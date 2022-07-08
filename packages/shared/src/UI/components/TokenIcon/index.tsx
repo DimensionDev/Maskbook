@@ -1,12 +1,13 @@
 import { memo } from 'react'
+import { useAsyncRetry } from 'react-use'
+import { first } from 'lodash-unified'
 import { Avatar, AvatarProps } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import NO_IMAGE_COLOR from './constants'
 import { useChainId, useWeb3Hub, Web3Helper } from '@masknet/plugin-infra/web3'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useImageFailOver } from '../../../hooks'
-import { useAsyncRetry } from 'react-use'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { useImageBase64 } from '../../../hooks/useImageBase64'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -20,31 +21,27 @@ export interface TokenIconProps extends withClasses<'icon'> {
     pluginID?: NetworkPluginID
     address: string
     name?: string
-    logoURI?: string
+    logoURL?: string
     AvatarProps?: Partial<AvatarProps>
 }
 
 export function TokenIcon(props: TokenIconProps) {
-    const { address, logoURI, name, AvatarProps, classes } = props
+    const { address, logoURL, name, AvatarProps, classes } = props
 
-    const chainId = useChainId(props.pluginID, props.chainId) as Web3Helper.ChainIdAll
-    const hub = useWeb3Hub(props.pluginID) as Web3Helper.Web3HubAll
+    const chainId = useChainId(props.pluginID, props.chainId)
+    const hub = useWeb3Hub(props.pluginID)
 
-    const { value: urls = EMPTY_LIST } = useAsyncRetry(async () => {
+    const { value } = useAsyncRetry(async () => {
         const logoURLs = await hub?.getFungibleTokenIconURLs?.(chainId, address)
-        return [logoURI, ...(logoURLs ?? [])].filter(Boolean) as string[]
-    }, [chainId, address, logoURI, hub])
+        return {
+            key: `${address}_${chainId}`,
+            urls: [logoURL, ...(logoURLs ?? [])].filter(Boolean) as string[],
+        }
+    }, [chainId, address, logoURL, hub])
+    const { urls = EMPTY_LIST, key } = value ?? {}
+    const base64 = useImageBase64(key, first(urls))
 
-    const { value: trustedLogoURI, loading } = useImageFailOver(urls, '')
-
-    return (
-        <TokenIconUI
-            logoURL={loading ? undefined : trustedLogoURI}
-            AvatarProps={AvatarProps}
-            classes={classes}
-            name={name}
-        />
-    )
+    return <TokenIconUI logoURL={base64} AvatarProps={AvatarProps} classes={classes} name={name} />
 }
 
 export interface TokenIconUIProps extends withClasses<'icon'> {

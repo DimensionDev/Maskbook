@@ -123,7 +123,7 @@ const TokenDetail = memo(() => {
                     address={currentToken.address}
                     name={currentToken.name}
                     chainId={currentToken.chainId}
-                    logoURI={currentToken.logoURL}
+                    logoURL={currentToken.logoURL}
                     AvatarProps={{ sx: { width: 24, height: 24 } }}
                 />
                 <Typography className={classes.balance}>
@@ -136,7 +136,7 @@ const TokenDetail = memo(() => {
                     />
                 </Typography>
                 <Typography className={classes.text}>
-                    <FormattedCurrency value={getTokenUSDValue(currentToken)} sign="$" formatter={formatCurrency} />
+                    <FormattedCurrency value={getTokenUSDValue(currentToken)} formatter={formatCurrency} />
                 </Typography>
                 <div className={classes.controller}>
                     <div onClick={openBuyDialog}>

@@ -104,7 +104,12 @@ export function PoolView(props: PoolViewProps) {
                 <br />
                 {(error as any)?.message || errorAllowedTokens?.message}
                 <br />
-                <RefreshIcon className={classes.refresh} color="primary" onClick={error ? retry : retryAllowedTokens} />
+                <RefreshIcon
+                    className={classes.refresh}
+                    color="primary"
+                    style={{ fill: '#1C68F3' }}
+                    onClick={error ? retry : retryAllowedTokens}
+                />
             </Typography>
         )
 
@@ -137,7 +142,7 @@ export function PoolView(props: PoolViewProps) {
                 <ChainBoundary
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                     expectedChainId={pool?.chainId ?? ChainId.Mainnet}
-                    renderInTimeline
+                    ActionButtonPromiseProps={{ variant: 'roundedDark' }}
                 />
             </Box>
         </>

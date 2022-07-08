@@ -1,11 +1,14 @@
 import { MouseEvent, useCallback, useState } from 'react'
+import { useAsync } from 'react-use'
+import { Interface } from '@ethersproject/abi'
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import { Box, ListItem, Typography, Popper, useMediaQuery, Theme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { omit, pick } from 'lodash-unified'
 import { TokenIcon } from '@masknet/shared'
-import { ChainId, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
+import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import intervalToDuration from 'date-fns/intervalToDuration'
 import nextDay from 'date-fns/nextDay'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -16,8 +19,10 @@ import { StyledLinearProgress } from '../../ITO/SNSAdaptor/StyledLinearProgress'
 import { RedPacketJSONPayload, RedPacketJSONPayloadFromChain, RedPacketStatus } from '../types'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
 import { useRefundCallback } from './hooks/useRefundCallback'
-import { useAccount, useFungibleToken } from '@masknet/plugin-infra/web3'
-import { formatBalance, FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useAccount, useChainId, useFungibleToken, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { formatBalance, FungibleToken, NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
+
+const interFace = new Interface(REDPACKET_ABI)
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -180,16 +185,50 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const t = useI18N()
     const { classes } = useStyles()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
+
+    const { value: receipt } = useAsync(async () => {
+        const result = await connection.getTransactionReceipt(history.txid)
+        if (!result) return null
+
+        const log = result.logs.find((log) => isSameAddress(log.address, HAPPY_RED_PACKET_ADDRESS_V4))
+        if (!log) return null
+
+        type CreationSuccessEventParams = {
+            id: string
+            creation_time: BigNumber
+        }
+        const eventParams = interFace.decodeEventLog(
+            'CreationSuccess',
+            log.data,
+            log.topics,
+        ) as unknown as CreationSuccessEventParams
+
+        return {
+            rpid: eventParams.id,
+            creation_time: eventParams.creation_time.toNumber() * 1000,
+        }
+    }, [connection, history, HAPPY_RED_PACKET_ADDRESS_V4])
+
+    const rpid = receipt?.rpid ?? ''
+    const creation_time = receipt?.creation_time ?? 0
+
     const {
+        value: availability,
         computed: { canRefund, canSend, listOfStatus, isPasswordValid },
         retry: revalidateAvailability,
-    } = useAvailabilityComputed(account, history)
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
+    } = useAvailabilityComputed(account, { ...history, rpid, creation_time })
+
+    const claimerNumber = availability ? Number(availability.claimed) : 0
+    const total_remaining = availability?.balance
+
     const [{ loading: isRefunding }, refunded, refundCallback] = useRefundCallback(
         history.contract_version,
         account,
-        history.rpid,
+        rpid,
     )
     const tokenAddress =
         (history as RedPacketJSONPayload).token?.address ?? (history as RedPacketJSONPayloadFromChain).token_address
@@ -216,20 +255,18 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
 
     // #region refund time
     const refundDuration =
-        canSend && !isPasswordValid
-            ? intervalToDuration({ start: Date.now(), end: nextDay(history.creation_time, 1) })
-            : null
+        canSend && !isPasswordValid ? intervalToDuration({ start: Date.now(), end: nextDay(creation_time, 1) }) : null
     const formatRefundDuration = `${refundDuration?.hours}h ${refundDuration?.minutes}m`
     // #endregion
 
-    return (
+    return !rpid ? null : (
         <ListItem className={classes.root}>
             <Box className={classes.box}>
                 <TokenIcon
                     classes={{ icon: classes.icon }}
                     address={historyToken?.address ?? ''}
                     name={historyToken?.name}
-                    logoURI={historyToken?.logoURL}
+                    logoURL={historyToken?.logoURL}
                 />
                 <Box className={classes.content}>
                     <section className={classes.section}>
@@ -241,8 +278,8 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                             </div>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
                                 {t.history_duration({
-                                    startTime: dateTimeFormat(new Date(history.creation_time)),
-                                    endTime: dateTimeFormat(new Date(history.creation_time + history.duration), false),
+                                    startTime: dateTimeFormat(new Date(creation_time)),
+                                    endTime: dateTimeFormat(new Date(creation_time + history.duration), false),
                                 })}
                             </Typography>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
@@ -274,7 +311,6 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                         classes.actionButton,
                                         canSend && !isPasswordValid ? classes.disabledButton : '',
                                     )}
-                                    variant="contained"
                                     size="large">
                                     {canSend
                                         ? t.send()
@@ -301,7 +337,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                     </section>
                     <StyledLinearProgress
                         variant="determinate"
-                        value={100 * (1 - Number(history.total_remaining) / Number(history.total))}
+                        value={100 * (1 - Number(total_remaining) / Number(history.total))}
                     />
                     <section className={classes.footer}>
                         <Typography variant="body1" className={classes.footerInfo}>
@@ -310,7 +346,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                     strong: <strong />,
                                 }}
                                 values={{
-                                    claimedShares: String(history.claimers?.length ?? 0),
+                                    claimedShares: String(claimerNumber),
                                     shares: String(history.shares),
                                 }}
                             />
@@ -324,7 +360,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                 values={{
                                     amount: formatBalance(history.total, historyToken?.decimals, 6),
                                     claimedAmount: formatBalance(
-                                        new BigNumber(history.total).minus(history?.total_remaining ?? 0),
+                                        new BigNumber(history.total).minus(total_remaining ?? 0),
                                         historyToken?.decimals,
                                         6,
                                     ),

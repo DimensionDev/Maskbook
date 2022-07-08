@@ -3,24 +3,26 @@ import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { DialogContent } from '@mui/material'
+import { DialogContent, Tab } from '@mui/material'
 import Web3Utils from 'web3-utils'
 import {
     useCurrentIdentity,
     useCurrentLinkedPersona,
     useLastRecognizedIdentity,
 } from '../../../components/DataSource/useActivatedUI'
-import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { useI18N } from '../locales'
 import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketMetaKey } from '../constants'
-import { DialogTabs, RedPacketJSONPayload, RpTypeTabs } from '../types'
+import { DialogTabs, RedPacketJSONPayload } from '../types'
 import type { RedPacketSettings } from './hooks/useCreateCallback'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog'
-import { RedPacketCreateNew } from './RedPacketCreateNew'
 import { RedPacketPast } from './RedPacketPast'
+import { TabContext, TabPanel } from '@mui/lab'
+import { HistoryIcon } from '@masknet/icons'
+import { RedPacketERC20Form } from './RedPacketERC20Form'
+import { RedPacketERC721Form } from './RedPacketERC721Form'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -32,6 +34,11 @@ const useStyles = makeStyles()((theme) => ({
     },
     dialogContent: {
         padding: 0,
+        '::-webkit-scrollbar': {
+            display: 'none',
+        },
+
+        overflowX: 'hidden',
     },
     tabPaper: {
         position: 'sticky',
@@ -50,6 +57,13 @@ const useStyles = makeStyles()((theme) => ({
     flexContainer: {
         justifyContent: 'space-around',
     },
+    labelWrapper: {
+        display: 'flex',
+    },
+    img: {
+        width: 20,
+        marginRight: 4,
+    },
 }))
 
 enum CreateRedPacketPageStep {
@@ -60,6 +74,7 @@ enum CreateRedPacketPageStep {
 interface RedPacketDialogProps extends withClasses<never> {
     open: boolean
     onClose: () => void
+    isOpenFromApplicationBoard?: boolean
 }
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
@@ -71,6 +86,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const [settings, setSettings] = useState<RedPacketSettings>()
+    const [showHistory, setShowHistory] = useState(false)
+    const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
 
     const onClose = useCallback(() => {
         setStep(CreateRedPacketPageStep.NewRedPacketPage)
@@ -78,7 +95,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         const [, setValue] = state
         setValue(DialogTabs.create)
         props.onClose()
-    }, [props, state])
+    }, [props, state, step])
 
     const currentIdentity = useCurrentIdentity()
     const lastRecognized = useLastRecognizedIdentity()
@@ -99,7 +116,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     if (!connection) return
                     payload.password = await connection.signMessage(
                         Web3Utils.sha3(payload.sender.message) ?? '',
-                        'personaSign',
+                        'personalSign',
                         { account },
                     )
                     payload.password = payload.password!.slice(2)
@@ -116,53 +133,17 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         [onClose, chainId, senderName, connection],
     )
 
-    const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
     const onBack = useCallback(() => {
         if (step === CreateRedPacketPageStep.ConfirmPage) setStep(CreateRedPacketPageStep.NewRedPacketPage)
+        if (step === CreateRedPacketPageStep.NewRedPacketPage) onClose()
     }, [step])
     const onNext = useCallback(() => {
         if (step === CreateRedPacketPageStep.NewRedPacketPage) setStep(CreateRedPacketPageStep.ConfirmPage)
     }, [step])
 
-    const onChange = useCallback((val: Omit<RedPacketSettings, 'password'>) => {
+    const _onChange = useCallback((val: Omit<RedPacketSettings, 'password'>) => {
         setSettings(val)
     }, [])
-
-    const tokenState = useState(RpTypeTabs.ERC20)
-
-    const dialogContentHeight = state[0] === DialogTabs.past ? 600 : tokenState[0] === RpTypeTabs.ERC20 ? 350 : 690
-
-    const tabProps: AbstractTabProps = {
-        tabs: [
-            {
-                label: t.create_new(),
-                children: (
-                    <RedPacketCreateNew
-                        origin={settings}
-                        onNext={onNext}
-                        state={tokenState}
-                        onClose={onClose}
-                        onChange={onChange}
-                    />
-                ),
-                sx: { p: 0 },
-            },
-            {
-                label: t.select_existing(),
-                children: <RedPacketPast onSelect={onCreateOrSelect} onClose={onClose} />,
-                sx: { p: 0 },
-            },
-        ],
-        state,
-        classes: {
-            focusTab: classes.focusTab,
-            tabPaper: classes.tabPaper,
-            tab: classes.tab,
-            flexContainer: classes.flexContainer,
-            indicator: classes.indicator,
-            tabs: classes.tabs,
-        },
-    }
 
     const handleCreated = useCallback(
         (payload: RedPacketJSONPayload) => {
@@ -175,21 +156,61 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const isCreateStep = step === CreateRedPacketPageStep.NewRedPacketPage
     const title = isCreateStep ? t.display_name() : t.details()
 
+    const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
+
     return (
-        <InjectedDialog open={props.open} title={title} onClose={onClose} disableTitleBorder>
-            <DialogContent className={classes.dialogContent}>
-                {step === CreateRedPacketPageStep.NewRedPacketPage ? (
-                    <AbstractTab height={dialogContentHeight} {...tabProps} />
-                ) : null}
-                {step === CreateRedPacketPageStep.ConfirmPage ? (
-                    <RedPacketConfirmDialog
-                        onClose={onClose}
-                        onBack={onBack}
-                        onCreated={handleCreated}
-                        settings={settings}
-                    />
-                ) : null}
-            </DialogContent>
-        </InjectedDialog>
+        <TabContext value={currentTab}>
+            <InjectedDialog
+                isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
+                open={props.open}
+                title={title}
+                titleTail={
+                    step === CreateRedPacketPageStep.NewRedPacketPage && !showHistory ? (
+                        <HistoryIcon onClick={() => setShowHistory((history) => !history)} />
+                    ) : null
+                }
+                titleTabs={
+                    step === CreateRedPacketPageStep.NewRedPacketPage ? (
+                        <MaskTabList variant="base" onChange={onChange} aria-label="Redpacket">
+                            <Tab label={t.erc20_tab_title()} value={tabs.tokens} />
+                            <Tab label={t.erc721_tab_title()} value={tabs.collectibles} />
+                        </MaskTabList>
+                    ) : null
+                }
+                onClose={() => (showHistory ? setShowHistory(false) : onBack())}
+                isOnBack={showHistory || step !== CreateRedPacketPageStep.NewRedPacketPage}
+                disableTitleBorder>
+                <DialogContent className={classes.dialogContent}>
+                    {step === CreateRedPacketPageStep.NewRedPacketPage ? (
+                        !showHistory ? (
+                            <>
+                                <TabPanel value={tabs.tokens} style={{ padding: 0 }}>
+                                    <RedPacketERC20Form
+                                        origin={settings}
+                                        onClose={onClose}
+                                        onNext={onNext}
+                                        onChange={_onChange}
+                                    />
+                                </TabPanel>
+                                <TabPanel value={tabs.collectibles} style={{ padding: 0 }}>
+                                    <RedPacketERC721Form onClose={onClose} />
+                                </TabPanel>
+                            </>
+                        ) : (
+                            <RedPacketPast tabs={tabs} onSelect={onCreateOrSelect} onClose={onClose} />
+                        )
+                    ) : null}
+
+                    {step === CreateRedPacketPageStep.ConfirmPage ? (
+                        <RedPacketConfirmDialog
+                            onClose={onClose}
+                            onBack={onBack}
+                            onCreated={handleCreated}
+                            settings={settings}
+                        />
+                    ) : null}
+                </DialogContent>
+            </InjectedDialog>
+        </TabContext>
     )
 }

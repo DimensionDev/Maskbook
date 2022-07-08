@@ -1,10 +1,30 @@
-import { AddressViewer } from '@masknet/shared'
+import { ReversedAddress } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { IdentityAddress, IdentityAddressType } from '@masknet/web3-shared-base'
-import { Box, Typography } from '@mui/material'
+import { makeStyles, ShadowRootMenu } from '@masknet/theme'
+import { NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
+import { formatEthereumAddress, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { Button, MenuItem, Typography } from '@mui/material'
+import { first, uniqBy } from 'lodash-unified'
+import { useState } from 'react'
 import { useI18N } from '../locales'
-import { useDonations, useFootprints } from './hooks'
+import { useCollectionFilter, useDonations, useFootprints } from './hooks'
 import { DonationPage, FootprintPage } from './pages'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import { useCurrentVisitingProfile } from './hooks/useContext'
+import { CollectionType, KVType } from '../types'
+import { useKV } from './hooks/useKV'
+
+const useStyles = makeStyles()((theme) => ({
+    button: {
+        border: `1px solid ${theme.palette.text.primary} !important`,
+        color: `${theme.palette.text.primary} !important`,
+        borderRadius: 4,
+        background: 'transparent',
+        '&:hover': {
+            background: 'rgba(15, 20, 25, 0.1)',
+        },
+    },
+}))
 
 export enum TabCardType {
     Donation = 1,
@@ -12,18 +32,50 @@ export enum TabCardType {
 }
 
 export interface TabCardProps {
+    persona?: string
     type: TabCardType
-    addressNames: IdentityAddress[]
+    socialAddressList?: Array<SocialAddress<NetworkPluginID>>
 }
 
-export function TabCard({ type, addressNames }: TabCardProps) {
+export function TabCard({ type, socialAddressList, persona }: TabCardProps) {
     const t = useI18N()
-    const addressName = addressNames.find((x) => x.type === IdentityAddressType.RSS3)
-    const userAddress = addressName?.address || ''
-    const { value: donations = EMPTY_LIST, loading: loadingDonations } = useDonations(userAddress)
-    const { value: footprints = EMPTY_LIST, loading: loadingFootprints } = useFootprints(userAddress)
+    const { classes } = useStyles()
 
-    if (!addressName) return null
+    const [selectedAddress, setSelectedAddress] = useState(first(socialAddressList))
+
+    const { value: donations = EMPTY_LIST, loading: loadingDonations } = useDonations(
+        formatEthereumAddress(selectedAddress?.address ?? ZERO_ADDRESS),
+    )
+    const { value: footprints = EMPTY_LIST, loading: loadingFootprints } = useFootprints(
+        formatEthereumAddress(selectedAddress?.address ?? ZERO_ADDRESS),
+    )
+    const currentVisitingProfile = useCurrentVisitingProfile()
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+
+    const onOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget)
+    const onClose = () => setAnchorEl(null)
+    const onSelect = (option: SocialAddress<NetworkPluginID>) => {
+        setSelectedAddress(option)
+        onClose()
+    }
+
+    const { value: kvValue } = useKV(persona)
+    const unHiddenDonations = useCollectionFilter(
+        kvValue?.proofs ?? EMPTY_LIST,
+        donations,
+        CollectionType.Donations,
+        currentVisitingProfile,
+        selectedAddress,
+    )
+    const unHiddenFootprints = useCollectionFilter(
+        (kvValue as KVType)?.proofs,
+        footprints,
+        CollectionType.Footprints,
+        currentVisitingProfile,
+        selectedAddress,
+    )
+
+    if (!selectedAddress) return null
 
     const isDonation = type === TabCardType.Donation
 
@@ -39,18 +91,62 @@ export function TabCard({ type, addressNames }: TabCardProps) {
     return (
         <>
             <link rel="stylesheet" href={new URL('./styles/tailwind.css', import.meta.url).toString()} />
-            <Box display="flex" alignItems="center" justifyContent="space-between">
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    position: 'relative',
+                }}>
                 <div>{summary}</div>
-                <AddressViewer identityAddress={addressName} />
-            </Box>
+                <div>
+                    <Button
+                        id="demo-positioned-button"
+                        variant="outlined"
+                        size="small"
+                        onClick={onOpen}
+                        className={classes.button}>
+                        {selectedAddress?.type === SocialAddressType.KV ||
+                        selectedAddress?.type === SocialAddressType.ADDRESS ? (
+                            <ReversedAddress address={selectedAddress.address} />
+                        ) : (
+                            selectedAddress.label
+                        )}
+                        <KeyboardArrowDownIcon />
+                    </Button>
+                    <ShadowRootMenu
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl)}
+                        PaperProps={{ style: { maxHeight: 192 } }}
+                        aria-labelledby="demo-positioned-button"
+                        onClose={() => setAnchorEl(null)}>
+                        {uniqBy(socialAddressList ?? [], (x) => x.address.toLowerCase()).map((x) => {
+                            return (
+                                <MenuItem key={x.address} value={x.address} onClick={() => onSelect(x)}>
+                                    {selectedAddress?.type === SocialAddressType.KV ||
+                                    selectedAddress?.type === SocialAddressType.ADDRESS ? (
+                                        <ReversedAddress address={x.address} />
+                                    ) : (
+                                        x.label
+                                    )}
+                                </MenuItem>
+                            )
+                        })}
+                    </ShadowRootMenu>
+                </div>
+            </div>
             {isDonation ? (
-                <DonationPage donations={donations} loading={loadingDonations} addressLabel={addressName.label} />
+                <DonationPage
+                    donations={unHiddenDonations}
+                    loading={loadingDonations}
+                    addressLabel={selectedAddress.label}
+                />
             ) : (
                 <FootprintPage
-                    address={userAddress}
+                    address={selectedAddress.address}
                     loading={loadingFootprints}
-                    footprints={footprints}
-                    addressLabel={addressName.label}
+                    footprints={unHiddenFootprints}
+                    addressLabel={selectedAddress.label}
                 />
             )}
         </>

@@ -117,7 +117,7 @@ const CreateMnemonic = memo(() => {
             await PluginServices.Wallet.updateMaskAccount({
                 account: address_,
             })
-            await PluginServices.Wallet.selectMaskAccount([address_])
+            await PluginServices.Wallet.resolveMaskAccount([address_])
         }
 
         return address_
@@ -168,7 +168,7 @@ export const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, onRefreshW
             <Typography className={classes.title}>Create a wallet</Typography>
             <div className={classes.refresh}>
                 <Box style={{ display: 'flex', cursor: 'pointer' }} onClick={onRefreshWords}>
-                    <RefreshIcon />
+                    <RefreshIcon style={{ fill: '#1C68F3' }} />
                     <Typography>{t.wallets_create_wallet_refresh()}</Typography>
                 </Box>
             </div>

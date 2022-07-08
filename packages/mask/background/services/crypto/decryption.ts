@@ -34,7 +34,11 @@ import {
 } from '../../database/persona/helper'
 import { queryPostDB } from '../../database/post'
 import { savePostKeyToDB } from '../../database/post/helper'
-import { GUN_queryPostKey_version39Or38, GUN_queryPostKey_version40 } from '../../network/gun/encryption/queryPostKey'
+import {
+    GUN_queryPostKey_version37,
+    GUN_queryPostKey_version39Or38,
+    GUN_queryPostKey_version40,
+} from '../../network/gun/encryption/queryPostKey'
 
 export interface DecryptionContext {
     currentSocialNetwork: SocialNetworkEnum
@@ -57,7 +61,7 @@ export async function* decryptionWithSocialNetworkDecoding(
     encoded: SocialNetworkEncodedPayload,
     context: DecryptionContext,
 ): AsyncGenerator<DecryptProgress, void, undefined> {
-    let decoded: string
+    let decoded: string | Uint8Array
     if (encoded.type === 'text') {
         decoded = socialNetworkDecoder(context.currentSocialNetwork, encoded.text)[0]
     } else {
@@ -146,9 +150,16 @@ async function* decryption(payload: string | Uint8Array, context: DecryptionCont
             queryAuthorPublicKey(author, signal) {
                 return queryPublicKey(author || authorHint)
             },
-            // TODO: get a gun instance
-            async *queryPostKey_version37() {
-                throw new Error('TODO')
+            async *queryPostKey_version37(iv, signal) {
+                const author = await queryPublicKey(context.currentProfile)
+                if (!author)
+                    throw new DecryptError(DecryptErrorReasons.CurrentProfileDoesNotConnectedToPersona, undefined)
+                yield* GUN_queryPostKey_version37(
+                    iv,
+                    author,
+                    context.currentSocialNetwork,
+                    signal || new AbortController().signal,
+                )
             },
             async *queryPostKey_version38(iv, signal) {
                 const author = await queryPublicKey(context.currentProfile)

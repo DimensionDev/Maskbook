@@ -12,6 +12,7 @@ import { PopupRoutes } from '@masknet/shared-base'
 import { useTitle } from '../../../hook/useTitle'
 import { EthereumMethodType } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -93,33 +94,46 @@ const SignRequest = memo(() => {
     const [transferError, setTransferError] = useState(false)
 
     const { data, address } = useMemo(() => {
-        if (
-            (value?.payload?.method === EthereumMethodType.ETH_SIGN ||
-                value?.payload?.method === EthereumMethodType.ETH_SIGN_TYPED_DATA) &&
-            value.computedPayload?.data
-        ) {
-            let message = value.computedPayload?.data
-
-            try {
-                message = toUtf8(value.computedPayload?.data)
-            } catch (error) {
-                console.log(error)
-            }
+        if (!value)
             return {
-                address: value.computedPayload.to,
-                data: message,
+                data: '',
+                address: '',
             }
-        }
+        if (
+            value?.payload.method === EthereumMethodType.ETH_SIGN ||
+            value?.payload.method === EthereumMethodType.ETH_SIGN_TYPED_DATA
+        ) {
+            try {
+                return {
+                    address: value.payload.params?.[0],
+                    data: toUtf8(value.payload.params?.[1] ?? ''),
+                }
+            } catch {
+                return {
+                    address: value.payload.params?.[0],
+                    data: value.payload.params?.[1],
+                }
+            }
+        } else if (value?.payload.method === EthereumMethodType.PERSONAL_SIGN)
+            return {
+                address: value.payload.params?.[1],
+                data: value.payload.params?.[0],
+            }
+
         return {
-            address: '',
             data: '',
+            address: '',
         }
     }, [value])
 
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
-        if (value && connection?.confirmRequest) {
+        const goBack = new URLSearchParams(routeLocation.search).get('goBack')
+
+        if (value) {
             try {
-                await connection.confirmRequest()
+                await WalletRPC.confirmRequest(value.payload, {
+                    disableClose: !!goBack,
+                })
                 navigate(-1)
             } catch (error_) {
                 setTransferError(true)
@@ -128,8 +142,8 @@ const SignRequest = memo(() => {
     }, [value, routeLocation.search, connection])
 
     const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
-        if (!value || !connection?.rejectRequest) return
-        await connection.rejectRequest()
+        if (!value) return
+        await WalletRPC.rejectRequest(value.payload)
         navigate(PopupRoutes.Wallet, { replace: true })
     }, [value, connection])
 

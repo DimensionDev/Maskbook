@@ -34,7 +34,7 @@ function useCanAppendShareTarget(whoAmI: ProfileIdentifier | null): whoAmI is Pr
     const postAuthor = authorInPayload || currentPostBy
 
     if (sharedPublic) return false
-    if (version !== -38) return false
+    if (version !== -38 && version !== -37) return false
     if (!whoAmI) return false
     if (whoAmI !== postAuthor) return false
     return true

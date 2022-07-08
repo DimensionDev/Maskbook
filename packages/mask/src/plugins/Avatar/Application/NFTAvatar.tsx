@@ -1,5 +1,5 @@
 import { EnhanceableSite } from '@masknet/shared-base'
-import { Avatar, Stack } from '@mui/material'
+import { Avatar, Box, Stack } from '@mui/material'
 import { PointIcon } from '../assets/point'
 import { TwitterIcon } from '../assets/twitter'
 import { RainbowBox } from '../SNSAdaptor/RainbowBox'
@@ -26,7 +26,9 @@ export function NFTAvatar(props: NFTAvatarProps) {
                     <Avatar src={avatar} />
                 </RainbowBox>
             ) : (
-                <Avatar src={avatar} />
+                <Box style={{ border: '2px solid transparent' }}>
+                    <Avatar src={avatar} />
+                </Box>
             )}
 
             <Stack
@@ -40,7 +42,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                 }}>
                 {SOCIAL_MEDIA_ICON_MAPPING[EnhanceableSite.Twitter]}
             </Stack>
-            {owner ? <PointIcon sx={{ position: 'absolute', top: 0, right: 8, width: 6, height: 6 }} /> : null}
+            {owner ? <PointIcon sx={{ position: 'absolute', top: 1, right: 6, width: 8, height: 8 }} /> : null}
         </Stack>
     )
 }

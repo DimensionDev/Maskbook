@@ -10,7 +10,6 @@ import { useI18N } from '../locales'
 import { useGrant } from '../hooks/useGrant'
 import { PluginGitcoinMessages } from '../messages'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
-import { useChainId } from '@masknet/plugin-infra/web3'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -75,11 +74,6 @@ const useStyles = makeStyles()((theme) => ({
         '-webkit-box-orient': 'vertical',
     },
     button: {
-        backgroundColor: theme.palette.maskColor.dark,
-        color: 'white',
-        '&:hover': {
-            backgroundColor: theme.palette.maskColor.dark,
-        },
         width: '100%',
     },
 }))
@@ -89,11 +83,10 @@ export interface PreviewCardProps {
 }
 
 export function PreviewCard(props: PreviewCardProps) {
-    const { t: tr } = useBaseI18N()
     const t = useI18N()
+    const { t: tr } = useBaseI18N()
     const { classes } = useStyles()
     const { value: grant, error, loading, retry } = useGrant(props.id)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const theme = useTheme()
 
     // #region the donation dialog
@@ -120,16 +113,7 @@ export function PreviewCard(props: PreviewCardProps) {
         return (
             <Box display="flex" flexDirection="column" alignItems="center" sx={{ padding: 1.5 }}>
                 <Typography color="textPrimary">{tr('go_wrong')}</Typography>
-                <Button
-                    sx={{
-                        backgroundColor: theme.palette.maskColor.dark,
-                        '&:hover': {
-                            backgroundColor: theme.palette.maskColor.dark,
-                        },
-                        width: 254,
-                        color: 'white',
-                    }}
-                    onClick={retry}>
+                <Button variant="roundedDark" onClick={retry}>
                     {tr('retry')}
                 </Button>
             </Box>
@@ -179,6 +163,7 @@ export function PreviewCard(props: PreviewCardProps) {
                 <Box sx={{ flex: 1, padding: 1.5 }}>
                     <Button
                         fullWidth
+                        variant="roundedDark"
                         className={classes.button}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -193,18 +178,9 @@ export function PreviewCard(props: PreviewCardProps) {
                         predicate={(pluginID, chainId) =>
                             pluginID === NetworkPluginID.PLUGIN_EVM &&
                             [ChainId.Mainnet, ChainId.Matic].includes(chainId)
-                        }>
-                        <Button
-                            variant="contained"
-                            fullWidth
-                            sx={{
-                                backgroundColor: theme.palette.maskColor.dark,
-                                '&:hover': {
-                                    backgroundColor: theme.palette.maskColor.dark,
-                                },
-                                color: 'white',
-                            }}
-                            onClick={onDonate}>
+                        }
+                        ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
+                        <Button fullWidth variant="roundedDark" onClick={onDonate}>
                             {t.donate()}
                         </Button>
                     </ChainBoundary>

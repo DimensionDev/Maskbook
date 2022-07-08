@@ -1,1 +1,1 @@
-export {}
+import './implementation/EventTarget-abortSignal'

@@ -1,19 +1,34 @@
-import { useCopyToClipboard } from 'react-use'
-import { TableContainer, Paper, Table, TableRow, TableCell, TableBody, Typography, IconButton } from '@mui/material'
+import {
+    TableContainer,
+    Paper,
+    Table,
+    TableRow,
+    TableCell,
+    TableBody,
+    Typography,
+    Stack,
+    MenuItem,
+    IconButton,
+} from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import FileCopyIcon from '@mui/icons-material/FileCopy'
 import type { DataProvider } from '@masknet/public-api'
-import { useSnackbarCallback, FormattedAddress } from '@masknet/shared'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import type { Trending } from '../../types'
 import { Linking } from './Linking'
-import { CoinMetadataTags } from './CoinMetadataTags'
-import { useI18N } from '../../../../utils'
+import { useI18N, useMenu } from '../../../../utils'
+import { ContractSection } from './ContractSection'
+import type { CommunityType } from '../../types'
+import {
+    DiscordRoundIcon,
+    FacebookRoundIcon,
+    RedditRoundIcon,
+    TelegramRoundIcon,
+    TwitterRoundIcon,
+} from '@masknet/icons'
+import { upperFirst } from 'lodash-unified'
+import type { TrendingAPI } from '@masknet/web3-providers'
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
-        padding: theme.spacing(2),
-    },
+    root: {},
     container: {
         borderRadius: 0,
         boxSizing: 'border-box',
@@ -25,15 +40,25 @@ const useStyles = makeStyles()((theme) => ({
     cell: {
         whiteSpace: 'nowrap',
         border: 'none',
+        padding: 0,
+        lineHeight: 1.2,
+        fontWeight: 700,
+    },
+    cellValue: {
+        border: 'none',
     },
     label: {
         color: theme.palette.text.secondary,
         whiteSpace: 'nowrap',
+        textAlign: 'left',
     },
     link: {
-        display: 'inline-block',
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: theme.spacing(0.25),
         whiteSpace: 'nowrap',
-        paddingRight: theme.spacing(1),
+        color: theme.palette.maskColor.main,
+        fontWeight: 700,
         '&:last-child': {
             paddingRight: 0,
         },
@@ -41,96 +66,135 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface CoinMetadataTableProps {
-    trending: Trending
+    trending: TrendingAPI.Trending
     dataProvider: DataProvider
 }
 
+const brands: Record<CommunityType, React.ReactNode> = {
+    facebook: <FacebookRoundIcon sx={{ fontSize: 16 }} />,
+    twitter: <TwitterRoundIcon sx={{ fontSize: 16 }} />,
+    telegram: <TelegramRoundIcon sx={{ fontSize: 16 }} />,
+    discord: <DiscordRoundIcon sx={{ fontSize: 16 }} />,
+    reddit: <RedditRoundIcon sx={{ fontSize: 16 }} />,
+    other: null,
+}
+
 export function CoinMetadataTable(props: CoinMetadataTableProps) {
-    const { dataProvider, trending } = props
+    const { trending } = props
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [, copyToClipboard] = useCopyToClipboard()
-    const onCopyAddress = useSnackbarCallback(async () => {
-        if (!trending.coin.contract_address) return
-        copyToClipboard(trending.coin.contract_address)
-    }, [trending.coin.contract_address])
 
-    const metadataLinks = [
-        ['Website', trending.coin.home_urls],
-        ['Announcement', trending.coin.announcement_urls],
-        ['Message Board', trending.coin.message_board_urls],
-        ['Explorer', trending.coin.blockchain_urls],
-        ['Tech Docs', trending.coin.tech_docs_urls],
-        ['Source Code', trending.coin.source_code_urls],
-        ['Community', trending.coin.community_urls],
-    ] as Array<[string, string[] | undefined]>
+    const metadataLinks = [['Website', trending.coin.home_urls]] as Array<[string, string[] | undefined]>
+
+    const contracts = trending.contracts ?? []
+
+    const [menu, openMenu] = useMenu(
+        contracts.map((x) => (
+            <MenuItem key={x.chainId}>
+                <ContractSection address={x.address} chainId={x.chainId} iconURL={x.iconURL} />
+            </MenuItem>
+        )),
+        false,
+    )
 
     return (
-        <TableContainer className={classes.container} component={Paper} elevation={0}>
-            <Table className={classes.table} size="small">
-                <TableBody>
-                    {trending.coin.market_cap_rank ? (
-                        <TableRow>
-                            <TableCell>
-                                <Typography className={classes.label} variant="body2">
-                                    {t('plugin_trader_market_cap')}
-                                </Typography>
-                            </TableCell>
-                            <TableCell>Rank #{trending.coin.market_cap_rank}</TableCell>
-                        </TableRow>
-                    ) : null}
-                    {metadataLinks.map(([label, links], i) => {
-                        if (!links?.length) return null
-                        return (
-                            <TableRow key={i}>
-                                <TableCell>
+        <Stack>
+            <Stack>
+                <Typography fontSize={14} fontWeight={700}>
+                    {t('plugin_trader_info')}
+                </Typography>
+            </Stack>
+            <TableContainer className={classes.container} component={Paper} elevation={0}>
+                <Table className={classes.table} size="small">
+                    <TableBody>
+                        {contracts.length ? (
+                            <TableRow>
+                                <TableCell className={classes.cell}>
                                     <Typography className={classes.label} variant="body2">
-                                        {label}
+                                        {t('contract')}
                                     </Typography>
                                 </TableCell>
-                                <TableCell>
-                                    {links.map((x, i) => (
-                                        <Linking key={i} href={x} LinkProps={{ className: classes.link }} />
-                                    ))}
+                                <TableCell className={classes.cellValue} align="right">
+                                    {contracts[0].address ? (
+                                        <Stack
+                                            direction="row"
+                                            justifyContent="flex-end"
+                                            height={18}
+                                            style={{ position: 'relative', right: -5 }}>
+                                            <ContractSection
+                                                iconURL={contracts[0].iconURL}
+                                                chainId={contracts[0].chainId}
+                                                address={contracts[0].address}
+                                            />
+                                            <IconButton size="small" onClick={openMenu}>
+                                                <MoreHorizIcon style={{ fontSize: 16 }} />
+                                            </IconButton>
+                                            {menu}
+                                        </Stack>
+                                    ) : (
+                                        '--'
+                                    )}
                                 </TableCell>
                             </TableRow>
-                        )
-                    })}
-                    {trending.coin.contract_address ? (
-                        <TableRow>
-                            <TableCell>
-                                <Typography className={classes.label} variant="body2">
-                                    {t('contract')}
-                                </Typography>
-                            </TableCell>
-                            <TableCell>
-                                <Typography variant="body2" component="span">
-                                    <FormattedAddress
-                                        address={trending.coin.contract_address}
-                                        size={4}
-                                        formatter={formatEthereumAddress}
-                                    />
-                                </Typography>
-                                <IconButton color="primary" size="small" onClick={onCopyAddress}>
-                                    <FileCopyIcon fontSize="small" />
-                                </IconButton>
-                            </TableCell>
-                        </TableRow>
-                    ) : null}
-                    {trending.coin.tags?.length ? (
-                        <TableRow>
-                            <TableCell>
-                                <Typography className={classes.label} variant="body2">
-                                    {t('tags')}
-                                </Typography>
-                            </TableCell>
-                            <TableCell>
-                                <CoinMetadataTags tags={trending.coin.tags} />
-                            </TableCell>
-                        </TableRow>
-                    ) : null}
-                </TableBody>
-            </Table>
-        </TableContainer>
+                        ) : null}
+                        {metadataLinks.map(([label, links], i) => {
+                            if (!links?.length) return null
+                            return (
+                                <TableRow key={i}>
+                                    <TableCell className={classes.cell}>
+                                        <Typography className={classes.label} variant="body2">
+                                            {label}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell className={classes.cellValue} align="right">
+                                        <Stack display="inline-flex" direction="row" gap={1}>
+                                            {links.map((x, i) => (
+                                                <Linking
+                                                    key={i}
+                                                    href={x}
+                                                    LinkProps={{ className: classes.link }}
+                                                    TypographyProps={{ fontWeight: 700 }}
+                                                />
+                                            ))}
+                                        </Stack>
+                                    </TableCell>
+                                </TableRow>
+                            )
+                        })}
+                        {!!trending.coin.community_urls?.length && (
+                            <TableRow>
+                                <TableCell className={classes.cell}>
+                                    <Typography className={classes.label} variant="body2">
+                                        {t('plugin_trader_community')}
+                                    </Typography>
+                                </TableCell>
+                                <TableCell className={classes.cellValue} align="right">
+                                    <Stack
+                                        height="100%"
+                                        display="flex"
+                                        direction="row"
+                                        justifyContent="flex-end"
+                                        flexWrap="wrap"
+                                        alignItems="center"
+                                        gap={1.5}>
+                                        {trending.coin.community_urls.map((x) => (
+                                            <Linking
+                                                key={x.link}
+                                                href={x.link}
+                                                LinkProps={{
+                                                    className: classes.link,
+                                                }}>
+                                                {brands[x.type]}
+                                                {upperFirst(x.type)}
+                                            </Linking>
+                                        ))}
+                                    </Stack>
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </Stack>
     )
 }

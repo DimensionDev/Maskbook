@@ -1,22 +1,27 @@
 import { TipCoin } from '@masknet/icons'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
+import { useCurrentWeb3NetworkPluginID, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
+import { NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
 import type { TooltipProps } from '@mui/material'
 import classnames from 'classnames'
-import { uniq } from 'lodash-unified'
+import { uniqBy } from 'lodash-unified'
 import { FC, HTMLProps, MouseEventHandler, useCallback, useEffect, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { MaskMessages } from '../../../../shared'
-import Services from '../../../extension/service'
+import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
 import { activatedSocialNetworkUI } from '../../../social-network'
+import { useProfilePublicKey } from '../hooks/useProfilePublicKey'
 import { usePublicWallets } from '../hooks/usePublicWallets'
 import { useI18N } from '../locales'
 import { PluginNextIDMessages } from '../messages'
+import type { TipAccount } from '../types'
 
 interface Props extends HTMLProps<HTMLDivElement> {
-    addresses?: string[]
+    addresses?: TipAccount[]
+    recipient?: TipAccount['address']
     receiver?: ProfileIdentifier | null
     tooltipProps?: Partial<TooltipProps>
 }
@@ -60,6 +65,7 @@ export const TipButton: FC<Props> = ({
     className,
     receiver,
     addresses = EMPTY_LIST,
+    recipient,
     children,
     tooltipProps,
     ...rest
@@ -68,51 +74,91 @@ export const TipButton: FC<Props> = ({
     const t = useI18N()
 
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
-    const { value: receiverPersona, loading: loadingPersona } = useAsyncRetry(async () => {
-        if (!receiver) return
-        return Services.Identity.queryPersonaByProfile(receiver)
-    }, [receiver])
+    const { value: personaPubkey, loading: loadingPersona } = useProfilePublicKey(receiver)
+    const receiverUserId = receiver?.userId
 
+    const pluginId = useCurrentWeb3NetworkPluginID()
     const {
         value: isAccountVerified,
         loading: loadingVerifyInfo,
         retry: retryLoadVerifyInfo,
-    } = useAsyncRetry(() => {
-        if (!receiverPersona?.identifier.publicKeyAsHex || !receiver?.userId) return Promise.resolve(false)
-        return NextIDProof.queryIsBound(receiverPersona.identifier.publicKeyAsHex, platform, receiver.userId, true)
-    }, [receiverPersona?.identifier.publicKeyAsHex, platform, receiver?.userId])
+    } = useAsyncRetry(async () => {
+        if (pluginId !== NetworkPluginID.PLUGIN_EVM) return true
+        if (!personaPubkey || !receiverUserId) return false
+        return NextIDProof.queryIsBound(personaPubkey, platform, receiverUserId, true)
+    }, [pluginId, personaPubkey, platform, receiverUserId])
+    const visitingIdentity = useCurrentVisitingIdentity()
+
+    const isVisitingUser = visitingIdentity.identifier?.userId === receiverUserId
+    const isRuntimeAvailable = useMemo(() => {
+        switch (pluginId) {
+            case NetworkPluginID.PLUGIN_EVM:
+                return true
+            case NetworkPluginID.PLUGIN_SOLANA:
+                return isVisitingUser
+        }
+        return false
+    }, [pluginId, isVisitingUser])
 
     useEffect(() => {
-        return MaskMessages.events.ownProofChanged.on(() => {
-            retryLoadVerifyInfo()
-        })
+        return MaskMessages.events.ownProofChanged.on(retryLoadVerifyInfo)
     }, [])
 
-    const publicWallets = usePublicWallets(receiver || undefined)
-    const allAddresses = useMemo(() => uniq([...publicWallets, ...addresses]), [publicWallets, addresses])
+    const publicWallets = usePublicWallets(personaPubkey)
+    const { value: socialAddressList = EMPTY_LIST } = useSocialAddressListAll(visitingIdentity)
+    const allAddresses = useMemo(() => {
+        switch (pluginId) {
+            case NetworkPluginID.PLUGIN_EVM:
+                const evmAddresses = socialAddressList
+                    .filter((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM)
+                    .map((x) => ({
+                        address: x.address,
+                        name: x.type === SocialAddressType.ENS ? x.label : undefined,
+                    }))
+                return uniqBy([...publicWallets, ...addresses, ...evmAddresses], (v) => v.address.toLowerCase())
+            case NetworkPluginID.PLUGIN_SOLANA:
+                return socialAddressList
+                    .filter((x) => x.networkSupporterPluginID === pluginId)
+                    .map((x) => ({
+                        address: x.address,
+                        name: x.type === SocialAddressType.SOL ? x.label : undefined,
+                    }))
+        }
+        return EMPTY_LIST
+    }, [pluginId, publicWallets, addresses, socialAddressList])
 
     const isChecking = loadingPersona || loadingVerifyInfo
-    const disabled = isChecking || !isAccountVerified || allAddresses.length === 0
+    const disabled = isChecking || !isAccountVerified || allAddresses.length === 0 || !isRuntimeAvailable
 
-    const sendTip: MouseEventHandler<HTMLDivElement> = useCallback(
+    const createTipTask: MouseEventHandler<HTMLDivElement> = useCallback(
         async (evt) => {
             evt.stopPropagation()
             evt.preventDefault()
             if (disabled) return
-            if (!allAddresses.length || !receiver?.userId) return
+            if (!allAddresses.length || !receiverUserId) return
             PluginNextIDMessages.tipTask.sendToLocal({
-                recipientSnsId: receiver.userId,
+                recipient,
+                recipientSnsId: receiverUserId,
                 addresses: allAddresses,
             })
         },
-        [disabled, allAddresses, receiver?.userId],
+        [disabled, recipient, allAddresses, receiverUserId],
     )
+
+    useEffect(() => {
+        PluginNextIDMessages.tipTaskUpdate.sendToLocal({
+            recipient,
+            recipientSnsId: receiverUserId,
+            addresses: allAddresses,
+        })
+    }, [recipient, receiverUserId, allAddresses])
+
     const dom = (
         <div
             className={classnames(className, classes.tipButton, disabled ? classes.disabled : null)}
             {...rest}
             role="button"
-            onClick={sendTip}>
+            onClick={createTipTask}>
             <TipCoin viewBox="0 0 24 24" />
             {children}
         </div>

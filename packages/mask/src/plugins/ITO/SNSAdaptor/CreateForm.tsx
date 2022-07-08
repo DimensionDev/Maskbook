@@ -9,9 +9,12 @@ import formatDateTime from 'date-fns/format'
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import Web3Utils from 'web3-utils'
-import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { sliceTextByUILength, useI18N } from '../../../utils'
+import {
+    useCurrentIdentity,
+    useCurrentLinkedPersona,
+    useLastRecognizedIdentity,
+} from '../../../components/DataSource/useActivatedUI'
+import { PluginWalletStatusBar, sliceTextByUILength, useI18N } from '../../../utils'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
@@ -23,6 +26,8 @@ import { AdvanceSettingData, AdvanceSetting } from './AdvanceSetting'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { RegionSelect } from './RegionSelect'
 import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -56,13 +61,6 @@ const useStyles = makeStyles()((theme) => {
         tip: {
             fontSize: 12,
             color: theme.palette.text.secondary,
-        },
-        button: {
-            marginTop: theme.spacing(1.5),
-            [smallQuery]: {
-                lineHeight: 1.2,
-                marginTop: theme.spacing(0),
-            },
         },
         date: {
             margin: theme.spacing(1),
@@ -104,6 +102,10 @@ const useStyles = makeStyles()((theme) => {
             padding: theme.spacing(1),
             marginTop: theme.spacing(1),
         },
+        controller: {
+            position: 'sticky',
+            bottom: 0,
+        },
     }
 })
 
@@ -112,21 +114,27 @@ export interface CreateFormProps extends withClasses<never> {
     onNext: () => void
     onClose: () => void
     origin?: PoolSettings
+    chainId: ChainId
 }
 
 export function CreateForm(props: CreateFormProps) {
-    const { onChangePoolSettings, onNext, origin, onClose } = props
+    const { onChangePoolSettings, onNext, origin, onClose, chainId } = props
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const { ITO2_CONTRACT_ADDRESS, DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants()
+    const { ITO2_CONTRACT_ADDRESS, DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants(chainId)
 
     const currentIdentity = useCurrentIdentity()
+    const lastRecognizedIdentity = useLastRecognizedIdentity()
 
     const { value: linkedPersona } = useCurrentLinkedPersona()
 
-    const senderName = currentIdentity?.identifier.userId ?? linkedPersona?.nickname ?? 'Unknown User'
+    const senderName =
+        lastRecognizedIdentity.identifier?.userId ??
+        currentIdentity?.identifier.userId ??
+        linkedPersona?.nickname ??
+        'Unknown User'
 
     const [message, setMessage] = useState(origin?.title ?? '')
     const [totalOfPerWallet, setTotalOfPerWallet] = useState(
@@ -358,6 +366,7 @@ export function CreateForm(props: CreateFormProps) {
                     token={tokenAndAmount?.token}
                     origin={tokenAndAmounts}
                     onTokenAmountChange={(arr) => setTokenAndAmounts(arr)}
+                    chainId={chainId}
                 />
             </Box>
             <Box className={classes.line}>
@@ -462,24 +471,28 @@ export function CreateForm(props: CreateFormProps) {
                     ) : null}
                 </Box>
             ) : null}
-            <Box className={classes.line}>
-                <WalletConnectedBoundary>
-                    <EthereumERC20TokenApprovedBoundary
-                        amount={inputTokenAmount}
-                        spender={ITO2_CONTRACT_ADDRESS}
-                        token={tokenAndAmount?.token?.schema === SchemaType.ERC20 ? tokenAndAmount.token : undefined}>
-                        <ActionButton
-                            className={classes.button}
-                            fullWidth
-                            variant="contained"
-                            size="large"
-                            disabled={!!validationMessage}
-                            onClick={onNext}>
-                            {validationMessage || t('plugin_ito_next')}
-                        </ActionButton>
-                    </EthereumERC20TokenApprovedBoundary>
-                </WalletConnectedBoundary>
-            </Box>
+
+            <PluginWalletStatusBar className={classes.controller}>
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                    <WalletConnectedBoundary>
+                        <EthereumERC20TokenApprovedBoundary
+                            amount={inputTokenAmount}
+                            spender={ITO2_CONTRACT_ADDRESS}
+                            token={
+                                tokenAndAmount?.token?.schema === SchemaType.ERC20 ? tokenAndAmount.token : undefined
+                            }>
+                            <ActionButton
+                                fullWidth
+                                variant="contained"
+                                size="medium"
+                                disabled={!!validationMessage}
+                                onClick={onNext}>
+                                {validationMessage || t('plugin_ito_next')}
+                            </ActionButton>
+                        </EthereumERC20TokenApprovedBoundary>
+                    </WalletConnectedBoundary>
+                </ChainBoundary>
+            </PluginWalletStatusBar>
         </>
     )
 }

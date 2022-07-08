@@ -15,7 +15,7 @@ import { usePopupCustomSnackbar } from '@masknet/theme'
 const AccountDetail = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
-    const { selectedAccount, currentPersona } = PersonaContext.useContainer()
+    const { selectedAccount, currentPersona, refreshProofs } = PersonaContext.useContainer()
     const [open, setOpen] = useState(false)
 
     const { showSnackbar } = usePopupCustomSnackbar()
@@ -35,7 +35,7 @@ const AccountDetail = memo(() => {
             showSnackbar(t('popups_disconnect_success'), {
                 variant: 'success',
             })
-            navigate(PopupRoutes.SocialAccounts)
+            navigate(-1)
         } catch {
             showSnackbar(t('popups_disconnect_failed'), {
                 variant: 'error',
@@ -71,10 +71,11 @@ const AccountDetail = memo(() => {
             )
 
             await Service.Identity.detachProfile(selectedAccount.identifier)
+            refreshProofs()
             showSnackbar(t('popups_disconnect_success'), {
                 variant: 'success',
             })
-            navigate(PopupRoutes.SocialAccounts)
+            navigate(-1)
         } catch {
             showSnackbar(t('popups_disconnect_failed'), {
                 variant: 'error',

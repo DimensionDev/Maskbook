@@ -1,4 +1,4 @@
-import { clone_into, redefineEventTargetPrototype, unwrapXRay_CPPBindingObject } from '../utils'
+import { clone_into, isTwitter, redefineEventTargetPrototype, unwrapXRay_CPPBindingObject } from '../utils'
 import { apply, error, no_xray_Proxy, warn, xray_Map } from '../intrinsic'
 
 const CapturingEvents: Set<string> = new Set(['keyup', 'input', 'paste', 'change'] as Array<keyof DocumentEventMap>)
@@ -145,10 +145,4 @@ export function dispatchEventRaw<T extends Event>(
             }),
         )
     }
-}
-
-const { includes } = String.prototype
-
-function isTwitter() {
-    return apply(includes, window.location.href, ['twitter.com'])
 }

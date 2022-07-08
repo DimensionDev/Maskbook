@@ -82,11 +82,6 @@ const useStyles = makeStyles()((theme) => ({
     confirmText: {
         color: '#6F767C',
     },
-    button: {
-        width: 'fit-content',
-        margin: '0 auto',
-        padding: '6px 48px',
-    },
     table: {
         border: '1px solid #FF5555',
         color: '#FF5555',
@@ -145,7 +140,7 @@ export function RemindDialog(props: RemindDialogProps) {
                 </Typography>
             </section>
             <section className={classNames(classes.wrapper, classes.tokenWrapper)}>
-                <TokenIcon address={token.address} classes={{ icon: classes.tokenIcon }} logoURI={token?.logoURL} />
+                <TokenIcon address={token.address} classes={{ icon: classes.tokenIcon }} logoURL={token?.logoURL} />
                 <div className={classes.tokenTextWrapper}>
                     <Typography variant="h5" className={classes.tokenSymbol}>
                         {token.name}
@@ -177,9 +172,8 @@ export function RemindDialog(props: RemindDialogProps) {
                 />
             </section>
             <ActionButton
-                variant="contained"
                 color="primary"
-                className={classes.button}
+                fullWidth
                 onClick={() => setStatus(SwapStatus.Swap)}
                 disabled={!agreeReminder}>
                 {t('plugin_ito_continue')}

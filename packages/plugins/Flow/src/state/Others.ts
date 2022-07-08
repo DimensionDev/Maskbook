@@ -9,16 +9,17 @@ import {
     formatDomainName,
     ProviderType,
     NetworkType,
+    Transaction,
     SchemaType,
     CHAIN_DESCRIPTORS,
     NETWORK_DESCRIPTORS,
     PROVIDER_DESCRIPTORS,
 } from '@masknet/web3-shared-flow'
 
-export class Others extends OthersState<ChainId, SchemaType, ProviderType, NetworkType> {
+export class Others extends OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
     constructor(context: Plugin.Shared.SharedContext) {
         super(context, {
-            defaultAddress: '',
+            defaultAddress: '0x1654653399040a61',
             defaultBlockDelay: 15,
             chainDescriptors: CHAIN_DESCRIPTORS,
             networkDescriptors: NETWORK_DESCRIPTORS,

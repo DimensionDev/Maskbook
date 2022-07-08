@@ -3,7 +3,7 @@ import type { Currency } from '@uniswap/sdk-core'
 import { Pool, Route } from '@uniswap/v3-sdk'
 import { useV3SwapPools } from './useV3SwapPools'
 import { useSingleHopOnly } from './useSingleHopOnly'
-import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 
 function computeAllRoutes(
     currencyIn: Currency,

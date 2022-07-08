@@ -7,27 +7,28 @@ import { CloseIcon } from '../assets/close'
 import { context } from '../context'
 import { usePersonas } from '../hooks/usePersonas'
 import { useI18N } from '../locales/i18n_generated'
-import type { TokenInfo } from '../types'
 import { PersonaItem } from './PersonaItem'
 import { InfoIcon } from '../assets/info'
 import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
+import type { AllChainsNonFungibleToken } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
     messageBox: {
         display: 'flex',
         borderRadius: 4,
-        padding: 8,
+        padding: 12,
         backgroundColor: theme.palette.mode === 'dark' ? '#15171A' : '#F9F9F9',
         fontSize: 14,
         alignItems: 'center',
         color: theme.palette.text.primary,
+        gap: 10,
     },
 }))
 
 interface PersonaPageProps {
     onNext: () => void
     onClose(): void
-    onChange: (proof: BindingProof, wallets?: BindingProof[], tokenInfo?: TokenInfo) => void
+    onChange: (proof: BindingProof, wallets?: BindingProof[], tokenInfo?: AllChainsNonFungibleToken) => void
 }
 
 export function PersonaPage(props: PersonaPageProps) {
@@ -40,7 +41,7 @@ export function PersonaPage(props: PersonaPageProps) {
     const t = useI18N()
 
     const onSelect = useCallback(
-        (proof: BindingProof, tokenInfo?: TokenInfo) => {
+        (proof: BindingProof, tokenInfo?: AllChainsNonFungibleToken) => {
             onChange(proof, persona?.wallets, tokenInfo)
             onNext()
         },
@@ -57,11 +58,14 @@ export function PersonaPage(props: PersonaPageProps) {
                 <>
                     {visible ? (
                         <Box className={classes.messageBox}>
-                            <InfoIcon />
-                            <Typography color="currentColor" variant="body1" fontSize={14}>
+                            <InfoIcon style={{ width: 20, height: 20 }} />
+                            <Typography color="currentColor" fontSize={14} fontFamily="Helvetica">
                                 {t.persona_hint()}
                             </Typography>
-                            <CloseIcon sx={{ cursor: 'pointer' }} onClick={() => setVisible(false)} />
+                            <CloseIcon
+                                sx={{ cursor: 'pointer', width: 20, height: 20 }}
+                                onClick={() => setVisible(false)}
+                            />
                         </Box>
                     ) : null}
                     {persona?.binds?.proofs

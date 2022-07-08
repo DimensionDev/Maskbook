@@ -159,6 +159,8 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
         const { value: contractDetailed } = useNonFungibleTokenContract(
             NetworkPluginID.PLUGIN_EVM,
             history.token_contract.address,
+            undefined,
+            { account },
         )
         const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
             WalletMessages.events.ApplicationDialogUpdated,
@@ -189,7 +191,7 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                         classes={{ icon: classes.icon }}
                         address={contractDetailed?.address ?? ''}
                         name={contractDetailed?.name ?? '-'}
-                        logoURI={
+                        logoURL={
                             contractDetailed?.iconURL ??
                             new URL('../../../resources/maskFilledIcon.png', import.meta.url).toString()
                         }
@@ -221,7 +223,6 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                                         classes.actionButton,
                                         isPasswordValid ? '' : classes.disabledButton,
                                     )}
-                                    variant="contained"
                                     size="large">
                                     {t.send()}
                                 </ActionButton>
@@ -229,7 +230,7 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                         </section>
                         <section className={classes.nftList}>
                             <NftList
-                                contract={history.token_contract}
+                                contract={contractDetailed ?? history.token_contract}
                                 statusList={bitStatusList}
                                 tokenIds={history.token_ids}
                             />

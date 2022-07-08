@@ -3,7 +3,6 @@ import { OpenSeaPort } from 'opensea-js'
 import { useWeb3Provider } from '@masknet/plugin-infra/web3'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { OpenSeaAPI_Key } from '../constants'
 import { isOpenSeaSupportedChainId, resolveOpenSeaNetwork } from '../pipes'
 
 export function useOpenSea(chainId?: ChainId) {
@@ -14,7 +13,7 @@ export function useOpenSea(chainId?: ChainId) {
         return new OpenSeaPort(
             web3Provider,
             {
-                apiKey: OpenSeaAPI_Key,
+                apiBaseUrl: 'https://opensea-proxy.r2d2.to',
                 networkName: resolveOpenSeaNetwork(chainId),
             },
             console.log,

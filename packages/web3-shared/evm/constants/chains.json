@@ -12,7 +12,8 @@
             "chainId": 1,
             "name": "Ether",
             "symbol": "ETH",
-            "decimals": 18
+            "decimals": 18,
+            "logoURL": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
         },
         "infoURL": "https://ethereum.org",
         "explorers": [
@@ -26,17 +27,18 @@
     {
         "chainId": 3,
         "type": "Ethereum",
-        "name": "ETH",
+        "name": "Ropsten",
         "color": "rgb(255, 65, 130)",
         "network": "ropsten",
-        "fullName": "Ethereum",
+        "fullName": "Ropsten Test Network",
         "shortName": "rop",
         "features": ["EIP1559"],
         "nativeCurrency": {
             "chainId": 3,
             "name": "Ropsten Ether",
             "symbol": "ROP",
-            "decimals": 18
+            "decimals": 18,
+            "logoURL": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
         },
         "infoURL": "https://github.com/ethereum/ropsten",
         "explorers": [
@@ -50,17 +52,18 @@
     {
         "chainId": 4,
         "type": "Ethereum",
-        "name": "ETH",
+        "name": "Rinkeby",
         "color": "rgb(133, 89, 255)",
         "network": "rinkeby",
-        "fullName": "Ethereum",
+        "fullName": "Rinkeby Test Network",
         "shortName": "rin",
         "features": [],
         "nativeCurrency": {
             "chainId": 4,
             "name": "Rinkeby Ether",
             "symbol": "RIN",
-            "decimals": 18
+            "decimals": 18,
+            "logoURL": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
         },
         "infoURL": "https://www.rinkeby.io",
         "explorers": [
@@ -74,10 +77,10 @@
     {
         "chainId": 42,
         "type": "Ethereum",
-        "name": "ETH",
+        "name": "Kovan",
         "color": "rgb(133, 89,255)",
         "network": "kovan",
-        "fullName": "Ethereum",
+        "fullName": "Kovan Test Network",
         "shortName": "kov",
         "features": [],
         "nativeCurrency": {
@@ -98,10 +101,10 @@
     {
         "chainId": 5,
         "type": "Ethereum",
-        "name": "ETH",
+        "name": "Goerli",
         "color": "rgb(48, 153, 242)",
         "network": "goerli",
-        "fullName": "Ethereum",
+        "fullName": "Goerli Test Network",
         "shortName": "gor",
         "features": [],
         "nativeCurrency": {
@@ -132,7 +135,8 @@
             "chainId": 56,
             "name": "Binance Chain Native Token",
             "symbol": "BNB",
-            "decimals": 18
+            "decimals": 18,
+            "logoURL": "https://static.debank.com/image/bsc_token/logo_url/bsc/8bfdeaa46fe9be8f5cd43a53b8d1eea1.png"
         },
         "infoURL": "https://www.binance.org",
         "explorers": [
@@ -180,7 +184,8 @@
             "chainId": 137,
             "name": "Matic",
             "symbol": "MATIC",
-            "decimals": 18
+            "decimals": 18,
+            "logoURL": "https://static.debank.com/image/matic_token/logo_url/matic/e5a8a2860ba5cf740a474dcab796dc63.png"
         },
         "infoURL": "https://matic.network/",
         "explorers": [
@@ -204,7 +209,8 @@
             "chainId": 80001,
             "name": "Matic",
             "symbol": "tMATIC",
-            "decimals": 18
+            "decimals": 18,
+            "logoURL": "https://static.debank.com/image/matic_token/logo_url/matic/e5a8a2860ba5cf740a474dcab796dc63.png"
         },
         "infoURL": "https://matic.network/",
         "explorers": [
@@ -221,14 +227,15 @@
         "name": "Arbitrum",
         "color": "rgb(36, 150, 238)",
         "network": "mainnet",
-        "fullName": "Arbitrum",
+        "fullName": "Arbitrum One",
         "shortName": "arb",
         "features": [],
         "nativeCurrency": {
             "chainId": 42161,
             "name": "Arbitrum Ether",
             "symbol": "ARETH",
-            "decimals": 18
+            "decimals": 18,
+            "logoURL": "https://assets.debank.com/static/media/arbitrum.8e326f58.svg"
         },
         "infoURL": "https://arbitrum.io",
         "explorers": [
@@ -833,8 +840,9 @@
     },
     {
         "chainId": 66,
-        "name": "OKExChain Mainnet",
+        "fullName": "OKExChain Mainnet",
         "chain": "OKEx",
+        "name": "OKEx",
         "network": "mainnet",
         "shortName": "okt",
         "features": [],
@@ -1296,15 +1304,15 @@
             "chainId": 250,
             "name": "Fantom",
             "symbol": "FTM",
-            "decimals": 18
+            "decimals": 18,
+            "logoURL": "https://static.debank.com/image/ftm_token/logo_url/ftm/33fdb9c5067e94f3a1b9e78f6fa86984.png"
         },
         "infoURL": "https://fantom.foundation",
         "explorers": [
             {
                 "name": "ftmscan",
                 "url": "https://ftmscan.com",
-                "standard": "EIP3091",
-                "logoURL": "https://static.debank.com/image/ftm_token/logo_url/ftm/33fdb9c5067e94f3a1b9e78f6fa86984.png"
+                "standard": "EIP3091"
             }
         ]
     },
@@ -2218,15 +2226,15 @@
             "chainId": 43114,
             "name": "Avalanche",
             "symbol": "AVAX",
-            "decimals": 18
+            "decimals": 18,
+            "logoURL": "https://static.debank.com/image/avax_token/logo_url/avax/0b9c84359c84d6bdd5bfda9c2d4c4a82.png"
         },
         "infoURL": "https://snowtrace.io/",
         "explorers": [
             {
                 "name": "snowtrace",
                 "url": "https://snowtrace.io/",
-                "standard": "EIP3091",
-                "logoURL": "https://snowtrace.io/images/svg/brands/main.svg?v=21.12.4.1"
+                "standard": "EIP3091"
             }
         ]
     },
@@ -2821,8 +2829,9 @@
     {
         "chainId": 1666600000,
         "name": "Harmony",
+        "type": "Harmony",
         "network": "mainnet",
-        "shortName": "hmy-s0",
+        "shortName": "hmy",
         "features": [],
         "nativeCurrency": {
             "chainId": 1666600000,
@@ -2836,7 +2845,8 @@
         "chainId": 1666600001,
         "name": "Harmony",
         "network": "mainnet",
-        "shortName": "hmy-s1",
+        "type": "Harmony",
+        "shortName": "hmy",
         "features": [],
         "nativeCurrency": {
             "chainId": 1666600001,
@@ -2850,7 +2860,8 @@
         "chainId": 1666600002,
         "name": "Harmony",
         "network": "mainnet",
-        "shortName": "hmy-s2",
+        "type": "Harmony",
+        "shortName": "hmy",
         "features": [],
         "nativeCurrency": {
             "chainId": 1666600002,
@@ -2864,7 +2875,8 @@
         "chainId": 1666600003,
         "name": "Harmony",
         "network": "mainnet",
-        "shortName": "hmy-s3",
+        "type": "Harmony",
+        "shortName": "hmy",
         "features": [],
         "nativeCurrency": {
             "chainId": 1666600003,
@@ -2878,7 +2890,8 @@
         "chainId": 1666700000,
         "name": "Harmony",
         "network": "testnet",
-        "shortName": "hmy-b-s0",
+        "type": "Harmony",
+        "shortName": "hmy",
         "features": [],
         "nativeCurrency": {
             "chainId": 1666700000,
@@ -2892,7 +2905,8 @@
         "chainId": 1666700001,
         "name": "Harmony",
         "network": "testnet",
-        "shortName": "hmy-b-s1",
+        "type": "Harmony",
+        "shortName": "hmy",
         "features": [],
         "nativeCurrency": {
             "chainId": 1666700001,
@@ -2906,7 +2920,8 @@
         "chainId": 1666700002,
         "name": "Harmony",
         "network": "testnet",
-        "shortName": "hmy-b-s2",
+        "type": "Harmony",
+        "shortName": "hmy",
         "features": [],
         "nativeCurrency": {
             "chainId": 1666700002,
@@ -2919,8 +2934,9 @@
     {
         "chainId": 1666700003,
         "name": "Harmony",
+        "type": "Harmony",
         "network": "testnet",
-        "shortName": "hmy-b-s3",
+        "shortName": "hmy",
         "features": [],
         "nativeCurrency": {
             "chainId": 1666700003,

@@ -3,11 +3,14 @@ import { InjectedDialog } from '@masknet/shared'
 import { Button, DialogActions, DialogContent, InputAdornment, InputBase, Typography } from '@mui/material'
 import Fuse from 'fuse.js'
 import { useEffect, useMemo, useState } from 'react'
-import type { ProfileInformation as Profile, ProfileInformationFromNextID } from '@masknet/shared-base'
+import type {
+    ProfileInformation as Profile,
+    ProfileInformation,
+    ProfileInformationFromNextID,
+} from '@masknet/shared-base'
 import { useI18N } from '../../../utils'
 import { ProfileInList } from './ProfileInList'
 import { SearchEmptyIcon, SearchIcon } from '@masknet/icons'
-import { uniqBy } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -85,7 +88,7 @@ export interface SelectRecipientsDialogUIProps extends withClasses<never> {
     searchEmptyText?: string
     onSubmit: () => void
     onClose: () => void
-    onSelect: (item: Profile) => void
+    onSelect: (item: ProfileInformationFromNextID | ProfileInformation) => void
     onDeselect: (item: Profile) => void
     onSearch(v: string): void
 }
@@ -107,15 +110,13 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                 'walletAddress',
                 'linkedPersona.rawPublicKey',
                 'linkedPersona.publicKeyAsHex',
+                'linkedTwitterNames',
             ],
             isCaseSensitive: false,
             ignoreLocation: true,
             threshold: 0,
         })
-        return uniqBy(
-            (search === '' ? items : fuse.search(search).map((item) => item.item)).concat(props.selected),
-            (x) => x.linkedPersona?.rawPublicKey.toLowerCase(),
-        )
+        return (search === '' ? items : fuse.search(search).map((item) => item.item)).concat(props.selected)
     }, [search, items])
     return (
         <InjectedDialog
@@ -184,7 +185,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                 )}
             </DialogContent>
             <DialogActions className={classes.actions}>
-                <Button fullWidth variant="roundedFlat" disabled={props.submitDisabled} onClick={props.onSubmit}>
+                <Button fullWidth variant="roundedOutlined" disabled={props.submitDisabled} onClick={props.onSubmit}>
                     {t('back')}
                 </Button>
                 <Button fullWidth variant="roundedContained" disabled={props.submitDisabled} onClick={props.onSubmit}>

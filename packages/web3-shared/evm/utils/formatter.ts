@@ -1,15 +1,9 @@
 import { BigNumber } from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
-import { multipliedBy } from '@masknet/web3-shared-base'
 import { isValidDomain } from './domain'
 import { isValidAddress } from './address'
 
-export function formatPercentage(value: BigNumber.Value) {
-    const percentage = multipliedBy(value, 100)
-        .toFixed(2)
-        .replace(/\.?0+$/, '')
-    return `${percentage}%`
-}
+export { formatPercentage } from '@masknet/web3-shared-base'
 
 export function formatPrice(price: BigNumber.Value, decimalPlaces = 6) {
     return new BigNumber(price).decimalPlaces(decimalPlaces).toString()
@@ -52,7 +46,7 @@ export function formatNumberString(input: string, size = 0) {
 }
 
 export function formatWeiToGwei(value: BigNumber.Value) {
-    return new BigNumber(value).shiftedBy(-9).integerValue()
+    return new BigNumber(value).shiftedBy(-9)
 }
 
 export function formatWeiToEther(value: BigNumber.Value) {
@@ -60,7 +54,7 @@ export function formatWeiToEther(value: BigNumber.Value) {
 }
 
 export function formatGweiToWei(value: BigNumber.Value) {
-    return new BigNumber(value).shiftedBy(9)
+    return new BigNumber(value).shiftedBy(9).integerValue()
 }
 
 export function formatGweiToEther(value: BigNumber.Value) {

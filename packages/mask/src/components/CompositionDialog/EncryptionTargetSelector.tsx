@@ -11,7 +11,6 @@ import { unreachable } from '@dimensiondev/kit'
 
 const useStyles = makeStyles()((theme) => ({
     optionTitle: {
-        fontFamily: 'sans-serif',
         fontSize: 14,
         lineHeight: '18px',
         color: theme.palette.text.secondary,
@@ -90,21 +89,22 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-    const e2eDisabledMessage = props.e2eDisabled ? (
-        <div className={classes.flex}>
-            <Typography className={classes.mainTitle}>{t('persona_required')}</Typography>
-            <Typography
-                className={classes.create}
-                onClick={() => {
-                    if (props.e2eDisabled === E2EUnavailableReason.NoLocalKey) return
-                    props.e2eDisabled === E2EUnavailableReason.NoPersona
-                        ? props.onCreatePersona()
-                        : props.onConnectPersona()
-                }}>
-                {props.e2eDisabled === E2EUnavailableReason.NoPersona ? t('create') : t('connect')}
-            </Typography>
-        </div>
-    ) : null
+    const e2eDisabledMessage =
+        props.e2eDisabled && props.e2eDisabled !== E2EUnavailableReason.NoLocalKey ? (
+            <div className={classes.flex}>
+                <Typography className={classes.mainTitle}>{t('persona_required')}</Typography>
+                <Typography
+                    className={classes.create}
+                    onClick={() => {
+                        if (props.e2eDisabled === E2EUnavailableReason.NoLocalKey) return
+                        props.e2eDisabled === E2EUnavailableReason.NoPersona
+                            ? props.onCreatePersona()
+                            : props.onConnectPersona()
+                    }}>
+                    {props.e2eDisabled === E2EUnavailableReason.NoPersona ? t('create') : t('connect')}
+                </Typography>
+            </div>
+        ) : null
     const noLocalKeyMessage = props.e2eDisabled === E2EUnavailableReason.NoLocalKey && (
         <div className={classes.flex}>
             <Typography className={classes.mainTitle}>{t('compose_no_local_key')}</Typography>
@@ -137,18 +137,18 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                     value={EncryptionTargetType.Public}
                     title={t('compose_encrypt_visible_to_all')}
                     subTitle={t('compose_encrypt_visible_to_all_sub')}
-                    showDivider
                 />
+                <div className={classes.divider} />
                 <PopoverListItem
                     onItemClick={() => props.onChange(EncryptionTargetType.Self)}
                     disabled={!!props.e2eDisabled}
                     value={EncryptionTargetType.Self}
                     title={t('compose_encrypt_visible_to_private')}
                     subTitle={t('compose_encrypt_visible_to_private_sub')}
-                    showDivider
                 />
                 {e2eDisabledMessage}
                 {noLocalKeyMessage}
+                <div className={classes.divider} />
                 <PopoverListItem
                     onItemClick={() => {
                         props.onChange(EncryptionTargetType.E2E)

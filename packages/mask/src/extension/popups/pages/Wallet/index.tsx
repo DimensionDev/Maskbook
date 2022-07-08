@@ -1,15 +1,15 @@
+import urlcat from 'urlcat'
+import { lazy, Suspense, useEffect } from 'react'
+import { useAsyncRetry } from 'react-use'
+import { Route, Routes, useNavigate, useLocation } from 'react-router-dom'
 import { WalletStartUp } from './components/StartUp'
 import { WalletAssets } from './components/WalletAssets'
-import { Route, Routes, useNavigate, useLocation } from 'react-router-dom'
-import { lazy, Suspense, useEffect } from 'react'
 import { PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
 import { WalletContext } from './hooks/useWalletContext'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder'
-import { useAsyncRetry } from 'react-use'
 import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages'
 import SelectWallet from './SelectWallet'
 import { useWalletLockStatus } from './hooks/useWalletLockStatus'
-import urlcat from 'urlcat'
 import { WalletHeader } from './components/WalletHeader'
 import { useChainId, useWallet, useWeb3State } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, TransactionDescriptorType } from '@masknet/web3-shared-base'
@@ -36,6 +36,8 @@ const LegacyWalletRecovery = lazy(() => import('./LegacyWalletRecovery'))
 const ReplaceTransaction = lazy(() => import('./ReplaceTransaction'))
 const ConnectWallet = lazy(() => import('./ConnectWallet'))
 
+const exclusionDetectLocked = [PopupRoutes.Unlock, PopupRoutes.ConnectWallet]
+
 const r = relativeRouteOf(PopupRoutes.Wallet)
 export default function Wallet() {
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
@@ -57,7 +59,21 @@ export default function Wallet() {
             return
         const payload = await WalletRPC.topUnconfirmedRequest()
         if (!payload) return
+
+        if (payload) {
+            switch (payload.method) {
+                case EthereumMethodType.ETH_SIGN:
+                case EthereumMethodType.ETH_SIGN_TYPED_DATA:
+                case EthereumMethodType.PERSONAL_SIGN:
+                    navigate(PopupRoutes.WalletSignRequest, { replace: true })
+                    break
+                default:
+                    break
+            }
+        }
+
         const computedPayload = getPayloadConfig(payload)
+
         if (!computedPayload) return
 
         const formatterTransaction = await TransactionFormatter?.formatTransaction(chainId, computedPayload)
@@ -70,21 +86,10 @@ export default function Wallet() {
         ) {
             navigate(PopupRoutes.ContractInteraction, { replace: true })
         }
-
-        if (computedPayload) {
-            switch (payload.method) {
-                case EthereumMethodType.ETH_SIGN:
-                case EthereumMethodType.ETH_SIGN_TYPED_DATA:
-                    navigate(PopupRoutes.WalletSignRequest, { replace: true })
-                    break
-                default:
-                    break
-            }
-        }
     }, [location.search, location.pathname, chainId])
 
     useEffect(() => {
-        if (!(isLocked && !getLockStatusLoading && location.pathname !== PopupRoutes.Unlock)) return
+        if (!(isLocked && !getLockStatusLoading && !exclusionDetectLocked.some((x) => x === location.pathname))) return
         navigate(urlcat(PopupRoutes.Unlock, { from: location.pathname }), { replace: true })
     }, [isLocked, location.pathname, getLockStatusLoading])
 

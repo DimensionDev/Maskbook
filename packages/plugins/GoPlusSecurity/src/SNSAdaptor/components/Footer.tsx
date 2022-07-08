@@ -7,16 +7,27 @@ export const Footer = () => {
     const t = useI18N()
     return (
         <Stack justifyContent="flex-end" direction="row">
-            <Stack direction="row" alignItems="center">
-                <Box>
-                    <Typography variant="body2" mr={1.25}>
-                        {t.powered_by_go_plus()}
-                    </Typography>
-                </Box>
-                <Link href={PLUGIN_OFFICIAL_WEBSITE} target="_blank" rel="noopener noreferrer">
-                    <GoPlusLabLogo />
+            <Box display="flex" justifyContent="center">
+                <Link href={PLUGIN_OFFICIAL_WEBSITE} target="_blank" underline="none" rel="noopener noreferrer">
+                    <Stack direction="row" justifyContent="center">
+                        <Typography
+                            fontSize="14px"
+                            color={(theme) => theme.palette.maskColor.second}
+                            fontWeight="700"
+                            marginRight="4px">
+                            {t.powered_by()}
+                        </Typography>
+                        <Typography
+                            fontSize="14px"
+                            color={(theme) => theme.palette.maskColor.main}
+                            fontWeight="700"
+                            marginRight="12px">
+                            {t.go_plus()}
+                        </Typography>
+                        <GoPlusLabLogo style={{ width: 24, height: 24 }} />
+                    </Stack>
                 </Link>
-            </Stack>
+            </Box>
         </Stack>
     )
 }

@@ -363,17 +363,10 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(
                     </AccordionDetails>
                 </Accordion>
                 <Box className={classes.controller}>
-                    <ActionButton
-                        color="secondary"
-                        variant="contained"
-                        className={classnames(classes.button, classes.cancelButton)}
-                        onClick={onCancel}>
+                    <ActionButton variant="outlined" onClick={onCancel}>
                         {t('cancel')}
                     </ActionButton>
                     <ActionButton
-                        color="primary"
-                        variant="contained"
-                        className={classes.button}
                         onClick={() => {
                             onSave()
                             onSaveSlippage()

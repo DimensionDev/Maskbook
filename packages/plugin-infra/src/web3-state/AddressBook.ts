@@ -14,7 +14,7 @@ export class AddressBookState<
 
     constructor(
         protected context: Plugin.Shared.SharedContext,
-        protected defaultValue: AddressBook,
+        protected chainIds: ChainId[],
         protected subscriptions: {
             chainId?: Subscription<ChainId>
         },
@@ -24,11 +24,10 @@ export class AddressBookState<
             formatAddress(a: string): string
         },
     ) {
-        const { storage } = this.context
-            .createKVStorage('persistent', 'AddressBook', {})
-            .createSubScope('AddressBook', {
-                value: defaultValue,
-            })
+        const defaultValue = Object.fromEntries(chainIds.map((x) => [x, []] as [ChainId, string[]])) as AddressBook
+        const { storage } = this.context.createKVStorage('persistent', {}).createSubScope('AddressBook', {
+            value: defaultValue,
+        })
         this.storage = storage.value
 
         if (this.subscriptions.chainId) {

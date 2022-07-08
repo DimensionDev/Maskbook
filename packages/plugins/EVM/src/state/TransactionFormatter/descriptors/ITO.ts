@@ -9,12 +9,15 @@ export class ITODescriptor implements TransactionDescriptor {
         const { ITO2_CONTRACT_ADDRESS } = getITOConstants(context.chainId)
         if (!isSameAddress(context.to, ITO2_CONTRACT_ADDRESS)) return
 
+        const parameters = context.methods?.find((x) => x.name === 'fill_pool')?.parameters
+        if (!parameters?._token_addr || !parameters?._total_tokens) return
+
         const connection = await Web3StateSettings.value.Connection?.getConnection?.({
             chainId: context.chainId,
             account: context.from,
         })
-        const token = await connection?.getFungibleToken(context.parameters?._token_addr ?? '')
-        const amount = formatBalance(context.parameters?._total_tokens, token?.decimals)
+        const token = await connection?.getFungibleToken(parameters?._token_addr ?? '')
+        const amount = formatBalance(parameters?._total_tokens, token?.decimals)
 
         return {
             chainId: context.chainId,

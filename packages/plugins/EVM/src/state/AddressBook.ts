@@ -12,14 +12,15 @@ export class AddressBook extends AddressBookState<ChainId> {
             chainId?: Subscription<ChainId>
         },
     ) {
-        const defaultValue = Object.fromEntries(
-            getEnumAsArray(ChainId).map((x) => [x.value, []] as [ChainId, string[]]),
-        ) as Record<ChainId, string[]>
-
-        super(context, defaultValue, subscriptions, {
-            isValidAddress,
-            isSameAddress,
-            formatAddress: formatEthereumAddress,
-        })
+        super(
+            context,
+            getEnumAsArray(ChainId).map((x) => x.value),
+            subscriptions,
+            {
+                isValidAddress,
+                isSameAddress,
+                formatAddress: formatEthereumAddress,
+            },
+        )
     }
 }

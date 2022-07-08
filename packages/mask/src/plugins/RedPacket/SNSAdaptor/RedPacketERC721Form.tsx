@@ -3,7 +3,6 @@ import { makeStyles } from '@masknet/theme'
 import { useState, useCallback, useEffect, useMemo } from 'react'
 import { useI18N } from '../locales'
 import classNames from 'classnames'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { ERC721ContractSelectPanel } from '../../../web3/UI/ERC721ContractSelectPanel'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { EthereumERC721TokenApprovedBoundary } from '../../../web3/UI/EthereumERC721TokenApprovedBoundary'
@@ -20,6 +19,10 @@ import { NFT_RED_PACKET_MAX_SHARES } from '../constants'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { useNonFungibleOwnerTokens } from '@masknet/plugin-infra/web3-evm'
 import { NetworkPluginID, NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { PluginWalletStatusBar } from '../../../utils'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -27,6 +30,7 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             alignItems: 'stretch',
             flexDirection: 'column',
+            padding: '0 16px',
         },
         line: {
             display: 'flex',
@@ -72,6 +76,17 @@ const useStyles = makeStyles()((theme) => {
             borderRadius: 12,
             padding: theme.spacing(1.5, 1.5, 1, 1),
             boxSizing: 'border-box',
+            '::-webkit-scrollbar': {
+                backgroundColor: 'transparent',
+                width: 20,
+            },
+            '::-webkit-scrollbar-thumb': {
+                borderRadius: '20px',
+                width: 5,
+                border: '7px solid rgba(0, 0, 0, 0)',
+                backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+                backgroundClip: 'padding-box',
+            },
         },
         tokenSelectorWrapper: {
             position: 'relative',
@@ -139,7 +154,7 @@ const useStyles = makeStyles()((theme) => {
         selectWrapper: {
             display: 'flex',
             alignItems: 'center',
-            margin: '16px 0 8px 0',
+            margin: 0,
         },
         option: {
             display: 'flex',
@@ -190,14 +205,20 @@ const useStyles = makeStyles()((theme) => {
         assetImgWrapper: {
             maxHeight: 155,
         },
+        approveButton: {
+            height: 40,
+            margin: 0,
+            padding: 0,
+        },
     }
 })
 interface RedPacketERC721FormProps {
     onClose: () => void
+    setERC721DialogHeight?: (height: number) => void
 }
 export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const t = useI18N()
-    const { onClose } = props
+    const { onClose, setERC721DialogHeight } = props
     const { classes } = useStyles()
     const [open, setOpen] = useState(false)
     const [balance, setBalance] = useState(0)
@@ -206,8 +227,8 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [contract, setContract] = useState<NonFungibleTokenContract<ChainId, SchemaType.ERC721>>()
-    const [manualSelectedTokenDetailedList, setExistTokenDetailedList] = useState<OrderedERC721Token[]>([])
-    const [onceAllSelectedTokenDetailedList, setAllTokenDetailedList] = useState<OrderedERC721Token[]>([])
+    const [manualSelectedTokenDetailedList, setExistTokenDetailedList] = useState<OrderedERC721Token[]>(EMPTY_LIST)
+    const [onceAllSelectedTokenDetailedList, setAllTokenDetailedList] = useState<OrderedERC721Token[]>(EMPTY_LIST)
     const tokenDetailedList =
         selectOption === NFTSelectOption.Partial ? manualSelectedTokenDetailedList : onceAllSelectedTokenDetailedList
     const [message, setMessage] = useState('Best Wishes!')
@@ -258,7 +279,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         clearContract()
     }, [chainId])
 
-    const { RED_PACKET_NFT_ADDRESS } = useNftRedPacketConstants()
+    const { RED_PACKET_NFT_ADDRESS } = useNftRedPacketConstants(chainId)
 
     const validationMessage = useMemo(() => {
         if (!balance) return t.erc721_insufficient_balance()
@@ -266,15 +287,19 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         return ''
     }, [tokenDetailedList.length, balance, t])
 
+    setERC721DialogHeight?.(balance > 0 ? 690 : 350)
+
     return (
         <>
             <Box className={classes.root}>
-                <ERC721ContractSelectPanel
-                    contract={contract}
-                    onContractChange={setContract}
-                    balance={balance}
-                    onBalanceChange={setBalance}
-                />
+                <Box style={{ margin: '16px 0' }}>
+                    <ERC721ContractSelectPanel
+                        contract={contract}
+                        onContractChange={setContract}
+                        balance={balance}
+                        onBalanceChange={setBalance}
+                    />
+                </Box>
                 {contract && balance ? (
                     loadingOwnerList ? (
                         <CircularProgress size={24} className={classes.loadingOwnerList} />
@@ -346,22 +371,29 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         <Typography className={classes.approveAllTip}>{t.nft_approve_all_tip()}</Typography>
                     </>
                 ) : null}
-                <WalletConnectedBoundary>
-                    <EthereumERC721TokenApprovedBoundary
-                        validationMessage={validationMessage}
-                        owner={account}
-                        contractDetailed={contract}
-                        operator={RED_PACKET_NFT_ADDRESS}>
-                        <ActionButton
-                            variant="contained"
-                            size="large"
-                            disabled={!!validationMessage}
-                            fullWidth
-                            onClick={() => setOpenConfirmDialog(true)}>
-                            {t.next()}
-                        </ActionButton>
-                    </EthereumERC721TokenApprovedBoundary>
-                </WalletConnectedBoundary>
+            </Box>
+            <Box style={{ position: 'absolute', bottom: 0, width: '100%' }}>
+                <PluginWalletStatusBar>
+                    <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                        <WalletConnectedBoundary>
+                            <EthereumERC721TokenApprovedBoundary
+                                validationMessage={validationMessage}
+                                owner={account}
+                                contractDetailed={contract}
+                                classes={{ approveButton: classes.approveButton }}
+                                operator={RED_PACKET_NFT_ADDRESS}>
+                                <ActionButton
+                                    style={{ height: 40, padding: 0, margin: 0 }}
+                                    size="large"
+                                    disabled={!!validationMessage}
+                                    fullWidth
+                                    onClick={() => setOpenConfirmDialog(true)}>
+                                    {t.next()}
+                                </ActionButton>
+                            </EthereumERC721TokenApprovedBoundary>
+                        </WalletConnectedBoundary>
+                    </ChainBoundary>
+                </PluginWalletStatusBar>
             </Box>
             {open ? (
                 <SelectNftTokenDialog

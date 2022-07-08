@@ -48,14 +48,14 @@ export function OperationFooter({
 
         if (!account) {
             return (
-                <ActionButton variant="contained" fullWidth onClick={openSelectProviderDialog}>
+                <ActionButton fullWidth onClick={openSelectProviderDialog} variant="roundedDark">
                     {tr('plugin_wallet_connect_a_wallet')}
                 </ActionButton>
             )
         }
         if (!chainIdValid) {
             return (
-                <ActionButton disabled variant="contained" fullWidth>
+                <ActionButton disabled fullWidth variant="roundedDark">
                     {tr('plugin_wallet_invalid_network')}
                 </ActionButton>
             )
@@ -72,10 +72,10 @@ export function OperationFooter({
                         backgroundColor: theme.palette.maskColor.dark,
                     },
                 }}
+                variant="roundedDark"
                 fullWidth
                 loading={isLoading}
                 disabled={isLoading}
-                variant="contained"
                 onClick={onClaimOrRefund}>
                 {canClaim ? (isClaiming ? t.claiming() : t.claim()) : isRefunding ? t.refunding() : t.refund()}
             </ActionButton>
@@ -87,28 +87,17 @@ export function OperationFooter({
             <ChainBoundary
                 expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                 expectedChainId={chainId ?? ChainId.Mainnet}
-                renderInTimeline>
+                ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                 <WalletConnectedBoundary
                     hideRiskWarningConfirmed
                     startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
-                    renderInTimeline
-                    classes={{
-                        connectWallet: classes.connectWallet,
-                    }}>
+                    ActionButtonProps={{ variant: 'roundedDark' }}>
                     <Box className={classes.footer}>
                         {canRefund ? null : (
                             <ActionButton
-                                sx={{
-                                    backgroundColor: theme.palette.maskColor.dark,
-                                    color: theme.palette.maskColor.white,
-                                    '&:hover': {
-                                        backgroundColor: theme.palette.maskColor.dark,
-                                    },
-                                    padding: 1.125,
-                                }}
                                 fullWidth
+                                variant="roundedDark"
                                 startIcon={<SharedIcon style={{ fontSize: 18 }} />}
-                                variant="contained"
                                 onClick={onShare}>
                                 {tr('share')}
                             </ActionButton>

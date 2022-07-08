@@ -8,10 +8,8 @@ export function useChainIdSupport<T extends NetworkPluginID>(
     expectedChainId?: Web3Helper.Definition[T]['ChainId'],
     feature?: string,
 ) {
-    type IsSupport = (chainId?: Web3Helper.Definition[T]['ChainId'], feature?: string) => boolean
-
     const chainId = useChainId(pluginID, expectedChainId)
     const { Others } = useWeb3State(pluginID)
 
-    return (Others?.chainResolver.isSupport as IsSupport | undefined)?.(chainId, feature) ?? false
+    return Others?.chainResolver.isSupport?.(chainId, feature) ?? false
 }

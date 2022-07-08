@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useWindowSize } from 'react-use'
-import { CircularProgress, Typography } from '@mui/material'
+import { CircularProgress, Stack, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import RefreshIcon from '@mui/icons-material/Refresh'
 import { useI18N } from '../../../../utils'
 import type { Coin, Currency, Stat } from '../../types'
 import { useDimension, Dimension } from '../../../hooks/useDimension'
@@ -28,9 +27,9 @@ const useStyles = makeStyles<PriceChartProps>()((theme, { stats, coin }) => {
             display: 'block',
         },
         progress: {
-            bottom: theme.spacing(1),
-            right: theme.spacing(1),
             position: 'absolute',
+            right: 0,
+            bottom: -64,
         },
         refresh: {
             bottom: theme.spacing(1),
@@ -90,19 +89,14 @@ export function PriceChart(props: PriceChartProps) {
         })),
         dimension,
         'x-trader-price-line-chart',
-        { sign: props.currency.symbol },
+        { sign: 'USD', color: '#3DC233' },
     )
 
     return (
         <div className={classes.root} ref={rootRef}>
-            {props.loading ? (
-                <CircularProgress className={classes.progress} color="primary" size={15} />
-            ) : (
-                <RefreshIcon className={classes.refresh} color="primary" onClick={props.retry} />
-            )}
+            {props.loading && <CircularProgress className={classes.progress} color="primary" size={15} />}
             {props.stats.length ? (
-                <>
-                    {props.children}
+                <Stack gap={2}>
                     <svg
                         className={classes.svg}
                         ref={svgRef}
@@ -114,7 +108,8 @@ export function PriceChart(props: PriceChartProps) {
                             props.stats.length && openWindow(props.coin?.platform_url)
                         }}
                     />
-                </>
+                    {props.children}
+                </Stack>
             ) : (
                 <Typography className={classes.placeholder} align="center" color="textSecondary">
                     {t('plugin_trader_no_data')}

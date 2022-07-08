@@ -49,13 +49,18 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             alignItems: 'center',
         },
         paper: {
-            width: '612px !important',
+            width: '600px !important',
+            minHeight: 400,
+            maxHeight: 620,
             maxWidth: 'none',
             boxShadow: 'none',
             backgroundImage: 'none',
             [smallQuery]: {
                 display: 'block !important',
                 margin: 12,
+            },
+            '&::-webkit-scrollbar': {
+                display: 'none',
             },
         },
         dialogTitle: {
@@ -83,6 +88,7 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             },
         },
         dialogContent: {
+            backgroundColor: theme.palette.maskColor.bottom,
             [smallQuery]: {
                 display: 'flex',
                 flexDirection: 'column',
@@ -92,6 +98,7 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             },
         },
         dialogActions: {
+            backgroundColor: theme.palette.maskColor.bottom,
             padding: '6px 16px',
             [smallQuery]: {
                 display: 'flex',

@@ -1,5 +1,5 @@
-import { useCallback } from 'react'
-import { DialogActions, DialogContent, Typography } from '@mui/material'
+import { useCallback, useState } from 'react'
+import { DialogActions, DialogContent, Typography, dialogClasses } from '@mui/material'
 import ErrorIcon from '@mui/icons-material/Error'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -13,7 +13,7 @@ import { WalletMessages } from '../../messages'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
-        padding: theme.spacing(2.5),
+        padding: theme.spacing(2),
         overflowX: 'hidden',
     },
     footer: {
@@ -39,17 +39,29 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: 11.5,
         color: theme.palette.text.primary,
     },
+    inVisible: {
+        visibility: 'hidden',
+    },
+    dialog: {
+        [`.${dialogClasses.paper}`]: {
+            minHeight: 'unset !important',
+        },
+    },
 }))
 export interface WalletStatusDialogProps {}
 export function WalletStatusDialog(props: WalletStatusDialogProps) {
     const { t } = useI18N()
 
     const { classes } = useStyles()
+    const [isHidden, setIsHidden] = useState(false)
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
 
     // #region remote controlled dialog logic
     const { open, closeDialog: _closeDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
+        (ev) => {
+            if (ev.open) setIsHidden(false)
+        },
     )
 
     const closeDialog = useCallback(() => {
@@ -62,9 +74,20 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     // #endregion
 
     return (
-        <InjectedDialog title="Mask Network" open={open} onClose={closeDialog} maxWidth="sm">
+        <InjectedDialog
+            title={t('plugin_wallet_dialog_title')}
+            open={open}
+            onClose={closeDialog}
+            maxWidth="sm"
+            className={isHidden ? classes.inVisible : classes.dialog}>
             <DialogContent className={classes.content}>
-                <WalletStatusBox />
+                <WalletStatusBox
+                    showPendingTransaction
+                    closeDialog={() => {
+                        setIsHidden(true)
+                        _closeDialog()
+                    }}
+                />
             </DialogContent>
             {!chainIdValid ? (
                 <DialogActions className={classes.footer}>

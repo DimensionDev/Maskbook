@@ -1,33 +1,41 @@
 import { createContainer } from 'unstated-next'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { ECKeyIdentifier, EMPTY_LIST, PersonaInformation } from '@masknet/shared-base'
+import { ECKeyIdentifier, EMPTY_LIST, PersonaInformation, ProfileIdentifier } from '@masknet/shared-base'
 import { currentPersonaIdentifier } from '../../../../../settings/settings'
-import { useAsync, useAsyncRetry } from 'react-use'
+import { useAsyncRetry } from 'react-use'
 import Services from '../../../../service'
-import { head } from 'lodash-unified'
-import { useEffect, useState } from 'react'
+import { head, isEqual, unionWith } from 'lodash-unified'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { MaskMessages } from '../../../../../utils'
 import { NextIDProof } from '@masknet/web3-providers'
 import type { Account } from '../type'
+import { initialPersonaInformation } from './PersonaContextInitialData'
+import { NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP } from '@masknet/shared'
 
+function useSSRPersonaInformation() {
+    const [personas, setPersonas] = useState(initialPersonaInformation)
+    const revalidate = useCallback(
+        () => void Services.Identity.queryOwnedPersonaInformation(false).then(setPersonas),
+        [],
+    )
+    useEffect(() => void initialPersonaInformation ?? revalidate(), [])
+    useEffect(() => MaskMessages.events.ownPersonaChanged.on(revalidate), [])
+
+    return { personas }
+}
+
+const compareIdentity = (a?: string, b?: string) => isEqual(a?.toLowerCase(), b?.toLowerCase())
 function usePersonaContext() {
     const [selectedAccount, setSelectedAccount] = useState<Account>()
     const [selectedPersona, setSelectedPersona] = useState<PersonaInformation>()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
-    const { value: personas, retry } = useAsyncRetry(
-        async () => Services.Identity.queryOwnedPersonaInformation(false),
-        [currentPersonaIdentifier],
-    )
-    const { value: avatar } = useAsync(async () => {
-        return Services.Identity.getPersonaAvatar(ECKeyIdentifier.from(currentIdentifier).unwrap())
-    }, [currentIdentifier])
-    useEffect(() => {
-        return MaskMessages.events.ownPersonaChanged.on(retry)
-    }, [retry])
+
+    const { personas } = useSSRPersonaInformation()
 
     const currentPersona = personas?.find(
         (x) => x.identifier === ECKeyIdentifier.from(currentIdentifier).unwrapOr(head(personas)?.identifier),
     )
+    const avatar = currentPersona?.avatar
 
     const {
         value: proofs,
@@ -45,7 +53,40 @@ function usePersonaContext() {
         }
     }, [currentPersona])
 
+    const accounts = useMemo(() => {
+        if (!currentPersona) return EMPTY_LIST
+
+        const localProfiles = currentPersona.linkedProfiles.map<Account>((profile) => ({
+            ...profile,
+            identity: profile.identifier.userId,
+        }))
+
+        if (!proofs) return localProfiles
+
+        const remoteProfiles = proofs
+            .filter((x) => !!NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP[x.platform])
+            .map<Account>((x) => {
+                return {
+                    ...x,
+                    identifier: ProfileIdentifier.of(
+                        NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP[x.platform],
+                        x.identity,
+                    ).unwrap(),
+                }
+            })
+
+        return unionWith(remoteProfiles, localProfiles, (a, b) => compareIdentity(a.identity, b.identity)).map((x) => {
+            const localProfile = localProfiles.find((profile) => compareIdentity(profile.identity, x.identity))
+            if (!localProfile) return x
+            return {
+                ...localProfile,
+                ...x,
+            }
+        })
+    }, [proofs, currentPersona])
+
     return {
+        accounts,
         selectedAccount,
         setSelectedAccount,
         avatar,

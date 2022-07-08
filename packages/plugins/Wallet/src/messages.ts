@@ -1,38 +1,31 @@
 import type BigNumber from 'bignumber.js'
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
-import type {
-    GasOptionType,
-    NetworkPluginID,
-    NonFungibleTokenContract,
-    TransactionStatusType,
-} from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType, TransactionState } from '@masknet/web3-shared-evm'
+import type { GasOptionType, NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { PLUGIN_ID } from './constants'
 
 export type ApplicationDialogEvent = {
     open: boolean
 }
 
-export type TransactionDialogEvent =
-    | {
-          open: true
-          state: TransactionState
-          shareText?: string
-          summary?: string
-          title?: string
-      }
-    | {
-          open: false
-      }
-
 export type SelectProviderDialogEvent =
     | {
           open: true
+          walletConnectedCallback?: () => void
       }
     | {
           open: false
           address?: string
+      }
+
+export type WalletConnectQRCodeDialogEvent =
+    | {
+          open: true
+          uri: string
+      }
+    | {
+          open: false
       }
 
 export type ConnectWalletDialogEvent =
@@ -40,6 +33,7 @@ export type ConnectWalletDialogEvent =
           open: true
           network: Web3Helper.NetworkDescriptorAll
           provider: Web3Helper.ProviderDescriptorAll
+          walletConnectedCallback?: () => void
       }
     | {
           open: false
@@ -74,6 +68,7 @@ export type SelectNftContractDialogEvent = {
     uuid: string
 
     chainId?: ChainId
+    balance?: string
     /**
      * The selected detailed nft contract.
      */
@@ -87,20 +82,7 @@ export interface SocketMessageUpdatedEvent {
     from: 'cache' | 'remote'
 }
 
-export interface TransactionProgressEvent {
-    pluginID: NetworkPluginID
-    chainId: Web3Helper.ChainIdAll
-    status: TransactionStatusType
-    transactionId: string
-    transaction: Web3Helper.TransactionAll
-}
-
 export interface WalletMessage {
-    /**
-     * Transaction dialog
-     */
-    transactionDialogUpdated: TransactionDialogEvent
-
     /**
      * Select provider dialog
      */
@@ -132,6 +114,11 @@ export interface WalletMessage {
     selectNftContractDialogUpdated: SelectNftContractDialogEvent
 
     /**
+     * WalletConnect QR Code dialog
+     */
+    walletConnectQRCodeDialogUpdated: WalletConnectQRCodeDialogEvent
+
+    /**
      * Wallet Risk Warning dialog
      */
     walletRiskWarningDialogUpdated: WalletRiskWarningDialogEvent
@@ -140,7 +127,6 @@ export interface WalletMessage {
     phrasesUpdated: void
     addressBookUpdated: void
     transactionsUpdated: void
-    transactionProgressUpdated: TransactionProgressEvent
     requestsUpdated: { hasRequest: boolean }
     /** true: Now locked; false: Now unlocked */
     walletLockStatusUpdated: boolean

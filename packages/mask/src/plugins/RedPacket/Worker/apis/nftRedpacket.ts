@@ -112,6 +112,7 @@ export async function getNftRedPacketHistory(chainId: ChainId, address: string, 
         const nftRedPacketSubgraphInMask = {
             ...x,
             token: tokenIntoMask(x.token),
+            token_contract: tokenIntoMask(x.token_contract),
             duration: x.duration * 1000,
             creation_time: x.creation_time * 1000,
         } as NftRedPacketSubgraphInMask

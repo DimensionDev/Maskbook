@@ -2,8 +2,8 @@ import type { Subscription } from 'use-subscription'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import type { Plugin } from '@masknet/plugin-infra'
 import { AddressBookState } from '@masknet/plugin-infra/web3'
-import { ChainId } from '@masknet/web3-shared-flow'
-import { isSameAddress, isValidAddress, formatAddress } from '../helpers'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { ChainId, isValidAddress, formatAddress } from '@masknet/web3-shared-flow'
 
 export class AddressBook extends AddressBookState<ChainId, Record<ChainId, string[]>> {
     constructor(
@@ -12,14 +12,15 @@ export class AddressBook extends AddressBookState<ChainId, Record<ChainId, strin
             chainId?: Subscription<ChainId>
         },
     ) {
-        const defaultValue = Object.fromEntries(
-            getEnumAsArray(ChainId).map((x) => [x.value, []] as [ChainId, string[]]),
-        ) as Record<ChainId, string[]>
-
-        super(context, defaultValue, subscriptions, {
-            isValidAddress,
-            isSameAddress,
-            formatAddress,
-        })
+        super(
+            context,
+            getEnumAsArray(ChainId).map((x) => x.value),
+            subscriptions,
+            {
+                isValidAddress,
+                isSameAddress,
+                formatAddress,
+            },
+        )
     }
 }

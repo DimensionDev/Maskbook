@@ -11,6 +11,7 @@ import PriorityHighIcon from '@mui/icons-material/PriorityHigh'
 import { useI18N, useMatchXS } from '../../../../utils'
 import { WalletMessages } from '../../messages'
 import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
+import { isDashboardPage } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -23,15 +24,12 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(3),
     },
     button: {
-        borderRadius: 9999,
+        borderRadius: isDashboardPage() ? 9999 : undefined,
         [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
             marginBottom: theme.spacing(2),
         },
     },
-    cancel: {
-        backgroundColor: theme.palette.background.default,
-        border: 'none',
-    },
+    cancel: {},
     title: {
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2),
@@ -129,17 +127,13 @@ export function WalletRiskWarningDialog() {
                 <Button
                     className={classnames(classes.button, classes.cancel, 'dashboard-style')}
                     fullWidth
-                    variant="outlined"
-                    onClick={onClose}
-                    size="large">
+                    onClick={onClose}>
                     {t('cancel')}
                 </Button>
                 <ActionButtonPromise
                     className={classes.button}
-                    variant="contained"
                     fullWidth
                     disabled={!account}
-                    size="large"
                     init={t('confirm')}
                     waiting={t('wallet_risk_confirm_confirming')}
                     failed={t('wallet_risk_confirm_failed')}

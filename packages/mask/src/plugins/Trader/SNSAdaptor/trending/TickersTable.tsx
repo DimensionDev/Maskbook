@@ -17,9 +17,13 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     cell: {
-        paddingLeft: theme.spacing(1.5),
-        paddingRight: theme.spacing(1),
+        paddingLeft: theme.spacing(0.5),
+        paddingRight: theme.spacing(0.5),
+        fontSize: 12,
+        fontWeight: 700,
         whiteSpace: 'nowrap',
+        background: theme.palette.background.paper,
+        border: 'none',
     },
     logo: {
         width: 18,
@@ -59,7 +63,11 @@ export function TickersTable(props: TickersTableProps) {
                 {(() => {
                     const formatted = formatEthereumAddress(ticker.base_name, 2)
                     return (
-                        <Link color="primary" target="_blank" rel="noopener noreferrer" href={ticker.trade_url}>
+                        <Link
+                            color={(theme) => theme.palette.maskColor?.primary}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href={ticker.trade_url}>
                             <span title={formatted !== ticker.base_name ? ticker.base_name : ''}>{formatted}</span>
                             <span>/</span>
                             <span>{formatEthereumAddress(ticker.target_name, 2)}</span>
@@ -69,11 +77,11 @@ export function TickersTable(props: TickersTableProps) {
             </TableCell>
             {ticker.price ? (
                 <TableCell className={classes.cell}>
-                    <FormattedCurrency value={ticker.price} sign="$" formatter={formatCurrency} />
+                    <FormattedCurrency value={ticker.price} formatter={formatCurrency} />
                 </TableCell>
             ) : null}
             <TableCell className={classes.cell}>
-                <FormattedCurrency value={ticker.volume} sign="$" formatter={formatCurrency} />
+                <FormattedCurrency value={ticker.volume} formatter={formatCurrency} />
             </TableCell>
             <TableCell className={classes.cell}>{formatElapsed(ticker.updated.getTime())}</TableCell>
         </TableRow>

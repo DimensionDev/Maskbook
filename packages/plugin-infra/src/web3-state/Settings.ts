@@ -20,7 +20,7 @@ export class SettingsState implements Web3SettingsState {
     public nonFungibleAssetSourceType?: Subscription<SourceType>
 
     constructor(context: Plugin.Shared.SharedContext) {
-        const { storage } = context.createKVStorage('memory', 'Settings', {}).createSubScope('Settings', {
+        const { storage } = context.createKVStorage('memory', {}).createSubScope('Settings', {
             currencyType: CurrencyType.USD,
             gasOptionType: GasOptionType.NORMAL,
             fungibleAssetSourceType: SourceType.DeBank,

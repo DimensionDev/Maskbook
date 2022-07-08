@@ -15,23 +15,25 @@ export class NameService extends NameServiceState<ChainId> {
             chainId?: Subscription<ChainId>
         },
     ) {
-        const defaultValue = Object.fromEntries(getEnumAsArray(ChainId).map((x) => [x.value, {}])) as Record<
-            ChainId,
-            Record<string, string>
-        >
-
-        super(context, defaultValue, subscriptions, {
-            isValidName: (x) => x !== '0x',
-            isValidAddress: (x) => isValidAddress(x) && !isZeroAddress(x),
-            formatAddress: formatEthereumAddress,
-        })
+        super(
+            context,
+            getEnumAsArray(ChainId).map((x) => x.value),
+            subscriptions,
+            {
+                isValidName: (x) => x !== '0x',
+                isValidAddress: (x) => isValidAddress(x) && !isZeroAddress(x),
+                formatAddress: formatEthereumAddress,
+            },
+        )
     }
 
     private async createENS() {
         if (this.ens) return this.ens
+        const provider = await Providers[ProviderType.MaskWallet].createWeb3Provider({
+            chainId: ChainId.Mainnet,
+        })
         this.ens = new ENS({
-            // @ts-ignore
-            provider: await Providers[ProviderType.MaskWallet].createWeb3Provider(ChainId.Mainnet),
+            provider,
             network: ChainId.Mainnet,
         })
         return this.ens
@@ -49,13 +51,18 @@ export class NameService extends NameServiceState<ChainId> {
     }
 
     override async reverse(chainId: ChainId, address: string) {
-        if (chainId !== ChainId.Mainnet) return
+        try {
+            if (chainId !== ChainId.Mainnet) return
 
-        const cachedDomain = await super.reverse(chainId, address)
-        if (cachedDomain) return cachedDomain
+            const cachedDomain = await super.reverse(chainId, address)
+            if (cachedDomain) return cachedDomain
 
-        const ens = await this.createENS()
-        await super.addName(chainId, address, await ens.reverse(address))
-        return super.reverse(chainId, address)
+            const ens = await this.createENS()
+            const name = await ens.reverse(address)
+            await super.addName(chainId, address, name)
+            return super.reverse(chainId, address)
+        } catch {
+            return
+        }
     }
 }

@@ -14,6 +14,7 @@ import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 interface Props {
     onClose: () => void
     open: boolean
+    isOpenFromApplicationBoard?: boolean
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -21,12 +22,7 @@ const useStyles = makeStyles()((theme) => ({
         alignSelf: 'center',
     },
     button: {
-        borderRadius: 26,
         marginTop: 24,
-        fontSize: 16,
-        lineHeight: 2.5,
-        paddingLeft: 35,
-        paddingRight: 35,
     },
     paper: {
         width: '600px !important',
@@ -87,6 +83,7 @@ const FileServiceDialog: React.FC<Props> = (props) => {
     }
     return (
         <MaskDialog
+            isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
             DialogProps={{ scroll: 'paper', classes: { paper: classes.paper } }}
             open={props.open}
             title={t.__display_name()}

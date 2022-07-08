@@ -1,173 +1,349 @@
-import {
-    BlockResponse,
-    Connection as SolanaConnection,
-    sendAndConfirmRawTransaction,
-    Transaction,
-} from '@solana/web3.js'
-import { ChainId, decodeAddress, ProviderType, SchemaType } from '@masknet/web3-shared-solana'
-import { Providers } from './provider'
-import type { SolanaConnection as BaseConnection, SolanaWeb3ConnectionOptions } from './types'
-import { NETWORK_ENDPOINTS } from '../../constants'
+import { MagicEden } from '@masknet/web3-providers'
 import {
     Account,
     ConnectionOptions,
+    createNonFungibleToken,
     FungibleToken,
     NonFungibleToken,
     NonFungibleTokenCollection,
     NonFungibleTokenContract,
+    NonFungibleTokenMetadata,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
+import { ChainId, createNativeToken, decodeAddress, ProviderType, SchemaType } from '@masknet/web3-shared-solana'
+import {
+    BlockResponse,
+    Connection as SolConnection,
+    PublicKey,
+    sendAndConfirmRawTransaction,
+    SystemProgram,
+    Transaction,
+} from '@solana/web3.js'
+import { NETWORK_ENDPOINTS, SOL_ADDRESS } from '../../constants'
+import { SolanaRPC } from '../../messages'
 import { Web3StateSettings } from '../../settings'
+import type { Plugin } from '@masknet/plugin-infra'
+import { isNativeTokenAddress } from '../../utils'
+import { Providers } from './provider'
+import { createTransferInstruction, getOrCreateAssociatedTokenAccount } from './spl-token'
+import type { SolanaConnection as BaseConnection, SolanaWeb3ConnectionOptions } from './types'
+import type { PartialRequired } from '@masknet/shared-base'
 
 class Connection implements BaseConnection {
-    private connections: Map<ChainId, SolanaConnection> = new Map()
+    private connections: Map<ChainId, SolConnection> = new Map()
 
-    constructor(private chainId: ChainId, private account: string, private providerType: ProviderType) {}
+    constructor(
+        private chainId: ChainId,
+        private account: string,
+        private providerType: ProviderType,
+        private context?: Plugin.Shared.SharedContext,
+    ) {}
 
-    private _getWeb3Provider(options?: SolanaWeb3ConnectionOptions) {
-        return Providers[options?.providerType ?? this.providerType]
+    private getOptions(
+        initial?: SolanaWeb3ConnectionOptions,
+        overrides?: Partial<SolanaWeb3ConnectionOptions>,
+    ): PartialRequired<SolanaWeb3ConnectionOptions, 'account' | 'chainId' | 'providerType'> {
+        return {
+            account: this.account,
+            chainId: this.chainId,
+            providerType: this.providerType,
+            ...initial,
+            ...overrides,
+        }
     }
 
-    async getWeb3(options?: SolanaWeb3ConnectionOptions) {
-        return this._getWeb3Provider(options).createWeb3(options?.chainId ?? this.chainId)
+    private _getWeb3Provider(initial?: SolanaWeb3ConnectionOptions) {
+        const options = this.getOptions(initial)
+        return Providers[options.providerType]
     }
 
-    getWeb3Provider(options?: SolanaWeb3ConnectionOptions) {
-        return this._getWeb3Provider(options).createWeb3Provider(options?.chainId)
+    private async _attachRecentBlockHash(transaction: Transaction, initial?: SolanaWeb3ConnectionOptions) {
+        const options = this.getOptions(initial)
+        const connection =
+            this.connections.get(options.chainId) ?? new SolConnection(NETWORK_ENDPOINTS[options.chainId])
+        const blockHash = await connection.getRecentBlockhash()
+        transaction.recentBlockhash = blockHash.blockhash
+        return transaction
     }
 
-    async connect(options?: SolanaWeb3ConnectionOptions): Promise<Account<ChainId>> {
+    async getWeb3(initial?: SolanaWeb3ConnectionOptions) {
+        const options = this.getOptions(initial)
+        return this._getWeb3Provider(options).createWeb3(options)
+    }
+
+    getWeb3Provider(initial?: SolanaWeb3ConnectionOptions) {
+        const options = this.getOptions(initial)
+        return this._getWeb3Provider(options).createWeb3Provider(options)
+    }
+
+    async connect(initial?: SolanaWeb3ConnectionOptions): Promise<Account<ChainId>> {
+        const options = this.getOptions(initial)
         return {
             account: '',
             chainId: ChainId.Mainnet,
-            ...(await Web3StateSettings.value.Provider?.connect(
-                options?.chainId ?? this.chainId,
-                options?.providerType ?? this.providerType,
-            )),
+            ...(await Web3StateSettings.value.Provider?.connect(options.chainId, options.providerType)),
         }
     }
-    async disconnect(options?: SolanaWeb3ConnectionOptions): Promise<void> {
-        await Web3StateSettings.value.Provider?.disconnect(options?.providerType ?? this.providerType)
+    async disconnect(initial?: SolanaWeb3ConnectionOptions): Promise<void> {
+        const options = this.getOptions(initial)
+        await Web3StateSettings.value.Provider?.disconnect(options.providerType)
     }
-    transferFungibleToken(
+    private async transferSol(recipient: string, amount: string, initial?: SolanaWeb3ConnectionOptions) {
+        const options = this.getOptions(initial)
+        if (!options.account) throw new Error('No payer provides.')
+        const payerPubkey = new PublicKey(options.account)
+        const recipientPubkey = new PublicKey(recipient)
+        const transaction = new Transaction().add(
+            SystemProgram.transfer({
+                fromPubkey: payerPubkey,
+                toPubkey: recipientPubkey,
+                lamports: Number.parseInt(amount, 10),
+            }),
+        )
+        transaction.feePayer = payerPubkey
+        await this._attachRecentBlockHash(transaction)
+
+        return this.sendTransaction(transaction)
+    }
+    private async transferSplToken(
+        address: string,
+        recipient: string,
+        amount: string,
+        initial?: SolanaWeb3ConnectionOptions,
+    ): Promise<string> {
+        const options = this.getOptions(initial)
+        if (!options.account) throw new Error('No payer provides.')
+        const connection =
+            this.connections.get(options.chainId) ?? new SolConnection(NETWORK_ENDPOINTS[options.chainId])
+
+        const payerPubkey = new PublicKey(options.account)
+        const recipientPubkey = new PublicKey(recipient)
+        const mintPubkey = new PublicKey(address)
+        const signTransaction = this.signTransaction.bind(this)
+        const formatTokenAccount = await getOrCreateAssociatedTokenAccount(
+            connection,
+            payerPubkey,
+            mintPubkey,
+            payerPubkey,
+            signTransaction,
+        )
+        const toTokenAccount = await getOrCreateAssociatedTokenAccount(
+            connection,
+            payerPubkey,
+            mintPubkey,
+            recipientPubkey,
+            signTransaction,
+        )
+        const transaction = new Transaction().add(
+            createTransferInstruction(
+                formatTokenAccount.address,
+                toTokenAccount.address,
+                payerPubkey,
+                Number.parseInt(amount, 10),
+            ),
+        )
+        const blockHash = await connection.getRecentBlockhash()
+        transaction.feePayer = payerPubkey
+        transaction.recentBlockhash = blockHash.blockhash
+
+        const signature = await this.sendTransaction(transaction)
+        return signature
+    }
+    approveFungibleToken(
+        address: string,
+        recipient: string,
+        amount: string,
+        initial?: SolanaWeb3ConnectionOptions,
+    ): Promise<string> {
+        throw new Error('Method not implemented.')
+    }
+    approveNonFungibleToken(
+        address: string,
+        recipient: string,
+        tokenId: string,
+        schema?: SchemaType,
+        initial?: SolanaWeb3ConnectionOptions,
+    ): Promise<string> {
+        throw new Error('Method not implemented.')
+    }
+    approveAllNonFungibleTokens(
+        address: string,
+        recipient: string,
+        approved: boolean,
+        schema?: SchemaType,
+        initial?: SolanaWeb3ConnectionOptions,
+    ): Promise<string> {
+        throw new Error('Method not implemented.')
+    }
+    async transferFungibleToken(
         address: string,
         recipient: string,
         amount: string,
         memo?: string,
-        options?: SolanaWeb3ConnectionOptions,
+        initial?: SolanaWeb3ConnectionOptions,
     ): Promise<string> {
-        throw new Error('Method not implemented.')
+        const options = this.getOptions(initial)
+        if (isNativeTokenAddress(address)) {
+            return this.transferSol(recipient, amount, options)
+        }
+        return this.transferSplToken(address, recipient, amount, options)
     }
     transferNonFungibleToken(
         address: string,
-        tokenId: string,
-        amount: string,
         recipient: string,
-        options?: SolanaWeb3ConnectionOptions,
+        mintAddress: string,
+        amount: string,
+        schema?: SchemaType,
+        initial?: SolanaWeb3ConnectionOptions,
     ): Promise<string> {
+        const options = this.getOptions(initial)
+        return this.transferSplToken(mintAddress, recipient, amount, options)
+    }
+    getGasPrice(initial?: SolanaWeb3ConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    getGasPrice(options?: SolanaWeb3ConnectionOptions): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-    getSchemaType(address: string, options?: SolanaWeb3ConnectionOptions): Promise<SchemaType> {
+    getTokenSchema(address: string, initial?: SolanaWeb3ConnectionOptions): Promise<SchemaType> {
         throw new Error('Method not implemented.')
     }
     getNonFungibleTokenContract(
         address: string,
-        id: string,
-        options?: SolanaWeb3ConnectionOptions,
+        schemaType?: SchemaType,
+        initial?: SolanaWeb3ConnectionOptions,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
     getNonFungibleTokenCollection(
         address: string,
-        options?: SolanaWeb3ConnectionOptions,
+        schemaType?: SchemaType,
+        initial?: SolanaWeb3ConnectionOptions,
     ): Promise<NonFungibleTokenCollection<ChainId>> {
         throw new Error('Method not implemented.')
     }
-    getBlockTimestamp(options?: SolanaWeb3ConnectionOptions): Promise<number> {
+    async switchChain(chainId: ChainId, initial?: SolanaWeb3ConnectionOptions) {
+        const options = this.getOptions(initial)
+        await Providers[options.providerType].switchChain(chainId)
+    }
+    getNativeToken(initial?: SolanaWeb3ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
+        const options = this.getOptions(initial)
+        const token = createNativeToken(options.chainId)
+        return Promise.resolve(token)
+    }
+    async getNativeTokenBalance(initial?: SolanaWeb3ConnectionOptions): Promise<string> {
+        const options = this.getOptions(initial)
+        if (!options.account) return '0'
+        const connection = this.getWeb3Connection(options)
+        const balance = await connection.getBalance(new PublicKey(options.account))
+        return balance.toString()
+    }
+    async getFungibleTokenBalance(address: string, initial?: SolanaWeb3ConnectionOptions): Promise<string> {
+        const options = this.getOptions(initial)
+        if (!options.account) return '0'
+        if (isNativeTokenAddress(address)) {
+            return this.getNativeTokenBalance(options)
+        }
+        return SolanaRPC.getSplTokenBalance(options.chainId, options.account, address)
+    }
+    getNonFungibleTokenBalance(
+        address: string,
+        tokenId?: string,
+        schemaType?: SchemaType,
+        initial?: SolanaWeb3ConnectionOptions,
+    ): Promise<string> {
         throw new Error('Method not implemented.')
     }
-    switchChain?: ((options?: SolanaWeb3ConnectionOptions) => Promise<void>) | undefined
-    getNativeToken(options?: SolanaWeb3ConnectionOptions): Promise<FungibleToken<ChainId, SchemaType>> {
-        throw new Error('Method not implemented.')
-    }
-    getNativeTokenBalance(options?: SolanaWeb3ConnectionOptions): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-    getFungibleTokenBalance(address: string, options?: SolanaWeb3ConnectionOptions): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-    getNonFungibleTokenBalance(address: string, options?: SolanaWeb3ConnectionOptions): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-    getFungibleTokensBalance(
+    async getFungibleTokensBalance(
         listOfAddress: string[],
-        options?: SolanaWeb3ConnectionOptions,
+        initial?: SolanaWeb3ConnectionOptions,
     ): Promise<Record<string, string>> {
-        throw new Error('Method not implemented.')
+        const options = this.getOptions(initial)
+        if (!options.account) return {}
+        const splTokens = await SolanaRPC.getSplTokenList(options.chainId, options.account)
+        const records = splTokens.reduce(
+            (map: Record<string, string>, asset) => ({ ...map, [asset.address]: asset.balance }),
+            {},
+        )
+        if (listOfAddress.includes(SOL_ADDRESS)) {
+            records[SOL_ADDRESS] = await this.getNativeTokenBalance(options)
+        }
+        return records
     }
     getNonFungibleTokensBalance(
         listOfAddress: string[],
-        options?: SolanaWeb3ConnectionOptions,
+        initial?: SolanaWeb3ConnectionOptions,
     ): Promise<Record<string, string>> {
         throw new Error('Method not implemented.')
     }
-    getCode(address: string, options?: SolanaWeb3ConnectionOptions): Promise<string> {
+    getCode(address: string, initial?: SolanaWeb3ConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
 
-    getWeb3Connection(options?: SolanaWeb3ConnectionOptions) {
-        const chainId = options?.chainId ?? this.chainId
-        const connection = this.connections.get(chainId) ?? new SolanaConnection(NETWORK_ENDPOINTS[chainId])
-        this.connections.set(chainId, connection)
+    getWeb3Connection(initial?: SolanaWeb3ConnectionOptions) {
+        const options = this.getOptions(initial)
+        const connection =
+            this.connections.get(options.chainId) ?? new SolConnection(NETWORK_ENDPOINTS[options.chainId])
+        this.connections.set(options.chainId, connection)
         return connection
     }
 
-    getAccount(options?: SolanaWeb3ConnectionOptions) {
-        return Promise.resolve(options?.account ?? this.account)
+    getAccount(initial?: SolanaWeb3ConnectionOptions) {
+        const options = this.getOptions(initial)
+        return Promise.resolve(options.account)
     }
 
-    getAccountInfo(account: string, options?: SolanaWeb3ConnectionOptions) {
+    getAccountInfo(account: string, initial?: SolanaWeb3ConnectionOptions) {
+        const options = this.getOptions(initial, {
+            account,
+        })
         return this.getWeb3Connection(options).getAccountInfo(decodeAddress(account))
     }
 
-    getChainId(options?: SolanaWeb3ConnectionOptions) {
-        return Promise.resolve(options?.chainId ?? this.chainId)
+    getChainId(initial?: SolanaWeb3ConnectionOptions) {
+        const options = this.getOptions(initial)
+        return Promise.resolve(options.chainId)
     }
 
-    getBlock(no: number, options?: SolanaWeb3ConnectionOptions): Promise<BlockResponse> {
-        throw new Error('Method not implemented.')
+    async getBlock(no: number, initial?: SolanaWeb3ConnectionOptions): Promise<BlockResponse | null> {
+        const options = this.getOptions(initial)
+        return this.getWeb3Connection(options).getBlock(no)
     }
 
-    async getBlockNumber(options?: SolanaWeb3ConnectionOptions) {
-        // cspell:disable-next-line
-        const response = await this.getWeb3Connection(options).getLatestBlockhash()
-        return response.lastValidBlockHeight
+    async getBlockNumber(initial?: SolanaWeb3ConnectionOptions) {
+        const options = this.getOptions(initial)
+        return this.getWeb3Connection(options).getSlot()
     }
 
-    async getBalance(account: string, options?: SolanaWeb3ConnectionOptions) {
+    async getBlockTimestamp(initial?: SolanaWeb3ConnectionOptions): Promise<number> {
+        const options = this.getOptions(initial)
+        const slot = await this.getBlockNumber(options)
+        const response = await this.getWeb3Connection(options).getBlockTime(slot)
+        return response ?? 0
+    }
+
+    async getBalance(account: string, initial?: SolanaWeb3ConnectionOptions) {
+        const options = this.getOptions(initial)
         const balance = await this.getWeb3Connection(options).getBalance(decodeAddress(account))
         return balance.toFixed()
     }
 
-    getTransaction(id: string, options?: SolanaWeb3ConnectionOptions) {
+    getTransaction(id: string, initial?: SolanaWeb3ConnectionOptions) {
+        const options = this.getOptions(initial)
         return this.getWeb3Connection(options).getTransaction(id)
     }
 
-    async getTransactionReceipt(id: string, options?: SolanaWeb3ConnectionOptions) {
+    async getTransactionReceipt(id: string, initial?: SolanaWeb3ConnectionOptions) {
         return null
     }
 
-    async getTransactionStatus(id: string, options?: SolanaWeb3ConnectionOptions) {
+    async getTransactionStatus(id: string, initial?: SolanaWeb3ConnectionOptions) {
+        const options = this.getOptions(initial)
         const response = await this.getWeb3Connection(options).getSignatureStatus(id)
         if (response.value?.err) return TransactionStatusType.FAILED
         if (response.value?.confirmations && response.value.confirmations > 0) return TransactionStatusType.SUCCEED
         return TransactionStatusType.NOT_DEPEND
     }
 
-    async signMessage(dataToSign: string, signType?: string, options?: SolanaWeb3ConnectionOptions) {
+    async signMessage(dataToSign: string, signType?: string, initial?: SolanaWeb3ConnectionOptions) {
+        const options = this.getOptions(initial)
         return this._getWeb3Provider(options).signMessage(dataToSign)
     }
 
@@ -175,64 +351,107 @@ class Connection implements BaseConnection {
         dataToVerify: string,
         signature: string,
         signType?: string,
-        options?: SolanaWeb3ConnectionOptions,
+        initial?: SolanaWeb3ConnectionOptions,
     ): Promise<boolean> {
+        const options = this.getOptions(initial)
         return this._getWeb3Provider(options).verifyMessage(dataToVerify, signature)
     }
 
-    async signTransaction(transaction: Transaction, options?: SolanaWeb3ConnectionOptions) {
+    async signTransaction(transaction: Transaction, initial?: SolanaWeb3ConnectionOptions) {
+        const options = this.getOptions(initial)
         return this._getWeb3Provider(options).signTransaction(transaction)
     }
 
-    signTransactions(transactions: Transaction[], options?: SolanaWeb3ConnectionOptions) {
-        return Promise.all(transactions.map((x) => this.signTransaction(x)))
+    signTransactions(transactions: Transaction[], initial?: SolanaWeb3ConnectionOptions) {
+        const options = this.getOptions(initial)
+        return Promise.all(transactions.map((x) => this.signTransaction(x, options)))
     }
 
-    callTransaction(transaction: Transaction, options?: SolanaWeb3ConnectionOptions): Promise<string> {
+    callTransaction(transaction: Transaction, initial?: SolanaWeb3ConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
 
-    async sendTransaction(transaction: Transaction, options?: SolanaWeb3ConnectionOptions) {
+    async sendTransaction(transaction: Transaction, initial?: SolanaWeb3ConnectionOptions) {
+        const options = this.getOptions(initial)
         const signedTransaction = await this.signTransaction(transaction)
         return sendAndConfirmRawTransaction(this.getWeb3Connection(options), signedTransaction.serialize())
     }
 
-    sendSignedTransaction(signature: Transaction, options?: SolanaWeb3ConnectionOptions) {
+    sendSignedTransaction(signature: Transaction, initial?: SolanaWeb3ConnectionOptions) {
+        const options = this.getOptions(initial)
         return sendAndConfirmRawTransaction(this.getWeb3Connection(options), signature.serialize())
     }
 
-    async getTransactionNonce(account: string, options?: SolanaWeb3ConnectionOptions): Promise<number> {
+    async getTransactionNonce(account: string, initial?: SolanaWeb3ConnectionOptions): Promise<number> {
+        const options = this.getOptions(initial, {
+            account,
+        })
         const response = await this.getWeb3Connection(options).getNonce(decodeAddress(account))
         return response?.nonce ? Number.parseInt(response.nonce, 10) : 0
     }
 
-    getFungibleToken(
+    async getFungibleToken(
         address: string,
-        options?: SolanaWeb3ConnectionOptions,
+        initial?: SolanaWeb3ConnectionOptions,
     ): Promise<FungibleToken<ChainId, SchemaType>> {
-        throw new Error('Method not implemented.')
+        const options = this.getOptions(initial)
+        if (!address || isNativeTokenAddress(address)) {
+            return this.getNativeToken()
+        }
+        const splTokens = await SolanaRPC.getAllSplTokens()
+        const token = splTokens.find((x) => x.address === address)
+        return (
+            token ??
+            ({
+                address,
+                chainId: options.chainId,
+            } as FungibleToken<ChainId, SchemaType>)
+        )
     }
-    getNonFungibleToken(
+    async getNonFungibleToken(
         address: string,
-        id: string,
-        options?: SolanaWeb3ConnectionOptions,
+        tokenId: string,
+        schemaType?: SchemaType,
+        initial?: SolanaWeb3ConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
+        const options = this.getOptions(initial)
+        const asset = await MagicEden.getAsset(address, tokenId, options)
+        return createNonFungibleToken(
+            options.chainId,
+            address,
+            SchemaType.NonFungible,
+            tokenId,
+            asset?.ownerId,
+            asset?.metadata,
+            asset?.contract,
+            asset?.collection,
+        )
+    }
+    getNonFungibleTokenOwnership(
+        address: string,
+        tokenId: string,
+        owner: string,
+        schema?: SchemaType | undefined,
+        initial?: SolanaWeb3ConnectionOptions,
+    ): Promise<boolean> {
         throw new Error('Method not implemented.')
     }
-    confirmRequest?:
-        | ((options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) => Promise<void>)
-        | undefined
-    rejectRequest?:
-        | ((options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) => Promise<void>)
-        | undefined
-    replaceRequest(
+    getNonFungibleTokenMetadata(
+        address: string,
+        tokenId: string,
+        schemaType?: SchemaType,
+        initial?: SolanaWeb3ConnectionOptions,
+    ): Promise<NonFungibleTokenMetadata<ChainId>> {
+        throw new Error('Method not implemented.')
+    }
+    requestTransaction(
         hash: string,
         config: Transaction,
         options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
     ): Promise<void> {
         throw new Error('Method not implemented.')
     }
-    cancelRequest(
+    cancelTransaction(
         hash: string,
         config: Transaction,
         options?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
@@ -241,6 +460,15 @@ class Connection implements BaseConnection {
     }
 }
 
-export function createConnection(chainId = ChainId.Mainnet, account = '', providerType = ProviderType.Phantom) {
-    return new Connection(chainId, account, providerType)
+export function createConnection(
+    context: Plugin.Shared.SharedContext,
+    options?: {
+        chainId?: ChainId
+        account?: string
+        providerType?: ProviderType
+    },
+) {
+    const { chainId = ChainId.Mainnet, account = '', providerType = ProviderType.Phantom } = options ?? {}
+
+    return new Connection(chainId, account, providerType, context)
 }

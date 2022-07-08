@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, useCallback } from 'react'
-import { InjectedDialog, useOpenShareTxDialog } from '@masknet/shared'
+import { InjectedDialog, NFTCardStyledAssetPlayer, useOpenShareTxDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { first } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
@@ -155,6 +155,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     }, [amount, balance.value, isVerified, is24Auction])
 
     if (!asset || !asset.value) return null
+
     return (
         <InjectedDialog
             title={
@@ -168,14 +169,14 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                         <Box className={classes.mediaContent}>
                             {assetSource?.ossUrl.match(/\.(mp4|avi|webm)$/i) ? (
                                 <Link href={assetSource?.ossUrl} target="_blank" rel="noopener noreferrer">
-                                    <img
-                                        className={classes.player}
-                                        src={assetSource?.shareUrl}
-                                        alt={assetSource?.title}
-                                    />
+                                    <NFTCardStyledAssetPlayer url={assetSource.ossUrl || assetSource.shareUrl} />
                                 </Link>
                             ) : (
-                                <img className={classes.player} src={assetSource?.shareUrl} alt={assetSource?.title} />
+                                <img
+                                    className={classes.player}
+                                    src={assetSource?.ossUrl || assetSource?.shareUrl}
+                                    alt={assetSource?.title}
+                                />
                             )}
                         </Box>
                         <h3>
@@ -230,7 +231,6 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                 <ActionButton
                                     loading={isPlacingBid}
                                     className={classes.button}
-                                    variant="contained"
                                     disabled={!!validationMessage || isPlacingBid}
                                     fullWidth
                                     onClick={onMakeOffer}>

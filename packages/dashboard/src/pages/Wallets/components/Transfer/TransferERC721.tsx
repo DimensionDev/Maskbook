@@ -10,7 +10,14 @@ import {
     multipliedBy,
     NetworkPluginID,
 } from '@masknet/web3-shared-base'
-import { SchemaType, formatWeiToEther, NetworkType, ChainId, explorerResolver } from '@masknet/web3-shared-evm'
+import {
+    SchemaType,
+    formatWeiToEther,
+    NetworkType,
+    ChainId,
+    explorerResolver,
+    isValidAddress,
+} from '@masknet/web3-shared-evm'
 // import { useERC721TokenDetailedOwnerList } from '@masknet/web3-providers'
 import { FormattedAddress } from '@masknet/shared'
 import { useDashboardI18N } from '../../../../locales'
@@ -26,7 +33,7 @@ import TuneIcon from '@mui/icons-material/Tune'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useGasConfig } from '../../hooks/useGasConfig'
+import { useGasConfig } from '../../hooks'
 import { unionBy } from 'lodash-unified'
 import { TransferTab } from './types'
 import {
@@ -38,9 +45,10 @@ import {
     useWeb3State,
     useNativeToken,
     useNativeTokenPrice,
+    useWeb3Connection,
 } from '@masknet/plugin-infra/web3'
 import { RightIcon } from '@masknet/icons'
-import { useGasLimit, useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
+import { useGasLimit, useNonFungibleOwnerTokens, useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
 
 const useStyles = makeStyles()((theme) => ({
     disabled: {
@@ -60,10 +68,12 @@ export const TransferERC721 = memo(() => {
     const t = useDashboardI18N()
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const anchorEl = useRef<HTMLDivElement | null>(null)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
     const { state } = useLocation() as {
-        state: { erc721Token?: NonFungibleToken<ChainId, SchemaType>; type?: TransferTab } | null
+        state: { nonFungibleToken?: NonFungibleToken<ChainId, SchemaType>; type?: TransferTab } | null
     }
+
     const { classes } = useStyles()
     const [defaultToken, setDefaultToken] = useState<NonFungibleToken<ChainId, SchemaType> | null>(null)
     const navigate = useNavigate()
@@ -82,7 +92,6 @@ export const TransferERC721 = memo(() => {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const nativeToken = useNativeToken(NetworkPluginID.PLUGIN_EVM)
     const nativeTokenPrice = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
-
     // form
     const schema = z.object({
         recipient: z
@@ -109,14 +118,13 @@ export const TransferERC721 = memo(() => {
 
     useEffect(() => {
         if (!state) return
-        if (!state.erc721Token || state.type !== TransferTab.Collectibles) return
-        if (state.erc721Token.chainId !== chainId) return
-        if (!isSameAddress(contract?.address, state.erc721Token.address)) return
+        if (!state.nonFungibleToken || state.type !== TransferTab.Collectibles) return
+        if (state.nonFungibleToken.chainId !== chainId) return
 
-        setContract(state.erc721Token.contract)
-        setValue('contract', state.erc721Token.contract?.name ?? '')
-        setValue('tokenId', state.erc721Token.tokenId)
-        setDefaultToken(state.erc721Token)
+        setContract(state.nonFungibleToken.contract)
+        setValue('contract', state.nonFungibleToken.contract?.name ?? '')
+        setValue('tokenId', state.nonFungibleToken.tokenId)
+        setDefaultToken(state.nonFungibleToken)
     }, [state])
 
     const allFormFields = watch()
@@ -131,25 +139,26 @@ export const TransferERC721 = memo(() => {
 
     // #region check contract address and account address
     useAsync(async () => {
-        // const recipient = allFormFields.recipient
-        // setRecipientError(null)
-        // if (!recipient && !registeredAddress) return
-        // if (!isValidAddress(recipient) && !isValidAddress(registeredAddress)) return
-        // clearErrors()
-        // if (isSameAddress(recipient, account) || isSameAddress(registeredAddress, account)) {
-        //     setRecipientError({
-        //         type: 'account',
-        //         message: t.wallets_transfer_error_same_address_with_current_account(),
-        //     })
-        // }
-        // const result = await EVM_RPC.getCode(recipient)
-        // if (result !== '0x') {
-        //     setRecipientError({
-        //         type: 'contractAddress',
-        //         message: t.wallets_transfer_error_is_contract_address(),
-        //     })
-        // }
-    }, [allFormFields.recipient, clearErrors, registeredAddress])
+        const recipient = allFormFields.recipient
+        setRecipientError(null)
+        if (!recipient && !registeredAddress) return
+        if (!isValidAddress(recipient) && !isValidAddress(registeredAddress)) return
+        clearErrors()
+        if (isSameAddress(recipient, account) || isSameAddress(registeredAddress, account)) {
+            setRecipientError({
+                type: 'account',
+                message: t.wallets_transfer_error_same_address_with_current_account(),
+            })
+        }
+        if (!connection) return
+        const result = await connection?.getCode(recipient)
+        if (result !== '0x') {
+            setRecipientError({
+                type: 'contractAddress',
+                message: t.wallets_transfer_error_is_contract_address(),
+            })
+        }
+    }, [allFormFields.recipient, clearErrors, registeredAddress, connection])
     // #endregion
 
     const erc721GasLimit = useGasLimit(
@@ -180,27 +189,23 @@ export const TransferERC721 = memo(() => {
     const { setDialog: setSelectContractDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectNftContractDialogUpdated,
         (ev) => {
-            // if (ev.open || !ev.contract || ev.uuid !== id) return
-            // if (!contract || (contract && !isSameAddress(contract.address, ev.contract.address))) {
-            //     if (contract && defaultToken && !isSameAddress(contract.address, defaultToken.address)) {
-            //         setDefaultToken(null)
-            //     }
-            //     setValue('contract', ev.contract.name || ev.contract.address, { shouldValidate: true })
-            //     setContract(ev.contract)
-            //     setValue('tokenId', '')
-            // }
+            if (ev.open || !ev.contract || ev.uuid !== id) return
+            if (!contract || (contract && !isSameAddress(contract.address, ev.contract.address))) {
+                if (contract && defaultToken && !isSameAddress(contract.address, defaultToken.address)) {
+                    setDefaultToken(null)
+                }
+                setValue('contract', ev.contract.name || ev.contract.address, { shouldValidate: true })
+                setContract(ev.contract)
+                setValue('tokenId', '')
+            }
         },
     )
 
-    // const {
-    //     asyncRetry: { loading: loadingOwnerList },
-    //     tokenDetailedOwnerList = [],
-    //     refreshing,
-    // } = useERC721TokenDetailedOwnerList(contract, account)
-
-    const loadingOwnerList = false
-    const tokenDetailedOwnerList: Array<NonFungibleToken<ChainId, SchemaType>> = []
-    const refreshing = false
+    const {
+        asyncRetry: { loading: loadingOwnerList },
+        tokenDetailedOwnerList = [],
+        clearTokenDetailedOwnerList,
+    } = useNonFungibleOwnerTokens(contract?.address ?? '', account, chainId)
 
     const onTransfer = useCallback(
         async (data: FormInputs) => {
@@ -360,13 +365,13 @@ export const TransferERC721 = memo(() => {
                             name="contract"
                         />
                     </Box>
-                    {((loadingOwnerList && tokenDetailedOwnerList.length === 0) || refreshing) && (
+                    {loadingOwnerList && tokenDetailedOwnerList.length === 0 && (
                         <Box pt={4}>
                             <LoadingPlaceholder />
                         </Box>
                     )}
                     <Box width="100%" mt={2}>
-                        {tokenDetailedOwnerList.length > 0 && !refreshing && (
+                        {tokenDetailedOwnerList.length > 0 && !loadingOwnerList && (
                             <Controller
                                 control={control}
                                 render={(field) => (

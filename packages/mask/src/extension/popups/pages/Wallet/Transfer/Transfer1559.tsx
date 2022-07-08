@@ -683,7 +683,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                                             classes={{ icon: classes.icon }}
                                                             address={selectedAsset?.address ?? ''}
                                                             name={selectedAsset?.name}
-                                                            logoURI={selectedAsset?.logoURL}
+                                                            logoURL={selectedAsset?.logoURL}
                                                         />
                                                     }
                                                     deleteIcon={<ChevronDown className={classes.icon} />}

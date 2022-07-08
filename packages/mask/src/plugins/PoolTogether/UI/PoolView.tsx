@@ -217,7 +217,12 @@ export function PoolView(props: PoolProps) {
     if (errorToken) {
         return (
             <div className={classes.root}>
-                <RefreshIcon className={classes.refresh} color="primary" onClick={retryToken} />
+                <RefreshIcon
+                    className={classes.refresh}
+                    color="primary"
+                    style={{ fill: '#1C68F3' }}
+                    onClick={retryToken}
+                />
             </div>
         )
     }
@@ -265,12 +270,7 @@ export function PoolView(props: PoolProps) {
                 </Grid>
                 <Grid item>
                     {currentPluginID === NetworkPluginID.PLUGIN_EVM && account ? (
-                        <Button
-                            className={classes.deposit}
-                            variant="contained"
-                            fullWidth
-                            size="small"
-                            onClick={onDeposit}>
+                        <Button className={classes.deposit} fullWidth size="small" onClick={onDeposit}>
                             {t('plugin_pooltogether_deposit', { token: token.symbol ?? '' })}
                         </Button>
                     ) : null}

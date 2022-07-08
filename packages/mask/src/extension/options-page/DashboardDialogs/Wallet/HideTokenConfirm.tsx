@@ -5,10 +5,10 @@ import { useSnackbarCallback } from '@masknet/shared'
 import { useI18N } from '../../../../utils'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
-import type { Wallet } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
-import type { FungibleToken, NonFungibleToken } from '@masknet/web3-shared-base'
+import type { FungibleToken, NonFungibleToken, Wallet } from '@masknet/web3-shared-base'
+import { Trans } from 'react-i18next'
 
 export function DashboardWalletHideTokenConfirmDialog(
     props: WrappedDialogProps<{
@@ -61,7 +61,13 @@ export function DashboardWalletHideTokenConfirmDialog(
                 icon={<TrashIcon />}
                 iconColor="#F4637D"
                 primary={t('hide_token')}
-                secondary={t('hide_token_hint', { token: tokenName })}
+                secondary={
+                    <Trans
+                        i18nKey="hide_token_hint"
+                        values={{ token: tokenName }}
+                        components={{ strong: <strong /> }}
+                    />
+                }
                 footer={
                     <SpacedButtonGroup>
                         <DebounceButton variant="contained" color="danger" onClick={onConfirm}>

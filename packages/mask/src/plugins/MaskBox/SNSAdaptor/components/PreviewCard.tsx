@@ -10,9 +10,8 @@ import { ArticlesTab } from './ArticlesTab'
 import { DetailsTab } from './DetailsTab'
 import { DrawDialog } from './DrawDialog'
 import { DrawResultDialog } from './DrawResultDialog'
-import { useTransactionCallback } from '@masknet/plugin-infra/web3-evm'
+import { useTransactionCallback, TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
-import { useChainId } from '@masknet/plugin-infra/web3'
 import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import AbstractTab from '../../../../components/shared/AbstractTab'
@@ -60,7 +59,7 @@ export function PreviewCard(props: PreviewCardProps) {
     const state = useState(CardTab.Articles)
     const [openDrawDialog, setOpenDrawDialog] = useState(false)
     const [openDrawResultDialog, setOpenDrawResultDialog] = useState(false)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { targetChainId } = TargetChainIdContext.useContainer()
     const theme = useTheme()
 
     const {
@@ -216,24 +215,18 @@ export function PreviewCard(props: PreviewCardProps) {
                 />
             </Box>
             <Box style={{ padding: 12 }}>
-                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId} renderInTimeline>
+                <ChainBoundary
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    expectedChainId={targetChainId}
+                    ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                     <WalletConnectedBoundary
-                        ActionButtonProps={{ size: 'medium' }}
-                        classes={{ button: tabClasses.button }}
-                        renderInTimeline>
+                        ActionButtonProps={{ size: 'medium', variant: 'roundedDark' }}
+                        classes={{ button: tabClasses.button }}>
                         <ActionButton
                             loading={isOpening}
                             size="medium"
+                            variant="roundedDark"
                             fullWidth
-                            variant="contained"
-                            sx={{
-                                backgroundColor: theme.palette.maskColor.dark,
-                                color: 'white',
-                                width: '100%',
-                                '&:hover': {
-                                    background: theme.palette.maskColor.dark,
-                                },
-                            }}
                             disabled={boxState !== BoxState.READY || isOpening}
                             onClick={() => setOpenDrawDialog(true)}>
                             {(() => {

@@ -1,5 +1,6 @@
-import { useContext, createContext, PropsWithChildren, useMemo, useCallback, useEffect } from 'react'
+import { useState, useContext, createContext, PropsWithChildren, useMemo, useCallback, useEffect } from 'react'
 import { makeStyles, getMaskColor } from '@masknet/theme'
+import { useTimeout } from 'react-use'
 import { Typography } from '@mui/material'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useCurrentWeb3NetworkPluginID, useAccount, useChainId } from '@masknet/plugin-infra/web3'
@@ -18,11 +19,11 @@ import { WalletMessages } from '../../plugins/Wallet/messages'
 import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext'
 import { MaskMessages } from '../../../shared'
 
-const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
+const useStyles = makeStyles<{ shouldScroll: boolean; isCarouselReady: boolean }>()((theme, props) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
         applicationWrapper: {
-            padding: theme.spacing(1, 0.25),
+            padding: theme.spacing(props.isCarouselReady ? 0 : 1, 0.25, 1),
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
             overflowY: 'auto',
@@ -49,6 +50,11 @@ const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
                 gridTemplateColumns: 'repeat(3, 1fr)',
                 gridGap: theme.spacing(1),
             },
+        },
+        applicationWrapperWithCarousel: {
+            position: 'relative',
+            zIndex: 50,
+            top: '-132px',
         },
         subTitle: {
             cursor: 'default',
@@ -150,16 +156,32 @@ function ApplicationBoardContent(props: Props) {
         .sort((a, b) => (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0))
 
     const listedAppList = applicationList.filter((x) => !x.entry.recommendFeature).filter((x) => !getUnlistedApp(x))
-    const { classes } = useStyles({ shouldScroll: listedAppList.length > 12 })
+    // #region handle carousel ui
+    const [isCarouselReady] = useTimeout(300)
+    const [isHoveringCarousel, setIsHoveringCarousel] = useState(false)
+    // #endregion
+    const { classes, cx } = useStyles({
+        shouldScroll: listedAppList.length > 12,
+        isCarouselReady: Boolean(isCarouselReady()),
+    })
     return (
         <>
             <ApplicationRecommendArea
                 recommendFeatureAppList={recommendFeatureAppList}
                 RenderEntryComponent={RenderEntryComponent}
+                isCarouselReady={isCarouselReady}
+                isHoveringCarousel={isHoveringCarousel}
+                setIsHoveringCarousel={(hover: boolean) => setIsHoveringCarousel(hover)}
             />
 
             {listedAppList.length > 0 ? (
-                <section className={classes.applicationWrapper}>
+                <section
+                    className={cx(
+                        classes.applicationWrapper,
+                        recommendFeatureAppList.length > 2 && isCarouselReady() && isHoveringCarousel
+                            ? classes.applicationWrapperWithCarousel
+                            : '',
+                    )}>
                     {listedAppList.map((application) => (
                         <RenderEntryComponent key={application.entry.ApplicationEntryID} application={application} />
                     ))}
@@ -167,7 +189,7 @@ function ApplicationBoardContent(props: Props) {
             ) : (
                 <div className={classes.placeholderWrapper}>
                     <Typography className={classes.placeholder}>
-                        {t('application_settings_tab_plug_app-unlisted-placeholder')}
+                        {t('application_display_tab_plug_app-unlisted-placeholder')}
                     </Typography>
                 </div>
             )}
@@ -178,7 +200,7 @@ function ApplicationBoardContent(props: Props) {
 function RenderEntryComponent({ application }: { application: Application }) {
     const Entry = application.entry.RenderEntryComponent!
     const { t } = useI18N()
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+    const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
     const { closeDialog: closeApplicationBoard } = useRemoteControlledDialog(
@@ -213,15 +235,15 @@ function RenderEntryComponent({ application }: { application: Application }) {
         ApplicationEntryStatus.personaNextIDReset?.()
     }, [])
 
-    const clickHandler = (() => {
+    const clickHandler = useMemo(() => {
         if (application.isWalletConnectedRequired || application.isWalletConnectedEVMRequired)
-            return openSelectProviderDialog
+            return () => setSelectProviderDialog({ open: true })
         if (!application.entry.nextIdRequired) return
         if (ApplicationEntryStatus.isPersonaConnected === false || ApplicationEntryStatus.isPersonaCreated === false)
             return createOrConnectPersona
         if (ApplicationEntryStatus.shouldVerifyNextId) return verifyPersona
         return
-    })()
+    }, [setSelectProviderDialog, createOrConnectPersona, ApplicationEntryStatus, verifyPersona, application])
 
     // #endregion
 

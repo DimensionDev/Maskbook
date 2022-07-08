@@ -2,7 +2,13 @@ import type { Result } from 'ts-results'
 import type RSS3 from 'rss3-next'
 import type { Transaction as Web3Transaction } from 'web3-core'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
-import type { NextIDAction, NextIDStoragePayload, NextIDPayload, NextIDPlatform } from '@masknet/shared-base'
+import type {
+    NextIDAction,
+    NextIDStoragePayload,
+    NextIDPayload,
+    NextIDPlatform,
+    NextIDPersonaBindings,
+} from '@masknet/shared-base'
 import type {
     Transaction,
     FungibleAsset,
@@ -18,7 +24,10 @@ import type {
     NonFungibleTokenEvent,
     GasOptionType,
     HubOptions,
+    HubIndicator,
 } from '@masknet/web3-shared-base'
+import type { DataProvider } from '@masknet/public-api'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 export namespace ExplorerAPI {
     export type Transaction = Web3Transaction & {
@@ -100,8 +109,9 @@ export namespace RSS3BaseAPI {
 
 export namespace PriceAPI {
     export interface Provider {
-        getTokenPrice(address: string, currency: CurrencyType): Promise<number>
+        getTokenPrice(platform_id: string, address: string, currency: CurrencyType): Promise<number>
         getTokensPrice(listOfAddress: string[], currency: CurrencyType): Promise<Record<string, number>>
+        getTokenPriceByCoinId(coin_id: string, currency: CurrencyType): Promise<number>
     }
 }
 
@@ -110,7 +120,7 @@ export namespace HistoryAPI {
         getTransactions(
             address: string,
             options?: HubOptions<ChainId>,
-        ): Promise<Pageable<Transaction<ChainId, SchemaType>>>
+        ): Promise<Array<Transaction<ChainId, SchemaType>>>
     }
 }
 
@@ -121,58 +131,83 @@ export namespace GasOptionAPI {
 }
 
 export namespace FungibleTokenAPI {
-    export interface Provider<ChainId, SchemaType> {
-        getAssets(address: string, options?: HubOptions<ChainId>): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>>
+    export interface Provider<ChainId, SchemaType, Indicator = HubIndicator> {
+        getAssets(
+            address: string,
+            options?: HubOptions<ChainId>,
+        ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>, Indicator>>
     }
 }
 
 export namespace NonFungibleTokenAPI {
-    export interface Provider<ChainId, SchemaType> {
+    export interface Provider<ChainId, SchemaType, Indicator = HubIndicator> {
+        /** Get balance of a token owned by the account. */
+        getBalance?: (address: string, options?: HubOptions<ChainId, Indicator>) => Promise<number>
+        /** Get the detailed of a token. */
+        getContract?: (
+            address: string,
+            options?: HubOptions<ChainId>,
+        ) => Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined>
+        /** Get a token asset. */
         getAsset?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
         ) => Promise<NonFungibleAsset<ChainId, SchemaType> | undefined>
-        getAssets?: (address: string) => Promise<Array<NonFungibleAsset<ChainId, SchemaType>>>
-        getHistory?: (
+        /** Get a list of token assets */
+        getAssets?: (
+            address: string,
+            options?: HubOptions<ChainId>,
+        ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
+        /** Get a token. */
+        getToken?: (
+            address: string,
+            tokenId: string,
+            options?: HubOptions<ChainId>,
+        ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
+        /** Get a list of tokens. */
+        getTokens?: (
+            from: string,
+            options?: HubOptions<ChainId, Indicator>,
+        ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, Indicator>>
+        /** Get history events related to a token. */
+        getEvents?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
         ) => Promise<Array<NonFungibleTokenEvent<ChainId, SchemaType>>>
+        /** Get all listed orders for selling a token. */
         getListings?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
         ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
+        /** Get all listed orders for buying a token. */
         getOffers?: (
             address: string,
             tokenId: string,
-            opts?: HubOptions<ChainId>,
+            options?: HubOptions<ChainId>,
         ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
+        /** Get all orders. */
         getOrders?: (
             address: string,
             tokenId: string,
             side: OrderSide,
             options?: HubOptions<ChainId>,
         ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
-        getToken?: (
-            address: string,
-            tokenId: string,
-            options?: HubOptions<ChainId>,
-        ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
-        getTokens?: (
-            from: string,
-            opts?: HubOptions<ChainId>,
-        ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>>
-        getContract?: (
-            address: string,
-            opts?: HubOptions<ChainId>,
-        ) => Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined>
-        getContractBalance?: (address: string) => Promise<number>
+        /** Get all collections owned by the account. */
         getCollections?: (
             address: string,
-            options?: HubOptions<ChainId>,
-        ) => Promise<Pageable<NonFungibleTokenCollection<ChainId> | undefined>>
+            options?: HubOptions<ChainId, Indicator>,
+        ) => Promise<Pageable<NonFungibleTokenCollection<ChainId>, Indicator>>
+        /** Place a bid on a token. */
+        createBuyOrder?: (/** TODO: add parameters */) => Promise<void>
+        /** Listing a token for public sell. */
+        createSellOrder?: (/** TODO: add parameters */) => Promise<void>
+        /** Fulfill an order. */
+        fulfillOrder?: (/** TODO: add parameters */) => Promise<void>
+        /** Cancel an order. */
+        cancelOrder?: (/** TODO: add parameters */) => Promise<void>
     }
 }
 
@@ -183,15 +218,15 @@ export namespace RiskWarningBaseAPI {
 }
 
 export namespace StorageAPI {
-    export interface Storage {
-        set(key: string, value: any): Promise<void>
-        get<T>(key: string): Promise<T | undefined>
+    export interface Storage<T> {
+        get(key: string): Promise<T | undefined>
+        set(key: string, value: T): Promise<void>
         delete?(key: string): Promise<void>
     }
 
     export interface Provider {
-        createJSON_Storage?(key: string): Storage
-        createBinaryStorage?(key: string): Storage
+        createJSON_Storage?<T>(key: string): Storage<T>
+        createBinaryStorage?<T>(key: string): Storage<T>
     }
 }
 
@@ -241,6 +276,8 @@ export namespace NextIDBaseAPI {
 
         queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page?: number): Promise<any>
 
+        queryAllExistedBindingsByPlatform(platform: NextIDPlatform, identity: string): Promise<NextIDPersonaBindings[]>
+
         queryIsBound(
             personaPublicKey: string,
             platform: NextIDPlatform,
@@ -278,6 +315,7 @@ export namespace SecurityAPI {
         is_whitelisted?: '0' | '1'
         is_in_dex?: '0' | '1'
         is_anti_whale?: '0' | '1'
+        trust_list?: '0' | '1'
     }
 
     export interface ContractSecurity {
@@ -355,6 +393,84 @@ export namespace TwitterBaseAPI {
             }>
         }
     }
+    type UserUrl = {
+        display_url: string
+        expanded_url: string
+        /** t.co url */
+        url: string
+        indices: [number, number]
+    }
+    export interface User {
+        __typename: 'User'
+        id: string
+        rest_id: string
+        affiliates_highlighted_label: {}
+        has_nft_avatar: boolean
+        legacy: {
+            blocked_by: boolean
+            blocking: boolean
+            can_dm: boolean
+            can_media_tag: boolean
+            /** ISODateTime */
+            created_at: string
+            default_profile: boolean
+            default_profile_image: boolean
+            description: string
+            entities: {
+                description: {
+                    urls: []
+                }
+                url: {
+                    urls: UserUrl[]
+                }
+            }
+            fast_followers_count: 0
+            favourites_count: 22
+            follow_request_sent: boolean
+            followed_by: boolean
+            followers_count: 35
+            following: boolean
+            friends_count: 76
+            has_custom_timelines: boolean
+            is_translator: boolean
+            listed_count: 4
+            location: string
+            media_count: 196
+            muting: boolean
+            name: string
+            normal_followers_count: 35
+            notifications: boolean
+            pinned_tweet_ids_str: []
+            possibly_sensitive: boolean
+            /** unused data, declare details when you need */
+            profile_banner_extensions: any
+            profile_banner_url: string
+            /** unused data, declare details when you need */
+            profile_image_extensions: any
+            profile_image_url_https: string
+            profile_interstitial_type: string
+            protected: boolean
+            screen_name: string
+            statuses_count: number
+            translator_type: string
+            /** t.co url */
+            url: string
+            verified: boolean
+            want_retweets: boolean
+            withheld_in_countries: []
+        }
+        smart_blocked_by: false
+        smart_blocking: false
+        super_follow_eligible: false
+        super_followed_by: false
+        super_following: false
+        legacy_extended_profile: {}
+        is_profile_translatable: boolean
+    }
+    export type Response<T> = {
+        data: T
+    }
+    export type UserByScreenNameResponse = Response<{ user: { result: User } }>
     export interface AvatarInfo {
         nickname: string
         userId: string
@@ -389,6 +505,7 @@ export namespace TwitterBaseAPI {
         >
         uploadUserAvatar: (screenName: string, image: Blob | File) => Promise<TwitterResult>
         updateProfileImage: (screenName: string, media_id_str: string) => Promise<AvatarInfo | undefined>
+        getUserByScreenName: (screenName: string) => Promise<User>
     }
 }
 
@@ -452,4 +569,148 @@ export namespace MaskBaseAPI {
     export type StoredKeyInfo = api.IStoredKeyInfo
 
     export interface Provider {}
+}
+
+export namespace TokenAPI {
+    export interface TokenInfo {
+        id: string
+        market_cap: string
+        price: string
+    }
+    export interface Provider {
+        getTokenInfo(tokenName: string): Promise<TokenInfo | undefined>
+    }
+}
+export namespace TrendingAPI {
+    export interface Settings {
+        currency: Currency
+    }
+    export enum TagType {
+        CASH = 1,
+        HASH = 2,
+    }
+
+    export interface Currency {
+        id: string
+        name: string
+        symbol?: string
+        description?: string
+    }
+
+    export interface Platform {
+        id: string | number
+        name: string
+        slug: string
+        symbol: string
+    }
+
+    export type CommunityType = 'twitter' | 'facebook' | 'telegram' | 'reddit' | 'other' | 'discord'
+    export type CommunityUrls = Array<{ type: Partial<CommunityType>; link: string }>
+
+    export interface Coin {
+        id: string
+        chainId?: ChainId
+        name: string
+        symbol: string
+        decimals?: number
+        is_mirrored?: boolean
+        platform_url?: string
+        tags?: string[]
+        tech_docs_urls?: string[]
+        message_board_urls?: string[]
+        source_code_urls?: string[]
+        community_urls?: CommunityUrls
+        home_urls?: string[]
+        announcement_urls?: string[]
+        blockchain_urls?: string[]
+        image_url?: string
+        description?: string
+        market_cap_rank?: number
+        address?: string
+        contract_address?: string
+        facebook_url?: string
+        twitter_url?: string
+        telegram_url?: string
+    }
+
+    export interface Market {
+        current_price: number
+        circulating_supply?: number
+        market_cap?: number
+        max_supply?: number
+        total_supply?: number
+        total_volume?: number
+        price_change_percentage_1h?: number
+        price_change_percentage_24h?: number
+        price_change_percentage_1h_in_currency?: number
+        price_change_percentage_1y_in_currency?: number
+        price_change_percentage_7d_in_currency?: number
+        price_change_percentage_14d_in_currency?: number
+        price_change_percentage_24h_in_currency?: number
+        price_change_percentage_30d_in_currency?: number
+        price_change_percentage_60d_in_currency?: number
+        price_change_percentage_200d_in_currency?: number
+    }
+
+    export interface Ticker {
+        logo_url: string
+        trade_url: string
+        market_name: string
+        base_name: string
+        target_name: string
+        price?: number
+        volume: number
+        score?: string
+        updated: Date
+    }
+
+    export interface Contract {
+        chainId?: ChainId
+        address: string
+        iconURL?: string
+    }
+
+    export interface Trending {
+        currency: Currency
+        dataProvider: DataProvider
+        coin: Coin
+        platform?: Platform
+        contracts?: Contract[]
+        market?: Market
+        tickers: Ticker[]
+        lastUpdated: string
+    }
+
+    // #region historical
+    export type Stat = [number | string, number]
+    export interface HistoricalCoinInfo {
+        id: number
+        is_active: 0 | 1
+        is_fiat: 0 | 1
+        name: string
+        quotes: []
+        symbol: string
+    }
+    // #endregion
+
+    export type HistoricalInterval = '1d' | '2h' | '1h' | '15m' | '5m'
+
+    export type PriceStats = {
+        market_caps: Stat[]
+        prices: Stat[]
+        total_volumes: Stat[]
+    }
+
+    export interface Provider<ChainId> {
+        getCoinTrending(chainId: ChainId, id: string, currency: Currency): Promise<Trending>
+
+        // #region get all coins
+        getCoins(): Promise<Coin[]>
+        // #endregion
+
+        // #region get all currency
+        getCurrencies(): Promise<Currency[]>
+        // #endregion
+        getPriceStats(chainId: ChainId, coinId: string, currency: Currency, days: number): Promise<Stat[]>
+    }
 }

@@ -1,18 +1,19 @@
 import { useCallback, useState } from 'react'
-import { uniqBy } from 'lodash-unified'
+import { range, uniqBy } from 'lodash-unified'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { Box, Button, Skeleton, Typography } from '@mui/material'
+import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
+import { Box, Button, List, ListItem, Skeleton, Typography } from '@mui/material'
 import { useI18N } from '../../../utils'
 import { AddNFT } from './AddNFT'
-import { NFTImage } from './NFTImage'
-import { useAccount, useChainId, useImageChecker } from '@masknet/plugin-infra/web3'
-import { ReversedAddress } from '@masknet/shared'
-import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
+import { ElementAnchor, ReversedAddress } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import { useCollectibles } from '../hooks/useCollectibles'
+import type { AllChainsNonFungibleToken, SelectTokenInfo } from '../types'
+import { NFTImageCollectibleAvatar } from '../Application/NFTListPage'
+import type { ChainId } from '@masknet/web3-shared-evm'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -30,17 +31,13 @@ const useStyles = makeStyles()((theme) => ({
     galleryItem: {
         border: `1px solid ${theme.palette.divider}`,
         borderRadius: 4,
-        padding: theme.spacing(1),
-    },
-    gallery: {
-        display: 'flex',
-        flexFlow: 'row wrap',
-        height: 150,
-        overflowY: 'auto',
-        '&::-webkit-scrollbar': {
+        height: 200,
+        '::-webkit-scrollbar': {
             display: 'none',
         },
+        overflowY: 'auto',
     },
+
     button: {
         textAlign: 'center',
         paddingTop: theme.spacing(1),
@@ -50,13 +47,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     setNFTAvatar: {},
     skeleton: {
-        width: 97,
-        height: 97,
+        width: 100,
+        height: 100,
         objectFit: 'cover',
-        borderRadius: '100%',
         boxSizing: 'border-box',
-        padding: 6,
-        margin: theme.spacing(0.5, 1),
     },
     skeletonBox: {
         marginLeft: 'auto',
@@ -80,31 +74,62 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(1),
         gap: 16,
     },
+    list: {
+        gridGap: 13,
+        display: 'grid',
+        gridTemplateColumns: 'repeat(5, 1fr)',
+        padding: 8,
+        overflowY: 'auto',
+    },
+
+    nftItem: {
+        position: 'relative',
+        cursor: 'pointer',
+        display: 'flex',
+        overflow: 'hidden',
+        padding: 0,
+        flexDirection: 'column',
+        borderRadius: 12,
+        userSelect: 'none',
+        justifyContent: 'center',
+        lineHeight: 0,
+    },
 }))
 
 export interface NFTAvatarProps extends withClasses<'root'> {
-    onChange: (token: NonFungibleToken<ChainId, SchemaType>) => void
+    onChange: (token: SelectTokenInfo) => void
     hideWallet?: boolean
 }
 
 export function NFTAvatar(props: NFTAvatarProps) {
     const { onChange, hideWallet } = props
     const classes = useStylesExtends(useStyles(), props)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const [selectedToken, setSelectedToken] = useState<NonFungibleToken<ChainId, SchemaType> | undefined>()
+    const pluginID = useCurrentWeb3NetworkPluginID()
+    const account = useAccount(pluginID)
+    const chainId = useChainId(pluginID)
+    const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken | undefined>()
     const [open_, setOpen_] = useState(false)
-    const [collectibles_, setCollectibles_] = useState<Array<NonFungibleToken<ChainId, SchemaType>>>([])
+    const [collectibles_, setCollectibles_] = useState<AllChainsNonFungibleToken[]>([])
     const { t } = useI18N()
-    const { collectibles, error, retry, loading } = useCollectibles()
+    const {
+        value: collectibles = EMPTY_LIST,
+        done: loadFinish,
+        next: nextPage,
+        error: loadError,
+    } = useNonFungibleAssets(pluginID, undefined, { chainId, account })
 
     const onClick = useCallback(async () => {
         if (!selectedToken) return
-        onChange(selectedToken)
+        onChange({
+            account,
+            token: selectedToken,
+            image: selectedToken.metadata?.imageURL ?? '',
+            pluginId: pluginID,
+        })
         setSelectedToken(undefined)
     }, [onChange, selectedToken])
 
-    const onAddClick = useCallback((token: NonFungibleToken<ChainId, SchemaType>) => {
+    const onAddClick = useCallback((token: AllChainsNonFungibleToken) => {
         setSelectedToken(token)
         setCollectibles_((tokens) => uniqBy([token, ...tokens], (x) => x.contract?.address && x.tokenId))
     }, [])
@@ -113,21 +138,28 @@ export function NFTAvatar(props: NFTAvatarProps) {
         WalletMessages.events.selectProviderDialogUpdated,
     )
 
-    const LoadStatus = Array.from({ length: 8 })
-        .fill(0)
-        .map((_, i) => (
-            <div key={i} className={classes.skeletonBox}>
-                <Skeleton animation="wave" variant="rectangular" className={classes.skeleton} />
-            </div>
-        ))
+    const LoadStatus = (
+        <List className={classes.list}>
+            {range(8).map((i) => (
+                <ListItem key={i} className={classes.nftItem}>
+                    <Skeleton animation="wave" variant="rectangular" className={classes.skeleton} />
+                </ListItem>
+            ))}
+        </List>
+    )
     const Retry = (
         <Box className={classes.error}>
             <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
-            <Button className={classes.button} variant="text" onClick={retry}>
+            <Button className={classes.button} variant="text" onClick={nextPage}>
                 {t('plugin_collectible_retry')}
             </Button>
         </Box>
     )
+
+    const _onChange = (token: AllChainsNonFungibleToken) => {
+        if (!token) return
+        setSelectedToken(token)
+    }
     return (
         <>
             <Box className={classes.root}>
@@ -150,55 +182,56 @@ export function NFTAvatar(props: NFTAvatarProps) {
                         </Typography>
                     ) : null}
                 </Box>
-                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId as ChainId}>
                     <Box className={classes.galleryItem}>
-                        <Box className={classes.gallery}>
-                            {loading && !collectibles?.length
-                                ? LoadStatus
-                                : error || (!collectibles?.length && !collectibles_.length)
-                                ? Retry
-                                : uniqBy(
-                                      [...collectibles_, ...(collectibles ?? [])],
-                                      (x) => x.contract?.address && x.tokenId,
-                                  ).map((token: NonFungibleToken<ChainId, SchemaType>, i) => (
-                                      <NFTImageCollectibleAvatar
-                                          key={i}
-                                          token={token}
-                                          selectedToken={selectedToken}
-                                          setSelectedToken={setSelectedToken}
-                                      />
-                                  ))}
-                        </Box>
-                        <Box className={classes.buttons}>
-                            <Button variant="outlined" size="small" onClick={() => setOpen_(true)}>
-                                {t('nft_button_add_collectible')}
-                            </Button>
+                        {!loadFinish && !loadError && !collectibles?.length ? (
+                            LoadStatus
+                        ) : loadError || (!collectibles?.length && !collectibles_.length) ? (
+                            Retry
+                        ) : (
+                            <List className={classes.list}>
+                                {uniqBy(
+                                    [...collectibles_, ...(collectibles ?? [])],
+                                    (x) => x.contract?.address && x.tokenId,
+                                ).map((token: AllChainsNonFungibleToken, i) => (
+                                    <ListItem className={classes.nftItem} key={i}>
+                                        <NFTImageCollectibleAvatar
+                                            key={i}
+                                            pluginId={NetworkPluginID.PLUGIN_EVM}
+                                            token={token}
+                                            selectedToken={selectedToken}
+                                            onChange={(token) => _onChange(token)}
+                                        />
+                                    </ListItem>
+                                ))}
+                                <ElementAnchor
+                                    callback={() => {
+                                        nextPage?.()
+                                    }}>
+                                    {!loadFinish && <LoadingBase />}
+                                </ElementAnchor>
+                            </List>
+                        )}
+                    </Box>
 
-                            <Button variant="contained" size="small" onClick={onClick} disabled={!selectedToken}>
-                                {t('nft_button_set_avatar')}
-                            </Button>
-                        </Box>
+                    <Box className={classes.buttons}>
+                        <Button variant="outlined" size="small" onClick={() => setOpen_(true)}>
+                            {t('nft_button_add_collectible')}
+                        </Button>
+
+                        <Button variant="contained" size="small" onClick={onClick} disabled={!selectedToken}>
+                            {t('nft_button_set_avatar')}
+                        </Button>
                     </Box>
                 </ChainBoundary>
             </Box>
-            <AddNFT open={open_} onClose={() => setOpen_(false)} onAddClick={onAddClick} />
+            <AddNFT
+                chainId={chainId as ChainId}
+                expectedPluginID={pluginID}
+                open={open_}
+                onClose={() => setOpen_(false)}
+                onAddClick={onAddClick}
+            />
         </>
     )
-}
-interface NFTImageCollectibleAvatarProps {
-    token: NonFungibleToken<ChainId, SchemaType>
-    setSelectedToken: React.Dispatch<React.SetStateAction<NonFungibleToken<ChainId, SchemaType> | undefined>>
-    selectedToken?: NonFungibleToken<ChainId, SchemaType>
-}
-
-function NFTImageCollectibleAvatar({ token, setSelectedToken, selectedToken }: NFTImageCollectibleAvatarProps) {
-    const { classes } = useStyles()
-    const { value: isImageToken, loading } = useImageChecker(token.metadata?.imageURL)
-    if (loading)
-        return (
-            <div className={classes.skeletonBox}>
-                <Skeleton animation="wave" variant="rectangular" className={classes.skeleton} />
-            </div>
-        )
-    return isImageToken ? <NFTImage token={token} selectedToken={selectedToken} onChange={setSelectedToken} /> : null
 }

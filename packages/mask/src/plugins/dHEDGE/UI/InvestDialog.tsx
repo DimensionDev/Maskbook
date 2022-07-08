@@ -1,12 +1,11 @@
-import { InjectedDialog, useOpenShareTxDialog, usePickToken } from '@masknet/shared'
+import { InjectedDialog, useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 import { formatBalance, FungibleToken, isZero, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { DialogContent } from '@mui/material'
+import { DialogActions, DialogContent } from '@mui/material'
 import { useCallback, useMemo, useState } from 'react'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
@@ -19,6 +18,8 @@ import type { Coin } from '../../Trader/types'
 import { useInvestCallback } from '../hooks/useInvestCallback'
 import { PluginDHedgeMessages } from '../messages'
 import type { Pool } from '../types'
+import { PluginWalletStatusBar } from '../../../utils'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -38,8 +39,9 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(2, 2, 0, 2),
     },
     button: {
-        margin: theme.spacing(1.5, 0, 0),
-        padding: 12,
+        margin: 0,
+        padding: 0,
+        height: 40,
     },
 }))
 
@@ -68,14 +70,14 @@ export function InvestDialog() {
     // #endregion
 
     // #region select token
-    const pickToken = usePickToken()
+    const selectFungibleToken = useSelectFungibleToken(NetworkPluginID.PLUGIN_EVM)
     const onSelectTokenChipClick = useCallback(async () => {
-        const picked = await pickToken({
+        const picked = await selectFungibleToken({
             disableNativeToken: true,
             whitelist: allowedTokens,
         })
         if (picked) setToken(picked)
-    }, [pickToken, token?.address, allowedTokens])
+    }, [selectFungibleToken, token?.address, allowedTokens])
     // #endregion
 
     // #region amount
@@ -92,17 +94,17 @@ export function InvestDialog() {
     const [{ loading: isInvesting }, investCallback] = useInvestCallback(pool, amount.toFixed(), token)
     const openShareTxDialog = useOpenShareTxDialog()
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
+    const isOnTwitter = isTwitter(activatedSocialNetworkUI)
+    const isOnFacebook = isFacebook(activatedSocialNetworkUI)
     const shareText = token
-        ? [
-              `I just invested ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol} in ${pool?.name}. ${
-                  isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                      ? `Follow @${
-                            isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                        } (mask.io) to invest dHEDGE pools.`
-                      : ''
-              }`,
-              '#mask_io',
-          ].join('\n')
+        ? t('plugin_dhedge_share_text', {
+              amount: formatBalance(amount, token.decimals),
+              symbol: `${cashTag}${token.symbol}`,
+              pool: pool?.name,
+              account_promote: t('plugin_dhedge_account_promote', {
+                  context: isOnTwitter ? 'twitter' : isOnFacebook ? 'facebook' : 'default',
+              }),
+          })
         : ''
     const invest = useCallback(async () => {
         const hash = await investCallback()
@@ -163,7 +165,7 @@ export function InvestDialog() {
     return (
         <div className={classes.root}>
             <InjectedDialog open={open} onClose={onClose} title={pool.name} maxWidth="xs">
-                <DialogContent>
+                <DialogContent style={{ padding: 16 }}>
                     <form className={classes.form} noValidate autoComplete="off">
                         <TokenAmountPanel
                             label="Amount"
@@ -179,35 +181,37 @@ export function InvestDialog() {
                             }}
                         />
                     </form>
-                    <WalletConnectedBoundary>
-                        {isZero(tokenBalance) ? (
-                            <ActionButton
-                                className={classes.button}
-                                fullWidth
-                                onClick={openSwap}
-                                variant="contained"
-                                disabled={isInvesting}
-                                loading={loadingTokenBalance || isInvesting}>
-                                {t('plugin_dhedge_buy_token', { symbol: token?.symbol })}
-                            </ActionButton>
-                        ) : (
-                            <EthereumERC20TokenApprovedBoundary
-                                amount={amount.toFixed()}
-                                spender={pool.address}
-                                token={token?.schema === SchemaType.ERC20 ? token : undefined}>
+                </DialogContent>
+                <DialogActions style={{ padding: 0 }}>
+                    <PluginWalletStatusBar>
+                        <WalletConnectedBoundary>
+                            {isZero(tokenBalance) ? (
                                 <ActionButton
                                     className={classes.button}
                                     fullWidth
-                                    disabled={!!validationMessage || isInvesting}
-                                    onClick={invest}
-                                    variant="contained"
+                                    onClick={openSwap}
+                                    disabled={isInvesting}
                                     loading={loadingTokenBalance || isInvesting}>
-                                    {validationMessage || t('plugin_dhedge_invest')}
+                                    {t('plugin_dhedge_buy_token', { symbol: token?.symbol })}
                                 </ActionButton>
-                            </EthereumERC20TokenApprovedBoundary>
-                        )}
-                    </WalletConnectedBoundary>
-                </DialogContent>
+                            ) : (
+                                <EthereumERC20TokenApprovedBoundary
+                                    amount={amount.toFixed()}
+                                    spender={pool.address}
+                                    token={token?.schema === SchemaType.ERC20 ? token : undefined}>
+                                    <ActionButton
+                                        className={classes.button}
+                                        fullWidth
+                                        disabled={!!validationMessage || isInvesting}
+                                        onClick={invest}
+                                        loading={loadingTokenBalance || isInvesting}>
+                                        {validationMessage || t('plugin_dhedge_invest')}
+                                    </ActionButton>
+                                </EthereumERC20TokenApprovedBoundary>
+                            )}
+                        </WalletConnectedBoundary>
+                    </PluginWalletStatusBar>
+                </DialogActions>
             </InjectedDialog>
         </div>
     )

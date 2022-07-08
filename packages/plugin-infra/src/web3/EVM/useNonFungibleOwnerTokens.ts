@@ -1,6 +1,6 @@
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { useAsyncRetry } from 'react-use'
 import { useRef } from 'react'
+import { useAsyncRetry } from 'react-use'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { NonFungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useWeb3Connection } from '../useWeb3Connection'
 
@@ -46,10 +46,15 @@ export function useNonFungibleOwnerTokens(
 
         if (!listOfPairs.length) return
 
-        allListRef.current = (
-            await Promise.all(listOfPairs?.map((x) => connection.getNonFungibleToken(x[0], x[1])) ?? [])
-        ).filter((x) => x.contract?.balance) as Array<NonFungibleToken<ChainId, SchemaType.ERC721>>
-    }, [contractAddress, ownerAccount, chainId, connection, nonFungibleTokenContract, _balance])
+        allListRef.current = (await Promise.all(
+            listOfPairs?.map((x) =>
+                connection.getNonFungibleToken(x[0], x[1], SchemaType.ERC721, {
+                    chainId,
+                    account: ownerAccount,
+                }),
+            ) ?? [],
+        )) as Array<NonFungibleToken<ChainId, SchemaType.ERC721>>
+    }, [chainId, contractAddress, ownerAccount, chainId, connection, nonFungibleTokenContract, _balance])
 
     const clearTokenDetailedOwnerList = () => (allListRef.current = [])
 

@@ -1,13 +1,11 @@
 import { toHex } from 'web3-utils'
 import { EthereumMethodType } from '@masknet/web3-shared-evm'
 import type { Context, Middleware } from '../types'
-import { SharedContextSettings, Web3StateSettings } from '../../../settings'
+import { SharedContextSettings } from '../../../settings'
 
 export class MaskWallet implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {
-        const { Connection } = Web3StateSettings.value
-        const { hasNativeAPI, send, account, chainId, signTransaction, signPersonalMessage, signTypedData } =
-            SharedContextSettings.value
+        const { hasNativeAPI, send, account, chainId } = SharedContextSettings.value
 
         // redirect to native app
         if (hasNativeAPI) {
@@ -35,40 +33,6 @@ export class MaskWallet implements Middleware<Context> {
                 if (!config?.from || !config?.to) {
                     context.abort(new Error('Invalid JSON payload.'))
                     break
-                }
-                try {
-                    const rawTransaction = await signTransaction(config.from as string, config)
-
-                    if (!rawTransaction) {
-                        context.abort(new Error('Failed to sign transaction.'))
-                        break
-                    }
-
-                    const connection = await Connection?.getConnection?.({
-                        chainId: context.chainId,
-                    })
-                    const tx = await connection?.sendSignedTransaction?.(rawTransaction, {
-                        chainId: context.chainId,
-                    })
-                    context.write(tx)
-                } catch (error) {
-                    context.abort(error, 'Failed to send transaction.')
-                }
-                break
-            case EthereumMethodType.PERSONAL_SIGN:
-                try {
-                    const [data, address] = context.request.params as [string, string]
-                    context.write(await signPersonalMessage(data, address))
-                } catch (error) {
-                    context.abort(error, 'Failed to sign data.')
-                }
-                break
-            case EthereumMethodType.ETH_SIGN_TYPED_DATA:
-                try {
-                    const [address, data] = context.request.params as [string, string]
-                    context.write(await signTypedData(address, JSON.parse(data)))
-                } catch (error) {
-                    context.abort(error, 'Failed to sign typed data.')
                 }
                 break
             default:

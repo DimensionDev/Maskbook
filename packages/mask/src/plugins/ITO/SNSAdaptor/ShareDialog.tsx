@@ -89,11 +89,7 @@ export function ShareDialog(props: ShareDialogProps) {
                     {isZero(actualSwapAmount) ? t('plugin_ito_out_of_stock_hit') : t('plugin_ito_congratulations')}
                 </Typography>
                 {shareSuccessText ? (
-                    <ActionButton
-                        onClick={onShareSuccess}
-                        variant="contained"
-                        color="primary"
-                        className={classes.shareButton}>
+                    <ActionButton onClick={onShareSuccess} color="primary" className={classes.shareButton}>
                         {t('plugin_ito_dialog_swap_share_title')}
                     </ActionButton>
                 ) : null}

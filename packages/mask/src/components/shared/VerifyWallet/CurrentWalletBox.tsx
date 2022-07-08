@@ -2,7 +2,6 @@ import {
     useAccount,
     useNetworkDescriptor,
     useProviderDescriptor,
-    useProviderType,
     useReverseAddress,
     useWeb3State,
 } from '@masknet/plugin-infra/web3'
@@ -105,20 +104,20 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { wallet, walletName, notInPop, changeWallet } = props
-    const providerType = useProviderType(NetworkPluginID.PLUGIN_EVM)
+    const { providerType } = wallet
     const providerDescriptor = useProviderDescriptor(NetworkPluginID.PLUGIN_EVM, providerType)
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM)
     const frontAccount = useAccount(NetworkPluginID.PLUGIN_EVM)
     const account = notInPop ? frontAccount : wallet.account
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM) ?? {}
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet.account)
     return account ? (
         <section className={classes.currentAccount}>
             <WalletIcon
                 size={30}
                 badgeSize={12}
-                networkIcon={providerDescriptor?.icon}
-                providerIcon={networkDescriptor?.icon}
+                mainIcon={providerDescriptor?.icon}
+                badgeIcon={networkDescriptor?.icon}
             />
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
@@ -133,9 +132,6 @@ export function CurrentWalletBox(props: CurrentWalletBox) {
                             <Typography className={classes.accountName}>
                                 {walletName ?? providerDescriptor?.name}
                             </Typography>
-                            {domain && Others?.formatDomainName ? (
-                                <Typography className={classes.domain}>{Others.formatDomainName(domain)}</Typography>
-                            ) : null}
                         </>
                     )}
                 </div>

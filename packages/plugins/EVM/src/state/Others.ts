@@ -7,17 +7,20 @@ import {
     ChainId,
     formatEthereumAddress,
     formatDomainName,
+    formatTokenId,
+    getTransactionSignature,
     ProviderType,
     NetworkType,
+    Transaction,
     SchemaType,
     ZERO_ADDRESS,
-    formatTokenId,
     CHAIN_DESCRIPTORS,
     NETWORK_DESCRIPTORS,
     PROVIDER_DESCRIPTORS,
+    getMaskTokenAddress,
 } from '@masknet/web3-shared-evm'
 
-export class Others extends OthersState<ChainId, SchemaType, ProviderType, NetworkType> {
+export class Others extends OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
     constructor(context: Plugin.Shared.SharedContext) {
         super(context, {
             defaultAddress: ZERO_ADDRESS,
@@ -31,6 +34,9 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
     override isValidDomain = isValidDomain
     override isValidAddress = isValidAddress
     override isSameAddress = isSameAddress
+
+    override getMaskTokenAddress = getMaskTokenAddress
+    override getTransactionSignature = getTransactionSignature
 
     override formatAddress = formatEthereumAddress
     override formatTokenId = formatTokenId

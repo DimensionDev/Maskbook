@@ -112,7 +112,14 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
     }
 
     if (error || errorMask) {
-        return <RefreshIcon className={classes.refresh} color="primary" onClick={error ? retry : retryMask} />
+        return (
+            <RefreshIcon
+                className={classes.refresh}
+                color="primary"
+                style={{ fill: '#1C68F3' }}
+                onClick={error ? retry : retryMask}
+            />
+        )
     }
 
     if (pools.length === 0) {
@@ -152,7 +159,6 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                     expectedChainId={ChainId.Mainnet}
                     predicate={(pluginId, chainId) => [ChainId.Mainnet, ChainId.Matic].includes(chainId)}
-                    renderInTimeline
                 />
             </Box>
         </>

@@ -3,7 +3,7 @@ import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
-import { formatGweiToWei, formatWeiToEther, SchemaType } from '@masknet/web3-shared-evm'
+import { formatGweiToWei, formatWeiToEther, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
 import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { Link, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
@@ -23,8 +23,7 @@ import {
     useNativeTokenPrice,
     useNetworkType,
     useReverseAddress,
-    useSchemaType,
-    useWeb3Connection,
+    useTokenSchema,
     useWeb3State,
 } from '@masknet/plugin-infra/web3'
 import {
@@ -39,6 +38,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { CopyIconButton } from '../../../components/CopyIconButton'
 import { useTitle } from '../../../hook/useTitle'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -153,8 +153,8 @@ const ContractInteraction = memo(() => {
     const navigate = useNavigate()
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
     const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const [transferError, setTransferError] = useState(false)
     const { value: request, loading: requestLoading } = useUnconfirmedRequest()
 
@@ -167,16 +167,21 @@ const ContractInteraction = memo(() => {
         maxFeePerGas,
         maxPriorityFeePerGas,
         amount,
-        isNativeTokenInteraction,
         contractAddress,
+        isNativeTokenInteraction,
     } = useMemo(() => {
         const type = request?.formatterTransaction?.type
         if (!type) return {}
 
+        const methods = request.transactionContext?.methods
+        if (!methods?.length) return {}
+
         switch (type) {
             case TransactionDescriptorType.INTERACTION:
-                switch (request.transactionContext?.name) {
-                    case 'approve':
+                for (const method of methods) {
+                    const parameters = method.parameters
+
+                    if (method.name === 'approve' && parameters?.value) {
                         return {
                             isNativeTokenInteraction: false,
                             typeName: request.formatterTransaction?.title,
@@ -186,34 +191,39 @@ const ContractInteraction = memo(() => {
                             gasPrice: request.computedPayload?.gasPrice,
                             maxFeePerGas: request.computedPayload?.maxFeePerGas,
                             maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
-                            amount: request.transactionContext.parameters?.value,
+                            amount: parameters?.value,
                         }
-                    case 'transfer':
-                    case 'transferFrom':
+                    }
+
+                    if (
+                        (method.name === 'transfer' || method.name === 'transferFrom') &&
+                        parameters?.to &&
+                        parameters?.value
+                    ) {
                         return {
                             isNativeTokenInteraction: false,
                             typeName: t('popups_wallet_contract_interaction_transfer'),
                             tokenAddress: request.computedPayload?.to,
-                            to: request.transactionContext.parameters?.to,
+                            to: parameters?.to,
                             gas: request.computedPayload?.gas,
                             gasPrice: request.computedPayload?.gasPrice,
                             maxFeePerGas: request.computedPayload?.maxFeePerGas,
                             maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
-                            amount: request.transactionContext.parameters?.value,
+                            amount: parameters?.value,
                             contractAddress: request.computedPayload?.to,
                         }
-                    default:
-                        return {
-                            isNativeTokenInteraction: true,
-                            typeName: t('popups_wallet_contract_interaction'),
-                            tokenAddress: request.computedPayload?.to,
-                            to: request.computedPayload?.to,
-                            gas: request.computedPayload?.gas,
-                            gasPrice: request.computedPayload?.gasPrice,
-                            maxFeePerGas: request.computedPayload?.maxFeePerGas,
-                            maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
-                            amount: request.computedPayload?.value,
-                        }
+                    }
+                }
+                return {
+                    isNativeTokenInteraction: true,
+                    typeName: t('popups_wallet_contract_interaction'),
+                    tokenAddress: request.computedPayload?.to,
+                    to: request.computedPayload?.to,
+                    gas: request.computedPayload?.gas,
+                    gasPrice: request.computedPayload?.gasPrice,
+                    maxFeePerGas: request.computedPayload?.maxFeePerGas,
+                    maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
+                    amount: request.computedPayload?.value,
                 }
             case TransactionDescriptorType.TRANSFER:
                 return {
@@ -234,13 +244,13 @@ const ContractInteraction = memo(() => {
             default:
                 unreachable(type)
         }
-    }, [request, t])
+    }, [request, t, NATIVE_TOKEN_ADDRESS])
 
-    const { value: contractType } = useSchemaType(NetworkPluginID.PLUGIN_EVM, contractAddress)
+    const { value: contractType } = useTokenSchema(NetworkPluginID.PLUGIN_EVM, contractAddress)
 
     // token detailed
     const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
-    const { value: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, isNativeTokenInteraction ? '' : tokenAddress)
+    const { value: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, !isNativeTokenInteraction ? tokenAddress : '')
 
     // gas price
     const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, chainId, 'EIP1559')
@@ -266,18 +276,18 @@ const ContractInteraction = memo(() => {
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
         if (request) {
             try {
-                await connection?.confirmRequest?.()
+                await WalletRPC.confirmRequest(request.payload, { chainId })
                 navigate(-1)
             } catch (error_) {
                 setTransferError(true)
             }
         }
         return
-    }, [request, location.search, history])
+    }, [request, location.search, history, chainId])
 
     const [{ loading: rejectLoading }, handleReject] = useAsyncFn(async () => {
         if (!request) return
-        await connection?.rejectRequest?.()
+        await WalletRPC.rejectRequest(request.payload)
         navigate(PopupRoutes.Wallet, { replace: true })
     }, [request])
 
@@ -291,14 +301,15 @@ const ContractInteraction = memo(() => {
 
     // token decimals
     const tokenAmount = (amount ?? 0) as number
-    const tokenDecimals = isNativeTokenInteraction ? nativeToken?.decimals : token?.decimals
+    const tokenDecimals = token?.decimals
 
     // token estimated value
-    const { value: tokenPrice } = useFungibleTokenPrice(
-        NetworkPluginID.PLUGIN_EVM,
-        !isNativeTokenInteraction ? token?.address : undefined,
-    )
+    const { value: tokenPrice } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, token?.address, {
+        chainId,
+    })
+
     const { value: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
+
     const tokenValueUSD =
         contractType && [SchemaType.ERC721, SchemaType.ERC1155].includes(contractType)
             ? ZERO
@@ -311,21 +322,6 @@ const ContractInteraction = memo(() => {
         .plus(tokenValueUSD)
         .toString()
 
-    console.log('DEBUG: ContractInteraction')
-    console.log({
-        amount,
-        gasFee,
-        gas,
-        maxPriorityFeePerGas: maxPriorityFeePerGas ?? defaultPrices?.maxPriorityFeePerGas,
-        maxFeePerGas: maxFeePerGas ?? defaultPrices?.maxFeePerGas,
-        defaultPrice: (gasPrice as string) ?? defaultPrices?.gasPrice,
-        request,
-        tokenPrice,
-        tokenAmount,
-        tokenDecimals,
-        nativeTokenPrice,
-    })
-
     useUpdateEffect(() => {
         if (!request && !requestLoading) {
             navigate(PopupRoutes.Wallet, { replace: true })
@@ -333,7 +329,6 @@ const ContractInteraction = memo(() => {
     }, [request, requestLoading])
 
     useTitle(typeName ?? t('popups_wallet_contract_interaction'))
-
     const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, to)
 
     return requestLoading ? (
@@ -349,7 +344,7 @@ const ContractInteraction = memo(() => {
                     <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
                         {to}
                         {request?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION &&
-                        request?.transactionContext?.name === 'approve' &&
+                        request?.transactionContext?.methods?.some((x) => x.name === 'approve') &&
                         to ? (
                             <CopyIconButton text={to} className={classes.copy} />
                         ) : null}
@@ -359,6 +354,8 @@ const ContractInteraction = memo(() => {
                     <div className={classes.item} style={{ marginTop: 20, marginBottom: 30 }}>
                         <TokenIcon
                             address={(isNativeTokenInteraction ? nativeToken?.address : token?.address) ?? ''}
+                            chainId={chainId}
+                            name={(isNativeTokenInteraction ? nativeToken?.name : token?.name) ?? ''}
                             classes={{ icon: classes.tokenIcon }}
                         />
                         {tokenDecimals !== undefined ? (
@@ -377,7 +374,7 @@ const ContractInteraction = memo(() => {
                                 </Typography>
                                 <Typography>
                                     {!isGreaterThan(tokenValueUSD, pow10(9)) ? (
-                                        <FormattedCurrency value={tokenValueUSD} sign="$" formatter={formatCurrency} />
+                                        <FormattedCurrency value={tokenValueUSD} formatter={formatCurrency} />
                                     ) : null}
                                 </Typography>
                             </>
@@ -412,7 +409,7 @@ const ContractInteraction = memo(() => {
                             </Typography>
 
                             <Typography className={classes.gasPrice}>
-                                <FormattedCurrency value={totalUSD} sign="$" formatter={formatCurrency} />
+                                <FormattedCurrency value={totalUSD} formatter={formatCurrency} />
                             </Typography>
                         </div>
                     ) : null}

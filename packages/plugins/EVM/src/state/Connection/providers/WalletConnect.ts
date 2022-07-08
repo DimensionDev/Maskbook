@@ -4,11 +4,11 @@ import type { RequestArguments } from 'web3-core'
 import { defer } from '@dimensiondev/kit'
 import WalletConnect from '@walletconnect/client'
 import type { ITxData } from '@walletconnect/types'
-import QRCodeModal from '@walletconnect/qrcode-modal'
-import { ChainId, chainResolver, EthereumMethodType, ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, chainResolver, EthereumMethodType, isValidAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { BaseProvider } from './Base'
 import type { EVM_Provider } from '../types'
 import type { Account } from '@masknet/web3-shared-base'
+import { SharedContextSettings } from '../../../settings'
 
 interface SessionPayload {
     event: 'connect' | 'session_update'
@@ -32,7 +32,7 @@ interface ModalClosePayload {
 
 export default class WalletConnectProvider extends BaseProvider implements EVM_Provider {
     private connectorId = 0
-    private connector: WalletConnect = null!
+    private connector: WalletConnect = this.createConnector()
 
     /**
      * The ongoing walletconnect connection which the listeners use to resolve later.
@@ -42,7 +42,7 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
         reject: (error: unknown) => void
     } | null = null
 
-    private async createConnector() {
+    private createConnector() {
         // disable legacy listeners
         this.connectorId += 1
 
@@ -57,10 +57,15 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
 
         const connector = new WalletConnect({
             bridge: 'https://bridge.walletconnect.org',
-            qrcodeModal: QRCodeModal,
+            qrcodeModal: {
+                open(uri: string, callback) {
+                    SharedContextSettings.value.openWalletConnectDialog(uri, callback)
+                },
+                close() {
+                    SharedContextSettings.value.closeWalletConnectDialog()
+                },
+            },
         })
-
-        if (connector.connected) await connector.killSession()
 
         connector.on('connect', createListener(this.onConnect.bind(this)))
         connector.on('disconnect', createListener(this.onDisconnect.bind(this)))
@@ -108,22 +113,38 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
 
     private onModalClose(error: Error | null, payload: ModalClosePayload) {
         if (!this.connection) return
-        this.connection.reject(error || new Error('User closed modal.'))
+        this.connection.reject(error || new Error('User rejected'))
     }
 
-    private async login(chainId?: ChainId) {
+    private async login(expectedChainId?: ChainId) {
         // delay to return the result until session is updated or connected
         const [deferred, resolve, reject] = defer<Account<ChainId>>()
 
-        this.connector = await this.createConnector()
-
-        await this.connector.createSession({
-            chainId,
-        })
+        this.connector = this.createConnector()
 
         this.connection = {
             resolve,
             reject,
+        }
+
+        if (this.connector.connected) {
+            const { chainId: actualChainId, accounts } = this.connector
+            const account = first(accounts)
+            if (actualChainId !== 0 && actualChainId === expectedChainId && account && isValidAddress(account)) {
+                this.connection.resolve({
+                    chainId: actualChainId,
+                    account,
+                })
+            } else {
+                await this.logoutClientSide()
+                await this.connector.createSession({
+                    chainId: expectedChainId,
+                })
+            }
+        } else {
+            await this.connector.createSession({
+                chainId: expectedChainId,
+            })
         }
 
         return deferred.finally(() => {
@@ -132,7 +153,27 @@ export default class WalletConnectProvider extends BaseProvider implements EVM_P
     }
 
     private async logout() {
-        await this.connector.killSession()
+        await this.logoutClientSide(true)
+    }
+
+    private async logoutClientSide(force = false) {
+        try {
+            await this.connector.killSession()
+        } catch {
+            window.localStorage.removeItem('walletconnect')
+
+            // force to clean client state
+            if (force) {
+                this.onDisconnect(new Error('disconnect'), {
+                    event: 'disconnect',
+                    params: [
+                        {
+                            message: 'disconnect',
+                        },
+                    ],
+                })
+            }
+        }
     }
 
     override request<T extends unknown>(requestArguments: RequestArguments): Promise<T> {

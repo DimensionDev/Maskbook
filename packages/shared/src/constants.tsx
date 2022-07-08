@@ -10,7 +10,7 @@ import {
     InstagramRoundIcon,
     MindsRoundIcon,
 } from '@masknet/icons'
-import { EnhanceableSite } from '@masknet/shared-base'
+import { EnhanceableSite, NextIDPlatform } from '@masknet/shared-base'
 
 export const SOCIAL_MEDIA_ICON_MAPPING: Record<string, ReactNode> = {
     [EnhanceableSite.Twitter]: <TwitterColoredIcon />,
@@ -37,6 +37,10 @@ export const SOCIAL_MEDIA_NAME: Record<string, string> = {
     [EnhanceableSite.Instagram]: 'Instagram',
     [EnhanceableSite.OpenSea]: 'OpenSea',
     [EnhanceableSite.Localhost]: 'Localhost',
+}
+
+export const NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP: Record<string, string> = {
+    [NextIDPlatform.Twitter]: EnhanceableSite.Twitter,
 }
 
 export const SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID = [EnhanceableSite.Twitter]

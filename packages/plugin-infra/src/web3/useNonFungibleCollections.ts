@@ -1,26 +1,33 @@
 import { useAsyncRetry } from 'react-use'
 import { asyncIteratorToArray } from '@masknet/shared-base'
-import type { NonFungibleTokenCollection, NetworkPluginID, HubOptions } from '@masknet/web3-shared-base'
+import {
+    HubIndicator,
+    NetworkPluginID,
+    NonFungibleTokenCollection,
+    pageableToIterator,
+} from '@masknet/web3-shared-base'
 import type { Web3Helper } from '../web3-helpers'
 import { useAccount } from './useAccount'
 import { useWeb3Hub } from './useWeb3Hub'
 
-export function useNonFungibleCollections<T extends NetworkPluginID>(
+export function useNonFungibleCollections<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
-    chainId?: Web3Helper.Definition[T]['ChainId'],
+    options?: Web3Helper.Web3HubOptionsScope<S, T>,
 ) {
-    type GetAllNonFungibleCollections = (
-        address: string,
-        options?: HubOptions<Web3Helper.Definition[T]['ChainId']>,
-    ) => AsyncIterableIterator<NonFungibleTokenCollection<Web3Helper.Definition[T]['ChainId']>>
+    const account = useAccount(pluginID, options?.account)
+    const hub = useWeb3Hub(pluginID, options)
 
-    const account = useAccount(pluginID)
-    const hub = useWeb3Hub(pluginID)
-
-    return useAsyncRetry(async () => {
+    return useAsyncRetry<Array<NonFungibleTokenCollection<Web3Helper.ChainIdScope<S, T>>>>(async () => {
         if (!account || !hub) return []
-        return asyncIteratorToArray(
-            (hub.getAllNonFungibleCollections as GetAllNonFungibleCollections)(account, { chainId }),
-        )
-    }, [account, chainId, hub])
+
+        const iterator = pageableToIterator(async (indicator?: HubIndicator) => {
+            if (!hub.getNonFungibleCollections) return
+            return hub.getNonFungibleCollections(account, {
+                indicator,
+                size: 50,
+                ...options,
+            })
+        })
+        return asyncIteratorToArray(iterator)
+    }, [account, hub, JSON.stringify(options)])
 }

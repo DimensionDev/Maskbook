@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { Link, List, ListItem } from '@mui/material'
+import { List, ListItem } from '@mui/material'
 import urlcat from 'urlcat'
 import { RSS3_DEFAULT_IMAGE } from '../../constants'
 import { useI18N } from '../../locales'
@@ -48,12 +48,12 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface DonationPageProps {
-    donations: GeneralAsset[]
+    donations?: GeneralAsset[]
     loading?: boolean
     addressLabel: string
 }
 
-export function DonationPage({ donations, loading, addressLabel }: DonationPageProps) {
+export function DonationPage({ donations = [], loading, addressLabel }: DonationPageProps) {
     const { classes } = useStyles()
     const t = useI18N()
 
@@ -64,19 +64,13 @@ export function DonationPage({ donations, loading, addressLabel }: DonationPageP
         <List className={classes.list}>
             {donations.map((donation) => (
                 <ListItem key={donation.id} className={classes.listItem}>
-                    <Link
-                        className={classes.link}
-                        href={getDonationLink(addressLabel, donation)}
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        <DonationCard
-                            className={classes.donationCard}
-                            imageUrl={donation.info.image_preview_url || RSS3_DEFAULT_IMAGE}
-                            name={donation.info.title || t.inactive_project()}
-                            contribCount={donation.info.total_contribs || 0}
-                            contribDetails={donation.info.token_contribs || []}
-                        />
-                    </Link>
+                    <DonationCard
+                        className={classes.donationCard}
+                        imageUrl={donation.info.image_preview_url || RSS3_DEFAULT_IMAGE}
+                        name={donation.info.title || t.inactive_project()}
+                        contribCount={donation.info.total_contribs || 0}
+                        contribDetails={donation.info.token_contribs || []}
+                    />
                 </ListItem>
             ))}
         </List>

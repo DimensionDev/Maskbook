@@ -1,8 +1,9 @@
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import classNames from 'classnames'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales'
 import type { OwnerERC721TokenInfo } from '../types'
+import { ImageLoader } from './ImageLoader'
 import ModelView from './ModelView'
 
 export const useStyles = makeStyles()((theme) => ({
@@ -95,6 +96,11 @@ export const useStyles = makeStyles()((theme) => ({
         },
         animation: 'image-show 0.4s both;',
     },
+    video: {
+        width: '100%',
+        height: '100%',
+        transition: 'all 200ms',
+    },
     noData: {
         paddingBottom: '-12px',
         color: '#7b8192',
@@ -117,12 +123,29 @@ export const useStyles = makeStyles()((theme) => ({
 interface Props {
     message?: string
     imageUrl?: string
+    mediaUrl?: string
     tokenInfo?: OwnerERC721TokenInfo | null
 }
 
 export function PreviewBox(props: Props) {
     const classes = useStylesExtends(useStyles(), {})
-    const { t } = useI18N()
+    const t = useI18N()
+
+    const renderPreview = (mediaUrl: string, imageUrl: string) => {
+        if (/\.(mp4|webm|ogg)/.test(mediaUrl ?? '')) {
+            return (
+                <video className={classes.video} autoPlay loop muted playsInline poster={imageUrl}>
+                    <source
+                        src={mediaUrl}
+                        type={`video/${mediaUrl.slice(Math.max(0, mediaUrl.lastIndexOf('.') + 1))}`}
+                    />
+                </video>
+            )
+        } else {
+            return <ImageLoader className={classes.image} src={imageUrl} />
+        }
+    }
+
     return (
         <div className={classes.box}>
             {props.message && (
@@ -134,17 +157,17 @@ export function PreviewBox(props: Props) {
                     {props.message}
                 </div>
             )}
-            {props.imageUrl &&
+            {props.mediaUrl &&
                 (props.tokenInfo?.glbSupport ? (
                     <div>
-                        <ModelView className={classes.glbView} source={props.imageUrl} />
+                        <ModelView className={classes.glbView} source={props.mediaUrl} />
                     </div>
                 ) : (
-                    <img className={classes.image} src={props.imageUrl} />
+                    renderPreview(props.mediaUrl, props.imageUrl ?? '')
                 ))}
-            {!(props.message || props.imageUrl) && (
+            {!(props.message || props.mediaUrl) && (
                 <div className={classes.noData}>
-                    <Typography color="textPrimary">{t('plugin_pets_dialog_preview')}</Typography>
+                    <Typography color="textPrimary">{t.pets_dialog_preview()}</Typography>
                 </div>
             )}
         </div>

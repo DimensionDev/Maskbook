@@ -6,39 +6,41 @@ import { Web3StateSettings } from '../../../settings'
 
 export class ERC20Descriptor implements TransactionDescriptor {
     async compute(context: TransactionContext<ChainId>) {
-        if (!context.name) return
+        if (!context.methods?.length) return
 
         const connection = await Web3StateSettings.value.Connection?.getConnection?.({
             chainId: context.chainId,
         })
 
-        switch (context.name) {
-            case 'approve':
+        for (const method of context.methods) {
+            const parameters = method.parameters
+            if (method.name === 'approve' && parameters?.spender && parameters?.value) {
                 return {
                     chainId: context.chainId,
                     title: 'Approve',
                     description: `Approve spend ${getTokenAmountDescription(
-                        context.parameters?.value,
-                        await connection?.getFungibleToken(context.parameters?.to ?? '', {
+                        parameters?.value,
+                        await connection?.getFungibleToken(context.to ?? '', {
                             chainId: context.chainId,
                         }),
                     )}`,
                 }
-            case 'transfer':
-            case 'transferFrom':
+            }
+
+            if ((method.name === 'transfer' || method.name === 'transferFrom') && parameters?.to && parameters?.value) {
                 return {
                     chainId: context.chainId,
                     title: 'Transfer Token',
                     description: `Transfer token ${getTokenAmountDescription(
-                        context.parameters?.value,
-                        await connection?.getFungibleToken(context.parameters?.to ?? '', {
+                        method.parameters?.value,
+                        await connection?.getFungibleToken(context.to ?? '', {
                             chainId: context.chainId,
                         }),
                         true,
                     )}`,
                 }
-            default:
-                return
+            }
         }
+        return
     }
 }

@@ -270,7 +270,7 @@ export function Collectible(props: CollectibleProps) {
                 <ChainBoundary
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                     expectedChainId={expectChainId ?? chainId}
-                    renderInTimeline>
+                    ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                     <ActionBar />
                 </ChainBoundary>
             </Box>

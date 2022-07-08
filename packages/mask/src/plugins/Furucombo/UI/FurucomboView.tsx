@@ -71,7 +71,7 @@ export function FurucomboView(props: PoolViewProps) {
                 <Typography align="center" color={MaskColorVar.errorPlugin}>
                     {t('plugin_furucombo_load_failed')}
                 </Typography>
-                <Button variant="contained" className={classes.reload} onClick={retry}>
+                <Button className={classes.reload} onClick={retry}>
                     {t('plugin_furucombo_reload')}
                 </Button>
             </Stack>
@@ -97,7 +97,7 @@ export function FurucomboView(props: PoolViewProps) {
                     <ChainBoundary
                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                         expectedChainId={props.chainId}
-                        renderInTimeline
+                        ActionButtonPromiseProps={{ variant: 'roundedDark' }}
                     />
                 </Box>
             </>
@@ -124,11 +124,7 @@ export function FurucomboView(props: PoolViewProps) {
                 </CardContent>
             </Card>
             <Box sx={{ padding: 1.5 }}>
-                <ChainBoundary
-                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                    expectedChainId={props.chainId}
-                    renderInTimeline
-                />
+                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={props.chainId} />
             </Box>
         </>
     )

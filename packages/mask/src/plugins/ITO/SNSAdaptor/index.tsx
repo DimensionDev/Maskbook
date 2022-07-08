@@ -42,8 +42,15 @@ const sns: Plugin.SNSAdaptor.Definition = {
         [ITO_MetaKey_2, onAttached_ITO],
     ]),
     CompositionDialogEntry: {
-        dialog({ open, onClose }) {
-            return <CompositionDialog open={open} onConfirm={onClose} onClose={onClose} />
+        dialog({ open, onClose, isOpenFromApplicationBoard }) {
+            return (
+                <CompositionDialog
+                    open={open}
+                    onConfirm={onClose}
+                    onClose={onClose}
+                    isOpenFromApplicationBoard={isOpenFromApplicationBoard}
+                />
+            )
         },
         label: (
             <>
@@ -57,6 +64,16 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const icon = <MarketsIcon />
             const name = <Trans i18nKey="plugin_ito_name" />
             const iconFilterColor = 'rgba(56, 228, 239, 0.3)'
+            const clickHandler = () =>
+                CrossIsolationMessages.events.requestComposition.sendToLocal({
+                    reason: 'timeline',
+                    open: true,
+                    options: {
+                        startupPlugin: base.ID,
+                        isOpenFromApplicationBoard: true,
+                    },
+                })
+
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
@@ -67,15 +84,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             icon={icon}
                             iconFilterColor={iconFilterColor}
                             onClick={
-                                EntryComponentProps.onClick ??
-                                (() =>
-                                    CrossIsolationMessages.events.requestComposition.sendToLocal({
-                                        reason: 'timeline',
-                                        open: true,
-                                        options: {
-                                            startupPlugin: base.ID,
-                                        },
-                                    }))
+                                EntryComponentProps.onClick
+                                    ? () => EntryComponentProps.onClick?.(clickHandler)
+                                    : clickHandler
                             }
                         />
                     )
@@ -98,6 +109,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 ApplicationEntryID: `${base.ID}_claim`,
                 RenderEntryComponent(EntryComponentProps) {
                     const [open, setOpen] = useState(false)
+                    const clickHandler = () => setOpen(true)
                     return (
                         <>
                             <ApplicationEntry
@@ -105,9 +117,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 iconFilterColor={iconFilterColor}
                                 icon={icon}
                                 {...EntryComponentProps}
-                                onClick={EntryComponentProps.onClick ?? (() => setOpen(true))}
+                                onClick={
+                                    EntryComponentProps.onClick
+                                        ? () => EntryComponentProps.onClick?.(clickHandler)
+                                        : clickHandler
+                                }
                             />
-                            <ClaimAllDialog open={open} onClose={() => setOpen(false)} />
+                            {open ? <ClaimAllDialog open={open} onClose={() => setOpen(false)} /> : null}
                         </>
                     )
                 },

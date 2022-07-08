@@ -1,12 +1,14 @@
 import Web3 from 'web3'
 import type { Plugin } from '@masknet/plugin-infra'
-import { SocialIdentity, IdentityAddress, IdentityAddressType } from '@masknet/web3-shared-base'
-import { ChainId, createPayload, createWeb3Provider, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
+import { NetworkPluginID, SocialIdentity, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
+import { createPayload, createWeb3Provider, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { IdentityServiceState } from '@masknet/plugin-infra/web3'
 import type { RequestArguments } from 'web3-core'
+import { KeyValue, RSS3 } from '@masknet/web3-providers'
+import { getSiteType } from '@masknet/shared-base'
 
 const ENS_RE = /\S{1,256}\.(eth|kred|xyz|luxe)\b/
-const ADDRESS_FULL = /0x\w+/
+const ADDRESS_FULL = /0x\w{40,}/
 // xxx.cheers.bio xxx.rss3.bio
 const RSS3_URL_RE = /https?:\/\/(?<name>[\w.]+)\.(rss3|cheers)\.bio/
 const RSS3_RNS_RE = /(?<name>[\w.]+)\.rss3/
@@ -33,12 +35,12 @@ function getAddress(text: string) {
     return ''
 }
 
-export class IdentityService extends IdentityServiceState<ChainId> {
+export class IdentityService extends IdentityServiceState {
     constructor(protected context: Plugin.Shared.SharedContext) {
         super()
     }
 
-    override async lookup(identity: SocialIdentity): Promise<IdentityAddress[]> {
+    override async getFromRemote(identity: SocialIdentity) {
         const { identifier, bio = '', nickname = '', homepage = '' } = identity
 
         const address = getAddress(bio)
@@ -53,11 +55,12 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         )
         const allSettled = await Promise.allSettled([
             web3.eth.ens.getAddress(ethereumName),
-            '',
-            '',
-            // TODO: move to external apis
-            // PluginProfileRPC.getRSS3AddressById(RSS3Id),
-            // PluginNFTAvatarRPC.getAddress(identifier.userId ?? '', identifier.network),
+            RSS3.getNameInfo(RSS3Id).then((x) => x?.address ?? ''),
+            KeyValue.createJSON_Storage<Record<NetworkPluginID, { address: string; networkPluginID: NetworkPluginID }>>(
+                `com.maskbook.user_${getSiteType()}`,
+            )
+                .get(identifier?.userId ?? '$unknown')
+                .then((x) => x?.[NetworkPluginID.PLUGIN_EVM].address ?? ''),
         ])
 
         const getSettledAddress = (result: PromiseSettledResult<string>) => {
@@ -66,41 +69,41 @@ export class IdentityService extends IdentityServiceState<ChainId> {
 
         const addressENS = getSettledAddress(allSettled[0])
         const addressRSS3 = getSettledAddress(allSettled[1])
-        const addressGUN = getSettledAddress(allSettled[2])
+        const addressKV = getSettledAddress(allSettled[2])
 
         return [
             isValidSocialAddress(address)
                 ? {
-                      type: IdentityAddressType.ADDRESS,
-                      chainId: ChainId.Mainnet,
+                      networkSupporterPluginID: NetworkPluginID.PLUGIN_EVM,
+                      type: SocialAddressType.ADDRESS,
                       label: address,
                       address,
                   }
                 : null,
             isValidSocialAddress(addressENS)
                 ? {
-                      type: IdentityAddressType.ENS,
-                      chainId: ChainId.Mainnet,
+                      networkSupporterPluginID: NetworkPluginID.PLUGIN_EVM,
+                      type: SocialAddressType.ENS,
                       label: ethereumName,
                       address: addressENS,
                   }
                 : null,
             isValidSocialAddress(addressRSS3)
                 ? {
-                      type: IdentityAddressType.RSS3,
-                      chainId: ChainId.Mainnet,
+                      networkSupporterPluginID: NetworkPluginID.PLUGIN_EVM,
+                      type: SocialAddressType.RSS3,
                       label: `${RSS3Id}.rss3`,
                       address: addressRSS3,
                   }
                 : null,
-            isValidSocialAddress(addressGUN)
+            isValidSocialAddress(addressKV)
                 ? {
-                      type: IdentityAddressType.GUN,
-                      chainId: ChainId.Mainnet,
-                      label: addressGUN,
-                      address: addressGUN,
+                      networkSupporterPluginID: NetworkPluginID.PLUGIN_EVM,
+                      type: SocialAddressType.KV,
+                      label: addressKV,
+                      address: addressKV,
                   }
                 : null,
-        ].filter(Boolean) as IdentityAddress[]
+        ].filter(Boolean) as Array<SocialAddress<NetworkPluginID.PLUGIN_EVM>>
     }
 }

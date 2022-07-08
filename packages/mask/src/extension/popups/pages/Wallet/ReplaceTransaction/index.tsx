@@ -80,11 +80,11 @@ const ReplaceTransaction = memo(() => {
         return TransactionFormatter.createContext(chainId, transaction)
     }, [transaction, TransactionFormatter, chainId])
 
-    const defaultGas = formatterTransaction?._tx.gas ?? 0
-    const defaultGasPrice = formatterTransaction?._tx.gasPrice ?? 0
+    const defaultGas = transaction?._tx.gas ?? 0
+    const defaultGasPrice = transaction?._tx.gasPrice ?? 0
 
-    const defaultMaxFeePerGas = formatterTransaction?._tx.maxFeePerGas ?? 0
-    const defaultMaxPriorityFeePerGas = formatterTransaction?._tx.maxPriorityFeePerGas ?? 0
+    const defaultMaxFeePerGas = transaction?._tx.maxFeePerGas ?? 0
+    const defaultMaxPriorityFeePerGas = transaction?._tx.maxPriorityFeePerGas ?? 0
 
     const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
     const { value: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
@@ -93,12 +93,12 @@ const ReplaceTransaction = memo(() => {
     const schema = useMemo(() => {
         return zod
             .object({
-                gas: zod
-                    .string()
-                    .refine(
-                        (gas) => new BigNumber(gas).gte(hexToNumber(defaultGas) ?? 0),
-                        t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: hexToNumber(defaultGas) }),
-                    ),
+                gas: zod.string().refine(
+                    (gas) => new BigNumber(gas).gte(hexToNumber(toHex(defaultGas)) ?? 0),
+                    t('popups_wallet_gas_fee_settings_min_gas_limit_tips', {
+                        limit: hexToNumber(toHex(defaultGas)),
+                    }),
+                ),
                 gasPrice: is1559
                     ? zod.string().optional()
                     : zod.string().min(1, t('wallet_transfer_error_gas_price_absence')),
@@ -127,7 +127,7 @@ const ReplaceTransaction = memo(() => {
         mode: 'onBlur',
         resolver: zodResolver(schema),
         defaultValues: {
-            gas: new BigNumber(hexToNumber(defaultGas)).toString(),
+            gas: new BigNumber(hexToNumber(toHex(defaultGas))).toString(),
             gasPrice: formatWeiToGwei(new BigNumber(defaultGasPrice as number, 16))
                 .plus(1)
                 .toString(),
@@ -153,30 +153,26 @@ const ReplaceTransaction = memo(() => {
     const [{ loading }, handleConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             try {
-                if (transactionContext?.parameters) {
-                    const config = {
-                        ...formatterTransaction?._tx,
-                        gas: toHex(new BigNumber(data.gas).toString()),
-                        ...(is1559
-                            ? {
-                                  maxPriorityFeePerGas: toHex(
-                                      formatGweiToWei(data.maxPriorityFeePerGas ?? 0).toString(),
-                                  ),
-                                  maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas ?? 0).toString()),
-                              }
-                            : { gasPrice: toHex(formatGweiToWei(data.gasPrice ?? 0).toString()) }),
-                    }
-
-                    if (!transaction || !formatterTransaction) return
-
-                    if (type === ReplaceType.CANCEL) {
-                        await connection?.cancelRequest(transaction?.id, config)
-                    } else {
-                        await connection?.replaceRequest(transaction?.id, config)
-                    }
-
-                    navigate(-1)
+                const config = {
+                    ...transaction?._tx,
+                    gas: toHex(new BigNumber(data.gas).toString()),
+                    ...(is1559
+                        ? {
+                              maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas ?? 0).toString()),
+                              maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas ?? 0).toString()),
+                          }
+                        : { gasPrice: toHex(formatGweiToWei(data.gasPrice ?? 0).toString()) }),
                 }
+
+                if (!transaction || !formatterTransaction) return
+
+                if (type === ReplaceType.CANCEL) {
+                    await connection?.cancelTransaction(transaction?.id, config)
+                } else {
+                    await connection?.requestTransaction(transaction?.id, config)
+                }
+
+                navigate(-1)
             } catch (error) {
                 if (error instanceof Error) {
                     if (error.message.includes('maxFeePerGas cannot be less thant maxPriorityFeePerGas')) {

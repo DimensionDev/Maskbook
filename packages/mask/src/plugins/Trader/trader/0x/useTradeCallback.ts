@@ -5,7 +5,7 @@ import stringify from 'json-stable-stringify'
 import type { TransactionConfig } from 'web3-core'
 import { GasOptionConfig, TransactionEventType } from '@masknet/web3-shared-evm'
 import type { SwapQuoteResponse, TradeComputed } from '../../types'
-import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { SUPPORTED_CHAIN_ID_LIST } from './constants'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useAccount, useWeb3 } from '@masknet/plugin-infra/web3'
@@ -23,7 +23,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
             ...pick(tradeComputed.trade_, ['to', 'data', 'value']),
             ...gasConfig,
         } as TransactionConfig
-    }, [account, tradeComputed])
+    }, [account, tradeComputed, gasConfig])
 
     return useAsyncFn(async () => {
         // validate config

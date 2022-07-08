@@ -19,7 +19,7 @@ to {
             height: 335,
             boxSizing: 'border-box',
             backgroundImage: `url(${new URL('./cover.png', import.meta.url)})`,
-            backgroundSize: 'cover',
+            backgroundSize: 'contain',
             [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
                 padding: theme.spacing(1, 1.5),
                 height: 202,

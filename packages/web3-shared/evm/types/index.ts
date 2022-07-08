@@ -152,8 +152,6 @@ export enum EthereumMethodType {
     MASK_LOGIN = 'MASK_LOGIN',
     MASK_LOGOUT = 'MASK_LOGOUT',
     MASK_REPLACE_TRANSACTION = 'mask_replaceTransaction',
-    MASK_CONFIRM_TRANSACTION = 'mask_confirmTransaction',
-    MASK_REJECT_TRANSACTION = 'mask_rejectTransaction',
 }
 
 export enum TransactionEventType {
@@ -196,6 +194,7 @@ export enum TransactionType {
     RECEIVE = 'Receive',
     TRANSFER = 'transfer',
     CREATE_LUCKY_DROP = 'create_lucky_drop',
+    CREATE_RED_PACKET = 'create_red_packet',
     FILL_POOL = 'fill_pool',
     CLAIM = 'claim',
     REFUND = 'refund',
@@ -263,6 +262,7 @@ export enum NetworkType {
 }
 
 export enum ProviderType {
+    None = 'None',
     MaskWallet = 'Maskbook',
     MetaMask = 'MetaMask',
     WalletConnect = 'WalletConnect',
@@ -292,6 +292,9 @@ export enum NonFungibleAssetProvider {
     ZORA = 'Zora',
 }
 
+/**
+ * @deprecated
+ */
 export type TransactionState =
     | {
           type: TransactionStateType.UNKNOWN
@@ -299,7 +302,9 @@ export type TransactionState =
     | {
           type: TransactionStateType.WAIT_FOR_CONFIRMING
 
-          // @deprecated don't depend on this property will be removed in the future
+          /**
+           * @deprecated Don't depend on this property will be removed in the future
+           */
           hash?: string
       }
     | {
@@ -324,8 +329,14 @@ export type TransactionState =
 
 export type Web3 = EVM_Web3
 export type Web3Provider = {
-    send(payload: JsonRpcPayload): Promise<JsonRpcResponse>
-    sendAsync(payload: JsonRpcPayload): Promise<JsonRpcResponse>
+    send(
+        payload: JsonRpcPayload,
+        callback: (error: Error | null, response?: JsonRpcResponse) => void,
+    ): Promise<JsonRpcResponse>
+    sendAsync(
+        payload: JsonRpcPayload,
+        callback: (error: Error | null, response?: JsonRpcResponse) => void,
+    ): Promise<JsonRpcResponse>
     request<T extends unknown>(requestArguments: RequestArguments): Promise<T>
 
     on(name: 'connect', listener: (connectInfo: { chainId: string }) => void): Web3Provider
@@ -341,6 +352,7 @@ export type GasOption = {
     estimatedSeconds: number
     // eip1559 only
     estimatedBaseFee?: string
+    baseFeePerGas?: string
     // note: for prior 1559 it means gasPrice
     suggestedMaxFeePerGas: string
     suggestedMaxPriorityFeePerGas: string

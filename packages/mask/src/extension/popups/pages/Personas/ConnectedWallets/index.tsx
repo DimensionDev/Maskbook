@@ -13,12 +13,13 @@ import { NextIDProof } from '@masknet/web3-providers'
 import Service from '../../../../service'
 import { usePopupCustomSnackbar } from '@masknet/theme'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { MaskMessages } from '../../../../../../shared/messages'
 
 const ConnectedWallets = memo(() => {
     const { t } = useI18N()
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { NameService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const wallets = useWallets()
+    const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const navigate = useNavigate()
     const location = useLocation()
     const { proofs, currentPersona, refreshProofs, fetchProofsLoading } = PersonaContext.useContainer()
@@ -28,7 +29,6 @@ const ConnectedWallets = memo(() => {
     const { value: connectedWallets, loading: resolveWalletNameLoading } = useAsync(async () => {
         if (!proofs) return []
 
-        console.log(proofs)
         const results = await Promise.all(
             proofs.map(async (x, index) => {
                 if (x.platform === NextIDPlatform.Ethereum) {
@@ -100,7 +100,8 @@ const ConnectedWallets = memo(() => {
                     result.createdAt,
                     { signature: signature.signature.signature },
                 )
-
+                // Broadcast updates.
+                MaskMessages.events.ownProofChanged.sendToAll()
                 showSnackbar(t('popups_wallet_disconnect_success'))
                 refreshProofs()
             } catch {

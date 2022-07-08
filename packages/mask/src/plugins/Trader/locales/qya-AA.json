@@ -1,3 +1,12 @@
 {
-    "promote": "crwdns16896:0crwdne16896:0"
+    "promote": "crwdns16896:0crwdne16896:0",
+    "account_promote$default": "crwdns17290:0crwdne17290:0",
+    "account_promote$twitter": "crwdns17292:0$t(mask:twitter_account)crwdne17292:0",
+    "account_promote$facebook": "crwdns17294:0$t(mask:facebook_account)crwdne17294:0",
+    "share_text": "crwdns17296:0{{input_amount}}crwdnd17296:0{{input_symbol}}crwdnd17296:0{{output_amount}}crwdnd17296:0{{output_symbol}}crwdnd17296:0{{account_promote}}crwdnd17296:0$t(mask:hash_tag)crwdne17296:0",
+    "impact_warning": "crwdns17706:0crwdne17706:0",
+    "risk_warning": "crwdns17708:0crwdne17708:0",
+    "risk_warning_description": "crwdns17710:0{{impact}}crwdnd17710:0{{lostSymbol}}crwdnd17710:0{{lostValue}}crwdne17710:0",
+    "adjust_order": "crwdns17712:0crwdne17712:0",
+    "make_trade_anyway": "crwdns17714:0crwdne17714:0"
 }

@@ -195,6 +195,16 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         isMainnet: true,
     },
     {
+        ID: `${PLUGIN_ID}_harmony`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Harmony,
+        type: NetworkType.Harmony,
+        name: 'Harmony',
+        icon: new URL('../assets/harmony.png', import.meta.url),
+        iconColor: 'rgb(73, 169, 166)',
+        isMainnet: true,
+    },
+    {
         ID: `${PLUGIN_ID}_conflux`,
         networkSupporterPluginID: PLUGIN_ID,
         chainId: ChainId.Conflux,
@@ -220,6 +230,9 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         homeLink: 'https://mask.io',
         shortenLink: 'mask.io',
         downloadLink: 'https://mask.io/download-links',
+        iconFilterColor: 'rgba(28, 104, 243, 0.2)',
+        backgroundGradient:
+            'linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
     },
     {
         ID: `${PLUGIN_ID}_metamask`,
@@ -235,6 +248,9 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         homeLink: 'https://metamask.io',
         shortenLink: 'metamask.io',
         downloadLink: 'https://metamask.io/download.html',
+        iconFilterColor: 'rgba(216, 124, 48, 0.3)',
+        backgroundGradient:
+            'linear-gradient(90deg, rgba(248, 156, 53, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
     },
     {
         ID: `${PLUGIN_ID}_walletconnect`,
@@ -250,6 +266,9 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         homeLink: 'https://walletconnect.com',
         shortenLink: 'walletconnect.com',
         downloadLink: 'https://walletconnect.com',
+        iconFilterColor: 'rgba(59, 153, 252, 0.2)',
+        backgroundGradient:
+            'linear-gradient(90deg, rgba(59, 153, 252, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
     },
     {
         ID: `${PLUGIN_ID}_coin98`,
@@ -259,7 +278,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         icon: new URL('../assets/coin98.png', import.meta.url),
         enableRequirements: {
             supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
-            supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedEnhanceableSites: [],
         },
         homeLink: 'https://coin98.com',
         shortenLink: 'coin98.com',
@@ -273,7 +292,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         icon: new URL('../assets/coinbase.png', import.meta.url),
         enableRequirements: {
             supportedChainIds: getEnumAsArray(ChainId).map((x) => x.value),
-            supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedEnhanceableSites: [],
         },
         homeLink: 'https://walletlink.org',
         shortenLink: 'walletlink.org',
@@ -287,7 +306,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         icon: new URL('../assets/mathwallet.png', import.meta.url),
         enableRequirements: {
             supportedChainIds: [ChainId.Mainnet, ChainId.BSC],
-            supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedEnhanceableSites: [],
         },
         homeLink: 'https://mathwallet.org',
         shortenLink: 'mathwallet.org',
@@ -307,6 +326,9 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         homeLink: 'https://fortmatic.com',
         shortenLink: 'fortmatic.com',
         downloadLink: 'https://fortmatic.com',
+        iconFilterColor: 'rgba(104, 81, 255, 0.2)',
+        backgroundGradient:
+            'linear-gradient(90deg, rgba(104, 81, 255, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
     },
     {
         ID: `${PLUGIN_ID}_torus`,
@@ -324,8 +346,8 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
                 ChainId.Arbitrum,
                 ChainId.Avalanche,
             ],
-            supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
-            supportedExtensionSites: getEnumAsArray(ExtensionSite).map((x) => x.value),
+            supportedEnhanceableSites: [],
+            supportedExtensionSites: [],
         },
         homeLink: 'https://app.tor.us/',
         shortenLink: 'tor.us',

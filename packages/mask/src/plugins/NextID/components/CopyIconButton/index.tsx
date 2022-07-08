@@ -28,7 +28,14 @@ export const CopyIconButton = memo<CopyIconButtonProps>(({ text, ...props }) => 
             onMouseLeave={() => setOpen(false)}
             disableFocusListener
             disableTouchListener>
-            <CopyIcon onClick={onCopy} className={props.className} />
+            <CopyIcon
+                onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    onCopy()
+                }}
+                className={props.className}
+            />
         </Tooltip>
     )
 })

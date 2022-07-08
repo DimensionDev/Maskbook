@@ -28,7 +28,7 @@ const sns: Plugin.SNSAdaptor.Definition<
 > = {
     ...base,
     init(signal, context) {
-        setupStorage(context.createKVStorage('persistent', '', storageDefaultValue))
+        setupStorage(context.createKVStorage('persistent', storageDefaultValue))
     },
     SearchResultBox: SearchResultInspector,
     GlobalInjection: function Component() {
@@ -56,7 +56,11 @@ const sns: Plugin.SNSAdaptor.Definition<
                             title={name}
                             icon={icon}
                             iconFilterColor={iconFilterColor}
-                            onClick={EntryComponentProps.onClick ?? openDialog}
+                            onClick={
+                                EntryComponentProps.onClick
+                                    ? () => EntryComponentProps.onClick?.(openDialog)
+                                    : openDialog
+                            }
                         />
                     )
                 },

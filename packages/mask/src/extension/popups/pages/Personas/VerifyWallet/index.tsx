@@ -1,11 +1,11 @@
 import urlcat from 'urlcat'
-import { memo, useEffect, useMemo } from 'react'
+import { memo, useEffect } from 'react'
 import { useAsync, useAsyncFn, useLocation } from 'react-use'
 import { useNavigate } from 'react-router-dom'
-import { EMPTY_LIST, NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
+import { NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
-import { ChainId, providerResolver, ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, EthereumMethodType, providerResolver, ProviderType } from '@masknet/web3-shared-evm'
 import { SignSteps, Steps } from '../../../../../components/shared/VerifyWallet/Steps'
 import Services from '../../../../service'
 import { PersonaContext } from '../hooks/usePersonaContext'
@@ -15,6 +15,7 @@ import { useUnconfirmedRequest } from '../../Wallet/hooks/useUnConfirmedRequest'
 import { PopupContext } from '../../../hook/usePopupContext'
 import { Account, isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useReverseAddress, useWallets, useWeb3Connection, useWeb3State } from '@masknet/plugin-infra/web3'
+import { MaskMessages } from '../../../../../../shared/messages'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -44,21 +45,15 @@ const VerifyWallet = memo(() => {
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet?.account)
-    const { value: bounds } = useAsync(async () => {
-        if (!wallet.account) return EMPTY_LIST
-        return NextIDProof.queryExistedBindingByPlatform(NextIDPlatform.Ethereum, wallet.account)
-    }, [wallet])
-    const isBound = useMemo(() => {
-        if (!bounds || !bounds.length) return false
-        const res = bounds.filter((x) => x.persona === currentPersona?.identifier.publicKeyAsHex)
-        if (res.length > 0) {
-            const final = res[0].proofs.filter((x) => {
-                return isSameAddress(x.identity, wallet?.account)
-            })
-            if (final.length > 0) return true
-        }
-        return false
-    }, [bounds])
+
+    const { value: isBound } = useAsync(async () => {
+        if (!wallet.account || !currentPersona?.identifier.publicKeyAsHex) return false
+        return NextIDProof.queryIsBound(
+            currentPersona.identifier.publicKeyAsHex,
+            NextIDPlatform.Ethereum,
+            wallet.account,
+        )
+    }, [wallet.account, currentPersona?.identifier.publicKeyAsHex])
 
     const walletName = () => {
         if (domain && Others?.formatDomainName) return Others.formatDomainName(domain)
@@ -68,7 +63,11 @@ const VerifyWallet = memo(() => {
     }
 
     useEffect(() => {
-        // if (request?.computedPayload?.type !== EthereumRpcType.SIGN) return
+        if (
+            request?.payload.method !== EthereumMethodType.ETH_SIGN &&
+            request?.payload.method !== EthereumMethodType.PERSONAL_SIGN
+        )
+            return
 
         navigate(urlcat(PopupRoutes.WalletSignRequest, { goBack: true }), {
             state: wallet,
@@ -105,11 +104,10 @@ const VerifyWallet = memo(() => {
     const [{ value: walletSignState }, walletSign] = useAsyncFn(async () => {
         if (!payload || !currentPersona?.identifier.publicKeyAsHex) return false
         try {
-            const walletSignature = await connection?.signMessage(payload.signPayload, 'personaSign', {
+            const walletSignature = await connection?.signMessage(payload.signPayload, 'personalSign', {
                 chainId: wallet.chainId,
                 account: wallet.account,
                 providerType: wallet.providerType,
-                popupsWindow: false,
             })
 
             if (!walletSignature) throw new Error('Wallet sign failed')
@@ -125,6 +123,9 @@ const VerifyWallet = memo(() => {
                     signature,
                 },
             )
+
+            // Broadcast updates
+            MaskMessages.events.ownProofChanged.sendToAll()
             showSnackbar(t('popups_verify_wallet_sign_success'), { variant: 'success' })
             setSigned(true)
             refreshProofs()
@@ -166,6 +167,7 @@ const VerifyWallet = memo(() => {
     return (
         <div className={classes.container}>
             <Steps
+                isBound={isBound}
                 walletName={walletName()}
                 disableConfirm={isBound && !signed}
                 nickname={currentPersona.nickname}
