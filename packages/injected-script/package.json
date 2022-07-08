@@ -6,6 +6,10 @@
     ".": {
       "webpack": "./sdk/index.ts",
       "default": "./dist/sdk/index.js"
+    },
+    "./shared": {
+      "webpack": "./shared/index.ts",
+      "default": "./dist/shared/index.js"
     }
   },
   "types": "./dist/sdk/index.d.ts",

@@ -1,17 +1,19 @@
-import { delay } from '@dimensiondev/kit'
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { Twitter } from '@masknet/web3-providers'
+import { delay } from '@dimensiondev/kit'
+import { TWITTER_RESERVED_SLUGS } from '@masknet/injected-script/shared'
 import { ProfileIdentifier } from '@masknet/shared-base'
-import {
-    searchSelfHandleSelector,
-    searchSelfNicknameSelector,
-    searchSelfAvatarSelector,
-    searchWatcherAvatarSelector,
-    selfInfoSelectors,
-} from '../utils/selector'
+import { Twitter } from '@masknet/web3-providers'
+import { first } from 'lodash-unified'
 import { creator, SocialNetworkUI as Next } from '../../../social-network'
 import { twitterBase } from '../base'
 import { isMobileTwitter } from '../utils/isMobile'
+import {
+    searchSelfAvatarSelector,
+    searchSelfHandleSelector,
+    searchSelfNicknameSelector,
+    searchWatcherAvatarSelector,
+    selfInfoSelectors,
+} from '../utils/selector'
 
 function recognizeDesktop() {
     const collect = () => {
@@ -111,13 +113,16 @@ function resolveLastRecognizedIdentityMobileInner(
     window.addEventListener('locationchange', onLocationChange, { signal: cancel })
 }
 
+function getFirstSlug() {
+    const slugs: string[] = location.pathname.split('/').filter(Boolean)
+    return first(slugs)
+}
+
 function resolveCurrentVisitingIdentityInner(
     ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
-    const update = async (event: WindowEventMap['scenechange']) => {
-        if (event.detail.scene !== 'profile' || !event.detail.value) return
-        const twitterId = event.detail.value
+    const update = async (twitterId: string) => {
         const user = await Twitter.getUserByScreenName(twitterId)
         const bio = user.legacy.description
 
@@ -135,7 +140,20 @@ function resolveCurrentVisitingIdentityInner(
         }
     }
 
-    window.addEventListener('scenechange', update, { signal: cancel })
+    const slug = getFirstSlug()
+    if (slug && !TWITTER_RESERVED_SLUGS.includes(slug)) {
+        update(slug)
+    }
+
+    window.addEventListener(
+        'scenechange',
+        (event) => {
+            if (event.detail.scene !== 'profile') return
+            const twitterId = event.detail.value
+            update(twitterId)
+        },
+        { signal: cancel },
+    )
 }
 
 export const IdentityProviderTwitter: Next.CollectingCapabilities.IdentityResolveProvider = {
