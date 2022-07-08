@@ -9,8 +9,9 @@ export class ERC721Descriptor implements TransactionDescriptor {
         for (const method of context.methods) {
             const parameters = method.parameters
 
-            switch (method.name === 'setApprovalForAll' && parameters?.operator && parameters?.approved) {
+            switch (method.name) {
                 case 'setApprovalForAll':
+                    if (parameters?.operator === undefined || parameters?.approved === undefined) break
                     return {
                         chainId: context.chainId,
                         title: parameters?.approved === false ? 'Revoke' : 'Unlock',
