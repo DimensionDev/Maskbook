@@ -14,7 +14,10 @@ export class AddressBook implements Middleware<Context> {
             case TransactionDescriptorType.TRANSFER:
                 return context.to
             case TransactionDescriptorType.INTERACTION:
-                if (context.name && ['transfer', 'transferFrom'].includes(context.name)) return context.parameters?.to
+                const method = context.methods?.find(
+                    (x) => x.name && ['transfer', 'transferFrom'].includes(x.name) && x.parameters?.to,
+                )
+                return method?.parameters?.to
         }
         return
     }
@@ -31,7 +34,7 @@ export class AddressBook implements Middleware<Context> {
             const { TransactionFormatter } = Web3StateSettings.value
             const formatContext = await TransactionFormatter?.createContext(context.chainId, context.config)
             const from = this.getFrom(formatContext)
-            const to = this.getTo(formatContext)
+            const to = this.getTo(formatContext) as string
 
             if (!isSameAddress(from, to) && !isZeroAddress(to) && to) await AddressBook?.addAddress(context.chainId, to)
         } catch {

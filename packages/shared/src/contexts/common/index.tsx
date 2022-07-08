@@ -1,11 +1,11 @@
 import type { FC, PropsWithChildren } from 'react'
 import { ConfirmProvider } from './Confirm'
 import { SelectFungibleTokenProvider } from './SelectFungibleTokenDialog'
-import { SelectGasSettingsProvider } from './SelectGasSettingsDialog'
+import { SelectGasSettingsProvider } from './SelectAdvancedSettingsDialog'
 
 export * from './Confirm'
 export * from './SelectFungibleTokenDialog'
-export * from './SelectGasSettingsDialog'
+export * from './SelectAdvancedSettingsDialog'
 
 export const CommonUIProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
     return (

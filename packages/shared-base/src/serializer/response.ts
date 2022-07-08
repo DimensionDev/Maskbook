@@ -1,25 +1,25 @@
+import { TypesonPromise } from 'typeson'
+
 export const is = (x: any) => x instanceof Response
 export const serializer = (x: Response) => {
-    return {
-        body: x.body,
-        init: {
-            status: x.status,
-            statusText: x.statusText,
-            headers: x.headers,
-        },
-    }
+    return new TypesonPromise<{
+        body: Blob
+        init: ResponseInit
+    }>(async (resolve) => {
+        const bodyBlob = await x.blob()
+        resolve({
+            body: bodyBlob,
+            init: {
+                status: x.status,
+                statusText: x.statusText,
+                headers: x.headers,
+            },
+        })
+    })
 }
 
-export const deserializer = (x: { body: Uint8Array[]; init: ResponseInit }) => {
-    const body = new ReadableStream({
-        start(controller) {
-            for (const binary of x.body) {
-                controller.enqueue(binary)
-            }
-            controller.close()
-        },
-    })
-    return new Response(body, x.init)
+export const deserializer = (x: { body: Blob; init: ResponseInit }) => {
+    return new Response(x.body, x.init)
 }
 
 export const responseRegedit = [is, serializer, deserializer] as const

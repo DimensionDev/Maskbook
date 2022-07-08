@@ -51,7 +51,7 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
         paper: {
             width: '600px !important',
             minHeight: 400,
-            maxHeight: 612,
+            maxHeight: 620,
             maxWidth: 'none',
             boxShadow: 'none',
             backgroundImage: 'none',
@@ -69,7 +69,7 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             alignItems: 'center',
             padding: 16,
             position: 'relative',
-            background: theme.palette.maskColor.modelTitleBg,
+            background: theme.palette.maskColor.modalTitleBg,
             borderBottom: 'none',
             '& > p': {
                 fontSize: 18,
@@ -88,6 +88,7 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             },
         },
         dialogContent: {
+            backgroundColor: theme.palette.maskColor.bottom,
             [smallQuery]: {
                 display: 'flex',
                 flexDirection: 'column',
@@ -97,6 +98,7 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             },
         },
         dialogActions: {
+            backgroundColor: theme.palette.maskColor.bottom,
             padding: '6px 16px',
             [smallQuery]: {
                 display: 'flex',

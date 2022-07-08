@@ -5,6 +5,7 @@ import { CheckSecurityDialog } from './CheckSecurityDialog'
 import { useState } from 'react'
 import { ApplicationEntry } from '@masknet/shared'
 import { SecurityCheckerIcon } from '@masknet/icons'
+import { Trans } from 'react-i18next'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -13,25 +14,18 @@ const sns: Plugin.SNSAdaptor.Definition = {
         (() => {
             const icon = <SecurityCheckerIcon />
             const name = { i18nKey: '__plugin_name', fallback: 'Check Security' }
-            const iconFilterColor = 'rgba(69, 110, 255, 0.3)'
 
             return {
                 ApplicationEntryID: base.ID,
-                RenderEntryComponent(EntryComponentProps) {
+                RenderEntryComponent({ disabled }) {
                     const [open, setOpen] = useState(false)
-                    const clickHandler = () => setOpen(true)
                     return (
                         <>
                             <ApplicationEntry
                                 title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
-                                {...EntryComponentProps}
-                                iconFilterColor={iconFilterColor}
+                                disabled={disabled}
                                 icon={icon}
-                                onClick={
-                                    EntryComponentProps.onClick
-                                        ? () => EntryComponentProps.onClick?.(clickHandler)
-                                        : clickHandler
-                                }
+                                onClick={() => setOpen(true)}
                             />
                             {open && <CheckSecurityDialog open={open} onClose={() => setOpen(false)} />}
                         </>
@@ -40,8 +34,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 name,
                 icon,
                 iconFilterColor,
-                appBoardSortingDefaultPriority: 13,
+                appBoardSortingDefaultPriority: 14,
+                category: 'dapp',
                 marketListSortingPriority: 16,
+                description: <Trans i18nKey="plugin_goPlusSecurity_description" />,
             }
         })(),
     ],

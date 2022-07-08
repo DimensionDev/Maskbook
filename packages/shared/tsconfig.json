@@ -14,7 +14,7 @@
     { "path": "../web3-shared/evm" },
     { "path": "../web3-shared/flow" },
     { "path": "../web3-shared/solana" },
-    { "path": "../icons" },
-    { "path": "../web3-providers" }
+    { "path": "../web3-providers" },
+    { "path": "../icons" }
   ]
 }

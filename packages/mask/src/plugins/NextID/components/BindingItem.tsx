@@ -1,6 +1,6 @@
 import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Link, Stack, Typography } from '@mui/material'
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import { NextIDPlatform } from '@masknet/shared-base'
 import { DeleteIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
@@ -70,6 +70,7 @@ export const BindingItem = memo<Item>(({ platform, identity, tipable, deletable,
     const { classes } = useStyles()
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, ChainId.Mainnet)
     const visitingPersona = useCurrentVisitingIdentity()
+    const addressConfigs = useMemo(() => [{ address: identity, verified: true }], [identity])
 
     if (platform === NextIDPlatform.Ethereum) {
         return (
@@ -90,7 +91,8 @@ export const BindingItem = memo<Item>(({ platform, identity, tipable, deletable,
                 <Box>
                     {tipable ? (
                         <TipButton
-                            addresses={[identity]}
+                            addresses={addressConfigs}
+                            recipient={identity}
                             receiver={visitingPersona.identifier}
                             className={classes.tipButton}>
                             <span className={classes.tipButtonLabel}>{t.tips()}</span>

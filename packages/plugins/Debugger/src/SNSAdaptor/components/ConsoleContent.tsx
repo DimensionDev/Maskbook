@@ -14,6 +14,7 @@ import {
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 import {
+    ChainId,
     ChainId as EVM_ChainId,
     ProviderType as EVM_ProviderType,
     SchemaType,
@@ -35,9 +36,11 @@ import {
     TextField,
     Typography,
 } from '@mui/material'
-import { useSelectFungibleToken, useSelectGasSettings } from '@masknet/shared'
+import { useSelectFungibleToken, useSelectAdvancedSettings } from '@masknet/shared'
 
-export interface ConsoleContentProps {}
+export interface ConsoleContentProps {
+    onClose?: () => void
+}
 
 const useStyles = makeStyles()({
     container: {
@@ -46,8 +49,8 @@ const useStyles = makeStyles()({
 })
 
 export function ConsoleContent(props: ConsoleContentProps) {
+    const { onClose } = props
     const { classes } = useStyles()
-
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const pluginID = useCurrentWeb3NetworkPluginID()
     const { Others } = useWeb3State()
@@ -147,7 +150,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
     )
 
     const onSelectFungibleToken = useSelectFungibleToken()
-    const onSelectGasSettings = useSelectGasSettings()
+    const onSelectGasSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
 
     return (
         <section className={classes.container}>
@@ -342,7 +345,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                             <Button
                                 size="small"
                                 onClick={async () => {
-                                    const token = await onSelectFungibleToken({})
+                                    const token = await onSelectFungibleToken()
                                     console.log(token)
                                 }}>
                                 Select Fungible Token
@@ -359,7 +362,19 @@ export function ConsoleContent(props: ConsoleContentProps) {
                             <Button
                                 size="small"
                                 onClick={async () => {
-                                    const gasSettings = await onSelectGasSettings({})
+                                    const gasSettings = await onSelectGasSettings({
+                                        chainId: ChainId.Matic,
+                                        slippageTolerance: 1,
+                                        disableSlippageTolerance: true,
+                                        transaction: {
+                                            from: account,
+                                            to: account,
+                                            value: '1',
+                                            gas: 30000,
+                                            // this field could be overridden with the instant gas options
+                                            maxFeePerGas: 3800000000,
+                                        },
+                                    })
                                     console.log(gasSettings)
                                 }}>
                                 Gas Settings
@@ -429,7 +444,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                     const address = formData.get('address') as string
                                     const tokenId = formData.get('tokenId') as string
                                     const sourceType = formData.get('sourceType') as SourceType
-                                    const token = await hub.getNonFungibleAsset?.(address, tokenId, {
+                                    const token = await hub?.getNonFungibleAsset?.(address, tokenId, {
                                         sourceType,
                                     })
                                     console.log(token)

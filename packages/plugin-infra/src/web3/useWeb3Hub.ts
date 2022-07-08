@@ -20,5 +20,5 @@ export function useWeb3Hub<S extends 'all' | void = void, T extends NetworkPlugi
         })
     }, [account, chainId, Hub, JSON.stringify(options)])
 
-    return hub as Web3Helper.Web3HubScope<S, T>
+    return hub as Web3Helper.Web3HubScope<S, T> | null
 }

@@ -1,6 +1,6 @@
-import { memo, useMemo, useState } from 'react'
-import { useAsync } from 'react-use'
 import { Box, Button, InputAdornment, MenuItem, Stack, Typography } from '@mui/material'
+import { useAsync } from 'react-use'
+import { memo, useMemo, useState } from 'react'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { makeStyles, MaskColorVar, MaskTextField, ShadowRootMenu } from '@masknet/theme'
 import { SearchIcon } from '@masknet/icons'
@@ -44,9 +44,7 @@ const DEFAULT_SEARCH_CHAIN = ChainId.Mainnet
 
 function getChainName(chain?: SecurityAPI.SupportedChain<ChainId>) {
     if (!chain) return chainResolver.chainName(ChainId.Mainnet)
-    if (chain.chainId === ChainId.BSC) return chainResolver.chainShortName(ChainId.BSC)?.toUpperCase()
-    if (chain.chainId === (66 as ChainId)) return chain.name
-    return chainResolver.chainName(chain.chainId)
+    return chainResolver.chainName(chain.chainId) ?? chain.name
 }
 
 export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
@@ -96,7 +94,7 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
                         placeholder={t.search_input_placeholder()}
                         autoFocus
                         fullWidth
-                        onKeyPress={(event: React.KeyboardEvent) => {
+                        onKeyPress={(event) => {
                             if (event.key !== 'Enter') return
                             onSearch(selectedChain?.chainId ?? DEFAULT_SEARCH_CHAIN, searchContent ?? '')
                         }}

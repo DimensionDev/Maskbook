@@ -1,11 +1,11 @@
 import type { TransactionContext } from '@masknet/web3-shared-base'
-import { ChainId, getTokenConstants } from '@masknet/web3-shared-evm'
+import { ChainId, getTokenConstants, TransactionParameter } from '@masknet/web3-shared-evm'
 import { Web3StateSettings } from '../../../settings'
 import type { TransactionDescriptor } from '../types'
 import { getTokenAmountDescription } from '../utils'
 
 export class BaseTransactionDescriptor implements TransactionDescriptor {
-    async compute(context: TransactionContext<ChainId, string | undefined>) {
+    async compute(context: TransactionContext<ChainId, TransactionParameter>) {
         const connection = await Web3StateSettings.value.Connection?.getConnection?.({
             chainId: context.chainId,
         })
@@ -15,10 +15,8 @@ export class BaseTransactionDescriptor implements TransactionDescriptor {
 
         return {
             chainId: context.chainId,
-            title: context.name ?? 'Contract Interaction',
-            description: context.value
-                ? getTokenAmountDescription(context.value as string | undefined, nativeToken, true)
-                : '-',
+            title: context.methods?.find((x) => x.name)?.name ?? 'Contract Interaction',
+            description: context.value ? getTokenAmountDescription(context.value, nativeToken, true) : '-',
         }
     }
 }

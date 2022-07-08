@@ -4,15 +4,15 @@ import { getCurrentPreferredCoinIdSettings } from '../settings'
 import type { DataProvider } from '@masknet/public-api'
 
 export function usePreferredCoinId(keyword: string, dataProvider: DataProvider) {
-    const keyword_ = keyword.toLowerCase()
+    const kw = keyword.toLowerCase()
     const settings = useValueRef(getCurrentPreferredCoinIdSettings(dataProvider))
 
     return useMemo(() => {
         try {
             const parsedSettings = JSON.parse(settings) as Record<string, string>
-            return parsedSettings[keyword_] ?? ''
+            return parsedSettings[kw] ?? ''
         } catch {
             return ''
         }
-    }, [keyword_, settings])
+    }, [kw, settings])
 }

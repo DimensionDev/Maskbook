@@ -73,7 +73,7 @@ export function Account(props: AccountProps) {
     }
 
     if (error) {
-        return <RefreshIcon className={classes.refresh} color="primary" onClick={retry} />
+        return <RefreshIcon className={classes.refresh} color="primary" style={{ fill: '#1C68F3' }} onClick={retry} />
     }
 
     const noZeroBalances = balances.filter((balance) => Number.parseInt(balance.account.ticketBalance, 10) !== 0)

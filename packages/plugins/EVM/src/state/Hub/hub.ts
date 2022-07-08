@@ -5,6 +5,7 @@ import {
     DeBank,
     EthereumWeb3,
     MetaSwap,
+    NFTScan,
     OpenSea,
     Rarible,
     TokenList,
@@ -28,6 +29,9 @@ import {
     attemptUntil,
     createPredicate,
     createIndicator,
+    FungibleTokenSecurity,
+    FungibleTokenAuthorization,
+    NonFungibleTokenAuthorization,
 } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -64,6 +68,32 @@ class Hub implements EVM_Hub {
             ...initial,
             ...overrides,
         }
+    }
+
+    async getFungibleTokenSecurity(
+        chainId: ChainId,
+        address: string,
+        initial?: HubOptions<ChainId>,
+    ): Promise<FungibleTokenSecurity> {
+        const options = this.getOptions(initial, {
+            chainId,
+        })
+
+        console.log(options)
+        throw new Error('Method not implemented.')
+    }
+
+    async getNonFungibleTokenSecurity(
+        chainId: ChainId,
+        address: string,
+        initial?: HubOptions<ChainId>,
+    ): Promise<FungibleTokenSecurity> {
+        const options = this.getOptions(initial, {
+            chainId,
+        })
+
+        console.log(options)
+        throw new Error('Method not implemented.')
     }
 
     async getFungibleTokensFromTokenList(
@@ -128,6 +158,7 @@ class Hub implements EVM_Hub {
         const providers = {
             [SourceType.OpenSea]: OpenSea,
             [SourceType.Rarible]: Rarible,
+            [SourceType.NFTScan]: NFTScan,
             [SourceType.Alchemy_EVM]: Alchemy_EVM,
         }
         const predicate = createPredicate(Object.keys(providers) as Array<keyof typeof providers>)
@@ -142,7 +173,7 @@ class Hub implements EVM_Hub {
     async getNonFungibleTokens(
         account: string,
         initial?: HubOptions<ChainId>,
-    ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
+    ): Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>> {
         const options = this.getOptions(initial, {
             account,
         })
@@ -160,6 +191,12 @@ class Hub implements EVM_Hub {
             filteredProviders.map((x) => () => x.getAssets(options.account, options)),
             createPageable([], createIndicator(options.indicator)),
         )
+    }
+    async getNonFungibleTokensByCollection(
+        address: string,
+        initial?: HubOptions<ChainId>,
+    ): Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>> {
+        return NFTScan.getAssetsByCollection(address, initial)
     }
     getNonFungibleCollections(
         account: string,
@@ -216,6 +253,18 @@ class Hub implements EVM_Hub {
         tokenId?: string | undefined,
         initial?: HubOptions<ChainId>,
     ): Promise<string[]> {
+        throw new Error('Method not implemented.')
+    }
+    getApprovedFungibleTokens(
+        account: string,
+        initial?: HubOptions<ChainId>,
+    ): Promise<Array<FungibleTokenAuthorization<ChainId, SchemaType>>> {
+        throw new Error('Method not implemented.')
+    }
+    getApprovedNonFungibleTokens(
+        account: string,
+        initial?: HubOptions<ChainId>,
+    ): Promise<Array<NonFungibleTokenAuthorization<ChainId, SchemaType>>> {
         throw new Error('Method not implemented.')
     }
     async getTransactions(

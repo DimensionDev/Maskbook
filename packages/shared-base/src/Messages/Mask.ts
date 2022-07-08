@@ -97,6 +97,10 @@ export interface ProfileNFTsPageEvent {
     show: boolean
 }
 
+export interface Web3ProfileDialogRequest {
+    open: boolean
+}
+
 export interface NFTAvatarEvent {
     userId: string
     avatarId: string

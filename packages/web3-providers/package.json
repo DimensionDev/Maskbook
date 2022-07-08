@@ -11,6 +11,7 @@
   "dependencies": {
     "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
     "@masknet/plugin-infra": "workspace:*",
+    "@masknet/public-api": "workspace:*",
     "@masknet/shared-base": "workspace:*",
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-contracts": "workspace:*",
@@ -33,9 +34,11 @@
     "wallet.ts": "^1.0.1",
     "web3": "1.7.4",
     "web3-core": "1.7.4",
+    "web3-utils": "1.7.4",
     "web3-eth": "1.7.4"
   },
   "devDependencies": {
+    "@types/json-stable-stringify": "^1.0.34",
     "@types/lru-cache": "^7.10.10"
   }
 }

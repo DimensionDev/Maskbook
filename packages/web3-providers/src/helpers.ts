@@ -10,8 +10,14 @@ export function isProxyENV() {
     }
 }
 
-export async function fetchJSON<T = unknown>(requestInfo: string, requestInit?: RequestInit): Promise<T> {
-    const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
+export async function fetchJSON<T = unknown>(
+    requestInfo: string,
+    requestInit?: RequestInit,
+    options?: {
+        fetch: typeof globalThis.fetch
+    },
+): Promise<T> {
+    const fetch = options?.fetch ?? globalThis.r2d2Fetch ?? globalThis.fetch
     const res = await fetch(requestInfo, requestInit)
     return res.json()
 }
@@ -26,4 +32,10 @@ export function getAllEVMNativeAssets(): Array<FungibleAsset<ChainId, SchemaType
         ...createNativeToken(x.chainId),
         balance: '0',
     }))
+}
+
+export function getTraderAllAPICachedFlag(): RequestCache {
+    // TODO: handle flags
+    // cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
+    return 'default'
 }

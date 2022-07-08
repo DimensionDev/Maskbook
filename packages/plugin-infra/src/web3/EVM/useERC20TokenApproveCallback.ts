@@ -1,14 +1,14 @@
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { isLessThan, NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
+import { isLessThan, NetworkPluginID, toFixed, isZero } from '@masknet/web3-shared-base'
 import { once } from 'lodash-unified'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useERC20TokenContract } from './useERC20TokenContract'
 import { useERC20TokenAllowance } from './useERC20TokenAllowance'
 import { useChainId } from '../useChainId'
 import { useAccount } from '../useAccount'
 import { useFungibleTokenBalance } from '../../entry-web3'
-import { TransactionEventType } from '@masknet/web3-shared-evm'
+import { TransactionEventType, ChainId } from '@masknet/web3-shared-evm'
 
 const MaxUint256 = toFixed('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
 
@@ -21,8 +21,14 @@ export enum ApproveStateType {
     FAILED = 5,
 }
 
-export function useERC20TokenApproveCallback(address?: string, amount?: string, spender?: string) {
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+export function useERC20TokenApproveCallback(
+    address: string,
+    amount: string,
+    spender: string,
+    callback?: () => void,
+    _chainId?: ChainId,
+) {
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM, _chainId)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const erc20Contract = useERC20TokenContract(chainId, address)
 
@@ -39,33 +45,24 @@ export function useERC20TokenApproveCallback(address?: string, amount?: string, 
         error: errorAllowance,
         retry: revalidateAllowance,
     } = useERC20TokenAllowance(address, spender)
-    const [isApproving, setApproving] = useState(false)
+
     // the computed approve state
     const approveStateType = useMemo(() => {
         if (!amount || !spender) return ApproveStateType.UNKNOWN
-        if (loadingBalance || loadingAllowance || isApproving) return ApproveStateType.UPDATING
+        if (loadingBalance || loadingAllowance) return ApproveStateType.UPDATING
         if (errorBalance || errorAllowance) return ApproveStateType.FAILED
-        return isLessThan(allowance, amount) ? ApproveStateType.NOT_APPROVED : ApproveStateType.APPROVED
-    }, [
-        amount,
-        spender,
-        balance,
-        allowance,
-        errorBalance,
-        errorAllowance,
-        loadingAllowance,
-        loadingBalance,
-        isApproving,
-    ])
+        return isLessThan(allowance, amount) || (allowance === amount && isZero(amount))
+            ? ApproveStateType.NOT_APPROVED
+            : ApproveStateType.APPROVED
+    }, [amount, spender, balance, allowance, errorBalance, errorAllowance, loadingAllowance, loadingBalance])
 
     const [state, approveCallback] = useAsyncFn(
-        async (useExact = false) => {
+        async (useExact = false, isRevoke = false) => {
             if (approveStateType === ApproveStateType.UNKNOWN || !amount || !spender || !erc20Contract) {
                 return
             }
-
             // error: failed to approve token
-            if (approveStateType !== ApproveStateType.NOT_APPROVED) {
+            if (approveStateType !== ApproveStateType.NOT_APPROVED && !isRevoke) {
                 return
             }
 
@@ -99,7 +96,7 @@ export function useERC20TokenApproveCallback(address?: string, amount?: string, 
                     .send(config as NonPayableTx)
                     .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                         resolve(receipt.transactionHash)
-                        setApproving(false)
+                        callback?.()
                         revalidate()
                     })
                     .on(TransactionEventType.ERROR, (error) => {
@@ -124,7 +121,7 @@ export function useERC20TokenApproveCallback(address?: string, amount?: string, 
             spender,
             balance,
         },
-        { ...state, loading: loadingAllowance || loadingBalance || state.loading },
+        { ...state, loading: loadingAllowance || loadingBalance || state.loading, loadingApprove: state.loading },
         approveCallback,
         resetCallback,
     ] as const

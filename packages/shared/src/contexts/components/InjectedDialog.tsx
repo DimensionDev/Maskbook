@@ -39,8 +39,8 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
     },
     dialogTitleWithTabs: {
         paddingBottom: '0 !important',
-        gridRowGap: 16,
-        gridTemplateRows: '1fr 1fr',
+        gridTemplateRows: `${theme.spacing(3.5)} ${theme.spacing(4.5)}`,
+        gridRowGap: theme.spacing(1.5),
         gridTemplateAreas: `
             ". . ."
             "tabs tabs tabs"
@@ -70,6 +70,10 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
         },
     },
     paper: clean ? { width: 'auto', backgroundImage: 'none' } : {},
+    tabs: {
+        display: 'flex',
+        gridColumn: '3 span',
+    },
 }))
 
 export type InjectedDialogClassKey =
@@ -124,8 +128,8 @@ export function InjectedDialog(props: InjectedDialogProps) {
         titleBarIconStyle,
         onClose,
         title,
+        titleTabs,
         titleTail = null,
-        titleTabs = null,
         disableTitleBorder,
         isOpenFromApplicationBoard,
         ...rest
@@ -140,7 +144,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
         }
 
         onClose?.()
-    }, [isOpenFromApplicationBoard])
+    }, [isOpenFromApplicationBoard, onClose])
 
     return usePortalShadowRoot((container) => (
         <IncreaseStack>

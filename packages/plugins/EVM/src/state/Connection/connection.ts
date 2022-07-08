@@ -212,6 +212,63 @@ class Connection implements EVM_Connection {
             this.getOptions(initial),
         )
     }
+    async approveFungibleToken(
+        address: string,
+        recipient: string,
+        amount: string,
+        initial?: EVM_Web3ConnectionOptions,
+    ): Promise<string> {
+        const options = this.getOptions(initial)
+
+        // Native
+        if (!address || isNativeTokenAddress(options.chainId, address)) throw new Error('Invalid token address.')
+
+        // ERC20
+        const contract = await this.getERC20Contract(address, options)
+        const tx = contract?.methods.approve(recipient, toHex(amount))
+        return sendTransaction(contract, tx, options.overrides)
+    }
+    async approveNonFungibleToken(
+        address: string,
+        recipient: string,
+        tokenId: string,
+        schema: SchemaType,
+        initial?: EVM_Web3ConnectionOptions,
+    ): Promise<string> {
+        const options = this.getOptions(initial)
+        const actualSchema = schema ?? (await this.getTokenSchema(address, options))
+
+        // Native
+        if (!address || isNativeTokenAddress(options.chainId, address)) throw new Error('Invalid token address.')
+
+        // ERC721
+        if (actualSchema === SchemaType.ERC721) {
+            const contract = await this.getERC721Contract(address, options)
+            const tx = contract?.methods.approve(recipient, tokenId)
+            return sendTransaction(contract, tx, options.overrides)
+        }
+
+        const contract = await this.getERC1155Contract(address, options)
+        const tx = contract?.methods.setApprovalForAll(recipient, true)
+        return sendTransaction(contract, tx, options.overrides)
+    }
+    async approveAllNonFungibleTokens(
+        address: string,
+        recipient: string,
+        approved: boolean,
+        schema?: SchemaType,
+        initial?: EVM_Web3ConnectionOptions,
+    ): Promise<string> {
+        const options = this.getOptions(initial)
+
+        // Native
+        if (!address || isNativeTokenAddress(options.chainId, address)) throw new Error('Invalid token address.')
+
+        // ERC721 & ERC1155
+        const contract = await this.getERC721Contract(address, options)
+        const tx = contract?.methods.setApprovalForAll(recipient, approved)
+        return sendTransaction(contract, tx, options.overrides)
+    }
     async transferFungibleToken(
         address: string,
         recipient: string,
@@ -475,7 +532,7 @@ class Connection implements EVM_Connection {
 
         // ERC1155
         if (actualSchema === SchemaType.ERC1155) {
-            throw new Error('Not implemented')
+            throw new Error('Not implemented yet.')
         }
 
         // ERC721

@@ -1,0 +1,16 @@
+{
+    "game_dialog_menu_change": "Change",
+    "game_dialog_menu_ski": "Ski",
+    "game_dialog_menu_about": "About us",
+    "game_dialog_unverified": " (unverified)",
+    "game_name": "GAME",
+    "game_list_title": "GameList",
+    "game_list_rank": "Rank",
+    "game_list_play": "Play",
+    "game_list_play_error": "Please connect wallet",
+    "game_list_play_evm_error": "Please connect to EVM wallet",
+    "game_share_btn": "Share",
+    "game_share_title": "Share",
+    "game_dialog_info": "Share this game to twitter",
+    "game_share_text": "I'm playing {{name}} by @NonFFriend x {{snsId}} on Twitter.\nInstall the Mask Network Extension mask.io and JOIN ME!\n $t(mask:hash_tag) #NFF #NFTgame\n{{share_Twitter}}"
+}

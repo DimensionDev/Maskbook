@@ -1,8 +1,8 @@
 import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { ElementAnchor, NFTCardStyledAssetPlayer, RetryHint } from '@masknet/shared'
-import { LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
-import { Checkbox, Link, List, ListItem, Radio, Stack } from '@mui/material'
+import { Checkbox, Link, List, ListItem, Radio, Stack, Tooltip } from '@mui/material'
 import classnames from 'classnames'
 import { noop } from 'lodash-unified'
 import { FC, useCallback } from 'react'
@@ -71,12 +71,16 @@ const useStyles = makeStyles()((theme) => ({
         height: 64,
     },
     assetPlayerIframe: {
-        height: 100,
-        width: 100,
+        height: 96,
+        width: 96,
+    },
+    wrapper: {
+        height: '96px !important',
+        width: '96px !important',
     },
     imgWrapper: {
-        height: '100px !important',
-        width: '100px !important',
+        height: '96px !important',
+        width: '96px !important',
         img: {
             height: '100%',
             width: '100%',
@@ -98,11 +102,12 @@ export const NFTItem: FC<NFTItemProps> = ({ token }) => {
         <NFTCardStyledAssetPlayer
             chainId={chainId}
             contractAddress={token.contract?.address}
-            url={token.metadata?.imageURL ?? token.metadata?.imageURL}
+            url={token.metadata?.imageURL ?? token.metadata?.mediaURL}
             tokenId={token.tokenId}
             classes={{
                 loadingFailImage: classes.loadingFailImage,
                 iframe: classes.assetPlayerIframe,
+                wrapper: classes.wrapper,
                 imgWrapper: classes.imgWrapper,
             }}
         />
@@ -155,15 +160,23 @@ export const NFTList: FC<Props> = ({
                           token.tokenId,
                       )
                     : undefined
+                const name = token.collection?.name || token.contract?.name
+                const title = `${name} ${Others?.formatTokenId(token.tokenId, 2)}`
                 return (
-                    <ShadowRootTooltip
+                    <Tooltip
                         classes={{ tooltip: classes.tooltip }}
-                        key={`${token.address}/${token.tokenId + token.id}`}
-                        title={`${token.contract?.name} ${Others?.formatTokenId(token.tokenId, 2)}`}
+                        key={`${token.address}/${token.tokenId}/${token.id}`}
+                        title={title}
                         placement="top"
+                        disableInteractive
+                        PopperProps={{
+                            disablePortal: true,
+                            popperOptions: {
+                                strategy: 'absolute',
+                            },
+                        }}
                         arrow>
                         <ListItem
-                            key={token.tokenId + token.id}
                             className={classnames(classes.nftItem, {
                                 [classes.disabled]: disabled,
                                 [classes.selected]: selected,
@@ -188,7 +201,7 @@ export const NFTList: FC<Props> = ({
                                 checked={selected}
                             />
                         </ListItem>
-                    </ShadowRootTooltip>
+                    </Tooltip>
                 )
             })}
             {loadError && !loadFinish && tokens.length && (

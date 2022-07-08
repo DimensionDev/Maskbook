@@ -1,24 +1,28 @@
-import { Link, Typography } from '@mui/material'
+import { Link, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { resolveDaysName } from '../../pipes'
+import classNames from 'classnames'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
-        top: 0,
-        right: 0,
-        padding: theme.spacing(1, 2),
-        position: 'absolute',
+        background: theme.palette.background.input,
+        borderRadius: 28,
+        fontSize: 14,
+        padding: theme.spacing(0.5),
+    },
+    active: {
+        boxShadow: '0px 2px 5px 1px rgba(0, 0, 0, 0.05)',
+        background: theme.palette.background.paper,
+        fontWeight: 700,
     },
     link: {
+        padding: theme.spacing(1),
+        width: '25%',
         cursor: 'pointer',
-        marginRight: theme.spacing(1),
-        '&:last-child': {
-            marginRight: 0,
-        },
-    },
-    text: {
-        fontSize: 10,
-        fontWeight: 300,
+        borderRadius: 18,
+        textAlign: 'center',
+        color: theme.palette.text.primary,
+        textDecoration: 'none !important',
     },
 }))
 
@@ -26,39 +30,38 @@ export enum Days {
     MAX = 0,
     ONE_DAY = 1,
     ONE_WEEK = 7,
-    TWO_WEEKS = 14,
     ONE_MONTH = 30,
     THREE_MONTHS = 90,
     ONE_YEAR = 365,
 }
 
+export const DEFAULT_RANGE_OPTIONS = [Days.ONE_DAY, Days.ONE_WEEK, Days.ONE_MONTH, Days.ONE_YEAR, Days.MAX]
+export const NFT_RANGE_OPTIONS = [Days.ONE_DAY, Days.ONE_WEEK, Days.ONE_MONTH, Days.THREE_MONTHS]
+
 export interface PriceChartDaysControlProps {
     days: number
+    rangeOptions?: Days[]
     onDaysChange?: (days: number) => void
 }
 
-export function PriceChartDaysControl(props: PriceChartDaysControlProps) {
+export function PriceChartDaysControl({
+    rangeOptions = DEFAULT_RANGE_OPTIONS,
+    days,
+    onDaysChange,
+}: PriceChartDaysControlProps) {
     const { classes } = useStyles()
     return (
-        <div className={classes.root}>
-            {[
-                Days.ONE_DAY,
-                Days.ONE_WEEK,
-                Days.TWO_WEEKS,
-                Days.ONE_MONTH,
-                Days.THREE_MONTHS,
-                Days.ONE_YEAR,
-                Days.MAX,
-            ].map((days) => (
-                <Link className={classes.link} key={days} onClick={() => props.onDaysChange?.(days)}>
-                    <Typography
-                        className={classes.text}
-                        component="span"
-                        color={props.days === days ? 'primary' : 'textSecondary'}>
-                        {resolveDaysName(days)}
+        <Stack className={classes.root} direction="row" gap={2}>
+            {rangeOptions.map((daysOption) => (
+                <Link
+                    className={classNames(classes.link, days === daysOption ? classes.active : '')}
+                    key={daysOption}
+                    onClick={() => onDaysChange?.(daysOption)}>
+                    <Typography sx={{ ':hover': { fontWeight: 700 } }} component="span">
+                        {resolveDaysName(daysOption)}
                     </Typography>
                 </Link>
             ))}
-        </div>
+        </Stack>
     )
 }

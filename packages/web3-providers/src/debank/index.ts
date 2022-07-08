@@ -49,17 +49,17 @@ export class DeBankAPI
         const responseModified = gasModifier(result, CHAIN_ID)
         return {
             [GasOptionType.FAST]: {
-                estimatedSeconds: responseModified.data.fast.estimated_seconds,
+                estimatedSeconds: responseModified.data.fast.estimated_seconds || 15,
                 suggestedMaxFeePerGas: formatWeiToGwei(responseModified.data.fast.price).toString(),
                 suggestedMaxPriorityFeePerGas: '0',
             },
             [GasOptionType.NORMAL]: {
-                estimatedSeconds: responseModified.data.normal.estimated_seconds,
+                estimatedSeconds: responseModified.data.normal.estimated_seconds || 30,
                 suggestedMaxFeePerGas: formatWeiToGwei(responseModified.data.normal.price).toString(),
                 suggestedMaxPriorityFeePerGas: '0',
             },
             [GasOptionType.SLOW]: {
-                estimatedSeconds: responseModified.data.slow.estimated_seconds,
+                estimatedSeconds: responseModified.data.slow.estimated_seconds || 60,
                 suggestedMaxFeePerGas: formatWeiToGwei(responseModified.data.slow.price).toString(),
                 suggestedMaxPriorityFeePerGas: '0',
             },

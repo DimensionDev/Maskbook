@@ -32,19 +32,26 @@ async function getScriptContent(url: string) {
     return response.text()
 }
 
-async function getTokens() {
-    const swContent = await getScriptContent('https://twitter.com/sw.js')
-    const mainContent = await getScriptContent(getScriptURL(swContent ?? '', 'main'))
-    const nftContent = await getScriptContent(getScriptURL(swContent ?? '', 'bundle.UserNft'))
+let swContent = ''
+async function getTokens(operationName?: string) {
+    swContent = swContent || (await getScriptContent('https://twitter.com/sw.js'))
+    const [mainContent, nftContent] = await Promise.all([
+        getScriptContent(getScriptURL(swContent ?? '', 'main')),
+        getScriptContent(getScriptURL(swContent ?? '', 'bundle.UserNft')),
+    ])
 
     const bearerToken = getScriptContentMatched(mainContent ?? '', /s="(\w+%3D\w+)"/)
     const queryToken = getScriptContentMatched(nftContent ?? '', /{\s?id:\s?"([\w-]+)"/)
     const csrfToken = getCSRFToken()
+    const queryId = operationName
+        ? getScriptContentMatched(mainContent ?? '', new RegExp(`queryId:"(\\w+)",operationName:"${operationName}"`))
+        : undefined
 
     return {
         bearerToken,
         queryToken,
         csrfToken,
+        queryId,
     }
 }
 
@@ -188,6 +195,31 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
             nickname: updateInfo.name,
             userId: updateInfo.screen_name,
         }
+    }
+
+    async getUserByScreenName(screenName: string): Promise<TwitterBaseAPI.User> {
+        const { bearerToken, csrfToken, queryId } = await getTokens('UserByScreenName')
+        const url = urlcat('https://twitter.com/i/api/graphql/:queryId/UserByScreenName', {
+            queryId,
+            variables: JSON.stringify({
+                screen_name: screenName,
+                withSafetyModeUserFields: true,
+                withSuperFollowsUserFields: true,
+            }),
+        })
+
+        const response = await fetch(url, {
+            headers: {
+                authorization: `Bearer ${bearerToken}`,
+                'x-csrf-token': csrfToken,
+                'content-type': 'application/json',
+                'x-twitter-auth-type': 'OAuth2Session',
+                'x-twitter-active-user': 'yes',
+                referer: `https://twitter.com/${screenName}`,
+            },
+        })
+        const userResponse: TwitterBaseAPI.UserByScreenNameResponse = await response.json()
+        return userResponse.data.user.result
     }
 }
 
