@@ -1,5 +1,4 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import { base } from '../base'
 import { NextIdPage } from '../components/NextIdPage'
 import { PLUGIN_ID } from '../constants'
@@ -13,7 +12,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             label: 'Wallets',
             priority: 10,
             UI: {
-                TabContent: ({ personaList = EMPTY_LIST }) => <NextIdPage personaList={personaList} />,
+                TabContent: ({ persona }) => <NextIdPage persona={persona} />,
             },
         },
     ],

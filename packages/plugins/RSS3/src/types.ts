@@ -1,9 +1,17 @@
+import type { NextIDPlatform } from '@masknet/shared-base'
+
 export enum PageTags {
     WalletTag = 'Wallets',
     NFTTag = 'NFTs',
     DonationTag = 'Donations',
     FootprintTag = 'Footprints',
     DAOTag = 'DAO',
+}
+
+export enum CollectionType {
+    NFTs = 'NFTs',
+    Donations = 'Donations',
+    Footprints = 'Footprints',
 }
 
 export interface Asset {
@@ -47,4 +55,23 @@ export interface RSS3Profile {
 export enum AssetType {
     GitcoinDonation = 'Gitcoin-Donation',
     POAP = 'POAP',
+}
+
+export interface CollectionKeys {
+    NFTs: string[]
+    Donations: string[]
+    Footprints: string[]
+}
+
+export interface Patch {
+    unListedCollections: Record<string, CollectionKeys>
+}
+export interface KVType {
+    persona: string
+    proofs: Proof[]
+}
+export interface Proof {
+    platform: NextIDPlatform
+    identity: string
+    content?: Record<string, Patch>
 }

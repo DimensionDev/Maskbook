@@ -393,6 +393,7 @@ importers:
       '@masknet/plugin-scamsniffer': workspace:*
       '@masknet/plugin-solana': workspace:*
       '@masknet/plugin-wallet': workspace:*
+      '@masknet/plugin-web3-profile': workspace:*
       '@masknet/public-api': workspace:*
       '@masknet/sdk': workspace:*
       '@masknet/shared': workspace:*
@@ -542,6 +543,7 @@ importers:
       '@masknet/plugin-scamsniffer': link:../plugins/ScamSniffer
       '@masknet/plugin-solana': link:../plugins/Solana
       '@masknet/plugin-wallet': link:../plugins/Wallet
+      '@masknet/plugin-web3-profile': link:../plugins/Web3Profile
       '@masknet/public-api': link:../public-api
       '@masknet/sdk': link:../mask-sdk
       '@masknet/shared': link:../shared
@@ -1029,11 +1031,13 @@ importers:
       '@masknet/web3-providers': workspace:*
       '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-evm': workspace:*
+      '@types/use-subscription': ^1.0.0
       bignumber.js: ^9.0.2
       classnames: ^2.3.1
       date-fns: ^2.28.0
       react-use: ^17.4.0
       urlcat: ^2.0.4
+      use-subscription: 1.6.0
     dependencies:
       '@masknet/icons': link:../../icons
       '@masknet/plugin-infra': link:../../plugin-infra
@@ -1043,11 +1047,13 @@ importers:
       '@masknet/web3-providers': link:../../web3-providers
       '@masknet/web3-shared-base': link:../../web3-shared/base
       '@masknet/web3-shared-evm': link:../../web3-shared/evm
+      '@types/use-subscription': 1.0.0
       bignumber.js: 9.0.2
       classnames: 2.3.1
       date-fns: 2.28.0
       react-use: 17.4.0
       urlcat: 2.0.4
+      use-subscription: 1.6.0
 
   packages/plugins/ScamSniffer:
     specifiers:
@@ -1161,6 +1167,46 @@ importers:
       bignumber.js: 9.0.2
       react-use: 17.4.0
       web3-core-helpers: 1.7.4
+
+  packages/plugins/Web3Profile:
+    specifiers:
+      '@dimensiondev/holoflows-kit': ^0.9.0-20220520093249-0870919
+      '@masknet/icons': workspace:*
+      '@masknet/plugin-infra': workspace:*
+      '@masknet/plugin-wallet': workspace:*
+      '@masknet/shared': workspace:*
+      '@masknet/shared-base': workspace:*
+      '@masknet/shared-base-ui': workspace:*
+      '@masknet/theme': workspace:*
+      '@masknet/web3-providers': workspace:*
+      '@masknet/web3-shared-base': workspace:*
+      '@masknet/web3-shared-evm': workspace:*
+      '@types/use-subscription': ^1.0.0
+      classnames: ^2.3.1
+      date-fns: 2.28.0
+      react-feather: ^2.0.9
+      react-use: ^17.3.2
+      urlcat: ^2.0.4
+      use-subscription: 1.7.0
+    dependencies:
+      '@dimensiondev/holoflows-kit': 0.9.0-20220520093249-0870919
+      '@masknet/icons': link:../../icons
+      '@masknet/plugin-infra': link:../../plugin-infra
+      '@masknet/plugin-wallet': link:../Wallet
+      '@masknet/shared': link:../../shared
+      '@masknet/shared-base': link:../../shared-base
+      '@masknet/shared-base-ui': link:../../shared-base-ui
+      '@masknet/theme': link:../../theme
+      '@masknet/web3-providers': link:../../web3-providers
+      '@masknet/web3-shared-base': link:../../web3-shared/base
+      '@masknet/web3-shared-evm': link:../../web3-shared/evm
+      '@types/use-subscription': 1.0.0
+      classnames: 2.3.1
+      date-fns: 2.28.0
+      react-feather: 2.0.9
+      react-use: 17.4.0
+      urlcat: 2.0.4
+      use-subscription: 1.7.0
 
   packages/plugins/example:
     specifiers:
@@ -19727,7 +19773,7 @@ packages:
     dev: true
 
   /is-utf8/0.2.1:
-    resolution: {integrity: sha1-Sw2hRCEE0bM2NA6AeX6GXPOffXI=}
+    resolution: {integrity: sha512-rMYPYvCzsXywIsldgLaSoPlw5PfoB/ssr7hY4pLfcodrA5M/eArza1a9VmTiNIBNMjOGr1Ow9mTyU2o69U6U9Q==}
 
   /is-valid-glob/1.0.0:
     resolution: {integrity: sha1-Kb8+/3Ab4tTTFdusw5vDn+j2Aao=}
@@ -20667,7 +20713,7 @@ packages:
     dev: false
 
   /json-rpc-random-id/1.0.1:
-    resolution: {integrity: sha1-uknZat7RRE27jaPSA3SKy7zeyMg=}
+    resolution: {integrity: sha512-RJ9YYNCkhVDBuP4zN5BBtYAzEl03yq/jIIsyif0JY9qyJuQQZNeDK7anAPKKlyEtLSj2s8h6hNh2F8zO5q7ScA==}
     dev: false
 
   /json-schema-traverse/0.4.1:
@@ -27977,6 +28023,26 @@ packages:
         optional: true
     dev: false
 
+  /use-subscription/1.7.0:
+    resolution: {integrity: sha512-87x6MjiIVE/BWqtxfiRvM6jfvGudN+UeVOnWi7qKYp2c0YJn5+Z5Jt0kZw6Tt+8hs7kw/BWo2WBhizJSAZsQJA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || 18
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      use-sync-external-store: 1.2.0
+    dev: false
+
+  /use-sync-external-store/1.2.0:
+    resolution: {integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || 18
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dev: false
+
   /use/3.1.1:
     resolution: {integrity: sha512-cwESVXlO3url9YWlFW/TA9cshCEhtu7IKJ/p5soJ/gGpj7vbvFrAY/eIioQ6Dw23KjZhYgiIo8HOs1nQ2vr/oQ==}
     engines: {node: '>=0.10.0'}
@@ -29215,7 +29281,7 @@ packages:
     dev: false
 
   /wordwrap/1.0.0:
-    resolution: {integrity: sha512-gvVzJFlPycKc5dZN4yPkP8w7Dc37BtP1yczEneOb4uq34pXZcvrtRTmWV8W+Ume+XCxKgbjM+nevkyFPMybd4Q==}
+    resolution: {integrity: sha1-J1hIEIkUVqQXHI0CJkQa3pDLyus=}
 
   /worker-farm/1.7.0:
     resolution: {integrity: sha512-rvw3QTZc8lAxyVrqcSGVm5yP/IJ2UcB3U0graE3LCFoZ0Yn2x4EoVSqJKdB/T5M+FLcRPjz4TDacRf3OCfNUzw==}

@@ -6,6 +6,7 @@ import { MenuItem } from '@mui/material'
 import { SocialAddress, NetworkPluginID, SocialIdentity, SocialAddressType } from '@masknet/web3-shared-base'
 import { CollectionList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { useCurrentVisitingProfile } from '../hooks/useContext'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -44,11 +45,12 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface NFTPageProps {
+    persona?: string
     identity?: SocialIdentity
     socialAddressList?: Array<SocialAddress<NetworkPluginID>>
 }
 
-export function NFTPage({ socialAddressList }: NFTPageProps) {
+export function NFTPage({ socialAddressList, persona }: NFTPageProps) {
     const { classes } = useStyles()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
@@ -59,6 +61,7 @@ export function NFTPage({ socialAddressList }: NFTPageProps) {
         setSelectedAddress(option)
         onClose()
     }
+    const currentVisitingProfile = useCurrentVisitingProfile()
 
     if (!selectedAddress) return null
 
@@ -72,7 +75,7 @@ export function NFTPage({ socialAddressList }: NFTPageProps) {
                 {uniqBy(socialAddressList ?? EMPTY_LIST, (x) => x.address.toLowerCase()).map((x) => {
                     return (
                         <MenuItem key={x.address} value={x.address} onClick={() => onSelect(x)}>
-                            {x.type === SocialAddressType.ADDRESS ? (
+                            {x.type === SocialAddressType.ADDRESS || x.type === SocialAddressType.KV ? (
                                 <ReversedAddress address={x.address} pluginId={x.networkSupporterPluginID} />
                             ) : (
                                 x.label
@@ -81,7 +84,12 @@ export function NFTPage({ socialAddressList }: NFTPageProps) {
                     )
                 })}
             </ShadowRootMenu>
-            <CollectionList addressName={selectedAddress} onSelectAddress={onOpen} />
+            <CollectionList
+                addressName={selectedAddress}
+                onSelectAddress={onOpen}
+                persona={persona}
+                visitingProfile={currentVisitingProfile}
+            />
         </div>
     )
 }
