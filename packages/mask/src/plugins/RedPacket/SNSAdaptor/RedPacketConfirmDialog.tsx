@@ -287,7 +287,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                             <Typography variant="body1" color="textPrimary" align="right">
                                 {isBalanceInsufficient
                                     ? '0'
-                                    : (Number(formatTotal) / (settings?.shares ?? 1)).toFixed(6)}{' '}
+                                    : new BigNumber(formatTotal).div(settings?.shares ?? 1).toFixed(6)}{' '}
                                 {settings?.token?.symbol}
                             </Typography>
                         </Grid>
