@@ -35,9 +35,7 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
             const [imageTemplateType, decoratedText] = decorateEncryptedText(encrypted, t, content.meta)
 
             if (encode === 'image') {
-                const defaultText = t('additional_post_box__steganography_post_pre', {
-                    random: new Date().toLocaleString(),
-                })
+                const defaultText = t('additional_post_box__steganography_post_pre')
                 if (decoratedText) {
                     await pasteImage(decoratedText.replace(encrypted, ''), encrypted, imageTemplateType, reason)
                 } else {

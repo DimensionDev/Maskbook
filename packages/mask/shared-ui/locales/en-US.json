@@ -66,7 +66,7 @@
     "additional_post_box__encrypted_post_pre_ito": "$t(promote_ito) {{encrypted}}",
     "additional_post_box__encrypted_post_pre_file_service_twitter_official_account": "$t(promote_file_service)\n {{encrypted}}",
     "additional_post_box__encrypted_post_pre_file_service": "$t(promote_file_service) {{encrypted}}",
-    "additional_post_box__steganography_post_pre": "This image is encrypted with #mask_io.\n{{random}}\n$t(promote)",
+    "additional_post_box__steganography_post_pre": "$t(promote)",
     "auto_paste_failed_dialog_title": "Paste manually",
     "auto_paste_failed_dialog_content": "Please copy the following text and image (if there is any) and publish it.",
     "auto_paste_failed_dialog_image_caption": "Open in a new tab",
