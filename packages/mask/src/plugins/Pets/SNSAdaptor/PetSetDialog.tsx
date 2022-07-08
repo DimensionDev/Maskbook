@@ -385,11 +385,6 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     noSwitchNetworkTip
                     ActionButtonPromiseProps={{
                         fullWidth: true,
-                        sx: {
-                            height: 40,
-                            padding: 0,
-                            margin: 0,
-                        },
                     }}>
                     <ActionButton
                         loading={loading}

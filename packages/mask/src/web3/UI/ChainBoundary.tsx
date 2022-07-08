@@ -143,7 +143,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     const renderBox = (children?: React.ReactNode, tips?: string) => {
         return (
             <ShadowRootTooltip title={tips ?? ''} classes={{ tooltip: classes.tooltip }} arrow placement="top">
-                <Box className={props.className} display="flex" flexDirection="column">
+                <Box className={props.className} display="flex" flexDirection="column" width="100%">
                     {children}
                 </Box>
             </ShadowRootTooltip>
