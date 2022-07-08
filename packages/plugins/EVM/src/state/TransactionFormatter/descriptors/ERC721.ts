@@ -4,21 +4,27 @@ import type { TransactionDescriptor } from '../types'
 
 export class ERC721Descriptor implements TransactionDescriptor {
     async compute(context: TransactionContext<ChainId>) {
-        if (!context.name) return
+        if (!context.methods?.length) return
 
-        switch (context.name) {
-            case 'setApprovalForAll':
-                return {
-                    chainId: context.chainId,
-                    title: context.parameters?.approved === false ? 'Revoke' : 'Unlock',
-                    description: `${
-                        context.parameters?.approved === false ? 'Revoke the approval for' : 'Unlock'
-                    } the token.`,
-                    successfulDescription: 'Revoke the approval successfully.',
-                }
+        for (const method of context.methods) {
+            const parameters = method.parameters
 
-            default:
-                return
+            switch (method.name === 'setApprovalForAll' && parameters?.operator && parameters?.approved) {
+                case 'setApprovalForAll':
+                    return {
+                        chainId: context.chainId,
+                        title: parameters?.approved === false ? 'Revoke' : 'Unlock',
+                        description: `${
+                            parameters?.approved === false ? 'Revoke the approval for' : 'Unlock'
+                        } the token.`,
+                        successfulDescription: 'Revoke the approval successfully.',
+                    }
+
+                default:
+                    return
+            }
         }
+
+        return
     }
 }
