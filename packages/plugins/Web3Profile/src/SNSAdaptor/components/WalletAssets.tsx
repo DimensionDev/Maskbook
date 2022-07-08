@@ -3,11 +3,10 @@ import { Edit2Icon, LinkOutIcon } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../locales'
 import { ImageIcon } from './ImageIcon'
-import { useReverseAddress } from '@masknet/plugin-infra/web3'
-import type { CollectionTypes } from '../types'
+import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import type { CollectionTypes, WalletTypes } from '../types'
 import { ChainId, explorerResolver, NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { formatAddress } from '../utils'
 import { Empty } from './Empty'
 import { CollectionList } from './CollectionList'
 
@@ -31,7 +30,7 @@ const useStyles = makeStyles()((theme) => {
             position: 'relative',
             cursor: 'pointer',
             display: 'flex',
-            overflow: 'hidden',
+            // overflow: 'hidden',
             padding: 0,
             flexDirection: 'column',
             borderRadius: 12,
@@ -65,8 +64,9 @@ const useStyles = makeStyles()((theme) => {
         },
         list: {
             gridRowGap: 16,
-            gridColumnGap: 21,
+            gridColumnGap: 14,
             display: 'grid',
+            justifyItems: 'center',
             gridTemplateColumns: 'repeat(4, 1fr)',
             paddingBottom: '20px',
         },
@@ -81,7 +81,7 @@ const useStyles = makeStyles()((theme) => {
 
 export interface WalletAssetsCardProps extends withClasses<never | 'root'> {
     networkIcon?: URL
-    address: string
+    address: WalletTypes
     onSetting: () => void
     collectionList?: CollectionTypes[]
 }
@@ -91,20 +91,23 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
     const t = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const chainId = ChainId.Mainnet
+    const { Others } = useWeb3State(address?.platform ?? NetworkPluginID.PLUGIN_EVM)
 
     const iconURL = NETWORK_DESCRIPTORS.find((network) => network?.chainId === ChainId.Mainnet)?.icon
 
-    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address)
+    const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address?.address)
 
     return (
         <Card className={classes.wrapper}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div className={classes.walletInfo}>
                     <ImageIcon icon={iconURL} size={20} borderRadius="99px" />
-                    <Typography className={classes.walletName}>{domain || formatAddress(address, 4)}</Typography>
+                    <Typography className={classes.walletName}>
+                        {domain || Others?.formatAddress(address?.address, 4)}
+                    </Typography>
                     <Link
                         className={classes.link}
-                        href={address ? explorerResolver.addressLink(chainId, address) ?? '' : ''}
+                        href={address ? explorerResolver.addressLink(chainId, address?.address) ?? '' : ''}
                         target="_blank"
                         rel="noopener noreferrer">
                         <LinkOutIcon className={classes.linkIcon} />

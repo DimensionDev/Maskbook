@@ -24,6 +24,7 @@ import { context } from '../context'
 import { PersonaAction } from './PersonaAction'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { CurrentStatusMap, CURRENT_STATUS } from '../../constants'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 const useStyles = makeStyles()((theme) => ({
     content: {
         width: 568,
@@ -100,32 +101,32 @@ export function Web3ProfileDialog() {
             ?.filter((proof) => proof?.platform === NextIDPlatform.Ethereum)
             ?.map((address) => ({
                 address: address?.identity,
-                platform: address?.platform,
+                platform: NetworkPluginID.PLUGIN_EVM,
             })) || []
 
     const accounts = bindings?.proofs?.filter((proof) => proof?.platform === NextIDPlatform.Twitter) || []
 
     const { value: MainnetNFTList } = useAsyncRetry(async () => {
         if (!currentPersona) return
-        return getNFTList(wallets?.map((wallet) => wallet?.address))
-    }, [wallets?.length])
+        return getNFTList(wallets)
+    }, [wallets?.length, currentPersona])
 
     const { value: PolygonNFTList } = useAsyncRetry(async () => {
         if (!currentPersona) return
-        return getNFTList_Polygon(wallets?.map((wallet) => wallet?.address))
-    }, [wallets?.length])
+        return getNFTList_Polygon(wallets)
+    }, [wallets?.length, currentPersona])
 
     const NFTList = mergeList(MainnetNFTList, PolygonNFTList)
 
     const { value: donationList } = useAsyncRetry(async () => {
         if (!currentPersona) return
-        return getDonationList(wallets?.map((wallet) => wallet?.address))
-    }, [wallets?.length])
+        return getDonationList(wallets)
+    }, [wallets?.length, currentPersona])
 
     const { value: footprintList } = useAsyncRetry(async () => {
         if (!currentPersona) return
-        return getFootprintList(wallets?.map((wallet) => wallet?.address))
-    }, [wallets?.length])
+        return getFootprintList(wallets)
+    }, [wallets?.length, currentPersona])
 
     const { value: hiddenObj, retry: retryGetWalletHiddenList } = useAsyncRetry(async () => {
         if (!currentPersona) return

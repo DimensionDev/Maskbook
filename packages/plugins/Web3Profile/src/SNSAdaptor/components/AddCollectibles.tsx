@@ -77,7 +77,6 @@ export function AddNFT(props: AddNFTProps) {
         }
 
         toggleChecking(true)
-        let tokenDetailed
 
         try {
             const asset = await hub.getNonFungibleAsset(address, tokenId, { chainId: currentChainId })

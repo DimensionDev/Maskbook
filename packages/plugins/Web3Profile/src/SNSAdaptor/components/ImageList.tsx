@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { useI18N } from '../../locales'
 import { InjectedDialog } from '@masknet/shared'
 import type { PersonaInformation, NextIDStoragePayload } from '@masknet/shared-base'
-import type { CollectionTypes } from '../types'
+import type { CollectionTypes, WalletTypes } from '../types'
 import { context } from '../context'
 import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 import { AddNFT } from './AddCollectibles'
@@ -125,7 +125,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface ImageListDialogProps extends withClasses<never | 'root'> {
-    address?: string
+    address?: WalletTypes
     open: boolean
     onClose: () => void
     title: string
@@ -136,7 +136,16 @@ export interface ImageListDialogProps extends withClasses<never | 'root'> {
 }
 
 export function ImageListDialog(props: ImageListDialogProps) {
-    const { address = ZERO_ADDRESS, open, onClose, retryData, title, accountId, currentPersona, collectionList } = props
+    const {
+        address = { address: ZERO_ADDRESS },
+        open,
+        onClose,
+        retryData,
+        title,
+        accountId,
+        currentPersona,
+        collectionList,
+    } = props
     const t = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const [unListedCollections, setUnListedCollections] = useState<CollectionTypes[]>([])
@@ -157,10 +166,8 @@ export function ImageListDialog(props: ImageListDialogProps) {
         if (unListingCollection) {
             setUnListedCollections((pre) => [...pre, unListingCollection])
         }
-        const unListingIndex = listedCollections?.findIndex((collection) => collection?.key === key)
-        const currentListed = listedCollections
-        currentListed?.splice(unListingIndex!, 1)
-        setListedCollections([...currentListed])
+        const currentListed = [...listedCollections]
+        setListedCollections(currentListed?.filter((collection) => collection?.key !== key))
     }
     const list = (key: string | undefined) => {
         if (!key) return
@@ -169,17 +176,16 @@ export function ImageListDialog(props: ImageListDialogProps) {
         if (listingCollection) {
             setListedCollections((pre) => [...pre, listingCollection])
         }
-        const listingIndex = unListedCollections?.findIndex((collection) => collection?.key === key)
-        const currentUnListed = unListedCollections
-        currentUnListed?.splice(listingIndex!, 1)
-        setUnListedCollections([...currentUnListed])
+
+        const currentUnListed = [...unListedCollections]
+        setUnListedCollections(currentUnListed?.filter((collection) => collection?.key !== key))
     }
 
     const onConfirm = async () => {
         if (!currentPersona?.identifier.publicKeyAsHex) return
         const patch = {
             unListedCollections: {
-                [address]: {
+                [address.address]: {
                     [title]: unListedCollections?.map((x) => x?.key),
                 },
             },
@@ -260,13 +266,13 @@ export function ImageListDialog(props: ImageListDialogProps) {
                         )}
                     </Box>
                     <AddNFT
-                        account={address}
+                        account={address.address}
                         chainId={ChainId.Mainnet}
                         title={t.add_collectible()}
                         open={open_}
                         onClose={() => setOpen_(false)}
                         onAddClick={onAddClick}
-                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                        expectedPluginID={address?.platform ?? NetworkPluginID.PLUGIN_EVM}
                     />
                 </div>
             </DialogContent>

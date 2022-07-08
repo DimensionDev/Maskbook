@@ -24,7 +24,7 @@ export function CollectionList(props: CollectionListProps) {
                     className={classes.collectionWrap}
                     onClick={() => onList?.(collection.key)}>
                     <NFTImageCollectibleAvatar
-                        pluginId={NetworkPluginID.PLUGIN_EVM}
+                        pluginId={collection?.platform ?? NetworkPluginID.PLUGIN_EVM}
                         size={size}
                         token={{
                             ...collection,

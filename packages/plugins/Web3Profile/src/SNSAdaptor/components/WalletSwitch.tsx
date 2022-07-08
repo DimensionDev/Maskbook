@@ -3,12 +3,12 @@ import { Link, styled, Switch, SwitchProps, Typography } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
 import { useI18N } from '../../locales'
 import { useState } from 'react'
-import { formatAddress } from '../utils'
 import type { WalletTypes } from '../types'
 import { ChainId, explorerResolver, NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
 import { LinkOutIcon } from '@masknet/icons'
 import { ImageIcon } from './ImageIcon'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
@@ -118,6 +118,8 @@ export function WalletSwitch({ type, address, isPublic, hiddenItems = [], setHid
 
     const iconURL = NETWORK_DESCRIPTORS.find((network) => network?.chainId === ChainId.Mainnet)?.icon
 
+    const { Others } = useWeb3State(address?.platform ?? NetworkPluginID.PLUGIN_EVM)
+
     const onSwitch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const v = e.target.checked
         if (!v) {
@@ -137,7 +139,7 @@ export function WalletSwitch({ type, address, isPublic, hiddenItems = [], setHid
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.address} variant="body2" title={address?.address}>
-                        <FormattedAddress address={address?.address} size={4} formatter={formatAddress} />
+                        <FormattedAddress address={address?.address} size={4} formatter={Others?.formatAddress} />
                     </Typography>
 
                     <Link

@@ -1,4 +1,5 @@
 import type { BindingProof, NextIDPlatform, ProfileInformation } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export interface GeneralAsset {
     platform: string
@@ -45,7 +46,7 @@ export interface Proof {
     content?: Record<string, Patch>
 }
 export interface CollectionTypes {
-    platform: string
+    platform: NetworkPluginID
     address: string // take id as address if collection is a poap
     key: string // address + tokenId as unique key of NFT, id as unique key of poap
     tokenId?: string
@@ -75,7 +76,7 @@ export interface WalletsCollection {
 
 export interface WalletTypes {
     address: string
-    platform?: string
+    platform?: NetworkPluginID
     collections?: CollectionTypes[]
 }
 

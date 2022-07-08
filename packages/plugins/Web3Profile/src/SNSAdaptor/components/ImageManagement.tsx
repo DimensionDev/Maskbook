@@ -13,6 +13,7 @@ import { Empty } from './Empty'
 import { context } from '../context'
 import { GearIcon, WalletUnderTabsIcon } from '@masknet/icons'
 import { CurrentStatusMap, CURRENT_STATUS } from '../../constants'
+import { isSameAddress } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     bottomButton: {
@@ -92,7 +93,7 @@ export function ImageManagement(props: ImageManagementProps) {
         accountList,
         getWalletHiddenRetry,
     } = props
-    const [settingAddress, setSettingAddress] = useState<string>()
+    const [settingAddress, setSettingAddress] = useState<WalletTypes>()
     const [imageListOpen, setImageListOpen] = useState(false)
     const [walletSettingOpen, setWalletSettingOpen] = useState(false)
     const addresses = getAddressesByStatus(status, accountList!)
@@ -117,11 +118,11 @@ export function ImageManagement(props: ImageManagementProps) {
                             <WalletAssetsCard
                                 key={address.address}
                                 onSetting={() => {
-                                    setSettingAddress(address.address)
+                                    setSettingAddress(address)
                                     setImageListOpen(true)
                                 }}
                                 collectionList={address?.collections}
-                                address={address.address}
+                                address={address}
                             />
                         ))
                     ) : (
@@ -146,7 +147,10 @@ export function ImageManagement(props: ImageManagementProps) {
                     accountId={accountId}
                     onClose={() => setImageListOpen(false)}
                     retryData={getWalletHiddenRetry}
-                    collectionList={addresses?.find((address) => address?.address === settingAddress)?.collections}
+                    collectionList={
+                        addresses?.find((address) => isSameAddress(address?.address, settingAddress?.address))
+                            ?.collections
+                    }
                 />
                 <WalletSetting
                     wallets={allWallets}

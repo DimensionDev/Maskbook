@@ -4,10 +4,10 @@ import {
     NextIDPlatform,
     NextIDStoragePayload,
     PersonaInformation,
-    ProfileInformation,
     toBase64,
 } from '@masknet/shared-base'
 import { Alchemy_EVM, NextIDStorage, RSS3 } from '@masknet/web3-providers'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '../../../../web3-shared/base/src/utils'
 import { PLUGIN_ID } from '../constants'
@@ -27,10 +27,6 @@ export const mergeList = (listA?: WalletTypes[], listB?: WalletTypes[]) => {
             collections: [...(item?.collections ?? []), ...(listBCollection ?? [])],
         }
     })
-}
-
-export const formatAddress = (address: string, size = 4) => {
-    return `${address?.slice(0, size + 2)}...${address?.slice(-size)}`
 }
 
 const deduplicateArray = (listA?: WalletTypes[], listB?: WalletTypes[]) => {
@@ -81,12 +77,7 @@ export const getWalletList = (
     NFTs?: Collection[],
 ) => {
     if (accounts?.length === 0) return
-    let allLinkedProfiles: ProfileInformation[] = []
-    allPersona?.forEach((persona) => {
-        if (persona?.linkedProfiles) {
-            allLinkedProfiles = [...allLinkedProfiles, ...persona.linkedProfiles]
-        }
-    })
+    const allLinkedProfiles = allPersona?.flatMap((persona) => persona?.linkedProfiles)
     const detailedAccounts = accounts?.map((account) => {
         const linkedProfile = allLinkedProfiles?.find(
             (profile) =>
@@ -133,114 +124,111 @@ export const placeFirst = (userId?: string, accountList?: AccountType[]) => {
     if (!accountList || accountList?.length === 0) return accountList
     const currentAccountIndex = accountList?.findIndex((account) => account?.identity === userId?.toLowerCase())
     if (currentAccountIndex === -1) return accountList
-    const currentItem = accountList?.splice(currentAccountIndex, 1)?.[0]
-    return [currentItem, ...accountList]
+    const currentItem = accountList?.filter((item) => item?.identity === userId?.toLowerCase())?.[0]
+    const restAccountList = accountList?.filter((item) => item?.identity !== userId?.toLowerCase())
+    return [currentItem, ...restAccountList]
 }
 
-export const getDonationList = async (walletList: string[]) => {
-    const resNodeIdParams: Collection[] = []
-    const promises = walletList.map((address) => {
+export const getDonationList = async (walletList: WalletTypes[]) => {
+    const promises = walletList.map(({ address, platform }) => {
         return RSS3.getDonations(formatEthereumAddress(address)).then((result) => {
             if (result) {
-                resNodeIdParams.push({
+                return {
                     address,
                     collections: result?.assets?.map((asset) => ({
                         key: asset?.id,
                         address: asset?.id,
-                        platform: asset?.platform,
+                        platform: platform ?? NetworkPluginID.PLUGIN_EVM,
                         iconURL: asset?.info?.image_preview_url ?? undefined,
                         name: asset?.info?.title ?? asset?.info?.collection,
                     })),
-                })
+                }
             } else {
-                resNodeIdParams.push({
+                return {
                     address,
-                })
+                }
             }
         })
     })
-    await Promise.all(promises)
-    return resNodeIdParams
+    const collections = await Promise.all(promises)
+    return collections
 }
 
-export const getFootprintList = async (walletList: string[]) => {
-    const resNodeIdParams: Collection[] = []
-    const promises = walletList.map((address) => {
+export const getFootprintList = async (walletList: WalletTypes[]) => {
+    const promises = walletList.map(({ address, platform }) => {
         return RSS3.getFootprints(formatEthereumAddress(address)).then((result) => {
             if (result) {
-                resNodeIdParams.push({
+                return {
                     address,
                     collections: result?.assets?.map((asset) => ({
                         key: asset?.id,
                         address: asset?.id,
-                        platform: asset?.platform,
+                        platform: platform ?? NetworkPluginID.PLUGIN_EVM,
                         iconURL: asset?.info?.image_preview_url ?? undefined,
                         name: asset?.info?.title ?? asset?.info?.collection,
                     })),
-                })
+                }
             } else {
-                resNodeIdParams.push({
+                return {
                     address,
-                })
+                }
             }
         })
     })
-    await Promise.all(promises)
-    return resNodeIdParams
+    const collections = await Promise.all(promises)
+    return collections
 }
 
-export const getNFTList = async (walletList: string[]) => {
-    const resNodeIdParams: Collection[] = []
-    const promises = walletList.map((address) => {
+export const getNFTList = async (walletList: WalletTypes[]) => {
+    const promises = walletList.map(({ address, platform }) => {
         return Alchemy_EVM.getAssets(formatEthereumAddress(address), { chainId: ChainId.Mainnet }).then((result) => {
             if (result) {
-                resNodeIdParams.push({
+                return {
                     address,
                     collections: result?.data?.map((asset) => ({
                         key: `${asset?.contract?.address}+${asset.tokenId}`,
                         address: asset?.address,
-                        platform: 'EVM',
+                        platform: platform ?? NetworkPluginID.PLUGIN_EVM,
                         tokenId: asset.tokenId,
                         iconURL: asset?.metadata?.imageURL,
                         name: asset?.metadata?.name,
                     })),
-                })
+                }
             } else {
-                resNodeIdParams.push({
+                return {
                     address,
-                })
+                }
             }
         })
     })
-    await Promise.all(promises)
-    return resNodeIdParams
+    const collections = await Promise.all(promises)
+    return collections
 }
 
-export const getNFTList_Polygon = async (walletList: string[]) => {
-    const resNodeIdParams: Collection[] = []
-    const promises = walletList.map((address) => {
+export const getNFTList_Polygon = async (walletList: WalletTypes[]) => {
+    const promises = walletList.map(({ address, platform }) => {
         return Alchemy_EVM.getAssets(formatEthereumAddress(address), { chainId: ChainId.Matic }).then((result) => {
             if (result) {
-                resNodeIdParams.push({
+                return {
                     address,
                     collections: result?.data?.map((asset) => ({
                         key: `${asset?.contract?.address}+${asset.tokenId}`,
                         address: asset?.address,
-                        platform: 'EVM',
+                        platform: platform ?? NetworkPluginID.PLUGIN_EVM,
                         tokenId: asset.tokenId,
                         iconURL: asset?.metadata?.imageURL,
                         name: asset?.metadata?.name,
                     })),
-                })
+                }
             } else {
-                resNodeIdParams.push({
+                return {
                     address,
-                })
+                }
             }
         })
     })
-    await Promise.all(promises)
-    return resNodeIdParams
+    const collection = await Promise.all(promises)
+    return collection
 }
 
 export const getWalletHiddenList = async (publicKey: string) => {
