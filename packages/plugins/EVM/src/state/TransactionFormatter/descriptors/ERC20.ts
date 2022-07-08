@@ -6,47 +6,51 @@ import { Web3StateSettings } from '../../../settings'
 
 export class ERC20Descriptor implements TransactionDescriptor {
     async compute(context: TransactionContext<ChainId>) {
-        if (!context.name) return
+        if (!context.methods?.length) return
 
         const connection = await Web3StateSettings.value.Connection?.getConnection?.({
             chainId: context.chainId,
         })
-        switch (context.name) {
-            case 'approve':
-                if (isZero(context.value)) {
+        for (const method of context.methods) {
+            const parameters = method.parameters
+            switch (method.name === 'approve' && parameters?.spender && parameters?.value) {
+                case 'approve':
+                    if (isZero(context.value)) {
+                        return {
+                            chainId: context.chainId,
+                            title: 'Revoke',
+                            description: 'Revoke the approval for the token.',
+                            successfulDescription: 'Revoke the approval successfully.',
+                        }
+                    }
+
                     return {
                         chainId: context.chainId,
-                        title: 'Revoke',
-                        description: 'Revoke the approval for the token.',
-                        successfulDescription: 'Revoke the approval successfully.',
+                        title: 'Approve',
+                        description: `Approve spend ${getTokenAmountDescription(
+                            parameters?.value as string,
+                            await connection?.getFungibleToken(context.to ?? '', {
+                                chainId: context.chainId,
+                            }),
+                        )}`,
                     }
-                }
+            }
 
-                return {
-                    chainId: context.chainId,
-                    title: 'Approve',
-                    description: `Approve spend ${getTokenAmountDescription(
-                        context.parameters?.value as string,
-                        await connection?.getFungibleToken(context.to ?? '', {
-                            chainId: context.chainId,
-                        }),
-                    )}`,
-                }
-            case 'transfer':
-            case 'transferFrom':
+            if ((method.name === 'transfer' || method.name === 'transferFrom') && parameters?.to && parameters?.value) {
                 return {
                     chainId: context.chainId,
                     title: 'Transfer Token',
                     description: `Transfer token ${getTokenAmountDescription(
-                        context.parameters?.value as string,
+                        parameters?.value as string,
                         await connection?.getFungibleToken(context.to ?? '', {
                             chainId: context.chainId,
                         }),
                         true,
                     )}`,
                 }
-            default:
-                return
+            }
         }
+
+        return
     }
 }

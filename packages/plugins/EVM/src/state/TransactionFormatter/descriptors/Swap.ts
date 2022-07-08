@@ -1,23 +1,27 @@
+import { first, last } from 'lodash-unified'
 import { formatBalance, TransactionContext } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import type { TransactionDescriptor } from '../types'
 import { Web3StateSettings } from '../../../settings'
-import { first, last } from 'lodash-unified'
 
 export class SwapDescriptor implements TransactionDescriptor {
     async compute(context: TransactionContext<ChainId>) {
-        if (!context.name) return
+        if (!context.methods?.find((x) => x.name)) return
+
         const connection = await Web3StateSettings.value.Connection?.getConnection?.({
             chainId: context.chainId,
         })
-
         const nativeToken = await connection?.getNativeToken({ chainId: context.chainId })
 
-        switch (context.name) {
-            case 'swapExactETHForTokens':
-                const outputToken = await connection?.getFungibleToken(last(context.parameters!.path as string) ?? '')
+        const methods = context.methods
+
+        for (const method of methods) {
+            const parameters = method.parameters
+
+            if (method.name === 'swapExactETHForTokens' && parameters?.path && parameters.amountOutMin) {
+                const outputToken = await connection?.getFungibleToken(last(parameters!.path as string) ?? '')
                 const inputAmount = formatBalance(context.value, nativeToken?.decimals, 2)
-                const outputAmount = formatBalance(context.parameters!.amountOutMin as string, outputToken?.decimals, 2)
+                const outputAmount = formatBalance(parameters!.amountOutMin as string, outputToken?.decimals, 2)
                 return {
                     chainId: context.chainId,
                     title: 'Swap Token',
@@ -25,38 +29,48 @@ export class SwapDescriptor implements TransactionDescriptor {
                         outputToken?.symbol ?? ''
                     }`,
                 }
-            case 'swapExactTokensForETH':
-                const inToken = await connection?.getFungibleToken(first(context.parameters!.path as string) ?? '')
-                const inAmount = formatBalance(context.parameters!.amountIn as string, inToken?.decimals, 2)
-                const outAmount = formatBalance(context.parameters!.amountOutMin as string, nativeToken?.decimals, 2)
+            }
 
+            if (method.name === 'swapExactTokensForETH' && parameters?.path && parameters?.amountOutMin) {
+                const outputToken = await connection?.getFungibleToken(last(parameters!.path as string) ?? '')
+                const inputAmount = formatBalance(context.value, nativeToken?.decimals, 2)
+                const outputAmount = formatBalance(parameters!.amountOutMin as string, outputToken?.decimals, 2)
                 return {
                     chainId: context.chainId,
                     title: 'Swap Token',
-                    description: `Swap ${inAmount} ${inToken?.symbol ?? ''} for ${outAmount} ${
-                        nativeToken?.symbol ?? ''
+                    description: `Swap ${inputAmount} ${nativeToken?.symbol ?? ''} for ${outputAmount} ${
+                        outputToken?.symbol ?? ''
                     }`,
                 }
-            case 'swapExactTokensForTokens':
-                const tokenIn = await connection?.getFungibleToken(first(context.parameters!.path as string) ?? '')
-                const tokenOut = await connection?.getFungibleToken(last(context.parameters!.path as string) ?? '')
+            }
 
-                const amountIn = formatBalance(context.parameters!.amountIn as string, tokenIn?.decimals, 2)
-                const amountOut = formatBalance(context.parameters!.amountOutMin as string, tokenOut?.decimals, 2)
+            if (
+                method.name === 'swapExactTokensForTokens' &&
+                parameters?.path &&
+                parameters?.amountIn &&
+                parameters?.amountOutMin
+            ) {
+                const tokenIn = await connection?.getFungibleToken(first(parameters!.path as string) ?? '')
+                const tokenOut = await connection?.getFungibleToken(last(parameters!.path as string) ?? '')
+
+                const amountIn = formatBalance(parameters!.amountIn as string, tokenIn?.decimals, 2)
+                const amountOut = formatBalance(parameters!.amountOutMin as string, tokenOut?.decimals, 2)
 
                 return {
                     chainId: context.chainId,
                     title: 'SwapToken',
                     description: `Swap ${amountIn} ${tokenIn?.symbol ?? ''} for ${amountOut} ${tokenOut?.symbol ?? ''}`,
                 }
-            case 'multicall':
+            }
+
+            if (method.name === 'multicall') {
                 return {
                     chainId: context.chainId,
                     title: 'SwapToken',
                     description: 'Swap with UniSwap V3',
                 }
-            default:
-                return
+            }
         }
+        return
     }
 }

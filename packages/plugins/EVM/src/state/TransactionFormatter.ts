@@ -19,7 +19,7 @@ import {
     Transaction,
     TransactionParameter,
 } from '@masknet/web3-shared-evm'
-import { readABI } from './TransactionFormatter/abi'
+import { readABIs } from './TransactionFormatter/abi'
 import { createConnection } from './Connection/connection'
 import type { TransactionDescriptor } from './TransactionFormatter/types'
 
@@ -76,15 +76,17 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
 
         if (data) {
             // contract interaction
-            const abi = readABI(signature)
+            const abis = readABIs(signature)
 
-            if (abi) {
+            if (abis?.length) {
                 try {
                     return {
                         ...context,
                         type: TransactionDescriptorType.INTERACTION,
-                        name: abi.name,
-                        parameters: this.coder.decodeParameters(abi.parameters, parameters ?? ''),
+                        methods: abis.map((x) => ({
+                            name: x.name,
+                            parameters: this.coder.decodeParameters(x.parameters, parameters ?? ''),
+                        })),
                     }
                 } catch {
                     // do nothing

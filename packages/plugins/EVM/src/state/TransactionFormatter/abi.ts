@@ -1,5 +1,6 @@
 import type { AbiItem } from 'web3-utils'
 import * as ABICoder from 'web3-eth-abi'
+import { uniqBy } from 'lodash-unified'
 import type { TransactionMethodABI } from './types'
 
 // built-in abis
@@ -15,7 +16,7 @@ import MaskBox from '@masknet/web3-contracts/abis/MaskBox.json'
 
 class ABI {
     private coder = ABICoder as unknown as ABICoder.AbiCoder
-    private abis: Map<string, TransactionMethodABI> = new Map()
+    private abis: Map<string, TransactionMethodABI[]> = new Map()
 
     constructor() {
         this.construct(BulkCheckout as AbiItem[]) // donate gitcoin grants
@@ -43,18 +44,21 @@ class ABI {
                 const signature = this.coder.encodeFunctionSignature(
                     `${x.name}(${inputs.map((y) => y.type).join(',')})`,
                 )
-                if (this.abis.has(signature))
-                    console.warn(
-                        `The signature of ${`${x.name}(${inputs.map((y) => y.type).join(',')})`} already exists.`,
-                    )
-                this.abis.set(signature, {
-                    name,
-                    parameters:
-                        inputs.map((y) => ({
-                            name: y.name,
-                            type: y.type,
-                        })) ?? [],
-                })
+                const all = uniqBy(
+                    [
+                        ...(this.abis.get(signature) ?? []),
+                        {
+                            name,
+                            parameters:
+                                inputs.map((y) => ({
+                                    name: y.name,
+                                    type: y.type,
+                                })) ?? [],
+                        },
+                    ],
+                    (x) => `${x.name}_${x.parameters.map((y) => `${y.type}_${y.name}`)}`,
+                )
+                this.abis.set(signature, all)
             } catch (error) {
                 console.log('Failed to encode function signature from below ABI:')
                 console.log(x)
@@ -65,6 +69,6 @@ class ABI {
 
 const abi = new ABI()
 
-export function readABI(signature?: string) {
+export function readABIs(signature?: string) {
     return abi.read(signature)
 }
