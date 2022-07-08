@@ -372,4 +372,4 @@ export type Transaction = TransactionConfig_ & {
 export type TransactionReceipt = Web3TransactionReceipt
 export type TransactionDetailed = Web3Transaction
 export type TransactionSignature = string
-export type TransactionParameter = string | undefined
+export type TransactionParameter = string | boolean | undefined

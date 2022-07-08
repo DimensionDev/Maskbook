@@ -1,9 +1,9 @@
 import type { TransactionContext } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId, TransactionParameter } from '@masknet/web3-shared-evm'
 import type { TransactionDescriptor } from '../types'
 
 export class ERC721Descriptor implements TransactionDescriptor {
-    async compute(context: TransactionContext<ChainId>) {
+    async compute(context: TransactionContext<ChainId, TransactionParameter>) {
         if (!context.methods?.length) return
 
         for (const method of context.methods) {

@@ -1,12 +1,18 @@
 import { i18NextInstance } from '@masknet/shared-base'
-import { ChainId, getNftRedPacketConstants, getRedPacketConstants } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    getNftRedPacketConstants,
+    getRedPacketConstants,
+    TransactionParameter,
+} from '@masknet/web3-shared-evm'
 import type { TransactionDescriptor } from '../types'
 import { Web3StateSettings } from '../../../settings'
 import { isSameAddress, formatBalance, TransactionContext } from '@masknet/web3-shared-base'
 
 export class RedPacketDescriptor implements TransactionDescriptor {
     // TODO: 6002: avoid using i18n text in a service. delegate it to ui.
-    async compute(context: TransactionContext<ChainId>) {
+    async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
+        const context = context_ as TransactionContext<ChainId, string | undefined>
         const { HAPPY_RED_PACKET_ADDRESS_V4 } = getRedPacketConstants(context.chainId)
         const { RED_PACKET_NFT_ADDRESS } = getNftRedPacketConstants(context.chainId)
 
@@ -19,8 +25,8 @@ export class RedPacketDescriptor implements TransactionDescriptor {
                 account: context.from,
             })
 
-            const token = await connection?.getFungibleToken((parameters?._token_addr as string) ?? '')
-            const amount = formatBalance(parameters?._total_tokens as string, token?.decimals)
+            const token = await connection?.getFungibleToken(parameters?._token_addr ?? '')
+            const amount = formatBalance(parameters?._total_tokens, token?.decimals)
 
             return {
                 chainId: context.chainId,
