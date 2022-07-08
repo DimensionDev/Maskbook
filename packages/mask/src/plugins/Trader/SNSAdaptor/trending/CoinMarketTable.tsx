@@ -62,7 +62,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                                     </Typography>
                                 </TableCell>
                                 <TableCell className={classes.cell}>
-                                    <FormattedCurrency value={market?.market_cap ?? 0} formatter={formatCurrency} />
+                                    {market?.market_cap ? `$${formatSupply(market.market_cap)}` : '--'}
                                 </TableCell>
                             </TableRow>
                         ) : null}
@@ -85,7 +85,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                                 </Typography>
                             </TableCell>
                             <TableCell className={classes.cell}>
-                                <FormattedCurrency value={market?.total_volume ?? 0} formatter={formatCurrency} />
+                                {market?.total_volume ? `$${formatSupply(market.total_volume)}` : '--'}
                             </TableCell>
                         </TableRow>
                         {dataProvider !== DataProvider.UNISWAP_INFO ? (
