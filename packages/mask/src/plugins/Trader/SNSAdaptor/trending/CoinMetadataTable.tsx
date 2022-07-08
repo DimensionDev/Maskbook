@@ -89,7 +89,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
     const contracts = trending.contracts ?? []
 
     const [menu, openMenu] = useMenu(
-        contracts.map((x, i) => (
+        contracts.map((x) => (
             <MenuItem key={x.chainId}>
                 <ContractSection address={x.address} chainId={x.chainId} iconURL={x.iconURL} />
             </MenuItem>

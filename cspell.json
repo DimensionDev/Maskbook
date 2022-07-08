@@ -348,7 +348,7 @@
         "wnative",
         "xsushi"
     ],
-    "ignoreRegExpList": ["/@servie/"],
+    "ignoreRegExpList": ["/@servie/", "/[A-Za-z0-9]{46}/"],
     "overrides": [
         {
             "filename": "**/*.md",

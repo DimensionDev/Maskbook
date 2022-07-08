@@ -9,6 +9,7 @@ import {
     formatAddress,
     ProviderType,
     NetworkType,
+    Transaction,
     SchemaType,
     ZERO_ADDRESS,
     CHAIN_DESCRIPTORS,
@@ -19,7 +20,7 @@ import {
 } from '@masknet/web3-shared-solana'
 import { getNativeTokenAddress } from '../utils'
 
-export class Others extends OthersState<ChainId, SchemaType, ProviderType, NetworkType> {
+export class Others extends OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
     constructor(context: Plugin.Shared.SharedContext) {
         super(context, {
             defaultAddress: ZERO_ADDRESS,

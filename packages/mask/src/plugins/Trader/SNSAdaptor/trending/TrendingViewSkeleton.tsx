@@ -1,7 +1,6 @@
 import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
 import { PluginHeader } from './PluginHeader'
-import { ProvidedBy } from '@masknet/shared'
 import { CardContent, Stack } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({
@@ -30,9 +29,7 @@ export function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
     return (
         <TrendingCard {...TrendingCardProps}>
             <Stack className={classes.root}>
-                <PluginHeader>
-                    <ProvidedBy providerName="Mask Network" providerLink="https://mask.io" />
-                </PluginHeader>
+                <PluginHeader />
                 <CardContent className={classes.content}>
                     <Stack height="100%" alignItems="center" justifyContent="center">
                         <LoadingBase />

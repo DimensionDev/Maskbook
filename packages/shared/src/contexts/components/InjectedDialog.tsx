@@ -144,7 +144,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
         }
 
         onClose?.()
-    }, [isOpenFromApplicationBoard])
+    }, [isOpenFromApplicationBoard, onClose])
 
     return usePortalShadowRoot((container) => (
         <IncreaseStack>
