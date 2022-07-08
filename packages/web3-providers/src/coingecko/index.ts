@@ -1,10 +1,11 @@
+import { DataProvider } from '@masknet/public-api'
 import { CurrencyType, Price } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
-import { fetchJSON, PriceAPI, TrendingAPI } from '..'
 import { uniq } from 'lodash-unified'
-import { DataProvider } from '@masknet/public-api'
 import { getCommunityLink, isMirroredKeyword, resolveChainId, resolveCoinAddress } from '../CoinMarketCap/helper'
+import { fetchJSON } from '../helpers'
+import { PriceAPI, TrendingAPI, TrendingCoinType } from '../types'
 import { getAllCoins, getAllCurrencies, getCoinInfo, getPriceStats as getStats } from './base-api'
 import { COINGECKO_URL_BASE } from './constants'
 import { resolveChain } from './helper'
@@ -75,6 +76,7 @@ export class CoinGeckoAPI implements PriceAPI.Provider, TrendingAPI.Provider<Cha
                 id,
                 name: info.name,
                 symbol: info.symbol.toUpperCase(),
+                type: TrendingCoinType.Fungible,
                 is_mirrored: isMirroredKeyword(info.symbol),
 
                 // TODO: use current language setting
