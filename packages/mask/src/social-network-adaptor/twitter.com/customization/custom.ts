@@ -1,7 +1,6 @@
 import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
 import { createSubscriptionFromValueRef } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { parseColor } from '@masknet/theme'
 import { PaletteMode, Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
 import produce, { setAutoFreeze } from 'immer'
 import { useMemo } from 'react'
@@ -81,14 +80,15 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
             theme.components.MuiChip = {
                 styleOverrides: {
                     root: {
-                        backgroundColor: theme.palette.maskColor.primary,
+                        backgroundColor: theme.palette.background.default,
                         color: theme.palette.text.strong,
                     },
                     colorPrimary: {
                         backgroundColor: theme.palette.primary.main,
                         color: theme.palette.common.white,
                         '&:hover': {
-                            backgroundColor: parseColor(theme.palette.maskColor.primary).brighten(10).toHexString(),
+                            backgroundColor: `${theme.palette.primary.main} !important`,
+                            opacity: 0.9,
                         },
                     },
                 },
