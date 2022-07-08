@@ -6,7 +6,7 @@ import { useTheme } from '@mui/system'
 import { ExternalLink } from 'react-feather'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { formatCurrency } from '@masknet/web3-shared-base'
+import { formatCurrency, formatSupply } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -56,7 +56,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                 arrow
                 title={
                     <Typography color={(theme) => theme.palette.info.contrastText} className={classes.tooltip}>
-                        {tokenSecurity.total_supply}
+                        {tokenSecurity.total_supply ? formatSupply(tokenSecurity.total_supply) : DEFAULT_PLACEHOLDER}
                     </Typography>
                 }>
                 <Typography className={classes.cardValue}>{formatTotalSupply(tokenSecurity.total_supply)}</Typography>
@@ -139,8 +139,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                 <Stack direction="row" justifyContent="space-between">
                     <Typography className={classes.subtitle}>{t.token_info_market_cap()}</Typography>
                     <Typography className={classes.cardValue}>
-                        {' '}
-                        {tokenMarketCap ? formatCurrency(tokenMarketCap) : DEFAULT_PLACEHOLDER}{' '}
+                        {tokenMarketCap ? `$${formatSupply(tokenMarketCap)}` : DEFAULT_PLACEHOLDER}
                     </Typography>
                 </Stack>
             </Stack>
