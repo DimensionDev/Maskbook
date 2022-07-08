@@ -117,7 +117,7 @@
     "decrypted_postbox_decrypting": "Mask decrypting…",
     "decrypted_postbox_decoding": "Mask decoding…",
     "decrypted_postbox_decrypting_finding_person_key": "Mask is looking for the public key of the author…",
-    "decrypted_postbox_decrypting_finding_post_key": "Mask is getting the key, if you see this for a long time, this post might not be shared to you.",
+    "decrypted_postbox_decrypting_finding_post_key": "Mask is getting the key to decrypt. If you see this for a long time, this post might not be shared to you.",
     "decrypted_postbox_author_mismatch": "Originally posted by {{name}}",
     "decrypted_postbox_title": "Decrypted by Mask:",
     "dismiss": "Dismiss",
