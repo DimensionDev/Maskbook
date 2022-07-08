@@ -10,6 +10,8 @@ import {
     Rarible,
     TokenList,
     Zerion,
+    Rabby,
+    RabbyTokenAPI,
 } from '@masknet/web3-providers'
 import {
     FungibleToken,
@@ -31,7 +33,6 @@ import {
     createIndicator,
     FungibleTokenSecurity,
     FungibleTokenAuthorization,
-    NonFungibleTokenAuthorization,
 } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -262,10 +263,11 @@ class Hub implements EVM_Hub {
         throw new Error('Method not implemented.')
     }
     getApprovedNonFungibleTokens(
+        chainId: ChainId,
         account: string,
         initial?: HubOptions<ChainId>,
-    ): Promise<Array<NonFungibleTokenAuthorization<ChainId, SchemaType>>> {
-        throw new Error('Method not implemented.')
+    ): Promise<RabbyTokenAPI.NFTInfo[]> {
+        return Rabby.getNonFungibleTokensFromTokenList(chainId, account)
     }
     async getTransactions(
         chainId: ChainId,

@@ -6,18 +6,29 @@ import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 import { LinkOutIcon } from '@masknet/icons'
-import { useAccount, useWeb3State, useNetworkDescriptor, useNonFungibleTokenContract } from '@masknet/plugin-infra/web3'
+import {
+    useAccount,
+    useWeb3State,
+    useNetworkDescriptor,
+    useNonFungibleTokenContract,
+    useWeb3Hub,
+} from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, NetworkDescriptor } from '@masknet/web3-shared-base'
 import { useI18N } from '../locales'
 import { useStyles } from './useStyles'
-import { useApprovedNFTList } from './hooks/useApprovedNFTList'
 import { ApprovalLoadingContent } from './ApprovalLoadingContent'
 import { ApprovalEmptyContent } from './ApprovalEmptyContent'
 import type { NFTInfo } from './types'
+import { useAsync } from 'react-use'
 
 export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const { value: NFTList, loading } = useApprovedNFTList(account, chainId)
+    const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM)
+    const { value: NFTList, loading } = useAsync(
+        async () => hub?.getApprovedNonFungibleTokens?.(chainId, account),
+        [chainId, account, hub],
+    )
+
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
     const { classes } = useStyles({
         listItemBackground: networkDescriptor.backgroundGradient,
@@ -31,7 +42,7 @@ export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {
     ) : (
         <List className={classes.approvalContentWrapper}>
             {NFTList.map((nft, i) => (
-                <ApprovalNFTItem key={i} nft={nft} networkDescriptor={networkDescriptor} chainId={chainId} />
+                <ApprovalNFTItem key={i} nft={nft as NFTInfo} networkDescriptor={networkDescriptor} chainId={chainId} />
             ))}
         </List>
     )
