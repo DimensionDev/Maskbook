@@ -1,4 +1,4 @@
-import { Box, Button, ButtonGroup, ButtonGroupProps, styled, Tab, useTheme } from '@mui/material'
+import { Box, Button, ButtonGroup, ButtonGroupProps, styled, Tab } from '@mui/material'
 import { useTabContext, getPanelId, getTabId } from '@mui/lab/TabContext'
 import {
     forwardRef,
@@ -37,7 +37,7 @@ const ArrowButtonWrap = styled(Button)(({ theme }) => ({
     height: defaultTabSize,
     width: defaultTabSize,
     minWidth: `${defaultTabSize}px !important`,
-    background: theme.palette.maskColor.input ?? '#F2F6FA',
+    background: theme.palette.maskColor.input,
     '&:hover': {
         background: theme.palette.maskColor.input,
     },
@@ -74,14 +74,20 @@ const ButtonGroupWrap = styled(ButtonGroup, {
     flexWrap: 'nowrap',
     overflowY: 'clip',
     flex: 1,
-    gap: maskVariant !== 'base' ? theme.spacing(1) : 0,
+    gap: theme.spacing(1),
     ...(maskVariant === 'round'
         ? {
               padding: theme.spacing(0.5),
               background: theme.palette.background.input,
               borderRadius: 18,
           }
+        : maskVariant === 'flexible'
+        ? {
+              background: 'transparent',
+              borderRadius: 0,
+          }
         : {
+              marginTop: theme.spacing(-1),
               paddingTop: theme.spacing(1),
               background: 'transparent',
               borderRadius: 0,
@@ -148,7 +154,6 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
     const anchorRef = useRef<HTMLDivElement>(null)
     const flexPanelRef = useRef(null)
     const { width } = useWindowSize()
-    const theme = useTheme()
 
     if (context === null) throw new TypeError('No TabContext provided')
 
@@ -165,14 +170,12 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
     }, [innerRef?.current?.scrollWidth, innerRef?.current?.clientWidth, width])
     // #endregion
 
-    const children = Children.map(props.children, (child, i) => {
+    const children = Children.map(props.children, (child) => {
         if (!isValidElement(child)) throw new TypeError('Invalided Children')
-        const selected = child.props.value === context.value
-
         const extra = {
             'aria-controls': getPanelId(context, child.props.value),
             id: getTabId(context, child.props.value),
-            selected,
+            selected: child.props.value === context.value,
             // if move tab to first in flexible tabs
             isVisitable: (top: number, right: number) => {
                 const anchor = anchorRef.current?.getBoundingClientRect()
@@ -184,9 +187,6 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
                 if (variant === 'flexible' && !visitable) {
                     setFirstTabId(value)
                 }
-            },
-            style: {
-                background: selected ? theme.palette.maskColor.input : 'transparent',
             },
         }
 
@@ -211,6 +211,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
             return 0
         })
     }, [firstId, children])
+    // #endregion
 
     // #region Should close panel when click other area
     useClickAway(flexPanelRef, (event) => {
@@ -231,7 +232,11 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
     if (variant === 'flexible') {
         return (
             <Box position="relative">
-                <ButtonGroupWrap ref={anchorRef} style={{ visibility: 'hidden', height: defaultTabSize }} />
+                <ButtonGroupWrap
+                    maskVariant={variant}
+                    ref={anchorRef}
+                    style={{ visibility: 'hidden', height: defaultTabSize }}
+                />
                 <FlexibleButtonGroupPanel isOpen={open && isTabsOverflow} ref={flexPanelRef}>
                     <FlexButtonGroupWrap
                         maskVariant={variant}
@@ -241,16 +246,20 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
                         ref={innerRef}
                         role="tablist">
                         {flexibleTabs}
-                        <ArrowButtonWrap
-                            variant="text"
-                            size="small"
-                            aria-controls={open ? 'split-button-menu' : undefined}
-                            aria-expanded={open ? 'true' : undefined}
-                            aria-label="select tabs list"
-                            aria-haspopup="menu"
-                            onClick={() => handleToggle(!open)}>
-                            <ArrowBackIosNewIconWrap sx={{ transform: open ? 'rotate(90deg)' : 'rotate(270deg)' }} />
-                        </ArrowButtonWrap>
+                        {isTabsOverflow && (
+                            <ArrowButtonWrap
+                                variant="text"
+                                size="small"
+                                aria-controls={open ? 'split-button-menu' : undefined}
+                                aria-expanded={open ? 'true' : undefined}
+                                aria-label="select tabs list"
+                                aria-haspopup="menu"
+                                onClick={() => handleToggle(!open)}>
+                                <ArrowBackIosNewIconWrap
+                                    sx={{ transform: open ? 'rotate(90deg)' : 'rotate(270deg)' }}
+                                />
+                            </ArrowButtonWrap>
+                        )}
                     </FlexButtonGroupWrap>
                 </FlexibleButtonGroupPanel>
             </Box>

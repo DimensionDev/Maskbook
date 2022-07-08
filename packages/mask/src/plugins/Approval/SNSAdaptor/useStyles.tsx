@@ -10,7 +10,7 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
         dialogContent: {
             width: 600,
             background: theme.palette.maskColor.bottom,
-            padding: '12px 0px 0px',
+            padding: 0,
             margin: 'auto',
             overflowX: 'hidden',
         },
@@ -39,7 +39,6 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
         },
         abstractTabWrapper: {
             width: '100%',
-            paddingTop: theme.spacing(1),
             paddingBottom: theme.spacing(2),
         },
         tab: {
@@ -65,7 +64,7 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
             flexGrow: 1,
             width: 565,
             paddingTop: 0,
-            marginLeft: 18,
+            marginLeft: 16,
             display: 'flex',
             flexDirection: 'column',
         },
