@@ -38,13 +38,14 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         backgroundColor: parseColor(theme.palette.maskColor?.bottom).setAlpha(0.8).toRgbString(),
-        boxShadow: `0 0 20px ${parseColor(theme.palette.maskColor?.bottom).setAlpha(0.05).toRgbString()}`,
+        boxShadow: `0 0 20px ${parseColor(theme.palette.maskColor?.highlight).setAlpha(0.05).toRgbString()}`,
         backdropFilter: 'blur(16px)',
         padding: theme.spacing(2),
         borderRadius: '0 0 12px 12px',
         alignItems: 'center',
         justifyContent: 'space-between',
         flex: 1,
+        maxHeight: 40,
     },
     wallet: {
         display: 'flex',
@@ -53,7 +54,7 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
     },
     description: {
-        marginLeft: 4,
+        marginLeft: 11,
     },
     walletName: {
         display: 'flex',
@@ -142,6 +143,10 @@ export function PluginWalletStatusBar({
         WalletMessages.events.selectProviderDialogUpdated,
     )
 
+    const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletStatusDialogUpdated,
+    )
+
     const pendingTransactions = useRecentTransactions(currentPluginId, TransactionStatusType.NOT_DEPEND)
 
     useLayoutEffect(() => {
@@ -200,7 +205,12 @@ export function PluginWalletStatusBar({
                             <LinkOutIcon className={classes.linkIcon} />
                         </Link>
                         {pendingTransactions.length ? (
-                            <span className={classes.pending}>
+                            <span
+                                className={classes.pending}
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    openWalletStatusDialog()
+                                }}>
                                 {t('wallet_status_bar_pending')}
                                 <CircularProgress thickness={6} size={12} className={classes.progress} />
                             </span>

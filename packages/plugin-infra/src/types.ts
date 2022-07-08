@@ -917,6 +917,7 @@ export interface IdentityResolved {
  * All integrated Plugin IDs
  */
 export enum PluginId {
+    Approval = 'com.maskbook.approval',
     Avatar = 'com.maskbook.avatar',
     ArtBlocks = 'io.artblocks',
     Collectible = 'com.maskbook.collectibles',

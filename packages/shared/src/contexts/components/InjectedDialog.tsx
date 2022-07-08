@@ -70,6 +70,10 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
         },
     },
     paper: clean ? { width: 'auto', backgroundImage: 'none' } : {},
+    tabs: {
+        display: 'flex',
+        gridColumn: '3 span',
+    },
 }))
 
 export type InjectedDialogClassKey =
@@ -124,8 +128,8 @@ export function InjectedDialog(props: InjectedDialogProps) {
         titleBarIconStyle,
         onClose,
         title,
+        titleTabs,
         titleTail = null,
-        titleTabs = null,
         disableTitleBorder,
         isOpenFromApplicationBoard,
         ...rest

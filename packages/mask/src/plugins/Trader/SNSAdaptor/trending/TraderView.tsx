@@ -86,7 +86,7 @@ const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
             : {},
 
         cardHeader: {
-            marginBottom: '-44px',
+            marginBottom: '-36px',
         },
         nftItems: {
             height: 530,

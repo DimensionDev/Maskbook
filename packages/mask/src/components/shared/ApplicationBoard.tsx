@@ -32,7 +32,7 @@ const useStyles = makeStyles<{ shouldScroll: boolean; isCarouselReady: boolean }
             gridGap: 10,
             justifyContent: 'space-between',
             height: 320,
-            width: props.shouldScroll ? 589 : 576,
+            width: props.shouldScroll ? 583 : 576,
             '::-webkit-scrollbar': {
                 backgroundColor: 'transparent',
                 width: 20,
@@ -41,7 +41,7 @@ const useStyles = makeStyles<{ shouldScroll: boolean; isCarouselReady: boolean }
                 borderRadius: '20px',
                 width: 5,
                 border: '7px solid rgba(0, 0, 0, 0)',
-                backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+                backgroundColor: theme.palette.maskColor.secondaryLine,
                 backgroundClip: 'padding-box',
             },
             [smallQuery]: {
@@ -150,7 +150,6 @@ function ApplicationBoardContent(props: Props) {
                 .filter((x) => Boolean(x.entry.RenderEntryComponent)),
         [snsAdaptorPlugins, currentWeb3Network, chainId, account],
     )
-
     const recommendFeatureAppList = applicationList
         .filter((x) => x.entry.recommendFeature)
         .sort((a, b) => (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0))
@@ -315,7 +314,12 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
     } = usePersonaAgainstSNSConnectStatus()
 
     useEffect(() => {
-        return MaskMessages.events.currentPersonaIdentifier.on(retry)
+        retry()
+        nextIDConnectStatus.reset()
+        return MaskMessages.events.currentPersonaIdentifier.on(() => {
+            retry()
+            nextIDConnectStatus.reset()
+        })
     }, [])
 
     const { isSNSConnectToCurrentPersona, currentPersonaPublicKey, currentSNSConnectedPersonaPublicKey } =

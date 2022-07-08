@@ -165,8 +165,12 @@ export interface NetworkDescriptor<ChainId, NetworkType> {
     icon: URL
     /** The network icon in fixed color */
     iconColor: Color
+    /** The background gradient color for relative network bar */
+    backgroundGradient?: string
     /** The network name */
     name: string
+    /** The network short name */
+    shortName?: string
     /** Is a mainnet network */
     isMainnet: boolean
 }
@@ -426,6 +430,8 @@ export interface TransactionDescriptor<ChainId, Transaction> {
     title: string
     /** a human-readable description. */
     description?: string
+    /** a human-readable description for successful transaction. */
+    successfulDescription?: string
     /** The original transaction object */
     _tx: Transaction
 }

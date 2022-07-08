@@ -1,11 +1,12 @@
 import { first, last } from 'lodash-unified'
 import { formatBalance, TransactionContext } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId, TransactionParameter } from '@masknet/web3-shared-evm'
 import type { TransactionDescriptor } from '../types'
 import { Web3StateSettings } from '../../../settings'
 
 export class SwapDescriptor implements TransactionDescriptor {
-    async compute(context: TransactionContext<ChainId>) {
+    async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
+        const context = context_ as TransactionContext<ChainId, string | undefined>
         if (!context.methods?.find((x) => x.name)) return
 
         const connection = await Web3StateSettings.value.Connection?.getConnection?.({

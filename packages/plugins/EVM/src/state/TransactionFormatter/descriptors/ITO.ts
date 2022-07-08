@@ -1,11 +1,13 @@
 import { i18NextInstance } from '@masknet/shared-base'
 import { TransactionContext, isSameAddress, formatBalance } from '@masknet/web3-shared-base'
-import { ChainId, getITOConstants } from '@masknet/web3-shared-evm'
+import { ChainId, getITOConstants, TransactionParameter } from '@masknet/web3-shared-evm'
 import { Web3StateSettings } from '../../../settings'
 import type { TransactionDescriptor } from '../types'
 
 export class ITODescriptor implements TransactionDescriptor {
-    async compute(context: TransactionContext<ChainId>) {
+    async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
+        const context = context_ as TransactionContext<ChainId, string | undefined>
+
         const { ITO2_CONTRACT_ADDRESS } = getITOConstants(context.chainId)
         if (!isSameAddress(context.to, ITO2_CONTRACT_ADDRESS)) return
 

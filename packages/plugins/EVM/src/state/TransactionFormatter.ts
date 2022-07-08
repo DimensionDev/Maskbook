@@ -31,6 +31,7 @@ import { BaseTransactionDescriptor } from './TransactionFormatter/descriptors/Ba
 import { ITODescriptor } from './TransactionFormatter/descriptors/ITO'
 import { RedPacketDescriptor } from './TransactionFormatter/descriptors/RedPacket'
 import { ERC20Descriptor } from './TransactionFormatter/descriptors/ERC20'
+import { ERC721Descriptor } from './TransactionFormatter/descriptors/ERC721'
 import { SwapDescriptor } from './TransactionFormatter/descriptors/Swap'
 
 export class TransactionFormatter extends TransactionFormatterState<ChainId, TransactionParameter, Transaction> {
@@ -42,6 +43,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
             new ITODescriptor(),
             new RedPacketDescriptor(),
             new ERC20Descriptor(),
+            new ERC721Descriptor(),
             new SwapDescriptor(),
             new BaseTransactionDescriptor(),
         ],
