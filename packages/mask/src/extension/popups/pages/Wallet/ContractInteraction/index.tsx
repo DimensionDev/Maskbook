@@ -204,7 +204,7 @@ const ContractInteraction = memo(() => {
                             isNativeTokenInteraction: false,
                             typeName: t('popups_wallet_contract_interaction_transfer'),
                             tokenAddress: request.computedPayload?.to,
-                            to: parameters?.to,
+                            to: parameters?.to as string,
                             gas: request.computedPayload?.gas,
                             gasPrice: request.computedPayload?.gasPrice,
                             maxFeePerGas: request.computedPayload?.maxFeePerGas,

@@ -1,11 +1,12 @@
 import { TransactionContext, isZero } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId, TransactionParameter } from '@masknet/web3-shared-evm'
 import type { TransactionDescriptor } from '../types'
 import { getTokenAmountDescription } from '../utils'
 import { Web3StateSettings } from '../../../settings'
 
 export class ERC20Descriptor implements TransactionDescriptor {
-    async compute(context: TransactionContext<ChainId>) {
+    async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
+        const context = context_ as TransactionContext<ChainId, string | undefined>
         if (!context.methods?.length) return
 
         const connection = await Web3StateSettings.value.Connection?.getConnection?.({
@@ -30,7 +31,7 @@ export class ERC20Descriptor implements TransactionDescriptor {
                         chainId: context.chainId,
                         title: 'Approve',
                         description: `Approve spend ${getTokenAmountDescription(
-                            parameters?.value as string,
+                            parameters?.value,
                             await connection?.getFungibleToken(context.to ?? '', {
                                 chainId: context.chainId,
                             }),
@@ -43,7 +44,7 @@ export class ERC20Descriptor implements TransactionDescriptor {
                     chainId: context.chainId,
                     title: 'Transfer Token',
                     description: `Transfer token ${getTokenAmountDescription(
-                        parameters?.value as string,
+                        parameters?.value,
                         await connection?.getFungibleToken(context.to ?? '', {
                             chainId: context.chainId,
                         }),
