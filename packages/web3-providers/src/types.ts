@@ -531,7 +531,7 @@ export namespace TwitterBaseAPI {
         >
         uploadUserAvatar: (screenName: string, image: Blob | File) => Promise<TwitterResult>
         updateProfileImage: (screenName: string, media_id_str: string) => Promise<AvatarInfo | undefined>
-        getUserByScreenName: (screenName: string) => Promise<User>
+        getUserByScreenName: (screenName: string) => Promise<User | null>
     }
 }
 
