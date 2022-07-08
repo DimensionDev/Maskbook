@@ -127,7 +127,7 @@ export function ImageManagement(props: ImageManagementProps) {
                         ))
                     ) : (
                         <Box className={classes.emptyItem}>
-                            <Empty content={hasConnectedWallets ? t.open_wallet() : t.add_wallet()} />
+                            <Empty content={hasConnectedWallets ? t.open_wallet() : t.add_wallet_to_connected()} />
                         </Box>
                     )}
                     {!hasConnectedWallets && (
