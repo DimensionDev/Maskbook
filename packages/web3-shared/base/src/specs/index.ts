@@ -442,12 +442,15 @@ export interface TransactionContext<ChainId, Parameter = string | undefined> {
     value: string
     /** code to deploy */
     code?: string
-    /** method name */
-    name?: string
-    /** actual parameters */
-    parameters?: {
-        [key: string]: Parameter
-    }
+    /** methods */
+    methods?: Array<{
+        /** name */
+        name?: string
+        /** actual parameters */
+        parameters?: {
+            [key: string]: Parameter
+        }
+    }>
 }
 
 export interface AddressName {
