@@ -36,6 +36,7 @@ interface WalletStatusBarProps extends PropsWithChildren<{}> {
 
 const useStyles = makeStyles()((theme) => ({
     root: {
+        boxSizing: 'content-box',
         display: 'flex',
         backgroundColor: parseColor(theme.palette.maskColor.bottom).setAlpha(0.8).toRgbString(),
         boxShadow: `0 0 20px ${parseColor(theme.palette.maskColor.highlight).setAlpha(0.05).toRgbString()}`,
