@@ -9,10 +9,13 @@ import { PLUGIN_ID } from '../constants'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { NFTPage } from './NFTPage'
 import { SocialAddressType } from '@masknet/web3-shared-base'
+import { setupContext } from '../context'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal) {},
+    init(signal, context) {
+        setupContext(context)
+    },
     PostInspector: function Component() {
         const links = usePostInfoDetails.mentionedLinks()
         const link = uniq(links).find(checkUrl)
