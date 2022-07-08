@@ -89,7 +89,10 @@ const ConnectWalletPage = memo(() => {
                     return
                 }
 
-                if (!wallets.length) navigate(PopupRoutes.Wallet, { replace: true })
+                if (!wallets.length) {
+                    navigate(PopupRoutes.Wallet, { replace: true })
+                    return
+                }
 
                 navigate(
                     urlcat(PopupRoutes.SelectWallet, {
