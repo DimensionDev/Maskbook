@@ -123,7 +123,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     let total =
         isNativeToken &&
         new BigNumber(balance).isLessThan(
-            new BigNumber(settings?.total ?? '0').plus(new BigNumber(estimateGasFee ?? '')),
+            new BigNumber(settings?.total ?? '0').plus(new BigNumber(estimateGasFee ?? '0')),
         )
             ? new BigNumber(settings?.total ?? '0').minus(estimateGasFee ?? '0').toFixed()
             : (settings?.total as string)
