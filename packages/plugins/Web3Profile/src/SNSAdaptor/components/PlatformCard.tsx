@@ -72,7 +72,7 @@ export function PlatformCard(props: PlatformCardProps) {
                     <div style={{ display: 'flex' }}>
                         <PlatformAvatar
                             networkIcon={isCurrent ? currentPersona?.avatar : account?.linkedProfile?.avatar}
-                            providerIcon={new URL('../assets/twitter.png', import.meta.url)}
+                            providerIcon={new URL('../assets/Twitter.png', import.meta.url)}
                             size={36}
                         />
                         <div style={{ marginLeft: '20px' }}>
