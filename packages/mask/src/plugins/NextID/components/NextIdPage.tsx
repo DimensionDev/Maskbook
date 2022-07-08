@@ -221,21 +221,6 @@ export function NextIdPage({ persona }: NextIdPageProps) {
         )
     }
 
-    if (!isAccountVerified && isOwn) {
-        return (
-            <Box>
-                <Box className={classes.tip}>
-                    <Typography className={classes.verifyIntro}>{t.verify_Twitter_ID_intro()}</Typography>
-                    <Typography className={classes.verifyDetail}>{t.verify_Twitter_ID()}</Typography>
-                </Box>
-
-                <Stack justifyContent="center" direction="row" mt="24px">
-                    <Button onClick={onVerify}>{t.verify_Twitter_ID_button()}</Button>
-                </Stack>
-            </Box>
-        )
-    }
-
     return (
         <>
             <Box className={classes.container}>
