@@ -214,9 +214,9 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
             }),
         })
         const cacheKey = `${bearerToken}/${csrfToken}/${url}`
-        let fetchingTask: Promise<Response> | undefined = cache.get(cacheKey)
-        if (!fetchingTask) {
-            fetchingTask = fetch(url, {
+        const fetchingTask: Promise<Response> =
+            cache.get(cacheKey) ??
+            fetch(url, {
                 headers: {
                     authorization: `Bearer ${bearerToken}`,
                     'x-csrf-token': csrfToken,
@@ -226,8 +226,8 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
                     referer: `https://twitter.com/${screenName}`,
                 },
             })
-            cache.set(cacheKey, fetchingTask)
-        }
+
+        cache.set(cacheKey, fetchingTask)
         const response = (await fetchingTask).clone()
         if (!response.ok) {
             cache.delete(cacheKey)
