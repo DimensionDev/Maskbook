@@ -1,5 +1,5 @@
 import { GearSettingsIcon } from '@masknet/icons'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles, useStylesExtends, ShadowRootTooltip } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useI18N } from '../../../utils'
 import { ApplicationSmallIcon } from '../assets/application'
@@ -32,20 +32,23 @@ const useStyles = makeStyles()((theme) => ({
 interface NFTAvatarButtonProps extends withClasses<'root' | 'text' | 'icon'> {
     onClick: () => void
     showSetting?: boolean
+    tooltip?: string | React.ReactElement
 }
 
 export function NFTAvatarButton(props: NFTAvatarButtonProps) {
     const classes = useStylesExtends(useStyles(), props)
-    const { onClick } = props
+    const { onClick, tooltip } = props
     const { t } = useI18N()
 
     return (
-        <div className={classes.root} onClick={onClick}>
-            <ApplicationSmallIcon className={classes.icon} />
-            <Typography variant="body1" className={classes.text}>
-                <span style={{ marginLeft: 4, fontWeight: 600 }}>{t('nft_avatar')}</span>
-                {props.showSetting ? <GearSettingsIcon className={classes.setIcon} /> : null}
-            </Typography>
-        </div>
+        <ShadowRootTooltip title={<Typography>{tooltip}</Typography>}>
+            <div className={classes.root} onClick={onClick}>
+                <ApplicationSmallIcon className={classes.icon} />
+                <Typography variant="body1" className={classes.text}>
+                    <span style={{ marginLeft: 4, fontWeight: 600 }}>{t('nft_avatar')}</span>
+                    {props.showSetting ? <GearSettingsIcon className={classes.setIcon} /> : null}
+                </Typography>
+            </div>
+        </ShadowRootTooltip>
     )
 }

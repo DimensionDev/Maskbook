@@ -1,11 +1,12 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useState, useEffect, useCallback } from 'react'
+import { Trans } from 'react-i18next'
 import { useNextIDConnectStatus } from '../../../../components/DataSource/useNextID'
 import { usePersonaConnectStatus } from '../../../../components/DataSource/usePersonaConnectStatus'
 import { NFTAvatarDialog } from '../../../../plugins/Avatar/Application/NFTAvatarsDialog'
 import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
-import { startWatch, createReactRootShadowed, useLocationChange } from '../../../../utils'
+import { startWatch, createReactRootShadowed, useLocationChange, useI18N } from '../../../../utils'
 import { searchEditProfileSelector } from '../../utils/selector'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
@@ -51,7 +52,7 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
         color: '',
     })
     const [open, setOpen] = useState(false)
-
+    const { t } = useI18N()
     const personaConnectStatus = usePersonaConnectStatus()
     const nextIDConnectStatus = useNextIDConnectStatus()
 
@@ -92,7 +93,19 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     const { classes } = useStyles(style)
     return (
         <>
-            <NFTAvatarButton classes={{ root: classes.root, text: classes.text }} onClick={clickHandler} />
+            <NFTAvatarButton
+                tooltip={
+                    !personaConnectStatus.hasPersona || !personaConnectStatus.connected ? (
+                        t('application_tooltip_hint_create_persona')
+                    ) : !nextIDConnectStatus.isVerified ? (
+                        t('application_tooltip_hint_connect_persona')
+                    ) : (
+                        <Trans i18nKey="application_hint" />
+                    )
+                }
+                classes={{ root: classes.root, text: classes.text }}
+                onClick={clickHandler}
+            />
             <NFTAvatarDialog open={open} onClose={() => setOpen(false)} />
         </>
     )
