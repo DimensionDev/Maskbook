@@ -15,7 +15,7 @@ export function setupWatcherForTwitter() {
     const update = () => {
         const newFirstSlug = getFirstSlug()
         // reset to void wrong value
-        if (!firstSlug || apply(includes, TWITTER_RESERVED_SLUGS, [firstSlug])) {
+        if (!newFirstSlug || apply(includes, TWITTER_RESERVED_SLUGS, [newFirstSlug])) {
             const event = new no_xray_CustomEvent('scenechange', {
                 detail: { scene: 'unknown' },
             }) as WindowEventMap['scenechange']
