@@ -125,10 +125,10 @@ export function FindTrumanDialog(props: FindTrumanDialogProps) {
                                 color="textSecondary"
                                 fontSize={14}
                                 fontWeight={700}>
-                                {i18N('plugin_powered_by')}
+                                {i18N('plugin_findtruman_powered_by')}
                             </Typography>
                             <Typography variant="body1" color="textPrimary" fontSize={14} fontWeight={700}>
-                                {i18N('plugin_find_truman')}
+                                {i18N('plugin_findtruman_find_truman')}
                             </Typography>
                             <img
                                 className={classes.icon}
