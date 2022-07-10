@@ -10,10 +10,9 @@ import { FindTrumanContext } from '../context'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { useConst } from './hooks/useConst'
 import IntroductionPanel from './IntroductionPanel'
-import { PluginWalletStatusBar } from '../../../utils'
+import { PluginWalletStatusBar, useI18N } from '../../../utils'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useI18N } from '../locales'
 
 const useStyles = makeStyles()((theme, props) => ({
     wrapper: {
@@ -77,7 +76,7 @@ interface FindTrumanDialogProps {
 }
 
 export function FindTrumanDialog(props: FindTrumanDialogProps) {
-    const i18N = useI18N()
+    const { t: i18N } = useI18N()
     const { open, onClose } = props
     const { classes } = useStyles()
     const account = useAccount()
@@ -126,10 +125,10 @@ export function FindTrumanDialog(props: FindTrumanDialogProps) {
                                 color="textSecondary"
                                 fontSize={14}
                                 fontWeight={700}>
-                                {i18N.powered_by()}
+                                {i18N('plugin_findtruman_powered_by')}
                             </Typography>
                             <Typography variant="body1" color="textPrimary" fontSize={14} fontWeight={700}>
-                                FindTruman
+                                {i18N('plugin_findtruman_find_truman')}
                             </Typography>
                             <img
                                 className={classes.icon}
