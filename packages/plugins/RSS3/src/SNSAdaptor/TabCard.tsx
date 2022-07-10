@@ -123,8 +123,7 @@ export function TabCard({ type, socialAddressList, persona }: TabCardProps) {
                         {uniqBy(socialAddressList ?? [], (x) => x.address.toLowerCase()).map((x) => {
                             return (
                                 <MenuItem key={x.address} value={x.address} onClick={() => onSelect(x)}>
-                                    {selectedAddress?.type === SocialAddressType.KV ||
-                                    selectedAddress?.type === SocialAddressType.ADDRESS ? (
+                                    {x?.type === SocialAddressType.KV || x?.type === SocialAddressType.ADDRESS ? (
                                         <ReversedAddress address={x.address} />
                                     ) : (
                                         x.label
