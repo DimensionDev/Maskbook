@@ -60,8 +60,8 @@ import { getReceiptStatus } from './utils'
 import { Web3StateSettings } from '../../settings'
 import { getSubscriptionCurrentValue, PartialRequired } from '@masknet/shared-base'
 
-const EMPTY_STRING = () => Promise.resolve('')
-const ZERO = () => Promise.resolve(0)
+const EMPTY_STRING = Promise.resolve('')
+const ZERO = Promise.resolve(0)
 
 export function isReadOnlyMethod(method: EthereumMethodType) {
     return [
