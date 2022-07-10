@@ -11,7 +11,7 @@ import {
     SnackbarAction,
     OptionsObject,
 } from 'notistack'
-import { Typography, IconButton } from '@mui/material'
+import { Typography, IconButton, alpha } from '@mui/material'
 import classnames from 'classnames'
 import { Close as CloseIcon } from '@mui/icons-material'
 import WarningIcon from '@mui/icons-material/Warning'
@@ -64,15 +64,15 @@ to {
         },
     }
     const success = {
-        backgroundColor: MaskColorVar.greenMain,
+        backgroundColor: theme.palette.maskColor.success,
         color: '#ffffff',
         [`& .${refs.title}`]: {
             color: 'inherit',
         },
         [`& .${refs.message}`]: {
-            color: MaskColorVar.normalTextLight,
+            color: alpha(theme.palette.maskColor.white, 0.8),
             '& svg': {
-                color: MaskColorVar.white,
+                color: theme.palette.maskColor.white,
             },
         },
     } as const

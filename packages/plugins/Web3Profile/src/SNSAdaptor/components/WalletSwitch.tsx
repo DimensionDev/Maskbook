@@ -45,7 +45,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     linkIcon: {
-        fill: theme.palette.maskColor.second,
+        color: theme.palette.maskColor.second,
         height: 15,
         width: 15,
         marginTop: '1px',
