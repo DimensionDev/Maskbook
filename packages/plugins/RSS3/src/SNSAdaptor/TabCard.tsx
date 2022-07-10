@@ -108,7 +108,10 @@ export function TabCard({ type, socialAddressList, persona }: TabCardProps) {
                         className={classes.button}>
                         {selectedAddress?.type === SocialAddressType.KV ||
                         selectedAddress?.type === SocialAddressType.ADDRESS ? (
-                            <ReversedAddress address={selectedAddress.address} />
+                            <ReversedAddress
+                                address={selectedAddress.address}
+                                pluginId={selectedAddress.networkSupporterPluginID}
+                            />
                         ) : (
                             selectedAddress.label
                         )}
@@ -124,7 +127,7 @@ export function TabCard({ type, socialAddressList, persona }: TabCardProps) {
                             return (
                                 <MenuItem key={x.address} value={x.address} onClick={() => onSelect(x)}>
                                     {x?.type === SocialAddressType.KV || x?.type === SocialAddressType.ADDRESS ? (
-                                        <ReversedAddress address={x.address} />
+                                        <ReversedAddress address={x.address} pluginId={x.networkSupporterPluginID} />
                                     ) : (
                                         x.label
                                     )}
