@@ -185,7 +185,13 @@ function ApplicationBoardContent(props: Props) {
                     ))}
                 </section>
             ) : (
-                <div className={classes.placeholderWrapper}>
+                <div
+                    className={cx(
+                        classes.placeholderWrapper,
+                        recommendFeatureAppList.length > 2 && isCarouselReady() && isHoveringCarousel
+                            ? classes.applicationWrapperWithCarousel
+                            : '',
+                    )}>
                     <Typography className={classes.placeholder}>
                         {t('application_display_tab_plug_app-unlisted-placeholder')}
                     </Typography>
