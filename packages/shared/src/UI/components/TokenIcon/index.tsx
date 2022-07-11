@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { first } from 'lodash-unified'
-import { Avatar, AvatarProps } from '@mui/material'
+import { Avatar, AvatarProps, useTheme } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import NO_IMAGE_COLOR from './constants'
 import { useChainId, useWeb3Hub, Web3Helper } from '@masknet/plugin-infra/web3'
@@ -32,7 +32,7 @@ export function TokenIcon(props: TokenIconProps) {
     const hub = useWeb3Hub(props.pluginID)
     const { value } = useAsyncRetry(async () => {
         const logoURLs = await hub?.getFungibleTokenIconURLs?.(chainId, address).catch(() => [])
-        const key = address ? [chainId, address].join('/') : [chainId, address, logoURL].join('/')
+        const key = address ? [chainId, address].join('/') : logoURL
         return {
             key,
             urls: [logoURL, ...(logoURLs ?? [])].filter(Boolean) as string[],
@@ -67,13 +67,17 @@ export const TokenIconUI = memo<TokenIconUIProps>((props) => {
         : undefined
 
     const classes = useStylesExtends(useStyles(), props)
+    const theme = useTheme()
 
     return (
         <Avatar
             className={classes.icon}
             src={logoURL}
-            style={{ backgroundColor: logoURL ? undefined : defaultBackgroundColor }}
-            {...AvatarProps}>
+            {...AvatarProps}
+            sx={{
+                ...AvatarProps?.sx,
+                backgroundColor: logoURL ? theme.palette.common.white : defaultBackgroundColor,
+            }}>
             {name?.slice(0, 1).toUpperCase()}
         </Avatar>
     )
