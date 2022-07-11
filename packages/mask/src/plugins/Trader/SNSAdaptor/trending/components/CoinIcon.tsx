@@ -21,7 +21,7 @@ export const CoinIcon: FC<CoinIconProps> = ({ type, address, logoUrl, name, size
             },
         },
     }
-    if (address && type === TrendingCoinType.Fungible) return <TokenIcon {...sharedProps} address={address} />
-    if (type === TrendingCoinType.NonFungible) return <TokenIcon {...sharedProps} address="" logoURL={logoUrl} />
-    return null
+    if (address && type === TrendingCoinType.Fungible)
+        return <TokenIcon {...sharedProps} address={address} logoURL={logoUrl} />
+    return <TokenIcon {...sharedProps} address={address ?? ''} logoURL={logoUrl} />
 }

@@ -7,11 +7,10 @@ import NO_IMAGE_COLOR from './constants'
 import { useChainId, useWeb3Hub, Web3Helper } from '@masknet/plugin-infra/web3'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { useImageBase64 } from '../../../hooks/useImageBase64'
+import { useAccessibleUrl } from '../../../hooks/useImageBase64'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
-        backgroundColor: theme.palette.common.white,
         margin: 0,
     },
 }))
@@ -31,18 +30,25 @@ export function TokenIcon(props: TokenIconProps) {
 
     const chainId = useChainId(props.pluginID, props.chainId)
     const hub = useWeb3Hub(props.pluginID)
-
     const { value } = useAsyncRetry(async () => {
-        const logoURLs = await hub?.getFungibleTokenIconURLs?.(chainId, address)
+        const logoURLs = await hub?.getFungibleTokenIconURLs?.(chainId, address).catch(() => [])
+        const key = address ? [chainId, address].join('/') : [chainId, address, logoURL].join('/')
         return {
-            key: [chainId, address, logoURL].join('/'),
+            key,
             urls: [logoURL, ...(logoURLs ?? [])].filter(Boolean) as string[],
         }
     }, [chainId, address, logoURL, hub])
     const { urls = EMPTY_LIST, key } = value ?? {}
-    const base64 = useImageBase64(key, first(urls))
+    const accessibleUrl = useAccessibleUrl(key, first(urls))
 
-    return <TokenIconUI logoURL={isERC721 ? logoURL : base64} AvatarProps={AvatarProps} classes={classes} name={name} />
+    return (
+        <TokenIconUI
+            logoURL={isERC721 ? logoURL : accessibleUrl}
+            AvatarProps={AvatarProps}
+            classes={classes}
+            name={name}
+        />
+    )
 }
 
 export interface TokenIconUIProps extends withClasses<'icon'> {
