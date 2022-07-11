@@ -18,7 +18,7 @@ import { FormattedBalance, useOpenShareTxDialog } from '@masknet/shared'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../locales'
 import { RedPacketSettings, useCreateCallback, useCreateParams } from './hooks/useCreateCallback'
-import { useGasConfig } from '@masknet/plugin-infra/web3-evm'
+import { useTransactionValue } from '@masknet/plugin-infra/web3-evm'
 import { NetworkPluginID, formatBalance, isSameAddress } from '@masknet/web3-shared-base'
 import type { RedPacketJSONPayload, RedPacketRecord } from '../types'
 import { RedPacketRPC } from '../messages'
@@ -111,25 +111,12 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
 
     // #region amount minus estimate gas fee
-    const { gasPrice } = useGasConfig(chainId)
     const { value: createParams } = useCreateParams(settings!, contract_version, publicKey)
-    const estimateGasFee = !createParams?.gas
-        ? undefined
-        : gasPrice && gasPrice !== '0'
-        ? new BigNumber(gasPrice).multipliedBy(createParams.gas * 1.5).toFixed()
-        : undefined
-
     const isNativeToken = isSameAddress(settings?.token?.address, nativeTokenAddress)
-    let total =
-        isNativeToken &&
-        new BigNumber(balance).isLessThan(
-            new BigNumber(settings?.total ?? '0').plus(new BigNumber(estimateGasFee ?? '0')),
-        )
-            ? new BigNumber(settings?.total ?? '0').minus(estimateGasFee ?? '0').toFixed()
-            : (settings?.total as string)
+    const { transactionValue, estimateGasFee } = useTransactionValue(settings?.total, createParams?.gas)
     const isWaitGasBeMinus = (!estimateGasFee || loadingBalance) && isNativeToken
-    const isBalanceInsufficient = new BigNumber(total).isLessThanOrEqualTo(0)
-    total = isBalanceInsufficient ? '0' : total
+    const isBalanceInsufficient = new BigNumber(transactionValue).isLessThanOrEqualTo(0)
+    const total = isNativeToken ? (isBalanceInsufficient ? '0' : transactionValue) : (settings?.total as string)
     const formatTotal = formatBalance(total, settings?.token?.decimals ?? 18, isNativeToken ? 3 : 0)
     const [{ loading: isCreating }, createCallback] = useCreateCallback(
         { ...settings!, total },
