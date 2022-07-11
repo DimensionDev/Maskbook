@@ -1,6 +1,7 @@
 import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import { isNil } from 'lodash-unified'
 import { defer } from '@dimensiondev/kit'
 import {
     ChainId,
@@ -13,7 +14,6 @@ import {
 import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper'
 import { nativeAPI } from '../../../../shared/native-rpc'
 import { WalletRPC } from '../messages'
-import { isNil } from 'lodash-unified'
 
 enum JSON_RPC_ERROR_CODE {
     INVALID_REQUEST = -32600,

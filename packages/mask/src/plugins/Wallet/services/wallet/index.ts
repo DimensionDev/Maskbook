@@ -123,7 +123,7 @@ export async function signTransaction(address: string, config: Transaction) {
         amount: (config.value as string) ?? null,
         gas_limit: config.gas ? toHex(config.gas) : null,
         gas_price: config.gasPrice?.toString() ?? null,
-        chain_id: config.chainId,
+        chain_id: config.chainId ? config.chainId.toString() : null,
         max_fee_per_gas: (config.maxFeePerGas as string | undefined) ?? null,
         max_inclusion_fee_per_gas: (config.maxFeePerGas as string | undefined) ?? null,
         nonce: config.nonce ? toHex(config.nonce) : null,
