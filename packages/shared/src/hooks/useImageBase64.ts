@@ -29,7 +29,7 @@ export function useAccessibleUrl(
     },
 ) {
     const fetch = options?.fetch ?? globalThis.fetch
-    const [avaliableUrl, setAvaliableUrl] = useState(() => {
+    const [availableUrl, setAvailableUrl] = useState(() => {
         const hit = cache.get(key)
         return typeof hit === 'string' ? hit : ''
     })
@@ -38,10 +38,10 @@ export function useAccessibleUrl(
         if (!key) return
         const hit = cache.get(key)
         if (typeof hit === 'string') {
-            setAvaliableUrl(hit)
+            setAvailableUrl(hit)
             return
         } else if (hit instanceof Promise) {
-            setAvaliableUrl(await responseToBase64((await hit).clone()))
+            setAvailableUrl(await responseToBase64((await hit).clone()))
             return
         }
 
@@ -57,8 +57,8 @@ export function useAccessibleUrl(
         const blob = await response.blob()
         const dataURL = await readAsDataURL(blob)
         cache.set(key, dataURL)
-        setAvaliableUrl(dataURL)
+        setAvailableUrl(dataURL)
     }, [key, url])
 
-    return avaliableUrl
+    return availableUrl
 }
