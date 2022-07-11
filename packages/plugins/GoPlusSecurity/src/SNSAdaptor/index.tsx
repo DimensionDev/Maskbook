@@ -33,7 +33,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 },
                 name,
                 icon,
-                iconFilterColor,
+                iconFilterColor: '',
                 appBoardSortingDefaultPriority: 14,
                 category: 'dapp',
                 marketListSortingPriority: 16,

@@ -157,10 +157,10 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         isTokenSecurityEnable,
     )
 
+    const isBuyable = !isNFT && transakPluginEnabled && !transakIsMinimalMode && trending.coin.symbol && isAllowanceCoin
     const onBuyButtonClicked = useCallback(() => {
         setBuyDialog({
             open: true,
-            // @ts-ignore
             code: coin.symbol,
             address: account,
         })
@@ -293,7 +293,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                         </Stack>
                     </Stack>
                     <Stack>
-                        {transakPluginEnabled && !transakIsMinimalMode && trending.coin.symbol && isAllowanceCoin ? (
+                        {isBuyable ? (
                             <Button
                                 style={{
                                     background: theme.palette.maskColor.dark,
