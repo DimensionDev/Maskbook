@@ -25,12 +25,7 @@ export function usePersonaNFTAvatar(userId: string, avatarId: string, snsKey: RS
     return useAsyncRetry(async () => {
         if (!userId) return
         const key = `${userId}-${activatedSocialNetworkUI.networkIdentifier}`
-        let v = cache.get(key)
-        if (!v) {
-            cache.set(key, getNFTAvatarForCache(userId, snsKey, avatarId, getNFTAvatar))
-        }
-
-        v = cache.get(key)
+        const v = cache.get(key) ?? cache.set(key, getNFTAvatarForCache(userId, snsKey, avatarId, getNFTAvatar))
         return v
     }, [
         userId,
