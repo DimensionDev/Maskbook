@@ -167,6 +167,7 @@ function ApplicationBoardContent(props: Props) {
         <>
             <ApplicationRecommendArea
                 recommendFeatureAppList={recommendFeatureAppList}
+                isCarouselReady={isCarouselReady}
                 RenderEntryComponent={RenderEntryComponent}
                 isHoveringCarousel={isHoveringCarousel}
                 setIsHoveringCarousel={setIsHoveringCarousel}
@@ -321,6 +322,7 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
     } = usePersonaAgainstSNSConnectStatus()
 
     useEffect(() => {
+        nextIDConnectStatus.reset()
         retry()
         return MaskMessages.events.currentPersonaIdentifier.on(() => {
             retry()
