@@ -1,35 +1,5 @@
+import { TWITTER_RESERVED_SLUGS } from '../../shared'
 import { apply, dispatchEvent, no_xray_CustomEvent } from '../intrinsic'
-
-// Collect from main js of Twitter's web client.
-const RESERVED_SLUGS = [
-    '404',
-    'account',
-    'download',
-    'explore',
-    'follower_requests',
-    'hashtag',
-    'home',
-    'i',
-    'intent',
-    'lists',
-    'login',
-    'logout',
-    'mentions',
-    'messages',
-    'notifications',
-    'personalization',
-    'search',
-    'search-advanced',
-    'search-home',
-    'session',
-    'settings',
-    'share',
-    'signup',
-    'twitterblue',
-    'webview',
-    'welcome',
-    'your_twitter_data',
-]
 
 const { split } = String.prototype
 const { filter, includes } = Array.prototype
@@ -41,11 +11,11 @@ function getFirstSlug() {
 }
 
 export function setupWatcherForTwitter() {
-    let firstSlug = getFirstSlug()
-    window.addEventListener('locationchange', () => {
+    let firstSlug = ''
+    const update = () => {
         const newFirstSlug = getFirstSlug()
         // reset to void wrong value
-        if (!firstSlug || apply(includes, RESERVED_SLUGS, [firstSlug])) {
+        if (!firstSlug || apply(includes, TWITTER_RESERVED_SLUGS, [firstSlug])) {
             const event = new no_xray_CustomEvent('scenechange', {
                 detail: { scene: 'unknown' },
             }) as WindowEventMap['scenechange']
@@ -55,6 +25,7 @@ export function setupWatcherForTwitter() {
         if (firstSlug !== newFirstSlug) {
             firstSlug = newFirstSlug
             const event = new no_xray_CustomEvent('scenechange', {
+                cancelable: true,
                 detail: {
                     scene: 'profile',
                     value: newFirstSlug,
@@ -62,5 +33,6 @@ export function setupWatcherForTwitter() {
             })
             apply(dispatchEvent, window, [event])
         }
-    })
+    }
+    window.addEventListener('locationchange', update)
 }

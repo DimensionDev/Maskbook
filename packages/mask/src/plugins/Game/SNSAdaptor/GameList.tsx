@@ -2,21 +2,12 @@ import { useEffect, useState } from 'react'
 import { Button, List, Typography } from '@mui/material'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { PluginWalletStatusBar } from '../../../utils'
 import { useI18N } from '../locales'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { useGameList } from '../hook'
 import type { GameInfo } from '../types'
 import classNames from 'classnames'
 
 const useStyles = makeStyles()(() => ({
-    statusBar: {
-        position: 'absolute',
-        width: 'calc(100% - 80px)',
-        bottom: 0,
-    },
     title: {
         fontSize: '20px',
         fontWeight: '500',
@@ -104,7 +95,6 @@ const GameList = (props: Props) => {
     const t = useI18N()
     const classes = useStylesExtends(useStyles(), {})
     const gameList = useGameList()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const [descTypes, setDescTypes] = useState<boolean[]>([])
     useEffect(() => {
@@ -160,9 +150,6 @@ const GameList = (props: Props) => {
                         : null}
                 </ul>
             </List>
-            <PluginWalletStatusBar className={classes.statusBar}>
-                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId} />
-            </PluginWalletStatusBar>
         </>
     )
 }

@@ -26,10 +26,13 @@ const useStyles = makeStyles()((theme) => ({
             fontSize: 12,
             lineHeight: '16px',
         },
+        '& input::-webkit-input-placeholder': {
+            color: theme.palette.maskColor.second,
+        },
     },
     input: {
         padding: theme.spacing(1),
-        background: theme.palette.mode === 'dark' ? '#2B2E4C' : '#F6F6F8',
+        background: theme.palette.maskColor.input,
         fontSize: 13,
         lineHeight: '16px',
         borderRadius: 6,
@@ -43,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
         color: 'rgba(255, 255, 255, 0.4)',
     },
     inputFocused: {
-        background: MaskColorVar.primaryBackground,
+        backgroundColor: theme.palette.maskColor.input,
         boxShadow: `0 0 0 2px ${theme.palette.mode === 'dark' ? '#4F5378' : 'rgba(28, 104, 243, 0.2)'}`,
     },
 }))

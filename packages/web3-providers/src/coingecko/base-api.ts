@@ -1,4 +1,4 @@
-import { fetchJSON, getTraderAllAPICachedFlag } from '..'
+import { fetchJSON, getTraderAllAPICachedFlag, TrendingAPI } from '../'
 import { COINGECKO_URL_BASE } from './constants'
 
 // #region get currency
@@ -10,14 +10,8 @@ export async function getAllCurrencies() {
 // #endregion
 
 // #region get coins list
-export interface Coin {
-    id: string
-    name: string
-    symbol: string
-}
-
 export async function getAllCoins() {
-    return fetchJSON<Coin[]>(`${COINGECKO_URL_BASE}/coins/list`, { cache: 'force-cache' })
+    return fetchJSON<TrendingAPI.Coin[]>(`${COINGECKO_URL_BASE}/coins/list`, { cache: 'force-cache' })
 }
 // #endregion
 

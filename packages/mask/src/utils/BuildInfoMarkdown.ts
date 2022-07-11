@@ -1,5 +1,5 @@
 export const buildInfoMarkdown = `## Build info
-- Version: ${globalThis.browser?.runtime?.getManifest?.()?.version ?? process.env.TAG_NAME?.slice(1)}
+- Version: ${globalThis.browser?.runtime?.getManifest?.()?.version ?? process.env.VERSION}
 - NODE_ENV: ${process.env.NODE_ENV}
 - target: ${process.env.engine}
 - build: ${process.env.channel}
@@ -9,5 +9,5 @@ export const buildInfoMarkdown = `## Build info
 
 ## Git (${process.env.TAG_DIRTY ? '*' : ''}):
 
-${process.env.COMMIT_HASH} (${process.env.BRANCH_NAME}) on tag "${process.env.TAG_NAME}"
+${process.env.COMMIT_HASH} (${process.env.BRANCH_NAME})
 ${process.env.REMOTE_URL?.toLowerCase()?.includes('DimensionDev') ? '' : process.env.REMOTE_URL}`

@@ -100,6 +100,7 @@
       "@masknet/plugin-cyberconnect": ["./packages/plugins/CyberConnect/src"],
       "@masknet/plugin-go-plus-security": ["./packages/plugins/GoPlusSecurity/src"],
       "@masknet/plugin-cross-chain-bridge": ["./packages/plugins/CrossChainBridge/src"],
+      "@masknet/plugin-web3-profile": ["./packages/plugins/Web3Profile/src"],
       // @masknet/scripts: insert-here 3
       "@masknet/plugin-wallet": ["./packages/plugins/Wallet/src"]
     },

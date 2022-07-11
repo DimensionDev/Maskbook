@@ -109,9 +109,11 @@ export interface ActionButtonPromiseProps extends ButtonProps {
     waiting: React.ReactChild
     waitingOnClick?: () => ActionButtonPromiseState
     failed?: React.ReactChild
+    failedButtonStyle?: string
     failedOnClick?: 'use executor' | (() => void)
     completeIcon?: React.ReactNode
     failIcon?: React.ReactNode
+    waitingIcon?: React.ReactNode
     onComplete?: () => void
     noUpdateEffect?: boolean
 }
@@ -131,6 +133,8 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
         noUpdateEffect,
         completeIcon = <CheckIcon />,
         failIcon = <ErrorIcon />,
+        waitingIcon = circle,
+        failedButtonStyle,
         ...b
     } = props
 
@@ -165,7 +169,16 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
     }, [executor, noUpdateEffect])
 
     if (state === 'wait')
-        return <ActionButton {...b} loading disabled={!waitingOnClick} children={waiting} onClick={cancel} />
+        return (
+            <ActionButton
+                {...b}
+                startIcon={waitingIcon}
+                loading
+                disabled={!waitingOnClick}
+                children={waiting}
+                onClick={cancel}
+            />
+        )
     if (state === 'complete')
         return (
             <ActionButton
@@ -184,7 +197,7 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
                 disabled={!failClick}
                 startIcon={failIcon}
                 children={failed}
-                className={failClass}
+                className={failedButtonStyle || failClass}
                 onClick={failClick}
             />
         )

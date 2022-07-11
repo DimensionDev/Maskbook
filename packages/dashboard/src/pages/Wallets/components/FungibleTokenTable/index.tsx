@@ -2,6 +2,7 @@ import { memo, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import BigNumber from 'bignumber.js'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
+import { TrendingCoinType } from '@masknet/web3-providers'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
@@ -93,6 +94,7 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
                         id: token.id,
                         name: token.name || '',
                         symbol: token.symbol || '',
+                        type: TrendingCoinType.Fungible,
                         contract_address: token.address,
                         decimals: token.decimals,
                     },

@@ -38,6 +38,8 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: 48,
     },
     tooltip: {
+        background: theme.palette.common.black,
+        color: theme.palette.common.white,
         borderRadius: 4,
         padding: 10,
         maxWidth: 260,
@@ -53,9 +55,11 @@ export interface ChainBoundaryProps<T extends NetworkPluginID> extends withClass
     predicate?: (actualPluginID: NetworkPluginID, actualChainId: Web3Helper.Definition[T]['ChainId']) => boolean
 
     className?: string
+    switchChainWithoutPopup?: boolean
     noSwitchNetworkTip?: boolean
     hiddenConnectButton?: boolean
     children?: React.ReactNode
+    expectedChainIdSwitchedCallback?: () => void
     ActionButtonPromiseProps?: Partial<ActionButtonPromiseProps>
 }
 
@@ -64,6 +68,8 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         noSwitchNetworkTip = true,
         expectedPluginID,
         expectedChainId,
+        expectedChainIdSwitchedCallback,
+        switchChainWithoutPopup = false,
         predicate = (actualPluginID, actualChainId) =>
             actualPluginID === expectedPluginID && actualChainId === expectedChainId,
     } = props
@@ -108,9 +114,15 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
             return 'init'
         }
         if (!isMatched) {
-            await expectedConnection?.connect({
-                chainId: expectedChainId,
-            })
+            if (switchChainWithoutPopup && actualProviderType === ProviderType.MaskWallet) {
+                await expectedConnection?.switchChain?.(expectedChainId)
+            } else {
+                await expectedConnection?.connect({
+                    chainId: expectedChainId,
+                })
+            }
+
+            expectedChainIdSwitchedCallback?.()
         }
         return
     }, [
@@ -131,7 +143,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     const renderBox = (children?: React.ReactNode, tips?: string) => {
         return (
             <ShadowRootTooltip title={tips ?? ''} classes={{ tooltip: classes.tooltip }} arrow placement="top">
-                <Box className={props.className} sx={{ flex: 1 }} display="flex" flexDirection="column">
+                <Box className={props.className} display="flex" flexDirection="column">
                     {children}
                 </Box>
             </ShadowRootTooltip>

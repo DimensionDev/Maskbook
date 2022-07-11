@@ -37,10 +37,9 @@ const ArrowButtonWrap = styled(Button)(({ theme }) => ({
     height: defaultTabSize,
     width: defaultTabSize,
     minWidth: `${defaultTabSize}px !important`,
-    background: theme.palette.maskColor.input ?? '#F2F6FA',
-
+    background: theme.palette.maskColor.input,
     '&:hover': {
-        background: theme.palette.maskColor.input ?? '#F2F6FA',
+        background: theme.palette.maskColor.input,
     },
 }))
 
@@ -75,10 +74,24 @@ const ButtonGroupWrap = styled(ButtonGroup, {
     flexWrap: 'nowrap',
     overflowY: 'clip',
     flex: 1,
-    gap: maskVariant !== 'base' ? theme.spacing(1) : 0,
-    paddingTop: theme.spacing(1),
-    background: 'transparent',
-    borderRadius: 0,
+    gap: theme.spacing(1),
+    ...(maskVariant === 'round'
+        ? {
+              padding: theme.spacing(0.5),
+              background: theme.palette.background.input,
+              borderRadius: 18,
+          }
+        : maskVariant === 'flexible'
+        ? {
+              background: 'transparent',
+              borderRadius: 0,
+          }
+        : {
+              marginTop: theme.spacing(-1),
+              paddingTop: theme.spacing(1),
+              background: 'transparent',
+              borderRadius: 0,
+          }),
 }))
 
 const FlexButtonGroupWrap = styled(ButtonGroup, {
@@ -136,7 +149,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
 
     const [open, handleToggle] = useState(false)
     const [isTabsOverflow, setIsTabsOverflow] = useState(false)
-    const [firstId, setFirstTabId] = useState<string>()
+    const [firstId, setFirstTabId] = useState<string | undefined>(context?.value)
     const innerRef = useRef<HTMLDivElement>(null)
     const anchorRef = useRef<HTMLDivElement>(null)
     const flexPanelRef = useRef(null)
@@ -219,7 +232,11 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
     if (variant === 'flexible') {
         return (
             <Box position="relative">
-                <ButtonGroupWrap ref={anchorRef} style={{ visibility: 'hidden', height: defaultTabSize }} />
+                <ButtonGroupWrap
+                    maskVariant={variant}
+                    ref={anchorRef}
+                    style={{ visibility: 'hidden', height: defaultTabSize }}
+                />
                 <FlexibleButtonGroupPanel isOpen={open && isTabsOverflow} ref={flexPanelRef}>
                     <FlexButtonGroupWrap
                         maskVariant={variant}

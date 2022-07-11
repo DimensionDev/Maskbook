@@ -1,44 +1,59 @@
-import type { TransactionContext } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { TransactionContext, isZero } from '@masknet/web3-shared-base'
+import type { ChainId, TransactionParameter } from '@masknet/web3-shared-evm'
 import type { TransactionDescriptor } from '../types'
 import { getTokenAmountDescription } from '../utils'
 import { Web3StateSettings } from '../../../settings'
 
 export class ERC20Descriptor implements TransactionDescriptor {
-    async compute(context: TransactionContext<ChainId>) {
-        if (!context.name) return
+    async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
+        const context = context_ as TransactionContext<ChainId, string | undefined>
+        if (!context.methods?.length) return
 
         const connection = await Web3StateSettings.value.Connection?.getConnection?.({
             chainId: context.chainId,
         })
+        for (const method of context.methods) {
+            const parameters = method.parameters
+            switch (method.name) {
+                case 'approve':
+                    if (parameters?.spender === undefined || parameters?.value === undefined) break
 
-        switch (context.name) {
-            case 'approve':
-                return {
-                    chainId: context.chainId,
-                    title: 'Approve',
-                    description: `Approve spend ${getTokenAmountDescription(
-                        context.parameters?.value,
-                        await connection?.getFungibleToken(context.to ?? '', {
+                    if (isZero(context.value)) {
+                        return {
                             chainId: context.chainId,
-                        }),
-                    )}`,
-                }
-            case 'transfer':
-            case 'transferFrom':
+                            title: 'Revoke',
+                            description: 'Revoke the approval for the token.',
+                            successfulDescription: 'Revoke the approval successfully.',
+                        }
+                    }
+
+                    return {
+                        chainId: context.chainId,
+                        title: 'Approve',
+                        description: `Approve spend ${getTokenAmountDescription(
+                            parameters?.value,
+                            await connection?.getFungibleToken(context.to ?? '', {
+                                chainId: context.chainId,
+                            }),
+                        )}`,
+                    }
+            }
+
+            if ((method.name === 'transfer' || method.name === 'transferFrom') && parameters?.to && parameters?.value) {
                 return {
                     chainId: context.chainId,
                     title: 'Transfer Token',
                     description: `Transfer token ${getTokenAmountDescription(
-                        context.parameters?.value,
+                        parameters?.value,
                         await connection?.getFungibleToken(context.to ?? '', {
                             chainId: context.chainId,
                         }),
                         true,
                     )}`,
                 }
-            default:
-                return
+            }
         }
+
+        return
     }
 }

@@ -21,7 +21,6 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         width: 600,
     },
-    paperRoot: {},
     content: {
         height: 510,
         maxHeight: 510,
@@ -73,7 +72,7 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
     }, [value])
 
     return (
-        <InjectedDialog title={t.__plugin_name()} classes={{ paper: classes.paperRoot }} open={open} onClose={onClose}>
+        <InjectedDialog title={t.__plugin_name()} open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
                 <Stack height="100%" spacing={2}>
                     <Box>

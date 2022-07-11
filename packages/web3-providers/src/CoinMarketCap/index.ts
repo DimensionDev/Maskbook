@@ -1,5 +1,5 @@
 import getUnixTime from 'date-fns/getUnixTime'
-import type { TrendingAPI } from '../types'
+import { TrendingAPI, TrendingCoinType } from '../types'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { BTC_FIRST_LEGER_DATE, CMC_STATIC_BASE_URL, CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from './constants'
 import { getCommunityLink, isMirroredKeyword, resolveChainIdByName } from './helper'
@@ -284,6 +284,7 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
                 id,
                 name: coinInfo.name,
                 symbol: coinInfo.symbol,
+                type: TrendingCoinType.Fungible,
                 is_mirrored: isMirroredKeyword(coinInfo.symbol),
                 announcement_urls: coinInfo.urls.announcement?.filter(Boolean),
                 tech_docs_urls: coinInfo.urls.technical_doc?.filter(Boolean),

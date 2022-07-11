@@ -12,25 +12,30 @@ import {
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { DataProvider } from '@masknet/public-api'
-import { Linking } from './Linking'
 import { useI18N, useMenu } from '../../../../utils'
 import { ContractSection } from './ContractSection'
 import type { CommunityType } from '../../types'
 import {
     DiscordRoundIcon,
     FacebookRoundIcon,
+    GitHubIcon,
+    InstagramRoundIcon,
+    MediumIcon,
     RedditRoundIcon,
     TelegramRoundIcon,
     TwitterRoundIcon,
+    YouTubeIcon,
 } from '@masknet/icons'
 import { upperFirst } from 'lodash-unified'
 import type { TrendingAPI } from '@masknet/web3-providers'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
+import { Linking } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
     container: {
         borderRadius: 0,
+        backgroundColor: 'transparent',
         boxSizing: 'border-box',
         '&::-webkit-scrollbar': {
             display: 'none',
@@ -71,11 +76,15 @@ export interface CoinMetadataTableProps {
 }
 
 const brands: Record<CommunityType, React.ReactNode> = {
-    facebook: <FacebookRoundIcon sx={{ fontSize: 16 }} />,
-    twitter: <TwitterRoundIcon sx={{ fontSize: 16 }} />,
-    telegram: <TelegramRoundIcon sx={{ fontSize: 16 }} />,
     discord: <DiscordRoundIcon sx={{ fontSize: 16 }} />,
+    facebook: <FacebookRoundIcon sx={{ fontSize: 16 }} />,
+    github: <GitHubIcon sx={{ fontSize: 16 }} />,
+    instagram: <InstagramRoundIcon sx={{ fontSize: 16 }} />,
+    medium: <MediumIcon sx={{ fontSize: 16 }} />,
     reddit: <RedditRoundIcon sx={{ fontSize: 16 }} />,
+    telegram: <TelegramRoundIcon sx={{ fontSize: 16 }} />,
+    twitter: <TwitterRoundIcon sx={{ fontSize: 16 }} />,
+    youtube: <YouTubeIcon sx={{ fontSize: 16 }} />,
     other: null,
 }
 
@@ -89,7 +98,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
     const contracts = trending.contracts ?? []
 
     const [menu, openMenu] = useMenu(
-        contracts.map((x, i) => (
+        contracts.map((x) => (
             <MenuItem key={x.chainId}>
                 <ContractSection address={x.address} chainId={x.chainId} iconURL={x.iconURL} />
             </MenuItem>
@@ -126,9 +135,11 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                                 chainId={contracts[0].chainId}
                                                 address={contracts[0].address}
                                             />
-                                            <IconButton size="small" onClick={openMenu}>
-                                                <MoreHorizIcon style={{ fontSize: 16 }} />
-                                            </IconButton>
+                                            {contracts.length > 1 ? (
+                                                <IconButton size="small" onClick={openMenu}>
+                                                    <MoreHorizIcon style={{ fontSize: 16 }} />
+                                                </IconButton>
+                                            ) : null}
                                             {menu}
                                         </Stack>
                                     ) : (

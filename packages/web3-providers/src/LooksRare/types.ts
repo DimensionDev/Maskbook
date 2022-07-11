@@ -1,0 +1,37 @@
+export interface LooksRareCollectionStats {
+    address: number
+    countOwners: number
+    totalSupply: number
+    floorPrice: number
+    floorChange24h: number
+    floorChange7d: number
+    floorChange30d: number
+    marketCap: number
+    volume24h: number
+    average24h: number
+    count24h: number
+    change24h: number
+    volume7d: number
+    average7d: number
+    count7d: number
+    change7d: number
+    volume1m: number
+    average1m: number
+    count1m: number
+    change1m: number
+    volume3m: number
+    average3m: number
+    count3m: number
+    change3m: number
+    volume6m: number
+    average6m: number
+    count6m: number
+    change6m: number
+    volume1y: number
+    average1y: number
+    count1y: number
+    change1y: number
+    volumeAll: number
+    averageAll: number
+    countAll: number
+}

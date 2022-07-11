@@ -201,7 +201,6 @@ export async function sendPayload(payload: JsonRpcPayload, options?: Options) {
                 if (options?.popupsWindow) openPopupWindow()
                 return
             }
-
             send(payload, callback, options)
         })
     }

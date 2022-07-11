@@ -8,7 +8,6 @@ import * as BN from 'bignumber.js'
 import { blob, builtin, cryptokey, file, filelist, imagebitmap, specialNumbers } from 'typeson-registry'
 import { Identifier } from '../Identifier'
 import { responseRegedit } from './response'
-import { readableStreamRegedit } from './readableStream'
 import { requestRegedit } from './request'
 
 const pendingRegister = new Set<() => void>()
@@ -30,7 +29,6 @@ function setup() {
 
     typeson.register({
         Identifier: [(x) => x instanceof Identifier, (x: Identifier) => x.toText(), (x) => Identifier.from(x).unwrap()],
-        ReadableStream: [...readableStreamRegedit],
         Response: [...responseRegedit],
         Request: [...requestRegedit],
     })

@@ -14,7 +14,7 @@ import { useSlippageTolerance } from './useSlippageTolerance'
 import { OPENOCEAN_SUPPORTED_CHAINS } from './constants'
 import { useAccount, useDoubleBlockBeatRetry } from '@masknet/plugin-infra/web3'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import { FungibleToken, NetworkPluginID, isZero } from '@masknet/web3-shared-base'
 
 export function useTrade(
     strategy: TradeStrategy,
@@ -38,7 +38,7 @@ export function useTrade(
         async () => {
             if (!OPENOCEAN_SUPPORTED_CHAINS.includes(targetChainId)) return null
             if (!inputToken || !outputToken) return null
-            if (inputAmount === '0') return null
+            if (isZero(inputAmount)) return null
             const sellToken = isNativeTokenAddress(inputToken.address)
                 ? { ...inputToken, address: OPENOCEAN_ETH_ADDRESS ?? '' }
                 : inputToken

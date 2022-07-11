@@ -63,6 +63,7 @@ export enum SourceType {
     Zora = 'zora',
     OpenSea = 'opensea',
     Rarible = 'rarible',
+    LooksRare = 'looksrare',
     NFTScan = 'NFTScan',
     Alchemy_EVM = 'Alchemy_EVM',
     Alchemy_FLOW = 'Alchemy_FLOW'
@@ -164,8 +165,12 @@ export interface NetworkDescriptor<ChainId, NetworkType> {
     icon: URL
     /** The network icon in fixed color */
     iconColor: Color
+    /** The background gradient color for relative network bar */
+    backgroundGradient?: string
     /** The network name */
     name: string
+    /** The network short name */
+    shortName?: string
     /** Is a mainnet network */
     isMainnet: boolean
 }
@@ -425,6 +430,8 @@ export interface TransactionDescriptor<ChainId, Transaction> {
     title: string
     /** a human-readable description. */
     description?: string
+    /** a human-readable description for successful transaction. */
+    successfulDescription?: string
     /** The original transaction object */
     _tx: Transaction
 }
@@ -442,12 +449,15 @@ export interface TransactionContext<ChainId, Parameter = string | undefined> {
     value: string
     /** code to deploy */
     code?: string
-    /** method name */
-    name?: string
-    /** actual parameters */
-    parameters?: {
-        [key: string]: Parameter
-    }
+    /** methods */
+    methods?: Array<{
+        /** name */
+        name?: string
+        /** actual parameters */
+        parameters?: {
+            [key: string]: Parameter
+        }
+    }>
 }
 
 export interface AddressName {
@@ -861,6 +871,11 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         account: string,
         initial?: Web3HubOptions,
     ) => Promise<Array<NonFungibleTokenAuthorization<ChainId, SchemaType>>>
+    /** Get non-fungible tokens by collection with pagination supported. */
+    getNonFungibleTokensByCollection?: (
+        address: string,
+        initial?: Web3HubOptions,
+    ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>>
     /** Get price of a fungible token */
     getFungibleTokenPrice?: (chainId: ChainId, address: string, initial?: Web3HubOptions) => Promise<number>
     /** Get price of an non-fungible token */
@@ -1076,7 +1091,7 @@ export interface WalletState {
     removeWallet?: (id: string) => Promise<void>
     getAllWallets?: () => Promise<Wallet[]>
 }
-export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType> {
+export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
     // #region resolvers
     chainResolver: ReturnChainResolver<ChainId, SchemaType, NetworkType>
     explorerResolver: ReturnExplorerResolver<ChainId, SchemaType, NetworkType>
@@ -1104,6 +1119,7 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType> {
     getNativeTokenAddress(chainId?: ChainId): string
     getMaskTokenAddress(chainId?: ChainId): string | undefined
     getAverageBlockDelay(chainId?: ChainId, scale?: number): number
+    getTransactionSignature(chainId?: ChainId, transaction?: Partial<Transaction>): string | undefined
     // #endregion
 }
 

@@ -5,7 +5,7 @@ import { PluginTraderRPC } from '../../messages'
 import { SwapResponse, TradeStrategy } from '../../types'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import { FungibleToken, NetworkPluginID, isZero } from '@masknet/web3-shared-base'
 
 export function useTrade(
     strategy: TradeStrategy,
@@ -23,8 +23,8 @@ export function useTrade(
             if (!WNATIVE_ADDRESS) return null
             if (!inputToken || !outputToken) return null
             const isExactIn = strategy === TradeStrategy.ExactIn
-            if (inputAmount === '0' && isExactIn) return null
-            if (outputAmount === '0' && !isExactIn) return null
+            if (isZero(inputAmount) && isExactIn) return null
+            if (isZero(outputAmount) && !isExactIn) return null
             // the WETH address is used for looking for available pools
             const sellToken = isNativeTokenAddress(inputToken) ? WNATIVE_ADDRESS : inputToken.address
             const buyToken = isNativeTokenAddress(outputToken) ? WNATIVE_ADDRESS : outputToken.address
