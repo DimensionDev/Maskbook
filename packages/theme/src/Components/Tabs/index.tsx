@@ -2,7 +2,6 @@ import { Box, Button, ButtonGroup, ButtonGroupProps, styled, Tab } from '@mui/ma
 import { useTabContext, getPanelId, getTabId } from '@mui/lab/TabContext'
 import {
     forwardRef,
-    cloneElement,
     Children,
     isValidElement,
     useState,
@@ -177,11 +176,6 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
             'aria-controls': getPanelId(context, child.props.value),
             id: getTabId(context, child.props.value),
             selected: child.props.value === context.value,
-            // if move tab to first in flexible tabs
-            isVisitable: (top: number, right: number) => {
-                const anchor = anchorRef.current?.getBoundingClientRect()
-                return right <= (anchor?.right ?? 0) - defaultTabSize && top - (anchor?.top ?? 0) < defaultTabSize
-            },
             onChange: (event: object, value: string, visitable?: boolean) => {
                 handleToggle(false)
                 props.onChange(event, value)
@@ -191,16 +185,23 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
             },
         }
 
-        if (child.type === Tab) {
-            const C = tabMapping[variant]
-            return (
-                <C value={child.props.value} {...extra}>
-                    {child.props.label}
-                </C>
-            )
-        }
+        if (child.type !== Tab) return child
 
-        return cloneElement(child, extra)
+        if (variant === 'flexible') {
+            Object.assign(extra, {
+                // if move tab to first in flexible tabs
+                isVisitable: (top: number, right: number) => {
+                    const anchor = anchorRef.current?.getBoundingClientRect()
+                    return right <= (anchor?.right ?? 0) - defaultTabSize && top - (anchor?.top ?? 0) < defaultTabSize
+                },
+            })
+        }
+        const C = tabMapping[variant]
+        return (
+            <C value={child.props.value} {...extra}>
+                {child.props.label}
+            </C>
+        )
     })
 
     // #region hide tab should up to first when chick
