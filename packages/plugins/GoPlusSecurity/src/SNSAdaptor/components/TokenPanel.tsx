@@ -51,16 +51,17 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
     const theme = useTheme()
 
     const totalSupply = usePortalShadowRoot((container) => {
+        const supply = tokenSecurity.total_supply ? formatSupply(tokenSecurity.total_supply) : DEFAULT_PLACEHOLDER
         return (
             <Tooltip
                 PopperProps={{ container }}
                 arrow
                 title={
                     <Typography color={(theme) => theme.palette.text.buttonText} className={classes.tooltip}>
-                        {tokenSecurity.total_supply ? formatSupply(tokenSecurity.total_supply) : DEFAULT_PLACEHOLDER}
+                        {supply}
                     </Typography>
                 }>
-                <Typography className={classes.cardValue}>{formatTotalSupply(tokenSecurity.total_supply)}</Typography>
+                <Typography className={classes.cardValue}>{supply}</Typography>
             </Tooltip>
         )
     })
