@@ -212,7 +212,7 @@ export function PluginWalletStatusBar({
                                     e.stopPropagation()
                                     openWalletStatusDialog()
                                 }}>
-                                {t('wallet_status_bar_pending')}
+                                {t('recent_transaction_pending')}
                                 <CircularProgress thickness={6} size={12} className={classes.progress} />
                             </span>
                         ) : null}
