@@ -794,6 +794,7 @@ class Connection implements EVM_Connection {
                         {
                             from: options.account,
                             ...transaction,
+                            value: transaction.value ? toHex(transaction.value) : undefined,
                         },
                     ],
                 },

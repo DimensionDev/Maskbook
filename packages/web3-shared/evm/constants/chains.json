@@ -2782,7 +2782,7 @@
         "nativeCurrency": {
             "chainId": 1313161554,
             "name": "Ether",
-            "symbol": "aETH",
+            "symbol": "AETH",
             "decimals": 18
         },
         "infoURL": "https://aurora.dev",
@@ -2805,7 +2805,7 @@
         "nativeCurrency": {
             "chainId": 1313161555,
             "name": "Ether",
-            "symbol": "aETH",
+            "symbol": "AETH",
             "decimals": 18
         },
         "infoURL": "https://aurora.dev"
@@ -2821,7 +2821,7 @@
         "nativeCurrency": {
             "chainId": 1313161556,
             "name": "Ether",
-            "symbol": "aETH",
+            "symbol": "AETH",
             "decimals": 18
         },
         "infoURL": "https://aurora.dev"

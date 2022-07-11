@@ -8,7 +8,6 @@ import type { SwapRouteSuccessResponse, TradeComputed } from '../../types'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { NetworkPluginID, ZERO } from '@masknet/web3-shared-base'
 import type { GasOptionConfig } from '@masknet/web3-shared-evm'
-import { toHex } from 'web3-utils'
 
 export function useTradeCallback(
     tradeComputed: TradeComputed<SwapRouteSuccessResponse> | null,
@@ -36,11 +35,7 @@ export function useTradeCallback(
         // compose transaction config
         const config_ = {
             ...config,
-            gas:
-                (await connection.estimateTransaction?.({
-                    ...config,
-                    value: config.value ? toHex(config.value) : undefined,
-                })) ?? ZERO.toString(),
+            gas: (await connection.estimateTransaction?.(config)) ?? ZERO.toString(),
             ...gasConfig,
         }
 
