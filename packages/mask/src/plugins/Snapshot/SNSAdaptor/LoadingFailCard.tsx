@@ -36,15 +36,28 @@ export class LoadingFailCard extends Component<
                 </Box>
             ) : (
                 <SnapshotCard title={this.props.title}>
-                    <Typography color="textPrimary">Loading fails due to Snapshot API service breakdown.</Typography>
-                    <Button
-                        style={{ width: 100, marginTop: 16 }}
-                        onClick={() => {
-                            this.setState({ error: null })
-                            this.props.retry()
-                        }}>
-                        Retry
-                    </Button>
+                    <Box style={{ textAlign: 'center' }}>
+                        <Typography color="textPrimary">
+                            Loading fails due to Snapshot API service breakdown.
+                        </Typography>
+                        <Button
+                            sx={{
+                                width: 254,
+                                height: 40,
+                                backgroundColor: (theme) => (theme.palette.mode === 'dark' ? 'white' : '#07101B'),
+                                color: (theme) => (theme.palette.mode === 'dark' ? '#07101b' : 'white'),
+                                fontSize: 14,
+                                fontWeight: 700,
+                                marginBottom: 4,
+                                marginTop: 32,
+                            }}
+                            onClick={() => {
+                                this.setState({ error: null })
+                                this.props.retry()
+                            }}>
+                            Retry
+                        </Button>
+                    </Box>
                 </SnapshotCard>
             )
         }
