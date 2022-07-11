@@ -6,7 +6,7 @@ import {
     useReverseAddress,
     useWeb3State,
 } from '@masknet/plugin-infra/web3'
-import { ImageIcon, useSnackbarCallback } from '@masknet/shared'
+import { ImageIcon, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
@@ -52,10 +52,11 @@ interface WalletUIProps {
     verify?: boolean
     isETH?: boolean
     chainId?: ChainId
+    providerIcon?: URL
 }
 
 export function WalletUI(props: WalletUIProps) {
-    const { isETH, address, verify = false, name, chainId = ChainId.Mainnet } = props
+    const { isETH, address, verify = false, name, chainId = ChainId.Mainnet, providerIcon } = props
 
     const { classes } = useStyles()
     const currentPluginId = useCurrentWeb3NetworkPluginID()
@@ -68,7 +69,11 @@ export function WalletUI(props: WalletUIProps) {
     if (!address) return null
     return (
         <Stack direction="row" alignItems="center" justifyContent="center">
-            <ImageIcon size={30} icon={networkDescriptor?.icon} />
+            {providerIcon ? (
+                <WalletIcon size={30} badgeSize={12} mainIcon={providerIcon} badgeIcon={networkDescriptor?.icon} />
+            ) : (
+                <ImageIcon size={30} icon={networkDescriptor?.icon} />
+            )}
             <Stack direction="column" style={{ marginLeft: 4 }}>
                 <Stack display="flex" fontSize={14} flexDirection="row" alignItems="center">
                     <Typography className={classes.walletName} fontWeight={700} fontSize={14}>
