@@ -219,7 +219,7 @@ export async function confirmRequest(payload: JsonRpcPayload, options?: Options)
                 return
             }
             if (response?.error) {
-                reject(new Error(`Failed to send transaction: ${response.error}`))
+                reject(new Error(`Failed to send transaction: ${response.error?.message ?? response.error}`))
                 return
             }
             WalletRPC.deleteUnconfirmedRequest(payload)
