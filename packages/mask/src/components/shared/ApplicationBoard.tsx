@@ -316,7 +316,6 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
 
     useEffect(() => {
         retry()
-        nextIDConnectStatus.reset()
         return MaskMessages.events.currentPersonaIdentifier.on(() => {
             retry()
             nextIDConnectStatus.reset()
