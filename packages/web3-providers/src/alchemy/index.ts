@@ -146,7 +146,7 @@ function createNftToken_EVM(
     asset: AlchemyNFT_EVM,
 ): NonFungibleAsset<ChainId_EVM, SchemaType_EVM> {
     const contractAddress = asset.contract?.address
-    const tokenId = Number.parseInt(asset.id?.tokenId, 16).toString()
+    const tokenId = asset.id?.tokenId
 
     return {
         id: `${contractAddress}_${tokenId}`,
@@ -257,7 +257,7 @@ function createNftToken_FLOW(
         chainId,
         type: TokenType.NonFungible,
         schema: SchemaType_FLOW.NonFungible,
-        tokenId: Number.parseInt(asset.id?.tokenId, 16).toString(),
+        tokenId: asset.id?.tokenId,
         address: asset.contract?.address,
         metadata: {
             chainId,
@@ -300,7 +300,7 @@ function createNFTAsset_FLOW(
         chainId,
         type: TokenType.NonFungible,
         schema: SchemaType_FLOW.NonFungible,
-        tokenId: Number.parseInt(metaDataResponse.id?.tokenId, 16).toString(),
+        tokenId: metaDataResponse.id?.tokenId,
         address: metaDataResponse.contract?.address,
         metadata: {
             chainId,
