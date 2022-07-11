@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import type { AbiItem } from 'web3-utils'
 import BigNumber from 'bignumber.js'
@@ -38,7 +38,6 @@ import { PluginWalletStatusBar, useI18N } from '../../../utils'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { PluginTraderMessages } from '../../Trader/messages'
-import type { Coin } from '../../Trader/types'
 import { ProtocolType, SavingsProtocol, TabType } from '../types'
 import { useStyles } from './SavingsFormStyles'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
@@ -75,22 +74,6 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
     const { value: nativeTokenBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, '', { chainId })
 
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
-
-    const onConvertClick = useCallback(() => {
-        const token = protocol.stakeToken
-        openSwapDialog({
-            open: true,
-            traderProps: {
-                defaultInputCoin: {
-                    id: token.address,
-                    name: token.name ?? '',
-                    symbol: token.symbol ?? '',
-                    contract_address: token.address,
-                    decimals: token.decimals,
-                } as Coin,
-            },
-        })
-    }, [protocol, openSwapDialog])
 
     // #region form variables
     const { value: inputTokenBalance } = useFungibleTokenBalance(
@@ -198,19 +181,12 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                 })
                 break
             case TabType.Withdraw:
-                switch (protocol.type) {
-                    case ProtocolType.Lido:
-                        onClose?.()
-                        onConvertClick()
-                        return
-                    default:
-                        if (!(await protocol.withdraw(account, chainId, web3, tokenAmount))) {
-                            throw new Error('Failed to withdraw token.')
-                        } else {
-                            await protocol.updateBalance(chainId, web3, account)
-                        }
-                        return
+                if (!(await protocol.withdraw(account, chainId, web3, tokenAmount))) {
+                    throw new Error('Failed to withdraw token.')
+                } else {
+                    await protocol.updateBalance(chainId, web3, account)
                 }
+                break
             default:
                 unreachable(tab)
         }

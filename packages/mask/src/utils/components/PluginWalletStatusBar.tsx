@@ -44,7 +44,7 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: isDashboard
             ? MaskColorVar.mainBackground
             : parseColor(theme.palette.maskColor.bottom).setAlpha(0.8).toRgbString(),
-        boxShadow: `0 0 20px ${parseColor(theme.palette.maskColor.highlight).setAlpha(0.05).toRgbString()}`,
+        boxShadow: `0 0 20px ${parseColor(theme.palette.maskColor.highlight).setAlpha(0.2).toRgbString()}`,
         backdropFilter: 'blur(16px)',
         padding: theme.spacing(2),
         borderRadius: '0 0 12px 12px',
