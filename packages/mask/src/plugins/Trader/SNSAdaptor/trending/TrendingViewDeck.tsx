@@ -158,19 +158,19 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const isTokenSecurityEnable = !isNFT && !snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginId.GoPlusSecurity)
 
     const { value: tokenSecurityInfo, error } = useTokenSecurity(
-        coin?.chainId ?? ChainId.Mainnet,
+        coin.chainId ?? ChainId.Mainnet,
         coin.contract_address?.trim(),
         isTokenSecurityEnable,
     )
 
-    const isBuyable = !isNFT && transakPluginEnabled && !transakIsMinimalMode && trending.coin.symbol && isAllowanceCoin
+    const isBuyable = !isNFT && transakPluginEnabled && !transakIsMinimalMode && coin.symbol && isAllowanceCoin
     const onBuyButtonClicked = useCallback(() => {
         setBuyDialog({
             open: true,
             code: coin.symbol,
             address: account,
         })
-    }, [account, trending?.coin?.symbol])
+    }, [account, coin.symbol])
     // #endregion
 
     // #region sync with settings
@@ -222,10 +222,10 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                 <Linking href={first(coin.home_urls)}>
                                     <Avatar className={classes.avatar} src={coin.image_url} alt={coin.symbol}>
                                         <CoinIcon
-                                            type={trending.coin.type}
-                                            address={trending.coin.address}
-                                            name={trending.coin.name}
-                                            logoUrl={trending.coin.image_url}
+                                            type={coin.type}
+                                            address={coin.address}
+                                            name={coin.name}
+                                            logoUrl={coin.image_url}
                                             size={20}
                                         />
                                     </Avatar>
