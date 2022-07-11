@@ -3,7 +3,7 @@ import { Typography } from '@mui/material'
 
 export const Version = ({ className }: { className?: string }) => {
     const t = useDashboardI18N()
-    const version = globalThis.browser?.runtime.getManifest()?.version ?? process.env.TAG_NAME.slice(1)
+    const version = globalThis.browser?.runtime.getManifest()?.version ?? process.env.VERSION
 
     return (
         <Typography className={className} variant="body2" component="span" color="inherit">
