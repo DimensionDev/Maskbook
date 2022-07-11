@@ -3,17 +3,17 @@ import { useAsyncFn } from 'react-use'
 import { pick } from 'lodash-unified'
 import stringify from 'json-stable-stringify'
 import type { TransactionConfig } from 'web3-core'
-import { GasOptionConfig, TransactionEventType } from '@masknet/web3-shared-evm'
+import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import type { SwapQuoteResponse, TradeComputed } from '../../types'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { SUPPORTED_CHAIN_ID_LIST } from './constants'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useAccount, useWeb3 } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, ZERO } from '@masknet/web3-shared-base'
+import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse> | null, gasConfig?: GasOptionConfig) {
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     // compose transaction config
     const config = useMemo(() => {
@@ -27,28 +27,23 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
 
     return useAsyncFn(async () => {
         // validate config
-        if (!web3 || !account || !config || !tradeComputed) {
+        if (!account || !config || !tradeComputed || !connection) {
             return
         }
 
         const config_ = {
             ...config,
-            gas: await web3.eth
-                .estimateGas({
+            gas:
+                (await connection.estimateTransaction?.({
                     from: account,
                     ...pick(tradeComputed.trade_, ['to', 'data', 'value']),
-                })
-                .catch(() => 0),
+                })) ?? ZERO.toString(),
         }
 
         // send transaction and wait for hash
-        return new Promise<string>((resolve, reject) => {
-            web3.eth
-                .sendTransaction(config_)
-                .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
-                    resolve(receipt.transactionHash)
-                })
-                .on(TransactionEventType.ERROR, reject)
-        })
-    }, [web3, account, chainId, stringify(config), gasConfig])
+        const hash = await connection.sendTransaction(config_)
+        const receipt = await connection.getTransactionReceipt(hash)
+
+        return receipt?.transactionHash
+    }, [connection, account, chainId, stringify(config), gasConfig])
 }

@@ -1,12 +1,16 @@
 import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy'
-import type { PayableTx } from '@masknet/web3-contracts/types/types'
-import { SchemaType, GasOptionConfig, TransactionEventType, useTraderConstants } from '@masknet/web3-shared-evm'
+import {
+    SchemaType,
+    GasOptionConfig,
+    useTraderConstants,
+    encodeContractTransaction
+} from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
 import { SLIPPAGE_DEFAULT } from '../../constants'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { useAccount } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, ZERO } from '@masknet/web3-shared-base'
 import { useTradeAmount } from './useTradeAmount'
 
 export function useTradeCallback(
@@ -18,7 +22,7 @@ export function useTradeCallback(
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const { BALANCER_ETH_ADDRESS } = useTraderConstants(chainId)
-
+    const connection = useWeb3Connection()
     const tradeAmount = useTradeAmount(trade, allowedSlippage)
 
     return useAsyncFn(async () => {
@@ -51,21 +55,6 @@ export function useTradeCallback(
         const outputTokenAddress =
             trade.outputToken.schema === SchemaType.Native ? BALANCER_ETH_ADDRESS : trade.outputToken.address
 
-        const tx =
-            trade.strategy === TradeStrategy.ExactIn
-                ? exchangeProxyContract.methods.multihopBatchSwapExactIn(
-                      swap_,
-                      inputTokenAddress,
-                      outputTokenAddress,
-                      trade.inputAmount.toFixed(),
-                      tradeAmount.toFixed(),
-                  )
-                : exchangeProxyContract.methods.multihopBatchSwapExactOut(
-                      swap_,
-                      inputTokenAddress,
-                      outputTokenAddress,
-                      tradeAmount.toFixed(),
-                  )
 
         // trade with the native token
         let transactionValue = '0'
@@ -77,27 +66,37 @@ export function useTradeCallback(
         // send transaction and wait for hash
         const config = {
             from: account,
-            gas: await tx
-                .estimateGas({
+            gas: await connection
+                .estimateTransaction?.({
                     from: account,
                     value: transactionValue,
-                })
-                .catch((error: Error) => {
-                    throw error
-                }),
+                }) ?? ZERO.toString(),
             value: transactionValue,
             ...gasConfig,
         }
 
+
+        const tx = await encodeContractTransaction(exchangeProxyContract,  trade.strategy === TradeStrategy.ExactIn
+            ? exchangeProxyContract.methods.multihopBatchSwapExactIn(
+                swap_,
+                inputTokenAddress,
+                outputTokenAddress,
+                trade.inputAmount.toFixed(),
+                tradeAmount.toFixed(),
+            )
+            : exchangeProxyContract.methods.multihopBatchSwapExactOut(
+                swap_,
+                inputTokenAddress,
+                outputTokenAddress,
+                tradeAmount.toFixed(),
+            ), config)
+
+
+
         // send transaction and wait for hash
-        return new Promise<string>((resolve, reject) => {
-            tx.send(config as PayableTx)
-                .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
-                    resolve(receipt.transactionHash)
-                })
-                .on(TransactionEventType.ERROR, (error) => {
-                    reject(error)
-                })
-        })
-    }, [chainId, trade, tradeAmount, exchangeProxyContract, BALANCER_ETH_ADDRESS])
+        const hash = await connection.sendTransaction(tx)
+        const receipt = await connection.getTransactionReceipt(hash)
+
+        return receipt?.transactionHash
+    }, [chainId, trade, tradeAmount, exchangeProxyContract, BALANCER_ETH_ADDRESS, connection])
 }
