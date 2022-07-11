@@ -145,6 +145,8 @@ export function Web3ProfileDialog() {
         })
     }
 
+    console.log({ accountList, hiddenObj })
+
     return (
         <InjectedDialog
             classes={{ dialogContent: classes.content }}
