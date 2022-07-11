@@ -116,7 +116,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
             ignoreLocation: true,
             threshold: 0,
         })
-        return (search === '' ? items : fuse.search(search).map((item) => item.item)).concat(props.selected)
+        return search === '' ? items : fuse.search(search).map((item) => item.item)
     }, [search, items])
     return (
         <InjectedDialog
