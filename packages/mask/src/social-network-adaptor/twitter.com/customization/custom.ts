@@ -118,6 +118,24 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                     },
                 },
             }
+            theme.components.MuiDialogContent = {
+                styleOverrides: {
+                    root: {
+                        paddingRight: 4,
+                        '::-webkit-scrollbar': {
+                            backgroundColor: 'transparent',
+                            width: 20,
+                        },
+                        '::-webkit-scrollbar-thumb': {
+                            borderRadius: 20,
+                            width: 5,
+                            border: '7px solid rgba(0, 0, 0, 0)',
+                            backgroundColor: theme.palette.maskColor.secondaryLine,
+                            backgroundClip: 'padding-box',
+                        },
+                    },
+                },
+            }
             theme.components.MuiSnackbar = {
                 styleOverrides: {
                     root: {

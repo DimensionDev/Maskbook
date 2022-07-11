@@ -14,13 +14,14 @@ import {
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { ImageIcon, WalletIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles, parseColor } from '@masknet/theme'
+import { makeStyles, MaskColorVar, parseColor } from '@masknet/theme'
 import { NetworkPluginID, TransactionStatusType, Wallet } from '@masknet/web3-shared-base'
 import { Box, Button, CircularProgress, Link, Typography } from '@mui/material'
 import { useI18N } from '../i18n-next-ui'
 import { LinkOutIcon, ArrowDropIcon, PluginWalletConnectIcon } from '@masknet/icons'
 import { useLayoutEffect, useRef, useState, PropsWithChildren } from 'react'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
+import { isDashboardPage } from '@masknet/shared-base'
 
 interface WalletStatusBarProps extends PropsWithChildren<{}> {
     className?: string
@@ -34,11 +35,15 @@ interface WalletStatusBarProps extends PropsWithChildren<{}> {
     expectedChainIdOrNetworkTypeOrID?: string | number
 }
 
+const isDashboard = isDashboardPage()
+
 const useStyles = makeStyles()((theme) => ({
     root: {
         boxSizing: 'content-box',
         display: 'flex',
-        backgroundColor: parseColor(theme.palette.maskColor.bottom).setAlpha(0.8).toRgbString(),
+        backgroundColor: isDashboard
+            ? MaskColorVar.mainBackground
+            : parseColor(theme.palette.maskColor.bottom).setAlpha(0.8).toRgbString(),
         boxShadow: `0 0 20px ${parseColor(theme.palette.maskColor.highlight).setAlpha(0.05).toRgbString()}`,
         backdropFilter: 'blur(16px)',
         padding: theme.spacing(2),

@@ -23,7 +23,7 @@ const useStyles = makeStyles<{ shouldScroll: boolean; isCarouselReady: boolean }
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
         applicationWrapper: {
-            padding: theme.spacing(props.isCarouselReady ? 0 : 1, 0.25, 1),
+            paddingTop: theme.spacing(1),
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
             overflowY: 'auto',
@@ -38,7 +38,7 @@ const useStyles = makeStyles<{ shouldScroll: boolean; isCarouselReady: boolean }
                 width: 20,
             },
             '::-webkit-scrollbar-thumb': {
-                borderRadius: '20px',
+                borderRadius: 20,
                 width: 5,
                 border: '7px solid rgba(0, 0, 0, 0)',
                 backgroundColor: theme.palette.maskColor.secondaryLine,
@@ -235,7 +235,8 @@ function RenderEntryComponent({ application }: { application: Application }) {
 
     const clickHandler = useMemo(() => {
         if (application.isWalletConnectedRequired || application.isWalletConnectedEVMRequired) {
-            return (walletConnectedCallback?: () => void) => setSelectProviderDialog({ open: true })
+            return (walletConnectedCallback?: () => void) =>
+                setSelectProviderDialog({ open: true, walletConnectedCallback })
         }
         if (!application.entry.nextIdRequired) return
         if (ApplicationEntryStatus.isPersonaConnected === false || ApplicationEntryStatus.isPersonaCreated === false)
@@ -315,7 +316,6 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
 
     useEffect(() => {
         retry()
-        nextIDConnectStatus.reset()
         return MaskMessages.events.currentPersonaIdentifier.on(() => {
             retry()
             nextIDConnectStatus.reset()

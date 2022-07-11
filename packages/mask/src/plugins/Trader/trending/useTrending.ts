@@ -50,7 +50,7 @@ export function useTrendingById(id: string, dataProvider: DataProvider) {
     } = useAsync(async () => {
         if (!id) return null
         if (!currency) return null
-        return PluginTraderRPC.getCoinTrendingById(chainId, id, currency, dataProvider)
+        return PluginTraderRPC.getCoinTrendingById(chainId, id, currency, dataProvider).catch(() => null)
     }, [chainId, dataProvider, currency?.id, id])
 
     const { value: detailedToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, trending?.coin.contract_address)
