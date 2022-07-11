@@ -18,7 +18,7 @@ export class ERC20Descriptor implements TransactionDescriptor {
                 case 'approve':
                     if (parameters?.spender === undefined || parameters?.value === undefined) break
 
-                    if (isZero(context.value)) {
+                    if (isZero(parameters?.value)) {
                         return {
                             chainId: context.chainId,
                             title: 'Revoke',
