@@ -2839,7 +2839,14 @@
             "symbol": "ONE",
             "decimals": 18
         },
-        "infoURL": "https://www.harmony.one/"
+        "infoURL": "https://www.harmony.one/",
+        "explorers": [
+            {
+                "name": "harmony",
+                "url": "https://explorer.harmony.one",
+                "standard": "EIP3091"
+            }
+        ]
     },
     {
         "chainId": 1666600001,
@@ -2854,7 +2861,14 @@
             "symbol": "ONE",
             "decimals": 18
         },
-        "infoURL": "https://www.harmony.one/"
+        "infoURL": "https://www.harmony.one/",
+        "explorers": [
+            {
+                "name": "harmony",
+                "url": "https://explorer.harmony.one",
+                "standard": "EIP3091"
+            }
+        ]
     },
     {
         "chainId": 1666600002,
@@ -2869,7 +2883,14 @@
             "symbol": "ONE",
             "decimals": 18
         },
-        "infoURL": "https://www.harmony.one/"
+        "infoURL": "https://www.harmony.one/",
+        "explorers": [
+            {
+                "name": "harmony",
+                "url": "https://explorer.harmony.one",
+                "standard": "EIP3091"
+            }
+        ]
     },
     {
         "chainId": 1666600003,
@@ -2884,7 +2905,14 @@
             "symbol": "ONE",
             "decimals": 18
         },
-        "infoURL": "https://www.harmony.one/"
+        "infoURL": "https://www.harmony.one/",
+        "explorers": [
+            {
+                "name": "harmony",
+                "url": "https://explorer.harmony.one",
+                "standard": "EIP3091"
+            }
+        ]
     },
     {
         "chainId": 1666700000,

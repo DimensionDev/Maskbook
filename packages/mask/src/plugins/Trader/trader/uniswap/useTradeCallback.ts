@@ -36,7 +36,6 @@ export function useTradeCallback(
     allowedSlippage?: number,
 ) {
     const { targetChainId } = TargetChainIdContext.useContainer()
-    // const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId: targetChainId })
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: targetChainId })
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const tradeParameters = useTradeParameters(trade, tradeProvider, allowedSlippage)
