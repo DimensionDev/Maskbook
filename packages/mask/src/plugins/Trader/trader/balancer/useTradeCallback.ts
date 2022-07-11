@@ -5,7 +5,7 @@ import { SLIPPAGE_DEFAULT } from '../../constants'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, ZERO } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useTradeAmount } from './useTradeAmount'
 
 export function useTradeCallback(
@@ -60,11 +60,6 @@ export function useTradeCallback(
         // send transaction and wait for hash
         const config = {
             from: account,
-            gas:
-                (await connection.estimateTransaction?.({
-                    from: account,
-                    value: transactionValue,
-                })) ?? ZERO.toString(),
             value: transactionValue,
             ...gasConfig,
         }

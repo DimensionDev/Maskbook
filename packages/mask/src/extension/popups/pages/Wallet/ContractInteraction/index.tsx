@@ -173,11 +173,22 @@ const ContractInteraction = memo(() => {
         const type = request?.formatterTransaction?.type
         if (!type) return {}
 
-        const methods = request.transactionContext?.methods
-        if (!methods?.length) return {}
-
         switch (type) {
             case TransactionDescriptorType.INTERACTION:
+                const methods = request.transactionContext?.methods
+                if (!methods?.length)
+                    return {
+                        isNativeTokenInteraction: true,
+                        typeName: t('popups_wallet_contract_interaction'),
+                        tokenAddress: request.computedPayload?.to,
+                        to: request.computedPayload?.to,
+                        gas: request.computedPayload?.gas,
+                        gasPrice: request.computedPayload?.gasPrice,
+                        maxFeePerGas: request.computedPayload?.maxFeePerGas,
+                        maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
+                        amount: request.computedPayload?.value,
+                    }
+
                 for (const method of methods) {
                     const parameters = method.parameters
 
@@ -214,17 +225,8 @@ const ContractInteraction = memo(() => {
                         }
                     }
                 }
-                return {
-                    isNativeTokenInteraction: true,
-                    typeName: t('popups_wallet_contract_interaction'),
-                    tokenAddress: request.computedPayload?.to,
-                    to: request.computedPayload?.to,
-                    gas: request.computedPayload?.gas,
-                    gasPrice: request.computedPayload?.gasPrice,
-                    maxFeePerGas: request.computedPayload?.maxFeePerGas,
-                    maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
-                    amount: request.computedPayload?.value,
-                }
+
+                return {}
             case TransactionDescriptorType.TRANSFER:
                 return {
                     isNativeTokenInteraction: true,
