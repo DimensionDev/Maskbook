@@ -250,6 +250,7 @@ export const getWalletHiddenList = async (publicKey: string) => {
               >
           }
         | undefined = { hiddenWallets: {}, hiddenCollections: {} }
+    console.log({ res, publicKey })
     if (res) {
         ;(res?.val as PersonaKV)?.proofs
             ?.filter((x) => x.platform === NextIDPlatform.Twitter)
