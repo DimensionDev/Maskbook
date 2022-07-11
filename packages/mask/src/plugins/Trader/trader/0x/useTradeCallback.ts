@@ -9,6 +9,7 @@ import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { SUPPORTED_CHAIN_ID_LIST } from './constants'
 import { NetworkPluginID, ZERO } from '@masknet/web3-shared-base'
 import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { toHex } from 'web3-utils'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse> | null, gasConfig?: GasOptionConfig) {
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
@@ -36,7 +37,8 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
             gas:
                 (await connection.estimateTransaction?.({
                     from: account,
-                    ...pick(tradeComputed.trade_, ['to', 'data', 'value']),
+                    ...pick(tradeComputed.trade_, ['to', 'data']),
+                    value: tradeComputed.trade_?.value ? toHex(tradeComputed.trade_.value) : undefined,
                 })) ?? ZERO.toString(),
         }
 

@@ -8,6 +8,7 @@ import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import { PluginTraderRPC } from '../../messages'
 import type { SwapBancorRequest, TradeComputed } from '../../types'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
+import { toHex } from 'web3-utils'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest> | null, gasConfig?: GasOptionConfig) {
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
@@ -35,7 +36,11 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest>
         const config = pick(tradeTransaction.transaction, ['to', 'data', 'value', 'from'])
         const config_ = {
             ...config,
-            gas: (await connection.estimateTransaction?.(config)) ?? ZERO.toString(),
+            gas:
+                (await connection.estimateTransaction?.({
+                    ...config,
+                    value: config.value ? toHex(config.value) : undefined,
+                })) ?? ZERO.toString(),
             ...gasConfig,
         }
 

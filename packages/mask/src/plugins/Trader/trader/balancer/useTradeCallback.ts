@@ -1,16 +1,11 @@
 import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy'
-import {
-    SchemaType,
-    GasOptionConfig,
-    useTraderConstants,
-    encodeContractTransaction
-} from '@masknet/web3-shared-evm'
+import { SchemaType, GasOptionConfig, useTraderConstants, encodeContractTransaction } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
 import { SLIPPAGE_DEFAULT } from '../../constants'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, ZERO } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useTradeAmount } from './useTradeAmount'
 
 export function useTradeCallback(
@@ -55,7 +50,6 @@ export function useTradeCallback(
         const outputTokenAddress =
             trade.outputToken.schema === SchemaType.Native ? BALANCER_ETH_ADDRESS : trade.outputToken.address
 
-
         // trade with the native token
         let transactionValue = '0'
         if (trade.strategy === TradeStrategy.ExactIn && trade.inputToken.schema === SchemaType.Native)
@@ -66,32 +60,28 @@ export function useTradeCallback(
         // send transaction and wait for hash
         const config = {
             from: account,
-            gas: await connection
-                .estimateTransaction?.({
-                    from: account,
-                    value: transactionValue,
-                }) ?? ZERO.toString(),
             value: transactionValue,
             ...gasConfig,
         }
 
-
-        const tx = await encodeContractTransaction(exchangeProxyContract,  trade.strategy === TradeStrategy.ExactIn
-            ? exchangeProxyContract.methods.multihopBatchSwapExactIn(
-                swap_,
-                inputTokenAddress,
-                outputTokenAddress,
-                trade.inputAmount.toFixed(),
-                tradeAmount.toFixed(),
-            )
-            : exchangeProxyContract.methods.multihopBatchSwapExactOut(
-                swap_,
-                inputTokenAddress,
-                outputTokenAddress,
-                tradeAmount.toFixed(),
-            ), config)
-
-
+        const tx = await encodeContractTransaction(
+            exchangeProxyContract,
+            trade.strategy === TradeStrategy.ExactIn
+                ? exchangeProxyContract.methods.multihopBatchSwapExactIn(
+                      swap_,
+                      inputTokenAddress,
+                      outputTokenAddress,
+                      trade.inputAmount.toFixed(),
+                      tradeAmount.toFixed(),
+                  )
+                : exchangeProxyContract.methods.multihopBatchSwapExactOut(
+                      swap_,
+                      inputTokenAddress,
+                      outputTokenAddress,
+                      tradeAmount.toFixed(),
+                  ),
+            config,
+        )
 
         // send transaction and wait for hash
         const hash = await connection.sendTransaction(tx)
