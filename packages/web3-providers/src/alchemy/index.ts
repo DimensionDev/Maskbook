@@ -15,6 +15,7 @@ import {
     SchemaType as SchemaType_EVM,
 } from '@masknet/web3-shared-evm'
 import { ChainId as ChainId_FLOW, SchemaType as SchemaType_FLOW } from '@masknet/web3-shared-flow'
+import BigNumber from 'bignumber.js'
 import { first } from 'lodash-unified'
 import urlcat from 'urlcat'
 import type { NonFungibleTokenAPI } from '..'
@@ -141,13 +142,21 @@ function resolveCollectionName(asset: AlchemyNFT_EVM) {
     return ''
 }
 
+function numberToString(tokenId: string) {
+    const data = new BigNumber(tokenId).toString()
+    const matches = data.match(/^(\d\.\d*)e\+(\d*)$/)
+    if (!matches) return data
+    const length = Number(matches[2])
+    const id = matches[1].replace('.', '')
+    return id.padEnd(length + 1, '0')
+}
+
 function createNftToken_EVM(
     chainId: ChainId_EVM,
     asset: AlchemyNFT_EVM,
 ): NonFungibleAsset<ChainId_EVM, SchemaType_EVM> {
     const contractAddress = asset.contract?.address
-    const tokenId = asset.id?.tokenId
-
+    const tokenId = numberToString(asset.id.tokenId)
     return {
         id: `${contractAddress}_${tokenId}`,
         chainId,
@@ -206,7 +215,7 @@ function createNFTAsset_EVM(
             metaDataResponse?.id?.tokenMetadata?.tokenType === 'ERC721'
                 ? SchemaType_EVM.ERC721
                 : SchemaType_EVM.ERC1155,
-        tokenId: metaDataResponse.id?.tokenId,
+        tokenId: numberToString(metaDataResponse.id.tokenId),
         address: metaDataResponse.contract?.address,
         metadata: {
             chainId,
@@ -257,7 +266,7 @@ function createNftToken_FLOW(
         chainId,
         type: TokenType.NonFungible,
         schema: SchemaType_FLOW.NonFungible,
-        tokenId: asset.id?.tokenId,
+        tokenId: numberToString(asset.id.tokenId),
         address: asset.contract?.address,
         metadata: {
             chainId,
