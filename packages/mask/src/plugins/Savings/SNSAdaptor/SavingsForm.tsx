@@ -2,7 +2,6 @@ import { useState, useMemo } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import type { AbiItem } from 'web3-utils'
 import BigNumber from 'bignumber.js'
-import { unreachable } from '@dimensiondev/kit'
 import {
     isLessThan,
     rightShift,
@@ -165,31 +164,19 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
     })
     const [, executor] = useAsyncFn(async () => {
         if (!web3) return
-        switch (tab) {
-            case TabType.Deposit:
-                const hash = await protocol.deposit(account, chainId, web3, tokenAmount)
-                if (typeof hash !== 'string') {
-                    throw new Error('Failed to deposit token.')
-                } else {
-                    await protocol.updateBalance(chainId, web3, account)
-                }
-                openShareTxDialog({
-                    hash,
-                    onShare() {
-                        activatedSocialNetworkUI.utils.share?.(shareText)
-                    },
-                })
-                break
-            case TabType.Withdraw:
-                if (!(await protocol.withdraw(account, chainId, web3, tokenAmount))) {
-                    throw new Error('Failed to withdraw token.')
-                } else {
-                    await protocol.updateBalance(chainId, web3, account)
-                }
-                break
-            default:
-                unreachable(tab)
+        const methodName = tab === TabType.Deposit ? 'deposit' : 'withdraw'
+        const hash = await protocol[methodName](account, chainId, web3, tokenAmount)
+        if (typeof hash !== 'string') {
+            throw new Error('Failed to deposit token.')
+        } else {
+            await protocol.updateBalance(chainId, web3, account)
         }
+        openShareTxDialog({
+            hash,
+            onShare() {
+                activatedSocialNetworkUI.utils.share?.(shareText)
+            },
+        })
     }, [tab, protocol, account, chainId, web3, tokenAmount, openShareTxDialog])
 
     const buttonDom = useMemo(() => {
