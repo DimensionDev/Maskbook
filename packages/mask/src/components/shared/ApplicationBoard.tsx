@@ -23,7 +23,7 @@ const useStyles = makeStyles<{ shouldScroll: boolean; isCarouselReady: boolean }
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
         applicationWrapper: {
-            padding: theme.spacing(props.isCarouselReady ? 0 : 1, 0.25, 1),
+            paddingTop: theme.spacing(1),
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
             overflowY: 'auto',
@@ -38,7 +38,7 @@ const useStyles = makeStyles<{ shouldScroll: boolean; isCarouselReady: boolean }
                 width: 20,
             },
             '::-webkit-scrollbar-thumb': {
-                borderRadius: '20px',
+                borderRadius: 20,
                 width: 5,
                 border: '7px solid rgba(0, 0, 0, 0)',
                 backgroundColor: theme.palette.maskColor.secondaryLine,
@@ -185,7 +185,13 @@ function ApplicationBoardContent(props: Props) {
                     ))}
                 </section>
             ) : (
-                <div className={classes.placeholderWrapper}>
+                <div
+                    className={cx(
+                        classes.placeholderWrapper,
+                        recommendFeatureAppList.length > 2 && isCarouselReady() && isHoveringCarousel
+                            ? classes.applicationWrapperWithCarousel
+                            : '',
+                    )}>
                     <Typography className={classes.placeholder}>
                         {t('application_display_tab_plug_app-unlisted-placeholder')}
                     </Typography>
@@ -316,7 +322,6 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
 
     useEffect(() => {
         retry()
-        nextIDConnectStatus.reset()
         return MaskMessages.events.currentPersonaIdentifier.on(() => {
             retry()
             nextIDConnectStatus.reset()

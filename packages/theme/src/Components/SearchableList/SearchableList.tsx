@@ -136,8 +136,11 @@ export function SearchableList<T extends {}>({
     )
 }
 const useStyles = makeStyles()((theme) => ({
-    container: {},
+    container: {
+        overflow: 'hidden',
+    },
     list: {
+        overflow: 'auto',
         marginTop: theme.spacing(1.5),
         '& > div::-webkit-scrollbar': {
             width: '7px',

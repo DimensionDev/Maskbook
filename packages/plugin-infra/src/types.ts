@@ -547,6 +547,7 @@ export namespace Plugin.SNSAdaptor {
         recommendFeature?: {
             description: React.ReactNode
             backgroundGradient: string
+            isFirst?: boolean
         }
     }
 

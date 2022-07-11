@@ -104,6 +104,12 @@ const useStyles = makeStyles()((theme) => {
             width: 24,
             height: 24,
         },
+        buyButton: {
+            background: theme.palette.maskColor.dark,
+            color: theme.palette.maskColor.white,
+            marginLeft: 'auto',
+            marginBottom: theme.spacing(2),
+        },
     }
 })
 
@@ -157,10 +163,10 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         isTokenSecurityEnable,
     )
 
+    const isBuyable = !isNFT && transakPluginEnabled && !transakIsMinimalMode && trending.coin.symbol && isAllowanceCoin
     const onBuyButtonClicked = useCallback(() => {
         setBuyDialog({
             open: true,
-            // @ts-ignore
             code: coin.symbol,
             address: account,
         })
@@ -253,6 +259,16 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         />
                                     </>
                                 ) : null}
+                                {isBuyable ? (
+                                    <Button
+                                        className={classes.buyButton}
+                                        size="small"
+                                        startIcon={<BuyIcon style={{ fontSize: 16 }} />}
+                                        variant="contained"
+                                        onClick={onBuyButtonClicked}>
+                                        {t('buy_now')}
+                                    </Button>
+                                ) : null}
                             </Stack>
                             <Stack direction="row" justifyContent="space-between">
                                 <Stack direction="row" gap={1} alignItems="center">
@@ -291,21 +307,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                 )}
                             </Stack>
                         </Stack>
-                    </Stack>
-                    <Stack>
-                        {transakPluginEnabled && !transakIsMinimalMode && trending.coin.symbol && isAllowanceCoin ? (
-                            <Button
-                                style={{
-                                    background: theme.palette.maskColor.dark,
-                                    color: theme.palette.maskColor.white,
-                                }}
-                                size="small"
-                                startIcon={<BuyIcon style={{ fontSize: 16 }} />}
-                                variant="contained"
-                                onClick={onBuyButtonClicked}>
-                                {t('buy_now')}
-                            </Button>
-                        ) : null}
                     </Stack>
                 </Stack>
             </Stack>

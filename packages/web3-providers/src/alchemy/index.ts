@@ -309,7 +309,7 @@ function createNFTAsset_FLOW(
         chainId,
         type: TokenType.NonFungible,
         schema: SchemaType_FLOW.NonFungible,
-        tokenId: metaDataResponse.id?.tokenId,
+        tokenId: numberToString(metaDataResponse.id.tokenId),
         address: metaDataResponse.contract?.address,
         metadata: {
             chainId,

@@ -53,6 +53,8 @@ export class CoinGeckoAPI implements PriceAPI.Provider, TrendingAPI.Provider<Cha
 
     async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
         const info = await getCoinInfo(id)
+        if ('error' in info) throw new Error(info.error)
+
         const platform_url = `https://www.coingecko.com/en/coins/${info.id}`
         const twitter_url = info.links.twitter_screen_name
             ? `https://twitter.com/${info.links.twitter_screen_name}`
@@ -139,8 +141,9 @@ export class CoinGeckoAPI implements PriceAPI.Provider, TrendingAPI.Provider<Cha
         }
     }
 
-    getCoins(): Promise<TrendingAPI.Coin[]> {
-        return getAllCoins()
+    async getCoins(): Promise<TrendingAPI.Coin[]> {
+        const coins = await getAllCoins()
+        return coins.map((coin) => ({ ...coin, type: TrendingCoinType.Fungible }))
     }
 
     async getCurrencies(): Promise<TrendingAPI.Currency[]> {
