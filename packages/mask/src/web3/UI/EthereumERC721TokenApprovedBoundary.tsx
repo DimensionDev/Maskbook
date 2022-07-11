@@ -49,6 +49,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
         contractDetailed?.address,
         operator,
         true,
+        retry,
     )
 
     const validationMessage = useMemo(() => {
