@@ -323,7 +323,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                             </Typography>
                         </Box>
                         <Box>
-                            <Typography className={classes.symbol}>
+                            <Typography component="div" className={classes.symbol}>
                                 <TokenIcon
                                     classes={{ icon: classes.tokenIcon }}
                                     address={inputToken.address}
@@ -361,7 +361,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                             </Typography>
                         </Box>
                         <Box>
-                            <Typography className={classes.symbol}>
+                            <Typography component="div" className={classes.symbol}>
                                 <TokenIcon
                                     classes={{ icon: classes.tokenIcon }}
                                     address={outputToken.address}
