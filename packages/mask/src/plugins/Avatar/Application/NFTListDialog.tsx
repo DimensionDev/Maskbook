@@ -415,6 +415,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                                     chainId={chainId}
                                     setChainId={setChainId}
                                     classes={classes}
+                                    networkId={selectedPluginId}
                                 />
                             </div>
                         ) : null}
