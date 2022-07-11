@@ -33,8 +33,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     linkIcon: {
         fill: theme.palette.maskColor.main,
-        width: 16,
-        height: 16,
+        width: 18,
+        height: 18,
     },
 }))
 
