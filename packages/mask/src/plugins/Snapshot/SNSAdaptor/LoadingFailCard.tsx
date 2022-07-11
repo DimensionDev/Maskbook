@@ -49,7 +49,7 @@ export class LoadingFailCard extends Component<
                                 fontSize: 14,
                                 fontWeight: 700,
                                 marginBottom: 4,
-                                marginTop: 32,
+                                marginTop: 2,
                             }}
                             onClick={() => {
                                 this.setState({ error: null })
