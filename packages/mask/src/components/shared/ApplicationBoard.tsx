@@ -235,8 +235,7 @@ function RenderEntryComponent({ application }: { application: Application }) {
 
     const clickHandler = useMemo(() => {
         if (application.isWalletConnectedRequired || application.isWalletConnectedEVMRequired) {
-            return (walletConnectedCallback?: () => void) =>
-                setSelectProviderDialog({ open: true, walletConnectedCallback })
+            return (walletConnectedCallback?: () => void) => setSelectProviderDialog({ open: true })
         }
         if (!application.entry.nextIdRequired) return
         if (ApplicationEntryStatus.isPersonaConnected === false || ApplicationEntryStatus.isPersonaCreated === false)
