@@ -102,7 +102,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             }
         })
         return [...socialAddressList, ...addresses]
-    }, [socialAddressList, wallets, isOwn])
+    }, [socialAddressList, wallets?.map((x) => x.identity).join(), isOwn])
 
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
     const availablePlugins = useAvailablePlugins(activatedPlugins)
@@ -163,9 +163,10 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         )
     }, [
         componentTabId,
+        personaPublicKey,
         displayPlugins.map((x) => x.ID).join(),
         personaList.join(),
-        socialAddressList.map((x) => x.address).join(),
+        addressList.map((x) => x.address).join(),
     ])
 
     useLocationChange(() => {
@@ -187,6 +188,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             setHidden(!data.show)
         })
     }, [identity.identifier?.userId])
+
+    // console.log({ identity, socialAddressList, addressList, wallets })
 
     if (hidden) return null
 
