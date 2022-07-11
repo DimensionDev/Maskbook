@@ -7,6 +7,7 @@ import { ExternalLink } from 'react-feather'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { formatCurrency, formatSupply } from '@masknet/web3-shared-base'
+import { LinkOutIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -18,17 +19,22 @@ const useStyles = makeStyles()((theme) => ({
                 : '0px 0px 20px rgba(255, 255, 255, 0.12)',
     },
     subtitle: {
-        color: theme.palette.text.secondary,
+        color: theme.palette.maskColor.second,
         fontWeight: 400,
         fontSize: 16,
     },
     cardValue: {
-        color: theme.palette.text.primary,
+        color: theme.palette.maskColor.main,
         fontSize: 16,
         fontWeight: 700,
     },
     tooltip: {
         fontSize: 12,
+    },
+    linkIcon: {
+        fill: theme.palette.maskColor.main,
+        width: 16,
+        height: 16,
     },
 }))
 
@@ -88,7 +94,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                             href={explorerResolver.fungibleTokenLink(tokenSecurity.chainId, tokenSecurity.contract)}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <ExternalLink color={theme.palette.text.strong} size={14} />
+                            <LinkOutIcon className={classes.linkIcon} />
                         </Link>
                     </Stack>
                 </Stack>
@@ -109,7 +115,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                                 )}
                                 target="_blank"
                                 rel="noopener noreferrer">
-                                <ExternalLink color={theme.palette.text.strong} size={14} />
+                                <LinkOutIcon className={classes.linkIcon} />
                             </Link>
                         )}
                     </Stack>
