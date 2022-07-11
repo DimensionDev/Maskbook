@@ -141,8 +141,9 @@ export class CoinGeckoAPI implements PriceAPI.Provider, TrendingAPI.Provider<Cha
         }
     }
 
-    getCoins(): Promise<TrendingAPI.Coin[]> {
-        return getAllCoins()
+    async getCoins(): Promise<TrendingAPI.Coin[]> {
+        const coins = await getAllCoins()
+        return coins.map((coin) => ({ ...coin, type: TrendingCoinType.Fungible }))
     }
 
     async getCurrencies(): Promise<TrendingAPI.Currency[]> {
