@@ -116,6 +116,7 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
                     expectedChainId={chainId}
                     switchChainWithoutPopup
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    className={classes.chainBoundary}
                     classes={{ switchButton: classes.button }}
                     expectedChainIdSwitchedCallback={() => approveCallback()}
                     ActionButtonPromiseProps={{
