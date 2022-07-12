@@ -94,20 +94,24 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: 2,
     },
     item1: {
-        color: theme.palette.maskColor.second,
+        color: '#767f8d',
         fontSize: '14',
         fontWeight: 400,
     },
     item2: {
-        color: theme.palette.maskColor.main,
+        color: '#07101B',
         fontSize: '14',
         fontWeight: 500,
         marginLeft: '2px',
     },
     button: {
         borderRadius: '99px',
-        backgroundColor: theme.palette.maskColor.dark,
+        backgroundColor: '#07101b',
         color: '#fff',
+        ':hover': {
+            color: 'fff',
+            backgroundColor: '#07101b',
+        },
     },
 }))
 
@@ -131,7 +135,11 @@ export function NextIdPage({ persona }: NextIdPageProps) {
     const personaActionButton = useMemo(() => {
         if (!personaConnectStatus.action) return null
         const button = personaConnectStatus.hasPersona ? t.connect_persona() : t.create_persona()
-        return <Button onClick={personaConnectStatus.action}>{button}</Button>
+        return (
+            <Button className={classes.button} onClick={personaConnectStatus.action}>
+                {button}
+            </Button>
+        )
     }, [personaConnectStatus, t])
 
     const { value: currentPersona, loading: loadingPersona } = useAsyncRetry(async () => {
@@ -218,21 +226,6 @@ export function NextIdPage({ persona }: NextIdPageProps) {
                         </div>
                     ))}
             </>
-        )
-    }
-
-    if (!isAccountVerified && isOwn) {
-        return (
-            <Box>
-                <Box className={classes.tip}>
-                    <Typography className={classes.verifyIntro}>{t.verify_Twitter_ID_intro()}</Typography>
-                    <Typography className={classes.verifyDetail}>{t.verify_Twitter_ID()}</Typography>
-                </Box>
-
-                <Stack justifyContent="center" direction="row" mt="24px">
-                    <Button onClick={onVerify}>{t.verify_Twitter_ID_button()}</Button>
-                </Stack>
-            </Box>
         )
     }
 

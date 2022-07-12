@@ -417,6 +417,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 <Box className={classes.buttonWrapper}>
                     <Box sx={{ flex: 1, padding: 1.5 }}>
                         <Button
+                            variant="roundedDark"
                             startIcon={<SharedIcon style={{ fontSize: 18 }} />}
                             className={classes.button}
                             fullWidth
@@ -428,6 +429,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                         <Box sx={{ flex: 1, padding: 1.5 }}>
                             <ChainBoundary
                                 expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                                ActionButtonPromiseProps={{ variant: 'roundedDark' }}
                                 expectedChainId={payload.chainId}>
                                 <WalletConnectedBoundary
                                     startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}

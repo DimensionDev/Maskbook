@@ -1,17 +1,16 @@
 import { memo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { first } from 'lodash-unified'
-import { Avatar, AvatarProps } from '@mui/material'
+import { Avatar, AvatarProps, useTheme } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import NO_IMAGE_COLOR from './constants'
 import { useChainId, useWeb3Hub, Web3Helper } from '@masknet/plugin-infra/web3'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { useImageBase64 } from '../../../hooks/useImageBase64'
+import { useAccessibleUrl } from '../../../hooks/useImageBase64'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
-        backgroundColor: theme.palette.common.white,
         margin: 0,
     },
 }))
@@ -23,26 +22,36 @@ export interface TokenIconProps extends withClasses<'icon'> {
     name?: string
     logoURL?: string
     isERC721?: boolean
+    disableDefaultIcon?: boolean
     AvatarProps?: Partial<AvatarProps>
 }
 
 export function TokenIcon(props: TokenIconProps) {
-    const { address, logoURL, name, AvatarProps, classes, isERC721 } = props
+    const { address, logoURL, name, AvatarProps, classes, isERC721, disableDefaultIcon } = props
 
     const chainId = useChainId(props.pluginID, props.chainId)
     const hub = useWeb3Hub(props.pluginID)
-
     const { value } = useAsyncRetry(async () => {
-        const logoURLs = await hub?.getFungibleTokenIconURLs?.(chainId, address)
+        const logoURLs = await hub?.getFungibleTokenIconURLs?.(chainId, address).catch(() => [])
+        const key = address ? [chainId, address].join('/') : logoURL
         return {
-            key: [chainId, address, logoURL].join('/'),
+            key,
             urls: [logoURL, ...(logoURLs ?? [])].filter(Boolean) as string[],
         }
     }, [chainId, address, logoURL, hub])
     const { urls = EMPTY_LIST, key } = value ?? {}
-    const base64 = useImageBase64(key, first(urls))
+    const accessibleUrl = useAccessibleUrl(key, first(urls))
 
-    return <TokenIconUI logoURL={isERC721 ? logoURL : base64} AvatarProps={AvatarProps} classes={classes} name={name} />
+    if (!accessibleUrl && disableDefaultIcon) return null
+
+    return (
+        <TokenIconUI
+            logoURL={isERC721 ? logoURL : accessibleUrl}
+            AvatarProps={AvatarProps}
+            classes={classes}
+            name={name}
+        />
+    )
 }
 
 export interface TokenIconUIProps extends withClasses<'icon'> {
@@ -61,13 +70,17 @@ export const TokenIconUI = memo<TokenIconUIProps>((props) => {
         : undefined
 
     const classes = useStylesExtends(useStyles(), props)
+    const theme = useTheme()
 
     return (
         <Avatar
             className={classes.icon}
             src={logoURL}
-            style={{ backgroundColor: logoURL ? undefined : defaultBackgroundColor }}
-            {...AvatarProps}>
+            {...AvatarProps}
+            sx={{
+                ...AvatarProps?.sx,
+                backgroundColor: logoURL ? theme.palette.common.white : defaultBackgroundColor,
+            }}>
             {name?.slice(0, 1).toUpperCase()}
         </Avatar>
     )

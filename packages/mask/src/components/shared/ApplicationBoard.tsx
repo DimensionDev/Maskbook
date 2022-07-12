@@ -11,7 +11,7 @@ import { useI18N } from '../../utils'
 import { Application, getUnlistedApp } from './ApplicationSettingPluginList'
 import { ApplicationRecommendArea } from './ApplicationRecommendArea'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useNextIDConnectStatus } from '../DataSource/useNextID'
+import { useNextIDConnectStatus, verifyPersona } from '../DataSource/useNextID'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus'
 import { WalletMessages } from '../../plugins/Wallet/messages'
@@ -23,7 +23,7 @@ const useStyles = makeStyles<{ shouldScroll: boolean; isCarouselReady: boolean }
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
         applicationWrapper: {
-            padding: theme.spacing(props.isCarouselReady ? 0 : 1, 0.25, 1),
+            paddingTop: theme.spacing(1),
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
             overflowY: 'auto',
@@ -38,7 +38,7 @@ const useStyles = makeStyles<{ shouldScroll: boolean; isCarouselReady: boolean }
                 width: 20,
             },
             '::-webkit-scrollbar-thumb': {
-                borderRadius: '20px',
+                borderRadius: 20,
                 width: 5,
                 border: '7px solid rgba(0, 0, 0, 0)',
                 backgroundColor: theme.palette.maskColor.secondaryLine,
@@ -167,6 +167,7 @@ function ApplicationBoardContent(props: Props) {
         <>
             <ApplicationRecommendArea
                 recommendFeatureAppList={recommendFeatureAppList}
+                isCarouselReady={isCarouselReady}
                 RenderEntryComponent={RenderEntryComponent}
                 isHoveringCarousel={isHoveringCarousel}
                 setIsHoveringCarousel={setIsHoveringCarousel}
@@ -185,7 +186,13 @@ function ApplicationBoardContent(props: Props) {
                     ))}
                 </section>
             ) : (
-                <div className={classes.placeholderWrapper}>
+                <div
+                    className={cx(
+                        classes.placeholderWrapper,
+                        recommendFeatureAppList.length > 2 && isCarouselReady() && isHoveringCarousel
+                            ? classes.applicationWrapperWithCarousel
+                            : '',
+                    )}>
                     <Typography className={classes.placeholder}>
                         {t('application_display_tab_plug_app-unlisted-placeholder')}
                     </Typography>
@@ -306,7 +313,7 @@ const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContex
 
 function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
     const personaConnectStatus = usePersonaConnectStatus()
-    const nextIDConnectStatus = useNextIDConnectStatus()
+    const nextIDConnectStatus = useNextIDConnectStatus(true)
 
     const {
         value: ApplicationCurrentStatus,
@@ -323,6 +330,11 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
         })
     }, [])
 
+    const personaNextIDReset = useCallback(() => {
+        nextIDConnectStatus.reset()
+        verifyPersona(personaConnectStatus.currentConnectedPersona?.identifier)()
+    }, [nextIDConnectStatus, personaConnectStatus])
+
     const { isSNSConnectToCurrentPersona, currentPersonaPublicKey, currentSNSConnectedPersonaPublicKey } =
         ApplicationCurrentStatus ?? {}
 
@@ -330,7 +342,7 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
         <ApplicationEntryStatusContext.Provider
             value={{
                 personaConnectAction: personaConnectStatus.action ?? undefined,
-                personaNextIDReset: nextIDConnectStatus.reset ?? undefined,
+                personaNextIDReset,
                 isPersonaCreated: personaConnectStatus.hasPersona,
                 isPersonaConnected: personaConnectStatus.connected,
                 isNextIDVerify: nextIDConnectStatus.isVerified,

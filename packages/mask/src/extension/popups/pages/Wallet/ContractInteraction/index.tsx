@@ -173,44 +173,45 @@ const ContractInteraction = memo(() => {
         const type = request?.formatterTransaction?.type
         if (!type) return {}
 
-        const methods = request.transactionContext?.methods
-        if (!methods?.length) return {}
-
         switch (type) {
             case TransactionDescriptorType.INTERACTION:
-                for (const method of methods) {
-                    const parameters = method.parameters
+                const methods = request.transactionContext?.methods
 
-                    if (method.name === 'approve' && parameters?.value) {
-                        return {
-                            isNativeTokenInteraction: false,
-                            typeName: request.formatterTransaction?.title,
-                            tokenAddress: request.computedPayload?.to,
-                            to: request.computedPayload?.to,
-                            gas: request.computedPayload?.gas,
-                            gasPrice: request.computedPayload?.gasPrice,
-                            maxFeePerGas: request.computedPayload?.maxFeePerGas,
-                            maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
-                            amount: parameters?.value,
+                if (methods?.length) {
+                    for (const method of methods) {
+                        const parameters = method.parameters
+
+                        if (method.name === 'approve' || method.name === 'setApprovalForAll') {
+                            return {
+                                isNativeTokenInteraction: false,
+                                typeName: request.formatterTransaction?.title,
+                                tokenAddress: request.computedPayload?.to,
+                                to: request.computedPayload?.to,
+                                gas: request.computedPayload?.gas,
+                                gasPrice: request.computedPayload?.gasPrice,
+                                maxFeePerGas: request.computedPayload?.maxFeePerGas,
+                                maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
+                                amount: parameters?.value,
+                            }
                         }
-                    }
 
-                    if (
-                        (method.name === 'transfer' || method.name === 'transferFrom') &&
-                        parameters?.to &&
-                        parameters?.value
-                    ) {
-                        return {
-                            isNativeTokenInteraction: false,
-                            typeName: t('popups_wallet_contract_interaction_transfer'),
-                            tokenAddress: request.computedPayload?.to,
-                            to: parameters?.to as string,
-                            gas: request.computedPayload?.gas,
-                            gasPrice: request.computedPayload?.gasPrice,
-                            maxFeePerGas: request.computedPayload?.maxFeePerGas,
-                            maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
-                            amount: parameters?.value,
-                            contractAddress: request.computedPayload?.to,
+                        if (
+                            (method.name === 'transfer' || method.name === 'transferFrom') &&
+                            parameters?.to &&
+                            parameters?.value
+                        ) {
+                            return {
+                                isNativeTokenInteraction: false,
+                                typeName: t('popups_wallet_contract_interaction_transfer'),
+                                tokenAddress: request.computedPayload?.to,
+                                to: parameters?.to as string,
+                                gas: request.computedPayload?.gas,
+                                gasPrice: request.computedPayload?.gasPrice,
+                                maxFeePerGas: request.computedPayload?.maxFeePerGas,
+                                maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
+                                amount: parameters?.value,
+                                contractAddress: request.computedPayload?.to,
+                            }
                         }
                     }
                 }

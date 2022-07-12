@@ -11,7 +11,7 @@ import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { PluginTraderMessages } from '../../messages'
 import { Trader, TraderRef, TraderProps } from './Trader'
 import { useI18N } from '../../../../utils'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { NetworkTab } from '../../../../components/shared/NetworkTab'
 import { useUpdateEffect } from 'react-use'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
@@ -28,6 +28,12 @@ const useStyles = makeStyles()((theme) => ({
         position: 'sticky',
         top: 0,
         zIndex: 2,
+
+        '& > div .MuiBox-root': isDashboard
+            ? {
+                  background: MaskColorVar.mainBackground,
+              }
+            : {},
     },
     indicator: {
         display: 'none',

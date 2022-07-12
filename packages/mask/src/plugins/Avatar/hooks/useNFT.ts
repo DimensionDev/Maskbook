@@ -24,7 +24,7 @@ export function useNFT(
         return {
             amount: asset?.price?.[CurrencyType.USD] ?? '0',
             name: asset?.contract?.name ?? '',
-            symbol: asset?.paymentTokens?.[0].symbol ?? 'ETH',
+            symbol: asset?.priceToken?.symbol ?? asset?.paymentTokens?.[0].symbol ?? 'ETH',
             image: asset?.metadata?.imageURL ?? '',
             owner: asset?.owner?.address ?? asset?.ownerId ?? '',
             slug: asset?.collection?.slug ?? '',

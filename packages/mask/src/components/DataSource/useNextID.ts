@@ -22,7 +22,7 @@ export const usePersonaBoundPlatform = (personaPublicKey: string) => {
 let isOpenedVerifyDialog = false
 let isOpenedFromButton = false
 
-const verifyPersona = (personaIdentifier?: PersonaIdentifier, username?: string) => async () => {
+export const verifyPersona = (personaIdentifier?: PersonaIdentifier, username?: string) => async () => {
     if (!personaIdentifier) return
     currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier].value = stringify({
         status: SetupGuideStep.VerifyOnNextID,
@@ -59,7 +59,7 @@ export function useSetupGuideStatusState() {
     }, [lastState_])
 }
 
-export function useNextIDConnectStatus() {
+export function useNextIDConnectStatus(disableInitialVerify = false) {
     const ui = activatedSocialNetworkUI
     const [enableNextID] = useState(ui.configuration.nextIDConfig?.enable)
     const personaConnectStatus = usePersonaConnectStatus()
@@ -110,13 +110,20 @@ export function useNextIDConnectStatus() {
         )
         if (isBound) return NextIDVerificationStatus.Verified
 
-        if (isOpenedFromButton) {
+        if (isOpenedFromButton && !disableInitialVerify) {
             verifyPersona(personaConnectStatus.currentConnectedPersona?.identifier)()
         }
         isOpenedVerifyDialog = true
         isOpenedFromButton = false
         return NextIDVerificationStatus.WaitingVerify
-    }, [username, enableNextID, isOpenedVerifyDialog, personaConnectStatus, currentPersonaIdentifier.value])
+    }, [
+        username,
+        enableNextID,
+        isOpenedVerifyDialog,
+        personaConnectStatus,
+        currentPersonaIdentifier.value,
+        disableInitialVerify,
+    ])
 
     return {
         isVerified: VerificationStatus === NextIDVerificationStatus.Verified,
