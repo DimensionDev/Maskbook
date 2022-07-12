@@ -128,19 +128,19 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
             open: true,
             traderProps: {
                 defaultInputCoin: {
+                    id: sETH.address,
+                    name: sETH.name ?? '',
+                    symbol: sETH.symbol ?? '',
+                    contract_address: sETH.address,
+                    decimals: sETH.decimals,
+                    type: TrendingCoinType.Fungible,
+                },
+                defaultOutputCoin: {
                     id: ETH.address,
                     name: ETH.name ?? '',
                     symbol: ETH.symbol ?? '',
                     contract_address: ETH.address,
                     decimals: ETH.decimals,
-                    type: TrendingCoinType.Fungible,
-                },
-                defaultOutputCoin: {
-                    id: sETH.address,
-                    name: sETH.name ?? '',
-                    symbol: sETH.symbol ?? '',
-                    contract_address: ETH.address,
-                    decimals: sETH.decimals,
                     type: TrendingCoinType.Fungible,
                 },
             },
