@@ -60,8 +60,6 @@ export async function encodeContractTransaction(
             to: tx.to as string | undefined,
             data: tx.data as string | undefined,
             value: tx.value,
-            data: tx.data as string | undefined,
-            to: tx.to as string | undefined,
         })
     }
 
