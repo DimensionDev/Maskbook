@@ -12,7 +12,7 @@ import { useSocialAddressListAll, useAvailablePlugins } from '@masknet/plugin-in
 import { ConcealableTabs } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { Box, CircularProgress, Typography } from '@mui/material'
+import { Box, CircularProgress } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 import { MaskMessages, sortPersonaBindings, useI18N } from '../../utils'
@@ -209,17 +209,13 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     return (
         <div className={classes.root}>
             <div>
-                {tabs.length ? (
+                {tabs.length && (
                     <ConcealableTabs<string>
                         tabs={tabs}
                         selectedId={selectedTabId}
                         onChange={setSelectedTab}
                         tail={isOwn && <GearIcon onClick={handleOpenDialog} className={classes.settingIcon} />}
                     />
-                ) : (
-                    <Typography variant="body2" color="textPrimary" align="center" sx={{ paddingTop: 8 }}>
-                        {t('web3_tab_hint')}
-                    </Typography>
                 )}
             </div>
             <div className={classes.content}>{component}</div>
