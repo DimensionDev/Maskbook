@@ -27,6 +27,14 @@ const useStyles = makeStyles()((theme) => ({
             border: 'none',
         },
     },
+    content: {
+        margin: 0,
+        padding: 16,
+        '::-webkit-scrollbar': {
+            display: 'none',
+        },
+        textAlign: 'center',
+    },
 }))
 
 interface UploadAvatarDialogProps {
@@ -102,11 +110,11 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
 
     return (
         <>
-            <DialogContent sx={{ overFlow: 'hidden' }}>
+            <DialogContent className={classes.content}>
                 <AvatarEditor
                     ref={(e) => setEditor(e)}
                     image={image!}
-                    style={{ width: '100%', height: '100%' }}
+                    style={{ width: 'auto', height: 400 }}
                     scale={scale ?? 1}
                     rotate={0}
                     border={50}

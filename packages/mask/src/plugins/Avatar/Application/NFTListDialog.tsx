@@ -103,7 +103,6 @@ const useStyles = makeStyles()((theme) => ({
     gallery: {
         display: 'flex',
         flexFlow: 'row wrap',
-        overflowY: 'auto',
         '&::-webkit-scrollbar': {
             display: 'none',
         },
