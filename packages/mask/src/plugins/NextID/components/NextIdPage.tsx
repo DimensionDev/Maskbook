@@ -94,12 +94,12 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: 2,
     },
     item1: {
-        color: theme.palette.maskColor.second,
+        color: '#767f8d',
         fontSize: '14',
         fontWeight: 400,
     },
     item2: {
-        color: theme.palette.maskColor.main,
+        color: '#07101B',
         fontSize: '14',
         fontWeight: 500,
         marginLeft: '2px',
