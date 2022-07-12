@@ -48,7 +48,7 @@ export function useERC20TokenApproveCallback(
 
     // the computed approve state
     const approveStateType = useMemo(() => {
-        if (isZero(amount) || !spender) return ApproveStateType.UNKNOWN
+        if (!amount || !spender) return ApproveStateType.UNKNOWN
         if (loadingBalance || loadingAllowance) return ApproveStateType.UPDATING
         if (errorBalance || errorAllowance) return ApproveStateType.FAILED
         return isLessThan(allowance, amount) || (allowance === amount && isZero(amount))
