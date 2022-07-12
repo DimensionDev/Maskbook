@@ -144,11 +144,12 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         }))
 
     const selectedTabId = selectedTab ?? first(tabs)?.id
-    const componentTabId =
+    const showNextID =
         isTwitter(activatedSocialNetworkUI) &&
         ((isOwn && addressList?.length === 0) || isWeb3ProfileDisable || (isOwn && !isCurrentConnectedPersonaBind))
-            ? displayPlugins?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
-            : selectedTabId
+    const componentTabId = showNextID
+        ? displayPlugins?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
+        : selectedTabId
 
     const handleOpenDialog = () => {
         CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToAll({
@@ -194,8 +195,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         })
     }, [identity.identifier?.userId])
 
-    console.log({ identity, socialAddressList, addressList, wallets, currentConnectedPersona })
-
     if (hidden) return null
 
     if (!identity.identifier?.userId || loadingSocialAddressList || loadingPersonaList)
@@ -214,7 +213,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     return (
         <div className={classes.root}>
             <div>
-                {tabs.length && (
+                {tabs.length && !showNextID && (
                     <ConcealableTabs<string>
                         tabs={tabs}
                         selectedId={selectedTabId}
