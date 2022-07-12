@@ -11,7 +11,7 @@ import { useI18N } from '../../utils'
 import { Application, getUnlistedApp } from './ApplicationSettingPluginList'
 import { ApplicationRecommendArea } from './ApplicationRecommendArea'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useNextIDConnectStatus } from '../DataSource/useNextID'
+import { useNextIDConnectStatus, verifyPersona } from '../DataSource/useNextID'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus'
 import { WalletMessages } from '../../plugins/Wallet/messages'
@@ -313,7 +313,7 @@ const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContex
 
 function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
     const personaConnectStatus = usePersonaConnectStatus()
-    const nextIDConnectStatus = useNextIDConnectStatus()
+    const nextIDConnectStatus = useNextIDConnectStatus(true)
 
     const {
         value: ApplicationCurrentStatus,
@@ -322,13 +322,18 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
     } = usePersonaAgainstSNSConnectStatus()
 
     useEffect(() => {
-        nextIDConnectStatus.reset()
         retry()
+        nextIDConnectStatus.reset()
         return MaskMessages.events.currentPersonaIdentifier.on(() => {
             retry()
             nextIDConnectStatus.reset()
         })
     }, [])
+
+    const personaNextIDReset = useCallback(() => {
+        nextIDConnectStatus.reset()
+        verifyPersona(personaConnectStatus.currentConnectedPersona?.identifier)()
+    }, [nextIDConnectStatus, personaConnectStatus])
 
     const { isSNSConnectToCurrentPersona, currentPersonaPublicKey, currentSNSConnectedPersonaPublicKey } =
         ApplicationCurrentStatus ?? {}
@@ -337,7 +342,7 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
         <ApplicationEntryStatusContext.Provider
             value={{
                 personaConnectAction: personaConnectStatus.action ?? undefined,
-                personaNextIDReset: nextIDConnectStatus.reset ?? undefined,
+                personaNextIDReset,
                 isPersonaCreated: personaConnectStatus.hasPersona,
                 isPersonaConnected: personaConnectStatus.connected,
                 isNextIDVerify: nextIDConnectStatus.isVerified,
