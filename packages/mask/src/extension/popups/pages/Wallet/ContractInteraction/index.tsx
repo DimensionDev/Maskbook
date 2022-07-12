@@ -181,7 +181,7 @@ const ContractInteraction = memo(() => {
                     for (const method of methods) {
                         const parameters = method.parameters
 
-                        if (method.name === 'approve' && parameters?.value) {
+                        if (method.name === 'approve' || method.name === 'setApprovalForAll') {
                             return {
                                 isNativeTokenInteraction: false,
                                 typeName: request.formatterTransaction?.title,
