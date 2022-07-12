@@ -10,7 +10,7 @@ import LRU from 'lru-cache'
 
 const cache = new LRU<string, Promise<NextIDAvatarMeta | undefined>>({
     max: 500,
-    maxAge: 60 * 1000,
+    ttl: 60 * 1000,
 })
 
 type GetNFTAvatar = (

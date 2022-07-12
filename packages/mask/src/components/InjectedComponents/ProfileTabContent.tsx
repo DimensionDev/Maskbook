@@ -76,6 +76,10 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         ? currentConnectedPersona?.identifier?.publicKeyAsHex
         : currentPersonaBinding?.persona
 
+    const isCurrentConnectedPersonaBind = personaList.some(
+        (persona) => persona.persona === currentConnectedPersona?.identifier?.publicKeyAsHex.toLowerCase(),
+    )
+
     const { value: personaProof, retry: retryProof } = useAsyncRetry(async () => {
         if (!personaPublicKey) return
         return NextIDProof.queryExistedBindingByPersona(personaPublicKey)
@@ -141,7 +145,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     const selectedTabId = selectedTab ?? first(tabs)?.id
     const componentTabId =
-        isTwitter(activatedSocialNetworkUI) && ((isOwn && addressList?.length === 0) || isWeb3ProfileDisable)
+        isTwitter(activatedSocialNetworkUI) &&
+        ((isOwn && addressList?.length === 0) || isWeb3ProfileDisable || (isOwn && !isCurrentConnectedPersonaBind))
             ? displayPlugins?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
             : selectedTabId
 
@@ -189,7 +194,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         })
     }, [identity.identifier?.userId])
 
-    // console.log({ identity, socialAddressList, addressList, wallets })
+    console.log({ identity, socialAddressList, addressList, wallets, currentConnectedPersona })
 
     if (hidden) return null
 

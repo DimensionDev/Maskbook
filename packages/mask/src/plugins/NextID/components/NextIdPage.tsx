@@ -106,8 +106,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     button: {
         borderRadius: '99px',
-        backgroundColor: theme.palette.maskColor.dark,
+        backgroundColor: '#07101b',
         color: '#fff',
+        ':hover': {
+            color: 'fff',
+            backgroundColor: '#07101b',
+        },
     },
 }))
 
@@ -131,7 +135,11 @@ export function NextIdPage({ persona }: NextIdPageProps) {
     const personaActionButton = useMemo(() => {
         if (!personaConnectStatus.action) return null
         const button = personaConnectStatus.hasPersona ? t.connect_persona() : t.create_persona()
-        return <Button onClick={personaConnectStatus.action}>{button}</Button>
+        return (
+            <Button className={classes.button} onClick={personaConnectStatus.action}>
+                {button}
+            </Button>
+        )
     }, [personaConnectStatus, t])
 
     const { value: currentPersona, loading: loadingPersona } = useAsyncRetry(async () => {
