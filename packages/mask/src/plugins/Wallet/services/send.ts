@@ -1,5 +1,6 @@
 import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
+import { isHex, hexToNumber } from 'web3-utils'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { isNil } from 'lodash-unified'
 import { defer } from '@dimensiondev/kit'
@@ -7,7 +8,7 @@ import {
     ChainId,
     createWeb3,
     EthereumMethodType,
-    getPayloadConfig,
+    getSignablePayloadConfig,
     getPayloadId,
     getRPCConstants,
     isRiskMethod,
@@ -120,15 +121,16 @@ export async function send(
     options?: Options,
 ) {
     const provider = await createProvider(options?.chainId)
-    const computedPayload = getPayloadConfig(payload)
+
     switch (payload.method) {
         case EthereumMethodType.ETH_SEND_TRANSACTION:
         case EthereumMethodType.MASK_REPLACE_TRANSACTION:
+            const computedPayload = getSignablePayloadConfig(payload)
             if (!computedPayload?.from || !computedPayload.to || !options?.chainId) return
 
             const privateKey = await WalletRPC.exportPrivateKey(computedPayload.from as string)
             const web3 = createWeb3(provider)
-            const transactionSigned = await web3.eth.accounts.signTransaction(computedPayload, privateKey)
+            const transactionSigned = await web3.eth.accounts.signTransaction(computedPayload, `0x${privateKey}`)
             if (!transactionSigned.rawTransaction) break
 
             return provider.send(

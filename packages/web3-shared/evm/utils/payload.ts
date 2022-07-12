@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js'
-import { first } from 'lodash-unified'
+import { first, isUndefined, omitBy } from 'lodash-unified'
 import type { JsonRpcPayload } from 'web3-core-helpers'
+import { hexToNumber } from 'web3-utils'
 import { EthereumMethodType, Transaction } from '../types'
 
 export function addGasMargin(value: BigNumber.Value, scale = 3000) {
@@ -55,4 +56,26 @@ export function getPayloadConfig(payload: JsonRpcPayload) {
         default:
             return
     }
+}
+
+export function getSignablePayloadConfig(payload: JsonRpcPayload) {
+    const raw = getPayloadConfig(payload)
+    if (!raw) return
+
+    const parseHexNumber = (hex: string | number | undefined) =>
+        typeof hex !== 'undefined' ? hexToNumber(hex ?? '0x0') : undefined
+
+    return omitBy(
+        {
+            ...raw,
+            value: parseHexNumber(raw.value as string | undefined),
+            gas: parseHexNumber(raw.gas),
+            gasPrice: parseHexNumber(raw.gasPrice as string | undefined),
+            maxFeePerGas: parseHexNumber(raw.maxFeePerGas as string | undefined),
+            maxPriorityFeePerGas: parseHexNumber(raw.maxPriorityFeePerGas as string | undefined),
+            chainId: parseHexNumber(raw.chainId),
+            nonce: parseHexNumber(raw.nonce),
+        },
+        isUndefined,
+    ) as Transaction
 }
