@@ -169,6 +169,12 @@ function createNFTAsset(chainId: ChainId, asset: OpenSeaResponse): NonFungibleAs
                 asset.last_sale?.payment_token.decimals,
             )?.toString(),
         },
+        priceToken: createTokenDetailed(chainId, {
+            address: asset.last_sale?.payment_token.address ?? '',
+            decimals: Number(asset.last_sale?.payment_token.decimals ?? '0'),
+            name: '',
+            symbol: asset.last_sale?.payment_token.symbol ?? '',
+        }),
         orders: asset.orders
             ?.sort((a, z) =>
                 new BigNumber(getOrderUSDPrice(z.current_price, z.payment_token_contract?.usd_price) ?? 0)
