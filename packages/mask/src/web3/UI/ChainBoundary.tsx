@@ -138,7 +138,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     ])
 
     const switchButtonDisabled = useMemo(() => {
-        return !(actualProviderDescriptor.enableRequirements?.supportedChainIds?.includes(expectedChainId) ?? false)
+        return !(actualProviderDescriptor?.enableRequirements?.supportedChainIds?.includes(expectedChainId) ?? false)
     }, [expectedChainId, actualProviderDescriptor])
 
     const renderBox = (children?: React.ReactNode, tips?: string) => {

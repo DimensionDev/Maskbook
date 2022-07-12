@@ -373,6 +373,7 @@ export interface NonFungibleAsset<ChainId, SchemaType> extends NonFungibleToken<
     orders?: Array<NonFungibleTokenOrder<ChainId, SchemaType>>
     events?: Array<NonFungibleTokenEvent<ChainId, SchemaType>>
     paymentTokens?: Array<FungibleToken<ChainId, SchemaType>>
+    priceToken?: FungibleToken<ChainId, SchemaType>
 }
 
 /**

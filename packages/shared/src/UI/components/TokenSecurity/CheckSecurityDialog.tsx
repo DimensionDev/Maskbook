@@ -12,13 +12,12 @@ import { useFungibleToken, useFungibleTokenPrice } from '@masknet/plugin-infra/w
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
-        width: 600,
-    },
     content: {
-        height: 510,
-        maxHeight: 510,
-        padding: 16,
+        margin: 0,
+        padding: '0px !important',
+        '::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     footer: {
         boxShadow:
@@ -30,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface BuyTokenDialogProps extends withClasses<never | 'root'> {
+export interface BuyTokenDialogProps {
     open: boolean
     onClose(): void
     tokenSecurity: TokenSecurity
@@ -53,13 +52,9 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
     }, [tokenSecurity])
 
     return (
-        <InjectedDialog
-            classes={{ dialogContent: classes.content }}
-            title={t.check_security()}
-            open={open}
-            onClose={onClose}>
+        <InjectedDialog title={t.check_security()} open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
-                <Stack height="100%" spacing={2}>
+                <Stack height="100%" padding="16px">
                     <Stack flex={1}>
                         {loadingToken && (
                             <Center>
