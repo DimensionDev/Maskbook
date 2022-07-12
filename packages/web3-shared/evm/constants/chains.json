@@ -233,7 +233,7 @@
         "nativeCurrency": {
             "chainId": 42161,
             "name": "Arbitrum Ether",
-            "symbol": "ETH",
+            "symbol": "ARETH",
             "decimals": 18,
             "logoURL": "https://assets.debank.com/static/media/arbitrum.8e326f58.svg"
         },
@@ -258,7 +258,7 @@
         "nativeCurrency": {
             "chainId": 421611,
             "name": "Arbitrum Rinkeby Ether",
-            "symbol": "ETH",
+            "symbol": "ARETH",
             "decimals": 18
         },
         "infoURL": "https://arbitrum.io",
