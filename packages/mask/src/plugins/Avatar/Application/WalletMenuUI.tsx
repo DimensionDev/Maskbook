@@ -74,7 +74,7 @@ export function WalletUI(props: WalletUIProps) {
             ) : (
                 <ImageIcon size={30} icon={networkDescriptor?.icon} />
             )}
-            <Stack direction="column" style={{ marginLeft: 4 }}>
+            <Stack direction="column" style={{ marginLeft: 16 }}>
                 <Stack display="flex" fontSize={14} flexDirection="row" alignItems="center">
                     <Typography className={classes.walletName} fontWeight={700} fontSize={14}>
                         {verify
