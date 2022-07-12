@@ -12,7 +12,6 @@ import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import intervalToDuration from 'date-fns/intervalToDuration'
 import nextDay from 'date-fns/nextDay'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useI18N as useBaseI18N } from '../../../utils'
 import { Translate, useI18N } from '../locales'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
 import { StyledLinearProgress } from '../../ITO/SNSAdaptor/StyledLinearProgress'
@@ -181,7 +180,6 @@ export interface RedPacketInHistoryListProps {
 }
 export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const { history, onSelect } = props
-    const i18n = useBaseI18N()
     const t = useI18N()
     const { classes } = useStyles()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
@@ -245,7 +243,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
             await refundCallback()
             revalidateAvailability()
         }
-        if (canSend) onSelect(removeUselessSendParams({ ...history, token: historyToken }))
+        if (canSend) onSelect(removeUselessSendParams({ ...history, token: historyToken, rpid }))
     }, [onSelect, refundCallback, canRefund, canSend, history, historyToken])
 
     // #region password lost tips
