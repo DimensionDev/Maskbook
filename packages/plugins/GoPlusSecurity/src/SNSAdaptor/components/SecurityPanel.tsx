@@ -169,7 +169,9 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                             href={resolveGoLabLink(tokenSecurity.chainId, tokenSecurity.contract)}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <LinkOutIcon style={{ color: theme.palette.text.strong, width: 14, height: 14 }} />
+                            <LinkOutIcon
+                                style={{ color: theme.palette.text.strong, width: 18, height: 18, marginTop: 2 }}
+                            />
                         </Link>
                     </Stack>
                 </Stack>

@@ -89,7 +89,9 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                             href={explorerResolver.fungibleTokenLink(tokenSecurity.chainId, tokenSecurity.contract)}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <LinkOutIcon style={{ color: theme.palette.text.strong, width: 14, height: 14 }} />{' '}
+                            <LinkOutIcon
+                                style={{ color: theme.palette.text.strong, width: 18, height: 18, marginTop: 2 }}
+                            />
                         </Link>
                     </Stack>
                 </Stack>
@@ -110,7 +112,9 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                                 )}
                                 target="_blank"
                                 rel="noopener noreferrer">
-                                <LinkOutIcon style={{ color: theme.palette.text.strong, width: 14, height: 14 }} />
+                                <LinkOutIcon
+                                    style={{ color: theme.palette.text.strong, width: 18, height: 18, marginTop: 2 }}
+                                />
                             </Link>
                         )}
                     </Stack>
