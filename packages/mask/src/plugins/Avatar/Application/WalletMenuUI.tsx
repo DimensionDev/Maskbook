@@ -77,10 +77,10 @@ export function WalletUI(props: WalletUIProps) {
             <Stack direction="column" style={{ marginLeft: 4 }}>
                 <Stack display="flex" fontSize={14} flexDirection="row" alignItems="center">
                     <Typography className={classes.walletName} fontWeight={700} fontSize={14}>
-                        {providerType === ProviderType.MaskWallet
-                            ? domain ?? name ?? providerDescriptor?.name ?? formatAddress(address, 4)
-                            : isETH
+                        {verify
                             ? domain ?? 'EVM Wallet'
+                            : providerType === ProviderType.MaskWallet
+                            ? domain ?? name ?? providerDescriptor?.name ?? formatAddress(address, 4)
                             : domain ?? providerDescriptor?.name ?? formatAddress(address, 4)}
                     </Typography>
                     {verify ? <VerifyIcon style={{ width: 13, height: 13, marginLeft: 4 }} /> : null}
