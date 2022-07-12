@@ -14,7 +14,7 @@ import {
     useChainIdValid,
     useProviderDescriptor,
 } from '@masknet/plugin-infra/web3'
-import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { delay } from '@dimensiondev/kit'
 import ActionButton, {
