@@ -89,7 +89,7 @@ export class DeBankAPI
                         options?.chainId,
                     ),
                     getAllEVMNativeAssets(),
-                    (a, z) => a.symbol === z.symbol,
+                    (a, z) => a.symbol === z.symbol && a.chainId === z.chainId,
                 ),
                 createIndicator(options?.indicator),
             )
