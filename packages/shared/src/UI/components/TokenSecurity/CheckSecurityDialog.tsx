@@ -12,9 +12,6 @@ import { useFungibleToken, useFungibleTokenPrice } from '@masknet/plugin-infra/w
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
-    title: {
-        width: 600,
-    },
     content: {
         margin: 0,
         padding: '0px !important',
