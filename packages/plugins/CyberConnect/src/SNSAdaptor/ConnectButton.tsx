@@ -92,7 +92,7 @@ export default function ConnectButton({
 }) {
     const { classes, cx } = useStyles()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
-    const myAddress = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const myAddress = useAccount()
     const [cc, setCC] = useState<CyberConnect | null>(null)
     const [isFollowing, setFollowing] = useState(false)
     const [isLoading, setLoading] = useState(false)
@@ -137,7 +137,7 @@ export default function ConnectButton({
     if (!myAddress)
         return (
             <Typography variant="body2" sx={{ marginTop: 2 }}>
-                Please Connect your wallet first
+                Please connect your wallet first
             </Typography>
         )
     if (blockChainNetwork !== NetworkPluginID.PLUGIN_EVM) {
