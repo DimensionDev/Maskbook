@@ -27,17 +27,11 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         fontSize: 18,
     },
-    root: {
-        width: '600px',
-    },
     detectionCard: {
         backgroundColor: theme.palette.background.default,
     },
     detectionCollection: {
         overflowY: 'auto',
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
     },
     icon: {
         width: '48px',
@@ -101,7 +95,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
     }, [riskyFactors, attentionFactors])
 
     return (
-        <Stack spacing={2}>
+        <Stack width="100%" spacing={2}>
             <Stack
                 spacing={1}
                 direction="row"
