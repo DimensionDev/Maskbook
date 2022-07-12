@@ -268,9 +268,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                     switch (pluginID) {
                                         case NetworkPluginID.PLUGIN_EVM:
                                             await onSwitchChain(
-                                                chainId === EVM_ChainId.Mainnet
-                                                    ? EVM_ChainId.Matic
-                                                    : EVM_ChainId.Mainnet,
+                                                chainId === EVM_ChainId.Mainnet ? EVM_ChainId.BSC : EVM_ChainId.Mainnet,
                                             )
                                             break
                                         default:
