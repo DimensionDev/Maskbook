@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { first, isUndefined, omitBy } from 'lodash-unified'
 import type { JsonRpcPayload } from 'web3-core-helpers'
-import { hexToNumber } from 'web3-utils'
+import { hexToNumberString } from 'web3-utils'
 import { EthereumMethodType, Transaction } from '../types'
 
 export function addGasMargin(value: BigNumber.Value, scale = 3000) {
@@ -62,19 +62,19 @@ export function getSignablePayloadConfig(payload: JsonRpcPayload) {
     const raw = getPayloadConfig(payload)
     if (!raw) return
 
-    const parseHexNumber = (hex: string | number | undefined) =>
-        typeof hex !== 'undefined' ? hexToNumber(hex ?? '0x0') : undefined
+    const parseHexNumberString = (hex: string | number | undefined) =>
+        typeof hex !== 'undefined' ? hexToNumberString(hex ?? '0x0') : undefined
 
     return omitBy(
         {
             ...raw,
-            value: parseHexNumber(raw.value as string | undefined),
-            gas: parseHexNumber(raw.gas),
-            gasPrice: parseHexNumber(raw.gasPrice as string | undefined),
-            maxFeePerGas: parseHexNumber(raw.maxFeePerGas as string | undefined),
-            maxPriorityFeePerGas: parseHexNumber(raw.maxPriorityFeePerGas as string | undefined),
-            chainId: parseHexNumber(raw.chainId),
-            nonce: parseHexNumber(raw.nonce),
+            value: parseHexNumberString(raw.value as string | undefined),
+            gas: parseHexNumberString(raw.gas),
+            gasPrice: parseHexNumberString(raw.gasPrice as string | undefined),
+            maxFeePerGas: parseHexNumberString(raw.maxFeePerGas as string | undefined),
+            maxPriorityFeePerGas: parseHexNumberString(raw.maxPriorityFeePerGas as string | undefined),
+            chainId: parseHexNumberString(raw.chainId),
+            nonce: parseHexNumberString(raw.nonce),
         },
         isUndefined,
     ) as Transaction
