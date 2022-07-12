@@ -7,8 +7,13 @@ import { isZero, rightShift, formatBalance, isSameAddress, NetworkPluginID } fro
 import type { ChainId, Web3 } from '@masknet/web3-shared-evm'
 import { ProviderIconURLs } from './IconURL'
 import { useI18N } from '../../../utils'
-import { SavingsProtocol, TabType } from '../types'
+import { ProtocolType, SavingsProtocol, TabType } from '../types'
 import { useAccount, useWeb3, useFungibleAssets } from '@masknet/plugin-infra/web3'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { useCallback } from 'react'
+import { PluginTraderMessages } from '../../Trader/messages'
+import { LDO_PAIRS } from '../constants'
+import { TrendingCoinType } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {
@@ -105,7 +110,7 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     const { value: assets, loading: getAssetsLoading } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM)
-
+    const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
     // Only fetch protocol APR and Balance on chainId change
     const { loading } = useAsync(async () => {
         await Promise.all(
@@ -115,6 +120,32 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
             }),
         )
     }, [chainId, web3, account, protocols])
+
+    const onConvertClick = useCallback(() => {
+        const ETH = LDO_PAIRS[0][0]
+        const sETH = LDO_PAIRS[0][1]
+        openSwapDialog({
+            open: true,
+            traderProps: {
+                defaultInputCoin: {
+                    id: sETH.address,
+                    name: sETH.name ?? '',
+                    symbol: sETH.symbol ?? '',
+                    contract_address: sETH.address,
+                    decimals: sETH.decimals,
+                    type: TrendingCoinType.Fungible,
+                },
+                defaultOutputCoin: {
+                    id: ETH.address,
+                    name: ETH.name ?? '',
+                    symbol: ETH.symbol ?? '',
+                    contract_address: ETH.address,
+                    decimals: ETH.decimals,
+                    type: TrendingCoinType.Fungible,
+                },
+            },
+        })
+    }, [openSwapDialog])
     return (
         <Box className={classes.containerWrap}>
             <Grid container spacing={0} className={classes.tableHeader}>
@@ -188,6 +219,10 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
                                         color="primary"
                                         disabled={tab === TabType.Withdraw ? isZero(protocol.balance) : false}
                                         onClick={() => {
+                                            if (tab === TabType.Withdraw && protocol.type === ProtocolType.Lido) {
+                                                onConvertClick()
+                                                return
+                                            }
                                             setTab(tab)
                                             setSelectedProtocol(protocol)
                                         }}>
