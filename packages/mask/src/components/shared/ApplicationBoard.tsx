@@ -23,7 +23,7 @@ const useStyles = makeStyles<{ shouldScroll: boolean; isCarouselReady: boolean }
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
         applicationWrapper: {
-            paddingTop: theme.spacing(1),
+            padding: theme.spacing(props.isCarouselReady ? 0 : 1, 0.25, 1),
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
             overflowY: 'auto',
@@ -38,7 +38,7 @@ const useStyles = makeStyles<{ shouldScroll: boolean; isCarouselReady: boolean }
                 width: 20,
             },
             '::-webkit-scrollbar-thumb': {
-                borderRadius: 20,
+                borderRadius: '20px',
                 width: 5,
                 border: '7px solid rgba(0, 0, 0, 0)',
                 backgroundColor: theme.palette.maskColor.secondaryLine,
