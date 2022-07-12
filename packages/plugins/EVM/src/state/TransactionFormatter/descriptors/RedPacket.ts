@@ -3,6 +3,7 @@ import {
     ChainId,
     getNftRedPacketConstants,
     getRedPacketConstants,
+    isNativeTokenAddress,
     TransactionParameter,
 } from '@masknet/web3-shared-evm'
 import type { TransactionDescriptor } from '../types'
@@ -26,7 +27,11 @@ export class RedPacketDescriptor implements TransactionDescriptor {
             })
 
             const token = await connection?.getFungibleToken(parameters?._token_addr ?? '')
-            const amount = formatBalance(parameters?._total_tokens, token?.decimals)
+            const amount = formatBalance(
+                parameters?._total_tokens,
+                token?.decimals,
+                isNativeTokenAddress(parameters?._token_addr) ? 6 : 0,
+            )
 
             return {
                 chainId: context.chainId,
