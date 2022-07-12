@@ -76,6 +76,10 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         ? currentConnectedPersona?.identifier?.publicKeyAsHex
         : currentPersonaBinding?.persona
 
+    const isCurrentConnectedPersonaBind = personaList.some(
+        (persona) => persona.persona === currentConnectedPersona?.identifier?.publicKeyAsHex.toLowerCase(),
+    )
+
     const { value: personaProof, retry: retryProof } = useAsyncRetry(async () => {
         if (!personaPublicKey) return
         return NextIDProof.queryExistedBindingByPersona(personaPublicKey)
@@ -140,10 +144,12 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         }))
 
     const selectedTabId = selectedTab ?? first(tabs)?.id
-    const componentTabId =
-        isTwitter(activatedSocialNetworkUI) && ((isOwn && addressList?.length === 0) || isWeb3ProfileDisable)
-            ? displayPlugins?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
-            : selectedTabId
+    const showNextID =
+        isTwitter(activatedSocialNetworkUI) &&
+        ((isOwn && addressList?.length === 0) || isWeb3ProfileDisable || (isOwn && !isCurrentConnectedPersonaBind))
+    const componentTabId = showNextID
+        ? displayPlugins?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
+        : selectedTabId
 
     const handleOpenDialog = () => {
         CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToAll({
@@ -189,8 +195,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         })
     }, [identity.identifier?.userId])
 
-    // console.log({ identity, socialAddressList, addressList, wallets })
-
     if (hidden) return null
 
     if (!identity.identifier?.userId || loadingSocialAddressList || loadingPersonaList)
@@ -209,7 +213,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     return (
         <div className={classes.root}>
             <div>
-                {tabs.length && (
+                {tabs.length && !showNextID && (
                     <ConcealableTabs<string>
                         tabs={tabs}
                         selectedId={selectedTabId}
