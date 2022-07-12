@@ -117,6 +117,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                         address={token.address}
                         chainId={token.chainId}
                         name={token.name}
+                        disableDefaultIcon
                         classes={{ icon: classes.icon }}
                     />
                 }

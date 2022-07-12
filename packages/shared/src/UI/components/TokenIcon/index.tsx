@@ -22,11 +22,12 @@ export interface TokenIconProps extends withClasses<'icon'> {
     name?: string
     logoURL?: string
     isERC721?: boolean
+    disableDefaultIcon?: boolean
     AvatarProps?: Partial<AvatarProps>
 }
 
 export function TokenIcon(props: TokenIconProps) {
-    const { address, logoURL, name, AvatarProps, classes, isERC721 } = props
+    const { address, logoURL, name, AvatarProps, classes, isERC721, disableDefaultIcon } = props
 
     const chainId = useChainId(props.pluginID, props.chainId)
     const hub = useWeb3Hub(props.pluginID)
@@ -40,6 +41,8 @@ export function TokenIcon(props: TokenIconProps) {
     }, [chainId, address, logoURL, hub])
     const { urls = EMPTY_LIST, key } = value ?? {}
     const accessibleUrl = useAccessibleUrl(key, first(urls))
+
+    if (!accessibleUrl && disableDefaultIcon) return null
 
     return (
         <TokenIconUI
