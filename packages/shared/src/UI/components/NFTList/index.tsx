@@ -28,7 +28,7 @@ interface Props {
     hasError?: boolean
 }
 
-const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { columns, gap }) => {
+const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { columns = 4, gap = 12 }) => {
     const isLight = theme.palette.mode === 'light'
     return {
         checkbox: {
@@ -37,10 +37,10 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
             top: 0,
         },
         list: {
-            gridGap: gap ?? 12,
+            gridGap: gap,
             padding: 0,
             display: 'grid',
-            gridTemplateColumns: `repeat(${columns ?? 4}, 1fr)`,
+            gridTemplateColumns: `repeat(${columns}, 1fr)`,
         },
         nftContainer: {
             background: isLight ? '#EDEFEF' : '#2F3336',
@@ -123,10 +123,10 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
 
 export const NFTItem: FC<NFTItemProps> = ({ token }) => {
     const { classes } = useStyles({})
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const fullCaption = token.metadata?.name || token.tokenId
-    const caption = token.metadata?.name.match(/#\d+$/) ? token.metadata.name : Others?.formatTokenId(token.tokenId)
+    const caption = token.metadata?.name?.match(/#\d+$/) ? token.metadata.name : Others?.formatTokenId(token.tokenId)
     return (
         <div className={classes.nftContainer}>
             <NFTCardStyledAssetPlayer
