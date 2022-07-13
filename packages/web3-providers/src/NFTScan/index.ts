@@ -218,7 +218,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                     schema: SchemaType.ERC721,
                     metadata: {
                         chainId,
-                        name: platformInfo.name,
+                        name: x.nft_name,
                         symbol,
                         description: platformInfo.description,
                         imageURL: prependIpfs(x.cover),

@@ -47,6 +47,7 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
             borderRadius: 8,
             width: '100%',
             transition: 'all 0.2s ease',
+            overflow: 'auto',
             '&:hover': {
                 backgroundColor: isLight ? theme.palette.background.paper : undefined,
                 boxShadow: isLight ? '0px 4px 30px rgba(0, 0, 0, 0.1)' : undefined,
@@ -123,6 +124,8 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
 export const NFTItem: FC<NFTItemProps> = ({ token }) => {
     const { classes } = useStyles({})
     const chainId = useChainId()
+    const fullCaption = token.metadata?.name || token.tokenId
+    const caption = token.metadata?.name || formatTokenId(token.tokenId)
     return (
         <div className={classes.nftContainer}>
             <NFTCardStyledAssetPlayer
@@ -137,7 +140,9 @@ export const NFTItem: FC<NFTItemProps> = ({ token }) => {
                     wrapper: classes.wrapper,
                 }}
             />
-            <Typography className={classes.caption}>{formatTokenId(token.tokenId)}</Typography>
+            <Typography className={classes.caption} title={fullCaption !== caption ? fullCaption : undefined}>
+                {caption}
+            </Typography>
         </div>
     )
 }

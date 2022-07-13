@@ -22,7 +22,7 @@ export function formatEthereumAddress(address: string, size = 0) {
 
 export function formatTokenId(tokenId: string, size = 0) {
     if (tokenId.length < 9) return `#${tokenId}`
-    return `#${tokenId.slice(0, Math.max(0, 2 + size))}...${tokenId.slice(-size)}`
+    return `#${tokenId.slice(0, Math.max(0, 2 + size))}...${tokenId.slice(-4)}`
 }
 
 export function formatDomainName(domain: string, size = 4) {
