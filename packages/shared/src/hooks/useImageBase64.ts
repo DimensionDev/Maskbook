@@ -54,8 +54,7 @@ export function useAccessibleUrl(
             return
         }
 
-        const blob = await response.blob()
-        const dataURL = await readAsDataURL(blob)
+        const dataURL = await responseToBase64(response)
         cache.set(key, dataURL)
         setAvailableUrl(dataURL)
     }, [key, url])

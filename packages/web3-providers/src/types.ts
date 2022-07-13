@@ -25,6 +25,7 @@ import type {
     GasOptionType,
     HubOptions,
     HubIndicator,
+    TokenType,
 } from '@masknet/web3-shared-base'
 import type { DataProvider } from '@masknet/public-api'
 import type { ChainId } from '@masknet/web3-shared-evm'
@@ -608,10 +609,6 @@ export namespace TokenAPI {
     }
 }
 
-export enum TrendingCoinType {
-    Fungible = 1,
-    NonFungible = 2,
-}
 export enum NonFungibleMarketplace {
     OpenSea = 'OpenSea',
     LooksRare = 'LooksRare',
@@ -658,7 +655,7 @@ export namespace TrendingAPI {
         chainId?: ChainId
         name: string
         symbol: string
-        type: TrendingCoinType
+        type: TokenType
         decimals?: number
         is_mirrored?: boolean
         platform_url?: string

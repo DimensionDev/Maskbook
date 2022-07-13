@@ -9,8 +9,7 @@ import { DataProvider } from '@masknet/public-api'
 import { NFTList } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { TrendingCoinType } from '@masknet/web3-providers'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
 import { isNativeTokenSymbol } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { Link, Stack, Tab } from '@mui/material'
@@ -169,7 +168,7 @@ export function TraderView(props: TraderViewProps) {
     })
     // #endregion
 
-    const isNFT = trending?.coin.type === TrendingCoinType.NonFungible
+    const isNFT = trending?.coin.type === TokenType.NonFungible
     // #region if the coin is a native token or contract address exists
     const isSwappable =
         !isMinimalMode &&
@@ -238,8 +237,7 @@ export function TraderView(props: TraderViewProps) {
         props.onUpdate?.()
     }, [tabIndex, loadingTrending])
     // #endregion
-    const collectionAddress =
-        trending?.coin.type === TrendingCoinType.NonFungible ? trending.coin.contract_address : undefined
+    const collectionAddress = trending?.coin.type === TokenType.NonFungible ? trending.coin.contract_address : undefined
     const {
         value: fetchedTokens = EMPTY_LIST,
         done,

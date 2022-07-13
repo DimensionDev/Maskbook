@@ -2,10 +2,9 @@ import { Paper, Stack, Table, TableBody, TableCell, TableContainer, TableRow, Ty
 import { makeStyles } from '@masknet/theme'
 import { DataProvider } from '@masknet/public-api'
 import { FormattedCurrency } from '@masknet/shared'
-import { formatCurrency, formatInteger, formatSupply } from '@masknet/web3-shared-base'
+import { formatCurrency, formatInteger, formatSupply, TokenType } from '@masknet/web3-shared-base'
 import type { Trending } from '../../types'
 import { useI18N } from '../../../../utils'
-import { TrendingCoinType } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -176,6 +175,6 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
 }
 
 export function CoinMarketTable(props: CoinMarketTableProps) {
-    const isNFT = props.trending.coin.type === TrendingCoinType.NonFungible
+    const isNFT = props.trending.coin.type === TokenType.NonFungible
     return isNFT ? <NonFungibleCoinMarketTable {...props} /> : <FungibleCoinMarketTable {...props} />
 }

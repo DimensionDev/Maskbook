@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Button, Grid, Typography } from '@mui/material'
 import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import { CircleLoadingIcon, DirectIcon } from '@masknet/icons'
-import { isZero, rightShift, formatBalance, isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { isZero, rightShift, formatBalance, isSameAddress, NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
 import type { ChainId, Web3 } from '@masknet/web3-shared-evm'
 import { ProviderIconURLs } from './IconURL'
 import { useI18N } from '../../../utils'
@@ -13,7 +13,6 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useCallback } from 'react'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { LDO_PAIRS } from '../constants'
-import { TrendingCoinType } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {
@@ -133,7 +132,7 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
                     symbol: sETH.symbol ?? '',
                     contract_address: sETH.address,
                     decimals: sETH.decimals,
-                    type: TrendingCoinType.Fungible,
+                    type: TokenType.Fungible,
                 },
                 defaultOutputCoin: {
                     id: ETH.address,
@@ -141,7 +140,7 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
                     symbol: ETH.symbol ?? '',
                     contract_address: ETH.address,
                     decimals: ETH.decimals,
-                    type: TrendingCoinType.Fungible,
+                    type: TokenType.Fungible,
                 },
             },
         })
