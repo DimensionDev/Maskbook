@@ -32,13 +32,13 @@ export function TokenIcon(props: TokenIconProps) {
     const chainId = useChainId(props.pluginID, props.chainId)
     const hub = useWeb3Hub(props.pluginID)
     const { value } = useAsyncRetry(async () => {
-        const logoURLs = await hub?.getFungibleTokenIconURLs?.(chainId, address).catch(() => [])
+        const logoURLs = isERC721 ? [] : await hub?.getFungibleTokenIconURLs?.(chainId, address).catch(() => [])
         const key = address ? [chainId, address].join('/') : logoURL
         return {
             key,
             urls: [logoURL, ...(logoURLs ?? [])].filter(Boolean) as string[],
         }
-    }, [chainId, address, logoURL, hub])
+    }, [chainId, address, isERC721, logoURL, hub])
     const { urls = EMPTY_LIST, key } = value ?? {}
     const accessibleUrl = useAccessibleUrl(key, first(urls))
 
