@@ -179,7 +179,8 @@ export interface RedPacketInHistoryListProps {
     onSelect: (payload: RedPacketJSONPayload) => void
 }
 export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
-    const { history, onSelect } = props
+    const { onSelect } = props
+    const history: RedPacketInHistoryListProps['history'] = { ...props.history }
     const t = useI18N()
     const { classes } = useStyles()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
