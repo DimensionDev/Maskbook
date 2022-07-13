@@ -5,7 +5,7 @@ import { Avatar, AvatarProps, useTheme } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import NO_IMAGE_COLOR from './constants'
 import { useChainId, useWeb3Hub, Web3Helper } from '@masknet/plugin-infra/web3'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useAccessibleUrl } from '../../../hooks/useImageBase64'
 
@@ -22,23 +22,27 @@ export interface TokenIconProps extends withClasses<'icon'> {
     name?: string
     logoURL?: string
     isERC721?: boolean
+    tokenType?: TokenType
     disableDefaultIcon?: boolean
     AvatarProps?: Partial<AvatarProps>
 }
 
 export function TokenIcon(props: TokenIconProps) {
-    const { address, logoURL, name, AvatarProps, classes, isERC721, disableDefaultIcon } = props
+    const { address, logoURL, name, AvatarProps, classes, tokenType = TokenType.Fungible, disableDefaultIcon } = props
 
     const chainId = useChainId(props.pluginID, props.chainId)
     const hub = useWeb3Hub(props.pluginID)
+    const isNFT = tokenType === TokenType.NonFungible
     const { value } = useAsyncRetry(async () => {
-        const logoURLs = isERC721 ? [] : await hub?.getFungibleTokenIconURLs?.(chainId, address).catch(() => [])
+        const logoURLs = isNFT
+            ? await hub?.getNonFungibleTokenIconURLs?.(chainId, address)
+            : await hub?.getFungibleTokenIconURLs?.(chainId, address).catch(() => [])
         const key = address ? [chainId, address].join('/') : logoURL
         return {
             key,
             urls: [logoURL, ...(logoURLs ?? [])].filter(Boolean) as string[],
         }
-    }, [chainId, address, isERC721, logoURL, hub])
+    }, [chainId, address, isNFT, logoURL, hub])
     const { urls = EMPTY_LIST, key } = value ?? {}
     const accessibleUrl = useAccessibleUrl(key, first(urls))
 
@@ -46,7 +50,7 @@ export function TokenIcon(props: TokenIconProps) {
 
     return (
         <TokenIconUI
-            logoURL={isERC721 ? logoURL : accessibleUrl}
+            logoURL={isNFT ? logoURL : accessibleUrl}
             AvatarProps={AvatarProps}
             classes={classes}
             name={name}

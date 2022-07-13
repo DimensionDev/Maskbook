@@ -1,6 +1,6 @@
 import { TokenIcon } from '@masknet/shared'
 import { TrendingCoinType } from '@masknet/web3-providers'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
 import type { FC } from 'react'
 
 interface CoinIconProps {
@@ -13,7 +13,7 @@ interface CoinIconProps {
 export const CoinIcon: FC<CoinIconProps> = ({ type, address, logoUrl, name, size }) => {
     return (
         <TokenIcon
-            isERC721={type === TrendingCoinType.NonFungible}
+            tokenType={type === TrendingCoinType.NonFungible ? TokenType.NonFungible : TokenType.Fungible}
             pluginID={NetworkPluginID.PLUGIN_EVM}
             name={name}
             AvatarProps={{
