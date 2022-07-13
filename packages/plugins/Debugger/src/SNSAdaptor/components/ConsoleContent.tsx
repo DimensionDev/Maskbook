@@ -5,7 +5,10 @@ import {
     useBlockNumber,
     useBlockTimestamp,
     useChainId,
+    useCurrentWeb3NetworkChainId,
     useCurrentWeb3NetworkPluginID,
+    useNetworkType,
+    useProviderType,
     useWeb3Connection,
     useWeb3Hub,
     useWeb3State,
@@ -49,7 +52,6 @@ const useStyles = makeStyles()({
 })
 
 export function ConsoleContent(props: ConsoleContentProps) {
-    const { onClose } = props
     const { classes } = useStyles()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const pluginID = useCurrentWeb3NetworkPluginID()
@@ -58,6 +60,9 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const hub = useWeb3Hub()
     const account = useAccount()
     const chainId = useChainId()
+    const networkType = useNetworkType()
+    const providerType = useProviderType()
+    const chainIdContext = useCurrentWeb3NetworkChainId()
     const { value: balance = '0' } = useBalance()
     const { value: blockNumber = 0 } = useBlockNumber()
     const { value: blockTimestamp = 0 } = useBlockTimestamp()
@@ -179,6 +184,46 @@ export function ConsoleContent(props: ConsoleContentProps) {
         <section className={classes.container}>
             <Table size="small">
                 <TableBody>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                ChainId
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Typography variant="body2">{chainId}</Typography>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                PluginID
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Typography variant="body2">{pluginID}</Typography>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Network Type
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Typography variant="body2">{networkType}</Typography>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Provider Type
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Typography variant="body2">{providerType}</Typography>
+                        </TableCell>
+                    </TableRow>
                     <TableRow>
                         <TableCell>
                             <Typography variant="body2" whiteSpace="nowrap">
