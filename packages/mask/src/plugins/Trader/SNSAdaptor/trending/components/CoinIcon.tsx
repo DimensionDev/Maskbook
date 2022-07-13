@@ -1,27 +1,28 @@
-import { TrendingCoinType } from '@masknet/web3-providers'
-import { TokenIcon, TokenIconProps } from '@masknet/shared'
+import { TokenIcon } from '@masknet/shared'
+import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
 import type { FC } from 'react'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 interface CoinIconProps {
-    type: TrendingCoinType
+    type: TokenType
     address?: string
     logoUrl?: string
     name?: string
     size?: number
 }
 export const CoinIcon: FC<CoinIconProps> = ({ type, address, logoUrl, name, size }) => {
-    const sharedProps: Partial<TokenIconProps> = {
-        pluginID: NetworkPluginID.PLUGIN_EVM,
-        name,
-        AvatarProps: {
-            sx: {
-                height: size,
-                width: size,
-            },
-        },
-    }
-    if (address && type === TrendingCoinType.Fungible)
-        return <TokenIcon {...sharedProps} address={address} logoURL={logoUrl} />
-    return <TokenIcon {...sharedProps} address={address ?? ''} logoURL={logoUrl} />
+    return (
+        <TokenIcon
+            tokenType={type}
+            pluginID={NetworkPluginID.PLUGIN_EVM}
+            name={name}
+            AvatarProps={{
+                sx: {
+                    height: size,
+                    width: size,
+                },
+            }}
+            address={address ?? ''}
+            logoURL={logoUrl}
+        />
+    )
 }

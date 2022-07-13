@@ -1,11 +1,11 @@
 import { DataProvider } from '@masknet/public-api'
-import { CurrencyType, Price } from '@masknet/web3-shared-base'
+import { CurrencyType, Price, TokenType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
 import { uniq, uniqBy } from 'lodash-unified'
 import { getCommunityLink, isMirroredKeyword, resolveChainId, resolveCoinAddress } from '../CoinMarketCap/helper'
 import { fetchJSON } from '../helpers'
-import { PriceAPI, TrendingAPI, TrendingCoinType } from '../types'
+import type { PriceAPI, TrendingAPI } from '../types'
 import { getAllCoins, getAllCurrencies, getCoinInfo, getPriceStats as getStats } from './base-api'
 import { COINGECKO_URL_BASE } from './constants'
 import { resolveChain } from './helper'
@@ -78,7 +78,7 @@ export class CoinGeckoAPI implements PriceAPI.Provider, TrendingAPI.Provider<Cha
                 id,
                 name: info.name,
                 symbol: info.symbol.toUpperCase(),
-                type: TrendingCoinType.Fungible,
+                type: TokenType.Fungible,
                 is_mirrored: isMirroredKeyword(info.symbol),
 
                 // TODO: use current language setting
@@ -143,7 +143,7 @@ export class CoinGeckoAPI implements PriceAPI.Provider, TrendingAPI.Provider<Cha
 
     async getCoins(): Promise<TrendingAPI.Coin[]> {
         const coins = await getAllCoins()
-        return coins.map((coin) => ({ ...coin, type: TrendingCoinType.Fungible }))
+        return coins.map((coin) => ({ ...coin, type: TokenType.Fungible }))
     }
 
     async getCurrencies(): Promise<TrendingAPI.Currency[]> {

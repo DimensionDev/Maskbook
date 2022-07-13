@@ -1,11 +1,11 @@
 import { CheckCircleIcon } from '@masknet/icons'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
-import { TrendingCoinType } from '@masknet/web3-providers'
+import { TokenType } from '@masknet/web3-shared-base'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import { Divider, MenuItem, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/system'
-import { FC, PropsWithChildren, useCallback, useMemo } from 'react'
 import { groupBy, toPairs } from 'lodash-unified'
+import { FC, PropsWithChildren, useCallback, useMemo } from 'react'
 import type { Coin } from '../../types'
 import { CoinIcon } from './components'
 
@@ -61,9 +61,9 @@ export interface CoinMenuOption {
 }
 interface TokenMenuListProps {
     options: CoinMenuOption[]
-    type?: TrendingCoinType
+    type?: TokenType
     value?: CoinMenuOption['value']
-    onSelect(type: TrendingCoinType, value: CoinMenuOption['value']): void
+    onSelect(type: TokenType, value: CoinMenuOption['value']): void
 }
 
 const TokenMenuList: FC<TokenMenuListProps> = ({ options, type, value, onSelect }) => {
@@ -116,15 +116,15 @@ export interface CoinMenuProps {
     open: boolean
     anchorEl: HTMLElement | null
     options: CoinMenuOption[]
-    type?: TrendingCoinType
+    type?: TokenType
     value?: CoinMenuOption['value']
-    onChange?: (type: TrendingCoinType, value: CoinMenuOption['value']) => void
+    onChange?: (type: TokenType, value: CoinMenuOption['value']) => void
     onClose?: () => void
 }
 
-const menuGroupNameMap: Record<TrendingCoinType, string> = {
-    [TrendingCoinType.Fungible]: 'Token',
-    [TrendingCoinType.NonFungible]: 'NFT',
+const menuGroupNameMap: Record<TokenType, string> = {
+    [TokenType.Fungible]: 'Token',
+    [TokenType.NonFungible]: 'NFT',
 }
 
 export const CoinMenu: FC<PropsWithChildren<CoinMenuProps>> = ({
@@ -138,7 +138,7 @@ export const CoinMenu: FC<PropsWithChildren<CoinMenuProps>> = ({
 }) => {
     const { classes } = useStyles()
     const onSelect = useCallback(
-        (type: TrendingCoinType, value: CoinMenuOption['value']) => {
+        (type: TokenType, value: CoinMenuOption['value']) => {
             onChange?.(type, value)
             onClose?.()
         },
@@ -146,9 +146,9 @@ export const CoinMenu: FC<PropsWithChildren<CoinMenuProps>> = ({
     )
 
     const menuItems = useMemo(() => {
-        const groups: Array<[type: TrendingCoinType, options: CoinMenuOption[]]> = toPairs(
+        const groups: Array<[type: TokenType, options: CoinMenuOption[]]> = toPairs(
             groupBy(options, (x) => x.coin.type),
-        ).map(([type, options]) => [Number.parseInt(type, 10), options])
+        ).map(([type, options]) => [type as TokenType, options])
 
         if (groups.length > 1) {
             return groups.map(([type, groupOptions]) => (
