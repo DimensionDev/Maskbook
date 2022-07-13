@@ -354,6 +354,11 @@ export interface FungibleAsset<ChainId, SchemaType> extends FungibleToken<ChainI
     value?: Price
 }
 
+export interface PriceInToken<ChainId, SchemaType> {
+    amount: string
+    token: FungibleToken<ChainId, SchemaType>
+}
+
 /**
  * A non-fungible token but with more metadata
  */
@@ -373,7 +378,7 @@ export interface NonFungibleAsset<ChainId, SchemaType> extends NonFungibleToken<
     orders?: Array<NonFungibleTokenOrder<ChainId, SchemaType>>
     events?: Array<NonFungibleTokenEvent<ChainId, SchemaType>>
     paymentTokens?: Array<FungibleToken<ChainId, SchemaType>>
-    priceToken?: FungibleToken<ChainId, SchemaType>
+    priceInToken?:PriceInToken<ChainId, SchemaType>
 }
 
 /**
