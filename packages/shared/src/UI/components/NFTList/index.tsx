@@ -2,21 +2,21 @@ import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State, Web3Helper } f
 import { ElementAnchor, Linking, NFTCardStyledAssetPlayer, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
-import { formatTokenId } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Checkbox, List, ListItem, Radio, Stack, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { noop } from 'lodash-unified'
 import { FC, useCallback } from 'react'
 
 interface NFTItemProps {
-    token: NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    token: NonFungibleToken<ChainId, SchemaType>
 }
 
 export type NFTKeyPair = [address: string, tokenId: string]
 
 interface Props {
     selectable?: boolean
-    tokens: Array<Web3Helper.NonFungibleAssetScope<'all'>>
+    tokens: Array<Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>>
     selectedPairs?: NFTKeyPair[]
     onChange?: (id: string | null, contractAddress?: string) => void
     limit?: number
@@ -28,7 +28,7 @@ interface Props {
     hasError?: boolean
 }
 
-const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { columns, gap }) => {
+const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { columns = 4, gap = 12 }) => {
     const isLight = theme.palette.mode === 'light'
     return {
         checkbox: {
@@ -37,16 +37,17 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
             top: 0,
         },
         list: {
-            gridGap: gap ?? 12,
+            gridGap: gap,
             padding: 0,
             display: 'grid',
-            gridTemplateColumns: `repeat(${columns ?? 4}, 1fr)`,
+            gridTemplateColumns: `repeat(${columns}, 1fr)`,
         },
         nftContainer: {
             background: isLight ? '#EDEFEF' : '#2F3336',
             borderRadius: 8,
             width: '100%',
             transition: 'all 0.2s ease',
+            overflow: 'auto',
             '&:hover': {
                 backgroundColor: isLight ? theme.palette.background.paper : undefined,
                 boxShadow: isLight ? '0px 4px 30px rgba(0, 0, 0, 0.1)' : undefined,
@@ -122,7 +123,10 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
 
 export const NFTItem: FC<NFTItemProps> = ({ token }) => {
     const { classes } = useStyles({})
-    const chainId = useChainId()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const fullCaption = token.metadata?.name || token.tokenId
+    const caption = token.metadata?.name?.match(/#\d+$/) ? token.metadata.name : Others?.formatTokenId(token.tokenId)
     return (
         <div className={classes.nftContainer}>
             <NFTCardStyledAssetPlayer
@@ -137,7 +141,9 @@ export const NFTItem: FC<NFTItemProps> = ({ token }) => {
                     wrapper: classes.wrapper,
                 }}
             />
-            <Typography className={classes.caption}>{formatTokenId(token.tokenId)}</Typography>
+            <Typography className={classes.caption} title={fullCaption !== caption ? fullCaption : undefined}>
+                {caption}
+            </Typography>
         </div>
     )
 }
@@ -177,7 +183,7 @@ export const NFTList: FC<Props> = ({
               }
 
     const SelectComponent = isRadio ? Radio : Checkbox
-    const { Others } = useWeb3State()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     return (
         <>

@@ -232,6 +232,7 @@ export interface NonFungibleTokenContract<ChainId, SchemaType> {
 
 export interface NonFungibleTokenMetadata<ChainId> {
     chainId: ChainId
+    /** Might be the format `TheName #42` */
     name: string
     symbol: string
     description?: string
