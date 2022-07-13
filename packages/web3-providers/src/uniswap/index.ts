@@ -47,6 +47,7 @@ export class UniSwapAPI implements TrendingAPI.Provider<ChainId> {
             market: marketInfo,
             coin: {
                 id,
+                chainId,
                 name: token?.name || '',
                 symbol: token?.symbol || '',
                 type: TokenType.Fungible,
