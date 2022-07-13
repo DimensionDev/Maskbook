@@ -2,21 +2,21 @@ import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State, Web3Helper } f
 import { ElementAnchor, Linking, NFTCardStyledAssetPlayer, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
-import { formatTokenId } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Checkbox, List, ListItem, Radio, Stack, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { noop } from 'lodash-unified'
 import { FC, useCallback } from 'react'
 
 interface NFTItemProps {
-    token: NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    token: NonFungibleToken<ChainId, SchemaType>
 }
 
 export type NFTKeyPair = [address: string, tokenId: string]
 
 interface Props {
     selectable?: boolean
-    tokens: Array<Web3Helper.NonFungibleAssetScope<'all'>>
+    tokens: Array<Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>>
     selectedPairs?: NFTKeyPair[]
     onChange?: (id: string | null, contractAddress?: string) => void
     limit?: number
@@ -124,8 +124,9 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
 export const NFTItem: FC<NFTItemProps> = ({ token }) => {
     const { classes } = useStyles({})
     const chainId = useChainId()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const fullCaption = token.metadata?.name || token.tokenId
-    const caption = token.metadata?.name || formatTokenId(token.tokenId)
+    const caption = token.metadata?.name.match(/#\d+$/) ? token.metadata.name : Others?.formatTokenId(token.tokenId)
     return (
         <div className={classes.nftContainer}>
             <NFTCardStyledAssetPlayer
@@ -182,7 +183,7 @@ export const NFTList: FC<Props> = ({
               }
 
     const SelectComponent = isRadio ? Radio : Checkbox
-    const { Others } = useWeb3State()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     return (
         <>
