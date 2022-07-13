@@ -146,7 +146,10 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const selectedTabId = selectedTab ?? first(tabs)?.id
     const showNextID =
         isTwitter(activatedSocialNetworkUI) &&
-        ((isOwn && addressList?.length === 0) || isWeb3ProfileDisable || (isOwn && !isCurrentConnectedPersonaBind))
+        ((isOwn && addressList?.length === 0) ||
+            isWeb3ProfileDisable ||
+            (isOwn && !isCurrentConnectedPersonaBind) ||
+            (isOwn && !wallets?.length))
     const componentTabId = showNextID
         ? displayPlugins?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
         : selectedTabId
