@@ -214,11 +214,12 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const rpid = receipt?.rpid ?? ''
     const creation_time = receipt?.creation_time ?? 0
 
+    history.rpid = rpid
     const {
         value: availability,
         computed: { canRefund, canSend, listOfStatus, isPasswordValid },
         retry: revalidateAvailability,
-    } = useAvailabilityComputed(account, { ...history, rpid, creation_time })
+    } = useAvailabilityComputed(account, { ...history, creation_time })
 
     const claimerNumber = availability ? Number(availability.claimed) : 0
     const total_remaining = availability?.balance
@@ -243,7 +244,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
             await refundCallback()
             revalidateAvailability()
         }
-        if (canSend) onSelect(removeUselessSendParams({ ...history, token: historyToken, rpid }))
+        if (canSend) onSelect(removeUselessSendParams({ ...history, token: historyToken }))
     }, [onSelect, refundCallback, canRefund, canSend, history, historyToken])
 
     // #region password lost tips
