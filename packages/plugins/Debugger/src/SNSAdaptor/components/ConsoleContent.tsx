@@ -75,9 +75,6 @@ export function ConsoleContent(props: ConsoleContentProps) {
         )
     }, [connection])
 
-    console.log('DEBUG: context')
-    console.log(chainIdContext)
-
     const onSignMessage = useCallback(
         async (type?: string) => {
             const message = 'Hello World'
