@@ -109,7 +109,7 @@ export class ProviderState<
                 const siteType = getSiteType()
                 if (!siteType) return
 
-                this.storage.providerType.setValue(this.options.getDefaultProviderType())
+                this.storage.providerType.setValue(this.options.getDefaultProviderType(siteType))
             })
         })
     }

@@ -33,12 +33,19 @@ const useStyles = makeStyles()((theme) => ({
         borderBottom: `1px solid ${theme.palette.divider}`,
     },
     dialogContent: {
+        minHeight: 305,
         padding: 0,
         '::-webkit-scrollbar': {
             display: 'none',
         },
 
         overflowX: 'hidden',
+    },
+    nftDialogContent: {
+        height: 305,
+    },
+    nftDialogContentLoaded: {
+        height: 620,
     },
     tabPaper: {
         position: 'sticky',
@@ -79,9 +86,10 @@ interface RedPacketDialogProps extends withClasses<never> {
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
     const t = useI18N()
-    const { classes } = useStyles()
+    const { cx, classes } = useStyles()
     const { attachMetadata, dropMetadata } = useCompositionContext()
     const state = useState(DialogTabs.create)
+    const [isNFTRedPacketLoaded, setIsNFTRedPacketLoaded] = useState(false)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
@@ -180,7 +188,15 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 onClose={() => (showHistory ? setShowHistory(false) : onBack())}
                 isOnBack={showHistory || step !== CreateRedPacketPageStep.NewRedPacketPage}
                 disableTitleBorder>
-                <DialogContent className={classes.dialogContent}>
+                <DialogContent
+                    className={cx(
+                        classes.dialogContent,
+                        currentTab === 'collectibles'
+                            ? isNFTRedPacketLoaded
+                                ? classes.nftDialogContentLoaded
+                                : classes.nftDialogContent
+                            : '',
+                    )}>
                     {step === CreateRedPacketPageStep.NewRedPacketPage ? (
                         !showHistory ? (
                             <>
@@ -193,7 +209,10 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                     />
                                 </TabPanel>
                                 <TabPanel value={tabs.collectibles} style={{ padding: 0 }}>
-                                    <RedPacketERC721Form onClose={onClose} />
+                                    <RedPacketERC721Form
+                                        onClose={onClose}
+                                        setIsNFTRedPacketLoaded={setIsNFTRedPacketLoaded}
+                                    />
                                 </TabPanel>
                             </>
                         ) : (

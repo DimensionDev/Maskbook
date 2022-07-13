@@ -28,6 +28,10 @@ const useStyles = makeStyles()(() => {
                     display: 'none',
                 },
             },
+            '& .carousel__slide:focus-visible': {
+                outline: 'none',
+                display: 'none',
+            },
             overflow: 'hidden',
         },
         isHoveringCarousel: {
@@ -42,7 +46,7 @@ const useStyles = makeStyles()(() => {
 interface Props {
     recommendFeatureAppList: Application[]
     RenderEntryComponent: (props: { application: Application }) => JSX.Element
-    isCarouselReady: () => boolean | null
+    isCarouselReady?: () => boolean | null
     setIsHoveringCarousel: (hover: boolean) => void
     isHoveringCarousel: boolean
 }
@@ -61,7 +65,7 @@ export function ApplicationRecommendArea(props: Props) {
     return (
         <>
             <link rel="stylesheet" href={new URL('./assets/react-carousel.es.css', import.meta.url).toString()} />
-            {recommendFeatureAppList.length > 2 && isCarouselReady() ? (
+            {recommendFeatureAppList.length > 2 && isCarouselReady?.() ? (
                 <CarouselProvider
                     naturalSlideWidth={220}
                     naturalSlideHeight={117}

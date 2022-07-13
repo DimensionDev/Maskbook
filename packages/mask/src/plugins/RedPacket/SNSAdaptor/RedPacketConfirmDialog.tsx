@@ -145,6 +145,10 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
             token_address: string
             total: string
         }
+
+        // the events log is not available
+        if (!events?.CreationSuccess.returnValues.id) return
+
         payload.current.sender = {
             address: account,
             name: settings.name,

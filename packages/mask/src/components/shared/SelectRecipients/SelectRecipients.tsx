@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
     ProfileInformation as Profile,
-    EMPTY_LIST,
     NextIDPlatform,
     ECKeyIdentifier,
     ProfileInformationFromNextID,
@@ -51,13 +50,12 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
         type ?? NextIDPlatform.NextID,
         value,
     )
-    const NextIDItems = useTwitterIdByWalletSearch(NextIDResults, value, type)
-    const profileItems = items.recipients?.filter((x) => x.identifier !== currentIdentity?.identifier)
 
-    const searchedList = uniqBy(
-        profileItems?.concat(NextIDItems) ?? [],
-        ({ linkedPersona }) => linkedPersona?.rawPublicKey,
-    )
+    const NextIDItems = useTwitterIdByWalletSearch(NextIDResults, value, type)
+    const searchedList = useMemo(() => {
+        const profileItems = items.recipients?.filter((x) => x.identifier !== currentIdentity?.identifier)
+        return uniqBy(profileItems?.concat(NextIDItems) ?? [], ({ linkedPersona }) => linkedPersona?.rawPublicKey)
+    }, [NextIDItems, items.recipients])
 
     const onSelect = async (item: ProfileInformationFromNextID) => {
         onSetSelected([...selected, item])
@@ -85,7 +83,7 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
                 setValueToSearch(v)
             }}
             open={open}
-            items={searchedList || EMPTY_LIST}
+            items={searchedList}
             selected={selected}
             disabled={false}
             submitDisabled={false}

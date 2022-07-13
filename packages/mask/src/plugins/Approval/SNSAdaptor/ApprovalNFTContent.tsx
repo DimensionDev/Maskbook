@@ -5,7 +5,7 @@ import { TokenIcon } from '@masknet/shared'
 import { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 import { LinkOutIcon } from '@masknet/icons'
 import { useAccount, useWeb3State, useNetworkDescriptor, useNonFungibleTokenContract } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, NetworkDescriptor } from '@masknet/web3-shared-base'
+import { NetworkPluginID, NetworkDescriptor, TokenType } from '@masknet/web3-shared-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../locales'
@@ -80,7 +80,7 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
                             name={nft.contract_name}
                             logoURL={contractDetailed?.iconURL}
                             classes={{ icon: classes.logoIcon }}
-                            isERC721
+                            tokenType={TokenType.NonFungible}
                         />
 
                         {contractDetailed ? (
@@ -116,6 +116,7 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
                     expectedChainId={chainId}
                     switchChainWithoutPopup
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    className={classes.chainBoundary}
                     classes={{ switchButton: classes.button }}
                     expectedChainIdSwitchedCallback={() => approveCallback()}
                     ActionButtonPromiseProps={{

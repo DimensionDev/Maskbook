@@ -156,7 +156,7 @@ const WalletSetting = memo(
                         -1,
                 ),
             )
-        }, [open])
+        }, [open, wallets])
 
         useEffect(() => {
             if (confirmButtonDisabled) setConfirmButtonDisabled(false)

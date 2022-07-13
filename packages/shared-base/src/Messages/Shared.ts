@@ -17,6 +17,5 @@ export const CrossIsolationMessages = new WebExtensionMessage<CrossIsolationEven
 
 export interface CrossIsolationEvents {
     requestComposition: CompositionRequest
-    verifyNextID: void
     requestWeb3ProfileDialog: Web3ProfileDialogRequest
 }

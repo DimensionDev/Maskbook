@@ -93,7 +93,6 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         chainId: ChainId.BSC,
         type: NetworkType.Binance,
         name: 'BNB Chain',
-        shortName: 'BNB',
         icon: new URL('../assets/binance.png', import.meta.url),
         iconColor: 'rgb(240, 185, 10)',
         backgroundGradient: 'linear-gradient(180deg, rgba(243, 186, 47, 0.15) 0%, rgba(243, 186, 47, 0.05) 100%)',

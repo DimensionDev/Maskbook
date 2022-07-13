@@ -23,7 +23,7 @@ interface TokenCardProps {
 
 const useStyles = makeStyles()((theme) => ({
     header: {
-        fontWeight: 500,
+        fontWeight: 700,
         fontSize: 18,
     },
     root: {
@@ -43,13 +43,14 @@ const useStyles = makeStyles()((theme) => ({
         height: '48px',
     },
     tokenName: {
-        fontSize: '16px',
+        fontSize: '18px',
         fontWeight: 700,
+        color: theme.palette.maskColor.main,
     },
     tokenPrice: {
-        fontSize: '16px',
+        fontSize: '18px',
         fontWeight: 700,
-        color: theme.palette.text.secondary,
+        color: theme.palette.maskColor.main,
     },
     itemTitle: {
         color: theme.palette.maskColor.second,
@@ -160,7 +161,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                         />
                     </Stack>
                     <Stack direction="row" alignItems="center" spacing={1}>
-                        <Typography component="span" lineHeight="14px" fontSize={14}>
+                        <Typography component="span" lineHeight="14px" fontSize={14} fontWeight={400}>
                             {t.more_details()}
                         </Typography>
                         <Link
@@ -168,7 +169,9 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                             href={resolveGoLabLink(tokenSecurity.chainId, tokenSecurity.contract)}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <LinkOutIcon style={{ color: theme.palette.text.strong, width: 14, height: 14 }} />
+                            <LinkOutIcon
+                                style={{ color: theme.palette.text.strong, width: 18, height: 18, marginTop: 2 }}
+                            />
                         </Link>
                     </Stack>
                 </Stack>
@@ -204,28 +207,18 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                         )}
                     </Stack>
                 </Stack>
-                <Collapse
-                    in={isCollapse}
-                    timeout={{
-                        enter: 1200,
-                        exit: 10,
-                    }}
-                    collapsedSize={LIST_HEIGHT.min}
-                    className={classes.detectionCollection}
-                    sx={{ maxHeight: LIST_HEIGHT.max, overflowY: 'auto' }}>
-                    <Stack spacing={1}>
-                        {makeMessageList.map((x, i) => (
-                            <RiskCard tokenSecurity={tokenSecurity} info={x} key={i} />
-                        ))}
-                        {(!makeMessageList.length || securityMessageLevel === SecurityMessageLevel.Safe) && (
-                            <RiskCardUI
-                                icon={DefineMapping[SecurityMessageLevel.Safe].icon(14)}
-                                title={t.risk_safe_description()}
-                                titleColor={DefineMapping[SecurityMessageLevel.Safe].titleColor}
-                            />
-                        )}
-                    </Stack>
-                </Collapse>
+                <Stack className={classes.detectionCollection} sx={{ maxHeight: LIST_HEIGHT.max, overflowY: 'auto' }}>
+                    {makeMessageList.map((x, i) => (
+                        <RiskCard tokenSecurity={tokenSecurity} info={x} key={i} />
+                    ))}
+                    {(!makeMessageList.length || securityMessageLevel === SecurityMessageLevel.Safe) && (
+                        <RiskCardUI
+                            icon={DefineMapping[SecurityMessageLevel.Safe].icon(14)}
+                            title={t.risk_safe_description()}
+                            titleColor={DefineMapping[SecurityMessageLevel.Safe].titleColor}
+                        />
+                    )}
+                </Stack>
             </Stack>
         </Stack>
     )

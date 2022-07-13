@@ -101,6 +101,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const recommendFeature = {
                 description: <Trans ns={PluginId.RedPacket} i18nKey="recommend_feature_description" />,
                 backgroundGradient: 'linear-gradient(180.54deg, #FF9A9E 0.71%, #FECFEF 98.79%, #FECFEF 99.78%)',
+                isFirst: true,
             }
             return {
                 ApplicationEntryID: base.ID,

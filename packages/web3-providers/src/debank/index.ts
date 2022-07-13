@@ -85,11 +85,17 @@ export class DeBankAPI
                             // rename bsc to bnb
                             id: x.id === 'bsc' ? 'bnb' : x.id,
                             chain: x.chain === 'bsc' ? 'bnb' : x.chain,
+                            // prefix ARETH
+                            symbol: x.chain === 'arb' && x.symbol === 'ETH' ? 'ARETH' : x.symbol,
+                            logo_url:
+                                x.chain === 'arb' && x.symbol === 'ETH'
+                                    ? 'https://assets.debank.com/static/media/arbitrum.8e326f58.svg'
+                                    : x.logo_url,
                         })),
                         options?.chainId,
                     ),
                     getAllEVMNativeAssets(),
-                    (a, z) => a.symbol === z.symbol,
+                    (a, z) => a.symbol === z.symbol && a.chainId === z.chainId,
                 ),
                 createIndicator(options?.indicator),
             )
