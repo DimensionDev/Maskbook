@@ -34,7 +34,7 @@ export const verifyPersona = (personaIdentifier?: PersonaIdentifier, username?: 
 export const useNextIDBoundByPlatform = (platform?: NextIDPlatform, userId?: string) => {
     const res = useAsyncRetry(async () => {
         if (!platform || !userId) return EMPTY_LIST
-        return NextIDProof.queryExistedBindingByPlatform(platform, userId)
+        return NextIDProof.queryAllExistedBindingsByPlatform(platform, userId)
     }, [platform, userId])
     useEffect(() => MaskMessages.events.ownProofChanged.on(res.retry), [res.retry])
     return res
