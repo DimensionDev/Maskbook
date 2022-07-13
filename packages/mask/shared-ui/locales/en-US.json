@@ -374,6 +374,7 @@
     "plugin_red_packet_create": "Create a Lucky Drop",
     "plugin_red_packet_claimed": "Claimed",
     "plugin_red_packet_claim": "Claim",
+    "plugin_red_packet_claim_notification": "Claim a Lucky Drop",
     "plugin_red_packet_create_with_token": "Create a Lucky Drop with {{amount}} {{symbol}}",
     "plugin_nft_red_packet_create": "Create an NFT Lucky Drop",
     "plugin_nft_red_packet_claim": "Claim an NFT Lucky Drop",

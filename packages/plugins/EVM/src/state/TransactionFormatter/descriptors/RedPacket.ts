@@ -35,14 +35,21 @@ export class RedPacketDescriptor implements TransactionDescriptor {
                 token?.decimals,
                 isNativeTokenAddress(method.parameters?._token_addr) ? 6 : 0,
             )
-
-            return {
-                chainId: context.chainId,
-                title: 'Create Lucky Drop',
-                description: i18NextInstance.t('plugin_red_packet_create_with_token', {
-                    amount,
-                    symbol: token?.symbol,
-                }),
+            if (method?.name === 'create_red_packet') {
+                return {
+                    chainId: context.chainId,
+                    title: 'Create Lucky Drop',
+                    description: i18NextInstance.t('plugin_red_packet_create_with_token', {
+                        amount,
+                        symbol: token?.symbol,
+                    }),
+                }
+            } else if (method?.name === 'claim') {
+                return {
+                    chainId: context.chainId,
+                    title: 'Claim Lucky Drop',
+                    description: i18NextInstance.t('plugin_red_packet_claim_notification'),
+                }
             }
         } else if (isSameAddress(context.to, RED_PACKET_NFT_ADDRESS)) {
             if (method?.name === 'create_red_packet') {
