@@ -22,6 +22,8 @@ export function useCreateNftRedpacketCallback(
     const createCallback = useAsyncFn(
         async (publicKey: string) => {
             if (
+                !web3 ||
+                !connection ||
                 !nftRedPacketContract ||
                 !contractAddress ||
                 !EthereumAddress.isValid(contractAddress) ||

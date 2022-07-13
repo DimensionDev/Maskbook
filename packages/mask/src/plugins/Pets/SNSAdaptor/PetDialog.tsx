@@ -26,6 +26,7 @@ export function PetDialog() {
     const [isReady, cancel] = useTimeout(500)
     const { NFTS_BLOCK_ADDRESS = '' } = usePetConstants()
     useAsync(async () => {
+        if (!connection) return
         setConfigNFTs(await PluginPetRPC.getConfigNFTsFromRSS(connection, NFTS_BLOCK_ADDRESS))
     }, [connection, NFTS_BLOCK_ADDRESS])
 

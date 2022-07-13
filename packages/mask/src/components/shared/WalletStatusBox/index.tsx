@@ -220,7 +220,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             onClick={async () => {
                                 props.closeDialog?.()
                                 closeWalletStatusDialog()
-                                await connection.disconnect()
+                                await connection?.disconnect()
                                 openSelectProviderDialog()
                             }}>
                             {t('plugin_wallet_disconnect')}

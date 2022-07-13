@@ -129,6 +129,8 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
 
     return useAsyncFn(async () => {
+        if (!web3 || !connection) return
+
         const { token } = redPacketSettings
         const createParams = await getCreateParams()
         if (!token || !redPacketContract || !createParams) return
@@ -171,5 +173,5 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
             }
         }
         return { hash, receipt }
-    }, [account, connection, redPacketContract, redPacketSettings, chainId])
+    }, [account, chainId, web3, connection, redPacketContract, redPacketSettings])
 }

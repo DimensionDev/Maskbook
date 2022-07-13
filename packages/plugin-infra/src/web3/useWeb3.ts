@@ -25,5 +25,5 @@ export function useWeb3<S extends 'all' | void = void, T extends NetworkPluginID
         })
     }, [account, chainId, providerType, JSON.stringify(options)])
 
-    return web3 as Web3Helper.Web3Scope<S, T>
+    return web3 as Web3Helper.Web3Scope<S, T> | null
 }
