@@ -133,7 +133,7 @@
     "beta_sup": "<sup>(测试版)<sup>",
     "post_dialog__button": "加密",
     "post_dialog__placeholder": "文本在此处…",
-    "post_dialog__title": "Mask：编辑",
+    "post_dialog__title": "加密贴文",
     "post_dialog_enable_paste_auto": "启用自动粘贴",
     "post_modal_hint__button": "编辑加密贴文",
     "hide": "隐藏",
