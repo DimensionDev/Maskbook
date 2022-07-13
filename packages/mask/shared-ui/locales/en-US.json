@@ -376,6 +376,7 @@
     "plugin_red_packet_claim": "Claim",
     "plugin_red_packet_create_with_token": "Create a Lucky Drop with {{amount}} {{symbol}}",
     "plugin_nft_red_packet_create": "Create an NFT Lucky Drop",
+    "plugin_nft_red_packet_claim": "Claim an NFT Lucky Drop",
     "plugin_red_packet_nft_account_name": "Wallet account",
     "plugin_gitcoin_select_a_token": "Select a token",
     "plugin_gitcoin_insufficient_balance": "Insufficient {{symbol}} balance",
