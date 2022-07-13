@@ -219,5 +219,8 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
                 boxShadow: `0 8px 25px ${parseColor(theme.palette.common.black).setAlpha(0.3).toRgbString()}`,
             },
         },
+        chainBoundary: {
+            width: 'auto !important',
+        },
     }),
 )

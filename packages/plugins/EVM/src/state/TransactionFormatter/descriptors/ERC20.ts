@@ -14,11 +14,12 @@ export class ERC20Descriptor implements TransactionDescriptor {
         })
         for (const method of context.methods) {
             const parameters = method.parameters
+
             switch (method.name) {
                 case 'approve':
                     if (parameters?.spender === undefined || parameters?.value === undefined) break
 
-                    if (isZero(context.value)) {
+                    if (isZero(parameters?.value)) {
                         return {
                             chainId: context.chainId,
                             title: 'Revoke',

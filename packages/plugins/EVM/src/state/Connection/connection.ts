@@ -60,8 +60,8 @@ import { getReceiptStatus } from './utils'
 import { Web3StateSettings } from '../../settings'
 import { getSubscriptionCurrentValue, PartialRequired } from '@masknet/shared-base'
 
-const EMPTY_STRING = () => Promise.resolve('')
-const ZERO = () => Promise.resolve(0)
+const EMPTY_STRING = Promise.resolve('')
+const ZERO = Promise.resolve(0)
 
 export function isReadOnlyMethod(method: EthereumMethodType) {
     return [
@@ -337,26 +337,30 @@ class Connection implements EVM_Connection {
         const ERC721_ENUMERABLE_INTERFACE_ID = '0x780e9d63'
         const ERC1155_ENUMERABLE_INTERFACE_ID = '0xd9b67a26'
 
-        const erc165Contract = await this.getWeb3Contract<ERC165>(address, ERC165ABI as AbiItem[], options)
+        try {
+            const erc165Contract = await this.getWeb3Contract<ERC165>(address, ERC165ABI as AbiItem[], options)
 
-        const isERC165 = await erc165Contract?.methods
-            .supportsInterface(ERC165_INTERFACE_ID)
-            .call({ from: options.account })
+            const isERC165 = await erc165Contract?.methods
+                .supportsInterface(ERC165_INTERFACE_ID)
+                .call({ from: options.account })
 
-        const isERC721 = await erc165Contract?.methods
-            .supportsInterface(ERC721_ENUMERABLE_INTERFACE_ID)
-            .call({ from: options.account })
-        if (isERC165 && isERC721) return SchemaType.ERC721
+            const isERC721 = await erc165Contract?.methods
+                .supportsInterface(ERC721_ENUMERABLE_INTERFACE_ID)
+                .call({ from: options.account })
+            if (isERC165 && isERC721) return SchemaType.ERC721
 
-        const isERC1155 = await erc165Contract?.methods
-            .supportsInterface(ERC1155_ENUMERABLE_INTERFACE_ID)
-            .call({ from: options.account })
-        if (isERC165 && isERC1155) return SchemaType.ERC1155
+            const isERC1155 = await erc165Contract?.methods
+                .supportsInterface(ERC1155_ENUMERABLE_INTERFACE_ID)
+                .call({ from: options.account })
+            if (isERC165 && isERC1155) return SchemaType.ERC1155
 
-        const isERC20 = (await this.getCode(address, options)) !== '0x'
-        if (isERC20) return SchemaType.ERC20
+            const isERC20 = (await this.getCode(address, options)) !== '0x'
+            if (isERC20) return SchemaType.ERC20
 
-        return
+            return
+        } catch {
+            return
+        }
     }
     async getNonFungibleToken(
         address: string,
@@ -794,6 +798,7 @@ class Connection implements EVM_Connection {
                         {
                             from: options.account,
                             ...transaction,
+                            value: transaction.value ? toHex(transaction.value) : undefined,
                         },
                     ],
                 },

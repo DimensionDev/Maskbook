@@ -6,8 +6,8 @@ import { FormattedCurrency, Linking, TokenSecurityBar, useTokenSecurity } from '
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { TrendingAPI, TrendingCoinType } from '@masknet/web3-providers'
-import { formatCurrency, NetworkPluginID } from '@masknet/web3-shared-base'
+import type { TrendingAPI } from '@masknet/web3-providers'
+import { formatCurrency, NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Avatar, Button, CardContent, IconButton, Paper, Stack, Typography, useTheme } from '@mui/material'
 import { Box } from '@mui/system'
@@ -104,6 +104,12 @@ const useStyles = makeStyles()((theme) => {
             width: 24,
             height: 24,
         },
+        buyButton: {
+            background: theme.palette.maskColor.dark,
+            color: theme.palette.maskColor.white,
+            marginLeft: 'auto',
+            marginBottom: theme.spacing(2),
+        },
     }
 })
 
@@ -138,7 +144,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const theme = useTheme()
     const classes = useStylesExtends(useStyles(), props)
 
-    const isNFT = coin.type === TrendingCoinType.NonFungible
+    const isNFT = coin.type === TokenType.NonFungible
 
     // #region buy
     const transakPluginEnabled = useActivatedPluginsSNSAdaptor('any').some((x) => x.ID === PluginId.Transak)
@@ -152,19 +158,19 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const isTokenSecurityEnable = !isNFT && !snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginId.GoPlusSecurity)
 
     const { value: tokenSecurityInfo, error } = useTokenSecurity(
-        coin?.chainId ?? ChainId.Mainnet,
+        coin.chainId ?? ChainId.Mainnet,
         coin.contract_address?.trim(),
         isTokenSecurityEnable,
     )
 
+    const isBuyable = !isNFT && transakPluginEnabled && !transakIsMinimalMode && coin.symbol && isAllowanceCoin
     const onBuyButtonClicked = useCallback(() => {
         setBuyDialog({
             open: true,
-            // @ts-ignore
             code: coin.symbol,
             address: account,
         })
-    }, [account, trending?.coin?.symbol])
+    }, [account, coin.symbol])
     // #endregion
 
     // #region sync with settings
@@ -176,7 +182,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     // #region switch between coins with the same symbol
     const currentPreferredCoinIdSettings = useValueRef(getCurrentPreferredCoinIdSettings(dataProvider))
     const onCoinMenuChange = useCallback(
-        (type: TrendingCoinType, value: string) => {
+        (type: TokenType, value: string) => {
             const settings = JSON.parse(currentPreferredCoinIdSettings) as Record<string, string>
             const coin = coins.find((x) => x.id === value && x.type === type)
             if (!coin) return
@@ -216,10 +222,10 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                 <Linking href={first(coin.home_urls)}>
                                     <Avatar className={classes.avatar} src={coin.image_url} alt={coin.symbol}>
                                         <CoinIcon
-                                            type={trending.coin.type}
-                                            address={trending.coin.address}
-                                            name={trending.coin.name}
-                                            logoUrl={trending.coin.image_url}
+                                            type={coin.type}
+                                            address={coin.address}
+                                            name={coin.name}
+                                            logoUrl={coin.image_url}
                                             size={20}
                                         />
                                     </Avatar>
@@ -230,9 +236,11 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         LinkProps={{ className: classes.name, title: coin.name.toUpperCase() }}>
                                         {coin.name.toUpperCase()}
                                     </Linking>
-                                    <Typography component="span" className={classes.symbol}>
-                                        ({coin.symbol.toUpperCase()})
-                                    </Typography>
+                                    {coin.symbol ? (
+                                        <Typography component="span" className={classes.symbol}>
+                                            ({coin.symbol.toUpperCase()})
+                                        </Typography>
+                                    ) : null}
                                 </Typography>
                                 {coins.length > 1 ? (
                                     <>
@@ -252,6 +260,16 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             onClose={() => setCoinMenuOpen(false)}
                                         />
                                     </>
+                                ) : null}
+                                {isBuyable ? (
+                                    <Button
+                                        className={classes.buyButton}
+                                        size="small"
+                                        startIcon={<BuyIcon style={{ fontSize: 16 }} />}
+                                        variant="contained"
+                                        onClick={onBuyButtonClicked}>
+                                        {t('buy_now')}
+                                    </Button>
                                 ) : null}
                             </Stack>
                             <Stack direction="row" justifyContent="space-between">
@@ -291,21 +309,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                 )}
                             </Stack>
                         </Stack>
-                    </Stack>
-                    <Stack>
-                        {transakPluginEnabled && !transakIsMinimalMode && trending.coin.symbol && isAllowanceCoin ? (
-                            <Button
-                                style={{
-                                    background: theme.palette.maskColor.dark,
-                                    color: theme.palette.maskColor.white,
-                                }}
-                                size="small"
-                                startIcon={<BuyIcon style={{ fontSize: 16 }} />}
-                                variant="contained"
-                                onClick={onBuyButtonClicked}>
-                                {t('buy_now')}
-                            </Button>
-                        ) : null}
                     </Stack>
                 </Stack>
             </Stack>

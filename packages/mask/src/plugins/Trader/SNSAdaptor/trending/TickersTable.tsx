@@ -12,14 +12,13 @@ import {
 import { makeStyles } from '@masknet/theme'
 import { FormattedCurrency } from '@masknet/shared'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { formatCurrency } from '@masknet/web3-shared-base'
+import { formatCurrency, TokenType } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../utils'
 import type { Ticker } from '../../types'
 import { DataProvider } from '@masknet/public-api'
 import { formatElapsed } from '../../../Wallet/formatter'
 import { ReactNode, useMemo } from 'react'
 import { compact, pick } from 'lodash-unified'
-import { TrendingCoinType } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -57,7 +56,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface TickersTableProps {
     dataProvider: DataProvider
     tickers: Ticker[]
-    coinType: TrendingCoinType
+    coinType: TokenType
 }
 
 type FungibleTokenCells = 'exchange' | 'pair' | 'price' | 'volume' | 'updated'
@@ -67,7 +66,7 @@ type Cells = FungibleTokenCells | NonFungibleTokenCells
 export function TickersTable({ dataProvider, tickers, coinType }: TickersTableProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const isNFT = coinType === TrendingCoinType.NonFungible
+    const isNFT = coinType === TokenType.NonFungible
     const isUniswap = dataProvider === DataProvider.UNISWAP_INFO
 
     const headCellMap: Record<Cells, string> = {

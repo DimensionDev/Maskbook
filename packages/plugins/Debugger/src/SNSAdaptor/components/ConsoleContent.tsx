@@ -11,7 +11,7 @@ import {
     useWeb3State,
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -61,6 +61,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const { value: balance = '0' } = useBalance()
     const { value: blockNumber = 0 } = useBlockNumber()
     const { value: blockTimestamp = 0 } = useBlockTimestamp()
+
     const onTransferCallback = useCallback(() => {
         if (!NATIVE_TOKEN_ADDRESS) return
         return connection.transferFungibleToken(
@@ -69,6 +70,26 @@ export function ConsoleContent(props: ConsoleContentProps) {
             '100',
         )
     }, [connection])
+
+    const onApproveFungibleTokenCallback = useCallback(() => {
+        if (pluginID !== NetworkPluginID.PLUGIN_EVM) return
+        if (chainId !== ChainId.Mainnet) return
+        return connection.approveFungibleToken(
+            '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+            '0x31f42841c2db5173425b5223809cf3a38fede360',
+            '1',
+        )
+    }, [pluginID, connection])
+
+    const onApproveNonFungibleTokenCallback = useCallback(() => {
+        if (pluginID !== NetworkPluginID.PLUGIN_EVM) return
+        if (chainId !== ChainId.Mainnet) return
+        return connection.approveNonFungibleToken(
+            '0xd945f759d422ae30a6166838317b937de08380e3',
+            '0x31f42841c2db5173425b5223809cf3a38fede360',
+            '71050',
+        )
+    }, [pluginID, connection])
 
     const onSignMessage = useCallback(
         async (type?: string) => {
@@ -152,6 +173,8 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const onSelectFungibleToken = useSelectFungibleToken()
     const onSelectGasSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
 
+    const { showSnackbar, closeSnackbar } = useCustomSnackbar()
+
     return (
         <section className={classes.container}>
             <Table size="small">
@@ -205,6 +228,30 @@ export function ConsoleContent(props: ConsoleContentProps) {
                         <TableCell>
                             <Button size="small" onClick={onTransferCallback}>
                                 Transfer
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Approve Fungible Token
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button size="small" onClick={onApproveFungibleTokenCallback}>
+                                Approve
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Approve Non-Fungible Token
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button size="small" onClick={onApproveNonFungibleTokenCallback}>
+                                Approve
                             </Button>
                         </TableCell>
                     </TableRow>
@@ -266,9 +313,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                     switch (pluginID) {
                                         case NetworkPluginID.PLUGIN_EVM:
                                             await onSwitchChain(
-                                                chainId === EVM_ChainId.Mainnet
-                                                    ? EVM_ChainId.Matic
-                                                    : EVM_ChainId.Mainnet,
+                                                chainId === EVM_ChainId.Mainnet ? EVM_ChainId.BSC : EVM_ChainId.Mainnet,
                                             )
                                             break
                                         default:
@@ -485,6 +530,21 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                     Query
                                 </Button>
                             </FormControl>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>Test Snackbar</TableCell>
+                        <TableCell>
+                            <Button
+                                onClick={() => {
+                                    showSnackbar('test', {
+                                        variant: 'success',
+                                        message: 'test message',
+                                        autoHideDuration: 100000000,
+                                    })
+                                }}>
+                                show
+                            </Button>
                         </TableCell>
                     </TableRow>
                 </TableBody>

@@ -23,7 +23,7 @@ import {
     useChainIdMainnet,
     useRecentTransactions,
 } from '@masknet/plugin-infra/web3'
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { WalletIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '../../plugins/Wallet/messages'
@@ -33,7 +33,6 @@ import GuideStep from '../GuideStep'
 import { AccountBalanceWalletIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
-import { NextIDVerificationStatus, useNextIDConnectStatus } from '../DataSource/useNextID'
 import { MaskIcon } from '../../resources/MaskIcon'
 
 const useStyles = makeStyles<{ iconFontSize?: string }>()((theme, { iconFontSize = '1.5rem' }) => ({
@@ -95,7 +94,6 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
 function ToolboxHintForApplication(props: ToolboxHintProps) {
     const {
         ListItemButton = MuiListItemButton,
-        ListItemIcon = MuiListItemIcon,
         Container = 'div',
         Typography = MuiTypography,
         iconSize = 24,
@@ -136,7 +134,6 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
 
 function ToolboxHintForWallet(props: ToolboxHintProps) {
     const { t } = useI18N()
-    const nextIDConnectStatus = useNextIDConnectStatus()
     const {
         ListItemButton = MuiListItemButton,
         ListItemText = MuiListItemText,
@@ -154,14 +151,6 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
     const theme = useTheme()
     const networkDescriptor = useNetworkDescriptor()
     const providerDescriptor = useProviderDescriptor()
-
-    useEffect(() => {
-        const { status, isVerified, action } = nextIDConnectStatus
-        if (isVerified || status === NextIDVerificationStatus.WaitingLocalConnect) return
-        if (action) {
-            action()
-        }
-    }, [nextIDConnectStatus.status])
 
     return (
         <GuideStep step={2} total={4} tip={t('user_guide_tip_2')}>
@@ -243,7 +232,6 @@ function useToolbox() {
                 <span style={{ marginRight: 12 }}>
                     {t('plugin_wallet_pending_transactions', {
                         count: pendingTransactions.length,
-                        plural: pendingTransactions.length > 1 ? 's' : '',
                     })}
                 </span>
                 <CircularProgress thickness={6} size={20} color="inherit" />

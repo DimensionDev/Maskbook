@@ -1,5 +1,6 @@
 import { escapeRegExp } from 'lodash-unified'
 import urlcat from 'urlcat'
+import LRUCache from 'lru-cache'
 import type { TwitterBaseAPI } from '../types'
 
 const UPLOAD_AVATAR_URL = 'https://upload.twitter.com/i/media/upload.json'
@@ -117,6 +118,11 @@ async function getSettings(bearerToken: string, csrfToken: string): Promise<Twit
     return response.json()
 }
 
+const cache = new LRUCache<string, any>({
+    max: 20,
+    ttl: 300_000,
+})
+
 export class TwitterAPI implements TwitterBaseAPI.Provider {
     async getSettings() {
         const { bearerToken, queryToken, csrfToken } = await getTokens()
@@ -197,7 +203,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         }
     }
 
-    async getUserByScreenName(screenName: string): Promise<TwitterBaseAPI.User> {
+    async getUserByScreenName(screenName: string): Promise<TwitterBaseAPI.User | null> {
         const { bearerToken, csrfToken, queryId } = await getTokens('UserByScreenName')
         const url = urlcat('https://twitter.com/i/api/graphql/:queryId/UserByScreenName', {
             queryId,
@@ -207,17 +213,26 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
                 withSuperFollowsUserFields: true,
             }),
         })
+        const cacheKey = `${bearerToken}/${csrfToken}/${url}`
+        const fetchingTask: Promise<Response> =
+            cache.get(cacheKey) ??
+            fetch(url, {
+                headers: {
+                    authorization: `Bearer ${bearerToken}`,
+                    'x-csrf-token': csrfToken,
+                    'content-type': 'application/json',
+                    'x-twitter-auth-type': 'OAuth2Session',
+                    'x-twitter-active-user': 'yes',
+                    referer: `https://twitter.com/${screenName}`,
+                },
+            })
 
-        const response = await fetch(url, {
-            headers: {
-                authorization: `Bearer ${bearerToken}`,
-                'x-csrf-token': csrfToken,
-                'content-type': 'application/json',
-                'x-twitter-auth-type': 'OAuth2Session',
-                'x-twitter-active-user': 'yes',
-                referer: `https://twitter.com/${screenName}`,
-            },
-        })
+        cache.set(cacheKey, fetchingTask)
+        const response = (await fetchingTask).clone()
+        if (!response.ok) {
+            cache.delete(cacheKey)
+            return null
+        }
         const userResponse: TwitterBaseAPI.UserByScreenNameResponse = await response.json()
         return userResponse.data.user.result
     }

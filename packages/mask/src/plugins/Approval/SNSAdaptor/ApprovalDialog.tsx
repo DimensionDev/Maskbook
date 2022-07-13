@@ -1,4 +1,4 @@
-import { DialogContent, Button, Tab, Typography } from '@mui/material'
+import { DialogContent, Button, Tab } from '@mui/material'
 import { MaskTabList, useTabs } from '@masknet/theme'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useState } from 'react'
@@ -45,8 +45,8 @@ export function ApprovalDialog({ open, onClose }: ApprovalDialogProps) {
                 classes={{ paper: classes.dialogRoot, dialogTitle: classes.dialogTitle }}
                 titleTabs={
                     <MaskTabList variant="base" onChange={onChange} aria-label="Savings">
-                        <Tab label={<Typography>{t.tokens()}</Typography>} value={t.tokens()} />
-                        <Tab label={<Typography>{t.collectibles()}</Typography>} value={t.collectibles()} />
+                        <Tab label={t.tokens()} value={t.tokens()} />
+                        <Tab label={t.collectibles()} value={t.collectibles()} />
                     </MaskTabList>
                 }>
                 <DialogContent className={classes.dialogContent}>

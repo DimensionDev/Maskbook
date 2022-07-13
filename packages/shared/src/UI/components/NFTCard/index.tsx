@@ -67,6 +67,7 @@ const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, pro
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        borderRadius: 12,
     },
     image: {
         width: 126,

@@ -205,7 +205,6 @@
     "sharing": "crwdns4469:0crwdne4469:0",
     "transfer": "crwdns4471:0crwdne4471:0",
     "export": "crwdns9305:0crwdne9305:0",
-    "wallet_status_bar_pending": "crwdns17546:0crwdne17546:0",
     "wallet_load_retry": "crwdns10135:0{{symbol}}crwdne10135:0",
     "wallet_name": "crwdns4487:0crwdne4487:0",
     "wallet_rename": "crwdns4489:0crwdne4489:0",

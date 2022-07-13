@@ -26,12 +26,11 @@ import {
     useNonFungibleAssets,
     useProviderType,
     useWallet,
+    useProviderDescriptor,
 } from '@masknet/plugin-infra/web3'
 import { NFTWalletConnect } from './WalletConnect'
 import { toPNG } from '../utils'
 import { NFTListPage } from './NFTListPage'
-import { useSubscription } from 'use-subscription'
-import { context } from '../context'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { useAsync } from 'react-use'
 import { WalletMessages, WalletRPC } from '../../Wallet/messages'
@@ -175,7 +174,8 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const [disabled, setDisabled] = useState(false)
     const t = useI18N()
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
-    const lastRecognizedProfile = useSubscription(context.lastRecognizedProfile)
+    const providerType = useProviderType()
+    const providerDescriptor = useProviderDescriptor(currentPluginId, providerType)
 
     const { value: chains = EMPTY_LIST } = useAsync(async () => {
         const networks = await WalletRPC.getSupportedNetworks()
@@ -320,8 +320,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
         })
     }, [chainId])
 
-    const providerType = useProviderType()
-
     const theme = useTheme()
 
     const walletItems = wallets
@@ -352,6 +350,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     onConnectWallet={openSelectProviderDialog}
                     onSelectedWallet={onChangeWallet}
                     haveChangeWallet={Boolean(account)}
+                    providerIcon={providerDescriptor.icon}
                 />
             ) : (
                 <MenuItem key="Connect Wallet">
@@ -415,6 +414,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                                     chainId={chainId}
                                     setChainId={setChainId}
                                     classes={classes}
+                                    networkId={selectedPluginId}
                                 />
                             </div>
                         ) : null}
