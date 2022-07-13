@@ -26,7 +26,6 @@ const useStyles = makeStyles()((theme) => ({
     menuItem: {
         overflow: 'hidden',
         alignItems: 'stretch',
-        paddingRight: 0,
         height: 36,
     },
     itemText: {

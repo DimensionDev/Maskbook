@@ -22,8 +22,8 @@ export function useTrendingByKeyword(tagType: TagType, keyword: string, dataProv
     const coin = {
         ...trending?.coin,
         decimals: trending?.coin.decimals || detailedToken?.decimals || 0,
-        contract_address: trending?.contracts?.[0]?.address,
-        chainId: trending?.contracts?.[0]?.chainId,
+        contract_address: trending?.contracts?.[0]?.address ?? trending?.coin.contract_address,
+        chainId: trending?.contracts?.[0]?.chainId ?? trending?.coin.contract_address,
     } as Coin
     return {
         value: {
