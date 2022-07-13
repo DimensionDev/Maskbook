@@ -33,6 +33,15 @@ interface WalletStatusBarProps extends PropsWithChildren<{}> {
     expectedProviderType?: Web3Helper.ProviderTypeAll
     expectedPluginID?: NetworkPluginID
     expectedChainIdOrNetworkTypeOrID?: string | number
+    // Sometime need override wallet info
+    expectedWalletInfo?: {
+        providerIcon?: URL
+        networkIcon?: URL
+        iconFilterColor?: string
+        name?: string
+        account?: string
+        link?: string
+    }
 }
 
 const isDashboard = isDashboardPage()
@@ -44,7 +53,10 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: isDashboard
             ? MaskColorVar.mainBackground
             : parseColor(theme.palette.maskColor.bottom).setAlpha(0.8).toRgbString(),
-        boxShadow: `0 0 20px ${parseColor(theme.palette.maskColor.highlight).setAlpha(0.2).toRgbString()}`,
+        boxShadow:
+            theme.palette.mode === 'dark'
+                ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
+                : '0px 0px 20px rgba(0, 0, 0, 0.05)',
         backdropFilter: 'blur(16px)',
         padding: theme.spacing(2),
         borderRadius: '0 0 12px 12px',
@@ -121,6 +133,7 @@ export function PluginWalletStatusBar({
     expectedPluginID,
     expectedProviderType,
     onlyNetworkIcon = false,
+    expectedWalletInfo,
 }: WalletStatusBarProps) {
     const ref = useRef<HTMLDivElement>()
     const { t } = useI18N()
@@ -182,28 +195,33 @@ export function PluginWalletStatusBar({
                     <WalletIcon
                         size={30}
                         badgeSize={12}
-                        mainIcon={providerDescriptor?.icon}
-                        badgeIcon={networkDescriptor?.icon}
-                        iconFilterColor={providerDescriptor?.iconFilterColor}
+                        mainIcon={expectedWalletInfo?.providerIcon ?? providerDescriptor?.icon}
+                        badgeIcon={expectedWalletInfo?.networkIcon ?? networkDescriptor?.icon}
+                        iconFilterColor={expectedWalletInfo?.iconFilterColor ?? providerDescriptor?.iconFilterColor}
                     />
                 )}
                 <Box className={classes.description}>
                     <Typography className={classes.walletName}>
                         <span>
-                            {providerType === ProviderType.MaskWallet
-                                ? domain ??
-                                  wallet?.name ??
-                                  providerDescriptor?.name ??
-                                  Others?.formatAddress(account, 4)
-                                : domain ?? providerDescriptor?.name ?? Others?.formatAddress(account, 4)}
+                            {expectedWalletInfo?.name ??
+                                (providerType === ProviderType.MaskWallet
+                                    ? domain ??
+                                      wallet?.name ??
+                                      providerDescriptor?.name ??
+                                      Others?.formatAddress(account, 4)
+                                    : domain ?? providerDescriptor?.name ?? Others?.formatAddress(account, 4))}
                         </span>
 
                         <ArrowDropIcon />
                     </Typography>
                     <Typography className={classes.address}>
-                        <span>{Others?.formatAddress(account, 4)}</span>
+                        <span>{expectedWalletInfo?.account ?? Others?.formatAddress(account, 4)}</span>
                         <Link
-                            href={Others?.explorerResolver.addressLink?.(chainId, account) ?? ''}
+                            href={
+                                expectedWalletInfo?.link ??
+                                Others?.explorerResolver.addressLink?.(chainId, account) ??
+                                ''
+                            }
                             target="_blank"
                             title="View on Explorer"
                             rel="noopener noreferrer"
