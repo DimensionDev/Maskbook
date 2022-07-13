@@ -59,6 +59,7 @@ interface WalletItemProps {
     chainId: ChainId
     haveChangeWallet?: boolean
     onConnectWallet?: () => void
+    providerIcon?: URL
 }
 export function WalletItem(props: WalletItemProps) {
     const { classes } = useStyles()
@@ -71,6 +72,7 @@ export function WalletItem(props: WalletItemProps) {
         onSelectedWallet,
         haveChangeWallet = false,
         onConnectWallet,
+        providerIcon,
     } = props
     const currentPluginId = useCurrentWeb3NetworkPluginID()
     const t = useI18N()
@@ -97,7 +99,14 @@ export function WalletItem(props: WalletItemProps) {
                     <UncheckIcon className={classes.icon} />
                 )}
             </ListItemIcon>
-            <WalletUI chainId={chainId} name={walletName} address={wallet} verify={verify} isETH={isETH} />
+            <WalletUI
+                providerIcon={providerIcon}
+                chainId={chainId}
+                name={walletName}
+                address={wallet}
+                verify={verify}
+                isETH={isETH}
+            />
             {haveChangeWallet && (
                 <Button size="small" className={classes.change} onClick={onConnectWallet}>
                     {t.change()}
