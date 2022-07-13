@@ -122,6 +122,42 @@ export namespace RSS3BaseAPI {
         address: string
     }
 
+    export interface Attachments {
+        address?: string
+        mime_type?: string
+        size_in_bytes?: string
+        type?: string
+    }
+
+    export type Tags = 'NFT' | 'Token' | 'POAP' | 'Gitcoin' | 'Mirror Entry'
+
+    export type FeedType = 'Token' | 'Donation' | 'NFT'
+
+    export interface Web3Feed {
+        attachments?: Attachments[]
+        authors: string[]
+        backlinks: string
+        date_created: string
+        date_updated: string
+        identifier: string
+        links: string
+        related_urls?: string[]
+        // this field works different from API doc
+        source: string
+        tags: Tags[]
+        summary?: string
+        title?: string
+    }
+
+    export interface Web3FeedResponse {
+        version: string
+        date_updated: string
+        identifier: string
+        identifier_next?: string
+        total: string
+        list: Web3Feed[]
+    }
+
     export interface Provider {
         createRSS3(address: string): RSS3
         getFileData<T>(rss3: RSS3, address: string, key: string): Promise<T | undefined>
@@ -130,6 +166,11 @@ export namespace RSS3BaseAPI {
         getFootprints(address: string): Promise<GeneralAssetResponse | undefined>
         getNameInfo(id: string): Promise<NameInfo | undefined>
         getProfileInfo(address: string): Promise<ProfileInfo | undefined>
+        getWeb3Feed(
+            address: string,
+            options?: HubOptions<ChainId>,
+            type?: FeedType,
+        ): Promise<Web3FeedResponse | undefined>
     }
 }
 
