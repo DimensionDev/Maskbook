@@ -16,6 +16,10 @@ const useStyles = makeStyles()((theme) => ({
         '&::-webkit-scrollbar': {
             display: 'none',
         },
+        '& > ul': {
+            paddingRight: '0 !important',
+            width: '100% !important',
+        },
     },
     groupName: {
         height: 18,
@@ -33,7 +37,6 @@ const useStyles = makeStyles()((theme) => ({
         flexGrow: 1,
         justifyContent: 'space-around',
         gap: theme.spacing(1),
-        paddingRight: theme.spacing(1),
         alignItems: 'center',
         overflow: 'hidden',
     },
