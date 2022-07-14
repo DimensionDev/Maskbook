@@ -8,6 +8,7 @@ import type { NextIDPersonaBindings, NextIDPlatform } from '@masknet/shared-base
 import type { NextIDAvatarMeta } from '../types'
 import { PLUGIN_ID } from '../constants'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { sortPersonaBindings } from '../../../utils'
 
 function getLastSalePrice(lastSale?: NonFungibleTokenEvent<ChainId, SchemaType> | null) {
     if (!lastSale?.price?.usd || !lastSale.paymentToken?.decimals) return
@@ -72,15 +73,6 @@ export function formatTokenId(symbol: string, tokenId: string) {
 export function formatAddress(address: string, size = 0) {
     if (size === 0 || size >= 20) return address
     return `${address.slice(0, Math.max(0, 2 + size))}...${address.slice(-size)}`
-}
-
-export const sortPersonaBindings = (a: NextIDPersonaBindings, b: NextIDPersonaBindings, userId: string): number => {
-    const p_a = first(a.proofs.filter((x) => x.identity === userId.toLowerCase()))
-    const p_b = first(b.proofs.filter((x) => x.identity === userId.toLowerCase()))
-
-    if (!p_a || !p_b) return 0
-    if (p_a.created_at > p_b.created_at) return -1
-    return 1
 }
 
 export async function getNFTAvatarByUserId(userId: string, avatarId: string): Promise<NextIDAvatarMeta | undefined> {
