@@ -1,5 +1,5 @@
-import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { ChainId, chainResolver, SchemaType } from '@masknet/web3-shared-evm'
+import { isSameAddress, NonFungibleContractAuthorization } from '@masknet/web3-shared-base'
 import urlcat from 'urlcat'
 import { getAllMaskDappContractInfo, resolveNetworkOnRabby } from './helpers'
 import type { RabbyTokenAPI } from '../types'
@@ -28,8 +28,12 @@ export class RabbyAPI implements RabbyTokenAPI.Provider<ChainId> {
                 if (maskDappContractInfo) {
                     return {
                         ...x,
+                        contract: {
+                            address: x.contract_id,
+                            name: x.contract_name,
+                        },
                         spender: {
-                            id: x.spender.id,
+                            address: x.spender.id,
                             name: maskDappContractInfo.name,
                             logo: maskDappContractInfo.logo,
                         },
@@ -37,12 +41,23 @@ export class RabbyAPI implements RabbyTokenAPI.Provider<ChainId> {
                     }
                 }
 
-                return { ...x, isMaskDapp: false }
+                return {
+                    ...x,
+                    spender: {
+                        ...x.spender,
+                        address: x.spender.id,
+                    },
+                    contract: {
+                        address: x.contract_id,
+                        name: x.contract_name,
+                    },
+                    isMaskDapp: false,
+                }
             })
             .sort((a, b) => {
                 if (a.isMaskDapp && !b.isMaskDapp) return -1
                 if (!a.isMaskDapp && b.isMaskDapp) return 1
                 return Number(b.amount) - Number(a.amount)
-            }) as RabbyTokenAPI.NFTInfo[]
+            }) as Array<NonFungibleContractAuthorization<ChainId, SchemaType>>
     }
 }

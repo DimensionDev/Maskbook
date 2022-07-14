@@ -11,21 +11,25 @@ import {
     useNonFungibleTokenContract,
     useWeb3Hub,
 } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, NetworkDescriptor, TokenType } from '@masknet/web3-shared-base'
+import {
+    NetworkPluginID,
+    NetworkDescriptor,
+    TokenType,
+    NonFungibleContractAuthorization,
+} from '@masknet/web3-shared-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../locales'
 import { useStyles } from './useStyles'
 import { ApprovalLoadingContent } from './ApprovalLoadingContent'
 import { ApprovalEmptyContent } from './ApprovalEmptyContent'
-import type { NFTInfo } from './types'
 import { useAsync } from 'react-use'
 
 export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM)
     const { value: NFTList, loading } = useAsync(
-        async () => hub?.getApprovedNonFungibleTokens?.(chainId, account),
+        async () => hub?.getApprovedNonFungibleContracts?.(chainId, account),
         [chainId, account, hub],
     )
 
@@ -42,14 +46,14 @@ export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {
     ) : (
         <List className={classes.approvalContentWrapper}>
             {NFTList.map((nft, i) => (
-                <ApprovalNFTItem key={i} nft={nft as NFTInfo} networkDescriptor={networkDescriptor} chainId={chainId} />
+                <ApprovalNFTItem key={i} nft={nft} networkDescriptor={networkDescriptor} chainId={chainId} />
             ))}
         </List>
     )
 }
 
 interface ApprovalNFTItemProps {
-    nft: NFTInfo
+    nft: NonFungibleContractAuthorization<ChainId, SchemaType>
     chainId: ChainId
     networkDescriptor?: NetworkDescriptor<ChainId, NetworkType>
 }
@@ -65,8 +69,8 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     const [approveState, approveCallback] = useERC721ContractSetApproveForAllCallback(
-        nft.contract_id,
-        nft.spender.id,
+        nft.contract.address,
+        nft.spender.address,
         false,
         () => setCancelled(true),
         chainId,
@@ -74,7 +78,7 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
 
     const { value: contractDetailed } = useNonFungibleTokenContract(
         NetworkPluginID.PLUGIN_EVM,
-        nft.contract_id ?? '',
+        nft.contract.address ?? '',
         SchemaType.ERC721,
         {
             chainId,
@@ -87,8 +91,8 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
                 <div className={classes.listItemInfo}>
                     <div>
                         <TokenIcon
-                            address={nft.contract_id}
-                            name={nft.contract_name}
+                            address={nft.contract.address}
+                            name={nft.contract.name}
                             logoURL={contractDetailed?.iconURL}
                             classes={{ icon: classes.logoIcon }}
                             tokenType={TokenType.NonFungible}
@@ -97,7 +101,7 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
                         {contractDetailed ? (
                             <Typography className={classes.primaryText}>{contractDetailed?.symbol}</Typography>
                         ) : null}
-                        <Typography className={classes.secondaryText}>{nft.contract_name}</Typography>
+                        <Typography className={classes.secondaryText}>{nft.contract.name}</Typography>
                     </div>
                     <div className={classes.contractInfo}>
                         <Typography className={classes.secondaryText}>{t.contract()}</Typography>
@@ -107,11 +111,11 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
                             <div className={classes.spenderMaskLogoIcon}>{nft.spender.logo}</div>
                         )}
                         <Typography className={classes.primaryText}>
-                            {nft.spender.name ?? Others?.formatAddress(nft.spender.id, 4)}
+                            {nft.spender.name ?? Others?.formatAddress(nft.spender.address, 4)}
                         </Typography>
                         <Link
                             className={classes.link}
-                            href={Others?.explorerResolver.addressLink?.(chainId, nft.spender.id) ?? ''}
+                            href={Others?.explorerResolver.addressLink?.(chainId, nft.spender.address) ?? ''}
                             target="_blank"
                             rel="noopener noreferrer">
                             <LinkOutIcon className={cx(classes.spenderLogoIcon, classes.linkOutIcon)} />

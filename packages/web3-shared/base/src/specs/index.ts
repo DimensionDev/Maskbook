@@ -396,13 +396,11 @@ export interface FungibleTokenAuthorization<ChainId, SchemaType> {
  */
  export interface NonFungibleContractAuthorization<ChainId, SchemaType> {
     amount: string
-    contract_name: string
-    contract_id: string
-    isMaskDapp?: boolean
+    contract: Pick<NonFungibleTokenContract<ChainId, SchemaType>, 'name' | 'address'>
     spender: {
+        address: string
         name: string | undefined
         logo: React.ReactNode | undefined
-        isMaskDapp: boolean
     }
 }
 
@@ -898,7 +896,7 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         initial?: Web3HubOptions,
     ) => Promise<Array<FungibleTokenAuthorization<ChainId, SchemaType>>>
     /** Get all approved non-fungible tokens of given account. */
-    getApprovedNonFungibleTokens?: (
+    getApprovedNonFungibleContracts?: (
         chainId: ChainId,
         account: string,
         initial?: Web3HubOptions,

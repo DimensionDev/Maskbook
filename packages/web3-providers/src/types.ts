@@ -26,9 +26,10 @@ import type {
     HubOptions,
     HubIndicator,
     TokenType,
+    NonFungibleContractAuthorization,
 } from '@masknet/web3-shared-base'
 import type { DataProvider } from '@masknet/public-api'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export namespace ExplorerAPI {
     export type Transaction = Web3Transaction & {
@@ -831,6 +832,9 @@ export namespace RabbyTokenAPI {
     }
 
     export interface Provider<ChainId> {
-        getNonFungibleTokensFromTokenList(chainId: ChainId, account: string): Promise<NFTInfo[]>
+        getNonFungibleTokensFromTokenList(
+            chainId: ChainId,
+            account: string,
+        ): Promise<Array<NonFungibleContractAuthorization<ChainId, SchemaType>>>
     }
 }
