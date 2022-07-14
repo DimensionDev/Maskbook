@@ -7,7 +7,7 @@
     "yarn": ">=999.0.0",
     "npm": ">=999.0.0"
   },
-  "version": "2.10.0",
+  "version": "2.10.1",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
