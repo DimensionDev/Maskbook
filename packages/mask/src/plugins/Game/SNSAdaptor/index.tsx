@@ -22,10 +22,18 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const name = <Trans i18nKey="plugin_game_name" />
             return {
                 ApplicationEntryID: base.ID,
-                RenderEntryComponent({ disabled }) {
+                RenderEntryComponent({ disabled, ...props }) {
                     const { openDialog } = useRemoteControlledDialog(PluginGameMessages.events.gameDialogUpdated)
 
-                    return <ApplicationEntry disabled={disabled} title={name} icon={icon} onClick={openDialog} />
+                    return (
+                        <ApplicationEntry
+                            {...props}
+                            disabled={disabled}
+                            title={name}
+                            icon={icon}
+                            onClick={props.onClick ? () => props.onClick?.(openDialog) : openDialog}
+                        />
+                    )
                 },
                 appBoardSortingDefaultPriority: 11,
                 marketListSortingPriority: 12,

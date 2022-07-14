@@ -20,7 +20,6 @@ import {
     fromHex,
     NextIDAction,
     EnhanceableSite,
-    CrossIsolationMessages,
     EncryptionTargetType,
 } from '@masknet/shared-base'
 import Services from '../../extension/service'
@@ -100,12 +99,6 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const { value: persona_ } = useAsync(async () => {
         return Services.Identity.queryPersona(persona)
     }, [persona])
-
-    useEffect(() => {
-        return CrossIsolationMessages.events.verifyNextID.on(() => {
-            setStep(SetupGuideStep.VerifyOnNextID)
-        })
-    }, [])
 
     const onConnect = async () => {
         const id = ProfileIdentifier.of(ui.networkIdentifier, username)

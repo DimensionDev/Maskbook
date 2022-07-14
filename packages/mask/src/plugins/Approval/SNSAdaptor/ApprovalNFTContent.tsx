@@ -1,9 +1,7 @@
+import { useState } from 'react'
 import { ListItem, List, Typography, Link } from '@mui/material'
 import { useERC721ContractSetApproveForAllCallback } from '@masknet/plugin-infra/web3-evm'
-import { useState } from 'react'
 import { TokenIcon } from '@masknet/shared'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 import { LinkOutIcon } from '@masknet/icons'
 import {
@@ -13,7 +11,9 @@ import {
     useNonFungibleTokenContract,
     useWeb3Hub,
 } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, NetworkDescriptor } from '@masknet/web3-shared-base'
+import { NetworkPluginID, NetworkDescriptor, TokenType } from '@masknet/web3-shared-base'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../locales'
 import { useStyles } from './useStyles'
 import { ApprovalLoadingContent } from './ApprovalLoadingContent'
@@ -31,8 +31,8 @@ export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {
 
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
     const { classes } = useStyles({
-        listItemBackground: networkDescriptor.backgroundGradient,
-        listItemBackgroundIcon: `url("${networkDescriptor.icon}")`,
+        listItemBackground: networkDescriptor?.backgroundGradient,
+        listItemBackgroundIcon: networkDescriptor ? `url("${networkDescriptor?.icon}")` : undefined,
     })
 
     return loading ? (
@@ -50,8 +50,8 @@ export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {
 
 interface ApprovalNFTItemProps {
     nft: NFTInfo
-    networkDescriptor: NetworkDescriptor<ChainId, NetworkType>
     chainId: ChainId
+    networkDescriptor?: NetworkDescriptor<ChainId, NetworkType>
 }
 
 function ApprovalNFTItem(props: ApprovalNFTItemProps) {
@@ -59,8 +59,8 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
     const [cancelled, setCancelled] = useState(false)
     const t = useI18N()
     const { classes, cx } = useStyles({
-        listItemBackground: networkDescriptor.backgroundGradient,
-        listItemBackgroundIcon: `url("${networkDescriptor.icon}")`,
+        listItemBackground: networkDescriptor?.backgroundGradient,
+        listItemBackgroundIcon: `url("${networkDescriptor?.icon}")`,
     })
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
@@ -91,7 +91,7 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
                             name={nft.contract_name}
                             logoURL={contractDetailed?.iconURL}
                             classes={{ icon: classes.logoIcon }}
-                            isERC721
+                            tokenType={TokenType.NonFungible}
                         />
 
                         {contractDetailed ? (
@@ -127,6 +127,7 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
                     expectedChainId={chainId}
                     switchChainWithoutPopup
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    className={classes.chainBoundary}
                     classes={{ switchButton: classes.button }}
                     expectedChainIdSwitchedCallback={() => approveCallback()}
                     ActionButtonPromiseProps={{

@@ -19,6 +19,7 @@ import {
     createIndicator,
     createNextIndicator,
     NonFungibleAsset,
+    formatBalance,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, createNativeToken, createERC20Token } from '@masknet/web3-shared-evm'
 import type { NonFungibleTokenAPI, TrendingAPI } from '../types'
@@ -168,6 +169,18 @@ function createNFTAsset(chainId: ChainId, asset: OpenSeaResponse): NonFungibleAs
                 asset.last_sale?.payment_token.usd_price,
                 asset.last_sale?.payment_token.decimals,
             )?.toString(),
+        },
+        priceInToken: {
+            token: createTokenDetailed(chainId, {
+                address: asset.last_sale?.payment_token.address ?? '',
+                decimals: Number(asset.last_sale?.payment_token.decimals ?? '0'),
+                name: '',
+                symbol: asset.last_sale?.payment_token.symbol ?? '',
+            }),
+            amount: formatBalance(
+                new BigNumber(asset.last_sale?.total_price ?? '0'),
+                asset.last_sale?.payment_token.decimals,
+            ),
         },
         orders: asset.orders
             ?.sort((a, z) =>

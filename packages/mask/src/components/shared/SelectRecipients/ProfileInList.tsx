@@ -1,13 +1,14 @@
-import { useCallback } from 'react'
-import { ListItemText, Checkbox, ListItemAvatar, ListItem } from '@mui/material'
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import Highlighter from 'react-highlight-words'
-import { formatPersonaFingerprint, ProfileInformationFromNextID } from '@masknet/shared-base'
-import { Avatar } from '../../../utils/components/Avatar'
 import { CopyIcon } from '@masknet/icons'
+import { useSnackbarCallback } from '@masknet/shared'
+import { formatPersonaFingerprint, ProfileInformationFromNextID } from '@masknet/shared-base'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { Checkbox, ListItem, ListItemAvatar, ListItemText } from '@mui/material'
 import { truncate } from 'lodash-unified'
-import { useI18N } from '../../../utils'
+import { useCallback } from 'react'
+import Highlighter from 'react-highlight-words'
 import { useCopyToClipboard } from 'react-use'
+import { useI18N } from '../../../utils'
+import { Avatar } from '../../../utils/components/Avatar'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -93,6 +94,18 @@ export function ProfileInList(props: ProfileInListProps) {
     const profile = props.item
 
     const [, copyToClipboard] = useCopyToClipboard()
+    const rawPublicKey = profile.linkedPersona?.rawPublicKey
+    const onCopyPubkey = useSnackbarCallback(
+        async () => {
+            if (!rawPublicKey) return
+            copyToClipboard(rawPublicKey)
+        },
+        [rawPublicKey],
+        undefined,
+        undefined,
+        undefined,
+        t('copied'),
+    )
     const highlightText = (() => {
         if (!profile.fromNextID) return `@${profile.identifier.userId || profile.nickname}`
         const mentions = profile.linkedTwitterNames.map((x) => '@' + x).join(' ')
@@ -150,14 +163,7 @@ export function ProfileInList(props: ProfileInListProps) {
                             autoEscape
                             textToHighlight={textToHighlight}
                         />
-                        <CopyIcon
-                            className={classes.actionIcon}
-                            onClick={() => {
-                                const rawPublicKey = profile.linkedPersona?.rawPublicKey
-                                if (!rawPublicKey) return
-                                copyToClipboard(rawPublicKey.toUpperCase())
-                            }}
-                        />
+                        <CopyIcon className={classes.actionIcon} onClick={onCopyPubkey} />
                         {profile.fromNextID && <div className={classes.badge}>Next.ID</div>}
                     </div>
                 }

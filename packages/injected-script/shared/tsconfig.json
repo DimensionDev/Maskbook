@@ -5,6 +5,6 @@
     "outDir": "../dist/shared",
     "tsBuildInfoFile": "../dist/shared.tsbuildinfo"
   },
-  "files": ["./index.ts"],
+  "files": ["./index.ts", "./twitter.ts"],
   "references": []
 }

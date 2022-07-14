@@ -58,7 +58,8 @@ export function HistoryTab(props: HistoryTabProps) {
                 <LoadingBase />
             </div>
         )
-    if (events.length)
+
+    if (!asset.value || asset.error || !events.length)
         return (
             <Table size="small" stickyHeader>
                 <TableBody className={classes.empty}>

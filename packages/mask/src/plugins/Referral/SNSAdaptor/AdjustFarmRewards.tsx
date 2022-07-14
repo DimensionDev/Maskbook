@@ -145,9 +145,8 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
 
     const connection = useWeb3Connection<void, NetworkPluginID.PLUGIN_EVM>()
     const onAdjustFarmReward = useCallback(async () => {
-        if (!referredToken || !rewardToken) {
-            return onErrorDeposit(t.go_wrong())
-        }
+        if (!web3 || !connection) return
+        if (!referredToken || !rewardToken) return onErrorDeposit(t.go_wrong())
 
         const depositValue = Number.parseFloat(totalFarmReward) + attraceFee
 

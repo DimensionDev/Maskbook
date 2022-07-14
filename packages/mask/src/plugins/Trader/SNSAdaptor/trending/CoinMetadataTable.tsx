@@ -95,7 +95,16 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
 
     const metadataLinks = [['Website', trending.coin.home_urls]] as Array<[string, string[] | undefined]>
 
-    const contracts = trending.contracts ?? []
+    const contracts =
+        trending.contracts ?? (trending.coin.chainId && trending.coin.contract_address)
+            ? [
+                  {
+                      chainId: trending.coin.chainId!,
+                      address: trending.coin.contract_address!,
+                      iconURL: '',
+                  },
+              ]
+            : []
 
     const [menu, openMenu] = useMenu(
         contracts.map((x) => (

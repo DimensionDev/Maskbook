@@ -1,6 +1,5 @@
 import { useState, useContext, createContext, PropsWithChildren, useMemo, useCallback, useEffect } from 'react'
 import { makeStyles, getMaskColor } from '@masknet/theme'
-import { useTimeout } from 'react-use'
 import { Typography } from '@mui/material'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useCurrentWeb3NetworkPluginID, useAccount, useChainId } from '@masknet/plugin-infra/web3'
@@ -12,12 +11,13 @@ import { useI18N } from '../../utils'
 import { Application, getUnlistedApp } from './ApplicationSettingPluginList'
 import { ApplicationRecommendArea } from './ApplicationRecommendArea'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useNextIDConnectStatus } from '../DataSource/useNextID'
+import { useNextIDConnectStatus, verifyPersona } from '../DataSource/useNextID'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext'
 import { MaskMessages } from '../../../shared'
+import { useTimeout } from 'react-use'
 
 const useStyles = makeStyles<{ shouldScroll: boolean; isCarouselReady: boolean }>()((theme, props) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -167,10 +167,10 @@ function ApplicationBoardContent(props: Props) {
         <>
             <ApplicationRecommendArea
                 recommendFeatureAppList={recommendFeatureAppList}
-                RenderEntryComponent={RenderEntryComponent}
                 isCarouselReady={isCarouselReady}
+                RenderEntryComponent={RenderEntryComponent}
                 isHoveringCarousel={isHoveringCarousel}
-                setIsHoveringCarousel={(hover: boolean) => setIsHoveringCarousel(hover)}
+                setIsHoveringCarousel={setIsHoveringCarousel}
             />
 
             {listedAppList.length > 0 ? (
@@ -186,7 +186,13 @@ function ApplicationBoardContent(props: Props) {
                     ))}
                 </section>
             ) : (
-                <div className={classes.placeholderWrapper}>
+                <div
+                    className={cx(
+                        classes.placeholderWrapper,
+                        recommendFeatureAppList.length > 2 && isCarouselReady() && isHoveringCarousel
+                            ? classes.applicationWrapperWithCarousel
+                            : '',
+                    )}>
                     <Typography className={classes.placeholder}>
                         {t('application_display_tab_plug_app-unlisted-placeholder')}
                     </Typography>
@@ -235,8 +241,10 @@ function RenderEntryComponent({ application }: { application: Application }) {
     }, [])
 
     const clickHandler = useMemo(() => {
-        if (application.isWalletConnectedRequired || application.isWalletConnectedEVMRequired)
-            return () => setSelectProviderDialog({ open: true })
+        if (application.isWalletConnectedRequired || application.isWalletConnectedEVMRequired) {
+            return (walletConnectedCallback?: () => void) =>
+                setSelectProviderDialog({ open: true, walletConnectedCallback })
+        }
         if (!application.entry.nextIdRequired) return
         if (ApplicationEntryStatus.isPersonaConnected === false || ApplicationEntryStatus.isPersonaCreated === false)
             return createOrConnectPersona
@@ -305,7 +313,7 @@ const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContex
 
 function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
     const personaConnectStatus = usePersonaConnectStatus()
-    const nextIDConnectStatus = useNextIDConnectStatus()
+    const nextIDConnectStatus = useNextIDConnectStatus(true)
 
     const {
         value: ApplicationCurrentStatus,
@@ -322,6 +330,11 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
         })
     }, [])
 
+    const personaNextIDReset = useCallback(() => {
+        nextIDConnectStatus.reset()
+        verifyPersona(personaConnectStatus.currentConnectedPersona?.identifier)()
+    }, [nextIDConnectStatus, personaConnectStatus])
+
     const { isSNSConnectToCurrentPersona, currentPersonaPublicKey, currentSNSConnectedPersonaPublicKey } =
         ApplicationCurrentStatus ?? {}
 
@@ -329,7 +342,7 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
         <ApplicationEntryStatusContext.Provider
             value={{
                 personaConnectAction: personaConnectStatus.action ?? undefined,
-                personaNextIDReset: nextIDConnectStatus.reset ?? undefined,
+                personaNextIDReset,
                 isPersonaCreated: personaConnectStatus.hasPersona,
                 isPersonaConnected: personaConnectStatus.connected,
                 isNextIDVerify: nextIDConnectStatus.isVerified,

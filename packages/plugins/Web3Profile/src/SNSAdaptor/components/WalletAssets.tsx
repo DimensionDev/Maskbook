@@ -45,7 +45,7 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         linkIcon: {
-            fill: theme.palette.maskColor.second,
+            color: theme.palette.maskColor.second,
             height: 20,
             width: 20,
             marginLeft: theme.spacing(0.5),

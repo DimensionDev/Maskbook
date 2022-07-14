@@ -5,7 +5,7 @@ import React from 'react'
 import { useTheme } from '@mui/system'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { formatCurrency } from '@masknet/web3-shared-base'
+import { formatCurrency, formatSupply } from '@masknet/web3-shared-base'
 import { LinkOutIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
@@ -51,16 +51,17 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
     const theme = useTheme()
 
     const totalSupply = usePortalShadowRoot((container) => {
+        const supply = tokenSecurity.total_supply ? formatSupply(tokenSecurity.total_supply) : DEFAULT_PLACEHOLDER
         return (
             <Tooltip
                 PopperProps={{ container }}
                 arrow
                 title={
                     <Typography color={(theme) => theme.palette.text.buttonText} className={classes.tooltip}>
-                        {tokenSecurity.total_supply}
+                        {supply}
                     </Typography>
                 }>
-                <Typography className={classes.cardValue}>{formatTotalSupply(tokenSecurity.total_supply)}</Typography>
+                <Typography className={classes.cardValue}>{supply}</Typography>
             </Tooltip>
         )
     })
@@ -88,7 +89,9 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                             href={explorerResolver.fungibleTokenLink(tokenSecurity.chainId, tokenSecurity.contract)}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <LinkOutIcon style={{ color: theme.palette.text.strong, width: 14, height: 14 }} />{' '}
+                            <LinkOutIcon
+                                style={{ color: theme.palette.text.strong, width: 18, height: 18, marginTop: 2 }}
+                            />
                         </Link>
                     </Stack>
                 </Stack>
@@ -109,7 +112,9 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                                 )}
                                 target="_blank"
                                 rel="noopener noreferrer">
-                                <LinkOutIcon style={{ color: theme.palette.text.strong, width: 14, height: 14 }} />
+                                <LinkOutIcon
+                                    style={{ color: theme.palette.text.strong, width: 18, height: 18, marginTop: 2 }}
+                                />
                             </Link>
                         )}
                     </Stack>
@@ -140,7 +145,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                 <Stack direction="row" justifyContent="space-between">
                     <Typography className={classes.subtitle}>{t.token_market_cap()}</Typography>
                     <Typography className={classes.cardValue}>
-                        {tokenMarketCap ? formatCurrency(tokenMarketCap) : DEFAULT_PLACEHOLDER}
+                        {tokenMarketCap ? `$${formatSupply(tokenMarketCap)}` : DEFAULT_PLACEHOLDER}
                     </Typography>
                 </Stack>
             </Stack>
