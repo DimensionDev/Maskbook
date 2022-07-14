@@ -5,7 +5,6 @@ import {
     useBlockNumber,
     useBlockTimestamp,
     useChainId,
-    useCurrentWeb3NetworkChainId,
     useCurrentWeb3NetworkPluginID,
     useNetworkType,
     useProviderType,
@@ -62,14 +61,13 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const chainId = useChainId()
     const networkType = useNetworkType()
     const providerType = useProviderType()
-    const chainIdContext = useCurrentWeb3NetworkChainId()
     const { value: balance = '0' } = useBalance()
     const { value: blockNumber = 0 } = useBlockNumber()
     const { value: blockTimestamp = 0 } = useBlockTimestamp()
 
     const onTransferCallback = useCallback(() => {
         if (!NATIVE_TOKEN_ADDRESS) return
-        return connection.transferFungibleToken(
+        return connection?.transferFungibleToken(
             NATIVE_TOKEN_ADDRESS,
             '0x790116d0685eB197B886DAcAD9C247f785987A4a',
             '100',
@@ -79,7 +77,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const onApproveFungibleTokenCallback = useCallback(() => {
         if (pluginID !== NetworkPluginID.PLUGIN_EVM) return
         if (chainId !== ChainId.Mainnet) return
-        return connection.approveFungibleToken(
+        return connection?.approveFungibleToken(
             '0x6B175474E89094C44Da98b954EedeAC495271d0F',
             '0x31f42841c2db5173425b5223809cf3a38fede360',
             '1',
@@ -89,7 +87,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const onApproveNonFungibleTokenCallback = useCallback(() => {
         if (pluginID !== NetworkPluginID.PLUGIN_EVM) return
         if (chainId !== ChainId.Mainnet) return
-        return connection.approveNonFungibleToken(
+        return connection?.approveNonFungibleToken(
             '0xd945f759d422ae30a6166838317b937de08380e3',
             '0x31f42841c2db5173425b5223809cf3a38fede360',
             '71050',
@@ -143,7 +141,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                     ],
                 },
             })
-            const signed = await connection.signMessage(type === 'typedDataSign' ? typedData : message, type)
+            const signed = await connection?.signMessage(type === 'typedDataSign' ? typedData : message, type)
             window.alert(`Signed: ${signed}`)
         },
         [chainId, connection],
@@ -158,7 +156,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
 
     const onConnect = useCallback(
         async (chainId: Web3Helper.ChainIdAll, providerType: Web3Helper.ProviderTypeAll) => {
-            await connection.connect({
+            await connection?.connect({
                 chainId,
                 providerType,
             })
@@ -168,7 +166,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
 
     const onDisconnect = useCallback(
         async (providerType: Web3Helper.ProviderTypeAll) => {
-            await connection.disconnect({
+            await connection?.disconnect({
                 providerType,
             })
         },
@@ -489,7 +487,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                         formData.get('schema') as string,
                                         10,
                                     ) as SchemaType
-                                    const token = await connection.getNonFungibleToken(address, tokenId, schemaType)
+                                    const token = await connection?.getNonFungibleToken(address, tokenId, schemaType)
 
                                     console.log(token)
                                 }}>

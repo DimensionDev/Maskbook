@@ -10,6 +10,8 @@ export function useTransactionReceipt<T extends Record<string, unknown>>(hash: s
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
     return useAsyncRetry(async () => {
+        if (!web3 || !connection) return
+
         const receipt = await connection.getTransactionReceipt(hash)
         if (!receipt) return
 

@@ -189,7 +189,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
 
     const { value: receipt } = useAsync(async () => {
-        const result = await connection.getTransactionReceipt(history.txid)
+        const result = await connection?.getTransactionReceipt(history.txid)
         if (!result) return null
 
         const log = result.logs.find((log) => isSameAddress(log.address, HAPPY_RED_PACKET_ADDRESS_V4))

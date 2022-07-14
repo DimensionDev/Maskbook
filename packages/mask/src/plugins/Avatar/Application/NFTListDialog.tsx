@@ -350,7 +350,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     onConnectWallet={openSelectProviderDialog}
                     onSelectedWallet={onChangeWallet}
                     haveChangeWallet={Boolean(account)}
-                    providerIcon={providerDescriptor.icon}
+                    providerIcon={providerDescriptor?.icon}
                 />
             ) : (
                 <MenuItem key="Connect Wallet">
