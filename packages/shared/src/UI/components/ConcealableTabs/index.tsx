@@ -54,19 +54,19 @@ const useStyles = makeStyles()((theme) => ({
         border: '1px solid transparent',
         background: 'none',
         '&:hover': {
-            backgroundColor: '#fff',
+            backgroundColor: theme.palette.maskColor.bottom,
         },
     },
     normal: {
         boxSizing: 'border-box',
-        color: `${theme.palette.text.secondary} !important`,
+        color: theme.palette.maskColor.secondaryDark,
         border: '1px solid transparent',
     },
     selected: {
         position: 'relative',
-        backgroundColor: '#fff',
+        backgroundColor: theme.palette.maskColor.bottom,
         zIndex: 10,
-        color: '#07101b',
+        color: theme.palette.maskColor.main,
         '&::after': {
             content: '""',
             position: 'absolute',
@@ -114,6 +114,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     settingItem: {
         display: 'flex',
+        alignItems: 'center',
     },
     walletItem: {
         display: 'flex',
@@ -138,6 +139,11 @@ const useStyles = makeStyles()((theme) => ({
         '&:hover': {
             textDecoration: 'none',
         },
+    },
+    linkIcon: {
+        fill: theme.palette.maskColor.second,
+        fontSize: '20px',
+        margin: '4px 2px 0 2px',
     },
 }))
 
@@ -233,7 +239,7 @@ export function ConcealableTabs<T extends number | string>({
                         size="small"
                         onClick={onOpen}
                         className={classes.walletButton}>
-                        <Typography fontSize="18px" fontWeight={700}>
+                        <Typography fontSize="18px" fontWeight={700} color="#07101b">
                             {selectedAddress?.type === SocialAddressType.KV ||
                             selectedAddress?.type === SocialAddressType.ADDRESS ? (
                                 <ReversedAddress
@@ -261,7 +267,12 @@ export function ConcealableTabs<T extends number | string>({
                     <ShadowRootMenu
                         anchorEl={anchorEl}
                         open={Boolean(anchorEl)}
-                        PaperProps={{ style: { maxHeight: 192, width: 248 } }}
+                        PaperProps={{
+                            style: {
+                                maxHeight: 192,
+                                width: 248,
+                            },
+                        }}
                         aria-labelledby="demo-positioned-button"
                         onClose={() => setAnchorEl(null)}>
                         {uniqBy(addressList ?? [], (x) => x.address.toLowerCase()).map((x) => {
@@ -290,9 +301,7 @@ export function ConcealableTabs<T extends number | string>({
                                                 }
                                                 target="_blank"
                                                 rel="noopener noreferrer">
-                                                <LinkOutIcon
-                                                    sx={{ fill: '#767f8d', fontSize: '20px', margin: '4px 2px 0 2px' }}
-                                                />
+                                                <LinkOutIcon className={classes.linkIcon} />
                                             </Link>
                                             {x?.type === SocialAddressType.KV && (
                                                 <NextIdPersonaVerifiedIcon sx={{ fill: '#3dc233' }} />
@@ -314,7 +323,7 @@ export function ConcealableTabs<T extends number | string>({
                     <Typography fontSize="14px" fontWeight={700} marginRight="8px" color="#07101b">
                         {t.rss3()}
                     </Typography>
-                    <RSS3Icon sx={{ marginRight: '8px' }} />
+                    <RSS3Icon sx={{ margin: '0 8px 0 0' }} />
                     <GearIcon onClick={handleOpenDialog} sx={{ cursor: 'pointer' }} />
                 </div>
             </div>
