@@ -10,6 +10,7 @@ import {
     i18NextInstance,
     createSubscriptionFromValueRef,
     createSubscriptionFromAsync,
+    NextIDPlatform,
 } from '@masknet/shared-base'
 import { Environment, assertNotEnvironment, ValueRef } from '@dimensiondev/holoflows-kit'
 import { IdentityResolved, PluginId, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
@@ -18,7 +19,7 @@ import { createPluginHost, createSharedContext } from '../plugin-infra/host'
 import { definedSocialNetworkUIs } from './define'
 import { setupShadowRootPortal, MaskMessages } from '../utils'
 import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
-import { sharedUINetworkIdentifier, sharedUIComponentOverwrite } from '@masknet/shared'
+import { sharedUINetworkIdentifier, sharedUIComponentOverwrite, nextIDPlatform } from '@masknet/shared'
 import { SocialNetworkEnum } from '@masknet/encryption'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
@@ -50,6 +51,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     if (ui.customization.sharedComponentOverwrite) {
         sharedUIComponentOverwrite.value = ui.customization.sharedComponentOverwrite
     }
+    nextIDPlatform.value = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
 
     console.log('Provider activated. You can access it by globalThis.ui', ui)
     Object.assign(globalThis, { ui })
