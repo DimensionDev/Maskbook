@@ -27,6 +27,7 @@ import type {
     HubIndicator,
     TokenType,
     NonFungibleContractAuthorization,
+    FungibleTokenAuthorization,
 } from '@masknet/web3-shared-base'
 import type { DataProvider } from '@masknet/public-api'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -787,6 +788,8 @@ export namespace TrendingAPI {
 export namespace RabbyTokenAPI {
     interface RawTokenSpender {
         id: string
+        address: string
+        amount: number
         value: number
         exposure_usd: number
         protocol: {
@@ -803,6 +806,7 @@ export namespace RabbyTokenAPI {
 
     export interface RawTokenInfo {
         id: string
+        address: string
         name: string
         symbol: string
         logo_url: string
@@ -832,9 +836,14 @@ export namespace RabbyTokenAPI {
     }
 
     export interface Provider<ChainId> {
-        getNonFungibleTokensFromTokenList(
+        getApprovedNonFungibleContracts(
             chainId: ChainId,
             account: string,
         ): Promise<Array<NonFungibleContractAuthorization<ChainId, SchemaType>>>
+
+        getApprovedFungibleTokenSpenders(
+            chainId: ChainId,
+            account: string,
+        ): Promise<Array<FungibleTokenAuthorization<ChainId, SchemaType>>>
     }
 }

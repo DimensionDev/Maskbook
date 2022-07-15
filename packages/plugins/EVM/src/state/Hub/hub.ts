@@ -256,18 +256,19 @@ class Hub implements EVM_Hub {
     ): Promise<string[]> {
         throw new Error('Method not implemented.')
     }
-    getApprovedFungibleTokens(
+    getApprovedFungibleTokenSpenders(
+        chainId: ChainId,
         account: string,
         initial?: HubOptions<ChainId>,
     ): Promise<Array<FungibleTokenAuthorization<ChainId, SchemaType>>> {
-        throw new Error('Method not implemented.')
+        return Rabby.getApprovedFungibleTokenSpenders(chainId, account)
     }
     getApprovedNonFungibleContracts(
         chainId: ChainId,
         account: string,
         initial?: HubOptions<ChainId>,
     ): Promise<Array<NonFungibleContractAuthorization<ChainId, SchemaType>>> {
-        return Rabby.getNonFungibleTokensFromTokenList(chainId, account)
+        return Rabby.getApprovedNonFungibleContracts(chainId, account)
     }
     async getTransactions(
         chainId: ChainId,
