@@ -189,7 +189,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
 
     const { value: receipt } = useAsync(async () => {
-        const result = await connection.getTransactionReceipt(history.txid)
+        const result = await connection?.getTransactionReceipt(history.txid)
         if (!result) return null
 
         const log = result.logs.find((log) => isSameAddress(log.address, HAPPY_RED_PACKET_ADDRESS_V4))
@@ -214,11 +214,12 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const rpid = receipt?.rpid ?? ''
     const creation_time = receipt?.creation_time ?? 0
 
+    history.rpid = rpid
     const {
         value: availability,
         computed: { canRefund, canSend, listOfStatus, isPasswordValid },
         retry: revalidateAvailability,
-    } = useAvailabilityComputed(account, { ...history, rpid, creation_time })
+    } = useAvailabilityComputed(account, { ...history, creation_time })
 
     const claimerNumber = availability ? Number(availability.claimed) : 0
     const total_remaining = availability?.balance

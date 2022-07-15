@@ -27,10 +27,10 @@ For general introductions, see [Mask.io](https://mask.io).
 ## Downloads
 
 - [Mask Network on Chrome Web Store][client-chrome]
-- [Mask Network on Firefox Addon Store][client-firefox] (Works on Firefox for Android too!)
+- [Mask Network on Firefox Addon Store][client-firefox]
 
 - [Mask Network for iOS][client-ios]
-- (Testflight!) [Mask Network for iOS Testflight][client-ios-testflight]
+- [Mask Network for iOS Testflight][client-ios-testflight]
 - (Beta!) [Mask Network for Android][client-android]
 
 ## Useful Links

@@ -1,5 +1,5 @@
 {
-    "promote": "🎭 🎭🎭 Tired of plaintext？Try to send encrypted message to you friends. Install Mask.io to send your first encrypted tweet.",
+    "promote": "🎭🎭🎭 Tired of plaintext？Try to send encrypted message to you friends. Install Mask.io to send your first encrypted tweet.",
     "promote_red_packet": "🧧🧧🧧 Try sending Lucky Drop to your friends with tokens or NFTs to share the joy now! Install Mask.io to send your first Lucky Drop.",
     "promote_ito": "Launch decentralized assets freely and participate in token launch directly on Twitter! Install Mask.io to participate in your first token launch activity.",
     "promote_ito_short": "Install Mask.io to launch dencentralized assests freely on Twitter!",
@@ -374,8 +374,10 @@
     "plugin_red_packet_create": "Create a Lucky Drop",
     "plugin_red_packet_claimed": "Claimed",
     "plugin_red_packet_claim": "Claim",
+    "plugin_red_packet_claim_notification": "Claim a Lucky Drop",
     "plugin_red_packet_create_with_token": "Create a Lucky Drop with {{amount}} {{symbol}}",
     "plugin_nft_red_packet_create": "Create an NFT Lucky Drop",
+    "plugin_nft_red_packet_claim": "Claim an NFT Lucky Drop",
     "plugin_red_packet_nft_account_name": "Wallet account",
     "plugin_gitcoin_select_a_token": "Select a token",
     "plugin_gitcoin_insufficient_balance": "Insufficient {{symbol}} balance",

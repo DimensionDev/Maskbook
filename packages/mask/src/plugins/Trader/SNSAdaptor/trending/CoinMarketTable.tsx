@@ -2,10 +2,9 @@ import { Paper, Stack, Table, TableBody, TableCell, TableContainer, TableRow, Ty
 import { makeStyles } from '@masknet/theme'
 import { DataProvider } from '@masknet/public-api'
 import { FormattedCurrency } from '@masknet/shared'
-import { formatCurrency, formatInteger, formatSupply } from '@masknet/web3-shared-base'
+import { formatCurrency, formatInteger, formatSupply, TokenType } from '@masknet/web3-shared-base'
 import type { Trending } from '../../types'
 import { useI18N } from '../../../../utils'
-import { TrendingCoinType } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -47,7 +46,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
     return (
         <Stack>
             <Stack>
-                <Typography fontSize={14} fontWeight={700}>
+                <Typography fontSize={14} fontWeight={700} component="h3">
                     {t('plugin_trader_usdc_price_statistic')}
                 </Typography>
             </Stack>
@@ -56,7 +55,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                     <TableBody>
                         {DataProvider.UNISWAP_INFO !== dataProvider ? (
                             <TableRow>
-                                <TableCell className={classes.head}>
+                                <TableCell className={classes.head} component="th">
                                     <Typography color="textSecondary" variant="body2">
                                         {t('plugin_trader_market_cap')}
                                     </Typography>
@@ -68,7 +67,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                         ) : null}
                         {DataProvider.UNISWAP_INFO !== dataProvider ? (
                             <TableRow>
-                                <TableCell className={classes.head}>
+                                <TableCell className={classes.head} component="th">
                                     <Typography color="textSecondary" variant="body2">
                                         {t('plugin_trader_circulating_supply')}
                                     </Typography>
@@ -79,7 +78,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                             </TableRow>
                         ) : null}
                         <TableRow>
-                            <TableCell className={classes.head}>
+                            <TableCell className={classes.head} component="th">
                                 <Typography color="textSecondary" variant="body2">
                                     {t('plugin_trader_volume_24')}
                                 </Typography>
@@ -90,7 +89,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                         </TableRow>
                         {dataProvider !== DataProvider.UNISWAP_INFO ? (
                             <TableRow>
-                                <TableCell className={classes.head}>
+                                <TableCell className={classes.head} component="th">
                                     <Typography color="textSecondary" variant="body2">
                                         {t('plugin_trader_total_supply')}
                                     </Typography>
@@ -117,7 +116,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
     return (
         <Stack>
             <Stack>
-                <Typography fontSize={14} fontWeight={700}>
+                <Typography fontSize={14} fontWeight={700} component="h3">
                     {t('plugin_trader_market_statistic')}
                 </Typography>
             </Stack>
@@ -125,7 +124,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                 <Table size="small">
                     <TableBody>
                         <TableRow>
-                            <TableCell className={classes.head}>
+                            <TableCell className={classes.head} component="th">
                                 <Typography color="textSecondary" variant="body2">
                                     {t('plugin_trader_floor_price')}
                                 </Typography>
@@ -139,7 +138,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                             </TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell className={classes.head}>
+                            <TableCell className={classes.head} component="th">
                                 <Typography color="textSecondary" variant="body2">
                                     {t('plugin_trader_volume_24')}
                                 </Typography>
@@ -153,7 +152,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                             </TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell className={classes.head}>
+                            <TableCell className={classes.head} component="th">
                                 <Typography color="textSecondary" variant="body2">
                                     {t('plugin_trader_owners_count')}
                                 </Typography>
@@ -161,7 +160,7 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                             <TableCell className={classes.cell}>{formatInteger(market?.owners_count, '--')}</TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell className={classes.head}>
+                            <TableCell className={classes.head} component="th">
                                 <Typography color="textSecondary" variant="body2">
                                     {t('plugin_trader_total_assets')}
                                 </Typography>
@@ -176,6 +175,6 @@ export function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
 }
 
 export function CoinMarketTable(props: CoinMarketTableProps) {
-    const isNFT = props.trending.coin.type === TrendingCoinType.NonFungible
+    const isNFT = props.trending.coin.type === TokenType.NonFungible
     return isNFT ? <NonFungibleCoinMarketTable {...props} /> : <FungibleCoinMarketTable {...props} />
 }

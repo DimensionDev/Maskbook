@@ -1,7 +1,7 @@
+import { useAsyncFn } from 'react-use'
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { encodeContractTransaction } from '@masknet/web3-shared-evm'
-import { useAsyncFn } from 'react-use'
 import { useITO_Contract } from './useITO_Contract'
 
 export function useDestructCallback(ito_address: string) {
@@ -12,7 +12,7 @@ export function useDestructCallback(ito_address: string) {
 
     return useAsyncFn(
         async (id: string) => {
-            if (!ITO_Contract || !id) return
+            if (!connection || !ITO_Contract || !id) return
 
             const config = {
                 from: account,

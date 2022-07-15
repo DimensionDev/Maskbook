@@ -24,5 +24,5 @@ export function useWeb3Connection<S extends 'all' | void = void, T extends Netwo
         })
     }, [account, chainId, providerType, Connection, JSON.stringify(options)])
 
-    return connection as Web3Helper.Web3ConnectionScope<S, T>
+    return connection as Web3Helper.Web3ConnectionScope<S, T> | null
 }

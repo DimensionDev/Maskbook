@@ -21,7 +21,14 @@ export function useTradeCallback(
     const tradeAmount = useTradeAmount(trade, allowedSlippage)
 
     return useAsyncFn(async () => {
-        if (!trade || !trade.inputToken || !trade.outputToken || !exchangeProxyContract || !BALANCER_ETH_ADDRESS) {
+        if (
+            !connection ||
+            !trade ||
+            !trade.inputToken ||
+            !trade.outputToken ||
+            !exchangeProxyContract ||
+            !BALANCER_ETH_ADDRESS
+        ) {
             return
         }
 

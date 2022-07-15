@@ -21,7 +21,7 @@ import type { AbiItem } from 'web3-utils'
 import { courier } from '../helpers'
 import { LooksRare, OpenSea } from '../index'
 import { LooksRareLogo, OpenSeaLogo } from '../resources'
-import { NonFungibleMarketplace, NonFungibleTokenAPI, TrendingAPI, TrendingCoinType } from '../types'
+import { NonFungibleMarketplace, NonFungibleTokenAPI, TrendingAPI } from '../types'
 import { NFTSCAN_ACCESS_TOKEN_URL, NFTSCAN_BASE, NFTSCAN_BASE_API, NFTSCAN_LOGO_BASE } from './constants'
 import type {
     NFTPlatformInfo,
@@ -218,7 +218,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                     schema: SchemaType.ERC721,
                     metadata: {
                         chainId,
-                        name: platformInfo.name,
+                        name: x.nft_name,
                         symbol,
                         description: platformInfo.description,
                         imageURL: prependIpfs(x.cover),
@@ -270,7 +270,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                     id: nft.address,
                     name: nft.platform,
                     symbol,
-                    type: TrendingCoinType.NonFungible,
+                    type: TokenType.NonFungible,
                     address: nft.address,
                     contract_address: nft.address,
                     image_url: nft.image,
@@ -340,7 +340,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 symbol,
                 address: platformInfo.address,
                 contract_address: platformInfo.address,
-                type: TrendingCoinType.NonFungible,
+                type: TokenType.NonFungible,
                 description: platformInfo.description,
                 image_url: platformInfo.image,
                 home_urls: compact([platformInfo.website]),

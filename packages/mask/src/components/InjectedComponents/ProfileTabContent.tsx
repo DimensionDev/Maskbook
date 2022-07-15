@@ -207,7 +207,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     return (
         <div className={classes.root}>
             <div>
-                {tabs.length && !showNextID && (
+                {tabs.length > 0 && !showNextID && (
                     <ConcealableTabs<string>
                         tabs={tabs}
                         selectedId={selectedTabId}
