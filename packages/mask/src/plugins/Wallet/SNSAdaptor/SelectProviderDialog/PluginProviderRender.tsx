@@ -72,6 +72,7 @@ const useStyles = makeStyles()((theme) => {
             height: 12,
             background: theme.palette.background.paper,
             borderRadius: '50%',
+            fill: theme.palette.maskColor.success,
         },
         alert: {
             fontSize: 12,

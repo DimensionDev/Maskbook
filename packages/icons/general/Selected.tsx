@@ -2,9 +2,9 @@ import { createPaletteAwareIcon } from '../utils'
 
 export const SelectedIcon = createPaletteAwareIcon(
     'SelectedIcon',
-    <g fill="none">
+    <g>
         <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Z" fill="rgb(245, 245, 245)" />
-        <path d="M8 14.667A6.667 6.667 0 1 0 8 1.333a6.667 6.667 0 0 0 0 13.334Z" fill="#3DC233" />
+        <path d="M8 14.667A6.667 6.667 0 1 0 8 1.333a6.667 6.667 0 0 0 0 13.334Z" />
         <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -12,9 +12,9 @@ export const SelectedIcon = createPaletteAwareIcon(
             fill="#fff"
         />
     </g>,
-    <g fill="none">
+    <g>
         <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Z" fill="rgb(16, 16, 16)" />
-        <path d="M8 14.667A6.667 6.667 0 1 0 8 1.333a6.667 6.667 0 0 0 0 13.334Z" fill="#3DC233" />
+        <path d="M8 14.667A6.667 6.667 0 1 0 8 1.333a6.667 6.667 0 0 0 0 13.334Z" />
         <path
             fillRule="evenodd"
             clipRule="evenodd"

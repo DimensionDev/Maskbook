@@ -142,7 +142,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                             {proof.loading ? (
                                 <LoadingAnimation />
                             ) : isProved?.is_valid ? (
-                                <NextIdPersonaVerifiedIcon />
+                                <NextIdPersonaVerifiedIcon sx={{ fill: '#1C68F3' }} />
                             ) : (
                                 <NextIdPersonaWarningIcon />
                             )}

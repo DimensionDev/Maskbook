@@ -198,7 +198,7 @@ export function PluginWalletStatusBar({
                                 : domain ?? providerDescriptor?.name ?? Others?.formatAddress(account, 4)}
                         </span>
 
-                        <ArrowDropIcon />
+                        <ArrowDropIcon sx={{ fill: '#767F8D' }} />
                     </Typography>
                     <Typography className={classes.address}>
                         <span>{Others?.formatAddress(account, 4)}</span>
