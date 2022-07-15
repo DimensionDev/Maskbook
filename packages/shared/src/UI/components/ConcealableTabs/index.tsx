@@ -15,7 +15,7 @@ import { isSameAddress, NetworkPluginID, SocialAddress, SocialAddressType } from
 import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
 import { Button, Link, MenuItem, Typography } from '@mui/material'
 import classnames from 'classnames'
-import { first, throttle, uniqBy } from 'lodash-unified'
+import { throttle, uniqBy } from 'lodash-unified'
 import { HTMLProps, ReactNode, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useSharedI18N } from '../../../locales'
 
@@ -158,6 +158,8 @@ export interface ConcealableTabsProps<T> extends Omit<HTMLProps<HTMLDivElement>,
     onChange?(id: T): void
     tail?: ReactNode
     addressList: Array<SocialAddress<NetworkPluginID>>
+    selectedAddress?: SocialAddress<NetworkPluginID>
+    onSelectAddress: (address: SocialAddress<NetworkPluginID>) => void
 }
 
 export function ConcealableTabs<T extends number | string>({
@@ -167,6 +169,8 @@ export function ConcealableTabs<T extends number | string>({
     tail,
     onChange,
     addressList,
+    selectedAddress,
+    onSelectAddress,
     ...rest
 }: ConcealableTabsProps<T>) {
     const { classes } = useStyles()
@@ -178,7 +182,6 @@ export function ConcealableTabs<T extends number | string>({
     const [reachedLeftEdge, setReachedLeftEdge] = useState(false)
     const [reachedRightEdge, setReachedRightEdge] = useState(false)
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-    const [selectedAddress, setSelectedAddress] = useState(first(addressList))
 
     useLayoutEffect(() => {
         const tabList = trackRef.current
@@ -217,7 +220,7 @@ export function ConcealableTabs<T extends number | string>({
     const onClose = () => setAnchorEl(null)
 
     const onSelect = (option: SocialAddress<NetworkPluginID>) => {
-        setSelectedAddress(option)
+        onSelectAddress(option)
         onClose()
     }
 

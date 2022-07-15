@@ -593,14 +593,14 @@ export namespace Plugin.SNSAdaptor {
             TabContent: InjectUI<{
                 identity?: SocialIdentity
                 persona?: string
-                socialAddressList?: Array<SocialAddress<NetworkPluginID>>
+                socialAddress?: SocialAddress<NetworkPluginID>
             }>
         }
         Utils?: {
             /**
              * If it returns false, this tab will not be displayed.
              */
-            shouldDisplay?(identity?: SocialIdentity, addressNames?: Array<SocialAddress<NetworkPluginID>>): boolean
+            shouldDisplay?(identity?: SocialIdentity, addressName?: SocialAddress<NetworkPluginID>): boolean
             /**
              * Filter social address.
              */

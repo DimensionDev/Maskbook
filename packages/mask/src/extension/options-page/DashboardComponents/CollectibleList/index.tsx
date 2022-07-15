@@ -5,7 +5,6 @@ import {
     NonFungibleAsset,
     NonFungibleTokenCollection,
     SocialAddress,
-    SocialAddressType,
     SourceType,
     Wallet,
 } from '@masknet/web3-shared-base'
@@ -15,8 +14,7 @@ import { CollectibleCard } from './CollectibleCard'
 import { useI18N } from '../../../../utils'
 import { CollectionIcon } from './CollectionIcon'
 import { uniqBy } from 'lodash-unified'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import { ElementAnchor, RetryHint, ReversedAddress } from '@masknet/shared'
+import { ElementAnchor, RetryHint } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingSkeleton } from './LoadingSkeleton'
 import { useNonFungibleAssets, useTrustedNonFungibleTokens, Web3Helper } from '@masknet/plugin-infra/web3'
@@ -222,12 +220,10 @@ export function CollectibleList(props: CollectibleListProps) {
 
 export function CollectionList({
     addressName,
-    onSelectAddress,
     persona,
     visitingProfile,
 }: {
     addressName: SocialAddress<NetworkPluginID>
-    onSelectAddress: (event: React.MouseEvent<HTMLButtonElement>) => void
     persona?: string
     visitingProfile?: IdentityResolved
 }) {
@@ -291,55 +287,15 @@ export function CollectionList({
 
     if ((done && !allCollectibles.length) || !account)
         return (
-            <>
-                {addressName && (
-                    <Stack direction="row" height={42} justifyContent="flex-end" alignItems="center" px={2}>
-                        <Box display="flex" alignItems="center" justifyContent="flex-end" flexWrap="wrap">
-                            <Button
-                                onClick={onSelectAddress}
-                                className={classes.button}
-                                variant="outlined"
-                                size="small">
-                                {addressName.type === SocialAddressType.ADDRESS ||
-                                addressName.type === SocialAddressType.KV ? (
-                                    <ReversedAddress
-                                        address={addressName.address}
-                                        pluginId={addressName.networkSupporterPluginID}
-                                    />
-                                ) : (
-                                    addressName.label
-                                )}
-                                <KeyboardArrowDownIcon />
-                            </Button>
-                        </Box>
-                    </Stack>
-                )}
-                <Box display="flex" alignItems="center" justifyContent="center">
-                    <Typography color="textPrimary" sx={{ paddingTop: 4, paddingBottom: 4 }}>
-                        {t('dashboard_no_collectible_found')}
-                    </Typography>
-                </Box>
-            </>
+            <Box display="flex" alignItems="center" justifyContent="center">
+                <Typography color="textPrimary" sx={{ paddingTop: 4, paddingBottom: 4 }}>
+                    {t('dashboard_no_collectible_found')}
+                </Typography>
+            </Box>
         )
 
     return (
         <Box>
-            <Stack direction="row" justifyContent="space-between" alignItems="center" px={2}>
-                <Stack display="inline-flex" />
-                <Box display="flex" alignItems="center" justifyContent="flex-end" flexWrap="wrap">
-                    <Button onClick={onSelectAddress} className={classes.button} variant="outlined" size="small">
-                        {addressName.type === SocialAddressType.ADDRESS || addressName.type === SocialAddressType.KV ? (
-                            <ReversedAddress
-                                address={addressName.address}
-                                pluginId={addressName.networkSupporterPluginID}
-                            />
-                        ) : (
-                            addressName.label
-                        )}
-                        <KeyboardArrowDownIcon />
-                    </Button>
-                </Box>
-            </Stack>
             <Stack spacing={1} direction="row" mt={1.5}>
                 <Box sx={{ flexGrow: 1 }}>
                     <Box>

@@ -15,12 +15,12 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, CircularProgress } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
-import { MaskMessages, sortPersonaBindings, useI18N } from '../../utils'
+import { MaskMessages, sortPersonaBindings } from '../../utils'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { useNextIDBoundByPlatform } from '../DataSource/useNextID'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
-import { NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
+import { NetworkPluginID, SocialAddressType, SocialAddress } from '@masknet/web3-shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 
 function getTabContent(tabId?: string) {
@@ -43,11 +43,11 @@ export interface ProfileTabContentProps extends withClasses<'text' | 'button' | 
 export function ProfileTabContent(props: ProfileTabContentProps) {
     const classes = useStylesExtends(useStyles(), props)
 
-    const { t } = useI18N()
     const translate = usePluginI18NField()
 
     const [hidden, setHidden] = useState(true)
     const [selectedTab, setSelectedTab] = useState<string | undefined>()
+    const [selectedAddress, setSelectedAddress] = useState<SocialAddress<NetworkPluginID> | undefined>()
 
     const currentIdentity = useLastRecognizedIdentity()
     const identity = useCurrentVisitingIdentity()
@@ -89,6 +89,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     const addressList = useMemo(() => {
         if (!wallets?.length || (!isOwn && socialAddressList?.length)) {
+            setSelectedAddress(first(socialAddressList))
             return socialAddressList
         }
         const addresses = wallets.map((proof) => {
@@ -99,7 +100,9 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                 address: proof?.identity,
             }
         })
-        return [...addresses, ...socialAddressList]
+        const addressList = [...addresses, ...socialAddressList]
+        setSelectedAddress(first(addressList))
+        return addressList
     }, [socialAddressList, wallets?.map((x) => x.identity).join(), isOwn])
 
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
@@ -108,8 +111,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const displayPlugins = useMemo(() => {
         return availablePlugins
             .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
-            .filter((z) => z.Utils?.shouldDisplay?.(identity, addressList) ?? true)
-    }, [identity, availablePlugins.map((x) => x.ID).join(), addressList.map((x) => x.address).join()])
+            .filter((z) => z.Utils?.shouldDisplay?.(identity, selectedAddress) ?? true)
+    }, [identity, availablePlugins.map((x) => x.ID).join(), selectedAddress])
 
     const tabs = displayPlugins
         .sort((a, z) => {
@@ -151,22 +154,9 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     const component = useMemo(() => {
         const Component = getTabContent(componentTabId)
-        const Utils = displayPlugins.find((x) => x.ID === selectedTabId)?.Utils
 
-        return (
-            <Component
-                identity={identity}
-                persona={personaPublicKey}
-                socialAddressList={addressList.filter((x) => Utils?.filter?.(x) ?? true).sort(Utils?.sorter)}
-            />
-        )
-    }, [
-        componentTabId,
-        personaPublicKey,
-        displayPlugins.map((x) => x.ID).join(),
-        personaList.join(),
-        addressList.map((x) => x.address).join(),
-    ])
+        return <Component identity={identity} persona={personaPublicKey} socialAddress={selectedAddress} />
+    }, [componentTabId, personaPublicKey, selectedAddress])
 
     useLocationChange(() => {
         setSelectedTab(undefined)
@@ -190,7 +180,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     if (hidden) return null
 
-    console.log({ identity, isOwn, addressList, personaPublicKey, personaList })
+    console.log({ identity, isOwn, addressList, personaPublicKey, personaList, selectedAddress })
 
     if (!identity.identifier?.userId || loadingSocialAddressList || loadingPersonaList)
         return (
@@ -214,6 +204,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                         selectedId={selectedTabId}
                         onChange={setSelectedTab}
                         addressList={addressList}
+                        selectedAddress={selectedAddress}
+                        onSelectAddress={setSelectedAddress}
                     />
                 )}
             </div>
