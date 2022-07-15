@@ -1,4 +1,5 @@
-import { createIcon } from '@masknet/icons'
+import { createIcon } from '../utils'
+
 export const RSS3Icon = createIcon(
     'RSS3Icon',
     <g>
