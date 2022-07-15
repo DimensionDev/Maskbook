@@ -1,7 +1,7 @@
 import { ChainId, chainResolver, SchemaType } from '@masknet/web3-shared-evm'
 import {
     isSameAddress,
-    NonFungibleContractAuthorization,
+    NonFungibleContractSpenderAuthorization,
     FungibleTokenSpenderAuthorization,
 } from '@masknet/web3-shared-base'
 import urlcat from 'urlcat'
@@ -37,21 +37,17 @@ export class RabbyAPI implements RabbyTokenAPI.Provider<ChainId> {
                             address: x.contract_id,
                             name: x.contract_name,
                         },
-                        spender: {
-                            address: x.spender.id,
-                            name: maskDappContractInfo.name,
-                            logo: maskDappContractInfo.logo,
-                        },
+                        address: x.spender.id,
+                        name: maskDappContractInfo.name,
+                        logo: maskDappContractInfo.logo,
                         isMaskDapp: true,
                     }
                 }
 
                 return {
                     ...x,
-                    spender: {
-                        ...x.spender,
-                        address: x.spender.id,
-                    },
+                    ...x.spender,
+                    address: x.spender.id,
                     contract: {
                         address: x.contract_id,
                         name: x.contract_name,
@@ -63,7 +59,7 @@ export class RabbyAPI implements RabbyTokenAPI.Provider<ChainId> {
                 if (a.isMaskDapp && !b.isMaskDapp) return -1
                 if (!a.isMaskDapp && b.isMaskDapp) return 1
                 return Number(b.amount) - Number(a.amount)
-            }) as Array<NonFungibleContractAuthorization<ChainId, SchemaType>>
+            }) as Array<NonFungibleContractSpenderAuthorization<ChainId, SchemaType>>
     }
 
     async getApprovedFungibleTokenSpenders(chainId: ChainId, account: string) {

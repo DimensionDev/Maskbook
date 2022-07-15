@@ -400,14 +400,12 @@ export interface FungibleTokenSpenderAuthorization<ChainId, SchemaType> {
 /**
  * Authorization about a non-fungible contract.
  */
- export interface NonFungibleContractAuthorization<ChainId, SchemaType> {
+ export interface NonFungibleContractSpenderAuthorization<ChainId, SchemaType> {
     amount: string
     contract: Pick<NonFungibleTokenContract<ChainId, SchemaType>, 'name' | 'address'>
-    spender: {
-        address: string
-        name: string | undefined
-        logo: React.ReactNode | undefined
-    }
+    address: string
+    name: string | undefined
+    logo: React.ReactNode | undefined
 }
 
 /**
@@ -907,7 +905,7 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         chainId: ChainId,
         account: string,
         initial?: Web3HubOptions,
-    ) => Promise<Array<NonFungibleContractAuthorization<ChainId, SchemaType>>>
+    ) => Promise<Array<NonFungibleContractSpenderAuthorization<ChainId, SchemaType>>>
     /** Get non-fungible tokens by collection with pagination supported. */
     getNonFungibleTokensByCollection?: (
         address: string,
