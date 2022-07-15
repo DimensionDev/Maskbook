@@ -1,14 +1,13 @@
-import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { isLessThan, NetworkPluginID, toFixed, isZero } from '@masknet/web3-shared-base'
-import { once } from 'lodash-unified'
 import { useCallback, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useERC20TokenContract } from './useERC20TokenContract'
 import { useERC20TokenAllowance } from './useERC20TokenAllowance'
+import { useWeb3Connection } from '../useWeb3Connection'
 import { useChainId } from '../useChainId'
 import { useAccount } from '../useAccount'
 import { useFungibleTokenBalance } from '../../entry-web3'
-import { TransactionEventType, ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 const MaxUint256 = toFixed('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
 
@@ -30,6 +29,7 @@ export function useERC20TokenApproveCallback(
 ) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM, _chainId)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: _chainId })
     const erc20Contract = useERC20TokenContract(chainId, address)
 
     // read the approved information from the chain
@@ -58,7 +58,7 @@ export function useERC20TokenApproveCallback(
 
     const [state, approveCallback] = useAsyncFn(
         async (useExact = false, isRevoke = false) => {
-            if (approveStateType === ApproveStateType.UNKNOWN || !amount || !spender || !erc20Contract) {
+            if (approveStateType === ApproveStateType.UNKNOWN || !amount || !spender || !erc20Contract || !connection) {
                 return
             }
             // error: failed to approve token
@@ -66,46 +66,16 @@ export function useERC20TokenApproveCallback(
                 return
             }
 
-            // estimate gas and compose transaction
-            const config = {
-                from: account,
-                gas: await erc20Contract.methods
-                    .approve(spender, useExact ? amount : MaxUint256)
-                    .estimateGas({
-                        from: account,
-                    })
-                    .catch((error) => {
-                        useExact = !useExact
-                        return erc20Contract.methods.approve(spender, amount).estimateGas({
-                            from: account,
-                        })
-                    })
-                    .catch((error) => {
-                        throw error
-                    }),
-            }
+            const hash = await connection?.approveFungibleToken(address, spender, useExact ? amount : MaxUint256)
+            const receipt = await connection.getTransactionReceipt(hash)
 
-            // send transaction and wait for hash
-            return new Promise<string>(async (resolve, reject) => {
-                const revalidate = once(() => {
-                    revalidateBalance()
-                    revalidateAllowance()
-                })
-                erc20Contract.methods
-                    .approve(spender, useExact ? amount : MaxUint256)
-                    .send(config as NonPayableTx)
-                    .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
-                        resolve(receipt.transactionHash)
-                        callback?.()
-                        revalidate()
-                    })
-                    .on(TransactionEventType.ERROR, (error) => {
-                        revalidate()
-                        reject(error)
-                    })
-            })
+            if (receipt) {
+                callback?.()
+                revalidateBalance()
+                revalidateAllowance()
+            }
         },
-        [account, amount, spender, erc20Contract, approveStateType],
+        [account, amount, spender, address, erc20Contract, approveStateType, connection],
     )
 
     const resetCallback = useCallback(() => {
