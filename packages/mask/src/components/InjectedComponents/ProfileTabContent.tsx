@@ -10,7 +10,7 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { useSocialAddressListAll, useAvailablePlugins } from '@masknet/plugin-infra/web3'
 import { ConcealableTabs } from '@masknet/shared'
-import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
+import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, CircularProgress } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../social-network'
@@ -21,7 +21,6 @@ import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../DataSo
 import { useNextIDBoundByPlatform } from '../DataSource/useNextID'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
-import { GearIcon } from '@masknet/icons'
 import { NextIDProof } from '@masknet/web3-providers'
 
 function getTabContent(tabId?: string) {
@@ -36,11 +35,6 @@ const useStyles = makeStyles()((theme) => ({
     content: {
         position: 'relative',
         padding: theme.spacing(2, 1),
-    },
-    settingIcon: {
-        cursor: 'pointer',
-        fill: theme.palette.maskColor.main,
-        margin: '0 6px',
     },
 }))
 
@@ -105,7 +99,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                 address: proof?.identity,
             }
         })
-        return [...socialAddressList, ...addresses]
+        return [...addresses, ...socialAddressList]
     }, [socialAddressList, wallets?.map((x) => x.identity).join(), isOwn])
 
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
@@ -154,11 +148,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         ? displayPlugins?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
         : selectedTabId
 
-    const handleOpenDialog = () => {
-        CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToAll({
-            open: true,
-        })
-    }
     const component = useMemo(() => {
         const Component = getTabContent(componentTabId)
         const Utils = displayPlugins.find((x) => x.ID === selectedTabId)?.Utils
@@ -200,6 +189,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     if (hidden) return null
 
+    console.log({ identity, isOwn, addressList, personaPublicKey, personaList })
+
     if (!identity.identifier?.userId || loadingSocialAddressList || loadingPersonaList)
         return (
             <div className={classes.root}>
@@ -221,7 +212,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                         tabs={tabs}
                         selectedId={selectedTabId}
                         onChange={setSelectedTab}
-                        tail={isOwn && <GearIcon onClick={handleOpenDialog} className={classes.settingIcon} />}
+                        addressList={addressList}
                     />
                 )}
             </div>
