@@ -137,6 +137,7 @@ export namespace RSS3BaseAPI {
     export interface Web3Feed {
         attachments?: Attachments[]
         authors: string[]
+        /* cspell:disable-next-line */
         backlinks: string
         date_created: string
         date_updated: string

@@ -126,6 +126,13 @@ const useStyles = makeStyles()((theme) => ({
             backgroundColor: '#07101b',
         },
     },
+    content: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontSize: '14px',
+        fontWeight: 400,
+    },
 }))
 
 interface NextIdPageProps {
@@ -135,6 +142,8 @@ interface NextIdPageProps {
 export function NextIdPage({ persona }: NextIdPageProps) {
     const t = useI18N()
     const { classes } = useStyles()
+
+    const [description, setDescription] = useState('')
     const currentProfileIdentifier = useLastRecognizedIdentity()
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
     const personaConnectStatus = usePersonaConnectStatus()
@@ -148,6 +157,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
     const personaActionButton = useMemo(() => {
         if (!personaConnectStatus.action) return null
         const button = personaConnectStatus.hasPersona ? t.connect_persona() : t.create_persona()
+        setDescription(personaConnectStatus.hasPersona ? '' : t.create_persona_intro())
         const icon = personaConnectStatus.hasPersona ? (
             <ConnectIcon sx={{ marginRight: '8px' }} />
         ) : (
@@ -207,7 +217,11 @@ export function NextIdPage({ persona }: NextIdPageProps) {
         })
     }
 
-    const getButton = () => {
+    const getButton = useMemo(() => {
+        if (!isOwn) {
+            setDescription(t.others_lack_wallet())
+            return
+        }
         if (isWeb3ProfileDisable) {
             return (
                 <Button className={classes.button} variant="contained" onClick={onEnablePlugin}>
@@ -219,7 +233,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
         if (personaActionButton && isOwn) {
             return personaActionButton
         }
-        if (!isAccountVerified) {
+        if (!isAccountVerified && isOwn) {
             return (
                 <Button className={classes.button} variant="contained" onClick={onVerify}>
                     <VerifyIcon sx={{ marginRight: '8px' }} />
@@ -227,13 +241,14 @@ export function NextIdPage({ persona }: NextIdPageProps) {
                 </Button>
             )
         }
+        setDescription(t.add_wallet_intro())
         return (
             <Button className={classes.button} variant="contained" onClick={handleAddWallets}>
                 <WalletUnderTabsIcon className={classes.walletIcon} />
                 {t.add_wallet_button()}
             </Button>
         )
-    }
+    }, [isWeb3ProfileDisable, personaActionButton, isOwn, isAccountVerified, t])
 
     if (loadingBindings || loadingPersona || loadingVerifyInfo) {
         return (
@@ -275,13 +290,9 @@ export function NextIdPage({ persona }: NextIdPageProps) {
                         </Link>
                     </div>
                 </Box>
-                {/* <div style={{ marginTop: '24px' }}>
-                    <div className={classes.longBar} />
-                    <div className={classes.middleBar} />
-                    <div className={classes.shortBar} />
-                </div> */}
-                <Stack justifyContent="center" direction="row" mt="24px">
-                    {getButton()}
+                <Box className={classes.content}>{description}</Box>
+                <Stack justifyContent="center" direction="row">
+                    {getButton}
                 </Stack>
             </Box>
             {openBindDialog && currentPersona && isOwn && (

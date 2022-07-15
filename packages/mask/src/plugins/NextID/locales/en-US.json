@@ -54,5 +54,8 @@
     "send_specific_tip_successfully": "Sent {{amount}} {{name}} tip successfully.",
     "search": "Search",
     "web3_profile": "Web3 Profile",
-    "mask_network": "Mask Network"
+    "mask_network": "Mask Network",
+    "create_persona_intro": "Please create your persona to use Web3 Profile.",
+    "add_wallet_intro": "In the Web3 tab, you can show your wallet addresses for NFT collections, donation records, and other on-chain feeds to friends who have also installed the Mask extension.",
+    "others_lack_wallet": "The user has not set this."
 }

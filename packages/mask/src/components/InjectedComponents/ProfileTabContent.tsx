@@ -143,7 +143,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         ((isOwn && addressList?.length === 0) ||
             isWeb3ProfileDisable ||
             (isOwn && !isCurrentConnectedPersonaBind) ||
-            (isOwn && !wallets?.length))
+            (isOwn && !wallets?.length) ||
+            !addressList?.length)
     const componentTabId = showNextID
         ? displayPlugins?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
         : selectedTabId
