@@ -16,7 +16,7 @@ import { memo, useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { CopyIcon } from '../assets/copy'
 import { LinkIcon } from '../assets/link'
-import { VerifyIcon } from '../assets/verify'
+import { Verified } from '../assets/verify'
 import { useI18N } from '../locales'
 import { formatAddress } from '../utils'
 
@@ -83,7 +83,7 @@ export function WalletUI(props: WalletUIProps) {
                             ? domain ?? name ?? providerDescriptor?.name ?? formatAddress(address, 4)
                             : domain ?? providerDescriptor?.name ?? formatAddress(address, 4)}
                     </Typography>
-                    {verify ? <VerifyIcon style={{ width: 13, height: 13, marginLeft: 4 }} /> : null}
+                    {verify ? <Verified style={{ width: 13, height: 13, marginLeft: 4 }} /> : null}
                 </Stack>
                 <Stack direction="row" alignItems="center">
                     <Typography

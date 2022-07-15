@@ -27,7 +27,6 @@
     { "path": "../../web3-shared/solana" },
     { "path": "../../web3-providers" },
     { "path": "../../theme" },
-    { "path": "../../icons" },
     { "path": "../../plugin-infra" },
     { "path": "../../plugins/Wallet" },
     { "path": "../../plugins/DAO" },

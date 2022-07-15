@@ -53,7 +53,7 @@ export const CollectiblePlaceholder = memo<CollectiblePlaceHolderProps>(({ chain
                 <WalletIcon mainIcon={networkDescriptor?.icon} size={20} />
             </Box>
             <div className={classes.placeholder}>
-                <MiniMaskIcon viewBox="0 0 48 48" sx={{ fontSize: 48, opacity: 0.5 }} />
+                <MiniMaskIcon sx={{ fontSize: 48, opacity: 0.5 }} />
             </div>
         </div>
     )
