@@ -27,7 +27,7 @@ import type {
     HubIndicator,
     TokenType,
     NonFungibleContractAuthorization,
-    FungibleTokenAuthorization,
+    FungibleTokenSpenderAuthorization,
 } from '@masknet/web3-shared-base'
 import type { DataProvider } from '@masknet/public-api'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -844,6 +844,6 @@ export namespace RabbyTokenAPI {
         getApprovedFungibleTokenSpenders(
             chainId: ChainId,
             account: string,
-        ): Promise<Array<FungibleTokenAuthorization<ChainId, SchemaType>>>
+        ): Promise<Array<FungibleTokenSpenderAuthorization<ChainId, SchemaType>>>
     }
 }

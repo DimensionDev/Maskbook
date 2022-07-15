@@ -1,5 +1,9 @@
 import { ChainId, chainResolver, SchemaType } from '@masknet/web3-shared-evm'
-import { isSameAddress, NonFungibleContractAuthorization, FungibleTokenAuthorization } from '@masknet/web3-shared-base'
+import {
+    isSameAddress,
+    NonFungibleContractAuthorization,
+    FungibleTokenSpenderAuthorization,
+} from '@masknet/web3-shared-base'
 import urlcat from 'urlcat'
 import { omit } from 'lodash-unified'
 import { getAllMaskDappContractInfo, resolveNetworkOnRabby } from './helpers'
@@ -112,6 +116,6 @@ export class RabbyAPI implements RabbyTokenAPI.Provider<ChainId> {
                 if (a.isMaskDapp && !b.isMaskDapp) return -1
                 if (!a.isMaskDapp && b.isMaskDapp) return 1
                 return b.exposure_usd - a.exposure_usd
-            }) as Array<FungibleTokenAuthorization<ChainId, SchemaType>>
+            }) as Array<FungibleTokenSpenderAuthorization<ChainId, SchemaType>>
     }
 }

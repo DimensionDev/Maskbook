@@ -8,7 +8,7 @@ import {
     NetworkPluginID,
     NetworkDescriptor,
     isGreaterThan,
-    FungibleTokenAuthorization,
+    FungibleTokenSpenderAuthorization,
 } from '@masknet/web3-shared-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -47,7 +47,7 @@ export function ApprovalTokenContent({ chainId }: { chainId: ChainId }) {
 
 interface ApprovalTokenItemProps {
     chainId: ChainId
-    spender: FungibleTokenAuthorization<ChainId, SchemaType>
+    spender: FungibleTokenSpenderAuthorization<ChainId, SchemaType>
     networkDescriptor?: NetworkDescriptor<ChainId, NetworkType>
 }
 

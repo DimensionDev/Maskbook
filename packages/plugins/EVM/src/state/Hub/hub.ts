@@ -31,7 +31,7 @@ import {
     createPredicate,
     createIndicator,
     FungibleTokenSecurity,
-    FungibleTokenAuthorization,
+    FungibleTokenSpenderAuthorization,
     NonFungibleContractAuthorization,
 } from '@masknet/web3-shared-base'
 import {
@@ -260,7 +260,7 @@ class Hub implements EVM_Hub {
         chainId: ChainId,
         account: string,
         initial?: HubOptions<ChainId>,
-    ): Promise<Array<FungibleTokenAuthorization<ChainId, SchemaType>>> {
+    ): Promise<Array<FungibleTokenSpenderAuthorization<ChainId, SchemaType>>> {
         return Rabby.getApprovedFungibleTokenSpenders(chainId, account)
     }
     getApprovedNonFungibleContracts(

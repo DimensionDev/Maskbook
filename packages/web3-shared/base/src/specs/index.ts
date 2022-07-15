@@ -385,11 +385,15 @@ export interface NonFungibleAsset<ChainId, SchemaType> extends NonFungibleToken<
 /**
  * Authorization about a fungible token.
  */
-export interface FungibleTokenAuthorization<ChainId, SchemaType> {
+export interface FungibleTokenSpenderAuthorization<ChainId, SchemaType> {
     tokenInfo:  Pick<FungibleToken<ChainId, SchemaType>, 'address' | 'logoURL' | 'symbol' | 'name'>
+    /** spender address */
     address: string
+    /** spender name */
     name: string | undefined
+    /** spender logo */
     logo: React.ReactNode | undefined
+    /** allowance token amount of this spender */
     amount: number
 }
 
@@ -897,7 +901,7 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         chainId: ChainId,
         account: string,
         initial?: Web3HubOptions,
-    ) => Promise<Array<FungibleTokenAuthorization<ChainId, SchemaType>>>
+    ) => Promise<Array<FungibleTokenSpenderAuthorization<ChainId, SchemaType>>>
     /** Get all approved non-fungible tokens of given account. */
     getApprovedNonFungibleContracts?: (
         chainId: ChainId,
