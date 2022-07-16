@@ -84,16 +84,6 @@ export function ConsoleContent(props: ConsoleContentProps) {
         )
     }, [pluginID, connection])
 
-    const onApproveNonFungibleTokenCallback = useCallback(() => {
-        if (pluginID !== NetworkPluginID.PLUGIN_EVM) return
-        if (chainId !== ChainId.Mainnet) return
-        return connection?.approveNonFungibleToken(
-            '0xd945f759d422ae30a6166838317b937de08380e3',
-            '0x31f42841c2db5173425b5223809cf3a38fede360',
-            '71050',
-        )
-    }, [pluginID, connection])
-
     const onSignMessage = useCallback(
         async (type?: string) => {
             const message = 'Hello World'
@@ -291,11 +281,6 @@ export function ConsoleContent(props: ConsoleContentProps) {
                             <Typography variant="body2" whiteSpace="nowrap">
                                 Approve Non-Fungible Token
                             </Typography>
-                        </TableCell>
-                        <TableCell>
-                            <Button size="small" onClick={onApproveNonFungibleTokenCallback}>
-                                Approve
-                            </Button>
                         </TableCell>
                     </TableRow>
                     <TableRow>

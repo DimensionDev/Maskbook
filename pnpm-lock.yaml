@@ -1546,6 +1546,7 @@ importers:
   packages/web3-providers:
     specifiers:
       '@dimensiondev/mask-wallet-core': 0.1.0-20211013082857-eb62e5f
+      '@masknet/icons': workspace:*
       '@masknet/plugin-infra': workspace:*
       '@masknet/public-api': workspace:*
       '@masknet/shared-base': workspace:*
@@ -1576,6 +1577,7 @@ importers:
       web3-utils: 1.7.4
     dependencies:
       '@dimensiondev/mask-wallet-core': 0.1.0-20211013082857-eb62e5f
+      '@masknet/icons': link:../icons
       '@masknet/plugin-infra': link:../plugin-infra
       '@masknet/public-api': link:../public-api
       '@masknet/shared-base': link:../shared-base

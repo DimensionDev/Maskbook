@@ -26,9 +26,11 @@ import type {
     HubOptions,
     HubIndicator,
     TokenType,
+    NonFungibleContractSpenderAuthorization,
+    FungibleTokenSpenderAuthorization,
 } from '@masknet/web3-shared-base'
 import type { DataProvider } from '@masknet/public-api'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export namespace ExplorerAPI {
     export type Transaction = Web3Transaction & {
@@ -780,5 +782,68 @@ export namespace TrendingAPI {
         getCurrencies(): Promise<Currency[]>
         // #endregion
         getPriceStats(chainId: ChainId, coinId: string, currency: Currency, days: number): Promise<Stat[]>
+    }
+}
+
+export namespace RabbyTokenAPI {
+    interface RawTokenSpender {
+        id: string
+        address: string
+        amount: number
+        value: number
+        exposure_usd: number
+        protocol: {
+            id: string
+            name: string
+            logo_url: string
+            chain: string
+        } | null
+        is_contract: boolean
+        is_open_source: boolean
+        is_hacked: boolean
+        is_abandoned: boolean
+    }
+
+    export interface RawTokenInfo {
+        id: string
+        address: string
+        name: string
+        symbol: string
+        logo_url: string
+        chain: string
+        price: number
+        balance: number
+        spenders: RawTokenSpender[]
+    }
+
+    export type TokenInfo = Omit<RawTokenInfo, 'spenders'>
+
+    export type TokenSpender = Omit<RawTokenSpender, 'protocol'> & {
+        tokenInfo: TokenInfo
+        name: string | undefined
+        logo: React.ReactNode | undefined
+        isMaskDapp: boolean
+    }
+
+    export interface NFTInfo {
+        chain: string
+        amount: string
+        contract_name: string
+        is_erc721?: boolean
+        contract_id: string
+        isMaskDapp?: boolean
+        spender: Omit<TokenSpender, 'tokenInfo'>
+    }
+
+    export interface Provider<ChainId> {
+        getApprovedNonFungibleContracts(
+            chainId: ChainId,
+            account: string,
+        ): Promise<Array<NonFungibleContractSpenderAuthorization<ChainId, SchemaType>>>
+
+        getApprovedFungibleTokenSpenders(
+            chainId: ChainId,
+            account: string,
+        ): Promise<Array<FungibleTokenSpenderAuthorization<ChainId, SchemaType>>>
     }
 }
