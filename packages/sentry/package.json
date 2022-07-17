@@ -1,7 +1,7 @@
 {
   "name": "@masknet/sentry-wrapper",
   "dependencies": {
-    "@sentry/browser": "7"
+    "@sentry/react": "7.3.0"
   },
   "type": "module",
   "main": "./dist/sentry.js",
