@@ -3,6 +3,7 @@
     <g>
         <path
             d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"
+            fill="none"
             stroke="#1C68F3"
             stroke-width="1.5"
             stroke-linecap="round"
@@ -10,6 +11,7 @@
         />
         <path
             d="M17 21v-8H7v8M7 3v5h8"
+            fill="none"
             stroke="#1C68F3"
             stroke-width="1.5"
             stroke-linecap="round"

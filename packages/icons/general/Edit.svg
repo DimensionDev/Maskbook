@@ -5,6 +5,7 @@
             stroke-width="1.25"
             stroke-linecap="round"
             stroke-linejoin="round"
+            stroke="currentColor"
         />
     </g>
 </svg>

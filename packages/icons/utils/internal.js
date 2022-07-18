@@ -74,14 +74,13 @@ export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
 
         const iconProps = {
             'aria-hidden': true,
-            'aria-role': undefined,
             ...rest,
             ref,
             sx: iconStyle,
         }
         if (hasClickHandler) {
             iconProps['aria-hidden'] = false
-            iconProps['aria-role'] = 'button'
+            iconProps['role'] = 'button'
         }
         if (supportColor && jsx) {
             iconProps.component = 'svg'

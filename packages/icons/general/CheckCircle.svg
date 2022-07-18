@@ -1,7 +1,7 @@
 <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
 <g>
         <circle
-            style={{ filter: 'drop-shadow(0px 2px 5px rgba(28, 104, 243, 0.2))' }}
+            style="filter: drop-shadow(0px 2px 5px rgba(28, 104, 243, 0.2))"
             cx="10"
             cy="10"
             r="10"

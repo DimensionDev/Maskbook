@@ -17,7 +17,6 @@ const useStyles = makeStyles()((theme) => ({
         padding: 10,
         borderBottom: '1px solid #F7F9FA',
         display: 'flex',
-
         alignItems: 'center',
     },
     content: {
@@ -42,26 +41,12 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         fontSize: 16,
     },
-    icon: {
-        fontSize: 20,
-    },
-    name: {
-        fontSize: 12,
-        lineHeight: '16px',
-        color: '#1C68F3',
-    },
     address: {
         fontSize: 12,
         lineHeight: '16px',
         color: '#1C68F3',
         display: 'flex',
         alignItems: 'center',
-    },
-    copy: {
-        fontSize: 12,
-        cursor: 'pointer',
-        fill: '#1C68F3',
-        marginLeft: 4,
     },
 }))
 
@@ -85,12 +70,12 @@ const WalletSettings = memo(() => {
             <div className={classes.content}>
                 <List dense className={classes.list}>
                     <ListItem className={classes.item} onClick={() => navigate(PopupRoutes.BackupWallet)}>
-                        <BackUpIcon className={classes.icon} />
+                        <BackUpIcon size={20} />
                         <ListItemText className={classes.text}>{t('popups_wallet_backup_wallet')}</ListItemText>
                     </ListItem>
                     {wallet?.configurable ? (
                         <ListItem className={classes.item} onClick={() => navigate(PopupRoutes.DeleteWallet)}>
-                            <TrashIcon className={classes.icon} />
+                            <TrashIcon size={20} />
                             <ListItemText className={classes.text}>{t('delete_wallet')}</ListItemText>
                         </ListItem>
                     ) : null}
@@ -99,7 +84,7 @@ const WalletSettings = memo(() => {
                         target="_blank"
                         rel="noopener noreferrer">
                         <ListItem className={classes.item}>
-                            <CloudLinkIcon className={classes.icon} />
+                            <CloudLinkIcon size={20} />
                             <ListItemText className={classes.text}>{t('popups_wallet_view_on_explorer')}</ListItemText>
                         </ListItem>
                     </Link>

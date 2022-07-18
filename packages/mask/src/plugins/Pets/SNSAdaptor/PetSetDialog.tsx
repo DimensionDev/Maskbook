@@ -116,8 +116,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 21,
     },
     RSS3Icon: {
-        fontSize: 24,
-        fill: theme.palette.mode === 'light' ? '#000' : '#fff',
+        color: theme.palette.mode === 'light' ? '#000' : '#fff',
     },
 }))
 
