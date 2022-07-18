@@ -71,6 +71,11 @@ const useStyles = makeStyles()((theme) => ({
         width: 20,
         marginRight: 4,
     },
+    injectedDialog: {
+        '& [role="dialog"]': {
+            maxHeight: '720px !important',
+        },
+    },
 }))
 
 enum CreateRedPacketPageStep {
@@ -171,6 +176,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             <InjectedDialog
                 isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
                 open={props.open}
+                className={classes.injectedDialog}
                 title={title}
                 titleTail={
                     step === CreateRedPacketPageStep.NewRedPacketPage && !showHistory ? (
