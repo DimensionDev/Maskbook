@@ -459,7 +459,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                     <TableRow>
                         <TableCell>
                             <Typography variant="body2" whiteSpace="nowrap">
-                                Non-Fungible Token
+                                Non-Fungible Token Hub APIs
                             </Typography>
                         </TableCell>
                         <TableCell>
@@ -470,14 +470,9 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                     const formData = new FormData(ev.currentTarget)
                                     const address = formData.get('address') as string
                                     const tokenId = formData.get('tokenId') as string
-                                    const schemaType = Number.parseInt(
-                                        formData.get('schema') as string,
-                                        10,
-                                    ) as SchemaType
-
                                     const allSettled = await Promise.allSettled([
-                                        connection?.getBalance(address),
-                                        connection?.getNonFungibleToken(address, tokenId, schemaType),
+                                        hub?.getFungibleTokenBalance?.(address),
+                                        hub?.getNonFungibleAsset?.(address, tokenId),
                                     ])
                                     const getSettledValue = <T extends unknown>(
                                         result: PromiseSettledResult<T>,
@@ -485,8 +480,8 @@ export function ConsoleContent(props: ConsoleContentProps) {
 
                                     console.log(
                                         Object.fromEntries([
-                                            ['getBalance', getSettledValue(allSettled[0])],
-                                            ['getNonFungibleToken', getSettledValue(allSettled[1])],
+                                            ['getFungibleTokenBalance', getSettledValue(allSettled[0])],
+                                            ['getNonFungibleAsset', getSettledValue(allSettled[1])],
                                         ]),
                                     )
                                 }}>
@@ -508,50 +503,6 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                             control={<Radio size="small" />}
                                             label="ERC1155"
                                         />
-                                    </RadioGroup>
-                                </Box>
-                                <Button size="small" type="submit">
-                                    Query
-                                </Button>
-                            </FormControl>
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
-                                Non-Fungible Asset
-                            </Typography>
-                        </TableCell>
-                        <TableCell>
-                            <FormControl
-                                component="form"
-                                onSubmit={async (ev: FormEvent<HTMLFormElement>) => {
-                                    ev.preventDefault()
-                                    const formData = new FormData(ev.currentTarget)
-                                    const address = formData.get('address') as string
-                                    const tokenId = formData.get('tokenId') as string
-                                    const sourceType = formData.get('sourceType') as SourceType
-                                    const token = await hub?.getNonFungibleAsset?.(address, tokenId, {
-                                        sourceType,
-                                    })
-                                    console.log(token)
-                                }}>
-                                <Box sx={{ marginBottom: 1 }}>
-                                    <TextField name="address" label="Contract Address" size="small" />
-                                </Box>
-                                <Box sx={{ marginBottom: 1 }}>
-                                    <TextField name="tokenId" label="Token Id" size="small" />
-                                </Box>
-                                <Box sx={{ marginBottom: 1 }}>
-                                    <RadioGroup defaultValue={SourceType.Alchemy_EVM} name="sourceType">
-                                        {getEnumAsArray(SourceType).map((x) => (
-                                            <FormControlLabel
-                                                key={x.key}
-                                                label={x.value}
-                                                value={x.value}
-                                                control={<Radio size="small" />}
-                                            />
-                                        ))}
                                     </RadioGroup>
                                 </Box>
                                 <Button size="small" type="submit">
