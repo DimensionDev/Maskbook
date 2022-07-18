@@ -17,6 +17,7 @@ export { buildNetlify } from './netlify'
 export { clean, help, createPackageInteractive, fixLockfile, syncDevelop } from './commands'
 export { syncLanguages } from './locale-kit-next'
 export { reorderSpellcheck } from './spellcheck'
+export { migrateIcon } from './migration/icon'
 
 // Sub-projects build commands
 export { buildInjectedScript, watchInjectedScript } from './projects/injected-scripts'
