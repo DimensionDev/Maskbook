@@ -122,8 +122,8 @@ export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect, r
                     value={checked}
                     size="small"
                     disabled={isDisabled}
-                    icon={<CheckboxBorder sx={{ fontSize: '18px', stroke: '#D0D4DD' }} />}
-                    checkedIcon={<CheckBoxIcon sx={{ fontSize: '18px' }} />}
+                    icon={<CheckboxBorder size={18} color="#D0D4DD" />}
+                    checkedIcon={<CheckBoxIcon size={18} />}
                     onChange={(e) => {
                         const value = e.target.checked
                         onSelect(value ? token.tokenId : '')
