@@ -1,5 +1,5 @@
-<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-    <g>
+<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<g>
         <path
             stroke="currentColor"
             d="M5.833 10.833 10 15l4.167-4.167M5.833 5 10 9.167 14.167 5"
@@ -9,3 +9,4 @@
         />
     </g>
 </svg>
+  

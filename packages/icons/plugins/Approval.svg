@@ -1,5 +1,5 @@
-<svg viewBox="6 0 36 36" xmlns="http://www.w3.org/2000/svg">
-    <g>
+<svg width="36" height="36" viewBox="6 0 36 36" xmlns="http://www.w3.org/2000/svg">
+<g>
         <g filter="url(#filter0_bd_1560_130509)">
             <path
                 d="M23.5574 36.6333C24.2264 36.8722 24.9529 36.8722 25.6219 36.6333C30.1803 35.0078 31.827 33.6799 31.827 33.6799C36.5644 30.3202 36.6061 25.9086 36.6061 25.9086V11.9856C36.6061 11.303 36.0721 10.7168 35.4158 10.6918C32.0537 10.5678 27.0986 7.99906 25.2848 6.99394C25.0705 6.87482 24.8312 6.8125 24.5882 6.8125C24.3452 6.8125 24.106 6.87482 23.8916 6.99394C22.0778 7.99604 17.1257 10.5678 13.7606 10.6918C13.1043 10.7166 12.5703 11.303 12.5703 11.9856V25.9086C12.5703 25.9086 12.612 30.32 17.3494 33.6799C17.3523 33.6799 18.999 35.0078 23.5574 36.6333Z"
@@ -23,9 +23,8 @@
                 y="-12"
                 width="68"
                 height="70"
-                filterUnits="userSpaceOnUse"
-                color-interpolation-filters="sRGB"
-            >
+                filter-units="userSpaceOnUse"
+                color-interpolation-filters="sRGB">
                 <feFlood flood-opacity="0" result="BackgroundImageFix" />
                 <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_1560_130509" />
                 <feOffset dy="6" />
@@ -41,3 +40,4 @@
         </defs>
     </g>
 </svg>
+  

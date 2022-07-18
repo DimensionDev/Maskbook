@@ -1,5 +1,5 @@
-<svg viewBox="0 0 37 36" xmlns="http://www.w3.org/2000/svg">
-    <g>
+<svg width="37" height="36" viewBox="0 0 37 36" xmlns="http://www.w3.org/2000/svg">
+<g>
         <path
             d="M14.0888 30.0442C11.5763 29.6606 9.3038 28.688 7.47668 27.3018C7.58557 27.4556 7.65914 27.6316 7.69212 27.8172L8.34479 31.7314C8.37771 31.9307 8.48028 32.1119 8.63424 32.2427C8.78821 32.3736 8.98359 32.4455 9.18563 32.4459H12.6399C12.843 32.4458 13.0395 32.3732 13.1939 32.2413C13.3484 32.1093 13.4507 31.9266 13.4825 31.7259L13.6934 30.4024C13.7089 30.3067 13.7565 30.2191 13.8284 30.154C13.9002 30.0889 13.9921 30.0502 14.0888 30.0442Z"
             fill="url(#paint0_radial_35_22374)"
@@ -7,7 +7,7 @@
         <path
             d="M14.0888 30.0442C11.5763 29.6606 9.3038 28.688 7.47668 27.3018C7.58557 27.4556 7.65914 27.6316 7.69212 27.8172L8.34479 31.7314C8.37771 31.9307 8.48028 32.1119 8.63424 32.2427C8.78821 32.3736 8.98359 32.4455 9.18563 32.4459H12.6399C12.843 32.4458 13.0395 32.3732 13.1939 32.2413C13.3484 32.1093 13.4507 31.9266 13.4825 31.7259L13.6934 30.4024C13.7089 30.3067 13.7565 30.2191 13.8284 30.154C13.9002 30.0889 13.9921 30.0502 14.0888 30.0442Z"
             fill="url(#paint1_linear_35_22374)"
-            fillOpacity="0.4"
+            fill-opacity="0.4"
         />
         <path
             d="M20.9987 30.0306L20.9078 30.0433C23.7885 29.5979 26.3537 28.3807 28.2927 26.6572C28.1818 26.759 28.0681 26.8563 27.9527 26.9527C27.7173 27.1475 27.559 27.4198 27.5064 27.7208L26.8373 31.7295C26.8044 31.9289 26.7018 32.1101 26.5479 32.2409C26.3939 32.3717 26.1985 32.4437 25.9965 32.444H22.5422C22.3391 32.4439 22.1426 32.3714 21.9882 32.2394C21.8337 32.1074 21.7314 31.9247 21.6996 31.7241L21.4851 30.3851C21.4767 30.3298 21.4574 30.2767 21.4283 30.2288C21.3993 30.181 21.361 30.1394 21.3158 30.1065C21.2706 30.0735 21.2193 30.0498 21.1649 30.0368C21.1104 30.0238 21.054 30.0217 20.9987 30.0306Z"
@@ -16,7 +16,7 @@
         <path
             d="M20.9987 30.0306L20.9078 30.0433C23.7885 29.5979 26.3537 28.3807 28.2927 26.6572C28.1818 26.759 28.0681 26.8563 27.9527 26.9527C27.7173 27.1475 27.559 27.4198 27.5064 27.7208L26.8373 31.7295C26.8044 31.9289 26.7018 32.1101 26.5479 32.2409C26.3939 32.3717 26.1985 32.4437 25.9965 32.444H22.5422C22.3391 32.4439 22.1426 32.3714 21.9882 32.2394C21.8337 32.1074 21.7314 31.9247 21.6996 31.7241L21.4851 30.3851C21.4767 30.3298 21.4574 30.2767 21.4283 30.2288C21.3993 30.181 21.361 30.1394 21.3158 30.1065C21.2706 30.0735 21.2193 30.0498 21.1649 30.0368C21.1104 30.0238 21.054 30.0217 20.9987 30.0306Z"
             fill="url(#paint3_linear_35_22374)"
-            fillOpacity="0.4"
+            fill-opacity="0.4"
         />
         <path
             d="M7.6563 11.0328L10.7023 12.5509C10.8488 12.6239 10.84 12.8357 10.688 12.8963C9.39916 13.4105 8.31562 14.3351 7.60501 15.527L7.56652 15.5915C7.48053 15.7358 7.26483 15.7122 7.21204 15.5528L6.14823 12.3398C5.84613 11.4273 6.79609 10.6041 7.6563 11.0328Z"
@@ -25,7 +25,7 @@
         <path
             d="M7.6563 11.0328L10.7023 12.5509C10.8488 12.6239 10.84 12.8357 10.688 12.8963C9.39916 13.4105 8.31562 14.3351 7.60501 15.527L7.56652 15.5915C7.48053 15.7358 7.26483 15.7122 7.21204 15.5528L6.14823 12.3398C5.84613 11.4273 6.79609 10.6041 7.6563 11.0328Z"
             fill="url(#paint5_linear_35_22374)"
-            fillOpacity="0.4"
+            fill-opacity="0.4"
         />
         <path
             d="M2.401 20.0495C2.401 19.2832 3.15126 18.6621 4.07676 18.6621H4.81554C5.74104 18.6621 6.4913 19.2832 6.4913 20.0495V21.9109C6.4913 22.6771 5.74104 23.2982 4.81554 23.2982H4.07676C3.15126 23.2982 2.401 22.6771 2.401 21.9109V20.0495Z"
@@ -34,7 +34,7 @@
         <path
             d="M2.401 20.0495C2.401 19.2832 3.15126 18.6621 4.07676 18.6621H4.81554C5.74104 18.6621 6.4913 19.2832 6.4913 20.0495V21.9109C6.4913 22.6771 5.74104 23.2982 4.81554 23.2982H4.07676C3.15126 23.2982 2.401 22.6771 2.401 21.9109V20.0495Z"
             fill="url(#paint7_linear_35_22374)"
-            fillOpacity="0.4"
+            fill-opacity="0.4"
         />
         <path
             d="M31.3634 20.2054C31.3634 26.2731 25.2728 30.5772 17.7596 30.5772C10.2465 30.5772 4.15588 27.1719 4.15588 20.2054C4.15588 12.9228 10.2465 9.95801 17.7596 9.95801C25.2728 9.95801 31.3634 14.1376 31.3634 20.2054Z"
@@ -63,7 +63,7 @@
         <path
             d="M9.74788 10.8484L13.0272 12.4828C13.1849 12.5614 13.1754 12.7894 13.0118 12.8547C11.6242 13.4082 10.4577 14.4036 9.69266 15.6868L9.65122 15.7563C9.55864 15.9116 9.32642 15.8862 9.26959 15.7145L8.1243 12.2555C7.79906 11.2732 8.82178 10.3868 9.74788 10.8484Z"
             fill="url(#paint11_linear_35_22374)"
-            fillOpacity="0.4"
+            fill-opacity="0.4"
         />
         <path
             fill-rule="evenodd"
@@ -78,7 +78,7 @@
         <path
             d="M17.6366 10.3019C17.5904 10.3001 17.5481 10.2744 17.5255 10.235L16.0065 7.62601C15.9757 7.57376 15.9841 7.50759 16.0262 7.46391C16.0684 7.42023 16.1343 7.41023 16.1871 7.4402L17.7142 8.27734L19.3007 7.56335C19.3556 7.53847 19.4206 7.55349 19.4593 7.60026C19.498 7.64704 19.5012 7.71365 19.4665 7.7634L17.7525 10.2446C17.726 10.2822 17.6828 10.3036 17.6366 10.3019Z"
             fill="white"
-            fillOpacity="0.7"
+            fill-opacity="0.7"
         />
         <defs>
             <radialGradient
@@ -86,9 +86,8 @@
                 cx="0"
                 cy="0"
                 r="1"
-                gradientUnits="userSpaceOnUse"
-                gradientTransform="translate(10.7828 29.8738) rotate(90) scale(2.57205 3.30608)"
-            >
+                gradient-units="userSpaceOnUse"
+                gradient-transform="translate(10.7828 29.8738) rotate(90) scale(2.57205 3.30608)">
                 <stop stop-color="#FFD1E1" />
                 <stop offset="1" stop-color="#FFB2CE" />
             </radialGradient>
@@ -98,8 +97,7 @@
                 y1="27.3018"
                 x2="10.7828"
                 y2="32.4459"
-                gradientUnits="userSpaceOnUse"
-            >
+                gradient-units="userSpaceOnUse">
                 <stop stop-color="#F6528F" />
                 <stop offset="1" stop-color="#F6528F" stop-opacity="0" />
             </linearGradient>
@@ -108,9 +106,8 @@
                 cx="0"
                 cy="0"
                 r="1"
-                gradientUnits="userSpaceOnUse"
-                gradientTransform="translate(24.6002 29.5506) rotate(90) scale(2.89339 3.69241)"
-            >
+                gradient-units="userSpaceOnUse"
+                gradient-transform="translate(24.6002 29.5506) rotate(90) scale(2.89339 3.69241)">
                 <stop stop-color="#FFD1E1" />
                 <stop offset="1" stop-color="#FFB2CE" />
             </radialGradient>
@@ -120,8 +117,7 @@
                 y1="26.6572"
                 x2="24.6002"
                 y2="32.444"
-                gradientUnits="userSpaceOnUse"
-            >
+                gradient-units="userSpaceOnUse">
                 <stop stop-color="#F6528F" />
                 <stop offset="1" stop-color="#F6528F" stop-opacity="0" />
             </linearGradient>
@@ -130,9 +126,8 @@
                 cx="0"
                 cy="0"
                 r="1"
-                gradientUnits="userSpaceOnUse"
-                gradientTransform="translate(7.72966 12.3239) rotate(52.4597) scale(1.40566 1.1082)"
-            >
+                gradient-units="userSpaceOnUse"
+                gradient-transform="translate(7.72966 12.3239) rotate(52.4597) scale(1.40566 1.1082)">
                 <stop stop-color="#FFD1E1" />
                 <stop offset="1" stop-color="#FFB2CE" />
             </radialGradient>
@@ -142,8 +137,7 @@
                 y1="13.8945"
                 x2="7.06415"
                 y2="11.9428"
-                gradientUnits="userSpaceOnUse"
-            >
+                gradient-units="userSpaceOnUse">
                 <stop stop-color="#F6528F" />
                 <stop offset="1" stop-color="#F6528F" stop-opacity="0" />
             </linearGradient>
@@ -152,9 +146,8 @@
                 cx="0"
                 cy="0"
                 r="1"
-                gradientUnits="userSpaceOnUse"
-                gradientTransform="translate(3.8814 20.9801) rotate(174.364) scale(1.48759 1.31246)"
-            >
+                gradient-units="userSpaceOnUse"
+                gradient-transform="translate(3.8814 20.9801) rotate(174.364) scale(1.48759 1.31246)">
                 <stop stop-color="#FFD1E1" />
                 <stop offset="1" stop-color="#FFB2CE" />
             </radialGradient>
@@ -164,8 +157,7 @@
                 y1="21.3289"
                 x2="2.401"
                 y2="21.3796"
-                gradientUnits="userSpaceOnUse"
-            >
+                gradient-units="userSpaceOnUse">
                 <stop stop-color="#F6528F" />
                 <stop offset="1" stop-color="#F6528F" stop-opacity="0" />
             </linearGradient>
@@ -174,9 +166,8 @@
                 cx="0"
                 cy="0"
                 r="1"
-                gradientUnits="userSpaceOnUse"
-                gradientTransform="translate(17.7596 20.206) rotate(90) scale(10.9866 13.6038)"
-            >
+                gradient-units="userSpaceOnUse"
+                gradient-transform="translate(17.7596 20.206) rotate(90) scale(10.9866 13.6038)">
                 <stop stop-color="#FFD1E1" />
                 <stop offset="1" stop-color="#FFB2CE" />
             </radialGradient>
@@ -185,9 +176,8 @@
                 cx="0"
                 cy="0"
                 r="1"
-                gradientUnits="userSpaceOnUse"
-                gradientTransform="translate(32.6446 18.7791) rotate(90) scale(1.42655 2.28703)"
-            >
+                gradient-units="userSpaceOnUse"
+                gradient-transform="translate(32.6446 18.7791) rotate(90) scale(1.42655 2.28703)">
                 <stop stop-color="#FFD1E1" />
                 <stop offset="1" stop-color="#FFB2CE" />
             </radialGradient>
@@ -196,9 +186,8 @@
                 cx="0"
                 cy="0"
                 r="1"
-                gradientUnits="userSpaceOnUse"
-                gradientTransform="translate(9.82685 12.2384) rotate(52.4597) scale(1.51332 1.19308)"
-            >
+                gradient-units="userSpaceOnUse"
+                gradient-transform="translate(9.82685 12.2384) rotate(52.4597) scale(1.51332 1.19308)">
                 <stop stop-color="#FFD1E1" />
                 <stop offset="1" stop-color="#FFB2CE" />
             </radialGradient>
@@ -208,11 +197,11 @@
                 y1="13.9293"
                 x2="9.11037"
                 y2="11.8281"
-                gradientUnits="userSpaceOnUse"
-            >
+                gradient-units="userSpaceOnUse">
                 <stop stop-color="#F6528F" />
                 <stop offset="1" stop-color="#F6528F" stop-opacity="0" />
             </linearGradient>
         </defs>
     </g>
 </svg>
+  

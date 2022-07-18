@@ -1,5 +1,5 @@
-<svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-    <g fill="none">
+<svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
+<g fill="none">
         <path
             fill-rule="evenodd"
             clip-rule="evenodd"
@@ -8,3 +8,4 @@
         />
     </g>
 </svg>
+  
