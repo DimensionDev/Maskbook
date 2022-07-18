@@ -31,6 +31,7 @@ import {
     FormControlLabel,
     Radio,
     RadioGroup,
+    Select,
     Table,
     TableBody,
     TableCell,
@@ -39,6 +40,7 @@ import {
     Typography,
 } from '@mui/material'
 import { useSelectFungibleToken, useSelectAdvancedSettings } from '@masknet/shared'
+import { getEnumAsArray } from '@dimensiondev/kit'
 
 export interface ConsoleContentProps {
     onClose?: () => void
@@ -428,7 +430,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                     <TableRow>
                         <TableCell>
                             <Typography variant="body2" whiteSpace="nowrap">
-                                Gas settings
+                                Gas Settings
                             </Typography>
                         </TableCell>
                         <TableCell>
@@ -472,9 +474,21 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                         formData.get('schema') as string,
                                         10,
                                     ) as SchemaType
-                                    const token = await connection?.getNonFungibleToken(address, tokenId, schemaType)
 
-                                    console.log(token)
+                                    const allSettled = await Promise.allSettled([
+                                        connection?.getBalance(address),
+                                        connection?.getNonFungibleToken(address, tokenId, schemaType),
+                                    ])
+                                    const getSettledValue = <T extends unknown>(
+                                        result: PromiseSettledResult<T>,
+                                    ): T | undefined => (result.status === 'fulfilled' ? result.value : undefined)
+
+                                    console.log(
+                                        Object.fromEntries([
+                                            ['getBalance', getSettledValue(allSettled[0])],
+                                            ['getNonFungibleToken', getSettledValue(allSettled[1])],
+                                        ]),
+                                    )
                                 }}>
                                 <Box sx={{ marginBottom: 1 }}>
                                     <TextField name="address" label="Contract Address" size="small" />
@@ -486,12 +500,12 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                     <RadioGroup defaultValue={SchemaType.ERC721} name="schema">
                                         <FormControlLabel
                                             value={SchemaType.ERC721}
-                                            control={<Radio />}
+                                            control={<Radio size="small" />}
                                             label="ERC721"
                                         />
                                         <FormControlLabel
                                             value={SchemaType.ERC1155}
-                                            control={<Radio />}
+                                            control={<Radio size="small" />}
                                             label="ERC1155"
                                         />
                                     </RadioGroup>
@@ -530,28 +544,14 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                 </Box>
                                 <Box sx={{ marginBottom: 1 }}>
                                     <RadioGroup defaultValue={SourceType.Alchemy_EVM} name="sourceType">
-                                        <FormControlLabel
-                                            value={SourceType.Alchemy_EVM}
-                                            control={<Radio />}
-                                            label="Alchemy"
-                                        />
-                                        <FormControlLabel
-                                            value={SourceType.OpenSea}
-                                            control={<Radio />}
-                                            label="OpenSea"
-                                        />
-                                        <FormControlLabel
-                                            value={SourceType.Rarible}
-                                            control={<Radio />}
-                                            label="Rarible"
-                                        />
-                                        <FormControlLabel value={SourceType.RSS3} control={<Radio />} label="RSS3" />
-                                        <FormControlLabel value={SourceType.Zora} control={<Radio />} label="Zora" />
-                                        <FormControlLabel
-                                            value={SourceType.NFTScan}
-                                            control={<Radio />}
-                                            label="NFTScan"
-                                        />
+                                        {getEnumAsArray(SourceType).map((x) => (
+                                            <FormControlLabel
+                                                key={x.key}
+                                                label={x.value}
+                                                value={x.value}
+                                                control={<Radio size="small" />}
+                                            />
+                                        ))}
                                     </RadioGroup>
                                 </Box>
                                 <Button size="small" type="submit">
@@ -564,6 +564,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                         <TableCell>Test Snackbar</TableCell>
                         <TableCell>
                             <Button
+                                size="small"
                                 onClick={() => {
                                     showSnackbar('test', {
                                         variant: 'success',
