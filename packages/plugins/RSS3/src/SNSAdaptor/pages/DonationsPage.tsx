@@ -1,7 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { List, ListItem } from '@mui/material'
 import urlcat from 'urlcat'
-import { RSS3_DEFAULT_IMAGE } from '../../constants'
 import { useI18N } from '../../locales'
 import type { GeneralAsset, GeneralAssetWithTags } from '../../types'
 import { DonationCard, StatusBox } from '../components'
@@ -25,7 +24,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     list: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(2, 1fr)',
+        gridTemplateColumns: 'repeat(1, 1fr)',
         gridGap: theme.spacing(2),
     },
     listItem: {
@@ -64,13 +63,7 @@ export function DonationPage({ donations = [], loading, addressLabel }: Donation
         <List className={classes.list}>
             {donations.map((donation) => (
                 <ListItem key={donation.id} className={classes.listItem}>
-                    <DonationCard
-                        className={classes.donationCard}
-                        imageUrl={donation.info.image_preview_url || RSS3_DEFAULT_IMAGE}
-                        name={donation.info.title || t.inactive_project()}
-                        contribCount={donation.info.total_contribs || 0}
-                        contribDetails={donation.info.token_contribs || []}
-                    />
+                    <DonationCard className={classes.donationCard} donation={donation} />
                 </ListItem>
             ))}
         </List>

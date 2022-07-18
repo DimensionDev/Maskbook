@@ -72,6 +72,7 @@ const useStyles = makeStyles()((theme) => ({
     description: {
         background: theme.palette.mode === 'light' ? '#F7F9FA' : '#2F3336',
         alignSelf: 'stretch',
+        borderRadius: '0 0 8px 8px',
     },
     name: {
         whiteSpace: 'nowrap',
@@ -360,7 +361,12 @@ export function CollectionList({
                                         key={i}
                                         alignItems="center"
                                         justifyContent="center"
-                                        sx={{ marginTop: '8px', marginBottom: '12px', minWidth: 30, maxHeight: 24 }}>
+                                        sx={{
+                                            marginTop: '8px',
+                                            marginBottom: '12px',
+                                            minWidth: 30,
+                                            maxHeight: 24,
+                                        }}>
                                         <CollectionIcon
                                             selectedCollection={
                                                 selectedCollection === 'all' ? undefined : selectedCollection?.address

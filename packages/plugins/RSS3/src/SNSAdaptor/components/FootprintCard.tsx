@@ -1,55 +1,73 @@
 import { Typography } from '@mui/material'
-import EventRoundedIcon from '@mui/icons-material/EventRounded'
-import LocationOnRoundedIcon from '@mui/icons-material/LocationOnRounded'
 import fromUnixTime from 'date-fns/fromUnixTime'
-import { ImageHolder } from './ImageHolder'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../locales'
+import { RSS3_DEFAULT_IMAGE } from '../../constants'
+import type { GeneralAsset } from '../../types'
+
+const useStyles = makeStyles()((theme) => ({
+    card: {
+        display: 'flex',
+        padding: 3,
+        marginBottom: 16,
+    },
+    cover: {
+        flexShrink: 1,
+        height: 126,
+        width: 126,
+        borderRadius: 8,
+        objectFit: 'cover',
+    },
+    content: {
+        marginLeft: 12,
+        marginTop: 12,
+    },
+}))
 
 const formatDate = (ts: string): string => {
     return fromUnixTime(Number.parseInt(ts, 16)).toLocaleDateString('en-US')
 }
 export interface FootprintProps {
-    imageUrl: string
-    startDate: string | undefined
-    endDate: string | undefined
-    city: string | undefined
-    country: string | undefined
     username: string
-    activity: string
+    footprint: GeneralAsset
 }
 
-export const FootprintCard = ({ imageUrl, startDate, endDate, city, country, activity }: FootprintProps) => {
+export const FootprintCard = ({ footprint }: FootprintProps) => {
     const t = useI18N()
+    const { classes } = useStyles()
+
     // Calc display date
     let displayDate: string
-    if (startDate && endDate) {
-        displayDate = formatDate(startDate)
-        if (endDate !== startDate) {
-            displayDate += ` ~ ${formatDate(endDate)}`
+    if (footprint.info.start_date && footprint.info.end_date) {
+        displayDate = formatDate(footprint.info.start_date)
+        if (footprint.info.start_date !== footprint.info.end_date) {
+            displayDate += ` ~ ${formatDate(footprint.info.end_date)}`
         }
     } else {
         displayDate = t.no_activity_time()
     }
 
     // Calc location
-    const location = city || country || 'Metaverse'
+    const location = footprint.info.city || footprint.info.country || 'Metaverse'
 
     return (
-        <div className="flex flex-row justify-start gap-2 p-4 ">
+        <div className={classes.card}>
             <section className="flex flex-row flex-shrink-0 w-max h-max">
-                <ImageHolder url={imageUrl} isFullRound size={76} />
+                <img
+                    className={classes.cover}
+                    src={footprint.info.image_preview_url || RSS3_DEFAULT_IMAGE}
+                    alt={t.inactive_project()}
+                />
             </section>
-            <section className="flex flex-col justify-around flex-1 text-sm leading-normal text-body-text">
+            <section className={classes.content}>
                 <div className="flex flex-row items-center gap-2 no-underline">
-                    <EventRoundedIcon className="text-footprint" fontSize="small" />
                     <Typography variant="body1" color="textPrimary">
                         {displayDate}
                     </Typography>
                 </div>
                 <div className="flex flex-row items-center gap-2">
-                    <LocationOnRoundedIcon className="text-footprint" fontSize="small" />
                     <Typography variant="body1" color="textPrimary">
-                        {location}
+                        @ {location}
                     </Typography>
                 </div>
                 <div className="flex flex-row gap-2 font-medium">
@@ -57,7 +75,7 @@ export const FootprintCard = ({ imageUrl, startDate, endDate, city, country, act
                         {t.attended()}
                     </Typography>
                     <Typography variant="body1" color="textPrimary">
-                        {activity}
+                        {footprint.info.title || ''}
                     </Typography>
                 </div>
             </section>

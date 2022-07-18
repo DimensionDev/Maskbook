@@ -10,7 +10,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 4,
+        borderRadius: '8px 8px 0 0',
         position: 'absolute',
         zIndex: 1,
         backgroundColor: theme.palette.mode === 'light' ? '#F7F9FA' : '#2F3336',

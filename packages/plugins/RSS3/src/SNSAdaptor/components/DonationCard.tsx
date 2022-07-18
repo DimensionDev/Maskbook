@@ -2,16 +2,12 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import classnames from 'classnames'
 import { HTMLProps, Fragment } from 'react'
+import { RSS3_DEFAULT_IMAGE } from '../../constants'
 import { useI18N } from '../../locales'
+import type { GeneralAsset } from '../../types'
 
 export interface DonationCardProps extends HTMLProps<HTMLDivElement> {
-    imageUrl: string
-    name: string
-    contribCount: number
-    contribDetails: Array<{
-        token: string
-        amount: string
-    }>
+    donation: GeneralAsset
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -20,14 +16,14 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'row',
         backgroundColor: MaskColorVar.twitterBg,
-        padding: theme.spacing(1),
         flexGrow: 1,
         alignItems: 'stretch',
+        padding: 3,
     },
     cover: {
         flexShrink: 1,
-        height: 90,
-        width: 90,
+        height: 126,
+        width: 126,
         borderRadius: 8,
         objectFit: 'cover',
     },
@@ -40,7 +36,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     info: {
         flexGrow: 1,
-        marginLeft: theme.spacing(1),
+        marginLeft: '12px',
         fontSize: 16,
         display: 'flex',
         overflow: 'hidden',
@@ -61,43 +57,42 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const DonationCard = ({
-    imageUrl,
-    name,
-    contribCount,
-    contribDetails,
-    className,
-    ...rest
-}: DonationCardProps) => {
+export const DonationCard = ({ donation, className, ...rest }: DonationCardProps) => {
     const { classes } = useStyles()
     const t = useI18N()
     return (
         <div className={classnames(classes.card, className)} {...rest}>
-            <img className={classes.cover} src={imageUrl} alt={name} />
-            <dl className={classes.info}>
-                <dt className={classes.infoRow}>
+            <img
+                className={classes.cover}
+                src={donation.info.image_preview_url || RSS3_DEFAULT_IMAGE}
+                alt={donation.info.title || t.inactive_project()}
+            />
+            <div className={classes.info}>
+                <div className={classes.infoRow}>
                     <Typography
                         variant="h6"
                         color="textPrimary"
                         fontWeight={600}
                         className={classes.title}
-                        title={name}>
-                        {name}
+                        title={donation.info.title || t.inactive_project()}>
+                        {donation.info.title || t.inactive_project()}
                     </Typography>
-                </dt>
-                <dd className={classes.infoRow}>
-                    <span className={classes.infoLabel}>{contribCount}</span>
-                    <span className={classes.infoValue}> {t.contribution({ count: contribCount })}</span>
-                </dd>
-                <dd className={classes.infoRow}>
-                    {contribDetails.map((contrib, i) => (
+                </div>
+                <div className={classes.infoRow}>
+                    <span className={classes.infoLabel}>{donation.info.total_contribs || 0} </span>
+                    <span className={classes.infoValue}>
+                        {t.contribution({ count: donation.info.total_contribs || 0 })}
+                    </span>
+                </div>
+                <div className={classes.infoRow}>
+                    {(donation.info.token_contribs || []).map((contrib, i) => (
                         <Fragment key={i}>
                             <span className={classes.infoLabel}>{contrib.amount}</span>
                             <span className={classes.infoValue}> {contrib.token} </span>
                         </Fragment>
                     ))}
-                </dd>
-            </dl>
+                </div>
+            </div>
         </div>
     )
 }
