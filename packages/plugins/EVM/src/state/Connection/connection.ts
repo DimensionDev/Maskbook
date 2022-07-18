@@ -235,22 +235,9 @@ class Connection implements EVM_Connection {
         schema: SchemaType,
         initial?: EVM_Web3ConnectionOptions,
     ): Promise<string> {
-        const options = this.getOptions(initial)
-        const actualSchema = schema ?? (await this.getTokenSchema(address, options))
-
-        // Native
-        if (!address || isNativeTokenAddress(options.chainId, address)) throw new Error('Invalid token address.')
-
-        // ERC721
-        if (actualSchema === SchemaType.ERC721) {
-            const contract = await this.getERC721Contract(address, options)
-            const tx = contract?.methods.approve(recipient, tokenId)
-            return sendTransaction(contract, tx, options.overrides)
-        }
-
-        const contract = await this.getERC1155Contract(address, options)
-        const tx = contract?.methods.setApprovalForAll(recipient, true)
-        return sendTransaction(contract, tx, options.overrides)
+        // Do not use `approve()`, since it is buggy.
+        // https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/ERC721.sol
+        throw new Error('Method not implemented.')
     }
     async approveAllNonFungibleTokens(
         address: string,

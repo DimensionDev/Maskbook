@@ -385,19 +385,27 @@ export interface NonFungibleAsset<ChainId, SchemaType> extends NonFungibleToken<
 /**
  * Authorization about a fungible token.
  */
-export interface FungibleTokenAuthorization<ChainId, SchemaType> {
-    amount: string
-    recipient: string
-    token: FungibleToken<ChainId, SchemaType>
+export interface FungibleTokenSpenderAuthorization<ChainId, SchemaType> {
+    tokenInfo:  Pick<FungibleToken<ChainId, SchemaType>, 'address' | 'logoURL' | 'symbol' | 'name'>
+    /** spender address */
+    address: string
+    /** spender name */
+    name: string | undefined
+    /** spender logo */
+    logo: React.ReactNode | undefined
+    /** allowance token amount of this spender */
+    amount: number
 }
 
 /**
- * Authorization about a non-fungible token.
+ * Authorization about a non-fungible contract.
  */
-export interface NonFungibleTokenAuthorization<ChainId, SchemaType> {
-    all: boolean
-    recipient: string
-    tokens: NonFungibleToken<ChainId, SchemaType>
+ export interface NonFungibleContractSpenderAuthorization<ChainId, SchemaType> {
+    amount: string
+    contract: Pick<NonFungibleTokenContract<ChainId, SchemaType>, 'name' | 'address'>
+    address: string
+    name: string | undefined
+    logo: React.ReactNode | undefined
 }
 
 /**
@@ -887,15 +895,17 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>>
     /** Get all approved fungible tokens of given account. */
-    getApprovedFungibleTokens?: (
+    getApprovedFungibleTokenSpenders?: (
+        chainId: ChainId,
         account: string,
         initial?: Web3HubOptions,
-    ) => Promise<Array<FungibleTokenAuthorization<ChainId, SchemaType>>>
+    ) => Promise<Array<FungibleTokenSpenderAuthorization<ChainId, SchemaType>>>
     /** Get all approved non-fungible tokens of given account. */
-    getApprovedNonFungibleTokens?: (
+    getApprovedNonFungibleContracts?: (
+        chainId: ChainId,
         account: string,
         initial?: Web3HubOptions,
-    ) => Promise<Array<NonFungibleTokenAuthorization<ChainId, SchemaType>>>
+    ) => Promise<Array<NonFungibleContractSpenderAuthorization<ChainId, SchemaType>>>
     /** Get non-fungible tokens by collection with pagination supported. */
     getNonFungibleTokensByCollection?: (
         address: string,
