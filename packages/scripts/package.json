@@ -16,6 +16,7 @@
     "gulp-zip": "^5.1.0",
     "proper-lockfile": "^4.1.1",
     "rimraf": "^3.0.2",
+    "source-map": "^0.7.4",
     "yargs": "^17.5.1"
   },
   "devDependencies": {
