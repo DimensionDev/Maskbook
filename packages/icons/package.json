@@ -15,18 +15,13 @@
     "./url": {
       "type": "./icon-generated-as-url.d.ts",
       "default": "./icon-generated-as-url.js"
-    },
-    "./full": {
-      "type": "./full.d.ts",
-      "default": "./full.js"
     }
   },
   "types": "./index.d.ts",
   "typesVersions": {
     "*": {
       "jsx": ["./icon-generated-as-jsx.d.ts"],
-      "url": ["./icon-generated-as-url.d.ts"],
-      "full": ["./full.d.ts"]
+      "url": ["./icon-generated-as-url.d.ts"]
     }
   },
   "scripts": {},
