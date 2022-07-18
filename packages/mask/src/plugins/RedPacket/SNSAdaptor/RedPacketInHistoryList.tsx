@@ -314,6 +314,8 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                     {canSend
                                         ? t.send()
                                         : refunded
+                                        ? t.refund()
+                                        : isRefunding
                                         ? t.refunding()
                                         : listOfStatus.includes(RedPacketStatus.empty)
                                         ? t.empty()
