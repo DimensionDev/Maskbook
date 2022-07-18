@@ -87,12 +87,6 @@ const LogoItem = styled(MuiListItem)(({ theme }) => ({
     },
 })) as any as typeof MuiListItem
 
-const ItemIcon = styled(ListItemIcon)(({ theme }) => ({
-    '& svg': {
-        fontSize: 36,
-    },
-}))
-
 const ListSubTextItem = styled(ListItemText)(({ theme }) => ({
     [`&.${listItemTextClasses.inset}`]: {
         marginLeft: theme.spacing(2),
@@ -131,21 +125,29 @@ export function Navigation({ onClose }: NavigationProps) {
 
     return (
         <List onClick={() => onClose?.()}>
-            {isLargeScreen && <LogoItem>{mode === 'dark' ? <MaskBannerIcon /> : <Mask />}</LogoItem>}
+            {isLargeScreen && (
+                <LogoItem>
+                    {mode === 'dark' ? <MaskBannerIcon width={250} height={72} /> : <Mask width={250} height={72} />}
+                </LogoItem>
+            )}
             <ListItemLink to={DashboardRoutes.Personas}>
-                <ItemIcon>
-                    {useMatch(DashboardRoutes.Personas) ? <MenuPersonasActiveIcon /> : <MenuPersonasIcon />}
-                </ItemIcon>
+                <ListItemIcon>
+                    {useMatch(DashboardRoutes.Personas) ? (
+                        <MenuPersonasActiveIcon size={36} />
+                    ) : (
+                        <MenuPersonasIcon size={36} />
+                    )}
+                </ListItemIcon>
                 <ListItemText primary={t.personas()} />
             </ListItemLink>
             <ListItemLink to="" selected={!!useMatch(DashboardRoutes.Wallets)} onClick={onExpand}>
-                <ItemIcon>
+                <ListItemIcon>
                     {isWalletPath || isWalletHistoryPath || isWalletTransferPath ? (
-                        <MenuWalletsActiveIcon />
+                        <MenuWalletsActiveIcon size={36} />
                     ) : (
-                        <MenuWalletsIcon />
+                        <MenuWalletsIcon size={36} />
                     )}
-                </ItemIcon>
+                </ListItemIcon>
                 <ListItemText>{t.wallets()}</ListItemText>
                 {expanded ? <ExpandLess /> : <ExpandMore />}
             </ListItemLink>
@@ -167,9 +169,13 @@ export function Navigation({ onClose }: NavigationProps) {
                 </List>
             </Collapse>
             <ListItemLink to={DashboardRoutes.Settings}>
-                <ItemIcon sx={{ fontSize: 36 }}>
-                    {useMatch(DashboardRoutes.Settings) ? <MenuSettingsActiveIcon /> : <MenuSettingsIcon />}
-                </ItemIcon>
+                <ListItemIcon>
+                    {useMatch(DashboardRoutes.Settings) ? (
+                        <MenuSettingsActiveIcon size={36} />
+                    ) : (
+                        <MenuSettingsIcon size={36} />
+                    )}
+                </ListItemIcon>
                 <ListItemText primary={t.settings()} />
             </ListItemLink>
         </List>

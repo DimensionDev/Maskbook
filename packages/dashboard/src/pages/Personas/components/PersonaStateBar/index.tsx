@@ -48,9 +48,9 @@ export const PersonaStateBar = memo<PersonaStateBarProps>(({ nickname, toggleDra
             </Stack>
             <IconButton onClick={toggleDrawer} size="small" className={classes.iconButton}>
                 {drawerOpen ? (
-                    <ArrowUpRound className={classes.arrow} sx={{ fontSize: 28 }} />
+                    <ArrowUpRound className={classes.arrow} size={28} />
                 ) : (
-                    <ArrowDownRound className={classes.arrow} sx={{ fontSize: 16 }} />
+                    <ArrowDownRound className={classes.arrow} size={16} />
                 )}
             </IconButton>
         </Box>

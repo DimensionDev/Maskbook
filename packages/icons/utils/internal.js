@@ -2,13 +2,6 @@ import { useTheme, Box } from '@mui/material'
 import * as React from 'react'
 import { MaskIconPaletteContext } from './MaskIconPaletteContext.js'
 
-const supportCSSAspectRatio = (() => {
-    try {
-        return CSS.supports('aspect-ratio: 1')
-    } catch {
-        return false
-    }
-})()
 /**
  * @typedef {[currentVariant: null | string[], url: string, jsx: object | null, supportColor?: boolean]} RawIcon
  */
@@ -20,15 +13,10 @@ const supportCSSAspectRatio = (() => {
  * @returns {React.ComponentType<import('./internal').GeneratedIconProps>}
  */
 export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
-    const intrinsicAspectRatio = intrinsicSize[0] / intrinsicSize[1]
-
     function Icon(/** @type {import('./internal').GeneratedIconProps} */ props, ref) {
         /* eslint-disable */
         let { size = 24, variant, color, sx, height, width, ...rest } = props
 
-        if (intrinsicAspectRatio !== 1 && props.size) {
-            console.warn(`Icon ${name} is not a square. Please use height or width property instead of size.`)
-        }
         const hasClickHandler = rest.onClick
 
         const defaultPalette = useDefaultPalette()
@@ -49,21 +37,10 @@ export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
                 flexShrink: 0,
                 aspectRatio: String(intrinsicSize[0] / intrinsicSize[1]),
                 color,
+                height: height ?? size,
+                width: width ?? size,
             }
             if (hasClickHandler) base.cursor = 'pointer'
-
-            if (intrinsicAspectRatio !== 1 && !width && !height) height = 24
-            if (!supportCSSAspectRatio) {
-                if (height && !width) width = (height || 24) * intrinsicAspectRatio
-                if (width && !height) height = (width || 24) / intrinsicAspectRatio
-            }
-            if (intrinsicAspectRatio === 1) {
-                base.height = height || size
-                base.width = width || size
-            } else {
-                if (height) base.height = height
-                if (width) base.width = width
-            }
 
             return {
                 ...base,

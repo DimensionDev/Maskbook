@@ -139,20 +139,20 @@ export const Balance = memo<BalanceCardProps>(
                 </Box>
                 {showOperations && (
                     <ButtonGroup>
-                        <Button size="small" onClick={onSend} endIcon={<SendIcon style={{ fill: '#fff' }} />}>
+                        <Button size="small" onClick={onSend} endIcon={<SendIcon size={12} />}>
                             {t.wallets_balance_Send()}
                         </Button>
-                        <Button size="small" onClick={onBuy} endIcon={<CardIcon />}>
+                        <Button size="small" onClick={onBuy} endIcon={<CardIcon size={12} />}>
                             {t.wallets_balance_Buy()}
                         </Button>
-                        <Button size="small" onClick={onSwap} endIcon={<SwapIcon />}>
+                        <Button size="small" onClick={onSwap} endIcon={<SwapIcon size={12} />}>
                             {t.wallets_balance_Swap()}
                         </Button>
                         <Button
                             size="small"
                             color="secondary"
                             onClick={onReceive}
-                            endIcon={<DownloadIcon style={{ stroke: MaskColorVar.textLink }} />}>
+                            endIcon={<DownloadIcon size={12} color={MaskColorVar.textLink} />}>
                             {t.wallets_balance_Receive()}
                         </Button>
                     </ButtonGroup>

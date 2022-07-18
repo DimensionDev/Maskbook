@@ -38,8 +38,9 @@ const useStyles = makeStyles()({
         flex: 1,
     },
     copy: {
-        fontSize: 16,
-        fill: '#767F8D',
+        width: 16,
+        height: 16,
+        color: '#767F8D',
         cursor: 'pointer',
         marginLeft: 4,
     },

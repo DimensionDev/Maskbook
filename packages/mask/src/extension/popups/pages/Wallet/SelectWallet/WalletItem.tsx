@@ -21,8 +21,9 @@ const useStyles = makeStyles()({
         alignItems: 'center',
     },
     copy: {
-        fontSize: 12,
-        fill: '#1C68F3',
+        width: 12,
+        height: 12,
+        color: '#1C68F3',
         marginLeft: 4,
         cursor: 'pointer',
     },
