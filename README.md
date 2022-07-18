@@ -68,7 +68,6 @@ Please submit your **resume** to `jobs (at) mask.io`
 [client-firefox]: https://addons.mozilla.org/en-US/firefox/addon/maskbook/
 [client-ios-testflight]: https://testflight.apple.com/join/PYomz4pJ
 [client-ios]: https://apps.apple.com/app/id1478382964
-[bounty]: https://github.com/DimensionDev/Maskbook/issues?q=is%3Aopen+is%3Aissue+label%3A%22Bounty%3A+Open%22
 [circle-ci]: https://circleci.com/gh/DimensionDev/Maskbook
 [crowdin]: https://crowdin.com/project/mask-network
 [fossa-status]: https://app.fossa.io/api/projects/git%2Bgithub.com%2FDimensionDev%2FMaskbook.svg?type=large
