@@ -4,7 +4,7 @@ import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { Grid, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { PoolTogetherTrophy } from '@masknet/icons'
+import { PoolTogetherIcon } from '@masknet/icons'
 import { useI18N } from '../../../utils'
 import { useManagePoolURL } from '../hooks/usePoolURL'
 import type { AccountPool as Pool } from '../types'
@@ -162,7 +162,7 @@ export function AccountPool(props: AccountPoolProps) {
                 </Grid>
                 <Grid container direction="column" item className={classes.item}>
                     <Grid item className={classes.prize}>
-                        <PoolTogetherTrophy className={classes.trophy} />
+                        <PoolTogetherIcon className={classes.trophy} />
                         <Typography
                             className={classes.prizeAmount}
                             color={DarkColor.textSecondary}

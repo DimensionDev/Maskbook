@@ -1,6 +1,6 @@
 import { Box, Button, Link, Stack, Typography } from '@mui/material'
 import { memo, ReactNode, useCallback, useMemo } from 'react'
-import { FileMessageIcon, ITOIcon, MessageIcon, PollIcon, RedPacketIcon, NFTRedPacketIcon } from '@masknet/icons'
+import { FileMessageIcon, Ito, MessageIcon, PollIcon, RedPacketIcon, NftRedPacket } from '@masknet/icons'
 import { getMaskColor, MaskColorVar, makeStyles } from '@masknet/theme'
 import { Services } from '../../../../API'
 import type { PostInformation } from '@masknet/shared-base'
@@ -59,17 +59,17 @@ const SUPPORT_PLUGIN: Record<
     },
     'com.maskbook.red_packet_nft:1': {
         pluginId: PluginId.RedPacket,
-        icon: <NFTRedPacketIcon />,
+        icon: <NftRedPacket />,
         messageParse: (body: { message: string }) => body.message,
     },
     'com.maskbook.ito:1': {
         pluginId: PluginId.ITO,
-        icon: <ITOIcon />,
+        icon: <Ito />,
         messageParse: (body: any) => body.message.split(MSG_DELIMITER)[1],
     },
     'com.maskbook.ito:2': {
         pluginId: PluginId.ITO,
-        icon: <ITOIcon />,
+        icon: <Ito />,
         messageParse: (body: any) => body.message.split(MSG_DELIMITER)[1],
     },
     'com.maskbook.poll:1': {

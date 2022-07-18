@@ -21,7 +21,7 @@ import RedPacketDialog from './RedPacketDialog'
 import { RedPacketInPost } from './RedPacketInPost'
 import { RedPacketNftInPost } from './RedPacketNftInPost'
 import { Trans } from 'react-i18next'
-import { RedPacketIcon, NFTRedPacketIcon } from '@masknet/icons'
+import { RedPacketIcon, NftRedPacket } from '@masknet/icons'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ApplicationEntry } from '@masknet/shared'
 import { useFungibleToken } from '@masknet/plugin-infra/web3'
@@ -77,7 +77,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 return {
                     text: (
                         <div style={containerStyle}>
-                            <NFTRedPacketIcon style={badgeSvgIconSize} />
+                            <NftRedPacket style={badgeSvgIconSize} />
                             {payload.message ? payload.message : 'An NFT Lucky Drop'}
                         </div>
                     ),

@@ -1,4 +1,4 @@
-import { NewLinkOutIcon, PluginIcon, VerifyIcon, WalletUnderTabsIcon, Web3ProfileIcon } from '@masknet/icons'
+import { NewLinkOutIcon, PluginIcon, Verified, WalletUnderTabsIcon, Web3ProfileIcon } from '@masknet/icons'
 import { PluginId, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NextIDPlatform, PopupRoutes, EMPTY_LIST } from '@masknet/shared-base'
@@ -191,7 +191,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
         if (isWeb3ProfileDisable) {
             return (
                 <Button className={classes.button} variant="contained" onClick={onEnablePlugin}>
-                    <PluginIcon fontSize="small" />
+                    <PluginIcon />
                     <Typography marginLeft="9px">{t.enable_plugin()}</Typography>
                 </Button>
             )
@@ -202,7 +202,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
         if (!isAccountVerified) {
             return (
                 <Button className={classes.button} variant="contained" onClick={onVerify}>
-                    <VerifyIcon />
+                    <Verified />
                     {t.verify_Twitter_ID_button()}
                 </Button>
             )

@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { CloseIcon, DownloadIcon, InteractionIcon, ITOIcon, RedPacketIcon, UploadIcon } from '@masknet/icons'
+import { CloseIcon, DownloadIcon, InteractionIcon, Ito, RedPacketIcon, UploadIcon } from '@masknet/icons'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { FilterTransactionType, TransactionType, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { useChainId } from '@masknet/plugin-infra/web3'
@@ -81,7 +81,7 @@ export const TransactionIconUI = memo<TransactionIconUIProps>(({ isFailed, isRed
             case TransactionType.CREATE_RED_PACKET:
                 return <RedPacketIcon className={classes.icon} />
             case TransactionType.FILL_POOL:
-                return <ITOIcon className={classes.icon} />
+                return <Ito className={classes.icon} />
             default:
                 return <InteractionIcon style={{ stroke: MaskColorVar.warning }} className={classes.icon} />
         }
