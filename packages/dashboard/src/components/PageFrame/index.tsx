@@ -133,7 +133,7 @@ export const PageFrame = memo((props: PageFrameProps) => {
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const { drawerOpen, toggleDrawer } = useContext(DashboardContext)
     const showFeaturePromotions = featurePromotionsEnabled.some((path: string) => path === location.pathname)
-    const mode = useTheme().palette.mode
+    const isDark = useTheme().palette.mode === 'dark'
     const { classes } = useStyle()
 
     return (
@@ -145,7 +145,7 @@ export const PageFrame = memo((props: PageFrameProps) => {
                             <MenuButton size="large" onClick={toggleDrawer}>
                                 {drawerOpen ? <CloseIcon /> : <MenuIcon />}
                             </MenuButton>
-                            {mode === 'dark' ? <MaskBannerIcon /> : <Mask />}
+                            {isDark ? <MaskBannerIcon width={90} height={40} /> : <Mask width={90} height={40} />}
                         </MaskLogo>
                     )}
                     <PageTitle item xs={isLargeScreen ? 12 : 10} container>

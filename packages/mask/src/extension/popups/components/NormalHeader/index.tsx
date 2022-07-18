@@ -20,7 +20,6 @@ const useStyles = makeStyles()(() => ({
         position: 'relative',
     },
     back: {
-        fill: 'none',
         position: 'absolute',
         left: 16,
         top: 16,

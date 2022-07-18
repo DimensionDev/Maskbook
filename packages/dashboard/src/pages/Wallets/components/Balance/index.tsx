@@ -24,7 +24,6 @@ const BalanceContainer = styled('div')(
 const IconContainer = styled('div')`
     width: 48px;
     height: 48px;
-    font-size: 48px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -108,8 +107,8 @@ export const Balance = memo<BalanceCardProps>(
         return (
             <BalanceContainer>
                 <Box display="flex" alignItems="center">
-                    <IconContainer sx={{ width: 48, height: 48 }}>
-                        <MaskWalletIcon />
+                    <IconContainer>
+                        <MaskWalletIcon size={48} />
                     </IconContainer>
                     <BalanceDisplayContainer>
                         <BalanceTitle>
