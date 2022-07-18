@@ -15,11 +15,21 @@
     "./url": {
       "type": "./icon-generated-as-url.d.ts",
       "default": "./icon-generated-as-url.js"
+    },
+    "./full": {
+      "type": "./full.d.ts",
+      "default": "./full.js"
     }
   },
   "types": "./index.d.ts",
-  "scripts": {
+  "typesVersions": {
+    "*": {
+      "jsx": ["./icon-generated-as-jsx.d.ts"],
+      "url": ["./icon-generated-as-url.d.ts"],
+      "full": ["./full.d.ts"]
+    }
   },
+  "scripts": {},
   "dependencies": {
     "@emotion/server": "^11.4.0"
   }
