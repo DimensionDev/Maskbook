@@ -119,7 +119,7 @@ export namespace RSS3BaseAPI {
         symbol: string
     }
 
-    export interface NFT_Traits {
+    export interface NFT_Trait {
         trait_type: string
         value: string
     }
@@ -136,7 +136,7 @@ export namespace RSS3BaseAPI {
         name: string
         received_at: string
         token_id: string
-        traits: NFT_Traits[]
+        traits: NFT_Trait[]
     }
 
     export interface NFT {
