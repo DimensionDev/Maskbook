@@ -1,10 +1,10 @@
 import { useCallback, useState } from 'react'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { DialogContent, Tab } from '@mui/material'
 import Web3Utils from 'web3-utils'
 import {
@@ -204,8 +204,12 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                             : '',
                     )}>
                     {step === CreateRedPacketPageStep.NewRedPacketPage ? (
-                        !showHistory ? (
-                            <>
+                        <>
+                            <div
+                                style={{
+                                    visibility: showHistory ? 'hidden' : 'visible',
+                                    height: showHistory ? 0 : 'auto',
+                                }}>
                                 <TabPanel value={tabs.tokens} style={{ padding: 0 }}>
                                     <RedPacketERC20Form
                                         origin={settings}
@@ -220,10 +224,11 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                         setIsNFTRedPacketLoaded={setIsNFTRedPacketLoaded}
                                     />
                                 </TabPanel>
-                            </>
-                        ) : (
-                            <RedPacketPast tabs={tabs} onSelect={onCreateOrSelect} onClose={onClose} />
-                        )
+                            </div>
+                            {showHistory ? (
+                                <RedPacketPast tabs={tabs} onSelect={onCreateOrSelect} onClose={onClose} />
+                            ) : null}
+                        </>
                     ) : null}
 
                     {step === CreateRedPacketPageStep.ConfirmPage ? (

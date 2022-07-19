@@ -30,7 +30,7 @@ import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { getAssetAsBlobURL, getTextUILength, useClassicMaskSNSTheme, useI18N } from '../../../utils'
+import { getAssetAsBlobURL, getTextUILength, useI18N } from '../../../utils'
 import { WalletMessages } from '../../Wallet/messages'
 import { ITO_EXCHANGE_RATION_MAX, MSG_DELIMITER, TIME_WAIT_BLOCKCHAIN } from '../constants'
 import { sortTokens } from './helpers'
@@ -583,7 +583,6 @@ export function ITO(props: ITO_Props) {
         [hasLockTime, canWithdraw],
     )
 
-    const theme = useClassicMaskSNSTheme()
     return (
         <>
             <Card
