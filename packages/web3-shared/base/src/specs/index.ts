@@ -693,18 +693,18 @@ export interface Connection<
     ): Promise<NonFungibleTokenCollection<ChainId>>
     /** Get native fungible token balance. */
     getNativeTokenBalance(initial?: Web3ConnectionOptions): Promise<string>
-    /** Get fungible token balance */
+    /** Get fungible token balance. */
     getFungibleTokenBalance(address: string, initial?: Web3ConnectionOptions): Promise<string>
-    /** Get non-fungible token balance */
+    /** Get non-fungible token balance. */
     getNonFungibleTokenBalance(
         address: string,
         tokenId?: string,
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,
     ): Promise<string>
-    /** Get fungible token balance */
+    /** Get fungible token balance. */
     getFungibleTokensBalance(listOfAddress: string[], initial?: Web3ConnectionOptions): Promise<Record<string, string>>
-    /** Get non-fungible token balance */
+    /** Get non-fungible token balance. */
     getNonFungibleTokensBalance(
         listOfAddress: string[],
         initial?: Web3ConnectionOptions,
@@ -835,26 +835,31 @@ export interface HubOptions<ChainId, Indicator = HubIndicator> {
 export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>> {
     /** Get recommended gas options. */
     getGasOptions?: (chainId: ChainId, initial?: Web3HubOptions) => Promise<Record<GasOptionType, GasOption>>
-    /** Get the most recent transactions of given account. */
+    /** Get the most recent transactions of the given account. */
     getTransactions: (
         chainId: ChainId,
         account: string,
         initial?: Web3HubOptions,
     ) => Promise<Array<Transaction<ChainId, SchemaType>>>
-    /** Get non-fungible tokens in the same collection. */
+    /** Get non-fungible tokens of the given collection. */
     getNonFungibleTokensByCollection?: (
         address: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>>
-    /** Get a non-fungible token contract. */
+    /** Get non-fungible assets of the given collection. */
+    getNonFungibleAssetsByCollection?: (
+        address: string,
+        initial?: Web3HubOptions,
+    ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
+    /** Get a non-fungible contract. */
     getNonFungibleTokenContract?: (
         address: string,
         initial?: Web3HubOptions,
     ) => Promise<NonFungibleTokenContract<ChainId, SchemaType>>
-    /** Get owned balance of a fungible token by given account. */
-    getFungibleTokenBalance?: (address: string, initial?: Web3HubOptions)  => Promise<number>
-    /** Get owned balance of a non-fungible token by given account. */
-    getNonFungibleTokenBalance?: (address: string, initial?: Web3HubOptions)  => Promise<number>
+    /** Get balance of a fungible token owned by the given account. */
+    getFungibleTokenBalance?: (address: string, initial?: Web3HubOptions) => Promise<number>
+    /** Get balance of non-fungible tokens in a collection owned by the given account. */
+    getNonFungibleTokenBalance?: (address: string, initial?: Web3HubOptions) => Promise<number>
     /** Get security diagnosis about a fungible token. */
     getFungibleTokenSecurity?: (
         chainId: ChainId,
@@ -877,13 +882,31 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         chainId: ChainId,
         initial?: Web3HubOptions,
     ) => Promise<Array<NonFungibleToken<ChainId, SchemaType>>>
-    /** Get approved spenders about a fungible token from given account. */
+    /** Get price of a fungible token. */
+    getFungibleTokenPrice?: (chainId: ChainId, address: string, initial?: Web3HubOptions) => Promise<number>
+    /** Get price of a non-fungible token. */
+    getNonFungibleTokenPrice?: (
+        chainId: ChainId,
+        address: string,
+        tokenId: string,
+        initial?: Web3HubOptions,
+    ) => Promise<number>
+    /** Get token icon URLs that point to a fungible token. */
+    getFungibleTokenIconURLs?: (chainId: ChainId, address: string, initial?: Web3HubOptions) => Promise<string[]>
+    /** Get token icon URLs that point to a non-fungible token. */
+    getNonFungibleTokenIconURLs?: (
+        chainId: ChainId,
+        address: string,
+        tokenId?: string,
+        initial?: Web3HubOptions,
+    ) => Promise<string[]>
+    /** Get spenders of a fungible token approved by the given account. */
     getApprovedFungibleTokenSpenders?: (
         chainId: ChainId,
         account: string,
         initial?: Web3HubOptions,
     ) => Promise<Array<FungibleTokenSpenderAuthorization<ChainId, SchemaType>>>
-    /** Get approved contracts about a non-fungible token from given account. */
+    /** Get contracts of a non-fungible token approved by the given account. */
     getApprovedNonFungibleContracts?: (
         chainId: ChainId,
         account: string,
@@ -900,65 +923,63 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         tokenId: string,
         initial?: Web3HubOptions,
     ) => Promise<NonFungibleAsset<ChainId, SchemaType> | undefined>
-    /** Get fungible assets of given account. */
+    /** Get fungible assets owned by the given account. */
     getFungibleAssets?: (
         account: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<FungibleAsset<ChainId, SchemaType>>>
-    /** Get non-fungible assets of given account. */
+    /** Get non-fungible assets owned by the given account. */
     getNonFungibleAssets?: (
         account: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
-    /** Get fungible tokens of given account. */
+    /** Get a fungible token. */
+    getFungibleToken?: (
+        address: string,
+        initial?: Web3HubOptions,
+    ) => Promise<FungibleToken<ChainId, SchemaType> | undefined>
+    /** Get a non-fungible token. */
+    getNonFungibleToken?: (
+        address: string,
+        tokenId: string,
+        initial?: Web3HubOptions,
+    ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
+    /** Get fungible tokens owned by the given account. */
     getFungibleTokens?: (
         account: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<FungibleToken<ChainId, SchemaType> | Error>>
-    /** Get non-fungible tokens of given account. */
+    /** Get non-fungible tokens owned by the given account. */
     getNonFungibleTokens?: (
         account: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>>
-    /** Get price of a fungible token */
-    getFungibleTokenPrice?: (chainId: ChainId, address: string, initial?: Web3HubOptions) => Promise<number>
-    /** Get price of a non-fungible token */
-    getNonFungibleTokenPrice?: (
-        chainId: ChainId,
-        address: string,
-        tokenId: string,
-        initial?: Web3HubOptions,
-    ) => Promise<number>
-    /** Get token icon urls of a fungible token */
-    getFungibleTokenIconURLs?: (chainId: ChainId, address: string, initial?: Web3HubOptions) => Promise<string[]>
-    /** Get token icon urls of a non-fungible token */
-    getNonFungibleTokenIconURLs?: (
-        chainId: ChainId,
-        address: string,
-        tokenId?: string,
-        initial?: Web3HubOptions,
-    ) => Promise<string[]>
     /** Get events of a non-fungible token. */
     getNonFungibleTokenEvents?: (
-        account: string,
+        address: string,
+        tokenId: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleTokenEvent<ChainId, SchemaType>>>
     /** Get listed orders of a non-fungible token. */
     getNonFungibleTokenListings?: (
-        account: string,
+        address: string,
+        tokenId: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
-    /** Get offering orders of a non-fungible token. */
+    /** Get offered orders of a non-fungible token. */
     getNonFungibleTokenOffers?: (
-        account: string,
+        address: string,
+        tokenId: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
     /** Get orders of a non-fungible token. */
     getNonFungibleTokenOrders?: (
-        account: string,
+        address: string,
+        tokenId: string,
+        side: OrderSide,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
-    /** Get non-fungible collections of given account. */
+    /** Get non-fungible collections owned by the given account. */
     getNonFungibleCollections?: (
         account: string,
         initial?: Web3HubOptions,
@@ -966,7 +987,7 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
 
     /** Place a bid on a token. */
     createBuyOrder?: (/** TODO: add parameters */) => Promise<void>
-    /** Listing a token for public sell. */
+    /** List a token for public sell. */
     createSellOrder?: (/** TODO: add parameters */) => Promise<void>
     /** Fulfill an order. */
     fulfillOrder?: (/** TODO: add parameters */) => Promise<void>
