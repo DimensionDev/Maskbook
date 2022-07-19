@@ -1,12 +1,11 @@
 import Web3 from 'web3'
 import type { RequestArguments } from 'web3-core'
-import { first } from 'lodash-unified'
 import type { Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID, SocialIdentity, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { createPayload, createWeb3Provider, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { IdentityServiceState } from '@masknet/plugin-infra/web3'
 import { KeyValue, NextIDProof, RSS3 } from '@masknet/web3-providers'
-import { getSiteType, NextIDPersonaBindings, NextIDPlatform } from '@masknet/shared-base'
+import { getSiteType, NextIDPlatform } from '@masknet/shared-base'
 import { nextIDPlatform } from '@masknet/shared'
 
 const ENS_RE = /\S{1,256}\.(eth|kred|xyz|luxe)\b/
@@ -33,20 +32,11 @@ function getAddress(text: string) {
     return ''
 }
 
-const sortPersonaBindings = (a: NextIDPersonaBindings, b: NextIDPersonaBindings, userId: string): number => {
-    const p_a = first(a.proofs.filter((x) => x.identity === userId.toLowerCase()))
-    const p_b = first(b.proofs.filter((x) => x.identity === userId.toLowerCase()))
-
-    if (!p_a || !p_b) return 0
-    if (p_a.created_at > p_b.created_at) return -1
-    return 1
-}
-
 async function getWalletAddressesFromNextID(userId: string) {
     if (!userId) return []
     const addresses = []
     const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(nextIDPlatform.value, userId)
-    for (const binding of bindings.sort((a, b) => sortPersonaBindings(a, b, userId))) {
+    for (const binding of bindings) {
         for (const proof of binding.proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)) {
             addresses.push(proof.identity)
         }
