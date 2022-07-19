@@ -83,6 +83,7 @@ export const resolveNetworkOnRabby = createLookupTableResolver<NetworkType, stri
         [NetworkType.Optimistic]: '',
         [NetworkType.Celo]: '',
         [NetworkType.Conflux]: '',
+        [NetworkType.Astar]: '',
     },
     'eth',
 )
