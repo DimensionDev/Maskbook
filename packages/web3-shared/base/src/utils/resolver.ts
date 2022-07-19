@@ -1,5 +1,13 @@
 import urlcat from 'urlcat'
-import { ChainDescriptor, CurrencyType, NetworkDescriptor, ProviderDescriptor, SourceType } from '../specs'
+import {
+    ChainDescriptor,
+    CurrencyType,
+    NetworkDescriptor,
+    NetworkPluginID,
+    ProviderDescriptor,
+    SourceType,
+} from '../specs'
+import { NextIDPlatform } from '@masknet/shared-base'
 
 export function createLookupTableResolver<K extends keyof any, T>(map: Record<K, T>, fallback: T | ((key: K) => T)) {
     function resolveFallback(key: K) {
@@ -187,3 +195,22 @@ export const resolveCurrencyName = createLookupTableResolver<CurrencyType, strin
         throw new Error(`Unknown currency type: ${CurrencyType}.`)
     },
 )
+
+const walletNameByNetwork = {
+    [NetworkPluginID.PLUGIN_EVM]: 'EVM wallet',
+    [NetworkPluginID.PLUGIN_SOLANA]: 'Solana wallet',
+    [NetworkPluginID.PLUGIN_FLOW]: 'Flow wallet',
+}
+
+export const resolveNextIdWalletName = (pluginId: NetworkPluginID) => {
+    return walletNameByNetwork[pluginId]
+}
+
+const pluginIdByNextIdPlatform: Partial<Record<NextIDPlatform, NetworkPluginID>> = {
+    [NextIDPlatform.Ethereum]: NetworkPluginID.PLUGIN_EVM,
+}
+
+export const resolveNextIdPlatformPluginId = (platform?: NextIDPlatform) => {
+    if (!platform) return
+    return pluginIdByNextIdPlatform[platform]
+}

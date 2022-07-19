@@ -1,8 +1,9 @@
 import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
 import { alpha, Box, CircularProgress, Link, Typography } from '@mui/material'
-import { WalletIcon } from '@masknet/shared'
-import { ArrowDropIcon, LinkOutIcon } from '@masknet/icons'
+import { WalletIcon, useSnackbarCallback } from '@masknet/shared'
+import { ArrowDrop, LinkOut, PopupCopy, NextIdPersonaVerified } from '@masknet/icons'
+import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../i18n-next-ui'
 
 const useStyles = makeStyles()((theme) => ({
@@ -53,9 +54,13 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.second,
         cursor: 'pointer',
     },
+    verified: {
+        width: 18,
+        height: 18,
+    },
 }))
 
-interface WalletDescriptionProps {
+export interface WalletDescriptionProps {
     onClick?: (ev: React.MouseEvent<HTMLDivElement>) => void
     pending?: boolean
     onPendingClick?: () => void
@@ -63,8 +68,10 @@ interface WalletDescriptionProps {
     networkIcon?: URL
     iconFilterColor?: string
     name?: string
+    address?: string
     formattedAddress?: string
     addressLink?: string
+    verified?: boolean
 }
 
 export const WalletDescription = memo<WalletDescriptionProps>(
@@ -74,13 +81,24 @@ export const WalletDescription = memo<WalletDescriptionProps>(
         networkIcon,
         iconFilterColor,
         name,
+        address,
         formattedAddress,
         addressLink,
         onPendingClick,
         pending,
+        verified,
     }) => {
         const { classes } = useStyles()
         const { t } = useI18N()
+
+        const [, copyToClipboard] = useCopyToClipboard()
+
+        const onCopy = useSnackbarCallback({
+            executor: async () => copyToClipboard(address ?? ''),
+            deps: [],
+            successText: t('copy_success'),
+        })
+
         return (
             <Box onClick={onClick} className={classes.root}>
                 <WalletIcon
@@ -93,17 +111,21 @@ export const WalletDescription = memo<WalletDescriptionProps>(
                 <Box className={classes.description}>
                     <Typography className={classes.walletName}>
                         <span>{name}</span>
-                        <ArrowDropIcon />
+                        {verified ? <NextIdPersonaVerified className={classes.verified} /> : <ArrowDrop />}
                     </Typography>
                     <Typography className={classes.address}>
                         <span>{formattedAddress}</span>
+                        {address ? <PopupCopy onClick={onCopy} className={classes.linkIcon} /> : null}
                         <Link
                             href={addressLink}
                             target="_blank"
                             title="View on Explorer"
                             rel="noopener noreferrer"
+                            onClick={(event) => {
+                                event.stopPropagation()
+                            }}
                             className={classes.linkIcon}>
-                            <LinkOutIcon className={classes.linkIcon} />
+                            <LinkOut className={classes.linkIcon} />
                         </Link>
                         {pending ? (
                             <span
