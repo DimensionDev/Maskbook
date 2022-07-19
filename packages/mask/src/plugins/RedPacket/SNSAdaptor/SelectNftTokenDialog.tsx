@@ -98,6 +98,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         flexDirection: 'column',
         borderRadius: 8,
         padding: 0,
+        marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2.5),
         background: theme.palette.background.paper,
         width: 120,
