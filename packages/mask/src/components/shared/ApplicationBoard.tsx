@@ -1,4 +1,4 @@
-import { useContext, createContext, PropsWithChildren, useMemo, useCallback, useEffect } from 'react'
+import { useState, useContext, createContext, PropsWithChildren, useMemo, useCallback, useEffect } from 'react'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
@@ -11,18 +11,19 @@ import { useI18N } from '../../utils'
 import { Application, getUnlistedApp } from './ApplicationSettingPluginList'
 import { ApplicationRecommendArea } from './ApplicationRecommendArea'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useNextIDConnectStatus } from '../DataSource/useNextID'
+import { useNextIDConnectStatus, verifyPersona } from '../DataSource/useNextID'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext'
 import { MaskMessages } from '../../../shared'
+import { useTimeout } from 'react-use'
 
-const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
+const useStyles = makeStyles<{ shouldScroll: boolean; isCarouselReady: boolean }>()((theme, props) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
         applicationWrapper: {
-            padding: theme.spacing(1, 0.25),
+            padding: theme.spacing(props.isCarouselReady ? 0 : 1, 0.25, 1),
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
             overflowY: 'auto',
@@ -31,7 +32,7 @@ const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
             gridGap: 10,
             justifyContent: 'space-between',
             height: 320,
-            width: props.shouldScroll ? 589 : 576,
+            width: props.shouldScroll ? 583 : 576,
             '::-webkit-scrollbar': {
                 backgroundColor: 'transparent',
                 width: 20,
@@ -40,7 +41,7 @@ const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
                 borderRadius: '20px',
                 width: 5,
                 border: '7px solid rgba(0, 0, 0, 0)',
-                backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+                backgroundColor: theme.palette.maskColor.secondaryLine,
                 backgroundClip: 'padding-box',
             },
             [smallQuery]: {
@@ -49,6 +50,11 @@ const useStyles = makeStyles<{ shouldScroll: boolean }>()((theme, props) => {
                 gridTemplateColumns: 'repeat(3, 1fr)',
                 gridGap: theme.spacing(1),
             },
+        },
+        applicationWrapperWithCarousel: {
+            position: 'relative',
+            zIndex: 50,
+            top: '-132px',
         },
         subTitle: {
             cursor: 'default',
@@ -144,28 +150,49 @@ function ApplicationBoardContent(props: Props) {
                 .filter((x) => Boolean(x.entry.RenderEntryComponent)),
         [snsAdaptorPlugins, currentWeb3Network, chainId, account],
     )
-
     const recommendFeatureAppList = applicationList
         .filter((x) => x.entry.recommendFeature)
         .sort((a, b) => (a.entry.appBoardSortingDefaultPriority ?? 0) - (b.entry.appBoardSortingDefaultPriority ?? 0))
 
     const listedAppList = applicationList.filter((x) => !x.entry.recommendFeature).filter((x) => !getUnlistedApp(x))
-    const { classes } = useStyles({ shouldScroll: listedAppList.length > 12 })
+    // #region handle carousel ui
+    const [isCarouselReady] = useTimeout(300)
+    const [isHoveringCarousel, setIsHoveringCarousel] = useState(false)
+    // #endregion
+    const { classes, cx } = useStyles({
+        shouldScroll: listedAppList.length > 12,
+        isCarouselReady: Boolean(isCarouselReady()),
+    })
     return (
         <>
             <ApplicationRecommendArea
                 recommendFeatureAppList={recommendFeatureAppList}
+                isCarouselReady={isCarouselReady}
                 RenderEntryComponent={RenderEntryComponent}
+                isHoveringCarousel={isHoveringCarousel}
+                setIsHoveringCarousel={setIsHoveringCarousel}
             />
 
             {listedAppList.length > 0 ? (
-                <section className={classes.applicationWrapper}>
+                <section
+                    className={cx(
+                        classes.applicationWrapper,
+                        recommendFeatureAppList.length > 2 && isCarouselReady() && isHoveringCarousel
+                            ? classes.applicationWrapperWithCarousel
+                            : '',
+                    )}>
                     {listedAppList.map((application) => (
                         <RenderEntryComponent key={application.entry.ApplicationEntryID} application={application} />
                     ))}
                 </section>
             ) : (
-                <div className={classes.placeholderWrapper}>
+                <div
+                    className={cx(
+                        classes.placeholderWrapper,
+                        recommendFeatureAppList.length > 2 && isCarouselReady() && isHoveringCarousel
+                            ? classes.applicationWrapperWithCarousel
+                            : '',
+                    )}>
                     <Typography className={classes.placeholder}>
                         {t('application_display_tab_plug_app-unlisted-placeholder')}
                     </Typography>
@@ -213,16 +240,17 @@ function RenderEntryComponent({ application }: { application: Application }) {
         ApplicationEntryStatus.personaNextIDReset?.()
     }, [])
 
-    const clickHandler = (() => {
-        if (application.isWalletConnectedRequired || application.isWalletConnectedEVMRequired)
+    const clickHandler = useMemo(() => {
+        if (application.isWalletConnectedRequired || application.isWalletConnectedEVMRequired) {
             return (walletConnectedCallback?: () => void) =>
                 setSelectProviderDialog({ open: true, walletConnectedCallback })
+        }
         if (!application.entry.nextIdRequired) return
         if (ApplicationEntryStatus.isPersonaConnected === false || ApplicationEntryStatus.isPersonaCreated === false)
             return createOrConnectPersona
         if (ApplicationEntryStatus.shouldVerifyNextId) return verifyPersona
         return
-    })()
+    }, [setSelectProviderDialog, createOrConnectPersona, ApplicationEntryStatus, verifyPersona, application])
 
     // #endregion
 
@@ -285,7 +313,7 @@ const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContex
 
 function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
     const personaConnectStatus = usePersonaConnectStatus()
-    const nextIDConnectStatus = useNextIDConnectStatus()
+    const nextIDConnectStatus = useNextIDConnectStatus(true)
 
     const {
         value: ApplicationCurrentStatus,
@@ -294,8 +322,18 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
     } = usePersonaAgainstSNSConnectStatus()
 
     useEffect(() => {
-        return MaskMessages.events.currentPersonaIdentifier.on(retry)
+        retry()
+        nextIDConnectStatus.reset()
+        return MaskMessages.events.currentPersonaIdentifier.on(() => {
+            retry()
+            nextIDConnectStatus.reset()
+        })
     }, [])
+
+    const personaNextIDReset = useCallback(() => {
+        nextIDConnectStatus.reset()
+        verifyPersona(personaConnectStatus.currentConnectedPersona?.identifier)()
+    }, [nextIDConnectStatus, personaConnectStatus])
 
     const { isSNSConnectToCurrentPersona, currentPersonaPublicKey, currentSNSConnectedPersonaPublicKey } =
         ApplicationCurrentStatus ?? {}
@@ -304,7 +342,7 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
         <ApplicationEntryStatusContext.Provider
             value={{
                 personaConnectAction: personaConnectStatus.action ?? undefined,
-                personaNextIDReset: nextIDConnectStatus.reset ?? undefined,
+                personaNextIDReset,
                 isPersonaCreated: personaConnectStatus.hasPersona,
                 isPersonaConnected: personaConnectStatus.connected,
                 isNextIDVerify: nextIDConnectStatus.isVerified,

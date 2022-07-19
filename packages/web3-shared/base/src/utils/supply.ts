@@ -14,7 +14,8 @@ const boundaryValues = {
  * @returns format result
  * @param value
  */
-export function formatSupply(value: BigNumber.Value): string {
+export function formatSupply(value: BigNumber.Value | null | undefined, fallback?: string | number) {
+    if (value === undefined || value === null) return fallback
     const bgValue = new BigNumber(value)
     const isGreaterThanOrEqualToMin = bgValue.isGreaterThanOrEqualTo(boundaryValues.mid)
 
@@ -22,5 +23,6 @@ export function formatSupply(value: BigNumber.Value): string {
     const decimalValue = bgValue.plus(integerValue.negated()).toFixed(2)
     const finalValue = integerValue.plus(decimalValue)
 
-    return isGreaterThanOrEqualToMin ? finalValue.toExponential(2) : finalValue.toFormat(2, 0).replace('.00', '.0')
+    if (isGreaterThanOrEqualToMin) return finalValue.toExponential(2)
+    return finalValue.toFormat(finalValue.isInteger() ? 0 : 2, 0)
 }

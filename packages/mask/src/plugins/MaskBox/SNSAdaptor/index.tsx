@@ -50,7 +50,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         />
                     )
                 },
-                appBoardSortingDefaultPriority: 6,
+                appBoardSortingDefaultPriority: 7,
                 marketListSortingPriority: 4,
                 icon,
                 tutorialLink: 'https://realmasknetwork.notion.site/d0941687649a4ef7a38d71f23ecbe4da',

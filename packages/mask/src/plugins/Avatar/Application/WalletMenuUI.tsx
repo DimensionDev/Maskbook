@@ -1,5 +1,4 @@
 import {
-    useChainId,
     useCurrentWeb3NetworkPluginID,
     useNetworkDescriptor,
     useProviderDescriptor,
@@ -7,7 +6,7 @@ import {
     useReverseAddress,
     useWeb3State,
 } from '@masknet/plugin-infra/web3'
-import { ImageIcon, useSnackbarCallback } from '@masknet/shared'
+import { ImageIcon, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
@@ -17,7 +16,7 @@ import { memo, useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { CopyIcon } from '../assets/copy'
 import { LinkIcon } from '../assets/link'
-import { VerifyIcon } from '../assets/verify'
+import { Verified } from '../assets/verify'
 import { useI18N } from '../locales'
 import { formatAddress } from '../utils'
 
@@ -52,14 +51,15 @@ interface WalletUIProps {
     address: string
     verify?: boolean
     isETH?: boolean
+    chainId?: ChainId
+    providerIcon?: URL
 }
 
 export function WalletUI(props: WalletUIProps) {
-    const { isETH, address, verify = false, name } = props
+    const { isETH, address, verify = false, name, chainId = ChainId.Mainnet, providerIcon } = props
 
     const { classes } = useStyles()
     const currentPluginId = useCurrentWeb3NetworkPluginID()
-    const chainId = useChainId(isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId)
     const networkDescriptor = useNetworkDescriptor(isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId, chainId)
     const { value: domain } = useReverseAddress(isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId, address)
     const { Others } = useWeb3State<'all'>(isETH ? NetworkPluginID.PLUGIN_EVM : currentPluginId)
@@ -69,15 +69,21 @@ export function WalletUI(props: WalletUIProps) {
     if (!address) return null
     return (
         <Stack direction="row" alignItems="center" justifyContent="center">
-            <ImageIcon size={30} icon={networkDescriptor?.icon} />
-            <Stack direction="column" style={{ marginLeft: 4 }}>
+            {providerIcon ? (
+                <WalletIcon size={30} badgeSize={12} mainIcon={providerIcon} badgeIcon={networkDescriptor?.icon} />
+            ) : (
+                <ImageIcon size={30} icon={networkDescriptor?.icon} />
+            )}
+            <Stack direction="column" style={{ marginLeft: 16 }}>
                 <Stack display="flex" fontSize={14} flexDirection="row" alignItems="center">
                     <Typography className={classes.walletName} fontWeight={700} fontSize={14}>
-                        {providerType === ProviderType.MaskWallet
+                        {verify
+                            ? domain ?? 'EVM Wallet'
+                            : providerType === ProviderType.MaskWallet
                             ? domain ?? name ?? providerDescriptor?.name ?? formatAddress(address, 4)
                             : domain ?? providerDescriptor?.name ?? formatAddress(address, 4)}
                     </Typography>
-                    {verify ? <VerifyIcon style={{ width: 13, height: 13, marginLeft: 4 }} /> : null}
+                    {verify ? <Verified style={{ width: 13, height: 13, marginLeft: 4 }} /> : null}
                 </Stack>
                 <Stack direction="row" alignItems="center">
                     <Typography

@@ -175,13 +175,13 @@ export enum DataProvider {
     COIN_GECKO = 0,
     COIN_MARKET_CAP = 1,
     UNISWAP_INFO = 2,
+    NFTSCAN = 3,
 }
 
 export enum TradeProvider {
     UNISWAP_V2 = 0,
     ZRX = 1,
     SUSHISWAP = 2,
-    SASHIMISWAP = 3,
     BALANCER = 4,
     QUICKSWAP = 5,
     PANCAKESWAP = 6,

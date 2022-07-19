@@ -166,6 +166,7 @@ export const resolveSourceName = createLookupTableResolver<SourceType, string>(
         [SourceType.RSS3]: 'RSS3',
         [SourceType.OpenSea]: 'OpenSea',
         [SourceType.Rarible]: 'Rarible',
+        [SourceType.LooksRare]: 'LooksRare',
         [SourceType.NFTScan]: 'NFTScan',
         [SourceType.Zora]: 'Zora',
         [SourceType.Alchemy_EVM]: 'Alchemy_EVM',

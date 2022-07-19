@@ -36,7 +36,7 @@
     "tip_wallet_sign_error": "Wallet connection failed.",
     "tip_wallet_add": "Please add wallet",
     "tip_connect_your_wallet": "Connect your wallet",
-    "tip_verify_line_intro": "Please add and verify your wallet to set the address for receiving tips.",
+    "tip_verify_line_intro": "Please add and verify your wallet to get it prepared for receiving tips.",
     "tip_empty_list": "Please set wallets to receive tips.",
     "tip_set_as_default": "Set as default",
     "tip_copy_success_of_wallet_addr": "Copy wallet address successfully!",

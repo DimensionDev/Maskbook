@@ -1,5 +1,6 @@
 import { CoinGeckoAPI } from './coingecko'
 import { OpenSeaAPI } from './opensea'
+import { LooksRareAPI } from './LooksRare'
 import { RaribleAPI } from './rarible'
 import { NFTScanAPI } from './NFTScan'
 import { ZoraAPI } from './zora'
@@ -18,14 +19,17 @@ import { NextIDProofAPI, NextIDStorageAPI } from './NextID'
 import { Alchemy_EVM_API, Alchemy_FLOW_API } from './alchemy'
 import { EthereumWeb3API } from './web3'
 import { MagicEdenAPI } from './MagicEden'
+import { TokenViewAPI } from './token-view'
 import { CoinMarketCapAPI } from './CoinMarketCap'
 import { UniSwapAPI } from './uniswap'
+import { RabbyAPI } from './rabby'
 
 export * from './helpers'
 export * from './types'
 export * from './opensea/utils'
 
 export const OpenSea = new OpenSeaAPI()
+export const LooksRare = new LooksRareAPI()
 export const MagicEden = new MagicEdenAPI()
 export const Rarible = new RaribleAPI()
 export const NFTScan = new NFTScanAPI()
@@ -47,5 +51,7 @@ export const EthereumWeb3 = new EthereumWeb3API()
 export const NextIDProof = new NextIDProofAPI()
 export const Alchemy_EVM = new Alchemy_EVM_API()
 export const Alchemy_FLOW = new Alchemy_FLOW_API()
+export const TokenView = new TokenViewAPI()
 export const CoinMarketCap = new CoinMarketCapAPI()
 export const UniSwap = new UniSwapAPI()
+export const Rabby = new RabbyAPI()

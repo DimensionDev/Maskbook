@@ -2,6 +2,9 @@ import { ForwardedRef, forwardRef } from 'react'
 import { Box, formHelperTextClasses, TextField, StandardTextFieldProps, InputProps, Typography } from '@mui/material'
 import { makeStyles } from '../../UIHelper/makeStyles'
 import { getMaskColor, MaskColorVar } from '../../CSSVariables/vars'
+import { isDashboardPage } from '@masknet/shared-base'
+
+const isDashboard = isDashboardPage()
 
 const useStyles = makeStyles()((theme) => ({
     label: {
@@ -26,10 +29,17 @@ const useStyles = makeStyles()((theme) => ({
             fontSize: 12,
             lineHeight: '16px',
         },
+        '& input::-webkit-input-placeholder': {
+            color: !isDashboard ? theme.palette.maskColor.second : undefined,
+        },
     },
     input: {
         padding: theme.spacing(1),
-        background: theme.palette.mode === 'dark' ? '#2B2E4C' : '#F6F6F8',
+        background: !isDashboard
+            ? theme.palette.maskColor.input
+            : theme.palette.mode === 'dark'
+            ? '#2B2E4C'
+            : '#F6F6F8',
         fontSize: 13,
         lineHeight: '16px',
         borderRadius: 6,
@@ -43,7 +53,7 @@ const useStyles = makeStyles()((theme) => ({
         color: 'rgba(255, 255, 255, 0.4)',
     },
     inputFocused: {
-        background: MaskColorVar.primaryBackground,
+        backgroundColor: !isDashboard ? theme.palette.maskColor.input : MaskColorVar.primaryBackground,
         boxShadow: `0 0 0 2px ${theme.palette.mode === 'dark' ? '#4F5378' : 'rgba(28, 104, 243, 0.2)'}`,
     },
 }))

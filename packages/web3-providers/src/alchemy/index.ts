@@ -17,6 +17,7 @@ import {
 import { ChainId as ChainId_FLOW, SchemaType as SchemaType_FLOW } from '@masknet/web3-shared-flow'
 import { first } from 'lodash-unified'
 import urlcat from 'urlcat'
+import { hexToNumberString, isHex } from 'web3-utils'
 import type { NonFungibleTokenAPI } from '..'
 import { fetchJSON } from '../helpers'
 import { Alchemy_EVM_NetworkMap, Alchemy_FLOW_NetworkMap, FILTER_WORDS } from './constants'
@@ -42,19 +43,19 @@ export class Alchemy_EVM_API implements NonFungibleTokenAPI.Provider<ChainId_EVM
 
         const allSettled = await Promise.allSettled([
             fetchJSON<AlchemyResponse_EVM_Metadata>(
-                urlcat(`${chainInfo?.baseURL}${chainInfo?.API_KEY}/getNFTMetadata`, {
+                urlcat(`${chainInfo?.baseURL}/getNFTMetadata`, {
                     contractAddress: address,
                     tokenId,
                     tokenType: 'ERC721',
                 }),
             ),
             fetchJSON<AlchemyResponse_EVM_Contact_Metadata>(
-                urlcat(`${chainInfo?.contractMetadataURL}${chainInfo?.API_KEY}/getContractMetadata`, {
+                urlcat(`${chainInfo?.contractMetadataURL}/getContractMetadata`, {
                     contractAddress: address,
                 }),
             ),
             fetchJSON<AlchemyResponse_EVM_Owners>(
-                urlcat(`${chainInfo?.tokenOwnerURL}${chainInfo?.API_KEY}/getOwnersForToken`, {
+                urlcat(`${chainInfo?.tokenOwnerURL}/getOwnersForToken`, {
                     contractAddress: address,
                     tokenId,
                 }),
@@ -78,7 +79,7 @@ export class Alchemy_EVM_API implements NonFungibleTokenAPI.Provider<ChainId_EVM
         if (!chainInfo) return createPageable([], createIndicator(indicator, ''))
 
         const res = await fetchJSON<AlchemyResponse_EVM>(
-            urlcat(`${chainInfo?.baseURL}${chainInfo?.API_KEY}/getNFTs/`, {
+            urlcat(`${chainInfo?.baseURL}/getNFTs/`, {
                 owner: from,
                 pageKey: typeof indicator?.index !== 'undefined' && indicator.index !== 0 ? indicator.id : undefined,
             }),
@@ -107,7 +108,7 @@ export class Alchemy_FLOW_API implements NonFungibleTokenAPI.Provider<ChainId_FL
         const chainInfo = Alchemy_FLOW_NetworkMap?.chains?.find((chain) => chain.chainId === chainId)
 
         const metaDataResponse = await fetchJSON<AlchemyResponse_FLOW_Metadata>(
-            urlcat(`${chainInfo?.baseURL}${chainInfo?.API_KEY}/getNFTMetadata/`, {
+            urlcat(`${chainInfo?.baseURL}/getNFTMetadata/`, {
                 owner: ownerAddress,
                 contractName,
                 contractAddress: address,
@@ -122,7 +123,7 @@ export class Alchemy_FLOW_API implements NonFungibleTokenAPI.Provider<ChainId_FL
     getAssets = async (from: string, { chainId, indicator }: HubOptions<ChainId_FLOW> = {}) => {
         const chainInfo = Alchemy_FLOW_NetworkMap?.chains?.find((chain) => chain.chainId === chainId)
         const res = await fetchJSON<AlchemyResponse_FLOW>(
-            urlcat(`${chainInfo?.baseURL}${chainInfo?.API_KEY}/getNFTs/`, {
+            urlcat(`${chainInfo?.baseURL}/getNFTs/`, {
                 owner: from,
                 pageKey: typeof indicator?.index !== 'undefined' && indicator.index !== 0 ? indicator.id : undefined,
             }),
@@ -146,8 +147,10 @@ function createNftToken_EVM(
     asset: AlchemyNFT_EVM,
 ): NonFungibleAsset<ChainId_EVM, SchemaType_EVM> {
     const contractAddress = asset.contract?.address
-    const tokenId = Number.parseInt(asset.id?.tokenId, 16).toString()
-
+    let tokenId = asset.id.tokenId
+    if (isHex(asset.id.tokenId)) {
+        tokenId = hexToNumberString(asset.id.tokenId)
+    }
     return {
         id: `${contractAddress}_${tokenId}`,
         chainId,
@@ -198,6 +201,10 @@ function createNFTAsset_EVM(
     contractMetadataResponse?: AlchemyResponse_EVM_Contact_Metadata,
     ownersResponse?: AlchemyResponse_EVM_Owners,
 ): NonFungibleAsset<ChainId_EVM, SchemaType_EVM> {
+    let tokenId = metaDataResponse.id.tokenId
+    if (isHex(metaDataResponse.id.tokenId)) {
+        tokenId = hexToNumberString(metaDataResponse.id.tokenId)
+    }
     return {
         id: metaDataResponse.contract?.address,
         chainId,
@@ -206,7 +213,7 @@ function createNFTAsset_EVM(
             metaDataResponse?.id?.tokenMetadata?.tokenType === 'ERC721'
                 ? SchemaType_EVM.ERC721
                 : SchemaType_EVM.ERC1155,
-        tokenId: metaDataResponse.id?.tokenId,
+        tokenId,
         address: metaDataResponse.contract?.address,
         metadata: {
             chainId,
@@ -252,12 +259,16 @@ function createNftToken_FLOW(
     chainId: ChainId_FLOW,
     asset: AlchemyNFT_FLOW,
 ): NonFungibleAsset<ChainId_FLOW, SchemaType_FLOW> {
+    let tokenId = asset.id.tokenId
+    if (isHex(asset.id.tokenId)) {
+        tokenId = hexToNumberString(asset.id.tokenId)
+    }
     return {
         id: asset.contract?.address,
         chainId,
         type: TokenType.NonFungible,
         schema: SchemaType_FLOW.NonFungible,
-        tokenId: Number.parseInt(asset.id?.tokenId, 16).toString(),
+        tokenId,
         address: asset.contract?.address,
         metadata: {
             chainId,
@@ -295,12 +306,16 @@ function createNFTAsset_FLOW(
     ownerAddress: string,
     metaDataResponse: AlchemyResponse_FLOW_Metadata,
 ): NonFungibleAsset<ChainId_FLOW, SchemaType_FLOW> {
+    let tokenId = metaDataResponse.id.tokenId
+    if (isHex(metaDataResponse.id.tokenId)) {
+        tokenId = hexToNumberString(metaDataResponse.id.tokenId)
+    }
     return {
         id: metaDataResponse.contract?.address,
         chainId,
         type: TokenType.NonFungible,
         schema: SchemaType_FLOW.NonFungible,
-        tokenId: Number.parseInt(metaDataResponse.id?.tokenId, 16).toString(),
+        tokenId,
         address: metaDataResponse.contract?.address,
         metadata: {
             chainId,

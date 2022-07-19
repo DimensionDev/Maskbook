@@ -5,7 +5,7 @@ import { useNetworkDescriptor } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, ImageIcon } from '@masknet/shared'
 import { Button, Link, Typography } from '@mui/material'
 import { CopyIconButton } from '../../../components/CopyIconButton'
-import { CircleLoadingIcon, DeleteIcon, EmptyIcon, LinkOutIcon } from '@masknet/icons'
+import { CircleLoadingIcon, DeleteIcon, EmptyIcon, PopupLinkIcon } from '@masknet/icons'
 import type { ConnectedWalletInfo } from '../type'
 import { DisconnectWalletDialog } from '../components/DisconnectWalletDialog'
 import { useI18N } from '../../../../../utils'
@@ -20,7 +20,7 @@ const useStyles = makeStyles()(() => ({
         flex: 1,
         backgroundColor: '#F7F9FA',
         overflow: 'auto',
-        maxHeight: 448,
+        maxHeight: 'calc(100vh - 108px)',
     },
     loading: {
         flex: 1,
@@ -157,7 +157,7 @@ export const ConnectedWalletsUI = memo<ConnectedWalletsUIProps>(
                                         href={explorerResolver.addressLink(chainId, wallet.identity ?? '')}
                                         target="_blank"
                                         rel="noopener noreferrer">
-                                        <LinkOutIcon className={classes.icon} />
+                                        <PopupLinkIcon className={classes.icon} />
                                     </Link>
                                 </Typography>
                             </div>

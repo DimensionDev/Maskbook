@@ -1,5 +1,12 @@
 import { type Plugin, usePluginWrapper, PluginId } from '@masknet/plugin-infra/content-script'
-import { ChainId, SchemaType, chainResolver, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    SchemaType,
+    chainResolver,
+    networkResolver,
+    NetworkType,
+    isNativeTokenAddress,
+} from '@masknet/web3-shared-evm'
 import { base } from '../base'
 import { RedPacketMetaKey, RedPacketNftMetaKey } from '../constants'
 import {
@@ -8,12 +15,13 @@ import {
     renderWithRedPacketMetadata,
     renderWithRedPacketNftMetadata,
 } from './helpers'
+import { useI18N } from '../locales'
 import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '../types'
 import RedPacketDialog from './RedPacketDialog'
 import { RedPacketInPost } from './RedPacketInPost'
 import { RedPacketNftInPost } from './RedPacketNftInPost'
 import { Trans } from 'react-i18next'
-import { RedPacketIcon, NFTRedPacketIcon } from '@masknet/icons'
+import { RedPacketIcon, NftRedPacket } from '@masknet/icons'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ApplicationEntry } from '@masknet/shared'
 import { useFungibleToken } from '@masknet/plugin-infra/web3'
@@ -69,7 +77,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 return {
                     text: (
                         <div style={containerStyle}>
-                            <NFTRedPacketIcon style={badgeSvgIconSize} />
+                            <NftRedPacket style={badgeSvgIconSize} />
                             {payload.message ? payload.message : 'An NFT Lucky Drop'}
                         </div>
                     ),
@@ -93,6 +101,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const recommendFeature = {
                 description: <Trans ns={PluginId.RedPacket} i18nKey="recommend_feature_description" />,
                 backgroundGradient: 'linear-gradient(180.54deg, #FF9A9E 0.71%, #FECFEF 98.79%, #FECFEF 99.78%)',
+                isFirst: true,
             }
             return {
                 ApplicationEntryID: base.ID,
@@ -147,6 +156,7 @@ interface ERC20RedpacketBadgeProps {
 
 function ERC20RedpacketBadge(props: ERC20RedpacketBadgeProps) {
     const { payload } = props
+    const t = useI18N()
     const { value: fetchedToken } = useFungibleToken(
         NetworkPluginID.PLUGIN_EVM,
         payload.token?.address ?? payload.token?.address,
@@ -156,9 +166,16 @@ function ERC20RedpacketBadge(props: ERC20RedpacketBadgeProps) {
     const tokenDetailed = payload.token?.schema === SchemaType.Native ? nativeCurrency : payload.token ?? fetchedToken
     return (
         <div style={containerStyle}>
-            <RedPacketIcon style={badgeSvgIconSize} /> A Lucky Drop with{' '}
-            {formatBalance(payload.total, tokenDetailed?.decimals ?? 0)} $
-            {tokenDetailed?.symbol ?? tokenDetailed?.name ?? 'Token'} from {payload.sender.name}
+            <RedPacketIcon style={badgeSvgIconSize} />
+            {t.badge({
+                balance: formatBalance(
+                    payload.total,
+                    tokenDetailed?.decimals ?? 0,
+                    isNativeTokenAddress(payload.token?.address) ? 6 : 0,
+                ),
+                tokenName: tokenDetailed?.symbol ?? tokenDetailed?.name ?? 'Token',
+                sender: payload.sender.name,
+            })}
         </div>
     )
 }

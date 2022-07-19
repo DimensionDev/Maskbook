@@ -1,5 +1,5 @@
 import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import type { CompositionRequest } from './Mask'
+import type { CompositionRequest, Web3ProfileDialogRequest } from './Mask'
 
 /**
  * @deprecated
@@ -17,5 +17,5 @@ export const CrossIsolationMessages = new WebExtensionMessage<CrossIsolationEven
 
 export interface CrossIsolationEvents {
     requestComposition: CompositionRequest
-    verifyNextID: void
+    requestWeb3ProfileDialog: Web3ProfileDialogRequest
 }

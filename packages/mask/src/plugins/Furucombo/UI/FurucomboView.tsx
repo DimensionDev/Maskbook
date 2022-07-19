@@ -1,10 +1,9 @@
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { Card, CardContent, Tabs, Tab, Typography, Paper, CircularProgress, Button, Stack, Box } from '@mui/material'
+import { Card, CardContent, Tabs, Tab, Typography, Paper, CircularProgress, Button, Stack } from '@mui/material'
 import { useState } from 'react'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { useFetchPools } from '../hooks/usePool'
 import type { Investable } from '../types'
 import { InvestmentsView } from './InvestmentsView'
@@ -81,22 +80,14 @@ export function FurucomboView(props: PoolViewProps) {
 
     const investable = investables.find(
         (investable: Investable) =>
-            isSameAddress(investable.address, props.address) &&
-            investable.chainId === currentChainId &&
-            investable.category === props.category,
+            isSameAddress(investable.address, props.address) && investable.category === props.category,
     )
 
     if (!investable)
         return (
-            <>
-                <Typography align="center" color="error">
-                    {t('plugin_furucombo_pool_not_found')}
-                </Typography>
-
-                <Box sx={{ padding: 1.5 }}>
-                    <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={props.chainId} />
-                </Box>
-            </>
+            <Typography align="center" color="error">
+                {t('plugin_furucombo_pool_not_found')}
+            </Typography>
         )
 
     return (
@@ -119,9 +110,6 @@ export function FurucomboView(props: PoolViewProps) {
                     </Paper>
                 </CardContent>
             </Card>
-            <Box sx={{ padding: 1.5 }}>
-                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={props.chainId} />
-            </Box>
         </>
     )
 }

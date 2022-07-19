@@ -49,17 +49,17 @@ export class DeBankAPI
         const responseModified = gasModifier(result, CHAIN_ID)
         return {
             [GasOptionType.FAST]: {
-                estimatedSeconds: responseModified.data.fast.estimated_seconds,
+                estimatedSeconds: responseModified.data.fast.estimated_seconds || 15,
                 suggestedMaxFeePerGas: formatWeiToGwei(responseModified.data.fast.price).toString(),
                 suggestedMaxPriorityFeePerGas: '0',
             },
             [GasOptionType.NORMAL]: {
-                estimatedSeconds: responseModified.data.normal.estimated_seconds,
+                estimatedSeconds: responseModified.data.normal.estimated_seconds || 30,
                 suggestedMaxFeePerGas: formatWeiToGwei(responseModified.data.normal.price).toString(),
                 suggestedMaxPriorityFeePerGas: '0',
             },
             [GasOptionType.SLOW]: {
-                estimatedSeconds: responseModified.data.slow.estimated_seconds,
+                estimatedSeconds: responseModified.data.slow.estimated_seconds || 60,
                 suggestedMaxFeePerGas: formatWeiToGwei(responseModified.data.slow.price).toString(),
                 suggestedMaxPriorityFeePerGas: '0',
             },
@@ -85,11 +85,17 @@ export class DeBankAPI
                             // rename bsc to bnb
                             id: x.id === 'bsc' ? 'bnb' : x.id,
                             chain: x.chain === 'bsc' ? 'bnb' : x.chain,
+                            // prefix ARETH
+                            symbol: x.chain === 'arb' && x.symbol === 'ETH' ? 'ARETH' : x.symbol,
+                            logo_url:
+                                x.chain === 'arb' && x.symbol === 'ETH'
+                                    ? 'https://assets.debank.com/static/media/arbitrum.8e326f58.svg'
+                                    : x.logo_url,
                         })),
                         options?.chainId,
                     ),
                     getAllEVMNativeAssets(),
-                    (a, z) => a.symbol === z.symbol,
+                    (a, z) => a.symbol === z.symbol && a.chainId === z.chainId,
                 ),
                 createIndicator(options?.indicator),
             )

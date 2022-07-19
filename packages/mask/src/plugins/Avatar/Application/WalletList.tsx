@@ -1,7 +1,7 @@
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { Button, ListItemIcon, MenuItem } from '@mui/material'
-import { CheckedIcon, UncheckIcon } from '../assets/checked'
+import { Checkbox, UncheckIcon } from '../assets/checked'
 import type { BindingProof } from '@masknet/shared-base'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import classNames from 'classnames'
@@ -59,6 +59,7 @@ interface WalletItemProps {
     chainId: ChainId
     haveChangeWallet?: boolean
     onConnectWallet?: () => void
+    providerIcon?: URL
 }
 export function WalletItem(props: WalletItemProps) {
     const { classes } = useStyles()
@@ -71,6 +72,7 @@ export function WalletItem(props: WalletItemProps) {
         onSelectedWallet,
         haveChangeWallet = false,
         onConnectWallet,
+        providerIcon,
     } = props
     const currentPluginId = useCurrentWeb3NetworkPluginID()
     const t = useI18N()
@@ -92,14 +94,19 @@ export function WalletItem(props: WalletItemProps) {
             }>
             <ListItemIcon>
                 {selectedWallet === wallet ? (
-                    <>
-                        <CheckedIcon className={classNames(classes.icon, classes.iconShadow)} />
-                    </>
+                    <Checkbox className={classNames(classes.icon, classes.iconShadow)} />
                 ) : (
                     <UncheckIcon className={classes.icon} />
                 )}
             </ListItemIcon>
-            <WalletUI name={walletName} address={wallet} verify={verify} isETH={isETH} />
+            <WalletUI
+                providerIcon={providerIcon}
+                chainId={chainId}
+                name={walletName}
+                address={wallet}
+                verify={verify}
+                isETH={isETH}
+            />
             {haveChangeWallet && (
                 <Button size="small" className={classes.change} onClick={onConnectWallet}>
                     {t.change()}

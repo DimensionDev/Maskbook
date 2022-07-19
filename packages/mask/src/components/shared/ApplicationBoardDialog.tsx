@@ -1,4 +1,4 @@
-import { DialogContent, useTheme } from '@mui/material'
+import { DialogContent } from '@mui/material'
 import { useState, useCallback } from 'react'
 import { ApplicationSettingDialog } from './ApplicationSettingDialog'
 import { makeStyles } from '@masknet/theme'
@@ -13,7 +13,7 @@ import { GearIcon } from '@masknet/icons'
 const useStyles = makeStyles()((theme) => {
     return {
         content: {
-            padding: theme.spacing(1.5, 2, 2),
+            padding: theme.spacing(1.5, 2, '6px'),
             height: 470,
             overflow: 'hidden',
         },
@@ -27,7 +27,6 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export function ApplicationBoardDialog() {
-    const theme = useTheme()
     const { classes } = useStyles()
     const { t } = useI18N()
     const [openSettings, setOpenSettings] = useState(false)
@@ -44,7 +43,7 @@ export function ApplicationBoardDialog() {
         })
     }, [])
 
-    return (
+    return open ? (
         <InjectedDialog
             open={open}
             maxWidth="sm"
@@ -58,5 +57,5 @@ export function ApplicationBoardDialog() {
                 ) : null}
             </DialogContent>
         </InjectedDialog>
-    )
+    ) : null
 }

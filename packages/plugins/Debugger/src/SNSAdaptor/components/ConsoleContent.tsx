@@ -6,14 +6,17 @@ import {
     useBlockTimestamp,
     useChainId,
     useCurrentWeb3NetworkPluginID,
+    useNetworkType,
+    useProviderType,
     useWeb3Connection,
     useWeb3Hub,
     useWeb3State,
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 import {
+    ChainId,
     ChainId as EVM_ChainId,
     ProviderType as EVM_ProviderType,
     SchemaType,
@@ -48,7 +51,6 @@ const useStyles = makeStyles()({
 })
 
 export function ConsoleContent(props: ConsoleContentProps) {
-    const { onClose } = props
     const { classes } = useStyles()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const pluginID = useCurrentWeb3NetworkPluginID()
@@ -57,17 +59,30 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const hub = useWeb3Hub()
     const account = useAccount()
     const chainId = useChainId()
+    const networkType = useNetworkType()
+    const providerType = useProviderType()
     const { value: balance = '0' } = useBalance()
     const { value: blockNumber = 0 } = useBlockNumber()
     const { value: blockTimestamp = 0 } = useBlockTimestamp()
+
     const onTransferCallback = useCallback(() => {
         if (!NATIVE_TOKEN_ADDRESS) return
-        return connection.transferFungibleToken(
+        return connection?.transferFungibleToken(
             NATIVE_TOKEN_ADDRESS,
             '0x790116d0685eB197B886DAcAD9C247f785987A4a',
             '100',
         )
     }, [connection])
+
+    const onApproveFungibleTokenCallback = useCallback(() => {
+        if (pluginID !== NetworkPluginID.PLUGIN_EVM) return
+        if (chainId !== ChainId.Mainnet) return
+        return connection?.approveFungibleToken(
+            '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+            '0x31f42841c2db5173425b5223809cf3a38fede360',
+            '1',
+        )
+    }, [pluginID, connection])
 
     const onSignMessage = useCallback(
         async (type?: string) => {
@@ -116,7 +131,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                     ],
                 },
             })
-            const signed = await connection.signMessage(type === 'typedDataSign' ? typedData : message, type)
+            const signed = await connection?.signMessage(type === 'typedDataSign' ? typedData : message, type)
             window.alert(`Signed: ${signed}`)
         },
         [chainId, connection],
@@ -131,7 +146,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
 
     const onConnect = useCallback(
         async (chainId: Web3Helper.ChainIdAll, providerType: Web3Helper.ProviderTypeAll) => {
-            await connection.connect({
+            await connection?.connect({
                 chainId,
                 providerType,
             })
@@ -141,7 +156,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
 
     const onDisconnect = useCallback(
         async (providerType: Web3Helper.ProviderTypeAll) => {
-            await connection.disconnect({
+            await connection?.disconnect({
                 providerType,
             })
         },
@@ -151,10 +166,52 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const onSelectFungibleToken = useSelectFungibleToken()
     const onSelectGasSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
 
+    const { showSnackbar, closeSnackbar } = useCustomSnackbar()
+
     return (
         <section className={classes.container}>
             <Table size="small">
                 <TableBody>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                ChainId
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Typography variant="body2">{chainId}</Typography>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                PluginID
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Typography variant="body2">{pluginID}</Typography>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Network Type
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Typography variant="body2">{networkType}</Typography>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Provider Type
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Typography variant="body2">{providerType}</Typography>
+                        </TableCell>
+                    </TableRow>
                     <TableRow>
                         <TableCell>
                             <Typography variant="body2" whiteSpace="nowrap">
@@ -205,6 +262,25 @@ export function ConsoleContent(props: ConsoleContentProps) {
                             <Button size="small" onClick={onTransferCallback}>
                                 Transfer
                             </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Approve Fungible Token
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button size="small" onClick={onApproveFungibleTokenCallback}>
+                                Approve
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Approve Non-Fungible Token
+                            </Typography>
                         </TableCell>
                     </TableRow>
                     <TableRow>
@@ -265,9 +341,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                     switch (pluginID) {
                                         case NetworkPluginID.PLUGIN_EVM:
                                             await onSwitchChain(
-                                                chainId === EVM_ChainId.Mainnet
-                                                    ? EVM_ChainId.Matic
-                                                    : EVM_ChainId.Mainnet,
+                                                chainId === EVM_ChainId.Mainnet ? EVM_ChainId.BSC : EVM_ChainId.Mainnet,
                                             )
                                             break
                                         default:
@@ -362,11 +436,16 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                 size="small"
                                 onClick={async () => {
                                     const gasSettings = await onSelectGasSettings({
+                                        chainId: ChainId.Matic,
+                                        slippageTolerance: 1,
+                                        disableSlippageTolerance: true,
                                         transaction: {
                                             from: account,
                                             to: account,
-                                            gas: '300000',
                                             value: '1',
+                                            gas: 30000,
+                                            // this field could be overridden with the instant gas options
+                                            maxFeePerGas: 3800000000,
                                         },
                                     })
                                     console.log(gasSettings)
@@ -393,7 +472,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                         formData.get('schema') as string,
                                         10,
                                     ) as SchemaType
-                                    const token = await connection.getNonFungibleToken(address, tokenId, schemaType)
+                                    const token = await connection?.getNonFungibleToken(address, tokenId, schemaType)
 
                                     console.log(token)
                                 }}>
@@ -479,6 +558,21 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                     Query
                                 </Button>
                             </FormControl>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>Test Snackbar</TableCell>
+                        <TableCell>
+                            <Button
+                                onClick={() => {
+                                    showSnackbar('test', {
+                                        variant: 'success',
+                                        message: 'test message',
+                                        autoHideDuration: 100000000,
+                                    })
+                                }}>
+                                show
+                            </Button>
                         </TableCell>
                     </TableRow>
                 </TableBody>

@@ -6,6 +6,7 @@ const useStyles = makeStyles()((theme) => {
         root: {},
         title: {
             fontWeight: 700,
+            fontSize: 14,
             margin: theme.spacing(3, 0, 2),
         },
     }

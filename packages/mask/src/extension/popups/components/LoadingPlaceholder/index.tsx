@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { LoadingIcon } from '@masknet/icons'
+import { CircleLoadingIcon } from '@masknet/icons'
 import { Typography } from '@mui/material'
 import { useI18N } from '../../../../utils'
 import { makeStyles } from '@masknet/theme'
@@ -27,7 +27,7 @@ export const LoadingPlaceholder = memo((props: LoadingPlaceholderProps) => {
 
     return (
         <main className={classes.container}>
-            <LoadingIcon style={{ color: props.iconColor ?? '#1C68F3' }} />
+            <CircleLoadingIcon style={{ color: props.iconColor ?? '#1C68F3' }} />
             <Typography variant="caption" color={props.titleColor ?? '#A6A9B6'}>
                 {props.title ?? t('loading')}
             </Typography>

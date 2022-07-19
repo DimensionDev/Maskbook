@@ -12,7 +12,6 @@ declare module NodeJS {
          */
         BUILD_DATE: string
         VERSION: string
-        TAG_NAME: string
         COMMIT_HASH: string
         COMMIT_DATE: string
         REMOTE_URL: string

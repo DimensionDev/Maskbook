@@ -149,6 +149,32 @@ class Connection implements BaseConnection {
         const signature = await this.sendTransaction(transaction)
         return signature
     }
+    approveFungibleToken(
+        address: string,
+        recipient: string,
+        amount: string,
+        initial?: SolanaWeb3ConnectionOptions,
+    ): Promise<string> {
+        throw new Error('Method not implemented.')
+    }
+    approveNonFungibleToken(
+        address: string,
+        recipient: string,
+        tokenId: string,
+        schema?: SchemaType,
+        initial?: SolanaWeb3ConnectionOptions,
+    ): Promise<string> {
+        throw new Error('Method not implemented.')
+    }
+    approveAllNonFungibleTokens(
+        address: string,
+        recipient: string,
+        approved: boolean,
+        schema?: SchemaType,
+        initial?: SolanaWeb3ConnectionOptions,
+    ): Promise<string> {
+        throw new Error('Method not implemented.')
+    }
     async transferFungibleToken(
         address: string,
         recipient: string,

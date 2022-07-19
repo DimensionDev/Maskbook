@@ -1,10 +1,8 @@
-import { explorerResolver, ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import OpenInNewIcon from '@mui/icons-material/OpenInNew'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../utils'
-import { makeStyles, useCustomSnackbar, useStylesExtends } from '@masknet/theme'
-import { Typography, Link } from '@mui/material'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
-import { useMemo, useCallback } from 'react'
+import { useMemo } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import {
@@ -51,35 +49,8 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
         contractDetailed?.address,
         operator,
         true,
+        retry,
     )
-    const { showSnackbar } = useCustomSnackbar()
-
-    const approve = useCallback(async () => {
-        const hash = await approveCallback()
-        if (typeof hash !== 'string') {
-            showSnackbar(approveState.error?.message)
-            return
-        }
-        showSnackbar(
-            <div className={classes.snackBar}>
-                <Typography className={classes.snackBarText}>
-                    {t('plugin_wallet_approve_all_nft_successfully', { symbol: contractDetailed?.symbol })}
-                </Typography>
-                <Link
-                    href={explorerResolver.transactionLink(contractDetailed!.chainId, hash)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={classes.snackBarLink}>
-                    <OpenInNewIcon className={classes.openIcon} />
-                </Link>
-            </div>,
-            {
-                variant: 'success',
-                anchorOrigin: { horizontal: 'right', vertical: 'top' },
-            },
-        )
-        retry()
-    }, [showSnackbar, approveState, retry, contractDetailed])
 
     const validationMessage = useMemo(() => {
         if (!contractDetailed?.address || !EthereumAddress.isValid(contractDetailed?.address))
@@ -95,7 +66,6 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
             <ActionButton
                 className={classes.approveButton}
                 variant="contained"
-                size="large"
                 fullWidth
                 loading
                 disabled
@@ -114,7 +84,6 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
             <ActionButton
                 className={classes.approveButton}
                 variant="contained"
-                size="large"
                 fullWidth
                 disabled
                 {...props.ActionButtonProps}>
@@ -126,7 +95,6 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
             <ActionButton
                 className={classes.approveButton}
                 variant="contained"
-                size="large"
                 fullWidth
                 loading
                 disabled
@@ -138,9 +106,8 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
             <ActionButton
                 className={classes.approveButton}
                 variant="contained"
-                size="large"
                 fullWidth
-                onClick={approve}
+                onClick={approveCallback}
                 {...props.ActionButtonProps}>
                 {t('plugin_wallet_approve_all_nft', {
                     symbol: contractDetailed?.symbol
@@ -156,7 +123,6 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
             <ActionButton
                 className={classes.approveButton}
                 variant="contained"
-                size="large"
                 fullWidth
                 onClick={retry}
                 {...props.ActionButtonProps}>

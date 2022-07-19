@@ -3,7 +3,7 @@ import { useEffect, RefObject } from 'react'
 import stringify from 'json-stable-stringify'
 import type { Dimension } from './useDimension'
 import format from 'date-fns/format'
-import { useTheme } from '@mui/material'
+import { alpha, useTheme } from '@mui/material'
 
 export function useLineChart(
     svgRef: RefObject<SVGSVGElement>,
@@ -103,7 +103,6 @@ export function useLineChart(
             )
 
         // create tooltip
-        const tooltip = graph.append('g')
         const tooltipLine = graph
             .append('line')
             .style('stroke', '#E0ECFF')
@@ -114,6 +113,7 @@ export function useLineChart(
             .attr('y1', -top)
             .attr('x2', 0)
             .attr('y2', height)
+        const tooltip = graph.append('g')
 
         const lineCallout = (g: d3.Selection<SVGLineElement, unknown, null, undefined>, value: any) => {
             if (!value) {
@@ -150,7 +150,7 @@ export function useLineChart(
                         .attr('x', 0)
                         .attr('y', (d, i) => `${i * 1.2}em`)
                         .style('font-weight', (_, i) => (i ? null : 'bold'))
-                        .attr('fill', '#ffffff')
+                        .attr('fill', theme.palette.maskColor.bottom)
                         .text((d) => d),
                 )
 
@@ -172,14 +172,14 @@ export function useLineChart(
                     path.attr(
                         'd',
                         `M-${boxArrowX} -54h85s4 0 4 4v38s0 4 -4 4h-85s-4 0 -4 -4v-38s0 -4 4 -4 M0 0L-7 -10L12 -10L7 -10Z`,
-                    ).attr('fill', theme.palette.background.tipMask)
+                    ).attr('fill', alpha(theme.palette.background.tipMask, 0.9))
                 } else {
                     text.attr('transform', `translate(${-boxHalfWidth + offset},${18 - yValue})`)
 
                     path.attr(
                         'd',
                         `M-${boxArrowX} 10h85s4 0 4 4v38s0 4 -4 4h-85s-4 0 -4 -4v-38s0 -4 4 -4 M0 2L-7 10L12 10L7 10Z`,
-                    ).attr('fill', theme.palette.background.tipMask)
+                    ).attr('fill', alpha(theme.palette.background.tipMask, 0.9))
                 }
             }
         }

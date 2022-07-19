@@ -1,4 +1,5 @@
 import { DataProvider } from '@masknet/public-api'
+import { TokenType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { isMirroredKeyword } from '../CoinMarketCap/helper'
 import type { TrendingAPI } from '../types'
@@ -46,8 +47,10 @@ export class UniSwapAPI implements TrendingAPI.Provider<ChainId> {
             market: marketInfo,
             coin: {
                 id,
+                chainId,
                 name: token?.name || '',
                 symbol: token?.symbol || '',
+                type: TokenType.Fungible,
                 decimals: Number(token?.decimals || '0'),
                 is_mirrored: isMirroredKeyword(token?.symbol || ''),
                 blockchain_urls: [`https://info.uniswap.org/token/${id}`, `https://etherscan.io/address/${id}`],

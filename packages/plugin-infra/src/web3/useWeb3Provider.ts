@@ -24,5 +24,5 @@ export function useWeb3Provider<S extends 'all' | void = void, T extends Network
         })
     }, [account, chainId, providerType, Connection, JSON.stringify(options)])
 
-    return web3Provider as Web3Helper.Web3ProviderScope<S, T>
+    return web3Provider as Web3Helper.Web3ProviderScope<S, T> | null
 }

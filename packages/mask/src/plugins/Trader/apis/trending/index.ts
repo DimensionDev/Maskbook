@@ -6,7 +6,7 @@ import { CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants'
 import { isBlockedId, isBlockedKeyword, resolveAlias, resolveCoinId, isBlockedAddress } from './hotfix'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { Days } from '../../SNSAdaptor/trending/PriceChartDaysControl'
-import { CoinGecko, CoinMarketCap, UniSwap } from '@masknet/web3-providers'
+import { CoinGecko, CoinMarketCap, NFTScan, UniSwap } from '@masknet/web3-providers'
 
 /**
  * Get supported currencies of specific data provider
@@ -20,6 +20,8 @@ export async function getCurrencies(dataProvider: DataProvider): Promise<Currenc
             return CoinMarketCap.getCurrencies()
         case DataProvider.UNISWAP_INFO:
             return UniSwap.getCurrencies()
+        case DataProvider.NFTSCAN:
+            throw new Error('Not implemented yet.')
         default:
             unreachable(dataProvider)
     }
@@ -33,8 +35,25 @@ export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
             return CoinMarketCap.getCoins()
         case DataProvider.UNISWAP_INFO:
             return UniSwap.getCoins()
+        case DataProvider.NFTSCAN:
+            return []
         default:
             unreachable(dataProvider)
+    }
+}
+
+export async function getCoinsByKeyword(
+    chainId: ChainId,
+    dataProvider: DataProvider,
+    keyword: string,
+): Promise<Coin[]> {
+    switch (dataProvider) {
+        case DataProvider.UNISWAP_INFO:
+            return UniSwap.getCoinsByKeyword(chainId, keyword)
+        case DataProvider.NFTSCAN:
+            return keyword ? NFTScan.getCoins(keyword) : []
+        default:
+            return []
     }
 }
 
@@ -54,7 +73,7 @@ const coinNamespace = new Map<
 async function updateCache(chainId: ChainId, dataProvider: DataProvider, keyword?: string) {
     try {
         // uniswap update cache with keyword
-        if (dataProvider === DataProvider.UNISWAP_INFO) {
+        if (dataProvider === DataProvider.UNISWAP_INFO || dataProvider === DataProvider.NFTSCAN) {
             if (!keyword) return
             if (!coinNamespace.has(dataProvider))
                 coinNamespace.set(dataProvider, {
@@ -63,7 +82,7 @@ async function updateCache(chainId: ChainId, dataProvider: DataProvider, keyword
                     lastUpdated: new Date(),
                 })
             const cache = coinNamespace.get(dataProvider)!
-            const coins = (await UniSwap.getCoinsByKeyword(chainId, keyword)).filter(
+            const coins = (await getCoinsByKeyword(chainId, dataProvider, keyword)).filter(
                 (x) => !isBlockedId(chainId, x.id, dataProvider),
             )
             if (coins.length) {
@@ -110,12 +129,13 @@ export async function checkAvailabilityOnDataProvider(
     dataProvider: DataProvider,
 ) {
     if (isBlockedKeyword(type, keyword)) return false
-    // for uniswap we check availability by fetching token info dynamically
-    if (dataProvider === DataProvider.UNISWAP_INFO) await updateCache(chainId, dataProvider, keyword)
+    // for uniswap, and NFTScan, we need to check availability by fetching token info dynamically
+    if (dataProvider === DataProvider.UNISWAP_INFO || dataProvider === DataProvider.NFTSCAN)
+        await updateCache(chainId, dataProvider, keyword)
     // cache never built before update in blocking way
-    else if (!coinNamespace.has(dataProvider)) await updateCache(chainId, dataProvider)
+    else if (!coinNamespace.has(dataProvider)) await updateCache(chainId, dataProvider, keyword)
     // data fetched before update in non-blocking way
-    else if (isCacheExpired(dataProvider)) updateCache(chainId, dataProvider)
+    else if (isCacheExpired(dataProvider)) updateCache(chainId, dataProvider, keyword)
     const symbols = coinNamespace.get(dataProvider)?.supportedSymbolsSet
     return symbols?.has(resolveAlias(chainId, keyword, dataProvider).toLowerCase()) ?? false
 }
@@ -150,11 +170,8 @@ export async function getAvailableDataProviders(chainId: ChainId, type?: TagType
 export async function getAvailableCoins(chainId: ChainId, keyword: string, type: TagType, dataProvider: DataProvider) {
     if (!(await checkAvailabilityOnDataProvider(chainId, keyword, type, dataProvider))) return []
     const ids = coinNamespace.get(dataProvider)?.supportedSymbolIdsMap
-    return (
-        ids
-            ?.get(resolveAlias(chainId, keyword, dataProvider).toLowerCase())
-            ?.filter((x) => !isBlockedAddress(chainId, x.address || x.contract_address || '')) ?? []
-    )
+    const alias = resolveAlias(chainId, keyword, dataProvider).toLowerCase()
+    return ids?.get(alias)?.filter((x) => !isBlockedAddress(chainId, x.address || x.contract_address || '')) ?? []
 }
 // #endregion
 
@@ -172,6 +189,8 @@ async function getCoinTrending(
             return CoinMarketCap.getCoinTrending(chainId, id, currency)
         case DataProvider.UNISWAP_INFO:
             return UniSwap.getCoinTrending(chainId, id, currency)
+        case DataProvider.NFTSCAN:
+            return NFTScan.getCoinTrending(chainId, id, currency)
         default:
             unreachable(dataProvider)
     }
@@ -201,12 +220,8 @@ export async function getCoinTrendingByKeyword(
     const coin = coins.find((x) => x.contract_address) ?? first(coins)
     if (!coin) return null
 
-    return getCoinTrendingById(
-        chainId,
-        resolveCoinId(chainId, resolveAlias(chainId, keyword, dataProvider), dataProvider) ?? coin.id,
-        currency,
-        dataProvider,
-    )
+    const coinId = resolveCoinId(chainId, resolveAlias(chainId, keyword, dataProvider), dataProvider) ?? coin.id
+    return getCoinTrendingById(chainId, coinId, currency, dataProvider)
 }
 // #endregion
 
@@ -225,6 +240,8 @@ export async function getPriceStats(
             return CoinMarketCap.getPriceStats(chainId, id, currency, days)
         case DataProvider.UNISWAP_INFO:
             return UniSwap.getPriceStats(chainId, id, currency, days)
+        case DataProvider.NFTSCAN:
+            return NFTScan.getPriceStats(chainId, id, currency, days)
         default:
             return []
     }

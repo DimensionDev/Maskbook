@@ -18,7 +18,7 @@ import Footer from './Footer'
 import StageCard from './StageCard'
 import EncryptionCard from './EncryptionCard'
 import CompletionCard from './CompletionCard'
-import { PluginWalletConnectIcon } from '@masknet/icons'
+import { WalletConnect } from '@masknet/icons'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { useChainId } from '@masknet/plugin-infra/web3'
@@ -272,10 +272,14 @@ export function FindTruman(props: FindTrumanProps) {
             </Card>
 
             <Box style={{ padding: 12 }}>
-                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                <ChainBoundary
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    expectedChainId={chainId}
+                    ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                     <WalletConnectedBoundary
                         classes={{ button: classes.button }}
-                        startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
+                        startIcon={<WalletConnect style={{ fontSize: 18 }} />}
+                        ActionButtonProps={{ variant: 'roundedDark' }}
                     />
                 </ChainBoundary>
             </Box>

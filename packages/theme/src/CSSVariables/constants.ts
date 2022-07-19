@@ -32,7 +32,7 @@ export const LightColor = {
     redLight: '#ffafaf',
     redContrastText: '#ffffff',
 
-    greenMain: '#77e0b5',
+    greenMain: '#3DC233',
     greenLight: '#e6f6f0',
 
     orangeMain: '#ffb915',
@@ -50,7 +50,7 @@ export const LightColor = {
 
     secondaryInfoText: '#AFC3E1',
     normalText: '#7B8192',
-
+    normalTextLight: 'rgba(255, 255, 255, 0.8)',
     infoBackground: 'rgba(175, 195, 225, 0.15)',
     success: '#60DFAB',
     warning: '#FFB915',
@@ -109,7 +109,7 @@ export const DarkColor: typeof LightColor = {
     redLight: '#46304a',
     redContrastText: '#ffffff',
 
-    greenMain: '#77e0b5',
+    greenMain: '#3DC233',
     greenLight: '#314457',
 
     orangeMain: '#ffb915',
@@ -129,6 +129,7 @@ export const DarkColor: typeof LightColor = {
 
     secondaryInfoText: '#AFC3E1',
     normalText: 'rgba(255, 255, 255, 0.8)',
+    normalTextLight: 'rgba(255, 255, 255, 0.8)',
 
     infoBackground: 'rgba(175, 195, 225, 0.15)',
     success: '#60DFAB',

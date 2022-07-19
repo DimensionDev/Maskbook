@@ -3,6 +3,7 @@ import { head, uniqBy } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import isAfter from 'date-fns/isAfter'
 import getUnixTime from 'date-fns/getUnixTime'
+import LRU, { Options as LRUOptions } from 'lru-cache'
 import {
     createPageable,
     CurrencyType,
@@ -18,28 +19,42 @@ import {
     createIndicator,
     createNextIndicator,
     NonFungibleAsset,
+    formatBalance,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, createNativeToken, createERC20Token } from '@masknet/web3-shared-evm'
-import type { NonFungibleTokenAPI } from '../types'
+import type { NonFungibleTokenAPI, TrendingAPI } from '../types'
 import type {
     OpenSeaAssetContract,
     OpenSeaAssetEvent,
     OpenSeaAssetOrder,
     OpenSeaCollection,
+    OpenSeaCollectionStats,
     OpenSeaCustomAccount,
     OpenSeaResponse,
 } from './types'
-import { getOrderUnitPrice, getOrderUSDPrice, toImage } from './utils'
+import { getOrderUSDPrice, toImage } from './utils'
 import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants'
 
-async function fetchFromOpenSea<T>(url: string, chainId: ChainId, apiKey?: string) {
-    if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
-    const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
+const cache = new LRU<string, any>({
+    max: 50,
+    ttl: 30_000,
+})
 
-    const response = await fetch(urlcat(OPENSEA_API_URL, url), { method: 'GET' })
+export async function fetchFromOpenSea<T>(url: string, chainId: ChainId, options?: LRUOptions<string, any>) {
+    if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
+    const cacheKey = `${chainId}/${url}`
+    let fetchingTask = cache.get(cacheKey)
+    if (!fetchingTask) {
+        const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
+
+        fetchingTask = fetch(urlcat(OPENSEA_API_URL, url), { method: 'GET' })
+        cache.set(cacheKey, fetchingTask, options)
+    }
+    const response = (await fetchingTask).clone()
     if (response.ok) {
         return (await response.json()) as T
     } else {
+        cache.delete(cacheKey)
         throw new Error('Fetch failed')
     }
 }
@@ -149,11 +164,23 @@ function createNFTAsset(chainId: ChainId, asset: OpenSeaResponse): NonFungibleAs
             value: x.value,
         })),
         price: {
-            [CurrencyType.USD]: getOrderUnitPrice(
+            [CurrencyType.USD]: getOrderUSDPrice(
                 asset.last_sale?.total_price,
+                asset.last_sale?.payment_token.usd_price,
                 asset.last_sale?.payment_token.decimals,
-                asset.last_sale?.quantity ?? '1',
             )?.toString(),
+        },
+        priceInToken: {
+            token: createTokenDetailed(chainId, {
+                address: asset.last_sale?.payment_token.address ?? '',
+                decimals: Number(asset.last_sale?.payment_token.decimals ?? '0'),
+                name: '',
+                symbol: asset.last_sale?.payment_token.symbol ?? '',
+            }),
+            amount: formatBalance(
+                new BigNumber(asset.last_sale?.total_price ?? '0'),
+                asset.last_sale?.payment_token.decimals,
+            ),
         },
         orders: asset.orders
             ?.sort((a, z) =>
@@ -289,16 +316,11 @@ function createAssetOrder(chainId: ChainId, order: OpenSeaAssetOrder): NonFungib
 }
 
 export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    private readonly _apiKey
-    constructor(apiKey?: string) {
-        this._apiKey = apiKey
-    }
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
         const response = await fetchFromOpenSea<OpenSeaResponse>(
             urlcat('/api/v1/asset/:address/:tokenId', { address, tokenId }),
             chainId,
         )
-
         if (!response) return
         return createNFTAsset(chainId, response)
     }
@@ -313,7 +335,6 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 limit: size,
             }),
             chainId,
-            this._apiKey,
         )
 
         const tokens = (response?.assets ?? [])
@@ -345,13 +366,14 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             urlcat('/api/v1/asset_contract/:address', { address }),
             chainId,
         )
-        return createNonFungibleTokenContract(
+        const result = createNonFungibleTokenContract(
             chainId,
             SchemaType.ERC721,
             address,
             assetContract?.name ?? 'Unknown Token',
             assetContract?.symbol ?? 'UNKNOWN',
         )
+        return result
     }
 
     async getEvents(
@@ -406,7 +428,6 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 limit: size,
             }),
             chainId,
-            this._apiKey,
         )
         if (!response) return createPageable([], createIndicator(indicator))
 
@@ -432,5 +453,31 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             createIndicator(indicator),
             collections.length === size ? createNextIndicator(indicator) : undefined,
         )
+    }
+
+    async getCollectionStats(
+        address: string,
+        { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
+    ): Promise<OpenSeaCollectionStats | undefined> {
+        const assetContract = await fetchFromOpenSea<OpenSeaAssetContract>(
+            urlcat('/api/v1/asset_contract/:address', { address }),
+            chainId,
+            {
+                ttl: 0,
+            },
+        )
+        const slug = assetContract?.collection.slug
+        if (!slug) return
+        const response = await fetchFromOpenSea<{ stats: OpenSeaCollectionStats }>(
+            urlcat('/api/v1/collection/:slug/stats', {
+                slug,
+            }),
+            chainId,
+        )
+        return response?.stats
+    }
+
+    async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
+        throw new Error('Not implemented yet.')
     }
 }

@@ -1,5 +1,6 @@
 import { escapeRegExp } from 'lodash-unified'
 import urlcat from 'urlcat'
+import LRUCache from 'lru-cache'
 import type { TwitterBaseAPI } from '../types'
 
 const UPLOAD_AVATAR_URL = 'https://upload.twitter.com/i/media/upload.json'
@@ -32,19 +33,26 @@ async function getScriptContent(url: string) {
     return response.text()
 }
 
-async function getTokens() {
-    const swContent = await getScriptContent('https://twitter.com/sw.js')
-    const mainContent = await getScriptContent(getScriptURL(swContent ?? '', 'main'))
-    const nftContent = await getScriptContent(getScriptURL(swContent ?? '', 'bundle.UserNft'))
+let swContent = ''
+async function getTokens(operationName?: string) {
+    swContent = swContent || (await getScriptContent('https://twitter.com/sw.js'))
+    const [mainContent, nftContent] = await Promise.all([
+        getScriptContent(getScriptURL(swContent ?? '', 'main')),
+        getScriptContent(getScriptURL(swContent ?? '', 'bundle.UserNft')),
+    ])
 
     const bearerToken = getScriptContentMatched(mainContent ?? '', /s="(\w+%3D\w+)"/)
     const queryToken = getScriptContentMatched(nftContent ?? '', /{\s?id:\s?"([\w-]+)"/)
     const csrfToken = getCSRFToken()
+    const queryId = operationName
+        ? getScriptContentMatched(mainContent ?? '', new RegExp(`queryId:"(\\w+)",operationName:"${operationName}"`))
+        : undefined
 
     return {
         bearerToken,
         queryToken,
         csrfToken,
+        queryId,
     }
 }
 
@@ -109,6 +117,11 @@ async function getSettings(bearerToken: string, csrfToken: string): Promise<Twit
     )
     return response.json()
 }
+
+const cache = new LRUCache<string, any>({
+    max: 20,
+    ttl: 300_000,
+})
 
 export class TwitterAPI implements TwitterBaseAPI.Provider {
     async getSettings() {
@@ -188,6 +201,40 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
             nickname: updateInfo.name,
             userId: updateInfo.screen_name,
         }
+    }
+
+    async getUserByScreenName(screenName: string): Promise<TwitterBaseAPI.User | null> {
+        const { bearerToken, csrfToken, queryId } = await getTokens('UserByScreenName')
+        const url = urlcat('https://twitter.com/i/api/graphql/:queryId/UserByScreenName', {
+            queryId,
+            variables: JSON.stringify({
+                screen_name: screenName,
+                withSafetyModeUserFields: true,
+                withSuperFollowsUserFields: true,
+            }),
+        })
+        const cacheKey = `${bearerToken}/${csrfToken}/${url}`
+        const fetchingTask: Promise<Response> =
+            cache.get(cacheKey) ??
+            fetch(url, {
+                headers: {
+                    authorization: `Bearer ${bearerToken}`,
+                    'x-csrf-token': csrfToken,
+                    'content-type': 'application/json',
+                    'x-twitter-auth-type': 'OAuth2Session',
+                    'x-twitter-active-user': 'yes',
+                    referer: `https://twitter.com/${screenName}`,
+                },
+            })
+
+        cache.set(cacheKey, fetchingTask)
+        const response = (await fetchingTask).clone()
+        if (!response.ok) {
+            cache.delete(cacheKey)
+            return null
+        }
+        const userResponse: TwitterBaseAPI.UserByScreenNameResponse = await response.json()
+        return userResponse.data.user.result
     }
 }
 

@@ -4,7 +4,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, useTheme } from '@mui/material'
-import { SharedIcon, PluginWalletConnectIcon } from '@masknet/icons'
+import { SharedIcon, WalletConnect } from '@masknet/icons'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N as useBaseI18n } from '../../../../utils'
 import { useI18N } from '../../locales'
@@ -48,14 +48,14 @@ export function OperationFooter({
 
         if (!account) {
             return (
-                <ActionButton fullWidth onClick={openSelectProviderDialog}>
+                <ActionButton fullWidth onClick={openSelectProviderDialog} variant="roundedDark">
                     {tr('plugin_wallet_connect_a_wallet')}
                 </ActionButton>
             )
         }
         if (!chainIdValid) {
             return (
-                <ActionButton disabled fullWidth>
+                <ActionButton disabled fullWidth variant="roundedDark">
                     {tr('plugin_wallet_invalid_network')}
                 </ActionButton>
             )
@@ -72,6 +72,7 @@ export function OperationFooter({
                         backgroundColor: theme.palette.maskColor.dark,
                     },
                 }}
+                variant="roundedDark"
                 fullWidth
                 loading={isLoading}
                 disabled={isLoading}
@@ -83,25 +84,19 @@ export function OperationFooter({
 
     return (
         <Box style={{ flex: 1, padding: 12 }}>
-            <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId ?? ChainId.Mainnet}>
+            <ChainBoundary
+                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                expectedChainId={chainId ?? ChainId.Mainnet}
+                ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                 <WalletConnectedBoundary
                     hideRiskWarningConfirmed
-                    startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
-                    classes={{
-                        connectWallet: classes.connectWallet,
-                    }}>
+                    startIcon={<WalletConnect style={{ fontSize: 18 }} />}
+                    ActionButtonProps={{ variant: 'roundedDark' }}>
                     <Box className={classes.footer}>
                         {canRefund ? null : (
                             <ActionButton
-                                sx={{
-                                    backgroundColor: theme.palette.maskColor.dark,
-                                    color: theme.palette.maskColor.white,
-                                    '&:hover': {
-                                        backgroundColor: theme.palette.maskColor.dark,
-                                    },
-                                    padding: 1.125,
-                                }}
                                 fullWidth
+                                variant="roundedDark"
                                 startIcon={<SharedIcon style={{ fontSize: 18 }} />}
                                 onClick={onShare}>
                                 {tr('share')}

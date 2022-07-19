@@ -24,6 +24,7 @@
     "token_info_contract_creator": "Contract Creator",
     "token_info_contract_owner": "Contract Owner",
     "token_info_total_supply": "Total Supply",
+    "token_market_cap": "Market Cap",
     "default_placeholder": "Note: Scams detections might not be 100% guaranteed.",
     "not_found_tip_title": "Results not found now. it might be chain network error, on-chain data abnormal or the token address is not covered now. please check as followings:",
     "not_found_tip_network_error": "1. Make sure network is working;",
@@ -35,9 +36,9 @@
     "risk_contract_source_code_not_verified_title": "Contract source code not verified",
     "risk_contract_source_code_not_verified_body": "This token contract has not been verified. We cannot check the contract code for details. Unsourced token contracts are likely to have malicious functions to defraud users of their assets.",
     "risk_proxy_contract_title": "Proxy contract",
-    "risk_proxy_contract_body": "This contract is an Admin Upgradeability Proxy. The proxy contract means the contract owner can modify the function of the token and could possibly effect the price.There is possibly a way for the team to Rug or Scam. Please confirm the details with the project team before buying.",
+    "risk_proxy_contract_body": "This contract is an Admin Upgradeability Proxy. The proxy contract means the contract owner can modifiy the function of the token and could possibly effect the price.There is possibly a way for the team to Rug or Scam. Please confirm the details with the project team before buying.",
     "risk_no_proxy_title": "No proxy",
-    "risk_no_proxy_body": "There is no proxy in the contract. The proxy contract means contract owner can modify the function of the token and possibly effect the price.",
+    "risk_no_proxy_body": "There is no proxy in the contract. The proxy contract means contract owner can modifiy the function of the token and possibly effect the price.",
     "risk_mint_function_title": "Mint function",
     "risk_mint_function_body": "The contract may contain additional issuance functions, which could maybe generate a large number of tokens, resulting in significant fluctuations in token prices. It is recommended to confirm with the project team whether it complies with the token issuance instructions.",
     "risk_no_mint_function_title": "No mint function",
@@ -85,5 +86,7 @@
     "risk_is_airdrop_scam_title": "Airdrop Scam",
     "risk_is_airdrop_scam_body": "You may lose your assets if giving approval to the website of this token.",
     "risk_not_is_airdrop_scam_title": "No Airdrop Scam",
-    "risk_not_is_airdrop_scam_body": "This is not an airdrop scam. Many scams attract users through airdrops."
+    "risk_not_is_airdrop_scam_body": "This is not an airdrop scam. Many scams attract users through airdrops.",
+    "contract_not_found": "Contract Not Found",
+    "unnamed": "Unnamed"
 }

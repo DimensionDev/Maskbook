@@ -1,11 +1,13 @@
 import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import { isNil } from 'lodash-unified'
 import { defer } from '@dimensiondev/kit'
 import {
     ChainId,
+    createWeb3,
     EthereumMethodType,
-    getPayloadConfig,
+    getSignablePayloadConfig,
     getPayloadId,
     getRPCConstants,
     isRiskMethod,
@@ -13,7 +15,6 @@ import {
 import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper'
 import { nativeAPI } from '../../../../shared/native-rpc'
 import { WalletRPC } from '../messages'
-import { isNil } from 'lodash-unified'
 
 enum JSON_RPC_ERROR_CODE {
     INVALID_REQUEST = -32600,
@@ -119,34 +120,34 @@ export async function send(
     options?: Options,
 ) {
     const provider = await createProvider(options?.chainId)
-    const computedPayload = getPayloadConfig(payload)
+
     switch (payload.method) {
         case EthereumMethodType.ETH_SEND_TRANSACTION:
         case EthereumMethodType.MASK_REPLACE_TRANSACTION:
+            const computedPayload = getSignablePayloadConfig(payload)
             if (!computedPayload?.from || !computedPayload.to || !options?.chainId) return
 
-            const rawTransaction = await WalletRPC.signTransaction(computedPayload.from as string, {
-                ...computedPayload,
-                chainId: options.chainId,
-            })
-            if (!rawTransaction) break
+            const privateKey = await WalletRPC.exportPrivateKey(computedPayload.from as string)
+            const web3 = createWeb3(provider)
+            const transactionSigned = await web3.eth.accounts.signTransaction(computedPayload, `0x${privateKey}`)
+            if (!transactionSigned.rawTransaction) break
 
             return provider.send(
                 {
                     ...payload,
                     method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
-                    params: [rawTransaction],
+                    params: [transactionSigned.rawTransaction],
                 },
                 callback,
             )
         case EthereumMethodType.ETH_SIGN_TYPED_DATA:
             const [address, dataToSign] = payload.params as [string, string]
-            const signed = await WalletRPC.signTypedData(address, dataToSign)
+            const dataSigned = await WalletRPC.signTypedData(address, dataToSign)
             try {
                 callback(null, {
                     jsonrpc: '2.0',
                     id: payload.id as number,
-                    result: signed,
+                    result: dataSigned,
                 })
             } catch (error) {
                 callback(getError(error, null, 'Failed to sign message.'))
@@ -154,12 +155,12 @@ export async function send(
             break
         case EthereumMethodType.PERSONAL_SIGN:
             const [data, account] = payload.params as [string, string]
-            const personalSigned = await WalletRPC.signPersonalMessage(data, account)
+            const messageSigned = await WalletRPC.signPersonalMessage(data, account)
             try {
                 callback(null, {
                     jsonrpc: '2.0',
                     id: payload.id as number,
-                    result: personalSigned,
+                    result: messageSigned,
                 })
             } catch (error) {
                 callback(getError(error, null, 'Failed to sign message.'))
@@ -201,7 +202,6 @@ export async function sendPayload(payload: JsonRpcPayload, options?: Options) {
                 if (options?.popupsWindow) openPopupWindow()
                 return
             }
-
             send(payload, callback, options)
         })
     }
@@ -220,7 +220,7 @@ export async function confirmRequest(payload: JsonRpcPayload, options?: Options)
                 return
             }
             if (response?.error) {
-                reject(new Error(`Failed to send transaction: ${response.error}`))
+                reject(new Error(`Failed to send transaction: ${response.error?.message ?? response.error}`))
                 return
             }
             WalletRPC.deleteUnconfirmedRequest(payload)

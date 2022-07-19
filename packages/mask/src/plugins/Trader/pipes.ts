@@ -6,6 +6,7 @@ export const resolveDataProviderName = createLookupTableResolver<DataProvider, s
         [DataProvider.COIN_GECKO]: 'CoinGecko',
         [DataProvider.COIN_MARKET_CAP]: 'CoinMarketCap',
         [DataProvider.UNISWAP_INFO]: 'Uniswap Info',
+        [DataProvider.NFTSCAN]: 'NFTScan',
     },
     (dataProvider) => {
         throw new Error(`Unknown data provider: ${dataProvider}`)
@@ -17,6 +18,7 @@ export const resolveDataProviderLink = createLookupTableResolver<DataProvider, s
         [DataProvider.COIN_GECKO]: 'https://www.coingecko.com/',
         [DataProvider.COIN_MARKET_CAP]: 'https://coinmarketcap.com/',
         [DataProvider.UNISWAP_INFO]: 'https://info.uniswap.org/',
+        [DataProvider.NFTSCAN]: 'https://www.nftscan.com/',
     },
     (dataProvider) => {
         throw new Error(`Unknown data provider: ${dataProvider}`)
@@ -29,7 +31,6 @@ export const resolveTradeProviderName = createLookupTableResolver<TradeProvider,
         [TradeProvider.UNISWAP_V3]: 'Uniswap V3',
         [TradeProvider.ZRX]: '0x',
         [TradeProvider.SUSHISWAP]: 'SushiSwap',
-        [TradeProvider.SASHIMISWAP]: 'SashimiSwap',
         [TradeProvider.BALANCER]: 'Balancer',
         [TradeProvider.QUICKSWAP]: 'QuickSwap',
         [TradeProvider.PANCAKESWAP]: 'PancakeSwap',

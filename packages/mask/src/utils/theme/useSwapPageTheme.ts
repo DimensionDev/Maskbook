@@ -1,7 +1,7 @@
-import { parseColor } from '@masknet/theme'
+import { parseColor, MaskColors } from '@masknet/theme'
 import { unstable_createMuiStrictModeTheme } from '@mui/material'
 import produce, { setAutoFreeze } from 'immer'
-import twitterColorSchema from '../../social-network-adaptor/twitter.com/customization/twitter-color-schema.json'
+
 import { MaskLightTheme } from './MaskTheme'
 
 /**
@@ -18,7 +18,7 @@ export function useSwapPageTheme() {
             main: '#1c68f3',
         }
 
-        const colorSchema = twitterColorSchema.light
+        const colorSchema = MaskColors.light
         const colors = Object.keys(colorSchema) as Array<keyof typeof colorSchema>
 
         colors.forEach((color) => {

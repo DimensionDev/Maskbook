@@ -44,13 +44,14 @@ const useStyles = makeStyles()((theme) => ({
     actions: {
         position: 'sticky',
         bottom: 0,
-
+        padding: theme.spacing(2),
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         gap: theme.spacing(1.5),
     },
     dialogContent: {
+        padding: '12px 16px',
         position: 'relative',
         boxSizing: 'border-box',
     },
@@ -63,7 +64,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         top: '50%',
         left: '50%',
-        transform: 'translate(-50%,-50%)',
+        transform: 'translate(-50%, -50%)',
     },
 }))
 

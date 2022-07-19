@@ -1,15 +1,9 @@
 import { BigNumber } from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
-import { multipliedBy } from '@masknet/web3-shared-base'
 import { isValidDomain } from './domain'
 import { isValidAddress } from './address'
 
-export function formatPercentage(value: BigNumber.Value) {
-    const percentage = multipliedBy(value, 100)
-        .toFixed(2)
-        .replace(/\.?0+$/, '')
-    return `${percentage}%`
-}
+export { formatPercentage } from '@masknet/web3-shared-base'
 
 export function formatPrice(price: BigNumber.Value, decimalPlaces = 6) {
     return new BigNumber(price).decimalPlaces(decimalPlaces).toString()
@@ -26,9 +20,14 @@ export function formatEthereumAddress(address: string, size = 0) {
     return `${address_.slice(0, Math.max(0, 2 + size))}...${address_.slice(-size)}`
 }
 
-export function formatTokenId(tokenId: string, size = 0) {
-    if (tokenId.length < 9) return `#${tokenId}`
-    return `#${tokenId.slice(0, Math.max(0, 2 + size))}...${tokenId.slice(-size)}`
+export function formatTokenId(tokenId: string, size = 4) {
+    size = Math.max(2, size)
+    const isHex = tokenId.toLowerCase().startsWith('0x')
+    const prefix = isHex ? '0x' : '#'
+    if (tokenId.length < size * 2 + prefix.length) return `#${tokenId}`
+    const head = tokenId.slice(0, isHex ? 2 + size : size)
+    const tail = tokenId.slice(-size)
+    return `${prefix}${head}...${tail}`
 }
 
 export function formatDomainName(domain: string, size = 4) {

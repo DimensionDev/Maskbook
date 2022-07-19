@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
-import { GoogGhostingIcon } from '@masknet/icons'
+import { GoodGhosting } from '@masknet/icons'
 import { Trans } from 'react-i18next'
 import { PreviewCard } from '../UI/PreviewCard'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -39,7 +39,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             description: <Trans i18nKey="plugin_good_ghosting_description" />,
             name: <Trans i18nKey="plugin_good_ghosting_name" />,
             tutorialLink: 'https://realmasknetwork.notion.site/f94aa38b01404b9c99c7a03935840962',
-            icon: <GoogGhostingIcon />,
+            icon: <GoodGhosting />,
         },
     ],
 }
@@ -52,7 +52,10 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     usePluginWrapper(true)
 
     return (
-        <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={ChainId.Matic}>
+        <ChainBoundary
+            expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+            expectedChainId={ChainId.Matic}
+            ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
             <PreviewCard id={id} />
         </ChainBoundary>
     )

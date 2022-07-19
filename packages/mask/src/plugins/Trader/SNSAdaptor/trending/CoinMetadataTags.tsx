@@ -1,8 +1,7 @@
 import { Chip, DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState } from 'react'
-import { InjectedDialog } from '@masknet/shared'
-import { Linking } from './Linking'
+import { InjectedDialog, Linking } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     tag: {
