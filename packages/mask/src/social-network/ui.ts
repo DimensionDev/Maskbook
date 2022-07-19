@@ -12,6 +12,7 @@ import {
     i18NextInstance,
     queryRemoteI18NBundle,
     ValueRef,
+    initLogs
 } from '@masknet/shared-base'
 import type { ThemeSettings } from '@masknet/web3-shared-base'
 import { Flags } from '../../shared/index.js'
@@ -46,6 +47,8 @@ export let globalUIState: Readonly<SocialNetworkUI.AutonomousState> = {} as any
 
 export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.DeferredDefinition): Promise<void> {
     assertNotEnvironment(Environment.ManifestBackground)
+
+    initLogs('sns', { sns: ui_deferred.networkIdentifier })
 
     console.log('Activating provider', ui_deferred.networkIdentifier)
     setupReactShadowRootEnvironment()
