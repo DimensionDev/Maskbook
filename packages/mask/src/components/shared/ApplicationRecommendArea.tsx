@@ -9,8 +9,8 @@ const useStyles = makeStyles()(() => {
         recommendFeatureAppListWrapper: {
             display: 'flex',
             overflowX: 'scroll',
-            margin: '0 2px 5px 2px',
-            padding: '8px 2px 0 2px',
+            margin: '0 2px 5px',
+            padding: '8px 0px 0',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
@@ -21,7 +21,8 @@ const useStyles = makeStyles()(() => {
             overflowX: 'scroll',
             overscrollBehavior: 'contain',
             '& .carousel__slider': {
-                padding: '8px 4px 0',
+                padding: '8px 2px 0',
+                width: 562,
                 overscrollBehavior: 'contain',
                 overflowX: 'scroll',
                 '&::-webkit-scrollbar': {
@@ -70,7 +71,7 @@ export function ApplicationRecommendArea(props: Props) {
                     naturalSlideWidth={220}
                     naturalSlideHeight={117}
                     totalSlides={recommendFeatureAppList.length}
-                    visibleSlides={2.25}
+                    visibleSlides={2.242}
                     infinite={false}
                     interval={2500}
                     className={cx(classes.carousel, isHoveringCarousel ? classes.isHoveringCarousel : '')}
