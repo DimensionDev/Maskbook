@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
 import RSS3 from 'rss3-next'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { RSS3_ENDPOINT } from './constants'
+import { CollectionType, NEW_RSS3_ENDPOINT, RSS3_ENDPOINT } from './constants'
 import { NonFungibleTokenAPI, RSS3BaseAPI } from '../types'
 import { fetchJSON } from '../helpers'
 import { createIndicator, createPageable, HubOptions, TokenType } from '@masknet/web3-shared-base'
@@ -38,18 +38,28 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
         return value as T
     }
     async getDonations(address: string) {
-        const url = urlcat(RSS3_ENDPOINT, '/assets/list', {
-            personaID: address,
-            type: RSS3BaseAPI.AssetType.GitcoinDonation,
+        if (!address) return
+        const allCollectionIdURL = urlcat(NEW_RSS3_ENDPOINT, `/${address}-list-assets.auto-0`)
+        const res = await fetchJSON<{ list: string[] }>(allCollectionIdURL)
+        const footprints = res.list.filter((str) => !!str.match(CollectionType.donation))
+        const collectionURL = urlcat(NEW_RSS3_ENDPOINT, '/assets/details', {
+            assets: footprints?.join(','),
+            full: 1,
         })
-        return fetchJSON<RSS3BaseAPI.GeneralAssetResponse>(url)
+        const collectionRes = await fetchJSON<{ data: RSS3BaseAPI.Donations[] }>(collectionURL)
+        return collectionRes.data
     }
     async getFootprints(address: string) {
-        const url = urlcat(RSS3_ENDPOINT, '/assets/list', {
-            personaID: address,
-            type: RSS3BaseAPI.AssetType.POAP,
+        if (!address) return
+        const allCollectionIdURL = urlcat(NEW_RSS3_ENDPOINT, `/${address}-list-assets.auto-0`)
+        const res = await fetchJSON<{ list: string[] }>(allCollectionIdURL)
+        const footprints = res.list.filter((str) => !!str.match(CollectionType.footprint))
+        const collectionURL = urlcat(NEW_RSS3_ENDPOINT, '/assets/details', {
+            assets: footprints?.join(','),
+            full: 1,
         })
-        return fetchJSON<RSS3BaseAPI.GeneralAssetResponse>(url)
+        const collectionRes = await fetchJSON<{ data: RSS3BaseAPI.Footprints[] }>(collectionURL)
+        return collectionRes.data
     }
     async getNameInfo(id: string) {
         if (!id) return
@@ -58,6 +68,7 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
     }
     async getProfileInfo(address: string) {
         if (!address) return
+
         const url = urlcat(RSS3_ENDPOINT, '/:address', { address })
         const rsp = await fetchJSON<{
             profile: RSS3BaseAPI.ProfileInfo

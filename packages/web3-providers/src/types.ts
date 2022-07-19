@@ -113,6 +113,94 @@ export namespace RSS3BaseAPI {
         name: string
     }
 
+    export interface NFTContract {
+        address: string
+        name: string
+        symbol: string
+    }
+
+    export interface NFT_trains {
+        trait_type: string
+        value: string
+    }
+    export interface NFTsType {
+        asset_contract: NFTContract
+        chain: string
+        description: string
+        image_preview_url: string
+        image_preview_url_ct: string
+        image_thumbnail_url: string
+        image_thubnail_url_ct: string
+        image_url: string
+        image_url_ct: string
+        name: string
+        received_at: string
+        token_id: string
+        traints: NFT_trains[]
+    }
+
+    export interface NFTs {
+        id: string
+        detail: NFTsType
+    }
+
+    export interface DonationTx {
+        adminAddr: string
+        amount: string
+        approach: string
+        donor: string
+        formatedAmount: string
+        symbol: string
+        timeStamp: string
+        tokenAddr: string
+        txHash: string
+    }
+
+    export interface DonationGrant {
+        active: boolean
+        admin_address: string
+        contract_address: string
+        description: string
+        id: number
+        logo: string
+        reference_url: string
+        slug: string
+        title: string
+        token_address: string
+        token_symbol: string
+    }
+
+    export interface DonationsType {
+        grant: DonationGrant
+        txs: DonationTx[]
+    }
+
+    export interface Donations {
+        id: string
+        detail: DonationsType
+    }
+
+    export interface FootprintsType {
+        id: number
+        fancy_id: string
+        name: string
+        event_url: string
+        image_url: string
+        country: string
+        city: string
+        description: string
+        year: number
+        start_date: string
+        end_date: string
+        expiry_date: string
+        supply: number
+    }
+
+    export interface Footprints {
+        id: string
+        detail: FootprintsType
+    }
+
     export enum AssetType {
         GitcoinDonation = 'Gitcoin-Donation',
         POAP = 'POAP',
@@ -129,8 +217,8 @@ export namespace RSS3BaseAPI {
         createRSS3(address: string): RSS3
         getFileData<T>(rss3: RSS3, address: string, key: string): Promise<T | undefined>
         setFileData<T>(rss3: RSS3, address: string, key: string, data: T): Promise<T>
-        getDonations(address: string): Promise<GeneralAssetResponse | undefined>
-        getFootprints(address: string): Promise<GeneralAssetResponse | undefined>
+        getDonations(address: string): Promise<Donations[] | undefined>
+        getFootprints(address: string): Promise<Footprints[] | undefined>
         getNameInfo(id: string): Promise<NameInfo | undefined>
         getProfileInfo(address: string): Promise<ProfileInfo | undefined>
     }
