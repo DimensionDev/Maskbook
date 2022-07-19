@@ -88,8 +88,7 @@ const useStyles = makeStyles()((theme, props) => ({
         animation: 'loadingAnimation 1s linear infinite',
     },
     direct: {
-        fill: theme.palette.secondaryDivider,
-        fontSize: 36,
+        color: theme.palette.secondaryDivider,
     },
 }))
 
@@ -235,7 +234,7 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
                 </div>
             ) : (
                 <div className={classes.placeholder}>
-                    <DirectIcon className={classes.direct} />
+                    <DirectIcon size={36} className={classes.direct} />
                 </div>
             )}
         </Box>

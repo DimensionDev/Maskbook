@@ -51,7 +51,9 @@ const useStyles = makeStyles()(() => ({
     },
     icon: {
         fontSize: 12,
-        fill: '#767F8D',
+        height: 12,
+        width: 12,
+        color: '#767F8D',
         cursor: 'pointer',
         marginLeft: 4,
     },

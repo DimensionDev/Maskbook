@@ -1,7 +1,7 @@
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { Button, ListItemIcon, MenuItem } from '@mui/material'
-import { CheckedIcon, UncheckIcon } from '../assets/checked'
+import { Checkbox, UncheckIcon } from '../assets/checked'
 import type { BindingProof } from '@masknet/shared-base'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import classNames from 'classnames'
@@ -94,7 +94,7 @@ export function WalletItem(props: WalletItemProps) {
             }>
             <ListItemIcon>
                 {selectedWallet === wallet ? (
-                    <CheckedIcon className={classNames(classes.icon, classes.iconShadow)} />
+                    <Checkbox className={classNames(classes.icon, classes.iconShadow)} />
                 ) : (
                     <UncheckIcon className={classes.icon} />
                 )}

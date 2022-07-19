@@ -26,9 +26,11 @@ import type {
     HubOptions,
     HubIndicator,
     TokenType,
+    NonFungibleContractSpenderAuthorization,
+    FungibleTokenSpenderAuthorization,
 } from '@masknet/web3-shared-base'
 import type { DataProvider } from '@masknet/public-api'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export namespace ExplorerAPI {
     export type Transaction = Web3Transaction & {
@@ -111,6 +113,94 @@ export namespace RSS3BaseAPI {
         name: string
     }
 
+    export interface NFT_Contract {
+        address: string
+        name: string
+        symbol: string
+    }
+
+    export interface NFT_Trait {
+        trait_type: string
+        value: string
+    }
+    export interface NFT_Type {
+        asset_contract: NFT_Contract
+        chain: string
+        description: string
+        image_preview_url: string
+        image_preview_url_ct: string
+        image_thumbnail_url: string
+        image_thumbnail_url_ct: string
+        image_url: string
+        image_url_ct: string
+        name: string
+        received_at: string
+        token_id: string
+        traits: NFT_Trait[]
+    }
+
+    export interface NFT {
+        id: string
+        detail: NFT_Type
+    }
+
+    export interface DonationTx {
+        adminAddr: string
+        amount: string
+        approach: string
+        donor: string
+        formatedAmount: string
+        symbol: string
+        timeStamp: string
+        tokenAddr: string
+        txHash: string
+    }
+
+    export interface DonationGrant {
+        active: boolean
+        admin_address: string
+        contract_address: string
+        description: string
+        id: number
+        logo: string
+        reference_url: string
+        slug: string
+        title: string
+        token_address: string
+        token_symbol: string
+    }
+
+    export interface DonationType {
+        grant: DonationGrant
+        txs: DonationTx[]
+    }
+
+    export interface Donation {
+        id: string
+        detail: DonationType
+    }
+
+    export interface FootprintType {
+        id: number
+        fancy_id: string
+        name: string
+        event_url: string
+        image_url: string
+        country: string
+        city: string
+        description: string
+        year: number
+        start_date: string
+        end_date: string
+        expiry_date: string
+        supply: number
+    }
+
+    export interface Footprint {
+        id: string
+        detail: FootprintType
+    }
+
     export enum AssetType {
         GitcoinDonation = 'Gitcoin-Donation',
         POAP = 'POAP',
@@ -127,8 +217,8 @@ export namespace RSS3BaseAPI {
         createRSS3(address: string): RSS3
         getFileData<T>(rss3: RSS3, address: string, key: string): Promise<T | undefined>
         setFileData<T>(rss3: RSS3, address: string, key: string, data: T): Promise<T>
-        getDonations(address: string): Promise<GeneralAssetResponse | undefined>
-        getFootprints(address: string): Promise<GeneralAssetResponse | undefined>
+        getDonations(address: string): Promise<Donation[] | undefined>
+        getFootprints(address: string): Promise<Footprint[] | undefined>
         getNameInfo(id: string): Promise<NameInfo | undefined>
         getProfileInfo(address: string): Promise<ProfileInfo | undefined>
     }
@@ -780,5 +870,68 @@ export namespace TrendingAPI {
         getCurrencies(): Promise<Currency[]>
         // #endregion
         getPriceStats(chainId: ChainId, coinId: string, currency: Currency, days: number): Promise<Stat[]>
+    }
+}
+
+export namespace RabbyTokenAPI {
+    interface RawTokenSpender {
+        id: string
+        address: string
+        amount: number
+        value: number
+        exposure_usd: number
+        protocol: {
+            id: string
+            name: string
+            logo_url: string
+            chain: string
+        } | null
+        is_contract: boolean
+        is_open_source: boolean
+        is_hacked: boolean
+        is_abandoned: boolean
+    }
+
+    export interface RawTokenInfo {
+        id: string
+        address: string
+        name: string
+        symbol: string
+        logo_url: string
+        chain: string
+        price: number
+        balance: number
+        spenders: RawTokenSpender[]
+    }
+
+    export type TokenInfo = Omit<RawTokenInfo, 'spenders'>
+
+    export type TokenSpender = Omit<RawTokenSpender, 'protocol'> & {
+        tokenInfo: TokenInfo
+        name: string | undefined
+        logo: React.ReactNode | undefined
+        isMaskDapp: boolean
+    }
+
+    export interface NFTInfo {
+        chain: string
+        amount: string
+        contract_name: string
+        is_erc721?: boolean
+        contract_id: string
+        isMaskDapp?: boolean
+        spender: Omit<TokenSpender, 'tokenInfo'>
+    }
+
+    export interface Provider<ChainId> {
+        getApprovedNonFungibleContracts(
+            chainId: ChainId,
+            account: string,
+        ): Promise<Array<NonFungibleContractSpenderAuthorization<ChainId, SchemaType>>>
+
+        getApprovedFungibleTokenSpenders(
+            chainId: ChainId,
+            account: string,
+        ): Promise<Array<FungibleTokenSpenderAuthorization<ChainId, SchemaType>>>
     }
 }

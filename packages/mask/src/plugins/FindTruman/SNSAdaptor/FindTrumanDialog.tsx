@@ -54,7 +54,7 @@ const useStyles = makeStyles()((theme, props) => ({
         display: 'flex',
         justifyContent: 'flex-end',
         alignItems: 'center',
-        padding: 16,
+        padding: '8px 16px',
     },
     icon: {
         width: 22,

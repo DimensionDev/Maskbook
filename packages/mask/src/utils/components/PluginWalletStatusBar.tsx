@@ -18,7 +18,7 @@ import { makeStyles, MaskColorVar, parseColor } from '@masknet/theme'
 import { NetworkPluginID, TransactionStatusType, Wallet } from '@masknet/web3-shared-base'
 import { Box, Button, CircularProgress, Link, Typography } from '@mui/material'
 import { useI18N } from '../i18n-next-ui'
-import { LinkOutIcon, ArrowDropIcon, PluginWalletConnectIcon } from '@masknet/icons'
+import { LinkOutIcon, ArrowDropIcon, WalletConnect } from '@masknet/icons'
 import { useLayoutEffect, useRef, useState, PropsWithChildren } from 'react'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { isDashboardPage } from '@masknet/shared-base'
@@ -167,7 +167,7 @@ export function PluginWalletStatusBar({
         return (
             <Box className={cx(classes.root, className)}>
                 <Button fullWidth onClick={openSelectProviderDialog}>
-                    <PluginWalletConnectIcon className={classes.connection} /> {t('plugin_wallet_connect_a_wallet')}
+                    <WalletConnect className={classes.connection} /> {t('plugin_wallet_connect_a_wallet')}
                 </Button>
             </Box>
         )

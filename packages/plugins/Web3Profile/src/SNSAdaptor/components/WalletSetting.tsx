@@ -34,8 +34,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     titleTailButton: {
         cursor: 'pointer',
-        fill: theme.palette.maskColor.main,
-        fontSize: '24px',
+        color: theme.palette.maskColor.main,
     },
     labelWrapper: {
         display: 'flex',
@@ -214,7 +213,9 @@ const WalletSetting = memo(
                     title="Settings"
                     fullWidth={false}
                     open={open}
-                    titleTail={<WalletUnderTabsIcon onClick={openPopupsWindow} className={classes.titleTailButton} />}
+                    titleTail={
+                        <WalletUnderTabsIcon size={24} onClick={openPopupsWindow} className={classes.titleTailButton} />
+                    }
                     titleTabs={
                         <MaskTabList variant="base" onChange={onChange} aria-label="Web3ProfileWalletSetting">
                             <Tab label={t.NFTs()} value={tabs.NFTs} />

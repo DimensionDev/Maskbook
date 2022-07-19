@@ -58,8 +58,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     icon: {
-        fontSize: 24,
-        fill: theme.palette.text.primary,
+        color: theme.palette.text.primary,
         cursor: 'pointer',
     },
     dialog: {
@@ -126,7 +125,7 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                     titleTail={
                         <div className={classes.tail}>
                             <IconButton onClick={() => tradeRef.current?.refresh()}>
-                                <RefreshIcon className={classes.icon} />
+                                <RefreshIcon size={24} className={classes.icon} />
                             </IconButton>
                             <IconButton
                                 onClick={async () => {
@@ -154,7 +153,7 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                                         },
                                     })
                                 }}>
-                                <GearIcon className={classes.icon} />
+                                <GearIcon size={24} className={classes.icon} />
                             </IconButton>
                         </div>
                     }

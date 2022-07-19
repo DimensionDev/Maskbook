@@ -5,7 +5,7 @@ import {
     useITOConstants,
     useNftRedPacketConstants,
 } from '@masknet/web3-shared-evm'
-import { RedPacketIcon, ITOIcon, MaskBoxIcon } from '@masknet/icons'
+import { RedPacketIcon, Ito, MaskBoxIcon } from '@masknet/icons'
 export function useAllMaskDappContractInfo(chainId: ChainId, type: 'token' | 'nft') {
     const {
         HAPPY_RED_PACKET_ADDRESS_V1,
@@ -41,12 +41,12 @@ export function useAllMaskDappContractInfo(chainId: ChainId, type: 'token' | 'nf
               {
                   address: ITO_CONTRACT_ADDRESS,
                   name: 'ITO V1',
-                  logo: <ITOIcon />,
+                  logo: <Ito />,
               },
               {
                   address: ITO2_CONTRACT_ADDRESS,
                   name: 'ITO V2',
-                  logo: <ITOIcon />,
+                  logo: <Ito />,
               },
           ]
         : [

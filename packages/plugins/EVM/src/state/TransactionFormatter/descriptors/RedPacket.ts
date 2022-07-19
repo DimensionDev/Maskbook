@@ -19,22 +19,23 @@ export class RedPacketDescriptor implements TransactionDescriptor {
 
         const method = context.methods?.find((x) => ['create_red_packet', 'claim'].includes(x.name ?? ''))
 
-        if (
-            isSameAddress(context.to, HAPPY_RED_PACKET_ADDRESS_V4) &&
-            method?.parameters?._token_addr &&
-            method?.parameters?._total_tokens
-        ) {
+        if (isSameAddress(context.to, HAPPY_RED_PACKET_ADDRESS_V4)) {
             const connection = await Web3StateSettings.value.Connection?.getConnection?.({
                 chainId: context.chainId,
                 account: context.from,
             })
-            const token = await connection?.getFungibleToken(method?.parameters?._token_addr ?? '')
-            const amount = formatBalance(
-                method.parameters?._total_tokens,
-                token?.decimals,
-                isNativeTokenAddress(method.parameters?._token_addr) ? 6 : 0,
-            )
-            if (method?.name === 'create_red_packet') {
+
+            if (
+                method?.name === 'create_red_packet' &&
+                method?.parameters?._token_addr &&
+                method?.parameters?._total_tokens
+            ) {
+                const token = await connection?.getFungibleToken(method?.parameters?._token_addr ?? '')
+                const amount = formatBalance(
+                    method.parameters?._total_tokens,
+                    token?.decimals,
+                    isNativeTokenAddress(method.parameters?._token_addr) ? 6 : 0,
+                )
                 return {
                     chainId: context.chainId,
                     title: 'Create Lucky Drop',

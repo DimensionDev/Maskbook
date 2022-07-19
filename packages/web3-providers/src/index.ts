@@ -22,6 +22,7 @@ import { MagicEdenAPI } from './MagicEden'
 import { TokenViewAPI } from './token-view'
 import { CoinMarketCapAPI } from './CoinMarketCap'
 import { UniSwapAPI } from './uniswap'
+import { RabbyAPI } from './rabby'
 
 export * from './helpers'
 export * from './types'
@@ -53,3 +54,4 @@ export const Alchemy_FLOW = new Alchemy_FLOW_API()
 export const TokenView = new TokenViewAPI()
 export const CoinMarketCap = new CoinMarketCapAPI()
 export const UniSwap = new UniSwapAPI()
+export const Rabby = new RabbyAPI()

@@ -32,9 +32,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
     },
     linkIcon: {
-        fill: theme.palette.maskColor.main,
-        width: 18,
-        height: 18,
+        color: theme.palette.maskColor.main,
     },
 }))
 
@@ -94,7 +92,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                             href={explorerResolver.fungibleTokenLink(tokenSecurity.chainId, tokenSecurity.contract)}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <LinkOutIcon className={classes.linkIcon} />
+                            <LinkOutIcon size={18} className={classes.linkIcon} />
                         </Link>
                     </Stack>
                 </Stack>
