@@ -123,7 +123,7 @@ export namespace RSS3BaseAPI {
         trait_type: string
         value: string
     }
-    export interface NFTsType {
+    export interface NFT_Type {
         asset_contract: NFTContract
         chain: string
         description: string
@@ -139,9 +139,9 @@ export namespace RSS3BaseAPI {
         traits: NFT_traits[]
     }
 
-    export interface NFTs {
+    export interface NFT {
         id: string
-        detail: NFTsType
+        detail: NFT_Type
     }
 
     export interface DonationTx {
@@ -170,17 +170,17 @@ export namespace RSS3BaseAPI {
         token_symbol: string
     }
 
-    export interface DonationsType {
+    export interface DonationType {
         grant: DonationGrant
         txs: DonationTx[]
     }
 
     export interface Donation {
         id: string
-        detail: DonationsType
+        detail: DonationType
     }
 
-    export interface FootprintsType {
+    export interface FootprintType {
         id: number
         fancy_id: string
         name: string
@@ -198,7 +198,7 @@ export namespace RSS3BaseAPI {
 
     export interface Footprint {
         id: string
-        detail: FootprintsType
+        detail: FootprintType
     }
 
     export enum AssetType {
