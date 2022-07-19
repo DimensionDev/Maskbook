@@ -130,13 +130,13 @@ export namespace RSS3BaseAPI {
         image_preview_url: string
         image_preview_url_ct: string
         image_thumbnail_url: string
-        image_thubnail_url_ct: string
+        image_thumbnail_url_ct: string
         image_url: string
         image_url_ct: string
         name: string
         received_at: string
         token_id: string
-        traints: NFT_trains[]
+        traits: NFT_trains[]
     }
 
     export interface NFTs {
