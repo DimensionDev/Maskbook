@@ -14,7 +14,7 @@ import {
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import {
     ChainId,
     ChainId as EVM_ChainId,
@@ -31,7 +31,6 @@ import {
     FormControlLabel,
     Radio,
     RadioGroup,
-    Select,
     Table,
     TableBody,
     TableCell,
@@ -40,7 +39,6 @@ import {
     Typography,
 } from '@mui/material'
 import { useSelectFungibleToken, useSelectAdvancedSettings } from '@masknet/shared'
-import { getEnumAsArray } from '@dimensiondev/kit'
 
 export interface ConsoleContentProps {
     onClose?: () => void
