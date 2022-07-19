@@ -1,6 +1,6 @@
 import { unreachable } from '@dimensiondev/kit'
 import { DataProvider } from '@masknet/public-api'
-import { CoinGeckoIcon, CoinMarketCapIcon, UniswapIcon, NFTScanIcon } from '@masknet/icons'
+import { CoinGeckoIcon, CoinMarketCapIcon, UniswapIcon, NftScan } from '@masknet/icons'
 
 export interface DataProviderIconProps {
     provider: DataProvider
@@ -17,7 +17,7 @@ export function DataProviderIconUI(props: DataProviderIconProps) {
         case DataProvider.UNISWAP_INFO:
             return <UniswapIcon style={{ width: size, height: size }} />
         case DataProvider.NFTSCAN:
-            return <NFTScanIcon style={{ width: size, height: size }} />
+            return <NftScan style={{ width: size, height: size }} />
         default:
             unreachable(props.provider)
     }

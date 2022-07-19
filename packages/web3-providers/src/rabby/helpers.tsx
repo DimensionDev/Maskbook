@@ -7,7 +7,7 @@ import {
     NetworkType,
 } from '@masknet/web3-shared-evm'
 import { createLookupTableResolver } from '@masknet/web3-shared-base'
-import { RedPacketIcon, ITOIcon, MaskBoxIcon } from '@masknet/icons'
+import { RedPacketIcon, Ito as ITOIcon, MaskBoxIcon } from '@masknet/icons'
 
 export function getAllMaskDappContractInfo(chainId: ChainId, type: 'token' | 'nft') {
     const {

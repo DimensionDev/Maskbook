@@ -67,10 +67,11 @@ const useStyles = makeStyles()(() => ({
         alignItems: 'center',
     },
     icon: {
-        fontSize: 16,
+        width: 16,
+        height: 16,
         marginLeft: 4,
         cursor: 'pointer',
-        fill: '#767F8D',
+        color: '#767F8D',
     },
     delete: {
         fontSize: 24,

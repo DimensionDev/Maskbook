@@ -43,7 +43,7 @@ interface PersonaActionProps {
 
 export function PersonaAction(props: PersonaActionProps) {
     const classes = useStylesExtends(useStyles(), {})
-    const { currentPersona, currentVisitingProfile } = props
+    const { currentPersona } = props
     const t = useI18N()
 
     const [open, setOpen] = useState(false)
@@ -87,7 +87,7 @@ export function PersonaAction(props: PersonaActionProps) {
                         onMouseLeave={() => setOpen(false)}
                         disableFocusListener
                         disableTouchListener>
-                        <CopyIcon onClick={onCopy} className={classes.linkIcon} />
+                        <CopyIcon size={16} onClick={onCopy} className={classes.linkIcon} />
                     </ShadowRootTooltip>
                 </Box>
             </div>

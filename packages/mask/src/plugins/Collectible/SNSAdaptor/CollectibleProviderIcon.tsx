@@ -24,7 +24,7 @@ const useStyles = makeStyles()({
     },
 })
 
-const NFTScanIcon = new URL('../../../resources/NFTScanIcon.png', import.meta.url).toString()
+const NftScan = new URL('../../../resources/NFTScanIcon.png', import.meta.url).toString()
 const ZerionIcon = new URL('../../../resources/zerion.png', import.meta.url).toString()
 
 export interface CollectibleProviderIconProps {
@@ -35,7 +35,7 @@ export function CollectibleProviderIcon(props: CollectibleProviderIconProps) {
     const { classes } = useStyles()
     switch (props.provider) {
         case SourceType.NFTScan:
-            return <img src={NFTScanIcon} className={classes.NFTScan} />
+            return <img src={NftScan} className={classes.NFTScan} />
         case SourceType.Zerion:
             return <img src={ZerionIcon} className={classes.NFTScan} />
         case SourceType.OpenSea:

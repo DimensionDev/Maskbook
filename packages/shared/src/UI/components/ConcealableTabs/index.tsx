@@ -1,13 +1,4 @@
-import {
-    GearIcon,
-    ArrowDropIcon,
-    LinkOutIcon,
-    RightArrowIcon,
-    RSS3Icon,
-    NextIdPersonaVerifiedIcon,
-    SelectedIcon,
-    LeftArrowIcon,
-} from '@masknet/icons'
+import { Gear, ArrowDrop, LinkOut, RightArrow, NextIdPersonaVerified, Selected, LeftArrow, Rss3 } from '@masknet/icons'
 import { ReversedAddress } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
@@ -263,9 +254,9 @@ export function ConcealableTabs<T extends number | string>({
                             }
                             target="_blank"
                             rel="noopener noreferrer">
-                            <LinkOutIcon sx={{ fill: '#767f8d', fontSize: '20px' }} />
+                            <LinkOut sx={{ fill: '#767f8d', fontSize: '20px' }} />
                         </Link>
-                        <ArrowDropIcon sx={{ fill: '#07101b' }} />
+                        <ArrowDrop sx={{ fill: '#07101b' }} />
                     </Button>
                     <ShadowRootMenu
                         anchorEl={anchorEl}
@@ -304,14 +295,14 @@ export function ConcealableTabs<T extends number | string>({
                                                 }
                                                 target="_blank"
                                                 rel="noopener noreferrer">
-                                                <LinkOutIcon className={classes.linkIcon} />
+                                                <LinkOut className={classes.linkIcon} />
                                             </Link>
                                             {x?.type === SocialAddressType.KV && (
-                                                <NextIdPersonaVerifiedIcon sx={{ fill: '#3dc233' }} />
+                                                <NextIdPersonaVerified sx={{ fill: '#3dc233' }} />
                                             )}
                                         </div>
                                         {isSameAddress(selectedAddress?.address, x.address) && (
-                                            <SelectedIcon sx={{ fill: '#1c68f3' }} />
+                                            <Selected sx={{ fill: '#1c68f3' }} />
                                         )}
                                     </div>
                                 </MenuItem>
@@ -326,8 +317,8 @@ export function ConcealableTabs<T extends number | string>({
                     <Typography fontSize="14px" fontWeight={700} marginRight="8px" color="#07101b">
                         {t.rss3()}
                     </Typography>
-                    <RSS3Icon sx={{ margin: '0 8px 0 0' }} />
-                    <GearIcon onClick={handleOpenDialog} sx={{ cursor: 'pointer' }} />
+                    <Rss3 sx={{ margin: '0 8px 0 0' }} />
+                    <Gear onClick={handleOpenDialog} sx={{ cursor: 'pointer' }} />
                 </div>
             </div>
             <div className={classes.tabs}>
@@ -359,7 +350,7 @@ export function ConcealableTabs<T extends number | string>({
                                     onClick={() => {
                                         slide(false)
                                     }}>
-                                    <LeftArrowIcon color="inherit" />
+                                    <LeftArrow color="inherit" />
                                 </Button>
                                 <Button
                                     disableRipple
@@ -368,7 +359,7 @@ export function ConcealableTabs<T extends number | string>({
                                     onClick={() => {
                                         slide(true)
                                     }}>
-                                    <RightArrowIcon color="inherit" />
+                                    <RightArrow color="inherit" />
                                 </Button>
                             </>
                         ) : null}

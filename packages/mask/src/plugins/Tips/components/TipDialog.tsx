@@ -122,12 +122,6 @@ const useStyles = makeStyles()((theme) => ({
             textDecoration: 'none',
         },
     },
-    linkIcon: {
-        fill: theme.palette.maskColor?.second,
-        width: 12,
-        height: 12,
-        marginLeft: theme.spacing(0.5),
-    },
 }))
 
 export interface TipDialogProps {
@@ -251,7 +245,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                     reset()
                     onClose?.()
                 }}
-                icon={isTokenTip ? <SuccessIcon style={{ height: 64, width: 64 }} /> : null}
+                icon={isTokenTip ? <SuccessIcon size={64} /> : null}
                 message={successMessage}
                 confirmText={t.tip_share()}
                 onConfirm={handleConfirm}

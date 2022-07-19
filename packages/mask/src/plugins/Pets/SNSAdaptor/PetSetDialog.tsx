@@ -29,7 +29,7 @@ import { petShowSettings } from '../settings'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { saveCustomEssayToRSS } from '../Services/rss3'
-import { RSS3Icon } from '@masknet/icons'
+import { Rss3 } from '@masknet/icons'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => ({
@@ -116,8 +116,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 21,
     },
     RSS3Icon: {
-        fontSize: 24,
-        fill: theme.palette.mode === 'light' ? '#000' : '#fff',
+        color: theme.palette.mode === 'light' ? '#000' : '#fff',
     },
 }))
 
@@ -377,7 +376,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     <Typography fontSize={14} color="textSecondary" fontWeight={700} className={classes.des}>
                         RSS3
                     </Typography>
-                    <RSS3Icon className={classes.RSS3Icon} />
+                    <Rss3 className={classes.RSS3Icon} />
                 </Box>
             </Box>
 

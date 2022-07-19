@@ -1,12 +1,4 @@
-import {
-    NewLinkOutIcon,
-    PluginIcon,
-    VerifyIcon,
-    WalletUnderTabsIcon,
-    Web3ProfileIcon,
-    IdentityIcon,
-    ConnectIcon,
-} from '@masknet/icons'
+import { NewLinkOut, Plugin, Verified, WalletUnderTabs, Web3Profile, Connect, Identity } from '@masknet/icons'
 import { PluginId, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NextIDPlatform, PopupRoutes, EMPTY_LIST } from '@masknet/shared-base'
@@ -159,9 +151,9 @@ export function NextIdPage({ persona }: NextIdPageProps) {
         const button = personaConnectStatus.hasPersona ? t.connect_persona() : t.create_persona()
         setDescription(personaConnectStatus.hasPersona ? '' : t.create_persona_intro())
         const icon = personaConnectStatus.hasPersona ? (
-            <ConnectIcon sx={{ marginRight: '8px' }} />
+            <Connect sx={{ marginRight: '8px' }} />
         ) : (
-            <IdentityIcon sx={{ width: 18, height: 18, marginRight: '8px' }} />
+            <Identity sx={{ width: 18, height: 18, marginRight: '8px' }} />
         )
 
         return (
@@ -225,7 +217,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
         if (isWeb3ProfileDisable) {
             return (
                 <Button className={classes.button} variant="contained" onClick={onEnablePlugin}>
-                    <PluginIcon fontSize="small" />
+                    <Plugin />
                     <Typography marginLeft="9px">{t.enable_plugin()}</Typography>
                 </Button>
             )
@@ -236,7 +228,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
         if (!isAccountVerified && isOwn) {
             return (
                 <Button className={classes.button} variant="contained" onClick={onVerify}>
-                    <VerifyIcon sx={{ marginRight: '8px' }} />
+                    <Verified />
                     {t.verify_Twitter_ID_button()}
                 </Button>
             )
@@ -244,7 +236,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
         setDescription(t.add_wallet_intro())
         return (
             <Button className={classes.button} variant="contained" onClick={handleAddWallets}>
-                <WalletUnderTabsIcon className={classes.walletIcon} />
+                <WalletUnderTabs className={classes.walletIcon} />
                 {t.add_wallet_button()}
             </Button>
         )
@@ -269,7 +261,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
             <Box className={classes.container}>
                 <Box className={classes.header}>
                     <div className={classes.title}>
-                        <Web3ProfileIcon className={classes.web3Icon} />
+                        <Web3Profile className={classes.web3Icon} />
                         <Typography fontSize={16} fontWeight={700}>
                             {t.web3_profile()}
                         </Typography>
@@ -286,7 +278,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
                             width="22px"
                             height="22px"
                             style={{ alignSelf: 'center', marginTop: '2px' }}>
-                            <NewLinkOutIcon />
+                            <NewLinkOut />
                         </Link>
                     </div>
                 </Box>

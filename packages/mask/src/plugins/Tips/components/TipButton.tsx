@@ -159,7 +159,7 @@ export const TipButton: FC<Props> = ({
             {...rest}
             role="button"
             onClick={createTipTask}>
-            <TipCoin viewBox="0 0 24 24" />
+            <TipCoin />
             {children}
         </div>
     )

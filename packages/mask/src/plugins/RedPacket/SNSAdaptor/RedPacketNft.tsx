@@ -19,7 +19,7 @@ import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
 import { useAccount, useNetworkType, useWeb3 } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { PluginWalletConnectIcon, SharedIcon } from '@masknet/icons'
+import { WalletConnect, SharedIcon } from '@masknet/icons'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
@@ -432,7 +432,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                                 ActionButtonPromiseProps={{ variant: 'roundedDark' }}
                                 expectedChainId={payload.chainId}>
                                 <WalletConnectedBoundary
-                                    startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
+                                    startIcon={<WalletConnect style={{ fontSize: 18 }} />}
                                     classes={{
                                         connectWallet: classes.button,
                                         unlockMetaMask: classes.button,

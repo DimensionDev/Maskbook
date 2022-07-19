@@ -34,7 +34,6 @@ const useStyles = makeStyles()((theme) => ({
     linkIcon: {
         // TODO: replace with theme color
         color: theme.palette.mode === 'dark' ? '#F5F5F5' : '#07101B',
-        fontSize: 16,
         marginLeft: 10,
     },
     pair: {
@@ -157,7 +156,7 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
                             href={Others?.explorerResolver.transactionLink(selectedChainId, transaction.id)}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <LinkOutIcon className={classes.linkIcon} />
+                            <LinkOutIcon size={16} className={classes.linkIcon} />
                         </Link>
                     </Box>
                 </TableCell>
