@@ -113,18 +113,18 @@ export namespace RSS3BaseAPI {
         name: string
     }
 
-    export interface NFTContract {
+    export interface NFT_Contract {
         address: string
         name: string
         symbol: string
     }
 
-    export interface NFT_traits {
+    export interface NFT_Traits {
         trait_type: string
         value: string
     }
     export interface NFT_Type {
-        asset_contract: NFTContract
+        asset_contract: NFT_Contract
         chain: string
         description: string
         image_preview_url: string
@@ -136,7 +136,7 @@ export namespace RSS3BaseAPI {
         name: string
         received_at: string
         token_id: string
-        traits: NFT_traits[]
+        traits: NFT_Traits[]
     }
 
     export interface NFT {
