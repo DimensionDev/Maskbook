@@ -46,7 +46,7 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
             assets: footprints?.join(','),
             full: 1,
         })
-        const collectionRes = await fetchJSON<{ data: RSS3BaseAPI.Donations[] }>(collectionURL)
+        const collectionRes = await fetchJSON<{ data: RSS3BaseAPI.Donation[] }>(collectionURL)
         return collectionRes.data
     }
     async getFootprints(address: string) {
@@ -58,7 +58,7 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
             assets: footprints?.join(','),
             full: 1,
         })
-        const collectionRes = await fetchJSON<{ data: RSS3BaseAPI.Footprints[] }>(collectionURL)
+        const collectionRes = await fetchJSON<{ data: RSS3BaseAPI.Footprint[] }>(collectionURL)
         return collectionRes.data
     }
     async getNameInfo(id: string) {

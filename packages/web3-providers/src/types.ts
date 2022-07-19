@@ -175,7 +175,7 @@ export namespace RSS3BaseAPI {
         txs: DonationTx[]
     }
 
-    export interface Donations {
+    export interface Donation {
         id: string
         detail: DonationsType
     }
@@ -196,7 +196,7 @@ export namespace RSS3BaseAPI {
         supply: number
     }
 
-    export interface Footprints {
+    export interface Footprint {
         id: string
         detail: FootprintsType
     }
@@ -217,8 +217,8 @@ export namespace RSS3BaseAPI {
         createRSS3(address: string): RSS3
         getFileData<T>(rss3: RSS3, address: string, key: string): Promise<T | undefined>
         setFileData<T>(rss3: RSS3, address: string, key: string, data: T): Promise<T>
-        getDonations(address: string): Promise<Donations[] | undefined>
-        getFootprints(address: string): Promise<Footprints[] | undefined>
+        getDonations(address: string): Promise<Donation[] | undefined>
+        getFootprints(address: string): Promise<Footprint[] | undefined>
         getNameInfo(id: string): Promise<NameInfo | undefined>
         getProfileInfo(address: string): Promise<ProfileInfo | undefined>
     }
