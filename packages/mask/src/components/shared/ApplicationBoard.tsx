@@ -24,7 +24,7 @@ const useStyles = makeStyles<{ shouldScroll: boolean; isCarouselReady: boolean }
     return {
         applicationWrapper: {
             padding: theme.spacing(1, 0.25),
-            transform: props.isCarouselReady ? 'translateY(-14px)' : 'translateY(0px)',
+            transform: props.isCarouselReady ? 'translateY(-8px)' : 'translateY(0px)',
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
             overflowY: 'auto',
