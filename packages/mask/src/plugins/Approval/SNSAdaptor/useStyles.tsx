@@ -63,7 +63,7 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
         approvalContentWrapper: {
             flexGrow: 1,
             width: 565,
-            paddingTop: 0,
+            paddingTop: 8,
             marginLeft: 16,
             display: 'flex',
             flexDirection: 'column',
@@ -175,6 +175,10 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
             width: 16,
             height: 16,
             '& > svg': {
+                width: 16,
+                height: 16,
+            },
+            '& > span': {
                 width: 16,
                 height: 16,
             },
