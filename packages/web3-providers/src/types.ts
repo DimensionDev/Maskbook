@@ -302,26 +302,26 @@ export namespace NonFungibleTokenAPI {
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
-        ) => Promise<Array<NonFungibleTokenEvent<ChainId, SchemaType>>>
+        ) => Promise<Pageable<NonFungibleTokenEvent<ChainId, SchemaType>>>
         /** Get listed orders of a non-fungible token. */
         getListings?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
-        ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
+        ) => Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
         /** Get offered orders of a non-fungible token. */
         getOffers?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
-        ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
+        ) => Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
         /** Get orders of a non-fungible token. */
         getOrders?: (
             address: string,
             tokenId: string,
             side: OrderSide,
             options?: HubOptions<ChainId>,
-        ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
+        ) => Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
         /** Get non-fungible collections owned by the given account. */
         getCollections?: (
             account: string,

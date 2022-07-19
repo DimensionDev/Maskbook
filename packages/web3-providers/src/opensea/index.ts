@@ -400,7 +400,12 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             }),
             chainId,
         )
-        return response?.asset_events?.map((x) => createNFTHistory(chainId, x)) ?? EMPTY_LIST
+        const events = response?.asset_events?.map((x) => createNFTHistory(chainId, x)) ?? EMPTY_LIST
+        return createPageable(
+            events,
+            createIndicator(indicator),
+            events.length === size ? createNextIndicator(indicator) : undefined,
+        )
     }
 
     async getOrders(
@@ -421,7 +426,12 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             }),
             chainId,
         )
-        return response?.orders?.map((x) => createAssetOrder(chainId, x)) ?? EMPTY_LIST
+        const orders = response?.orders?.map((x) => createAssetOrder(chainId, x)) ?? EMPTY_LIST
+        return createPageable(
+            orders,
+            createIndicator(indicator),
+            orders.length === size ? createNextIndicator(indicator) : undefined,
+        )
     }
 
     async getCollections(

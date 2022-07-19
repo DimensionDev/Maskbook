@@ -385,7 +385,21 @@ class Hub implements EVM_Hub {
         tokenId: string,
         initial?: HubOptions<ChainId, HubIndicator> | undefined,
     ): Promise<Pageable<NonFungibleTokenEvent<ChainId, SchemaType>>> {
-        throw new Error('Method not implemented.')
+        const options = this.getOptions(initial)
+        const providers = this.getProviders<NonFungibleTokenAPI.Provider<ChainId, SchemaType>>(
+            {
+                [SourceType.OpenSea]: OpenSea,
+                [SourceType.Rarible]: Rarible,
+                [SourceType.Alchemy_EVM]: Alchemy_EVM,
+            },
+            options.chainId === ChainId.Mainnet ? [OpenSea, Alchemy_EVM, Rarible] : [Alchemy_EVM, OpenSea, Rarible],
+            initial,
+        )
+
+        return attemptUntil(
+            providers.map((x) => () => x.getEvents?.(address, tokenId, options)),
+            createPageable(EMPTY_LIST, createIndicator(options.indicator)),
+        )
     }
 
     async getNonFungibleTokenListings(
@@ -393,7 +407,21 @@ class Hub implements EVM_Hub {
         tokenId: string,
         initial?: HubOptions<ChainId, HubIndicator> | undefined,
     ): Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>> {
-        throw new Error('Method not implemented.')
+        const options = this.getOptions(initial)
+        const providers = this.getProviders<NonFungibleTokenAPI.Provider<ChainId, SchemaType>>(
+            {
+                [SourceType.OpenSea]: OpenSea,
+                [SourceType.Rarible]: Rarible,
+                [SourceType.Alchemy_EVM]: Alchemy_EVM,
+            },
+            options.chainId === ChainId.Mainnet ? [OpenSea, Alchemy_EVM, Rarible] : [Alchemy_EVM, OpenSea, Rarible],
+            initial,
+        )
+
+        return attemptUntil(
+            providers.map((x) => () => x.getListings?.(address, tokenId, options)),
+            createPageable(EMPTY_LIST, createIndicator(options.indicator)),
+        )
     }
 
     async getNonFungibleTokenOffers(
@@ -401,7 +429,21 @@ class Hub implements EVM_Hub {
         tokenId: string,
         initial?: HubOptions<ChainId, HubIndicator> | undefined,
     ): Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>> {
-        throw new Error('Method not implemented.')
+        const options = this.getOptions(initial)
+        const providers = this.getProviders<NonFungibleTokenAPI.Provider<ChainId, SchemaType>>(
+            {
+                [SourceType.OpenSea]: OpenSea,
+                [SourceType.Rarible]: Rarible,
+                [SourceType.Alchemy_EVM]: Alchemy_EVM,
+            },
+            options.chainId === ChainId.Mainnet ? [OpenSea, Alchemy_EVM, Rarible] : [Alchemy_EVM, OpenSea, Rarible],
+            initial,
+        )
+
+        return attemptUntil(
+            providers.map((x) => () => x.getOffers?.(address, tokenId, options)),
+            createPageable(EMPTY_LIST, createIndicator(options.indicator)),
+        )
     }
 
     async getNonFungibleTokenOrders(
@@ -410,7 +452,21 @@ class Hub implements EVM_Hub {
         side: OrderSide,
         initial?: HubOptions<ChainId, HubIndicator> | undefined,
     ): Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>> {
-        throw new Error('Method not implemented.')
+        const options = this.getOptions(initial)
+        const providers = this.getProviders<NonFungibleTokenAPI.Provider<ChainId, SchemaType>>(
+            {
+                [SourceType.OpenSea]: OpenSea,
+                [SourceType.Rarible]: Rarible,
+                [SourceType.Alchemy_EVM]: Alchemy_EVM,
+            },
+            options.chainId === ChainId.Mainnet ? [OpenSea, Alchemy_EVM, Rarible] : [Alchemy_EVM, OpenSea, Rarible],
+            initial,
+        )
+
+        return attemptUntil(
+            providers.map((x) => () => x.getOrders?.(address, tokenId, side, options)),
+            createPageable(EMPTY_LIST, createIndicator(options.indicator)),
+        )
     }
 
     async getNonFungibleCollections(
