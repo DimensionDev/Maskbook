@@ -15,7 +15,7 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { NetworkTab } from '../../../../components/shared/NetworkTab'
 import { useUpdateEffect } from 'react-use'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { GearIcon, RefreshIcon } from '@masknet/icons'
+import { Gear, RefreshIcon } from '@masknet/icons'
 import { currentSlippageSettings } from '../../settings'
 import { MIN_GAS_LIMIT } from '../../constants'
 import { isDashboardPage } from '@masknet/shared-base'
@@ -153,7 +153,7 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                                         },
                                     })
                                 }}>
-                                <GearIcon size={24} className={classes.icon} />
+                                <Gear size={24} className={classes.icon} />
                             </IconButton>
                         </div>
                     }
