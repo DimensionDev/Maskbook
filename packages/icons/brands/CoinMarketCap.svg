@@ -1,5 +1,5 @@
-<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <g>
+<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<g>
         <g clip-path="url(#clip0_1867_25263)">
             <rect x="0.5" width="24" height="24" rx="12" fill="black" />
             <path
@@ -14,3 +14,4 @@
         </defs>
     </g>
 </svg>
+  

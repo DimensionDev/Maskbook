@@ -1,5 +1,5 @@
-<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <g>
+<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<g>
         <path
             d="M12 0C5.37258 0 0 5.37258 0 12C0 18.6274 5.37258 24 12 24C18.6274 24 24 18.6274 24 12C24 5.37258 18.6274 0 12 0ZM12 1.14286C17.9962 1.14286 22.8571 6.00377 22.8571 12C22.8571 17.9962 17.9962 22.8571 12 22.8571C6.00377 22.8571 1.14286 17.9962 1.14286 12C1.14286 6.00377 6.00377 1.14286 12 1.14286Z"
             fill="#2F3249"
@@ -57,9 +57,8 @@
                 cx="0"
                 cy="0"
                 r="1"
-                gradientUnits="userSpaceOnUse"
-                gradientTransform="translate(11.9997 12.4603) scale(10.8064)"
-            >
+                gradient-units="userSpaceOnUse"
+                gradient-transform="translate(11.9997 12.4603) scale(10.8064)">
                 <stop stop-color="#1D1E27" />
                 <stop offset="0.220033" stop-color="#1F202A" />
                 <stop offset="0.75923" stop-color="#20222E" />
@@ -68,3 +67,4 @@
         </defs>
     </g>
 </svg>
+  

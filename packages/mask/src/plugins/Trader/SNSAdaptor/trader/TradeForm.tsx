@@ -185,7 +185,7 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
         dropIcon: {
             width: 20,
             height: 24,
-            fill: isDashboard ? theme.palette.text.primary : theme.palette.text.strong,
+            color: isDashboard ? theme.palette.text.primary : theme.palette.text.strong,
         },
         connectWallet: {
             marginTop: 0,
@@ -474,7 +474,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 deleteIcon: (
                                     <DropIcon
                                         className={classes.dropIcon}
-                                        style={{ fill: !inputToken ? '#ffffff' : undefined }}
+                                        color={!inputToken ? '#ffffff' : undefined}
                                     />
                                 ),
                             },
@@ -502,7 +502,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     deleteIcon: (
                                         <DropIcon
                                             className={classes.dropIcon}
-                                            style={{ fill: !outputToken ? '#ffffff' : undefined }}
+                                            color={!outputToken ? '#ffffff' : undefined}
                                         />
                                     ),
                                 }}

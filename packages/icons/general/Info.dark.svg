@@ -1,6 +1,6 @@
-<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-    <g fill="none">
-        <path d="M17.5 10a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" fill="currentColor" />
+<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<g fill="none">
+        <path d="M17.5 10a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" fill="#eee" />
         <path
             fill-rule="evenodd"
             clip-rule="evenodd"
@@ -9,3 +9,4 @@
         />
     </g>
 </svg>
+  

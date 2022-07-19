@@ -1,5 +1,5 @@
-<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-    <g>
+<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<g>
         <circle
             style="filter: drop-shadow(0px 2px 5px rgba(28, 104, 243, 0.2))"
             cx="10"
@@ -9,6 +9,7 @@
         />
         <path
             d="M5.16602 10.6309L8.49935 14.1309L15.166 7.13086"
+            fill="none"
             stroke="white"
             stroke-width="1.5"
             stroke-linecap="round"
@@ -16,3 +17,4 @@
         />
     </g>
 </svg>
+  

@@ -1,11 +1,11 @@
-<svg viewBox="0 0 37 36" xmlns="http://www.w3.org/2000/svg">
-    <g>
+<svg width="37" height="36" viewBox="0 0 37 36" xmlns="http://www.w3.org/2000/svg">
+<g>
         <path
             d="M5 10C5 9.44772 5.44772 9 6 9H15.75C16.0648 9 16.3611 9.14819 16.55 9.4L21.8 16.4C22.2944 17.0592 21.824 18 21 18H6C5.44772 18 5 17.5523 5 17V10Z"
             fill="#F7931E"
         />
         <g filter="url(#filter0_b_39_226867)">
-            <rect x="7.25" y="11.0039" width="22.5" height="15.75" rx="1" fill="white" fillOpacity="0.3" />
+            <rect x="7.25" y="11.0039" width="22.5" height="15.75" rx="1" fill="white" fill-opacity="0.3" />
         </g>
         <path
             fill-rule="evenodd"
@@ -44,14 +44,14 @@
                 y="1.00391"
                 width="42.5"
                 height="35.75"
-                filterUnits="userSpaceOnUse"
-                color-interpolation-filters="sRGB"
-            >
+                filter-units="userSpaceOnUse"
+                color-interpolation-filters="sRGB">
                 <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                <feGaussianBlur in="BackgroundImage" stdDeviation="5" />
+                <feGaussianBlur in="BackgroundImage" std-deviation="5" />
                 <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_39_226867" />
                 <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur_39_226867" result="shape" />
             </filter>
         </defs>
     </g>
 </svg>
+  

@@ -1,10 +1,10 @@
-<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-    <g>
+<svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<g>
         <g filter="url(#filter0_b)">
             <path
                 d="M7 25C7 23.8954 7.89543 23 9 23H39C40.1046 23 41 23.8954 41 25V35C41 35.5523 40.5523 36 40 36H8C7.44772 36 7 35.5523 7 35V25Z"
                 fill="#FFD149"
-                fillOpacity="0.1"
+                fill-opacity="0.1"
             />
         </g>
         <path
@@ -15,7 +15,7 @@
             <path
                 d="M6 29C6 27.8954 6.89543 27 8 27H40C41.1046 27 42 27.8954 42 29V39C42 39.5523 41.5523 40 41 40H7C6.44772 40 6 39.5523 6 39V29Z"
                 fill="#FFD149"
-                fillOpacity="0.2"
+                fill-opacity="0.2"
             />
         </g>
         <defs>
@@ -25,11 +25,10 @@
                 y="19"
                 width="42"
                 height="21"
-                filterUnits="userSpaceOnUse"
-                color-interpolation-filters="sRGB"
-            >
+                filter-units="userSpaceOnUse"
+                color-interpolation-filters="sRGB">
                 <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                <feGaussianBlur in="BackgroundImage" stdDeviation="2" />
+                <feGaussianBlur in="BackgroundImage" std-deviation="2" />
                 <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur" />
                 <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />
             </filter>
@@ -39,11 +38,10 @@
                 y="23"
                 width="44"
                 height="21"
-                filterUnits="userSpaceOnUse"
-                color-interpolation-filters="sRGB"
-            >
+                filter-units="userSpaceOnUse"
+                color-interpolation-filters="sRGB">
                 <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                <feGaussianBlur in="BackgroundImage" stdDeviation="2" />
+                <feGaussianBlur in="BackgroundImage" std-deviation="2" />
                 <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur" />
                 <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />
             </filter>
@@ -53,11 +51,11 @@
                 y1="36.1723"
                 x2="38.7719"
                 y2="36.1723"
-                gradientUnits="userSpaceOnUse"
-            >
+                gradient-units="userSpaceOnUse">
                 <stop stop-color="#FFB110" />
                 <stop offset="1" stop-color="#FFC524" />
             </linearGradient>
         </defs>
     </g>
 </svg>
+  

@@ -1,5 +1,5 @@
-<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-    <g width="48" height="48" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<g width="48" height="48" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect width="48" height="48" rx="24" fill="url(#a)" />
         <path
             fill-rule="evenodd"
@@ -14,11 +14,11 @@
                 y1="0"
                 x2="25.4"
                 y2="48"
-                gradientUnits="userSpaceOnUse"
-            >
+                gradient-units="userSpaceOnUse">
                 <stop stop-color="#202020" />
                 <stop offset="1" stop-color="#181818" />
             </linearGradient>
         </defs>
     </g>
 </svg>
+  

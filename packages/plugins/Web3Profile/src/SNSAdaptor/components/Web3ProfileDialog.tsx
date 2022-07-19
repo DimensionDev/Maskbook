@@ -1,6 +1,5 @@
 import { DialogActions, DialogContent } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useI18N } from '../../locales'
 import { useEffect, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
 import { useAllPersonas, useCurrentPersona, useLastRecognizedProfile } from '../hooks/usePersona'
@@ -56,13 +55,11 @@ const useStyles = makeStyles()((theme) => ({
     },
     titleTailButton: {
         cursor: 'pointer',
-        fill: theme.palette.maskColor.main,
-        fontSize: '24px',
+        color: theme.palette.maskColor.main,
     },
 }))
 
 export function Web3ProfileDialog() {
-    const t = useI18N()
     const classes = useStylesExtends(useStyles(), {})
     const [status, setStatus] = useState(CURRENT_STATUS.Main)
     const [imageManageOpen, setImageManageOpen] = useState(false)
@@ -82,11 +79,7 @@ export function Web3ProfileDialog() {
         (x: PersonaInformation) => x.identifier.rawPublicKey === persona?.rawPublicKey,
     )
 
-    const {
-        value: bindings,
-        loading,
-        retry: retryQueryBinding,
-    } = useAsyncRetry(async () => {
+    const { value: bindings, retry: retryQueryBinding } = useAsyncRetry(async () => {
         if (!currentPersona) return
         return NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex!)
     }, [currentPersona])
@@ -152,7 +145,7 @@ export function Web3ProfileDialog() {
             fullWidth={false}
             open={open}
             isOnBack
-            titleTail={<WalletUnderTabsIcon onClick={openPopupsWindow} className={classes.titleTailButton} />}
+            titleTail={<WalletUnderTabsIcon size={24} onClick={openPopupsWindow} className={classes.titleTailButton} />}
             onClose={() => setOpen(false)}>
             <DialogContent className={classes.content}>
                 <Main

@@ -1,5 +1,5 @@
-<svg viewBox="0 0 2124 660" xmlns="http://www.w3.org/2000/svg">
-    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+<svg width="2124" height="660" viewBox="0 0 2124 660" xmlns="http://www.w3.org/2000/svg">
+<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g transform="translate(30.000000, 30.000000)">
             <g>
                 <circle fill="#1C68F3" cx="300" cy="300" r="300" />
@@ -16,3 +16,4 @@
         </g>
     </g>
 </svg>
+  

@@ -1,10 +1,10 @@
-<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-    <g>
+<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+<g>
         <g filter="url(#filter0_b)">
             <path
                 d="M10.666 29.587c0-3.085 2.635-5.587 5.886-5.587h30.896c3.25 0 5.885 2.502 5.885 5.587v18.159c0 3.086-2.635 5.587-5.885 5.587H16.552c-3.25 0-5.886-2.501-5.886-5.587V29.587z"
                 fill="#1C68F3"
-                fillOpacity=".1"
+                fill-opacity=".1"
             />
         </g>
         <path
@@ -31,7 +31,7 @@
             <path
                 d="M10.666 34.386c0-2.79 2.635-5.053 5.886-5.053h30.896c3.25 0 5.885 2.263 5.885 5.053v13.895c0 2.79-2.635 5.052-5.885 5.052H16.552c-3.25 0-5.886-2.262-5.886-5.052V34.386z"
                 fill="#1C68F3"
-                fillOpacity=".05"
+                fill-opacity=".05"
             />
         </g>
         <defs>
@@ -41,11 +41,10 @@
                 y="20"
                 width="50.667"
                 height="37.333"
-                filterUnits="userSpaceOnUse"
-                color-interpolation-filters="sRGB"
-            >
+                filter-units="userSpaceOnUse"
+                color-interpolation-filters="sRGB">
                 <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                <feGaussianBlur in="BackgroundImage" stdDeviation="2" />
+                <feGaussianBlur in="BackgroundImage" std-deviation="2" />
                 <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur" />
                 <feBlend in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />
             </filter>
@@ -55,14 +54,14 @@
                 y="26.333"
                 width="48.667"
                 height="30"
-                filterUnits="userSpaceOnUse"
-                color-interpolation-filters="sRGB"
-            >
+                filter-units="userSpaceOnUse"
+                color-interpolation-filters="sRGB">
                 <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                <feGaussianBlur in="BackgroundImage" stdDeviation="1.5" />
+                <feGaussianBlur in="BackgroundImage" std-deviation="1.5" />
                 <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur" />
                 <feBlend in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />
             </filter>
         </defs>
     </g>
 </svg>
+  

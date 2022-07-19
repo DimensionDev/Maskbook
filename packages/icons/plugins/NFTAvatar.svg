@@ -1,5 +1,5 @@
-<svg viewBox="0 0 37 36" xmlns="http://www.w3.org/2000/svg">
-    <g>
+<svg width="37" height="36" viewBox="0 0 37 36" xmlns="http://www.w3.org/2000/svg">
+<g>
         <path
             d="M4.83325 3.5C4.83325 2.39543 5.72868 1.5 6.83325 1.5H29.8333C30.9378 1.5 31.8333 2.39543 31.8333 3.5V32.5C31.8333 33.6046 30.9378 34.5 29.8333 34.5H6.83325C5.72868 34.5 4.83325 33.6046 4.83325 32.5V3.5Z"
             fill="url(#paint0_linear_35_22290)"
@@ -15,11 +15,11 @@
                 y1="1.5"
                 x2="21.0748"
                 y2="34.4996"
-                gradientUnits="userSpaceOnUse"
-            >
+                gradient-units="userSpaceOnUse">
                 <stop stop-color="#FF8D5C" />
                 <stop offset="0.99" stop-color="#FFC49A" />
             </linearGradient>
         </defs>
     </g>
 </svg>
+  

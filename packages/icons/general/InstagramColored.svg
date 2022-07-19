@@ -1,5 +1,5 @@
-<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <g fill="none">
+<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<g fill="none">
         <g clip-path="url(#instagram_colored_a)">
             <path
                 d="M6.086 23.915a8.083 8.083 0 0 1-2.718-.503 4.549 4.549 0 0 1-1.684-1.095 4.512 4.512 0 0 1-1.096-1.683 8.08 8.08 0 0 1-.502-2.718C.014 16.373 0 15.91 0 12c0-3.91.016-4.371.085-5.915a8.126 8.126 0 0 1 .503-2.717 4.565 4.565 0 0 1 1.095-1.685A4.52 4.52 0 0 1 3.367.588 8.08 8.08 0 0 1 6.085.085C7.63.015 8.092 0 12 0s4.371.016 5.915.085a8.126 8.126 0 0 1 2.718.503 4.531 4.531 0 0 1 1.684 1.095c.486.472.86 1.048 1.095 1.684.323.87.493 1.79.503 2.718.07 1.544.085 2.007.085 5.916 0 3.908-.014 4.37-.085 5.915a8.118 8.118 0 0 1-.503 2.718 4.848 4.848 0 0 1-2.779 2.778c-.87.323-1.79.493-2.718.503-1.543.07-2.007.085-5.915.085-3.91 0-4.372-.013-5.914-.085"
@@ -20,9 +20,8 @@
                 cx="0"
                 cy="0"
                 r="1"
-                gradientUnits="userSpaceOnUse"
-                gradientTransform="translate(1.553 23.474) scale(30.4711)"
-            >
+                gradient-units="userSpaceOnUse"
+                gradient-transform="translate(1.553 23.474) scale(30.4711)">
                 <stop offset=".09" stop-color="#FA8F21" />
                 <stop offset=".78" stop-color="#D82D7E" />
             </radialGradient>
@@ -31,9 +30,8 @@
                 cx="0"
                 cy="0"
                 r="1"
-                gradientUnits="userSpaceOnUse"
-                gradientTransform="translate(16.624 22.703) scale(26.8148)"
-            >
+                gradient-units="userSpaceOnUse"
+                gradient-transform="translate(16.624 22.703) scale(26.8148)">
                 <stop offset=".64" stop-color="#8C3AAA" stop-opacity="0" />
                 <stop offset="1" stop-color="#8C3AAA" />
             </radialGradient>
@@ -43,3 +41,4 @@
         </defs>
     </g>
 </svg>
+  

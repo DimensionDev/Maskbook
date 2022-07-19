@@ -1,5 +1,5 @@
-<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <g>
+<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<g>
         <g clip-path="url(#clip0_4039_39674)">
             <path
                 d="M2 0H22C23.3333 0 24 0.666667 24 2V22C24 23.3333 23.3333 24 22 24H2C0.666667 24 0 23.3333 0 22V2C0 0.666667 0.666667 0 2 0V0Z"
@@ -17,3 +17,4 @@
         </defs>
     </g>
 </svg>
+  

@@ -18,16 +18,13 @@ const useStyles = makeStyles()((theme) => {
             overflow: 'hidden',
         },
         settingIcon: {
-            height: 24,
-            width: 24,
-            fill: theme.palette.text.primary,
             cursor: 'pointer',
         },
     }
 })
 
 export function ApplicationBoardDialog() {
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
     const { t } = useI18N()
     const [openSettings, setOpenSettings] = useState(false)
 
@@ -49,7 +46,14 @@ export function ApplicationBoardDialog() {
             maxWidth="sm"
             onClose={closeDialog}
             title={t('applications')}
-            titleTail={<GearIcon className={classes.settingIcon} onClick={() => setOpenSettings(true)} />}>
+            titleTail={
+                <GearIcon
+                    size={24}
+                    color={theme.palette.text.primary}
+                    className={classes.settingIcon}
+                    onClick={() => setOpenSettings(true)}
+                />
+            }>
             <DialogContent className={classes.content}>
                 <ApplicationBoard closeDialog={closeDialog} />
                 {openSettings ? (

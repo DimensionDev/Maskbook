@@ -96,7 +96,10 @@ export function ApplicationSettingPluginSwitch(props: Props) {
                                         </Typography>
                                         {x.entry.tutorialLink ? (
                                             <Box className={classes.settings}>
-                                                <TutorialIcon onClick={() => openWindow(x.entry.tutorialLink)} />
+                                                <TutorialIcon
+                                                    size={22}
+                                                    onClick={() => openWindow(x.entry.tutorialLink)}
+                                                />
                                             </Box>
                                         ) : null}
                                     </div>

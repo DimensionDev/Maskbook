@@ -135,8 +135,8 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(({ address, 
                 <Checkbox
                     disabled={added}
                     defaultChecked={selected || added}
-                    icon={<CheckboxBorder sx={{ fontSize: '16px', stroke: '#1C68F3' }} />}
-                    checkedIcon={<CheckboxIcon sx={{ fontSize: '16px' }} />}
+                    icon={<CheckboxBorder size={16} color="#1C68F3" />}
+                    checkedIcon={<CheckboxIcon size={16} />}
                     sx={{
                         color: '#1C68F3',
                         padding: 0,

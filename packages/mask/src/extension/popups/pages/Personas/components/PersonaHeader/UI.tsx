@@ -48,8 +48,9 @@ const useStyles = makeStyles()(() => ({
         alignItems: 'center',
     },
     icon: {
-        fontSize: 12,
-        fill: '#767F8D',
+        width: 12,
+        height: 12,
+        color: '#767F8D',
         cursor: 'pointer',
         marginLeft: 4,
     },

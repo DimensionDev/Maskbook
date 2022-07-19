@@ -1,5 +1,5 @@
-<svg viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
-    <g>
+<svg width="25" height="25" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
+<g>
         <circle cx="12.5" cy="12.1929" r="12" fill="url(#paint0_linear_1533_34913)" />
         <circle opacity="0.5" cx="12.5" cy="12.1929" r="10.9688" fill="white" />
         <path
@@ -27,11 +27,11 @@
                 y1="0.192871"
                 x2="24.5"
                 y2="24.1929"
-                gradientUnits="userSpaceOnUse"
-            >
+                gradient-units="userSpaceOnUse">
                 <stop stop-color="#FFFBFD" />
                 <stop offset="1" stop-color="#FCBCDB" />
             </linearGradient>
         </defs>
     </g>
 </svg>
+  

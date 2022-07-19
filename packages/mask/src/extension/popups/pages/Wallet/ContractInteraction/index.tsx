@@ -140,8 +140,9 @@ const useStyles = makeStyles()(() => ({
         margin: '10px 0',
     },
     copy: {
-        fontSize: 12,
-        fill: '#7B8192',
+        width: 12,
+        height: 12,
+        color: '#7B8192',
         cursor: 'pointer',
     },
 }))

@@ -1,5 +1,5 @@
-<svg viewBox="0 0 37 36" xmlns="http://www.w3.org/2000/svg">
-    <g>
+<svg width="37" height="36" viewBox="0 0 37 36" xmlns="http://www.w3.org/2000/svg">
+<g>
         <path
             fill-rule="evenodd"
             clip-rule="evenodd"
@@ -17,11 +17,11 @@
                 y1="3"
                 x2="18.5"
                 y2="33"
-                gradientUnits="userSpaceOnUse"
-            >
+                gradient-units="userSpaceOnUse">
                 <stop stop-color="#F7931E" />
                 <stop offset="1" stop-color="#FBB03B" />
             </linearGradient>
         </defs>
     </g>
 </svg>
+  
