@@ -16,7 +16,7 @@ import {
     fetchBlockNumbersObjectByTimestamps,
 } from './blocks'
 import { fetchLatestBlocks } from './uniswap-health'
-import { isGreaterThan, isLessThanOrEqualTo } from '@masknet/web3-shared-base'
+import { isGreaterThan, isLessThanOrEqualTo, TokenType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import type { TrendingAPI } from '../types'
 
@@ -118,6 +118,7 @@ export async function getAllCoinsByKeyword(chainId: ChainId, keyword: string): P
                 id: '0x69af81e73a73b40adf4f3d4223cd9b1ece623074',
                 name: 'Mask Network',
                 symbol: 'MASK',
+                type: TokenType.Fungible,
                 contract_address: '0x69af81e73a73b40adf4f3d4223cd9b1ece623074',
             },
         ]
@@ -127,6 +128,7 @@ export async function getAllCoinsByKeyword(chainId: ChainId, keyword: string): P
 
     const coins: TrendingAPI.Coin[] = tokens.map((x) => ({
         ...x,
+        type: TokenType.Fungible,
         address: x.id,
         contract_address: x.id,
     }))
@@ -138,6 +140,7 @@ export async function getAllCoinsByKeyword(chainId: ChainId, keyword: string): P
             name: 'ETHer (Wrapped)',
             contract_address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
             symbol: 'eth',
+            type: TokenType.Fungible,
             decimals: 18,
         })
     } else if (keyword === 'nrge') {
@@ -147,6 +150,7 @@ export async function getAllCoinsByKeyword(chainId: ChainId, keyword: string): P
             name: 'Energi',
             contract_address: '0x1416946162b1c2c871a73b07e932d2fb6c932069',
             symbol: 'NRGT',
+            type: TokenType.Fungible,
             decimals: 18,
         })
     }

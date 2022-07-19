@@ -57,6 +57,8 @@ export async function encodeContractTransaction(
     if (!tx.gas) {
         tx.gas = await transaction.estimateGas({
             from: tx.from as string | undefined,
+            to: tx.to as string | undefined,
+            data: tx.data as string | undefined,
             value: tx.value,
         })
     }

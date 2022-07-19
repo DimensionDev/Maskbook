@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
 import { makeStyles, MaskTextField, MaskAlert } from '@masknet/theme'
-import { WarningIcon } from '@masknet/icons'
+import { WarningTriangleIcon, WarningIcon } from '@masknet/icons'
 import { useSharedI18N } from '@masknet/shared'
 import { Box, Paper } from '@mui/material'
 import { isZero } from '@masknet/web3-shared-base'
@@ -18,11 +18,21 @@ const useStyles = makeStyles()((theme) => {
             boxShadow: `0px 0px 20px 0px ${theme.palette.mode === 'dark' ? '#FFFFFF1F' : '#0000000D'}`,
             backdropFilter: 'blur(16px)',
             marginTop: theme.spacing(1),
+            padding: theme.spacing(2),
+            justifyContent: 'space-between',
         },
         textfield: {
             flex: 1,
-            paddingRight: 9,
+            maxWidth: 100,
+            '& input::-webkit-input-placeholder': {
+                fontWeight: 700,
+            },
             '& input[type=number]': {
+                fontSize: 16,
+                fontWeight: 700,
+                height: 24,
+                padding: 0,
+                textAlign: 'center',
                 '-moz-appearance': 'textfield',
             },
             '& input[type=number]::-webkit-outer-spin-button': {
@@ -36,17 +46,18 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface SlippageToleranceFormProps {
+    slippageTolerance: number
     slippageTolerances: number[]
     onChange?: (data?: zod.infer<ReturnType<typeof useSlippageToleranceSchema>>) => void
 }
 
 export function SlippageToleranceForm(props: SlippageToleranceFormProps) {
-    const { slippageTolerances, onChange } = props
+    const { slippageTolerance, slippageTolerances, onChange } = props
     const t = useSharedI18N()
     const { classes } = useStyles()
 
     const schema = useSlippageToleranceSchema()
-    const [tolerance, setTolerance] = useState(1)
+    const [tolerance, setTolerance] = useState(slippageTolerance)
 
     const methods = useForm<zod.infer<typeof schema>>({
         shouldUnregister: false,
@@ -122,6 +133,16 @@ export function SlippageToleranceForm(props: SlippageToleranceFormProps) {
             {error ? (
                 <MaskAlert icon={<WarningIcon />} severity="error">
                     {error}
+                </MaskAlert>
+            ) : tolerance < slippageTolerances[0] ? (
+                <MaskAlert icon={<WarningTriangleIcon color="warning" />} severity="warning">
+                    {t.gas_settings_alert_low_slippage_tolerance()}
+                </MaskAlert>
+            ) : tolerance > slippageTolerances[slippageTolerances.length - 1] ? (
+                <MaskAlert icon={<WarningIcon />} severity="error">
+                    {t.gas_settings_alert_high_slippage_tolerance({
+                        percentage: tolerance.toString(),
+                    })}
                 </MaskAlert>
             ) : null}
         </FormProvider>

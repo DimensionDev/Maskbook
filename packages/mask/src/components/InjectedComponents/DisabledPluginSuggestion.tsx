@@ -80,7 +80,7 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
                         <Button
                             size="small"
                             startIcon={<PluginIcon style={{ width: 18, height: 18 }} />}
-                            variant="contained"
+                            variant="roundedDark"
                             onClick={() => onClick(x)}
                             sx={{
                                 backgroundColor: theme.palette.maskColor.dark,

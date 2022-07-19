@@ -7,8 +7,6 @@ import {
     PANCAKESWAP_CUSTOM_BASES,
     QUICKSWAP_BASE_AGAINST_TOKENS,
     QUICKSWAP_CUSTOM_BASES,
-    SASHIMISWAP_BASE_AGAINST_TOKENS,
-    SASHIMISWAP_CUSTOM_BASES,
     SUSHISWAP_BASE_AGAINST_TOKENS,
     SUSHISWAP_CUSTOM_BASES,
     UNISWAP_BASE_AGAINST_TOKENS,
@@ -84,19 +82,6 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     AGAINST_TOKENS: SUSHISWAP_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: SUSHISWAP_CUSTOM_BASES,
-                }
-            case TradeProvider.SASHIMISWAP:
-                return {
-                    TYPE: tradeProvider,
-                    IS_UNISWAP_V2_LIKE: true,
-                    GRAPH_API: DEX_TRADE.SASHIMISWAP_THEGRAPH,
-                    INIT_CODE_HASH: DEX_TRADE.SASHIMISWAP_INIT_CODE_HASH,
-                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.SASHIMISWAP_ROUTER_ADDRESS,
-                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.SASHIMISWAP_ROUTER_ADDRESS,
-                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.SASHIMISWAP_FACTORY_ADDRESS,
-                    AGAINST_TOKENS: SASHIMISWAP_BASE_AGAINST_TOKENS,
-                    ADDITIONAL_TOKENS: {},
-                    CUSTOM_TOKENS: SASHIMISWAP_CUSTOM_BASES,
                 }
             case TradeProvider.QUICKSWAP:
                 return {

@@ -20,8 +20,8 @@ function useTrade(
         !isTradable ||
         !inputToken ||
         !outputToken ||
-        (inputAmount === '0' && isExactIn) ||
-        (outputAmount === '0' && !isExactIn)
+        (isZero(inputAmount) && isExactIn) ||
+        (isZero(outputAmount) && !isExactIn)
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const inputCurrency = toUniswapCurrency(chainId, inputToken)
     const outputCurrency = toUniswapCurrency(chainId, outputToken)

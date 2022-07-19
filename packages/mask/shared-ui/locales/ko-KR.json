@@ -193,7 +193,6 @@
     "plugin_wallet_on_create": "월렛 만들기",
     "plugin_wallet_on_connect": "월렛 연결하기",
     "plugin_wallet_wrong_network": "잘못된 네트워크",
-    "plugin_wallet_pending_transactions": "{{count}} 대기 중",
     "plugin_wallet_import_wallet": "월렛 불러오기",
     "plugin_wallet_select_provider_dialog_title": "월렛 연결",
     "plugin_wallet_qr_code_with_wallet_connect": "WalletConnect와 호환성이 있는 월렛으로 QR 코드를 스칸하세요.",

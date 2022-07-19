@@ -22,11 +22,14 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     header: {
-        fontSize: 14,
+        fontSize: 16,
+        fontWeight: 700,
         lineHeight: '22px',
     },
     description: {
-        fontSize: 12,
+        fontSize: 16,
+        fontWeight: 400,
+        color: theme.palette.maskColor.second,
     },
 }))
 
@@ -44,24 +47,20 @@ export const RiskCard = memo<RiskCardProps>(({ info, tokenSecurity }) => {
                 quantity: '',
                 rate: info.i18nParams?.(tokenSecurity).rate ?? '',
                 type: '',
-                seconds: '',
                 amount: '',
                 fee: '',
                 percentage: '',
-                symbol: '',
-                limit: '',
+                distance: '',
             })}
             titleColor={DefineMapping[info.level].titleColor}
             description={t[info.messageKey]({
                 quantity: '',
                 rate: info.i18nParams?.(tokenSecurity).rate ?? '',
                 type: '',
-                seconds: '',
                 amount: '',
                 fee: '',
                 percentage: '',
-                symbol: '',
-                limit: '',
+                distance: '',
             })}
         />
     )

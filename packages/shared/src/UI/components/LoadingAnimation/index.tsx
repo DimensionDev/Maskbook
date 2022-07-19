@@ -1,6 +1,5 @@
-import { CircleLoadingIcon, LoadingIcon } from '@masknet/icons'
+import { CircleLoadingIcon, GeneratedIconProps } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import type { SvgIconProps } from '@mui/material'
 import classNames from 'classnames'
 
 const useStyles = makeStyles()({
@@ -17,12 +16,12 @@ const useStyles = makeStyles()({
     },
 })
 
-export const LoadingAnimation = (props: SvgIconProps) => {
+export const LoadingAnimation = (props: GeneratedIconProps) => {
     const { classes } = useStyles()
-    return <LoadingIcon {...props} className={classNames(classes.animated, props.className)} />
+    return <CircleLoadingIcon {...props} className={classNames(classes.animated, props.className)} />
 }
 
-export const CircleLoadingAnimation = (props: SvgIconProps) => {
+export const CircleLoadingAnimation = (props: GeneratedIconProps) => {
     const { classes } = useStyles()
     return <CircleLoadingIcon {...props} className={classNames(classes.animated, props.className)} />
 }

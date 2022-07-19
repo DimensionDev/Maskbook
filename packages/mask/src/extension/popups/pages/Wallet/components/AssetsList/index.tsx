@@ -25,11 +25,6 @@ const useStyles = makeStyles()({
         width: 20,
         height: 20,
     },
-    arrow: {
-        stroke: '#15181B',
-        fill: 'none',
-        fontSize: 20,
-    },
     text: {
         margin: '0 0 0 15px',
     },
@@ -84,7 +79,7 @@ export const AssetsListUI = memo<AssetsListUIProps>(({ dataSource, onItemClick }
                                 formatter={formatBalance}
                             />
                         </ListItemText>
-                        <ArrowRightIcon className={classes.arrow} style={{ fill: 'none' }} />
+                        <ArrowRightIcon size={20} color="#15181B" />
                     </ListItem>
                 )
             })}

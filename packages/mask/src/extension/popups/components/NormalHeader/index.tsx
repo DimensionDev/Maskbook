@@ -3,7 +3,7 @@
 import { memo, useContext } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
-import { MaskNotSquareIcon, SquareBack, PopupCloseIcon } from '@masknet/icons'
+import { Mask, SquareBack, PopupCloseIcon } from '@masknet/icons'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { PageTitleContext } from '../../context'
 import { PopupRoutes } from '@masknet/shared-base'
@@ -20,7 +20,6 @@ const useStyles = makeStyles()(() => ({
         position: 'relative',
     },
     back: {
-        fill: 'none',
         position: 'absolute',
         left: 16,
         top: 16,
@@ -93,7 +92,7 @@ export const NormalHeader = memo<NormalHeaderProps>(({ onlyTitle }) => {
                     <Typography className={classes.title}>{title}</Typography>
                 </>
             ) : (
-                <MaskNotSquareIcon className={classes.logo} />
+                <Mask className={classes.logo} />
             )}
         </Box>
     )

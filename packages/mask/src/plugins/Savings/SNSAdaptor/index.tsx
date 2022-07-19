@@ -32,11 +32,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                         : clickHandler
                                 }
                             />
-                            <SavingsDialog open={open} onClose={() => setOpen(false)} />
+                            {open ? <SavingsDialog open onClose={() => setOpen(false)} /> : null}
                         </>
                     )
                 },
-                appBoardSortingDefaultPriority: 7,
+                appBoardSortingDefaultPriority: 8,
                 icon,
                 name,
                 iconFilterColor,

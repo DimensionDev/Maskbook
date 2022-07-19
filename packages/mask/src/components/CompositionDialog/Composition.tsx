@@ -26,6 +26,9 @@ const useStyles = makeStyles()({
     hideDialogRoot: {
         visibility: 'hidden',
     },
+    dialogContent: {
+        padding: '20px 24px',
+    },
 })
 export interface PostDialogProps {
     type?: 'popup' | 'timeline'
@@ -114,7 +117,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                 open={open}
                 onClose={onClose}
                 title={t('post_dialog__title')}>
-                <DialogContent>
+                <DialogContent classes={{ root: classes.dialogContent }}>
                     <CompositionDialogUI
                         version={version}
                         setVersion={setVersion}

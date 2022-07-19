@@ -214,11 +214,11 @@ const useStyles = makeStyles()((theme) => {
 })
 interface RedPacketERC721FormProps {
     onClose: () => void
-    setERC721DialogHeight?: (height: number) => void
+    setIsNFTRedPacketLoaded?: (x: boolean) => void
 }
 export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const t = useI18N()
-    const { onClose, setERC721DialogHeight } = props
+    const { onClose, setIsNFTRedPacketLoaded } = props
     const { classes } = useStyles()
     const [open, setOpen] = useState(false)
     const [balance, setBalance] = useState(0)
@@ -287,7 +287,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         return ''
     }, [tokenDetailedList.length, balance, t])
 
-    setERC721DialogHeight?.(balance > 0 ? 690 : 350)
+    setIsNFTRedPacketLoaded?.(balance > 0)
 
     return (
         <>

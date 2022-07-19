@@ -33,8 +33,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 },
                 name,
                 icon,
+                appBoardSortingDefaultPriority: 14,
                 category: 'dapp',
-                appBoardSortingDefaultPriority: 13,
                 marketListSortingPriority: 16,
                 description: <Trans i18nKey="plugin_goPlusSecurity_description" />,
             }

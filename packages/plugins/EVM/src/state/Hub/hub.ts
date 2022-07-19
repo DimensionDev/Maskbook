@@ -6,11 +6,12 @@ import {
     EthereumWeb3,
     MetaSwap,
     AstarGas,
-    OpenSea,
     NFTScan,
+    OpenSea,
     Rarible,
     TokenList,
     Zerion,
+    Rabby,
 } from '@masknet/web3-providers'
 import {
     FungibleToken,
@@ -31,8 +32,8 @@ import {
     createPredicate,
     createIndicator,
     FungibleTokenSecurity,
-    FungibleTokenAuthorization,
-    NonFungibleTokenAuthorization,
+    FungibleTokenSpenderAuthorization,
+    NonFungibleContractSpenderAuthorization,
 } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -175,7 +176,7 @@ class Hub implements EVM_Hub {
     async getNonFungibleTokens(
         account: string,
         initial?: HubOptions<ChainId>,
-    ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
+    ): Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>> {
         const options = this.getOptions(initial, {
             account,
         })
@@ -193,6 +194,12 @@ class Hub implements EVM_Hub {
             filteredProviders.map((x) => () => x.getAssets(options.account, options)),
             createPageable([], createIndicator(options.indicator)),
         )
+    }
+    async getNonFungibleTokensByCollection(
+        address: string,
+        initial?: HubOptions<ChainId>,
+    ): Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>> {
+        return NFTScan.getAssetsByCollection(address, initial)
     }
     getNonFungibleCollections(
         account: string,
@@ -251,17 +258,19 @@ class Hub implements EVM_Hub {
     ): Promise<string[]> {
         throw new Error('Method not implemented.')
     }
-    getApprovedFungibleTokens(
+    getApprovedFungibleTokenSpenders(
+        chainId: ChainId,
         account: string,
         initial?: HubOptions<ChainId>,
-    ): Promise<Array<FungibleTokenAuthorization<ChainId, SchemaType>>> {
-        throw new Error('Method not implemented.')
+    ): Promise<Array<FungibleTokenSpenderAuthorization<ChainId, SchemaType>>> {
+        return Rabby.getApprovedFungibleTokenSpenders(chainId, account)
     }
-    getApprovedNonFungibleTokens(
+    getApprovedNonFungibleContracts(
+        chainId: ChainId,
         account: string,
         initial?: HubOptions<ChainId>,
-    ): Promise<Array<NonFungibleTokenAuthorization<ChainId, SchemaType>>> {
-        throw new Error('Method not implemented.')
+    ): Promise<Array<NonFungibleContractSpenderAuthorization<ChainId, SchemaType>>> {
+        return Rabby.getApprovedNonFungibleContracts(chainId, account)
     }
     async getTransactions(
         chainId: ChainId,

@@ -23,6 +23,7 @@ export interface TradeProviderSettings {
 const coinGeckoPreferredCoinId = createInternalSettings(`${PLUGIN_ID}+currentCoinGeckoPreferredCoinId`, '{}')
 const coinMarketCapPreferredCoinId = createInternalSettings(`${PLUGIN_ID}+currentCoinMarketCapPreferredCoinId`, '{}')
 const coinUniswapPreferredCoinId = createInternalSettings(`${PLUGIN_ID}+currentCoinUniswapPreferredCoinId`, '{}')
+const coinNftScanPreferredCoinId = createInternalSettings(`${PLUGIN_ID}+coinNftScanPreferredCoinId`, '{}')
 
 export function getCurrentPreferredCoinIdSettings(dataProvider: DataProvider) {
     switch (dataProvider) {
@@ -32,6 +33,8 @@ export function getCurrentPreferredCoinIdSettings(dataProvider: DataProvider) {
             return coinMarketCapPreferredCoinId
         case DataProvider.UNISWAP_INFO:
             return coinUniswapPreferredCoinId
+        case DataProvider.NFTSCAN:
+            return coinNftScanPreferredCoinId
         default:
             unreachable(dataProvider)
     }

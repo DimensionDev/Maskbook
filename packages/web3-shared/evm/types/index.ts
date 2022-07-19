@@ -356,6 +356,7 @@ export type GasOption = {
     estimatedSeconds: number
     // eip1559 only
     estimatedBaseFee?: string
+    baseFeePerGas?: string
     // note: for prior 1559 it means gasPrice
     suggestedMaxFeePerGas: string
     suggestedMaxPriorityFeePerGas: string
@@ -375,4 +376,4 @@ export type Transaction = TransactionConfig_ & {
 export type TransactionReceipt = Web3TransactionReceipt
 export type TransactionDetailed = Web3Transaction
 export type TransactionSignature = string
-export type TransactionParameter = string | undefined
+export type TransactionParameter = string | boolean | undefined

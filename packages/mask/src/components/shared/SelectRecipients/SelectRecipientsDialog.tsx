@@ -102,7 +102,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
         setSearch('')
         onSearch('')
     }, [props.open])
-    const itemsAfterSearch = useMemo(() => {
+    const searchedItems = useMemo(() => {
         const fuse = new Fuse(items, {
             keys: [
                 'identifier.userId',
@@ -116,7 +116,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
             ignoreLocation: true,
             threshold: 0,
         })
-        return (search === '' ? items : fuse.search(search).map((item) => item.item)).concat(props.selected)
+        return search === '' ? items : fuse.search(search).map((item) => item.item)
     }, [search, items])
     return (
         <InjectedDialog
@@ -151,7 +151,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                     </div>
                 ) : (
                     <div className={classes.list}>
-                        {itemsAfterSearch.length === 0 ? (
+                        {searchedItems.length === 0 ? (
                             <div className={classes.empty}>
                                 <SearchEmptyIcon style={{ width: 36, height: 36 }} />
                                 <Typography>
@@ -159,7 +159,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                                 </Typography>
                             </div>
                         ) : (
-                            itemsAfterSearch.map((item, idx) => (
+                            searchedItems.map((item, idx) => (
                                 <ProfileInList
                                     key={idx}
                                     item={item as ProfileInformationFromNextID}

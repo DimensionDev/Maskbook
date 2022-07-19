@@ -19,7 +19,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        fontSize: 36,
         backgroundColor: MaskColorVar.secondaryBackground,
     },
     button: {
@@ -37,7 +36,7 @@ export const PersonaSetup = memo(({ networkIdentifier, onConnect }: PersonaSetup
     return (
         <div className={classes.container}>
             <div className={classes.iconContainer}>
-                <LinkIcon color="primary" fontSize="inherit" style={{ fill: 'none' }} viewBox="0 0 36 36" />
+                <LinkIcon size={36} sx={{ color: 'primary' }} />
             </div>
             <Typography variant="body2" sx={{ marginTop: 2.5, marginBottom: 2.5 }}>
                 {t.personas_setup_connect_tips({ type: networkIdentifier.split('.')[0] })}

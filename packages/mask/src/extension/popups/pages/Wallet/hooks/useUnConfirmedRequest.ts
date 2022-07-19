@@ -24,7 +24,7 @@ export const useUnconfirmedRequest = () => {
             formatterTransaction,
             transactionContext,
         }
-    }, [])
+    }, [chainId, TransactionFormatter])
 
     useEffect(() => {
         return WalletMessages.events.requestsUpdated.on(result.retry)

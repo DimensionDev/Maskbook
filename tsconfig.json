@@ -63,7 +63,6 @@
       "@masknet/encryption": ["./packages/encryption/src"],
       "@masknet/external-plugin-previewer": ["./packages/external-plugin-previewer/src"],
       "@masknet/gun-utils": ["./packages/gun-utils/src"],
-      "@masknet/icons": ["./packages/icons"],
       "@masknet/injected-script": ["./packages/injected-script/sdk"],
       // @masknet/mask is not listed. it does not have a exports/main field in the package.json.
       "@masknet/mask-sdk": ["./packages/mask-sdk/server"],
@@ -100,6 +99,7 @@
       "@masknet/plugin-cyberconnect": ["./packages/plugins/CyberConnect/src"],
       "@masknet/plugin-go-plus-security": ["./packages/plugins/GoPlusSecurity/src"],
       "@masknet/plugin-cross-chain-bridge": ["./packages/plugins/CrossChainBridge/src"],
+      "@masknet/plugin-web3-profile": ["./packages/plugins/Web3Profile/src"],
       // @masknet/scripts: insert-here 3
       "@masknet/plugin-wallet": ["./packages/plugins/Wallet/src"]
     },

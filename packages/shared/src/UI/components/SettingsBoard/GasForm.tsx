@@ -1,13 +1,12 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
-import BigNumber from 'bignumber.js'
 import { makeStyles, MaskAlert, MaskTextField } from '@masknet/theme'
 import { Grid, Typography } from '@mui/material'
-import { WarningIcon } from '@masknet/icons'
+import { InfoIcon, CircleWarningIcon } from '@masknet/icons'
 import { useSharedI18N } from '@masknet/shared'
 import { ChainId, formatGweiToWei, formatWeiToGwei, GasOption, Transaction } from '@masknet/web3-shared-evm'
-import { GasOptionType, NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance, GasOptionType, isPositive, isZero, NetworkPluginID, scale10 } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import type { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -17,22 +16,39 @@ const useStyles = makeStyles()((theme) => {
     return {
         unit: {
             color: theme.palette.maskColor.third,
+            fontSize: 14,
         },
         textfield: {
             '& input[type=number]': {
-                '-moz-appearance': 'textfield',
+                MozAppearance: 'textfield',
             },
             '& input[type=number]::-webkit-outer-spin-button': {
-                '-webkit-appearance': 'none',
+                WebkitAppearance: 'none',
             },
             '& input[type=number]::-webkit-inner-spin-button': {
-                '-webkit-appearance': 'none',
+                WebkitAppearance: 'none',
             },
         },
         caption: {
             color: theme.palette.maskColor.second,
+            fontSize: 14,
             fontWeight: 700,
             margin: theme.spacing(1, 0, 1.5),
+        },
+        alertIcon: {
+            color: `${theme.palette.maskColor.main} !important`,
+            width: 22,
+            height: 22,
+            padding: 0,
+        },
+        alertMessage: {
+            color: theme.palette.maskColor.main,
+            fontSize: 14,
+            fontWeight: 400,
+            padding: 0,
+        },
+        alertStandardSuccess: {
+            backgroundColor: theme.palette.maskColor.bg,
         },
     }
 })
@@ -40,72 +56,89 @@ const useStyles = makeStyles()((theme) => {
 export interface GasFormProps {
     chainId: ChainId
     transaction: Transaction
+    disableGasLimit?: boolean
+    transactionOptions: Partial<Transaction>
     gasOptions: Record<GasOptionType, GasOption>
     onChange?: (transactionOptions?: Partial<Transaction>) => void
 }
 
 export function GasForm(props: GasFormProps) {
-    const { chainId, transaction, gasOptions, onChange } = props
+    const { chainId, transaction, transactionOptions, gasOptions, onChange } = props
     const t = useSharedI18N()
     const { classes } = useStyles()
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     const isEIP1559 = Others?.chainResolver.isSupport(chainId, 'EIP1559')
+    const baseFeePerGas = gasOptions[GasOptionType.FAST].baseFeePerGas ?? '0'
 
     const schema = useGasSchema(chainId, transaction, gasOptions)
+    const transactionComputed: Transaction = {
+        ...transaction,
+        ...transactionOptions,
+    }
 
     const methods = useForm<zod.infer<typeof schema>>({
         shouldUnregister: false,
         mode: 'onChange',
         resolver: zodResolver(schema),
         defaultValues: {
-            gasLimit: (transaction.gas as string | undefined) ?? '21000',
-            gasPrice: transaction.gasPrice
-                ? formatWeiToGwei(transaction.gasPrice as string).toString()
+            gasLimit: (transactionComputed.gas as string | number | undefined)?.toString() ?? '21000',
+            gasPrice: transactionComputed.gasPrice
+                ? formatWeiToGwei(transactionComputed.gasPrice as string).toString()
                 : gasOptions.normal.suggestedMaxFeePerGas,
-            maxPriorityFeePerGas: transaction.maxPriorityFeePerGas
-                ? formatWeiToGwei(transaction.maxPriorityFeePerGas as string).toString()
+            maxPriorityFeePerGas: transactionComputed.maxPriorityFeePerGas
+                ? formatWeiToGwei(transactionComputed.maxPriorityFeePerGas as string).toString()
                 : gasOptions.normal.suggestedMaxPriorityFeePerGas,
-            maxFeePerGas: transaction.maxFeePerGas
-                ? formatWeiToGwei(transaction.maxFeePerGas as string).toString()
+            maxFeePerGas: transactionComputed.maxFeePerGas
+                ? formatWeiToGwei(transactionComputed.maxFeePerGas as string).toString()
                 : gasOptions.normal.suggestedMaxFeePerGas,
         },
     })
 
+    const { errors } = methods.formState
     const [gasLimit, gasPrice, maxFeePerGas, maxPriorityFeePerGas] = methods.watch([
         'gasLimit',
         'gasPrice',
         'maxFeePerGas',
         'maxPriorityFeePerGas',
     ])
+    const [gasPriceByUser, setGasPriceByUser] = useState<string>()
+    const [maxFeePerGasByUser, setMaxFeePerGasByUser] = useState<string>()
+    const [maxPriorityFeePerGasByUser, setMaxPriorityFeePerGasByUser] = useState<string>()
 
-    const error = useMemo(() => {
+    const errorCenter = useMemo(() => {
+        return isEIP1559 ? errors.gasLimit?.message ?? '' : ''
+    }, [isEIP1559, errors.gasLimit?.message])
+    const errorBottom = useMemo(() => {
         return (
-            methods.formState.errors.gasLimit?.message ??
-            methods.formState.errors.gasPrice?.message ??
-            methods.formState.errors.maxFeePerGas?.message ??
-            methods.formState.errors.maxPriorityFeePerGas?.message ??
+            (isEIP1559 ? undefined : errors.gasPrice?.message) ??
+            (isEIP1559 ? undefined : errors.gasLimit?.message) ??
+            (isEIP1559 ? errors.maxFeePerGas?.message : undefined) ??
+            (isEIP1559 ? errors.maxPriorityFeePerGas?.message : undefined) ??
             ''
         )
     }, [
-        methods.formState.errors.gasLimit?.message,
-        methods.formState.errors.gasPrice?.message,
-        methods.formState.errors.maxFeePerGas?.message,
-        methods.formState.errors.maxPriorityFeePerGas?.message,
+        isEIP1559,
+        errors.gasPrice?.message,
+        errors.gasLimit?.message,
+        errors.maxFeePerGas?.message,
+        errors.maxPriorityFeePerGas?.message,
     ])
 
-    // #region set default Max priority gas fee and max fee
+    // #region set the default max priority gas fee and max fee
     useUpdateEffect(() => {
         if (!gasOptions) return
-        methods.setValue(
-            'maxFeePerGas',
-            new BigNumber(gasOptions[GasOptionType.NORMAL].suggestedMaxFeePerGas ?? 0).toString(),
-        )
-        methods.setValue(
-            'maxPriorityFeePerGas',
-            new BigNumber(gasOptions[GasOptionType.NORMAL].suggestedMaxPriorityFeePerGas ?? 0).toString(),
-        )
-    }, [gasOptions, methods.setValue])
+
+        if (!gasPriceByUser) {
+            methods.setValue('gasPrice', gasOptions.normal.suggestedMaxFeePerGas)
+        }
+        if (!maxFeePerGasByUser) {
+            methods.setValue('maxFeePerGas', gasOptions.normal.suggestedMaxFeePerGas)
+        }
+        if (!maxPriorityFeePerGasByUser) {
+            methods.setValue('maxPriorityFeePerGas', gasOptions.normal.suggestedMaxPriorityFeePerGas)
+        }
+    }, [gasOptions, gasPriceByUser, maxFeePerGasByUser, maxPriorityFeePerGasByUser, methods.setValue])
     // #endregion
 
     useEffect(() => {
@@ -118,36 +151,25 @@ export function GasForm(props: GasFormProps) {
             : {
                   gasPrice: formatGweiToWei(gasPrice).toFixed(),
               }
-        onChange?.(!error ? payload : undefined)
-    }, [error, isEIP1559, gasLimit, gasPrice, maxFeePerGas, maxPriorityFeePerGas])
+        onChange?.(!errorCenter && !errorBottom ? payload : undefined)
+    }, [errorCenter, errorBottom, isEIP1559, gasLimit, gasPrice, maxFeePerGas, maxPriorityFeePerGas, gasOptions])
 
     return (
         <FormProvider {...methods}>
+            {isEIP1559 && isPositive(baseFeePerGas) ? (
+                <MaskAlert
+                    classes={{
+                        icon: classes.alertIcon,
+                        message: classes.alertMessage,
+                        standardSuccess: classes.alertStandardSuccess,
+                    }}
+                    icon={<InfoIcon />}>
+                    {t.gas_settings_info_gas_fee({
+                        fee: formatBalance(scale10(baseFeePerGas, 2), 2, 2),
+                    })}
+                </MaskAlert>
+            ) : null}
             <Grid container direction="row" spacing={2}>
-                <Grid item xs={isEIP1559 ? 12 : 6}>
-                    <Controller
-                        render={({ field }) => (
-                            <MaskTextField
-                                {...field}
-                                className={classes.textfield}
-                                InputProps={{
-                                    type: 'number',
-                                }}
-                                inputProps={{
-                                    pattern: '^[0-9]*[.,]?[0-9]*$',
-                                }}
-                                value={gasLimit}
-                                label={
-                                    <Typography className={classes.caption}>
-                                        {t.gas_settings_label_gas_limit()}
-                                    </Typography>
-                                }
-                                error={!!methods.formState.errors.gasLimit?.message}
-                            />
-                        )}
-                        name="gasLimit"
-                    />
-                </Grid>
                 {isEIP1559 ? null : (
                     <Grid item xs={6}>
                         <Controller
@@ -157,23 +179,59 @@ export function GasForm(props: GasFormProps) {
                                     className={classes.textfield}
                                     InputProps={{
                                         type: 'number',
+                                        endAdornment: <Typography className={classes.unit}>Gwei</Typography>,
                                     }}
                                     inputProps={{
                                         pattern: '^[0-9]*[.,]?[0-9]*$',
                                     }}
-                                    value={gasPrice}
+                                    value={isZero(gasPriceByUser ?? 0) ? gasPrice : gasPriceByUser}
                                     label={
                                         <Typography className={classes.caption}>
                                             {t.gas_settings_label_gas_price()}
                                         </Typography>
                                     }
-                                    error={!!methods.formState.errors.gasPrice?.message}
+                                    error={!!errors.gasPrice?.message}
+                                    onChange={(ev) => {
+                                        setGasPriceByUser(ev.target.value)
+                                        methods.setValue('gasPrice', ev.target.value)
+                                        methods.trigger()
+                                    }}
                                 />
                             )}
                             name="gasPrice"
                         />
                     </Grid>
                 )}
+                <Grid item xs={isEIP1559 ? 12 : 6}>
+                    <Controller
+                        render={({ field }) => (
+                            <MaskTextField
+                                {...field}
+                                className={classes.textfield}
+                                InputProps={{
+                                    type: 'number',
+                                }}
+                                disabled={props.disableGasLimit}
+                                inputProps={{
+                                    pattern: '^[0-9]*[.,]?[0-9]*$',
+                                }}
+                                value={gasLimit}
+                                label={
+                                    <Typography className={classes.caption}>
+                                        {t.gas_settings_label_gas_limit()}
+                                    </Typography>
+                                }
+                                error={!!errors.gasLimit?.message}
+                            />
+                        )}
+                        name="gasLimit"
+                    />
+                    {errorCenter ? (
+                        <MaskAlert icon={<CircleWarningIcon />} severity="error">
+                            {errorCenter}
+                        </MaskAlert>
+                    ) : null}
+                </Grid>
             </Grid>
             {isEIP1559 ? (
                 <Grid container direction="row" spacing={2}>
@@ -190,13 +248,22 @@ export function GasForm(props: GasFormProps) {
                                     inputProps={{
                                         pattern: '^[0-9]*[.,]?[0-9]*$',
                                     }}
-                                    value={maxPriorityFeePerGas}
+                                    value={
+                                        isZero(maxPriorityFeePerGasByUser ?? 0)
+                                            ? maxPriorityFeePerGas
+                                            : maxPriorityFeePerGasByUser
+                                    }
                                     label={
                                         <Typography className={classes.caption}>
                                             {t.gas_settings_label_max_priority_fee()}
                                         </Typography>
                                     }
-                                    error={!!methods.formState.errors.maxPriorityFeePerGas?.message}
+                                    error={!!errors.maxPriorityFeePerGas?.message}
+                                    onChange={(ev) => {
+                                        setMaxPriorityFeePerGasByUser(ev.target.value)
+                                        methods.setValue('maxPriorityFeePerGas', ev.target.value)
+                                        methods.trigger()
+                                    }}
                                 />
                             )}
                             name="maxPriorityFeePerGas"
@@ -215,13 +282,18 @@ export function GasForm(props: GasFormProps) {
                                     inputProps={{
                                         pattern: '^[0-9]*[.,]?[0-9]*$',
                                     }}
-                                    value={maxFeePerGas}
+                                    value={isZero(maxFeePerGasByUser ?? 0) ? maxFeePerGas : maxFeePerGasByUser}
                                     label={
                                         <Typography className={classes.caption}>
                                             {t.gas_settings_label_max_fee()}
                                         </Typography>
                                     }
-                                    error={!!methods.formState.errors.maxFeePerGas?.message}
+                                    error={!!errors.maxFeePerGas?.message}
+                                    onChange={(ev) => {
+                                        setMaxFeePerGasByUser(ev.target.value)
+                                        methods.setValue('maxFeePerGas', ev.target.value)
+                                        methods.trigger()
+                                    }}
                                 />
                             )}
                             name="maxFeePerGas"
@@ -229,9 +301,9 @@ export function GasForm(props: GasFormProps) {
                     </Grid>
                 </Grid>
             ) : null}
-            {error ? (
-                <MaskAlert icon={<WarningIcon />} severity="error">
-                    {error}
+            {errorBottom ? (
+                <MaskAlert icon={<CircleWarningIcon />} severity="error">
+                    {errorBottom}
                 </MaskAlert>
             ) : null}
         </FormProvider>

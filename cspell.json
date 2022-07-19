@@ -3,6 +3,7 @@
     "dictionaries": ["typescript", "node", "html", "css", "fonts"],
     "ignorePaths": [
         ".github",
+        ".gitignore",
         ".prettierignore",
         "*.snap",
         "**/*.json",
@@ -84,6 +85,7 @@
         "filelist",
         "fileservice",
         "flashloan",
+        "formatedamount",
         "fortmatic",
         "furucombo",
         "futuna",
@@ -119,6 +121,7 @@
         "locationchange",
         "lockdown",
         "logsearch",
+        "looksrare",
         "maarten",
         "macbinary",
         "magiceden",
@@ -175,6 +178,7 @@
         "pvtsutils",
         "qrcode",
         "quickswap",
+        "rabby",
         "radisk",
         "rarible",
         "raydium",
@@ -191,7 +195,6 @@
         "rindexed",
         "rpid",
         "sablier",
-        "sashimiswap",
         "scamsniffer",
         "scenechange",
         "scroller",
@@ -241,6 +244,7 @@
         "wavax",
         "webextension",
         "webm",
+        "wechat",
         "withdrawed",
         "wmatic",
         "xdai",
@@ -353,7 +357,7 @@
         "yumi",
         "yumiswap"
     ],
-    "ignoreRegExpList": ["/@servie/"],
+    "ignoreRegExpList": ["/@servie/", "/[A-Za-z0-9]{46}/"],
     "overrides": [
         {
             "filename": "**/*.md",

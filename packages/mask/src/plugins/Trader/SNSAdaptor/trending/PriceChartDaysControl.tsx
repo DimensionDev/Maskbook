@@ -31,25 +31,34 @@ export enum Days {
     ONE_DAY = 1,
     ONE_WEEK = 7,
     ONE_MONTH = 30,
+    THREE_MONTHS = 90,
     ONE_YEAR = 365,
 }
 
+export const DEFAULT_RANGE_OPTIONS = [Days.ONE_DAY, Days.ONE_WEEK, Days.ONE_MONTH, Days.ONE_YEAR, Days.MAX]
+export const NFT_RANGE_OPTIONS = [Days.ONE_DAY, Days.ONE_WEEK, Days.ONE_MONTH, Days.THREE_MONTHS]
+
 export interface PriceChartDaysControlProps {
     days: number
+    rangeOptions?: Days[]
     onDaysChange?: (days: number) => void
 }
 
-export function PriceChartDaysControl(props: PriceChartDaysControlProps) {
+export function PriceChartDaysControl({
+    rangeOptions = DEFAULT_RANGE_OPTIONS,
+    days,
+    onDaysChange,
+}: PriceChartDaysControlProps) {
     const { classes } = useStyles()
     return (
         <Stack className={classes.root} direction="row" gap={2}>
-            {[Days.ONE_DAY, Days.ONE_WEEK, Days.ONE_MONTH, Days.ONE_YEAR, Days.MAX].map((days) => (
+            {rangeOptions.map((daysOption) => (
                 <Link
-                    className={classNames(classes.link, props.days === days ? classes.active : '')}
-                    key={days}
-                    onClick={() => props.onDaysChange?.(days)}>
+                    className={classNames(classes.link, days === daysOption ? classes.active : '')}
+                    key={daysOption}
+                    onClick={() => onDaysChange?.(daysOption)}>
                     <Typography sx={{ ':hover': { fontWeight: 700 } }} component="span">
-                        {resolveDaysName(days)}
+                        {resolveDaysName(daysOption)}
                     </Typography>
                 </Link>
             ))}

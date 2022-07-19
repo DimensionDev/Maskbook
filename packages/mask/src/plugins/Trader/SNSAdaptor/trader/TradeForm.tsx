@@ -3,7 +3,7 @@ import { PluginWalletStatusBar, useI18N } from '../../../../utils'
 import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
 import { alpha, Box, chipClasses, Collapse, IconButton, lighten, Typography } from '@mui/material'
-import { ChainId, formatWeiToEther, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, formatWeiToEther, GasOptionConfig, SchemaType } from '@masknet/web3-shared-evm'
 import {
     FungibleToken,
     isLessThan,
@@ -28,7 +28,7 @@ import { ChevronUpIcon, DropIcon, RefreshIcon, ArrowDownwardIcon } from '@maskne
 import classnames from 'classnames'
 import { isNativeTokenWrapper } from '../../helpers'
 import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo'
-import { MINIMUM_AMOUNT } from '../../constants'
+import { MINIMUM_AMOUNT, MIN_GAS_LIMIT } from '../../constants'
 import { resolveTradeProviderName } from '../../pipes'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
@@ -185,7 +185,7 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
         dropIcon: {
             width: 20,
             height: 24,
-            fill: isDashboard ? theme.palette.text.primary : theme.palette.text.strong,
+            color: isDashboard ? theme.palette.text.primary : theme.palette.text.strong,
         },
         connectWallet: {
             marginTop: 0,
@@ -220,8 +220,6 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
     }
 })
 
-const MIN_GAS_LIMIT = 150000
-
 export interface AllTradeFormProps extends withClasses<'root'> {
     inputAmount: string
     inputToken?: FungibleToken<ChainId, SchemaType>
@@ -237,6 +235,7 @@ export interface AllTradeFormProps extends withClasses<'root'> {
     onSwap: () => void
     onSwitch: () => void
     settings?: boolean
+    gasConfig?: GasOptionConfig
 }
 
 export const TradeForm = memo<AllTradeFormProps>(
@@ -254,6 +253,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         gasPrice,
         onSwitch,
         settings,
+        gasConfig,
         ...props
     }) => {
         const maxAmountTrade = useRef<TradeInfo | null>(null)
@@ -344,14 +344,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                 if (isNativeTokenWrapper(focusedTrade.value)) {
                     return focusedTrade.value.trade_?.isWrap ? t('plugin_trader_wrap') : t('plugin_trader_unwrap')
                 }
-                return t('plugin_trader_swap_amount_symbol', {
-                    amount: formatBalance(
-                        focusedTrade?.value?.outputAmount ?? 0,
-                        focusedTrade?.value?.outputToken?.decimals,
-                        2,
-                    ),
-                    symbol: outputToken?.symbol,
-                })
+                return t('plugin_trader_swap_amount_symbol')
             } else {
                 return t('plugin_trader_no_trade')
             }
@@ -432,7 +425,16 @@ export const TradeForm = memo<AllTradeFormProps>(
         // #region gas settings
         const selectAdvancedSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
         const openSwapSettingDialog = useCallback(async () => {
-            const { slippageTolerance, transaction } = await selectAdvancedSettings()
+            const { slippageTolerance, transaction } = await selectAdvancedSettings({
+                chainId,
+                disableGasLimit: true,
+                disableSlippageTolerance: false,
+                slippageTolerance: currentSlippageSettings.value / 100,
+                transaction: {
+                    gas: focusedTrade?.gas.value ?? MIN_GAS_LIMIT,
+                    ...(gasConfig ?? {}),
+                },
+            })
 
             if (slippageTolerance) currentSlippageSettings.value = slippageTolerance
 
@@ -444,7 +446,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                     maxPriorityFeePerGas: transaction?.maxPriorityFeePerGas as string | undefined,
                 },
             })
-        }, [selectAdvancedSettings])
+        }, [chainId, focusedTrade?.gas.value, selectAdvancedSettings, gasConfig])
         // #endregion
 
         // #region if `isPopup` be true, click the plugin status bar need to  open popup window
@@ -472,7 +474,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 deleteIcon: (
                                     <DropIcon
                                         className={classes.dropIcon}
-                                        style={{ fill: !inputToken ? '#ffffff' : undefined }}
+                                        color={!inputToken ? '#ffffff' : undefined}
                                     />
                                 ),
                             },
@@ -500,7 +502,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     deleteIcon: (
                                         <DropIcon
                                             className={classes.dropIcon}
-                                            style={{ fill: !outputToken ? '#ffffff' : undefined }}
+                                            color={!outputToken ? '#ffffff' : undefined}
                                         />
                                     ),
                                 }}

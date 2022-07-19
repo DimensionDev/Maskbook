@@ -1,6 +1,6 @@
 import { sha3, toHex } from 'web3-utils'
 import { unreachable } from '@dimensiondev/kit'
-import { Transaction, TransactionStateType, EthereumMethodType } from '../types'
+import { Transaction, TransactionStateType, EthereumMethodType, ChainId } from '../types'
 import { isEmptyHex } from './address'
 import { ZERO_ADDRESS } from '../constants'
 
@@ -89,8 +89,8 @@ export function getFunctionParameters(tx: Transaction) {
     return data?.slice(10)
 }
 
-export function getTransactionSignature(transaction: Transaction | null) {
-    if (!transaction) return
+export function getTransactionSignature(chainId?: ChainId, transaction?: Partial<Transaction>) {
+    if (!chainId || !transaction) return
     const { from, to, data, value } = transaction
-    return sha3([from, to, data || '0x0', toHex((value as string) || '0x0') || '0x0'].join('_')) ?? undefined
+    return sha3([chainId, from, to, data || '0x0', toHex((value as string) || '0x0') || '0x0'].join('_')) ?? undefined
 }

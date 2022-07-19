@@ -1,7 +1,7 @@
 import type { DataProvider } from '@masknet/public-api'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
-import { Box, useTheme } from '@mui/system'
+import { Box } from '@mui/system'
 import type { FC } from 'react'
 import { useI18N } from '../../../../utils'
 import { resolveDataProviderName } from '../../pipes'
@@ -37,7 +37,6 @@ export interface TradeDataSourceProps extends withClasses<'source'> {
 }
 
 export const TradeDataSource: FC<TradeDataSourceProps> = (props) => {
-    const theme = useTheme()
     const { showDataProviderIcon = false, dataProvider, dataProviders = [], onDataProviderChange } = props
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)

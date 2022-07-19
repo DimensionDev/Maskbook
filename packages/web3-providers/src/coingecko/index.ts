@@ -1,10 +1,11 @@
-import { CurrencyType, Price } from '@masknet/web3-shared-base'
+import { DataProvider } from '@masknet/public-api'
+import { CurrencyType, Price, TokenType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
-import { fetchJSON, PriceAPI, TrendingAPI } from '..'
-import { uniq } from 'lodash-unified'
-import { DataProvider } from '@masknet/public-api'
+import { uniq, uniqBy } from 'lodash-unified'
 import { getCommunityLink, isMirroredKeyword, resolveChainId, resolveCoinAddress } from '../CoinMarketCap/helper'
+import { fetchJSON } from '../helpers'
+import type { PriceAPI, TrendingAPI } from '../types'
 import { getAllCoins, getAllCurrencies, getCoinInfo, getPriceStats as getStats } from './base-api'
 import { COINGECKO_URL_BASE } from './constants'
 import { resolveChain } from './helper'
@@ -52,11 +53,13 @@ export class CoinGeckoAPI implements PriceAPI.Provider, TrendingAPI.Provider<Cha
 
     async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {
         const info = await getCoinInfo(id)
+        if ('error' in info) throw new Error(info.error)
+
         const platform_url = `https://www.coingecko.com/en/coins/${info.id}`
         const twitter_url = info.links.twitter_screen_name
             ? `https://twitter.com/${info.links.twitter_screen_name}`
             : ''
-        const facebook_url = info.links.facebook_username ? `https://t.me/${info.links.facebook_username}` : ''
+        const facebook_url = info.links.facebook_username ? `https://facebook.com/${info.links.facebook_username}` : ''
         const telegram_url = info.links.telegram_channel_identifier
             ? `https://t.me/${info.links.telegram_channel_identifier}`
             : ''
@@ -75,6 +78,7 @@ export class CoinGeckoAPI implements PriceAPI.Provider, TrendingAPI.Provider<Cha
                 id,
                 name: info.name,
                 symbol: info.symbol.toUpperCase(),
+                type: TokenType.Fungible,
                 is_mirrored: isMirroredKeyword(info.symbol),
 
                 // TODO: use current language setting
@@ -84,14 +88,17 @@ export class CoinGeckoAPI implements PriceAPI.Provider, TrendingAPI.Provider<Cha
                 tags: info.categories.filter(Boolean),
                 announcement_urls: info.links.announcement_url.filter(Boolean),
                 community_urls: getCommunityLink(
-                    [
-                        twitter_url,
-                        facebook_url,
-                        telegram_url,
-                        info.links.subreddit_url,
-                        ...info.links.chat_url,
-                        ...info.links.official_forum_url,
-                    ].filter(Boolean),
+                    uniqBy(
+                        [
+                            twitter_url,
+                            facebook_url,
+                            telegram_url,
+                            info.links.subreddit_url,
+                            ...info.links.chat_url,
+                            ...info.links.official_forum_url,
+                        ].filter(Boolean),
+                        (x) => x.toLowerCase(),
+                    ),
                 ),
                 source_code_urls: Object.values(info.links.repos_url).flatMap((x) => x),
                 home_urls: info.links.homepage.filter(Boolean),
@@ -134,8 +141,9 @@ export class CoinGeckoAPI implements PriceAPI.Provider, TrendingAPI.Provider<Cha
         }
     }
 
-    getCoins(): Promise<TrendingAPI.Coin[]> {
-        return getAllCoins()
+    async getCoins(): Promise<TrendingAPI.Coin[]> {
+        const coins = await getAllCoins()
+        return coins.map((coin) => ({ ...coin, type: TokenType.Fungible }))
     }
 
     async getCurrencies(): Promise<TrendingAPI.Currency[]> {

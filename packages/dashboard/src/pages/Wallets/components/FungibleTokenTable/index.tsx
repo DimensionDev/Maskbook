@@ -9,7 +9,15 @@ import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { FungibleTokenTableRow } from '../FungibleTokenTableRow'
 import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { CurrencyType, formatBalance, FungibleAsset, minus, NetworkPluginID, toZero } from '@masknet/web3-shared-base'
+import {
+    CurrencyType,
+    formatBalance,
+    FungibleAsset,
+    minus,
+    NetworkPluginID,
+    TokenType,
+    toZero,
+} from '@masknet/web3-shared-base'
 import {
     useCurrentWeb3NetworkPluginID,
     useFungibleAssets,
@@ -93,6 +101,7 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
                         id: token.id,
                         name: token.name || '',
                         symbol: token.symbol || '',
+                        type: TokenType.Fungible,
                         contract_address: token.address,
                         decimals: token.decimals,
                     },

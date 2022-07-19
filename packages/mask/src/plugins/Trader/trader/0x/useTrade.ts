@@ -14,7 +14,7 @@ import { useSlippageTolerance } from '../0x/useSlippageTolerance'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useAccount, useDoubleBlockBeatRetry, useNetworkType } from '@masknet/plugin-infra/web3'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import { FungibleToken, NetworkPluginID, isZero } from '@masknet/web3-shared-base'
 
 const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 
@@ -64,8 +64,8 @@ export function useTrade(
         async () => {
             if (!inputToken || !outputToken) return null
             const isExactIn = strategy === TradeStrategy.ExactIn
-            if (inputAmount === '0' && isExactIn) return null
-            if (outputAmount === '0' && !isExactIn) return null
+            if (isZero(inputAmount) && isExactIn) return null
+            if (isZero(outputAmount) && !isExactIn) return null
 
             const sellToken = isNativeTokenAddress(inputToken)
                 ? getNativeTokenLabel(chainResolver.chainNetworkType(targetChainId) ?? networkType)

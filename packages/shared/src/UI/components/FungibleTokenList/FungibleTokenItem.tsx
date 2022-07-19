@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import { ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import { formatBalance, FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { TokenIcon } from '../TokenIcon'
-import { LoadingIcon } from '@masknet/icons'
+import { CircleLoadingIcon } from '@masknet/icons'
 import type { MaskSearchableListItemProps } from '@masknet/theme'
 import { makeStyles, MaskLoadingButton } from '@masknet/theme'
 import { useSharedI18N } from '../../../locales'
@@ -113,7 +113,7 @@ export const getFungibleTokenItem =
             return source !== 'external' ? (
                 <span>
                     {loading ? (
-                        <LoadingAnimation />
+                        <LoadingAnimation size={16} />
                     ) : (
                         Number.parseFloat(new BigNumber(formatBalance(balance ?? 0, decimals, 6)).toFixed(6))
                     )}
@@ -126,7 +126,7 @@ export const getFungibleTokenItem =
                     size="small"
                     className={classes.importButton}
                     soloLoading
-                    loadingIndicator={<LoadingIcon sx={{ fontSize: 14 }} />}>
+                    loadingIndicator={<CircleLoadingIcon size={14} />}>
                     {t.import()}
                 </MaskLoadingButton>
             )

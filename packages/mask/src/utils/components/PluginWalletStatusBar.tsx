@@ -14,13 +14,14 @@ import {
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { ImageIcon, WalletIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles, parseColor } from '@masknet/theme'
+import { makeStyles, MaskColorVar, parseColor } from '@masknet/theme'
 import { NetworkPluginID, TransactionStatusType, Wallet } from '@masknet/web3-shared-base'
 import { Box, Button, CircularProgress, Link, Typography } from '@mui/material'
 import { useI18N } from '../i18n-next-ui'
-import { LinkOutIcon, ArrowDropIcon, PluginWalletConnectIcon } from '@masknet/icons'
+import { LinkOutIcon, ArrowDropIcon, WalletConnect } from '@masknet/icons'
 import { useLayoutEffect, useRef, useState, PropsWithChildren } from 'react'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
+import { isDashboardPage } from '@masknet/shared-base'
 
 interface WalletStatusBarProps extends PropsWithChildren<{}> {
     className?: string
@@ -34,17 +35,23 @@ interface WalletStatusBarProps extends PropsWithChildren<{}> {
     expectedChainIdOrNetworkTypeOrID?: string | number
 }
 
+const isDashboard = isDashboardPage()
+
 const useStyles = makeStyles()((theme) => ({
     root: {
+        boxSizing: 'content-box',
         display: 'flex',
-        backgroundColor: parseColor(theme.palette.maskColor?.bottom).setAlpha(0.8).toRgbString(),
-        boxShadow: `0 0 20px ${parseColor(theme.palette.maskColor?.bottom).setAlpha(0.05).toRgbString()}`,
+        backgroundColor: isDashboard
+            ? MaskColorVar.mainBackground
+            : parseColor(theme.palette.maskColor.bottom).setAlpha(0.8).toRgbString(),
+        boxShadow: `0 0 20px ${parseColor(theme.palette.maskColor.highlight).setAlpha(0.2).toRgbString()}`,
         backdropFilter: 'blur(16px)',
         padding: theme.spacing(2),
         borderRadius: '0 0 12px 12px',
         alignItems: 'center',
         justifyContent: 'space-between',
         flex: 1,
+        maxHeight: 40,
     },
     wallet: {
         display: 'flex',
@@ -53,19 +60,19 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
     },
     description: {
-        marginLeft: 4,
+        marginLeft: 11,
     },
     walletName: {
         display: 'flex',
         alignItems: 'center',
         columnGap: 4,
-        color: theme.palette.maskColor?.main,
+        color: theme.palette.maskColor.main,
         fontWeight: 700,
         fontSize: 14,
         lineHeight: '18px',
     },
     address: {
-        color: theme.palette.maskColor?.second,
+        color: theme.palette.maskColor.second,
         fontSize: 14,
         lineHeight: '18px',
         display: 'flex',
@@ -78,19 +85,19 @@ const useStyles = makeStyles()((theme) => ({
         gap: 2,
         borderRadius: 2,
         padding: '2px 4px',
-        backgroundColor: parseColor(theme.palette.maskColor?.warn).setAlpha(0.1).toRgbString(),
-        color: theme.palette.maskColor?.warn,
+        backgroundColor: parseColor(theme.palette.maskColor.warn).setAlpha(0.1).toRgbString(),
+        color: theme.palette.maskColor.warn,
         fontSize: 14,
         lineHeight: '18px',
     },
     progress: {
-        color: theme.palette.maskColor?.warn,
+        color: theme.palette.maskColor.warn,
     },
     linkIcon: {
         width: 14,
         height: 14,
         fontSize: 14,
-        fill: theme.palette.maskColor?.second,
+        color: theme.palette.maskColor.second,
         cursor: 'pointer',
     },
     action: {
@@ -142,6 +149,10 @@ export function PluginWalletStatusBar({
         WalletMessages.events.selectProviderDialogUpdated,
     )
 
+    const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletStatusDialogUpdated,
+    )
+
     const pendingTransactions = useRecentTransactions(currentPluginId, TransactionStatusType.NOT_DEPEND)
 
     useLayoutEffect(() => {
@@ -156,7 +167,7 @@ export function PluginWalletStatusBar({
         return (
             <Box className={cx(classes.root, className)}>
                 <Button fullWidth onClick={openSelectProviderDialog}>
-                    <PluginWalletConnectIcon className={classes.connection} /> {t('plugin_wallet_connect_a_wallet')}
+                    <WalletConnect className={classes.connection} /> {t('plugin_wallet_connect_a_wallet')}
                 </Button>
             </Box>
         )
@@ -200,8 +211,13 @@ export function PluginWalletStatusBar({
                             <LinkOutIcon className={classes.linkIcon} />
                         </Link>
                         {pendingTransactions.length ? (
-                            <span className={classes.pending}>
-                                {t('wallet_status_bar_pending')}
+                            <span
+                                className={classes.pending}
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    openWalletStatusDialog()
+                                }}>
+                                {t('recent_transaction_pending')}
                                 <CircularProgress thickness={6} size={12} className={classes.progress} />
                             </span>
                         ) : null}

@@ -26,6 +26,7 @@ export function PetDialog() {
     const [isReady, cancel] = useTimeout(500)
     const { NFTS_BLOCK_ADDRESS = '' } = usePetConstants()
     useAsync(async () => {
+        if (!connection) return
         setConfigNFTs(await PluginPetRPC.getConfigNFTsFromRSS(connection, NFTS_BLOCK_ADDRESS))
     }, [connection, NFTS_BLOCK_ADDRESS])
 
@@ -40,8 +41,9 @@ export function PetDialog() {
         <InjectedDialog
             open={open}
             onClose={handleClose}
-            title={step === PetFriendNFTStep.SetFriendNFT ? t.pets_dialog_title() : t.pets_dialog_title_share()}>
-            <DialogContent style={{ padding: 0 }}>
+            title={step === PetFriendNFTStep.SetFriendNFT ? t.pets_dialog_title() : t.pets_dialog_title_share()}
+            titleBarIconStyle="back">
+            <DialogContent style={{ padding: 0, display: 'flex', flexDirection: 'column' }}>
                 {step === PetFriendNFTStep.SetFriendNFT ? (
                     <PetSetDialog onClose={handleSetDialogClose} configNFTs={configNFTs} />
                 ) : (

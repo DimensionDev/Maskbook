@@ -14,3 +14,8 @@ declare var exportFunction:
 
 /** @see https://mdn.io/Component.utils.cloneInto Firefox only */
 declare var cloneInto: undefined | (<T>(f: T, target: object, opts: { cloneFunctions: boolean }) => T)
+
+/** @deprecated Only available in Manifest V2. */
+declare var content:
+    | undefined
+    | { fetch: typeof fetch; WebSocket: typeof WebSocket; XMLHttpRequest: typeof XMLHttpRequest }

@@ -294,6 +294,11 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     assetImgWrapper: {
         maxHeight: 155,
     },
+    injectedDialog: {
+        '& [role="dialog"]': {
+            maxHeight: '720px !important',
+        },
+    },
 }))
 
 export type OrderedERC721Token = NonFungibleToken<ChainId, SchemaType.ERC721> & { index: number }
@@ -463,7 +468,12 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     const maxSharesOptions = { amount: NFT_RED_PACKET_MAX_SHARES.toString() }
 
     return (
-        <InjectedDialog open={open} onClose={onClose} title={t.nft_select_collection()} maxWidth="xs">
+        <InjectedDialog
+            open={open}
+            onClose={onClose}
+            title={t.nft_select_collection()}
+            maxWidth="xs"
+            className={classes.injectedDialog}>
             {tokenDetailedOwnerList.length === 0 ? (
                 <DialogContent className={classes.dialogContent}>
                     <Box className={classes.tokenBox}>
