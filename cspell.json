@@ -3,8 +3,8 @@
     "dictionaries": ["typescript", "node", "html", "css", "fonts"],
     "ignorePaths": [
         ".github",
-        ".prettierignore",
         ".gitignore",
+        ".prettierignore",
         "*.snap",
         "**/*.json",
         "**/dist/**",
@@ -82,6 +82,7 @@
         "filelist",
         "fileservice",
         "flashloan",
+        "formatedamount",
         "fortmatic",
         "furucombo",
         "futuna",
