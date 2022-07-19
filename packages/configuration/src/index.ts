@@ -12,6 +12,8 @@ class Configuration<T extends unknown> {
         if (this.ac) this.ac.abort()
         this.ac = new AbortController()
 
+        // TODO: delegate the fetch to the background.
+        // because this DOES NOT work on Manifest V3 and Firefox.
         const response = await fetch(this.url, {
             signal: this.ac.signal,
         })
