@@ -258,61 +258,61 @@ export namespace FungibleTokenAPI {
 
 export namespace NonFungibleTokenAPI {
     export interface Provider<ChainId, SchemaType, Indicator = HubIndicator> {
-        /** Get balance of a token owned by the account. */
+        /** Get owned balance of a fungible token by given account. */
         getBalance?: (address: string, options?: HubOptions<ChainId, Indicator>) => Promise<number>
-        /** Get the detailed of a token. */
+        /** Get a non-fungible contract. */
         getContract?: (
             address: string,
             options?: HubOptions<ChainId>,
         ) => Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined>
-        /** Get a token asset. */
+        /** Get a non-fungible asset. */
         getAsset?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
         ) => Promise<NonFungibleAsset<ChainId, SchemaType> | undefined>
-        /** Get a list of token assets */
+        /** Get non-fungible assets */
         getAssets?: (
             address: string,
             options?: HubOptions<ChainId>,
         ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
-        /** Get a token. */
+        /** Get a non-fungible token. */
         getToken?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
         ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
-        /** Get a list of tokens. */
+        /** Get non-fungible tokens. */
         getTokens?: (
             from: string,
             options?: HubOptions<ChainId, Indicator>,
         ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, Indicator>>
-        /** Get history events related to a token. */
+        /** Get events of a non-fungible token. */
         getEvents?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
         ) => Promise<Array<NonFungibleTokenEvent<ChainId, SchemaType>>>
-        /** Get all listed orders for selling a token. */
+        /** Get listed orders of a non-fungible token. */
         getListings?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
         ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
-        /** Get all listed orders for buying a token. */
+        /** Get offering orders of a non-fungible token. */
         getOffers?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
         ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
-        /** Get all orders. */
+        /** Get orders of a non-fungible token. */
         getOrders?: (
             address: string,
             tokenId: string,
             side: OrderSide,
             options?: HubOptions<ChainId>,
         ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
-        /** Get all collections owned by the account. */
+        /** Get non-fungible collections of given account. */
         getCollections?: (
             address: string,
             options?: HubOptions<ChainId, Indicator>,
