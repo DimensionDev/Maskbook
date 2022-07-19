@@ -17,10 +17,10 @@ export class AstarAPI implements GasOptionAPI.Provider<ChainId, GasOption> {
 
         return {
             [GasOptionType.FAST]: {
-                estimatedBaseFee: fromWei(result.eip1559.baseFeePerGas) ?? '0',
+                estimatedBaseFee: formatWeiToGwei(result.eip1559.baseFeePerGas) ?? '0',
                 estimatedSeconds: result.timestamp ?? 0,
                 suggestedMaxFeePerGas: tip.fast ?? '0',
-                suggestedMaxPriorityFeePerGas: fromWei(priorityFeePerGas.fast) ?? '0',
+                suggestedMaxPriorityFeePerGas: formatWeiToGwei(priorityFeePerGas.fast) ?? '0',
             },
             [GasOptionType.NORMAL]: {
                 estimatedBaseFee: result.eip1559.baseFeePerGas ?? '0',
@@ -29,16 +29,16 @@ export class AstarAPI implements GasOptionAPI.Provider<ChainId, GasOption> {
                 suggestedMaxPriorityFeePerGas: priorityFeePerGas.average ?? '0',
             },
             [GasOptionType.SLOW]: {
-                estimatedBaseFee: fromWei(result.estimatedBaseFee) ?? '0',
+                estimatedBaseFee: formatWeiToGwei(result.estimatedBaseFee) ?? '0',
                 estimatedSeconds: result.timestamp ?? 0,
                 suggestedMaxFeePerGas: tip.slow ?? '0',
-                suggestedMaxPriorityFeePerGas: fromWei(priorityFeePerGas.slow) ?? '0',
+                suggestedMaxPriorityFeePerGas: formatWeiToGwei(priorityFeePerGas.slow) ?? '0',
             },
         }
     }
 }
 
-export function fromWei(value: string): string {
+export function formatWeiToGwei(value: string): string {
     const convert = Web3.utils.fromWei(value, 'Gwei')
     return convert
 }

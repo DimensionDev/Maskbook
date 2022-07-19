@@ -165,6 +165,6 @@
         "Conflux": "",
         "Harmony": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-harmony",
         "Harmony_Test": "",
-        "Astar": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-astar"
+        "Astar": ""
     }
 }
