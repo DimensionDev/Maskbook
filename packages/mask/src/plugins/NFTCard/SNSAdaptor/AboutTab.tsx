@@ -1,6 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { NFTPriceCard } from '../../../components/shared/NFTCard/NFTPriceCard'
 import { NFTInfoCard } from '../../../components/shared/NFTCard/NFTInfoCard'
+import { NFTDescription } from '../../../components/shared/NFTCard/NFTDescription'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -22,6 +23,7 @@ export function AboutTab(props: AboutTabProps) {
         <div className={classes.wrapper}>
             <NFTPriceCard asset={asset} />
             <NFTInfoCard asset={asset} />
+            <NFTDescription asset={asset} />
         </div>
     )
 }
