@@ -21,7 +21,7 @@ import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../DataSo
 import { useNextIDBoundByPlatform } from '../DataSource/useNextID'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
-import { GearIcon } from '@masknet/icons'
+import { Gear } from '@masknet/icons'
 import { NextIDProof } from '@masknet/web3-providers'
 
 function getTabContent(tabId?: string) {
@@ -218,7 +218,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                         tabs={tabs}
                         selectedId={selectedTabId}
                         onChange={setSelectedTab}
-                        tail={isOwn && <GearIcon onClick={handleOpenDialog} className={classes.settingIcon} />}
+                        tail={isOwn && <Gear onClick={handleOpenDialog} className={classes.settingIcon} />}
                     />
                 )}
             </div>
