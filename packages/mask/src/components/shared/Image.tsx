@@ -1,6 +1,5 @@
 import { useRef, useEffect, forwardRef, useImperativeHandle, useState, useMemo } from 'react'
 import { useAsync } from 'react-use'
-import Services from '../../extension/service'
 import { Skeleton, SkeletonProps } from '@mui/material'
 
 export interface ImageProps {

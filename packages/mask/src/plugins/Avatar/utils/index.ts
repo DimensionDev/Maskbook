@@ -1,13 +1,12 @@
-import { first, isNull } from 'lodash-unified'
-import Services from '../../../extension/service'
-import { NextIDProof, NextIDStorage } from '@masknet/web3-providers'
-import { formatBalance, NonFungibleTokenEvent } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
-import { activatedSocialNetworkUI } from '../../../social-network'
+import { first, isNull } from 'lodash-unified'
+import { NextIDProof, NextIDStorage } from '@masknet/web3-providers'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { formatBalance, NonFungibleTokenEvent } from '@masknet/web3-shared-base'
 import type { NextIDPersonaBindings, NextIDPlatform } from '@masknet/shared-base'
+import { activatedSocialNetworkUI } from '../../../social-network'
 import type { NextIDAvatarMeta } from '../types'
 import { PLUGIN_ID } from '../constants'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 function getLastSalePrice(lastSale?: NonFungibleTokenEvent<ChainId, SchemaType> | null) {
     if (!lastSale?.price?.usd || !lastSale.paymentToken?.decimals) return
