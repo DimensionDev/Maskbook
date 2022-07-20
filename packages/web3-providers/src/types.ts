@@ -300,65 +300,76 @@ export namespace FungibleTokenAPI {
 
 export namespace NonFungibleTokenAPI {
     export interface Provider<ChainId, SchemaType, Indicator = HubIndicator> {
-        /** Get balance of a token owned by the account. */
-        getBalance?: (address: string, options?: HubOptions<ChainId, Indicator>) => Promise<number>
-        /** Get the detailed of a token. */
+        /** Get balance of a fungible token owned by the given account. */
+        getBalance?: (account: string, options?: HubOptions<ChainId, Indicator>) => Promise<number>
+        /** Get a non-fungible contract. */
         getContract?: (
             address: string,
             options?: HubOptions<ChainId>,
         ) => Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined>
-        /** Get a token asset. */
+        /** Get a non-fungible asset. */
         getAsset?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
         ) => Promise<NonFungibleAsset<ChainId, SchemaType> | undefined>
-        /** Get a list of token assets */
+        /** Get non-fungible assets owned by the given account. */
         getAssets?: (
+            account: string,
+            options?: HubOptions<ChainId>,
+        ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
+        /** Get non-fungible assets of the given collection. */
+        getAssetsByCollection?: (
             address: string,
             options?: HubOptions<ChainId>,
         ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
-        /** Get a token. */
+        /** Get a non-fungible token. */
         getToken?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
         ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
-        /** Get a list of tokens. */
+        /** Get non-fungible tokens owned by the given account. */
         getTokens?: (
-            from: string,
+            account: string,
             options?: HubOptions<ChainId, Indicator>,
         ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, Indicator>>
-        /** Get history events related to a token. */
+        /** Get non-fungible tokens of the given collection. */
+        getTokensByCollection?: (
+            account: string,
+            options?: HubOptions<ChainId, Indicator>,
+        ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, Indicator>>
+        /** Get events of a non-fungible token. */
         getEvents?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
-        ) => Promise<Array<NonFungibleTokenEvent<ChainId, SchemaType>>>
-        /** Get all listed orders for selling a token. */
+        ) => Promise<Pageable<NonFungibleTokenEvent<ChainId, SchemaType>>>
+        /** Get listed orders of a non-fungible token. */
         getListings?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
-        ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
-        /** Get all listed orders for buying a token. */
+        ) => Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
+        /** Get offered orders of a non-fungible token. */
         getOffers?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
-        ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
-        /** Get all orders. */
+        ) => Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
+        /** Get orders of a non-fungible token. */
         getOrders?: (
             address: string,
             tokenId: string,
             side: OrderSide,
             options?: HubOptions<ChainId>,
-        ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
-        /** Get all collections owned by the account. */
+        ) => Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
+        /** Get non-fungible collections owned by the given account. */
         getCollections?: (
-            address: string,
+            account: string,
             options?: HubOptions<ChainId, Indicator>,
         ) => Promise<Pageable<NonFungibleTokenCollection<ChainId>, Indicator>>
+
         /** Place a bid on a token. */
         createBuyOrder?: (/** TODO: add parameters */) => Promise<void>
         /** Listing a token for public sell. */

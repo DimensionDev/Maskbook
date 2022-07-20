@@ -1,3 +1,6 @@
+/// <reference types="@masknet/global-types/firefox" />
+/// <reference types="@masknet/global-types/flag" />
+
 import { escapeRegExp } from 'lodash-unified'
 import urlcat from 'urlcat'
 import LRUCache from 'lru-cache'
@@ -28,17 +31,21 @@ function getCSRFToken() {
     return value
 }
 
-async function getScriptContent(url: string) {
+async function fetchContentAsTwitterDotCom(url: string) {
+    if (process.env.engine === 'firefox' && process.env.manifest === '2' && typeof content === 'object') {
+        const response = await content.fetch(url)
+        return response.text()
+    }
     const response = await fetch(url)
     return response.text()
 }
 
 let swContent = ''
 async function getTokens(operationName?: string) {
-    swContent = swContent || (await getScriptContent('https://twitter.com/sw.js'))
+    swContent = swContent || (await fetchContentAsTwitterDotCom('https://twitter.com/sw.js'))
     const [mainContent, nftContent] = await Promise.all([
-        getScriptContent(getScriptURL(swContent ?? '', 'main')),
-        getScriptContent(getScriptURL(swContent ?? '', 'bundle.UserNft')),
+        fetchContentAsTwitterDotCom(getScriptURL(swContent ?? '', 'main')),
+        fetchContentAsTwitterDotCom(getScriptURL(swContent ?? '', 'bundle.UserNft')),
     ])
 
     const bearerToken = getScriptContentMatched(mainContent ?? '', /s="(\w+%3D\w+)"/)

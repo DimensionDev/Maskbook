@@ -13,7 +13,8 @@ import {
     Typography,
     useTheme,
 } from '@mui/material'
-import { useCallback, useState, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { useMenuConfig } from '@masknet/shared'
 import { AddNFT } from '../SNSAdaptor/AddNFT'
 import { BindingProof, EMPTY_LIST, PopupRoutes } from '@masknet/shared-base'
 import type { AllChainsNonFungibleToken, SelectTokenInfo } from '../types'
@@ -24,17 +25,16 @@ import {
     useChainId,
     useCurrentWeb3NetworkPluginID,
     useNonFungibleAssets,
+    useProviderDescriptor,
     useProviderType,
     useWallet,
-    useProviderDescriptor,
 } from '@masknet/plugin-infra/web3'
 import { NFTWalletConnect } from './WalletConnect'
 import { toPNG } from '../utils'
 import { NFTListPage } from './NFTListPage'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
-import { useAsync } from 'react-use'
-import { WalletMessages, WalletRPC } from '../../Wallet/messages'
-import { PluginWalletStatusBar, useMenu } from '../../../utils'
+import { WalletMessages } from '../../Wallet/messages'
+import { PluginWalletStatusBar } from '../../../utils'
 import { WalletItem } from './WalletList'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import Services from '../../../extension/service'
@@ -159,6 +159,8 @@ interface NFTListDialogProps {
     onSelected: (info: SelectTokenInfo) => void
 }
 
+const supportedChains = [NetworkType.Ethereum, NetworkType.Polygon]
+
 export function NFTListDialog(props: NFTListDialogProps) {
     const { onNext, wallets = EMPTY_LIST, onSelected, tokenInfo } = props
     const { classes } = useStyles()
@@ -176,11 +178,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
     const providerType = useProviderType()
     const providerDescriptor = useProviderDescriptor(currentPluginId, providerType)
-
-    const { value: chains = EMPTY_LIST } = useAsync(async () => {
-        const networks = await WalletRPC.getSupportedNetworks()
-        return networks.map((network: NetworkType) => networkResolver.networkChainId(network))
-    }, [])
+    const chains = supportedChains.map((network: NetworkType) => networkResolver.networkChainId(network))
 
     const {
         value: collectibles = EMPTY_LIST,
@@ -338,7 +336,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
             </div>
         ))
 
-    const [menu, openMenu] = useMenu(
+    const [menu, openMenu] = useMenuConfig(
         [
             account ? (
                 <WalletItem
@@ -378,9 +376,9 @@ export function NFTListDialog(props: NFTListDialogProps) {
                 <Verify2Icon style={{ marginLeft: 24 }} />
             </MenuItem>,
         ],
-        false,
         {
-            paperProps: {
+            anchorSibling: false,
+            PaperProps: {
                 style: {
                     background: theme.palette.mode === 'dark' ? '#000000' : '#FFFFFF',
                 },

@@ -14,7 +14,7 @@ import {
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
+import { NetworkPluginID, OrderSide, SourceType } from '@masknet/web3-shared-base'
 import {
     ChainId,
     ChainId as EVM_ChainId,
@@ -428,7 +428,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                     <TableRow>
                         <TableCell>
                             <Typography variant="body2" whiteSpace="nowrap">
-                                Gas settings
+                                Gas Settings
                             </Typography>
                         </TableCell>
                         <TableCell>
@@ -457,7 +457,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                     <TableRow>
                         <TableCell>
                             <Typography variant="body2" whiteSpace="nowrap">
-                                Non-Fungible Token
+                                Non-Fungible Token Hub APIs
                             </Typography>
                         </TableCell>
                         <TableCell>
@@ -468,13 +468,40 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                     const formData = new FormData(ev.currentTarget)
                                     const address = formData.get('address') as string
                                     const tokenId = formData.get('tokenId') as string
-                                    const schemaType = Number.parseInt(
-                                        formData.get('schema') as string,
-                                        10,
-                                    ) as SchemaType
-                                    const token = await connection?.getNonFungibleToken(address, tokenId, schemaType)
+                                    const options = {
+                                        sourceType: SourceType.OpenSea,
+                                    }
+                                    const allSettled = await Promise.allSettled([
+                                        hub?.getNonFungibleTokenBalance?.(address, options),
+                                        hub?.getNonFungibleTokenContract?.(address, options),
+                                        hub?.getNonFungibleTokenEvents?.(address, tokenId, options),
+                                        hub?.getNonFungibleTokenOffers?.(address, tokenId, options),
+                                        hub?.getNonFungibleTokenListings?.(address, tokenId, options),
+                                        hub?.getNonFungibleTokenOrders?.(address, tokenId, OrderSide.Buy, options),
+                                        hub?.getNonFungibleTokenOrders?.(address, tokenId, OrderSide.Sell, options),
+                                        hub?.getNonFungibleAsset?.(address, tokenId, options),
+                                        hub?.getNonFungibleToken?.(address, tokenId, options),
+                                    ])
+                                    const keys = [
+                                        'getNonFungibleTokenBalance',
+                                        'getNonFungibleTokenContract',
+                                        'getNonFungibleTokenEvents',
+                                        'getNonFungibleTokenOffers',
+                                        'getNonFungibleTokenListings',
+                                        'getNonFungibleTokenOrders Buy',
+                                        'getNonFungibleTokenOrders Sell',
+                                        'getNonFungibleAsset',
+                                        'getNonFungibleToken',
+                                    ]
 
-                                    console.log(token)
+                                    console.log(
+                                        Object.fromEntries(
+                                            allSettled.map((settled, i) => [
+                                                keys[i],
+                                                settled.status === 'fulfilled' ? settled.value : undefined,
+                                            ]),
+                                        ),
+                                    )
                                 }}>
                                 <Box sx={{ marginBottom: 1 }}>
                                     <TextField name="address" label="Contract Address" size="small" />
@@ -486,71 +513,13 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                     <RadioGroup defaultValue={SchemaType.ERC721} name="schema">
                                         <FormControlLabel
                                             value={SchemaType.ERC721}
-                                            control={<Radio />}
+                                            control={<Radio size="small" />}
                                             label="ERC721"
                                         />
                                         <FormControlLabel
                                             value={SchemaType.ERC1155}
-                                            control={<Radio />}
+                                            control={<Radio size="small" />}
                                             label="ERC1155"
-                                        />
-                                    </RadioGroup>
-                                </Box>
-                                <Button size="small" type="submit">
-                                    Query
-                                </Button>
-                            </FormControl>
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell>
-                            <Typography variant="body2" whiteSpace="nowrap">
-                                Non-Fungible Asset
-                            </Typography>
-                        </TableCell>
-                        <TableCell>
-                            <FormControl
-                                component="form"
-                                onSubmit={async (ev: FormEvent<HTMLFormElement>) => {
-                                    ev.preventDefault()
-                                    const formData = new FormData(ev.currentTarget)
-                                    const address = formData.get('address') as string
-                                    const tokenId = formData.get('tokenId') as string
-                                    const sourceType = formData.get('sourceType') as SourceType
-                                    const token = await hub?.getNonFungibleAsset?.(address, tokenId, {
-                                        sourceType,
-                                    })
-                                    console.log(token)
-                                }}>
-                                <Box sx={{ marginBottom: 1 }}>
-                                    <TextField name="address" label="Contract Address" size="small" />
-                                </Box>
-                                <Box sx={{ marginBottom: 1 }}>
-                                    <TextField name="tokenId" label="Token Id" size="small" />
-                                </Box>
-                                <Box sx={{ marginBottom: 1 }}>
-                                    <RadioGroup defaultValue={SourceType.Alchemy_EVM} name="sourceType">
-                                        <FormControlLabel
-                                            value={SourceType.Alchemy_EVM}
-                                            control={<Radio />}
-                                            label="Alchemy"
-                                        />
-                                        <FormControlLabel
-                                            value={SourceType.OpenSea}
-                                            control={<Radio />}
-                                            label="OpenSea"
-                                        />
-                                        <FormControlLabel
-                                            value={SourceType.Rarible}
-                                            control={<Radio />}
-                                            label="Rarible"
-                                        />
-                                        <FormControlLabel value={SourceType.RSS3} control={<Radio />} label="RSS3" />
-                                        <FormControlLabel value={SourceType.Zora} control={<Radio />} label="Zora" />
-                                        <FormControlLabel
-                                            value={SourceType.NFTScan}
-                                            control={<Radio />}
-                                            label="NFTScan"
                                         />
                                     </RadioGroup>
                                 </Box>
@@ -564,6 +533,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                         <TableCell>Test Snackbar</TableCell>
                         <TableCell>
                             <Button
+                                size="small"
                                 onClick={() => {
                                     showSnackbar('test', {
                                         variant: 'success',
