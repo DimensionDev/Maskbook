@@ -6,7 +6,6 @@ import { createPayload, createWeb3Provider, isValidAddress, isZeroAddress } from
 import { IdentityServiceState } from '@masknet/plugin-infra/web3'
 import { KeyValue, NextIDProof, RSS3 } from '@masknet/web3-providers'
 import { getSiteType, NextIDPlatform } from '@masknet/shared-base'
-import { nextIDPlatform } from '@masknet/shared'
 
 const ENS_RE = /\S{1,256}\.(eth|kred|xyz|luxe)\b/
 const ADDRESS_FULL = /0x\w{40,}/
@@ -32,10 +31,17 @@ function getAddress(text: string) {
     return ''
 }
 
+function getNextIDPlatform() {
+    const site = getSiteType()?.split('.')?.[0]
+    const Platforms: unknown[] = [NextIDPlatform.Twitter]
+    if (Platforms.includes(site)) return site as NextIDPlatform
+    return NextIDPlatform.Twitter
+}
+
 async function getWalletAddressesFromNextID(userId: string) {
     if (!userId) return []
     const addresses = []
-    const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(nextIDPlatform.value, userId)
+    const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(getNextIDPlatform(), userId)
     for (const binding of bindings) {
         for (const proof of binding.proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)) {
             addresses.push(proof.identity)
