@@ -23,7 +23,8 @@ const useStyles = makeStyles<{ shouldScroll: boolean; isCarouselReady: boolean }
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
         applicationWrapper: {
-            padding: theme.spacing(props.isCarouselReady ? 0 : 1, 0.25, 1),
+            padding: theme.spacing(1, 0.25, 1, 1),
+            transform: props.isCarouselReady ? 'translate(-8px, -8px)' : 'translateX(-8px)',
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
             overflowY: 'auto',
