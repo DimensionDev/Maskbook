@@ -22,6 +22,8 @@ export function OffersTab(props: OffersTabProps) {
     return (
         <div className={classes.wrapper}>
             <NFTOfferCard offer="" />
+            <NFTOfferCard offer="" />
+            <NFTOfferCard offer="" />
         </div>
     )
 }

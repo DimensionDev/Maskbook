@@ -34,7 +34,7 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
             boxSizing: 'border-box',
         },
         tabWrapper: {
-            flexGrow: 1,
+            width: 'calc( 100% - 336px)',
             marginLeft: 36,
             maxHeight: '100%,',
         },

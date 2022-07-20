@@ -38,9 +38,9 @@ export function NFTCardDialogUI(props: NFTCardDialogUIProps) {
                     {currentTab === NFTCardDialogTabs.About ? (
                         <AboutTab asset={asset} />
                     ) : currentTab === NFTCardDialogTabs.Offers ? (
-                        <OffersTab />
+                        <OffersTab asset={asset} />
                     ) : (
-                        <ActivityTab />
+                        <ActivityTab asset={asset} />
                     )}
                 </div>
             </div>

@@ -1,12 +1,11 @@
 import { makeStyles } from '@masknet/theme'
-import { Skeleton } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
         width: '100%',
         display: 'flex',
         alignItems: 'center',
-        padding: 8,
+        padding: 12,
         boxSizing: 'border-box',
         gap: 12,
         borderRadius: 8,
@@ -17,14 +16,13 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NFTActivityCardProps {
-    asset: any
+    activity: any
 }
 
 export function NFTActivityCard(props: NFTActivityCardProps) {
-    const { asset } = props
+    const { activity } = props
     const { classes } = useStyles()
-    if (!asset.value || asset.loading) return <Skeleton width="100%" height={60} />
-    const _asset = asset.value
+    // if (!asset.value || asset.loading) return <Skeleton width="100%" height={60} />
 
-    return <div className={classes.wrapper}>222</div>
+    return <div className={classes.wrapper}>activity</div>
 }

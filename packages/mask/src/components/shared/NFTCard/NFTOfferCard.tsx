@@ -1,6 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { OpenSeaIcon } from '../../../resources/OpenSeaIcon'
 import { Typography } from '@mui/material'
+import { ETHIcon } from '../../../plugins/VCent/icons/ETH'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -21,6 +22,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     flex: {
         display: 'flex',
+        alignItems: 'center',
         gap: 6,
     },
     textBase: {
@@ -46,7 +48,7 @@ export function NFTOfferCard(props: NFTOfferCardProps) {
             <OpenSeaIcon width={24} height={24} />
             <div className={classes.offerDetail}>
                 <div className={classes.flex}>
-                    <img width={20} height={20} src={offer.img ?? ''} alt="" />
+                    <ETHIcon width={20} height={20} />
                     <Typography className={classes.textBase}>
                         <strong style={{ fontSize: 14 }}>9,999,99.00</strong> <strong>$232.00</strong> 2% below{' '}
                     </Typography>

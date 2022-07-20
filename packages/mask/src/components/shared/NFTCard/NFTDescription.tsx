@@ -9,7 +9,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     title: {
         fontSize: 20,
-        lineHeight: 24,
+        lineHeight: '24px',
         fontWeight: 700,
         marginBottom: 12,
         color: theme.palette.maskColor.main,
@@ -21,7 +21,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     textContent: {
         fontSize: 14,
-        lineHeight: 18,
+        lineHeight: '18px',
         color: theme.palette.maskColor.second,
     },
 }))
@@ -38,7 +38,7 @@ export function NFTDescription(props: NFTDescriptionProps) {
         <div className={classes.wrapper}>
             <Typography className={classes.title}>Description</Typography>
             <div className={classes.content}>
-                <Typography className={classes.title}>{_asset.metadata.description}</Typography>
+                <Typography className={classes.textContent}>{_asset.metadata.description}</Typography>
             </div>
         </div>
     )
