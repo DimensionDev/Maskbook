@@ -2,7 +2,7 @@ import { styled, useTheme } from '@mui/material/styles'
 import { FooterLine } from '../FooterLine'
 import { Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { MaskBannerIcon, MaskNotSquareIcon } from '@masknet/icons'
+import { MaskBannerIcon, Mask } from '@masknet/icons'
 
 const Container = styled('div')(
     ({ theme }) => `
@@ -40,7 +40,7 @@ export const ColumnLayout = ({ haveFooter = true, children }: ColumnLayoutProps)
         <Container>
             <Content>
                 <Paper className={classes.paper} variant="outlined">
-                    <Typography>{mode === 'dark' ? <MaskBannerIcon /> : <MaskNotSquareIcon />}</Typography>
+                    <Typography>{mode === 'dark' ? <MaskBannerIcon /> : <Mask />}</Typography>
                     {children}
                 </Paper>
                 {haveFooter && <FooterLine />}

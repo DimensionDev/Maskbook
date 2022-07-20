@@ -12,7 +12,7 @@ import { useSocialAddressListAll, useAvailablePlugins } from '@masknet/plugin-in
 import { ConcealableTabs } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { Box, CircularProgress, Typography } from '@mui/material'
+import { Box, CircularProgress } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 import { MaskMessages, sortPersonaBindings, useI18N } from '../../utils'
@@ -21,7 +21,7 @@ import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../DataSo
 import { useNextIDBoundByPlatform } from '../DataSource/useNextID'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
-import { GearIcon } from '@masknet/icons'
+import { Gear } from '@masknet/icons'
 import { NextIDProof } from '@masknet/web3-providers'
 
 function getTabContent(tabId?: string) {
@@ -76,6 +76,10 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         ? currentConnectedPersona?.identifier?.publicKeyAsHex
         : currentPersonaBinding?.persona
 
+    const isCurrentConnectedPersonaBind = personaList.some(
+        (persona) => persona.persona === currentConnectedPersona?.identifier?.publicKeyAsHex.toLowerCase(),
+    )
+
     const { value: personaProof, retry: retryProof } = useAsyncRetry(async () => {
         if (!personaPublicKey) return
         return NextIDProof.queryExistedBindingByPersona(personaPublicKey)
@@ -102,7 +106,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             }
         })
         return [...socialAddressList, ...addresses]
-    }, [socialAddressList, wallets, isOwn])
+    }, [socialAddressList, wallets?.map((x) => x.identity).join(), isOwn])
 
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
     const availablePlugins = useAvailablePlugins(activatedPlugins)
@@ -140,10 +144,12 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         }))
 
     const selectedTabId = selectedTab ?? first(tabs)?.id
-    const componentTabId =
-        isTwitter(activatedSocialNetworkUI) && ((isOwn && addressList?.length === 0) || isWeb3ProfileDisable)
-            ? displayPlugins?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
-            : selectedTabId
+    const showNextID =
+        isTwitter(activatedSocialNetworkUI) &&
+        ((isOwn && addressList?.length === 0) || isWeb3ProfileDisable || (isOwn && !isCurrentConnectedPersonaBind))
+    const componentTabId = showNextID
+        ? displayPlugins?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
+        : selectedTabId
 
     const handleOpenDialog = () => {
         CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToAll({
@@ -163,9 +169,10 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         )
     }, [
         componentTabId,
+        personaPublicKey,
         displayPlugins.map((x) => x.ID).join(),
         personaList.join(),
-        socialAddressList.map((x) => x.address).join(),
+        addressList.map((x) => x.address).join(),
     ])
 
     useLocationChange(() => {
@@ -206,17 +213,13 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     return (
         <div className={classes.root}>
             <div>
-                {tabs.length ? (
+                {tabs.length > 0 && !showNextID && (
                     <ConcealableTabs<string>
                         tabs={tabs}
                         selectedId={selectedTabId}
                         onChange={setSelectedTab}
-                        tail={isOwn && <GearIcon onClick={handleOpenDialog} className={classes.settingIcon} />}
+                        tail={isOwn && <Gear onClick={handleOpenDialog} className={classes.settingIcon} />}
                     />
-                ) : (
-                    <Typography variant="body2" color="textPrimary" align="center" sx={{ paddingTop: 8 }}>
-                        {t('web3_tab_hint')}
-                    </Typography>
                 )}
             </div>
             <div className={classes.content}>{component}</div>

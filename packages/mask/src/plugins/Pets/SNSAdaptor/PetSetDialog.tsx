@@ -115,6 +115,9 @@ const useStyles = makeStyles()((theme) => ({
     logo: {
         height: 21,
     },
+    RSS3Icon: {
+        color: theme.palette.mode === 'light' ? '#000' : '#fff',
+    },
 }))
 
 interface PetSetDialogProps {
@@ -373,7 +376,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     <Typography fontSize={14} color="textSecondary" fontWeight={700} className={classes.des}>
                         RSS3
                     </Typography>
-                    <RSS3Icon style={{ fontSize: 24 }} />
+                    <RSS3Icon className={classes.RSS3Icon} />
                 </Box>
             </Box>
 
@@ -385,11 +388,6 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     noSwitchNetworkTip
                     ActionButtonPromiseProps={{
                         fullWidth: true,
-                        sx: {
-                            height: 40,
-                            padding: 0,
-                            margin: 0,
-                        },
                     }}>
                     <ActionButton
                         loading={loading}

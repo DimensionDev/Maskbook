@@ -45,16 +45,14 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         linkIcon: {
-            fill: theme.palette.maskColor.second,
+            color: theme.palette.maskColor.second,
             height: 20,
             width: 20,
             marginLeft: theme.spacing(0.5),
             marginTop: '2px',
         },
         editIcon: {
-            height: 20,
-            width: 20,
-            fill: theme.palette.maskColor.second,
+            color: theme.palette.maskColor.second,
             cursor: 'pointer',
         },
         loadingFailImage: {
@@ -113,7 +111,7 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
                         <LinkOutIcon className={classes.linkIcon} />
                     </Link>
                 </div>
-                <Edit2Icon onClick={onSetting} className={classes.editIcon} />
+                <Edit2Icon size={20} onClick={onSetting} className={classes.editIcon} />
             </div>
 
             {collectionList && collectionList?.filter((collection) => !collection?.hidden)?.length > 0 ? (

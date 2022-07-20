@@ -49,6 +49,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
         contractDetailed?.address,
         operator,
         true,
+        retry,
     )
 
     const validationMessage = useMemo(() => {
@@ -65,7 +66,6 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
             <ActionButton
                 className={classes.approveButton}
                 variant="contained"
-                size="large"
                 fullWidth
                 loading
                 disabled
@@ -84,7 +84,6 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
             <ActionButton
                 className={classes.approveButton}
                 variant="contained"
-                size="large"
                 fullWidth
                 disabled
                 {...props.ActionButtonProps}>
@@ -96,7 +95,6 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
             <ActionButton
                 className={classes.approveButton}
                 variant="contained"
-                size="large"
                 fullWidth
                 loading
                 disabled
@@ -108,7 +106,6 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
             <ActionButton
                 className={classes.approveButton}
                 variant="contained"
-                size="large"
                 fullWidth
                 onClick={approveCallback}
                 {...props.ActionButtonProps}>
@@ -126,7 +123,6 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
             <ActionButton
                 className={classes.approveButton}
                 variant="contained"
-                size="large"
                 fullWidth
                 onClick={retry}
                 {...props.ActionButtonProps}>

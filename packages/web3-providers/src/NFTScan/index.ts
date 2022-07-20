@@ -1,4 +1,5 @@
 import { DataProvider } from '@masknet/public-api'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 import {
@@ -21,7 +22,7 @@ import type { AbiItem } from 'web3-utils'
 import { courier } from '../helpers'
 import { LooksRare, OpenSea } from '../index'
 import { LooksRareLogo, OpenSeaLogo } from '../resources'
-import { NonFungibleMarketplace, NonFungibleTokenAPI, TrendingAPI, TrendingCoinType } from '../types'
+import { NonFungibleMarketplace, NonFungibleTokenAPI, TrendingAPI } from '../types'
 import { NFTSCAN_ACCESS_TOKEN_URL, NFTSCAN_BASE, NFTSCAN_BASE_API, NFTSCAN_LOGO_BASE } from './constants'
 import type {
     NFTPlatformInfo,
@@ -174,7 +175,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         const total = response.data.total
         const rest = total - ((indicator?.index ?? 0) + 1) * size
         return createPageable(
-            response.data.content.map(createERC721TokenAsset) ?? [],
+            response.data.content.map(createERC721TokenAsset) ?? EMPTY_LIST,
             createIndicator(indicator),
             rest > 0 ? createNextIndicator(indicator) : undefined,
         )
@@ -218,7 +219,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                     schema: SchemaType.ERC721,
                     metadata: {
                         chainId,
-                        name: platformInfo.name,
+                        name: x.nft_name,
                         symbol,
                         description: platformInfo.description,
                         imageURL: prependIpfs(x.cover),
@@ -246,7 +247,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         })
         const response = await fetch(courier(url))
         const result: { data: SearchNFTPlatformNameResult[] } = await response.json()
-        return result.data ?? []
+        return result.data ?? EMPTY_LIST
     }
 
     private async getContractVolumeAndFloorByRange(contract: string, range: string): Promise<VolumeAndFloorRecord[]> {
@@ -256,11 +257,11 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         })
         const response = await fetch(courier(url))
         const result: { data: VolumeAndFloorRecord[] } = await response.json()
-        return result.data ?? []
+        return result.data ?? EMPTY_LIST
     }
 
     async getCoins(keyword: string, chainId = ChainId.Mainnet): Promise<TrendingAPI.Coin[]> {
-        if (!keyword) return []
+        if (!keyword) return EMPTY_LIST
         const nfts = await this.searchNftPlatformName(keyword)
 
         const coins = await Promise.all(
@@ -270,7 +271,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                     id: nft.address,
                     name: nft.platform,
                     symbol,
-                    type: TrendingCoinType.NonFungible,
+                    type: TokenType.NonFungible,
                     address: nft.address,
                     contract_address: nft.address,
                     image_url: nft.image,
@@ -340,7 +341,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 symbol,
                 address: platformInfo.address,
                 contract_address: platformInfo.address,
-                type: TrendingCoinType.NonFungible,
+                type: TokenType.NonFungible,
                 description: platformInfo.description,
                 image_url: platformInfo.image,
                 home_urls: compact([platformInfo.website]),

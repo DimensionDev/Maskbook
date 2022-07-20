@@ -60,8 +60,8 @@ import { getReceiptStatus } from './utils'
 import { Web3StateSettings } from '../../settings'
 import { getSubscriptionCurrentValue, PartialRequired } from '@masknet/shared-base'
 
-const EMPTY_STRING = () => Promise.resolve('')
-const ZERO = () => Promise.resolve(0)
+const EMPTY_STRING = Promise.resolve('')
+const ZERO = Promise.resolve(0)
 
 export function isReadOnlyMethod(method: EthereumMethodType) {
     return [
@@ -235,22 +235,9 @@ class Connection implements EVM_Connection {
         schema: SchemaType,
         initial?: EVM_Web3ConnectionOptions,
     ): Promise<string> {
-        const options = this.getOptions(initial)
-        const actualSchema = schema ?? (await this.getTokenSchema(address, options))
-
-        // Native
-        if (!address || isNativeTokenAddress(options.chainId, address)) throw new Error('Invalid token address.')
-
-        // ERC721
-        if (actualSchema === SchemaType.ERC721) {
-            const contract = await this.getERC721Contract(address, options)
-            const tx = contract?.methods.approve(recipient, tokenId)
-            return sendTransaction(contract, tx, options.overrides)
-        }
-
-        const contract = await this.getERC1155Contract(address, options)
-        const tx = contract?.methods.setApprovalForAll(recipient, true)
-        return sendTransaction(contract, tx, options.overrides)
+        // Do not use `approve()`, since it is buggy.
+        // https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/ERC721.sol
+        throw new Error('Method not implemented.')
     }
     async approveAllNonFungibleTokens(
         address: string,
@@ -337,26 +324,30 @@ class Connection implements EVM_Connection {
         const ERC721_ENUMERABLE_INTERFACE_ID = '0x780e9d63'
         const ERC1155_ENUMERABLE_INTERFACE_ID = '0xd9b67a26'
 
-        const erc165Contract = await this.getWeb3Contract<ERC165>(address, ERC165ABI as AbiItem[], options)
+        try {
+            const erc165Contract = await this.getWeb3Contract<ERC165>(address, ERC165ABI as AbiItem[], options)
 
-        const isERC165 = await erc165Contract?.methods
-            .supportsInterface(ERC165_INTERFACE_ID)
-            .call({ from: options.account })
+            const isERC165 = await erc165Contract?.methods
+                .supportsInterface(ERC165_INTERFACE_ID)
+                .call({ from: options.account })
 
-        const isERC721 = await erc165Contract?.methods
-            .supportsInterface(ERC721_ENUMERABLE_INTERFACE_ID)
-            .call({ from: options.account })
-        if (isERC165 && isERC721) return SchemaType.ERC721
+            const isERC721 = await erc165Contract?.methods
+                .supportsInterface(ERC721_ENUMERABLE_INTERFACE_ID)
+                .call({ from: options.account })
+            if (isERC165 && isERC721) return SchemaType.ERC721
 
-        const isERC1155 = await erc165Contract?.methods
-            .supportsInterface(ERC1155_ENUMERABLE_INTERFACE_ID)
-            .call({ from: options.account })
-        if (isERC165 && isERC1155) return SchemaType.ERC1155
+            const isERC1155 = await erc165Contract?.methods
+                .supportsInterface(ERC1155_ENUMERABLE_INTERFACE_ID)
+                .call({ from: options.account })
+            if (isERC165 && isERC1155) return SchemaType.ERC1155
 
-        const isERC20 = (await this.getCode(address, options)) !== '0x'
-        if (isERC20) return SchemaType.ERC20
+            const isERC20 = (await this.getCode(address, options)) !== '0x'
+            if (isERC20) return SchemaType.ERC20
 
-        return
+            return
+        } catch {
+            return
+        }
     }
     async getNonFungibleToken(
         address: string,
@@ -794,6 +785,7 @@ class Connection implements EVM_Connection {
                         {
                             from: options.account,
                             ...transaction,
+                            value: transaction.value ? toHex(transaction.value) : undefined,
                         },
                     ],
                 },

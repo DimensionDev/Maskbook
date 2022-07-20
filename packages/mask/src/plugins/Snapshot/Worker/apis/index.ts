@@ -44,6 +44,7 @@ async function fetchProposalFromGraphql(id: string) {
                       id
                       name
                       symbol
+                      avatar
                     }
                 }
                 votes(first: 10000, where: { proposal: $id }) {
@@ -75,6 +76,7 @@ async function fetchProposalFromGraphql(id: string) {
                     id: string
                     name: string
                     symbol: string
+                    avatar: string
                 }
                 state: string
                 title: string

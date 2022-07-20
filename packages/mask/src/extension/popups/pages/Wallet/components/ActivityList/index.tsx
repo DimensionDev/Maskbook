@@ -31,15 +31,6 @@ const useStyles = makeStyles()({
         borderBottom: '1px solid #F7F9FA',
         cursor: 'pointer',
     },
-    arrow: {
-        stroke: '#15181B',
-        fill: 'none',
-        fontSize: 20,
-    },
-    icon: {
-        width: 20,
-        height: 20,
-    },
     loader: {
         fill: '#FFB915',
     },

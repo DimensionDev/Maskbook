@@ -1,14 +1,14 @@
-import { useStylesExtends, makeStyles } from '@masknet/theme'
-import { Box, Link, Typography } from '@mui/material'
-import { Copy } from 'react-feather'
+import { useStylesExtends, makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { Box, Typography } from '@mui/material'
 import { useAsyncRetry, useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../locales'
 import { PlatformAvatar } from './PlatformAvatar'
-import { useSnackbarCallback } from '@masknet/shared'
 import { formatPublicKey } from '../utils'
 import type { PersonaInformation } from '@masknet/shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { context } from '../context'
+import { CopyIcon } from '@masknet/icons'
+import { useCallback, useState } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     bottomFixed: {
@@ -27,6 +27,7 @@ const useStyles = makeStyles()((theme) => ({
     linkIcon: {
         marginRight: theme.spacing(1),
         color: theme.palette.maskColor.second,
+        cursor: 'pointer',
     },
     personaKey: {
         fontSize: '12px',
@@ -42,8 +43,10 @@ interface PersonaActionProps {
 
 export function PersonaAction(props: PersonaActionProps) {
     const classes = useStylesExtends(useStyles(), {})
-    const { currentPersona, currentVisitingProfile } = props
+    const { currentPersona } = props
     const t = useI18N()
+
+    const [open, setOpen] = useState(false)
 
     const { value: avatar } = useAsyncRetry(async () => {
         const avatar = await context.getPersonaAvatar(currentPersona?.identifier)
@@ -51,16 +54,19 @@ export function PersonaAction(props: PersonaActionProps) {
         return avatar
     })
     const [, copyToClipboard] = useCopyToClipboard()
-    const onCopy = useSnackbarCallback(
-        async (ev: React.MouseEvent<HTMLAnchorElement>) => {
-            ev.stopPropagation()
+
+    const onCopy = useCallback(
+        (e: React.MouseEvent) => {
+            e.preventDefault()
+            e.stopPropagation()
             copyToClipboard(currentPersona?.identifier?.rawPublicKey ?? '')
+            setOpen(true)
+            // Close tooltip after five seconds of copying
+            setTimeout(() => {
+                setOpen(false)
+            }, 5000)
         },
-        [],
-        undefined,
-        undefined,
-        undefined,
-        t.copied(),
+        [currentPersona?.identifier?.rawPublicKey, copyToClipboard],
     )
 
     return (
@@ -74,14 +80,15 @@ export function PersonaAction(props: PersonaActionProps) {
                     <Typography className={classes.personaKey}>
                         {currentPersona?.identifier ? formatPublicKey(currentPersona?.identifier?.rawPublicKey) : '--'}
                     </Typography>
-                    <Link
-                        className={classes.link}
-                        underline="none"
-                        component="button"
-                        title={t.persona_public_key_copy()}
-                        onClick={onCopy}>
-                        <Copy className={classes.linkIcon} size={14} />
-                    </Link>
+                    <ShadowRootTooltip
+                        title={t.copied()}
+                        open={open}
+                        placement="top"
+                        onMouseLeave={() => setOpen(false)}
+                        disableFocusListener
+                        disableTouchListener>
+                        <CopyIcon size={16} onClick={onCopy} className={classes.linkIcon} />
+                    </ShadowRootTooltip>
                 </Box>
             </div>
         </div>

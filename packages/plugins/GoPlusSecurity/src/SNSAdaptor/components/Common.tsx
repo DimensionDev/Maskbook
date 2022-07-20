@@ -34,13 +34,13 @@ export const DefineMapping: DefineMapping = {
     [SecurityMessageLevel.High]: {
         i18nKey: 'high_risk',
         titleColor: '#FF5F5F',
-        bgColor: 'rgba(255, 95, 95, 0.1)',
+        bgColor: 'rgba(255, 53, 69, 0.1)',
         icon: (size: number) => <SecurityRiskIcon sx={{ fontSize: size ?? 24 }} />,
     },
     [SecurityMessageLevel.Medium]: {
         i18nKey: 'medium_risk',
-        titleColor: '#FFB915',
-        bgColor: 'rgba(255, 177, 0, 0.2)',
+        titleColor: '#FFB100',
+        bgColor: 'rgba(255, 177, 0, 0.1)',
         // TODO: Merge duplicate icon in a another PR.
         icon: (size: number) => <SecurityWarningIcon sx={{ fontSize: size ?? 24, color: '#FFB915' }} />,
     },

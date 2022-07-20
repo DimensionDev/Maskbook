@@ -16,9 +16,10 @@ import { PersonaContext } from '../../hooks/usePersonaContext'
 import { NextIdPersonaWarningIcon, NextIdPersonaVerifiedIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
-    connect: {
-        '& svg': {
-            fontSize: '18px',
+    icon: {
+        span: {
+            height: 18,
+            width: 18,
             marginRight: theme.spacing(1.5),
         },
     },
@@ -51,7 +52,7 @@ export const UnconnectedPersonaLine = memo<UnconnectedPersonaLineProps>(({ onCon
     const t = useDashboardI18N()
     const { classes } = useStyles()
     return (
-        <Box className={classes.connect} sx={{ display: 'flex', alignItems: 'center' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Link
                 underline="none"
                 classes={{ button: classes.link }}
@@ -64,7 +65,7 @@ export const UnconnectedPersonaLine = memo<UnconnectedPersonaLineProps>(({ onCon
                     alignItems: 'center',
                     cursor: 'pointer',
                 }}>
-                {SOCIAL_MEDIA_ICON_MAPPING[networkIdentifier]}
+                <span className={classes.icon}>{SOCIAL_MEDIA_ICON_MAPPING[networkIdentifier]}</span>
                 <Typography variant="caption">
                     <Button variant="text" size="small" sx={{ fontSize: 13, p: 0 }}>
                         {t.personas_connect_to({ internalName: networkIdentifier })}
@@ -142,9 +143,9 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                             {proof.loading ? (
                                 <LoadingAnimation />
                             ) : isProved?.is_valid ? (
-                                <NextIdPersonaVerifiedIcon />
+                                <NextIdPersonaVerifiedIcon size={18} />
                             ) : (
-                                <NextIdPersonaWarningIcon />
+                                <NextIdPersonaWarningIcon size={18} />
                             )}
                         </Typography>
                     )}
@@ -152,7 +153,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
             )
         }
         return (
-            <Box className={classes.connect} sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Link
                     underline="none"
                     sx={{
@@ -162,7 +163,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                         width: '100%',
                     }}>
                     <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
-                        {SOCIAL_MEDIA_ICON_MAPPING[networkIdentifier]}
+                        <span className={classes.icon}>{SOCIAL_MEDIA_ICON_MAPPING[networkIdentifier]}</span>
                         <Stack flexWrap="wrap" flexDirection="row">
                             {profileIdentifiers.map((x) => (
                                 <Typography

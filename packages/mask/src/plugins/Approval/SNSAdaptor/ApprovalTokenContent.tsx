@@ -1,26 +1,35 @@
+import { useState } from 'react'
 import { ListItem, List, Typography, Link, Avatar } from '@mui/material'
+import { LinkOutIcon } from '@masknet/icons'
+import type { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 import { useERC20TokenApproveCallback } from '@masknet/plugin-infra/web3-evm'
+import { useAccount, useWeb3State, useNetworkDescriptor, useWeb3Hub } from '@masknet/plugin-infra/web3'
+import {
+    NetworkPluginID,
+    NetworkDescriptor,
+    isGreaterThan,
+    FungibleTokenSpenderAuthorization,
+} from '@masknet/web3-shared-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useState } from 'react'
-import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
-import { useAccount, useWeb3State, useNetworkDescriptor } from '@masknet/plugin-infra/web3'
-import { LinkOutIcon } from '@masknet/icons'
-import { NetworkPluginID, NetworkDescriptor, isGreaterThan } from '@masknet/web3-shared-base'
 import { useI18N } from '../locales'
 import { useStyles } from './useStyles'
-import { useApprovedTokenList } from './hooks/useApprovedTokenList'
 import { ApprovalLoadingContent } from './ApprovalLoadingContent'
 import { ApprovalEmptyContent } from './ApprovalEmptyContent'
-import type { TokenSpender } from './types'
+import { useAsync } from 'react-use'
 
 export function ApprovalTokenContent({ chainId }: { chainId: ChainId }) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const { value: spenders, loading } = useApprovedTokenList(account, chainId)
+    const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM)
+
+    const { value: spenders, loading } = useAsync(
+        async () => hub?.getApprovedFungibleTokenSpenders?.(chainId, account),
+        [chainId, account, hub],
+    )
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
     const { classes } = useStyles({
-        listItemBackground: networkDescriptor.backgroundGradient,
-        listItemBackgroundIcon: `url("${networkDescriptor.icon}")`,
+        listItemBackground: networkDescriptor?.backgroundGradient,
+        listItemBackgroundIcon: networkDescriptor ? `url("${networkDescriptor.icon}")` : undefined,
     })
 
     return loading ? (
@@ -37,9 +46,9 @@ export function ApprovalTokenContent({ chainId }: { chainId: ChainId }) {
 }
 
 interface ApprovalTokenItemProps {
-    spender: TokenSpender
-    networkDescriptor: NetworkDescriptor<ChainId, NetworkType>
     chainId: ChainId
+    spender: FungibleTokenSpenderAuthorization<ChainId, SchemaType>
+    networkDescriptor?: NetworkDescriptor<ChainId, NetworkType>
 }
 
 function ApprovalTokenItem(props: ApprovalTokenItemProps) {
@@ -47,25 +56,24 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
     const [cancelled, setCancelled] = useState(false)
     const t = useI18N()
     const { classes, cx } = useStyles({
-        listItemBackground: networkDescriptor.backgroundGradient,
-        listItemBackgroundIcon: `url("${networkDescriptor.icon}")`,
+        listItemBackground: networkDescriptor?.backgroundGradient,
+        listItemBackgroundIcon: `url("${networkDescriptor?.icon}")`,
     })
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     const [_, transactionState, approveCallback] = useERC20TokenApproveCallback(
-        spender.tokenInfo.id,
+        spender.tokenInfo.address,
         '0',
-        spender.id,
+        spender.address,
         () => setCancelled(true),
         chainId,
     )
-
     return cancelled ? null : (
         <div className={classes.listItemWrapper}>
             <ListItem className={classes.listItem}>
                 <div className={classes.listItemInfo}>
                     <div>
-                        <Avatar src={spender.tokenInfo.logo_url} className={classes.logoIcon} />
+                        <Avatar src={spender.tokenInfo.logoURL} className={classes.logoIcon} />
                         <Typography className={classes.primaryText}>{spender.tokenInfo.symbol}</Typography>
                         <Typography className={classes.secondaryText}>{spender.tokenInfo.name}</Typography>
                     </div>
@@ -77,11 +85,11 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
                             <div className={classes.spenderMaskLogoIcon}>{spender.logo}</div>
                         )}
                         <Typography className={classes.primaryText}>
-                            {spender.name ?? Others?.formatAddress(spender.id, 4)}
+                            {spender.name ?? Others?.formatAddress(spender.address, 4)}
                         </Typography>
                         <Link
                             className={classes.link}
-                            href={Others?.explorerResolver.addressLink?.(chainId, spender.id) ?? ''}
+                            href={Others?.explorerResolver.addressLink?.(chainId, spender.address) ?? ''}
                             target="_blank"
                             rel="noopener noreferrer">
                             <LinkOutIcon className={cx(classes.spenderLogoIcon, classes.linkOutIcon)} />
@@ -90,7 +98,7 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
                     <div>
                         <Typography className={classes.secondaryText}>{t.approved_amount()}</Typography>
                         <Typography className={classes.primaryText}>
-                            {isGreaterThan(spender.value, '1e+10') ? t.infinite() : spender.value}
+                            {isGreaterThan(spender.amount, '1e+10') ? t.infinite() : spender.amount}
                         </Typography>
                     </div>
                 </div>
@@ -98,6 +106,7 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
                     expectedChainId={chainId}
                     switchChainWithoutPopup
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    className={classes.chainBoundary}
                     classes={{ switchButton: classes.button }}
                     expectedChainIdSwitchedCallback={() => approveCallback(true, true)}
                     ActionButtonPromiseProps={{

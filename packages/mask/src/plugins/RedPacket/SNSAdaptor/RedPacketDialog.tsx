@@ -1,10 +1,10 @@
 import { useCallback, useState } from 'react'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { DialogContent, Tab } from '@mui/material'
 import Web3Utils from 'web3-utils'
 import {
@@ -33,12 +33,19 @@ const useStyles = makeStyles()((theme) => ({
         borderBottom: `1px solid ${theme.palette.divider}`,
     },
     dialogContent: {
+        minHeight: 305,
         padding: 0,
         '::-webkit-scrollbar': {
             display: 'none',
         },
 
         overflowX: 'hidden',
+    },
+    nftDialogContent: {
+        height: 305,
+    },
+    nftDialogContentLoaded: {
+        height: 620,
     },
     tabPaper: {
         position: 'sticky',
@@ -79,9 +86,10 @@ interface RedPacketDialogProps extends withClasses<never> {
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
     const t = useI18N()
-    const { classes } = useStyles()
+    const { cx, classes } = useStyles()
     const { attachMetadata, dropMetadata } = useCompositionContext()
     const state = useState(DialogTabs.create)
+    const [isNFTRedPacketLoaded, setIsNFTRedPacketLoaded] = useState(false)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
@@ -180,10 +188,26 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 onClose={() => (showHistory ? setShowHistory(false) : onBack())}
                 isOnBack={showHistory || step !== CreateRedPacketPageStep.NewRedPacketPage}
                 disableTitleBorder>
-                <DialogContent className={classes.dialogContent}>
+                <DialogContent
+                    className={cx(
+                        classes.dialogContent,
+                        currentTab === 'collectibles'
+                            ? isNFTRedPacketLoaded
+                                ? classes.nftDialogContentLoaded
+                                : classes.nftDialogContent
+                            : '',
+                    )}>
                     {step === CreateRedPacketPageStep.NewRedPacketPage ? (
-                        !showHistory ? (
-                            <>
+                        <>
+                            <div
+                                style={{
+                                    visibility: showHistory ? 'hidden' : 'visible',
+                                    height: showHistory
+                                        ? 0
+                                        : currentTab === 'collectibles' && isNFTRedPacketLoaded
+                                        ? 'calc(100% + 84px)'
+                                        : 'auto',
+                                }}>
                                 <TabPanel value={tabs.tokens} style={{ padding: 0 }}>
                                     <RedPacketERC20Form
                                         origin={settings}
@@ -193,12 +217,16 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                     />
                                 </TabPanel>
                                 <TabPanel value={tabs.collectibles} style={{ padding: 0 }}>
-                                    <RedPacketERC721Form onClose={onClose} />
+                                    <RedPacketERC721Form
+                                        onClose={onClose}
+                                        setIsNFTRedPacketLoaded={setIsNFTRedPacketLoaded}
+                                    />
                                 </TabPanel>
-                            </>
-                        ) : (
-                            <RedPacketPast tabs={tabs} onSelect={onCreateOrSelect} onClose={onClose} />
-                        )
+                            </div>
+                            {showHistory ? (
+                                <RedPacketPast tabs={tabs} onSelect={onCreateOrSelect} onClose={onClose} />
+                            ) : null}
+                        </>
                     ) : null}
 
                     {step === CreateRedPacketPageStep.ConfirmPage ? (

@@ -4,7 +4,7 @@ import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Avatar, Box, Typography } from '@mui/material'
 import { CopyIconButton } from '../../../../components/CopyIconButton'
-import { ArrowDropIcon, MaskNotSquareIcon, MasksIcon } from '@masknet/icons'
+import { ArrowDropIcon, Mask, MasksIcon } from '@masknet/icons'
 import { formatPersonaFingerprint, formatPersonaName } from '@masknet/shared-base'
 
 const useStyles = makeStyles()(() => ({
@@ -48,8 +48,9 @@ const useStyles = makeStyles()(() => ({
         alignItems: 'center',
     },
     icon: {
-        fontSize: 12,
-        fill: '#767F8D',
+        width: 12,
+        height: 12,
+        color: '#767F8D',
         cursor: 'pointer',
         marginLeft: 4,
     },
@@ -72,7 +73,7 @@ export const PersonaHeaderUI = memo<PersonaHeaderUIProps>(
         const { classes } = useStyles()
         return (
             <Box className={classes.container}>
-                <MaskNotSquareIcon className={classes.logo} />
+                <Mask className={classes.logo} />
                 <div className={classes.action} onClick={onActionClick}>
                     {avatar ? (
                         <Avatar src={avatar} className={classes.avatar} />

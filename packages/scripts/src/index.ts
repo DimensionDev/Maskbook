@@ -3,6 +3,8 @@ export {
     codegenWatch,
     i18nCodegen,
     i18nCodegenWatch,
+    iconCodegen,
+    iconCodegenWatch,
     typescript,
     typescriptWatch,
     resourceCopy,

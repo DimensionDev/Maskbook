@@ -61,6 +61,7 @@ export interface AssetEvent {
         decimals: number
         symbol: string
         usd_price: string
+        address: string
     }
     quantity: string
 }

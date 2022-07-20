@@ -11,11 +11,11 @@ import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { PluginTraderMessages } from '../../messages'
 import { Trader, TraderRef, TraderProps } from './Trader'
 import { useI18N } from '../../../../utils'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { NetworkTab } from '../../../../components/shared/NetworkTab'
 import { useUpdateEffect } from 'react-use'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { GearIcon, RefreshIcon } from '@masknet/icons'
+import { Gear, Refresh } from '@masknet/icons'
 import { currentSlippageSettings } from '../../settings'
 import { MIN_GAS_LIMIT } from '../../constants'
 import { isDashboardPage } from '@masknet/shared-base'
@@ -28,6 +28,12 @@ const useStyles = makeStyles()((theme) => ({
         position: 'sticky',
         top: 0,
         zIndex: 2,
+
+        '& > div .MuiBox-root': isDashboard
+            ? {
+                  background: MaskColorVar.mainBackground,
+              }
+            : {},
     },
     indicator: {
         display: 'none',
@@ -52,8 +58,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     icon: {
-        fontSize: 24,
-        fill: theme.palette.text.primary,
+        color: theme.palette.maskColor.main,
         cursor: 'pointer',
     },
     dialog: {
@@ -120,7 +125,7 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                     titleTail={
                         <div className={classes.tail}>
                             <IconButton onClick={() => tradeRef.current?.refresh()}>
-                                <RefreshIcon className={classes.icon} />
+                                <Refresh size={24} className={classes.icon} />
                             </IconButton>
                             <IconButton
                                 onClick={async () => {
@@ -148,7 +153,7 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                                         },
                                     })
                                 }}>
-                                <GearIcon className={classes.icon} />
+                                <Gear size={24} className={classes.icon} />
                             </IconButton>
                         </div>
                     }

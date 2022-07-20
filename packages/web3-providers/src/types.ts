@@ -25,9 +25,12 @@ import type {
     GasOptionType,
     HubOptions,
     HubIndicator,
+    TokenType,
+    NonFungibleContractSpenderAuthorization,
+    FungibleTokenSpenderAuthorization,
 } from '@masknet/web3-shared-base'
 import type { DataProvider } from '@masknet/public-api'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export namespace ExplorerAPI {
     export type Transaction = Web3Transaction & {
@@ -110,6 +113,94 @@ export namespace RSS3BaseAPI {
         name: string
     }
 
+    export interface NFT_Contract {
+        address: string
+        name: string
+        symbol: string
+    }
+
+    export interface NFT_Trait {
+        trait_type: string
+        value: string
+    }
+    export interface NFT_Type {
+        asset_contract: NFT_Contract
+        chain: string
+        description: string
+        image_preview_url: string
+        image_preview_url_ct: string
+        image_thumbnail_url: string
+        image_thumbnail_url_ct: string
+        image_url: string
+        image_url_ct: string
+        name: string
+        received_at: string
+        token_id: string
+        traits: NFT_Trait[]
+    }
+
+    export interface NFT {
+        id: string
+        detail: NFT_Type
+    }
+
+    export interface DonationTx {
+        adminAddr: string
+        amount: string
+        approach: string
+        donor: string
+        formatedAmount: string
+        symbol: string
+        timeStamp: string
+        tokenAddr: string
+        txHash: string
+    }
+
+    export interface DonationGrant {
+        active: boolean
+        admin_address: string
+        contract_address: string
+        description: string
+        id: number
+        logo: string
+        reference_url: string
+        slug: string
+        title: string
+        token_address: string
+        token_symbol: string
+    }
+
+    export interface DonationType {
+        grant: DonationGrant
+        txs: DonationTx[]
+    }
+
+    export interface Donation {
+        id: string
+        detail: DonationType
+    }
+
+    export interface FootprintType {
+        id: number
+        fancy_id: string
+        name: string
+        event_url: string
+        image_url: string
+        country: string
+        city: string
+        description: string
+        year: number
+        start_date: string
+        end_date: string
+        expiry_date: string
+        supply: number
+    }
+
+    export interface Footprint {
+        id: string
+        detail: FootprintType
+    }
+
     export enum AssetType {
         GitcoinDonation = 'Gitcoin-Donation',
         POAP = 'POAP',
@@ -126,8 +217,8 @@ export namespace RSS3BaseAPI {
         createRSS3(address: string): RSS3
         getFileData<T>(rss3: RSS3, address: string, key: string): Promise<T | undefined>
         setFileData<T>(rss3: RSS3, address: string, key: string, data: T): Promise<T>
-        getDonations(address: string): Promise<GeneralAssetResponse | undefined>
-        getFootprints(address: string): Promise<GeneralAssetResponse | undefined>
+        getDonations(address: string): Promise<Donation[] | undefined>
+        getFootprints(address: string): Promise<Footprint[] | undefined>
         getNameInfo(id: string): Promise<NameInfo | undefined>
         getProfileInfo(address: string): Promise<ProfileInfo | undefined>
     }
@@ -167,65 +258,76 @@ export namespace FungibleTokenAPI {
 
 export namespace NonFungibleTokenAPI {
     export interface Provider<ChainId, SchemaType, Indicator = HubIndicator> {
-        /** Get balance of a token owned by the account. */
-        getBalance?: (address: string, options?: HubOptions<ChainId, Indicator>) => Promise<number>
-        /** Get the detailed of a token. */
+        /** Get balance of a fungible token owned by the given account. */
+        getBalance?: (account: string, options?: HubOptions<ChainId, Indicator>) => Promise<number>
+        /** Get a non-fungible contract. */
         getContract?: (
             address: string,
             options?: HubOptions<ChainId>,
         ) => Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined>
-        /** Get a token asset. */
+        /** Get a non-fungible asset. */
         getAsset?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
         ) => Promise<NonFungibleAsset<ChainId, SchemaType> | undefined>
-        /** Get a list of token assets */
+        /** Get non-fungible assets owned by the given account. */
         getAssets?: (
+            account: string,
+            options?: HubOptions<ChainId>,
+        ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
+        /** Get non-fungible assets of the given collection. */
+        getAssetsByCollection?: (
             address: string,
             options?: HubOptions<ChainId>,
         ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
-        /** Get a token. */
+        /** Get a non-fungible token. */
         getToken?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
         ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
-        /** Get a list of tokens. */
+        /** Get non-fungible tokens owned by the given account. */
         getTokens?: (
-            from: string,
+            account: string,
             options?: HubOptions<ChainId, Indicator>,
         ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, Indicator>>
-        /** Get history events related to a token. */
+        /** Get non-fungible tokens of the given collection. */
+        getTokensByCollection?: (
+            account: string,
+            options?: HubOptions<ChainId, Indicator>,
+        ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, Indicator>>
+        /** Get events of a non-fungible token. */
         getEvents?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
-        ) => Promise<Array<NonFungibleTokenEvent<ChainId, SchemaType>>>
-        /** Get all listed orders for selling a token. */
+        ) => Promise<Pageable<NonFungibleTokenEvent<ChainId, SchemaType>>>
+        /** Get listed orders of a non-fungible token. */
         getListings?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
-        ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
-        /** Get all listed orders for buying a token. */
+        ) => Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
+        /** Get offered orders of a non-fungible token. */
         getOffers?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
-        ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
-        /** Get all orders. */
+        ) => Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
+        /** Get orders of a non-fungible token. */
         getOrders?: (
             address: string,
             tokenId: string,
             side: OrderSide,
             options?: HubOptions<ChainId>,
-        ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
-        /** Get all collections owned by the account. */
+        ) => Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
+        /** Get non-fungible collections owned by the given account. */
         getCollections?: (
-            address: string,
+            account: string,
             options?: HubOptions<ChainId, Indicator>,
         ) => Promise<Pageable<NonFungibleTokenCollection<ChainId>, Indicator>>
+
         /** Place a bid on a token. */
         createBuyOrder?: (/** TODO: add parameters */) => Promise<void>
         /** Listing a token for public sell. */
@@ -531,7 +633,7 @@ export namespace TwitterBaseAPI {
         >
         uploadUserAvatar: (screenName: string, image: Blob | File) => Promise<TwitterResult>
         updateProfileImage: (screenName: string, media_id_str: string) => Promise<AvatarInfo | undefined>
-        getUserByScreenName: (screenName: string) => Promise<User>
+        getUserByScreenName: (screenName: string) => Promise<User | null>
     }
 }
 
@@ -608,10 +710,6 @@ export namespace TokenAPI {
     }
 }
 
-export enum TrendingCoinType {
-    Fungible = 1,
-    NonFungible = 2,
-}
 export enum NonFungibleMarketplace {
     OpenSea = 'OpenSea',
     LooksRare = 'LooksRare',
@@ -658,7 +756,7 @@ export namespace TrendingAPI {
         chainId?: ChainId
         name: string
         symbol: string
-        type: TrendingCoinType
+        type: TokenType
         decimals?: number
         is_mirrored?: boolean
         platform_url?: string
@@ -783,5 +881,68 @@ export namespace TrendingAPI {
         getCurrencies(): Promise<Currency[]>
         // #endregion
         getPriceStats(chainId: ChainId, coinId: string, currency: Currency, days: number): Promise<Stat[]>
+    }
+}
+
+export namespace RabbyTokenAPI {
+    interface RawTokenSpender {
+        id: string
+        address: string
+        amount: number
+        value: number
+        exposure_usd: number
+        protocol: {
+            id: string
+            name: string
+            logo_url: string
+            chain: string
+        } | null
+        is_contract: boolean
+        is_open_source: boolean
+        is_hacked: boolean
+        is_abandoned: boolean
+    }
+
+    export interface RawTokenInfo {
+        id: string
+        address: string
+        name: string
+        symbol: string
+        logo_url: string
+        chain: string
+        price: number
+        balance: number
+        spenders: RawTokenSpender[]
+    }
+
+    export type TokenInfo = Omit<RawTokenInfo, 'spenders'>
+
+    export type TokenSpender = Omit<RawTokenSpender, 'protocol'> & {
+        tokenInfo: TokenInfo
+        name: string | undefined
+        logo: React.ReactNode | undefined
+        isMaskDapp: boolean
+    }
+
+    export interface NFTInfo {
+        chain: string
+        amount: string
+        contract_name: string
+        is_erc721?: boolean
+        contract_id: string
+        isMaskDapp?: boolean
+        spender: Omit<TokenSpender, 'tokenInfo'>
+    }
+
+    export interface Provider<ChainId> {
+        getApprovedNonFungibleContracts(
+            chainId: ChainId,
+            account: string,
+        ): Promise<Array<NonFungibleContractSpenderAuthorization<ChainId, SchemaType>>>
+
+        getApprovedFungibleTokenSpenders(
+            chainId: ChainId,
+            account: string,
+        ): Promise<Array<FungibleTokenSpenderAuthorization<ChainId, SchemaType>>>
     }
 }
