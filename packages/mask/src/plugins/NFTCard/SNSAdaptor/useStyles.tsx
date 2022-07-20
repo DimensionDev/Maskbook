@@ -14,28 +14,14 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
             margin: 'auto',
             overflowX: 'hidden',
         },
-        contentWrapper: {
-            width: 602,
-            padding: 0,
-            overflowY: 'auto',
-            overflowX: 'hidden',
-            height: '100%',
-            '::-webkit-scrollbar': {
-                backgroundColor: 'transparent',
-                width: 18,
-            },
-            '::-webkit-scrollbar-thumb': {
-                borderRadius: '20px',
-                width: 5,
-                border: '7px solid rgba(0, 0, 0, 0)',
-                backgroundColor: theme.palette.maskColor.secondaryLine,
-                backgroundClip: 'padding-box',
-            },
-        },
         dialogTitle: {
             '& > p': {
                 overflow: 'visible',
             },
+        },
+        contentWrapper: {
+            width: '100%',
+            display: 'flex',
         },
         abstractTabWrapper: {
             width: '100%',

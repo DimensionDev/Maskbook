@@ -5,15 +5,20 @@ import { PluginId } from '@masknet/plugin-infra'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { NFTCardDialogTabs } from './NFTCardDialog'
+import { NFTCardDialogTabs } from './NFTCardDialog'
 import { useStyles } from './useStyles'
 import { chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
+import { NFTBasicInfo } from './NFTBasicInfo'
+import { AboutTab } from './AboutTab'
+import { OffersTab } from './OffersTab'
+import { ActivityTab } from './ActivityTab'
 interface NFTCardDialogUIProps {
     currentTab: NFTCardDialogTabs
 }
 
 export function NFTCardDialogUI(props: NFTCardDialogUIProps) {
+    const { currentTab } = props
     const { classes } = useStyles()
     const { t: tb } = useBaseI18n()
     const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
@@ -25,7 +30,16 @@ export function NFTCardDialogUI(props: NFTCardDialogUIProps) {
             ?.supportedChainIds ?? []
     return (
         <div>
-            222
+            <div className={classes.contentWrapper}>
+                <NFTBasicInfo />
+                {currentTab === NFTCardDialogTabs.About ? (
+                    <AboutTab />
+                ) : currentTab === NFTCardDialogTabs.Offers ? (
+                    <OffersTab />
+                ) : (
+                    <ActivityTab />
+                )}
+            </div>
             <PluginWalletStatusBar className={classes.footer}>
                 <Button
                     variant="contained"

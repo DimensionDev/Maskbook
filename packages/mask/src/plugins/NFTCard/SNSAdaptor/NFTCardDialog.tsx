@@ -1,25 +1,10 @@
 import { InjectedDialog } from '@masknet/shared'
-import { DialogStackingProvider, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { DialogStackingProvider, MaskTabList, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { NFTCardDialogUI } from './NFTCardDialogUI'
-
-const useStyles = makeStyles()({
-    dialogRoot: {
-        minWidth: 400,
-        width: 600,
-        boxShadow: 'none',
-        backgroundImage: 'none',
-        maxWidth: 'none',
-    },
-    hideDialogRoot: {
-        visibility: 'hidden',
-    },
-    dialogContent: {
-        padding: '20px 24px',
-    },
-})
+import { useStyles } from './useStyles'
 
 export enum NFTCardDialogTabs {
     About = 'About',
