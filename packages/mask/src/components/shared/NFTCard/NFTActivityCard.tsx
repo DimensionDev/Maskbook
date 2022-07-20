@@ -88,7 +88,7 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
                     From <strong>B7000A2</strong>
                 </Typography>
                 <Typography className={classes.textBase}>
-                    to <strong>joshkaj1991</strong> 3 months ago
+                    to <strong>josh1991</strong> 3 months ago
                     <ExternalLink size={14} style={{ marginLeft: 4 }} />
                 </Typography>
             </div>

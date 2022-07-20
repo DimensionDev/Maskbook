@@ -37,7 +37,7 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
             marginLeft: 36,
             height: '100%',
         },
-        NFTBasicInfoWraper: {
+        NFTBasicInfoWrapper: {
             width: 300,
         },
         abstractTabWrapper: {
