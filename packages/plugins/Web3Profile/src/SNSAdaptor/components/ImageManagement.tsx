@@ -40,7 +40,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         '::-webkit-scrollbar': {
             backgroundColor: 'transparent',
-            width: 20,
+            width: 5,
         },
         '::-webkit-scrollbar-thumb': {
             borderRadius: '20px',

@@ -53,5 +53,6 @@
     "wallet_setting_hint": "Toggle the button to manage wallet display settings.",
     "no_authenticated_wallet": "That hasn't been authenticated yet.",
     "no_items_found": "No Items found.",
-    "account_empty": "Please verify this persona to set your Web3 profile."
+    "account_empty": "Please verify this persona to set your Web3 profile.",
+    "load_more": "load more"
 }
