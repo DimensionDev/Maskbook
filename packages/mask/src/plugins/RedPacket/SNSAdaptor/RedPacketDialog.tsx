@@ -20,7 +20,7 @@ import type { RedPacketSettings } from './hooks/useCreateCallback'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog'
 import { RedPacketPast } from './RedPacketPast'
 import { TabContext, TabPanel } from '@mui/lab'
-import { HistoryIcon } from '@masknet/icons'
+import { History } from '@masknet/icons'
 import { RedPacketERC20Form } from './RedPacketERC20Form'
 import { RedPacketERC721Form } from './RedPacketERC721Form'
 
@@ -182,7 +182,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 title={title}
                 titleTail={
                     step === CreateRedPacketPageStep.NewRedPacketPage && !showHistory ? (
-                        <HistoryIcon onClick={() => setShowHistory((history) => !history)} />
+                        <History onClick={() => setShowHistory((history) => !history)} />
                     ) : null
                 }
                 titleTabs={
