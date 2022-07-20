@@ -298,11 +298,11 @@ export function ConcealableTabs<T extends number | string>({
                                                 <LinkOut className={classes.linkIcon} />
                                             </Link>
                                             {x?.type === SocialAddressType.KV && (
-                                                <NextIdPersonaVerified sx={{ fill: '#3dc233' }} />
+                                                <NextIdPersonaVerified color="#3dc233" />
                                             )}
                                         </div>
                                         {isSameAddress(selectedAddress?.address, x.address) && (
-                                            <Selected sx={{ fill: '#1c68f3' }} />
+                                            <Selected color="#1c68f3" />
                                         )}
                                     </div>
                                 </MenuItem>

@@ -70,7 +70,6 @@ const useStyles = makeStyles()((theme) => {
             bottom: 0,
             backgroundColor: theme.palette.background.paper,
             borderRadius: '50%',
-            fill: theme.palette.maskColor.success,
         },
         alert: {
             fontSize: 12,
@@ -275,7 +274,7 @@ function NetworkItem({
                 ) : (
                     <ImageIcon size={30} icon={network.icon} />
                 )}
-                {selected && <SelectedIcon size={12} className={classes.checkedBadge} />}
+                {selected && <SelectedIcon size={12} color="#3dc233" className={classes.checkedBadge} />}
             </div>
             <Typography className={cx(classes.networkName, selected ? classes.selected : '')}>
                 {Others?.chainResolver.chainName(network.chainId)}
