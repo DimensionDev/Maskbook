@@ -5,6 +5,9 @@ import { ZoraIcon } from '../../../resources/ZoraIcon'
 import { RSS3Icon } from '../../../resources/RSS3Icon'
 import { DebankIcon } from '../../../resources/DebankIcon'
 import { SourceType } from '@masknet/web3-shared-base'
+import { GemIcon } from '../../../resources/GemIcon'
+import { LooksrareIcon } from '../../../resources/LooksrareIcon'
+import { X2Y2Icon } from '../../../resources/X2Y2Icon'
 
 const useStyles = makeStyles()({
     opensea: {
@@ -48,6 +51,12 @@ export function CollectibleProviderIcon(props: CollectibleProviderIconProps) {
             return <RSS3Icon classes={{ root: classes.rarible }} viewBox="0 0 16 16" />
         case SourceType.DeBank:
             return <DebankIcon classes={{ root: classes.rarible }} viewBox="0 0 16 16" />
+        case SourceType.Gem:
+            return <GemIcon classes={{ root: classes.rarible }} viewBox="0 0 16 16" />
+        case SourceType.LooksRare:
+            return <LooksrareIcon classes={{ root: classes.rarible }} viewBox="0 0 16 16" />
+        case SourceType.X2Y2:
+            return <X2Y2Icon classes={{ root: classes.rarible }} viewBox="0 0 16 16" />
         default:
             return <></>
     }

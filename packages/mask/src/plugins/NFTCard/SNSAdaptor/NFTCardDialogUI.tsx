@@ -9,10 +9,10 @@ import { NFTCardDialogTabs } from './NFTCardDialog'
 import { useStyles } from './useStyles'
 import { chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { NFTBasicInfo } from './NFTBasicInfo'
 import { AboutTab } from './AboutTab'
 import { OffersTab } from './OffersTab'
 import { ActivityTab } from './ActivityTab'
+import { NFTBasicInfo } from '../../../components/shared/NFTCard/NFTBasicInfo'
 interface NFTCardDialogUIProps {
     currentTab: NFTCardDialogTabs
     asset: any

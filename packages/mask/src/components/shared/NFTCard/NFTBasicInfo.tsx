@@ -2,6 +2,8 @@ import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Skeleton, Typography } from '@mui/material'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
+import { SourceType } from '@masknet/web3-shared-base'
+import { CollectibleProviderIcon } from '../../../plugins/Collectible/SNSAdaptor/CollectibleProviderIcon'
 interface NFTBasicInfoProps {
     asset: any
 }
@@ -13,6 +15,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
     },
     body: {
+        position: 'relative',
         width: '100%',
         marginBottom: 36,
     },
@@ -72,7 +75,17 @@ const useStyles = makeStyles()((theme) => ({
         gap: 6,
         marginTop: 12,
     },
+    absoluteProvider: {
+        top: '10%',
+        right: '10%',
+        position: 'absolute',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 8,
+    },
 }))
+
+const providersMap = [SourceType.Rarible]
 
 export function NFTBasicInfo(props: NFTBasicInfoProps) {
     const { asset } = props
@@ -84,6 +97,11 @@ export function NFTBasicInfo(props: NFTBasicInfoProps) {
     return (
         <div className={classes.layout}>
             <div className={classes.body}>
+                <div className={classes.absoluteProvider}>
+                    {providersMap.map((x) => {
+                        return <CollectibleProviderIcon key={x} provider={x} />
+                    })}
+                </div>
                 <NFTCardStyledAssetPlayer url={resourceUrl} classes={classes} isNative={false} />
             </div>
             <Typography className={classes.nameSm}>{_asset.metadata.name + '#' + _asset.tokenId}</Typography>

@@ -67,6 +67,8 @@ export enum SourceType {
     NFTScan = 'NFTScan',
     Alchemy_EVM = 'Alchemy_EVM',
     Alchemy_FLOW = 'Alchemy_FLOW',
+    Gem = 'Gem',
+    X2Y2 = 'X2Y2',
 }
 
 export enum TransactionStatusType {
