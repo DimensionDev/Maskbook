@@ -5,7 +5,6 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
         dialogRoot: {
             width: 800,
             height: 800,
-            overflowX: 'hidden',
             maxWidth: 800,
         },
         dialogContent: {
@@ -13,7 +12,7 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
             background: theme.palette.maskColor.bottom,
             padding: 0,
             height: '100%',
-            overflowX: 'hidden',
+            overflow: 'hidden',
         },
         dialogTitle: {
             '& > p': {
@@ -36,7 +35,7 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
         tabWrapper: {
             width: 'calc( 100% - 336px)',
             marginLeft: 36,
-            maxHeight: '100%,',
+            height: '100%',
         },
         NFTBasicInfoWraper: {
             width: 300,

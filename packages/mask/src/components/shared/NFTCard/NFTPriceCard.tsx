@@ -50,7 +50,7 @@ export function NFTPriceCard(props: NFTPriceCardProps) {
     return (
         <div className={classes.wrapper}>
             <div className={classes.header}>
-                <Typography className={classes.textBase}>price</Typography>
+                <Typography className={classes.textBase}>Price</Typography>
                 <Typography className={classes.textBase}>
                     Time left <strong>8</strong> h <strong>31</strong> m
                 </Typography>
