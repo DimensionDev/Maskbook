@@ -23,4 +23,9 @@ const indexedDB: KVStorageBackend = {
 setupMaskKVStorageBackend(indexedDB, memory)
 
 // Temporary, will be removed when the Mask SDK is ready
+if (process.env.NODE_ENV === 'development') {
+    Reflect.set(globalThis, 'fetch', () => {
+        throw new Error('Use globalThis.r2d2Fetch instead.')
+    })
+}
 Reflect.set(globalThis, 'r2d2Fetch', Services.Helper.r2d2Fetch)
