@@ -14,7 +14,7 @@ const createSOR_ = memoize(
         const providerURL = first(RPC_URLS)
         if (!providerURL) throw new Error('Unknown chain id.')
         return new SOR(
-            // @ts-ignore we choose a fixed provider cause it's only used here.
+            // we choose a fixed provider cause it's only used here.
             new JsonRpcProvider(providerURL),
             BALANCER_SOR_GAS_PRICE,
             BALANCER_MAX_NO_POOLS,
