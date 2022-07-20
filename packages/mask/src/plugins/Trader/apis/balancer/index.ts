@@ -1,9 +1,9 @@
+import BigNumber from 'bignumber.js'
+import { first, memoize } from 'lodash-unified'
 import { SOR } from '@balancer-labs/sor'
 import { JsonRpcProvider } from '@ethersproject/providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, getRPCConstants, getTraderConstants } from '@masknet/web3-shared-evm'
-import BigNumber from 'bignumber.js'
-import { first, memoize } from 'lodash-unified'
 import { BALANCER_MAX_NO_POOLS, BALANCER_SOR_GAS_PRICE, BALANCER_SWAP_TYPE } from '../../constants'
 import type { Route } from '../../types'
 
