@@ -28,6 +28,7 @@ import type {
     TokenType,
     NonFungibleContractSpenderAuthorization,
     FungibleTokenSpenderAuthorization,
+    NonFungibleTokenRarity,
 } from '@masknet/web3-shared-base'
 import type { DataProvider } from '@masknet/public-api'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -260,6 +261,12 @@ export namespace NonFungibleTokenAPI {
     export interface Provider<ChainId, SchemaType, Indicator = HubIndicator> {
         /** Get balance of a fungible token owned by the given account. */
         getBalance?: (account: string, options?: HubOptions<ChainId, Indicator>) => Promise<number>
+        /** Get a non-fungible rarity. */
+        getRarity?: (
+            address: string,
+            tokenId: string,
+            options?: HubOptions<ChainId, Indicator>,
+        ) => Promise<NonFungibleTokenRarity | undefined>
         /** Get a non-fungible contract. */
         getContract?: (
             address: string,

@@ -59,6 +59,7 @@ export enum SourceType {
     Zerion = 'Zerion',
 
     // NFT assets
+    Gem = 'Gem',
     RSS3 = 'RSS3',
     Zora = 'zora',
     OpenSea = 'opensea',
@@ -67,6 +68,10 @@ export enum SourceType {
     NFTScan = 'NFTScan',
     Alchemy_EVM = 'Alchemy_EVM',
     Alchemy_FLOW = 'Alchemy_FLOW',
+
+    // Rarity
+    RaritySniper = 'RaritySniper',
+    TraitSniper = 'TraitSniper',
 }
 
 export enum TransactionStatusType {
@@ -217,6 +222,12 @@ export interface FungibleToken<ChainId, SchemaType> extends Token<ChainId, Schem
     symbol: string
     decimals: number
     logoURL?: string
+}
+
+export interface NonFungibleTokenRarity {
+    rank: number
+    url: string
+    status?: 'verified' | 'unverified'
 }
 
 export interface NonFungibleTokenContract<ChainId, SchemaType> {
@@ -372,6 +383,8 @@ export interface NonFungibleAsset<ChainId, SchemaType> extends NonFungibleToken<
     owner?: Identity
     /** estimated price */
     price?: Price
+    /** rarity */
+    rarity?: Record<SourceType, NonFungibleTokenRarity>
     /** traits of the digital asset */
     traits?: NonFungibleTokenTrait[]
     /** token on auction */
