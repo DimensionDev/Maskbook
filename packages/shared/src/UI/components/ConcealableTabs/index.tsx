@@ -1,4 +1,4 @@
-import { Gear, ArrowDrop, LinkOut, RightArrow, NextIdPersonaVerified, Selected, LeftArrow, Rss3 } from '@masknet/icons'
+import { Gear, ArrowDrop, LinkOut, RightArrow, NextIdPersonaVerified, Selected, LeftArrow } from '@masknet/icons'
 import { ReversedAddress } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
@@ -315,9 +315,8 @@ export function ConcealableTabs<T extends number | string>({
                         {t.powered_by()}
                     </Typography>
                     <Typography fontSize="14px" fontWeight={700} marginRight="8px" color="#07101b">
-                        {t.rss3()}
+                        {t.mask_network()}
                     </Typography>
-                    <Rss3 sx={{ margin: '0 8px 0 0' }} />
                     <Gear onClick={handleOpenDialog} sx={{ cursor: 'pointer' }} />
                 </div>
             </div>
