@@ -5,14 +5,15 @@
 import { pasteImage } from '@masknet/injected-script'
 import type { NextIDPersonaBindings } from '@masknet/shared-base'
 import { first, isNull } from 'lodash-unified'
-import Services from '../extension/service'
+
 /**
  * Download given url return as Blob
  */
 export async function downloadUrl(url: string) {
     try {
         if (url.startsWith(browser.runtime.getURL(''))) {
-            return Services.Helper.fetch(url)
+            const response = await globalThis.r2d2Fetch(url)
+            return response.blob()
         }
     } catch {}
     const res = await fetch(url)

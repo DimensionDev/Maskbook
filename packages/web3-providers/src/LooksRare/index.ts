@@ -7,9 +7,8 @@ import type { LooksRareCollectionStats } from './types'
 
 export async function fetchFromLooksRare<T>(url: string, chainId: ChainId) {
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
-    const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
 
-    const response = await fetch(urlcat(LOOKSRARE_API_URL, url), { method: 'GET' })
+    const response = await globalThis.r2d2Fetch(urlcat(LOOKSRARE_API_URL, url), { method: 'GET' })
     if (response.ok) {
         return (await response.json()) as T
     } else {

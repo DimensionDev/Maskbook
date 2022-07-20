@@ -3,6 +3,7 @@ import urlcat from 'urlcat'
 export const r2d2URL = 'r2d2.to'
 
 export enum R2d2Workers {
+    cors = 'cors',
     alchemy = 'alchemy-proxy',
     opensea = 'opensea-proxy',
     nftscan = 'nftscan-proxy',
@@ -31,6 +32,8 @@ const alchemyMatchers: AlchemyProxyMatchTuple[] = [
 ]
 
 const workerMatchers: R2d2WorkerMatchTuple[] = [
+    ['https://api-mainnet.magiceden.io', R2d2Workers.cors],
+    ['https://www.nftscan.com', R2d2Workers.cors],
     ['https://api.opensea.io', R2d2Workers.opensea],
     ['https://restapi.nftscan.com', R2d2Workers.nftscan],
     ['https://gitcoin.co', R2d2Workers.gitcoin],
@@ -61,24 +64,28 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
     if (url.includes('r2d2.to')) return globalThis.fetch(input, init)
 
     // r2d2 worker
-    const r2deWorkerType =
+    const r2d2WorkerType =
         workerMatchers.find((x) => url.startsWith(x[0]))?.[1] ??
         (alchemyMatchers.find((x) => url.startsWith(x[0])) ? R2d2Workers.alchemy : undefined)
 
     const u = new URL(url)
 
-    if (r2deWorkerType) {
-        if (r2deWorkerType === R2d2Workers.alchemy) {
-            const alchemyType = alchemyMatchers.find((x) => u.origin === x[0])?.[1]
+    if (r2d2WorkerType) {
+        switch (r2d2WorkerType) {
+            case R2d2Workers.cors:
+                return globalThis.fetch(urlcat(`https://${r2d2WorkerType}.${r2d2URL}?:url`, url))
+            case R2d2Workers.alchemy:
+                const alchemyType = alchemyMatchers.find((x) => u.origin === x[0])?.[1]
 
-            return globalThis.fetch(
-                `https://${r2deWorkerType}.${r2d2URL}/${alchemyType}${
-                    alchemyType === AlchemyProxies.eth ? '/nft' : ''
-                }/v2/APIKEY/${u.pathname.replace('/nft', '').replace('/v2/', '')}${u.search}`,
-                init,
-            )
+                return globalThis.fetch(
+                    `https://${r2d2WorkerType}.${r2d2URL}/${alchemyType}${
+                        alchemyType === AlchemyProxies.eth ? '/nft' : ''
+                    }/v2/APIKEY/${u.pathname.replace('/nft', '').replace('/v2/', '')}${u.search}`,
+                    init,
+                )
+            default:
+                return globalThis.fetch(url.replace(u.origin, `https://${r2d2WorkerType}.${r2d2URL}`), init)
         }
-        return globalThis.fetch(url.replace(u.origin, `https://${r2deWorkerType}.${r2d2URL}`), init)
     }
 
     // fallback

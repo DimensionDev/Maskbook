@@ -17,8 +17,8 @@ export function useExternalPluginTemplate(url: string, manifest: Manifest | unde
 // TODO: support suspense, cache
 async function fetchTemplate(url: string | null) {
     if (!url) return
-    const blob = await Services.Helper.fetch(url)
-    const text = await blob.text()
+    const response = await globalThis.r2d2Fetch(url)
+    const text = await response.text()
     // TODO: support TrustedTypes
     const parser = new DOMParser()
     const dom = parser.parseFromString(text, 'text/html').querySelector('template')?.innerHTML

@@ -15,7 +15,8 @@ function getLastSalePrice(lastSale?: NonFungibleTokenEvent<ChainId, SchemaType> 
 }
 
 export async function getImage(image: string): Promise<string> {
-    const blob = await Services.Helper.fetch(image)
+    const response = await globalThis.r2d2Fetch(image)
+    const blob = await response.blob()
     return (await blobToBase64(blob)) as string
 }
 

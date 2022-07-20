@@ -17,7 +17,6 @@ export async function fetchJSON<T = unknown>(
 ): Promise<Result<T, string>> {
     type FetchCache = LRU<string, Promise<Response> | T>
 
-    const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
     const cached = enableCache ? (fetchCache as FetchCache).get(url) : undefined
     const isPending = cached instanceof Promise
 
@@ -28,7 +27,7 @@ export async function fetchJSON<T = unknown>(
     if (isPending) {
         pendingResponse = cached
     } else {
-        pendingResponse = fetch(url, requestInit)
+        pendingResponse = globalThis.r2d2Fetch(url, requestInit)
         if (enableCache) {
             fetchCache.set(url, pendingResponse)
         }

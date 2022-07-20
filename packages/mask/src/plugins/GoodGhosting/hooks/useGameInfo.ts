@@ -6,7 +6,6 @@ import { useGoodGhostingContract } from '../contracts/useGoodGhostingContract'
 import type { GameMetaData, GoodGhostingInfo, Player, TimelineEvent } from '../types'
 import { useI18N } from '../../../utils'
 import addSeconds from 'date-fns/addSeconds'
-import Services from '../../../extension/service'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { useSingleContractMultipleData } from '@masknet/plugin-infra/web3-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
@@ -20,7 +19,8 @@ export function useGameContractAddress(id: string) {
                 contractAddress: '',
             }
 
-        const gameData: any = await Services.Helper.fetchJSON(GOOD_GHOSTING_CONTRACT_ADDRESS_FILE)
+        const response = await globalThis.r2d2Fetch(GOOD_GHOSTING_CONTRACT_ADDRESS_FILE)
+        const gameData: any = await response.json()
         return gameData?.[id] || gameData?.default || {}
     }, [id, GOOD_GHOSTING_CONTRACT_ADDRESS_FILE])
 

@@ -1,4 +1,3 @@
-import Services from '../../extension/service'
 import { getAssetAsBlobURL as _ } from '@masknet/shared-base'
 
 /**
@@ -6,5 +5,8 @@ import { getAssetAsBlobURL as _ } from '@masknet/shared-base'
  * This function must run in React concurrent mode.
  */
 export function getAssetAsBlobURL(url: string | URL) {
-    return _(url, Services.Helper.fetch)
+    return _(url, async (url: string) => {
+        const response = await globalThis.r2d2Fetch(url)
+        return response.blob()
+    })
 }

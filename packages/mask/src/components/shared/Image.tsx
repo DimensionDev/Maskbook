@@ -2,6 +2,7 @@ import { useRef, useEffect, forwardRef, useImperativeHandle, useState, useMemo }
 import { useAsync } from 'react-use'
 import Services from '../../extension/service'
 import { Skeleton, SkeletonProps } from '@mui/material'
+
 export interface ImageProps {
     children?: never
     src: string | Blob
@@ -88,7 +89,8 @@ export const Image = forwardRef<ImageRef, ImageProps>(function Image(props, outg
             if (component === 'img') return
             if (typeof src !== 'string') return
             if (origin === 'current') return fetch(src).then((x) => x.blob())
-            return Services.Helper.fetch(src)
+            const response = await globalThis.r2d2Fetch(src)
+            return response.blob()
         },
         [component, src, origin],
     )

@@ -19,7 +19,6 @@ import { compact, first } from 'lodash-unified'
 import urlcat from 'urlcat'
 import Web3SDK from 'web3'
 import type { AbiItem } from 'web3-utils'
-import { courier } from '../helpers'
 import { LooksRare, OpenSea } from '../index'
 import { LooksRareLogo, OpenSeaLogo } from '../resources'
 import { NonFungibleMarketplace, NonFungibleTokenAPI, TrendingAPI } from '../types'
@@ -42,8 +41,7 @@ async function getToken() {
     if (token && isBefore(Date.now(), token.expiration)) {
         return token.token
     }
-    const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
-    const response = await fetch(NFTSCAN_ACCESS_TOKEN_URL, { method: 'GET' })
+    const response = await globalThis.r2d2Fetch(NFTSCAN_ACCESS_TOKEN_URL, { method: 'GET' })
     const {
         data,
     }: {
@@ -71,8 +69,8 @@ async function getContractSymbol(address: string, chainId: ChainId) {
 }
 
 async function fetchAsset<T>(path: string, body?: unknown) {
-    const url = courier(urlcat(NFTSCAN_BASE_API, path))
-    const response = await fetch(url, {
+    const url = urlcat(NFTSCAN_BASE_API, path)
+    const response = await globalThis.r2d2Fetch(url, {
         method: 'POST',
         headers: { 'Access-Token': await getToken(), 'Content-type': 'application/json' },
         body: JSON.stringify(body),
@@ -191,7 +189,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             pageIndex: index,
             pageSize: size,
         })
-        const response = await fetch(courier(url))
+        const response = await globalThis.r2d2Fetch(url)
         if (!response.ok) return createPageable([], createIndicator(indicator))
         const result: Result<NFTSearchData> = await response.json()
         if (!result.data) return createPageable([], createIndicator(indicator))
@@ -237,7 +235,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         const url = urlcat(NFTSCAN_BASE, '/nftscan/getNftPlatformInfo', {
             keyword: address,
         })
-        const response = await fetch(courier(url))
+        const response = await globalThis.r2d2Fetch(url)
         const result: { data: NFTPlatformInfo } = await response.json()
         return result.data
     }
@@ -245,7 +243,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         const url = urlcat(NFTSCAN_BASE, '/nftscan/searchNftPlatformName', {
             keyword,
         })
-        const response = await fetch(courier(url))
+        const response = await globalThis.r2d2Fetch(url)
         const result: { data: SearchNFTPlatformNameResult[] } = await response.json()
         return result.data ?? EMPTY_LIST
     }
@@ -255,7 +253,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             contract,
             range,
         })
-        const response = await fetch(courier(url))
+        const response = await globalThis.r2d2Fetch(url)
         const result: { data: VolumeAndFloorRecord[] } = await response.json()
         return result.data ?? EMPTY_LIST
     }

@@ -46,9 +46,7 @@ export async function fetchFromOpenSea<T>(url: string, chainId: ChainId, options
     const cacheKey = `${chainId}/${url}`
     let fetchingTask = cache.get(cacheKey)
     if (!fetchingTask) {
-        const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
-
-        fetchingTask = fetch(urlcat(OPENSEA_API_URL, url), { method: 'GET' })
+        fetchingTask = globalThis.r2d2Fetch(urlcat(OPENSEA_API_URL, url), { method: 'GET' })
         cache.set(cacheKey, fetchingTask, options)
     }
     const response = (await fetchingTask).clone()
