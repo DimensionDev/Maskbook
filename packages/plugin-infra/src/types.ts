@@ -960,6 +960,7 @@ export enum PluginId {
     Referral = 'com.maskbook.referral',
     Web3Profile = 'io.mask.web3-profile',
     ScamSniffer = 'io.scamsniffer.mask-plugin',
+    NFTCard = 'com.mask.nft-card',
     // @masknet/scripts: insert-here
 }
 /**
