@@ -27,8 +27,14 @@ function blobToBase64(blob: Blob) {
     })
 }
 
+async function fetchImage(url: string) {
+    const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
+    const response = await fetch(url)
+    return response.blob()
+}
+
 export async function toPNG(image: string) {
-    const imageData = await Services.Helper.fetch(image)
+    const imageData = await fetchImage(image)
     return new Promise<Blob | null>((resolve, reject) => {
         const img = new Image()
         const canvas = document.createElement('canvas')
