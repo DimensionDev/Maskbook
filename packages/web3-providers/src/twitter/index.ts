@@ -31,6 +31,13 @@ function getCSRFToken() {
     return value
 }
 
+async function uploadToTwitter(url: string, config: RequestInit) {
+    if (process.env.engine === 'firefox' && process.env.manifest === '2' && typeof content === 'object') {
+        return content.fetch(url, config)
+    }
+    return fetch(url, config)
+}
+
 async function fetchContentAsTwitterDotCom(url: string) {
     if (process.env.engine === 'firefox' && process.env.manifest === '2' && typeof content === 'object') {
         const response = await content.fetch(url)
@@ -158,12 +165,12 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
             credentials: 'include',
         })
         const mediaId = initRes.media_id_string
-
         // APPEND
         const appendURL = `${UPLOAD_AVATAR_URL}?command=APPEND&media_id=${mediaId}&segment_index=0`
         const formData = new FormData()
         formData.append('media', image)
-        await fetch(appendURL, {
+
+        await uploadToTwitter(appendURL, {
             method: 'POST',
             credentials: 'include',
             body: formData,
@@ -188,7 +195,8 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         }
         const updateProfileImageURL = 'https://twitter.com/i/api/1.1/account/update_profile_image.json'
         if (!bearerToken || !queryToken || !csrfToken) return
-        const response = await fetch(
+
+        const response = await uploadToTwitter(
             urlcat(updateProfileImageURL, {
                 media_id: media_id_str,
                 skip_status: 1,
@@ -253,10 +261,14 @@ function request<TResponse>(
 
     // This function is async, it will return a Promise:
 ): Promise<TResponse> {
+    const _fetch =
+        process.env.engine === 'firefox' && process.env.manifest === '2' && typeof content === 'object'
+            ? content.fetch
+            : fetch
     // Inside, we call the `fetch` function with
     // a URL and config given:
     return (
-        fetch(url, config)
+        _fetch(url, config)
             // When got a response call a `json` method on it
             .then((response) => response.json())
             // and return the result data.

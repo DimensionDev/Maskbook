@@ -27,7 +27,8 @@ function blobToBase64(blob: Blob) {
     })
 }
 
-export function toPNG(image: string) {
+export async function toPNG(image: string) {
+    const imageData = await Services.Helper.fetch(image)
     return new Promise<Blob | null>((resolve, reject) => {
         const img = new Image()
         const canvas = document.createElement('canvas')
@@ -44,7 +45,7 @@ export function toPNG(image: string) {
             reject(new Error('Could not load image'))
         })
         img.setAttribute('CrossOrigin', 'Anonymous')
-        img.src = image
+        img.src = URL.createObjectURL(imageData)
     })
 }
 
