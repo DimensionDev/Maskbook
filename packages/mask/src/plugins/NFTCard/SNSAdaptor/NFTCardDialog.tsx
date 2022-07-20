@@ -44,14 +44,14 @@ export function NFTCardDialog() {
             <TabContext value={currentTab}>
                 <InjectedDialog
                     open={open}
-                    title="NFT Card"
+                    title="NFT Details"
                     onClose={onClose}
                     classes={{ paper: classes.dialogRoot }}
                     titleTabs={
                         <MaskTabList variant="base" onChange={onChange} aria-label="Savings">
                             <Tab label="About" value="about" />
                             <Tab label="Offers" value="offers" />
-                            <Tab label="Offers" value="offers" />
+                            <Tab label="Activity" value="activity" />
                         </MaskTabList>
                     }>
                     <DialogContent className={classes.dialogContent}>
