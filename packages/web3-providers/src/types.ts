@@ -258,8 +258,8 @@ export namespace FungibleTokenAPI {
 
 export namespace NonFungibleTokenAPI {
     export interface Provider<ChainId, SchemaType, Indicator = HubIndicator> {
-        /** Get owned balance of a fungible token by given account. */
-        getBalance?: (address: string, options?: HubOptions<ChainId, Indicator>) => Promise<number>
+        /** Get balance of a fungible token owned by the given account. */
+        getBalance?: (account: string, options?: HubOptions<ChainId, Indicator>) => Promise<number>
         /** Get a non-fungible contract. */
         getContract?: (
             address: string,
@@ -271,8 +271,13 @@ export namespace NonFungibleTokenAPI {
             tokenId: string,
             options?: HubOptions<ChainId>,
         ) => Promise<NonFungibleAsset<ChainId, SchemaType> | undefined>
-        /** Get non-fungible assets */
+        /** Get non-fungible assets owned by the given account. */
         getAssets?: (
+            account: string,
+            options?: HubOptions<ChainId>,
+        ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
+        /** Get non-fungible assets of the given collection. */
+        getAssetsByCollection?: (
             address: string,
             options?: HubOptions<ChainId>,
         ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
@@ -282,9 +287,14 @@ export namespace NonFungibleTokenAPI {
             tokenId: string,
             options?: HubOptions<ChainId>,
         ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
-        /** Get non-fungible tokens. */
+        /** Get non-fungible tokens owned by the given account. */
         getTokens?: (
-            from: string,
+            account: string,
+            options?: HubOptions<ChainId, Indicator>,
+        ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, Indicator>>
+        /** Get non-fungible tokens of the given collection. */
+        getTokensByCollection?: (
+            account: string,
             options?: HubOptions<ChainId, Indicator>,
         ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, Indicator>>
         /** Get events of a non-fungible token. */
@@ -292,31 +302,32 @@ export namespace NonFungibleTokenAPI {
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
-        ) => Promise<Array<NonFungibleTokenEvent<ChainId, SchemaType>>>
+        ) => Promise<Pageable<NonFungibleTokenEvent<ChainId, SchemaType>>>
         /** Get listed orders of a non-fungible token. */
         getListings?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
-        ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
-        /** Get offering orders of a non-fungible token. */
+        ) => Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
+        /** Get offered orders of a non-fungible token. */
         getOffers?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
-        ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
+        ) => Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
         /** Get orders of a non-fungible token. */
         getOrders?: (
             address: string,
             tokenId: string,
             side: OrderSide,
             options?: HubOptions<ChainId>,
-        ) => Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>>
-        /** Get non-fungible collections of given account. */
+        ) => Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
+        /** Get non-fungible collections owned by the given account. */
         getCollections?: (
-            address: string,
+            account: string,
             options?: HubOptions<ChainId, Indicator>,
         ) => Promise<Pageable<NonFungibleTokenCollection<ChainId>, Indicator>>
+
         /** Place a bid on a token. */
         createBuyOrder?: (/** TODO: add parameters */) => Promise<void>
         /** Listing a token for public sell. */
