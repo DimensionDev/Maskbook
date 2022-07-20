@@ -1,9 +1,9 @@
+import BigNumber from 'bignumber.js'
+import { first, memoize } from 'lodash-unified'
 import { SOR } from '@balancer-labs/sor'
 import { JsonRpcProvider } from '@ethersproject/providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, getRPCConstants, getTraderConstants } from '@masknet/web3-shared-evm'
-import BigNumber from 'bignumber.js'
-import { first, memoize } from 'lodash-unified'
 import { BALANCER_MAX_NO_POOLS, BALANCER_SOR_GAS_PRICE, BALANCER_SWAP_TYPE } from '../../constants'
 import type { Route } from '../../types'
 
@@ -14,7 +14,7 @@ const createSOR_ = memoize(
         const providerURL = first(RPC_URLS)
         if (!providerURL) throw new Error('Unknown chain id.')
         return new SOR(
-            // we choose a fixed provider cause it's only used here.
+            // @ts-ignore we choose a fixed provider cause it's only used here.
             new JsonRpcProvider(providerURL),
             BALANCER_SOR_GAS_PRICE,
             BALANCER_MAX_NO_POOLS,
