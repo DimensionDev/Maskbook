@@ -195,7 +195,7 @@ class Hub implements EVM_Hub {
         const { TOKEN_ASSET_BASE_URI = EMPTY_LIST } = getTokenAssetBaseURLConstants(options.chainId)
         const checkSummedAddress = formatEthereumAddress(address)
 
-        if (isSameAddress(getTokenConstants(chainId).NATIVE_TOKEN_ADDRESS, checkSummedAddress)) {
+        if (isSameAddress(getTokenConstants(options.chainId).NATIVE_TOKEN_ADDRESS, checkSummedAddress)) {
             return TOKEN_ASSET_BASE_URI.map((x) => `${x}/info/logo.png`)
         }
 
@@ -239,14 +239,22 @@ class Hub implements EVM_Hub {
         account: string,
         initial?: HubOptions<ChainId>,
     ): Promise<Array<FungibleTokenSpenderAuthorization<ChainId, SchemaType>>> {
-        return Rabby.getApprovedFungibleTokenSpenders(chainId, account)
+        const options = this.getOptions(initial, {
+            chainId,
+            account,
+        })
+        return Rabby.getApprovedFungibleTokenSpenders(options.chainId, options.account)
     }
     async getApprovedNonFungibleContracts(
         chainId: ChainId,
         account: string,
         initial?: HubOptions<ChainId>,
     ): Promise<Array<NonFungibleContractSpenderAuthorization<ChainId, SchemaType>>> {
-        return Rabby.getApprovedNonFungibleContracts(chainId, account)
+        const options = this.getOptions(initial, {
+            chainId,
+            account,
+        })
+        return Rabby.getApprovedNonFungibleContracts(options.chainId, options.account)
     }
 
     async getFungibleAsset(
@@ -306,7 +314,9 @@ class Hub implements EVM_Hub {
         account: string,
         initial?: HubOptions<ChainId>,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
-        const options = this.getOptions(initial)
+        const options = this.getOptions(initial, {
+            account,
+        })
         const providers = this.getProviders(
             {
                 [SourceType.OpenSea]: OpenSea,
@@ -318,7 +328,7 @@ class Hub implements EVM_Hub {
             initial,
         )
         return attemptUntil(
-            providers.map((x) => () => x.getAssets(account, options)),
+            providers.map((x) => () => x.getAssets(options.account, options)),
             createPageable(EMPTY_LIST, createIndicator(options.indicator)),
         )
     }
