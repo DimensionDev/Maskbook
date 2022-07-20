@@ -1,17 +1,6 @@
 import { CustomEventId, encodeEvent, InternalEvents } from '../shared'
-import {
-    error,
-    _XPCNativeWrapper,
-    no_xray_Proxy,
-    no_xray_DataTransfer,
-    no_xray_CustomEvent,
-    apply,
-    dispatchEvent,
-} from './intrinsic'
+import { $NoXRay, $ } from './intrinsic'
 
-const { Blob: no_xray_Blob, File: no_xray_File } = globalThis.window
-const EventTargetPrototype = globalThis.window.EventTarget.prototype
-const { now } = Date
 // Firefox magics!
 export function overwriteFunctionOnXRayObject<T extends object>(
     xray_object: T,
@@ -19,8 +8,8 @@ export function overwriteFunctionOnXRayObject<T extends object>(
     apply: (target: any, thisArg: any, argArray?: any) => any,
 ) {
     try {
-        if (_XPCNativeWrapper) {
-            const rawObject = _XPCNativeWrapper.unwrap(xray_object)
+        if ($.XPCNativeWrapper) {
+            const rawObject = $.XPCNativeWrapper.unwrap(xray_object)
             const rawFunction = rawObject[defineAs]
             exportFunction!(
                 function (this: any) {
@@ -32,33 +21,33 @@ export function overwriteFunctionOnXRayObject<T extends object>(
             return
         }
     } catch {
-        error('Redefine failed. Try to use Proxy as fallback.')
+        $.ConsoleError('Redefine failed. Try to use Proxy as fallback.')
     }
-    xray_object[defineAs] = new no_xray_Proxy(xray_object[defineAs], { apply })
+    xray_object[defineAs] = new $NoXRay.Proxy(xray_object[defineAs], { apply })
 }
 
 export function redefineEventTargetPrototype<K extends keyof EventTarget>(
     defineAs: K,
     apply: NonNullable<ProxyHandler<EventTarget[K]>['apply']>,
 ) {
-    overwriteFunctionOnXRayObject(EventTargetPrototype, defineAs, apply)
+    overwriteFunctionOnXRayObject($NoXRay.EventTargetPrototype, defineAs, apply)
 }
 
 /** get the xray-unwrapped version of a C++ binding object */
 export function unwrapXRay_CPPBindingObject<T>(x: T) {
-    if (_XPCNativeWrapper) return _XPCNativeWrapper.unwrap(x)
+    if ($.XPCNativeWrapper) return $.XPCNativeWrapper.unwrap(x)
     return x
 }
 
 /** Clone a object into the page realm */
 export function clone_into<T>(x: T) {
-    if (_XPCNativeWrapper && typeof cloneInto === 'function') return cloneInto(x, window, { cloneFunctions: true })
+    if ($.XPCNativeWrapper && typeof cloneInto === 'function') return cloneInto(x, window, { cloneFunctions: true })
     return x
 }
 
 export function constructXrayUnwrappedDataTransferProxy(xrayUnwrappedFile: File) {
-    return new no_xray_Proxy(
-        new no_xray_DataTransfer(),
+    return new $NoXRay.Proxy(
+        new $NoXRay.DataTransfer(),
         clone_into({
             get(target, key: keyof DataTransfer) {
                 if (key === 'files') return clone_into([xrayUnwrappedFile])
@@ -86,9 +75,9 @@ export function constructXrayUnwrappedFilesFromUintLike(
     xray_fileContent: number[] | Uint8Array,
 ) {
     const binary = unwrapXRay_CPPBindingObject(Uint8Array.from(xray_fileContent))
-    const blob = new no_xray_Blob([binary], { type: format })
-    const file = new no_xray_File([blob], fileName, {
-        lastModified: now(),
+    const blob = new $NoXRay.Blob([binary], { type: format })
+    const file = new $NoXRay.File([blob], fileName, {
+        lastModified: $.DateNow(),
         type: format,
     })
     return file
@@ -112,13 +101,10 @@ export async function handlePromise(id: number, promise: () => any) {
 
 export function sendEvent<T extends keyof InternalEvents>(event: T, ...args: InternalEvents[T]) {
     const detail = encodeEvent(event, args)
-    apply(dispatchEvent, document, [new no_xray_CustomEvent(CustomEventId, { detail })])
+    $NoXRay.dispatchEvent(document, new $NoXRay.CustomEvent(CustomEventId, { detail }))
 }
 
-const { includes } = String.prototype
-const { URL } = globalThis
-const originGetter = Object.getOwnPropertyDescriptor(URL.prototype, 'origin')!.get!
 export function isTwitter() {
-    const url = new URL(window.location.href)
-    return apply(includes, originGetter.call(url), ['twitter.com'])
+    const url = new $.URL(window.location.href)
+    return $.StringInclude($.URL_origin_getter(url), 'twitter.com')
 }

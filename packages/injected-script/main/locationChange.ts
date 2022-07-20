@@ -1,26 +1,26 @@
-import { apply, dispatchEvent, no_xray_Event, no_xray_Proxy } from './intrinsic'
+import { $NoXRay, $ } from './intrinsic'
 
 function setupChromium() {
     let currentLocationHref = window.location.href
     // Learn more about this hack from https://stackoverflow.com/a/52809105/1986338
-    window.history.pushState = new no_xray_Proxy(history.pushState, {
+    window.history.pushState = new $NoXRay.Proxy(history.pushState, {
         apply(target, thisArg, params: any) {
-            const val = apply(target, thisArg, params)
-            apply(dispatchEvent, window, [new no_xray_Event('pushstate')])
+            const val = $.Reflect.apply(target, thisArg, params)
+            $NoXRay.dispatchEvent(window, new $NoXRay.Event('locationchange'))
             if (currentLocationHref !== window.location.href) {
                 currentLocationHref = window.location.href
-                apply(dispatchEvent, window, [new no_xray_Event('locationchange')])
+                $NoXRay.dispatchEvent(window, new $NoXRay.Event('locationchange'))
             }
             return val
         },
     })
-    window.history.replaceState = new no_xray_Proxy(history.replaceState, {
+    window.history.replaceState = new $NoXRay.Proxy(history.replaceState, {
         apply(target, thisArg, params: any) {
-            const val = apply(target, thisArg, params)
-            apply(dispatchEvent, window, [new no_xray_Event('replacestate')])
+            const val = $.Reflect.apply(target, thisArg, params)
+            $NoXRay.dispatchEvent(window, new $NoXRay.Event('replacestate'))
             if (currentLocationHref !== window.location.href) {
                 currentLocationHref = window.location.href
-                apply(dispatchEvent, window, [new no_xray_Event('locationchange')])
+                $NoXRay.dispatchEvent(window, new $NoXRay.Event('replacestate'))
             }
             return val
         },
@@ -29,7 +29,7 @@ function setupChromium() {
     window.addEventListener('popstate', () => {
         if (currentLocationHref === window.location.href) return
         currentLocationHref = window.location.href
-        apply(dispatchEvent, window, [new no_xray_Event('locationchange')])
+        $NoXRay.dispatchEvent(window, new $NoXRay.Event('locationchange'))
     })
 }
 
@@ -45,7 +45,7 @@ function setupGecko() {
     }).observe(document, { subtree: true, childList: true })
 
     function onLocationChange() {
-        apply(dispatchEvent, window, [new no_xray_Event('locationchange')])
+        $NoXRay.dispatchEvent(window, new $NoXRay.Event('locationchange'))
     }
 }
 
@@ -54,5 +54,3 @@ function setupGecko() {
     if (isFF) setupGecko()
     setupChromium()
 })()
-
-export {}
