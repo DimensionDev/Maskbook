@@ -71,7 +71,7 @@
     "@types/uuid": "^8.3.4",
     "@uniswap/sdk-core": "^3.0.1",
     "@uniswap/v2-sdk": "3.0.0-alpha.2",
-    "@uniswap/v3-sdk": "^3.3.2",
+    "@uniswap/v3-sdk": "3.9.0",
     "anchorme": "^2.1.2",
     "assert": "^2.0.0",
     "async-call-rpc": "^6.1.0",
