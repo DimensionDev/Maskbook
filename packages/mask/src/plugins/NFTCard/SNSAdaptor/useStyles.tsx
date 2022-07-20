@@ -6,6 +6,7 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
             width: 800,
             height: 800,
             overflowX: 'hidden',
+            maxWidth: 800,
         },
         dialogContent: {
             width: '100%',
@@ -30,8 +31,12 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
             height: '100%',
             display: 'flex',
             padding: 24,
-            gap: 36,
             boxSizing: 'border-box',
+        },
+        tabWrapper: {
+            flexGrow: 1,
+            marginLeft: 36,
+            maxHeight: '100%,',
         },
         NFTBasicInfoWraper: {
             width: 300,

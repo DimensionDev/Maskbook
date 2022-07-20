@@ -29,17 +29,20 @@ export function NFTCardDialogUI(props: NFTCardDialogUIProps) {
     const chainIdList =
         useActivatedPlugin(PluginId.NFTCard, 'any')?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]
             ?.supportedChainIds ?? []
+    console.log(asset, 'asset')
     return (
         <div className={classes.contentWrapper}>
             <div className={classes.contentLayout}>
                 <NFTBasicInfo asset={asset} />
-                {currentTab === NFTCardDialogTabs.About ? (
-                    <AboutTab />
-                ) : currentTab === NFTCardDialogTabs.Offers ? (
-                    <OffersTab />
-                ) : (
-                    <ActivityTab />
-                )}
+                <div className={classes.tabWrapper}>
+                    {currentTab === NFTCardDialogTabs.About ? (
+                        <AboutTab asset={asset} />
+                    ) : currentTab === NFTCardDialogTabs.Offers ? (
+                        <OffersTab />
+                    ) : (
+                        <ActivityTab />
+                    )}
+                </div>
             </div>
             <PluginWalletStatusBar className={classes.footer}>
                 <Button
