@@ -20,11 +20,11 @@ import type { RedPacketSettings } from './hooks/useCreateCallback'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog'
 import { RedPacketPast } from './RedPacketPast'
 import { TabContext, TabPanel } from '@mui/lab'
-import { HistoryIcon } from '@masknet/icons'
+import { History } from '@masknet/icons'
 import { RedPacketERC20Form } from './RedPacketERC20Form'
 import { RedPacketERC721Form } from './RedPacketERC721Form'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ showHistory: boolean }>()((theme, { showHistory }) => ({
     content: {
         position: 'relative',
         paddingTop: 50,
@@ -71,6 +71,15 @@ const useStyles = makeStyles()((theme) => ({
         width: 20,
         marginRight: 4,
     },
+    injectedDialog: {
+        ...(showHistory
+            ? {
+                  '& [role="dialog"]': {
+                      height: '620px !important',
+                  },
+              }
+            : {}),
+    },
 }))
 
 enum CreateRedPacketPageStep {
@@ -86,7 +95,9 @@ interface RedPacketDialogProps extends withClasses<never> {
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
     const t = useI18N()
-    const { cx, classes } = useStyles()
+    const [showHistory, setShowHistory] = useState(false)
+    const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
+    const { cx, classes } = useStyles({ showHistory })
     const { attachMetadata, dropMetadata } = useCompositionContext()
     const state = useState(DialogTabs.create)
     const [isNFTRedPacketLoaded, setIsNFTRedPacketLoaded] = useState(false)
@@ -94,8 +105,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const [settings, setSettings] = useState<RedPacketSettings>()
-    const [showHistory, setShowHistory] = useState(false)
-    const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
 
     const onClose = useCallback(() => {
         setStep(CreateRedPacketPageStep.NewRedPacketPage)
@@ -163,7 +172,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const isCreateStep = step === CreateRedPacketPageStep.NewRedPacketPage
     const title = isCreateStep ? t.display_name() : t.details()
-
     const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
 
     return (
@@ -174,7 +182,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 title={title}
                 titleTail={
                     step === CreateRedPacketPageStep.NewRedPacketPage && !showHistory ? (
-                        <HistoryIcon onClick={() => setShowHistory((history) => !history)} />
+                        <History onClick={() => setShowHistory((history) => !history)} />
                     ) : null
                 }
                 titleTabs={
@@ -185,6 +193,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                         </MaskTabList>
                     ) : null
                 }
+                className={classes.injectedDialog}
                 onClose={() => (showHistory ? setShowHistory(false) : onBack())}
                 isOnBack={showHistory || step !== CreateRedPacketPageStep.NewRedPacketPage}
                 disableTitleBorder>
