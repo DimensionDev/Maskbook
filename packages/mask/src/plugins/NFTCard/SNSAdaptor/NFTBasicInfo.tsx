@@ -50,8 +50,8 @@ const useStyles = makeStyles()((theme) => ({
         minHeight: 300,
     },
     imgWrapper: {
-        width: 300,
-        height: 300,
+        minWidth: 300,
+        minHeight: 300,
         background: 'black',
         borderRadius: 20,
         '& > img': {

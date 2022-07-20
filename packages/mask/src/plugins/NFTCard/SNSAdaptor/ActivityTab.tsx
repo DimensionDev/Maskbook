@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { NFTActivityCard } from '../../../components/shared/NFTCard/NFTActivityCard'
+import { NFTActivityCard, ActivityType } from '../../../components/shared/NFTCard/NFTActivityCard'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -22,9 +22,9 @@ export function ActivityTab(props: ActivityTabProps) {
     const _asset = asset.value
     return (
         <div className={classes.wrapper}>
-            <NFTActivityCard activity="" />
-            <NFTActivityCard activity="" />
-            <NFTActivityCard activity="" />
+            <NFTActivityCard type={ActivityType.Sale} activity="" />
+            <NFTActivityCard type={ActivityType.Transfer} activity="" />
+            <NFTActivityCard type={ActivityType.Mint} activity="" />
         </div>
     )
 }
