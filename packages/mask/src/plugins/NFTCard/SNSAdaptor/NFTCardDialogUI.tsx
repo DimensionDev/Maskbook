@@ -15,10 +15,11 @@ import { OffersTab } from './OffersTab'
 import { ActivityTab } from './ActivityTab'
 interface NFTCardDialogUIProps {
     currentTab: NFTCardDialogTabs
+    asset: any
 }
 
 export function NFTCardDialogUI(props: NFTCardDialogUIProps) {
-    const { currentTab } = props
+    const { currentTab, asset } = props
     const { classes } = useStyles()
     const { t: tb } = useBaseI18n()
     const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
@@ -29,9 +30,9 @@ export function NFTCardDialogUI(props: NFTCardDialogUIProps) {
         useActivatedPlugin(PluginId.NFTCard, 'any')?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]
             ?.supportedChainIds ?? []
     return (
-        <div>
-            <div className={classes.contentWrapper}>
-                <NFTBasicInfo />
+        <div className={classes.contentWrapper}>
+            <div className={classes.contentLayout}>
+                <NFTBasicInfo asset={asset} />
                 {currentTab === NFTCardDialogTabs.About ? (
                     <AboutTab />
                 ) : currentTab === NFTCardDialogTabs.Offers ? (

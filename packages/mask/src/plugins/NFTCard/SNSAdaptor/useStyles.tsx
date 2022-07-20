@@ -3,15 +3,15 @@ import { makeStyles, parseColor } from '@masknet/theme'
 export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
     (theme, props) => ({
         dialogRoot: {
-            width: 600,
-            height: 620,
+            width: 800,
+            height: 800,
             overflowX: 'hidden',
         },
         dialogContent: {
-            width: 600,
+            width: '100%',
             background: theme.palette.maskColor.bottom,
             padding: 0,
-            margin: 'auto',
+            height: '100%',
             overflowX: 'hidden',
         },
         dialogTitle: {
@@ -20,8 +20,21 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
             },
         },
         contentWrapper: {
+            height: '100%',
             width: '100%',
             display: 'flex',
+            flexDirection: 'column',
+        },
+        contentLayout: {
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            padding: 24,
+            gap: 36,
+            boxSizing: 'border-box',
+        },
+        NFTBasicInfoWraper: {
+            width: 300,
         },
         abstractTabWrapper: {
             width: '100%',
@@ -39,35 +52,6 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
         },
         tabPanel: {
             marginTop: 12,
-        },
-        approvalWrapper: {
-            display: 'flex',
-            flexDirection: 'column',
-            width: '100%',
-            height: '100%',
-        },
-        approvalContentWrapper: {
-            flexGrow: 1,
-            width: 565,
-            paddingTop: 8,
-            marginLeft: 16,
-            display: 'flex',
-            flexDirection: 'column',
-        },
-        approvalEmptyOrLoadingWrapper: {
-            flexGrow: 1,
-            width: '100%',
-            height: 360,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-        },
-        approvalEmptyOrLoadingContent: {
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            fontSize: 14,
         },
         emptyText: {
             color: theme.palette.text.secondary,
