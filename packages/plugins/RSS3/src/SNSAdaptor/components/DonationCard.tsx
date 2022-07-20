@@ -1,13 +1,17 @@
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import { makeStyles } from '@masknet/theme'
+import type { RSS3BaseAPI } from '@masknet/web3-providers'
+import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import classnames from 'classnames'
-import { HTMLProps, Fragment } from 'react'
+import formatDateTime from 'date-fns/format'
+import type { HTMLProps } from 'react'
 import { RSS3_DEFAULT_IMAGE } from '../../constants'
 import { useI18N } from '../../locales'
-import type { GeneralAsset } from '../../types'
 
 export interface DonationCardProps extends HTMLProps<HTMLDivElement> {
-    donation: GeneralAsset
+    donation: RSS3BaseAPI.Donation
+    address: SocialAddress<NetworkPluginID>
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -15,7 +19,6 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 8,
         display: 'flex',
         flexDirection: 'row',
-        backgroundColor: MaskColorVar.twitterBg,
         flexGrow: 1,
         alignItems: 'stretch',
         padding: 3,
@@ -27,70 +30,67 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 8,
         objectFit: 'cover',
     },
-    title: {
-        color: theme.palette.text.primary,
-        fontSize: 16,
+    date: {
+        color: theme.palette.maskColor.main,
+        fontSize: 14,
+        fontWeight: 400,
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
     },
     info: {
-        flexGrow: 1,
+        marginTop: 15,
         marginLeft: '12px',
         fontSize: 16,
-        display: 'flex',
-        overflow: 'hidden',
-        flexDirection: 'column',
-        justifyContent: 'space-around',
-        fontFamily: '-apple-system,system-ui,sans-serif',
     },
     infoRow: {
-        whiteSpace: 'nowrap',
+        marginBottom: 8,
         overflow: 'hidden',
         textOverflow: 'ellipsis',
     },
-    infoLabel: {
-        color: theme.palette.text.primary,
+    activity: {
+        fontSize: 14,
+        fontWeight: 400,
+        fontColor: theme.palette.maskColor.main,
     },
-    infoValue: {
-        color: theme.palette.text.secondary,
+    fontColor: {
+        color: theme.palette.maskColor.primary,
     },
 }))
 
-export const DonationCard = ({ donation, className, ...rest }: DonationCardProps) => {
+export const DonationCard = ({ donation, address, className, ...rest }: DonationCardProps) => {
     const { classes } = useStyles()
     const t = useI18N()
+    const { value: domain } = useReverseAddress(address.networkSupporterPluginID, address.address)
+    const { Others } = useWeb3State(address.networkSupporterPluginID)
+    const reversedAddress =
+        !domain || !Others?.formatDomainName
+            ? Others?.formatAddress?.(address.address, 5) ?? address.address
+            : Others.formatDomainName(domain)
+
+    const date = donation.detail?.txs?.[0]
+        ? formatDateTime(new Date(Number(donation.detail?.txs?.[0]?.timeStamp) * 1000), 'MMM dd, yyyy')
+        : '--'
     return (
         <div className={classnames(classes.card, className)} {...rest}>
             <img
                 className={classes.cover}
-                src={donation.info.image_preview_url || RSS3_DEFAULT_IMAGE}
-                alt={donation.info.title || t.inactive_project()}
+                src={donation.detail?.grant?.logo || RSS3_DEFAULT_IMAGE}
+                alt={donation.detail?.grant?.title || t.inactive_project()}
             />
             <div className={classes.info}>
                 <div className={classes.infoRow}>
-                    <Typography
-                        variant="h6"
-                        color="textPrimary"
-                        fontWeight={600}
-                        className={classes.title}
-                        title={donation.info.title || t.inactive_project()}>
-                        {donation.info.title || t.inactive_project()}
+                    <Typography className={classes.date} title={date}>
+                        {date}
                     </Typography>
                 </div>
                 <div className={classes.infoRow}>
-                    <span className={classes.infoLabel}>{donation.info.total_contribs || 0} </span>
-                    <span className={classes.infoValue}>
-                        {t.contribution({ count: donation.info.total_contribs || 0 })}
-                    </span>
-                </div>
-                <div className={classes.infoRow}>
-                    {(donation.info.token_contribs || []).map((contrib, i) => (
-                        <Fragment key={i}>
-                            <span className={classes.infoLabel}>{contrib.amount}</span>
-                            <span className={classes.infoValue}> {contrib.token} </span>
-                        </Fragment>
-                    ))}
+                    <Typography className={classes.activity}>
+                        <span className={classes.fontColor}>{reversedAddress}</span> {t.contributed()}{' '}
+                        {donation.detail?.txs?.[0]?.formatedAmount}
+                        {donation.detail?.txs?.[0]?.symbol} <span className={classes.fontColor}>{t.to()}</span>{' '}
+                        {donation.detail?.grant?.title}
+                    </Typography>
                 </div>
             </div>
         </div>

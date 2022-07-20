@@ -5,5 +5,7 @@
     "no_data": "No data",
     "total_grants": "Total {{count}} Grants",
     "contribution": "Contribution",
-    "contribution_other": "Contributions"
+    "contribution_other": "Contributions",
+    "contributed": "contributed",
+    "to": "to"
 }

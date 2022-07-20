@@ -1,40 +1,16 @@
-import { makeStyles } from '@masknet/theme'
-import urlcat from 'urlcat'
-import type { GeneralAsset, GeneralAssetWithTags } from '../../types'
+import type { RSS3BaseAPI } from '@masknet/web3-providers'
+import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
 import { FootprintCard, StatusBox } from '../components'
 import { useRss3Profile } from '../hooks'
 
-const useStyles = makeStyles()((theme) => ({
-    address: {
-        color: theme.palette.primary.main,
-    },
-    link: {
-        '&:hover': {
-            textDecoration: 'none',
-        },
-    },
-}))
-
-const getFootprintLink = (label: string, footprint: GeneralAssetWithTags) => {
-    const { platform, identity, id, type } = footprint
-    return urlcat(`https://${label}.bio/singlefootprint/:platform/:identity/:id/:type`, {
-        platform,
-        identity,
-        id,
-        type: type.replaceAll('-', '.'),
-    })
-}
-
 export interface FootprintPageProps {
-    footprints?: GeneralAsset[]
+    footprints?: RSS3BaseAPI.Footprint[]
     loading?: boolean
-    addressLabel: string
-    address?: string
+    address: SocialAddress<NetworkPluginID>
 }
 
-export function FootprintPage({ footprints = [], address, loading, addressLabel }: FootprintPageProps) {
-    const { classes } = useStyles()
-    const { value: profile } = useRss3Profile(address || '')
+export function FootprintPage({ footprints = [], address, loading }: FootprintPageProps) {
+    const { value: profile } = useRss3Profile(address.address || '')
     const username = profile?.name
 
     if (loading || !footprints.length) {

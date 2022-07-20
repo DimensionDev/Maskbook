@@ -1,19 +1,9 @@
 import { makeStyles } from '@masknet/theme'
+import type { RSS3BaseAPI } from '@masknet/web3-providers'
+import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
 import { List, ListItem } from '@mui/material'
-import urlcat from 'urlcat'
 import { useI18N } from '../../locales'
-import type { GeneralAsset, GeneralAssetWithTags } from '../../types'
 import { DonationCard, StatusBox } from '../components'
-
-const getDonationLink = (label: string, donation: GeneralAssetWithTags) => {
-    const { platform, identity, id, type } = donation
-    return urlcat(`https://${label}.bio/singlegitcoin/:platform/:identity/:id/:type`, {
-        platform,
-        identity,
-        id,
-        type: type.replaceAll('-', '.'),
-    })
-}
 
 const useStyles = makeStyles()((theme) => ({
     statusBox: {
@@ -47,12 +37,12 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface DonationPageProps {
-    donations?: GeneralAsset[]
+    donations?: RSS3BaseAPI.Donation[]
     loading?: boolean
-    addressLabel: string
+    address: SocialAddress<NetworkPluginID>
 }
 
-export function DonationPage({ donations = [], loading, addressLabel }: DonationPageProps) {
+export function DonationPage({ donations = [], loading, address }: DonationPageProps) {
     const { classes } = useStyles()
     const t = useI18N()
 
@@ -63,7 +53,7 @@ export function DonationPage({ donations = [], loading, addressLabel }: Donation
         <List className={classes.list}>
             {donations.map((donation) => (
                 <ListItem key={donation.id} className={classes.listItem}>
-                    <DonationCard className={classes.donationCard} donation={donation} />
+                    <DonationCard className={classes.donationCard} donation={donation} address={address} />
                 </ListItem>
             ))}
         </List>

@@ -6,6 +6,7 @@ import { DonationPage, FootprintPage } from './pages'
 import { useCurrentVisitingProfile } from './hooks/useContext'
 import { CollectionType, KVType } from '../types'
 import { useKV } from './hooks/useKV'
+import type { RSS3BaseAPI } from '@masknet/web3-providers'
 
 export enum TabCardType {
     Donation = 1,
@@ -48,13 +49,16 @@ export function TabCard({ type, socialAddress, persona }: TabCardProps) {
     const isDonation = type === TabCardType.Donation
 
     return isDonation ? (
-        <DonationPage donations={unHiddenDonations} loading={loadingDonations} addressLabel={socialAddress.label} />
+        <DonationPage
+            donations={unHiddenDonations as RSS3BaseAPI.Donation[]}
+            loading={loadingDonations}
+            address={socialAddress}
+        />
     ) : (
         <FootprintPage
-            address={socialAddress.address}
+            address={socialAddress}
             loading={loadingFootprints}
-            footprints={unHiddenFootprints}
-            addressLabel={socialAddress.label}
+            footprints={unHiddenFootprints as RSS3BaseAPI.Footprint[]}
         />
     )
 }

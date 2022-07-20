@@ -1,12 +1,10 @@
 import { useAsync } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsync'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { PluginProfileRPC } from '../../messages'
-import type { GeneralAsset } from '../../types'
+import { RSS3, RSS3BaseAPI } from '@masknet/web3-providers'
 
-export function useDonations(address: string): AsyncState<GeneralAsset[]> {
+export function useDonations(address: string): AsyncState<RSS3BaseAPI.Donation[] | undefined> {
     return useAsync(async () => {
-        const response = await PluginProfileRPC.getDonations(address)
-        return response.status ? response.assets : EMPTY_LIST
+        const response = await RSS3.getDonations(address)
+        return response
     }, [address])
 }
