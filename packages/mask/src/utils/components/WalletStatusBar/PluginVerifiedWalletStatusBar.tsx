@@ -142,7 +142,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
             </MenuItem>,
         )
 
-        // Because getting the domian is asynchronous, the default name will not be correctly
+        // Because getting the domain is asynchronous, the default name will not be correctly
         useUpdateEffect(() => {
             setDescriptionProps((prev) => ({
                 ...prev,
