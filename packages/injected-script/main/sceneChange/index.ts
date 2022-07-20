@@ -1,5 +1,5 @@
-import { isTwitter } from '../utils'
-import { setupWatcherForTwitter } from './twitter'
+import { isTwitter } from '../utils.js'
+import { setupWatcherForTwitter } from './twitter.js'
 
 if (isTwitter()) {
     setupWatcherForTwitter()

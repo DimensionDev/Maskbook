@@ -1,4 +1,4 @@
-import { $NoXRay, $ } from './intrinsic'
+import { $NoXRay, $ } from './intrinsic.js'
 
 function setupChromium() {
     let currentLocationHref = window.location.href

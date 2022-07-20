@@ -1,5 +1,5 @@
-import type { InternalEvents } from '../../shared'
-import { $, $NoXRay } from '../intrinsic'
+import type { InternalEvents } from '../../shared/index.js'
+import { $, $NoXRay } from '../intrinsic.js'
 
 export function dispatchPaste(text: InternalEvents['paste'][0]) {
     const data = new $NoXRay.DataTransfer()

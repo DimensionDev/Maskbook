@@ -1,11 +1,11 @@
-import { CustomEventId, decodeEvent } from '../shared'
-import { instagramUpload } from './EventListenerPatch/instagramUpload'
-import { $, bless } from './intrinsic'
-import { dispatchInput } from './EventListenerPatch/dispatchInput'
-import { dispatchPaste } from './EventListenerPatch/dispatchPaste'
-import { dispatchPasteImage } from './EventListenerPatch/dispatchPasteImage'
-import { callRequest, access, bindEvent, execute, until } from './GlobalVariableBridge'
-import { hookInputUploadOnce } from './EventListenerPatch/hookInputUploadOnce'
+import { CustomEventId, decodeEvent } from '../shared/index.js'
+import { instagramUpload } from './EventListenerPatch/instagramUpload.js'
+import { $, bless } from './intrinsic.js'
+import { dispatchInput } from './EventListenerPatch/dispatchInput.js'
+import { dispatchPaste } from './EventListenerPatch/dispatchPaste.js'
+import { dispatchPasteImage } from './EventListenerPatch/dispatchPasteImage.js'
+import { callRequest, access, bindEvent, execute, until } from './GlobalVariableBridge/index.js'
+import { hookInputUploadOnce } from './EventListenerPatch/hookInputUploadOnce.js'
 
 document.addEventListener(CustomEventId, (e) => {
     const r = decodeEvent($.CustomEvent_detail_getter(e as CustomEvent))

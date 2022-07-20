@@ -1,6 +1,6 @@
-import { $, $NoXRay } from '../intrinsic'
-import { clone_into, handlePromise, sendEvent } from '../utils'
-import type { InternalEvents } from '../../shared'
+import { $, $NoXRay } from '../intrinsic.js'
+import { clone_into, handlePromise, sendEvent } from '../utils.js'
+import type { InternalEvents } from '../../shared/index.js'
 
 const hasListened: Record<string, boolean> = { __proto__: null! }
 

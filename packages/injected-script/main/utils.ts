@@ -1,5 +1,5 @@
-import { CustomEventId, encodeEvent, InternalEvents } from '../shared'
-import { $NoXRay, $ } from './intrinsic'
+import { CustomEventId, encodeEvent, InternalEvents } from '../shared/index.js'
+import { $NoXRay, $ } from './intrinsic.js'
 
 // Firefox magics!
 export function overwriteFunctionOnXRayObject<T extends object>(

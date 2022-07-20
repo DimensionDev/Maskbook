@@ -1,15 +1,7 @@
-import sucrase from '@rollup/plugin-sucrase'
-
 export default {
-    input: 'main/index.ts',
+    input: 'dist/main/index.js',
     output: {
         file: 'dist/injected-script.js',
         format: 'iife',
     },
-    plugins: [
-        sucrase({
-            exclude: ['node_modules/**'],
-            transforms: ['typescript'],
-        }),
-    ],
 }

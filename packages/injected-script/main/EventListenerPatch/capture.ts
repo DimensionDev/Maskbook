@@ -1,5 +1,5 @@
-import { clone_into, isTwitter, redefineEventTargetPrototype, unwrapXRay_CPPBindingObject } from '../utils'
-import { $, $Blessed, $NoXRay, bless } from '../intrinsic'
+import { clone_into, isTwitter, redefineEventTargetPrototype, unwrapXRay_CPPBindingObject } from '../utils.js'
+import { $, $Blessed, $NoXRay, bless } from '../intrinsic.js'
 
 // Do not use Array deconstruct syntax. It might invoke Array.prototype[Symbol.iterator].
 type EventListenerDescriptor = { once: boolean; passive: boolean; capture: boolean }

@@ -1,7 +1,7 @@
-import type { InternalEvents } from '../../shared'
-import { $, $NoXRay } from '../intrinsic'
-import { constructXrayUnwrappedFilesFromUintLike, constructXrayUnwrappedDataTransferProxy } from '../utils'
-import { dispatchEventRaw } from './capture'
+import type { InternalEvents } from '../../shared/index.js'
+import { $, $NoXRay } from '../intrinsic.js'
+import { constructXrayUnwrappedFilesFromUintLike, constructXrayUnwrappedDataTransferProxy } from '../utils.js'
+import { dispatchEventRaw } from './capture.js'
 
 export function dispatchPasteImage(image: InternalEvents['pasteImage'][0]) {
     const data = new $NoXRay.DataTransfer()

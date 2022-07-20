@@ -1,7 +1,7 @@
-import type { InternalEvents } from '../../shared'
-import { $, $NoXRay } from '../intrinsic'
-import { clone_into, constructXrayUnwrappedFilesFromUintLike } from '../utils'
-import { dispatchEventRaw } from './capture'
+import type { InternalEvents } from '../../shared/index.js'
+import { $, $NoXRay } from '../intrinsic.js'
+import { clone_into, constructXrayUnwrappedFilesFromUintLike } from '../utils.js'
+import { dispatchEventRaw } from './capture.js'
 
 const proto = HTMLInputElement.prototype
 
