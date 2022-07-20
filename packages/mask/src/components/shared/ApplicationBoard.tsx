@@ -23,7 +23,7 @@ const useStyles = makeStyles<{ shouldScroll: boolean; isCarouselReady: boolean }
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
         applicationWrapper: {
-            padding: theme.spacing(1, 0.25, 1, 1),
+            padding: theme.spacing(1, process.env.engine === 'firefox' ? 1.5 : 0.25, 1, 1),
             transform: props.isCarouselReady ? 'translate(-8px, -8px)' : 'translateX(-8px)',
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
@@ -33,7 +33,9 @@ const useStyles = makeStyles<{ shouldScroll: boolean; isCarouselReady: boolean }
             gridGap: 10,
             justifyContent: 'space-between',
             height: 320,
-            width: props.shouldScroll ? 583 : 576,
+            width: props.shouldScroll && process.env.engine !== 'firefox' ? 583 : 570,
+            scrollbarColor: `${theme.palette.maskColor.secondaryLine} ${theme.palette.maskColor.secondaryLine}`,
+            scrollbarWidth: 'thin',
             '::-webkit-scrollbar': {
                 backgroundColor: 'transparent',
                 width: 20,
