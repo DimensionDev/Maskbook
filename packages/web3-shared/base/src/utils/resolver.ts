@@ -196,21 +196,26 @@ export const resolveCurrencyName = createLookupTableResolver<CurrencyType, strin
     },
 )
 
-const walletNameByNetwork = {
-    [NetworkPluginID.PLUGIN_EVM]: 'EVM wallet',
-    [NetworkPluginID.PLUGIN_SOLANA]: 'Solana wallet',
-    [NetworkPluginID.PLUGIN_FLOW]: 'Flow wallet',
-}
+export const resolveNextIdWalletName = createLookupTableResolver<NetworkPluginID, string>(
+    {
+        [NetworkPluginID.PLUGIN_EVM]: 'EVM wallet',
+        [NetworkPluginID.PLUGIN_SOLANA]: 'Solana wallet',
+        [NetworkPluginID.PLUGIN_FLOW]: 'Flow wallet',
+    },
+    (network) => {
+        throw new Error(`Unknown network plugin-id: ${network}`)
+    },
+)
 
-export const resolveNextIdWalletName = (pluginId: NetworkPluginID) => {
-    return walletNameByNetwork[pluginId]
-}
-
-const pluginIdByNextIdPlatform: Partial<Record<NextIDPlatform, NetworkPluginID>> = {
-    [NextIDPlatform.Ethereum]: NetworkPluginID.PLUGIN_EVM,
-}
-
-export const resolveNextIdPlatformPluginId = (platform?: NextIDPlatform) => {
-    if (!platform) return
-    return pluginIdByNextIdPlatform[platform]
-}
+export const resolveNextIdPlatformPluginId = createLookupTableResolver<NextIDPlatform, NetworkPluginID | undefined>(
+    {
+        [NextIDPlatform.Ethereum]: NetworkPluginID.PLUGIN_EVM,
+        [NextIDPlatform.NextID]: undefined,
+        [NextIDPlatform.GitHub]: undefined,
+        [NextIDPlatform.Keybase]: undefined,
+        [NextIDPlatform.Twitter]: undefined,
+    },
+    (platform) => {
+        throw new Error(`Unknown next id platform: ${platform}`)
+    },
+)
