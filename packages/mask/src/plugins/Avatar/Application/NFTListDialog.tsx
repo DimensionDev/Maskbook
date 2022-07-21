@@ -70,7 +70,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     content: {
-        height: 612,
+        height: 478,
         padding: 0,
         backgroundColor: theme.palette.mode === 'dark' ? 'black' : 'white',
         marginBottom: 72,
