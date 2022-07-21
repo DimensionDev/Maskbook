@@ -55,11 +55,6 @@ export class IdentityService extends IdentityServiceState {
         super()
     }
 
-    /** When it has an allowlist, it then detects if a social address type is included.*/
-    private isSocialAddressIncludes(type: SocialAddressType, includes: SocialAddressType[] = []) {
-        return includes.length === 0 || includes.includes(type)
-    }
-
     private createSocialAddress(
         type: SocialAddressType,
         address: string,
@@ -126,22 +121,19 @@ export class IdentityService extends IdentityServiceState {
 
     override async getFromRemote(identity: SocialIdentity, includes?: SocialAddressType[]) {
         const allSettled = await Promise.allSettled([
-            this.isSocialAddressIncludes(SocialAddressType.ADDRESS, includes)
-                ? this.getSocialAddressFromBio(identity)
-                : undefined,
-            this.isSocialAddressIncludes(SocialAddressType.ENS, includes)
-                ? this.getSocialAddressFromENS(identity)
-                : undefined,
-            this.isSocialAddressIncludes(SocialAddressType.RSS3, includes)
-                ? this.getSocialAddressFromRSS3(identity)
-                : undefined,
-            this.isSocialAddressIncludes(SocialAddressType.NEXT_ID, includes)
-                ? this.getSocialAddressFromNextID(identity)
-                : undefined,
-            this.isSocialAddressIncludes(SocialAddressType.KV, includes)
-                ? this.getSocialAddressFromKV(identity)
-                : undefined,
+            this.getSocialAddressFromBio(identity),
+            this.getSocialAddressFromENS(identity),
+            this.getSocialAddressFromRSS3(identity),
+            this.getSocialAddressFromNextID(identity),
+            this.getSocialAddressFromKV(identity),
         ])
+
+        console.log('DEBUG: get from remote')
+        console.log({
+            identity,
+            includes,
+            allSettled,
+        })
 
         return allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : undefined)).filter(Boolean) as Array<
             SocialAddress<NetworkPluginID.PLUGIN_EVM>

@@ -4,7 +4,6 @@ import type {
     SocialIdentity,
     IdentityServiceState as Web3SocialIdentityState,
     NetworkPluginID,
-    SocialAddressType,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
@@ -14,39 +13,27 @@ export class IdentityServiceState implements Web3SocialIdentityState {
         ttl: Number.MAX_SAFE_INTEGER,
     })
 
-    private getIdentityID(identity: SocialIdentity, includes: SocialAddressType[] = []) {
+    private getIdentityID(identity: SocialIdentity) {
         if (!identity.identifier) return ''
-        return [
-            identity.identifier.network,
-            identity.identifier.userId,
-            identity.bio,
-            identity.homepage,
-            ...includes,
-        ].join('_')
+        return [identity.identifier.network, identity.identifier.userId, identity.bio, identity.homepage].join('_')
     }
 
-    protected getFromCache(identity: SocialIdentity, includes?: SocialAddressType[]) {
-        return this.cache.get(this.getIdentityID(identity, includes))
+    protected getFromCache(identity: SocialIdentity) {
+        return this.cache.get(this.getIdentityID(identity))
     }
 
-    protected getFromRemote(
-        identity: SocialIdentity,
-        includes?: SocialAddressType[],
-    ): Promise<Array<SocialAddress<NetworkPluginID>>> {
+    protected getFromRemote(identity: SocialIdentity): Promise<Array<SocialAddress<NetworkPluginID>>> {
         throw new Error('Method not implemented.')
     }
 
-    async lookup(
-        identity: SocialIdentity,
-        includes?: SocialAddressType[],
-    ): Promise<Array<SocialAddress<NetworkPluginID>>> {
-        const ID = this.getIdentityID(identity, includes)
+    async lookup(identity: SocialIdentity): Promise<Array<SocialAddress<NetworkPluginID>>> {
+        const ID = this.getIdentityID(identity)
         if (!ID) return EMPTY_LIST
 
-        const fromCache = this.getFromCache(identity, includes)
+        const fromCache = this.getFromCache(identity)
         if (fromCache) return fromCache
 
-        const fromRemote = this.getFromRemote(identity, includes)
+        const fromRemote = this.getFromRemote(identity)
         this.cache.set(ID, fromRemote)
 
         return fromRemote

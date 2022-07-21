@@ -32,12 +32,12 @@ export const verifyPersona = (personaIdentifier?: PersonaIdentifier, username?: 
 }
 
 export const useNextIDBoundByPlatform = (platform?: NextIDPlatform, userId?: string) => {
-    const res = useAsyncRetry(async () => {
+    const response = useAsyncRetry(async () => {
         if (!platform || !userId) return EMPTY_LIST
         return NextIDProof.queryAllExistedBindingsByPlatform(platform, userId)
     }, [platform, userId])
-    useEffect(() => MaskMessages.events.ownProofChanged.on(res.retry), [res.retry])
-    return res
+    useEffect(() => MaskMessages.events.ownProofChanged.on(response.retry), [response.retry])
+    return response
 }
 
 export enum NextIDVerificationStatus {

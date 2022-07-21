@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useUpdateEffect, useAsyncRetry } from 'react-use'
+import { useUpdateEffect } from 'react-use'
 import { first } from 'lodash-unified'
 import {
     createInjectHooksRenderer,
@@ -13,6 +13,8 @@ import { ConcealableTabs } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, CircularProgress } from '@mui/material'
+import { Gear } from '@masknet/icons'
+import { SocialAddressType } from '@masknet/web3-shared-base'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 import { MaskMessages, sortPersonaBindings, useI18N } from '../../utils'
@@ -20,9 +22,6 @@ import { useLocationChange } from '../../utils/hooks/useLocationChange'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { useNextIDBoundByPlatform } from '../DataSource/useNextID'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
-import { NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
-import { Gear } from '@masknet/icons'
-import { NextIDProof } from '@masknet/web3-providers'
 
 function getTabContent(tabId?: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
@@ -55,58 +54,30 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const [hidden, setHidden] = useState(true)
     const [selectedTab, setSelectedTab] = useState<string | undefined>()
 
-    const currentIdentity = useLastRecognizedIdentity()
-    const identity = useCurrentVisitingIdentity()
+    const ownerIdentity = useLastRecognizedIdentity()
+    const currentIdentity = useCurrentVisitingIdentity()
+    const ownerUserId = ownerIdentity.identifier?.userId
+    const currentUserId = currentIdentity.identifier?.userId
+    const isOwner = ownerUserId && currentUserId && ownerUserId?.toLowerCase() === currentUserId?.toLowerCase()
     const { currentConnectedPersona } = usePersonaConnectStatus()
 
-    const { value: socialAddressList = EMPTY_LIST, loading: loadingSocialAddressList } =
-        useSocialAddressListAll(identity)
+    const { value: socialAddressList = EMPTY_LIST, loading: loadingSocialAddressList } = useSocialAddressListAll(
+        currentIdentity,
+        [SocialAddressType.NEXT_ID],
+    )
     const { value: personaList = EMPTY_LIST, loading: loadingPersonaList } = useNextIDBoundByPlatform(
         activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform | undefined,
-        identity.identifier?.userId?.toLowerCase(),
+        currentUserId?.toLowerCase(),
     )
 
-    const currentPersonaBinding = first(
-        personaList.sort((a, b) => sortPersonaBindings(a, b, identity.identifier?.userId?.toLowerCase() ?? '')),
-    )
-
-    const isOwn = currentIdentity?.identifier?.userId?.toLowerCase() === identity?.identifier?.userId?.toLowerCase()
-
-    const personaPublicKey = isOwn
+    const personaPublicKey = isOwner
         ? currentConnectedPersona?.identifier?.publicKeyAsHex
-        : currentPersonaBinding?.persona
+        : first(personaList.slice(0).sort((a, b) => sortPersonaBindings(a, b, currentUserId?.toLowerCase() ?? '')))
+              ?.persona
 
     const isCurrentConnectedPersonaBind = personaList.some(
         (persona) => persona.persona === currentConnectedPersona?.identifier?.publicKeyAsHex.toLowerCase(),
     )
-
-    const { value: personaProof, retry: retryProof } = useAsyncRetry(async () => {
-        if (!personaPublicKey) return
-        return NextIDProof.queryExistedBindingByPersona(personaPublicKey)
-    }, [personaPublicKey])
-
-    useEffect(() => {
-        return MaskMessages.events.ownProofChanged.on(() => {
-            retryProof()
-        })
-    }, [retryProof])
-
-    const wallets = personaProof?.proofs?.filter((proof) => proof?.platform === NextIDPlatform.Ethereum)
-
-    const addressList = useMemo(() => {
-        if (!wallets?.length || (!isOwn && socialAddressList?.length)) {
-            return socialAddressList
-        }
-        const addresses = wallets.map((proof) => {
-            return {
-                networkSupporterPluginID: NetworkPluginID.PLUGIN_EVM,
-                type: SocialAddressType.KV,
-                label: proof?.identity,
-                address: proof?.identity,
-            }
-        })
-        return [...socialAddressList, ...addresses]
-    }, [socialAddressList, wallets?.map((x) => x.identity).join(), isOwn])
 
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
     const availablePlugins = useAvailablePlugins(activatedPlugins)
@@ -114,8 +85,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const displayPlugins = useMemo(() => {
         return availablePlugins
             .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
-            .filter((z) => z.Utils?.shouldDisplay?.(identity, addressList) ?? true)
-    }, [identity, availablePlugins.map((x) => x.ID).join(), addressList.map((x) => x.address).join()])
+            .filter((z) => z.Utils?.shouldDisplay?.(currentIdentity, socialAddressList) ?? true)
+    }, [currentIdentity, availablePlugins.map((x) => x.ID).join(), socialAddressList.map((x) => x.address).join()])
 
     const tabs = displayPlugins
         .sort((a, z) => {
@@ -146,7 +117,9 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const selectedTabId = selectedTab ?? first(tabs)?.id
     const showNextID =
         isTwitter(activatedSocialNetworkUI) &&
-        ((isOwn && addressList?.length === 0) || isWeb3ProfileDisable || (isOwn && !isCurrentConnectedPersonaBind))
+        ((isOwner && socialAddressList?.length === 0) ||
+            isWeb3ProfileDisable ||
+            (isOwner && !isCurrentConnectedPersonaBind))
     const componentTabId = showNextID
         ? displayPlugins?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
         : selectedTabId
@@ -162,17 +135,16 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
         return (
             <Component
-                identity={identity}
+                identity={currentIdentity}
                 persona={personaPublicKey}
-                socialAddressList={addressList.filter((x) => Utils?.filter?.(x) ?? true).sort(Utils?.sorter)}
+                socialAddressList={socialAddressList.filter((x) => Utils?.filter?.(x) ?? true).sort(Utils?.sorter)}
             />
         )
     }, [
         componentTabId,
         personaPublicKey,
         displayPlugins.map((x) => x.ID).join(),
-        personaList.join(),
-        addressList.map((x) => x.address).join(),
+        socialAddressList.map((x) => x.address).join(),
     ])
 
     useLocationChange(() => {
@@ -181,23 +153,23 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     useUpdateEffect(() => {
         setSelectedTab(undefined)
-    }, [identity.identifier?.userId])
+    }, [currentUserId])
 
     useEffect(() => {
         return MaskMessages.events.profileTabHidden.on((data) => {
             if (data.hidden) setHidden(data.hidden)
         })
-    }, [identity.identifier?.userId])
+    }, [currentUserId])
 
     useEffect(() => {
         return MaskMessages.events.profileTabUpdated.on((data) => {
             setHidden(!data.show)
         })
-    }, [identity.identifier?.userId])
+    }, [currentUserId])
 
     if (hidden) return null
 
-    if (!identity.identifier?.userId || loadingSocialAddressList || loadingPersonaList)
+    if (!currentUserId || loadingSocialAddressList || loadingPersonaList)
         return (
             <div className={classes.root}>
                 <Box
@@ -218,7 +190,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                         tabs={tabs}
                         selectedId={selectedTabId}
                         onChange={setSelectedTab}
-                        tail={isOwn && <Gear onClick={handleOpenDialog} className={classes.settingIcon} />}
+                        tail={isOwner && <Gear onClick={handleOpenDialog} className={classes.settingIcon} />}
                     />
                 )}
             </div>
