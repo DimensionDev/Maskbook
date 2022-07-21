@@ -40,7 +40,10 @@ export const $ = {
     MapDesc: Object.getOwnPropertyDescriptors(Map.prototype),
     WeakMapDesc: Object.getOwnPropertyDescriptors(WeakMap.prototype),
     SetDesc: Object.getOwnPropertyDescriptors(Set.prototype),
-    ArrayDesc: Object.getOwnPropertyDescriptors(Array.prototype) as any,
+    ArrayDesc: ((desc) => {
+        Reflect.deleteProperty(desc, 'length')
+        return desc as any
+    })(Object.getOwnPropertyDescriptors(Array.prototype)),
     GeneratorDesc: Object.getOwnPropertyDescriptors(
         Object.getPrototypeOf(Object.getPrototypeOf((function* () {})())),
     ) as any,
