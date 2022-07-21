@@ -5,7 +5,7 @@ import { useI18N } from '../../../../utils'
 import { ExternalLink } from 'react-feather'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID, resolveNextIdWalletName } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
@@ -55,14 +55,6 @@ interface WalletSwitchProps {
     index: number
 }
 
-const resolveNetworkName = (pluginId: NetworkPluginID) => {
-    const walletNameByNetwork = {
-        [NetworkPluginID.PLUGIN_EVM]: 'EVM wallet',
-        [NetworkPluginID.PLUGIN_SOLANA]: 'Solana wallet',
-        [NetworkPluginID.PLUGIN_FLOW]: 'Flow wallet',
-    }
-    return walletNameByNetwork[pluginId]
-}
 export function WalletSwitch({ type, address, isPublic, chainId, index, onChange }: WalletSwitchProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
@@ -75,7 +67,7 @@ export function WalletSwitch({ type, address, isPublic, chainId, index, onChange
         <div className={classes.currentAccount}>
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
-                    <Typography className={classes.accountName}>{resolveNetworkName(type)}</Typography>
+                    <Typography className={classes.accountName}>{resolveNextIdWalletName(type)}</Typography>
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.address} variant="body2" title={address}>
