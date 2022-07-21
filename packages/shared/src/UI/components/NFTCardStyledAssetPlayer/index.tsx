@@ -5,6 +5,7 @@ import { AssetPlayer } from '../AssetPlayer'
 import { useNonFungibleToken, Web3Helper } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useImageChecker } from '../../../hooks'
+import { useAsync } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -79,12 +80,22 @@ export function NFTCardStyledAssetPlayer(props: Props) {
     const fallbackImageURL =
         theme.palette.mode === 'dark' ? assetPlayerFallbackImageDark : assetPlayerFallbackImageLight
 
+    const { loading, value: image } = useAsync(async () => {
+        if (!(isImageToken || isNative)) return
+        const image_url = url || tokenDetailed?.metadata?.imageURL || tokenDetailed?.metadata?.mediaURL
+        if (!image_url) return
+        const imageData = await globalThis.r2d2Fetch(image_url)
+        return URL.createObjectURL(await imageData.blob())
+    }, [url, tokenDetailed?.metadata?.imageURL, tokenDetailed?.metadata?.mediaURL, isImageToken, isNative])
+
+    if (loading) return null
+
     return isImageToken || isNative ? (
         <div className={classes.imgWrapper}>
             <img
                 width="100%"
                 style={{ objectFit: 'cover' }}
-                src={url || tokenDetailed?.metadata?.imageURL || tokenDetailed?.metadata?.mediaURL}
+                src={image}
                 onError={(event) => {
                     const target = event.currentTarget as HTMLImageElement
                     target.src = fallbackImageURL.toString()

@@ -1,3 +1,6 @@
+import { CircularProgress } from '@mui/material'
+import { useAsync } from 'react-use'
+
 export interface ImageProps {
     url: string
     title?: string
@@ -12,9 +15,19 @@ export const ImageHolder = ({ url, title, isFullRound, size }: ImageProps) => {
         height: `${size}px`,
     }
 
+    const { loading, value: image } = useAsync(async () => {
+        if (!url) return
+        const data = await globalThis.r2d2Fetch(url)
+        return URL.createObjectURL(await data.blob())
+    }, [url])
+
     return (
         <div className={`flex justify-around relative ${roundedClass}`} style={containerStyles}>
-            <img className={`object-cover w-full h-full ${roundedClass}`} src={url} alt={title} />
+            {loading ? (
+                <CircularProgress size="small" />
+            ) : (
+                <img className={`object-cover w-full h-full ${roundedClass}`} src={image} alt={title} />
+            )}
         </div>
     )
 }
