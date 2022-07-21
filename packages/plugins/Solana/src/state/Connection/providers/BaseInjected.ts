@@ -8,8 +8,9 @@ import type { ChainId, ProviderType, Web3Provider } from '@masknet/web3-shared-s
 import type { SolanaProvider } from '../types'
 import { BaseProvider } from './Base'
 
-function toBase58(words: number[]) {
+export function toBase58(words: number[]) {
     const bn = new BN(0)
+    // Manually reset words and length to allow convert
     // @ts-ignore
     bn.words = words
     // @ts-ignore
@@ -58,11 +59,9 @@ export class BaseInjectedProvider extends BaseProvider implements SolanaProvider
         await this.readyPromise
 
         const provider = await this.createWeb3Provider()
-        const response = await provider.connect()
+        const { publicKey } = await provider.connect()
 
-        const account =
-            typeof response.publicKey === 'string' ? response.publicKey : toBase58(response.publicKey._bn.words)
-        console.log('account', account)
+        const account = typeof publicKey === 'string' ? publicKey : toBase58(publicKey._bn.words)
         return {
             chainId,
             account,

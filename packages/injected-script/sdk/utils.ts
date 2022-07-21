@@ -1,7 +1,6 @@
 import { CustomEventId, InternalEvents, encodeEvent } from '../shared'
 
 export function sendEvent<K extends keyof InternalEvents>(name: K, ...params: InternalEvents[K]) {
-    console.log('CustomEventId', CustomEventId)
     document.dispatchEvent(
         new CustomEvent(CustomEventId, {
             cancelable: true,

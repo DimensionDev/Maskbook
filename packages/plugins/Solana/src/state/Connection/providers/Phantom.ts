@@ -7,13 +7,11 @@ import { BaseInjectedProvider } from './BaseInjected'
 
 export class PhantomProvider extends BaseInjectedProvider implements SolanaProvider {
     constructor() {
-        if (process.env.engine !== 'firefox') {
-            injectedPhantomProvider.untilAvailable().then(() => {
-                injectedPhantomProvider.connect({
-                    onlyIfTrusted: true,
-                })
+        injectedPhantomProvider.untilAvailable().then(() => {
+            injectedPhantomProvider.connect({
+                onlyIfTrusted: true,
             })
-        }
+        })
         super(ProviderType.Phantom, injectedPhantomProvider)
     }
 
