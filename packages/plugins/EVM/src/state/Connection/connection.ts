@@ -883,12 +883,25 @@ class Connection implements EVM_Connection {
         return Promise.all(transactions.map((x) => this.signTransaction(x, initial)))
     }
 
+    supportedEntryPoints(initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) {
+        const options = this.getOptions(initial)
+        return this.hijackedRequest<string[]>(
+            {
+                method: EthereumMethodType.ETH_SUPPORTED_ENTRY_POINTS,
+                params: [],
+            },
+            options,
+        )
+    }
+
     async callOperation(
         operation: Operation,
-        entryPoint: string,
         initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
     ) {
         const options = this.getOptions(initial)
+        const entryPoint = first(await this.supportedEntryPoints(initial))
+        if (!isValidAddress(entryPoint)) throw new Error('No entry point.')
+
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_CALL_USER_OPERATION,
@@ -906,10 +919,12 @@ class Connection implements EVM_Connection {
 
     async sendOperation(
         operation: Operation,
-        entryPoint: string,
         initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
     ) {
         const options = this.getOptions(initial)
+        const entryPoint = first(await this.supportedEntryPoints(initial))
+        if (!isValidAddress(entryPoint)) throw new Error('No entry point.')
+
         return this.hijackedRequest<string>(
             {
                 method: EthereumMethodType.ETH_SEND_USER_OPERATION,
