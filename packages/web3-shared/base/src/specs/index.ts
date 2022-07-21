@@ -784,11 +784,11 @@ export interface Connection<
         initial?: Web3ConnectionOptions,
     ): Promise<string>
     /** Call a operation */
-    callOperation?: (operation: Operation,  initial?: Web3ConnectionOptions) => Promise<string>
+    callOperation?: (operation: Operation, initial?: Web3ConnectionOptions) => Promise<string>
     /** Send a operation */
-    sendOperation?: (operation: Operation,  initial?: Web3ConnectionOptions) => Promise<TransactionSignature>
+    sendOperation?: (operation: Operation, initial?: Web3ConnectionOptions) => Promise<TransactionSignature>
     /** Sign a transaction */
-    signTransaction(transaction: Transaction,  initial?: Web3ConnectionOptions): Promise<TransactionSignature>
+    signTransaction(transaction: Transaction, initial?: Web3ConnectionOptions): Promise<TransactionSignature>
     /** Sign multiple transactions */
     signTransactions(transactions: Transaction[], initial?: Web3ConnectionOptions): Promise<TransactionSignature[]>
     /** Query a transaction */

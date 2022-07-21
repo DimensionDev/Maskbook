@@ -148,7 +148,7 @@ export enum EthereumMethodType {
     ETH_GET_LOGS = 'eth_getLogs',
     ETH_GET_ENCRYPTION_PUBLIC_KEY = 'eth_getEncryptionPublicKey',
 
-    // EIP-4437
+    // EIP-4337
     ETH_SEND_USER_OPERATION = 'eth_sendUserOperation',
     ETH_CALL_USER_OPERATION = 'eth_callUserOperation',
     ETH_SUPPORTED_ENTRY_POINTS = 'eth_supportedEntryPoints',
