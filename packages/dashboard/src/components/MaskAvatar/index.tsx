@@ -6,7 +6,7 @@ import { usePersonaAvatar } from '../../pages/Personas/api'
 
 const useStyles = makeStyles()((theme) => ({
     author: {
-        fill: MaskColorVar.secondaryBackground,
+        color: MaskColorVar.secondaryBackground,
         cursor: 'pointer',
     },
 }))
