@@ -1,26 +1,26 @@
-import { $NoXRay, $ } from './intrinsic.js'
+import { $Content, $ } from './intrinsic.js'
 
 function setupChromium() {
     let currentLocationHref = window.location.href
     // Learn more about this hack from https://stackoverflow.com/a/52809105/1986338
-    window.history.pushState = new $NoXRay.Proxy(history.pushState, {
+    window.history.pushState = new $Content.Proxy(history.pushState, {
         apply(target, thisArg, params: any) {
             const val = $.Reflect.apply(target, thisArg, params)
-            $NoXRay.dispatchEvent(window, new $NoXRay.Event('locationchange'))
+            $Content.dispatchEvent(window, new $Content.Event('locationchange'))
             if (currentLocationHref !== window.location.href) {
                 currentLocationHref = window.location.href
-                $NoXRay.dispatchEvent(window, new $NoXRay.Event('locationchange'))
+                $Content.dispatchEvent(window, new $Content.Event('locationchange'))
             }
             return val
         },
     })
-    window.history.replaceState = new $NoXRay.Proxy(history.replaceState, {
+    window.history.replaceState = new $Content.Proxy(history.replaceState, {
         apply(target, thisArg, params: any) {
             const val = $.Reflect.apply(target, thisArg, params)
-            $NoXRay.dispatchEvent(window, new $NoXRay.Event('replacestate'))
+            $Content.dispatchEvent(window, new $Content.Event('replacestate'))
             if (currentLocationHref !== window.location.href) {
                 currentLocationHref = window.location.href
-                $NoXRay.dispatchEvent(window, new $NoXRay.Event('replacestate'))
+                $Content.dispatchEvent(window, new $Content.Event('replacestate'))
             }
             return val
         },
@@ -29,7 +29,7 @@ function setupChromium() {
     window.addEventListener('popstate', () => {
         if (currentLocationHref === window.location.href) return
         currentLocationHref = window.location.href
-        $NoXRay.dispatchEvent(window, new $NoXRay.Event('locationchange'))
+        $Content.dispatchEvent(window, new $Content.Event('locationchange'))
     })
 }
 
@@ -45,7 +45,7 @@ function setupGecko() {
     }).observe(document, { subtree: true, childList: true })
 
     function onLocationChange() {
-        $NoXRay.dispatchEvent(window, new $NoXRay.Event('locationchange'))
+        $Content.dispatchEvent(window, new $Content.Event('locationchange'))
     }
 }
 

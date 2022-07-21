@@ -7,11 +7,11 @@ export function takeThis<F extends (...args: any) => any>(f: F) {
     return <T>(self: T, ...args: Parameters<F>): ReturnType<F> => $.Reflect.apply(f, self, args)
 }
 
-type Setter<T> = (val: T) => void
-type Getter<T> = () => T
+export type Setter<T> = (val: T) => void
+export type Getter<T> = () => T
 
-// The "window." here is used to create a no-xray version on Firefox
-export const $NoXRay = {
+// The "window" here means another Realm in Firefox
+export const $Content = {
     dispatchEvent: takeThis(window.dispatchEvent)<EventTarget>,
     Proxy: window.Proxy,
     Event: window.Event,
@@ -23,6 +23,8 @@ export const $NoXRay = {
     setTimeout: window.setTimeout.bind(window),
     clearTimeout: window.clearTimeout.bind(window),
     EventTargetPrototype: window.EventTarget.prototype,
+    XMLHttpRequestPrototype: window.XMLHttpRequest.prototype,
+    window,
 
     Blob: window.Blob,
     File: window.File,
@@ -34,6 +36,7 @@ export const $ = {
     Boolean,
 
     Reflect: Object.create(null, Object.getOwnPropertyDescriptors(Reflect)) as typeof Reflect,
+    JSON: { parse: JSON.parse, stringify: JSON.stringify },
     defineProperties: Object.defineProperties,
     getOwnPropertyDescriptors: Object.getOwnPropertyDescriptors,
 
@@ -85,8 +88,12 @@ export const $ = {
         Object.getOwnPropertyDescriptor(CustomEvent.prototype, 'detail')!.get!,
     )<CustomEvent>,
 
+    XMLHttpRequestDesc: Object.getOwnPropertyDescriptors(XMLHttpRequest.prototype),
+
     // Firefox magic
-    XPCNativeWrapper: typeof XPCNativeWrapper === 'undefined' ? undefined : XPCNativeWrapper,
+    XPCNativeWrapper: typeof XPCNativeWrapper !== 'undefined' ? XPCNativeWrapper : null,
+    cloneInto: typeof cloneInto !== 'undefined' ? cloneInto : null,
+    exportFunction: typeof exportFunction !== 'undefined' ? exportFunction : null,
 }
 
 export const $Blessed = {

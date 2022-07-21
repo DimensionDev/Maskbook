@@ -1,5 +1,5 @@
-import { clone_into, isTwitter, redefineEventTargetPrototype, unwrapXRay_CPPBindingObject } from '../utils.js'
-import { $, $Blessed, $NoXRay, bless } from '../intrinsic.js'
+import { isTwitter, defineFunctionOnContentObject, unwrapXRayVision, cloneIntoContent } from '../utils.js'
+import { $, $Blessed, $Content, bless } from '../intrinsic.js'
 
 // Do not use Array deconstruct syntax. It might invoke Array.prototype[Symbol.iterator].
 type EventListenerDescriptor = { once: boolean; passive: boolean; capture: boolean }
@@ -9,7 +9,8 @@ const _CapturingEvents: ReadonlyArray<keyof DocumentEventMap> = ['keyup', 'input
 const CapturingEvents: ReadonlySet<string> = $Blessed.Set(_CapturingEvents)
 const CapturedListeners = $Blessed.WeakMap<EventTarget, Map<string, Map<EventListener, EventListenerDescriptor>>>()
 
-redefineEventTargetPrototype(
+defineFunctionOnContentObject(
+    $Content.EventTargetPrototype,
     'addEventListener',
     (raw, currentEventTarget: EventTarget, args: Parameters<EventTarget['addEventListener']>) => {
         const result = $.Reflect.apply(raw, currentEventTarget, args)
@@ -27,7 +28,9 @@ redefineEventTargetPrototype(
         return result
     },
 )
-redefineEventTargetPrototype(
+
+defineFunctionOnContentObject(
+    $Content.EventTargetPrototype,
     'removeEventListener',
     (raw, currentEventTarget: EventTarget, args: Parameters<EventTarget['removeEventListener']>) => {
         const result = $.Reflect.apply(raw, currentEventTarget, args)
@@ -115,24 +118,24 @@ export function dispatchEventRaw<T extends Event>(
         yield window
     }
     function getMockedEvent<T extends Event>(event: T, currentTarget: () => EventTarget, overwrites: Partial<T> = {}) {
-        const target = unwrapXRay_CPPBindingObject(currentTarget())
+        const target = unwrapXRayVision(currentTarget())
         const source = {
             target,
             srcElement: target,
             // ? Why? It doesn't work without this property.
             _inherits_from_prototype: true,
             defaultPrevented: false,
-            preventDefault: clone_into(() => {}),
+            preventDefault: cloneIntoContent(() => {}),
             ...overwrites,
         }
-        return new $NoXRay.Proxy(
+        return new $Content.Proxy(
             event,
-            clone_into({
+            cloneIntoContent({
                 get(target, key) {
                     // HACK: https://github.com/DimensionDev/Maskbook/pull/4970/
                     if (key === 'currentTarget' || (key === 'target' && isTwitter()))
-                        return unwrapXRay_CPPBindingObject(currentTarget())
-                    return (source as any)[key] ?? (unwrapXRay_CPPBindingObject(target) as any)[key]
+                        return unwrapXRayVision(currentTarget())
+                    return (source as any)[key] ?? (unwrapXRayVision(target) as any)[key]
                 },
             }),
         )

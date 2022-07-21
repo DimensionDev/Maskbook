@@ -1,5 +1,5 @@
-import { $, $NoXRay } from '../intrinsic.js'
-import { clone_into, handlePromise, sendEvent } from '../utils.js'
+import { $, $Content } from '../intrinsic.js'
+import { cloneIntoContent, handlePromise, sendEvent } from '../utils.js'
 import type { InternalEvents } from '../../shared/index.js'
 
 const hasListened: Record<string, boolean> = { __proto__: null! }
@@ -49,7 +49,7 @@ export function bindEvent(path: string, bridgeEvent: keyof InternalEvents, event
         if (typeof f === 'function') {
             f(
                 event,
-                clone_into((...args: any[]) => {
+                cloneIntoContent((...args: any[]) => {
                     // TODO: type unsound
                     sendEvent(bridgeEvent, path, event, args)
                 }),
@@ -68,7 +68,7 @@ function untilInner(name: string) {
             restCheckTimes -= 1
             if (restCheckTimes < 0) return
             if ($.Reflect.has(window, name)) return resolve(true)
-            $NoXRay.setTimeout(check, 200)
+            $Content.setTimeout(check, 200)
         }
         check()
     })

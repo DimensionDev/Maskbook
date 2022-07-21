@@ -1,9 +1,9 @@
 import type { InternalEvents } from '../../shared/index.js'
-import { $, $NoXRay } from '../intrinsic.js'
+import { $, $Content } from '../intrinsic.js'
 
 export function dispatchPaste(text: InternalEvents['paste'][0]) {
-    const data = new $NoXRay.DataTransfer()
-    const e = new $NoXRay.ClipboardEvent('paste', {
+    const data = new $Content.DataTransfer()
+    const e = new $Content.ClipboardEvent('paste', {
         clipboardData: data,
         // @ts-ignore Firefox only API
         dataType: 'text/plain',
@@ -12,5 +12,5 @@ export function dispatchPaste(text: InternalEvents['paste'][0]) {
         cancelable: true,
     })
     $.DataTransfer_setData(data, 'text/plain', text)
-    $NoXRay.dispatchEvent($.DocumentActiveElement()!, e)
+    $Content.dispatchEvent($.DocumentActiveElement()!, e)
 }

@@ -1,19 +1,21 @@
 // Some firefox magics
 
+interface XPCNativeWrapper {
+    (val: T): T
+    unwrap(val: T): T
+}
 /** @see https://mdn.io/XPCNativeWrapper */
-declare var XPCNativeWrapper:
-    | undefined
-    | {
-          unwrap<T>(object: T): T
-      }
+declare var XPCNativeWrapper: undefined | XPCNativeWrapper
 
-/** @see https://mdn.io/Component.utils.exportFunction Firefox only */
+/** @see https://udn.realityripple.com/docs/Mozilla/Tech/XPCOM/Language_Bindings/Components.utils.exportFunction Firefox only */
 declare var exportFunction:
     | undefined
-    | ((f: Function, target: object, opts: { defineAs: string | number | symbol }) => void)
+    | (<F extends Function>(f: F, targetRealm: object, opts?: { defineAs: PropertyKey }) => F)
 
-/** @see https://mdn.io/Component.utils.cloneInto Firefox only */
-declare var cloneInto: undefined | (<T>(f: T, target: object, opts: { cloneFunctions: boolean }) => T)
+/** @see https://udn.realityripple.com/docs/Mozilla/Tech/XPCOM/Language_Bindings/Components.utils.cloneInto Firefox only */
+declare var cloneInto:
+    | undefined
+    | (<T>(object: T, targetRealm: object, opts?: { cloneFunctions?: boolean; wrapReflectors?: boolean }) => T)
 
 /** @deprecated Only available in Manifest V2. */
 declare var content:

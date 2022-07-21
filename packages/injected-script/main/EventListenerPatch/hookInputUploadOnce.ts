@@ -1,6 +1,6 @@
 import type { InternalEvents } from '../../shared/index.js'
-import { $, $NoXRay } from '../intrinsic.js'
-import { clone_into, constructXrayUnwrappedFilesFromUintLike } from '../utils.js'
+import { $, $Content } from '../intrinsic.js'
+import { cloneIntoContent, contentFileFromBufferSource } from '../utils.js'
 import { dispatchEventRaw } from './capture.js'
 
 const proto = HTMLInputElement.prototype
@@ -24,16 +24,16 @@ export function hookInputUploadOnce(
     ...[format, fileName, fileArray, triggerOnActiveElementNow]: InternalEvents['hookInputUploadOnce']
 ) {
     let timer: ReturnType<typeof setTimeout> | null = null
-    const e = new $NoXRay.Event('change', {
+    const e = new $Content.Event('change', {
         bubbles: true,
         cancelable: true,
     })
-    const file = constructXrayUnwrappedFilesFromUintLike(format, fileName, fileArray)
+    const file = contentFileFromBufferSource(format, fileName, fileArray)
 
     const old = proto.click
     proto.click = function (this: HTMLInputElement) {
-        const fileList: Partial<FileList> = clone_into({
-            item: clone_into((i) => {
+        const fileList: Partial<FileList> = cloneIntoContent({
+            item: cloneIntoContent((i) => {
                 if (i === 0) return file
                 return null
             }),
@@ -44,8 +44,8 @@ export function hookInputUploadOnce(
             configurable: true,
             value: fileList,
         })
-        if (timer !== null) $NoXRay.clearTimeout(timer)
-        timer = $NoXRay.setTimeout(() => {
+        if (timer !== null) $Content.clearTimeout(timer)
+        timer = $Content.setTimeout(() => {
             dispatchEventRaw(this, e, {})
             proto.click = old
             $.Reflect.deleteProperty(this, 'files')
