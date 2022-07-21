@@ -1,4 +1,6 @@
-export const CustomEventId = 'c8a6c18e-f6a3-472a-adf3-5335deb80db6'
+import { $ } from './intrinsic.js'
+
+export const CustomEventId = '5335deb80db6-c8a6c18e-f6a3-472a'
 export interface InternalEvents {
     /** Simulate a paste event on the activeElement */
     paste: [text: string]
@@ -29,7 +31,11 @@ export interface InternalEvents {
     web3UntilBridgeOnline: [path: string, req_id: number]
     /** Request the bridge to call function. */
     web3BridgeExecute: [path: string, req_id: number, opts?: unknown]
+    sdk_ready: [undefined]
     // #endregion
+
+    // Implemented by SDK
+    requestDecrypt: [text: string, req_id: number]
 
     /** A simple RPC. */
     // Not using async-call-rpc because we need to make sure every intrinsic
@@ -37,7 +43,6 @@ export interface InternalEvents {
     resolvePromise: [req_id: number, data: unknown]
     rejectPromise: [req_id: number, error: unknown]
 }
-
 export interface RequestArguments {
     method: string
     params?: any
@@ -61,24 +66,21 @@ export type EventItemBeforeSerialization = keyof InternalEvents extends infer U
         ? readonly [U, InternalEvents[U]]
         : never
     : never
-const { parse, stringify } = JSON
-const { isArray } = Array
+
 export function encodeEvent<T extends keyof InternalEvents>(key: T, args: InternalEvents[T]) {
-    return stringify([key, args])
+    // TODO: how to prevent toJSON()?
+    return $.JSON.stringify([key, args])
 }
 export function decodeEvent(data: string): EventItemBeforeSerialization {
-    const result = parse(data)
-    // Do not throw new Error cause it requires a global lookup.
-    // eslint-disable-next-line
-    if (!isEventItemBeforeSerialization(result)) throw null
+    const result = $.JSON.parse(data)
+    if (!isEventItemBeforeSerialization(result)) throw new $.TypeError()
     return result
 }
 
 function isEventItemBeforeSerialization(data: unknown): data is EventItemBeforeSerialization {
-    if (!isArray(data)) return false
+    if (!$.isArray(data)) return false
     if (data.length !== 2) return false
     if (typeof data[0] !== 'string') return false
-    if (!isArray(data[1])) return false
+    if (!$.isArray(data[1])) return false
     return true
 }
-export * from './twitter.js'

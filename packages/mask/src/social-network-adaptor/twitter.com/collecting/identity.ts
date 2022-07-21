@@ -1,6 +1,6 @@
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { delay } from '@dimensiondev/kit'
-import { TWITTER_RESERVED_SLUGS } from '@masknet/injected-script/shared'
+import { TWITTER_RESERVED_SLUGS } from '@masknet/injected-script'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { Twitter } from '@masknet/web3-providers'
 import { first } from 'lodash-unified'

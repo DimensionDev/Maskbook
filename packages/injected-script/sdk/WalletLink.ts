@@ -1,5 +1,5 @@
 import { InjectedProvider } from './Base'
-import { createPromise, sendEvent } from './utils'
+import { createRequest, sendEvent } from '../shared/rpc'
 
 export class WalletLinkProvider extends InjectedProvider {
     constructor() {
@@ -7,6 +7,6 @@ export class WalletLinkProvider extends InjectedProvider {
     }
 
     override connect(options: unknown): Promise<void> {
-        return createPromise((id) => sendEvent('web3BridgeExecute', [this.pathname, 'enable'].join('.'), id, options))
+        return createRequest((id) => sendEvent('web3BridgeExecute', [this.pathname, 'enable'].join('.'), id, options))
     }
 }

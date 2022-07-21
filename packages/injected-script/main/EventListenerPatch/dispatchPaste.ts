@@ -1,5 +1,5 @@
-import type { InternalEvents } from '../../shared/index.js'
-import { $, $Content } from '../intrinsic.js'
+import type { InternalEvents } from '../../shared/event.js'
+import { $, $Content } from '../../shared/intrinsic.js'
 
 export function dispatchPaste(text: InternalEvents['paste'][0]) {
     const data = new $Content.DataTransfer()
@@ -11,6 +11,6 @@ export function dispatchPaste(text: InternalEvents['paste'][0]) {
         bubbles: true,
         cancelable: true,
     })
-    $.DataTransfer_setData(data, 'text/plain', text)
-    $Content.dispatchEvent($.DocumentActiveElement()!, e)
+    $.DataTransferSetData(data, 'text/plain', text)
+    $Content.dispatchEvent($.Document_activeElement_getter()!, e)
 }

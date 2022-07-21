@@ -1,4 +1,4 @@
-import { $Content, $ } from './intrinsic.js'
+import { $Content, $ } from '../shared/intrinsic.js'
 
 function setupChromium() {
     let currentLocationHref = window.location.href

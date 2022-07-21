@@ -1,12 +1,14 @@
-import { CustomEventId, decodeEvent } from '../shared/index.js'
+import { CustomEventId, decodeEvent } from '../shared/event.js'
 import { instagramUpload } from './EventListenerPatch/instagramUpload.js'
-import { $, bless } from './intrinsic.js'
+import { $, bless } from '../shared/intrinsic.js'
 import { dispatchInput } from './EventListenerPatch/dispatchInput.js'
 import { dispatchPaste } from './EventListenerPatch/dispatchPaste.js'
 import { dispatchPasteImage } from './EventListenerPatch/dispatchPasteImage.js'
 import { callRequest, access, bindEvent, execute, until } from './GlobalVariableBridge/index.js'
 import { hookInputUploadOnce } from './EventListenerPatch/hookInputUploadOnce.js'
+import { rejectPromise, resolvePromise } from '../shared/rpc.js'
 
+export let sdkReady = false
 document.addEventListener(CustomEventId, (e) => {
     const r = decodeEvent($.CustomEvent_detail_getter(e as CustomEvent))
     if (r[1].length < 1) return
@@ -15,6 +17,7 @@ document.addEventListener(CustomEventId, (e) => {
     bless(r[1], $.ArrayDesc)
 
     const [type, args] = r
+    sdkReady = true
 
     switch (type) {
         case 'input':
@@ -27,8 +30,12 @@ document.addEventListener(CustomEventId, (e) => {
             return dispatchPasteImage(...args)
         case 'hookInputUploadOnce':
             return hookInputUploadOnce(...args)
-        case 'rejectPromise':
         case 'resolvePromise':
+            return resolvePromise(...args)
+        case 'rejectPromise':
+            return rejectPromise(...args)
+        case 'requestDecrypt':
+        case 'sdk_ready':
             return
 
         // web3

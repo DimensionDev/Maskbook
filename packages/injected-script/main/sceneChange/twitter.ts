@@ -1,5 +1,5 @@
-import { TWITTER_RESERVED_SLUGS } from '../../shared/index.js'
-import { $, $Content } from '../intrinsic.js'
+import { TWITTER_RESERVED_SLUGS } from '../../shared/twitter.js'
+import { $, $Content } from '../../shared/intrinsic.js'
 
 function getFirstSlug() {
     const slugs: string[] = $.ArrayFilter($.StringSplit(location.pathname, '/' as any), $.Boolean)

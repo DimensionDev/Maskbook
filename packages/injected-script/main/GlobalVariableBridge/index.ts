@@ -1,6 +1,7 @@
-import { $, $Content } from '../intrinsic.js'
-import { cloneIntoContent, handlePromise, sendEvent } from '../utils.js'
-import type { InternalEvents } from '../../shared/index.js'
+import { $, $Blessed, $Content } from '../../shared/intrinsic.js'
+import { cloneIntoContent, handlePromise } from '../utils.js'
+import type { InternalEvents } from '../../shared/event.js'
+import { sendEvent } from '../../shared/rpc.js'
 
 const hasListened: Record<string, boolean> = { __proto__: null! }
 
@@ -59,11 +60,11 @@ export function bindEvent(path: string, bridgeEvent: keyof InternalEvents, event
 }
 
 function untilInner(name: string) {
-    if ($.Reflect.has(window, name)) return $.PromiseResolve(true)
+    if ($.Reflect.has(window, name)) return $Blessed.Promise((x) => x(true))
 
     let restCheckTimes = 150 // 30s
 
-    return new Promise<true>((resolve) => {
+    return $Blessed.Promise<true>((resolve) => {
         function check() {
             restCheckTimes -= 1
             if (restCheckTimes < 0) return

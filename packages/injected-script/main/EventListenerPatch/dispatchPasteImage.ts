@@ -1,7 +1,7 @@
-import type { InternalEvents } from '../../shared/index.js'
-import { $, $Content } from '../intrinsic.js'
+import type { InternalEvents } from '../../shared/event.js'
+import { $, $Content } from '../../shared/intrinsic.js'
 import { cloneIntoContent, contentFileFromBufferSource } from '../utils.js'
-import { dispatchEventRaw } from './capture.js'
+import { dispatchMockEventBubble } from './capture.js'
 
 export function dispatchPasteImage(image: InternalEvents['pasteImage'][0]) {
     const data = new $Content.DataTransfer()
@@ -12,7 +12,7 @@ export function dispatchPasteImage(image: InternalEvents['pasteImage'][0]) {
     })
     const file = contentFileFromBufferSource('image/png', 'image.png', image)
     const dt = contentRealmDataTransferProxyFromFile(file)
-    dispatchEventRaw($.DocumentActiveElement(), e, { clipboardData: dt })
+    dispatchMockEventBubble($.Document_activeElement_getter(), e, { clipboardData: dt })
 }
 
 function contentRealmDataTransferProxyFromFile(contentRealmFile: File) {

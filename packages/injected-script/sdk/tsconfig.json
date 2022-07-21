@@ -13,8 +13,7 @@
     "Coin98.ts",
     "MetaMask.ts",
     "MathWallet.ts",
-    "WalletLink.ts",
-    "utils.ts"
+    "WalletLink.ts"
   ],
   "references": [{ "path": "../shared/" }]
 }

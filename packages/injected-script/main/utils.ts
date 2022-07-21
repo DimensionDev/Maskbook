@@ -1,5 +1,6 @@
-import { CustomEventId, encodeEvent, InternalEvents } from '../shared/index.js'
-import { $Content, $ } from './intrinsic.js'
+import { CustomEventId, encodeEvent, InternalEvents } from '../shared/event.js'
+import { $Content, $, $Blessed } from '../shared/intrinsic.js'
+import { sendEvent } from '../shared/rpc.js'
 
 export const cloneIntoContent = <T>(obj: T) => {
     if (typeof obj === 'function') {
@@ -32,7 +33,7 @@ export function defineFunctionOnContentObject<T extends object>(
     contentObject[key] = new $Content.Proxy(contentObject[key], { apply })
 }
 
-export function unwrapXRayVision<T>(x: T) {
+export function unwrapXRayVision<T>(x: T): T {
     return $.XPCNativeWrapper?.unwrap(x) ?? x
 }
 
@@ -53,21 +54,29 @@ function getError(message: any) {
         return { message: 'unknown error' }
     }
 }
-export async function handlePromise(id: number, promise: () => any) {
+export const handlePromise = $Blessed.AsyncFunction(async (id: number, promise: () => any) => {
     try {
         const data = await promise()
         sendEvent('resolvePromise', id, data)
     } catch (error) {
         sendEvent('rejectPromise', id, getError(error))
     }
-}
-
-export function sendEvent<T extends keyof InternalEvents>(event: T, ...args: InternalEvents[T]) {
-    const detail = encodeEvent(event, args)
-    $Content.dispatchEvent(document, new $Content.CustomEvent(CustomEventId, { detail }))
-}
+})
 
 export function isTwitter() {
     const url = new $.URL(window.location.href)
     return $.StringInclude($.URL_origin_getter(url), 'twitter.com')
+}
+
+const native = $Blessed.WeakMap<Function, Function>()
+try {
+    Function.prototype.toString = function toString() {
+        if (native.has(this)) return $.FunctionToString(native.get(this)!)
+        return $.FunctionToString(this)
+    }
+    looksNative(Function.prototype.toString, $.FunctionToString)
+} catch {}
+export function looksNative<T extends Function>(f: T, old: Function): T {
+    native.set(f, old)
+    return f
 }

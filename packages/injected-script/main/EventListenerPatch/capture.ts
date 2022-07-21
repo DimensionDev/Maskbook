@@ -1,10 +1,16 @@
 import { isTwitter, defineFunctionOnContentObject, unwrapXRayVision, cloneIntoContent } from '../utils.js'
-import { $, $Blessed, $Content, bless } from '../intrinsic.js'
+import { $, $Blessed, $Content, bless } from '../../shared/intrinsic.js'
 
 // Do not use Array deconstruct syntax. It might invoke Array.prototype[Symbol.iterator].
 type EventListenerDescriptor = { once: boolean; passive: boolean; capture: boolean }
 
-const _CapturingEvents: ReadonlyArray<keyof DocumentEventMap> = ['keyup', 'input', 'paste', 'change']
+const _CapturingEvents: ReadonlyArray<keyof DocumentEventMap> = [
+    'keyup',
+    'input',
+    'paste',
+    'change',
+    'readystatechange',
+]
 
 const CapturingEvents: ReadonlySet<string> = $Blessed.Set(_CapturingEvents)
 const CapturedListeners = $Blessed.WeakMap<EventTarget, Map<string, Map<EventListener, EventListenerDescriptor>>>()
@@ -71,17 +77,58 @@ function normalizeAddEventListenerArgs(
     return { type, f, once, capture, passive }
 }
 
-export function dispatchEventRaw<T extends Event>(
+function dispatchEventTarget_inner(
+    target: EventTarget,
+    event: Event,
+    eventTarget_onEventGetter: () => Function | undefined | null,
+) {
+    const type = event.type
+    if (!CapturingEvents.has(type))
+        return $.ConsoleError("[@masknet/injected-script] Trying to send event didn't captured.")
+
+    // TODO: they should be triggered in order.
+    try {
+        const f = eventTarget_onEventGetter()
+        f && $.Reflect.apply(f, target, [event])
+    } catch (err) {
+        $.ConsoleError(err)
+    }
+
+    const listeners = CapturedListeners.get(target)?.get(type)
+    if (!listeners) return
+    for (const _ of listeners) {
+        // avoid Array deconstruct
+        if (_[1].capture) continue
+        try {
+            _[0](event)
+        } catch (err) {
+            $.ConsoleError(err)
+        }
+    }
+}
+export function dispatchMockEvent<T extends Event>(
+    target: EventTarget,
+    event: T,
+    eventTarget_onEventGetter: () => Function | undefined | null,
+    overwrite: Partial<T> = {},
+) {
+    dispatchEventTarget_inner(
+        target,
+        getMockedEvent(event, () => target, overwrite),
+        eventTarget_onEventGetter,
+    )
+}
+
+export function dispatchMockEventBubble<T extends Event>(
     target: Node | Document | null,
     eventBase: T,
     overwrites: Partial<T> = {},
 ) {
     let currentTarget: null | Node | Document = target
-    const event = getMockedEvent(eventBase, () => (isTwitter() ? target! : currentTarget!), overwrites)
+
+    // HACK: https://github.com/DimensionDev/Maskbook/pull/4970/ and https://github.com/DimensionDev/Maskbook/pull/5967
+    const event = getMockedEvent(eventBase, isTwitter() ? () => target! : () => currentTarget!, overwrites)
     // Note: in firefox, "event" is "Opaque". Displayed as an empty object.
-    const type = eventBase.type
-    if (!CapturingEvents.has(type))
-        return $.ConsoleError("[@masknet/injected-script] Trying to send event didn't captured.")
 
     const bubblingNode = bubble()
     for (const Node of bubblingNode) {
@@ -92,17 +139,8 @@ export function dispatchEventRaw<T extends Event>(
         // capture event
         // once event
         // passive event
-        const listeners = CapturedListeners.get(Node)?.get(type)
-        if (!listeners) continue
-        for (const _ of listeners) {
-            // avoid Array deconstruct
-            if (_[1].capture) continue
-            try {
-                _[0](event)
-            } catch (err) {
-                $.ConsoleError(err)
-            }
-        }
+        // onEvent trigger
+        dispatchEventTarget_inner(Node, event, () => undefined)
     }
     function bubble() {
         const g = bubble_unsafe()
@@ -112,32 +150,34 @@ export function dispatchEventRaw<T extends Event>(
     function* bubble_unsafe() {
         while (currentTarget) {
             yield currentTarget
-            currentTarget = $.Node_parentNode(currentTarget)
+            currentTarget = $.Node_parentNode_getter(currentTarget)
         }
         yield document
         yield window
     }
-    function getMockedEvent<T extends Event>(event: T, currentTarget: () => EventTarget, overwrites: Partial<T> = {}) {
-        const target = unwrapXRayVision(currentTarget())
-        const source = {
-            target,
-            srcElement: target,
-            // ? Why? It doesn't work without this property.
-            _inherits_from_prototype: true,
-            defaultPrevented: false,
-            preventDefault: cloneIntoContent(() => {}),
-            ...overwrites,
-        }
-        return new $Content.Proxy(
-            event,
-            cloneIntoContent({
-                get(target, key) {
-                    // HACK: https://github.com/DimensionDev/Maskbook/pull/4970/
-                    if (key === 'currentTarget' || (key === 'target' && isTwitter()))
-                        return unwrapXRayVision(currentTarget())
-                    return (source as any)[key] ?? (unwrapXRayVision(target) as any)[key]
-                },
-            }),
-        )
+}
+
+function getMockedEvent<T extends Event>(event: T, currentTarget: () => EventTarget, overwrites: Partial<T> = {}) {
+    const target = unwrapXRayVision(currentTarget())
+    const source = {
+        target,
+        srcElement: target,
+        get currentTarget() {
+            return unwrapXRayVision(currentTarget())
+        },
+        // ? Why? It doesn't work without this property.
+        // _inherits_from_prototype: true,
+        defaultPrevented: false,
+        preventDefault: cloneIntoContent(() => {}),
     }
+    $.defineProperties(source, $.getOwnPropertyDescriptors(overwrites))
+    return new $Content.Proxy(
+        event,
+        cloneIntoContent({
+            get(target, key) {
+                if (key in source) return (source as any)[key]
+                return (unwrapXRayVision(target) as any)[key]
+            },
+        }),
+    )
 }

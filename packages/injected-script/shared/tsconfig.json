@@ -7,6 +7,6 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext"
   },
-  "files": ["./index.ts", "./twitter.ts"],
+  "files": ["./twitter.ts", "./intrinsic.ts", "./event.ts", "./rpc.ts"],
   "references": []
 }

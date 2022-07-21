@@ -1,7 +1,9 @@
-import { CustomEventId, InternalEvents, encodeEvent } from '../shared'
+import { CustomEventId, InternalEvents, encodeEvent } from './event.js'
+import { $, $Blessed, $Content } from './intrinsic.js'
 
 export function sendEvent<K extends keyof InternalEvents>(name: K, ...params: InternalEvents[K]) {
-    document.dispatchEvent(
+    $Content.dispatchEvent(
+        document,
         new CustomEvent(CustomEventId, {
             cancelable: true,
             bubbles: true,
@@ -9,26 +11,26 @@ export function sendEvent<K extends keyof InternalEvents>(name: K, ...params: In
         }),
     )
 }
-const promisePool = new Map<number, [resolve: Function, reject: Function]>()
-let id = 1
-export function createPromise<T>(callback: (id: number) => void) {
-    return new Promise<T>((resolve, reject) => {
-        id += 1
-        promisePool.set(id, [resolve, reject])
+
+const promisePool = $Blessed.Map<number, { resolve: Function; reject: Function }>()
+export function createRequest<T>(callback: (id: number) => void) {
+    return $Blessed.Promise<T>((resolve, reject) => {
+        const id = $.random()
+        promisePool.set(id, { resolve, reject })
         callback(id)
     })
 }
 export function resolvePromise(id: number, data: unknown) {
     const pair = promisePool.get(id)
     if (pair) {
-        pair[0](data)
+        pair.resolve(data)
         promisePool.delete(id)
     }
 }
 export function rejectPromise(id: number, data: unknown) {
     const pair = promisePool.get(id)
     if (pair) {
-        pair[1](data)
+        pair.reject(data)
         promisePool.delete(id)
     }
 }

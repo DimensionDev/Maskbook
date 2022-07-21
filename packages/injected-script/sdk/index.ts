@@ -1,13 +1,14 @@
-import { CustomEventId, decodeEvent } from '../shared'
+import { CustomEventId, decodeEvent } from '../shared/event'
 import { Coin98Provider, Coin98ProviderType } from './Coin98'
 import { PhantomProvider } from './Phantom'
 import { SolflareProvider } from './Solflare'
 import { MetaMaskProvider } from './MetaMask'
-import { sendEvent, rejectPromise, resolvePromise } from './utils'
+import { sendEvent, rejectPromise, resolvePromise } from '../shared/rpc'
 import { MathWalletProvider } from './MathWallet'
 import { WalletLinkProvider } from './WalletLink'
 
-export type { EthereumProvider, InternalEvents } from '../shared'
+export { TWITTER_RESERVED_SLUGS } from '../shared/twitter'
+export type { EthereumProvider, InternalEvents } from '../shared/event'
 
 export const injectedCoin98EVMProvider = new Coin98Provider(Coin98ProviderType.EVM)
 export const injectedCoin98SolanaProvider = new Coin98Provider(Coin98ProviderType.Solana)
@@ -29,6 +30,19 @@ export function pasteInstagram(url: string) {
 export function inputText(text: string) {
     sendEvent('input', text)
 }
+
+let decrypt: (text: string, id: number) => void = async function f(text) {
+    console.log(text)
+    return text
+}
+export function setupDecryptHelper(f: (text: string) => Promise<string>) {
+    decrypt = (text, id) => {
+        new Promise((resolve) => resolve(f(text)))
+            .then((text) => sendEvent('resolvePromise', id, text))
+            .catch((err) => sendEvent('rejectPromise', id, err))
+    }
+}
+
 export function hookInputUploadOnce(
     format: string,
     fileName: string,
@@ -47,7 +61,8 @@ document.addEventListener(CustomEventId, (e) => {
             return resolvePromise(...r[1])
         case 'rejectPromise':
             return rejectPromise(...r[1])
-
+        case 'requestDecrypt':
+            return decrypt(...r[1])
         case 'web3BridgeEmitEvent':
             const [pathname, eventName, data] = r[1]
             const provider = [
@@ -72,9 +87,11 @@ document.addEventListener(CustomEventId, (e) => {
         case 'pasteImage':
         case 'instagramUpload':
         case 'hookInputUploadOnce':
+        case 'sdk_ready':
             break
         default:
             const neverEvent: never = r[0]
             console.log('[@masknet/injected-script]', neverEvent, 'not handled')
     }
 })
+sendEvent('sdk_ready', undefined)

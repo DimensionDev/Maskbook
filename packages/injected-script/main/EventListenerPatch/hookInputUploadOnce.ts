@@ -1,7 +1,7 @@
-import type { InternalEvents } from '../../shared/index.js'
-import { $, $Content } from '../intrinsic.js'
+import type { InternalEvents } from '../../shared/event.js'
+import { $, $Content } from '../../shared/intrinsic.js'
 import { cloneIntoContent, contentFileFromBufferSource } from '../utils.js'
-import { dispatchEventRaw } from './capture.js'
+import { dispatchMockEventBubble } from './capture.js'
 
 const proto = HTMLInputElement.prototype
 
@@ -46,7 +46,7 @@ export function hookInputUploadOnce(
         })
         if (timer !== null) $Content.clearTimeout(timer)
         timer = $Content.setTimeout(() => {
-            dispatchEventRaw(this, e, {})
+            dispatchMockEventBubble(this, e, {})
             proto.click = old
             $.Reflect.deleteProperty(this, 'files')
         }, 200)

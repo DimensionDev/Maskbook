@@ -1,4 +1,4 @@
-import type { RequestArguments } from '../shared'
+import type { RequestArguments } from '../shared/event'
 import { InjectedProvider } from './Base'
 
 export enum Coin98ProviderType {
