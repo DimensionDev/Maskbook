@@ -20,14 +20,15 @@ const AccountDetail = memo(() => {
 
     const { showSnackbar } = usePopupCustomSnackbar()
 
+    const isSupportNextDotID = selectedAccount
+        ? SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID.includes(selectedAccount.identifier.network as EnhanceableSite)
+        : false
+
     const [disconnectState, onDisconnect] = useAsyncFn(async () => {
         try {
             if (!selectedAccount?.identifier) return
 
-            if (
-                SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID.includes(selectedAccount.identifier.network as EnhanceableSite) &&
-                selectedAccount.is_valid
-            ) {
+            if (isSupportNextDotID && selectedAccount.is_valid) {
                 setOpen(true)
                 return
             }
@@ -110,6 +111,7 @@ const AccountDetail = memo(() => {
                 onVerify={onVerify}
                 onDisconnect={onDisconnect}
                 disconnectLoading={disconnectState.loading}
+                isSupportNextDotID={isSupportNextDotID}
             />
             <DisconnectDialog
                 unbundledIdentity={selectedAccount.identifier}
