@@ -6,6 +6,7 @@ import type {
     NetworkPluginID,
     SocialAddressType,
 } from '@masknet/web3-shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 export class IdentityServiceState implements Web3SocialIdentityState {
     protected cache = new LRU<string, Promise<Array<SocialAddress<NetworkPluginID>>>>({
@@ -40,7 +41,7 @@ export class IdentityServiceState implements Web3SocialIdentityState {
         includes?: SocialAddressType[],
     ): Promise<Array<SocialAddress<NetworkPluginID>>> {
         const ID = this.getIdentityID(identity, includes)
-        if (!ID) return []
+        if (!ID) return EMPTY_LIST
 
         const fromCache = this.getFromCache(identity, includes)
         if (fromCache) return fromCache

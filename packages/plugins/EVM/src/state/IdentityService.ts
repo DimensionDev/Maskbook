@@ -5,7 +5,7 @@ import { NetworkPluginID, SocialIdentity, SocialAddress, SocialAddressType } fro
 import { createPayload, createWeb3Provider, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { IdentityServiceState } from '@masknet/plugin-infra/web3'
 import { KeyValue, NextIDProof, RSS3 } from '@masknet/web3-providers'
-import { getSiteType, NextIDPlatform } from '@masknet/shared-base'
+import { EMPTY_LIST, EnhanceableSite, getSiteType, NextIDPlatform } from '@masknet/shared-base'
 
 const ENS_RE = /\S{1,256}\.(eth|kred|xyz|luxe)\b/
 const ADDRESS_FULL = /0x\w{40,}/
@@ -14,7 +14,7 @@ const RSS3_URL_RE = /https?:\/\/(?<name>[\w.]+)\.(rss3|cheers)\.bio/
 const RSS3_RNS_RE = /(?<name>[\w.]+)\.rss3/
 
 function getEthereumName(twitterId: string, nickname: string, bio: string) {
-    const [matched] = nickname.match(ENS_RE) ?? bio.match(ENS_RE) ?? []
+    const [matched] = nickname.match(ENS_RE) ?? bio.match(ENS_RE) ?? EMPTY_LIST
     if (matched) return matched
     return twitterId && !twitterId.endsWith('.eth') ? `${twitterId}.eth` : twitterId
 }
@@ -26,30 +26,28 @@ function getRSS3Id(nickname: string, profileURL: string, bio: string) {
 }
 
 function getAddress(text: string) {
-    const [matched] = text.match(ADDRESS_FULL) ?? []
+    const [matched] = text.match(ADDRESS_FULL) ?? EMPTY_LIST
     if (matched && isValidAddress(matched)) return matched
     return ''
 }
 
 function getNextIDPlatform() {
-    const site = getSiteType()?.split('.')?.[0]
-    const Platforms: unknown[] = [NextIDPlatform.Twitter]
-    if (Platforms.includes(site)) return site as NextIDPlatform
+    const site = getSiteType()
+    if (site === EnhanceableSite.Twitter) return NextIDPlatform.Twitter
     return NextIDPlatform.Twitter
 }
 
 async function getWalletAddressesFromNextID(userId: string) {
-    if (!userId) return []
-    const addresses = []
+    if (!userId) return EMPTY_LIST
     const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(getNextIDPlatform(), userId)
-    for (const binding of bindings) {
-        for (const proof of binding.proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)) {
-            addresses.push(proof.identity)
-        }
 
-        if (addresses.length) return addresses
+    for (const binding of bindings) {
+        const identities = binding.proofs
+            .filter((x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity))
+            .map((y) => y.identity)
+        if (identities.length) return identities
     }
-    return []
+    return EMPTY_LIST
 }
 
 export class IdentityService extends IdentityServiceState {
@@ -83,7 +81,7 @@ export class IdentityService extends IdentityServiceState {
     }
 
     /** Read a social address from NextID. */
-    private async getSocialAddressFromNextID({ identifier, nickname = '', homepage = '', bio = '' }: SocialIdentity) {
+    private async getSocialAddressFromNextID({ identifier }: SocialIdentity) {
         const listOfAddress = await getWalletAddressesFromNextID(identifier?.userId ?? '')
         return listOfAddress
             .map((x) => this.createSocialAddress(SocialAddressType.NEXT_ID, x))
