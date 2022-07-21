@@ -1,6 +1,6 @@
 /** Bless an internal object so it methods can be called directly. */
-export const bless = <T>(object: T, prototype: Record<keyof T, PropertyDescriptor>) =>
-    $.defineProperties(object, $.getOwnPropertyDescriptors(prototype))
+export const bless = <T>(object: T, descriptors: Record<keyof T, PropertyDescriptor>) =>
+    $.defineProperties(object, descriptors)
 
 /** Create a HOF that can be called without this. */
 export function takeThis<F extends (...args: any) => any>(f: F) {
