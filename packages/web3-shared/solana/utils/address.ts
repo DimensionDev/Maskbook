@@ -24,8 +24,10 @@ export function formatTokenId(id: string) {
     return id
 }
 export function isValidAddress(address?: string) {
+    const length = address?.length
+    if (!length) return false
     try {
-        return address?.length === 44 && Web3.PublicKey.isOnCurve(bs58.decode(address))
+        return length >= 32 && length <= 44 && Web3.PublicKey.isOnCurve(bs58.decode(address))
     } catch {
         return false
     }
