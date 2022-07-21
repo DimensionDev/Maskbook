@@ -44,9 +44,10 @@ export default function Wallet() {
     const location = useLocation()
     const navigate = useNavigate()
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const { TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { TransactionFormatter, Provider } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
 
+    console.log(Provider)
     const { loading, retry } = useAsyncRetry(async () => {
         if (
             [
