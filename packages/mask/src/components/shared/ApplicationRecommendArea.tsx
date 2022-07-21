@@ -29,7 +29,7 @@ const useStyles = makeStyles()(() => {
                     display: 'none',
                 },
             },
-            '& *:focus-visible': {
+            '& .carousel__slide:focus-visible': {
                 outline: 'none',
                 display: 'none',
             },
