@@ -1,7 +1,7 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useState, useEffect, useCallback } from 'react'
-import { useNextIDConnectStatus } from '../../../../components/DataSource/useNextID'
+import { useNextIDConnectStatus } from '../../../../components/DataSource/useNextIDConnectStatus'
 import { usePersonaConnectStatus } from '../../../../components/DataSource/usePersonaConnectStatus'
 import { NFTAvatarDialog } from '../../../../plugins/Avatar/Application/NFTAvatarsDialog'
 import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'

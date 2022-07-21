@@ -2,12 +2,13 @@
 //  if you make an incompatible change in this file, it will break the API.
 import type { ChainId } from '@masknet/web3-shared-evm'
 import type { SetupGuideStep } from '../components/InjectedComponents/SetupGuide/types'
+
 export interface ChainBlockNumber {
     chainId: ChainId
     blockNumber: number
 }
 
-export type SetupGuideCrossContextStatus = {
+export type SetupGuideContext = {
     /** The persona to be connected */
     persona?: string
     /** The user name given by user */

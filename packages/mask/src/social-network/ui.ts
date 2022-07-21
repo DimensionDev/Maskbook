@@ -3,7 +3,7 @@ import Services from '../extension/service'
 import { Flags } from '../../shared'
 import type { SocialNetworkUI } from './types'
 import { currentSetupGuideStatus } from '../settings/settings'
-import type { SetupGuideCrossContextStatus } from '../settings/types'
+import type { SetupGuideContext } from '../settings/types'
 import {
     ECKeyIdentifier,
     EnhanceableSite,
@@ -214,7 +214,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         const id = currentSetupGuideStatus[network].value
         let started = false
         const onStatusUpdate = (id: string) => {
-            const { persona, status }: SetupGuideCrossContextStatus = JSON.parse(id || '{}')
+            const { persona, status }: SetupGuideContext = JSON.parse(id || '{}')
             if (persona && status && !started) {
                 started = true
                 ui.injection.setupWizard?.(signal, ECKeyIdentifier.from(persona).unwrap())

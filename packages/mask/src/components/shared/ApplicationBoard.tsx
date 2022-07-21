@@ -11,7 +11,7 @@ import { useI18N } from '../../utils'
 import { Application, getUnlistedApp } from './ApplicationSettingPluginList'
 import { ApplicationRecommendArea } from './ApplicationRecommendArea'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useNextIDConnectStatus, verifyPersona } from '../DataSource/useNextID'
+import { useNextIDConnectStatus, verifyPersona } from '../DataSource/useNextIDConnectStatus'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus'
 import { WalletMessages } from '../../plugins/Wallet/messages'
@@ -333,7 +333,7 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
 
     const personaNextIDReset = useCallback(() => {
         nextIDConnectStatus.reset()
-        verifyPersona(personaConnectStatus.currentConnectedPersona?.identifier)()
+        verifyPersona(personaConnectStatus.currentPersona?.identifier)()
     }, [nextIDConnectStatus, personaConnectStatus])
 
     const { isSNSConnectToCurrentPersona, currentPersonaPublicKey, currentSNSConnectedPersonaPublicKey } =

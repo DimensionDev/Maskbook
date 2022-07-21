@@ -10,7 +10,7 @@ import {
     userGuideVersion,
     userPinExtension,
 } from '../../settings/settings'
-import type { SetupGuideCrossContextStatus } from '../../settings/types'
+import type { SetupGuideContext } from '../../settings/types'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import {
     PersonaIdentifier,
@@ -48,9 +48,8 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const verifyPostCollectTimer = useRef<NodeJS.Timer | null>(null)
     const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform
     // #region parse setup status
-    const lastStateRef = currentSetupGuideStatus[ui.networkIdentifier]
-    const lastState_ = useValueRef(lastStateRef)
-    const lastState = useMemo<SetupGuideCrossContextStatus>(() => {
+    const lastState_ = useValueRef(currentSetupGuideStatus[ui.networkIdentifier])
+    const lastState = useMemo<SetupGuideContext>(() => {
         try {
             return JSON.parse(lastState_)
         } catch {

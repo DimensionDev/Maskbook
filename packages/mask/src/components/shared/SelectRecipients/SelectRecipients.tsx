@@ -9,7 +9,7 @@ import {
 import type { LazyRecipients } from '../../CompositionDialog/CompositionUI'
 import { SelectRecipientsDialogUI } from './SelectRecipientsDialog'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
-import { useNextIDBoundByPlatform } from '../../DataSource/useNextID'
+import { useNextIDBoundByPlatform } from '../../DataSource/useNextIDConnectStatus'
 import { useTwitterIdByWalletSearch } from './useTwitterIdByWalletSearch'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'

@@ -63,13 +63,13 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const [scale, setScale] = useState(1)
     const { showSnackbar } = useCustomSnackbar()
     const [disabled, setDisabled] = useState(false)
-    const { currentConnectedPersona } = usePersonaConnectStatus()
+    const { currentPersona } = usePersonaConnectStatus()
     const t = useI18N()
 
     const [, saveAvatar] = useSave(currentPluginId, (token?.chainId ?? ChainId.Mainnet) as ChainId)
 
     const onSave = useCallback(async () => {
-        if (!editor || !account || !token || !currentConnectedPersona?.identifier || !proof) return
+        if (!editor || !account || !token || !currentPersona?.identifier || !proof) return
         editor.getImage().toBlob(async (blob) => {
             if (!blob) return
             setDisabled(true)
@@ -83,7 +83,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 isBindAccount,
                 token,
                 avatarData,
-                currentConnectedPersona.identifier,
+                currentPersona.identifier,
                 proof,
             )
             if (!response) {
@@ -96,7 +96,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
             onClose()
             setDisabled(false)
         }, 'image/png')
-    }, [account, editor, identifier, onClose, currentConnectedPersona, proof, isBindAccount, saveAvatar])
+    }, [account, editor, identifier, onClose, currentPersona, proof, isBindAccount, saveAvatar])
 
     if (!account || !image || !token || !proof) return null
 

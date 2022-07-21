@@ -3,6 +3,7 @@ import type { GrayscaleAlgorithm, SocialNetworkEnum } from '@masknet/encryption'
 import type { IdentityResolved, PostInfo } from '@masknet/plugin-infra/content-script'
 import type {
     EncryptionTargetType,
+    NextIDPlatform,
     ObservableWeakMap,
     PersonaIdentifier,
     PostIdentifier,
@@ -268,7 +269,7 @@ export namespace SocialNetworkUI {
         }
         export interface NextIDConfig {
             enable?: boolean
-            platform: string
+            platform: NextIDPlatform
             collectVerificationPost: (keyword: string) => PostIdentifier | null
         }
     }
