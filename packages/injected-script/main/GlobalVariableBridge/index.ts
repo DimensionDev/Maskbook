@@ -1,20 +1,15 @@
-import { apply } from '../intrinsic'
-import { clone_into, handlePromise, sendEvent } from '../utils'
-import type { InternalEvents } from '../../shared'
+import { $, $NoXRay } from '../intrinsic.js'
+import { clone_into, handlePromise, sendEvent } from '../utils.js'
+import type { InternalEvents } from '../../shared/index.js'
 
 const hasListened: Record<string, boolean> = { __proto__: null! }
-const { has } = Reflect
-const { Promise, setTimeout } = window
-const { resolve } = Promise
-const { split } = String.prototype
-const { shift } = Array.prototype
 
 function read(path: string): unknown {
-    const fragments = apply(split, path, ['.' as any])
+    const fragments = $.StringSplit(path, '.' as any)
     let result: any = window
     while (fragments.length !== 0) {
         try {
-            const key = apply(shift, fragments, [])
+            const key: string = $.ArrayShift(fragments)
             result = key ? result[key] : result
         } catch {
             return
@@ -50,18 +45,21 @@ export function bindEvent(path: string, bridgeEvent: keyof InternalEvents, event
     if (hasListened[event]) return
     hasListened[event] = true
     try {
-        ;(read(path) as any)?.on(
-            event,
-            clone_into((...args: any[]) => {
-                // TODO: type unsound
-                sendEvent(bridgeEvent, path, event, args)
-            }),
-        )
+        const f = read(path + '.on')
+        if (typeof f === 'function') {
+            f(
+                event,
+                clone_into((...args: any[]) => {
+                    // TODO: type unsound
+                    sendEvent(bridgeEvent, path, event, args)
+                }),
+            )
+        }
     } catch {}
 }
 
 function untilInner(name: string) {
-    if (has(window, name)) return apply<(result: true) => Promise<true>>(resolve, Promise, [true])
+    if ($.Reflect.has(window, name)) return $.PromiseResolve(true)
 
     let restCheckTimes = 150 // 30s
 
@@ -69,8 +67,8 @@ function untilInner(name: string) {
         function check() {
             restCheckTimes -= 1
             if (restCheckTimes < 0) return
-            if (has(window, name)) return resolve(true)
-            apply(setTimeout, window, [check, 200])
+            if ($.Reflect.has(window, name)) return resolve(true)
+            $NoXRay.setTimeout(check, 200)
         }
         check()
     })

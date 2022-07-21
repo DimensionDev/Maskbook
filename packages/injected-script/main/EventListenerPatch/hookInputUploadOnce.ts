@@ -1,12 +1,9 @@
-import type { InternalEvents } from '../../shared'
-import { no_xray_Event } from '../intrinsic'
-import { clone_into, constructXrayUnwrappedFilesFromUintLike } from '../utils'
-import { dispatchEventRaw } from './capture'
+import type { InternalEvents } from '../../shared/index.js'
+import { $, $NoXRay } from '../intrinsic.js'
+import { clone_into, constructXrayUnwrappedFilesFromUintLike } from '../utils.js'
+import { dispatchEventRaw } from './capture.js'
 
 const proto = HTMLInputElement.prototype
-const { defineProperty, deleteProperty } = Reflect
-const setTimeoutCaptured = setTimeout.bind(window)
-const clearTimeoutCaptured = clearTimeout.bind(window)
 
 /**
  * This API can mock a file upload in React applications when injected script has been injected into the page.
@@ -27,7 +24,7 @@ export function hookInputUploadOnce(
     ...[format, fileName, fileArray, triggerOnActiveElementNow]: InternalEvents['hookInputUploadOnce']
 ) {
     let timer: ReturnType<typeof setTimeout> | null = null
-    const e = new no_xray_Event('change', {
+    const e = new $NoXRay.Event('change', {
         bubbles: true,
         cancelable: true,
     })
@@ -43,15 +40,15 @@ export function hookInputUploadOnce(
             length: 1,
             [0]: file,
         })
-        defineProperty(this, 'files', {
+        $.Reflect.defineProperty(this, 'files', {
             configurable: true,
             value: fileList,
         })
-        if (timer !== null) clearTimeoutCaptured(timer)
-        timer = setTimeoutCaptured(() => {
+        if (timer !== null) $NoXRay.clearTimeout(timer)
+        timer = $NoXRay.setTimeout(() => {
             dispatchEventRaw(this, e, {})
             proto.click = old
-            deleteProperty(this, 'files')
+            $.Reflect.deleteProperty(this, 'files')
         }, 200)
     }
 

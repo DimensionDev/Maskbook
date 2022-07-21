@@ -1,5 +1,16 @@
 {
   "name": "@types/masknet__global-types",
   "private": true,
-  "types": "./__all.d.ts"
+  "types": "./__all.d.ts",
+  "type": "module",
+  "exports": {
+    "./dom": { "types": "./dom.d.ts" },
+    "./env": { "types": "./env.d.ts" },
+    "./firefox": { "types": "./firefox.d.ts" },
+    "./flag": { "types": "./flag.d.ts" },
+    "./global": { "types": "./global.d.ts" },
+    "./intl": { "types": "./intl.d.ts" },
+    "./theme-global": { "types": "./theme-global.d.ts" },
+    "./webpack": { "types": "./webpack.d.ts" }
+  }
 }

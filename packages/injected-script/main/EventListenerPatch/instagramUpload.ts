@@ -2,7 +2,7 @@ import {
     constructXrayUnwrappedFilesFromUintLike,
     overwriteFunctionOnXRayObject,
     unwrapXRay_CPPBindingObject,
-} from '../utils'
+} from '../utils.js'
 // TODO: This file is not audited
 export async function instagramUpload(url: string) {
     const result = await window.fetch(url).then((x) => x.arrayBuffer())
