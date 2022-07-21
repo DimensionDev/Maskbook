@@ -61,7 +61,10 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         // Whether the current account is verified
         const isVerifiedAccount = verifiedWallets.some((x) => isSameAddress(x.identity, account))
 
-        const pluginIdByDefaultVerifiedWallet = resolveNextIdPlatformPluginId(defaultVerifiedWallet?.platform)
+        const pluginIdByDefaultVerifiedWallet = defaultVerifiedWallet
+            ? resolveNextIdPlatformPluginId(defaultVerifiedWallet?.platform)
+            : undefined
+
         const defaultPluginId = account ? currentPluginId : pluginIdByDefaultVerifiedWallet
         const defaultWalletName = useWalletName(
             account ? account : defaultVerifiedWallet?.identity,
