@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { AddNFT } from '../SNSAdaptor/AddNFT'
 import { BindingProof, EMPTY_LIST } from '@masknet/shared-base'
 import type { AllChainsNonFungibleToken, SelectTokenInfo } from '../types'
-import { uniqBy } from 'lodash-unified'
+import { sortBy, uniqBy } from 'lodash-unified'
 import { Translate, useI18N } from '../locales'
 import {
     useAccount,
@@ -290,7 +290,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
         return
     }
 
-    const walletItems = wallets.sort((a, b) => Number.parseInt(b.created_at, 10) - Number.parseInt(a.created_at, 10))
+    const walletItems = sortBy(wallets, (a) => Number.parseInt(a.created_at, 10))
 
     if (!wallets?.length && !account)
         return (
