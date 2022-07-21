@@ -95,3 +95,8 @@ export async function openDashboard(route?: DashboardRoutes, search?: string) {
         url: browser.runtime.getURL(`/dashboard.html#${route}${search ? `?${search}` : ''}`),
     })
 }
+
+export async function queryCurrentActiveTab() {
+    const [activeTab] = await browser.tabs.query({ active: true, currentWindow: true })
+    return activeTab
+}

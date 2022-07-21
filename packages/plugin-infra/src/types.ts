@@ -12,6 +12,8 @@ import type {
     PersonaInformation,
     ECKeyIdentifier,
     MaskEvents,
+    EnhanceableSite,
+    ExtensionSite,
 } from '@masknet/shared-base'
 import type {
     ChainDescriptor,
@@ -183,6 +185,8 @@ export namespace Plugin.Shared {
         }): Promise<void>
         /** Reset Mask Wallet account */
         resetAccount(): Promise<void>
+        /** Record which sites are connected to the Mask wallet  */
+        recordConnectedSites(site: EnhanceableSite | ExtensionSite, connected: boolean): void
 
         /** Sign a message with persona */
         personaSignMessage(payload: PersonaSignRequest): Promise<PersonaSignResult>

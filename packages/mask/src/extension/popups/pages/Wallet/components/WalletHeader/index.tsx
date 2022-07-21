@@ -18,6 +18,7 @@ import { currentMaskWalletAccountSettings } from '../../../../../../plugins/Wall
 import { WalletRPC } from '../../../../../../plugins/Wallet/messages'
 import { NormalHeader } from '../../../../components/NormalHeader'
 import { NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useConnected } from '../../hooks/useConnected'
 
 const useStyles = makeStyles()({
     menu: {
@@ -45,7 +46,7 @@ export const WalletHeader = memo(() => {
         () => networks.find((x) => x.chainId === chainId) ?? networks[0],
         [networks, chainId],
     )
-
+    const connected = useConnected()
     const matchWallet = useMatch(PopupRoutes.Wallet)
     const matchSwitchWallet = useMatch(PopupRoutes.SwitchWallet)
     const matchContractInteraction = useMatch(PopupRoutes.ContractInteraction)
@@ -100,6 +101,7 @@ export const WalletHeader = memo(() => {
                     wallet={wallet}
                     isSwitchWallet={!!matchSwitchWallet}
                     disabled
+                    connected={connected}
                 />
                 {menu}
             </>
@@ -109,6 +111,7 @@ export const WalletHeader = memo(() => {
     return (matchSwitchWallet || matchWallet) && wallet ? (
         <>
             <WalletHeaderUI
+                connected={connected}
                 currentNetwork={currentNetwork}
                 chainId={chainId}
                 onOpenNetworkSelector={openMenu}

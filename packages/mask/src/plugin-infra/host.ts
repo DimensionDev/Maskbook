@@ -72,6 +72,7 @@ const SharedContext: Omit<Plugin.Shared.SharedContext, 'createKVStorage'> = {
     updateAccount: WalletRPC.updateMaskAccount,
     resetAccount: WalletRPC.resetMaskAccount,
     selectAccount: WalletRPC.selectMaskAccount,
+    recordConnectedSites: WalletRPC.recordConnectedSites,
 
     signTransaction: WalletRPC.signTransaction,
     signTypedData: WalletRPC.signTypedData,

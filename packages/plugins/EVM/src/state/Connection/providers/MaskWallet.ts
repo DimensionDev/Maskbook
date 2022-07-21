@@ -67,12 +67,14 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
     override async connect(chainId: ChainId) {
         const { chainId: actualChainId, getWallets, updateAccount } = SharedContextSettings.value
 
-        if (getSiteType() === ExtensionSite.Popup) throw new Error('Cannot connect wallet')
+        const siteType = getSiteType()
+        if (siteType === ExtensionSite.Popup) throw new Error('Cannot connect wallet')
 
         const wallets = await getWallets()
         SharedContextSettings.value.openPopupWindow(wallets.length ? PopupRoutes.SelectWallet : PopupRoutes.Wallet, {
             chainId,
         })
+
         const account = first(await SharedContextSettings.value.selectAccount())
         if (!account) throw new Error(`Failed to connect to ${chainResolver.chainFullName(chainId)}.`)
 
@@ -83,6 +85,8 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
             })
         }
 
+        if (siteType) SharedContextSettings.value.recordConnectedSites(siteType, true)
+
         return {
             chainId,
             account,
@@ -90,6 +94,8 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
     }
 
     override async disconnect() {
+        const siteType = getSiteType()
+        if (siteType) SharedContextSettings.value.recordConnectedSites(siteType, false)
         // do nothing
     }
 }

@@ -926,6 +926,8 @@
     "popups_name": "Name",
     "popups_social_account": "Social Accounts",
     "popups_connected_wallets": "Connected Wallets",
+    "popups_wallet_connected_status$connected": "Connected",
+    "popups_wallet_connected_status$unconnected": "Not Connected",
     "popups_loading": "Loading",
     "popups_connect_your_web2_social_accounts": "Connect your social media accounts",
     "popups_connect_social_account": "Connect Social Account",
