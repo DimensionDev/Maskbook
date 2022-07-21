@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
-import { CrossBridgeIcon } from '@masknet/icons'
+import { CrossBridge } from '@masknet/icons'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { base } from '../base'
 import { useState } from 'react'
@@ -11,7 +11,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal, context) {},
     ApplicationEntries: [
         (() => {
-            const icon = <CrossBridgeIcon />
+            const icon = <CrossBridge />
             const name = { i18nKey: '__plugin_name', fallback: 'Cross-chain' }
             const iconFilterColor = 'rgba(183, 212, 255, 0.3)'
             return {
