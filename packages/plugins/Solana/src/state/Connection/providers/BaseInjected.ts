@@ -1,22 +1,9 @@
-import base58 from 'bs58'
-import BN from 'bn.js'
-import { Buffer } from 'buffer'
 import { isExtensionSiteType } from '@masknet/shared-base'
 import type { InjectedProvider } from '@masknet/injected-script/sdk/Base'
 import type { Account, ProviderOptions } from '@masknet/web3-shared-base'
 import type { ChainId, ProviderType, Web3Provider } from '@masknet/web3-shared-solana'
 import type { SolanaProvider } from '../types'
 import { BaseProvider } from './Base'
-
-export function toBase58(words: number[]) {
-    const bn = new BN(0)
-    // Manually reset words and length to allow convert
-    // @ts-ignore
-    bn.words = words
-    // @ts-ignore
-    bn.length = 10
-    return base58.encode(bn.toArrayLike(Buffer))
-}
 
 export class BaseInjectedProvider extends BaseProvider implements SolanaProvider {
     constructor(protected providerType: ProviderType, protected bridge: InjectedProvider) {
@@ -61,10 +48,9 @@ export class BaseInjectedProvider extends BaseProvider implements SolanaProvider
         const provider = await this.createWeb3Provider()
         const { publicKey } = await provider.connect()
 
-        const account = typeof publicKey === 'string' ? publicKey : toBase58(publicKey._bn.words)
         return {
             chainId,
-            account,
+            account: publicKey,
         }
     }
 

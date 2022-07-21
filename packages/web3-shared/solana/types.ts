@@ -56,7 +56,7 @@ export type Web3Provider = {
     on(name: string, callback: () => void): void
     request(payload: Payload): Promise<unknown>
     connect(): Promise<{
-        publicKey: string | { _bn: { length: number; negative: number; red: number; words: number[] } }
+        publicKey: string
     }>
     disconnect(): Promise<void>
 }
