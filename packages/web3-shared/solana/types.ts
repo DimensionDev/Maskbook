@@ -63,6 +63,7 @@ export type Web3Provider = {
 export type Signature = string
 export type GasOption = never
 export type Block = BlockResponse
+export type Operation = never
 export type Transaction = SolanaTransaction
 export type TransactionReceipt = never
 export type TransactionDetailed = TransactionResponse

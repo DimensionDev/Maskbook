@@ -32,6 +32,7 @@ export declare namespace Web3Helper {
             Signature: EVM.Signature
             GasOption: EVM.GasOption
             Block: EVM.Block
+            Operation: EVM.Operation
             Transaction: EVM.Transaction
             TransactionReceipt: EVM.TransactionReceipt
             TransactionDetailed: EVM.TransactionDetailed
@@ -48,6 +49,7 @@ export declare namespace Web3Helper {
             Signature: Flow.Signature
             GasOption: Flow.GasOption
             Block: Flow.Block
+            Operation: Flow.Operation
             Transaction: Flow.Transaction
             TransactionReceipt: Flow.TransactionReceipt
             TransactionDetailed: Flow.TransactionDetailed
@@ -64,6 +66,7 @@ export declare namespace Web3Helper {
             Signature: Solana.Signature
             GasOption: Solana.GasOption
             Block: Solana.Block
+            Operation: Solana.Operation
             Transaction: Solana.Transaction
             TransactionReceipt: Solana.TransactionReceipt
             TransactionDetailed: Solana.TransactionDetailed
@@ -120,6 +123,7 @@ export declare namespace Web3Helper {
               Definition[T]['ProviderType'],
               Definition[T]['Signature'],
               Definition[T]['Block'],
+              Definition[T]['Operation'],
               Definition[T]['Transaction'],
               Definition[T]['TransactionReceipt'],
               Definition[T]['TransactionDetailed'],
@@ -195,6 +199,7 @@ export declare namespace Web3Helper {
         Definition[NetworkPluginID]['ProviderType'],
         Definition[NetworkPluginID]['Signature'],
         Definition[NetworkPluginID]['Block'],
+        Definition[NetworkPluginID]['Operation'],
         Definition[NetworkPluginID]['Transaction'],
         Definition[NetworkPluginID]['TransactionReceipt'],
         Definition[NetworkPluginID]['TransactionDetailed'],
@@ -341,6 +346,7 @@ export declare namespace Web3Helper {
               Definition[T]['ProviderType'],
               Definition[T]['Signature'],
               Definition[T]['Block'],
+              Definition[T]['Operation'],
               Definition[T]['Transaction'],
               Definition[T]['TransactionReceipt'],
               Definition[T]['TransactionDetailed'],

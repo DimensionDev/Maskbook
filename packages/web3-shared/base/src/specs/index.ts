@@ -639,6 +639,7 @@ export interface Connection<
     ProviderType,
     Signature,
     Block,
+    Operation,
     Transaction,
     TransactionReceipt,
     TransactionDetailed,
@@ -782,8 +783,12 @@ export interface Connection<
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,
     ): Promise<string>
+    /** Call a operation */
+    callOperation?: (operation: Operation, entryPoint: string, initial?: Web3ConnectionOptions) => Promise<string>
+    /** Send a operation */
+    sendOperation?: (operation: Operation, entryPoint: string, initial?: Web3ConnectionOptions) => Promise<TransactionSignature>
     /** Sign a transaction */
-    signTransaction(transaction: Transaction, initial?: Web3ConnectionOptions): Promise<TransactionSignature>
+    signTransaction(transaction: Transaction,  initial?: Web3ConnectionOptions): Promise<TransactionSignature>
     /** Sign multiple transactions */
     signTransactions(transactions: Transaction[], initial?: Web3ConnectionOptions): Promise<TransactionSignature[]>
     /** Query a transaction */
@@ -1151,6 +1156,7 @@ export interface ConnectionState<
     ProviderType,
     Signature,
     Block,
+    Operation,
     Transaction,
     TransactionReceipt,
     TransactionDetailed,
@@ -1164,6 +1170,7 @@ export interface ConnectionState<
         ProviderType,
         Signature,
         Block,
+    Operation,
         Transaction,
         TransactionReceipt,
         TransactionDetailed,

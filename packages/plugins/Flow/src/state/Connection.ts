@@ -12,6 +12,7 @@ import type {
     Transaction,
     TransactionDetailed,
     Web3Provider,
+    Operation,
 } from '@masknet/web3-shared-flow'
 import { createConnection } from './Connection/connection'
 
@@ -26,6 +27,7 @@ export class Connection extends ConnectionState<
     ProviderType,
     Signature,
     Block,
+    Operation,
     Transaction,
     never,
     TransactionDetailed,
