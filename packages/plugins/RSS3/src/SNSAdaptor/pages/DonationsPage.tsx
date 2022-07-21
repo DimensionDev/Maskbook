@@ -1,7 +1,9 @@
+import { CollectionDetailCard } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
 import { List, ListItem } from '@mui/material'
+import { useState } from 'react'
 import { useI18N } from '../../locales'
 import { DonationCard, StatusBox } from '../components'
 
@@ -46,16 +48,34 @@ export function DonationPage({ donations = [], loading, address }: DonationPageP
     const { classes } = useStyles()
     const t = useI18N()
 
+    const [selectedDonation, setSelectedDonation] = useState<RSS3BaseAPI.Donation | undefined>()
+
     if (loading || !donations.length) {
         return <StatusBox loading={loading} empty={!donations.length} />
     }
     return (
-        <List className={classes.list}>
-            {donations.map((donation) => (
-                <ListItem key={donation.id} className={classes.listItem}>
-                    <DonationCard className={classes.donationCard} donation={donation} address={address} />
-                </ListItem>
-            ))}
-        </List>
+        <>
+            <List className={classes.list}>
+                {donations.map((donation) => (
+                    <ListItem key={donation.id} className={classes.listItem}>
+                        <DonationCard
+                            onSelect={() => setSelectedDonation(donation)}
+                            className={classes.donationCard}
+                            donation={donation}
+                            address={address}
+                        />
+                    </ListItem>
+                ))}
+            </List>
+            <CollectionDetailCard
+                open={Boolean(selectedDonation)}
+                onClose={() => setSelectedDonation(undefined)}
+                img={selectedDonation?.detail?.grant?.logo}
+                title={selectedDonation?.detail?.grant?.title}
+                referenceUrl={selectedDonation?.detail?.grant?.reference_url}
+                description={selectedDonation?.detail?.grant?.description}
+                contributions={selectedDonation?.detail?.txs}
+            />
+        </>
     )
 }

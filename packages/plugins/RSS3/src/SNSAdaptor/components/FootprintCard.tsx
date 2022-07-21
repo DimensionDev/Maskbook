@@ -11,6 +11,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         padding: 3,
         marginBottom: 16,
+        cursor: 'pointer',
     },
     cover: {
         flexShrink: 1,
@@ -37,9 +38,10 @@ const formatDate = (ts: string): string => {
 export interface FootprintProps {
     username: string
     footprint: RSS3BaseAPI.Footprint
+    onSelect: () => void
 }
 
-export const FootprintCard = ({ footprint }: FootprintProps) => {
+export const FootprintCard = ({ footprint, onSelect }: FootprintProps) => {
     const t = useI18N()
     const { classes } = useStyles()
 
@@ -49,7 +51,7 @@ export const FootprintCard = ({ footprint }: FootprintProps) => {
     const location = footprint.detail.city || footprint.detail.country || 'Metaverse'
 
     return (
-        <div className={classes.card}>
+        <div className={classes.card} onClick={onSelect}>
             <section className="flex flex-row flex-shrink-0 w-max h-max">
                 <img
                     className={classes.cover}

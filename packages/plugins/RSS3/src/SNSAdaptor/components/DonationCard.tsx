@@ -12,6 +12,7 @@ import { useI18N } from '../../locales'
 export interface DonationCardProps extends HTMLProps<HTMLDivElement> {
     donation: RSS3BaseAPI.Donation
     address: SocialAddress<NetworkPluginID>
+    onSelect: () => void
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -22,6 +23,7 @@ const useStyles = makeStyles()((theme) => ({
         flexGrow: 1,
         alignItems: 'stretch',
         padding: 3,
+        cursor: 'pointer',
     },
     cover: {
         flexShrink: 1,
@@ -58,7 +60,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const DonationCard = ({ donation, address, className, ...rest }: DonationCardProps) => {
+export const DonationCard = ({ donation, address, onSelect, className, ...rest }: DonationCardProps) => {
     const { classes } = useStyles()
     const t = useI18N()
     const { value: domain } = useReverseAddress(address.networkSupporterPluginID, address.address)
@@ -72,7 +74,7 @@ export const DonationCard = ({ donation, address, className, ...rest }: Donation
         ? formatDateTime(new Date(Number(donation.detail?.txs?.[0]?.timeStamp) * 1000), 'MMM dd, yyyy')
         : '--'
     return (
-        <div className={classnames(classes.card, className)} {...rest}>
+        <div onClick={onSelect} className={classnames(classes.card, className)} {...rest}>
             <img
                 className={classes.cover}
                 src={donation.detail?.grant?.logo || RSS3_DEFAULT_IMAGE}
