@@ -8,6 +8,9 @@ const personas = createSubscriptionFromAsyncSuspense(
     MaskMessages.events.ownPersonaChanged.on,
 )
 
-export function useMyPersonas() {
+/**
+ * Get all owned personas from DB
+ */
+export function usePersonasFromDB() {
     return useSubscription(personas)
 }

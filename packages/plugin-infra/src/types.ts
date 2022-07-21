@@ -907,11 +907,11 @@ export enum CurrentSNSNetwork {
 }
 
 export interface IdentityResolved {
-    identifier?: ProfileIdentifier
     nickname?: string
     avatar?: string
     bio?: string
     homepage?: string
+    identifier?: ProfileIdentifier
 }
 
 /**

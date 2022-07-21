@@ -4,12 +4,12 @@ import type { NextIDPersonaBindings } from '../NextID/type'
  * This interface contains the minimal information for UI display
  */
 export interface PersonaInformation {
+    avatar?: string
     proof?: NextIDPersonaBindings
     /** The nickname of the persona. Should use profile.nickname if it presents. */
     nickname?: string
     identifier: PersonaIdentifier
     linkedProfiles: ProfileInformation[]
-    avatar?: string
 }
 export interface ProfileInformation {
     /** The nickname of the profile. Should be used in prior. */

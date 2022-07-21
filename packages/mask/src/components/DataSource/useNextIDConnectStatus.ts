@@ -1,7 +1,6 @@
-import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import stringify from 'json-stable-stringify'
-import { EMPTY_LIST, NextIDPlatform, PersonaIdentifier } from '@masknet/shared-base'
+import type { NextIDPlatform, PersonaIdentifier } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { usePersonaConnectStatus } from './usePersonaConnectStatus'
@@ -9,8 +8,7 @@ import { currentPersonaIdentifier, currentSetupGuideStatus, dismissVerifyNextID 
 import { SetupGuideStep } from '../InjectedComponents/SetupGuide/types'
 import { useLastRecognizedIdentity } from './useActivatedUI'
 import Services from '../../extension/service'
-import { MaskMessages } from '../../utils'
-import { useSetupGuideStatus } from './useSetupGuideStatus'
+import { useSetupGuideStatus } from '../GuideStep/useSetupGuideStatus'
 
 let isOpenedVerifyDialog = false
 let isOpenedFromButton = false
@@ -22,15 +20,6 @@ export const verifyPersona = (personaIdentifier?: PersonaIdentifier, username?: 
         persona: personaIdentifier.toText(),
         username,
     })
-}
-
-export function useNextIDBoundByPlatform(platform?: NextIDPlatform, userId?: string) {
-    const response = useAsyncRetry(async () => {
-        if (!platform || !userId) return EMPTY_LIST
-        return NextIDProof.queryAllExistedBindingsByPlatform(platform, userId)
-    }, [platform, userId])
-    useEffect(() => MaskMessages.events.ownProofChanged.on(response.retry), [response.retry])
-    return response
 }
 
 export enum NextIDVerificationStatus {

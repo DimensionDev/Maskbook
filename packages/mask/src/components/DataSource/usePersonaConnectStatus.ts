@@ -6,7 +6,7 @@ import { currentSetupGuideStatus } from '../../settings/settings'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { SetupGuideStep } from '../InjectedComponents/SetupGuide/types'
 import { useLastRecognizedIdentity } from './useActivatedUI'
-import { useMyPersonas } from './useMyPersonas'
+import { usePersonasFromDB } from './usePersonasFromDB'
 
 const createPersona = () => {
     Services.Helper.openDashboard(DashboardRoutes.Setup)
@@ -21,7 +21,7 @@ const connectPersona = async () => {
 }
 
 export function usePersonaConnectStatus() {
-    const personas = useMyPersonas()
+    const personas = usePersonasFromDB()
     const lastRecognized = useLastRecognizedIdentity()
 
     return useMemo(() => {

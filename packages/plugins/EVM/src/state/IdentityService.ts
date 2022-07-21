@@ -14,7 +14,7 @@ const RSS3_URL_RE = /https?:\/\/(?<name>[\w.]+)\.(rss3|cheers)\.bio/
 const RSS3_RNS_RE = /(?<name>[\w.]+)\.rss3/
 
 function getEthereumName(twitterId: string, nickname: string, bio: string) {
-    const [matched] = nickname.match(ENS_RE) ?? bio.match(ENS_RE) ?? EMPTY_LIST
+    const [matched] = nickname.match(ENS_RE) ?? bio.match(ENS_RE) ?? []
     if (matched) return matched
     return twitterId && !twitterId.endsWith('.eth') ? `${twitterId}.eth` : twitterId
 }
@@ -26,7 +26,7 @@ function getRSS3Id(nickname: string, profileURL: string, bio: string) {
 }
 
 function getAddress(text: string) {
-    const [matched] = text.match(ADDRESS_FULL) ?? EMPTY_LIST
+    const [matched] = text.match(ADDRESS_FULL) ?? []
     if (matched && isValidAddress(matched)) return matched
     return ''
 }
@@ -127,14 +127,6 @@ export class IdentityService extends IdentityServiceState {
             this.getSocialAddressFromNextID(identity),
             this.getSocialAddressFromKV(identity),
         ])
-
-        console.log('DEBUG: get from remote')
-        console.log({
-            identity,
-            includes,
-            allSettled,
-        })
-
         return allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : undefined)).filter(Boolean) as Array<
             SocialAddress<NetworkPluginID.PLUGIN_EVM>
         >

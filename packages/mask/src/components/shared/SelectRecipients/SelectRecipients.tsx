@@ -9,7 +9,7 @@ import {
 import type { LazyRecipients } from '../../CompositionDialog/CompositionUI'
 import { SelectRecipientsDialogUI } from './SelectRecipientsDialog'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
-import { useNextIDBoundByPlatform } from '../../DataSource/useNextIDConnectStatus'
+import { usePersonasFromNextID } from '../../DataSource/usePersonasFromNextID'
 import { useTwitterIdByWalletSearch } from './useTwitterIdByWalletSearch'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
@@ -46,10 +46,7 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
     const currentIdentity = useCurrentIdentity()
     const type = resolveNextIDPlatform(valueToSearch)
     const value = resolveValueToSearch(valueToSearch)
-    const { loading: searchLoading, value: NextIDResults } = useNextIDBoundByPlatform(
-        type ?? NextIDPlatform.NextID,
-        value,
-    )
+    const { loading: searchLoading, value: NextIDResults } = usePersonasFromNextID(value, type ?? NextIDPlatform.NextID)
 
     const NextIDItems = useTwitterIdByWalletSearch(NextIDResults, value, type)
     const searchedList = useMemo(() => {
