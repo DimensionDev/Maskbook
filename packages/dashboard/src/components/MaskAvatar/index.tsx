@@ -1,6 +1,6 @@
 import { Avatar, Stack } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { MenuPersonasActiveIcon } from '@masknet/icons'
+import { SignUpAccount } from '@masknet/icons'
 import { memo } from 'react'
 import { usePersonaAvatar } from '../../pages/Personas/api'
 
@@ -34,7 +34,7 @@ export const MaskAvatar = memo<MaskAvatarProps>(({ size = 36, onClick }) => {
     if (!avatar) {
         return (
             <Stack justifyContent="center" width="100%" height={size} flexDirection="row">
-                <MenuPersonasActiveIcon {...commonProps} />
+                <SignUpAccount {...commonProps} />
             </Stack>
         )
     }

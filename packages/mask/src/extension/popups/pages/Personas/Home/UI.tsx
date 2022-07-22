@@ -109,7 +109,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
         return (
             <>
                 <div className={classes.container}>
-                    {isEmpty ? (
+                    {!isEmpty ? (
                         <>
                             <div className={classes.item}>
                                 <Typography>{t('popups_profile_photo')}</Typography>

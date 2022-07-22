@@ -53,6 +53,7 @@ export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
             'aria-hidden': true,
             ...rest,
             ref,
+            'data-icon': name,
             sx: iconStyle,
         }
         if (hasClickHandler) {
