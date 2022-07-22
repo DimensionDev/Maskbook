@@ -96,6 +96,5 @@ export class MaskWalletProvider extends BaseProvider implements EVM_Provider {
     override async disconnect() {
         const siteType = getSiteType()
         if (siteType) SharedContextSettings.value.recordConnectedSites(siteType, false)
-        // do nothing
     }
 }
