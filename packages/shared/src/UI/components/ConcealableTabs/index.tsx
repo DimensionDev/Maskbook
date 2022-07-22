@@ -338,24 +338,6 @@ export function ConcealableTabs<T extends number | string>({
                     <div className={classes.controllers}>
                         {overflow ? (
                             <>
-                                {/* <Button
-                                    disableRipple
-                                    className={classnames(classes.normal, classes.controller)}
-                                    disabled={reachedLeftEdge}
-                                    onClick={() => {
-                                        slide(false)
-                                    }}>
-                                    <LeftArrow color="inherit" />
-                                </Button>
-                                <Button
-                                    disableRipple
-                                    disabled={reachedRightEdge}
-                                    className={classnames(classes.normal, classes.controller)}
-                                    onClick={() => {
-                                        slide(true)
-                                    }}>
-                                    <RightArrow color="inherit" />
-                                </Button> */}
                                 <LeftArrow size={24} className={classes.controller} onClick={() => slide(false)} />
                                 <RightArrow className={classes.controller} onClick={() => slide(true)} />
                             </>

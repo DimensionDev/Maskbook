@@ -190,13 +190,6 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
         return (
             <InjectedDialog open={open} onClose={onClose} title={t.details()}>
                 <DialogContent>
-                    {/* <Box className={classes.flexItem}>
-                        {isImageToken ? (
-                            <img className={classes.img} src={img} />
-                        ) : (
-                            <MaskAvatarIcon className={classes.img} />
-                        )}
-                    </Box> */}
                     <Box className={classes.flexItem}>
                         <div className={classes.img}>
                             <NFTCardStyledAssetPlayer
