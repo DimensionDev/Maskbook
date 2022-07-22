@@ -1,4 +1,4 @@
-import { NewLinkOut, Plugin, Verified, WalletUnderTabs, Web3Profile, Connect, Identity } from '@masknet/icons'
+import { Plugin, WalletUnderTabs, Web3Profile, Connect, Identity, LinkOut } from '@masknet/icons'
 import { PluginId, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NextIDPlatform, PopupRoutes, EMPTY_LIST } from '@masknet/shared-base'
@@ -60,7 +60,6 @@ const useStyles = makeStyles()((theme) => ({
     container: {
         background:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(45, 41, 253, 0.2) 100%), #FFFFFF;',
-        borderRadius: '16px',
         padding: '14px 14px 16px 14px ',
         height: '166px',
         display: 'flex',
@@ -88,10 +87,6 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: 0,
         backgroundColor: theme.palette.background.default,
         height: '196px',
-    },
-    walletIcon: {
-        fontSize: 18,
-        marginRight: 8,
     },
     web3Icon: {
         marginRight: 6,
@@ -228,7 +223,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
         if (!isAccountVerified && isOwn) {
             return (
                 <Button className={classes.button} variant="contained" onClick={onVerify}>
-                    <Verified />
+                    <Connect sx={{ margin: '2px 8px 0 0' }} />
                     {t.verify_Twitter_ID_button()}
                 </Button>
             )
@@ -236,7 +231,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
         setDescription(t.add_wallet_intro())
         return (
             <Button className={classes.button} variant="contained" onClick={handleAddWallets}>
-                <WalletUnderTabs className={classes.walletIcon} />
+                <WalletUnderTabs size={16} color="white" sx={{ marginRight: '8px' }} />
                 {t.add_wallet_button()}
             </Button>
         )
@@ -277,8 +272,8 @@ export function NextIdPage({ persona }: NextIdPageProps) {
                             href="https://mask.io/"
                             width="22px"
                             height="22px"
-                            style={{ alignSelf: 'center', marginTop: '2px' }}>
-                            <NewLinkOut />
+                            style={{ alignSelf: 'center', marginLeft: '4px' }}>
+                            <LinkOut size={16} color="#767f8d" />
                         </Link>
                     </div>
                 </Box>

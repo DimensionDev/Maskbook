@@ -71,15 +71,11 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexGrow: 0,
         alignItems: 'center',
-        borderLeft: `1px solid ${theme.palette.divider}`,
     },
     controller: {
         display: 'flex',
-        minWidth: 35,
-        color: theme.palette.text.primary,
+        color: theme.palette.maskColor.second,
         border: 'none',
-        width: 35,
-        height: 35,
         borderRadius: 0,
         boxSizing: 'border-box',
         alignItems: 'center',
@@ -91,7 +87,7 @@ const useStyles = makeStyles()((theme) => ({
             backgroundColor: theme.palette.background.paper,
         },
         '&[disabled]': {
-            backgroundColor: theme.palette.background.default,
+            color: theme.palette.maskColor.second,
         },
     },
     walletButton: {
@@ -342,7 +338,7 @@ export function ConcealableTabs<T extends number | string>({
                     <div className={classes.controllers}>
                         {overflow ? (
                             <>
-                                <Button
+                                {/* <Button
                                     disableRipple
                                     className={classnames(classes.normal, classes.controller)}
                                     disabled={reachedLeftEdge}
@@ -359,7 +355,9 @@ export function ConcealableTabs<T extends number | string>({
                                         slide(true)
                                     }}>
                                     <RightArrow color="inherit" />
-                                </Button>
+                                </Button> */}
+                                <LeftArrow size={24} className={classes.controller} onClick={() => slide(false)} />
+                                <RightArrow className={classes.controller} onClick={() => slide(true)} />
                             </>
                         ) : null}
                         {tail}
