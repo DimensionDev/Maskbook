@@ -45,16 +45,13 @@ export function bindEvent(path: string, bridgeEvent: keyof InternalEvents, event
     if (hasListened[event]) return
     hasListened[event] = true
     try {
-        const f = read(path + '.on')
-        if (typeof f === 'function') {
-            f(
-                event,
-                cloneIntoContent((...args: any[]) => {
-                    // TODO: type unsound
-                    sendEvent(bridgeEvent, path, event, args)
-                }),
-            )
-        }
+        ;(read(path) as any)?.on(
+            event,
+            cloneIntoContent((...args: any[]) => {
+                // TODO: type unsound
+                sendEvent(bridgeEvent, path, event, args)
+            }),
+        )
     } catch {}
 }
 
