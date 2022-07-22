@@ -1,7 +1,7 @@
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Box, Button, Divider, ListItemIcon, MenuItem, Typography } from '@mui/material'
-import { memo, PropsWithChildren, useCallback, useState } from 'react'
+import { memo, PropsWithChildren, useCallback, useMemo, useState } from 'react'
 import { useI18N } from '../../i18n-next-ui'
 import { Action } from './Action'
 import { useStatusBarStyles } from './styles'
@@ -79,19 +79,32 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         const providerDescriptor = useProviderDescriptor(defaultPluginId)
         const networkDescriptor = useNetworkDescriptor(defaultPluginId)
 
-        const [descriptionProps, setDescriptionProps] = useState<WalletDescriptionProps>({
-            name: defaultWalletName,
-            networkIcon: networkDescriptor?.icon,
-            providerIcon: account ? providerDescriptor?.icon : undefined,
-            iconFilterColor: account ? providerDescriptor?.iconFilterColor : '',
-            formattedAddress: Others?.formatAddress(account || (defaultVerifiedWallet?.identity ?? ''), 4),
-            addressLink: Others?.explorerResolver.addressLink?.(
-                account ? chainId : defaultChainId,
-                account || (defaultVerifiedWallet?.identity ?? ''),
-            ),
-            address: account || defaultVerifiedWallet?.identity,
-            verified: account ? isVerifiedAccount : true,
-        })
+        const description = useMemo(
+            () => ({
+                name: defaultWalletName,
+                networkIcon: networkDescriptor?.icon,
+                providerIcon: account ? providerDescriptor?.icon : undefined,
+                iconFilterColor: account ? providerDescriptor?.iconFilterColor : '',
+                formattedAddress: Others?.formatAddress(account || (defaultVerifiedWallet?.identity ?? ''), 4),
+                addressLink: Others?.explorerResolver.addressLink?.(
+                    account ? chainId : defaultChainId,
+                    account || (defaultVerifiedWallet?.identity ?? ''),
+                ),
+                address: account || defaultVerifiedWallet?.identity,
+                verified: account ? isVerifiedAccount : true,
+            }),
+            [
+                account,
+                defaultWalletName,
+                providerDescriptor,
+                networkDescriptor,
+                defaultVerifiedWallet,
+                defaultChainId,
+                chainId,
+            ],
+        )
+
+        const [descriptionProps, setDescriptionProps] = useState<WalletDescriptionProps>(description)
 
         const onSelect = useCallback(
             (props: WalletDescriptionProps, chainId: Web3Helper.ChainIdAll, pluginId: NetworkPluginID) => {
@@ -145,13 +158,9 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
             </MenuItem>,
         )
 
-        // Because getting the domain is asynchronous, the default name will not be correctly
         useUpdateEffect(() => {
-            setDescriptionProps((prev) => ({
-                ...prev,
-                name: defaultWalletName,
-            }))
-        }, [defaultWalletName])
+            setDescriptionProps(description)
+        }, [description])
 
         if (!account && !verifiedWallets) {
             return (

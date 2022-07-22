@@ -15,8 +15,8 @@
   },
   "types": "./dist/sdk/index.d.ts",
   "scripts": {
-    "build": "tsc -p ./main/tsconfig.json && rollup -c",
-    "start": "rollup -c -w"
+    "build": "tsc -b ./main/tsconfig.json && rollup -c",
+    "start": "tsc -b ./main/tsconfig.json && rollup -c -w"
   },
   "devDependencies": {
     "@rollup/plugin-sucrase": "^4.0.4",

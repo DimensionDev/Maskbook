@@ -130,6 +130,18 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                     defaultValue={1}
                     onChange={(_, value) => setScale(value as number)}
                     aria-label="Scale"
+                    sx={{
+                        color: (theme) => theme.palette.maskColor.primary,
+                        '& .MuiSlider-thumb': {
+                            width: 12,
+                            height: 12,
+                            backgroundColor: (theme) => theme.palette.maskColor.primary,
+                        },
+                        '& .MuiSlider-rail': {
+                            opacity: 0.5,
+                            backgroundColor: (theme) => theme.palette.maskColor.dark,
+                        },
+                    }}
                 />
             </DialogContent>
             <DialogActions className={classes.actions}>
