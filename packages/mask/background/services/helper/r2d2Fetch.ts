@@ -39,6 +39,7 @@ const workerMatchers: R2d2WorkerMatchTuple[] = [
     ['https://api.coingecko.com', R2d2Workers.coingecko],
 ]
 
+const { fetch: original_fetch } = globalThis
 /**
  * Why use r2d2 fetch: some third api provider will be block in Firefox and protect api key
  * @returns fetch response
@@ -46,43 +47,53 @@ const workerMatchers: R2d2WorkerMatchTuple[] = [
  * @param init
  */
 export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise<Response> {
-    const url = init instanceof Request ? init.url : (input as string)
+    const info = new Request(input, init)
+    const url = info.url
+    const u = new URL(url, location.href)
 
     // ipfs
     if (url.startsWith('ipfs://'))
-        return globalThis.fetch(
+        return proxied_fetch(
             urlcat('https://cors.r2d2.to?https://coldcdn.com/api/cdn/mipfsygtms/ipfs/:ipfs', {
                 ipfs: url.replace('ipfs://', ''),
             }),
-            init,
+            info,
         )
 
     // r2d2
-    if (url.includes('r2d2.to')) return globalThis.fetch(input, init)
+    if (url.includes('r2d2.to')) return original_fetch(info)
 
     // r2d2 worker
     const r2deWorkerType =
         workerMatchers.find((x) => url.startsWith(x[0]))?.[1] ??
         (alchemyMatchers.find((x) => url.startsWith(x[0])) ? R2d2Workers.alchemy : undefined)
 
-    const u = new URL(url)
-
     if (r2deWorkerType) {
         if (r2deWorkerType === R2d2Workers.alchemy) {
             const alchemyType = alchemyMatchers.find((x) => u.origin === x[0])?.[1]
 
-            return globalThis.fetch(
+            return proxied_fetch(
                 `https://${r2deWorkerType}.${r2d2URL}/${alchemyType}${
                     alchemyType === AlchemyProxies.eth ? '/nft' : ''
                 }/v2/APIKEY/${u.pathname.replace('/nft', '').replace('/v2/', '')}${u.search}`,
-                init,
+                info,
             )
         }
-        return globalThis.fetch(url.replace(u.origin, `https://${r2deWorkerType}.${r2d2URL}`), init)
+        return proxied_fetch(url.replace(u.origin, `https://${r2deWorkerType}.${r2d2URL}`), info)
     }
 
     // fallback
-    return globalThis.fetch(input, init)
+    return original_fetch(input, init)
+}
+
+function proxied_fetch(url: string, info: Request) {
+    const req = new Request({
+        // @ts-ignore
+        __proto__: info,
+        url,
+    })
+    return original_fetch(req)
 }
 
 Reflect.set(globalThis, 'r2d2Fetch', r2d2Fetch)
+Reflect.set(globalThis, 'fetch', r2d2Fetch)
