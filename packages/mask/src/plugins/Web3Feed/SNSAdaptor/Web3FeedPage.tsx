@@ -17,7 +17,6 @@ export function Web3FeedPage({ socialAddress, persona }: Web3FeedPageProps) {
         if (!socialAddress?.address) return
         return RSS3.getWeb3Feed(socialAddress?.address)
     }, [socialAddress])
-    console.log({ feed, socialAddress })
 
     if (!socialAddress) return null
     if (loading || !feed?.list?.length) {

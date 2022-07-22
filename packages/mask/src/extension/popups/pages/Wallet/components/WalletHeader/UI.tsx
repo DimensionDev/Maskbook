@@ -115,7 +115,8 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
                             {!disabled ? (
                                 <ArrowDropIcon
                                     className={classes.arrow}
-                                    style={{ transform: status ? 'rotate(-180deg)' : undefined, fill: '#767F8D' }}
+                                    color="#767F8D"
+                                    style={{ transform: status ? 'rotate(-180deg)' : undefined }}
                                 />
                             ) : null}
                         </Typography>
@@ -145,7 +146,8 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
                     {!disabled ? (
                         <ArrowDropIcon
                             className={classes.arrow}
-                            style={{ transform: isSwitchWallet ? 'rotate(-180deg)' : undefined, fill: '#767F8D' }}
+                            color="#767F8D"
+                            style={{ transform: isSwitchWallet ? 'rotate(-180deg)' : undefined }}
                         />
                     ) : null}
                 </div>

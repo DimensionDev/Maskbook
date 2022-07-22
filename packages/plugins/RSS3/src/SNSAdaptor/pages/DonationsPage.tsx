@@ -51,7 +51,7 @@ export function DonationPage({ donations = [], loading, address }: DonationPageP
     const [selectedDonation, setSelectedDonation] = useState<RSS3BaseAPI.Donation | undefined>()
 
     if (loading || !donations.length) {
-        return <StatusBox loading={loading} empty={!donations.length} />
+        return <StatusBox loading={loading} collection="Donation" empty={!donations.length} />
     }
     return (
         <>

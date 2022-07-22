@@ -111,7 +111,7 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
                         {progress.status === TransactionStatusType.SUCCEED
                             ? computed.successfulDescription ?? computed.description
                             : computed.description}{' '}
-                        <LinkOutIcon sx={{ ml: 0.5, width: '16px', height: '16px', color: '#07101B' }} />
+                        <LinkOutIcon color="#07101B" sx={{ ml: 0.5, width: '16px', height: '16px' }} />
                     </Link>
                 ),
             },

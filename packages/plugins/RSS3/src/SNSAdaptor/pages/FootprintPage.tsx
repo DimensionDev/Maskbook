@@ -18,7 +18,7 @@ export function FootprintPage({ footprints = [], address, loading }: FootprintPa
     const [selectedFootprint, setSelectedFootprint] = useState<RSS3BaseAPI.Footprint | undefined>()
 
     if (loading || !footprints.length) {
-        return <StatusBox loading={loading} empty={!footprints.length} />
+        return <StatusBox loading={loading} collection="Footprint" empty={!footprints.length} />
     }
 
     return (

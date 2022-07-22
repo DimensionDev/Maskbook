@@ -2,7 +2,7 @@
     "inactive_project": "Inactive Project",
     "no_activity_time": "No activity time",
     "attended": "attended",
-    "no_data": "No data",
+    "no_data": "No {{collection}} at the current address",
     "total_grants": "Total {{count}} Grants",
     "contribution": "Contribution",
     "contribution_other": "Contributions",
