@@ -220,10 +220,24 @@ export namespace RSS3BaseAPI {
         type?: string
     }
 
-    export type Tags = 'NFT' | 'Token' | 'POAP' | 'Gitcoin' | 'Mirror Entry'
+    export type Tags = 'NFT' | 'Token' | 'POAP' | 'Gitcoin' | 'Mirror Entry' | 'ETH'
 
     export type FeedType = 'Token' | 'Donation' | 'NFT'
 
+    export interface Metadata {
+        collection_address?: string
+        collection_name?: string
+        contract_type?: string
+        from?: string
+        log_index?: string
+        network?: 'polygon' | 'ethereum' | 'bnb'
+        proof?: string
+        to?: string
+        token_id?: string
+        token_standard?: string
+        token_symbol?: string
+        token_address?: string
+    }
     export interface Web3Feed {
         attachments?: Attachments[]
         authors: string[]
@@ -239,6 +253,12 @@ export namespace RSS3BaseAPI {
         tags: Tags[]
         summary?: string
         title?: string
+        metadata?: Metadata
+        imageURL?: string
+        traits?: Array<{
+            type: string
+            value: string
+        }>
     }
 
     export interface Web3FeedResponse {

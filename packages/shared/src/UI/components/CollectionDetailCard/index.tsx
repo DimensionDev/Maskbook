@@ -6,8 +6,9 @@ import { Box, DialogContent, Link, Typography } from '@mui/material'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import differenceInCalendarDays from 'date-fns/differenceInDays'
 import differenceInCalendarHours from 'date-fns/differenceInHours'
-import { LinkOut } from '@masknet/icons'
+import { Gitcoin, LinkOut, OpenSeaColoredIcon, PolygonScan } from '@masknet/icons'
 import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 
 interface CollectionDetailCardProps {
     img?: string
@@ -19,14 +20,26 @@ interface CollectionDetailCardProps {
     onClose: () => void
     date?: string
     location?: string
+    relatedURLs?: string[]
+    metadata?: RSS3BaseAPI.Metadata
+    traits?: Array<{
+        type: string
+        value: string
+    }>
 }
 const useStyles = makeStyles()((theme) => ({
     img: {
         flexShrink: 1,
-        height: 300,
-        width: 300,
+        height: '300px !important',
+        width: '300px !important',
         borderRadius: 8,
         objectFit: 'cover',
+    },
+    loadingFailImage: {
+        minHeight: '0 !important',
+        maxWidth: 'none',
+        width: 300,
+        height: 300,
     },
     flexItem: {
         display: 'flex',
@@ -75,22 +88,140 @@ const useStyles = makeStyles()((theme) => ({
     themeColor: {
         color: theme.palette.maskColor.highlight,
     },
+    linkLogo: {
+        width: 24,
+        height: 24,
+    },
+    icons: {
+        margin: '16px 0 16px 0',
+        display: 'flex',
+        alignItems: 'center',
+    },
+    traitsBox: {
+        marginTop: 16,
+        gridRowGap: 16,
+        gridColumnGap: 20,
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, 170px)',
+    },
+    traitItem: {
+        backgroundColor: theme.palette.maskColor.bg,
+        borderRadius: 8,
+        padding: 12,
+    },
+    traitValue: {
+        fontSize: 14,
+        fontWeight: 700,
+        color: theme.palette.maskColor.main,
+    },
+    secondText: {
+        fontSize: 14,
+        fontWeight: 400,
+        color: theme.palette.maskColor.second,
+    },
 }))
 
+const ChainID = {
+    ethereum: ChainId.Mainnet,
+    polygon: ChainId.Matic,
+    bnb: ChainId.BSC,
+}
+
 export const CollectionDetailCard = memo<CollectionDetailCardProps>(
-    ({ img, open, onClose, title, referenceUrl, description, contributions, date, location }) => {
+    ({
+        img,
+        open,
+        onClose,
+        title,
+        referenceUrl,
+        metadata,
+        description,
+        contributions,
+        date,
+        location,
+        relatedURLs,
+        traits,
+    }) => {
         const t = useSharedI18N()
         const { classes } = useStyles()
+
+        const icons = relatedURLs?.map((url) => {
+            if (url.includes('etherscan.io')) {
+                return (
+                    <Link href={url} target="_blank" marginRight="12px">
+                        <img
+                            className={classes.linkLogo}
+                            src={new URL('./assets/etherscan.png', import.meta.url).toString()}
+                        />
+                    </Link>
+                )
+            }
+            // if (url.includes('polygonscan.com/tx')) {
+            //     return (
+            //         <Link href={url} target="_blank">
+            //             <img
+            //                 className={classes.linkLogo}
+            //                 src="https://thumbor.rss3.dev/unsafe/60x60/https%3A%2F%&#x2026;alSelectionLabs%2Fweb3-logos%2Fmain%2FPolygon.png"
+            //             />{' '}
+            //             Polygonscan
+            //         </Link>
+            //     )
+            // }
+            if (url.includes('polygonscan.com/token')) {
+                return (
+                    <Link href={url} target="_blank" marginRight="12px">
+                        <PolygonScan size={24} />
+                    </Link>
+                )
+            }
+            if (url.includes('opensea.io')) {
+                return (
+                    <Link href={url} target="_blank" marginRight="12px">
+                        <OpenSeaColoredIcon size={24} />
+                    </Link>
+                )
+            }
+            if (url.includes('gitcoin.co')) {
+                return (
+                    <Link href={url} target="_blank" marginBottom="8px">
+                        <Gitcoin size={28} />
+                    </Link>
+                )
+            }
+            return null
+        })
 
         return (
             <InjectedDialog open={open} onClose={onClose} title={t.details()}>
                 <DialogContent>
+                    {/* <Box className={classes.flexItem}>
+                        {isImageToken ? (
+                            <img className={classes.img} src={img} />
+                        ) : (
+                            <MaskAvatarIcon className={classes.img} />
+                        )}
+                    </Box> */}
                     <Box className={classes.flexItem}>
-                        <img className={classes.img} src={img} />
+                        <div className={classes.img}>
+                            <NFTCardStyledAssetPlayer
+                                contractAddress={metadata?.collection_address}
+                                chainId={ChainID[metadata?.network ?? 'ethereum']}
+                                url={img}
+                                tokenId={metadata?.token_id}
+                                classes={{
+                                    loadingFailImage: classes.loadingFailImage,
+                                    wrapper: classes.img,
+                                    iframe: classes.img,
+                                }}
+                            />
+                        </div>
                     </Box>
+
                     <Typography fontSize="16px" fontWeight={700} marginTop="38px">
                         {title}
                     </Typography>
+                    <div className={classes.icons}> {icons}</div>
+
                     <Link rel="noopener noreferrer" target="_blank" href={referenceUrl} className={classes.link}>
                         {referenceUrl}
                     </Link>
@@ -111,6 +242,7 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                     <div style={{ display: '-webkit-box' }} className={classes.threeLine}>
                         {description}
                     </div>
+
                     {contributions ? (
                         <Typography fontSize="16px" fontWeight={700} marginTop="16px">
                             {t.contributions()}
@@ -143,6 +275,19 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                             </div>
                         </div>
                     ))}
+                    {traits && (
+                        <Typography fontSize="16px" fontWeight={700}>
+                            {t.properties()}
+                        </Typography>
+                    )}
+                    <Box className={classes.traitsBox}>
+                        {traits?.map((trait) => (
+                            <div key={trait?.type + trait?.value} className={classes.traitItem}>
+                                <Typography className={classes.secondText}> {trait?.type}</Typography>
+                                <Typography className={classes.traitValue}> {trait?.value}</Typography>
+                            </div>
+                        ))}
+                    </Box>
                 </DialogContent>
             </InjectedDialog>
         )

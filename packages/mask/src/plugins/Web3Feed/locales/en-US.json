@@ -1,1 +1,6 @@
-{}
+{
+    "days": "days",
+    "hours": "hours",
+    "ago": "ago",
+    "no_data": "no data"
+}

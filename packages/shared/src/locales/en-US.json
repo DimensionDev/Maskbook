@@ -50,6 +50,7 @@
     "days": "days",
     "hours": "hours",
     "ago": "ago",
+    "properties": "Properties",
     "security_detection": "Security Detection",
     "risky_items": "{{quantity}} Risky factors",
     "attention_items": "{{quantity}} Attention factors",

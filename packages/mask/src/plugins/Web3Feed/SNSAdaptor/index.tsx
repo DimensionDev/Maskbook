@@ -10,7 +10,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         {
             ID: `${PLUGIN_ID}_web3Feed`,
             label: 'Web3Feed',
-            priority: 1,
+            priority: 4,
             UI: {
                 TabContent: ({ socialAddress, persona }) => {
                     return <Web3FeedPage socialAddress={socialAddress} persona={persona} />
