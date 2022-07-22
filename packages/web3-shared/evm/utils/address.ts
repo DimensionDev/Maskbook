@@ -13,7 +13,7 @@ export function isValidAddress(address?: string) {
     return EthereumAddress.isValid(address)
 }
 
-export function isValidChainId(chainId: number) {
+export function isValidChainId(chainId: ChainId) {
     return getEnumAsArray(ChainId).some((x) => x.value === chainId)
 }
 

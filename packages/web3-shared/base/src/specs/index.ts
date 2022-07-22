@@ -1243,6 +1243,7 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Tra
     isValidChain(chainId?: ChainId, testnet?: boolean): boolean
     isValidDomain(domain?: string): boolean
     isValidAddress(address?: string): boolean
+    isZeroAddress(chainId?: ChainId, address?: string): boolean
     isSameAddress(address?: string, otherAddress?: string): boolean
     // #endregion
 
