@@ -31,11 +31,11 @@ export function inputText(text: string) {
     sendEvent('input', text)
 }
 
-let decrypt: (text: string, id: number) => void = async function f(text) {
+let decrypt: (text: Record<string, string>, id: number) => void = async function f(text) {
     console.log(text)
     return text
 }
-export function setupDecryptHelper(f: (text: string) => Promise<string>) {
+export function setupDecryptHelper(f: (text: Record<string, string>) => Promise<Record<string, string>>) {
     decrypt = (text, id) => {
         new Promise((resolve) => resolve(f(text)))
             .then((text) => sendEvent('resolvePromise', id, text))

@@ -35,7 +35,7 @@ export interface InternalEvents {
     // #endregion
 
     // Implemented by SDK
-    requestDecrypt: [text: string, req_id: number]
+    requestDecrypt: [text: Record<string, string>, req_id: number]
 
     /** A simple RPC. */
     // Not using async-call-rpc because we need to make sure every intrinsic

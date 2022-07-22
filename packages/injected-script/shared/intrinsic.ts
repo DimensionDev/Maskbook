@@ -63,6 +63,8 @@ export const $ = {
     ArrayIncludes: takeThis(Array.prototype.includes)<readonly any[]>,
     ArrayForEach: takeThis(Array.prototype.forEach)<readonly any[]>,
     ArrayShift: takeThis(Array.prototype.shift)<any[]>,
+    ArrayMap: takeThis(Array.prototype.map)<any[]>,
+    ArrayJoin: takeThis(Array.prototype.join)<any[]>,
     FunctionToString: takeThis(Function.prototype.toString)<Function>,
     HasOwn: Object.hasOwn || takeThis(Object.prototype.hasOwnProperty)<object>,
 

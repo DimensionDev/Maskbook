@@ -49,6 +49,7 @@ export const Flags = {
     using_emoji_flag: true,
 
     // we still need to handle image encoding
+    decryptByTwitterXHRInjection: betaOrInsiderOnly,
     v37PayloadDefaultEnabled: false, // new Date() > new Date('2022-07-01'),
 } as const
 
