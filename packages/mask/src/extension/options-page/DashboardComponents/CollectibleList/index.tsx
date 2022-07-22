@@ -296,7 +296,7 @@ export function CollectionList({
         )
 
     return (
-        <Box>
+        <Box marginLeft="16px">
             <Stack spacing={1} direction="row" mt={1.5}>
                 <Box sx={{ flexGrow: 1 }}>
                     <Box>

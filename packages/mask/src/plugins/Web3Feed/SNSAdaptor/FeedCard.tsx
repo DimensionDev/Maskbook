@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { Alchemy_EVM, RSS3BaseAPI } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { resolveIPFSLinkFromURL, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, Card } from '@mui/material'
 import differenceInCalendarDays from 'date-fns/differenceInDays'
 import differenceInCalendarHours from 'date-fns/differenceInHours'
 import { useMemo } from 'react'
@@ -17,11 +17,12 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'space-between',
         marginBottom: 16,
+        cursor: 'pointer',
     },
     img: {
         width: '64px !important',
         height: '64px !important',
-        borderRadius: 8,
+        borderRadius: '8px',
         objectFit: 'cover',
     },
     collection: {
@@ -37,7 +38,7 @@ const useStyles = makeStyles()((theme) => ({
     summary: {
         textOverflow: 'ellipsis',
         '-webkit-line-clamp': '1',
-        maxWidth: '300px',
+        maxWidth: '400px',
         overflow: 'hidden',
         display: '-webkit-box',
         '-webkit-box-orient': 'vertical',
@@ -131,7 +132,7 @@ export function FeedCard({ feed, address, index, onSelect }: FeedCardProps) {
     const logo = useMemo(() => {
         if (feed?.tags?.includes('NFT')) {
             return (
-                <div className={classes.img}>
+                <Card className={classes.img}>
                     <NFTCardStyledAssetPlayer
                         contractAddress={feed?.metadata?.collection_address}
                         chainId={ChainID[feed?.metadata?.network ?? 'ethereum']}
@@ -147,7 +148,7 @@ export function FeedCard({ feed, address, index, onSelect }: FeedCardProps) {
                             iframe: classes.img,
                         }}
                     />
-                </div>
+                </Card>
             )
         }
         if (feed?.tags.includes('Token') || feed?.tags.includes('ETH')) {
@@ -201,7 +202,7 @@ export function FeedCard({ feed, address, index, onSelect }: FeedCardProps) {
             <div>
                 <ReversedAddress address={address} /> {action} <span className={classes.time}>{time}</span>
                 <Box className={classes.collection}>
-                    <Typography fontWeight={700}>
+                    <Typography fontWeight={700} className={classes.summary}>
                         {feed?.title ||
                             NFTMetadata?.metadata?.name ||
                             NFTMetadata?.collection?.name ||

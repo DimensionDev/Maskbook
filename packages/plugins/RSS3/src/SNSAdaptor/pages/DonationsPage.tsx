@@ -2,7 +2,7 @@ import { CollectionDetailCard } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
-import { List, ListItem } from '@mui/material'
+import { Box, List, ListItem } from '@mui/material'
 import { useState } from 'react'
 import { useI18N } from '../../locales'
 import { DonationCard, StatusBox } from '../components'
@@ -54,7 +54,7 @@ export function DonationPage({ donations = [], loading, address }: DonationPageP
         return <StatusBox loading={loading} collection="Donation" empty={!donations.length} />
     }
     return (
-        <>
+        <Box margin="16px 0 0 16px">
             <List className={classes.list}>
                 {donations.map((donation) => (
                     <ListItem key={donation.id} className={classes.listItem}>
@@ -76,6 +76,6 @@ export function DonationPage({ donations = [], loading, address }: DonationPageP
                 description={selectedDonation?.detail?.grant?.description}
                 contributions={selectedDonation?.detail?.txs}
             />
-        </>
+        </Box>
     )
 }

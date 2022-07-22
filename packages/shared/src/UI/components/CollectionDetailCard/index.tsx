@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { InjectedDialog } from '../../../contexts'
 import { useSharedI18N } from '../../../locales'
-import { Box, DialogContent, Link, Typography } from '@mui/material'
+import { Box, Card, DialogContent, Link, Typography } from '@mui/material'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import differenceInCalendarDays from 'date-fns/differenceInDays'
 import differenceInCalendarHours from 'date-fns/differenceInHours'
@@ -191,10 +191,10 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
             <InjectedDialog open={open} onClose={onClose} title={t.details()}>
                 <DialogContent>
                     <Box className={classes.flexItem}>
-                        <div className={classes.img}>
+                        <Card className={classes.img}>
                             <NFTCardStyledAssetPlayer
                                 contractAddress={metadata?.collection_address}
-                                chainId={ChainID[metadata?.network ?? 'ethereum']}
+                                chainId={metadata ? ChainID[metadata?.network ?? 'ethereum'] : undefined}
                                 url={img}
                                 tokenId={metadata?.token_id}
                                 classes={{
@@ -203,7 +203,7 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                                     iframe: classes.img,
                                 }}
                             />
-                        </div>
+                        </Card>
                     </Box>
 
                     <Typography fontSize="16px" fontWeight={700} marginTop="38px">

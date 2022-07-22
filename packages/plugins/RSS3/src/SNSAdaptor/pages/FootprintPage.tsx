@@ -1,6 +1,7 @@
 import { CollectionDetailCard } from '@masknet/shared'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
+import { Box } from '@mui/material'
 import { useState } from 'react'
 import { FootprintCard, StatusBox } from '../components'
 import { useRss3Profile } from '../hooks'
@@ -22,8 +23,8 @@ export function FootprintPage({ footprints = [], address, loading }: FootprintPa
     }
 
     return (
-        <>
-            <section className="grid items-center justify-start grid-cols-1 gap-2 py-4">
+        <Box margin="16px 0 0 16px">
+            <section className="grid items-center justify-start grid-cols-1 gap-2 py-4 ">
                 {footprints.map((footprint) => (
                     <FootprintCard
                         key={footprint.id}
@@ -43,6 +44,6 @@ export function FootprintPage({ footprints = [], address, loading }: FootprintPa
                 date={selectedFootprint?.detail?.end_date}
                 location={selectedFootprint?.detail?.city || selectedFootprint?.detail?.country || 'Metaverse'}
             />
-        </>
+        </Box>
     )
 }

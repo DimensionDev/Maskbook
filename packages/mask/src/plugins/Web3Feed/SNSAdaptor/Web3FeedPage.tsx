@@ -24,7 +24,7 @@ export function Web3FeedPage({ socialAddress, persona }: Web3FeedPageProps) {
     }
 
     return (
-        <div style={{ marginTop: '16px' }}>
+        <div style={{ margin: '16px 16px 0 16px' }}>
             {feed?.list?.map((info, index) => {
                 return (
                     <FeedCard
