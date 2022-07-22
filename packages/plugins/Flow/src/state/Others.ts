@@ -4,6 +4,8 @@ import { createExplorerResolver, isSameAddress } from '@masknet/web3-shared-base
 import {
     isValidDomain,
     isValidAddress,
+    isZeroAddress,
+    isNativeTokenAddress,
     ChainId,
     formatAddress,
     formatDomainName,
@@ -41,6 +43,8 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
     override isValidDomain = isValidDomain
     override isValidAddress = isValidAddress
     override isSameAddress = isSameAddress
+    override isZeroAddress = isZeroAddress
+    override isNativeTokenAddress = isNativeTokenAddress
 
     override formatAddress = formatAddress
     override formatDomainName = formatDomainName

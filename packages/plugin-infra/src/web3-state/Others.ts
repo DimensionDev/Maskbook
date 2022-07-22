@@ -60,7 +60,13 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transac
 
     isSameAddress = isSameAddress
 
-    isZeroAddress(chainId: ChainId)
+    isZeroAddress(chainId: ChainId, address?: string): boolean {
+        throw new Error('Method not implemented.')
+    }
+
+    isNativeTokenAddress(chainId: ChainId, address?: string): boolean {
+        throw new Error('Method not implemented.')
+    }
 
     isValidChain(chainId: ChainId, testnet = false): boolean {
         return this.options.chainDescriptors.find((x) => x.chainId === chainId)?.network === 'mainnet' || testnet

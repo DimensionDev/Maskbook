@@ -99,7 +99,7 @@ export function useGameInfo(gameData: GameMetaData) {
             adaiTokenAddress: adaiToken,
             lendingPoolAddress: lendingPool,
             earlyWithdrawalFee,
-            currentPlayer: !isZeroAddress(player?.addr) ? player : undefined,
+            currentPlayer: !isZeroAddress(chainId, player?.addr) ? player : undefined,
             gameHasEnded: Number.parseInt(currentSegment, 10) > Number.parseInt(lastSegment, 10),
             refresh: asyncResult.retry,
         } as GoodGhostingInfo

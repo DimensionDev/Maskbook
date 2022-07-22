@@ -29,6 +29,14 @@ export function transform<ChainId extends number, T extends Constants>(
     }
 }
 
+export function transformFromConstants<ChainId extends number, T extends Constants>(
+    getter: (chainId: ChainId) => Constants[ChainId],
+) {
+    return (chainId: ChainId, key: keyof Constants[ChainId]) => {
+        return getter(chainId)[key]
+    }
+}
+
 export function transformFromJSON<ChainId extends number, T extends Constants>(
     chainIdEnum: ChainIdEnum<ChainId>,
     json: string,

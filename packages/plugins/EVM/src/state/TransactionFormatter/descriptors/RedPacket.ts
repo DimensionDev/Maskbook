@@ -6,9 +6,9 @@ import {
     isNativeTokenAddress,
     TransactionParameter,
 } from '@masknet/web3-shared-evm'
+import { isSameAddress, formatBalance, TransactionContext } from '@masknet/web3-shared-base'
 import type { TransactionDescriptor } from '../types'
 import { Web3StateSettings } from '../../../settings'
-import { isSameAddress, formatBalance, TransactionContext } from '@masknet/web3-shared-base'
 
 export class RedPacketDescriptor implements TransactionDescriptor {
     // TODO: 6002: avoid using i18n text in a service. delegate it to ui.
@@ -34,7 +34,7 @@ export class RedPacketDescriptor implements TransactionDescriptor {
                 const amount = formatBalance(
                     method.parameters?._total_tokens,
                     token?.decimals,
-                    isNativeTokenAddress(method.parameters?._token_addr) ? 6 : 0,
+                    isNativeTokenAddress(context.chainId, method.parameters?._token_addr) ? 6 : 0,
                 )
                 return {
                     chainId: context.chainId,

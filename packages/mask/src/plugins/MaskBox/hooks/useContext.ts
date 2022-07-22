@@ -8,14 +8,7 @@ import { omit, clamp, first, uniq } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import { createContainer } from 'unstated-next'
 import { unreachable } from '@dimensiondev/kit'
-import {
-    ChainId,
-    useTokenConstants,
-    useMaskBoxConstants,
-    ZERO_ADDRESS,
-    isZeroAddress,
-    SchemaType,
-} from '@masknet/web3-shared-evm'
+import { ChainId, useTokenConstants, useMaskBoxConstants, isZeroAddress, SchemaType } from '@masknet/web3-shared-evm'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { BoxInfo, BoxState } from '../type'
 import { useMaskBoxInfo } from './useMaskBoxInfo'
@@ -40,6 +33,7 @@ import {
 import {
     useAccount,
     useBalance,
+    useChainId,
     useFungibleToken,
     useFungibleTokenBalance,
     useFungibleTokens,
@@ -50,6 +44,7 @@ import { useERC20TokenAllowance } from '@masknet/plugin-infra/web3-evm'
 
 function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const now = new Date()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(ChainId.Mainnet)
     const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants()
@@ -91,7 +86,7 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
         loading: loadingBoxInfo,
         retry: retryBoxInfo,
     } = useAsyncRetry<BoxInfo | null>(async () => {
-        if (!maskBoxInfo || !maskBoxStatus || isZeroAddress(maskBoxInfo?.creator ?? ZERO_ADDRESS)) return null
+        if (!maskBoxInfo || !maskBoxStatus || isZeroAddress(chainId, maskBoxInfo?.creator)) return null
         const personalLimit = Number.parseInt(maskBoxInfo.personal_limit, 10)
         const remaining = Number.parseInt(maskBoxStatus.remaining, 10) // the current balance of the creator's account
         const total = Number.parseInt(maskBoxStatus.total, 10) // the total amount of tokens in the box

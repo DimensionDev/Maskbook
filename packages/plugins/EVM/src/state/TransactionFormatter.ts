@@ -94,7 +94,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
             }
 
             // contract deployment
-            if (isZeroAddress(to)) {
+            if (isZeroAddress(chainId, to)) {
                 return {
                     ...context,
                     type: TransactionDescriptorType.DEPLOYMENT,

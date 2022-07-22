@@ -21,7 +21,7 @@ export class NameService extends NameServiceState<ChainId> {
             subscriptions,
             {
                 isValidName: (x) => x !== '0x',
-                isValidAddress: (x) => isValidAddress(x) && !isZeroAddress(x),
+                isValidAddress: (x) => isValidAddress(x) && !isZeroAddress(ChainId.Mainnet, x),
                 formatAddress: formatEthereumAddress,
             },
         )

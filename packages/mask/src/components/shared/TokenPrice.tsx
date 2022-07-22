@@ -27,6 +27,6 @@ export const TokenPrice: FC<TokenPriceProps> = ({
         },
     )
     const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
-    const price = isZeroAddress(contractAddress) ? nativeTokenPrice : tokenPrice
+    const price = isZeroAddress(chainId, contractAddress) ? nativeTokenPrice : tokenPrice
     return <span {...rest}>${multipliedBy(amount, price).toFixed(2)}</span>
 }

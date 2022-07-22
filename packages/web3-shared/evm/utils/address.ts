@@ -1,6 +1,6 @@
 import { EthereumAddress } from 'wallet.ts'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { currySameAddress, isSameAddress } from '@masknet/web3-shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { getRedPacketConstants, getTokenConstants, ZERO_ADDRESS } from '../constants'
 import { ChainId } from '../types'
 
@@ -17,11 +17,13 @@ export function isValidChainId(chainId: ChainId) {
     return getEnumAsArray(ChainId).some((x) => x.value === chainId)
 }
 
-export const isZeroAddress = currySameAddress(ZERO_ADDRESS)
+export function isZeroAddress(chainId: ChainId, address?: string) {
+    return isSameAddress(address, ZERO_ADDRESS)
+}
 
-export const isNativeTokenAddress = currySameAddress(
-    getEnumAsArray(ChainId).map(({ value }) => getTokenConstants(value).NATIVE_TOKEN_ADDRESS!),
-)
+export function isNativeTokenAddress(chainId: ChainId, address?: string) {
+    return isSameAddress(address, getTokenConstants(chainId).NATIVE_TOKEN_ADDRESS)
+}
 
 export function isRedPacketAddress(address: string, version?: 1 | 2 | 3 | 4) {
     const {

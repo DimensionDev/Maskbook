@@ -1,17 +1,15 @@
 import { createFungibleToken } from '@masknet/web3-shared-base'
-import { getTokenConstants } from '../constants'
-import { chainResolver } from './resolver'
+import { getTokenConstants, ZERO_ADDRESS } from '../constants'
 import { ChainId, SchemaType } from '../types'
 
 export function createNativeToken(chainId: ChainId) {
-    const nativeCurrency = chainResolver.nativeCurrency(chainId)
     return createFungibleToken<ChainId, SchemaType.Native>(
         chainId,
         SchemaType.Native,
-        getTokenConstants(chainId).SOL_ADDRESS!,
-        nativeCurrency?.name ?? 'Sol',
-        nativeCurrency?.symbol ?? 'SOL',
-        nativeCurrency?.decimals ?? 9,
-        nativeCurrency?.logoURL,
+        getTokenConstants(chainId).SOL_ADDRESS ?? ZERO_ADDRESS,
+        'Solana',
+        'SOL',
+        9,
+        'https://assets.coingecko.com/coins/images/4128/small/solana.png',
     )
 }

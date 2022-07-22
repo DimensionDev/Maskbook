@@ -221,7 +221,7 @@ class Hub implements EVM_Hub {
         })
         const { PLATFORM_ID = '', COIN_ID = '' } = getCoinGeckoConstants(options.chainId)
 
-        if (isNativeTokenAddress(address)) {
+        if (isNativeTokenAddress(chainId, address)) {
             return CoinGecko.getTokenPriceByCoinId(COIN_ID, options.currencyType)
         }
         return CoinGecko.getTokenPrice(PLATFORM_ID, address, options.currencyType)
