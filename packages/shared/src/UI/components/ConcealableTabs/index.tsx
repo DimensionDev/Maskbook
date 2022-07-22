@@ -128,7 +128,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     linkIcon: {
-        fill: theme.palette.maskColor.second,
+        color: theme.palette.maskColor.second,
         fontSize: '20px',
         margin: '4px 2px 0 2px',
     },
@@ -250,9 +250,9 @@ export function ConcealableTabs<T extends number | string>({
                             }
                             target="_blank"
                             rel="noopener noreferrer">
-                            <LinkOut sx={{ fill: '#767f8d', fontSize: '20px' }} />
+                            <LinkOut color="#767f8d" sx={{ fontSize: '20px' }} />
                         </Link>
-                        <ArrowDrop sx={{ fill: '#07101b' }} />
+                        <ArrowDrop color="#07101b" />
                     </Button>
                     <ShadowRootMenu
                         anchorEl={anchorEl}

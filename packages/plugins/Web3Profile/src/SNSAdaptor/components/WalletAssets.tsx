@@ -1,5 +1,5 @@
 import { Card, Typography, Link, Box } from '@mui/material'
-import { ArrowUpRound, Edit2Icon, LinkOutIcon } from '@masknet/icons'
+import { Edit2Icon, LinkOutIcon, DoubleArrowUp } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../locales'
 import { ImageIcon } from './ImageIcon'
@@ -91,6 +91,15 @@ const useStyles = makeStyles()((theme) => {
             marginTop: 4,
             cursor: 'pointer',
         },
+        arrowUp: {
+            cursor: 'pointer',
+            color: theme.palette.maskColor.second,
+            marginRight: 10,
+        },
+        rightIcons: {
+            display: 'flex',
+            alignItems: 'center',
+        },
     }
 })
 
@@ -162,9 +171,13 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
                         <LinkOutIcon className={classes.linkIcon} />
                     </Link>
                 </div>
-                <div>
+                <div className={classes.rightIcons}>
                     {loadStatus === LOAD_STATUS.Finish && (
-                        <ArrowUpRound sx={{ cursor: 'pointer' }} onClick={() => setLoadStatus(LOAD_STATUS.Necessary)} />
+                        <DoubleArrowUp
+                            size={16}
+                            className={classes.arrowUp}
+                            onClick={() => setLoadStatus(LOAD_STATUS.Necessary)}
+                        />
                     )}
                     <Edit2Icon size={20} onClick={onSetting} className={classes.editIcon} />
                 </div>

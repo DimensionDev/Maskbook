@@ -74,7 +74,6 @@ export function FeedCard({ feed, address, index, onSelect }: FeedCardProps) {
         const res = await Alchemy_EVM.getAsset(feed?.metadata?.collection_address, feed?.metadata?.token_id ?? '', {
             chainId: ChainID[feed?.metadata?.network ?? 'ethereum'],
         })
-        console.log({ feed, res, index })
         return res
     }, [feed?.metadata?.collection_address])
 
