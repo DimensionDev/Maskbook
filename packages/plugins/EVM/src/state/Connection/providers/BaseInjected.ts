@@ -1,6 +1,6 @@
 import { first } from 'lodash-unified'
 import type { RequestArguments } from 'web3-core'
-import { isExtensionSiteType } from '@masknet/shared-base'
+import { isWindowEthereumUnableToInjected } from '@masknet/shared-base'
 import type { InjectedProvider } from '@masknet/injected-script/sdk/Base'
 import { ChainId, EthereumMethodType, ProviderType, Web3Provider } from '@masknet/web3-shared-evm'
 import type { EVM_Provider } from '../types'
@@ -21,7 +21,7 @@ export class BaseInjectedProvider extends BaseProvider implements EVM_Provider {
     }
 
     override get readyPromise() {
-        if (isExtensionSiteType()) return Promise.reject(new Error('Not available on extension site.'))
+        if (isWindowEthereumUnableToInjected()) return Promise.reject(new Error('Not available on extension site.'))
         return this.bridge.untilAvailable().then(() => undefined)
     }
 
