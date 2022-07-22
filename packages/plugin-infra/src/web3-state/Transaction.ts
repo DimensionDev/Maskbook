@@ -94,6 +94,7 @@ export class TransactionState<ChainId, Transaction> implements Web3TransactionSt
         const all = this.storage.value
         const address_ = this.options.formatAddress(address)
 
+        debugger
         // to ensure that the transaction exists
         const transaction_ = all[chainId][address_]?.find((x) => Object.keys(x.candidates).includes(id))
         if (!transaction_) return
