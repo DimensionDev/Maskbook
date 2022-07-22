@@ -156,17 +156,13 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                     </Link>
                 )
             }
-            // if (url.includes('polygonscan.com/tx')) {
-            //     return (
-            //         <Link href={url} target="_blank">
-            //             <img
-            //                 className={classes.linkLogo}
-            //                 src="https://thumbor.rss3.dev/unsafe/60x60/https%3A%2F%&#x2026;alSelectionLabs%2Fweb3-logos%2Fmain%2FPolygon.png"
-            //             />{' '}
-            //             Polygonscan
-            //         </Link>
-            //     )
-            // }
+            if (url.includes('polygonscan.com/tx')) {
+                return (
+                    <Link href={url} target="_blank">
+                        <PolygonScan size={24} />
+                    </Link>
+                )
+            }
             if (url.includes('polygonscan.com/token')) {
                 return (
                     <Link href={url} target="_blank" marginRight="12px">

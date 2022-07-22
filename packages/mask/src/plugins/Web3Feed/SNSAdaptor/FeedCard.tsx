@@ -77,13 +77,6 @@ export function FeedCard({ feed, address, index, onSelect }: FeedCardProps) {
         console.log({ feed, res, index })
         return res
     }, [feed?.metadata?.collection_address])
-    // const { value: isImageToken, loading } = useImageChecker(
-    //     resolveIPFSLinkFromURL(
-    //         NFTMetadata?.metadata?.imageURL ||
-    //             feed?.attachments?.find((attachment) => attachment?.type === 'preview')?.address ||
-    //             '',
-    //     ),
-    // )
 
     const action = useMemo(() => {
         if (!feed) return
@@ -101,7 +94,7 @@ export function FeedCard({ feed, address, index, onSelect }: FeedCardProps) {
             if (feed?.metadata?.to?.toLowerCase() === address) {
                 return (
                     <span>
-                        acquire a NFT from <ReversedAddress address={feed?.metadata?.from} />{' '}
+                        acquire a NFT from <ReversedAddress address={feed?.metadata?.from} />
                     </span>
                 )
             }
@@ -138,20 +131,6 @@ export function FeedCard({ feed, address, index, onSelect }: FeedCardProps) {
 
     const logo = useMemo(() => {
         if (feed?.tags?.includes('NFT')) {
-            // return isImageToken ? (
-            //     <img
-            //         className={classes.img}
-            //         src={resolveIPFSLinkFromURL(
-            //             NFTMetadata?.metadata?.imageURL ||
-            //                 feed?.attachments?.find((attachment) => attachment?.type === 'preview')?.address ||
-            //                 '',
-            //         )}
-            //     />
-            // ) : (
-            //     <Box sx={{ width: 64, height: 64 }} className={classes.defaultImage}>
-            //         <MaskAvatarIcon />
-            //     </Box>
-            // )
             return (
                 <div className={classes.img}>
                     <NFTCardStyledAssetPlayer
@@ -232,7 +211,7 @@ export function FeedCard({ feed, address, index, onSelect }: FeedCardProps) {
                     </Typography>
                     <Typography className={classes.summary}>
                         {feed?.summary || NFTMetadata?.metadata?.description || NFTMetadata?.collection?.description} ||
-                        `#${feed?.metadata?.token_id}`{' '}
+                        `#${feed?.metadata?.token_id}`
                     </Typography>
                 </Box>
             </div>

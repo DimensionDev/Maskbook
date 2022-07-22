@@ -179,8 +179,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     if (hidden) return null
 
-    console.log({ identity, isOwn, addressList, personaPublicKey, personaList, selectedAddress })
-
     if (!identity.identifier?.userId || loadingSocialAddressList || loadingPersonaList)
         return (
             <div className={classes.root}>

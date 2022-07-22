@@ -71,9 +71,6 @@ const useStyles = makeStyles()((theme) => {
             display: 'grid',
             justifyItems: 'center',
             gridTemplateColumns: 'repeat(4, 1fr)',
-            // display: 'flex',
-            // flexWrap: 'wrap',
-            // justifyContent: 'space-between',
         },
         listBox: {
             display: 'flex',
@@ -138,12 +135,6 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
     }, [loadStatus, collectionList])
 
     const loadIcon = useMemo(() => {
-        if (loadStatus === LOAD_STATUS.Finish)
-            return (
-                <Typography fontSize="12px" fontWeight={700}>
-                    done
-                </Typography>
-            )
         if (loadStatus === LOAD_STATUS.Necessary)
             return (
                 <Box onClick={() => setLoadStatus(LOAD_STATUS.Finish)} className={classes.loadIcon}>
