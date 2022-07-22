@@ -4,7 +4,7 @@ import { getSiteType } from '@masknet/shared-base'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 
 export function useConnected() {
-    const { value } = useAsync(async () => {
+    const { value = false } = useAsync(async () => {
         const { url } = await Services.Helper.queryCurrentActiveTab()
         const siteType = getSiteType(url)
 
