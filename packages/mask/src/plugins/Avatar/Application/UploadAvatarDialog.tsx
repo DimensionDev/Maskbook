@@ -1,6 +1,6 @@
 import { Button, DialogActions, DialogContent, Slider } from '@mui/material'
 import AvatarEditor from 'react-avatar-editor'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, parseColor, useCustomSnackbar } from '@masknet/theme'
 import { useCallback, useState } from 'react'
 import { Twitter } from '@masknet/web3-providers'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -17,7 +17,9 @@ import type { AllChainsNonFungibleToken } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
-        padding: theme.spacing(0, 2, 2, 2),
+        padding: 16,
+        boxShadow: `0 0 20px ${parseColor(theme.palette.maskColor.highlight).setAlpha(0.2).toRgbString()}`,
+        backdropFilter: 'blur(16px)',
     },
     cancel: {
         backgroundColor: theme.palette.background.default,
@@ -26,6 +28,14 @@ const useStyles = makeStyles()((theme) => ({
         '&:hover': {
             border: 'none',
         },
+    },
+    content: {
+        margin: 0,
+        padding: 16,
+        '::-webkit-scrollbar': {
+            display: 'none',
+        },
+        textAlign: 'center',
     },
 }))
 
@@ -102,11 +112,11 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
 
     return (
         <>
-            <DialogContent sx={{ overFlow: 'hidden' }}>
+            <DialogContent className={classes.content}>
                 <AvatarEditor
                     ref={(e) => setEditor(e)}
                     image={image!}
-                    style={{ width: '100%', height: '100%' }}
+                    style={{ width: 'auto', height: 400 }}
                     scale={scale ?? 1}
                     rotate={0}
                     border={50}

@@ -111,6 +111,18 @@ export const WalletStartUp = memo(() => {
                 {!loading ? (
                     <Link
                         to={!hasPassword ? PopupRoutes.SetPaymentPassword : PopupRoutes.ImportWallet}
+                        onClick={(event) => {
+                            if (process.env.engine !== 'firefox') return
+                            const params = new URLSearchParams(location.search)
+                            const toBeClose = params.get('toBeClose')
+                            if (!toBeClose) {
+                                event.preventDefault()
+                                event.stopPropagation()
+                                Services.Helper.openPopupWindow(
+                                    !hasPassword ? PopupRoutes.SetPaymentPassword : PopupRoutes.ImportWallet,
+                                )
+                            }
+                        }}
                         style={{ textDecoration: 'none' }}>
                         <Box className={classes.item}>
                             <ImportWalletIcon sx={{ fontSize: 24 }} />

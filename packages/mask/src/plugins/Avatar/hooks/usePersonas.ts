@@ -5,8 +5,8 @@ import { useAsyncRetry } from 'react-use'
 import { useSubscription } from 'use-subscription'
 import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
 import { activatedSocialNetworkUI } from '../../../social-network'
+import { sortPersonaBindings } from '../../../utils'
 import { context } from '../context'
-import { sortPersonaBindings } from '../utils'
 
 export function usePersonas(userId?: string) {
     const personaConnectStatus = usePersonaConnectStatus()

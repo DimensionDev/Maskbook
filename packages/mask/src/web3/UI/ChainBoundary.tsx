@@ -70,7 +70,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         expectedPluginID,
         expectedChainId,
         expectedChainIdSwitchedCallback,
-        switchChainWithoutPopup = false,
+        switchChainWithoutPopup = true,
         predicate = (actualPluginID, actualChainId) =>
             actualPluginID === expectedPluginID && actualChainId === expectedChainId,
     } = props
