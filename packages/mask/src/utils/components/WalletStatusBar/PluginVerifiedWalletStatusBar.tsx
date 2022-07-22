@@ -15,13 +15,19 @@ import {
     useWeb3State,
     Web3Helper,
     useDefaultChainId,
+    useRecentTransactions,
 } from '@masknet/plugin-infra/web3'
 import { WalletConnect, WalletSetting } from '@masknet/icons'
 import type { WalletDescriptionProps } from './WalletDescription'
 import { first, omit } from 'lodash-unified'
 import { useWalletName } from './hooks/useWalletName'
 import { WalletDescription } from './WalletDescription'
-import { isSameAddress, NetworkPluginID, resolveNextIdPlatformPluginId } from '@masknet/web3-shared-base'
+import {
+    isSameAddress,
+    NetworkPluginID,
+    resolveNextIdPlatformPluginId,
+    TransactionStatusType,
+} from '@masknet/web3-shared-base'
 import { WalletMenuItem } from './WalletMenuItem'
 import { useMenu } from '@masknet/shared'
 import Services from '../../../extension/service'
@@ -43,6 +49,10 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
 
         const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
             WalletMessages.events.selectProviderDialogUpdated,
+        )
+
+        const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
+            WalletMessages.events.walletStatusDialogUpdated,
         )
 
         const openPopupWindow = useCallback(() => {
@@ -78,6 +88,8 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
 
         const providerDescriptor = useProviderDescriptor(defaultPluginId)
         const networkDescriptor = useNetworkDescriptor(defaultPluginId)
+
+        const pendingTransactions = useRecentTransactions(currentPluginId, TransactionStatusType.NOT_DEPEND)
 
         const description = useMemo(
             () => ({
@@ -175,7 +187,12 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         return (
             <>
                 <Box className={cx(classes.root, className)}>
-                    <WalletDescription {...omit(descriptionProps, 'address')} onClick={openMenu} />
+                    <WalletDescription
+                        {...omit(descriptionProps, 'address')}
+                        onClick={openMenu}
+                        pending={!!pendingTransactions.length}
+                        onPendingClick={openWalletStatusDialog}
+                    />
                     <Action openSelectWalletDialog={openSelectProviderDialog}>{children}</Action>
                 </Box>
                 {menu}
