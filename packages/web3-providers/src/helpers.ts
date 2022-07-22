@@ -47,6 +47,6 @@ export async function contentFetch(url: string, config?: RequestInit) {
     const fetch =
         process.env.engine === 'firefox' && process.env.manifest === '2' && typeof content === 'object'
             ? content.fetch
-            : globalThis.r2d2Fetch ?? globalThis.fetch
+            : globalThis.fetch
     return fetch(url, config)
 }
