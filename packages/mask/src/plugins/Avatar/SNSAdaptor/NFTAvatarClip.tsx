@@ -135,7 +135,11 @@ function Text(props: TextProps) {
     const classes = useStylesExtends(useStyles(), props)
     return (
         <text x="0%" textAnchor="middle" fill={fill} fontFamily="sans-serif" className={classes.root}>
-            <textPath xlinkHref={xlinkHref} startOffset="50%" rotate="auto" dominantBaseline="mathematical">
+            <textPath
+                xlinkHref={xlinkHref}
+                startOffset="50%"
+                rotate="auto"
+                dominantBaseline={process.env.engine === 'firefox' ? 'hanging' : 'mathematical'}>
                 <tspan fontWeight="bold" fontSize={fontSize}>
                     {text}
                 </tspan>
