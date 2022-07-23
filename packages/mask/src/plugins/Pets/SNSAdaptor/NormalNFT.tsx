@@ -7,7 +7,7 @@ import Drag from './Drag'
 import type { ShowMeta } from '../types'
 import { CloseIcon } from '../constants'
 import RightMenu from './RightMenu'
-import { useAsync } from 'react-use'
+import { Image } from '../../../components/shared/Image'
 
 const useStyles = makeStyles()(() => ({
     imgContent: {
@@ -78,14 +78,6 @@ export function NormalNFT(props: NormalNFTProps) {
         setMenuShow(false)
     }
 
-    const { loading, value: image } = useAsync(async () => {
-        if (!showMeta?.image) return
-        const data = await globalThis.r2d2Fetch(showMeta?.image)
-        return URL.createObjectURL(await data.blob())
-    }, [showMeta?.image])
-
-    if (loading) return null
-
     return (
         <Drag moveHandle={moveHandle} baseWidth={150} baseHeight={150}>
             {start && showMeta?.word ? (
@@ -104,8 +96,8 @@ export function NormalNFT(props: NormalNFTProps) {
             ) : null}
             <Box className={classes.imgContent} onContextMenu={handleMenuShow}>
                 <div className={classes.imgBox}>
-                    <img
-                        src={image ?? showMeta?.image}
+                    <Image
+                        src={showMeta?.image ?? ''}
                         style={{
                             objectFit: 'contain',
                             maxWidth: '100%',
