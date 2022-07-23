@@ -66,35 +66,45 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
                 </linearGradient>
             </defs>
 
-            <circle cx={R} cy={R} r={R - strokeWidth / 2 + 1} fill="none" stroke={stroke} strokeWidth={strokeWidth} />
-            <pattern id={`${id}-pattern`} x="0" y="0" width="300%" height="100%" patternUnits="userSpaceOnUse">
-                <circle cx={R} cy={R} r={R} fill={`url(#${id}-gradient)`}>
-                    <animateTransform
-                        attributeName="transform"
-                        type="rotate"
-                        dur="10s"
-                        repeatCount="indefinite"
-                        from={`0 ${R} ${R}`}
-                        to={`360 ${R} ${R}`}
-                    />
-                </circle>
-            </pattern>
+            <g>
+                <circle
+                    cx={R}
+                    cy={R}
+                    r={R - strokeWidth / 2 + 1}
+                    fill="none"
+                    stroke={stroke}
+                    strokeWidth={strokeWidth}
+                />
+                <pattern id={`${id}-pattern`} x="0" y="0" width="300%" height="100%">
+                    <circle cx={R} cy={R} r={R} fill={`url(#${id}-gradient)`}>
+                        <animateTransform
+                            attributeName="transform"
+                            type="rotate"
+                            attributeType="XML"
+                            dur="10s"
+                            repeatCount="indefinite"
+                            from={`0 ${R} ${R}`}
+                            to={`360 ${R} ${R}`}
+                        />
+                    </circle>
+                </pattern>
 
-            <text x="0%" textAnchor="middle" fill={`url(#${id}-pattern)`} fontFamily="sans-serif">
-                <textPath xlinkHref={`#${id}-path-name`} startOffset="50%" rotate="auto">
-                    <tspan fontWeight="bold" fontSize={fontSize}>
-                        {text}
-                    </tspan>
-                </textPath>
-            </text>
+                <text x="0%" textAnchor="middle" fill={`url(#${id}-pattern)`} fontFamily="sans-serif">
+                    <textPath xlinkHref={`#${id}-path-name`} startOffset="50%" rotate="auto">
+                        <tspan fontWeight="bold" fontSize={fontSize}>
+                            {text}
+                        </tspan>
+                    </textPath>
+                </text>
 
-            <text x="0%" textAnchor="middle" fill={`url(#${id}-pattern)`} fontFamily="sans-serif">
-                <textPath xlinkHref={`#${id}-path-price`} startOffset="50%" rotate="auto">
-                    <tspan fontWeight="bold" fontSize={fontSize} dy="0.5em">
-                        {price}
-                    </tspan>
-                </textPath>
-            </text>
+                <text x="0%" textAnchor="middle" fontFamily="sans-serif">
+                    <textPath xlinkHref={`#${id}-path-price`} startOffset="50%" rotate="auto">
+                        <tspan fontWeight="bold" fontSize={fontSize} dy="0.5em">
+                            {price}
+                        </tspan>
+                    </textPath>
+                </text>
+            </g>
         </svg>
     )
 
