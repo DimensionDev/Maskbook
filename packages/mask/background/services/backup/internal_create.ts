@@ -5,12 +5,7 @@ import { queryPersonasDB, queryProfilesDB, queryRelations } from '../../database
 import { queryPostsDB } from '../../database/post'
 import { timeout } from '@dimensiondev/kit'
 import { activatedPluginsWorker } from '@masknet/plugin-infra/background-worker'
-
-// Well, this is a bit of a hack, because we have not move those two parts into this project yet.
-let backupWallets: () => Promise<NormalizedBackup.WalletBackup[]>
-export function delegateWalletBackup(f: typeof backupWallets) {
-    backupWallets = f
-}
+import { internal_wallet_backup } from './internal_wallet_backup'
 
 /** @internal */
 export interface InternalBackupOptions {
@@ -42,7 +37,7 @@ export async function createNewBackup(options: InternalBackupOptions): Promise<N
         noProfiles || backupProfiles(onlyForPersona),
         (noPersonas && noProfiles) || backupAllRelations(),
         noPosts || backupPosts(),
-        noWallets || backupWallets().then((w) => (file.wallets = w)),
+        noWallets || internal_wallet_backup().then((w) => (file.wallets = w)),
         backupPlugins().then((p) => (file.plugins = p)),
     ])
 

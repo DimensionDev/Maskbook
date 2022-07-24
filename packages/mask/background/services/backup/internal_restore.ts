@@ -12,13 +12,8 @@ import {
 } from '../../database/persona/db'
 import { withPostDBTransaction, createPostDB, PostRecord, queryPostDB, updatePostDB } from '../../database/post'
 import type { LatestRecipientDetailDB, LatestRecipientReasonDB } from '../../database/post/dbType'
+import { internal_wallet_restore } from './internal_wallet_restore'
 
-// Well, this is a bit of a hack, because we have not move those two parts into this project yet.
-// TODO: MV3 support
-let restoreWallets: (backup: NormalizedBackup.WalletBackup[]) => Promise<void>
-export function delegateWalletRestore(f: typeof restoreWallets) {
-    restoreWallets = f
-}
 export async function restoreNormalizedBackup(backup: NormalizedBackup.Data) {
     const { plugins, posts, wallets } = backup
 
@@ -33,7 +28,7 @@ export async function restoreNormalizedBackup(backup: NormalizedBackup.Data) {
     }
     if (process.env.manifest === '2') {
         if (wallets.length) {
-            await restoreWallets(wallets)
+            await internal_wallet_restore(wallets)
         }
         await restorePlugins(plugins)
     }

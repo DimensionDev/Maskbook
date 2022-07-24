@@ -8,7 +8,7 @@ import type { LegacyWalletRecord } from '../database/types'
 import { fromHex, toHex } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { LegacyWalletRecordOutDB } from './helpers'
-import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../constants'
+import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 import { hasNativeAPI } from '../../../../shared/native-rpc'
 
 function sortWallet(a: LegacyWalletRecord, b: LegacyWalletRecord) {

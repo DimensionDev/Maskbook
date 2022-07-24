@@ -11,9 +11,7 @@ import { PluginServices } from '../../../../API'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useMnemonicWordsPuzzle } from '../../../../hooks/useMnemonicWordsPuzzle'
-
-// Private key at m/purpose'/coin_type'/account'/change
-export const HD_PATH_WITHOUT_INDEX_ETHEREUM = "m/44'/60'/0'/0"
+import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

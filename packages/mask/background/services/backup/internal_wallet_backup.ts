@@ -1,76 +1,26 @@
-export * from '../../../background/services/backup'
-
-import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-assertEnvironment(Environment.ManifestBackground)
-
-import { currySameAddress, isSameAddress } from '@masknet/web3-shared-base'
-import {
-    exportMnemonic,
-    exportPrivateKey,
-    getDerivableAccounts,
-    getLegacyWallets,
-    getWallets,
-    recoverWalletFromMnemonic,
-    recoverWalletFromPrivateKey,
-} from '../../plugins/Wallet/services'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { provider } from './internal_wallet'
 import { Some, None } from 'ts-results'
-import { concatArrayBuffer, isNonNull } from '@dimensiondev/kit'
-import { delegateWalletBackup } from '../../../background/services/backup/internal_create'
+import { isNonNull } from '@dimensiondev/kit'
 import type { NormalizedBackup } from '@masknet/backup-format'
-import type { LegacyWalletRecord } from '../../plugins/Wallet/database/types'
-import type { WalletRecord } from '../../plugins/Wallet/services/wallet/type'
-import { delegateWalletRestore } from '../../../background/services/backup/internal_restore'
-import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
+import type { LegacyWalletRecord, WalletRecord } from '../../../shared/definitions/wallet'
 import { ec as EC } from 'elliptic'
 import { EthereumAddress } from 'wallet.ts'
-import {
-    toBase64URL,
-    fromBase64URL,
-    EC_Public_JsonWebKey,
-    EC_Private_JsonWebKey,
-    EC_JsonWebKey,
-    isSecp256k1Point,
-    isSecp256k1PrivateKey,
-} from '@masknet/shared-base'
-import { INTERNAL_getPasswordRequired } from '../../plugins/Wallet/services/wallet/password'
+import { toBase64URL, EC_Public_JsonWebKey, EC_Private_JsonWebKey } from '@masknet/shared-base'
 
-delegateWalletBackup(async function () {
+export async function internal_wallet_backup() {
     const wallet = await Promise.all([backupAllWallets(), backupAllLegacyWallets()])
     return wallet.flat()
-})
-delegateWalletRestore(async function (backup) {
-    const password = await INTERNAL_getPasswordRequired()
-    for (const wallet of backup) {
-        try {
-            const name = wallet.name
+}
 
-            if (wallet.privateKey.some)
-                await recoverWalletFromPrivateKey(name, await JWKToKey(wallet.privateKey.val, 'private'), password)
-            else if (wallet.mnemonic.some) {
-                // fix a backup bug of pre-v2.2.2 versions
-                const accounts = await getDerivableAccounts(wallet.mnemonic.val.words, 1, 5)
-                const index = accounts.findIndex(currySameAddress(wallet.address))
-                await recoverWalletFromMnemonic(
-                    name,
-                    wallet.mnemonic.val.words,
-                    index > -1 ? `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${index}` : wallet.mnemonic.val.path,
-                    password,
-                )
-            }
-        } catch (error) {
-            console.error(error)
-            continue
-        }
-    }
-})
 async function backupAllWallets(): Promise<NormalizedBackup.WalletBackup[]> {
-    const wallets = await getWallets()
+    const wallets = await provider.getWallets()
     const allSettled = await Promise.allSettled(
         wallets.map(async (wallet) => {
             return {
                 ...wallet,
-                mnemonic: wallet.derivationPath ? await exportMnemonic(wallet.address) : undefined,
-                privateKey: wallet.derivationPath ? undefined : await exportPrivateKey(wallet.address),
+                mnemonic: wallet.derivationPath ? await provider.exportMnemonic(wallet.address) : undefined,
+                privateKey: wallet.derivationPath ? undefined : await provider.exportPrivateKey(wallet.address),
             }
         }),
     )
@@ -80,10 +30,9 @@ async function backupAllWallets(): Promise<NormalizedBackup.WalletBackup[]> {
 }
 
 async function backupAllLegacyWallets(): Promise<NormalizedBackup.WalletBackup[]> {
-    const x = await getLegacyWallets()
+    const x = await provider.getLegacyWallets()
     return x.map(LegacyWalletRecordToJSONFormat)
 }
-
 function WalletRecordToJSONFormat(
     wallet: Omit<WalletRecord, 'type'> & {
         mnemonic?: string
@@ -165,21 +114,6 @@ function keyToJWK(key: string, type: 'public' | 'private'): JsonWebKey {
     function base64(nums: number[]) {
         return toBase64URL(new Uint8Array(nums).buffer)
     }
-}
-
-async function JWKToKey(jwk: EC_JsonWebKey, type: 'public' | 'private'): Promise<string> {
-    const ec = new EC('secp256k1')
-    if (type === 'public' && jwk.x && jwk.y) {
-        const xb = fromBase64URL(jwk.x)
-        const yb = fromBase64URL(jwk.y)
-        const point = new Uint8Array(concatArrayBuffer(new Uint8Array([0x04]), xb, yb))
-        if (await isSecp256k1Point(point)) return `0x${ec.keyFromPublic(point).getPublic(false, 'hex')}`
-    }
-    if (type === 'private' && jwk.d) {
-        const db = fromBase64URL(jwk.d)
-        if (await isSecp256k1PrivateKey(db)) return `0x${ec.keyFromPrivate(db).getPrivate('hex')}`
-    }
-    throw new Error('invalid private key')
 }
 
 function keyToAddr(key: string, type: 'public' | 'private'): string {
