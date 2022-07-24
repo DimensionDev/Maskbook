@@ -1,4 +1,3 @@
-import { merge } from 'lodash-unified'
 import { timeout } from '@dimensiondev/kit'
 
 /**
@@ -63,7 +62,11 @@ class MutexStorage<T extends browser.storage.StorageValue> {
 
 const storage = new MutexStorage<browser.storage.StorageValue>()
 
-/** Avoid using this. */
+/**
+ * Avoid using this.
+ * @deprecated
+ * @internal
+ */
 export async function __deprecated__getStorage<T extends browser.storage.StorageValue>(
     key: string,
 ): Promise<T | undefined> {
@@ -72,13 +75,15 @@ export async function __deprecated__getStorage<T extends browser.storage.Storage
     return value as T
 }
 
-/** Avoid using this. */
+/**
+ * Avoid using this.
+ * @deprecated
+ * @internal
+ */
 export async function __deprecated__setStorage<T extends browser.storage.StorageValue>(
     key: string,
     value: T,
-    options: { howToUpdate: 'merge' | 'replace' } = { howToUpdate: 'replace' },
 ): Promise<void> {
     if (typeof browser === 'undefined' || !browser.storage) return
-    if (options.howToUpdate === 'merge') value = merge((await storage.getStorage(key)) ?? {}, value)
     return storage.setStorage(key, value)
 }
