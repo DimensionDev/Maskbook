@@ -12,8 +12,8 @@ declare module 'typeson' {
         constructor(options?: {
             cyclic?: boolean
             encapsulateObserver?: (...args: unknown[]) => void
-            sync?: true
-            throwOnBadSyncType?: true
+            sync?: boolean
+            throwOnBadSyncType?: boolean
         })
         register(register: unknown[] | Record<string, CustomRegister<any, any> | NewableFunction>): Typeson
         encapsulate(data: unknown): object
