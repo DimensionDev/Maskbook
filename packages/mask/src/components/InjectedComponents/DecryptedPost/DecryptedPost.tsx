@@ -2,7 +2,7 @@ import { Fragment, useEffect, useReducer } from 'react'
 import { extractTextFromTypedMessage, TypedMessage } from '@masknet/typed-message'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 
-import Services, { ServicesWithProgress } from '../../../extension/service'
+import Services, { GeneratorServices } from '../../../extension/service'
 import type { DecryptionProgress, FailureDecryption, SuccessDecryption } from './types'
 import { DecryptPostSuccess } from './DecryptedPostSuccess'
 import { DecryptPostAwaiting } from './DecryptPostAwaiting'
@@ -199,7 +199,7 @@ async function makeProgress(
         currentSocialNetwork: activatedSocialNetworkUI.encryptionNetwork,
     }
     let iv: Uint8Array | undefined
-    for await (const progress of ServicesWithProgress.decryption(payload, context)) {
+    for await (const progress of GeneratorServices.decryption(payload, context)) {
         if (signal.aborted) return
         if (progress.type === DecryptProgressKind.Success) {
             done(progress.content, iv || new Uint8Array())
