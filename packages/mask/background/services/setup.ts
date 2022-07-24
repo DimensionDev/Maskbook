@@ -19,7 +19,7 @@ setup('Identity', () => import(/* webpackPreload: true */ './identity'))
 setup('Backup', () => import(/* webpackPreload: true */ './backup'))
 setup('Helper', () => import(/* webpackPreload: true */ './helper'))
 setup('SocialNetwork', () => import(/* webpackPreload: true */ './site-adaptors'))
-setup('Settings', () => import(/* webpackPreload: true */ './settings'))
+setup('Settings', () => import(/* webpackPreload: true */ './settings'), false)
 setup('ThirdPartyPlugin', () => import(/* webpackPreload: true */ './third-party-plugins'))
 
 if (import.meta.webpackHot) {
@@ -32,7 +32,7 @@ if (import.meta.webpackHot) {
     import.meta.webpackHot.accept(['./third-party-plugins'], () => hmr.dispatchEvent(new Event('thirdPartyPlugin')))
 }
 
-function setup<K extends keyof Services>(key: K, implementation: () => Promise<Services[K]>) {
+function setup<K extends keyof Services>(key: K, implementation: () => Promise<Services[K]>, hasLog = true) {
     const channel = message.events[key].bind(MessageTarget.Broadcast)
 
     async function load() {
@@ -49,12 +49,14 @@ function setup<K extends keyof Services>(key: K, implementation: () => Promise<S
         key,
         serializer,
         channel,
-        log: {
-            beCalled: true,
-            remoteError: false,
-            type: 'pretty',
-            requestReplay: debugMode,
-        },
+        log: hasLog
+            ? {
+                  beCalled: true,
+                  remoteError: false,
+                  type: 'pretty',
+                  requestReplay: debugMode,
+              }
+            : false,
         preferLocalImplementation: true,
         strict: {
             // temporally
