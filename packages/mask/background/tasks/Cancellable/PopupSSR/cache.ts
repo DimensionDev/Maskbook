@@ -2,7 +2,7 @@ import { throttle } from 'lodash-unified'
 import { MaskMessages } from '../../../../shared/messages'
 import { InternalStorageKeys } from '../../../services/settings/utils'
 import type { PopupSSR_Props } from './type'
-import { getCurrentPersonaIdentifier_alternative, getLanguagePreference } from '../../../services/settings'
+import { getCurrentPersonaIdentifier, getLanguage } from '../../../services/settings'
 import { queryOwnedPersonaInformation } from '../../../services/identity'
 
 export let cache: { html: string; css: string } = { html: '', css: '' }
@@ -34,8 +34,8 @@ export function startListen(
 }
 
 async function prepareData(): Promise<PopupSSR_Props> {
-    const language = getLanguagePreference()
-    const id = await getCurrentPersonaIdentifier_alternative()
+    const language = getLanguage()
+    const id = await getCurrentPersonaIdentifier()
     const personas = await queryOwnedPersonaInformation(false)
     const currentPersona = personas.find((x) => x.identifier === id) || personas.at(0)
 

@@ -25,9 +25,9 @@ export const Services = {
     Identity: add(() => import('../../background/services/identity'), 'Identity'),
     Backup: add(() => import('./background-script/BackupService'), 'Backup'),
     Helper: add(() => import('../../background/services/helper'), 'Helper'),
-    SocialNetwork: add(() => import('./background-script/SocialNetworkService'), 'SocialNetwork'),
-    Settings: add(() => import('./background-script/SettingsService'), 'Settings'),
-    ThirdPartyPlugin: add(() => import('./background-script/ThirdPartyPlugin'), 'ThirdPartyPlugin'),
+    SocialNetwork: add(() => import('../../background/services/site-adaptors'), 'SocialNetwork'),
+    Settings: add(() => import('../../background/services/settings'), 'Settings'),
+    ThirdPartyPlugin: add(() => import('../../background/services/third-party-plugins'), 'ThirdPartyPlugin'),
 }
 export default Services
 export const ServicesWithProgress: AsyncGeneratorVersionOf<typeof import('./service-generator')> = add(
@@ -43,9 +43,9 @@ if (process.env.manifest === '2' && import.meta.webpackHot && isEnvironment(Envi
             '../../background/services/identity',
             './background-script/BackupService',
             '../../background/services/helper',
-            './background-script/SettingsService',
-            './background-script/ThirdPartyPlugin',
-            './background-script/SocialNetworkService',
+            '../../background/services/settings',
+            '../../background/services/third-party-plugins',
+            '../../background/services/site-adaptors',
             './service-generator',
         ],
         () => document.dispatchEvent(new Event(SERVICE_HMR_EVENT)),
