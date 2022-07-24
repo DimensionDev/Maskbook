@@ -2,8 +2,8 @@ import '../utils/debug/general'
 import Services from '../extension/service'
 import { Flags } from '../../shared'
 import type { SocialNetworkUI } from './types'
-import { currentSetupGuideStatus } from '../settings/settings'
-import type { SetupGuideCrossContextStatus } from '../settings/types'
+import { currentSetupGuideStatus } from '../../shared/legacy-settings/settings'
+import type { SetupGuideCrossContextStatus } from '../../shared/legacy-settings/types'
 import {
     ECKeyIdentifier,
     EnhanceableSite,

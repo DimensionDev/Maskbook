@@ -9,7 +9,7 @@ import { PopupFrame } from './components/PopupFrame'
 import { MaskUIRoot } from '../../UIRoot'
 import { PageTitleContext } from './context'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { languageSettings } from '../../settings/settings'
+import { languageSettings } from '../../../shared/legacy-settings/settings'
 import { PopupSnackbarProvider } from '@masknet/theme'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder'
 

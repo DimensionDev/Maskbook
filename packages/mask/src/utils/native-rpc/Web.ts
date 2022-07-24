@@ -9,7 +9,7 @@ import {
 } from '@masknet/public-api'
 import { Environment, assertEnvironment } from '@dimensiondev/holoflows-kit'
 import { convertIdentifierMapToRawMap, ECKeyIdentifier, ProfileIdentifier } from '@masknet/shared-base'
-import { launchPageSettings } from '../../settings/settings'
+import { launchPageSettings } from '../../../shared/legacy-settings/settings'
 import Services from '../../extension/service'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { WalletRPC } from '../../plugins/Wallet/messages'
