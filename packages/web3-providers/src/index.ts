@@ -1,6 +1,6 @@
 import { CoinGeckoAPI } from './coingecko'
 import { OpenSeaAPI } from './opensea'
-import { LooksRareAPI } from './LooksRare'
+import { LooksRareAPI } from './looksrare'
 import { RaribleAPI } from './rarible'
 import { NFTScanAPI } from './NFTScan'
 import { ZoraAPI } from './zora'

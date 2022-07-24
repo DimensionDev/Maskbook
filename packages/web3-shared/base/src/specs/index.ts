@@ -224,6 +224,16 @@ export interface FungibleToken<ChainId, SchemaType> extends Token<ChainId, Schem
     logoURL?: string
 }
 
+export interface FungibleTokenStats {
+    /** TODO */
+}
+
+export interface NonFungibleTokenStats {
+    volume24h: number
+    count24h: number
+    floorPrice: number
+}
+
 export interface NonFungibleTokenRarity {
     rank: number
     url: string
@@ -255,13 +265,13 @@ export interface NonFungibleTokenMetadata<ChainId> {
     mediaType?: string
 }
 
-export interface NonFungibleTokenCollection<ChainId> {
+export interface NonFungibleTokenCollection<ChainId, SchemaType> {
     chainId: ChainId
     name: string
     slug: string
     address?: string
     symbol?: string
-    schema_name?: string
+    schema?: SchemaType
     balance?: number
     description?: string
     iconURL?: string
@@ -281,7 +291,7 @@ export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, Sc
     /** the media metadata */
     metadata?: NonFungibleTokenMetadata<ChainId>
     /** the collection info */
-    collection?: NonFungibleTokenCollection<ChainId>
+    collection?: NonFungibleTokenCollection<ChainId, SchemaType>
 }
 
 export interface NonFungibleTokenTrait {
@@ -324,16 +334,17 @@ export interface NonFungibleTokenOrder<ChainId, SchemaType> {
     createdAt?: number
     /** unix timestamp */
     expiredAt?: number
-    /** current price */
+    /** calculated current price */
     price?: Price
-    paymentToken?: FungibleToken<ChainId, SchemaType>
+    /** the payment token and corresponding price */
+    priceInToken?: PriceInToken<ChainId, SchemaType>
 }
 
 export interface NonFungibleTokenEvent<ChainId, SchemaType> {
     id: string
     /** chain Id */
     chainId: ChainId
-    /** token type */
+    /** event type */
     type: string
     /** permalink of asset */
     assetPermalink?: string
@@ -389,10 +400,14 @@ export interface NonFungibleAsset<ChainId, SchemaType> extends NonFungibleToken<
     traits?: NonFungibleTokenTrait[]
     /** token on auction */
     auction?: NonFungibleTokenAuction<ChainId, SchemaType>
+    /** related orders */
     orders?: Array<NonFungibleTokenOrder<ChainId, SchemaType>>
+    /** related events */
     events?: Array<NonFungibleTokenEvent<ChainId, SchemaType>>
+    /** all payment tokens */
     paymentTokens?: Array<FungibleToken<ChainId, SchemaType>>
-    priceInToken?:PriceInToken<ChainId, SchemaType>
+    /** the payment token and corresponding price */
+    priceInToken?: PriceInToken<ChainId, SchemaType>
 }
 
 /**
@@ -703,7 +718,7 @@ export interface Connection<
         address: string,
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,
-    ): Promise<NonFungibleTokenCollection<ChainId>>
+    ): Promise<NonFungibleTokenCollection<ChainId, SchemaType>>
     /** Get native fungible token balance. */
     getNativeTokenBalance(initial?: Web3ConnectionOptions): Promise<string>
     /** Get fungible token balance. */
@@ -873,6 +888,10 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
     getFungibleTokenBalance?: (address: string, initial?: Web3HubOptions) => Promise<number>
     /** Get balance of non-fungible tokens in a collection owned by the given account. */
     getNonFungibleTokenBalance?: (address: string, initial?: Web3HubOptions) => Promise<number>
+    /** Get stats data of a fungible token */
+    getFungibleTokenStats?: (address: string, initial?: Web3HubOptions) => Promise<FungibleTokenStats>
+    /** Get stats data of a non-fungible token */
+    getNonFungibleTokenStats?: (address: string, initial?: Web3HubOptions) => Promise<NonFungibleTokenStats>
     /** Get security diagnosis about a fungible token. */
     getFungibleTokenSecurity?: (
         chainId: ChainId,
@@ -996,7 +1015,7 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
     getNonFungibleCollections?: (
         account: string,
         initial?: Web3HubOptions,
-    ) => Promise<Pageable<NonFungibleTokenCollection<ChainId>>>
+    ) => Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>>>
 
     /** Place a bid on a token. */
     createBuyOrder?: (/** TODO: add parameters */) => Promise<void>
