@@ -15,8 +15,8 @@ import {
 } from '../../plugins/Wallet/services'
 import { activatedPluginsWorker, registeredPluginIDs } from '@masknet/plugin-infra/background-worker'
 import { Some, None } from 'ts-results'
-import { concatArrayBuffer, isNonNull, timeout } from '@dimensiondev/kit'
-import { delegatePluginBackup, delegateWalletBackup } from '../../../background/services/backup/internal_create'
+import { concatArrayBuffer, isNonNull } from '@dimensiondev/kit'
+import { delegateWalletBackup } from '../../../background/services/backup/internal_create'
 import type { NormalizedBackup } from '@masknet/backup-format'
 import type { LegacyWalletRecord } from '../../plugins/Wallet/database/types'
 import type { WalletRecord } from '../../plugins/Wallet/services/wallet/type'
@@ -35,7 +35,6 @@ import {
 } from '@masknet/shared-base'
 import { INTERNAL_getPasswordRequired } from '../../plugins/Wallet/services/wallet/password'
 
-delegatePluginBackup(backupAllPlugins)
 delegatePluginRestore(async function (backup) {
     const plugins = [...activatedPluginsWorker]
     const works = new Set<Promise<void>>()
@@ -176,31 +175,6 @@ function LegacyWalletRecordToJSONFormat(wallet: LegacyWalletRecord): NormalizedB
         console.error(error)
     }
     return backup
-}
-
-async function backupAllPlugins() {
-    const plugins = Object.create(null) as Record<string, unknown>
-    const allPlugins = [...activatedPluginsWorker]
-
-    async function backup(plugin: typeof allPlugins[0]): Promise<void> {
-        const backupCreator = plugin.backup?.onBackup
-        if (!backupCreator) return
-
-        async function backupPlugin() {
-            const result = await timeout(backupCreator!(), 3000)
-            if (result.none) return
-            // We limit the plugin contributed backups must be simple objects.
-            // We may allow plugin to store binary if we're moving to binary backup format like MessagePack.
-            plugins[plugin.ID] = result.map(JSON.stringify).map(JSON.parse).val
-        }
-        if (process.env.NODE_ENV === 'development') return backupPlugin()
-        return backupPlugin().catch((error) =>
-            console.error(`[@masknet/plugin-infra] Plugin ${plugin.ID} failed to backup`, error),
-        )
-    }
-
-    await Promise.all(allPlugins.map(backup))
-    return plugins
 }
 
 function keyToJWK(key: string, type: 'public'): EC_Public_JsonWebKey
