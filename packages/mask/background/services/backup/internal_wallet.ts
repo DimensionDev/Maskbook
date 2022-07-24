@@ -12,11 +12,11 @@ export interface WalletBackupProvider {
         page: number,
         pageSize?: number,
     ): Promise<
-        {
+        Array<{
             index: number
             address: string
             derivationPath: string
-        }[]
+        }>
     >
     recoverWalletFromMnemonic(
         name: string,
