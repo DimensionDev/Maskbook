@@ -15,8 +15,6 @@ export default function (signal: AbortSignal) {
         const contains = await browser.permissions.contains({ origins: [arg.url] })
         if (!contains) return
 
-        debugger
-
         chrome.scripting.executeScript({
             files: [injectedScriptURL, maskSDK_URL],
             target: { tabId: arg.tabId, frameIds: [arg.frameId] },
