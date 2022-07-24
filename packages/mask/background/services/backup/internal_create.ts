@@ -3,16 +3,9 @@ import type { PersonaIdentifier } from '@masknet/shared-base'
 import { None, Some } from 'ts-results'
 import { queryPersonasDB, queryProfilesDB, queryRelations } from '../../database/persona/db'
 import { queryPostsDB } from '../../database/post'
-
-// Well, this is a bit of a hack, because we have not move those two parts into this project yet.
-let backupPlugins: () => Promise<NormalizedBackup.Data['plugins']>
-let backupWallets: () => Promise<NormalizedBackup.WalletBackup[]>
-export function delegateWalletBackup(f: typeof backupWallets) {
-    backupWallets = f
-}
-export function delegatePluginBackup(f: typeof backupPlugins) {
-    backupPlugins = f
-}
+import { timeout } from '@dimensiondev/kit'
+import { activatedPluginsWorker } from '@masknet/plugin-infra/background-worker'
+import { internal_wallet_backup } from './internal_wallet_backup'
 
 /** @internal */
 export interface InternalBackupOptions {
@@ -44,7 +37,7 @@ export async function createNewBackup(options: InternalBackupOptions): Promise<N
         noProfiles || backupProfiles(onlyForPersona),
         (noPersonas && noProfiles) || backupAllRelations(),
         noPosts || backupPosts(),
-        noWallets || backupWallets().then((w) => (file.wallets = w)),
+        noWallets || internal_wallet_backup().then((w) => (file.wallets = w)),
         backupPlugins().then((p) => (file.plugins = p)),
     ])
 
@@ -139,5 +132,30 @@ export async function createNewBackup(options: InternalBackupOptions): Promise<N
                 profile: relation.profile,
             })
         }
+    }
+
+    async function backupPlugins() {
+        const plugins = Object.create(null) as Record<string, unknown>
+        const allPlugins = [...activatedPluginsWorker]
+
+        async function backup(plugin: typeof allPlugins[0]): Promise<void> {
+            const backupCreator = plugin.backup?.onBackup
+            if (!backupCreator) return
+
+            async function backupPlugin() {
+                const result = await timeout(backupCreator!(), 3000)
+                if (result.none) return
+                // We limit the plugin contributed backups must be simple objects.
+                // We may allow plugin to store binary if we're moving to binary backup format like MessagePack.
+                plugins[plugin.ID] = result.map(JSON.stringify).map(JSON.parse).val
+            }
+            if (process.env.NODE_ENV === 'development') return backupPlugin()
+            return backupPlugin().catch((error) =>
+                console.error(`[@masknet/plugin-infra] Plugin ${plugin.ID} failed to backup`, error),
+            )
+        }
+
+        await Promise.all(allPlugins.map(backup))
+        return plugins
     }
 }
