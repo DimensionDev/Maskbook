@@ -46,6 +46,10 @@ export function isExtensionSiteType() {
     return !!getExtensionSiteType()
 }
 
-export function isWindowEthereumUnableToInjected() {
-    return isExtensionSiteType() || process.env.engine === 'firefox'
+export function isFirefox() {
+    return process.env.engine === 'firefox'
+}
+
+export function isEthereumInjected() {
+    return !isExtensionSiteType() && !isFirefox()
 }

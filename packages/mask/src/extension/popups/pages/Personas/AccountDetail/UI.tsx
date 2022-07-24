@@ -1,10 +1,10 @@
-import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
+import { makeStyles } from '@masknet/theme'
+import { LoadingButton } from '@mui/lab'
+import { Button, Typography } from '@mui/material'
 import type { Account } from '../type'
 import { AccountAvatar } from '../components/AccountAvatar'
-import { Button, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
-import { LoadingButton } from '@mui/lab'
 
 const useStyles = makeStyles()(() => ({
     container: {
