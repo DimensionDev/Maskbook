@@ -2,7 +2,7 @@ import { first } from 'lodash-unified'
 import { memo, useRef, useCallback, useState, useEffect, useMemo } from 'react'
 import { getRPCConstants } from '@masknet/web3-shared-evm'
 import IframeResizer, { IFrameComponent } from 'iframe-resizer-react'
-import { mediaViewerUrl } from '../../../constants'
+import { MEDIA_VIEWER_URL } from '../../../constants'
 import { useUpdateEffect } from 'react-use'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box } from '@mui/material'
@@ -157,7 +157,7 @@ export const AssetPlayer = memo<AssetPlayerProps>((props) => {
         () =>
             hidden ? null : (
                 <IframeResizer
-                    src={mediaViewerUrl}
+                    src={MEDIA_VIEWER_URL}
                     onInit={(iframe: IFrameComponent) => {
                         ref.current = iframe
                         setPlayerState(AssetPlayerState.INIT)
@@ -184,7 +184,7 @@ export const AssetPlayer = memo<AssetPlayerProps>((props) => {
                     allowFullScreen
                 />
             ),
-        [hidden, playerState, classes.hidden, classes.iframe, mediaViewerUrl],
+        [hidden, playerState, classes.hidden, classes.iframe, MEDIA_VIEWER_URL],
     )
 
     return (
