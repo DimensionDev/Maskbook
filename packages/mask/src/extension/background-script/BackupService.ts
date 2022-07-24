@@ -13,14 +13,13 @@ import {
     recoverWalletFromMnemonic,
     recoverWalletFromPrivateKey,
 } from '../../plugins/Wallet/services'
-import { activatedPluginsWorker, registeredPluginIDs } from '@masknet/plugin-infra/background-worker'
 import { Some, None } from 'ts-results'
 import { concatArrayBuffer, isNonNull } from '@dimensiondev/kit'
 import { delegateWalletBackup } from '../../../background/services/backup/internal_create'
 import type { NormalizedBackup } from '@masknet/backup-format'
 import type { LegacyWalletRecord } from '../../plugins/Wallet/database/types'
 import type { WalletRecord } from '../../plugins/Wallet/services/wallet/type'
-import { delegatePluginRestore, delegateWalletRestore } from '../../../background/services/backup/internal_restore'
+import { delegateWalletRestore } from '../../../background/services/backup/internal_restore'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
 import { ec as EC } from 'elliptic'
 import { EthereumAddress } from 'wallet.ts'
@@ -35,37 +34,6 @@ import {
 } from '@masknet/shared-base'
 import { INTERNAL_getPasswordRequired } from '../../plugins/Wallet/services/wallet/password'
 
-delegatePluginRestore(async function (backup) {
-    const plugins = [...activatedPluginsWorker]
-    const works = new Set<Promise<void>>()
-    for (const [pluginID, item] of Object.entries(backup)) {
-        const plugin = plugins.find((x) => x.ID === pluginID)
-        // should we warn user here?
-        if (!plugin) {
-            if ([...registeredPluginIDs].includes(pluginID))
-                console.warn(`[@masknet/plugin-infra] Found a backup of a not enabled plugin ${plugin}`, item)
-            else console.warn(`[@masknet/plugin-infra] Found an unknown plugin backup of ${plugin}`, item)
-            continue
-        }
-
-        const f = plugin.backup?.onRestore
-        if (!f) {
-            console.warn(
-                `[@masknet/plugin-infra] Found a backup of plugin ${plugin} but it did not register a onRestore callback.`,
-                item,
-            )
-            continue
-        }
-        works.add(
-            (async () => {
-                const x = await f(item)
-                if (x.err) console.error(`[@masknet/plugin-infra] Plugin ${plugin} failed to restore its backup.`, item)
-                return x.unwrap()
-            })(),
-        )
-    }
-    await Promise.allSettled(works)
-})
 delegateWalletBackup(async function () {
     const wallet = await Promise.all([backupAllWallets(), backupAllLegacyWallets()])
     return wallet.flat()
