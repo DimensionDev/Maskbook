@@ -7,7 +7,7 @@ import { MnemonicReveal } from '../../../../components/Mnemonic'
 import { VerifyMnemonicDialog } from '../VerifyMnemonicDialog'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
-import { PluginServices, Services } from '../../../../API'
+import { PluginServices } from '../../../../API'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useMnemonicWordsPuzzle } from '../../../../hooks/useMnemonicWordsPuzzle'
@@ -110,15 +110,7 @@ const CreateMnemonic = memo(() => {
         )
 
         await PluginServices.Wallet.updateMaskAccount({ account: address_ })
-
-        const account = await Services.Settings.getSelectedWalletAddress()
-
-        if (!account) {
-            await PluginServices.Wallet.updateMaskAccount({
-                account: address_,
-            })
-            await PluginServices.Wallet.resolveMaskAccount([address_])
-        }
+        await PluginServices.Wallet.resolveMaskAccount([address_])
 
         return address_
     }, [location.search, words, resetCallback, hasPassword, searchParams])
