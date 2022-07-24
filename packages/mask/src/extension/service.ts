@@ -26,7 +26,7 @@ export const Services = {
     Backup: add(() => import('./background-script/BackupService'), 'Backup'),
     Helper: add(() => import('../../background/services/helper'), 'Helper'),
     SocialNetwork: add(() => import('../../background/services/site-adaptors'), 'SocialNetwork'),
-    Settings: add(() => import('./background-script/SettingsService'), 'Settings'),
+    Settings: add(() => import('../../background/services/settings'), 'Settings'),
     ThirdPartyPlugin: add(() => import('./background-script/ThirdPartyPlugin'), 'ThirdPartyPlugin'),
 }
 export default Services
@@ -43,7 +43,7 @@ if (process.env.manifest === '2' && import.meta.webpackHot && isEnvironment(Envi
             '../../background/services/identity',
             './background-script/BackupService',
             '../../background/services/helper',
-            './background-script/SettingsService',
+            '../../background/services/settings',
             './background-script/ThirdPartyPlugin',
             '../../background/services/site-adaptors',
             './service-generator',

@@ -8,10 +8,8 @@ import {
     currentPluginMinimalModeNOTEnabled,
     pluginIDSettings,
 } from '../../../shared/legacy-settings/settings'
-import { MaskMessages } from '../../../shared'
+import { MaskMessages } from '../../../shared/messages'
 import { queryPersonasDB } from '../../../background/database/persona/db'
-
-export * from '../../../background/services/settings'
 
 function create<T>(settings: InternalSettings<T>) {
     async function get() {
