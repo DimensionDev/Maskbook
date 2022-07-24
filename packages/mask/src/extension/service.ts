@@ -27,7 +27,7 @@ export const Services = {
     Helper: add(() => import('../../background/services/helper'), 'Helper'),
     SocialNetwork: add(() => import('../../background/services/site-adaptors'), 'SocialNetwork'),
     Settings: add(() => import('../../background/services/settings'), 'Settings'),
-    ThirdPartyPlugin: add(() => import('./background-script/ThirdPartyPlugin'), 'ThirdPartyPlugin'),
+    ThirdPartyPlugin: add(() => import('../../background/services/third-party-plugins'), 'ThirdPartyPlugin'),
 }
 export default Services
 export const ServicesWithProgress: AsyncGeneratorVersionOf<typeof import('./service-generator')> = add(
@@ -44,7 +44,7 @@ if (process.env.manifest === '2' && import.meta.webpackHot && isEnvironment(Envi
             './background-script/BackupService',
             '../../background/services/helper',
             '../../background/services/settings',
-            './background-script/ThirdPartyPlugin',
+            '../../background/services/third-party-plugins',
             '../../background/services/site-adaptors',
             './service-generator',
         ],

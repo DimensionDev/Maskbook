@@ -1,7 +1,8 @@
-import type { MaskSDK_SNS_ContextIdentifier } from '../../../plugins/External/sns-context'
-import type { Manifest } from '../../../plugins/External/types'
-import { constructThirdPartyRequestPermissionURL } from '../../popups/ThirdPartyRequestPermission/utils'
-import { ThirdPartyPluginPermission } from './types'
+// TODO: those types are defined in the plugin/External
+type MaskSDK_SNS_ContextIdentifier = string
+type Manifest = any
+
+import { constructThirdPartyRequestPermissionURL, ThirdPartyPluginPermission } from '../../../shared/definitions/routes'
 
 export async function fetchManifest(addr: string): Promise<Manifest> {
     const response = await fetch(addr + 'mask-manifest.json')
