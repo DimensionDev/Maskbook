@@ -25,7 +25,7 @@ export const Services = {
     Identity: add(() => import('../../background/services/identity'), 'Identity'),
     Backup: add(() => import('./background-script/BackupService'), 'Backup'),
     Helper: add(() => import('../../background/services/helper'), 'Helper'),
-    SocialNetwork: add(() => import('./background-script/SocialNetworkService'), 'SocialNetwork'),
+    SocialNetwork: add(() => import('../../background/services/site-adaptors'), 'SocialNetwork'),
     Settings: add(() => import('./background-script/SettingsService'), 'Settings'),
     ThirdPartyPlugin: add(() => import('./background-script/ThirdPartyPlugin'), 'ThirdPartyPlugin'),
 }
@@ -45,7 +45,7 @@ if (process.env.manifest === '2' && import.meta.webpackHot && isEnvironment(Envi
             '../../background/services/helper',
             './background-script/SettingsService',
             './background-script/ThirdPartyPlugin',
-            './background-script/SocialNetworkService',
+            '../../background/services/site-adaptors',
             './service-generator',
         ],
         () => document.dispatchEvent(new Event(SERVICE_HMR_EVENT)),
