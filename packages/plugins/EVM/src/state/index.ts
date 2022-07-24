@@ -17,7 +17,7 @@ import { IdentityService } from './IdentityService'
 import { BalanceNotifier } from './BalanceNotifier'
 import { BlockNumberNotifier } from './BlockNumberNotifier'
 
-export function createWeb3State(context: Plugin.Shared.SharedContext): EVM_Web3State {
+export function createWeb3State(context: Plugin.Shared.SharedUIContext): EVM_Web3State {
     const Provider_ = new Provider(context)
     const Settings_ = new Settings(context)
     const Transaction_ = new Transaction(context, {
