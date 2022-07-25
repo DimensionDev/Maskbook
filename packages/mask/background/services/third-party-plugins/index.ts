@@ -45,7 +45,10 @@ export async function openPluginPopup(
  * Check if the given URL has the permissions.
  */
 export async function hasPermission(baseURL: string, permissions: ThirdPartyPluginPermission[]): Promise<boolean> {
-    return permissions.every((p) => hasPermissionInternal(baseURL, p))
+    for (const permission of permissions) {
+        if (!(await hasPermissionInternal(baseURL, permission))) return false
+    }
+    return true
 }
 
 /**
@@ -64,11 +67,22 @@ export async function requestPermission(baseURL: string, permissions: ThirdParty
  * Notice: In this demo implementation, all permissions are stored in the sessionStorage and will lost after the plugin refresh.
  */
 export async function grantPermission(baseURL: string, permissions: ThirdPartyPluginPermission[]) {
-    for (const permission of permissions)
-        sessionStorage.setItem(`plugin:${ThirdPartyPluginPermission[permission]}:${baseURL}`, '1')
+    for (const permission of permissions) {
+        const key = `plugin:${ThirdPartyPluginPermission[permission]}:${baseURL}`
+        if (process.env.manifest === '2') {
+            sessionStorage.setItem(key, '1')
+        } else {
+            await browser.storage.session.set({ [key]: true })
+        }
+    }
 }
 
 /** @internal Do not export */
-function hasPermissionInternal(baseURL: string, permission: ThirdPartyPluginPermission) {
-    return !!sessionStorage.getItem(`plugin:${ThirdPartyPluginPermission[permission]}:${baseURL}`)
+async function hasPermissionInternal(baseURL: string, permission: ThirdPartyPluginPermission) {
+    const key = `plugin:${ThirdPartyPluginPermission[permission]}:${baseURL}`
+    if (process.env.manifest === '2') {
+        return !!sessionStorage.getItem(key)
+    } else {
+        return !!(await browser.storage.session.get(key))[key]
+    }
 }
