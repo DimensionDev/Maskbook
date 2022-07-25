@@ -88,7 +88,7 @@ export const MaskAlert = memo(({ description, type = 'info' }: MaskAlertProps) =
                         color="inherit"
                         size="small"
                         onClick={useCallback(() => setOpenAlert(false), [])}>
-                        <CloseIcon fontSize="inherit" />
+                        <CloseIcon />
                     </IconButton>
                 }>
                 {description}

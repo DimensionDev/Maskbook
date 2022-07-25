@@ -15,7 +15,6 @@ import { isAbsolute, join } from 'path'
 import { readFileSync } from 'fs'
 import { nonNullable, EntryDescription, normalizeEntryDescription, joinEntryItem } from './utils'
 import { BuildFlags, normalizeBuildFlags, computedBuildFlags } from './flags'
-import ResolveTypeScriptPlugin from 'resolve-typescript-plugin'
 
 import './clean-hmr'
 
@@ -53,7 +52,10 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
             })(),
         },
         resolve: {
-            plugins: [new ResolveTypeScriptPlugin()],
+            extensionAlias: {
+                '.js': ['.tsx', '.ts', '.js'],
+                '.mjs': ['.mts', '.mjs'],
+            },
             extensions: ['.js', '.ts', '.tsx'],
             alias: (() => {
                 const alias = {

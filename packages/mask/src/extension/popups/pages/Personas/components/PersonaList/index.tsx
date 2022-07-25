@@ -49,15 +49,8 @@ const useStyles = makeStyles()({
         wordBreak: 'break-all',
     },
     trashIcon: {
-        fontSize: 12,
         marginLeft: 6,
         cursor: 'pointer',
-        width: 12,
-        height: 12,
-    },
-    tick: {
-        fill: 'none',
-        fontSize: 18,
     },
     edit: {
         color: '#1C68F3',
@@ -173,6 +166,7 @@ const PersonaListItem = memo<PersonaListItemProps>(
                         {formatPersonaFingerprint(identifier.rawPublicKey ?? '', 10)}
                         <CopyIconButton className={classes.copy} text={identifier.rawPublicKey} />
                         <Trash2
+                            size={12}
                             className={classes.trashIcon}
                             onClick={(e) => {
                                 e.stopPropagation()
@@ -181,7 +175,7 @@ const PersonaListItem = memo<PersonaListItemProps>(
                         />
                     </Typography>
                 </div>
-                {isCurrent ? <TickIcon className={classes.tick} /> : null}
+                {isCurrent ? <TickIcon size={18} /> : null}
             </ListItemButton>
         ))
 

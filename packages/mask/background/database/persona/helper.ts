@@ -49,7 +49,7 @@ export async function decryptByLocalKey(
     authorHint: ProfileIdentifier | null,
     data: Uint8Array,
     iv: Uint8Array,
-): Promise<Uint8Array> {
+): Promise<ArrayBuffer> {
     const candidateKeys: AESJsonWebKey[] = []
 
     if (authorHint) {
@@ -62,11 +62,11 @@ export async function decryptByLocalKey(
 
     let check = () => {}
     return Promise.any(
-        candidateKeys.map(async (key): Promise<Uint8Array> => {
+        candidateKeys.map(async (key): Promise<ArrayBuffer> => {
             const k = await crypto.subtle.importKey('jwk', key, { name: 'AES-GCM', length: 256 }, false, ['decrypt'])
             check()
 
-            const result: Uint8Array = await crypto.subtle.decrypt({ iv, name: 'AES-GCM' }, k, data)
+            const result = await crypto.subtle.decrypt({ iv, name: 'AES-GCM' }, k, data)
             check = abort
             return result
         }),

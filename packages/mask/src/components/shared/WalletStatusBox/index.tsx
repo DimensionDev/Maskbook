@@ -100,7 +100,7 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, { content
         marginRight: theme.spacing(0.5),
     },
     copyIcon: {
-        fill: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor.dark,
+        color: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor.dark,
     },
     linkIcon: {
         color: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor?.dark,

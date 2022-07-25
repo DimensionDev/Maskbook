@@ -94,7 +94,7 @@ class Connection implements BaseConnection {
         address: string,
         schema?: SchemaType,
         initial?: FlowConnectionOptions,
-    ): Promise<NonFungibleTokenCollection<ChainId>> {
+    ): Promise<NonFungibleTokenCollection<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
     async getBlock(no: number, initial?: FlowConnectionOptions): Promise<BlockObject | null> {

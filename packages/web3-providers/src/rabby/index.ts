@@ -1,18 +1,17 @@
+import urlcat from 'urlcat'
+import { omit } from 'lodash-unified'
 import { ChainId, chainResolver, SchemaType } from '@masknet/web3-shared-evm'
 import {
     isSameAddress,
     NonFungibleContractSpenderAuthorization,
     FungibleTokenSpenderAuthorization,
 } from '@masknet/web3-shared-base'
-import urlcat from 'urlcat'
-import { omit } from 'lodash-unified'
+import type { AuthorizationAPI } from '../types'
 import { getAllMaskDappContractInfo, resolveNetworkOnRabby } from './helpers'
-import type { RabbyTokenAPI } from '../types'
 import { NON_FUNGIBLE_TOKEN_API_URL, FUNGIBLE_TOKEN_API_URL } from './constants'
+import type { NFTInfo, RawTokenInfo, TokenSpender } from './types'
 
-export * from './constants'
-
-export class RabbyAPI implements RabbyTokenAPI.Provider<ChainId> {
+export class RabbyAPI implements AuthorizationAPI.Provider<ChainId> {
     async getApprovedNonFungibleContracts(chainId: ChainId, account: string) {
         const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'nft')
         const networkType = chainResolver.chainNetworkType(chainId)
@@ -21,7 +20,7 @@ export class RabbyAPI implements RabbyTokenAPI.Provider<ChainId> {
         const response = await fetch(
             urlcat(NON_FUNGIBLE_TOKEN_API_URL, { id: account, chain_id: resolveNetworkOnRabby(networkType) }),
         )
-        const rawData: { contracts: RabbyTokenAPI.NFTInfo[] } = await response.json()
+        const rawData: { contracts: NFTInfo[] } = await response.json()
 
         return rawData.contracts
             .filter((x) => x.amount !== '0' && x.is_erc721)
@@ -72,10 +71,10 @@ export class RabbyAPI implements RabbyTokenAPI.Provider<ChainId> {
             urlcat(FUNGIBLE_TOKEN_API_URL, { id: account, chain_id: resolveNetworkOnRabby(networkType) }),
         )
 
-        const rawData: RabbyTokenAPI.RawTokenInfo[] = await response.json()
+        const rawData: RawTokenInfo[] = await response.json()
 
         return rawData
-            .reduce<RabbyTokenAPI.TokenSpender[]>((acc, cur) => {
+            .reduce<TokenSpender[]>((acc, cur) => {
                 const tokenInfo = omit({ ...cur, address: cur.id, logoURL: cur.logo_url }, ['spenders'])
                 return acc.concat(
                     cur.spenders.map((rawSpender) => {

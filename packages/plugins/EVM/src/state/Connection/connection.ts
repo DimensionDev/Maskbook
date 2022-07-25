@@ -517,7 +517,7 @@ class Connection implements EVM_Connection {
         address: string,
         schema?: SchemaType,
         initial?: EVM_Web3ConnectionOptions,
-    ): Promise<NonFungibleTokenCollection<ChainId>> {
+    ): Promise<NonFungibleTokenCollection<ChainId, SchemaType>> {
         const options = this.getOptions(initial)
         const actualSchema = schema ?? (await this.getTokenSchema(address, options))
 

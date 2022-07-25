@@ -41,7 +41,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     settingIcon: {
         cursor: 'pointer',
-        fill: theme.palette.maskColor.main,
+        color: theme.palette.maskColor.main,
         margin: '0 6px',
     },
 }))

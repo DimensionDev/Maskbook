@@ -2,9 +2,7 @@ import { memo, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { openWindow } from '@masknet/shared-base-ui'
-import { useAccount } from '@masknet/plugin-infra/web3'
 import { Services } from '../../../API'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { PersonaContext } from '../../../pages/Personas/hooks/usePersonaContext'
 import { DashboardRoutes, EnhanceableSite } from '@masknet/shared-base'
 import { PluginId } from '@masknet/plugin-infra'
@@ -22,7 +20,6 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     img: {
-        fill: 'none',
         width: 250,
         height: 140,
         cursor: 'pointer',
@@ -32,10 +29,8 @@ const useStyles = makeStyles()((theme) => ({
 export const FeaturePromotions = memo(() => {
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     const { currentPersona, connectPersona } = PersonaContext.useContainer()
-    // const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
 
     const isConnectedTwitter = useMemo(() => {
         if (!currentPersona) return false
