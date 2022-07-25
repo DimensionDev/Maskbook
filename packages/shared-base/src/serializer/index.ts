@@ -38,16 +38,10 @@ function setup() {
 export const serializer: Serialization = {
     async serialization(from: unknown) {
         if (!typeson) setup()
-        const result = await typeson!.encapsulate(from)
-        if (typeof result === 'object' && result !== null && '$' in result && result.$ instanceof Promise) {
-            return Promise.resolve(result.$).then((value) => {
-                value.$types = result.$types
-                return value
-            })
-        } else return result
+        return typeson!.encapsulate(from)
     },
     // cspell:disable-next-line
-    deserialization(to: string) {
+    deserialization(to: any) {
         if (!typeson) setup()
         return typeson!.revive(to)
     },
@@ -85,17 +79,20 @@ function addClass(name: string, constructor: any) {
     typeson!.register({
         [name]: [
             (x) => x instanceof constructor,
-            // eslint-disable-next-line @typescript-eslint/no-loop-func
             (x: unknown) => {
-                const y = Object.assign({}, x)
-                Object.getOwnPropertySymbols(y).forEach((x) => Reflect.deleteProperty(y, x))
-                return typeson!.encapsulate(y)
+                return new TypesonPromise((resolve) => {
+                    const cloned = Object.assign({}, x)
+                    Object.getOwnPropertySymbols(cloned).forEach((x) => Reflect.deleteProperty(cloned, x))
+                    Promise.resolve(typeson!.encapsulate(cloned)).then(resolve)
+                })
             },
-            // eslint-disable-next-line @typescript-eslint/no-loop-func
-            (x: unknown) => {
-                const y = typeson!.revive(x)
-                Object.setPrototypeOf(y, constructor.prototype)
-                return y
+            (x: any) => {
+                return new TypesonPromise((resolve) => {
+                    Promise.resolve(typeson!.revive(x)).then((data) => {
+                        Object.setPrototypeOf(data, constructor.prototype)
+                        resolve(data)
+                    })
+                })
             },
         ],
     })
