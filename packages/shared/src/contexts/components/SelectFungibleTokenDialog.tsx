@@ -17,7 +17,7 @@ interface StyleProps {
 const useStyles = makeStyles<StyleProps>()((theme, { compact, disablePaddingTop }) => ({
     content: {
         ...(compact ? { minWidth: 552 } : {}),
-        padding: 0,
+        padding: theme.spacing(3),
         display: 'flex',
         flexDirection: 'column',
         overflow: 'auto',

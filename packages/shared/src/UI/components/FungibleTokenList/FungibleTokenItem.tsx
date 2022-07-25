@@ -18,7 +18,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     list: {
         maxHeight: '100%',
-        padding: theme.spacing(1.5),
+        padding: theme.spacing(2),
         borderRadius: theme.spacing(1),
     },
     text: {
