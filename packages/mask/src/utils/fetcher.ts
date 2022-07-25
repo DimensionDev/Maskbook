@@ -1,5 +1,4 @@
 import Services from '../extension/service'
-/// <reference lib="@masknet/global-types/firefox" />
 
 const { fetch: original_fetch } = globalThis
 export function contentFetch(input: RequestInfo, init?: RequestInit) {
