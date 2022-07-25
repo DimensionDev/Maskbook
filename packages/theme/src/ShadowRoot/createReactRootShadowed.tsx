@@ -1,8 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { noop } from 'lodash-unified'
-import type {} from 'react/next'
-import type {} from 'react-dom/next'
 import { ShadowRootStyleProvider } from './ShadowRootStyleProvider'
 import { PreventEventPropagationListContext } from './Contexts'
 
