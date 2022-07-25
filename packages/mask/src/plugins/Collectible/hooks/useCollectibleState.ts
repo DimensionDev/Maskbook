@@ -14,6 +14,8 @@ function useCollectibleState(token?: CollectibleToken) {
         chainId: ChainId.Mainnet,
     })
 
+    console.log(asset, 'asset')
+
     return {
         token,
         asset,

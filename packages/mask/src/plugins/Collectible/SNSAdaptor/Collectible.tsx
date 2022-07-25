@@ -151,7 +151,6 @@ export function Collectible(props: CollectibleProps) {
     // #region provider switcher
     const CollectibleProviderSwitcher = useSwitcher(provider, setProvider, supportedProvider, resolveSourceName, true)
     // #endregion
-
     if (!asset.value || !token)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
