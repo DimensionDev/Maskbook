@@ -184,7 +184,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     if (hidden) return null
 
-    if (!identity.identifier?.userId || loadingSocialAddressList || loadingPersonaList)
+    // loadingSocialAddress
+    if (!identity.identifier?.userId || loadingPersonaList)
         return (
             <div className={classes.root}>
                 <Box
