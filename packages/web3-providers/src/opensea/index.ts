@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js'
 import isAfter from 'date-fns/isAfter'
 import getUnixTime from 'date-fns/getUnixTime'
 import LRU, { Options as LRUOptions } from 'lru-cache'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     createPageable,
     CurrencyType,
@@ -20,6 +21,7 @@ import {
     createNextIndicator,
     NonFungibleAsset,
     formatBalance,
+    NonFungibleTokenStats,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, createNativeToken, createERC20Token } from '@masknet/web3-shared-evm'
 import type { NonFungibleTokenAPI, TrendingAPI } from '../types'
@@ -34,7 +36,6 @@ import type {
 } from './types'
 import { getOrderUSDPrice, toImage } from './utils'
 import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants'
-import { EMPTY_LIST } from '@masknet/shared-base'
 
 const cache = new LRU<string, any>({
     max: 50,
@@ -310,15 +311,18 @@ function createAssetOrder(chainId: ChainId, order: OpenSeaAssetOrder): NonFungib
                 .multipliedBy(order.payment_token_contract?.usd_price ?? 1)
                 .toFixed(2),
         },
-        paymentToken: order.payment_token_contract
-            ? createERC20Token(
-                  ChainId.Mainnet,
-                  order.payment_token_contract.address,
-                  order.payment_token_contract.name,
-                  order.payment_token_contract.symbol,
-                  order.payment_token_contract.decimals,
-                  order.payment_token_contract.image_url,
-              )
+        priceInToken: order.payment_token_contract
+            ? {
+                  amount: '0',
+                  token: createERC20Token(
+                      ChainId.Mainnet,
+                      order.payment_token_contract.address,
+                      order.payment_token_contract.name,
+                      order.payment_token_contract.symbol,
+                      order.payment_token_contract.decimals,
+                      order.payment_token_contract.image_url,
+                  ),
+              }
             : undefined,
     }
 }
@@ -449,7 +453,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         )
         if (!response) return createPageable(EMPTY_LIST, createIndicator(indicator))
 
-        const collections: Array<NonFungibleTokenCollection<ChainId>> =
+        const collections: Array<NonFungibleTokenCollection<ChainId, SchemaType>> =
             response
                 ?.map((x) => ({
                     chainId,
@@ -457,7 +461,10 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                     slug: x.slug,
                     address: x.primary_asset_contracts?.[0]?.address,
                     symbol: x.primary_asset_contracts?.[0]?.symbol,
-                    schema_name: x.primary_asset_contracts?.[0]?.schema_name,
+                    schema:
+                        x.primary_asset_contracts?.[0]?.schema_name === 'ERC1155'
+                            ? SchemaType.ERC1155
+                            : SchemaType.ERC721,
                     description: x.description,
                     iconURL: x.image_url,
                     balance: x.owned_asset_count,
@@ -473,10 +480,10 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         )
     }
 
-    async getCollectionStats(
+    async getStats(
         address: string,
         { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
-    ): Promise<OpenSeaCollectionStats | undefined> {
+    ): Promise<NonFungibleTokenStats | undefined> {
         const assetContract = await fetchFromOpenSea<OpenSeaAssetContract>(
             urlcat('/api/v1/asset_contract/:address', { address }),
             chainId,
@@ -492,7 +499,14 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             }),
             chainId,
         )
-        return response?.stats
+        const stats = response?.stats
+        if (!stats) return
+
+        return {
+            volume24h: stats.one_day_volume,
+            floorPrice: stats.floor_price,
+            count24h: stats.one_day_sales,
+        }
     }
 
     async getCoinTrending(chainId: ChainId, id: string, currency: TrendingAPI.Currency): Promise<TrendingAPI.Trending> {

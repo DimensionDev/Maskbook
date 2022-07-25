@@ -1,13 +1,13 @@
 import { useMemo } from 'react'
+import BigNumber from 'bignumber.js'
 import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import BigNumber from 'bignumber.js'
+import { CurrencyType, isOne, isZero, OrderSide, SourceType } from '@masknet/web3-shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { useI18N } from '../../../utils'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleTab } from './CollectibleTab'
 import { OrderRow } from './OrderRow'
-import { CurrencyType, isOne, isZero, OrderSide, SourceType } from '@masknet/web3-shared-base'
-import { EMPTY_LIST } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -47,7 +47,7 @@ export function ListingTab() {
             return (
                 orders.some(
                     (item) =>
-                        (item.paymentToken?.symbol !== 'WETH' && item.paymentToken?.symbol !== 'ETH') ||
+                        (item.priceInToken?.token?.symbol !== 'WETH' && item.priceInToken?.token?.symbol !== 'ETH') ||
                         (item.quantity && !isOne(item.quantity)),
                 ) && orders.filter((item) => isZero(item.expiredAt ?? 0)).length === 0
             )

@@ -28,6 +28,9 @@ import type {
     TokenType,
     NonFungibleContractSpenderAuthorization,
     FungibleTokenSpenderAuthorization,
+    NonFungibleTokenRarity,
+    FungibleTokenStats,
+    NonFungibleTokenStats,
 } from '@masknet/web3-shared-base'
 import type { DataProvider } from '@masknet/public-api'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -249,10 +252,13 @@ export namespace GasOptionAPI {
 
 export namespace FungibleTokenAPI {
     export interface Provider<ChainId, SchemaType, Indicator = HubIndicator> {
+        /** Get fungible assets. */
         getAssets(
             address: string,
             options?: HubOptions<ChainId>,
         ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>, Indicator>>
+        /** Get fungible token stats. */
+        getStats?: (address: string, options?: HubOptions<ChainId>) => Promise<FungibleTokenStats | undefined>
     }
 }
 
@@ -260,6 +266,12 @@ export namespace NonFungibleTokenAPI {
     export interface Provider<ChainId, SchemaType, Indicator = HubIndicator> {
         /** Get balance of a fungible token owned by the given account. */
         getBalance?: (account: string, options?: HubOptions<ChainId, Indicator>) => Promise<number>
+        /** Get a non-fungible rarity. */
+        getRarity?: (
+            address: string,
+            tokenId: string,
+            options?: HubOptions<ChainId, Indicator>,
+        ) => Promise<NonFungibleTokenRarity | undefined>
         /** Get a non-fungible contract. */
         getContract?: (
             address: string,
@@ -297,6 +309,11 @@ export namespace NonFungibleTokenAPI {
             account: string,
             options?: HubOptions<ChainId, Indicator>,
         ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, Indicator>>
+        /** Get non-fungible collection stats */
+        getStats?: (
+            address: string,
+            options?: HubOptions<ChainId, Indicator>,
+        ) => Promise<NonFungibleTokenStats | undefined>
         /** Get events of a non-fungible token. */
         getEvents?: (
             address: string,
@@ -326,7 +343,7 @@ export namespace NonFungibleTokenAPI {
         getCollections?: (
             account: string,
             options?: HubOptions<ChainId, Indicator>,
-        ) => Promise<Pageable<NonFungibleTokenCollection<ChainId>, Indicator>>
+        ) => Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>, Indicator>>
 
         /** Place a bid on a token. */
         createBuyOrder?: (/** TODO: add parameters */) => Promise<void>
