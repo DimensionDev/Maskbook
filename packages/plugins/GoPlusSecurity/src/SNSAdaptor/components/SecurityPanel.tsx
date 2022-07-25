@@ -13,6 +13,7 @@ import type { TokenAPI } from '@masknet/web3-providers'
 import { DefaultTokenIcon, LinkOutIcon } from '@masknet/icons'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { formatCurrency, FungibleToken } from '@masknet/web3-shared-base'
+import type { SecurityMessage } from '../rules'
 
 interface TokenCardProps {
     tokenSecurity: TokenSecurity
@@ -209,7 +210,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                 </Stack>
                 <Stack className={classes.detectionCollection} sx={{ maxHeight: LIST_HEIGHT.max, overflowY: 'auto' }}>
                     {makeMessageList.map((x, i) => (
-                        <RiskCard tokenSecurity={tokenSecurity} info={x} key={i} />
+                        <RiskCard tokenSecurity={tokenSecurity} info={x as unknown as SecurityMessage} key={i} />
                     ))}
                     {(!makeMessageList.length || securityMessageLevel === SecurityMessageLevel.Safe) && (
                         <RiskCardUI
