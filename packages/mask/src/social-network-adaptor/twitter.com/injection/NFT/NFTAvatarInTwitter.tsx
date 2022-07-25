@@ -10,7 +10,6 @@ import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
 import { useAsync, useLocation, useUpdateEffect, useWindowSize } from 'react-use'
 import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/RainbowBox'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
-import { openWindow } from '@masknet/shared-base-ui'
 import { usePersonaNFTAvatar } from '../../../../plugins/Avatar/hooks/usePersonaNFTAvatar'
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
@@ -230,8 +229,8 @@ function NFTAvatarInTwitter() {
         if (!_avatar || !linkParentDom || !showAvatar) return
 
         const handler = () => {
-            if (!nftInfo?.permalink) return
-            openWindow(nftInfo?.permalink)
+            console.log(nftInfo, 'sss')
+            return
         }
 
         linkParentDom.addEventListener('click', handler)
