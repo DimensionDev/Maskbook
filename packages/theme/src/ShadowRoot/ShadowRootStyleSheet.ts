@@ -21,7 +21,9 @@ export class StyleSheet {
         this.key = options.key
         if (options.container instanceof ShadowRoot) {
             this.implementation =
-                constructableStyleSheetEnabled && 'adoptedStyleSheets' in Document.prototype
+                constructableStyleSheetEnabled &&
+                'adoptedStyleSheets' in Document.prototype &&
+                !navigator.userAgent.toLowerCase().includes('firefox')
                     ? new ConstructableStyleSheet()
                     : new SynchronizeStyleSheet()
             this.addContainer(options.container)
