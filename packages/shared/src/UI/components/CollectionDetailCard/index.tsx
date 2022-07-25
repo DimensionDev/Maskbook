@@ -158,7 +158,7 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
             }
             if (url.includes('polygonscan.com/tx')) {
                 return (
-                    <Link href={url} target="_blank">
+                    <Link href={url} target="_blank" marginRight="12px">
                         <PolygonScan size={24} />
                     </Link>
                 )

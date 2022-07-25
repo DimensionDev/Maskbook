@@ -189,6 +189,7 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
                         classes={{ list: classes.list, collectionWrap: classes.imageIconWrapper }}
                         size={126}
                         collections={collections}
+                        showNetwork
                     />
                     {loadIcon}
                 </Box>
