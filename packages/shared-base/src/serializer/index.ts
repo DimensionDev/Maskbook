@@ -15,7 +15,7 @@ let typeson: Typeson | undefined
 function setup() {
     const { default: BigNumber } = BN
     // https://github.com/dfahlander/typeson-registry/issues/27
-    typeson = new Typeson({ cyclic: false })
+    typeson = new Typeson({ cyclic: false, sync: false })
     typeson.register(builtin)
     typeson.register(specialNumbers)
     typeson.register([blob, file, filelist, imagebitmap])
@@ -36,9 +36,15 @@ function setup() {
     for (const a of pendingRegister) a()
 }
 export const serializer: Serialization = {
-    serialization(from: unknown) {
+    async serialization(from: unknown) {
         if (!typeson) setup()
-        return typeson!.encapsulate(from)
+        const result = await typeson!.encapsulate(from)
+        if (typeof result === 'object' && result !== null && '$' in result && result.$ instanceof Promise) {
+            return Promise.resolve(result.$).then((value) => {
+                value.$types = result.$types
+                return value
+            })
+        } else return result
     },
     // cspell:disable-next-line
     deserialization(to: string) {

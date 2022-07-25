@@ -16,7 +16,7 @@ declare module 'typeson' {
             throwOnBadSyncType?: boolean
         })
         register(register: unknown[] | Record<string, CustomRegister<any, any> | NewableFunction>): Typeson
-        encapsulate(data: unknown): object
+        encapsulate(data: unknown): any
         revive<T>(data: unknown): T
         stringify(...args: Parameters<JSON['stringify']>): Promise<string> | string
         stringifySync(...args: Parameters<JSON['stringify']>): string

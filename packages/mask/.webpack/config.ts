@@ -293,7 +293,9 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         )
     }
     for (const entry in entries) {
-        withReactDevTools(entries[entry])
+        if (entry !== 'background') {
+            withReactDevTools(entries[entry])
+        }
         with_iOSPatch(entries[entry])
     }
 
