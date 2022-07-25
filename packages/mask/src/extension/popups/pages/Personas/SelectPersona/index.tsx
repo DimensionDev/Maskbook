@@ -34,17 +34,10 @@ const useStyles = makeStyles()({
         fontSize: 14,
         lineHeight: '20px',
     },
-    editIcon: {
-        fontSize: 16,
-        stroke: '#1C68F3',
-        fill: 'none',
-        marginLeft: 10,
-        cursor: 'pointer',
-    },
     secondaryButton: {
         backgroundColor: '#F7F9FA',
         color: '#1C68F3',
-        '&: hover': {
+        '&:hover': {
             backgroundColor: '#dee0e1',
         },
     },

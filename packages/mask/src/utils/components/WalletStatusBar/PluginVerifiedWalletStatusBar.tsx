@@ -17,7 +17,7 @@ import {
     useDefaultChainId,
     useRecentTransactions,
 } from '@masknet/plugin-infra/web3'
-import { WalletConnect, WalletSetting } from '@masknet/icons'
+import { ConnectWallet, WalletSetting } from '@masknet/icons'
 import type { WalletDescriptionProps } from './WalletDescription'
 import { first, omit } from 'lodash-unified'
 import { useWalletName } from './hooks/useWalletName'
@@ -178,7 +178,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
             return (
                 <Box className={cx(classes.root, className)}>
                     <Button fullWidth onClick={openSelectProviderDialog}>
-                        <WalletConnect className={classes.connection} /> {t('plugin_wallet_connect_a_wallet')}
+                        <ConnectWallet className={classes.connection} /> {t('plugin_wallet_connect_a_wallet')}
                     </Button>
                 </Box>
             )
