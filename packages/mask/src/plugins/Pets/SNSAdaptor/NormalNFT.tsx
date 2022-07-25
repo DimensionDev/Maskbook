@@ -7,6 +7,7 @@ import Drag from './Drag'
 import type { ShowMeta } from '../types'
 import { CloseIcon } from '../constants'
 import RightMenu from './RightMenu'
+import { Image } from '../../../components/shared/Image'
 
 const useStyles = makeStyles()(() => ({
     imgContent: {
@@ -95,8 +96,8 @@ export function NormalNFT(props: NormalNFTProps) {
             ) : null}
             <Box className={classes.imgContent} onContextMenu={handleMenuShow}>
                 <div className={classes.imgBox}>
-                    <img
-                        src={showMeta?.image}
+                    <Image
+                        src={showMeta?.image ?? ''}
                         style={{
                             objectFit: 'contain',
                             maxWidth: '100%',

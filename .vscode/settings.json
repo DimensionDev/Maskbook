@@ -12,7 +12,7 @@
             "url": "http://json.schemastore.org/tsconfig"
         },
         {
-            "fileMatch": ["/packages/mask/src/manifest.json"],
+            "fileMatch": ["/packages/mask/src/manifest.json", "/packages/mask/src/manifest-v3.json"],
             "url": "http://json.schemastore.org/chrome-manifest"
         },
         {

@@ -69,11 +69,7 @@ const useStyles = makeStyles()((theme) => ({
         strokeLinecap: 'round',
     },
     text: {
-        transform: 'translate(1px, -5px) ',
-        '@supports (translate: 0)': {
-            transform: 'none',
-            translate: '1px, -5px',
-        },
+        transform: process.env.engine === 'firefox' ? 'translate(1px, -1px)' : 'translate(1px, -5px) ',
     },
     price: {
         transform: 'translate(0, -5px) ',

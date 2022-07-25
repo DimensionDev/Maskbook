@@ -19,6 +19,7 @@
     "core-js-builder": "3.23.3",
     "regenerator-runtime": "^0.13.9",
     "rollup": "^2.75.6",
-    "rollup-plugin-terser": "^7.0.2"
+    "rollup-plugin-terser": "^7.0.2",
+    "web-ext-types": "^3.1.0"
   }
 }
