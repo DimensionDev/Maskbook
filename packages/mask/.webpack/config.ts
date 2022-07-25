@@ -281,7 +281,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         }
         plugins.push(new WebExtensionPlugin({ background: { entry: 'background', manifest: 3 } }))
     } else {
-        entries.background = normalizeEntryDescription(join(__dirname, '../src/background-service.ts'))
+        entries.background = normalizeEntryDescription(join(__dirname, '../background/mv2-entry.ts'))
         plugins.push(new WebExtensionPlugin({ background: { entry: 'background', manifest: 2 } }))
         plugins.push(
             addHTMLEntry({

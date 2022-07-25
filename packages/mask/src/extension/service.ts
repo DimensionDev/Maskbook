@@ -10,10 +10,20 @@ import {
     AsyncVersionOf,
     AsyncGeneratorVersionOf,
 } from 'async-call-rpc/full'
-import { isEnvironment, Environment, WebExtensionMessage, MessageTarget } from '@dimensiondev/holoflows-kit'
-import { serializer, getLocalImplementation } from '@masknet/shared-base'
+import { WebExtensionMessage, MessageTarget, assertNotEnvironment, Environment } from '@dimensiondev/holoflows-kit'
+import { serializer } from '@masknet/shared-base'
+import type {
+    BackupService,
+    CryptoService,
+    GeneratorServices as GeneratorServicesType,
+    HelperService,
+    IdentityService,
+    SettingsService,
+    SocialNetworkService,
+    ThirdPartyPluginService,
+} from '../../background/services/types'
+assertNotEnvironment(Environment.ManifestBackground)
 
-const SERVICE_HMR_EVENT = 'service-hmr'
 const message = new WebExtensionMessage<Record<string, any>>({ domain: 'services' })
 const log: AsyncCallOptions['log'] = {
     type: 'pretty',
@@ -21,72 +31,34 @@ const log: AsyncCallOptions['log'] = {
 }
 
 export const Services = {
-    Crypto: add(() => import('../../background/services/crypto'), 'Crypto'),
-    Identity: add(() => import('../../background/services/identity'), 'Identity'),
-    Backup: add(() => import('./background-script/BackupService'), 'Backup'),
-    Helper: add(() => import('../../background/services/helper'), 'Helper'),
-    SocialNetwork: add(() => import('./background-script/SocialNetworkService'), 'SocialNetwork'),
-    Settings: add(() => import('./background-script/SettingsService'), 'Settings'),
-    ThirdPartyPlugin: add(() => import('./background-script/ThirdPartyPlugin'), 'ThirdPartyPlugin'),
+    Crypto: add<CryptoService>('Crypto'),
+    Identity: add<IdentityService>('Identity'),
+    Backup: add<BackupService>('Backup'),
+    Helper: add<HelperService>('Helper'),
+    SocialNetwork: add<SocialNetworkService>('SocialNetwork'),
+    Settings: add<SettingsService>('Settings'),
+    ThirdPartyPlugin: add<ThirdPartyPluginService>('ThirdPartyPlugin'),
 }
 export default Services
-export const ServicesWithProgress: AsyncGeneratorVersionOf<typeof import('./service-generator')> = add(
-    () => import('./service-generator'),
-    'ServicesWithProgress',
-    true,
-) as any
-
-if (process.env.manifest === '2' && import.meta.webpackHot && isEnvironment(Environment.ManifestBackground)) {
-    import.meta.webpackHot.accept(
-        [
-            '../../background/services/crypto',
-            '../../background/services/identity',
-            './background-script/BackupService',
-            '../../background/services/helper',
-            './background-script/SettingsService',
-            './background-script/ThirdPartyPlugin',
-            './background-script/SocialNetworkService',
-            './service-generator',
-        ],
-        () => document.dispatchEvent(new Event(SERVICE_HMR_EVENT)),
-    )
-}
+export const GeneratorServices: AsyncGeneratorVersionOf<GeneratorServicesType> = add('GeneratorServices', true) as any
 
 /**
- * Helper to add a new service to Services.* / ServicesWithProgress.* namespace.
- * @param impl Implementation of the service. Should be things like () => import("./background-script/CryptoService")
+ * Helper to add a new service to Services.* / GeneratorServices.* namespace.
  * @param key Name of the service. Used for better debugging.
  * @param generator Is the service is a generator?
  */
-function add<T extends object>(impl: () => Promise<T>, key: string, generator = false): AsyncVersionOf<T> {
+function add<T extends object>(key: string, generator = false): AsyncVersionOf<T> {
     const channel: EventBasedChannel | CallbackBasedChannel = message.events[key].bind(MessageTarget.Broadcast)
 
-    const isBackground = isEnvironment(Environment.ManifestBackground)
     const RPC = (generator ? AsyncGeneratorCall : AsyncCall) as any as typeof AsyncCall
-    const load = () => getLocalImplementation<T>(isBackground, `Services.${key}`, impl, channel)
-    const localImplementation = load()
-    // No HMR support in MV3
-    process.env.manifest === '2' &&
-        isBackground &&
-        import.meta.webpackHot &&
-        document.addEventListener(SERVICE_HMR_EVENT, load)
-    const service = RPC<T>(localImplementation, {
+    const service = RPC<T>(null, {
         key,
         serializer,
         log,
         channel,
-        preferLocalImplementation: isBackground,
-        strict: isBackground,
+        strict: false,
         thenable: false,
     })
-    if (isBackground) {
-        localImplementation.then((val) => {
-            Reflect.set(globalThis, key + 'Service', val)
-            if (isBackground) Reflect.set(Services, key, val)
-        })
-    } else {
-        Reflect.set(globalThis, key + 'Service', service)
-        if (isBackground) Reflect.set(Services, key, service)
-    }
+    Reflect.set(globalThis, key + 'Service', service)
     return service
 }

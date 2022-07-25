@@ -171,7 +171,7 @@ const PersonaListItem = memo<PersonaListItemProps>(
                     </Typography>
                     <Typography className={classes.identifier}>
                         {formatPersonaFingerprint(identifier.rawPublicKey ?? '', 10)}
-                        <CopyIconButton className={classes.copy} text={identifier.toText()} />
+                        <CopyIconButton className={classes.copy} text={identifier.rawPublicKey} />
                         <Trash2
                             className={classes.trashIcon}
                             onClick={(e) => {

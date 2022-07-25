@@ -1,14 +1,15 @@
+import { status } from '../../setup.ui'
 import { startPluginDashboard } from '@masknet/plugin-infra/dashboard'
 import { createNormalReactRoot, hydrateNormalReactRoot } from '../../utils'
-import { createPluginHost, createSharedContext } from '../../plugin-infra/host'
+import { createPluginHost, createPartialSharedUIContext } from '../../../shared/plugin-infra/host'
 import { Services } from '../service'
-import { status } from '../../setup.ui'
 import Popups from './UI'
 import createCache from '@emotion/cache'
 import { CacheProvider } from '@emotion/react'
 import { TssCacheProvider } from '@masknet/theme'
-import { currentPersonaIdentifier } from '../../settings/settings'
+import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings'
 import { setInitialPersonaInformation } from './pages/Personas/hooks/PersonaContextInitialData'
+import { RestPartOfPluginUIContextShared } from '../../utils/plugin-context-shared-ui'
 
 if (location.hash === '#/personas') {
     async function hydrate() {
@@ -60,5 +61,14 @@ if (location.hash === '#/personas') {
 function startPluginHost() {
     // TODO: Should only load plugins when the page is plugin-aware.
 
-    startPluginDashboard(createPluginHost(undefined, createSharedContext))
+    startPluginDashboard(
+        createPluginHost(
+            undefined,
+            (id, signal) => ({
+                ...createPartialSharedUIContext(id, signal),
+                ...RestPartOfPluginUIContextShared,
+            }),
+            Services.Settings.getPluginMinimalModeEnabled,
+        ),
+    )
 }

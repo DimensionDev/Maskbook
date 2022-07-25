@@ -1,17 +1,15 @@
 import { ECKeyIdentifier, PersonaIdentifier } from '@masknet/shared-base'
 import { head } from 'lodash-unified'
-import type { InternalSettings } from '../../settings/createSettings'
+import type { InternalSettings } from '../../../shared/legacy-settings/createSettings'
 import {
     appearanceSettings,
     currentPersonaIdentifier,
     languageSettings,
     currentPluginMinimalModeNOTEnabled,
     pluginIDSettings,
-} from '../../settings/settings'
-import { MaskMessages } from '../../../shared'
+} from '../../../shared/legacy-settings/settings'
+import { MaskMessages } from '../../../shared/messages'
 import { queryPersonasDB } from '../../../background/database/persona/db'
-
-export * from '../../../background/services/settings'
 
 function create<T>(settings: InternalSettings<T>) {
     async function get() {

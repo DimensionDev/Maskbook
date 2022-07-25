@@ -13,7 +13,7 @@ import {
 } from './selector'
 import { collectNodeText } from '../../../utils'
 import { isMobileFacebook } from './isMobile'
-import { bioDescription, personalHomepage } from '../../../settings/settings'
+import { bioDescription, personalHomepage } from '../../../../shared/legacy-settings/settings'
 
 export const getNickName = () => {
     const node = isMobileFacebook ? searchNickNameSelectorOnMobile().evaluate() : searchNickNameSelector().evaluate()

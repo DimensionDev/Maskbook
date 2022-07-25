@@ -1,5 +1,5 @@
 import { unreachable } from '@dimensiondev/kit'
-import { createGlobalSettings, createInternalSettings } from '../../settings/createSettings'
+import { createGlobalSettings, createInternalSettings } from '../../../shared/legacy-settings/createSettings'
 import { PLUGIN_ID, SLIPPAGE_DEFAULT } from './constants'
 import type { ZrxTradePool } from './types'
 import { DataProvider } from '@masknet/public-api'

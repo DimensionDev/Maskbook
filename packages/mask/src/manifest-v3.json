@@ -11,7 +11,13 @@
     "action": { "default_popup": "popups.html" },
     "homepage_url": "https://mask.io",
     "description": "The portal to the new & open Internet. Send encrypted message and decentralized Apps right on top of social networks.",
-    "web_accessible_resources": ["*.svg", "*.png", "*.css"],
+    "web_accessible_resources": [
+        {
+            "resources": ["js/*", "*.svg", "*.png", "*.css"],
+            "matches": ["<all_urls>"],
+            "use_dynamic_url": true
+        }
+    ],
     "content_security_policy": {
         "extension_pages": "script-src 'self'; object-src 'self';"
     }

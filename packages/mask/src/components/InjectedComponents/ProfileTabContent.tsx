@@ -9,8 +9,8 @@ import {
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
 import { useSocialAddressListAll, useAvailablePlugins } from '@masknet/plugin-infra/web3'
-import { ConcealableTabs } from '@masknet/shared'
-import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
+import { ConcealableTabs, SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID } from '@masknet/shared'
+import { EMPTY_LIST, EnhanceableSite, getSiteType, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, CircularProgress } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../social-network'
@@ -22,6 +22,8 @@ import { useNextIDBoundByPlatform } from '../DataSource/useNextID'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { NetworkPluginID, SocialAddressType, SocialAddress } from '@masknet/web3-shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
+
+const site = getSiteType()
 
 function getTabContent(tabId?: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
@@ -63,7 +65,10 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         personaList.sort((a, b) => sortPersonaBindings(a, b, identity.identifier?.userId?.toLowerCase() ?? '')),
     )
 
-    const isOwn = currentIdentity?.identifier?.userId?.toLowerCase() === identity?.identifier?.userId?.toLowerCase()
+    const isOwn =
+        site &&
+        SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID.includes(site as EnhanceableSite) &&
+        currentIdentity?.identifier?.userId?.toLowerCase() === identity?.identifier?.userId?.toLowerCase()
 
     const personaPublicKey = isOwn
         ? currentConnectedPersona?.identifier?.publicKeyAsHex

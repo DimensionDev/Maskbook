@@ -1,7 +1,7 @@
 import { notify } from 'async-call-rpc/full'
 import { MaskMessages } from '../../../shared'
 import { nativeAPI, hasNativeAPI } from '../../../shared/native-rpc'
-import { __deprecated__setStorage } from '../../services/helper/deprecated-storage'
+import { __deprecated__setStorage } from '../../utils/deprecated-storage'
 import { queryOwnedPersonaInformation } from '../../services/identity'
 
 export default function NotificationsToMobile(signal: AbortSignal) {

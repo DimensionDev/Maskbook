@@ -7,7 +7,6 @@ import { Mask, SquareBack, PopupCloseIcon } from '@masknet/icons'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { PageTitleContext } from '../../context'
 import { PopupRoutes } from '@masknet/shared-base'
-import Services from '../../../service'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -48,6 +47,7 @@ const useStyles = makeStyles()(() => ({
 
 interface NormalHeaderProps {
     onlyTitle?: boolean
+    onClose(): void
 }
 
 function canNavBack() {
@@ -56,7 +56,7 @@ function canNavBack() {
     } catch {}
     return false
 }
-export const NormalHeader = memo<NormalHeaderProps>(({ onlyTitle }) => {
+export const NormalHeader = memo<NormalHeaderProps>(({ onlyTitle, onClose }) => {
     const { classes } = useStyles()
     const navigate = useNavigate()
     const location = useLocation()
@@ -78,7 +78,7 @@ export const NormalHeader = memo<NormalHeaderProps>(({ onlyTitle }) => {
     if (showClose) {
         return (
             <Box className={classes.container} style={{ justifyContent: 'center' }}>
-                <PopupCloseIcon className={classes.close} onClick={() => Services.Helper.removePopupWindow()} />
+                <PopupCloseIcon className={classes.close} onClick={onClose} />
                 <Typography className={classes.title}>{title}</Typography>
             </Box>
         )

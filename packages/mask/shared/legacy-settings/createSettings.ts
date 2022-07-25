@@ -1,8 +1,8 @@
-import { ValueRef, isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import Services from '../extension/service'
-import { MaskMessages } from '../utils/messages'
+import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { defer } from '@dimensiondev/kit'
+import { MaskMessages } from '../messages'
 
+/** @deprecated */
 export type InternalSettings<T> = ValueRef<T> & {
     readonly key: string
     readonly ready: boolean
@@ -10,21 +10,25 @@ export type InternalSettings<T> = ValueRef<T> & {
     readonly resolve: (value: T) => void
     readonly reject: (e: Error) => void
 }
+
+/** @deprecated */
 export type ValueComparer<T> = (a: T, b: T) => boolean
 const defaultValueComparer = (a: any, b: any) => a === b
 
 const cached: Map<string, InternalSettings<any>> = new Map()
 const lastEventId: Map<string, number> = new Map()
 
-if (isEnvironment(Environment.ManifestBackground)) {
+export function setupLegacySettingsAtBackground(
+    __deprecated__getStorage: (key: string) => Promise<unknown>,
+    __deprecated__setStorage: (key: string, val: browser.storage.StorageValue) => Promise<void>,
+) {
     MaskMessages.events.createInternalSettingsChanged.on(async (payload) => {
         const { id, key, value, initial } = payload
 
-        const stored = await Services.Helper.__deprecated__getStorage(key)
-        if (!initial || (initial && typeof stored === 'undefined'))
-            await Services.Helper.__deprecated__setStorage(key, value)
+        const stored = await __deprecated__getStorage(key)
+        if (!initial || (initial && typeof stored === 'undefined')) await __deprecated__setStorage(key, value)
 
-        const updated = await Services.Helper.__deprecated__getStorage(key)
+        const updated = await __deprecated__getStorage(key)
         if (typeof updated === 'undefined') return
         MaskMessages.events.createInternalSettingsUpdated.sendToAll({
             id,
@@ -44,7 +48,7 @@ MaskMessages.events.createInternalSettingsUpdated.on(async (payload) => {
     settings.resolve(settings.value)
 })
 
-export function createComplexInternalSettings<T extends browser.storage.StorageValue>(
+function createComplexInternalSettings<T extends browser.storage.StorageValue>(
     key: string,
     value: T,
     comparer: ValueComparer<T>,
@@ -87,6 +91,7 @@ export function createComplexInternalSettings<T extends browser.storage.StorageV
     return settings
 }
 
+/** @deprecated */
 export function createInternalSettings(key: string, defaultValue: number): InternalSettings<number>
 export function createInternalSettings(key: string, defaultValue: string): InternalSettings<string>
 export function createInternalSettings(key: string, defaultValue: boolean): InternalSettings<boolean>
@@ -95,6 +100,10 @@ export function createInternalSettings(key: string, defaultValue: any): Internal
     return createComplexInternalSettings(key, defaultValue, defaultValueComparer)
 }
 
+/**
+ * @deprecated
+ * @internal
+ */
 export function createComplexGlobalSettings<T extends browser.storage.StorageValue>(
     key: string,
     value: T,
@@ -103,18 +112,29 @@ export function createComplexGlobalSettings<T extends browser.storage.StorageVal
     const settings = createComplexInternalSettings(`settings+${key}`, value, comparer)
     return settings
 }
+
+/** @deprecated */
 export function createGlobalSettings(key: string, defaultValue: number): InternalSettings<number>
+/** @deprecated */
 export function createGlobalSettings(key: string, defaultValue: string): InternalSettings<string>
+/** @deprecated */
 export function createGlobalSettings(key: string, defaultValue: boolean): InternalSettings<boolean>
+/** @deprecated */
 export function createGlobalSettings<T extends string | number>(key: string, defaultValue: T): InternalSettings<T>
+/** @deprecated */
 export function createGlobalSettings(key: string, defaultValue: any): InternalSettings<any> {
     return createComplexGlobalSettings(key, defaultValue, defaultValueComparer)
 }
 
+/** @deprecated */
 export interface NetworkSettings<T> {
     [networkKey: string]: ValueRef<T> & { ready: boolean; readyPromise: Promise<T> }
 }
 
+/**
+ * @deprecated
+ * @internal
+ */
 export function createComplexNetworkSettings<T extends browser.storage.StorageValue>(
     settingsKey: string,
     defaultValue: T,
@@ -142,10 +162,31 @@ export function createComplexNetworkSettings<T extends browser.storage.StorageVa
         },
     })
 }
+
+/**
+ * @deprecated
+ * @internal
+ */
 export function createNetworkSettings(key: string, defaultValue: number): NetworkSettings<number>
+/**
+ * @deprecated
+ * @internal
+ */
 export function createNetworkSettings(key: string, defaultValue: string): NetworkSettings<string>
+/**
+ * @deprecated
+ * @internal
+ */
 export function createNetworkSettings(key: string, defaultValue: boolean): NetworkSettings<boolean>
+/**
+ * @deprecated
+ * @internal
+ */
 export function createNetworkSettings<T extends string | number>(key: string, defaultValue: T): NetworkSettings<T>
+/**
+ * @deprecated
+ * @internal
+ */
 export function createNetworkSettings(key: string, defaultValue: any): NetworkSettings<any> {
     return createComplexNetworkSettings(key, defaultValue, defaultValueComparer)
 }
