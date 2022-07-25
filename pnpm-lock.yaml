@@ -501,7 +501,6 @@ importers:
       use-subscription: 1.6.0
       uuid: ^8.3.2
       wallet.ts: ^1.0.1
-      web-ext-types: ^3.1.0
       web3: 1.7.4
       web3-core: 1.7.4
       web3-core-helpers: 1.7.4
@@ -641,7 +640,6 @@ importers:
       use-subscription: 1.6.0
       uuid: 8.3.2
       wallet.ts: 1.0.1
-      web-ext-types: 3.2.1
       web3: 1.7.4
       web3-core: 1.7.4
       web3-core-helpers: 1.7.4
@@ -1251,6 +1249,7 @@ importers:
       regenerator-runtime: ^0.13.9
       rollup: ^2.75.6
       rollup-plugin-terser: ^7.0.2
+      web-ext-types: ^3.1.0
     dependencies:
       buffer: 6.0.3
       clipboard-polyfill: 3.0.3
@@ -1265,6 +1264,7 @@ importers:
       regenerator-runtime: 0.13.9
       rollup: 2.75.6
       rollup-plugin-terser: 7.0.2_rollup@2.75.6
+      web-ext-types: 3.2.1
 
   packages/polyfills/types:
     specifiers: {}
@@ -11457,7 +11457,7 @@ packages:
     dev: true
 
   /array-uniq/1.0.3:
-    resolution: {integrity: sha1-r2rId6Jcx/dOBYiUdThY39sk/bY=}
+    resolution: {integrity: sha512-MNha4BWQ6JbwhFhj03YK552f7cb3AzoE8SzeljgChvL1dl3IcvggXVz1DilzySZkCja+CXuZbdW7yATchWn8/Q==}
     engines: {node: '>=0.10.0'}
 
   /array-unique/0.3.2:
@@ -13257,7 +13257,7 @@ packages:
       mississippi: 3.0.0
       mkdirp: 0.5.6
       move-concurrently: 1.0.1
-      promise-inflight: 1.0.1
+      promise-inflight: 1.0.1_bluebird@3.7.2
       rimraf: 2.7.1
       ssri: 6.0.2
       unique-filename: 1.1.1
@@ -19052,7 +19052,7 @@ packages:
     patched: true
 
   /immutable/3.8.1:
-    resolution: {integrity: sha1-IAgH8Rqw9ycQ6khVQt4IgHX2jNI=}
+    resolution: {integrity: sha512-0R2q5f83L0h+zizu3lAA3ZR/mzEl04U1jVVXIqf2rQbZs9eX5YGtx1EFQuuJJHzVXH10ur6hGKehR8yBOQmZlQ==}
     engines: {node: '>=0.10.0'}
     dev: false
 
@@ -23557,6 +23557,17 @@ packages:
         optional: true
     dev: true
 
+  /promise-inflight/1.0.1_bluebird@3.7.2:
+    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
+    peerDependencies:
+      bluebird: '*'
+    peerDependenciesMeta:
+      bluebird:
+        optional: true
+    dependencies:
+      bluebird: 3.7.2
+    dev: true
+
   /promise-to-callback/1.0.0:
     resolution: {integrity: sha512-uhMIZmKM5ZteDMfLgJnoSq9GCwsNKrYau73Awf1jIy6/eUcuuZ3P+CD9zUv0kJsIUbU+x6uLNIhXhLHDs1pNPA==}
     engines: {node: '>=0.10.0'}
@@ -24889,7 +24900,7 @@ packages:
       webpack: ^4.0.0 || ^5.0.0
     dependencies:
       tslib: 2.3.1
-      webpack: 5.73.0_@swc+core@1.2.177
+      webpack: 5.73.0_webpack-cli@4.10.0
     dev: true
 
   /resolve-url/0.2.1:
@@ -26726,7 +26737,7 @@ packages:
       schema-utils: 3.1.1
       serialize-javascript: 6.0.0
       terser: 5.14.1
-      webpack: 5.73.0
+      webpack: 5.73.0_webpack-cli@4.10.0
 
   /terser/4.8.0:
     resolution: {integrity: sha512-EAPipTNeWsb/3wLPeup1tVPaXfIaU68xMnVdPafIL1TV05OhASArYyIfFvnvJCNrR2NIOvDVNNTFRa+Re2MWyw==}
@@ -28349,6 +28360,7 @@ packages:
 
   /web-ext-types/3.2.1:
     resolution: {integrity: sha512-oQZYDU3W8X867h8Jmt3129kRVKklz70db40Y6OzoTTuzOJpF/dB2KULJUf0txVPyUUXuyzV8GmT3nVvRHoG+Ew==}
+    dev: true
 
   /web-namespaces/1.1.4:
     resolution: {integrity: sha512-wYxSGajtmoP4WxfejAPIr4l0fVh+jeMXZb08wNc0tMg6xsfZXj3cECqIK0G7ZAqUq0PP8WlMDtaOGVBTAWztNw==}
@@ -29045,6 +29057,7 @@ packages:
       - '@swc/core'
       - esbuild
       - uglify-js
+    dev: true
 
   /webpack/5.73.0_@swc+core@1.2.177:
     resolution: {integrity: sha512-svjudQRPPa0YiOYa2lM/Gacw0r6PvxptHj4FuEKQ2kX05ZLkjbVc5MnPs6its5j7IZljnIqSVo/OsY2X0IpHGA==}
@@ -29253,7 +29266,7 @@ packages:
     dev: false
 
   /wordwrap/1.0.0:
-    resolution: {integrity: sha1-J1hIEIkUVqQXHI0CJkQa3pDLyus=}
+    resolution: {integrity: sha512-gvVzJFlPycKc5dZN4yPkP8w7Dc37BtP1yczEneOb4uq34pXZcvrtRTmWV8W+Ume+XCxKgbjM+nevkyFPMybd4Q==}
 
   /worker-farm/1.7.0:
     resolution: {integrity: sha512-rvw3QTZc8lAxyVrqcSGVm5yP/IJ2UcB3U0graE3LCFoZ0Yn2x4EoVSqJKdB/T5M+FLcRPjz4TDacRf3OCfNUzw==}

@@ -11,6 +11,7 @@
     "./global": { "types": "./global.d.ts" },
     "./intl": { "types": "./intl.d.ts" },
     "./theme-global": { "types": "./theme-global.d.ts" },
-    "./webpack": { "types": "./webpack.d.ts" }
+    "./webpack": { "types": "./webpack.d.ts" },
+    "./web-extension": { "types": "./web-extension.d.ts" }
   }
 }
