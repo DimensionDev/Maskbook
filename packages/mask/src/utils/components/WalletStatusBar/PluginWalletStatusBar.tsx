@@ -15,7 +15,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import { Box, Button } from '@mui/material'
 import { useI18N } from '../../i18n-next-ui'
-import { WalletConnect } from '@masknet/icons'
+import { ConnectWallet } from '@masknet/icons'
 import { memo, PropsWithChildren, useMemo } from 'react'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { WalletDescription } from './WalletDescription'
@@ -65,7 +65,7 @@ export const PluginWalletStatusBar = memo<WalletStatusBarProps>(({ className, on
         return (
             <Box className={cx(classes.root, className)}>
                 <Button fullWidth onClick={openSelectProviderDialog}>
-                    <WalletConnect className={classes.connection} /> {t('plugin_wallet_connect_a_wallet')}
+                    <ConnectWallet className={classes.connection} /> {t('plugin_wallet_connect_a_wallet')}
                 </Button>
             </Box>
         )
