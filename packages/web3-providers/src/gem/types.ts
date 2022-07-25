@@ -76,7 +76,7 @@ export interface Collection {
     externalUrl: string
     imageUrl: string
     totalSupply: number
-    isVerified: Boolean
+    isVerified: boolean
     sevenDayVolume: number
     oneDayVolume: number
     lastOpenSeaSaleCreatedId: number

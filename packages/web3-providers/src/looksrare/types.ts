@@ -129,7 +129,7 @@ export interface Token {
     isAnimated: boolean
     flag: TokenFlag
     collection?: Collection
-    attributes: Array<Attribute>
+    attributes: Attribute[]
 }
 
 export interface Event {

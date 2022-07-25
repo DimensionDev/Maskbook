@@ -1,6 +1,6 @@
-import type { PersonaInformation, NextIDPlatform } from '@masknet/shared-base'
-import { useAsyncRetry } from 'react-use'
 import { useMemo } from 'react'
+import { useAsyncRetry } from 'react-use'
+import type { PersonaInformation, NextIDPlatform } from '@masknet/shared-base'
 import Services from '../../extension/service'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { useLastRecognizedIdentity } from './useActivatedUI'
