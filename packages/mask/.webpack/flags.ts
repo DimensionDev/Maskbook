@@ -38,7 +38,6 @@ export function normalizeBuildFlags(flags: BuildFlags) {
 export function computedBuildFlags(flags: ReturnType<typeof normalizeBuildFlags>) {
     const { runtime, mode } = flags
     let sourceMapKind: Configuration['devtool'] = false
-    let supportWebAssembly = true
     let lockdown = runtime.engine === 'chromium'
     if (runtime.engine === 'safari' && runtime.architecture === 'app') {
         // Due to webextension-polyfill, eval on iOS is async.
@@ -46,11 +45,10 @@ export function computedBuildFlags(flags: ReturnType<typeof normalizeBuildFlags>
     } else if (runtime.manifest === 3 && mode === 'development') {
         // MV3 does not allow eval even in production
         sourceMapKind = 'inline-cheap-source-map'
-        supportWebAssembly = false
     } else if (mode === 'development') {
         sourceMapKind = 'eval-cheap-source-map'
     } else {
         sourceMapKind = false
     }
-    return { sourceMapKind, lockdown, supportWebAssembly } as const
+    return { sourceMapKind, lockdown } as const
 }

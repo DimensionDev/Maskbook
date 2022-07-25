@@ -16,7 +16,7 @@ import { ExtensionSite, mapSubscription, mergeSubscription } from '@masknet/shar
 import { getEnumAsArray } from '@dimensiondev/kit'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
-    constructor(context: Plugin.Shared.SharedContext) {
+    constructor(context: Plugin.Shared.SharedUIContext) {
         super(context, Providers, {
             isSameAddress,
             isValidAddress,

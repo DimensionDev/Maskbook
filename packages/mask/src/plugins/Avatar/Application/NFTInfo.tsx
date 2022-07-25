@@ -10,9 +10,7 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()(() => ({
-    root: {
-        width: 160,
-    },
+    root: {},
     nft: {
         display: 'flex',
         alignItems: 'center',

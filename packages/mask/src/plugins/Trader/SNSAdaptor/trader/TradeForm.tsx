@@ -24,7 +24,7 @@ import {
     useSelectAdvancedSettings,
     useTokenSecurity,
 } from '@masknet/shared'
-import { ChevronUpIcon, DropIcon, RefreshIcon, ArrowDownwardIcon } from '@masknet/icons'
+import { ChevronUpIcon, Drop, RefreshIcon, ArrowDownward } from '@masknet/icons'
 import classnames from 'classnames'
 import { isNativeTokenWrapper } from '../../helpers'
 import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo'
@@ -63,7 +63,7 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
         },
         reverseIcon: {
             cursor: 'pointer',
-            stroke: isDashboard ? `${theme.palette.text.primary}!important` : theme.palette.maskColor?.main,
+            color: isDashboard ? `${theme.palette.text.primary}!important` : theme.palette.maskColor?.main,
         },
         card: {
             background: isDashboard ? MaskColorVar.primaryBackground2 : theme.palette.maskColor?.input,
@@ -185,7 +185,10 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
         dropIcon: {
             width: 20,
             height: 24,
-            color: isDashboard ? theme.palette.text.primary : theme.palette.text.strong,
+            color: `${isDashboard ? theme.palette.text.primary : theme.palette.maskColor.main}!important`,
+        },
+        whiteDrop: {
+            color: '#ffffff !important',
         },
         connectWallet: {
             marginTop: 0,
@@ -261,7 +264,8 @@ export const TradeForm = memo<AllTradeFormProps>(
         const isDashboard = isDashboardPage()
         const isPopup = isPopupPage()
         const { t } = useI18N()
-        const classes = useStylesExtends(useStyles({ isDashboard, isPopup }), props)
+        const styles = useStyles({ isDashboard, isPopup })
+        const classes = useStylesExtends(styles, props)
         const { targetChainId: chainId } = TargetChainIdContext.useContainer()
         const { isSwapping, allTradeComputed } = AllProviderTradeContext.useContainer()
         const [isExpand, setExpand] = useState(false)
@@ -472,9 +476,8 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 onClick: () => onTokenChipClick(TokenPanelType.Input),
                                 onDelete: () => onTokenChipClick(TokenPanelType.Input),
                                 deleteIcon: (
-                                    <DropIcon
-                                        className={classes.dropIcon}
-                                        color={!inputToken ? '#ffffff' : undefined}
+                                    <Drop
+                                        className={styles.cx(classes.dropIcon, !inputToken ? classes.whiteDrop : null)}
                                     />
                                 ),
                             },
@@ -482,7 +485,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                     />
                     <Box className={classes.reverseWrapper}>
                         <Box className={classes.reverse}>
-                            <ArrowDownwardIcon className={classes.reverseIcon} onClick={onSwitch} />
+                            <ArrowDownward className={classes.reverseIcon} onClick={onSwitch} />
                         </Box>
                     </Box>
                     <Box className={classes.section} marginBottom={2.5}>
@@ -500,9 +503,11 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     onClick: () => onTokenChipClick(TokenPanelType.Output),
                                     onDelete: () => onTokenChipClick(TokenPanelType.Output),
                                     deleteIcon: (
-                                        <DropIcon
-                                            className={classes.dropIcon}
-                                            color={!outputToken ? '#ffffff' : undefined}
+                                        <Drop
+                                            className={styles.cx(
+                                                classes.dropIcon,
+                                                !outputToken ? classes.whiteDrop : null,
+                                            )}
                                         />
                                     ),
                                 }}

@@ -14,7 +14,7 @@ import {
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID, OrderSide, SourceType } from '@masknet/web3-shared-base'
 import {
     ChainId,
     ChainId as EVM_ChainId,
@@ -468,19 +468,39 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                     const formData = new FormData(ev.currentTarget)
                                     const address = formData.get('address') as string
                                     const tokenId = formData.get('tokenId') as string
+                                    const options = {
+                                        sourceType: SourceType.OpenSea,
+                                    }
                                     const allSettled = await Promise.allSettled([
-                                        hub?.getFungibleTokenBalance?.(address),
-                                        hub?.getNonFungibleAsset?.(address, tokenId),
+                                        hub?.getNonFungibleTokenBalance?.(address, options),
+                                        hub?.getNonFungibleTokenContract?.(address, options),
+                                        hub?.getNonFungibleTokenEvents?.(address, tokenId, options),
+                                        hub?.getNonFungibleTokenOffers?.(address, tokenId, options),
+                                        hub?.getNonFungibleTokenListings?.(address, tokenId, options),
+                                        hub?.getNonFungibleTokenOrders?.(address, tokenId, OrderSide.Buy, options),
+                                        hub?.getNonFungibleTokenOrders?.(address, tokenId, OrderSide.Sell, options),
+                                        hub?.getNonFungibleAsset?.(address, tokenId, options),
+                                        hub?.getNonFungibleToken?.(address, tokenId, options),
                                     ])
-                                    const getSettledValue = <T extends unknown>(
-                                        result: PromiseSettledResult<T>,
-                                    ): T | undefined => (result.status === 'fulfilled' ? result.value : undefined)
+                                    const keys = [
+                                        'getNonFungibleTokenBalance',
+                                        'getNonFungibleTokenContract',
+                                        'getNonFungibleTokenEvents',
+                                        'getNonFungibleTokenOffers',
+                                        'getNonFungibleTokenListings',
+                                        'getNonFungibleTokenOrders Buy',
+                                        'getNonFungibleTokenOrders Sell',
+                                        'getNonFungibleAsset',
+                                        'getNonFungibleToken',
+                                    ]
 
                                     console.log(
-                                        Object.fromEntries([
-                                            ['getFungibleTokenBalance', getSettledValue(allSettled[0])],
-                                            ['getNonFungibleAsset', getSettledValue(allSettled[1])],
-                                        ]),
+                                        Object.fromEntries(
+                                            allSettled.map((settled, i) => [
+                                                keys[i],
+                                                settled.status === 'fulfilled' ? settled.value : undefined,
+                                            ]),
+                                        ),
                                     )
                                 }}>
                                 <Box sx={{ marginBottom: 1 }}>

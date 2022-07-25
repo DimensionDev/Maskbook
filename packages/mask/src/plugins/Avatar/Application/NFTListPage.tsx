@@ -24,7 +24,7 @@ const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, pro
         gridGap: 13,
         display: 'grid',
         gridTemplateColumns: 'repeat(5, 1fr)',
-        padding: '0 16px 50px 16px',
+        padding: '8px 16px 50px',
     },
 
     nftItem: {

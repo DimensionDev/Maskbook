@@ -1,7 +1,7 @@
 import { createContainer } from 'unstated-next'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { ECKeyIdentifier, EMPTY_LIST, PersonaInformation, ProfileIdentifier } from '@masknet/shared-base'
-import { currentPersonaIdentifier } from '../../../../../settings/settings'
+import { currentPersonaIdentifier } from '../../../../../../shared/legacy-settings/settings'
 import { useAsyncRetry } from 'react-use'
 import Services from '../../../../service'
 import { head, isEqual, unionWith } from 'lodash-unified'

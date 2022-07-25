@@ -1,5 +1,13 @@
 import urlcat from 'urlcat'
-import { ChainDescriptor, CurrencyType, NetworkDescriptor, ProviderDescriptor, SourceType } from '../specs'
+import {
+    ChainDescriptor,
+    CurrencyType,
+    NetworkDescriptor,
+    NetworkPluginID,
+    ProviderDescriptor,
+    SourceType,
+} from '../specs'
+import { NextIDPlatform } from '@masknet/shared-base'
 
 export function createLookupTableResolver<K extends keyof any, T>(map: Record<K, T>, fallback: T | ((key: K) => T)) {
     function resolveFallback(key: K) {
@@ -187,5 +195,29 @@ export const resolveCurrencyName = createLookupTableResolver<CurrencyType, strin
     },
     (CurrencyType) => {
         throw new Error(`Unknown currency type: ${CurrencyType}.`)
+    },
+)
+
+export const resolveNextIdWalletName = createLookupTableResolver<NetworkPluginID, string>(
+    {
+        [NetworkPluginID.PLUGIN_EVM]: 'EVM wallet',
+        [NetworkPluginID.PLUGIN_SOLANA]: 'Solana wallet',
+        [NetworkPluginID.PLUGIN_FLOW]: 'Flow wallet',
+    },
+    (network) => {
+        throw new Error(`Unknown network plugin-id: ${network}`)
+    },
+)
+
+export const resolveNextIdPlatformPluginId = createLookupTableResolver<NextIDPlatform, NetworkPluginID | undefined>(
+    {
+        [NextIDPlatform.Ethereum]: NetworkPluginID.PLUGIN_EVM,
+        [NextIDPlatform.NextID]: undefined,
+        [NextIDPlatform.GitHub]: undefined,
+        [NextIDPlatform.Keybase]: undefined,
+        [NextIDPlatform.Twitter]: undefined,
+    },
+    (platform) => {
+        throw new Error(`Unknown next id platform: ${platform}`)
     },
 )

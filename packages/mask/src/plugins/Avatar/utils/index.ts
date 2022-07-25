@@ -1,13 +1,14 @@
-import { first, isNull } from 'lodash-unified'
+import { isNull } from 'lodash-unified'
 import Services from '../../../extension/service'
 import { NextIDProof, NextIDStorage } from '@masknet/web3-providers'
 import { formatBalance, NonFungibleTokenEvent } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import type { NextIDPersonaBindings, NextIDPlatform } from '@masknet/shared-base'
+import type { NextIDPlatform } from '@masknet/shared-base'
 import type { NextIDAvatarMeta } from '../types'
 import { PLUGIN_ID } from '../constants'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { sortPersonaBindings } from '../../../utils'
 
 function getLastSalePrice(lastSale?: NonFungibleTokenEvent<ChainId, SchemaType> | null) {
     if (!lastSale?.price?.usd || !lastSale.paymentToken?.decimals) return
@@ -27,7 +28,14 @@ function blobToBase64(blob: Blob) {
     })
 }
 
-export function toPNG(image: string) {
+async function fetchImage(url: string) {
+    const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
+    const response = await fetch(url)
+    return response.blob()
+}
+
+export async function toPNG(image: string) {
+    const imageData = await fetchImage(image)
     return new Promise<Blob | null>((resolve, reject) => {
         const img = new Image()
         const canvas = document.createElement('canvas')
@@ -44,7 +52,7 @@ export function toPNG(image: string) {
             reject(new Error('Could not load image'))
         })
         img.setAttribute('CrossOrigin', 'Anonymous')
-        img.src = image
+        img.src = URL.createObjectURL(imageData)
     })
 }
 
@@ -72,15 +80,6 @@ export function formatTokenId(symbol: string, tokenId: string) {
 export function formatAddress(address: string, size = 0) {
     if (size === 0 || size >= 20) return address
     return `${address.slice(0, Math.max(0, 2 + size))}...${address.slice(-size)}`
-}
-
-export const sortPersonaBindings = (a: NextIDPersonaBindings, b: NextIDPersonaBindings, userId: string): number => {
-    const p_a = first(a.proofs.filter((x) => x.identity === userId.toLowerCase()))
-    const p_b = first(b.proofs.filter((x) => x.identity === userId.toLowerCase()))
-
-    if (!p_a || !p_b) return 0
-    if (p_a.created_at > p_b.created_at) return -1
-    return 1
 }
 
 export async function getNFTAvatarByUserId(userId: string, avatarId: string): Promise<NextIDAvatarMeta | undefined> {

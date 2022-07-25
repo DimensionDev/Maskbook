@@ -1,5 +1,5 @@
 // Collect from main js of Twitter's web client.
-export const TWITTER_RESERVED_SLUGS = [
+export const TWITTER_RESERVED_SLUGS: readonly string[] = [
     '404',
     'account',
     'download',
@@ -28,3 +28,4 @@ export const TWITTER_RESERVED_SLUGS = [
     'welcome',
     'your_twitter_data',
 ]
+Object.freeze(TWITTER_RESERVED_SLUGS)

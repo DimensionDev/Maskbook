@@ -15,7 +15,7 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { NetworkTab } from '../../../../components/shared/NetworkTab'
 import { useUpdateEffect } from 'react-use'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { Gear, RefreshIcon } from '@masknet/icons'
+import { Gear, Refresh } from '@masknet/icons'
 import { currentSlippageSettings } from '../../settings'
 import { MIN_GAS_LIMIT } from '../../constants'
 import { isDashboardPage } from '@masknet/shared-base'
@@ -58,7 +58,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     icon: {
-        color: theme.palette.text.primary,
+        color: theme.palette.maskColor.main,
         cursor: 'pointer',
     },
     dialog: {
@@ -125,7 +125,7 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                     titleTail={
                         <div className={classes.tail}>
                             <IconButton onClick={() => tradeRef.current?.refresh()}>
-                                <RefreshIcon size={24} className={classes.icon} />
+                                <Refresh size={24} className={classes.icon} />
                             </IconButton>
                             <IconButton
                                 onClick={async () => {

@@ -1,8 +1,8 @@
 import urlcat from 'urlcat'
 import { compact, first } from 'lodash-unified'
 import getUnixTime from 'date-fns/getUnixTime'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import {
-    createLookupTableResolver,
     CurrencyType,
     HubOptions,
     FungibleToken,
@@ -29,17 +29,9 @@ import {
     RaribleOfferResponse,
     RaribleProfileResponse,
 } from './types'
-import { RaribleUserURL, RaribleRopstenUserURL, RaribleMainnetURL, RaribleChainURL, RaribleURL } from './constants'
+import { RaribleMainnetURL, RaribleChainURL, RaribleURL } from './constants'
 import { isProxyENV } from '../helpers'
 import type { NonFungibleTokenAPI } from '../types'
-
-const resolveRaribleUserNetwork = createLookupTableResolver<ChainId.Mainnet | ChainId.Ropsten, string>(
-    {
-        [ChainId.Mainnet]: RaribleUserURL,
-        [ChainId.Ropsten]: RaribleRopstenUserURL,
-    },
-    RaribleUserURL,
-)
 
 async function fetchFromRarible<T>(url: string, path: string, init?: RequestInit) {
     const response = await fetch(urlcat(url, path), {
@@ -197,17 +189,15 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     async getOffers(
         tokenAddress: string,
         tokenId: string,
-        { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
-    ): Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>> {
+        { chainId = ChainId.Mainnet, indicator, size }: HubOptions<ChainId> = {},
+    ) {
         const requestPath = urlcat('/items/:tokenAddress::tokenId/offers', { tokenAddress, tokenId })
         const orders = await fetchFromRarible<RaribleOfferResponse[]>(RaribleMainnetURL, requestPath, {
             method: 'POST',
-            body: JSON.stringify({ size: 20 }),
+            body: JSON.stringify({ size }),
             headers: { 'content-type': 'application/json' },
         })
-        const profiles = await getProfilesFromRarible(orders.map((item) => item.maker))
-        return orders.map((order): NonFungibleTokenOrder<ChainId, SchemaType> => {
-            const ownerInfo = profiles.find((owner) => owner.id === order.maker)
+        const offers = orders.map((order): NonFungibleTokenOrder<ChainId, SchemaType> => {
             return {
                 id: order.tokenId,
                 chainId: ChainId.Mainnet,
@@ -231,22 +221,25 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 expiredAt: 0,
             }
         })
+        return createPageable(
+            offers,
+            createIndicator(indicator),
+            offers.length === size ? createNextIndicator(indicator) : undefined,
+        )
     }
 
     async getListings(
         tokenAddress: string,
         tokenId: string,
-        { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
-    ): Promise<Array<NonFungibleTokenOrder<ChainId, SchemaType>>> {
+        { chainId = ChainId.Mainnet, indicator, size }: HubOptions<ChainId> = {},
+    ) {
         const requestPath = urlcat('/items/:tokenAddress::tokenId/ownerships', { tokenAddress, tokenId })
         const assets = await fetchFromRarible<Ownership[]>(RaribleMainnetURL, requestPath)
-        const listings = assets.filter((x) => x.selling)
-        const profiles = await getProfilesFromRarible(listings.map((x) => x.owner))
-        return listings.map((asset): NonFungibleTokenOrder<ChainId, SchemaType> => {
-            const ownerInfo = profiles.find((owner) => owner.id === asset.owner)
+        const orders = assets.filter((x) => x.selling)
+        const listings = orders.map((asset): NonFungibleTokenOrder<ChainId, SchemaType> => {
             return {
                 id: asset.tokenId,
-                chainId: ChainId.Mainnet,
+                chainId,
                 assetPermalink: '',
                 createdAt: Number(asset.date ?? 0),
                 price: {
@@ -256,7 +249,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                     name: asset.token,
                     id: asset.tokenId,
                     decimals: 0,
-                    chainId: ChainId.Mainnet,
+                    chainId,
                     address: tokenAddress,
                     type: TokenType.NonFungible,
                 } as FungibleToken<ChainId, SchemaType>,
@@ -265,20 +258,25 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 expiredAt: 0,
             }
         })
+        return createPageable(
+            listings,
+            createIndicator(indicator),
+            listings.length === size ? createNextIndicator(indicator) : undefined,
+        )
     }
 
-    async getOrders(tokenAddress: string, tokenId: string, side: OrderSide, opts: HubOptions<ChainId> = {}) {
+    async getOrders(tokenAddress: string, tokenId: string, side: OrderSide, options: HubOptions<ChainId> = {}) {
         switch (side) {
             case OrderSide.Buy:
-                return this.getOffers(tokenAddress, tokenId, opts)
+                return this.getOffers(tokenAddress, tokenId, options)
             case OrderSide.Sell:
-                return this.getListings(tokenAddress, tokenId, opts)
+                return this.getListings(tokenAddress, tokenId, options)
             default:
-                return []
+                return createPageable(EMPTY_LIST, createIndicator(options.indicator))
         }
     }
 
-    async getEvents(tokenAddress: string, tokenId: string): Promise<Array<NonFungibleTokenEvent<ChainId, SchemaType>>> {
+    async getEvents(tokenAddress: string, tokenId: string, { indicator, size }: HubOptions<ChainId> = {}) {
         const response = await fetchFromRarible<RaribleHistory[]>(RaribleMainnetURL, '/activity', {
             method: 'POST',
             body: JSON.stringify({
@@ -304,7 +302,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             ]),
         )
 
-        return histories.map((history) => {
+        const events = histories.map((history) => {
             const ownerInfo = profiles.find((profile) => profile.id === history.owner)
             const fromInfo = profiles.find((profile) => profile.id === history.buyer || profile.id === history.from)
             return {
@@ -329,5 +327,11 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 },
             } as NonFungibleTokenEvent<ChainId, SchemaType>
         })
+
+        return createPageable(
+            events,
+            createIndicator(indicator),
+            events.length === size ? createNextIndicator(indicator) : undefined,
+        )
     }
 }

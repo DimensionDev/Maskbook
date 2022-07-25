@@ -57,6 +57,7 @@ const FlexibleButtonGroupPanel = styled(Box, {
     zIndex: 100,
     padding: theme.spacing(1.5),
     maxWidth: 'calc(100% - 24px)',
+    width: 'calc(100% - 24px)',
     boxShadow: isOpen
         ? `0px 0px 20px ${theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.05)'}`
         : 'none',
@@ -166,7 +167,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
         if (!innerRef?.current) return
 
         const current = innerRef.current
-        setIsTabsOverflow(current?.scrollWidth >= current?.clientWidth)
+        setIsTabsOverflow(current?.scrollWidth >= current?.clientWidth + defaultTabSize)
     }, [innerRef?.current?.scrollWidth, innerRef?.current?.clientWidth, width])
     // #endregion
 
