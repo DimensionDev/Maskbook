@@ -86,11 +86,6 @@ export function NFTCardStyledAssetPlayer(props: Props) {
                 width="100%"
                 style={{ objectFit: 'cover' }}
                 src={url || tokenDetailed?.metadata?.imageURL || tokenDetailed?.metadata?.mediaURL}
-                onError={(event) => {
-                    const target = event.currentTarget as HTMLImageElement
-                    target.src = fallbackImageURL.toString()
-                    target.classList.add(classes.loadingFailImage ?? '')
-                }}
             />
         </div>
     ) : (
