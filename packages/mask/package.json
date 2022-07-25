@@ -144,7 +144,6 @@
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
     "@types/color": "^3.0.3",
     "@types/lru-cache": "^7.10.10",
-    "binaryen": "^107.0.0",
     "copy-webpack-plugin": "^11.0.0",
     "html-webpack-plugin": "^5.5.0",
     "react-devtools-core": "^4.24.6",
