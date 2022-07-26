@@ -79,11 +79,6 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
         borderRadius: 8,
     },
-    sendIcon: {
-        width: 18,
-        height: 18,
-        fill: theme.palette.text.buttonText,
-    },
 }))
 
 export interface LazyRecipients {
@@ -123,7 +118,7 @@ export interface CompositionRef {
     reset(): void
 }
 export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>((props, ref) => {
-    const { classes, cx } = useStyles()
+    const { classes, cx, theme } = useStyles()
     const { t } = useI18N()
     const id = useId()
 
@@ -274,7 +269,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     loadingPosition="start"
                     variant="roundedContained"
                     onClick={onSubmit}
-                    startIcon={<SendIcon className={classes.sendIcon} />}>
+                    startIcon={<SendIcon size={18} color={theme.palette.text.buttonText} />}>
                     {t('post_dialog__button')}
                 </LoadingButton>
             </div>

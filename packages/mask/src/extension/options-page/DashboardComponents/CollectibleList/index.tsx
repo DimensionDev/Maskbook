@@ -1,4 +1,5 @@
 import { createContext, useEffect, useMemo, useState } from 'react'
+import { uniqBy } from 'lodash-unified'
 import {
     isSameAddress,
     NetworkPluginID,
@@ -10,18 +11,17 @@ import {
 } from '@masknet/web3-shared-base'
 import { Box, Button, Stack, styled, Typography } from '@mui/material'
 import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
+import { ElementAnchor, RetryHint } from '@masknet/shared'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import type { IdentityResolved } from '@masknet/plugin-infra'
+import { useNonFungibleAssets, useTrustedNonFungibleTokens, Web3Helper } from '@masknet/plugin-infra/web3'
 import { CollectibleCard } from './CollectibleCard'
 import { useI18N } from '../../../../utils'
 import { CollectionIcon } from './CollectionIcon'
-import { uniqBy } from 'lodash-unified'
-import { ElementAnchor, RetryHint } from '@masknet/shared'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingSkeleton } from './LoadingSkeleton'
-import { useNonFungibleAssets, useTrustedNonFungibleTokens, Web3Helper } from '@masknet/plugin-infra/web3'
 import { useCollectionFilter } from '../../hooks/useCollectionFilter'
 import { useKV } from '../../hooks/useKV'
 import { COLLECTION_TYPE } from '../../types'
-import type { IdentityResolved } from '@masknet/plugin-infra'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -231,7 +231,7 @@ export function CollectionList({
     const { t } = useI18N()
     const { classes } = useStyles()
     const [selectedCollection, setSelectedCollection] = useState<
-        NonFungibleTokenCollection<Web3Helper.ChainIdAll> | 'all' | undefined
+        NonFungibleTokenCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | 'all' | undefined
     >('all')
     const { address: account } = addressName
 
@@ -277,7 +277,7 @@ export function CollectionList({
     const collections = useMemo(() => {
         return uniqBy(allCollectibles, (x) => x?.contract?.address.toLowerCase())
             .map((x) => x?.collection)
-            .filter(Boolean) as Array<NonFungibleTokenCollection<Web3Helper.ChainIdAll>>
+            .filter(Boolean) as Array<NonFungibleTokenCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     }, [allCollectibles.length])
 
     const isFromAlchemy = collections?.findIndex((collection) => collection?.name?.length > 0) === -1

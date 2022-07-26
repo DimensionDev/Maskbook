@@ -55,7 +55,9 @@ export async function* decrypt(options: DecryptOptions, io: DecryptIO): AsyncIte
                 : Promise.resolve(false)
             if (ownersAESKeyEncrypted.ok) {
                 try {
-                    const aes_raw = await io.decryptByLocalKey(author.unwrapOr(null), ownersAESKeyEncrypted.val, iv)
+                    const aes_raw = new Uint8Array(
+                        await io.decryptByLocalKey(author.unwrapOr(null), ownersAESKeyEncrypted.val, iv),
+                    )
                     const aes = await importAESKeyFromJWKFromTextEncoder(aes_raw)
                     io.setPostKeyCache(aes.unwrap()).catch(() => {})
                     return yield* decryptWithPostAESKey(version, aes.unwrap(), iv, encrypted, options.onDecrypted)
