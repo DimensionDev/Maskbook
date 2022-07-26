@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => {
             padding: '0 !important',
         },
         footer: {
-            marginTop: -1, // merge duplicate borders
+            marginTop: -1,
             zIndex: 1,
             position: 'relative',
             borderTop: `solid 1px ${theme.palette.divider}`,

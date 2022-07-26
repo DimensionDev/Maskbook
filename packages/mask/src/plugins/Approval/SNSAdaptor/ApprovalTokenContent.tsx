@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { ListItem, List, Typography, Link, Avatar } from '@mui/material'
-import { LinkOutIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import type { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 import { useERC20TokenApproveCallback } from '@masknet/plugin-infra/web3-evm'
 import { useAccount, useWeb3State, useNetworkDescriptor, useWeb3Hub } from '@masknet/plugin-infra/web3'
@@ -92,7 +92,7 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
                             href={Others?.explorerResolver.addressLink?.(chainId, spender.address) ?? ''}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <LinkOutIcon className={cx(classes.spenderLogoIcon, classes.linkOutIcon)} />
+                            <Icons.LinkOut className={cx(classes.spenderLogoIcon, classes.linkOutIcon)} />
                         </Link>
                     </div>
                     <div>

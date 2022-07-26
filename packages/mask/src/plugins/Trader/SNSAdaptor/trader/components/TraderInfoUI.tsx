@@ -6,7 +6,7 @@ import { memo } from 'react'
 import { useI18N } from '../../../../../utils'
 import { Box, TextField, Typography } from '@mui/material'
 import { CircleLoadingAnimation, FormattedBalance } from '@masknet/shared'
-import { BestTradeIcon, CircleWarningIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import classNames from 'classnames'
 
 // TODO: remove isDashboard after remove Dashboard page
@@ -166,10 +166,10 @@ export const TraderInfoUI = memo<TraderInfoUIProps>(
                     ),
                     endAdornment: (
                         <>
-                            {isBest ? <BestTradeIcon className={classes.best} /> : null}
+                            {isBest ? <Icons.BestTrade className={classes.best} /> : null}
                             {isGreatThanSlippageSetting ? (
                                 <Typography className={classes.warningText}>
-                                    <CircleWarningIcon style={{ width: 18, height: 18 }} />
+                                    <Icons.CircleWarning size={18} />
                                     {t('plugin_trader_price_image_value', {
                                         percent: priceImpact,
                                     })}

@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { useMenuConfig } from '@masknet/shared'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
-import { CheckCircleIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -48,7 +48,7 @@ export function FootnoteMenuUI(props: FootnoteMenuProps) {
                         {x.name}
                     </Stack>
                     {selectedIndex === i ? (
-                        <CheckCircleIcon
+                        <Icons.CheckCircle
                             style={{
                                 fontSize: 20,
                                 color: theme.palette.maskColor.primary,

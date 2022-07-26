@@ -10,7 +10,7 @@ import type { JSON_PayloadComposeMask } from '../types'
 import { ITO_MetadataReader, payloadIntoMask } from './helpers'
 import { CompositionDialog } from './CompositionDialog'
 import { set } from 'lodash-unified'
-import { Markets, MarketsClaimIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ClaimAllDialog } from './ClaimAllDialog'
@@ -54,14 +54,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
         },
         label: (
             <>
-                <Markets style={{ width: 16, height: 16 }} />
+                <Icons.Markets size={16} />
                 ITO
             </>
         ),
     },
     ApplicationEntries: [
         (() => {
-            const icon = <Markets />
+            const icon = <Icons.Markets />
             const name = <Trans i18nKey="plugin_ito_name" />
             const iconFilterColor = 'rgba(56, 228, 239, 0.3)'
             const clickHandler = () =>
@@ -102,7 +102,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
         })(),
         (() => {
-            const icon = <MarketsClaimIcon />
+            const icon = <Icons.MarketsClaim />
             const name = <Trans i18nKey="plugin_ito_claim" />
             const iconFilterColor = 'rgba(240, 51, 51, 0.3)'
             return {
@@ -135,7 +135,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         })(),
     ],
     wrapperProps: {
-        icon: <Markets style={{ filter: 'drop-shadow(0px 6px 12px rgba(27, 144, 238, 0.2))', fontSize: 24 }} />,
+        icon: <Icons.Markets size={24} style={{ filter: 'drop-shadow(0px 6px 12px rgba(27, 144, 238, 0.2))' }} />,
         backgroundGradient:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(41, 228, 253, 0.2) 100%), #FFFFFF;',
     },
