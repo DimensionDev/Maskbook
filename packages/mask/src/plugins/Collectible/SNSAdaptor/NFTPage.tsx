@@ -45,12 +45,11 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface NFTPageProps {
-    persona?: string
     identity?: SocialIdentity
     socialAddressList?: Array<SocialAddress<NetworkPluginID>>
 }
 
-export function NFTPage({ socialAddressList, persona }: NFTPageProps) {
+export function NFTPage({ socialAddressList, identity }: NFTPageProps) {
     const { classes } = useStyles()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
@@ -87,7 +86,7 @@ export function NFTPage({ socialAddressList, persona }: NFTPageProps) {
             <CollectionList
                 addressName={selectedAddress}
                 onSelectAddress={onOpen}
-                persona={persona}
+                persona={identity?.publicKey}
                 visitingProfile={currentVisitingProfile}
             />
         </div>
