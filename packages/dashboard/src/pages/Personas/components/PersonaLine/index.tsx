@@ -1,6 +1,6 @@
 import { memo, MouseEvent, useState } from 'react'
 import { Box, Button, Link, Stack, Typography } from '@mui/material'
-import { getMaskColor, MaskColorVar, makeStyles } from '@masknet/theme'
+import { getMaskColor, MaskColorVar, makeStyles, LoadingAnimation } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { DisconnectProfileDialog } from '../DisconnectProfileDialog'
 import {
@@ -11,7 +11,7 @@ import {
     NextIDPlatform,
     EnhanceableSite,
 } from '@masknet/shared-base'
-import { LoadingAnimation, SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
+import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { NextIdPersonaWarning, NextIdPersonaVerified } from '@masknet/icons'
 

@@ -2,13 +2,12 @@ import { memo, useCallback } from 'react'
 import type { DialogProps } from '@mui/material'
 import { DialogContent, Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import classNames from 'classnames'
 import { Trans } from 'react-i18next'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../locales'
 import { InjectedDialog } from '@masknet/shared'
-import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

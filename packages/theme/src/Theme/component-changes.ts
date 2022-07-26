@@ -1,338 +1,638 @@
 import type { PaletteMode, ThemeOptions } from '@mui/material'
-import type { Color } from '../CSSVariables'
-import { css_var } from '../CSSVariables/createVars'
+import { alpha, buttonClasses } from '@mui/material'
+import type { MaskColor } from './colors'
 
-type Theme = ThemeOptions | ((mode: PaletteMode, colors: Color) => ThemeOptions)
-
-export const BaseLine: Theme = (mode, colors): ThemeOptions => ({
-    components: {
-        MuiCssBaseline: {
-            styleOverrides: {
-                body: {
-                    scrollbarColor: 'red',
-                    '&::-webkit-scrollbar, & *::-webkit-scrollbar': {
-                        width: '10px',
-                    },
-                    '&::-webkit-scrollbar-thumb, & *::-webkit-scrollbar-thumb': {
-                        borderRadius: '6px',
-                        border: '2px solid rgba(0, 0, 0, 0)',
-                        backgroundColor: mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
-                        backgroundClip: 'padding-box',
-                    },
-                },
-            },
-        },
-    },
-})
-
-export const Grid: Theme = {
-    components: { MuiGrid: {} },
-}
-
-const button = css_var('m-button', { main: 1, contrast: 1, light: 1 })
-export const Button: Theme = (mode, colors): ThemeOptions => ({
+export const Button = (mode: PaletteMode, colors: MaskColor): ThemeOptions => ({
     components: {
         MuiButton: {
-            defaultProps: { disableElevation: true },
-            styleOverrides: {
-                root: {
-                    opacity: 1,
-                    fontWeight: 400,
-                    transitionProperty: 'background-color, color, box-shadow, opacity',
-                    '&:hover': { boxShadow: '0 0 5px ' + button.main() },
-                    '&[disabled]': { opacity: 0.5 },
-                },
-            },
-            variants: [
-                // new variant for rounded button
-                {
-                    props: { variant: 'rounded' },
-                    style: {
-                        borderRadius: '24px',
-                        backgroundColor: button.main(),
-                        color: button.contrast(),
-                        '&:hover': { backgroundColor: button.main() },
-                        '&[disabled]': { backgroundColor: button.main(), color: button.contrast() },
-                    },
-                },
-                {
-                    props: { variant: 'contained' },
-                    style: {
-                        backgroundColor: button.main(),
-                        color: button.contrast(),
-                        '&:hover': { backgroundColor: button.main() },
-                        '&[disabled]': { backgroundColor: button.main(), color: button.contrast() },
-                    },
-                },
-                {
-                    props: { variant: 'outlined' },
-                    style: {
-                        borderColor: button.light(),
-                        color: button.main(),
-                        '&:hover': { borderColor: button.light() },
-                        '&[disabled]': { borderColor: button.light(), color: button.main() },
-                    },
-                },
-                { props: { variant: 'text' }, style: { '&:hover': { boxShadow: 'unset' } } },
-                {
-                    props: { color: 'primary' },
-                    style: { [button.main]: colors.primary, [button.contrast]: colors.primaryContrastText },
-                },
-                {
-                    props: { color: 'secondary' },
-                    style: { [button.main]: colors.secondary, [button.contrast]: colors.secondaryContrastText },
-                },
-                {
-                    props: { color: 'secondary', variant: 'outlined' },
-                    style: { [button.light]: colors.secondary, [button.main]: colors.primary },
-                },
-                {
-                    props: { color: 'error' },
-                    style: { [button.main]: colors.redMain, [button.contrast]: colors.primaryContrastText },
-                },
-                {
-                    props: { color: 'warning' },
-                    style: { [button.main]: colors.warning, [button.contrast]: colors.primaryContrastText },
-                },
-                {
-                    props: { size: 'small' },
-                    style: { height: '28px', fontSize: '12px' },
-                },
-                {
-                    props: { size: 'medium' },
-                    style: { height: '38px', fontSize: '14px' },
-                },
-                {
-                    props: { size: 'large' },
-                    style: { height: '48px', fontSize: '16px' },
-                },
-            ],
-        },
-    },
-})
-
-export const Dialog: Theme = (mode, colors): ThemeOptions => ({
-    components: {
-        MuiDialog: {
-            styleOverrides: {
-                root: {
-                    '& .dashboard-style': {
-                        backgroundColor: mode === 'dark' ? colors.primaryBackground : colors.secondaryBackground,
-                    },
-                    // workaround for common component be used in dashboard and twitter
-                    '& .dashboard.token-list': {
-                        padding: '10px 16px',
-                    },
-                    '& .dashboard.token-list-symbol': {
-                        color: mode === 'dark' ? 'rgba(255, 255, 255, 0.8)' : '#7B8192',
-                        fontSize: 12,
-                    },
-                },
-                paper: { minHeight: 200, minWidth: 440, background: colors.mainBackground },
-            },
             defaultProps: {
-                BackdropProps: {
-                    sx: {
-                        backdropFilter: 'blur(8px)',
-                        backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                    },
-                },
+                size: 'medium',
+                disableElevation: true,
+                variant: 'contained',
             },
-        },
-        MuiDialogTitle: {
-            styleOverrides: {
-                root: {
-                    backgroundColor: colors.mainBackground,
-                    '&.dashboard-dialog-title-hook': {
-                        backgroundColor: colors.mainBackground,
-                        display: 'flex',
-                        flexDirection: 'row-reverse',
-                        alignItems: 'center',
-                        p: {
-                            width: '100%',
-                            display: 'inline-flex',
-                            justifyContent: 'start',
-                        },
-                    },
-                },
-            },
-        },
-        MuiDialogContent: {
-            styleOverrides: {
-                root: {
-                    backgroundColor: colors.mainBackground,
-                },
-            },
-        },
-        MuiDialogActions: {
-            styleOverrides: {
-                root: {
-                    justifyContent: 'center',
-                    paddingBottom: 24,
-                    '&>:not(:first-of-type)': { marginLeft: 18 },
-                    backgroundColor: colors.mainBackground,
-                },
-            },
-        },
-    },
-})
-
-export const TextField: Theme = {
-    components: {
-        MuiFilledInput: {
-            // alternative way, but less beauty
-            // defaultProps: { disableUnderline: false },
-            styleOverrides: {
-                underline: {
-                    '&:before': { display: 'none' },
-                },
-            },
-        },
-        MuiFormHelperText: {
-            styleOverrides: {
-                contained: {
-                    paddingLeft: 14,
-                    paddingRight: 14,
-                    marginLeft: 0,
-                    marginRight: 0,
-                    borderLeft: '2px solid',
-                },
-                root: {},
-            },
-        },
-    },
-}
-
-export const List: Theme = (mode, colors) => ({
-    components: {
-        MuiListItem: {
-            styleOverrides: {
-                button: {
-                    '&:hover': mode === 'light' ? { backgroundColor: '#f5fcff' } : {},
-                },
-            },
-        },
-    },
-})
-
-export const Card: Theme = (mode, colors) => ({
-    components: {
-        MuiCard: {
-            styleOverrides: {},
             variants: [
                 {
-                    props: { variant: 'outlined' },
-                    style: {
-                        border: `1px solid ${colors.lineLight}`,
+                    props: {
+                        size: 'small',
                     },
-                },
-                {
-                    props: { variant: 'background' },
                     style: {
-                        padding: 8,
-                        border: 'none',
-                        background: mode === 'dark' ? colors.lightBackground : colors.normalBackground,
-                    },
-                },
-            ],
-        },
-    },
-})
-
-export const Paper: Theme = (mode, colors) => ({
-    components: {
-        MuiPaper: {
-            styleOverrides: {},
-            variants: [
-                {
-                    props: { variant: 'outlined' },
-                    style: {
-                        borderRadius: 12,
-                    },
-                },
-                {
-                    props: { variant: 'rounded' },
-                    style: {
-                        borderRadius: 16,
-                        backgroundColor: colors.primaryBackground,
-                    },
-                },
-            ],
-        },
-    },
-})
-
-export const Tabs: Theme = () => ({
-    components: {
-        MuiTab: {
-            styleOverrides: {
-                root: {
-                    // up-sm
-                    '@media screen and (min-width: 600px)': {
-                        minWidth: 160,
-                    },
-                },
-            },
-        },
-    },
-})
-export const Link: Theme = () => ({
-    components: {
-        MuiLink: { defaultProps: { underline: 'hover' } },
-    },
-})
-
-export const Typography: Theme = (mode, colors) => ({
-    components: {
-        MuiTypography: {
-            styleOverrides: {},
-            variants: [
-                // UI component: h3
-                {
-                    props: { variant: 'h3' },
-                    style: {
-                        fontSize: 24,
-                        lineHeight: '30px',
-                        color: colors.textPrimary,
-                    },
-                },
-                // UI component: h4
-                {
-                    props: { variant: 'h4' },
-                    style: {
-                        fontSize: 18,
-                        lineHeight: '24px',
-                        fontStyle: 'normal',
-                        color: colors.textPrimary,
-                    },
-                },
-                // UI component: h5
-                {
-                    props: { variant: 'h5' },
-                    style: {
-                        fontSize: 16,
-                        lineHeight: '22px',
-                        color: colors.textPrimary,
-                    },
-                },
-                // UI component: P4
-                {
-                    props: { variant: 'body2', paragraph: true },
-                    style: {
-                        fontSize: 14,
-                        color: colors.textSecondary,
-                    },
-                },
-                // UI component: P12
-                {
-                    props: { variant: 'body2', component: 'span' },
-                    style: {
+                        padding: '8px 12px',
+                        borderRadius: 6,
                         fontSize: 12,
-                        color: colors.textSecondary,
                         lineHeight: '16px',
                     },
                 },
+                {
+                    props: {
+                        size: 'medium',
+                    },
+                    style: {
+                        padding: '11px 18px',
+                        borderRadius: 8,
+                        fontSize: 14,
+                        lineHeight: '18px',
+                    },
+                },
+                {
+                    props: {
+                        size: 'large',
+                    },
+                    style: {
+                        padding: '14px 20px',
+                        borderRadius: 10,
+                        fontSize: 16,
+                        lineHeight: '20px',
+                    },
+                },
+                {
+                    props: {
+                        variant: 'contained',
+                    },
+                    style: {
+                        backgroundColor: colors.maskColor.main,
+                        ['&:hover']: {
+                            backgroundColor: colors.maskColor.main,
+                            boxShadow: '0 8px 25px rgba(0, 0, 0, 0.2)',
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            background: colors.maskColor.primaryMain,
+                            opacity: 0.6,
+                            color: colors.background.paper,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        variant: 'outlined',
+                    },
+                    style: {
+                        backgroundColor: colors.maskColor.thirdMain,
+                        color: colors.maskColor.main,
+                        border: 'none!important',
+                        ['&:hover']: {
+                            background: colors.maskColor.bottom,
+                            boxShadow: '0px 8px 25px rgba(0, 0, 0, 0.1)',
+                            border: 'none',
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            color: colors.maskColor.main,
+                            background: colors.maskColor.thirdMain,
+                            opacity: 0.4,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        variant: 'text',
+                    },
+                    style: {
+                        color: colors.maskColor.main,
+                        ['&:hover']: {
+                            background: colors.maskColor.thirdMain,
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            opacity: 0.4,
+                        },
+                    },
+                },
+                // info button
+                {
+                    props: {
+                        variant: 'contained',
+                        color: 'info',
+                    },
+                    style: {
+                        background: colors.maskColor.primary,
+                        color: colors.maskColor.white,
+                        ['&:hover']: {
+                            background: colors.maskColor.primary,
+                            boxShadow: `0 8px 25px ${alpha(colors.maskColor.primary, 0.3)}`,
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            background: alpha(colors.maskColor.primary, 0.3),
+                            opacity: 0.6,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        variant: 'outlined',
+                        color: 'info',
+                    },
+                    style: {
+                        backgroundColor: alpha(colors.maskColor.primary, 0.1),
+                        color: colors.maskColor.primary,
+                        border: 'none!important',
+                        ['&:hover']: {
+                            background: alpha(colors.maskColor.primary, 0.2),
+                            boxShadow: `0 8px 25px ${alpha(colors.maskColor.primary, 0.1)}`,
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            color: colors.maskColor.primary,
+                            background: alpha(colors.maskColor.primary, 0.1),
+                            opacity: 0.4,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        variant: 'text',
+                        color: 'info',
+                    },
+                    style: {
+                        color: colors.maskColor.primary,
+                        ['&:hover']: {
+                            background: alpha(colors.maskColor.primary, 0.1),
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            color: colors.maskColor.primary,
+                            opacity: 0.4,
+                        },
+                    },
+                },
+
+                // warn button
+                {
+                    props: {
+                        variant: 'contained',
+                        color: 'warning',
+                    },
+                    style: {
+                        backgroundColor: colors.maskColor.warn,
+                        color: colors.maskColor.white,
+                        ['&:hover']: {
+                            background: colors.maskColor.warn,
+                            boxShadow: `0 8px 25px ${alpha(colors.maskColor.warn, 0.3)}`,
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            background: alpha(colors.maskColor.warn, 0.5),
+                            opacity: 0.6,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        variant: 'outlined',
+                        color: 'warning',
+                    },
+                    style: {
+                        backgroundColor: alpha(colors.maskColor.warn, 0.1),
+                        color: colors.maskColor.warn,
+                        border: 'none!important',
+                        ['&:hover']: {
+                            background: alpha(colors.maskColor.warn, 0.2),
+                            boxShadow: `0 8px 25px ${alpha(colors.maskColor.warn, 0.1)}`,
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            color: colors.maskColor.warn,
+                            background: alpha(colors.maskColor.warn, 0.1),
+                            opacity: 0.4,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        variant: 'text',
+                        color: 'warning',
+                    },
+                    style: {
+                        color: colors.maskColor.warn,
+                        ['&:hover']: {
+                            background: alpha(colors.maskColor.warn, 0.1),
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            color: colors.maskColor.warn,
+                            opacity: 0.4,
+                        },
+                    },
+                },
+
+                // success button
+                {
+                    props: {
+                        variant: 'contained',
+                        color: 'success',
+                    },
+                    style: {
+                        background: colors.maskColor.success,
+                        color: colors.maskColor.white,
+                        ['&:hover']: {
+                            background: colors.maskColor.success,
+                            boxShadow: `0 8px 25px ${alpha(colors.maskColor.success, 0.3)}`,
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            background: alpha(colors.maskColor.success, 0.5),
+                            opacity: 0.6,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        variant: 'outlined',
+                        color: 'success',
+                    },
+                    style: {
+                        background: alpha(colors.maskColor.success, 0.1),
+                        color: colors.maskColor.success,
+                        border: 'none',
+                        ['&:hover']: {
+                            background: alpha(colors.maskColor.success, 0.2),
+                            boxShadow: `0 8px 25px ${alpha(colors.maskColor.success, 0.1)}`,
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            color: colors.maskColor.success,
+                            background: alpha(colors.maskColor.success, 0.1),
+                            opacity: 0.4,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        variant: 'text',
+                        color: 'success',
+                    },
+                    style: {
+                        color: colors.maskColor.success,
+                        ['&:hover']: {
+                            background: alpha(colors.maskColor.success, 0.1),
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            color: colors.maskColor.success,
+                            opacity: 0.4,
+                        },
+                    },
+                },
+
+                // error button
+                {
+                    props: {
+                        variant: 'contained',
+                        color: 'error',
+                    },
+                    style: {
+                        backgroundColor: colors.maskColor.danger,
+                        color: colors.maskColor.white,
+                        ['&:hover']: {
+                            background: colors.maskColor.danger,
+                            boxShadow: `0 8px 25px ${alpha(colors.maskColor.danger, 0.3)}`,
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            background: alpha(colors.maskColor.danger, 0.5),
+                            opacity: 0.6,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        variant: 'outlined',
+                        color: 'error',
+                    },
+                    style: {
+                        backgroundColor: alpha(colors.maskColor.danger, 0.1),
+                        color: colors.maskColor.danger,
+                        border: 'none',
+                        ['&:hover']: {
+                            background: alpha(colors.maskColor.danger, 0.2),
+                            boxShadow: `0 8px 25px ${alpha(colors.maskColor.danger, 0.1)}`,
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            color: colors.maskColor.danger,
+                            background: alpha(colors.maskColor.danger, 0.1),
+                            opacity: 0.4,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        variant: 'text',
+                        color: 'error',
+                    },
+                    style: {
+                        color: colors.maskColor.danger,
+                        ['&:hover']: {
+                            background: alpha(colors.maskColor.danger, 0.1),
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            color: colors.maskColor.danger,
+                            opacity: 0.4,
+                        },
+                    },
+                },
+
+                // rounded button
+                {
+                    props: {
+                        variant: 'roundedContained',
+                    },
+                    style: {
+                        backgroundColor: colors.maskColor.main,
+                        borderRadius: 99,
+                        ['&:hover']: {
+                            backgroundColor: colors.maskColor.main,
+                            boxShadow: '0px 8px 25px rgba(0, 0, 0, 0.2)',
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            background: colors.maskColor.primaryMain,
+                            opacity: 0.6,
+                            color: colors.maskColor.bottom,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        variant: 'roundedDark',
+                    },
+                    style: {
+                        backgroundColor: colors.maskColor.dark,
+                        color: colors.maskColor.white,
+                        borderRadius: 99,
+                        ['&:hover']: {
+                            backgroundColor: colors.maskColor.dark,
+                            boxShadow: '0 8px 25px rgba(255, 255, 255, 0.2)',
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            background: colors.maskColor.secondaryDark,
+                            opacity: 0.6,
+                            color: colors.maskColor.white,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        variant: 'roundedOutlined',
+                    },
+                    style: {
+                        borderRadius: 99,
+                        backgroundColor: colors.maskColor.thirdMain,
+                        color: colors.maskColor.main,
+                        border: 'none!important',
+                        ['&:hover']: {
+                            background: colors.maskColor.bottom,
+                            boxShadow: '0px 8px 25px rgba(0, 0, 0, 0.1)',
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            opacity: 0.4,
+                            color: colors.maskColor.main,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        variant: 'roundedText',
+                    },
+                    style: {
+                        color: colors.maskColor.main,
+                        borderRadius: 99,
+                        ['&:hover']: {
+                            background: colors.maskColor.thirdMain,
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            opacity: 0.4,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        variant: 'roundedContained',
+                        color: 'info',
+                    },
+                    style: {
+                        background: colors.maskColor.primary,
+                        color: colors.maskColor.white,
+                        borderRadius: 99,
+                        ['&:hover']: {
+                            background: colors.maskColor.primary,
+                            boxShadow: `0 8px 25px ${alpha(colors.maskColor.primary, 0.3)}`,
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            background: alpha(colors.maskColor.primary, 0.3),
+                            opacity: 0.6,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        variant: 'roundedOutlined',
+                        color: 'info',
+                    },
+                    style: {
+                        backgroundColor: alpha(colors.maskColor.primary, 0.1),
+                        color: colors.maskColor.primary,
+                        borderRadius: 99,
+                        border: 'none!important',
+                        ['&:hover']: {
+                            background: alpha(colors.maskColor.primary, 0.2),
+                            boxShadow: `0 8px 25px ${alpha(colors.maskColor.primary, 0.1)}`,
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            color: colors.maskColor.primary,
+                            background: alpha(colors.maskColor.primary, 0.1),
+                            opacity: 0.4,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        variant: 'roundedText',
+                        color: 'info',
+                    },
+                    style: {
+                        color: colors.maskColor.primary,
+                        borderRadius: 99,
+                        ['&:hover']: {
+                            background: alpha(colors.maskColor.primary, 0.1),
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            color: colors.maskColor.primary,
+                            opacity: 0.4,
+                        },
+                    },
+                },
+                // warn button
+                {
+                    props: {
+                        variant: 'roundedContained',
+                        color: 'warning',
+                    },
+                    style: {
+                        borderRadius: 99,
+                        backgroundColor: colors.maskColor.warn,
+                        color: colors.maskColor.white,
+                        ['&:hover']: {
+                            background: colors.maskColor.warn,
+                            boxShadow: `0 8px 25px ${alpha(colors.maskColor.warn, 0.3)}`,
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            background: alpha(colors.maskColor.warn, 0.5),
+                            opacity: 0.6,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        variant: 'roundedOutlined',
+                        color: 'warning',
+                    },
+                    style: {
+                        borderRadius: 99,
+                        backgroundColor: alpha(colors.maskColor.warn, 0.1),
+                        color: colors.maskColor.warn,
+                        border: 'none!important',
+                        ['&:hover']: {
+                            background: alpha(colors.maskColor.warn, 0.2),
+                            boxShadow: `0 8px 25px ${alpha(colors.maskColor.warn, 0.1)}`,
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            color: colors.maskColor.warn,
+                            background: alpha(colors.maskColor.warn, 0.1),
+                            opacity: 0.4,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        variant: 'roundedText',
+                        color: 'warning',
+                    },
+                    style: {
+                        color: colors.maskColor.warn,
+                        borderRadius: 99,
+                        border: 'none',
+                        ['&:hover']: {
+                            background: alpha(colors.maskColor.warn, 0.1),
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            color: colors.maskColor.warn,
+                            opacity: 0.4,
+                        },
+                    },
+                },
+
+                // success button
+                {
+                    props: {
+                        variant: 'roundedContained',
+                        color: 'success',
+                    },
+                    style: {
+                        borderRadius: 99,
+                        background: colors.maskColor.success,
+                        color: colors.maskColor.white,
+                        ['&:hover']: {
+                            background: colors.maskColor.success,
+                            boxShadow: `0 8px 25px ${alpha(colors.maskColor.success, 0.3)}`,
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            background: alpha(colors.maskColor.success, 0.5),
+                            opacity: 0.6,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        variant: 'roundedOutlined',
+                        color: 'success',
+                    },
+                    style: {
+                        borderRadius: 99,
+                        background: alpha(colors.maskColor.success, 0.1),
+                        color: colors.maskColor.success,
+                        border: 'none!important',
+                        ['&:hover']: {
+                            background: alpha(colors.maskColor.success, 0.2),
+                            boxShadow: `0 8px 25px ${alpha(colors.maskColor.success, 0.1)}`,
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            color: colors.maskColor.success,
+                            background: alpha(colors.maskColor.success, 0.1),
+                            opacity: 0.4,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        variant: 'roundedText',
+                        color: 'success',
+                    },
+                    style: {
+                        borderRadius: 99,
+                        color: colors.maskColor.success,
+                        ['&:hover']: {
+                            background: alpha(colors.maskColor.success, 0.1),
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            color: colors.maskColor.success,
+                            opacity: 0.4,
+                        },
+                    },
+                },
+
+                // error button
+                {
+                    props: {
+                        variant: 'roundedContained',
+                        color: 'error',
+                    },
+                    style: {
+                        borderRadius: 99,
+                        backgroundColor: colors.maskColor.danger,
+                        color: colors.maskColor.white,
+                        ['&:hover']: {
+                            background: colors.maskColor.danger,
+                            boxShadow: `0 8px 25px ${alpha(colors.maskColor.danger, 0.3)}`,
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            background: alpha(colors.maskColor.danger, 0.5),
+                            opacity: 0.6,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        variant: 'roundedOutlined',
+                        color: 'error',
+                    },
+                    style: {
+                        borderRadius: 99,
+                        backgroundColor: alpha(colors.maskColor.danger, 0.1),
+                        color: colors.maskColor.danger,
+                        border: 'none!important',
+                        ['&:hover']: {
+                            background: alpha(colors.maskColor.danger, 0.2),
+                            boxShadow: `0 8px 25px ${alpha(colors.maskColor.danger, 0.1)}`,
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            color: colors.maskColor.danger,
+                            background: alpha(colors.maskColor.danger, 0.1),
+                            opacity: 0.4,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        variant: 'roundedText',
+                        color: 'error',
+                    },
+                    style: {
+                        borderRadius: 99,
+                        color: colors.maskColor.danger,
+                        ['&:hover']: {
+                            background: alpha(colors.maskColor.danger, 0.1),
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            color: colors.maskColor.danger,
+                            opacity: 0.4,
+                        },
+                    },
+                },
             ],
+            styleOverrides: {
+                root: {
+                    textTransform: 'initial',
+                    fontWeight: 700,
+                    color: colors.background.paper,
+                },
+            },
         },
     },
 })

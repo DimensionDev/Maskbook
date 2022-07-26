@@ -5,10 +5,8 @@ import { ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import { formatBalance, FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { TokenIcon } from '../TokenIcon'
 import { CircleLoadingIcon } from '@masknet/icons'
-import type { MaskSearchableListItemProps } from '@masknet/theme'
-import { makeStyles, MaskLoadingButton } from '@masknet/theme'
+import { makeStyles, MaskLoadingButton, MaskSearchableListItemProps, LoadingAnimation } from '@masknet/theme'
 import { useSharedI18N } from '../../../locales'
-import { LoadingAnimation } from '../LoadingAnimation'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({

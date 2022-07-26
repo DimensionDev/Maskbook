@@ -3,7 +3,7 @@ import { useTimeout } from 'react-use'
 import classNames from 'classnames'
 import { Constant, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { makeStyles, useStylesExtends, useCustomSnackbar, ShadowRootPopper } from '@masknet/theme'
+import { makeStyles, useStylesExtends, useCustomSnackbar, ShadowRootPopper, ActionButton } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
 import {
     TextField,
@@ -30,7 +30,6 @@ import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { saveCustomEssayToRSS } from '../Services/rss3'
 import { Rss3 } from '@masknet/icons'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => ({
     desBox: {

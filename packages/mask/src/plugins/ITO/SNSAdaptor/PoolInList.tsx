@@ -21,10 +21,9 @@ import {
     TableRow,
     Typography,
 } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import formatDateTime from 'date-fns/format'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
 import { MSG_DELIMITER } from '../constants'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'

@@ -1,5 +1,5 @@
 import { Box, Typography, List, ListItem, CircularProgress } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import { useState, useCallback, useEffect, useMemo } from 'react'
 import { useI18N } from '../locales'
 import classNames from 'classnames'
@@ -21,7 +21,6 @@ import { useNonFungibleOwnerTokens } from '@masknet/plugin-infra/web3-evm'
 import { NetworkPluginID, NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { PluginWalletStatusBar } from '../../../utils'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => {

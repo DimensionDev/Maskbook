@@ -25,7 +25,15 @@ export const decorators = [
                     <option value="dark">Dark</option>
                 </select>
                 <ThemeProvider theme={isDark ? MaskDarkTheme : MaskLightTheme}>
-                    <Box sx={{ background: isDark ? 'black' : 'white' }}>
+                    <Box
+                        sx={{
+                            background: isDark ? 'black' : 'white',
+                            marginTop: 2,
+                            height: 200,
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}>
                         <I18nextProvider i18n={i18NextInstance}>
                             <DisableShadowRootContext.Provider value>
                                 <Story />

@@ -116,3 +116,5 @@ export const MaskColors = {
         },
     },
 }
+
+export type MaskColor = typeof MaskColors.light

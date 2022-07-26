@@ -1,5 +1,5 @@
 import { useScrollBottomEvent } from '@masknet/shared-base-ui'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, LoadingAnimation } from '@masknet/theme'
 import classNames from 'classnames'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
@@ -11,7 +11,6 @@ import { useNftRedPacketHistory } from './hooks/useNftRedPacketHistory'
 import { NftRedPacketHistoryItem } from './NftRedPacketHistoryItem'
 import { useI18N as useBaseI18n } from '../../../utils'
 import { useI18N } from '../locales'
-import { LoadingAnimation } from '@masknet/shared'
 
 const useStyles = makeStyles<void, 'atBottom'>()((theme, _, refs) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`

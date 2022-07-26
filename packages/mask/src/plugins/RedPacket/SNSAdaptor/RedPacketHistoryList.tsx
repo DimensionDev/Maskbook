@@ -1,12 +1,11 @@
 import { Typography, List, Box } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, LoadingAnimation } from '@masknet/theme'
 import type { RedPacketJSONPayload } from '../types'
 import { RedPacketInHistoryList } from './RedPacketInHistoryList'
 import { useRedPacketHistory } from './hooks/useRedPacketHistory'
 import { useI18N } from '../../../utils'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { LoadingAnimation } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`

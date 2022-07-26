@@ -1,13 +1,12 @@
 import { useRef } from 'react'
 import { Box, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, LoadingAnimation } from '@masknet/theme'
 import { useAllPoolsAsSeller } from './hooks/useAllPoolsAsSeller'
 import type { JSON_PayloadInMask } from '../types'
 import { PoolInList } from './PoolInList'
 import { useI18N } from '../../../utils'
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { LoadingAnimation } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

@@ -12,6 +12,7 @@ import {
     formatBalance,
     formatCurrency,
 } from '@masknet/web3-shared-base'
+import { LoadingAnimation } from '@masknet/theme'
 import {
     createContract,
     createERC20Token,
@@ -22,14 +23,7 @@ import {
     chainResolver,
 } from '@masknet/web3-shared-evm'
 import { useAccount, useFungibleTokenBalance, useFungibleTokenPrice, useWeb3 } from '@masknet/plugin-infra/web3'
-import {
-    FormattedCurrency,
-    InjectedDialog,
-    LoadingAnimation,
-    TokenAmountPanel,
-    TokenIcon,
-    useOpenShareTxDialog,
-} from '@masknet/shared'
+import { FormattedCurrency, InjectedDialog, TokenAmountPanel, TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
 import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider'
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'

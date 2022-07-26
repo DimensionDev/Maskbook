@@ -1,7 +1,6 @@
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles, useStylesExtends, ActionButton, ActionButtonProps } from '@masknet/theme'
 import classNames from 'classnames'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
 import { isZero } from '@masknet/web3-shared-base'

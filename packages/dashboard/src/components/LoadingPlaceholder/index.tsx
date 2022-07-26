@@ -1,7 +1,6 @@
 import { memo } from 'react'
 import { Box, Typography } from '@mui/material'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { LoadingAnimation } from '@masknet/shared'
+import { makeStyles, MaskColorVar, LoadingAnimation } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
