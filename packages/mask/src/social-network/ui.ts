@@ -10,6 +10,7 @@ import {
     i18NextInstance,
     createSubscriptionFromValueRef,
     createSubscriptionFromAsync,
+    queryRemoteI18NBundle,
 } from '@masknet/shared-base'
 import { Environment, assertNotEnvironment, ValueRef } from '@dimensiondev/holoflows-kit'
 import { IdentityResolved, Plugin, PluginId, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
@@ -110,6 +111,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             Services.Identity.createNewRelation(ref.identifier, currentProfile.linkedPersona)
         }
     })
+    signal.addEventListener('abort', queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle))
 
     const allPersonaSub = createSubscriptionFromAsync(
         () => {

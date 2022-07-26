@@ -15,7 +15,7 @@ import {
     useAllPluginsWeb3State,
     useCurrentWeb3NetworkPluginID,
 } from '@masknet/plugin-infra/web3'
-import { i18NextInstance } from '@masknet/shared-base'
+import { i18NextInstance, queryRemoteI18NBundle } from '@masknet/shared-base'
 
 import '../utils/kv-storage'
 
@@ -23,12 +23,16 @@ import './PluginHost'
 import { Pages } from '../pages/routes'
 import { useAppearance } from '../pages/Personas/api'
 import { PersonaContext } from '../pages/Personas/hooks/usePersonaContext'
+import { useEffect } from 'react'
+import { Services } from '../API'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
 export default function DashboardRoot() {
     const pluginID = useCurrentWeb3NetworkPluginID()
     const PluginsWeb3State = useAllPluginsWeb3State()
+
+    useEffect(queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
 
     // #region theme
     const appearance = useAppearance()
