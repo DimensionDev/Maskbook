@@ -260,7 +260,7 @@
             "name": "Arbitrum Rinkeby Ether",
             "symbol": "ARETH",
             "decimals": 18,
-            "logoURI": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
+            "logoURL": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
         },
         "infoURL": "https://arbitrum.io",
         "explorers": [
@@ -339,7 +339,7 @@
             "name": "Ether",
             "symbol": "ETH",
             "decimals": 18,
-            "logoURI": "https://logo.chainbit.xyz/eth"
+            "logoURL": "https://logo.chainbit.xyz/eth"
         },
         "infoURL": "https://optimistic.etherscan.io/",
         "shortName": "op",
@@ -363,7 +363,7 @@
             "name": "Ether",
             "symbol": "KOR",
             "decimals": 18,
-            "logoURI": "https://static.debank.com/image/chain/logo_url/op/01ae734fe781c9c2ae6a4cc7e9244056.png"
+            "logoURL": "https://static.debank.com/image/chain/logo_url/op/01ae734fe781c9c2ae6a4cc7e9244056.png"
         },
         "infoURL": "https://optimism.io",
         "shortName": "kor"
