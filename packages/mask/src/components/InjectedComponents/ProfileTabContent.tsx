@@ -70,42 +70,38 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     )
 
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
-    const availablePlugins = useAvailablePlugins(activatedPlugins)
-    const displayPlugins = useMemo(() => {
-        return availablePlugins
+    const displayPlugins = useAvailablePlugins(activatedPlugins, (plugins) => {
+        return plugins
             .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
-            .filter((z) => z.Utils?.shouldDisplay?.(currentVisitingIdentity, socialAddressList) ?? true)
-    }, [
-        currentVisitingIdentity,
-        availablePlugins.map((x) => x.ID).join(),
-        socialAddressList.map((x) => x.address).join(),
-    ])
+            .filter(
+                (z) =>
+                    z.pluginID !== PluginId.NextID &&
+                    (z.Utils?.shouldDisplay?.(currentVisitingIdentity, socialAddressList) ?? true),
+            )
+            .sort((a, z) => {
+                // order those tabs from next id first
+                if (a.pluginID === PluginId.NextID) return -1
+                if (z.pluginID === PluginId.NextID) return 1
 
-    const tabs = displayPlugins
-        .sort((a, z) => {
-            // order those tabs from next id first
-            if (a.pluginID === PluginId.NextID) return -1
-            if (z.pluginID === PluginId.NextID) return 1
+                // order those tabs from collectible first
+                if (a.pluginID === PluginId.Collectible) return -1
+                if (z.pluginID === PluginId.Collectible) return 1
 
-            // order those tabs from collectible first
-            if (a.pluginID === PluginId.Collectible) return -1
-            if (z.pluginID === PluginId.Collectible) return 1
+                // place those tabs from debugger last
+                if (a.pluginID === PluginId.Debugger) return 1
+                if (z.pluginID === PluginId.Debugger) return -1
 
-            // place those tabs from debugger last
-            if (a.pluginID === PluginId.Debugger) return 1
-            if (z.pluginID === PluginId.Debugger) return -1
+                // place those tabs from dao before the last
+                if (a.pluginID === PluginId.DAO) return 1
+                if (z.pluginID === PluginId.DAO) return -1
 
-            // place those tabs from dao before the last
-            if (a.pluginID === PluginId.DAO) return 1
-            if (z.pluginID === PluginId.DAO) return -1
-
-            return a.priority - z.priority
-        })
-        .filter((z) => z.pluginID !== PluginId.NextID)
-        .map((x) => ({
-            id: x.ID,
-            label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
-        }))
+                return a.priority - z.priority
+            })
+    })
+    const tabs = displayPlugins.map((x) => ({
+        id: x.ID,
+        label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
+    }))
 
     const selectedTabId = selectedTab ?? first(tabs)?.id
 
