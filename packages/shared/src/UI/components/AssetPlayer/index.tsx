@@ -38,7 +38,6 @@ interface AssetPlayerProps
     fallbackResourceLoader?: JSX.Element
     setERC721TokenName?: (name: string) => void
     setSourceType?: (type: string) => void
-    showNetwork?: boolean
 }
 const useStyles = makeStyles()({
     hidden: {
@@ -56,7 +55,7 @@ enum AssetPlayerState {
 
 export const AssetPlayer = memo<AssetPlayerProps>((props) => {
     const ref = useRef<IFrameComponent | null>(null)
-    const { url, type, options, iconProps, isFixedIframeSize = true, showNetwork = false } = props
+    const { url, type, options, iconProps, isFixedIframeSize = true } = props
     const classes = useStylesExtends(useStyles(), props)
     const [hidden, setHidden] = useState(Boolean(props.renderTimeout))
     const { RPC_URLS } = getRPCConstants(props.erc721Token?.chainId)
@@ -189,7 +188,7 @@ export const AssetPlayer = memo<AssetPlayerProps>((props) => {
     )
 
     return (
-        <Box position="relative" width="100%" height="100%">
+        <>
             <Box
                 className={
                     playerState === AssetPlayerState.ERROR ? classes.errorPlaceholder : classes.loadingPlaceholder
@@ -209,6 +208,6 @@ export const AssetPlayer = memo<AssetPlayerProps>((props) => {
                     : props.loadingIcon ?? <AssetLoadingIcon className={classes.loadingIcon} />}
             </Box>
             {IframeResizerMemo}
-        </Box>
+        </>
     )
 })

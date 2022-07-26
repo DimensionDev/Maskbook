@@ -40,6 +40,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 TabContent: NFTPage,
             },
             Utils: {
+                shouldDisplay: (identity, socialAddressList) => {
+                    return !!socialAddressList?.length
+                },
                 sorter: (a, z) => {
                     if (a.type === SocialAddressType.ENS) return -1
                     if (z.type === SocialAddressType.ENS) return 1

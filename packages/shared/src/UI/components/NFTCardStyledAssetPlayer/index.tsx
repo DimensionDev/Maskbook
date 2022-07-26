@@ -5,8 +5,6 @@ import { AssetPlayer } from '../AssetPlayer'
 import { useNonFungibleToken, Web3Helper } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useImageChecker } from '../../../hooks'
-import { NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
-import { ImageIcon } from '../ImageIcon'
 import { Image } from '../Image'
 
 const useStyles = makeStyles()((theme) => ({
@@ -32,12 +30,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        position: 'relative',
-    },
-    networkIcon: {
-        position: 'absolute',
-        top: 6,
-        right: 6,
     },
 }))
 
@@ -52,7 +44,6 @@ interface Props extends withClasses<'loadingFailImage' | 'iframe' | 'wrapper' | 
     isNative?: boolean
     setERC721TokenName?: (name: string) => void
     setSourceType?: (type: string) => void
-    showNetwork?: boolean
 }
 
 const assetPlayerFallbackImageDark = new URL('./nft_token_fallback_dark.png', import.meta.url)
@@ -70,7 +61,6 @@ export function NFTCardStyledAssetPlayer(props: Props) {
         setERC721TokenName,
         renderOrder,
         setSourceType,
-        showNetwork = false,
     } = props
     const classes = useStylesExtends(useStyles(), props)
     const theme = useTheme()
@@ -90,8 +80,6 @@ export function NFTCardStyledAssetPlayer(props: Props) {
     const fallbackImageURL =
         theme.palette.mode === 'dark' ? assetPlayerFallbackImageDark : assetPlayerFallbackImageLight
 
-    const networkIcon = NETWORK_DESCRIPTORS.find((network) => network?.chainId === chainId)?.icon
-
     return isImageToken || isNative ? (
         <div className={classes.imgWrapper}>
             <Image
@@ -99,7 +87,6 @@ export function NFTCardStyledAssetPlayer(props: Props) {
                 style={{ objectFit: 'cover' }}
                 src={url || tokenDetailed?.metadata?.imageURL || tokenDetailed?.metadata?.mediaURL}
             />
-            {showNetwork && <ImageIcon icon={networkIcon} size={20} classes={{ icon: classes.networkIcon }} />}
         </div>
     ) : (
         <AssetPlayer

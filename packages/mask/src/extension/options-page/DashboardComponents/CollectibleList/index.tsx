@@ -6,12 +6,14 @@ import {
     NonFungibleAsset,
     NonFungibleTokenCollection,
     SocialAddress,
+    SocialAddressType,
     SourceType,
     Wallet,
 } from '@masknet/web3-shared-base'
 import { Box, Button, Stack, styled, Typography } from '@mui/material'
 import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
-import { ElementAnchor, RetryHint } from '@masknet/shared'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import { ElementAnchor, RetryHint, ReversedAddress } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { useNonFungibleAssets, useTrustedNonFungibleTokens, Web3Helper } from '@masknet/plugin-infra/web3'
@@ -72,7 +74,6 @@ const useStyles = makeStyles()((theme) => ({
     description: {
         background: theme.palette.mode === 'light' ? '#F7F9FA' : '#2F3336',
         alignSelf: 'stretch',
-        borderRadius: '0 0 8px 8px',
     },
     name: {
         whiteSpace: 'nowrap',
@@ -221,10 +222,12 @@ export function CollectibleList(props: CollectibleListProps) {
 
 export function CollectionList({
     addressName,
+    onSelectAddress,
     persona,
     visitingProfile,
 }: {
     addressName: SocialAddress<NetworkPluginID>
+    onSelectAddress: (event: React.MouseEvent<HTMLButtonElement>) => void
     persona?: string
     visitingProfile?: IdentityResolved
 }) {
@@ -288,15 +291,55 @@ export function CollectionList({
 
     if ((done && !allCollectibles.length) || !account)
         return (
-            <Box display="flex" alignItems="center" justifyContent="center">
-                <Typography color="textPrimary" sx={{ paddingTop: 4, paddingBottom: 4 }}>
-                    {t('no_nft_at_current_address')}
-                </Typography>
-            </Box>
+            <>
+                {addressName && (
+                    <Stack direction="row" height={42} justifyContent="flex-end" alignItems="center" px={2}>
+                        <Box display="flex" alignItems="center" justifyContent="flex-end" flexWrap="wrap">
+                            <Button
+                                onClick={onSelectAddress}
+                                className={classes.button}
+                                variant="outlined"
+                                size="small">
+                                {addressName.type === SocialAddressType.ADDRESS ||
+                                addressName.type === SocialAddressType.KV ? (
+                                    <ReversedAddress
+                                        address={addressName.address}
+                                        pluginId={addressName.networkSupporterPluginID}
+                                    />
+                                ) : (
+                                    addressName.label
+                                )}
+                                <KeyboardArrowDownIcon />
+                            </Button>
+                        </Box>
+                    </Stack>
+                )}
+                <Box display="flex" alignItems="center" justifyContent="center">
+                    <Typography color="textPrimary" sx={{ paddingTop: 4, paddingBottom: 4 }}>
+                        {t('dashboard_no_collectible_found')}
+                    </Typography>
+                </Box>
+            </>
         )
 
     return (
-        <Box marginLeft="16px">
+        <Box>
+            <Stack direction="row" justifyContent="space-between" alignItems="center" px={2}>
+                <Stack display="inline-flex" />
+                <Box display="flex" alignItems="center" justifyContent="flex-end" flexWrap="wrap">
+                    <Button onClick={onSelectAddress} className={classes.button} variant="outlined" size="small">
+                        {addressName.type === SocialAddressType.ADDRESS || addressName.type === SocialAddressType.KV ? (
+                            <ReversedAddress
+                                address={addressName.address}
+                                pluginId={addressName.networkSupporterPluginID}
+                            />
+                        ) : (
+                            addressName.label
+                        )}
+                        <KeyboardArrowDownIcon />
+                    </Button>
+                </Box>
+            </Stack>
             <Stack spacing={1} direction="row" mt={1.5}>
                 <Box sx={{ flexGrow: 1 }}>
                     <Box>
@@ -361,12 +404,7 @@ export function CollectionList({
                                         key={i}
                                         alignItems="center"
                                         justifyContent="center"
-                                        sx={{
-                                            marginTop: '8px',
-                                            marginBottom: '12px',
-                                            minWidth: 30,
-                                            maxHeight: 24,
-                                        }}>
+                                        sx={{ marginTop: '8px', marginBottom: '12px', minWidth: 30, maxHeight: 24 }}>
                                         <CollectionIcon
                                             selectedCollection={
                                                 selectedCollection === 'all' ? undefined : selectedCollection?.address
