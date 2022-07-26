@@ -1,17 +1,22 @@
 {
   "name": "@masknet/injected-script",
+  "type": "module",
   "version": "0.0.0",
   "private": true,
   "exports": {
     ".": {
       "webpack": "./sdk/index.ts",
       "default": "./dist/sdk/index.js"
+    },
+    "./shared": {
+      "webpack": "./shared/index.ts",
+      "default": "./dist/shared/index.js"
     }
   },
   "types": "./dist/sdk/index.d.ts",
   "scripts": {
-    "build": "rollup -c",
-    "start": "rollup -c -w"
+    "build": "tsc -b ./main/tsconfig.json && rollup -c",
+    "start": "tsc -b ./main/tsconfig.json && rollup -c -w"
   },
   "devDependencies": {
     "@rollup/plugin-sucrase": "^4.0.4",

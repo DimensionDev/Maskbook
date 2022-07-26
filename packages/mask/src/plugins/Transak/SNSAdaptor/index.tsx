@@ -37,7 +37,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         />
                     )
                 },
-                appBoardSortingDefaultPriority: 10,
+                appBoardSortingDefaultPriority: 11,
                 marketListSortingPriority: 6,
                 tutorialLink: 'https://transak.com/',
                 icon,

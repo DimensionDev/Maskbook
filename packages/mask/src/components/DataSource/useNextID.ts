@@ -3,10 +3,14 @@ import { EMPTY_LIST, NextIDPlatform, PersonaIdentifier } from '@masknet/shared-b
 import { useEffect, useMemo, useState } from 'react'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { usePersonaConnectStatus } from './usePersonaConnectStatus'
-import { currentPersonaIdentifier, currentSetupGuideStatus, dismissVerifyNextID } from '../../settings/settings'
+import {
+    currentPersonaIdentifier,
+    currentSetupGuideStatus,
+    dismissVerifyNextID,
+} from '../../../shared/legacy-settings/settings'
 import stringify from 'json-stable-stringify'
-import { SetupGuideStep } from '../InjectedComponents/SetupGuide/types'
-import type { SetupGuideCrossContextStatus } from '../../settings/types'
+import { SetupGuideStep } from '../../../shared/legacy-settings/types'
+import type { SetupGuideCrossContextStatus } from '../../../shared/legacy-settings/types'
 import { useLastRecognizedIdentity } from './useActivatedUI'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { NextIDProof } from '@masknet/web3-providers'
@@ -22,7 +26,7 @@ export const usePersonaBoundPlatform = (personaPublicKey: string) => {
 let isOpenedVerifyDialog = false
 let isOpenedFromButton = false
 
-const verifyPersona = (personaIdentifier?: PersonaIdentifier, username?: string) => async () => {
+export const verifyPersona = (personaIdentifier?: PersonaIdentifier, username?: string) => async () => {
     if (!personaIdentifier) return
     currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier].value = stringify({
         status: SetupGuideStep.VerifyOnNextID,
@@ -34,7 +38,7 @@ const verifyPersona = (personaIdentifier?: PersonaIdentifier, username?: string)
 export const useNextIDBoundByPlatform = (platform?: NextIDPlatform, userId?: string) => {
     const res = useAsyncRetry(async () => {
         if (!platform || !userId) return EMPTY_LIST
-        return NextIDProof.queryExistedBindingByPlatform(platform, userId)
+        return NextIDProof.queryAllExistedBindingsByPlatform(platform, userId)
     }, [platform, userId])
     useEffect(() => MaskMessages.events.ownProofChanged.on(res.retry), [res.retry])
     return res
@@ -59,7 +63,7 @@ export function useSetupGuideStatusState() {
     }, [lastState_])
 }
 
-export function useNextIDConnectStatus() {
+export function useNextIDConnectStatus(disableInitialVerify = false) {
     const ui = activatedSocialNetworkUI
     const [enableNextID] = useState(ui.configuration.nextIDConfig?.enable)
     const personaConnectStatus = usePersonaConnectStatus()
@@ -110,13 +114,20 @@ export function useNextIDConnectStatus() {
         )
         if (isBound) return NextIDVerificationStatus.Verified
 
-        if (isOpenedFromButton) {
+        if (isOpenedFromButton && !disableInitialVerify) {
             verifyPersona(personaConnectStatus.currentConnectedPersona?.identifier)()
         }
         isOpenedVerifyDialog = true
         isOpenedFromButton = false
         return NextIDVerificationStatus.WaitingVerify
-    }, [username, enableNextID, isOpenedVerifyDialog, personaConnectStatus, currentPersonaIdentifier.value])
+    }, [
+        username,
+        enableNextID,
+        isOpenedVerifyDialog,
+        personaConnectStatus,
+        currentPersonaIdentifier.value,
+        disableInitialVerify,
+    ])
 
     return {
         isVerified: VerificationStatus === NextIDVerificationStatus.Verified,

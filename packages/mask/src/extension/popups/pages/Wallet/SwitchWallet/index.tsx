@@ -10,6 +10,7 @@ import { WalletItem } from './WalletItem'
 import { MAX_WALLET_LIMIT } from '@masknet/shared'
 import classNames from 'classnames'
 import { useWallet, useWalletPrimary, useWallets } from '@masknet/plugin-infra/web3'
+import { Services } from '../../../../service'
 
 const useStyles = makeStyles()({
     header: {
@@ -40,12 +41,6 @@ const useStyles = makeStyles()({
         color: '#1C68F3',
         display: 'flex',
         alignItems: 'center',
-    },
-    copy: {
-        fontSize: 12,
-        stroke: '#1C68F3',
-        marginLeft: 4,
-        cursor: 'pointer',
     },
     name: {
         fontSize: 14,
@@ -135,7 +130,13 @@ const SwitchWallet = memo(() => {
                     variant="contained"
                     disabled={wallets.length >= MAX_WALLET_LIMIT}
                     className={classes.button}
-                    onClick={() => navigate(PopupRoutes.ImportWallet)}>
+                    onClick={() => {
+                        if (process.env.engine === 'firefox') {
+                            Services.Helper.openPopupWindow(PopupRoutes.ImportWallet)
+                            return
+                        }
+                        navigate(PopupRoutes.ImportWallet)
+                    }}>
                     {t('import')}
                 </Button>
             </div>

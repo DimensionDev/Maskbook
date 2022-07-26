@@ -35,6 +35,6 @@ export function useInvestCallback(pool: Pool | undefined, amount: string, token?
                       config,
                   )
 
-        return connection.sendTransaction(tx)
+        return connection?.sendTransaction(tx)
     }, [pool, account, amount, token, connection])
 }

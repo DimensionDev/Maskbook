@@ -1,4 +1,4 @@
-import { DialogContent, useTheme } from '@mui/material'
+import { DialogContent } from '@mui/material'
 import { useState, useCallback } from 'react'
 import { ApplicationSettingDialog } from './ApplicationSettingDialog'
 import { makeStyles } from '@masknet/theme'
@@ -8,27 +8,23 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ApplicationBoard } from './ApplicationBoard'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
-import { GearIcon } from '@masknet/icons'
+import { Gear } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => {
     return {
         content: {
-            padding: theme.spacing(1.5, 2, 2),
+            padding: theme.spacing(1.5, 2, '6px'),
             height: 470,
             overflow: 'hidden',
         },
         settingIcon: {
-            height: 24,
-            width: 24,
-            fill: theme.palette.text.primary,
             cursor: 'pointer',
         },
     }
 })
 
 export function ApplicationBoardDialog() {
-    const theme = useTheme()
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
     const { t } = useI18N()
     const [openSettings, setOpenSettings] = useState(false)
 
@@ -44,13 +40,13 @@ export function ApplicationBoardDialog() {
         })
     }, [])
 
-    return (
+    return open ? (
         <InjectedDialog
             open={open}
             maxWidth="sm"
             onClose={closeDialog}
             title={t('applications')}
-            titleTail={<GearIcon className={classes.settingIcon} onClick={() => setOpenSettings(true)} />}>
+            titleTail={<Gear size={24} className={classes.settingIcon} onClick={() => setOpenSettings(true)} />}>
             <DialogContent className={classes.content}>
                 <ApplicationBoard closeDialog={closeDialog} />
                 {openSettings ? (
@@ -58,5 +54,5 @@ export function ApplicationBoardDialog() {
                 ) : null}
             </DialogContent>
         </InjectedDialog>
-    )
+    ) : null
 }

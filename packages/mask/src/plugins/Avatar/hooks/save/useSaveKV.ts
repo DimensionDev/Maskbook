@@ -11,6 +11,8 @@ export function useSaveKV(pluginId: NetworkPluginID, chainId: ChainId) {
     const connection = useWeb3Connection<'all'>(pluginId)
     return useAsyncFn(
         async (info: NextIDAvatarMeta, account: string, persona: ECKeyIdentifier, proof: BindingProof) => {
+            if (!connection) return
+
             const sign = await connection.signMessage(JSON.stringify(info), 'personalSign', {
                 account,
             })

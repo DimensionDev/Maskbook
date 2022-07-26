@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react'
-import { CloseIcon, DownloadIcon, InteractionIcon, ITOIcon, RedPacketIcon, UploadIcon } from '@masknet/icons'
+import { CloseIcon, DownloadIcon, InteractionIcon, Ito, RedPacketIcon, UploadIcon } from '@masknet/icons'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { FilterTransactionType, TransactionType, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { useChainId } from '@masknet/plugin-infra/web3'
@@ -25,7 +25,6 @@ const useStyles = makeStyles()(() => ({
     },
     icon: {
         fontSize: 20,
-        fill: 'none',
     },
 }))
 
@@ -66,24 +65,24 @@ export interface TransactionIconUIProps {
 export const TransactionIconUI = memo<TransactionIconUIProps>(({ isFailed, isRedPacket, type, transactionType }) => {
     const { classes } = useStyles()
     const icon = useMemo(() => {
-        if (isFailed) return <CloseIcon style={{ stroke: MaskColorVar.redMain }} className={classes.icon} />
+        if (isFailed) return <CloseIcon color={MaskColorVar.redMain} className={classes.icon} />
         if (isRedPacket) return <RedPacketIcon className={classes.icon} />
 
         switch (type) {
             case TransactionType.SEND:
-                return <UploadIcon style={{ stroke: MaskColorVar.warning }} className={classes.icon} />
+                return <UploadIcon color={MaskColorVar.warning} className={classes.icon} />
             case TransactionType.TRANSFER:
-                return <UploadIcon style={{ stroke: MaskColorVar.warning }} className={classes.icon} />
+                return <UploadIcon color={MaskColorVar.warning} className={classes.icon} />
             case TransactionType.RECEIVE:
-                return <DownloadIcon style={{ stroke: MaskColorVar.greenMain }} className={classes.icon} />
+                return <DownloadIcon color={MaskColorVar.greenMain} className={classes.icon} />
             case TransactionType.CREATE_LUCKY_DROP:
                 return <RedPacketIcon className={classes.icon} />
             case TransactionType.CREATE_RED_PACKET:
                 return <RedPacketIcon className={classes.icon} />
             case TransactionType.FILL_POOL:
-                return <ITOIcon className={classes.icon} />
+                return <Ito className={classes.icon} />
             default:
-                return <InteractionIcon style={{ stroke: MaskColorVar.warning }} className={classes.icon} />
+                return <InteractionIcon color={MaskColorVar.warning} className={classes.icon} />
         }
     }, [isFailed, isRedPacket, type])
 

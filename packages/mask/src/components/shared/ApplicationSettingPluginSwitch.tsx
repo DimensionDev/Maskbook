@@ -1,10 +1,13 @@
 import { List, ListItem, ListItemAvatar, Avatar, Typography, Box } from '@mui/material'
 import { openWindow } from '@masknet/shared-base-ui'
 import { TutorialIcon } from '@masknet/icons'
-import { useActivatedPluginsSNSAdaptor, PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import { useActivatedPluginsSNSAdaptor, PluginI18NFieldRender, PluginId } from '@masknet/plugin-infra/content-script'
 import { SettingSwitch } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Services } from '../../extension/service'
+import CheckSecurityConfirmDialog from './CheckSecurityConfirmDialog'
+import { useState } from 'react'
+
 interface Props {}
 const useStyles = makeStyles()((theme) => ({
     listItem: {
@@ -64,49 +67,63 @@ export function ApplicationSettingPluginSwitch(props: Props) {
     const { classes } = useStyles()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
+    const [open, setOpen] = useState(false)
 
     async function onSwitch(id: string, checked: boolean) {
+        if (id === PluginId.GoPlusSecurity && checked === false) return setOpen(true)
         await Services.Settings.setPluginMinimalModeEnabled(id, !checked)
     }
 
     return (
-        <List>
-            {snsAdaptorPlugins
-                .flatMap(({ ID, ApplicationEntries: entries }) =>
-                    (entries ?? []).map((entry) => ({ entry, pluginId: ID })),
-                )
-                .filter((x) => x.entry.category === 'dapp')
-                .sort((a, b) => (a.entry.marketListSortingPriority ?? 0) - (b.entry.marketListSortingPriority ?? 0))
-                .map((x) => (
-                    <ListItem key={x.entry.ApplicationEntryID} className={classes.listItem}>
-                        <section className={classes.listContent}>
-                            <ListItemAvatar>
-                                <Avatar className={classes.avatar}>{x.entry.icon}</Avatar>
-                            </ListItemAvatar>
-                            <div className={classes.info}>
-                                <div className={classes.headerWrapper}>
-                                    <Typography className={classes.name}>
-                                        <PluginI18NFieldRender field={x.entry.name} pluginID={x.pluginId} />
+        <>
+            <List>
+                {snsAdaptorPlugins
+                    .flatMap(({ ID, ApplicationEntries: entries }) =>
+                        (entries ?? []).map((entry) => ({ entry, pluginId: ID })),
+                    )
+                    .filter((x) => x.entry.category === 'dapp')
+                    .sort((a, b) => (a.entry.marketListSortingPriority ?? 0) - (b.entry.marketListSortingPriority ?? 0))
+                    .map((x) => (
+                        <ListItem key={x.entry.ApplicationEntryID} className={classes.listItem}>
+                            <section className={classes.listContent}>
+                                <ListItemAvatar>
+                                    <Avatar className={classes.avatar}>{x.entry.icon}</Avatar>
+                                </ListItemAvatar>
+                                <div className={classes.info}>
+                                    <div className={classes.headerWrapper}>
+                                        <Typography className={classes.name}>
+                                            <PluginI18NFieldRender field={x.entry.name} pluginID={x.pluginId} />
+                                        </Typography>
+                                        {x.entry.tutorialLink ? (
+                                            <Box className={classes.settings}>
+                                                <TutorialIcon
+                                                    size={22}
+                                                    onClick={() => openWindow(x.entry.tutorialLink)}
+                                                />
+                                            </Box>
+                                        ) : null}
+                                    </div>
+                                    <Typography className={classes.desc}>
+                                        <PluginI18NFieldRender field={x.entry.description} pluginID={x.pluginId} />
                                     </Typography>
-                                    {x.entry.tutorialLink ? (
-                                        <Box className={classes.settings}>
-                                            <TutorialIcon onClick={() => openWindow(x.entry.tutorialLink)} />
-                                        </Box>
-                                    ) : null}
                                 </div>
-                                <Typography className={classes.desc}>
-                                    <PluginI18NFieldRender field={x.entry.description} pluginID={x.pluginId} />
-                                </Typography>
-                            </div>
-                        </section>
+                            </section>
 
-                        <SettingSwitch
-                            size="small"
-                            checked={!snsAdaptorMinimalPlugins.map((x) => x.ID).includes(x.pluginId)}
-                            onChange={(event) => onSwitch(x.pluginId, event.target.checked)}
-                        />
-                    </ListItem>
-                ))}
-        </List>
+                            <SettingSwitch
+                                size="small"
+                                checked={!snsAdaptorMinimalPlugins.map((x) => x.ID).includes(x.pluginId)}
+                                onChange={(event) => onSwitch(x.pluginId, event.target.checked)}
+                            />
+                        </ListItem>
+                    ))}
+            </List>
+            <CheckSecurityConfirmDialog
+                open={open}
+                onClose={() => setOpen(false)}
+                onConfirm={() => {
+                    Services.Settings.setPluginMinimalModeEnabled(PluginId.GoPlusSecurity, true)
+                }}
+            />
+        </>
     )
 }

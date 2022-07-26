@@ -1,12 +1,12 @@
 import { Avatar, Stack } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { MenuPersonasActiveIcon } from '@masknet/icons'
+import { MenuPersonasActive } from '@masknet/icons'
 import { memo } from 'react'
 import { usePersonaAvatar } from '../../pages/Personas/api'
 
 const useStyles = makeStyles()((theme) => ({
     author: {
-        fill: MaskColorVar.secondaryBackground,
+        color: MaskColorVar.secondaryBackground,
         cursor: 'pointer',
     },
 }))
@@ -24,7 +24,7 @@ export const MaskAvatar = memo<MaskAvatarProps>(({ size = 36, onClick }) => {
             width: size,
             height: size,
             display: 'inline-block',
-            background: MaskColorVar.lightBackground,
+            backgroundColor: MaskColorVar.lightBackground,
             borderRadius: '50%',
         },
         onClick,
@@ -34,7 +34,7 @@ export const MaskAvatar = memo<MaskAvatarProps>(({ size = 36, onClick }) => {
     if (!avatar) {
         return (
             <Stack justifyContent="center" width="100%" height={size} flexDirection="row">
-                <MenuPersonasActiveIcon {...commonProps} />
+                <MenuPersonasActive {...commonProps} />
             </Stack>
         )
     }

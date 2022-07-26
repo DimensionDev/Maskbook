@@ -13,6 +13,7 @@
     "verify_Twitter_ID": "You can verify your Twitter ID with Next.ID to enhance your Web3 experience.",
     "verify_other_Twitter_ID_intro": "This user has not connected wallets here.",
     "verify_Twitter_ID_button": "Verify your Twitter ID",
+    "enable_plugin": "Enable plugin",
     "verify_wallet_button": "Verify your wallet",
     "add_wallet_button": "Add wallet",
     "verify_wallet_dialog_title": "Verify your wallet",
@@ -22,6 +23,7 @@
     "persona_sign": "Persona Sign",
     "wallet_sign": "Wallet Sign",
     "copied": "copied",
+    "provided_by": "Provided by",
     "view_on_explorer": "View on explorer",
     "notify_persona_sign": "Persona Sign",
     "notify_persona_sign_confirm": "Confirm this sign in your Personas",
@@ -50,5 +52,7 @@
     "nft_not_belong_to_you": "The collectible doesn't exist or belong to you.",
     "send_tip_successfully": "Sent tip successfully.",
     "send_specific_tip_successfully": "Sent {{amount}} {{name}} tip successfully.",
-    "search": "Search"
+    "search": "Search",
+    "web3_profile": "Web3 Profile",
+    "mask_network": "Mask Network"
 }

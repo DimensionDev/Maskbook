@@ -1,4 +1,5 @@
 import { createContext, useEffect, useMemo, useState } from 'react'
+import { uniqBy } from 'lodash-unified'
 import {
     isSameAddress,
     NetworkPluginID,
@@ -11,15 +12,18 @@ import {
 } from '@masknet/web3-shared-base'
 import { Box, Button, Stack, styled, Typography } from '@mui/material'
 import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
-import { CollectibleCard } from './CollectibleCard'
-import { useI18N } from '../../../../utils'
-import { CollectionIcon } from './CollectionIcon'
-import { uniqBy } from 'lodash-unified'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { ElementAnchor, RetryHint, ReversedAddress } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { LoadingSkeleton } from './LoadingSkeleton'
+import type { IdentityResolved } from '@masknet/plugin-infra'
 import { useNonFungibleAssets, useTrustedNonFungibleTokens, Web3Helper } from '@masknet/plugin-infra/web3'
+import { CollectibleCard } from './CollectibleCard'
+import { useI18N } from '../../../../utils'
+import { CollectionIcon } from './CollectionIcon'
+import { LoadingSkeleton } from './LoadingSkeleton'
+import { useCollectionFilter } from '../../hooks/useCollectionFilter'
+import { useKV } from '../../hooks/useKV'
+import { COLLECTION_TYPE } from '../../types'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -219,14 +223,18 @@ export function CollectibleList(props: CollectibleListProps) {
 export function CollectionList({
     addressName,
     onSelectAddress,
+    persona,
+    visitingProfile,
 }: {
     addressName: SocialAddress<NetworkPluginID>
     onSelectAddress: (event: React.MouseEvent<HTMLButtonElement>) => void
+    persona?: string
+    visitingProfile?: IdentityResolved
 }) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [selectedCollection, setSelectedCollection] = useState<
-        NonFungibleTokenCollection<Web3Helper.ChainIdAll> | 'all' | undefined
+        NonFungibleTokenCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | 'all' | undefined
     >('all')
     const { address: account } = addressName
 
@@ -247,9 +255,18 @@ export function CollectionList({
         retry: retryFetchCollectible,
     } = useNonFungibleAssets(addressName.networkSupporterPluginID, undefined, { account })
 
+    const { value: kvValue } = useKV(persona)
+    const unHiddenCollectibles = useCollectionFilter(
+        kvValue?.proofs ?? EMPTY_LIST,
+        collectibles,
+        COLLECTION_TYPE.NFTs,
+        visitingProfile,
+        account?.toLowerCase(),
+    )
+
     const allCollectibles = [
         ...trustedNonFungibleTokens.filter((x) => isSameAddress(x.contract?.owner, account)),
-        ...collectibles,
+        ...unHiddenCollectibles,
     ]
 
     const renderCollectibles = useMemo(() => {
@@ -263,7 +280,7 @@ export function CollectionList({
     const collections = useMemo(() => {
         return uniqBy(allCollectibles, (x) => x?.contract?.address.toLowerCase())
             .map((x) => x?.collection)
-            .filter(Boolean) as Array<NonFungibleTokenCollection<Web3Helper.ChainIdAll>>
+            .filter(Boolean) as Array<NonFungibleTokenCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     }, [allCollectibles.length])
 
     const isFromAlchemy = collections?.findIndex((collection) => collection?.name?.length > 0) === -1
@@ -283,7 +300,8 @@ export function CollectionList({
                                 className={classes.button}
                                 variant="outlined"
                                 size="small">
-                                {addressName.type === SocialAddressType.ADDRESS ? (
+                                {addressName.type === SocialAddressType.ADDRESS ||
+                                addressName.type === SocialAddressType.KV ? (
                                     <ReversedAddress
                                         address={addressName.address}
                                         pluginId={addressName.networkSupporterPluginID}
@@ -310,7 +328,7 @@ export function CollectionList({
                 <Stack display="inline-flex" />
                 <Box display="flex" alignItems="center" justifyContent="flex-end" flexWrap="wrap">
                     <Button onClick={onSelectAddress} className={classes.button} variant="outlined" size="small">
-                        {addressName.type === SocialAddressType.ADDRESS ? (
+                        {addressName.type === SocialAddressType.ADDRESS || addressName.type === SocialAddressType.KV ? (
                             <ReversedAddress
                                 address={addressName.address}
                                 pluginId={addressName.networkSupporterPluginID}

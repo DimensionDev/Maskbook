@@ -7,8 +7,12 @@ import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
     detectionCard: {
-        backgroundColor: theme.palette.background.default,
         borderRadius: 8,
+        boxShadow:
+            theme.palette.mode === 'light'
+                ? '0px 0px 20px rgba(0, 0, 0, 0.05)'
+                : '0px 0px 20px rgba(255, 255, 255, 0.12)',
+        marginTop: '8px',
     },
     icon: {
         display: 'inline-flex',
@@ -18,11 +22,14 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     header: {
-        fontSize: 14,
+        fontSize: 16,
+        fontWeight: 700,
         lineHeight: '22px',
     },
     description: {
-        fontSize: 12,
+        fontSize: 16,
+        fontWeight: 400,
+        color: theme.palette.maskColor.second,
     },
 }))
 

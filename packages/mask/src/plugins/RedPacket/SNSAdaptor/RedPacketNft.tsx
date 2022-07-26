@@ -19,7 +19,7 @@ import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
 import { useAccount, useNetworkType, useWeb3 } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { PluginWalletConnectIcon, SharedIcon } from '@masknet/icons'
+import { ConnectWallet, SharedIcon } from '@masknet/icons'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
@@ -417,7 +417,8 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 <Box className={classes.buttonWrapper}>
                     <Box sx={{ flex: 1, padding: 1.5 }}>
                         <Button
-                            startIcon={<SharedIcon style={{ fontSize: 18 }} />}
+                            variant="roundedDark"
+                            startIcon={<SharedIcon size={18} />}
                             className={classes.button}
                             fullWidth
                             onClick={onShare}>
@@ -428,15 +429,18 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                         <Box sx={{ flex: 1, padding: 1.5 }}>
                             <ChainBoundary
                                 expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                                ActionButtonPromiseProps={{ variant: 'roundedDark' }}
                                 expectedChainId={payload.chainId}>
                                 <WalletConnectedBoundary
-                                    startIcon={<PluginWalletConnectIcon style={{ fontSize: 18 }} />}
+                                    startIcon={<ConnectWallet size={18} />}
                                     classes={{
                                         connectWallet: classes.button,
                                         unlockMetaMask: classes.button,
                                         gasFeeButton: classes.button,
-                                    }}>
+                                    }}
+                                    ActionButtonProps={{ variant: 'roundedDark' }}>
                                     <ActionButton
+                                        variant="roundedDark"
                                         loading={isClaiming}
                                         disabled={isClaiming}
                                         onClick={claim}

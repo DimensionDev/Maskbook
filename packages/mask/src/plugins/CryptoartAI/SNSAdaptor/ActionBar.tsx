@@ -59,6 +59,7 @@ export function ActionBar(props: ActionBarProps) {
             assetSource?.trade?.is_auction ? (
                 <ActionButton
                     variant="roundedDark"
+                    fullWidth
                     onClick={() => {
                         onOpenOfferDialog()
                     }}>
@@ -70,7 +71,7 @@ export function ActionBar(props: ActionBarProps) {
             !assetSource?.is24Auction &&
             assetSource?.priceInEth < 100000 &&
             assetSource?.trade?.isCanBuy ? (
-                <ActionButton variant="roundedDark" onClick={onOpenCheckoutDialog}>
+                <ActionButton fullWidth variant="roundedDark" onClick={onOpenCheckoutDialog}>
                     {t('plugin_collectible_buy_now')}
                 </ActionButton>
             ) : null}

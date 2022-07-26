@@ -91,7 +91,7 @@ class Hub implements SolanaHub {
     getNonFungibleCollections(
         account: string,
         initial?: HubOptions<ChainId>,
-    ): Promise<Pageable<NonFungibleTokenCollection<ChainId>>> {
+    ): Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>>> {
         const options = this.getOptions(initial, {
             account,
         })

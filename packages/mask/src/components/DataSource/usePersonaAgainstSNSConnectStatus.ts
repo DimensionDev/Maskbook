@@ -1,6 +1,6 @@
-import type { PersonaInformation, NextIDPlatform } from '@masknet/shared-base'
-import { useAsyncRetry } from 'react-use'
 import { useMemo } from 'react'
+import { useAsyncRetry } from 'react-use'
+import type { PersonaInformation, NextIDPlatform } from '@masknet/shared-base'
 import Services from '../../extension/service'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { useLastRecognizedIdentity } from './useActivatedUI'
@@ -30,5 +30,5 @@ export function usePersonaAgainstSNSConnectStatus() {
             currentPersonaPublicKey: currentPersona?.identifier.rawPublicKey,
             currentSNSConnectedPersonaPublicKey: currentSNSConnectedPersona?.identifier.rawPublicKey,
         }
-    }, [platform, username, ui, personas])
+    }, [platform, username, personas.map((x) => x.identifier.toText()).join()])
 }

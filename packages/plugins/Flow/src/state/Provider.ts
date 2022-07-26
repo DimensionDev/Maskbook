@@ -14,7 +14,7 @@ import {
 import { Providers } from './Connection/provider'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
-    constructor(override context: Plugin.Shared.SharedContext) {
+    constructor(override context: Plugin.Shared.SharedUIContext) {
         super(context, Providers, {
             isSameAddress,
             isValidChainId,

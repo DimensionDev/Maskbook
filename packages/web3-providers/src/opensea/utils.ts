@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { isOne, pow10 } from '@masknet/web3-shared-base'
+import { isOne, pow10, ZERO } from '@masknet/web3-shared-base'
 import { resolveIPFSLink } from '@masknet/web3-shared-evm'
 
 export function getOrderUnitPrice(currentPrice?: string, decimals?: number, quantity?: string) {
@@ -10,7 +10,7 @@ export function getOrderUnitPrice(currentPrice?: string, decimals?: number, quan
 }
 
 export function getOrderUSDPrice(currentPrice?: string, usdPrice?: string, decimals?: number) {
-    if (!currentPrice || !decimals) return
+    if (!currentPrice || !decimals) return ZERO
     const quantity = new BigNumber(currentPrice).div(pow10(decimals))
     return new BigNumber(usdPrice ?? 0).multipliedBy(quantity).decimalPlaces(2, 2)
 }

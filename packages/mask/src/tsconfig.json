@@ -8,7 +8,6 @@
     "lib": ["ES2021"]
   },
   "include": ["./", "./**/*.json"],
-  "exclude": ["./plugin-infra/register.js"],
 
   // ! Note: mask/ depends dashboard/ on source-code level
   // !       but dashboard/ depends mask/ on type level
@@ -27,7 +26,6 @@
     { "path": "../../web3-shared/solana" },
     { "path": "../../web3-providers" },
     { "path": "../../theme" },
-    { "path": "../../icons" },
     { "path": "../../plugin-infra" },
     { "path": "../../plugins/Wallet" },
     { "path": "../../plugins/DAO" },

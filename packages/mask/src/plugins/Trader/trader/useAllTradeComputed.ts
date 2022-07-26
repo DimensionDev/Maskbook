@@ -69,13 +69,6 @@ export function useAllTradeComputed(
         traderEstimateGas: sushiSwapEstimateGas,
     } = useUniswapV2Like(tradeProviders, TradeProvider.SUSHISWAP, inputAmount_, inputToken, outputToken)
 
-    // sashimi swap
-    const {
-        trader_: sashimiSwap_,
-        trader: sashimiSwap,
-        traderEstimateGas: sashimiSwapEstimateGas,
-    } = useUniswapV2Like(tradeProviders, TradeProvider.SASHIMISWAP, inputAmount_, inputToken, outputToken)
-
     // quick swap
     const {
         trader_: quickSwap_,
@@ -251,7 +244,6 @@ export function useAllTradeComputed(
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
         { provider: TradeProvider.SUSHISWAP, ...sushiSwap_, value: sushiSwap, gas: sushiSwapEstimateGas },
-        { provider: TradeProvider.SASHIMISWAP, ...sashimiSwap_, value: sashimiSwap, gas: sashimiSwapEstimateGas },
         { provider: TradeProvider.QUICKSWAP, ...quickSwap_, value: quickSwap, gas: quickSwapEstimateGas },
         { provider: TradeProvider.PANCAKESWAP, ...pancakeSwap_, value: pancakeSwap, gas: pancakeSwapEstimateGas },
         { provider: TradeProvider.UNISWAP_V3, ...uniswapV3_, value: uniswapV3, gas: uniswapV3SwapEstimateGas },

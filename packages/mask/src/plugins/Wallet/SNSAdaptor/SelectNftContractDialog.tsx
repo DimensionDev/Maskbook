@@ -1,14 +1,13 @@
 import { useCallback, useMemo, useState } from 'react'
+import { EthereumAddress } from 'wallet.ts'
 import { makeStyles } from '@masknet/theme'
 import { Avatar, Box, DialogContent, Link, List, ListItem, Typography, CircularProgress } from '@mui/material'
 import { SchemaType, explorerResolver, ChainId } from '@masknet/web3-shared-evm'
-import { WyvernSchemaName } from 'opensea-js/lib/types'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
+import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { WalletMessages } from '../messages'
 import { useI18N } from '../../../utils'
-import { EthereumAddress } from 'wallet.ts'
-import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import Fuse from 'fuse.js'
 import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput'
 import {
@@ -154,7 +153,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     })
 
     const contractList = assets
-        .filter((x) => x.schema_name === WyvernSchemaName.ERC721)
+        .filter((x) => x.schema === SchemaType.ERC721)
         .map(
             (x) =>
                 ({

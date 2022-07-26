@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
 import { Link } from '@mui/material'
-import LaunchIcon from '@mui/icons-material/Launch'
+import { LinkOutIcon } from '@masknet/icons'
 import { createLookupTableResolver, NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
 import { useWeb3State, useChainId, Web3Helper } from '@masknet/plugin-infra/web3'
 import { makeStyles, ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
@@ -108,7 +108,10 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
                         href={Others?.explorerResolver.transactionLink?.(progress.chainId, progress.id)}
                         target="_blank"
                         rel="noopener noreferrer">
-                        {computed.description} <LaunchIcon sx={{ ml: 1 }} fontSize="inherit" />
+                        {progress.status === TransactionStatusType.SUCCEED
+                            ? computed.successfulDescription ?? computed.description
+                            : computed.description}{' '}
+                        <LinkOutIcon sx={{ ml: 0.5, width: '16px', height: '16px' }} />
                     </Link>
                 ),
             },

@@ -112,7 +112,10 @@ export const MnemonicRevealForm = memo(() => {
                             direction="row"
                             justifyContent="flex-end"
                             sx={{ marginBottom: (theme) => theme.spacing(2) }}>
-                            <Button variant="text" startIcon={<RefreshIcon />} onClick={refreshCallback}>
+                            <Button
+                                variant="text"
+                                startIcon={<RefreshIcon color="primary" style={{ fill: '#1C68F3' }} />}
+                                onClick={refreshCallback}>
                                 {t.refresh()}
                             </Button>
                         </Stack>
@@ -137,10 +140,7 @@ export const MnemonicRevealForm = memo(() => {
                                 />
                             </IconButton>
                             <IconButton onClick={() => onPreview('download')}>
-                                <DownloadIcon
-                                    color="primary"
-                                    style={{ stroke: MaskColorVar.textLink, fill: MaskColorVar.primaryBackground }}
-                                />
+                                <DownloadIcon color="MaskColorVar.textLink" />
                             </IconButton>
                         </ButtonContainer>
                     </Box>

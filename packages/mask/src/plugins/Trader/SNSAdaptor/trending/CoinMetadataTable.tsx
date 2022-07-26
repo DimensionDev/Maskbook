@@ -12,25 +12,30 @@ import {
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { DataProvider } from '@masknet/public-api'
-import { Linking } from './Linking'
-import { useI18N, useMenu } from '../../../../utils'
+import { useI18N } from '../../../../utils'
 import { ContractSection } from './ContractSection'
 import type { CommunityType } from '../../types'
 import {
     DiscordRoundIcon,
     FacebookRoundIcon,
+    GitHubIcon,
+    InstagramRoundIcon,
+    MediumIcon,
     RedditRoundIcon,
     TelegramRoundIcon,
     TwitterRoundIcon,
+    YouTubeIcon,
 } from '@masknet/icons'
 import { upperFirst } from 'lodash-unified'
 import type { TrendingAPI } from '@masknet/web3-providers'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
+import { Linking, useMenuConfig } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
     container: {
         borderRadius: 0,
+        backgroundColor: 'transparent',
         boxSizing: 'border-box',
         '&::-webkit-scrollbar': {
             display: 'none',
@@ -57,6 +62,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         gap: theme.spacing(0.25),
         whiteSpace: 'nowrap',
+        color: theme.palette.maskColor.main,
         fontWeight: 700,
         '&:last-child': {
             paddingRight: 0,
@@ -70,11 +76,15 @@ export interface CoinMetadataTableProps {
 }
 
 const brands: Record<CommunityType, React.ReactNode> = {
-    facebook: <FacebookRoundIcon sx={{ fontSize: 16 }} />,
-    twitter: <TwitterRoundIcon sx={{ fontSize: 16 }} />,
-    telegram: <TelegramRoundIcon sx={{ fontSize: 16 }} />,
     discord: <DiscordRoundIcon sx={{ fontSize: 16 }} />,
+    facebook: <FacebookRoundIcon sx={{ fontSize: 16 }} />,
+    github: <GitHubIcon sx={{ fontSize: 16 }} />,
+    instagram: <InstagramRoundIcon sx={{ fontSize: 16 }} />,
+    medium: <MediumIcon sx={{ fontSize: 16 }} />,
     reddit: <RedditRoundIcon sx={{ fontSize: 16 }} />,
+    telegram: <TelegramRoundIcon sx={{ fontSize: 16 }} />,
+    twitter: <TwitterRoundIcon sx={{ fontSize: 16 }} />,
+    youtube: <YouTubeIcon sx={{ fontSize: 16 }} />,
     other: null,
 }
 
@@ -85,15 +95,26 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
 
     const metadataLinks = [['Website', trending.coin.home_urls]] as Array<[string, string[] | undefined]>
 
-    const contracts = trending.contracts ?? []
+    const contracts =
+        trending.contracts ?? (trending.coin.chainId && trending.coin.contract_address)
+            ? [
+                  {
+                      chainId: trending.coin.chainId!,
+                      address: trending.coin.contract_address!,
+                      iconURL: '',
+                  },
+              ]
+            : []
 
-    const [menu, openMenu] = useMenu(
-        contracts.map((x, i) => (
+    const [menu, openMenu] = useMenuConfig(
+        contracts.map((x) => (
             <MenuItem key={x.chainId}>
                 <ContractSection address={x.address} chainId={x.chainId} iconURL={x.iconURL} />
             </MenuItem>
         )),
-        false,
+        {
+            anchorSibling: false,
+        },
     )
 
     return (
@@ -125,9 +146,11 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                                 chainId={contracts[0].chainId}
                                                 address={contracts[0].address}
                                             />
-                                            <IconButton size="small" onClick={openMenu}>
-                                                <MoreHorizIcon style={{ fontSize: 16 }} />
-                                            </IconButton>
+                                            {contracts.length > 1 ? (
+                                                <IconButton size="small" onClick={openMenu}>
+                                                    <MoreHorizIcon style={{ fontSize: 16 }} />
+                                                </IconButton>
+                                            ) : null}
                                             {menu}
                                         </Stack>
                                     ) : (
@@ -177,7 +200,12 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                         alignItems="center"
                                         gap={1.5}>
                                         {trending.coin.community_urls.map((x) => (
-                                            <Linking key={x.link} href={x.link} LinkProps={{ className: classes.link }}>
+                                            <Linking
+                                                key={x.link}
+                                                href={x.link}
+                                                LinkProps={{
+                                                    className: classes.link,
+                                                }}>
                                                 {brands[x.type]}
                                                 {upperFirst(x.type)}
                                             </Linking>

@@ -12,6 +12,15 @@ export function createWeb3(provider: Provider) {
     return web3
 }
 
+export function createSignableWeb3(provider: Provider, keys: string[]) {
+    const web3 = createWeb3(provider)
+    if (keys.length) {
+        web3.eth.accounts.wallet.clear()
+        keys.forEach((k) => k && ['0x', '0x0'].includes(k) && web3.eth.accounts.wallet.add(k))
+    }
+    return web3
+}
+
 export function createWeb3Provider(request: <T>(requestArguments: RequestArguments) => Promise<T>): Web3Provider {
     const provider: Web3Provider = {
         on() {

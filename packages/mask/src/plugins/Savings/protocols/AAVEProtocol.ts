@@ -239,13 +239,14 @@ export class AAVEProtocol implements SavingsProtocol {
             poolAddress || ZERO_ADDRESS,
             AaveLendingPoolABI as AbiItem[],
         )
-        return new Promise<string>((resolve) =>
+        return new Promise<string>((resolve, reject) =>
             contract?.methods
                 .withdraw(this.bareToken.address, new BigNumber(value).toFixed(), account)
                 .send({
                     from: account,
                     gas: gasEstimate.toNumber(),
                 })
+                .once(TransactionEventType.ERROR, reject)
                 .once(TransactionEventType.CONFIRMATION, (_, receipt) => {
                     resolve(receipt.transactionHash)
                 }),

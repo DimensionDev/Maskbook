@@ -24,6 +24,7 @@
     "@types/qrcode": "^1.4.2",
     "@solana/web3.js": "^1.30.2",
     "anchorme": "^2.1.2",
+    "lru-cache": "^7.10.1",
     "bignumber.js": "^9.0.2",
     "classnames": "^2.3.1",
     "date-fns": "2.28.0",

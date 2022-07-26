@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import type { ExplorerAPI } from '..'
+import type { ExplorerAPI } from '../types'
 import type { Transaction } from './types'
 import { toTransaction } from './helpers'
 

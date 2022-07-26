@@ -38,8 +38,9 @@ const useStyles = makeStyles()({
         flex: 1,
     },
     copy: {
-        fontSize: 16,
-        fill: '#767F8D',
+        width: 16,
+        height: 16,
+        color: '#767F8D',
         cursor: 'pointer',
         marginLeft: 4,
     },
@@ -50,7 +51,6 @@ const useStyles = makeStyles()({
     },
     arrow: {
         color: '#7B8192',
-        fontSize: 24,
     },
     placeholder: {
         display: 'flex',
@@ -73,7 +73,6 @@ const useStyles = makeStyles()({
         width: '100%',
         '& > svg': {
             marginLeft: 4,
-            fontSize: 18,
         },
     },
 })
@@ -119,7 +118,9 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                 ) : (
                                     <MenuPersonasActiveIcon
                                         className={classes.avatar}
-                                        style={{ fill: '#f9fafa', backgroundColor: '#F9FAFA', borderRadius: 99 }}
+                                        color="#f9fafa"
+                                        size={48}
+                                        style={{ backgroundColor: '#F9FAFA', borderRadius: 99 }}
                                     />
                                 )}
                             </div>
@@ -157,7 +158,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                     ) : (
                         <>
                             <div className={classes.placeholder}>
-                                <EmptyIcon style={{ fontSize: 60 }} />
+                                <EmptyIcon size={60} />
                             </div>
                             <div className={classes.controller}>
                                 <Button
@@ -165,14 +166,14 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                     style={{ backgroundColor: '#07101B', color: '#F2F5F6' }}
                                     onClick={onCreatePersona}>
                                     {t('popups_create_persona')}
-                                    <AddUserIcon style={{ fill: '#F2F5F6' }} />
+                                    <AddUserIcon color="#F2F5F6" size={18} />
                                 </Button>
                                 <Button
                                     className={classes.button}
                                     style={{ backgroundColor: '#FFFFFF', color: '#07101B' }}
                                     onClick={onRestore}>
                                     {t('popups_restore_and_login')}
-                                    <PopupRestoreIcon style={{ fill: '#07101B' }} />
+                                    <PopupRestoreIcon color="#07101B" size={18} />
                                 </Button>
                             </div>
                         </>

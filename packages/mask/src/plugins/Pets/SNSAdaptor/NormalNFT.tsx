@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box } from '@mui/material'
 import { useStyles as useBoxStyles } from './PreviewBox'
@@ -5,13 +6,10 @@ import classNames from 'classnames'
 import Drag from './Drag'
 import type { ShowMeta } from '../types'
 import { CloseIcon } from '../constants'
+import RightMenu from './RightMenu'
+import { Image } from '../../../components/shared/Image'
 
 const useStyles = makeStyles()(() => ({
-    root: {
-        position: 'fixed',
-        top: 0,
-        left: 0,
-    },
     imgContent: {
         zIndex: 999,
         width: '100%',
@@ -33,6 +31,7 @@ const useStyles = makeStyles()(() => ({
         position: 'absolute',
         top: 0,
         right: 0,
+        zIndex: 99,
     },
     wordContent: {
         display: 'flex',
@@ -61,8 +60,26 @@ export function NormalNFT(props: NormalNFTProps) {
     const classes = useStylesExtends(useStyles(), {})
     const boxClasses = useStylesExtends(useBoxStyles(), {})
 
+    const [isMenuShow, setMenuShow] = useState(false)
+    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+    const handleMenuShow = (e: React.MouseEvent) => {
+        e.preventDefault()
+
+        setMousePosition({ x: e.clientX, y: e.clientY })
+        setMenuShow(true)
+    }
+    const handleMenuClose = () => {
+        setMenuShow(false)
+    }
+
+    const [position, setPosition] = useState({ x: 50, y: 150 })
+    const moveHandle = (x: number, y: number) => {
+        setPosition({ x, y })
+        setMenuShow(false)
+    }
+
     return (
-        <Drag baseWidth={150} baseHeight={150}>
+        <Drag moveHandle={moveHandle} baseWidth={150} baseHeight={150}>
             {start && showMeta?.word ? (
                 <Box className={classes.wordContent}>
                     <Box
@@ -77,10 +94,10 @@ export function NormalNFT(props: NormalNFTProps) {
                     </Box>
                 </Box>
             ) : null}
-            <Box className={classes.imgContent}>
+            <Box className={classes.imgContent} onContextMenu={handleMenuShow}>
                 <div className={classes.imgBox}>
-                    <img
-                        src={showMeta?.image}
+                    <Image
+                        src={showMeta?.image ?? ''}
                         style={{
                             objectFit: 'contain',
                             maxWidth: '100%',
@@ -94,6 +111,13 @@ export function NormalNFT(props: NormalNFTProps) {
             {infoShow ? (
                 <div className={classes.close} onClick={handleClose} style={{ backgroundImage: `url(${CloseIcon})` }} />
             ) : null}
+            <RightMenu
+                showMeta={showMeta}
+                isShow={isMenuShow}
+                onClose={handleMenuClose}
+                mousePosition={mousePosition}
+                dragPosition={position}
+            />
         </Drag>
     )
 }

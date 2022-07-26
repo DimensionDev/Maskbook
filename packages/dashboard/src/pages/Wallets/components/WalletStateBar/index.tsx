@@ -88,7 +88,7 @@ export const WalletStateBar = memo(() => {
     return (
         <WalletStateBarUI
             isPending={!!pendingTransactions.length}
-            name={wallet?.name ?? providerDescriptor.name}
+            name={wallet?.name ?? providerDescriptor?.name}
             address={account}
             domain={domain}
             network={networkDescriptor}

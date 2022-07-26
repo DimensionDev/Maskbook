@@ -55,13 +55,17 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
             color: theme.palette.mode === 'light' ? theme.palette.common.white : theme.palette.common.black,
         },
         arrow: {
+            marginLeft: '-12px',
             color: theme.palette.mode === 'light' ? theme.palette.common.black : theme.palette.common.white,
         },
+        firstAreaArrow: {
+            marginLeft: '12px !important',
+        },
         recommendFeatureApplicationBox: {
-            width: 255,
-            minWidth: 255,
+            width: 221,
+            minWidth: 221,
             height: 97,
-            marginRight: 12,
+            marginRight: 9.5,
             cursor: 'pointer',
             display: 'inline-flex',
             flexDirection: 'row',
@@ -139,7 +143,10 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
                 disablePortal: true,
                 placement: recommendFeature ? 'bottom' : 'top',
             }}
-            classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
+            classes={{
+                tooltip: classes.tooltip,
+                arrow: classNames(classes.arrow, recommendFeature?.isFirst ? classes.firstAreaArrow : ''),
+            }}
             placement={recommendFeature ? 'bottom' : 'top'}
             arrow
             disableHoverListener={!tooltipHint}

@@ -54,18 +54,17 @@ const useStyles = makeStyles()((theme) => ({
     },
     link: {
         display: 'flex',
-        fill: 'none',
     },
     linkIcon: {
         // TODO: replace with theme color
-        fill: theme.palette.mode === 'dark' ? '#F5F5F5' : '#07101B',
+        color: theme.palette.mode === 'dark' ? '#F5F5F5' : '#07101B',
         width: 17.5,
         height: 17.5,
         marginLeft: theme.spacing(0.5),
     },
     clear: {
         fontSize: 14,
-        color: theme.palette.mode === 'light' ? MaskColorVar.blue : theme.palette.common.white,
+        color: MaskColorVar.blue,
         cursor: 'pointer',
     },
 }))

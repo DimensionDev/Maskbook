@@ -27,7 +27,7 @@ export function StartUp() {
                     <Box>
                         <ActionCard
                             title={t.wallets_startup_connect()}
-                            icon={<CloudLinkIcon fontSize="inherit" />}
+                            icon={<CloudLinkIcon />}
                             subtitle={t.wallets_startup_connect_desc()}
                             action={{
                                 type: 'primary',

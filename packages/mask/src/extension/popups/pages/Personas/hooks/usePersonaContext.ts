@@ -1,11 +1,11 @@
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useAsyncRetry } from 'react-use'
+import { head, isEqual, unionWith } from 'lodash-unified'
 import { createContainer } from 'unstated-next'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { ECKeyIdentifier, EMPTY_LIST, PersonaInformation, ProfileIdentifier } from '@masknet/shared-base'
-import { currentPersonaIdentifier } from '../../../../../settings/settings'
-import { useAsyncRetry } from 'react-use'
+import { currentPersonaIdentifier } from '../../../../../../shared/legacy-settings/settings'
 import Services from '../../../../service'
-import { head, isEqual, unionWith } from 'lodash-unified'
-import { useCallback, useEffect, useMemo, useState } from 'react'
 import { MaskMessages } from '../../../../../utils'
 import { NextIDProof } from '@masknet/web3-providers'
 import type { Account } from '../type'
@@ -23,6 +23,8 @@ function useSSRPersonaInformation() {
 
     return { personas }
 }
+
+const compareIdentity = (a?: string, b?: string) => isEqual(a?.toLowerCase(), b?.toLowerCase())
 function usePersonaContext() {
     const [selectedAccount, setSelectedAccount] = useState<Account>()
     const [selectedPersona, setSelectedPersona] = useState<PersonaInformation>()
@@ -73,9 +75,14 @@ function usePersonaContext() {
                 }
             })
 
-        return unionWith(remoteProfiles, localProfiles, (a, b) =>
-            isEqual(a.identity?.toLowerCase(), b.identity?.toLowerCase()),
-        )
+        return unionWith(remoteProfiles, localProfiles, (a, b) => compareIdentity(a.identity, b.identity)).map((x) => {
+            const localProfile = localProfiles.find((profile) => compareIdentity(profile.identity, x.identity))
+            if (!localProfile) return x
+            return {
+                ...localProfile,
+                ...x,
+            }
+        })
     }, [proofs, currentPersona])
 
     return {

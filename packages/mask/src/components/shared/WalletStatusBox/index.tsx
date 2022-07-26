@@ -100,10 +100,10 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, { content
         marginRight: theme.spacing(0.5),
     },
     copyIcon: {
-        fill: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor.dark,
+        color: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor.dark,
     },
     linkIcon: {
-        fill: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor?.dark,
+        color: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor?.dark,
     },
     statusBox: {
         position: 'relative',
@@ -220,7 +220,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             onClick={async () => {
                                 props.closeDialog?.()
                                 closeWalletStatusDialog()
-                                await connection.disconnect()
+                                await connection?.disconnect()
                                 openSelectProviderDialog()
                             }}>
                             {t('plugin_wallet_disconnect')}

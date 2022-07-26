@@ -1,0 +1,28 @@
+{
+    "NFTS_BLOCK_ADDRESS": {
+        "Mainnet": "0x8ed6DC7228Ec0A6aEFb4F4d55fB7f8b3A4F5D384",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "",
+        "Optimism": "",
+        "Optimism_Kovan": "",
+        "Optimism_Goerli": "",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": "",
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
+    }
+}

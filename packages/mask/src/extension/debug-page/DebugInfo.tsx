@@ -6,7 +6,6 @@ export const DEBUG_INFO = {
     'User Agent': navigator.userAgent,
     'Mask Version': process.env.VERSION,
     'Build Date': process.env.channel_DATE,
-    'Tag Name': process.env.TAG_NAME,
     'Commit Hash': process.env.COMMIT_HASH,
     'Commit Date': process.env.COMMIT_DATE,
     'Remote URL': process.env.REMOTE_URL,

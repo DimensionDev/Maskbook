@@ -140,8 +140,9 @@ const useStyles = makeStyles()(() => ({
         margin: '10px 0',
     },
     copy: {
-        fontSize: 12,
-        fill: '#7B8192',
+        width: 12,
+        height: 12,
+        color: '#7B8192',
         cursor: 'pointer',
     },
 }))
@@ -175,45 +176,56 @@ const ContractInteraction = memo(() => {
 
         switch (type) {
             case TransactionDescriptorType.INTERACTION:
-                switch (request.transactionContext?.name) {
-                    case 'approve':
-                        return {
-                            isNativeTokenInteraction: false,
-                            typeName: request.formatterTransaction?.title,
-                            tokenAddress: request.computedPayload?.to,
-                            to: request.computedPayload?.to,
-                            gas: request.computedPayload?.gas,
-                            gasPrice: request.computedPayload?.gasPrice,
-                            maxFeePerGas: request.computedPayload?.maxFeePerGas,
-                            maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
-                            amount: request.transactionContext.parameters?.value,
+                const methods = request.transactionContext?.methods
+
+                if (methods?.length) {
+                    for (const method of methods) {
+                        const parameters = method.parameters
+
+                        if (method.name === 'approve' || method.name === 'setApprovalForAll') {
+                            return {
+                                isNativeTokenInteraction: false,
+                                typeName: request.formatterTransaction?.title,
+                                tokenAddress: request.computedPayload?.to,
+                                to: request.computedPayload?.to,
+                                gas: request.computedPayload?.gas,
+                                gasPrice: request.computedPayload?.gasPrice,
+                                maxFeePerGas: request.computedPayload?.maxFeePerGas,
+                                maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
+                                amount: parameters?.value,
+                            }
                         }
-                    case 'transfer':
-                    case 'transferFrom':
-                        return {
-                            isNativeTokenInteraction: false,
-                            typeName: t('popups_wallet_contract_interaction_transfer'),
-                            tokenAddress: request.computedPayload?.to,
-                            to: request.transactionContext.parameters?.to,
-                            gas: request.computedPayload?.gas,
-                            gasPrice: request.computedPayload?.gasPrice,
-                            maxFeePerGas: request.computedPayload?.maxFeePerGas,
-                            maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
-                            amount: request.transactionContext.parameters?.value,
-                            contractAddress: request.computedPayload?.to,
+
+                        if (
+                            (method.name === 'transfer' || method.name === 'transferFrom') &&
+                            parameters?.to &&
+                            parameters?.value
+                        ) {
+                            return {
+                                isNativeTokenInteraction: false,
+                                typeName: t('popups_wallet_contract_interaction_transfer'),
+                                tokenAddress: request.computedPayload?.to,
+                                to: parameters?.to as string,
+                                gas: request.computedPayload?.gas,
+                                gasPrice: request.computedPayload?.gasPrice,
+                                maxFeePerGas: request.computedPayload?.maxFeePerGas,
+                                maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
+                                amount: parameters?.value,
+                                contractAddress: request.computedPayload?.to,
+                            }
                         }
-                    default:
-                        return {
-                            isNativeTokenInteraction: true,
-                            typeName: t('popups_wallet_contract_interaction'),
-                            tokenAddress: request.computedPayload?.to,
-                            to: request.computedPayload?.to,
-                            gas: request.computedPayload?.gas,
-                            gasPrice: request.computedPayload?.gasPrice,
-                            maxFeePerGas: request.computedPayload?.maxFeePerGas,
-                            maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
-                            amount: request.computedPayload?.value,
-                        }
+                    }
+                }
+                return {
+                    isNativeTokenInteraction: true,
+                    typeName: t('popups_wallet_contract_interaction'),
+                    tokenAddress: request.computedPayload?.to,
+                    to: request.computedPayload?.to,
+                    gas: request.computedPayload?.gas,
+                    gasPrice: request.computedPayload?.gasPrice,
+                    maxFeePerGas: request.computedPayload?.maxFeePerGas,
+                    maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
+                    amount: request.computedPayload?.value,
                 }
             case TransactionDescriptorType.TRANSFER:
                 return {
@@ -334,7 +346,7 @@ const ContractInteraction = memo(() => {
                     <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
                         {to}
                         {request?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION &&
-                        request?.transactionContext?.name === 'approve' &&
+                        request?.transactionContext?.methods?.some((x) => x.name === 'approve') &&
                         to ? (
                             <CopyIconButton text={to} className={classes.copy} />
                         ) : null}

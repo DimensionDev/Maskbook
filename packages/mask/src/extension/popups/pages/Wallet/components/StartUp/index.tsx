@@ -82,6 +82,10 @@ export const WalletStartUp = memo(() => {
                 urlcat('/dashboard.html#/create-mask-wallet', { chainId: params.get('chainId') }),
             ),
         })
+        if (process.env.engine === 'firefox') {
+            window.close()
+        }
+
         await Services.Helper.removePopupWindow()
     }, [location.search])
 
@@ -101,15 +105,27 @@ export const WalletStartUp = memo(() => {
                     <NetworkSelector />
                 </Box>
                 <Box className={classes.item} onClick={onEnterCreateWallet}>
-                    <MaskWalletIcon sx={{ fontSize: 24 }} />
+                    <MaskWalletIcon size={24} />
                     <Typography className={classes.itemTitle}>{t('wallet_new')}</Typography>
                 </Box>
                 {!loading ? (
                     <Link
                         to={!hasPassword ? PopupRoutes.SetPaymentPassword : PopupRoutes.ImportWallet}
+                        onClick={(event) => {
+                            if (process.env.engine !== 'firefox') return
+                            const params = new URLSearchParams(location.search)
+                            const toBeClose = params.get('toBeClose')
+                            if (!toBeClose) {
+                                event.preventDefault()
+                                event.stopPropagation()
+                                Services.Helper.openPopupWindow(
+                                    !hasPassword ? PopupRoutes.SetPaymentPassword : PopupRoutes.ImportWallet,
+                                )
+                            }
+                        }}
                         style={{ textDecoration: 'none' }}>
                         <Box className={classes.item}>
-                            <ImportWalletIcon sx={{ fontSize: 24 }} />
+                            <ImportWalletIcon size={24} />
                             <Typography className={classes.itemTitle}>{t('plugin_wallet_import_wallet')}</Typography>
                         </Box>
                     </Link>

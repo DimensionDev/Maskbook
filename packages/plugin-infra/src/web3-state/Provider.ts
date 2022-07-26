@@ -34,7 +34,7 @@ export class ProviderState<
     public providerType?: Subscription<ProviderType>
 
     constructor(
-        protected context: Plugin.Shared.SharedContext,
+        protected context: Plugin.Shared.SharedUIContext,
         protected providers: Record<ProviderType, WalletProvider<ChainId, ProviderType, Web3Provider, Web3>>,
         protected options: {
             isValidAddress(a?: string): boolean
@@ -93,6 +93,13 @@ export class ProviderState<
                     chainId: Number.parseInt(chainId, 16) as ChainId,
                 })
             })
+            provider.emitter.on('connect', ({ account }) => {
+                if (account && this.options.isValidAddress(account)) {
+                    this.setAccount(providerType, {
+                        account,
+                    })
+                }
+            })
             provider.emitter.on('accounts', async (accounts) => {
                 const account = first(accounts)
                 if (account && this.options.isValidAddress(account))
@@ -109,7 +116,7 @@ export class ProviderState<
                 const siteType = getSiteType()
                 if (!siteType) return
 
-                this.storage.providerType.setValue(this.options.getDefaultProviderType())
+                this.storage.providerType.setValue(this.options.getDefaultProviderType(siteType))
             })
         })
     }
@@ -161,13 +168,13 @@ export class ProviderState<
         const provider = this.providers[providerType]
 
         // compose the connection result
-        const account = await provider.connect(chainId)
+        const result = await provider.connect(chainId)
 
         // failed to connect provider
-        if (!account.account) throw new Error('Failed to connect provider.')
+        if (!result.account) throw new Error('Failed to connect provider.')
 
         // switch the sub-network to the expected one
-        if (chainId !== account.chainId) {
+        if (chainId !== result.chainId) {
             await Promise.race([
                 (async () => {
                     await delay(30 /* seconds */ * 1000 /* milliseconds */)
@@ -175,15 +182,15 @@ export class ProviderState<
                 })(),
                 provider.switchChain(chainId),
             ])
-            account.chainId = chainId
+            result.chainId = chainId
         }
 
         // update local storage
         await this.setProvider(providerType)
-        await this.setAccount(providerType, account)
+        await this.setAccount(providerType, result)
 
-        provider.emitter.emit('connect', account)
-        return account
+        provider.emitter.emit('connect', result)
+        return result
     }
 
     async disconnect(providerType: ProviderType) {

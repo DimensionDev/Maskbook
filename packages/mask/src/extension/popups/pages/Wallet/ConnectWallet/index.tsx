@@ -89,7 +89,10 @@ const ConnectWalletPage = memo(() => {
                     return
                 }
 
-                if (!wallets.length) navigate(PopupRoutes.Wallet, { replace: true })
+                if (!wallets.length) {
+                    navigate(PopupRoutes.Wallet, { replace: true })
+                    return
+                }
 
                 navigate(
                     urlcat(PopupRoutes.SelectWallet, {
@@ -113,7 +116,7 @@ const ConnectWalletPage = memo(() => {
                 },
             })
         },
-        [isLocked, getLockStatusLoading, wallets],
+        [isLocked, getLockStatusLoading, wallets.length],
     )
     useTitle(t('plugin_wallet_on_connect'))
 

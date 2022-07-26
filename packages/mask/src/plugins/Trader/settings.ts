@@ -1,5 +1,5 @@
 import { unreachable } from '@dimensiondev/kit'
-import { createGlobalSettings, createInternalSettings } from '../../settings/createSettings'
+import { createGlobalSettings, createInternalSettings } from '../../../shared/legacy-settings/createSettings'
 import { PLUGIN_ID, SLIPPAGE_DEFAULT } from './constants'
 import type { ZrxTradePool } from './types'
 import { DataProvider } from '@masknet/public-api'
@@ -23,6 +23,7 @@ export interface TradeProviderSettings {
 const coinGeckoPreferredCoinId = createInternalSettings(`${PLUGIN_ID}+currentCoinGeckoPreferredCoinId`, '{}')
 const coinMarketCapPreferredCoinId = createInternalSettings(`${PLUGIN_ID}+currentCoinMarketCapPreferredCoinId`, '{}')
 const coinUniswapPreferredCoinId = createInternalSettings(`${PLUGIN_ID}+currentCoinUniswapPreferredCoinId`, '{}')
+const coinNftScanPreferredCoinId = createInternalSettings(`${PLUGIN_ID}+coinNftScanPreferredCoinId`, '{}')
 
 export function getCurrentPreferredCoinIdSettings(dataProvider: DataProvider) {
     switch (dataProvider) {
@@ -32,6 +33,8 @@ export function getCurrentPreferredCoinIdSettings(dataProvider: DataProvider) {
             return coinMarketCapPreferredCoinId
         case DataProvider.UNISWAP_INFO:
             return coinUniswapPreferredCoinId
+        case DataProvider.NFTSCAN:
+            return coinNftScanPreferredCoinId
         default:
             unreachable(dataProvider)
     }

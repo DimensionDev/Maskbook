@@ -8,24 +8,39 @@ const useStyles = makeStyles()(() => {
     return {
         recommendFeatureAppListWrapper: {
             display: 'flex',
+            scrollbarColor: 'transparent transparent',
             overflowX: 'scroll',
-            margin: '0 2px 4px 2px',
-            padding: '8px 2px 0 2px',
+            margin: '0 2px 5px',
+            padding: '8px 0px 0',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
         },
         carousel: {
-            height: 130,
+            position: 'relative',
+            zIndex: 100,
             overflowX: 'scroll',
+            scrollbarColor: 'transparent transparent',
             overscrollBehavior: 'contain',
             '& .carousel__slider': {
                 padding: '8px 2px 0',
+                width: 562,
                 overscrollBehavior: 'contain',
                 overflowX: 'scroll',
                 '&::-webkit-scrollbar': {
                     display: 'none',
                 },
+            },
+            '& .carousel__slide:focus-visible': {
+                outline: 'none',
+                display: 'none',
+            },
+            overflow: 'hidden',
+        },
+        isHoveringCarousel: {
+            height: 270,
+            '& .carousel__slider': {
+                height: 270,
             },
         },
     }
@@ -34,29 +49,48 @@ const useStyles = makeStyles()(() => {
 interface Props {
     recommendFeatureAppList: Application[]
     RenderEntryComponent: (props: { application: Application }) => JSX.Element
+    isCarouselReady?: () => boolean | null
+    setIsHoveringCarousel: (hover: boolean) => void
+    isHoveringCarousel: boolean
 }
 
 export function ApplicationRecommendArea(props: Props) {
-    const { recommendFeatureAppList, RenderEntryComponent } = props
-    const { classes } = useStyles()
+    const {
+        recommendFeatureAppList,
+        RenderEntryComponent,
+        isCarouselReady,
+        isHoveringCarousel,
+        setIsHoveringCarousel,
+    } = props
+    const { classes, cx } = useStyles()
     const [isPlaying, setIsPlaying] = useState(true)
 
     return (
         <>
             <link rel="stylesheet" href={new URL('./assets/react-carousel.es.css', import.meta.url).toString()} />
-            {recommendFeatureAppList.length > 2 ? (
+            {recommendFeatureAppList.length > 2 && isCarouselReady?.() ? (
                 <CarouselProvider
                     naturalSlideWidth={220}
                     naturalSlideHeight={117}
                     totalSlides={recommendFeatureAppList.length}
-                    visibleSlides={2.2}
+                    visibleSlides={2.242}
                     infinite={false}
                     interval={2500}
-                    className={classes.carousel}
+                    className={cx(classes.carousel, isHoveringCarousel ? classes.isHoveringCarousel : '')}
                     isPlaying={isPlaying}>
                     <Slider onScroll={(e) => setIsPlaying((e.target as HTMLDivElement).scrollLeft === 0)}>
                         {recommendFeatureAppList.map((application, i) => (
-                            <Slide index={i} key={application.entry.ApplicationEntryID}>
+                            <Slide
+                                index={i}
+                                key={application.entry.ApplicationEntryID}
+                                onMouseEnter={() => {
+                                    setIsHoveringCarousel(true)
+                                    setIsPlaying(false)
+                                }}
+                                onMouseLeave={() => {
+                                    setIsHoveringCarousel(false)
+                                    setIsPlaying(true)
+                                }}>
                                 <RenderEntryComponent application={application} />
                             </Slide>
                         ))}

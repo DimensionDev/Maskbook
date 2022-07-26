@@ -26,7 +26,6 @@ const useStyles = makeStyles()({
         marginBottom: 1,
         backgroundColor: '#ffffff',
         '& > svg': {
-            fontSize: 20,
             marginRight: 15,
         },
     },
@@ -50,35 +49,20 @@ const useStyles = makeStyles()({
         wordBreak: 'break-all',
     },
     trashIcon: {
-        fontSize: 12,
         marginLeft: 6,
         cursor: 'pointer',
-        width: 12,
-        height: 12,
-    },
-    tick: {
-        fill: 'none',
-        fontSize: 18,
     },
     edit: {
-        fontSize: 16,
-        stroke: '#1C68F3',
-        fill: 'none',
+        color: '#1C68F3',
         marginLeft: 10,
         cursor: 'pointer',
     },
     copy: {
-        fontSize: 12,
-        fill: '#1C68F3',
+        width: 12,
+        height: 12,
+        color: '#1C68F3',
         marginLeft: 4,
         cursor: 'pointer',
-    },
-    setting: {
-        fontSize: 12,
-        cursor: 'pointer',
-        fill: 'none',
-        stroke: '#1C68F3',
-        marginLeft: 4,
     },
 })
 
@@ -162,13 +146,14 @@ const PersonaListItem = memo<PersonaListItemProps>(
         const [element] = useHover((isHovering) => (
             <ListItemButton className={classes.item} onClick={() => onChange()}>
                 <div className={classes.iconContainer}>
-                    <MasksIcon />
+                    <MasksIcon size={20} />
                 </div>
                 <div style={{ flex: 1 }}>
                     <Typography className={classes.name}>
                         {nickname}
                         {isHovering ? (
                             <EditIcon
+                                size={16}
                                 className={classes.edit}
                                 onClick={(e) => {
                                     e.stopPropagation()
@@ -179,8 +164,9 @@ const PersonaListItem = memo<PersonaListItemProps>(
                     </Typography>
                     <Typography className={classes.identifier}>
                         {formatPersonaFingerprint(identifier.rawPublicKey ?? '', 10)}
-                        <CopyIconButton className={classes.copy} text={identifier.toText()} />
+                        <CopyIconButton className={classes.copy} text={identifier.rawPublicKey} />
                         <Trash2
+                            size={12}
                             className={classes.trashIcon}
                             onClick={(e) => {
                                 e.stopPropagation()
@@ -189,7 +175,7 @@ const PersonaListItem = memo<PersonaListItemProps>(
                         />
                     </Typography>
                 </div>
-                {isCurrent ? <TickIcon className={classes.tick} /> : null}
+                {isCurrent ? <TickIcon size={18} /> : null}
             </ListItemButton>
         ))
 

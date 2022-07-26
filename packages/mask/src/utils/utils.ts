@@ -3,7 +3,8 @@
  * in this file please.
  */
 import { pasteImage } from '@masknet/injected-script'
-import { isNull } from 'lodash-unified'
+import type { NextIDPersonaBindings } from '@masknet/shared-base'
+import { first, isNull } from 'lodash-unified'
 import Services from '../extension/service'
 /**
  * Download given url return as Blob
@@ -52,4 +53,17 @@ export function regexMatch(input: string, pattern: RegExp, index: number | null 
         return r as RegExpMatchArray as any
     }
     return r[index] as string as any
+}
+/**
+ *
+ * @param find latest used persona binding
+ */
+
+export const sortPersonaBindings = (a: NextIDPersonaBindings, b: NextIDPersonaBindings, userId: string): number => {
+    const p_a = first(a.proofs.filter((x) => x.identity === userId.toLowerCase()))
+    const p_b = first(b.proofs.filter((x) => x.identity === userId.toLowerCase()))
+
+    if (!p_a || !p_b) return 0
+    if (p_a.created_at > p_b.created_at) return -1
+    return 1
 }

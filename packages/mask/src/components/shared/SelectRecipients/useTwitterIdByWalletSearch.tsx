@@ -5,20 +5,21 @@ import {
     NextIDPlatform,
     ProfileIdentifier,
 } from '@masknet/shared-base'
-import { uniqBy } from 'lodash-unified'
+import { compact, uniqBy } from 'lodash-unified'
 
 export function useTwitterIdByWalletSearch(
     bindings: NextIDPersonaBindings[] | undefined,
     value: string,
     type?: NextIDPlatform,
 ) {
-    if (!bindings || !type) return EMPTY_LIST
+    if (!bindings?.length || !type) return EMPTY_LIST
 
-    return bindings.map((binding) => {
+    const nextIdAccounts = bindings.map((binding) => {
         const proofs = uniqBy(
             binding.proofs.filter((x) => x.platform === NextIDPlatform.Twitter),
             (proof) => proof.identity,
         )
+        if (!proofs.length) return null
         const linkedTwitterNames = proofs.map((x) => x.identity)
         return {
             nickname: proofs[0].identity,
@@ -29,4 +30,5 @@ export function useTwitterIdByWalletSearch(
             linkedPersona: ECKeyIdentifier.fromHexPublicKeyK256(binding.persona).unwrap(),
         }
     })
+    return compact(nextIdAccounts)
 }

@@ -1,21 +1,13 @@
+import { WarningIcon } from '@masknet/icons'
+import { DashboardRoutes, PersonaIdentifier } from '@masknet/shared-base'
+import { MaskDialog } from '@masknet/theme'
+import { LoadingButton } from '@mui/lab'
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import { memo, useCallback } from 'react'
-import { getMaskColor, makeStyles, MaskDialog } from '@masknet/theme'
-import { useDashboardI18N } from '../../../../locales'
-import { Services } from '../../../../API'
-import { PersonaIdentifier, DashboardRoutes } from '@masknet/shared-base'
-import { PersonaContext } from '../../hooks/usePersonaContext'
 import { useNavigate } from 'react-router-dom'
-import { WarningIcon } from '@masknet/icons'
-import { LoadingButton } from '@mui/lab'
-
-const useStyles = makeStyles()((theme) => ({
-    svg: {
-        '& path': {
-            fill: getMaskColor(theme).redMain,
-        },
-    },
-}))
+import { Services } from '../../../../API'
+import { useDashboardI18N } from '../../../../locales'
+import { PersonaContext } from '../../hooks/usePersonaContext'
 
 export interface LogoutPersonaDialogProps {
     open: boolean
@@ -26,7 +18,6 @@ export interface LogoutPersonaDialogProps {
 export const LogoutPersonaDialog = memo<LogoutPersonaDialogProps>(({ open, onClose, identifier }) => {
     const t = useDashboardI18N()
     const navigate = useNavigate()
-    const { classes } = useStyles()
     const { changeCurrentPersona } = PersonaContext.useContainer()
     const handleLogout = useCallback(async () => {
         await Services.Identity.logoutPersona(identifier)
@@ -46,7 +37,7 @@ export const LogoutPersonaDialog = memo<LogoutPersonaDialogProps>(({ open, onClo
             <DialogContent>
                 <Box>
                     <Box textAlign="center" py={2}>
-                        <WarningIcon className={classes.svg} sx={{ fontSize: 64 }} color="warning" />
+                        <WarningIcon size={64} color="warning" />
                     </Box>
                 </Box>
                 <Typography color="error" variant="body2" fontSize={13}>

@@ -5,7 +5,7 @@ import { useNetworkDescriptor } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, ImageIcon } from '@masknet/shared'
 import { Button, Link, Typography } from '@mui/material'
 import { CopyIconButton } from '../../../components/CopyIconButton'
-import { CircleLoadingIcon, DeleteIcon, EmptyIcon, LinkOutIcon } from '@masknet/icons'
+import { CircleLoadingIcon, DeleteIcon, EmptyIcon, PopupLinkIcon } from '@masknet/icons'
 import type { ConnectedWalletInfo } from '../type'
 import { DisconnectWalletDialog } from '../components/DisconnectWalletDialog'
 import { useI18N } from '../../../../../utils'
@@ -67,14 +67,13 @@ const useStyles = makeStyles()(() => ({
         alignItems: 'center',
     },
     icon: {
-        fontSize: 16,
+        width: 16,
+        height: 16,
         marginLeft: 4,
         cursor: 'pointer',
-        fill: '#767F8D',
+        color: '#767F8D',
     },
     delete: {
-        fontSize: 24,
-        stroke: '#536471',
         cursor: 'pointer',
     },
     placeholder: {
@@ -157,16 +156,16 @@ export const ConnectedWalletsUI = memo<ConnectedWalletsUIProps>(
                                         href={explorerResolver.addressLink(chainId, wallet.identity ?? '')}
                                         target="_blank"
                                         rel="noopener noreferrer">
-                                        <LinkOutIcon className={classes.icon} />
+                                        <PopupLinkIcon className={classes.icon} />
                                     </Link>
                                 </Typography>
                             </div>
-                            <DeleteIcon className={classes.delete} onClick={() => onDelete(wallet)} />
+                            <DeleteIcon color="#536471" onClick={() => onDelete(wallet)} />
                         </div>
                     ))
                 ) : (
                     <div className={classes.placeholder}>
-                        <EmptyIcon style={{ fontSize: 60 }} />
+                        <EmptyIcon size={60} />
                     </div>
                 )}
                 <DisconnectWalletDialog
