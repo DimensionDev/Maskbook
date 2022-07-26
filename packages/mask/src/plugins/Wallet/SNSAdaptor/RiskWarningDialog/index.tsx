@@ -22,6 +22,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     buttons: {
         padding: theme.spacing(2),
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
     },
     button: {
         borderRadius: isDashboardPage() ? 9999 : undefined,
