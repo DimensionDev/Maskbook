@@ -17,7 +17,7 @@ import Services from '../../../../service'
 import { getDerivableAccounts } from '../../../../../plugins/Wallet/services'
 import { PageHeader } from '../components/PageHeader'
 import { PasswordField } from '../../../components/PasswordField'
-import { currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
+import { currentMaskWalletAccountSettings } from '../../../../../../shared/legacy-settings/wallet-settings'
 import { useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useTitle } from '../../../hook/useTitle'
@@ -255,8 +255,7 @@ const ImportWallet = memo(() => {
                         />
                     </Tabs>
                     <TabPanel value={tabs.mnemonic} className={classes.tabPanel}>
-                        <StyledInput
-                            type="password"
+                        <PasswordField
                             value={mnemonic}
                             onChange={(e) => {
                                 if (errorMessage) setErrorMessage('')
@@ -280,8 +279,7 @@ const ImportWallet = memo(() => {
                         />
                     </TabPanel>
                     <TabPanel value={tabs.privateKey} className={classes.tabPanel}>
-                        <StyledInput
-                            type="password"
+                        <PasswordField
                             value={privateKey}
                             onChange={(e) => {
                                 if (errorMessage) setErrorMessage('')

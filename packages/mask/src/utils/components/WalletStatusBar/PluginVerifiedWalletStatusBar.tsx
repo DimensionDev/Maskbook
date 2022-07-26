@@ -1,7 +1,7 @@
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Box, Button, Divider, ListItemIcon, MenuItem, Typography } from '@mui/material'
-import { memo, PropsWithChildren, useCallback, useState } from 'react'
+import { memo, PropsWithChildren, useCallback, useMemo, useState } from 'react'
 import { useI18N } from '../../i18n-next-ui'
 import { Action } from './Action'
 import { useStatusBarStyles } from './styles'
@@ -15,13 +15,19 @@ import {
     useWeb3State,
     Web3Helper,
     useDefaultChainId,
+    useRecentTransactions,
 } from '@masknet/plugin-infra/web3'
-import { WalletConnect, WalletSetting } from '@masknet/icons'
+import { ConnectWallet, WalletSetting } from '@masknet/icons'
 import type { WalletDescriptionProps } from './WalletDescription'
 import { first, omit } from 'lodash-unified'
 import { useWalletName } from './hooks/useWalletName'
 import { WalletDescription } from './WalletDescription'
-import { isSameAddress, NetworkPluginID, resolveNextIdPlatformPluginId } from '@masknet/web3-shared-base'
+import {
+    isSameAddress,
+    NetworkPluginID,
+    resolveNextIdPlatformPluginId,
+    TransactionStatusType,
+} from '@masknet/web3-shared-base'
 import { WalletMenuItem } from './WalletMenuItem'
 import { useMenu } from '@masknet/shared'
 import Services from '../../../extension/service'
@@ -43,6 +49,10 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
 
         const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
             WalletMessages.events.selectProviderDialogUpdated,
+        )
+
+        const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
+            WalletMessages.events.walletStatusDialogUpdated,
         )
 
         const openPopupWindow = useCallback(() => {
@@ -79,19 +89,34 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         const providerDescriptor = useProviderDescriptor(defaultPluginId)
         const networkDescriptor = useNetworkDescriptor(defaultPluginId)
 
-        const [descriptionProps, setDescriptionProps] = useState<WalletDescriptionProps>({
-            name: defaultWalletName,
-            networkIcon: networkDescriptor?.icon,
-            providerIcon: account ? providerDescriptor?.icon : undefined,
-            iconFilterColor: account ? providerDescriptor?.iconFilterColor : '',
-            formattedAddress: Others?.formatAddress(account || (defaultVerifiedWallet?.identity ?? ''), 4),
-            addressLink: Others?.explorerResolver.addressLink?.(
-                account ? chainId : defaultChainId,
-                account || (defaultVerifiedWallet?.identity ?? ''),
-            ),
-            address: account || defaultVerifiedWallet?.identity,
-            verified: account ? isVerifiedAccount : true,
-        })
+        const pendingTransactions = useRecentTransactions(currentPluginId, TransactionStatusType.NOT_DEPEND)
+
+        const description = useMemo(
+            () => ({
+                name: defaultWalletName,
+                networkIcon: networkDescriptor?.icon,
+                providerIcon: account ? providerDescriptor?.icon : undefined,
+                iconFilterColor: account ? providerDescriptor?.iconFilterColor : '',
+                formattedAddress: Others?.formatAddress(account || (defaultVerifiedWallet?.identity ?? ''), 4),
+                addressLink: Others?.explorerResolver.addressLink?.(
+                    account ? chainId : defaultChainId,
+                    account || (defaultVerifiedWallet?.identity ?? ''),
+                ),
+                address: account || defaultVerifiedWallet?.identity,
+                verified: account ? isVerifiedAccount : true,
+            }),
+            [
+                account,
+                defaultWalletName,
+                providerDescriptor,
+                networkDescriptor,
+                defaultVerifiedWallet,
+                defaultChainId,
+                chainId,
+            ],
+        )
+
+        const [descriptionProps, setDescriptionProps] = useState<WalletDescriptionProps>(description)
 
         const onSelect = useCallback(
             (props: WalletDescriptionProps, chainId: Web3Helper.ChainIdAll, pluginId: NetworkPluginID) => {
@@ -145,19 +170,15 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
             </MenuItem>,
         )
 
-        // Because getting the domain is asynchronous, the default name will not be correctly
         useUpdateEffect(() => {
-            setDescriptionProps((prev) => ({
-                ...prev,
-                name: defaultWalletName,
-            }))
-        }, [defaultWalletName])
+            setDescriptionProps(description)
+        }, [description])
 
         if (!account && !verifiedWallets) {
             return (
                 <Box className={cx(classes.root, className)}>
                     <Button fullWidth onClick={openSelectProviderDialog}>
-                        <WalletConnect className={classes.connection} /> {t('plugin_wallet_connect_a_wallet')}
+                        <ConnectWallet className={classes.connection} /> {t('plugin_wallet_connect_a_wallet')}
                     </Button>
                 </Box>
             )
@@ -166,7 +187,12 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         return (
             <>
                 <Box className={cx(classes.root, className)}>
-                    <WalletDescription {...omit(descriptionProps, 'address')} onClick={openMenu} />
+                    <WalletDescription
+                        {...omit(descriptionProps, 'address')}
+                        onClick={openMenu}
+                        pending={!!pendingTransactions.length}
+                        onPendingClick={openWalletStatusDialog}
+                    />
                     <Action openSelectWalletDialog={openSelectProviderDialog}>{children}</Action>
                 </Box>
                 {menu}

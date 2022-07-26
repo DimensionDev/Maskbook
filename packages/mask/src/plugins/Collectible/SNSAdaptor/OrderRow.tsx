@@ -1,6 +1,7 @@
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import { ChainId, explorerResolver, SchemaType } from '@masknet/web3-shared-evm'
 import { Avatar, Link, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { ChainId, explorerResolver, SchemaType } from '@masknet/web3-shared-evm'
 import {
     isOne,
     isZero,
@@ -9,11 +10,10 @@ import {
     SourceType,
     CurrencyType,
 } from '@masknet/web3-shared-base'
-import { CollectibleState } from '../hooks/useCollectibleState'
-import { Account } from './Account'
 import { FormattedBalance } from '@masknet/shared'
 import { getOrderUnitPrice } from '@masknet/web3-providers'
-import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import { CollectibleState } from '../hooks/useCollectibleState'
+import { Account } from './Account'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -88,26 +88,26 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                                     <Link
                                         href={explorerResolver.addressLink(
                                             ChainId.Mainnet,
-                                            order.paymentToken?.address ?? '',
+                                            order.priceInToken?.token?.address ?? '',
                                         )}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className={classes.tokenLink}>
-                                        {order.paymentToken?.logoURL && (
+                                        {order.priceInToken?.token?.logoURL && (
                                             <img
-                                                src={order.paymentToken.logoURL}
+                                                src={order.priceInToken?.token.logoURL}
                                                 className={classes.token}
-                                                alt={order.paymentToken?.symbol}
+                                                alt={order.priceInToken?.token?.symbol}
                                             />
                                         )}
                                     </Link>
                                 ) : null}
                                 {getOrderUnitPrice(
                                     order.price?.[CurrencyType.USD],
-                                    order.paymentToken?.decimals,
+                                    order.priceInToken?.token?.decimals,
                                     order.quantity,
                                 )}{' '}
-                                {order.paymentToken?.symbol}
+                                {order.priceInToken?.token?.symbol}
                             </>
                         </Typography>
                     </TableCell>
@@ -129,26 +129,26 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                                 <Link
                                     href={explorerResolver.addressLink(
                                         ChainId.Mainnet,
-                                        order.paymentToken?.address ?? '',
+                                        order.priceInToken?.token?.address ?? '',
                                     )}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className={classes.tokenLink}>
-                                    {order.paymentToken?.logoURL ? (
+                                    {order.priceInToken?.token?.logoURL ? (
                                         <img
-                                            src={order.paymentToken.logoURL}
+                                            src={order.priceInToken?.token.logoURL}
                                             className={classes.token}
-                                            alt={order.paymentToken?.symbol}
+                                            alt={order.priceInToken?.token?.symbol}
                                         />
                                     ) : null}
                                 </Link>
                             ) : null}
                             {getOrderUnitPrice(
                                 order.price?.[CurrencyType.USD],
-                                order.paymentToken?.decimals,
+                                order.priceInToken?.token?.decimals,
                                 order.quantity,
                             )?.toString()}{' '}
-                            {provider === SourceType.OpenSea ? order.paymentToken?.symbol ?? '' : 'ETH'}
+                            {provider === SourceType.OpenSea ? order.priceInToken?.token?.symbol ?? '' : 'ETH'}
                         </Typography>
                     </TableCell>
                     {provider === SourceType.OpenSea ? (

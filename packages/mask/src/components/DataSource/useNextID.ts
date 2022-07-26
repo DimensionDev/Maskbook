@@ -3,10 +3,14 @@ import { EMPTY_LIST, NextIDPlatform, PersonaIdentifier } from '@masknet/shared-b
 import { useEffect, useMemo, useState } from 'react'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { usePersonaConnectStatus } from './usePersonaConnectStatus'
-import { currentPersonaIdentifier, currentSetupGuideStatus, dismissVerifyNextID } from '../../settings/settings'
+import {
+    currentPersonaIdentifier,
+    currentSetupGuideStatus,
+    dismissVerifyNextID,
+} from '../../../shared/legacy-settings/settings'
 import stringify from 'json-stable-stringify'
-import { SetupGuideStep } from '../InjectedComponents/SetupGuide/types'
-import type { SetupGuideCrossContextStatus } from '../../settings/types'
+import { SetupGuideStep } from '../../../shared/legacy-settings/types'
+import type { SetupGuideCrossContextStatus } from '../../../shared/legacy-settings/types'
 import { useLastRecognizedIdentity } from './useActivatedUI'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { NextIDProof } from '@masknet/web3-providers'

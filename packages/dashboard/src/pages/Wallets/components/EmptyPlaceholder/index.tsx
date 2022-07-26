@@ -18,11 +18,6 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: theme.typography.pxToRem(16),
         marginTop: theme.spacing(2.5),
     },
-    icon: {
-        width: 96,
-        height: 96,
-        fill: 'none',
-    },
 }))
 
 export interface EmptyPlaceholderProps extends React.PropsWithChildren<{}> {}
@@ -31,7 +26,7 @@ export const EmptyPlaceholder = memo<EmptyPlaceholderProps>(({ children }) => {
     const { classes } = useStyles()
     return (
         <Box className={classes.container}>
-            <EmptyIcon className={classes.icon} />
+            <EmptyIcon size={96} />
             <Typography className={classes.prompt}>{children}</Typography>
         </Box>
     )

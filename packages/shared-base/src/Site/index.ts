@@ -47,3 +47,11 @@ export function isEnhanceableSiteType() {
 export function isExtensionSiteType() {
     return !!getExtensionSiteType()
 }
+
+export function isFirefox() {
+    return process.env.engine === 'firefox'
+}
+
+export function isEthereumInjected() {
+    return !isExtensionSiteType() && !isFirefox()
+}

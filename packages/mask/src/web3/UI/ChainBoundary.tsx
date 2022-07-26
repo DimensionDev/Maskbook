@@ -24,7 +24,7 @@ import ActionButton, {
 import { useI18N } from '../../utils'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { WalletIcon } from '@masknet/shared'
-import { WalletConnect } from '@masknet/icons'
+import { ConnectWallet } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 
@@ -157,7 +157,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                 {!props.hiddenConnectButton ? (
                     <ActionButton
                         fullWidth
-                        startIcon={<WalletConnect style={{ fontSize: 18 }} />}
+                        startIcon={<ConnectWallet size={18} />}
                         onClick={openSelectProviderDialog}
                         {...props.ActionButtonPromiseProps}>
                         {t('plugin_wallet_wrong_network')}
@@ -172,7 +172,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                 {!props.hiddenConnectButton ? (
                     <ActionButton
                         fullWidth
-                        startIcon={<WalletConnect style={{ fontSize: 18 }} />}
+                        startIcon={<ConnectWallet size={18} />}
                         onClick={openSelectProviderDialog}
                         {...props.ActionButtonPromiseProps}>
                         {t('plugin_wallet_connect_wallet')}

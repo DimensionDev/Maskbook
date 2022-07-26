@@ -7,8 +7,8 @@ export async function requestExtensionPermission(permission: browser.permissions
     try {
         return await browser.permissions.request(permission)
     } catch {
-        // which means we're on Firefox.
-        // Chrome allows permission request from the background.
+        // which means we're on Firefox or Manifest V3.
+        // Chrome Manifest v2 allows permission request from the background.
     }
     const popup = await browser.windows.create({
         height: 600,

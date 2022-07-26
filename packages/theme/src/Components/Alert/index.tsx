@@ -35,13 +35,14 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface MaskAlertProps extends AlertProps {}
 
-export const MaskAlert = forwardRef((props: MaskAlertProps) => {
+export const MaskAlert = forwardRef<HTMLDivElement | null, MaskAlertProps>((props, ref) => {
     const { children, ...rest } = props
     const { classes } = useStyles()
 
     return (
         <Alert
             {...rest}
+            ref={ref}
             classes={{
                 ...classes,
                 ...rest.classes,

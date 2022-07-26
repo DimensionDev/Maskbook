@@ -216,7 +216,7 @@ class Connection implements BaseConnection {
         address: string,
         schemaType?: SchemaType,
         initial?: SolanaWeb3ConnectionOptions,
-    ): Promise<NonFungibleTokenCollection<ChainId>> {
+    ): Promise<NonFungibleTokenCollection<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
     async switchChain(chainId: ChainId, initial?: SolanaWeb3ConnectionOptions) {

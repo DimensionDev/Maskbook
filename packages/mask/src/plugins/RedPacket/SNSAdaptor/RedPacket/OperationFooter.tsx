@@ -4,7 +4,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, useTheme } from '@mui/material'
-import { SharedIcon, WalletConnect } from '@masknet/icons'
+import { SharedIcon, ConnectWallet } from '@masknet/icons'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N as useBaseI18n } from '../../../../utils'
 import { useI18N } from '../../locales'
@@ -90,14 +90,14 @@ export function OperationFooter({
                 ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                 <WalletConnectedBoundary
                     hideRiskWarningConfirmed
-                    startIcon={<WalletConnect style={{ fontSize: 18 }} />}
+                    startIcon={<ConnectWallet size={18} />}
                     ActionButtonProps={{ variant: 'roundedDark' }}>
                     <Box className={classes.footer}>
                         {canRefund ? null : (
                             <ActionButton
                                 fullWidth
                                 variant="roundedDark"
-                                startIcon={<SharedIcon style={{ fontSize: 18 }} />}
+                                startIcon={<SharedIcon size={18} />}
                                 onClick={onShare}>
                                 {tr('share')}
                             </ActionButton>

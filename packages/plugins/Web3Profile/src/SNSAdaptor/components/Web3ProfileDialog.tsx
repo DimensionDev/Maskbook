@@ -83,11 +83,7 @@ export function Web3ProfileDialog() {
         if (!currentPersona) return
         return NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex!)
     }, [currentPersona])
-    useEffect(() => {
-        return context?.MaskMessages.events.ownProofChanged.on(() => {
-            retryQueryBinding()
-        })
-    }, [retryQueryBinding])
+    useEffect(() => context?.ownProofChanged.on(retryQueryBinding), [retryQueryBinding])
 
     const wallets =
         bindings?.proofs

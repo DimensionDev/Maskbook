@@ -140,10 +140,7 @@ export const MnemonicRevealForm = memo(() => {
                                 />
                             </IconButton>
                             <IconButton onClick={() => onPreview('download')}>
-                                <DownloadIcon
-                                    color="primary"
-                                    style={{ stroke: MaskColorVar.textLink, fill: MaskColorVar.primaryBackground }}
-                                />
+                                <DownloadIcon color="MaskColorVar.textLink" />
                             </IconButton>
                         </ButtonContainer>
                     </Box>

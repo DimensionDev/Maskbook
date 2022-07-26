@@ -53,14 +53,17 @@ export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
             'aria-hidden': true,
             ...rest,
             ref,
+            'data-icon': name,
             sx: iconStyle,
+            // To align icon center.
+            fontSize: 0,
         }
         if (hasClickHandler) {
             iconProps['aria-hidden'] = false
             iconProps['role'] = 'button'
         }
         if (supportColor && jsx) {
-            iconProps.component = 'svg'
+            iconProps.component = 'span'
             return React.createElement(Box, iconProps, jsx)
         }
         iconProps.component = 'span'

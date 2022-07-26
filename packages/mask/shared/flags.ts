@@ -13,6 +13,7 @@ export const Flags = {
     mask_SDK_ready: betaOrInsiderOnly,
     /** Don't inject injected script in this mode. Native side will do the job. */
     support_declarative_user_script: is_iOSApp,
+    use_register_content_script: true,
     /** Don't show welcome page in this mode. Native side will do the job. */
     has_native_welcome_ui: appOnly,
     /** Firefox has a special API that can inject to the document with a higher permission. */
