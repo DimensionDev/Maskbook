@@ -8,7 +8,7 @@ import { FileInfoMetadataReader } from '../helpers'
 import type { FileInfo } from '../types'
 import FileServiceDialog from './MainDialog'
 import { Preview } from './Preview'
-import { FileServiceIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { ApplicationEntry } from '@masknet/shared'
 
@@ -27,7 +27,7 @@ const definition: Plugin.SNSAdaptor.Definition = {
     CompositionDialogEntry: {
         label: (
             <>
-                <FileServiceIcon style={{ width: 16, height: 16 }} />
+                <Icons.FileService style={{ width: 16, height: 16 }} />
                 File Service
             </>
         ),
@@ -35,7 +35,7 @@ const definition: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         (() => {
-            const icon = <FileServiceIcon />
+            const icon = <Icons.FileService />
             const name = { i18nKey: '__plugin_name', fallback: 'File Service' }
             const iconFilterColor = 'rgba(247, 147, 30, 0.3)'
             return {
@@ -82,7 +82,7 @@ const definition: Plugin.SNSAdaptor.Definition = {
     ],
     wrapperProps: {
         icon: (
-            <FileServiceIcon
+            <Icons.FileService
                 style={{ width: 24, height: 24, filter: 'drop-shadow(0px 6px 12px rgba(247, 147, 30, 0.2))' }}
             />
         ),
@@ -98,7 +98,7 @@ function onAttachedFile(payload: FileInfo) {
     return {
         text: (
             <div style={{ display: 'flex', alignItems: 'center' }}>
-                <FileServiceIcon style={{ width: 16, height: 16 }} />
+                <Icons.FileService style={{ width: 16, height: 16 }} />
                 Attached File: {name} ({formatFileSize(payload.size)})
             </div>
         ),

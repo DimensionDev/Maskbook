@@ -1,4 +1,4 @@
-import { DiscordIcon, MaskBlueIcon, MaskGreyIcon, MaskTextIcon, MaskTextNightlyIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { Avatar, IconButton, Link, Typography } from '@mui/material'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import FacebookIcon from '@mui/icons-material/Facebook'
@@ -101,11 +101,11 @@ const brands: Record<string, React.ReactNode> = {
     'https://twitter.com/realMaskNetwork': <TwitterIcon />,
     'https://github.com/DimensionDev/Maskbook': <GitHubIcon />,
     'https://t.me/maskbook_group': <TelegramIcon />,
-    'https://discord.gg/4SVXvj7': <DiscordIcon />,
+    'https://discord.gg/4SVXvj7': <Icons.Discord />,
 }
 
-const MaskIcon = () => (process.env.NODE_ENV === 'production' ? <MaskBlueIcon /> : <MaskGreyIcon />)
-const MaskTitleIcon = () => (process.env.NODE_ENV === 'production' ? <MaskTextIcon /> : <MaskTextNightlyIcon />)
+const MaskIcon = () => (process.env.NODE_ENV === 'production' ? <Icons.MaskBlue /> : <Icons.MaskGrey />)
+const MaskTitleIcon = () => (process.env.NODE_ENV === 'production' ? <Icons.MaskText /> : <Icons.MaskTextNightly />)
 
 export function About() {
     const { classes } = useStyles()

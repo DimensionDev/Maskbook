@@ -1,7 +1,7 @@
 import { memo, useMemo, useState } from 'react'
 import { Checkbox, ImageListItem, ImageListItemBar, Box } from '@mui/material'
 import { getMaskColor, makeStyles, MaskColorVar } from '@masknet/theme'
-import { CheckboxBorder, Checkbox as CheckBoxIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import type { NonFungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -122,8 +122,8 @@ export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect, r
                     value={checked}
                     size="small"
                     disabled={isDisabled}
-                    icon={<CheckboxBorder size={18} color="#D0D4DD" />}
-                    checkedIcon={<CheckBoxIcon size={18} />}
+                    icon={<Icons.CheckboxBorder size={18} color="#D0D4DD" />}
+                    checkedIcon={<Icons.Checkbox size={18} />}
                     onChange={(e) => {
                         const value = e.target.checked
                         onSelect(value ? token.tokenId : '')

@@ -6,7 +6,7 @@ import { useTheme } from '@mui/system'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { formatCurrency, formatSupply } from '@masknet/web3-shared-base'
-import { LinkOutIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -89,7 +89,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                             href={explorerResolver.fungibleTokenLink(tokenSecurity.chainId, tokenSecurity.contract)}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <LinkOutIcon
+                            <Icons.LinkOut
                                 style={{ color: theme.palette.text.strong, width: 18, height: 18, marginTop: 2 }}
                             />
                         </Link>
@@ -112,7 +112,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                                 )}
                                 target="_blank"
                                 rel="noopener noreferrer">
-                                <LinkOutIcon
+                                <Icons.LinkOut
                                     style={{ color: theme.palette.text.strong, width: 18, height: 18, marginTop: 2 }}
                                 />
                             </Link>
@@ -133,7 +133,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                                 href={explorerResolver.addressLink(tokenSecurity.chainId, tokenSecurity.owner_address)}
                                 target="_blank"
                                 rel="noopener noreferrer">
-                                <LinkOutIcon style={{ color: theme.palette.text.strong, width: 14, height: 14 }} />
+                                <Icons.LinkOut style={{ color: theme.palette.text.strong, width: 14, height: 14 }} />
                             </Link>
                         )}
                     </Stack>

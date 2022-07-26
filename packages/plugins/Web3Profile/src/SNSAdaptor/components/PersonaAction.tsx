@@ -7,7 +7,7 @@ import { formatPublicKey } from '../utils'
 import type { PersonaInformation } from '@masknet/shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { context } from '../context'
-import { CopyIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { useCallback, useState } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
@@ -87,7 +87,7 @@ export function PersonaAction(props: PersonaActionProps) {
                         onMouseLeave={() => setOpen(false)}
                         disableFocusListener
                         disableTouchListener>
-                        <CopyIcon size={16} onClick={onCopy} className={classes.linkIcon} />
+                        <Icons.Copy size={16} onClick={onCopy} className={classes.linkIcon} />
                     </ShadowRootTooltip>
                 </Box>
             </div>

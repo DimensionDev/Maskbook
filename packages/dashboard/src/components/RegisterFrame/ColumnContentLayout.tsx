@@ -1,4 +1,3 @@
-import { RestoreBlueIcon, SignUpAccountIcon } from '@masknet/icons'
 import { Box, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { memo } from 'react'

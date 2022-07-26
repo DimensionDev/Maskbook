@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Button, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { LinkIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { useDashboardI18N } from '../../../../locales'
 
 const useStyles = makeStyles()((theme) => ({
@@ -36,7 +36,7 @@ export const PersonaSetup = memo(({ networkIdentifier, onConnect }: PersonaSetup
     return (
         <div className={classes.container}>
             <div className={classes.iconContainer}>
-                <LinkIcon size={36} sx={{ color: 'primary' }} />
+                <Icons.Link size={36} sx={{ color: 'primary' }} />
             </div>
             <Typography variant="body2" sx={{ marginTop: 2.5, marginBottom: 2.5 }}>
                 {t.personas_setup_connect_tips({ type: networkIdentifier.split('.')[0] })}

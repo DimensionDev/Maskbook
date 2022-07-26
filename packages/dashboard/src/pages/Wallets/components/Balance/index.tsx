@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { noop } from 'lodash-unified'
-import { CardIcon, DownloadIcon, MaskWalletIcon, SendIcon, SwapIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { MiniNetworkSelector } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { MaskColorVar } from '@masknet/theme'
@@ -108,7 +108,7 @@ export const Balance = memo<BalanceCardProps>(
             <BalanceContainer>
                 <Box display="flex" alignItems="center">
                     <IconContainer>
-                        <MaskWalletIcon size={48} />
+                        <Icons.MaskWallet size={48} />
                     </IconContainer>
                     <BalanceDisplayContainer>
                         <BalanceTitle>
@@ -138,20 +138,20 @@ export const Balance = memo<BalanceCardProps>(
                 </Box>
                 {showOperations && (
                     <ButtonGroup>
-                        <Button size="small" onClick={onSend} endIcon={<SendIcon size={12} />}>
+                        <Button size="small" onClick={onSend} endIcon={<Icons.Send size={12} />}>
                             {t.wallets_balance_Send()}
                         </Button>
-                        <Button size="small" onClick={onBuy} endIcon={<CardIcon size={12} />}>
+                        <Button size="small" onClick={onBuy} endIcon={<Icons.Card size={12} />}>
                             {t.wallets_balance_Buy()}
                         </Button>
-                        <Button size="small" onClick={onSwap} endIcon={<SwapIcon size={12} />}>
+                        <Button size="small" onClick={onSwap} endIcon={<Icons.Swap size={12} />}>
                             {t.wallets_balance_Swap()}
                         </Button>
                         <Button
                             size="small"
                             color="secondary"
                             onClick={onReceive}
-                            endIcon={<DownloadIcon size={12} color={MaskColorVar.textLink} />}>
+                            endIcon={<Icons.Download size={12} color={MaskColorVar.textLink} />}>
                             {t.wallets_balance_Receive()}
                         </Button>
                     </ButtonGroup>
