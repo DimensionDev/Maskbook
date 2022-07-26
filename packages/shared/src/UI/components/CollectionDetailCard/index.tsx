@@ -248,12 +248,8 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                                 {contribution.formatedAmount} {contribution.symbol}
                             </Typography>
                             <div className={classes.dayBox}>
-                                {differenceInCalendarDays(new Date(), new Date(Number(contribution.timeStamp) * 1000))}{' '}
-                                {t.days()}{' '}
-                                {differenceInCalendarHours(
-                                    new Date(),
-                                    new Date(Number(contribution.timeStamp) * 1000),
-                                ) % 24}{' '}
+                                {differenceInCalendarDays(Date.now(), Number(contribution.timeStamp) * 1000)} {t.days()}{' '}
+                                {differenceInCalendarHours(Date.now(), Number(contribution.timeStamp) * 1000) % 24}{' '}
                                 {t.hours()} {t.ago()}
                                 <Link
                                     className={classes.linkBox}

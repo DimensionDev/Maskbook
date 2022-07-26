@@ -148,7 +148,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
         const icon = personaConnectStatus.hasPersona ? (
             <Connect sx={{ marginRight: '8px' }} />
         ) : (
-            <Identity sx={{ width: 18, height: 18, marginRight: '8px' }} />
+            <Identity size={18} sx={{ marginRight: '8px' }} />
         )
 
         return (

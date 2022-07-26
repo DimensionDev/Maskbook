@@ -85,7 +85,8 @@ export const PersonaHeaderUI = memo<PersonaHeaderUIProps>(
                     </div>
                     <ArrowDrop
                         className={classes.arrow}
-                        style={{ transform: isSelectPersonaPage ? 'rotate(-180deg)' : undefined, fill: '#767F8D' }}
+                        color="#767f8d"
+                        style={{ transform: isSelectPersonaPage ? 'rotate(-180deg)' : undefined }}
                     />
                 </div>
             </Box>

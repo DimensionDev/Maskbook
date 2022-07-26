@@ -290,7 +290,7 @@ export function CollectionList({
         return (
             <Box display="flex" alignItems="center" justifyContent="center">
                 <Typography color="textPrimary" sx={{ paddingTop: 4, paddingBottom: 4 }}>
-                    {t('no_nft_found')}
+                    {t('no_nft_at_current_address')}
                 </Typography>
             </Box>
         )

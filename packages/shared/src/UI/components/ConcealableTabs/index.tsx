@@ -250,7 +250,7 @@ export function ConcealableTabs<T extends number | string>({
                             }
                             target="_blank"
                             rel="noopener noreferrer">
-                            <LinkOut color="#767f8d" sx={{ fontSize: '20px' }} />
+                            <LinkOut color="#767f8d" size={20} />
                         </Link>
                         <ArrowDrop color="#07101b" />
                     </Button>
