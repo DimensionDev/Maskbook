@@ -1,4 +1,5 @@
 /// <reference types="@masknet/global-types/firefox" />
+/// <reference types="@masknet/global-types/flag" />
 
 const shadowHeadMap = new WeakMap<ShadowRoot, HTMLHeadElement>()
 const constructableStyleSheetEnabled = true
@@ -23,7 +24,7 @@ export class StyleSheet {
             this.implementation =
                 constructableStyleSheetEnabled &&
                 'adoptedStyleSheets' in Document.prototype &&
-                !navigator.userAgent.toLowerCase().includes('firefox')
+                process.env.engine !== 'firefox'
                     ? new ConstructableStyleSheet()
                     : new SynchronizeStyleSheet()
             this.addContainer(options.container)
