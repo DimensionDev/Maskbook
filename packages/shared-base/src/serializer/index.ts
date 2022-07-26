@@ -15,7 +15,7 @@ let typeson: Typeson | undefined
 function setup() {
     const { default: BigNumber } = BN
     // https://github.com/dfahlander/typeson-registry/issues/27
-    typeson = new Typeson({ cyclic: false })
+    typeson = new Typeson({ cyclic: false, sync: false })
     typeson.register(builtin)
     typeson.register(specialNumbers)
     typeson.register([blob, file, filelist, imagebitmap])
@@ -36,12 +36,12 @@ function setup() {
     for (const a of pendingRegister) a()
 }
 export const serializer: Serialization = {
-    serialization(from: unknown) {
+    async serialization(from: unknown) {
         if (!typeson) setup()
         return typeson!.encapsulate(from)
     },
     // cspell:disable-next-line
-    deserialization(to: string) {
+    deserialization(to: any) {
         if (!typeson) setup()
         return typeson!.revive(to)
     },
@@ -79,17 +79,20 @@ function addClass(name: string, constructor: any) {
     typeson!.register({
         [name]: [
             (x) => x instanceof constructor,
-            // eslint-disable-next-line @typescript-eslint/no-loop-func
             (x: unknown) => {
-                const y = Object.assign({}, x)
-                Object.getOwnPropertySymbols(y).forEach((x) => Reflect.deleteProperty(y, x))
-                return typeson!.encapsulate(y)
+                return new TypesonPromise((resolve) => {
+                    const cloned = Object.assign({}, x)
+                    Object.getOwnPropertySymbols(cloned).forEach((x) => Reflect.deleteProperty(cloned, x))
+                    Promise.resolve(typeson!.encapsulate(cloned)).then(resolve)
+                })
             },
-            // eslint-disable-next-line @typescript-eslint/no-loop-func
-            (x: unknown) => {
-                const y = typeson!.revive(x)
-                Object.setPrototypeOf(y, constructor.prototype)
-                return y
+            (x: any) => {
+                return new TypesonPromise((resolve) => {
+                    Promise.resolve(typeson!.revive(x)).then((data) => {
+                        Object.setPrototypeOf(data, constructor.prototype)
+                        resolve(data)
+                    })
+                })
             },
         ],
     })

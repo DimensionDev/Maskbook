@@ -24,5 +24,5 @@ export function usePersonaAgainstSNSConnectStatus() {
             currentPersonaPublicKey: currentPersona?.identifier.rawPublicKey,
             currentSNSConnectedPersonaPublicKey: currentSNSConnectedPersona?.identifier.rawPublicKey,
         }
-    }, [username, personas])
+    }, [username, personas.map((x) => x.identifier.toText()).join()])
 }

@@ -1,5 +1,5 @@
 // This file should not import any file!!
-/// <reference types="web-ext-types" />
+/// <reference types="@masknet/global-types/web-extension" />
 
 // If the current page is "", navigate to "#/personas", therefore we can avoid a Router skip when hydrating.
 if (location.hash === '') location.assign('#/personas')
@@ -32,7 +32,7 @@ if (location.hash === '#/personas') {
     })
     import(/* webpackPreload: true */ './normal-client')
 } else {
-    import(/* webpackPreload: true */ './normal-client')
+    import(/* webpackPreload: true */ './normal-client').then(() => console.log('then'))
 }
 
 // this function is never called, but it will hint webpack to preload modules we need

@@ -20,22 +20,6 @@ const useStyles = makeStyles()({
         borderBottom: '1px solid #F7F9FA',
         cursor: 'pointer',
     },
-    arrow: {
-        stroke: '#15181B',
-        fill: 'none',
-        fontSize: 20,
-    },
-    icon: {
-        width: 20,
-        height: 20,
-    },
-    loader: {
-        fill: '#FFB915',
-    },
-    interaction: {
-        stroke: '#1C68F3',
-        fill: 'none',
-    },
     send: {
         stroke: '#FFB915',
         fill: 'none',
@@ -82,14 +66,14 @@ export const ActivityListItem = memo<ActivityListItemProps>(
         const transactionIcon = useMemo(() => {
             switch (transaction.status) {
                 case TransactionStatusType.NOT_DEPEND:
-                    return <LoaderIcon className={classes.loader} />
+                    return <LoaderIcon color="#FFB915" />
                 case TransactionStatusType.SUCCEED:
                     if (
                         formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
                         formatterTransaction.title === 'Transfer Token'
                     )
                         return <UploadIcon className={classes.send} />
-                    return <InteractionCircleIcon className={classes.interaction} />
+                    return <InteractionCircleIcon color="#1C68F3" />
                 case TransactionStatusType.FAILED:
                 default:
                     return <CircleCloseIcon style={{ fill: 'none' }} />
@@ -142,7 +126,7 @@ export const ActivityListItem = memo<ActivityListItemProps>(
                         </Typography>
                     ) : null}
                 </ListItemText>
-                <ArrowRightIcon className={classes.arrow} style={{ fill: 'none' }} />
+                <ArrowRightIcon color="#15181B" size={20} />
             </ListItem>
         )
     },

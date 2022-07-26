@@ -4,8 +4,12 @@ import type { NextIDPlatform, PersonaIdentifier } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { usePersonaConnectStatus } from './usePersonaConnectStatus'
-import { currentPersonaIdentifier, currentSetupGuideStatus, dismissVerifyNextID } from '../../settings/settings'
-import { SetupGuideStep } from '../InjectedComponents/SetupGuide/types'
+import {
+    currentPersonaIdentifier,
+    currentSetupGuideStatus,
+    dismissVerifyNextID,
+} from '../../../shared/legacy-settings/settings'
+import { SetupGuideStep } from '../../../shared/legacy-settings/types'
 import { useLastRecognizedIdentity } from './useActivatedUI'
 import Services from '../../extension/service'
 import { useSetupGuideStatus } from '../GuideStep/useSetupGuideStatus'

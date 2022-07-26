@@ -9,8 +9,7 @@ import {
     userGuideStatus,
     userGuideVersion,
     userPinExtension,
-} from '../../settings/settings'
-import type { SetupGuideContext } from '../../settings/types'
+} from '../../../shared/legacy-settings/settings'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import {
     PersonaIdentifier,
@@ -26,7 +25,7 @@ import Services from '../../extension/service'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { useAsync } from 'react-use'
 import stringify from 'json-stable-stringify'
-import { SetupGuideStep } from './SetupGuide/types'
+import { SetupGuideContext, SetupGuideStep } from '../../../shared/legacy-settings/types'
 import { FindUsername } from './SetupGuide/FindUsername'
 import { VerifyNextID } from './SetupGuide/VerifyNextID'
 import { PinExtension } from './SetupGuide/PinExtension'

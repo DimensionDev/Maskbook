@@ -24,7 +24,7 @@ import { History } from '@masknet/icons'
 import { RedPacketERC20Form } from './RedPacketERC20Form'
 import { RedPacketERC721Form } from './RedPacketERC721Form'
 
-const useStyles = makeStyles<{ showHistory: boolean }>()((theme, { showHistory }) => ({
+const useStyles = makeStyles()((theme) => ({
     content: {
         position: 'relative',
         paddingTop: 50,
@@ -71,15 +71,6 @@ const useStyles = makeStyles<{ showHistory: boolean }>()((theme, { showHistory }
         width: 20,
         marginRight: 4,
     },
-    injectedDialog: {
-        ...(showHistory
-            ? {
-                  '& [role="dialog"]': {
-                      height: '620px !important',
-                  },
-              }
-            : {}),
-    },
 }))
 
 enum CreateRedPacketPageStep {
@@ -97,7 +88,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const t = useI18N()
     const [showHistory, setShowHistory] = useState(false)
     const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
-    const { cx, classes } = useStyles({ showHistory })
+    const { cx, classes } = useStyles()
     const { attachMetadata, dropMetadata } = useCompositionContext()
     const state = useState(DialogTabs.create)
     const [isNFTRedPacketLoaded, setIsNFTRedPacketLoaded] = useState(false)
@@ -193,7 +184,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                         </MaskTabList>
                     ) : null
                 }
-                className={classes.injectedDialog}
                 onClose={() => (showHistory ? setShowHistory(false) : onBack())}
                 isOnBack={showHistory || step !== CreateRedPacketPageStep.NewRedPacketPage}
                 disableTitleBorder>

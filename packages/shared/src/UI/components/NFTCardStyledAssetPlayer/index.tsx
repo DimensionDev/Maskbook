@@ -5,6 +5,7 @@ import { AssetPlayer } from '../AssetPlayer'
 import { useNonFungibleToken, Web3Helper } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useImageChecker } from '../../../hooks'
+import { Image } from '../Image'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -81,15 +82,10 @@ export function NFTCardStyledAssetPlayer(props: Props) {
 
     return isImageToken || isNative ? (
         <div className={classes.imgWrapper}>
-            <img
+            <Image
                 width="100%"
                 style={{ objectFit: 'cover' }}
                 src={url || tokenDetailed?.metadata?.imageURL || tokenDetailed?.metadata?.mediaURL}
-                onError={(event) => {
-                    const target = event.currentTarget as HTMLImageElement
-                    target.src = fallbackImageURL.toString()
-                    target.classList.add(classes.loadingFailImage ?? '')
-                }}
             />
         </div>
     ) : (

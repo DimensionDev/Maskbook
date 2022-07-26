@@ -51,7 +51,7 @@ async function getWalletAddressesFromNextID(userId: string) {
 }
 
 export class IdentityService extends IdentityServiceState {
-    constructor(protected context: Plugin.Shared.SharedContext) {
+    constructor(protected context: Plugin.Shared.SharedUIContext) {
         super()
     }
 

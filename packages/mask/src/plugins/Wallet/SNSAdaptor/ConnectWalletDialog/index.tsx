@@ -9,7 +9,7 @@ import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { WalletMessages } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
 import { useI18N } from '../../../../utils'
-import { pluginIDSettings } from '../../../../settings/settings'
+import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings'
 import { getSiteType } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({

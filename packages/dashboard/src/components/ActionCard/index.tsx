@@ -7,7 +7,8 @@ const ActionCardIcon = styled('div')(
     width: 36px;
     height: 36px;
 
-    & > svg {
+    & > svg,
+    & > span {
         width: 100%;
         height: 100%;
     }

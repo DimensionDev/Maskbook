@@ -131,7 +131,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     },
     content: {
         padding: 16,
-        minHeight: 564,
+        minHeight: 458,
         '&::-webkit-scrollbar': {
             display: 'none',
         },

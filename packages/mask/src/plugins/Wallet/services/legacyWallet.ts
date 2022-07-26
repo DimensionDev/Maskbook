@@ -6,9 +6,8 @@ import { createTransaction } from '../../../../background/database/utils/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import type { LegacyWalletRecord } from '../database/types'
 import { fromHex, toHex } from '@masknet/shared-base'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { isSameAddress, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 import { LegacyWalletRecordOutDB } from './helpers'
-import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../constants'
 import { hasNativeAPI } from '../../../../shared/native-rpc'
 
 function sortWallet(a: LegacyWalletRecord, b: LegacyWalletRecord) {
