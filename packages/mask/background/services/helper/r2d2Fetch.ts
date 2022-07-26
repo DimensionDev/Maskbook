@@ -87,11 +87,7 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
 }
 
 function proxied_fetch(url: string, info: Request) {
-    const req = new Request({
-        // @ts-ignore
-        __proto__: info,
-        url,
-    })
+    const req = new Request(url, info)
     return original_fetch(req)
 }
 
