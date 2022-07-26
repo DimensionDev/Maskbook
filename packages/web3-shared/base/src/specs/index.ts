@@ -115,11 +115,20 @@ export interface Identity {
 }
 
 export interface SocialIdentity {
+    /** The identifier of the social account */
     identifier?: ProfileIdentifier
+    /** The avatar image link of the social account */
     avatar?: string
+    /** The bio content of the social account */
     bio?: string
+    /** The nickname of the social account */
     nickname?: string
+    /** The homepage link of the social account */
     homepage?: string
+    /** Has a NextID binding or not */
+    hasBinding?: boolean
+    /** The public key of persona in hex */
+    publicKey?: string
 }
 
 export interface SocialAddress<PluginID> {

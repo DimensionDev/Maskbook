@@ -6,8 +6,10 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { NextIDProof } from '@masknet/web3-providers'
 import type { ProfileInformation } from '@masknet/shared-base'
+import type { SocialIdentity } from '@masknet/web3-shared-base'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
 import Services from '../../extension/service'
+import { sortPersonaBindings } from '../../utils'
 
 async function queryPersonaFromDB(identityResolved: IdentityResolved) {
     if (!identityResolved.identifier) return
@@ -50,12 +52,12 @@ export function useCurrentVisitingIdentity() {
     return useValueRef(activatedSocialNetworkUI.collecting.currentVisitingIdentityProvider?.recognized || defaults)
 }
 
-export function useIsOwnerIdentity() {
+export function useIsCurrentVisitingOwnerIdentity() {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
     const currentVisitingIdentity = useCurrentVisitingIdentity()
     const lastRecognizedUserId = lastRecognizedIdentity.identifier?.userId
     const currentVisitingUserId = currentVisitingIdentity.identifier?.userId
-    return (
+    return !!(
         lastRecognizedUserId &&
         currentVisitingUserId &&
         lastRecognizedUserId.toLowerCase() === currentVisitingUserId.toLowerCase()
@@ -91,7 +93,10 @@ export function useCurrentVisitingPersona() {
  */
 export function useLastRecognizedPersonas() {
     const identity = useLastRecognizedIdentity()
-    return useAsyncRetry(async () => queryPersonasFromNextID(identity), [identity.identifier?.userId])
+    return useAsyncRetry(async () => {
+        const bindings = await queryPersonasFromNextID(identity)
+        return bindings?.sort((a, b) => sortPersonaBindings(a, b, identity.identifier?.userId.toLowerCase()))
+    }, [identity.identifier?.userId])
 }
 
 /**
@@ -99,5 +104,45 @@ export function useLastRecognizedPersonas() {
  */
 export function useCurrentVisitingPersonas() {
     const identity = useCurrentVisitingIdentity()
-    return useAsyncRetry(async () => queryPersonasFromNextID(identity), [identity.identifier?.userId])
+    return useAsyncRetry(async () => {
+        const bindings = await queryPersonasFromNextID(identity)
+        return bindings?.sort((a, b) => sortPersonaBindings(a, b, identity.identifier?.userId.toLowerCase()))
+    }, [identity.identifier?.userId])
+}
+
+/**
+ * Get the social identity of the last recognized identity
+ */
+export function useLastRecognizedSocialIdentity() {
+    const identity = useLastRecognizedIdentity()
+    return useAsyncRetry<SocialIdentity>(async () => {
+        const bindings = await queryPersonasFromNextID(identity)
+        const persona = await queryPersonaFromDB(identity)
+        return {
+            ...identity,
+            publicKey: persona?.identifier.publicKeyAsHex,
+            hasBinding: !!bindings?.find((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()),
+        }
+    }, [identity.identifier?.toText()])
+}
+
+/**
+ * Get the social identity of the current visiting identity
+ */
+export function useCurrentVisitingSocialIdentity() {
+    const identity = useCurrentVisitingIdentity()
+    const isOwnerIdentity = useIsCurrentVisitingOwnerIdentity()
+
+    return useAsyncRetry<SocialIdentity>(async () => {
+        const bindings = await queryPersonasFromNextID(identity)
+        const persona = await queryPersonaFromDB(identity)
+        const sortedBindings = bindings?.sort((a, b) =>
+            sortPersonaBindings(a, b, identity.identifier?.userId.toLowerCase()),
+        )
+        return {
+            ...identity,
+            publicKey: isOwnerIdentity ? persona?.identifier.publicKeyAsHex : first(sortedBindings)?.persona,
+            hasBinding: !!bindings?.find((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()),
+        }
+    }, [isOwnerIdentity, identity.identifier?.toText()])
 }

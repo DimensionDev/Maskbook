@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { first } from 'lodash-unified'
 import {
@@ -16,10 +16,13 @@ import { Gear } from '@masknet/icons'
 import { SocialAddressType } from '@masknet/web3-shared-base'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
-import { MaskMessages, sortPersonaBindings } from '../../utils'
+import { MaskMessages } from '../../utils'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
-import { useCurrentVisitingIdentity, useIsOwnerIdentity, useLastRecognizedPersona } from '../DataSource/useActivatedUI'
-import { usePersonasFromNextID } from '../DataSource/usePersonasFromNextID'
+import {
+    useCurrentVisitingIdentity,
+    useCurrentVisitingSocialIdentity,
+    useIsCurrentVisitingOwnerIdentity,
+} from '../DataSource/useActivatedUI'
 
 function getTabContent(tabId?: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
@@ -51,7 +54,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const [hidden, setHidden] = useState(true)
     const [selectedTab, setSelectedTab] = useState<string | undefined>()
 
-    const isOwnerIdentity = useIsOwnerIdentity()
+    const isOwnerIdentity = useIsCurrentVisitingOwnerIdentity()
     const currentVisitingIdentity = useCurrentVisitingIdentity()
     const currentVisitingUserId = currentVisitingIdentity.identifier?.userId
 
@@ -92,23 +95,13 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     const selectedTabId = selectedTab ?? first(tabs)?.id
 
-    const { value: lastRecognizedPersona, loading: loadingLastRecognizedPersona } = useLastRecognizedPersona()
-    const { value: personas = EMPTY_LIST, loading: loadingPersonas } = usePersonasFromNextID(
-        currentVisitingUserId?.toLowerCase(),
-    )
-
-    const personaPublicKey = isOwnerIdentity
-        ? lastRecognizedPersona?.identifier.publicKeyAsHex
-        : first(personas.slice(0).sort((a, b) => sortPersonaBindings(a, b, currentVisitingUserId?.toLowerCase())))
-              ?.persona
+    const { value: currentVisitingSocialIdentity, loading: loadingCurrentVisitingSocialIdentity } =
+        useCurrentVisitingSocialIdentity()
 
     const showNextID = !!(
         isTwitter(activatedSocialNetworkUI) &&
         isOwnerIdentity &&
-        (socialAddressList?.length === 0 ||
-            !personas.some(
-                (persona) => persona.persona === lastRecognizedPersona?.identifier.publicKeyAsHex?.toLowerCase(),
-            ))
+        (socialAddressList.length === 0 || !currentVisitingSocialIdentity?.hasBinding)
     )
     const handleOpenDialog = () => {
         CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToAll({
@@ -142,7 +135,11 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     if (hidden) return null
 
-    if (!currentVisitingUserId || loadingSocialAddressList || loadingLastRecognizedPersona || loadingPersonas)
+    if (
+        !currentVisitingUserId ||
+        loadingSocialAddressList ||
+        loadingCurrentVisitingSocialIdentity
+    )
         return (
             <div className={classes.root}>
                 <Box
@@ -169,8 +166,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             )}
             <div className={classes.content}>
                 <Component
-                    identity={currentVisitingIdentity}
-                    persona={personaPublicKey}
+                    identity={currentVisitingSocialIdentity}
                     socialAddressList={socialAddressList.filter((x) => Utils?.filter?.(x) ?? true).sort(Utils?.sorter)}
                 />
             </div>

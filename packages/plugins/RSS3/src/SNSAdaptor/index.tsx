@@ -26,9 +26,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
             label: 'Donations',
             priority: 1,
             UI: {
-                TabContent: ({ socialAddressList = [], persona }) => {
+                TabContent: ({ socialAddressList = [], identity }) => {
                     return (
-                        <TabCard socialAddressList={socialAddressList} type={TabCardType.Donation} persona={persona} />
+                        <TabCard socialAddressList={socialAddressList} type={TabCardType.Donation} persona={identity?.publicKey} />
                     )
                 },
             },
@@ -42,9 +42,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
             label: 'Footprints',
             priority: 2,
             UI: {
-                TabContent: ({ socialAddressList = [], persona }) => {
+                TabContent: ({ socialAddressList = [], identity }) => {
                     return (
-                        <TabCard socialAddressList={socialAddressList} type={TabCardType.Footprint} persona={persona} />
+                        <TabCard socialAddressList={socialAddressList} type={TabCardType.Footprint} persona={identity?.publicKey} />
                     )
                 },
             },
