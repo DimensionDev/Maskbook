@@ -26,7 +26,11 @@ export const ciBuild = series(
             { chromium: true, beta: true, 'output-path': 'build-chromium-beta' },
             'MaskNetwork.chromium-beta.zip',
         ),
-        buildTarget('Chromium-MV3', { chromium: true, 'output-path': 'build-mv3' }, 'MaskNetwork.chromium-mv3.zip'),
+        buildTarget(
+            'Chromium-MV3',
+            { chromium: true, mv3: true, 'output-path': 'build-mv3' },
+            'MaskNetwork.chromium-mv3.zip',
+        ),
     ),
 )
 task(ciBuild, 'build-ci', 'Build the extension on CI')
