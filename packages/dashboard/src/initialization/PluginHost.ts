@@ -4,8 +4,7 @@ import { Emitter } from '@servie/events'
 import { startPluginDashboard, Plugin } from '@masknet/plugin-infra/dashboard'
 import { createI18NBundle, i18NextInstance } from '@masknet/shared-base'
 import { Services, Messages } from '../API'
-import { createPartialSharedUIContext } from '../../../mask/shared/plugin-infra/host'
-import { RestPartOfPluginUIContextShared } from '../../../mask/src/utils/plugin-context-shared-ui'
+import { createSharedContext } from '../../../mask/src/plugin-infra/host'
 
 const PluginHost: Plugin.__Host.Host<Plugin.Dashboard.DashboardContext> = {
     minimalMode: {
@@ -17,10 +16,7 @@ const PluginHost: Plugin.__Host.Host<Plugin.Dashboard.DashboardContext> = {
     addI18NResource(plugin, resource) {
         createI18NBundle(plugin, resource)(i18NextInstance)
     },
-    createContext: (id, signal) => ({
-        ...createPartialSharedUIContext(id, signal),
-        ...RestPartOfPluginUIContextShared,
-    }),
+    createContext: createSharedContext,
 }
 setTimeout(() => {
     Messages.events.pluginMinimalModeChanged.on(([id, status]) => {

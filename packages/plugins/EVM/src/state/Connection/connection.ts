@@ -105,7 +105,7 @@ class Connection implements EVM_Connection {
         private chainId: ChainId,
         private account: string,
         private providerType: ProviderType,
-        private context?: Plugin.Shared.SharedUIContext,
+        private context?: Plugin.Shared.SharedContext,
     ) {}
 
     // Hijack RPC requests and process them with koa like middleware
@@ -979,7 +979,7 @@ class Connection implements EVM_Connection {
  * @returns
  */
 export function createConnection(
-    context?: Plugin.Shared.SharedUIContext,
+    context?: Plugin.Shared.SharedContext,
     options?: {
         chainId?: ChainId
         account?: string

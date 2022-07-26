@@ -199,7 +199,7 @@ async function makeProgress(
         currentSocialNetwork: activatedSocialNetworkUI.encryptionNetwork,
     }
     let iv: Uint8Array | undefined
-    for await (const progress of ServicesWithProgress.decryption(payload, context)) {
+    for await (const progress of ServicesWithProgress.decryptionWithSocialNetworkDecoding(payload, context)) {
         if (signal.aborted) return
         if (progress.type === DecryptProgressKind.Success) {
             done(progress.content, iv || new Uint8Array())

@@ -5,7 +5,7 @@ import {
     currentMaskWalletAccountSettings,
     currentMaskWalletChainIdSettings,
     currentMaskWalletNetworkSettings,
-} from '../../../../shared/legacy-settings/wallet-settings'
+} from '../settings'
 import { Flags } from '../../../../shared'
 import { WalletRPC } from '../messages'
 import { defer, DeferTuple } from '@dimensiondev/kit'
