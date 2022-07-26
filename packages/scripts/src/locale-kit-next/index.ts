@@ -6,11 +6,13 @@ import { prettier } from '../utils/prettier'
 
 const mainFallbackMap = new Map([['zh', 'zh-TW']])
 
-const header = `// This file is auto generated. DO NOT EDIT
-// Run \`npx gulp sync-languages\` to regenerate.
+const basicHeader = `// This file is auto generated. DO NOT EDIT
+// Run \`npx gulp sync-languages\` to regenerate.`
+const header = `${basicHeader}
 // Default fallback language in a family of languages are chosen by the alphabet order
 // To overwrite this, please overwrite packages/scripts/src/locale-kit-next/index.ts
 `
+
 export async function syncLanguages() {
     const config = require('../../../../.i18n-codegen.json').list
     for (const { input, generator } of config) {
@@ -66,6 +68,18 @@ export async function syncLanguages() {
             code = await prettier(code)
             await writeFile(join(inputDir, 'languages.ts'), code, { encoding: 'utf8' })
         }
+    }
+
+    {
+        const map: Record<string, string> = {}
+        for (const { input, generator } of config) {
+            const { namespace } = generator
+            map[`/[DimensionDev.Maskbook] develop/${input.slice(2).replace('en-US', '%locale%')}`] = namespace
+        }
+        const code = await prettier(`${basicHeader}\nexport default ${JSON.stringify(map)}`)
+        await writeFile(join(ROOT_PATH, 'packages/mask/background/services/helper/i18n-cache-query-list.ts'), code, {
+            encoding: 'utf8',
+        })
     }
 }
 task(

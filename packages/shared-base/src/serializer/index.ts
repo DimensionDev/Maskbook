@@ -15,7 +15,7 @@ let typeson: Typeson | undefined
 function setup() {
     const { default: BigNumber } = BN
     // https://github.com/dfahlander/typeson-registry/issues/27
-    typeson = new Typeson({ cyclic: false, sync: false })
+    typeson = new Typeson({ cyclic: false })
     typeson.register(builtin)
     typeson.register(specialNumbers)
     typeson.register([blob, file, filelist, imagebitmap])

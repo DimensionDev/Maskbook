@@ -116,7 +116,8 @@
       "@emotion/styled@11.9.3": "patches/@emotion__styled@11.9.3.patch",
       "@emotion/utils@1.1.0": "patches/@emotion__utils@1.1.0.patch",
       "cross-fetch@3.1.5": "patches/cross-fetch@3.1.5.patch",
-      "@uniswap/v3-sdk@3.9.0": "patches/@uniswap__v3-sdk@3.9.0.patch"
+      "@uniswap/v3-sdk@3.9.0": "patches/@uniswap__v3-sdk@3.9.0.patch",
+      "@ceramicnetwork/rpc-transport@0.3.1": "patches/@ceramicnetwork__rpc-transport@0.3.1.patch"
     }
   }
 }

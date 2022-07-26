@@ -6,7 +6,7 @@ export class WalletState implements Web3WalletState {
     public wallets?: Subscription<Wallet[]>
     public walletPrimary?: Subscription<Wallet | null>
 
-    constructor(protected context: Plugin.Shared.SharedUIContext) {
+    constructor(protected context: Plugin.Shared.SharedContext) {
         this.wallets = context.wallets
         this.walletPrimary = context.walletPrimary
     }

@@ -38,6 +38,9 @@ patchedDependencies:
   '@uniswap/v3-sdk@3.9.0':
     hash: i674dmxu47nk67u5bur7yueebu
     path: patches/@uniswap__v3-sdk@3.9.0.patch
+  '@ceramicnetwork/rpc-transport@0.3.1':
+    hash: 274ipmojcqj2d7kmcpl6ajm7e4
+    path: patches/@ceramicnetwork__rpc-transport@0.3.1.patch
 
 importers:
 
