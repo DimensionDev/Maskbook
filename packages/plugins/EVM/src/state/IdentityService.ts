@@ -1,11 +1,11 @@
-import Web3 from 'web3'
-import type { RequestArguments } from 'web3-core'
+import ENS from 'ethjs-ens'
 import type { Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID, SocialIdentity, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
-import { createPayload, createWeb3Provider, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
+import { EMPTY_LIST, EnhanceableSite, getSiteType, NextIDPlatform } from '@masknet/shared-base'
+import { ChainId, isValidAddress, isZeroAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { IdentityServiceState } from '@masknet/plugin-infra/web3'
 import { KeyValue, NextIDProof, RSS3 } from '@masknet/web3-providers'
-import { EMPTY_LIST, EnhanceableSite, getSiteType, NextIDPlatform } from '@masknet/shared-base'
+import { Providers } from './Connection/provider'
 
 const ENS_RE = /\S{1,256}\.(eth|kred|xyz|luxe)\b/
 const ADDRESS_FULL = /0x\w{40,}/
@@ -13,7 +13,7 @@ const ADDRESS_FULL = /0x\w{40,}/
 const RSS3_URL_RE = /https?:\/\/(?<name>[\w.]+)\.(rss3|cheers)\.bio/
 const RSS3_RNS_RE = /(?<name>[\w.]+)\.rss3/
 
-function getEthereumName(twitterId: string, nickname: string, bio: string) {
+function getENSName(twitterId: string, nickname: string, bio: string) {
     const [matched] = nickname.match(ENS_RE) ?? bio.match(ENS_RE) ?? []
     if (matched) return matched
     return twitterId && !twitterId.endsWith('.eth') ? `${twitterId}.eth` : twitterId
@@ -102,20 +102,17 @@ export class IdentityService extends IdentityServiceState {
 
     /** Read a social address from nickname, bio if them contain a ENS. */
     private async getSocialAddressFromENS({ identifier, nickname = '', bio = '' }: SocialIdentity) {
-        const ethereumName = getEthereumName(identifier?.userId ?? '', nickname, bio)
-        if (!ethereumName) return
+        const name = getENSName(identifier?.userId ?? '', nickname, bio)
+        if (!name) return
 
-        const web3 = new Web3(
-            createWeb3Provider(async (requestArguments: RequestArguments) => {
-                return (await this.context.send(createPayload(0, requestArguments.method, requestArguments.params)))
-                    .result
-            }),
-        )
-        return this.createSocialAddress(
-            SocialAddressType.ENS,
-            await web3.eth.ens.getAddress(ethereumName),
-            ethereumName,
-        )
+        const provider = await Providers[ProviderType.MaskWallet].createWeb3Provider({
+            chainId: ChainId.Mainnet,
+        })
+        const ens = new ENS({
+            provider,
+            network: ChainId.Mainnet,
+        })
+        return this.createSocialAddress(SocialAddressType.ENS, await ens.lookup(name), name)
     }
 
     override async getFromRemote(identity: SocialIdentity, includes?: SocialAddressType[]) {
