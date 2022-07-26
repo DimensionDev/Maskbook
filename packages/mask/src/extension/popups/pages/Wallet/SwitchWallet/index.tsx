@@ -42,12 +42,6 @@ const useStyles = makeStyles()({
         display: 'flex',
         alignItems: 'center',
     },
-    copy: {
-        fontSize: 12,
-        stroke: '#1C68F3',
-        marginLeft: 4,
-        cursor: 'pointer',
-    },
     name: {
         fontSize: 14,
         color: '#1C68F3',

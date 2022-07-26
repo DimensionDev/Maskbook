@@ -10,6 +10,7 @@ import {
     i18NextInstance,
     createSubscriptionFromValueRef,
     createSubscriptionFromAsync,
+    queryRemoteI18NBundle,
 } from '@masknet/shared-base'
 import { Environment, assertNotEnvironment, ValueRef } from '@dimensiondev/holoflows-kit'
 import { IdentityResolved, Plugin, PluginId, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
@@ -110,27 +111,32 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             Services.Identity.createNewRelation(ref.identifier, currentProfile.linkedPersona)
         }
     })
+    signal.addEventListener('abort', queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle))
+
+    const allPersonaSub = createSubscriptionFromAsync(
+        () => {
+            console.log('DEBUG: currentPersonaIdentifier')
+            return Services.Identity.queryOwnedPersonaInformation(true)
+        },
+        [],
+        MaskMessages.events.currentPersonaIdentifier.on,
+        signal,
+    )
+    const empty = new ValueRef<IdentityResolved | undefined>(undefined)
+    const lastRecognizedSub = createSubscriptionFromValueRef(
+        ui.collecting.identityProvider?.recognized || empty,
+        signal,
+    )
+    const currentVisitingSub = createSubscriptionFromValueRef(
+        ui.collecting.currentVisitingIdentityProvider?.recognized || empty,
+        signal,
+    )
 
     startPluginSNSAdaptor(
         getCurrentSNSNetwork(ui.networkIdentifier),
         createPluginHost(
             signal,
             (pluginID, signal): Plugin.SNSAdaptor.SNSAdaptorContext => {
-                const empty = new ValueRef<IdentityResolved | undefined>(undefined)
-                const lastRecognizedSub = createSubscriptionFromValueRef(
-                    ui.collecting.identityProvider?.recognized || empty,
-                    signal,
-                )
-                const currentVisitingSub = createSubscriptionFromValueRef(
-                    ui.collecting.currentVisitingIdentityProvider?.recognized || empty,
-                    signal,
-                )
-                const allPersonaSub = createSubscriptionFromAsync(
-                    () => Services.Identity.queryOwnedPersonaInformation(true),
-                    [],
-                    MaskMessages.events.currentPersonaIdentifier.on,
-                    signal,
-                )
                 return {
                     ...createPartialSharedUIContext(pluginID, signal),
                     ...RestPartOfPluginUIContextShared,

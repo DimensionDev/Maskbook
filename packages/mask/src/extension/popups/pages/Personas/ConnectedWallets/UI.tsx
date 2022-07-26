@@ -74,8 +74,6 @@ const useStyles = makeStyles()(() => ({
         color: '#767F8D',
     },
     delete: {
-        fontSize: 24,
-        stroke: '#536471',
         cursor: 'pointer',
     },
     placeholder: {
@@ -162,12 +160,12 @@ export const ConnectedWalletsUI = memo<ConnectedWalletsUIProps>(
                                     </Link>
                                 </Typography>
                             </div>
-                            <DeleteIcon className={classes.delete} onClick={() => onDelete(wallet)} />
+                            <DeleteIcon color="#536471" onClick={() => onDelete(wallet)} />
                         </div>
                     ))
                 ) : (
                     <div className={classes.placeholder}>
-                        <EmptyIcon style={{ fontSize: 60 }} />
+                        <EmptyIcon size={60} />
                     </div>
                 )}
                 <DisconnectWalletDialog

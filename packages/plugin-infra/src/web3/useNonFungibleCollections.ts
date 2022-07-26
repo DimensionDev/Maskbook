@@ -17,7 +17,9 @@ export function useNonFungibleCollections<S extends 'all' | void = void, T exten
     const account = useAccount(pluginID, options?.account)
     const hub = useWeb3Hub(pluginID, options)
 
-    return useAsyncRetry<Array<NonFungibleTokenCollection<Web3Helper.ChainIdScope<S, T>>>>(async () => {
+    return useAsyncRetry<
+        Array<NonFungibleTokenCollection<Web3Helper.ChainIdScope<S, T>, Web3Helper.SchemaTypeScope<S, T>>>
+    >(async () => {
         if (!account || !hub) return []
 
         const iterator = pageableToIterator(async (indicator?: HubIndicator) => {

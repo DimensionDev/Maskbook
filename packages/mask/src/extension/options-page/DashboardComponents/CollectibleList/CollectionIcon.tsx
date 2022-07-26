@@ -31,9 +31,9 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface CollectionIconProps {
+export interface CollectionIconProps {
     selectedCollection?: string
-    collection?: NonFungibleTokenCollection<Web3Helper.ChainIdAll>
+    collection?: NonFungibleTokenCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     onClick?(): void
 }
 
