@@ -187,6 +187,12 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
             return null
         })
 
+        const newContributions = contributions?.map((contribution) => ({
+            ...contribution,
+            daysFromNow: differenceInCalendarDays(Date.now(), Number(contribution.timeStamp) * 1000),
+            hoursFromNow: differenceInCalendarHours(Date.now(), Number(contribution.timeStamp) * 1000) % 24,
+        }))
+
         return (
             <InjectedDialog open={open} onClose={onClose} title={t.details()}>
                 <DialogContent>
@@ -242,15 +248,15 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                             {contributions?.length ?? 0}
                         </Typography>
                     ) : null}
-                    {contributions?.map((contribution) => (
+                    {newContributions?.map((contribution) => (
                         <div key={contribution.txHash} className={classes.txItem}>
                             <Typography className={classes.donationAmount}>
                                 {contribution.formatedAmount} {contribution.symbol}
                             </Typography>
                             <div className={classes.dayBox}>
-                                {differenceInCalendarDays(Date.now(), Number(contribution.timeStamp) * 1000)} {t.days()}{' '}
-                                {differenceInCalendarHours(Date.now(), Number(contribution.timeStamp) * 1000) % 24}{' '}
-                                {t.hours()} {t.ago()}
+                                {contribution?.daysFromNow} {contribution?.daysFromNow > 1 ? t.days() : t.day()}{' '}
+                                {contribution?.hoursFromNow} {contribution?.hoursFromNow > 1 ? t.hours() : t.hour()}{' '}
+                                {t.ago()}
                                 <Link
                                     className={classes.linkBox}
                                     target="_blank"

@@ -49,6 +49,8 @@
     "description": "Description",
     "days": "days",
     "hours": "hours",
+    "day": "day",
+    "hour": "hour",
     "ago": "ago",
     "properties": "Properties",
     "security_detection": "Security Detection",
