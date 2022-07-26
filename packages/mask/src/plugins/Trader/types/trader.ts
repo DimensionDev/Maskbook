@@ -71,7 +71,6 @@ export enum ZrxTradePool {
     PangolinDex = 'PangolinDex',
     Trisolaris = 'Trisolaris',
     WannaSwap = 'WannaSwap',
-    JugglerRed = 'JugglerRed',
     Mdex = 'Mdex',
     VenomSwap = 'VenomSwap',
     OpenSwap = 'OpenSwap',

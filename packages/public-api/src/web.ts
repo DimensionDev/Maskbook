@@ -197,7 +197,6 @@ export enum TradeProvider {
     VENOMSWAP = 16,
     OPENSWAP = 17,
     DEFIKINGDOMS = 18,
-    JUGGLERRED = 19,
 }
 
 /** Supported language settings */

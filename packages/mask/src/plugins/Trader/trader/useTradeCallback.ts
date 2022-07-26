@@ -100,8 +100,6 @@ export function useTradeCallback(
             return uniswapV2Like
         case TradeProvider.TRISOLARIS:
             return uniswapV2Like
-        case TradeProvider.JUGGLERRED:
-            return uniswapV2Like
         case TradeProvider.VENOMSWAP:
             return uniswapV2Like
         case TradeProvider.OPENSWAP:
