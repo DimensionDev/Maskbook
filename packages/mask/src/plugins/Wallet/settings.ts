@@ -1,13 +1,7 @@
-import { PluginId } from '@masknet/plugin-infra'
+import { createGlobalSettings } from '../../../shared/legacy-settings/createSettings'
 import { ChainId, NetworkType } from '@masknet/web3-shared-evm'
-import { createGlobalSettings } from './createSettings'
-
-const PLUGIN_ID = PluginId.Wallet
-export enum LockStatus {
-    INIT = 0,
-    UNLOCK = 1,
-    LOCKED = 2,
-}
+import { PLUGIN_ID } from './constants'
+import { LockStatus } from './types'
 
 export const currentMaskWalletAccountSettings = createGlobalSettings(`${PLUGIN_ID}+selectedMaskWalletAddress`, '')
 

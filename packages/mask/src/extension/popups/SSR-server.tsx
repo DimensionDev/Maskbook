@@ -70,7 +70,7 @@ function PopupSSR(props: PopupSSR_Props) {
                                         nickname={props.nickname}
                                     />
                                 ) : (
-                                    <NormalHeader onClose={noop} />
+                                    <NormalHeader />
                                 )}
                                 <PersonaHomeUI
                                     fetchProofsLoading

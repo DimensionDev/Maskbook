@@ -36,7 +36,7 @@ function getAddress(text: string) {
 }
 
 export class IdentityService extends IdentityServiceState {
-    constructor(protected context: Plugin.Shared.SharedUIContext) {
+    constructor(protected context: Plugin.Shared.SharedContext) {
         super()
     }
 

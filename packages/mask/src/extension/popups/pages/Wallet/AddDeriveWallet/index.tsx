@@ -10,7 +10,7 @@ import { useWallets } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../../../../../utils'
 import { LoadingButton } from '@mui/lab'
 import { PopupRoutes } from '@masknet/shared-base'
-import { currentMaskWalletAccountSettings } from '../../../../../../shared/legacy-settings/wallet-settings'
+import { currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
 import { first } from 'lodash-unified'
 import { useTitle } from '../../../hook/useTitle'
 

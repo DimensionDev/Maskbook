@@ -34,7 +34,7 @@ export class ProviderState<
     public providerType?: Subscription<ProviderType>
 
     constructor(
-        protected context: Plugin.Shared.SharedUIContext,
+        protected context: Plugin.Shared.SharedContext,
         protected providers: Record<ProviderType, WalletProvider<ChainId, ProviderType, Web3Provider, Web3>>,
         protected options: {
             isValidAddress(a?: string): boolean
