@@ -1,13 +1,13 @@
-import { Gear, ArrowDrop, LinkOut, RightArrow, NextIdPersonaVerified, Selected, LeftArrow } from '@masknet/icons'
+import { Gear, ArrowDrop, LinkOut, NextIdPersonaVerified, Selected } from '@masknet/icons'
 import { ReversedAddress } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { makeStyles, ShadowRootMenu } from '@masknet/theme'
+import { makeStyles, MaskTabList, ShadowRootMenu } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
-import { Button, Link, MenuItem, Typography } from '@mui/material'
-import classnames from 'classnames'
-import { throttle, uniqBy } from 'lodash-unified'
-import { HTMLProps, ReactNode, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { TabContext } from '@mui/lab'
+import { Button, Link, MenuItem, Typography, Tab } from '@mui/material'
+import { uniqBy } from 'lodash-unified'
+import { HTMLProps, ReactNode, useState } from 'react'
 import { useSharedI18N } from '../../../locales'
 
 const TAB_WIDTH = 126
@@ -141,8 +141,8 @@ interface TabOption<T> {
 
 export interface ConcealableTabsProps<T> extends Omit<HTMLProps<HTMLDivElement>, 'onChange'> {
     tabs: Array<TabOption<T>>
-    selectedId?: T
-    onChange?(id: T): void
+    currentTab: string
+    onChange(event: unknown, value: string): void
     tail?: ReactNode
     addressList: Array<SocialAddress<NetworkPluginID>>
     selectedAddress?: SocialAddress<NetworkPluginID>
@@ -152,7 +152,7 @@ export interface ConcealableTabsProps<T> extends Omit<HTMLProps<HTMLDivElement>,
 export function ConcealableTabs<T extends number | string>({
     className,
     tabs,
-    selectedId,
+    currentTab,
     tail,
     onChange,
     addressList,
@@ -163,46 +163,7 @@ export function ConcealableTabs<T extends number | string>({
     const { classes } = useStyles()
     const t = useSharedI18N()
 
-    const [overflow, setOverflow] = useState(false)
-
-    const trackRef = useRef<HTMLDivElement>(null)
-    const [reachedLeftEdge, setReachedLeftEdge] = useState(false)
-    const [reachedRightEdge, setReachedRightEdge] = useState(false)
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-
-    useLayoutEffect(() => {
-        const tabList = trackRef.current
-        if (!tabList) return
-        const isWider = tabList.scrollWidth > tabList.offsetWidth
-        setOverflow(isWider)
-
-        if (!isWider) return
-        const detectScrollStatus = throttle(() => {
-            const reachedRight = tabList.scrollWidth - tabList.offsetWidth <= tabList.scrollLeft
-            const reachedLeft = tabList.scrollLeft === 0
-            setReachedRightEdge(reachedRight)
-            setReachedLeftEdge(reachedLeft)
-        }, 100)
-
-        detectScrollStatus()
-        tabList.addEventListener('scroll', detectScrollStatus)
-        return () => {
-            tabList.removeEventListener('scroll', detectScrollStatus)
-        }
-    }, [])
-
-    useEffect(() => {
-        if (selectedId === undefined && tabs.length) {
-            onChange?.(tabs[0].id)
-        }
-    }, [selectedId, tabs.map((x) => x.id).join(), onChange])
-
-    const slide = useCallback((toLeft: boolean) => {
-        const tabList = trackRef.current
-        if (!tabList) return
-        const scrolled = Math.round(tabList.scrollLeft / TAB_WIDTH)
-        tabList.scrollTo({ left: TAB_WIDTH * (scrolled + (toLeft ? 1 : -1)), behavior: 'smooth' })
-    }, [])
 
     const onClose = () => setAnchorEl(null)
 
@@ -317,34 +278,13 @@ export function ConcealableTabs<T extends number | string>({
                 </div>
             </div>
             <div className={classes.tabs}>
-                <div className={classes.track} ref={trackRef}>
-                    {tabs.map((tab) => (
-                        <Button
-                            disableRipple
-                            key={tab.id}
-                            className={classnames(
-                                classes.button,
-                                selectedId === tab.id ? classes.selected : classes.normal,
-                            )}
-                            role="button"
-                            onClick={() => {
-                                onChange?.(tab.id)
-                            }}>
-                            {tab.label}
-                        </Button>
-                    ))}
-                </div>
-                {overflow || tail ? (
-                    <div className={classes.controllers}>
-                        {overflow ? (
-                            <>
-                                <LeftArrow size={24} className={classes.controller} onClick={() => slide(false)} />
-                                <RightArrow className={classes.controller} onClick={() => slide(true)} />
-                            </>
-                        ) : null}
-                        {tail}
-                    </div>
-                ) : null}
+                <TabContext value={currentTab}>
+                    <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
+                        {tabs.map((tab) => (
+                            <Tab key={tab.id} label={tab.label} value={tab.id} />
+                        ))}
+                    </MaskTabList>
+                </TabContext>
             </div>
         </div>
     )

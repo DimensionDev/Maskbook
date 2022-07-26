@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useUpdateEffect, useAsyncRetry } from 'react-use'
+import { useAsyncRetry, useUpdateEffect } from 'react-use'
 import { first } from 'lodash-unified'
 import {
     createInjectHooksRenderer,
@@ -11,12 +11,11 @@ import {
 import { useSocialAddressListAll, useAvailablePlugins } from '@masknet/plugin-infra/web3'
 import { ConcealableTabs, SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID } from '@masknet/shared'
 import { EMPTY_LIST, EnhanceableSite, getSiteType, NextIDPlatform } from '@masknet/shared-base'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles, useStylesExtends, useTabs } from '@masknet/theme'
 import { Box, CircularProgress } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
-import { MaskMessages, sortPersonaBindings } from '../../utils'
-import { useLocationChange } from '../../utils/hooks/useLocationChange'
+import { MaskMessages, sortPersonaBindings, useLocationChange } from '../../utils'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { useNextIDBoundByPlatform } from '../DataSource/useNextID'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
@@ -47,7 +46,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const translate = usePluginI18NField()
 
     const [hidden, setHidden] = useState(true)
-    const [selectedTab, setSelectedTab] = useState<string | undefined>()
     const [selectedAddress, setSelectedAddress] = useState<SocialAddress<NetworkPluginID> | undefined>()
 
     const currentIdentity = useLastRecognizedIdentity()
@@ -144,7 +142,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
         }))
 
-    const selectedTabId = selectedTab ?? first(tabs)?.id
+    const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginId.NextID, ...tabs.map((tab) => tab.id))
+
     const showNextID =
         isTwitter(activatedSocialNetworkUI) &&
         ((isOwn && addressList?.length === 0) ||
@@ -154,7 +153,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             !addressList?.length)
     const componentTabId = showNextID
         ? displayPlugins?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
-        : selectedTabId
+        : currentTab
 
     const component = useMemo(() => {
         const Component = getTabContent(componentTabId)
@@ -163,11 +162,11 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }, [componentTabId, personaPublicKey, selectedAddress])
 
     useLocationChange(() => {
-        setSelectedTab(undefined)
+        onChange(undefined, first(tabs)?.id)
     })
 
     useUpdateEffect(() => {
-        setSelectedTab(undefined)
+        onChange(undefined, first(tabs)?.id)
     }, [identity.identifier?.userId])
 
     useEffect(() => {
@@ -204,8 +203,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                 {tabs.length > 0 && !showNextID && (
                     <ConcealableTabs<string>
                         tabs={tabs}
-                        selectedId={selectedTabId}
-                        onChange={setSelectedTab}
+                        currentTab={currentTab}
+                        onChange={onChange}
                         addressList={addressList}
                         selectedAddress={selectedAddress}
                         onSelectAddress={setSelectedAddress}
