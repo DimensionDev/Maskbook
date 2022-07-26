@@ -25,11 +25,10 @@ export function Web3FeedPage({ socialAddress, persona }: Web3FeedPageProps) {
 
     return (
         <div style={{ margin: '16px 16px 0 16px' }}>
-            {feed?.list?.map((info, index) => {
+            {feed?.list?.map((info) => {
                 return (
                     <FeedCard
                         key={info.links}
-                        index={index}
                         onSelect={(feed) => setSelectedFeed(feed)}
                         feed={info}
                         address={socialAddress?.address}
