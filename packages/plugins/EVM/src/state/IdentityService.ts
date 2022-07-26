@@ -32,8 +32,7 @@ function getAddress(text: string) {
 }
 
 function getNextIDPlatform() {
-    const site = getSiteType()
-    if (site === EnhanceableSite.Twitter) return NextIDPlatform.Twitter
+    if (getSiteType() === EnhanceableSite.Twitter) return NextIDPlatform.Twitter
     return NextIDPlatform.Twitter
 }
 

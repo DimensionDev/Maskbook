@@ -1,3 +1,1 @@
-export function usePersonaFromNextID() {
-
-}
+export function usePersonaFromNextID() {}
