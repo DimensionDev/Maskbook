@@ -50,6 +50,18 @@ export function useCurrentVisitingIdentity() {
     return useValueRef(activatedSocialNetworkUI.collecting.currentVisitingIdentityProvider?.recognized || defaults)
 }
 
+export function useIsOwnerIdentity() {
+    const lastRecognizedIdentity = useLastRecognizedIdentity()
+    const currentVisitingIdentity = useCurrentVisitingIdentity()
+    const lastRecognizedUserId = lastRecognizedIdentity.identifier?.userId
+    const currentVisitingUserId = currentVisitingIdentity.identifier?.userId
+    return (
+        lastRecognizedUserId &&
+        currentVisitingUserId &&
+        lastRecognizedUserId.toLowerCase() === currentVisitingUserId.toLowerCase()
+    )
+}
+
 export function useCurrentLinkedPersona() {
     const currentIdentity = useSubscription(CurrentIdentitySubscription)
     return useAsync(async () => {
