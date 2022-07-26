@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, ReactNode } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { InjectedDialog } from '../../../contexts'
 import { useSharedI18N } from '../../../locales'
@@ -9,6 +9,7 @@ import differenceInCalendarHours from 'date-fns/differenceInHours'
 import { Gitcoin, LinkOut, OpenSeaColoredIcon, PolygonScan, EtherScan } from '@masknet/icons'
 import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 interface CollectionDetailCardProps {
     img?: string
@@ -136,59 +137,34 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
         referenceUrl,
         metadata,
         description,
-        contributions,
+        contributions = EMPTY_LIST,
         date,
         location,
-        relatedURLs,
+        relatedURLs = EMPTY_LIST,
         traits,
     }) => {
         const t = useSharedI18N()
         const { classes } = useStyles()
 
-        const icons = relatedURLs?.map((url) => {
+        const icons = relatedURLs.map((url) => {
+            let icon: ReactNode = null
             if (url.includes('etherscan.io')) {
-                return (
-                    <Link href={url} target="_blank" marginRight="12px">
-                        <EtherScan size={24} />
-                    </Link>
-                )
+                icon = <EtherScan size={24} />
+            } else if (url.includes('polygonscan.com/tx')) {
+                icon = <PolygonScan size={24} />
+            } else if (url.includes('polygonscan.com/token')) {
+                icon = <PolygonScan size={24} />
+            } else if (url.includes('opensea.io')) {
+                icon = <OpenSeaColoredIcon size={24} />
+            } else if (url.includes('gitcoin.co')) {
+                icon = <Gitcoin size={28} />
             }
-            if (url.includes('polygonscan.com/tx')) {
-                return (
-                    <Link href={url} target="_blank" marginRight="12px">
-                        <PolygonScan size={24} />
-                    </Link>
-                )
-            }
-            if (url.includes('polygonscan.com/token')) {
-                return (
-                    <Link href={url} target="_blank" marginRight="12px">
-                        <PolygonScan size={24} />
-                    </Link>
-                )
-            }
-            if (url.includes('opensea.io')) {
-                return (
-                    <Link href={url} target="_blank" marginRight="12px">
-                        <OpenSeaColoredIcon size={24} />
-                    </Link>
-                )
-            }
-            if (url.includes('gitcoin.co')) {
-                return (
-                    <Link href={url} target="_blank" marginBottom="8px">
-                        <Gitcoin size={28} />
-                    </Link>
-                )
-            }
-            return null
+            return icon ? (
+                <Link href={url} target="_blank" marginBottom="8px">
+                    {icon}
+                </Link>
+            ) : null
         })
-
-        const newContributions = contributions?.map((contribution) => ({
-            ...contribution,
-            daysFromNow: differenceInCalendarDays(Date.now(), Number(contribution.timeStamp) * 1000),
-            hoursFromNow: differenceInCalendarHours(Date.now(), Number(contribution.timeStamp) * 1000) % 24,
-        }))
 
         return (
             <InjectedDialog open={open} onClose={onClose} title={t.details()}>
@@ -235,34 +211,38 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                         {description}
                     </div>
 
-                    {contributions ? (
-                        <Typography fontSize="16px" fontWeight={700} marginTop="16px">
-                            {t.contributions()}
-                        </Typography>
-                    ) : null}
-                    {contributions ? (
-                        <Typography fontSize="16px" fontWeight={700} marginBottom="16px">
-                            {contributions?.length ?? 0}
-                        </Typography>
-                    ) : null}
-                    {newContributions?.map((contribution) => (
-                        <div key={contribution.txHash} className={classes.txItem}>
-                            <Typography className={classes.donationAmount}>
-                                {contribution.formatedAmount} {contribution.symbol}
+                    {contributions.length ? (
+                        <>
+                            <Typography fontSize="16px" fontWeight={700} marginTop="16px">
+                                {t.contributions()}
                             </Typography>
-                            <div className={classes.dayBox}>
-                                {contribution?.daysFromNow} {contribution?.daysFromNow > 1 ? t.days() : t.day()}{' '}
-                                {contribution?.hoursFromNow} {contribution?.hoursFromNow > 1 ? t.hours() : t.hour()}{' '}
-                                {t.ago()}
-                                <Link
-                                    className={classes.linkBox}
-                                    target="_blank"
-                                    href={explorerResolver.transactionLink(ChainId.Mainnet, contribution.txHash)}>
-                                    <LinkOut size={18} color="white" />
-                                </Link>
+                            <Typography fontSize="16px" fontWeight={700} marginBottom="16px">
+                                {contributions.length}
+                            </Typography>
+                        </>
+                    ) : null}
+                    {contributions.map((contribution) => {
+                        const days = differenceInCalendarDays(Date.now(), Number(contribution.timeStamp) * 1000)
+                        const hours = differenceInCalendarHours(Date.now(), Number(contribution.timeStamp) * 1000)
+                        return (
+                            <div key={contribution.txHash} className={classes.txItem}>
+                                <Typography className={classes.donationAmount}>
+                                    {contribution.formatedAmount} {contribution.symbol}
+                                </Typography>
+                                <div className={classes.dayBox}>
+                                    {days > 0 ? `${days} ${t.day({ count: days })} ` : ''}
+                                    {hours > 0 ? `${hours} ${t.day({ count: hours })} ` : ''}
+                                    {t.ago()}
+                                    <Link
+                                        className={classes.linkBox}
+                                        target="_blank"
+                                        href={explorerResolver.transactionLink(ChainId.Mainnet, contribution.txHash)}>
+                                        <LinkOut size={18} color="white" />
+                                    </Link>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        )
+                    })}
                     {traits && (
                         <Typography fontSize="16px" fontWeight={700}>
                             {t.properties()}
@@ -270,9 +250,9 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                     )}
                     <Box className={classes.traitsBox}>
                         {traits?.map((trait) => (
-                            <div key={trait?.type + trait?.value} className={classes.traitItem}>
-                                <Typography className={classes.secondText}> {trait?.type}</Typography>
-                                <Typography className={classes.traitValue}> {trait?.value}</Typography>
+                            <div key={trait.type + trait.value} className={classes.traitItem}>
+                                <Typography className={classes.secondText}> {trait.type}</Typography>
+                                <Typography className={classes.traitValue}> {trait.value}</Typography>
                             </div>
                         ))}
                     </Box>

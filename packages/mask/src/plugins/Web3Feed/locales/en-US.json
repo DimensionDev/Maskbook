@@ -1,6 +1,8 @@
 {
-    "days": "days",
-    "hours": "hours",
+    "day_one": "days",
+    "day_other": "days",
+    "hour_one": "hour",
+    "hour_other": "hours",
     "ago": "ago",
     "no_data": "No feed at the current address"
 }
