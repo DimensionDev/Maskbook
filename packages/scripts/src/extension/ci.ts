@@ -21,12 +21,12 @@ export const ciBuild = series(
         buildTarget('Firefox', { firefox: true, 'output-path': 'build-firefox' }, 'MaskNetwork.firefox.zip'),
         buildTarget('Android', { android: true, 'output-path': 'build-android' }, 'MaskNetwork.gecko.zip'),
         buildTarget('iOS', { iOS: true, 'output-path': 'build-iOS' }, 'MaskNetwork.iOS.zip'),
-        buildTarget('Firefox', { firefox: true, 'output-path': 'build-firefox' }, 'MaskNetwork.firefox.zip'),
         buildTarget(
             'Chromium-beta',
             { chromium: true, beta: true, 'output-path': 'build-chromium-beta' },
             'MaskNetwork.chromium-beta.zip',
         ),
+        buildTarget('Chromium-MV3', { chromium: true, 'output-path': 'build-mv3' }, 'MaskNetwork.chromium-mv3.zip'),
     ),
 )
 task(ciBuild, 'build-ci', 'Build the extension on CI')
