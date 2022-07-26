@@ -1,20 +1,11 @@
+import { CollectionDetailCard } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { List, ListItem } from '@mui/material'
-import urlcat from 'urlcat'
-import { RSS3_DEFAULT_IMAGE } from '../../constants'
+import type { RSS3BaseAPI } from '@masknet/web3-providers'
+import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
+import { Box, List, ListItem } from '@mui/material'
+import { useState } from 'react'
 import { useI18N } from '../../locales'
-import type { GeneralAsset, GeneralAssetWithTags } from '../../types'
 import { DonationCard, StatusBox } from '../components'
-
-const getDonationLink = (label: string, donation: GeneralAssetWithTags) => {
-    const { platform, identity, id, type } = donation
-    return urlcat(`https://${label}.bio/singlegitcoin/:platform/:identity/:id/:type`, {
-        platform,
-        identity,
-        id,
-        type: type.replaceAll('-', '.'),
-    })
-}
 
 const useStyles = makeStyles()((theme) => ({
     statusBox: {
@@ -25,7 +16,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     list: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(2, 1fr)',
+        gridTemplateColumns: 'repeat(1, 1fr)',
         gridGap: theme.spacing(2),
     },
     listItem: {
@@ -48,31 +39,43 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface DonationPageProps {
-    donations?: GeneralAsset[]
+    donations?: RSS3BaseAPI.Donation[]
     loading?: boolean
-    addressLabel: string
+    address: SocialAddress<NetworkPluginID>
 }
 
-export function DonationPage({ donations = [], loading, addressLabel }: DonationPageProps) {
+export function DonationPage({ donations = [], loading, address }: DonationPageProps) {
     const { classes } = useStyles()
     const t = useI18N()
 
+    const [selectedDonation, setSelectedDonation] = useState<RSS3BaseAPI.Donation | undefined>()
+
     if (loading || !donations.length) {
-        return <StatusBox loading={loading} empty={!donations.length} />
+        return <StatusBox loading={loading} collection="Donation" empty={!donations.length} />
     }
     return (
-        <List className={classes.list}>
-            {donations.map((donation) => (
-                <ListItem key={donation.id} className={classes.listItem}>
-                    <DonationCard
-                        className={classes.donationCard}
-                        imageUrl={donation.info.image_preview_url || RSS3_DEFAULT_IMAGE}
-                        name={donation.info.title || t.inactive_project()}
-                        contribCount={donation.info.total_contribs || 0}
-                        contribDetails={donation.info.token_contribs || []}
-                    />
-                </ListItem>
-            ))}
-        </List>
+        <Box margin="16px 0 0 16px">
+            <List className={classes.list}>
+                {donations.map((donation) => (
+                    <ListItem key={donation.id} className={classes.listItem}>
+                        <DonationCard
+                            onSelect={() => setSelectedDonation(donation)}
+                            className={classes.donationCard}
+                            donation={donation}
+                            address={address}
+                        />
+                    </ListItem>
+                ))}
+            </List>
+            <CollectionDetailCard
+                open={Boolean(selectedDonation)}
+                onClose={() => setSelectedDonation(undefined)}
+                img={selectedDonation?.detail?.grant?.logo}
+                title={selectedDonation?.detail?.grant?.title}
+                referenceUrl={selectedDonation?.detail?.grant?.reference_url}
+                description={selectedDonation?.detail?.grant?.description}
+                contributions={selectedDonation?.detail?.txs}
+            />
+        </Box>
     )
 }

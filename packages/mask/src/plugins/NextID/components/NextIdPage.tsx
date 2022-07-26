@@ -1,4 +1,4 @@
-import { NewLinkOutIcon, PluginIcon, Verified, WalletUnderTabsIcon, Web3ProfileIcon } from '@masknet/icons'
+import { Plugin, WalletUnderTabs, Web3Profile, Connect, Identity, LinkOut } from '@masknet/icons'
 import { PluginId, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NextIDPlatform, PopupRoutes, EMPTY_LIST } from '@masknet/shared-base'
@@ -59,9 +59,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     container: {
         background:
-            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(249, 55, 55, 0.2) 100%), #FFFFFF;',
-        borderRadius: '16px',
-        padding: '14px',
+            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(45, 41, 253, 0.2) 100%), #FFFFFF;',
+        padding: '14px 14px 16px 14px ',
+        height: '166px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
     },
     verifyIntro: {
         fontSize: '14px',
@@ -85,22 +88,18 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: theme.palette.background.default,
         height: '196px',
     },
-    walletIcon: {
-        fontSize: 18,
-        marginRight: 8,
-    },
     web3Icon: {
         marginRight: 6,
         marginTop: 2,
     },
     item1: {
         color: '#767f8d',
-        fontSize: '14',
+        fontSize: '14px',
         fontWeight: 400,
     },
     item2: {
         color: '#07101B',
-        fontSize: '14',
+        fontSize: '14px',
         fontWeight: 500,
         marginLeft: '2px',
     },
@@ -108,10 +107,18 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '99px',
         backgroundColor: '#07101b',
         color: '#fff',
+        marginTop: 'auto',
         ':hover': {
             color: 'fff',
             backgroundColor: '#07101b',
         },
+    },
+    content: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontSize: '14px',
+        fontWeight: 400,
     },
 }))
 
@@ -122,6 +129,8 @@ interface NextIdPageProps {
 export function NextIdPage({ persona }: NextIdPageProps) {
     const t = useI18N()
     const { classes } = useStyles()
+
+    const [description, setDescription] = useState('')
     const currentProfileIdentifier = useLastRecognizedIdentity()
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
     const personaConnectStatus = usePersonaConnectStatus()
@@ -135,8 +144,16 @@ export function NextIdPage({ persona }: NextIdPageProps) {
     const personaActionButton = useMemo(() => {
         if (!personaConnectStatus.action) return null
         const button = personaConnectStatus.hasPersona ? t.connect_persona() : t.create_persona()
+        setDescription(personaConnectStatus.hasPersona ? '' : t.create_persona_intro())
+        const icon = personaConnectStatus.hasPersona ? (
+            <Connect sx={{ marginRight: '8px' }} />
+        ) : (
+            <Identity size={18} sx={{ marginRight: '8px' }} />
+        )
+
         return (
             <Button className={classes.button} onClick={personaConnectStatus.action}>
+                {icon}
                 {button}
             </Button>
         )
@@ -187,11 +204,15 @@ export function NextIdPage({ persona }: NextIdPageProps) {
         })
     }
 
-    const getButton = () => {
+    const getButton = useMemo(() => {
+        if (!isOwn) {
+            setDescription(t.others_lack_wallet())
+            return
+        }
         if (isWeb3ProfileDisable) {
             return (
                 <Button className={classes.button} variant="contained" onClick={onEnablePlugin}>
-                    <PluginIcon />
+                    <Plugin />
                     <Typography marginLeft="9px">{t.enable_plugin()}</Typography>
                 </Button>
             )
@@ -199,21 +220,22 @@ export function NextIdPage({ persona }: NextIdPageProps) {
         if (personaActionButton && isOwn) {
             return personaActionButton
         }
-        if (!isAccountVerified) {
+        if (!isAccountVerified && isOwn) {
             return (
                 <Button className={classes.button} variant="contained" onClick={onVerify}>
-                    <Verified />
+                    <Connect sx={{ margin: '2px 8px 0 0' }} />
                     {t.verify_Twitter_ID_button()}
                 </Button>
             )
         }
+        setDescription(t.add_wallet_intro())
         return (
             <Button className={classes.button} variant="contained" onClick={handleAddWallets}>
-                <WalletUnderTabsIcon className={classes.walletIcon} />
+                <WalletUnderTabs size={16} color="white" sx={{ marginRight: '8px' }} />
                 {t.add_wallet_button()}
             </Button>
         )
-    }
+    }, [isWeb3ProfileDisable, personaActionButton, isOwn, isAccountVerified, t])
 
     if (loadingBindings || loadingPersona || loadingVerifyInfo) {
         return (
@@ -234,7 +256,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
             <Box className={classes.container}>
                 <Box className={classes.header}>
                     <div className={classes.title}>
-                        <Web3ProfileIcon className={classes.web3Icon} />
+                        <Web3Profile className={classes.web3Icon} />
                         <Typography fontSize={16} fontWeight={700}>
                             {t.web3_profile()}
                         </Typography>
@@ -250,18 +272,14 @@ export function NextIdPage({ persona }: NextIdPageProps) {
                             href="https://mask.io/"
                             width="22px"
                             height="22px"
-                            style={{ alignSelf: 'center' }}>
-                            <NewLinkOutIcon />
+                            style={{ alignSelf: 'center', marginLeft: '4px' }}>
+                            <LinkOut size={16} color="#767f8d" />
                         </Link>
                     </div>
                 </Box>
-                <div style={{ marginTop: '24px' }}>
-                    <div className={classes.longBar} />
-                    <div className={classes.middleBar} />
-                    <div className={classes.shortBar} />
-                </div>
-                <Stack justifyContent="center" direction="row" mt="24px">
-                    {getButton()}
+                <Box className={classes.content}>{description}</Box>
+                <Stack justifyContent="center" direction="row">
+                    {getButton}
                 </Stack>
             </Box>
             {openBindDialog && currentPersona && isOwn && (

@@ -192,6 +192,7 @@ export const getNFTList = async (walletList: WalletTypes[]) => {
                         tokenId: asset.tokenId,
                         iconURL: asset?.metadata?.imageURL,
                         name: asset?.metadata?.name,
+                        chainId: ChainId.Mainnet,
                     })),
                 }
             } else {
@@ -218,6 +219,7 @@ export const getNFTList_Polygon = async (walletList: WalletTypes[]) => {
                         tokenId: asset.tokenId,
                         iconURL: asset?.metadata?.imageURL,
                         name: asset?.metadata?.name,
+                        chainId: ChainId.Matic,
                     })),
                 }
             } else {

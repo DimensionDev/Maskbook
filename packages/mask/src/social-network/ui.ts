@@ -10,17 +10,17 @@ import {
     i18NextInstance,
     createSubscriptionFromValueRef,
     createSubscriptionFromAsync,
+    queryRemoteI18NBundle,
 } from '@masknet/shared-base'
 import { Environment, assertNotEnvironment, ValueRef } from '@dimensiondev/holoflows-kit'
-import { IdentityResolved, Plugin, PluginId, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { IdentityResolved, PluginId, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { getCurrentIdentifier, getCurrentSNSNetwork } from '../social-network-adaptor/utils'
-import { createPluginHost, createPartialSharedUIContext } from '../../shared/plugin-infra/host'
+import { createPluginHost, createSharedContext } from '../plugin-infra/host'
 import { definedSocialNetworkUIs } from './define'
 import { setupShadowRootPortal, MaskMessages } from '../utils'
 import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
 import { sharedUINetworkIdentifier, sharedUIComponentOverwrite } from '@masknet/shared'
 import { SocialNetworkEnum } from '@masknet/encryption'
-import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
@@ -110,44 +110,40 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             Services.Identity.createNewRelation(ref.identifier, currentProfile.linkedPersona)
         }
     })
+    signal.addEventListener('abort', queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle))
 
     startPluginSNSAdaptor(
         getCurrentSNSNetwork(ui.networkIdentifier),
-        createPluginHost(
-            signal,
-            (pluginID, signal): Plugin.SNSAdaptor.SNSAdaptorContext => {
-                const empty = new ValueRef<IdentityResolved | undefined>(undefined)
-                const lastRecognizedSub = createSubscriptionFromValueRef(
-                    ui.collecting.identityProvider?.recognized || empty,
-                    signal,
-                )
-                const currentVisitingSub = createSubscriptionFromValueRef(
-                    ui.collecting.currentVisitingIdentityProvider?.recognized || empty,
-                    signal,
-                )
-                const allPersonaSub = createSubscriptionFromAsync(
-                    () => Services.Identity.queryOwnedPersonaInformation(true),
-                    [],
-                    MaskMessages.events.currentPersonaIdentifier.on,
-                    signal,
-                )
-                return {
-                    ...createPartialSharedUIContext(pluginID, signal),
-                    ...RestPartOfPluginUIContextShared,
-                    lastRecognizedProfile: lastRecognizedSub,
-                    currentVisitingProfile: currentVisitingSub,
-                    allPersonas: allPersonaSub,
-                    privileged_silentSign: () => {
-                        if (pluginID !== PluginId.Web3Profile)
-                            throw new TypeError("current plugin doesn't support silent sign function")
-                        return Services.Identity.generateSignResult
-                    },
-                    getPersonaAvatar: Services.Identity.getPersonaAvatar,
-                    ownProofChanged: MaskMessages.events.ownProofChanged,
-                }
-            },
-            Services.Settings.getPluginMinimalModeEnabled,
-        ),
+        createPluginHost(signal, (pluginID, signal) => {
+            const empty = new ValueRef<IdentityResolved | undefined>(undefined)
+            const lastRecognizedSub = createSubscriptionFromValueRef(
+                ui.collecting.identityProvider?.recognized || empty,
+                signal,
+            )
+            const currentVisitingSub = createSubscriptionFromValueRef(
+                ui.collecting.currentVisitingIdentityProvider?.recognized || empty,
+                signal,
+            )
+            const allPersonaSub = createSubscriptionFromAsync(
+                () => Services.Identity.queryOwnedPersonaInformation(true),
+                [],
+                MaskMessages.events.currentPersonaIdentifier.on,
+                signal,
+            )
+            return {
+                ...createSharedContext(pluginID, signal),
+                lastRecognizedProfile: lastRecognizedSub,
+                currentVisitingProfile: currentVisitingSub,
+                allPersonas: allPersonaSub,
+                privileged_silentSign: () => {
+                    if (pluginID !== PluginId.Web3Profile)
+                        throw new TypeError("current plugin doesn't support silent sign function")
+                    return Services.Identity.generateSignResult
+                },
+                getPersonaAvatar: Services.Identity.getPersonaAvatar,
+                MaskMessages,
+            }
+        }),
     )
 
     setupShadowRootPortal()

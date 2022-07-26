@@ -11,6 +11,7 @@ import type {
     PopupRoutes,
     PersonaInformation,
     ECKeyIdentifier,
+    MaskEvents,
 } from '@masknet/shared-base'
 import type {
     ChainDescriptor,
@@ -25,7 +26,7 @@ import type {
 import type { ChainId, SchemaType, Transaction } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
-import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
+import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 
 export declare namespace Plugin {
     /**
@@ -134,8 +135,6 @@ export namespace Plugin.Shared {
          * A lightweight K/V storage used to store some simple data.
          */
         createKVStorage<T extends object>(type: 'memory' | 'persistent', defaultValues: T): ScopedStorage<T>
-    }
-    export interface SharedUIContext extends SharedContext {
         /** The selected account of Mask Wallet */
         account: Subscription<string>
         /** The selected chainId of Mask Wallet */
@@ -350,13 +349,13 @@ export namespace Plugin.Shared {
 
 /** This part runs in the SNSAdaptor */
 export namespace Plugin.SNSAdaptor {
-    export interface SNSAdaptorContext extends Shared.SharedUIContext {
+    export interface SNSAdaptorContext extends Shared.SharedContext {
         lastRecognizedProfile: Subscription<IdentityResolved | undefined>
         currentVisitingProfile: Subscription<IdentityResolved | undefined>
         allPersonas?: Subscription<PersonaInformation[]>
         privileged_silentSign: () => (signer: ECKeyIdentifier, message: string) => Promise<PersonaSignResult>
         getPersonaAvatar: (identifier: ECKeyIdentifier | null | undefined) => Promise<string | null | undefined>
-        ownProofChanged: UnboundedRegistry<void>
+        MaskMessages: WebExtensionMessage<MaskEvents>
     }
 
     export type SelectProviderDialogEvent =
@@ -594,14 +593,14 @@ export namespace Plugin.SNSAdaptor {
             TabContent: InjectUI<{
                 identity?: SocialIdentity
                 persona?: string
-                socialAddressList?: Array<SocialAddress<NetworkPluginID>>
+                socialAddress?: SocialAddress<NetworkPluginID>
             }>
         }
         Utils?: {
             /**
              * If it returns false, this tab will not be displayed.
              */
-            shouldDisplay?(identity?: SocialIdentity, addressNames?: Array<SocialAddress<NetworkPluginID>>): boolean
+            shouldDisplay?(identity?: SocialIdentity, addressName?: SocialAddress<NetworkPluginID>): boolean
             /**
              * Filter social address.
              */
@@ -616,7 +615,7 @@ export namespace Plugin.SNSAdaptor {
 
 /** This part runs in the dashboard */
 export namespace Plugin.Dashboard {
-    export interface DashboardContext extends Shared.SharedUIContext {}
+    export interface DashboardContext extends Shared.SharedContext {}
     // As you can see we currently don't have so much use case for an API here.
     export interface Definition<
         ChainId = unknown,
@@ -962,6 +961,7 @@ export enum PluginId {
     Web3Profile = 'io.mask.web3-profile',
     ScamSniffer = 'io.scamsniffer.mask-plugin',
     NFTCard = 'com.mask.nft-card',
+    Web3Feed = 'io.mask.web3-feed',
     // @masknet/scripts: insert-here
 }
 /**

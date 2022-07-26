@@ -34,7 +34,7 @@ export class Connection extends ConnectionState<
     Web3Provider
 > {
     constructor(
-        context: Plugin.Shared.SharedUIContext,
+        context: Plugin.Shared.SharedContext,
         subscription: {
             account?: Subscription<string>
             chainId?: Subscription<ChainId>

@@ -3,25 +3,26 @@ import classnames from 'classnames'
 import { Trans } from 'react-i18next'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { Avatar, Button, DialogActions, DialogContent, Paper, Typography } from '@mui/material'
+import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { getMaskColor, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import PriorityHighIcon from '@mui/icons-material/PriorityHigh'
 import { useI18N, useMatchXS } from '../../../../utils'
 import { WalletMessages } from '../../messages'
-import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
+import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
+import ActionButton, { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { isDashboardPage } from '@masknet/shared-base'
+import { Warning } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
-        paddingTop: theme.spacing(2),
-        paddingLeft: theme.spacing(1),
-        paddingRight: theme.spacing(1),
         color: getMaskColor(theme).redMain,
+        paddingBottom: 0,
+        overflowY: 'hidden',
     },
     buttons: {
-        padding: theme.spacing(3),
+        padding: theme.spacing(2),
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
     },
     button: {
         borderRadius: isDashboardPage() ? 9999 : undefined,
@@ -31,8 +32,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     cancel: {},
     title: {
-        paddingTop: theme.spacing(2),
-        paddingBottom: theme.spacing(2),
+        margin: theme.spacing(2, 0),
+        fontSize: 24,
+        fontWeight: 700,
+        lineHeight: '28.8px',
     },
     icon: {
         display: 'flex',
@@ -52,6 +55,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     texts: {
         paddingBottom: theme.spacing(1),
+    },
+    article: {
+        fontSize: 14,
+        lineHeight: '18px',
+        fontWeight: 400,
+        marginBottom: theme.spacing(2),
     },
 }))
 
@@ -96,40 +105,32 @@ export function WalletRiskWarningDialog() {
             title={isMobile ? undefined : t('wallet_risk_warning_dialog_title')}
             open={open}
             onClose={onClose}>
-            <DialogContent>
-                <Paper className={classes.paper} elevation={0}>
-                    <div className={classes.icon}>
-                        <Avatar className={classes.avatar}>
-                            <PriorityHighIcon style={{ fontSize: 58, color: 'rgba(255, 95, 95, 1)' }} />
-                        </Avatar>
-                    </div>
-                    <Typography
-                        className={classes.title}
-                        align="center"
-                        variant="h4"
-                        children={t('wallet_risk_warning_dialog_title')}
-                    />
-                    <Typography
-                        variant="body2"
-                        children={<Trans i18nKey="multiline">{t('wallet_risk_warning_content')}</Trans>}
-                    />
-                    <Paper elevation={0} className={`${classes.wallet} dashboard-style`}>
-                        <Typography variant="body1" color="textSecondary" className={classes.texts}>
-                            {t('nft_wallet_label')}
-                        </Typography>
-                        <Typography variant="body1" color="textPrimary" className={classes.texts}>
-                            {isMobile ? Others?.formatAddress(account, 5) : account}
-                        </Typography>
-                    </Paper>
-                </Paper>
+            <DialogContent className={classes.paper}>
+                <div className={classes.icon}>
+                    <Warning size={90} />
+                </div>
+                <Typography
+                    className={classes.title}
+                    align="center"
+                    variant="h4"
+                    children={t('wallet_risk_warning_dialog_title')}
+                />
+                <Typography
+                    className={classes.article}
+                    variant="body2"
+                    children={<Trans i18nKey="multiline">{t('wallet_risk_warning_content')}</Trans>}
+                />
+                <WalletStatusBox disableChange />
             </DialogContent>
             <DialogActions className={classes.buttons}>
-                <Button
-                    className={classnames(classes.button, classes.cancel, 'dashboard-style')}
+                <ActionButton
+                    className={classnames(classes.button, classes.cancel)}
                     fullWidth
+                    variant="outlined"
+                    color="secondary"
                     onClick={onClose}>
                     {t('cancel')}
-                </Button>
+                </ActionButton>
                 <ActionButtonPromise
                     className={classes.button}
                     fullWidth

@@ -1,10 +1,10 @@
 import urlcat from 'urlcat'
 import RSS3 from 'rss3-next'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { CollectionType, NEW_RSS3_ENDPOINT, RSS3_ENDPOINT } from './constants'
+import { PLATFORM, RSS3_ENDPOINT, CollectionType, NEW_RSS3_ENDPOINT, RSS3_FEED_ENDPOINT } from './constants'
 import { NonFungibleTokenAPI, RSS3BaseAPI } from '../types'
 import { fetchJSON } from '../helpers'
-import { createIndicator, createPageable, HubOptions, TokenType } from '@masknet/web3-shared-base'
+import { createIndicator, createPageable, HubOptions, NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
 
 export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     createRSS3(
@@ -108,5 +108,16 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
             })
             .filter((x) => x.chainId === chainId)
         return createPageable(data, createIndicator(indicator))
+    }
+
+    async getWeb3Feed(
+        address: string,
+        { networkPluginId = NetworkPluginID.PLUGIN_EVM }: HubOptions<ChainId> = {},
+        type?: RSS3BaseAPI.FeedType,
+    ) {
+        if (!address) return
+        const url = `${RSS3_FEED_ENDPOINT}account:${address}@${PLATFORM[networkPluginId]}/notes?limit=100&exclude_tags=POAP&tags=Gitcoin&tags=POAP&tags=NFT&tags=Donation&latest=false`
+        const res = fetchJSON<RSS3BaseAPI.Web3FeedResponse>(url)
+        return res
     }
 }

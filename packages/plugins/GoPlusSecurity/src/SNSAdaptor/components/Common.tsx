@@ -15,7 +15,7 @@ export enum SecurityMessageLevel {
     Safe = 'Safe',
 }
 
-export const Center = memo(({ children }) => (
+export const Center = memo(({ children }: { children: ReactNode }) => (
     <Stack height="100%" justifyContent="center" alignItems="center">
         {children}
     </Stack>

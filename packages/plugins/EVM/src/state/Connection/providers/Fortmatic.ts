@@ -29,6 +29,7 @@ const resolveAPI_Key = createLookupTableResolver<ChainIdFortmatic, string>(
 )
 
 const isFortmaticSupported = (chainId: ChainId): chainId is ChainIdFortmatic => {
+    if (process.env.engine === 'firefox') return false
     return [ChainId.Mainnet, ChainId.BSC].includes(chainId)
 }
 

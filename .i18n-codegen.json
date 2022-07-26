@@ -359,6 +359,17 @@
                 "trans": "Translate",
                 "sourceMap": "inline"
             }
+        },
+        {
+            "input": "./packages/mask/src/plugins/Web3Feed/locales/en-US.json",
+            "output": "./packages/mask/src/plugins/Web3Feed/locales/i18n_generated",
+            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useI18N",
+                "namespace": "com.maskbook.web3-feed",
+                "trans": "Translate"
+            }
         }
     ]
 }
