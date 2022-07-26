@@ -7,13 +7,12 @@ import { WalletRPC, WalletMessages } from '../../plugins/Wallet/messages'
 // import { PluginTraderMessages, PluginTraderRPC } from '../../plugins/Trader/messages'
 // import { PluginPetMessages } from '../../plugins/Pets/messages'
 import { MaskMessages } from '../../utils/messages'
-import { createPluginHost, createPartialSharedUIContext } from '../../../shared/plugin-infra/host'
+import { createPluginHost, createSharedContext } from '../../plugin-infra/host'
 import type { DashboardPluginMessages, DashboardPluginServices } from '@masknet/shared'
 import { createNormalReactRoot } from '../../utils/createNormalReactRoot'
 import { status } from '../../setup.ui'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { PluginTraderMessages } from '../../plugins/Trader/messages'
-import { RestPartOfPluginUIContextShared } from '../../utils/plugin-context-shared-ui'
 
 const msg: DashboardPluginMessages = {
     Wallet: WalletMessages,
@@ -33,14 +32,5 @@ setMessages(MaskMessages)
 setPluginServices(rpc)
 // @ts-ignore
 setPluginMessages(msg)
-startPluginDashboard(
-    createPluginHost(
-        undefined,
-        (id, signal) => ({
-            ...createPartialSharedUIContext(id, signal),
-            ...RestPartOfPluginUIContextShared,
-        }),
-        Services.Settings.getPluginMinimalModeEnabled,
-    ),
-)
+startPluginDashboard(createPluginHost(undefined, createSharedContext))
 status.then(() => createNormalReactRoot(<IntegratedDashboard />))

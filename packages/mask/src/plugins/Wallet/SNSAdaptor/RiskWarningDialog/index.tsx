@@ -3,15 +3,15 @@ import classnames from 'classnames'
 import { Trans } from 'react-i18next'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { Avatar, Button, DialogActions, DialogContent, Paper, Typography } from '@mui/material'
+import { Button, DialogActions, DialogContent, Paper, Typography } from '@mui/material'
 import { getMaskColor, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import PriorityHighIcon from '@mui/icons-material/PriorityHigh'
 import { useI18N, useMatchXS } from '../../../../utils'
 import { WalletMessages } from '../../messages'
 import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { isDashboardPage } from '@masknet/shared-base'
+import { WarningIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -31,7 +31,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     cancel: {},
     title: {
-        paddingTop: theme.spacing(2),
+        paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(2),
     },
     icon: {
@@ -99,9 +99,7 @@ export function WalletRiskWarningDialog() {
             <DialogContent>
                 <Paper className={classes.paper} elevation={0}>
                     <div className={classes.icon}>
-                        <Avatar className={classes.avatar}>
-                            <PriorityHighIcon style={{ fontSize: 58, color: 'rgba(255, 95, 95, 1)' }} />
-                        </Avatar>
+                        <WarningIcon size={58} />
                     </div>
                     <Typography
                         className={classes.title}

@@ -4,3 +4,4 @@ export { openPopupWindow, removePopupWindow, openDashboard } from './popup-opene
 export { queryExtensionPermission, requestExtensionPermission } from './request-permission'
 export { saveFileFromBuffer, type SaveFileOptions } from '../../../shared/helpers/download'
 export { r2d2Fetch } from './r2d2Fetch'
+export { queryRemoteI18NBundle, type Bundle } from './i18n-cache-query'

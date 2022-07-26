@@ -54,7 +54,7 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
     // ipfs
     if (url.startsWith('ipfs://'))
         return proxied_fetch(
-            urlcat('https://cors.r2d2.to?https://coldcdn.com/api/cdn/mipfsygtms/ipfs/:ipfs', {
+            urlcat('https://cors.r2d2.to?https://pz-tpsfpq.meson.network/ipfs/:ipfs', {
                 ipfs: url.replace('ipfs://', ''),
             }),
             info,
@@ -87,11 +87,7 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
 }
 
 function proxied_fetch(url: string, info: Request) {
-    const req = new Request({
-        // @ts-ignore
-        __proto__: info,
-        url,
-    })
+    const req = new Request(url, info)
     return original_fetch(req)
 }
 

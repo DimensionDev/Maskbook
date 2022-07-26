@@ -1,10 +1,8 @@
 import { startPluginWorker, Plugin } from '@masknet/plugin-infra/background-worker'
-import { createPluginDatabase } from '../../database/plugin-db'
-import { createPluginHost, createSharedContext } from '../../../shared/plugin-infra/host'
-import { getPluginMinimalModeEnabled } from '../../services/settings/old-settings-accessor'
-
+import { createPluginDatabase } from '../../../../background/database/plugin-db'
+import { createPluginHost, createSharedContext } from '../../../plugin-infra/host'
 export default function (signal: AbortSignal) {
-    startPluginWorker(createPluginHost(signal, createWorkerContext, getPluginMinimalModeEnabled))
+    startPluginWorker(createPluginHost(signal, createWorkerContext))
 }
 
 function createWorkerContext(pluginID: string, signal: AbortSignal): Plugin.Worker.WorkerContext {
