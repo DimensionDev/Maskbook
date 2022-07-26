@@ -593,14 +593,14 @@ export namespace Plugin.SNSAdaptor {
             TabContent: InjectUI<{
                 identity?: SocialIdentity
                 persona?: string
-                socialAddressList?: Array<SocialAddress<NetworkPluginID>>
+                socialAddress?: SocialAddress<NetworkPluginID>
             }>
         }
         Utils?: {
             /**
              * If it returns false, this tab will not be displayed.
              */
-            shouldDisplay?(identity?: SocialIdentity, addressNames?: Array<SocialAddress<NetworkPluginID>>): boolean
+            shouldDisplay?(identity?: SocialIdentity, addressName?: SocialAddress<NetworkPluginID>): boolean
             /**
              * Filter social address.
              */
@@ -960,6 +960,7 @@ export enum PluginId {
     Referral = 'com.maskbook.referral',
     Web3Profile = 'io.mask.web3-profile',
     ScamSniffer = 'io.scamsniffer.mask-plugin',
+    Web3Feed = 'io.mask.web3-feed',
     // @masknet/scripts: insert-here
 }
 /**
