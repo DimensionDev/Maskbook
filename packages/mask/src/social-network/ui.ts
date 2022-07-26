@@ -111,26 +111,30 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         }
     })
 
+    const allPersonaSub = createSubscriptionFromAsync(
+        () => {
+            console.log('DEBUG: currentPersonaIdentifier')
+            return Services.Identity.queryOwnedPersonaInformation(true)
+        },
+        [],
+        MaskMessages.events.currentPersonaIdentifier.on,
+        signal,
+    )
+    const empty = new ValueRef<IdentityResolved | undefined>(undefined)
+    const lastRecognizedSub = createSubscriptionFromValueRef(
+        ui.collecting.identityProvider?.recognized || empty,
+        signal,
+    )
+    const currentVisitingSub = createSubscriptionFromValueRef(
+        ui.collecting.currentVisitingIdentityProvider?.recognized || empty,
+        signal,
+    )
+
     startPluginSNSAdaptor(
         getCurrentSNSNetwork(ui.networkIdentifier),
         createPluginHost(
             signal,
             (pluginID, signal): Plugin.SNSAdaptor.SNSAdaptorContext => {
-                const empty = new ValueRef<IdentityResolved | undefined>(undefined)
-                const lastRecognizedSub = createSubscriptionFromValueRef(
-                    ui.collecting.identityProvider?.recognized || empty,
-                    signal,
-                )
-                const currentVisitingSub = createSubscriptionFromValueRef(
-                    ui.collecting.currentVisitingIdentityProvider?.recognized || empty,
-                    signal,
-                )
-                const allPersonaSub = createSubscriptionFromAsync(
-                    () => Services.Identity.queryOwnedPersonaInformation(true),
-                    [],
-                    MaskMessages.events.currentPersonaIdentifier.on,
-                    signal,
-                )
                 return {
                     ...createPartialSharedUIContext(pluginID, signal),
                     ...RestPartOfPluginUIContextShared,
