@@ -17,7 +17,6 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
                 TradeProvider.BANCOR,
                 TradeProvider.OPENOCEAN,
                 TradeProvider.MDEX,
-                TradeProvider.ELKFINANCE,
             ]
         case NetworkType.Polygon:
             return [
@@ -28,7 +27,6 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
                 TradeProvider.ZRX,
                 TradeProvider.OPENOCEAN,
                 TradeProvider.TRISOLARIS,
-                TradeProvider.ELKFINANCE,
             ]
         case NetworkType.Binance:
             return [
@@ -38,20 +36,13 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
                 TradeProvider.ZRX,
                 TradeProvider.OPENOCEAN,
                 TradeProvider.MDEX,
-                TradeProvider.ELKFINANCE,
             ]
         case NetworkType.Arbitrum:
-            return [TradeProvider.UNISWAP_V3, TradeProvider.OPENOCEAN, TradeProvider.ELKFINANCE, TradeProvider.DODO]
+            return [TradeProvider.UNISWAP_V3, TradeProvider.OPENOCEAN, TradeProvider.DODO]
         case NetworkType.xDai:
-            return [TradeProvider.SUSHISWAP, TradeProvider.ELKFINANCE, TradeProvider.OPENOCEAN]
+            return [TradeProvider.SUSHISWAP, TradeProvider.OPENOCEAN]
         case NetworkType.Avalanche:
-            return [
-                TradeProvider.SUSHISWAP,
-                TradeProvider.ELKFINANCE,
-                TradeProvider.OPENOCEAN,
-                TradeProvider.TRADERJOE,
-                TradeProvider.PANGOLIN,
-            ]
+            return [TradeProvider.SUSHISWAP, TradeProvider.OPENOCEAN, TradeProvider.TRADERJOE, TradeProvider.PANGOLIN]
         case NetworkType.Celo:
             return [TradeProvider.SUSHISWAP]
         case NetworkType.Fantom:
@@ -66,7 +57,6 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
                 TradeProvider.VENOMSWAP,
                 TradeProvider.OPENSWAP,
                 TradeProvider.DEFIKINGDOMS,
-                TradeProvider.ELKFINANCE,
             ]
         case NetworkType.Boba:
         case NetworkType.Fuse:
