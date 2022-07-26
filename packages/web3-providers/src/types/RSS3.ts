@@ -128,16 +128,74 @@ export namespace RSS3BaseAPI {
         detail: FootprintType
     }
 
+    export type FeedType = 'Token' | 'Donation' | 'NFT'
+
     export enum AssetType {
         GitcoinDonation = 'Gitcoin-Donation',
         POAP = 'POAP',
         NFT = 'NFT',
     }
 
+    export type Tags = 'NFT' | 'Token' | 'POAP' | 'Gitcoin' | 'Mirror Entry' | 'ETH'
+
     export interface NameInfo {
         rnsName: string
         ensName: string | null
         address: string
+    }
+
+    export interface Metadata {
+        collection_address?: string
+        collection_name?: string
+        contract_type?: string
+        from?: string
+        log_index?: string
+        network?: 'polygon' | 'ethereum' | 'bnb'
+        proof?: string
+        to?: string
+        token_id?: string
+        token_standard?: string
+        token_symbol?: string
+        token_address?: string
+    }
+
+    export interface Attachments {
+        address?: string
+        mime_type?: string
+        size_in_bytes?: string
+        type?: string
+    }
+
+    export interface Web3Feed {
+        attachments?: Attachments[]
+        authors: string[]
+        /* cspell:disable-next-line */
+        backlinks: string
+        date_created: string
+        date_updated: string
+        identifier: string
+        links: string
+        related_urls?: string[]
+        // this field works different from API doc
+        source: string
+        tags: Tags[]
+        summary?: string
+        title?: string
+        metadata?: Metadata
+        imageURL?: string
+        traits?: Array<{
+            type: string
+            value: string
+        }>
+    }
+
+    export interface Web3FeedResponse {
+        version: string
+        date_updated: string
+        identifier: string
+        identifier_next?: string
+        total: string
+        list: Web3Feed[]
     }
 
     export interface Provider {
