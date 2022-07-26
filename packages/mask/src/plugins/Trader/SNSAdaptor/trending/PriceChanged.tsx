@@ -31,8 +31,8 @@ export function PriceChanged(props: PriceChangedProps) {
     if (props.amount === 0) return null
     return (
         <Stack alignItems="center" direction="row">
-            {props.amount > 0 ? <ArrowDropIcon style={{ transform: 'rotate(180deg)' }} /> : null}
-            {props.amount < 0 ? <ArrowDropIcon /> : null}
+            {props.amount > 0 ? <ArrowDropIcon style={{ transform: 'rotate(180deg)', fill: '#767F8D' }} /> : null}
+            {props.amount < 0 ? <ArrowDropIcon sx={{ fill: '#767F8D' }} /> : null}
             <Typography className={classes.value} color={props.amount > 0 ? colors?.success : colors?.danger}>
                 {props.amount.toFixed(2)}%
             </Typography>

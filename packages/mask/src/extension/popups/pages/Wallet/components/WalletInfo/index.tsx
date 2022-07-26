@@ -109,7 +109,8 @@ export const WalletInfoUI = memo<WalletInfoUIProps>(
                     <div>
                         <Box display="flex" justifyContent="space-between" alignItems="center">
                             <Typography className={classes.name}>
-                                {name} <EditIcon size={16} onClick={onEditClick} className={classes.edit} />
+                                {name}{' '}
+                                <EditIcon size={16} color="#1C68F3" onClick={onEditClick} className={classes.edit} />
                             </Typography>
                             {domain && formatDomainName ? (
                                 <Typography className={classes.name}>{formatDomainName(domain)}</Typography>

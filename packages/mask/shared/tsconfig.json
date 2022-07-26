@@ -8,6 +8,5 @@
     "lib": ["ES2021"]
   },
   "include": ["./"],
-  "exclude": ["./plugin-infra/register.js"],
   "references": [{ "path": "../../shared-base" }, { "path": "../../plugin-infra" }]
 }

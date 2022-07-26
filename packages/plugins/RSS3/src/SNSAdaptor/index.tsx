@@ -1,18 +1,12 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { NetworkPluginID, SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
+import { NetworkPluginID, SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
 import { base } from '../base'
 import { PLUGIN_ID } from '../constants'
 import { setupContext } from './context'
 import { TabCard, TabCardType } from './TabCard'
 
-function sorter(a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>) {
-    if (a.type === SocialAddressType.RSS3) return -1
-    if (z.type === SocialAddressType.RSS3) return 1
-    return 0
-}
-
-function shouldDisplay(identity?: SocialIdentity, addressNames?: Array<SocialAddress<NetworkPluginID>>) {
-    return !!addressNames?.some((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM)
+function shouldDisplay(identity?: SocialIdentity, addressName?: SocialAddress<NetworkPluginID>) {
+    return addressName?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM
 }
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -26,14 +20,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
             label: 'Donations',
             priority: 1,
             UI: {
-                TabContent: ({ socialAddressList = [], persona }) => {
-                    return (
-                        <TabCard socialAddressList={socialAddressList} type={TabCardType.Donation} persona={persona} />
-                    )
+                TabContent: ({ socialAddress, persona }) => {
+                    return <TabCard socialAddress={socialAddress} type={TabCardType.Donation} persona={persona} />
                 },
             },
             Utils: {
-                sorter,
                 shouldDisplay,
             },
         },
@@ -42,14 +33,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
             label: 'Footprints',
             priority: 2,
             UI: {
-                TabContent: ({ socialAddressList = [], persona }) => {
-                    return (
-                        <TabCard socialAddressList={socialAddressList} type={TabCardType.Footprint} persona={persona} />
-                    )
+                TabContent: ({ socialAddress, persona }) => {
+                    return <TabCard socialAddress={socialAddress} type={TabCardType.Footprint} persona={persona} />
                 },
             },
             Utils: {
-                sorter,
                 shouldDisplay,
             },
         },

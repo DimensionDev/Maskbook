@@ -51,6 +51,7 @@ export const RiskCard = memo<RiskCardProps>(({ info, tokenSecurity }) => {
                 fee: '',
                 percentage: '',
                 distance: '',
+                count: 0,
             })}
             titleColor={DefineMapping[info.level].titleColor}
             description={t[info.messageKey]({
@@ -61,6 +62,7 @@ export const RiskCard = memo<RiskCardProps>(({ info, tokenSecurity }) => {
                 fee: '',
                 percentage: '',
                 distance: '',
+                count: 0,
             })}
         />
     )

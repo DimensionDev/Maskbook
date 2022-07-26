@@ -105,7 +105,9 @@ export const WalletItem = memo<WalletItemProps>(({ wallet, onClick, isSelected }
                                 ({Others.formatDomainName(domain)})
                             </Typography>
                         ) : null}
-                        {isHovering ? <EditIcon className={classes.edit} onClick={handleRename} /> : null}
+                        {isHovering ? (
+                            <EditIcon color="#1C68F3" className={classes.edit} onClick={handleRename} />
+                        ) : null}
                     </Typography>
                 </Typography>
                 <Typography className={classes.address}>

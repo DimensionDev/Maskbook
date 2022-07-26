@@ -8,6 +8,7 @@
     "lib": ["ES2021"]
   },
   "include": ["./", "./**/*.json"],
+  "exclude": ["./plugin-infra/register.js"],
 
   // ! Note: mask/ depends dashboard/ on source-code level
   // !       but dashboard/ depends mask/ on type level
@@ -30,6 +31,13 @@
     { "path": "../../plugins/Wallet" },
     { "path": "../../plugins/DAO" },
     { "path": "../../plugins/FileService" },
+    { "path": "../../plugins/RSS3" },
+    { "path": "../../plugins/Web3Profile" },
+    { "path": "../../plugins/example" },
+    { "path": "../../plugins/Debugger" },
+    { "path": "../../plugins/CyberConnect" },
+    { "path": "../../plugins/CrossChainBridge" },
+    { "path": "../../plugins/GoPlusSecurity" },
     { "path": "../../plugins/EVM" },
     { "path": "../../plugins/Flow" },
     { "path": "../../plugins/Solana" },
