@@ -10,19 +10,18 @@ import {
     AsyncVersionOf,
     AsyncGeneratorVersionOf,
 } from 'async-call-rpc/full'
-import { WebExtensionMessage, MessageTarget, assertNotEnvironment, Environment } from '@dimensiondev/holoflows-kit'
+import { WebExtensionMessage, MessageTarget } from '@dimensiondev/holoflows-kit'
 import { serializer } from '@masknet/shared-base'
 import type {
     BackupService,
     CryptoService,
-    GeneratorServices as GeneratorServicesType,
+    GeneratorServices,
     HelperService,
     IdentityService,
     SettingsService,
     SocialNetworkService,
     ThirdPartyPluginService,
 } from '../../background/services/types'
-assertNotEnvironment(Environment.ManifestBackground)
 
 const message = new WebExtensionMessage<Record<string, any>>({ domain: 'services' })
 const log: AsyncCallOptions['log'] = {
@@ -40,10 +39,11 @@ export const Services = {
     ThirdPartyPlugin: add<ThirdPartyPluginService>('ThirdPartyPlugin'),
 }
 export default Services
-export const GeneratorServices: AsyncGeneratorVersionOf<GeneratorServicesType> = add('GeneratorServices', true) as any
+export const ServicesWithProgress: AsyncGeneratorVersionOf<GeneratorServices> = add('ServicesWithProgress', true) as any
 
 /**
- * Helper to add a new service to Services.* / GeneratorServices.* namespace.
+ * Helper to add a new service to Services.* / ServicesWithProgress.* namespace.
+ * @param impl Implementation of the service. Should be things like () => import("./background-script/CryptoService")
  * @param key Name of the service. Used for better debugging.
  * @param generator Is the service is a generator?
  */

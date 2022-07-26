@@ -18,7 +18,6 @@ import { currentMaskWalletAccountSettings } from '../../../../../../../shared/le
 import { WalletRPC } from '../../../../../../plugins/Wallet/messages'
 import { NormalHeader } from '../../../../components/NormalHeader'
 import { NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-base'
-import Services from '../../../../../service'
 
 const useStyles = makeStyles()({
     menu: {
@@ -88,7 +87,7 @@ export const WalletHeader = memo(() => {
         },
     )
 
-    if (!wallet) return <NormalHeader onlyTitle={!!matchWalletRecovered} onClose={Services.Helper.removePopupWindow} />
+    if (!wallet) return <NormalHeader onlyTitle={!!matchWalletRecovered} />
 
     if (matchContractInteraction && wallet) {
         return (
@@ -120,6 +119,6 @@ export const WalletHeader = memo(() => {
             {menu}
         </>
     ) : (
-        <NormalHeader onClose={Services.Helper.removePopupWindow} />
+        <NormalHeader />
     )
 })

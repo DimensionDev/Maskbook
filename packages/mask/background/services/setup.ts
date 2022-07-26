@@ -38,7 +38,7 @@ function setup<K extends keyof Services>(key: K, implementation: () => Promise<S
     async function load() {
         const val = await getLocalImplementation(true, `Services.${key}`, implementation, channel)
         if (debugMode) {
-            Reflect.defineProperty(globalThis, key + 'Service', { configurable: true, enumerable: true, value: val })
+            Reflect.defineProperty(globalThis, key + 'Service', { configurable: true, value: val })
         }
         return val
     }
@@ -57,7 +57,12 @@ function setup<K extends keyof Services>(key: K, implementation: () => Promise<S
                   requestReplay: debugMode,
               }
             : false,
-        strict: true,
+        preferLocalImplementation: true,
+        strict: {
+            // temporally
+            methodNotFound: false,
+            unknownMessage: true,
+        },
         thenable: false,
     })
 }
