@@ -1,4 +1,3 @@
-import { createIcon } from '@masknet/icons'
 
 export const GoPlusLabLogo = createIcon(
     'GoPlusLabLogo',

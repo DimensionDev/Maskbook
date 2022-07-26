@@ -13,7 +13,7 @@ import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
 import type { TokenAPI } from '@masknet/web3-providers'
 import { formatCurrency, FungibleToken } from '@masknet/web3-shared-base'
-import { LinkOutIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 
 interface TokenCardProps {
     tokenSecurity: TokenSecurity
@@ -165,7 +165,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                             href={resolveGoLabLink(tokenSecurity.chainId, tokenSecurity.contract)}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <LinkOutIcon size={18} className={classes.linkIcon} />
+                            <Icons.LinkOut size={18} className={classes.linkIcon} />
                         </Link>
                     </Stack>
                 </Stack>

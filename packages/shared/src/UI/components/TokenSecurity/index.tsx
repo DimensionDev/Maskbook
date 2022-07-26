@@ -3,7 +3,7 @@ import { useSharedI18N } from '../../../locales'
 import { memo, useMemo, useState } from 'react'
 import { DefineMapping, SecurityMessageLevel } from './Common'
 import { CheckSecurityDialog } from './CheckSecurityDialog'
-import { RightArrowIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import type { SecurityAPI } from '@masknet/web3-providers'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { getMessageList, isHighRisk } from './utils'
@@ -86,7 +86,7 @@ export const TokenSecurityBar = memo<TokenCardProps>(({ tokenSecurity }) => {
                     <Typography component="span" fontSize="12px" color="#1C68F3">
                         {t.more()}
                     </Typography>
-                    <RightArrowIcon sx={{ fontSize: '14px', color: '#1C68F3' }} />
+                    <Icons.RightArrow sx={{ fontSize: '14px', color: '#1C68F3' }} />
                 </Stack>
             )}
             <CheckSecurityDialog tokenSecurity={tokenSecurity} open={open} onClose={() => setOpen(false)} />

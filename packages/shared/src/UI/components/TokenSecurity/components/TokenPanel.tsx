@@ -7,7 +7,7 @@ import { ExternalLink } from 'react-feather'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { formatCurrency, formatSupply } from '@masknet/web3-shared-base'
-import { LinkOutIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -92,7 +92,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                             href={explorerResolver.fungibleTokenLink(tokenSecurity.chainId, tokenSecurity.contract)}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <LinkOutIcon size={18} className={classes.linkIcon} />
+                            <Icons.LinkOut size={18} className={classes.linkIcon} />
                         </Link>
                     </Stack>
                 </Stack>
@@ -113,7 +113,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                                 )}
                                 target="_blank"
                                 rel="noopener noreferrer">
-                                <LinkOutIcon className={classes.linkIcon} />
+                                <Icons.LinkOut className={classes.linkIcon} />
                             </Link>
                         )}
                     </Stack>
