@@ -70,9 +70,8 @@ export const PlatformAvatar = (props: PlatformAvatarProps) => {
                 />
             ) : (
                 <Icons.Masks
+                    size={size}
                     sx={{
-                        width: size,
-                        height: size,
                         display: 'inline-block',
                         borderRadius: '50%',
                     }}

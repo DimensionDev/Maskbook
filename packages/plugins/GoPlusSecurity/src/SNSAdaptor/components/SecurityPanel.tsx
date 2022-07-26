@@ -110,7 +110,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                             chainId={tokenSecurity?.chainId}
                         />
                     ) : (
-                        <Icons.DefaultTokenIcon sx={{ fontSize: '48px' }} />
+                        <Icons.DefaultToken size={48} />
                     )}
                     <Stack>
                         <Typography className={classes.tokenName}>

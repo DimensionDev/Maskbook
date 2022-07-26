@@ -22,19 +22,19 @@ export const DefineMapping: DefineMapping = {
         i18nKey: 'high_risk',
         titleColor: '#FF5F5F',
         bgColor: 'rgba(255, 53, 69, 0.1)',
-        icon: (size: number) => <Icons.SecurityRisk sx={{ fontSize: size ?? 24 }} />,
+        icon: (size: number) => <Icons.SecurityRisk size={size ?? 24} />,
     },
     [SecurityMessageLevel.Medium]: {
         i18nKey: 'medium_risk',
         titleColor: '#FFB100',
         bgColor: 'rgba(255, 177, 0, 0.1)',
         // TODO: Merge duplicate icon in a another PR.
-        icon: (size: number) => <Icons.SecurityWarning sx={{ fontSize: size ?? 24, color: '#FFB915' }} />,
+        icon: (size: number) => <Icons.SecurityWarning size={size ?? 24} color="#FFB915" />,
     },
     [SecurityMessageLevel.Safe]: {
         i18nKey: 'low_risk',
         titleColor: '#60DFAB',
         bgColor: 'rgba(119, 224, 181, 0.1)',
-        icon: (size: number) => <Icons.Success sx={{ fontSize: size ?? 24 }} />,
+        icon: (size: number) => <Icons.Success size={size ?? 24} />,
     },
 }

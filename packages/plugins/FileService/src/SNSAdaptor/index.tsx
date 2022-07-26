@@ -27,7 +27,7 @@ const definition: Plugin.SNSAdaptor.Definition = {
     CompositionDialogEntry: {
         label: (
             <>
-                <Icons.FileService style={{ width: 16, height: 16 }} />
+                <Icons.FileService size={16} />
                 File Service
             </>
         ),
@@ -98,7 +98,7 @@ function onAttachedFile(payload: FileInfo) {
     return {
         text: (
             <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Icons.FileService style={{ width: 16, height: 16 }} />
+                <Icons.FileService size={16} />
                 Attached File: {name} ({formatFileSize(payload.size)})
             </div>
         ),

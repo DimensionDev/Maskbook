@@ -90,7 +90,7 @@ export const CreateWallet = memo(() => {
                 </ButtonGroupTabList>
                 <TabPanel classes={panelStyles} value={tabs.mnemonic}>
                     <Refresh>
-                        <Icons.Refresh style={{ fill: '#1C68F3' }} />
+                        <Icons.Refresh color="#1C68F3" />
                         <Typography>{t.wallets_create_wallet_refresh()}</Typography>
                     </Refresh>
                     <MnemonicGeneratorContainer>

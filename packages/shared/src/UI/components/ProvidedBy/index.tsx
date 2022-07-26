@@ -23,7 +23,7 @@ export const ProvidedBy = memo<ProvidedByProps>(({ providerLink, providerName })
                     target="_blank"
                     rel="noopener"
                     sx={{ display: 'inline-flex' }}>
-                    <Icons.LinkOut style={{ width: 16, height: 16, color: '#6E767D' }} />
+                    <Icons.LinkOut size={16} color="#6E767D" />
                 </Link>
             )}
         </Stack>

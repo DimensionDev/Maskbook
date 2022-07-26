@@ -154,7 +154,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                     openMenu(e)
                 }}
                 className={classes.setting}>
-                <Icons.Settings style={{ fill: MaskColorVar.textPrimary }} />
+                <Icons.Settings color={MaskColorVar.textPrimary} />
             </IconButton>
             <Stack direction="row" alignItems="center" justifyContent="center" width="240px" className={classes.avatar}>
                 <Box textAlign="center" className={classes.icon} onClick={() => toggleAvatar(true)}>

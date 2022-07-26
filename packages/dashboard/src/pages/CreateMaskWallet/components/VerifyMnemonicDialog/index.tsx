@@ -54,10 +54,9 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '20px',
     },
     copy: {
-        fontSize: 20,
         marginLeft: 12,
         cursor: 'pointer',
-        stroke: MaskColorVar.textPrimary,
+        color: MaskColorVar.textPrimary,
     },
 }))
 
@@ -140,7 +139,7 @@ export const VerifyMnemonicDialogUI = memo<VerifyMnemonicDialogUIProps>(
                     <div className={classes.container}>
                         {address ? (
                             <>
-                                <Icons.Success sx={{ fontSize: 54 }} />
+                                <Icons.Success size={54} />
                                 <SuccessTitle>{t.wallets_create_successfully_title()}</SuccessTitle>
                                 <Box style={{ width: '100%' }}>
                                     <Typography className={classes.addressTitle}>

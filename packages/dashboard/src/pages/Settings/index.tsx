@@ -39,11 +39,11 @@ export default function Settings() {
                             <AppearanceSetting />
                         </SettingItem>
                         {/* <SettingItem
-            icon={<SettingsSyncIcon />}
-            title={t.settings_sync_with_mobile_title()}
-            desc={t.settings_sync_with_mobile_desc()}>
-            <MobileSyncSetting />
-        </SettingItem> */}
+                            icon={<SettingsSyncIcon />}
+                            title={t.settings_sync_with_mobile_title()}
+                            desc={t.settings_sync_with_mobile_desc()}>
+                            <MobileSyncSetting />
+                        </SettingItem> */}
                     </SettingCard>
 
                     <SettingCard title={t.settings_backup_recovery()}>

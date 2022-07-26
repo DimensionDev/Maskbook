@@ -49,8 +49,8 @@ export function FootnoteMenuUI(props: FootnoteMenuProps) {
                     </Stack>
                     {selectedIndex === i ? (
                         <Icons.CheckCircle
+                            size={20}
                             style={{
-                                fontSize: 20,
                                 color: theme.palette.maskColor.primary,
                                 boxShadow: '0px 4px 10px rgba(28, 104, 243, 0.2)',
                             }}

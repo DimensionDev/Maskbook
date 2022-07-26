@@ -86,7 +86,7 @@ export const TokenSecurityBar = memo<TokenCardProps>(({ tokenSecurity }) => {
                     <Typography component="span" fontSize="12px" color="#1C68F3">
                         {t.more()}
                     </Typography>
-                    <Icons.RightArrow sx={{ fontSize: '14px', color: '#1C68F3' }} />
+                    <Icons.RightArrow size={14} color="#1C68F3" />
                 </Stack>
             )}
             <CheckSecurityDialog tokenSecurity={tokenSecurity} open={open} onClose={() => setOpen(false)} />

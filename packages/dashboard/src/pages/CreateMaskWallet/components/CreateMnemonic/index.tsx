@@ -158,7 +158,7 @@ export const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, onRefreshW
             <Typography className={classes.title}>Create a wallet</Typography>
             <div className={classes.refresh}>
                 <Box style={{ display: 'flex', cursor: 'pointer' }} onClick={onRefreshWords}>
-                    <Icons.Refresh style={{ fill: '#1C68F3' }} />
+                    <Icons.Refresh color="#1C68F3" />
                     <Typography>{t.wallets_create_wallet_refresh()}</Typography>
                 </Box>
             </div>

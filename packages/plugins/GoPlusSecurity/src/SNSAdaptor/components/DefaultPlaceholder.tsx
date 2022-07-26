@@ -7,7 +7,7 @@ export const DefaultPlaceholder = () => {
     return (
         <Stack alignItems="center" spacing={2.5}>
             <Box>
-                <Icons.SecurityChecker sx={{ fontSize: 48 }} />
+                <Icons.SecurityChecker size={48} />
             </Box>
             <Box>
                 <Typography variant="body2">{t.default_placeholder()}</Typography>

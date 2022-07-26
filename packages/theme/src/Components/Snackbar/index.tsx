@@ -196,7 +196,7 @@ const IconMap: Record<VariantType, React.ReactNode> = {
 export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarContentProps>((props, ref) => {
     const classes = useStylesExtends(useStyles({ offsetY: props.offsetY }), props)
     const snackbar = useSnackbar()
-    const loadingIcon = <Icons.CircleLoading color="inherit" className={classes.spinning} />
+    const loadingIcon = <Icons.CircleLoading className={classes.spinning} />
     const variantIcon = props.processing ? loadingIcon : props.variant ? IconMap[props.variant] : null
     let renderedAction: React.ReactNode = (
         <IconButton className={classes.closeButton} onClick={() => snackbar.closeSnackbar(props.id)}>

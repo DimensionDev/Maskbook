@@ -7,7 +7,7 @@ export const SOCIAL_MEDIA_ICON_MAPPING: Record<EnhanceableSite | string, ReactNo
     [EnhanceableSite.Facebook]: <Icons.FacebookColored />,
     [EnhanceableSite.Minds]: <Icons.Minds />,
     [EnhanceableSite.Instagram]: <Icons.InstagramColored />,
-    [EnhanceableSite.OpenSea]: <Icons.OpenSeaColoredIcon />,
+    [EnhanceableSite.OpenSea]: <Icons.OpenSeaColored />,
     [EnhanceableSite.Localhost]: null,
 }
 
@@ -16,7 +16,7 @@ export const SOCIAL_MEDIA_ROUND_ICON_MAPPING: Record<EnhanceableSite | string, R
     [EnhanceableSite.Facebook]: <Icons.FacebookRound />,
     [EnhanceableSite.Minds]: <Icons.MindsRound />,
     [EnhanceableSite.Instagram]: <Icons.InstagramRound />,
-    [EnhanceableSite.OpenSea]: <Icons.OpenSeaColoredIcon />,
+    [EnhanceableSite.OpenSea]: <Icons.OpenSeaColored />,
     [EnhanceableSite.Localhost]: null,
 }
 
