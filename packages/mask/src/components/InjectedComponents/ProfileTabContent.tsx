@@ -135,11 +135,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     if (hidden) return null
 
-    if (
-        !currentVisitingUserId ||
-        loadingSocialAddressList ||
-        loadingCurrentVisitingSocialIdentity
-    )
+    if (!currentVisitingUserId || loadingSocialAddressList || loadingCurrentVisitingSocialIdentity)
         return (
             <div className={classes.root}>
                 <Box

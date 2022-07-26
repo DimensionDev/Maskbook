@@ -28,7 +28,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
             UI: {
                 TabContent: ({ socialAddressList = [], identity }) => {
                     return (
-                        <TabCard socialAddressList={socialAddressList} type={TabCardType.Donation} persona={identity?.publicKey} />
+                        <TabCard
+                            socialAddressList={socialAddressList}
+                            type={TabCardType.Donation}
+                            persona={identity?.publicKey}
+                        />
                     )
                 },
             },
@@ -44,7 +48,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
             UI: {
                 TabContent: ({ socialAddressList = [], identity }) => {
                     return (
-                        <TabCard socialAddressList={socialAddressList} type={TabCardType.Footprint} persona={identity?.publicKey} />
+                        <TabCard
+                            socialAddressList={socialAddressList}
+                            type={TabCardType.Footprint}
+                            persona={identity?.publicKey}
+                        />
                     )
                 },
             },
