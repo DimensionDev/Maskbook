@@ -6,7 +6,7 @@ import { Box, Card, DialogContent, Link, Typography } from '@mui/material'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import differenceInCalendarDays from 'date-fns/differenceInDays'
 import differenceInCalendarHours from 'date-fns/differenceInHours'
-import { Gitcoin, LinkOut, OpenSeaColoredIcon, PolygonScan } from '@masknet/icons'
+import { Gitcoin, LinkOut, OpenSeaColoredIcon, PolygonScan, EtherScan } from '@masknet/icons'
 import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 
@@ -149,10 +149,7 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
             if (url.includes('etherscan.io')) {
                 return (
                     <Link href={url} target="_blank" marginRight="12px">
-                        <img
-                            className={classes.linkLogo}
-                            src={new URL('./assets/etherscan.png', import.meta.url).toString()}
-                        />
+                        <EtherScan size={24} />
                     </Link>
                 )
             }
