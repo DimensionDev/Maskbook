@@ -3,13 +3,13 @@ import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { MaskTabList, useTabs } from '@masknet/theme'
 import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
 import { PluginNFTCardMessages } from '../message'
 import { NFTCardDialogUI } from './NFTCardDialogUI'
 import { useStyles } from './useStyles'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 export enum NFTCardDialogTabs {
     About = 'About',
@@ -20,15 +20,23 @@ export enum NFTCardDialogTabs {
 export function NFTCardDialog() {
     const { classes } = useStyles()
     const [open, setOpen] = useState(false)
+    const [tokenId, setTokenId] = useState('')
+    const [tokenAddress, setTokenAddress] = useState('')
+    const [sourceType, setSourceType] = useState(SourceType.OpenSea)
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
     const { open: remoteOpen, closeDialog } = useRemoteControlledDialog(
         PluginNFTCardMessages.nftDialogUpdated,
         (ev) => {
-            console.log(ev, 'params')
+            const { tokenId, address, open } = ev
+            setTokenId(tokenId)
+            setTokenAddress(address)
+            if (open) {
+                setOpen(true)
+            }
         },
     )
-    const asset = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, '0xFD43D1dA000558473822302e1d44D81dA2e4cC0d', '5', {
-        sourceType: SourceType.OpenSea,
+    const asset = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, tokenAddress, tokenId, {
+        sourceType,
         chainId: ChainId.Mainnet,
     })
     const onClose = useCallback(() => {
@@ -43,7 +51,7 @@ export function NFTCardDialog() {
     useEffect(() => {
         if (!chainIdValid) closeDialog()
     }, [chainIdValid, closeDialog])
-
+    if (!asset.value) return null
     return (
         <TabContext value={currentTab}>
             <InjectedDialog
@@ -59,7 +67,7 @@ export function NFTCardDialog() {
                     </MaskTabList>
                 }>
                 <DialogContent className={classes.dialogContent}>
-                    <NFTCardDialogUI asset={asset} currentTab={currentTab} />
+                    <NFTCardDialogUI asset={asset.value} currentTab={currentTab} />
                 </DialogContent>
             </InjectedDialog>
         </TabContext>

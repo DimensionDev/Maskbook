@@ -13,9 +13,11 @@ import { AboutTab } from './AboutTab'
 import { OffersTab } from './OffersTab'
 import { ActivityTab } from './ActivityTab'
 import { NFTBasicInfo } from '../../../components/shared/NFTCard/NFTBasicInfo'
+import type { NonFungibleAsset } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 interface NFTCardDialogUIProps {
     currentTab: NFTCardDialogTabs
-    asset: any
+    asset: NonFungibleAsset<ChainId, SchemaType>
 }
 
 export function NFTCardDialogUI(props: NFTCardDialogUIProps) {
@@ -29,7 +31,6 @@ export function NFTCardDialogUI(props: NFTCardDialogUIProps) {
     const chainIdList =
         useActivatedPlugin(PluginId.NFTCard, 'any')?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]
             ?.supportedChainIds ?? []
-    console.log(asset, 'asset')
     return (
         <div className={classes.contentWrapper}>
             <div className={classes.contentLayout}>

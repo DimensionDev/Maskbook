@@ -1,5 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { NFTOfferCard } from '../../../components/shared/NFTCard/NFTOfferCard'
+import type { NonFungibleAsset } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -12,13 +14,12 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface OffersTabProps {
-    asset: any
+    asset: NonFungibleAsset<ChainId, SchemaType>
 }
 
 export function OffersTab(props: OffersTabProps) {
     const { asset } = props
     const { classes } = useStyles()
-    const _asset = asset.value
     return (
         <div className={classes.wrapper}>
             <NFTOfferCard offer="" />

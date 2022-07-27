@@ -3,6 +3,8 @@ import { NFTPriceCard } from '../../../components/shared/NFTCard/NFTPriceCard'
 import { NFTInfoCard } from '../../../components/shared/NFTCard/NFTInfoCard'
 import { NFTDescription } from '../../../components/shared/NFTCard/NFTDescription'
 import { NFTPropertiesCard } from '../../../components/shared/NFTCard/NFTPropertiesCard'
+import type { NonFungibleAsset } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -16,7 +18,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface AboutTabProps {
-    asset: any
+    asset: NonFungibleAsset<ChainId, SchemaType>
 }
 
 export function AboutTab(props: AboutTabProps) {

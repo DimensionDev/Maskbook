@@ -1,5 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { NFTActivityCard, ActivityType } from '../../../components/shared/NFTCard/NFTActivityCard'
+import type { NonFungibleAsset } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -12,14 +14,12 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ActivityTabProps {
-    asset: any
+    asset: NonFungibleAsset<ChainId, SchemaType>
 }
 
 export function ActivityTab(props: ActivityTabProps) {
     const { asset } = props
     const { classes } = useStyles()
-
-    const _asset = asset.value
     return (
         <div className={classes.wrapper}>
             <NFTActivityCard type={ActivityType.Sale} activity="" />

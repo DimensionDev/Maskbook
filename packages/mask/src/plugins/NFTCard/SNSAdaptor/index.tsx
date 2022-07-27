@@ -20,6 +20,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             <ApplicationEntry
                                 title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
                                 icon={icon}
+                                onClick={() => {}}
                                 {...EntryComponentProps}
                                 tooltipHint={
                                     EntryComponentProps.tooltipHint ??

@@ -15,7 +15,6 @@ function useCollectibleState(token?: CollectibleToken) {
     })
 
     console.log(asset, 'asset')
-
     return {
         token,
         asset,
