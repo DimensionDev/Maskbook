@@ -223,15 +223,6 @@ export const FungibleTokenList = forwardRef(
         // #endregion
 
         const getPlaceholder = () => {
-            // Search token which in list, and result is empty
-            if (
-                Object.keys(fungibleTokensBalance).length === 0 &&
-                keyword &&
-                !isSameAddress(searchedToken?.address, searchedTokenAddress) &&
-                !searchingToken
-            )
-                return <Content height={FixedSizeListProps?.height} message={<EmptyResult />} />
-
             // Add token in dashboard, includeTokens is empty
             if (Object.keys(fungibleTokensBalance).length === 0 && includeTokens?.length === 0 && !searchedToken)
                 return null
