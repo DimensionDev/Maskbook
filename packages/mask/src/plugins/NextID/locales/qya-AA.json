@@ -54,8 +54,5 @@
     "send_specific_tip_successfully": "crwdns14772:0{{amount}}crwdnd14772:0{{name}}crwdne14772:0",
     "search": "crwdns14780:0crwdne14780:0",
     "web3_profile": "crwdns18122:0crwdne18122:0",
-    "mask_network": "crwdns18124:0crwdne18124:0",
-    "create_persona_intro": "crwdns18226:0crwdne18226:0",
-    "add_wallet_intro": "crwdns18228:0crwdne18228:0",
-    "others_lack_wallet": "crwdns18230:0crwdne18230:0"
+    "mask_network": "crwdns18124:0crwdne18124:0"
 }
