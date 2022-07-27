@@ -223,7 +223,7 @@ importers:
       '@types/react-avatar-editor': ^12.0.0
       '@types/use-subscription': ^1.0.0
       '@types/uuid': ^8.3.4
-      async-call-rpc: ^6.1.0
+      async-call-rpc: ^6.1.1
       babel-loader: ^8.2.5
       bignumber.js: ^9.0.2
       classnames: ^2.3.1
@@ -274,7 +274,7 @@ importers:
       '@servie/events': 3.0.0
       '@types/color': 3.0.3
       '@types/react-avatar-editor': 12.0.0
-      async-call-rpc: 6.1.0
+      async-call-rpc: 6.1.1
       bignumber.js: 9.0.2
       classnames: 2.3.1
       color: 4.2.3
@@ -454,7 +454,7 @@ importers:
       '@uniswap/v3-sdk': 3.9.0
       anchorme: ^2.1.2
       assert: ^2.0.0
-      async-call-rpc: ^6.1.0
+      async-call-rpc: ^6.1.1
       bignumber.js: ^9.0.2
       bip39: ^3.0.2
       buffer: ^6.0.3
@@ -599,7 +599,7 @@ importers:
       '@uniswap/v3-sdk': 3.9.0_i674dmxu47nk67u5bur7yueebu
       anchorme: 2.1.2
       assert: 2.0.0
-      async-call-rpc: 6.1.0
+      async-call-rpc: 6.1.1
       bignumber.js: 9.0.2
       bip39: 3.0.4
       buffer: 6.0.3
@@ -682,11 +682,11 @@ importers:
     specifiers:
       '@rollup/plugin-node-resolve': ^13.3.0
       '@rollup/plugin-sucrase': ^4.0.4
-      async-call-rpc: ^6.1.0
+      async-call-rpc: ^6.1.1
       rollup: ^2.75.6
       rollup-plugin-terser: ^7.0.2
     dependencies:
-      async-call-rpc: 6.1.0
+      async-call-rpc: 6.1.1
     devDependencies:
       '@rollup/plugin-node-resolve': 13.3.0_rollup@2.75.6
       '@rollup/plugin-sucrase': 4.0.4_rollup@2.75.6
@@ -711,7 +711,7 @@ importers:
       '@servie/events': ^3.0.0
       '@types/ethereum-blockies': ^0.1.0
       '@types/use-subscription': ^1.0.0
-      async-call-rpc: ^6.1.0
+      async-call-rpc: ^6.1.1
       bignumber.js: ^9.0.2
       ethereum-blockies: ^0.1.1
       lru-cache: ^7.10.1
@@ -741,7 +741,7 @@ importers:
       '@servie/events': 3.0.0
       '@types/ethereum-blockies': 0.1.0
       '@types/use-subscription': 1.0.0
-      async-call-rpc: 6.1.0
+      async-call-rpc: 6.1.1
       bignumber.js: 9.0.2
       ethereum-blockies: 0.1.1
       lru-cache: 7.10.1
@@ -1395,7 +1395,7 @@ importers:
       '@types/react': 18.0.9
       '@types/use-subscription': ^1.0.0
       anchorme: ^2.1.2
-      async-call-rpc: ^6.1.0
+      async-call-rpc: ^6.1.1
       bignumber.js: ^9.0.2
       dompurify: ^2.3.10
       i18next-browser-languagedetector: ^6.1.4
@@ -1419,7 +1419,7 @@ importers:
       '@types/dompurify': 2.3.3
       '@types/react': 18.0.9
       anchorme: 2.1.2
-      async-call-rpc: 6.1.0
+      async-call-rpc: 6.1.1
       bignumber.js: 9.0.2
       dompurify: 2.3.10
       i18next-browser-languagedetector: 6.1.4
@@ -8342,7 +8342,7 @@ packages:
       react-refresh: 0.11.0
       schema-utils: 3.1.1
       source-map: 0.7.4
-      webpack: 5.74.0_@swc+core@1.2.218
+      webpack: 5.74.0
     dev: true
 
   /@popperjs/core/2.11.5:
@@ -10310,7 +10310,7 @@ packages:
       micromatch: 4.0.5
       react-docgen-typescript: 2.2.2
       tslib: 2.4.0
-      webpack: 5.74.0_@swc+core@1.2.218
+      webpack: 5.74.0
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -13164,8 +13164,8 @@ packages:
     resolution: {integrity: sha512-MRtUVp1eFKRLLPE+frvTUXnhcDnTM1altJg0dcSnlJ9AaodvZOv6b9/+kE8wGNlT33uRn0fYXZODY1XmZZQ6IQ==}
     dev: true
 
-  /async-call-rpc/6.1.0:
-    resolution: {integrity: sha512-oPDpjOfwLWYSSdftiuurTq817qY7DyUQCobzFZu6gpyjzT/HEoBHsgFUQVVdaGAKHguLrz/fsPr51fYNVwQw0w==}
+  /async-call-rpc/6.1.1:
+    resolution: {integrity: sha512-0UhaoLpoahn9XTroH+yW5Gn5yVeaReFrko/N66K3XKdSCLUyqRB+azb5XtkcRfJgHQ5+C0x8+oalJedLK+6KVg==}
     dev: false
 
   /async-done/1.3.2:
@@ -14686,7 +14686,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001370
-      electron-to-chromium: 1.4.199
+      electron-to-chromium: 1.4.202
     dev: false
 
   /browserslist/4.20.3:
@@ -14866,7 +14866,7 @@ packages:
       mississippi: 3.0.0
       mkdirp: 0.5.6
       move-concurrently: 1.0.1
-      promise-inflight: 1.0.1
+      promise-inflight: 1.0.1_bluebird@3.7.2
       rimraf: 2.7.1
       ssri: 6.0.2
       unique-filename: 1.1.1
@@ -17276,6 +17276,10 @@ packages:
 
   /electron-to-chromium/1.4.199:
     resolution: {integrity: sha512-WIGME0Cs7oob3mxsJwHbeWkH0tYkIE/sjkJ8ML2BYmuRcjhRl/q5kVDXG7W9LOOKwzPU5M0LBlXRq9rlSgnNlg==}
+
+  /electron-to-chromium/1.4.202:
+    resolution: {integrity: sha512-JYsK2ex9lmQD27kj19fhXYxzFJ/phLAkLKHv49A5UY6kMRV2xED3qMMLg/voW/+0AR6wMiI+VxlmK9NDtdxlPA==}
+    dev: false
 
   /elliptic/6.5.4:
     resolution: {integrity: sha512-iLhC6ULemrljPZb+QutR5TQGB+pdW6KGD5RSegS+8sorOZT+rdQFbsQFJgvN3eRqNALqJer4oQ16YvJHlU8hzQ==}
@@ -25193,6 +25197,17 @@ packages:
     peerDependenciesMeta:
       bluebird:
         optional: true
+    dev: true
+
+  /promise-inflight/1.0.1_bluebird@3.7.2:
+    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
+    peerDependencies:
+      bluebird: '*'
+    peerDependenciesMeta:
+      bluebird:
+        optional: true
+    dependencies:
+      bluebird: 3.7.2
     dev: true
 
   /promise-to-callback/1.0.0:
