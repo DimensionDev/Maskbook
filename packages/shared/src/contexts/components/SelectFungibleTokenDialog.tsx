@@ -1,4 +1,5 @@
 import type { FC } from 'react'
+import { useRef, useState } from 'react'
 import { useCurrentWeb3NetworkPluginID, useNativeTokenAddress, Web3Helper } from '@masknet/plugin-infra/web3'
 import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
 import { EMPTY_LIST, EnhanceableSite, isDashboardPage } from '@masknet/shared-base'
@@ -8,6 +9,7 @@ import { DialogContent, Theme, useMediaQuery } from '@mui/material'
 import { useBaseUIRuntime } from '../base'
 import { InjectedDialog } from '../components'
 import { useRowSize } from './useRowSize'
+import { TokenListMode } from '../../UI/components/FungibleTokenList/type'
 
 interface StyleProps {
     compact: boolean
@@ -79,17 +81,25 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
 
     const rowSize = useRowSize()
+    const [currentMode, setCurrentMode] = useState<TokenListMode>(TokenListMode.List)
 
     const nativeTokenAddress = useNativeTokenAddress(pluginId)
+
+    const modeRef = useRef<{
+        updateMode(mode: TokenListMode): void
+    }>(null)
 
     return (
         <InjectedDialog
             titleBarIconStyle={isDashboard ? 'close' : 'back'}
             open={open}
-            onClose={onClose}
+            onClose={
+                currentMode === TokenListMode.List ? onClose : () => modeRef?.current?.updateMode(TokenListMode.List)
+            }
             title={title ?? t.select_token()}>
             <DialogContent classes={{ root: classes.content }}>
                 <FungibleTokenList
+                    ref={modeRef}
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
                     pluginID={pluginId}
                     chainId={chainId}
