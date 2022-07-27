@@ -11,6 +11,8 @@ import type {
     PopupRoutes,
     PersonaInformation,
     ECKeyIdentifier,
+    EnhanceableSite,
+    ExtensionSite,
     MaskEvents,
 } from '@masknet/shared-base'
 import type {
@@ -183,6 +185,8 @@ export namespace Plugin.Shared {
         }): Promise<void>
         /** Reset Mask Wallet account */
         resetAccount(): Promise<void>
+        /** Record which sites are connected to the Mask wallet  */
+        recordConnectedSites(site: EnhanceableSite | ExtensionSite, connected: boolean): void
 
         /** Sign a message with persona */
         personaSignMessage(payload: PersonaSignRequest): Promise<PersonaSignResult>
