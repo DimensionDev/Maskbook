@@ -6,7 +6,6 @@ import { makeStyles } from '../../UIHelper'
 export interface ActionButtonProps extends ButtonProps {
     width?: number | string
     loading?: boolean
-    component?: keyof JSX.IntrinsicElements | React.ComponentType<any>
 }
 
 const useStyles = makeStyles()(() => ({

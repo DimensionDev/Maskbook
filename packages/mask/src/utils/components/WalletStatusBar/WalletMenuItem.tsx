@@ -1,7 +1,5 @@
-import { Button, ListItemIcon, MenuItem } from '@mui/material'
+import { Button, ListItemIcon, MenuItem, Radio } from '@mui/material'
 import { memo } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { Unchecked, Checked } from '@masknet/icons'
 import { useI18N } from '../../i18n-next-ui'
 import { resolveNextIdPlatformPluginId, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { NextIDPlatform } from '@masknet/shared-base'
@@ -17,14 +15,6 @@ import {
 } from '@masknet/plugin-infra/web3'
 import { WalletDescription, WalletDescriptionProps } from './WalletDescription'
 
-const useStyles = makeStyles()((theme) => ({
-    icon: {
-        fontSize: 24,
-        width: 24,
-        height: 24,
-    },
-}))
-
 interface WalletMenuItemProps {
     onSelect?: (value: WalletDescriptionProps, chainId: Web3Helper.ChainIdAll, pluginId: NetworkPluginID) => void
     address: string
@@ -36,7 +26,6 @@ interface WalletMenuItemProps {
 
 export const WalletMenuItem = memo<WalletMenuItemProps>(
     ({ address, selected, onChangeWallet, platform, onSelect, verified }) => {
-        const { classes } = useStyles()
         const { t } = useI18N()
 
         const pluginId = useCurrentWeb3NetworkPluginID(platform ? resolveNextIdPlatformPluginId(platform) : undefined)
@@ -67,14 +56,7 @@ export const WalletMenuItem = memo<WalletMenuItemProps>(
         return (
             <MenuItem value={address} onClick={() => onSelect?.(descriptionProps, chainId, pluginId)}>
                 <ListItemIcon>
-                    {selected ? (
-                        <Checked
-                            className={classes.icon}
-                            style={{ filter: 'drop-shadow(0px 0px 6px rgba(28, 104, 243, 0.6))' }}
-                        />
-                    ) : (
-                        <Unchecked className={classes.icon} />
-                    )}
+                    <Radio checked={selected} />
                 </ListItemIcon>
                 <WalletDescription {...descriptionProps} />
                 {onChangeWallet ? (

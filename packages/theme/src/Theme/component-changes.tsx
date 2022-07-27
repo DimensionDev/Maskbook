@@ -1,5 +1,6 @@
+import { RadioButtonUnChecked, RadioButtonChecked } from '@masknet/icons'
 import type { PaletteMode, ThemeOptions } from '@mui/material'
-import { alpha, buttonClasses } from '@mui/material'
+import { alpha, buttonClasses, radioClasses } from '@mui/material'
 import type { MaskColor } from './colors'
 
 export const Button = (mode: PaletteMode, colors: MaskColor): ThemeOptions => ({
@@ -631,6 +632,36 @@ export const Button = (mode: PaletteMode, colors: MaskColor): ThemeOptions => ({
                     textTransform: 'initial',
                     fontWeight: 700,
                     color: colors.background.paper,
+                },
+            },
+        },
+    },
+})
+
+export const Radio = (mode: PaletteMode, colors: MaskColor): ThemeOptions => ({
+    components: {
+        MuiRadio: {
+            defaultProps: {
+                size: 'medium',
+                icon: <RadioButtonUnChecked />,
+                checkedIcon: <RadioButtonChecked />,
+                disableRipple: true,
+            },
+            styleOverrides: {
+                root: {
+                    '&:hover': {
+                        backgroundColor: 'transparent',
+                    },
+                    color: colors.maskColor.secondaryLine,
+                    [`&.${radioClasses.checked} svg`]: {
+                        filter: 'drop-shadow(0px 4px 10px rgba(28, 104, 243, 0.2))',
+                    },
+                    [`&.${radioClasses.disabled} svg`]: {
+                        color: colors.maskColor.secondaryLine,
+                        '& circle': {
+                            fill: `${colors.maskColor.bg} !important`,
+                        },
+                    },
                 },
             },
         },
