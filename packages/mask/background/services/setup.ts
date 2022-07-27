@@ -20,7 +20,7 @@ setup('Backup', () => import(/* webpackPreload: true */ './backup'))
 setup('Helper', () => import(/* webpackPreload: true */ './helper'))
 setup('SocialNetwork', () => import(/* webpackPreload: true */ './site-adaptors'))
 setup('Settings', () => import(/* webpackPreload: true */ './settings'))
-setup('ThirdPartyPlugin', () => Promise.resolve({}))
+setup('ThirdPartyPlugin', () => import(/* webpackPreload: true */ './third-party-plugins'))
 
 if (import.meta.webpackHot) {
     import.meta.webpackHot.accept(['./crypto'], () => hmr.dispatchEvent(new Event('crypto')))
@@ -28,6 +28,8 @@ if (import.meta.webpackHot) {
     import.meta.webpackHot.accept(['./backup'], () => hmr.dispatchEvent(new Event('backup')))
     import.meta.webpackHot.accept(['./helper'], () => hmr.dispatchEvent(new Event('helper')))
     import.meta.webpackHot.accept(['./settings'], () => hmr.dispatchEvent(new Event('settings')))
+    import.meta.webpackHot.accept(['./site-adaptors'], () => hmr.dispatchEvent(new Event('socialNetwork')))
+    import.meta.webpackHot.accept(['./third-party-plugins'], () => hmr.dispatchEvent(new Event('thirdPartyPlugin')))
 }
 
 function setup<K extends keyof Services>(key: K, implementation: () => Promise<Services[K]>) {

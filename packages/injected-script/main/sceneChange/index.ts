@@ -1,10 +1,6 @@
-import { isTwitter } from '../utils'
-import { setupWatcherForTwitter } from './twitter'
+import { isTwitter } from '../utils.js'
+import { setupWatcherForTwitter } from './twitter.js'
 
-function setupWatcher() {
-    if (isTwitter()) {
-        setupWatcherForTwitter()
-    }
+if (isTwitter()) {
+    setupWatcherForTwitter()
 }
-
-setupWatcher()

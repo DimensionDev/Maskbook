@@ -96,11 +96,9 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             zIndex: 1,
         },
         chevron: {
-            fill: 'none',
-            stroke: isDashboard ? theme.palette.text.primary : theme.palette.text.strong,
+            color: isDashboard ? theme.palette.text.primary : theme.palette.text.strong,
             transition: 'all 300ms',
             cursor: 'pointer',
-            color: theme.palette.text.primary,
         },
         reverseChevron: {
             transform: 'rotate(-180deg)',
@@ -187,6 +185,9 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             height: 24,
             color: `${isDashboard ? theme.palette.text.primary : theme.palette.maskColor.main}!important`,
         },
+        whiteDrop: {
+            color: '#ffffff !important',
+        },
         connectWallet: {
             marginTop: 0,
         },
@@ -261,7 +262,8 @@ export const TradeForm = memo<AllTradeFormProps>(
         const isDashboard = isDashboardPage()
         const isPopup = isPopupPage()
         const { t } = useI18N()
-        const classes = useStylesExtends(useStyles({ isDashboard, isPopup }), props)
+        const styles = useStyles({ isDashboard, isPopup })
+        const classes = useStylesExtends(styles, props)
         const { targetChainId: chainId } = TargetChainIdContext.useContainer()
         const { isSwapping, allTradeComputed } = AllProviderTradeContext.useContainer()
         const [isExpand, setExpand] = useState(false)
@@ -472,7 +474,9 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 onClick: () => onTokenChipClick(TokenPanelType.Input),
                                 onDelete: () => onTokenChipClick(TokenPanelType.Input),
                                 deleteIcon: (
-                                    <Drop className={classes.dropIcon} color={!inputToken ? '#ffffff' : undefined} />
+                                    <Drop
+                                        className={styles.cx(classes.dropIcon, !inputToken ? classes.whiteDrop : null)}
+                                    />
                                 ),
                             },
                         }}
@@ -498,8 +502,10 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     onDelete: () => onTokenChipClick(TokenPanelType.Output),
                                     deleteIcon: (
                                         <Drop
-                                            className={classes.dropIcon}
-                                            color={!outputToken ? '#ffffff' : undefined}
+                                            className={styles.cx(
+                                                classes.dropIcon,
+                                                !outputToken ? classes.whiteDrop : null,
+                                            )}
                                         />
                                     ),
                                 }}

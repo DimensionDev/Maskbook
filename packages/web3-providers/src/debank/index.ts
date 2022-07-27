@@ -42,7 +42,7 @@ export class DeBankAPI
         const { CHAIN_ID = '' } = getDeBankConstants(chainId)
         if (!CHAIN_ID) throw new Error('Failed to get gas price.')
 
-        const response = await fetch(urlcat(DEBANK_API, '/chain/gas_price_dict_v2', { chain: CHAIN_ID }))
+        const response = await global.r2d2Fetch(urlcat(DEBANK_API, '/chain/gas_price_dict_v2', { chain: CHAIN_ID }))
         const result = (await response.json()) as GasPriceDictResponse
         if (result.error_code !== 0) throw new Error('Failed to get gas price.')
 
@@ -67,7 +67,7 @@ export class DeBankAPI
     }
 
     async getAssets(address: string, options?: HubOptions<ChainId>) {
-        const response = await fetch(
+        const response = await global.r2d2Fetch(
             urlcat(DEBANK_OPEN_API, '/v1/user/token_list', {
                 id: address.toLowerCase(),
                 is_all: true,
@@ -111,7 +111,9 @@ export class DeBankAPI
         const { CHAIN_ID = '' } = getDeBankConstants(chainId)
         if (!CHAIN_ID) return []
 
-        const response = await fetch(`${DEBANK_API}/history/list?user_addr=${address.toLowerCase()}&chain=${CHAIN_ID}`)
+        const response = await global.r2d2Fetch(
+            `${DEBANK_API}/history/list?user_addr=${address.toLowerCase()}&chain=${CHAIN_ID}`,
+        )
         const { data, error_code } = (await response.json()) as HistoryResponse
         if (error_code !== 0) throw new Error('Fail to load transactions.')
 

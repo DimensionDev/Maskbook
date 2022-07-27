@@ -13,6 +13,7 @@ import {
     Rabby,
     NonFungibleTokenAPI,
     FungibleTokenAPI,
+    LooksRare,
 } from '@masknet/web3-providers'
 import {
     FungibleToken,
@@ -275,8 +276,11 @@ class Hub implements EVM_Hub {
                 [SourceType.Rarible]: Rarible,
                 [SourceType.NFTScan]: NFTScan,
                 [SourceType.Alchemy_EVM]: Alchemy_EVM,
+                [SourceType.LooksRare]: LooksRare,
             },
-            options.chainId === ChainId.Mainnet ? [OpenSea, Alchemy_EVM, Rarible] : [Alchemy_EVM, OpenSea, Rarible],
+            options.chainId === ChainId.Mainnet
+                ? [OpenSea, Alchemy_EVM, Rarible, LooksRare]
+                : [Alchemy_EVM, OpenSea, Rarible, LooksRare],
             initial,
         )
         return attemptUntil(
@@ -351,8 +355,11 @@ class Hub implements EVM_Hub {
                 [SourceType.Rarible]: Rarible,
                 [SourceType.NFTScan]: NFTScan,
                 [SourceType.Alchemy_EVM]: Alchemy_EVM,
+                [SourceType.LooksRare]: LooksRare,
             },
-            options.chainId === ChainId.Mainnet ? [OpenSea, Alchemy_EVM, Rarible] : [Alchemy_EVM, OpenSea, Rarible],
+            options.chainId === ChainId.Mainnet
+                ? [OpenSea, Alchemy_EVM, Rarible, LooksRare]
+                : [Alchemy_EVM, OpenSea, Rarible, LooksRare],
             initial,
         )
         return attemptUntil(
@@ -401,8 +408,11 @@ class Hub implements EVM_Hub {
                 [SourceType.OpenSea]: OpenSea,
                 [SourceType.Rarible]: Rarible,
                 [SourceType.Alchemy_EVM]: Alchemy_EVM,
+                [SourceType.LooksRare]: LooksRare,
             },
-            options.chainId === ChainId.Mainnet ? [OpenSea, Alchemy_EVM, Rarible] : [Alchemy_EVM, OpenSea, Rarible],
+            options.chainId === ChainId.Mainnet
+                ? [OpenSea, Alchemy_EVM, Rarible, LooksRare]
+                : [Alchemy_EVM, OpenSea, Rarible, LooksRare],
             initial,
         )
 
@@ -423,8 +433,11 @@ class Hub implements EVM_Hub {
                 [SourceType.OpenSea]: OpenSea,
                 [SourceType.Rarible]: Rarible,
                 [SourceType.Alchemy_EVM]: Alchemy_EVM,
+                [SourceType.LooksRare]: LooksRare,
             },
-            options.chainId === ChainId.Mainnet ? [OpenSea, Alchemy_EVM, Rarible] : [Alchemy_EVM, OpenSea, Rarible],
+            options.chainId === ChainId.Mainnet
+                ? [OpenSea, Alchemy_EVM, Rarible, LooksRare]
+                : [Alchemy_EVM, OpenSea, Rarible, LooksRare],
             initial,
         )
 
@@ -445,8 +458,11 @@ class Hub implements EVM_Hub {
                 [SourceType.OpenSea]: OpenSea,
                 [SourceType.Rarible]: Rarible,
                 [SourceType.Alchemy_EVM]: Alchemy_EVM,
+                [SourceType.LooksRare]: LooksRare,
             },
-            options.chainId === ChainId.Mainnet ? [OpenSea, Alchemy_EVM, Rarible] : [Alchemy_EVM, OpenSea, Rarible],
+            options.chainId === ChainId.Mainnet
+                ? [OpenSea, Alchemy_EVM, Rarible, LooksRare]
+                : [Alchemy_EVM, OpenSea, Rarible, LooksRare],
             initial,
         )
 
@@ -468,8 +484,11 @@ class Hub implements EVM_Hub {
                 [SourceType.OpenSea]: OpenSea,
                 [SourceType.Rarible]: Rarible,
                 [SourceType.Alchemy_EVM]: Alchemy_EVM,
+                [SourceType.LooksRare]: LooksRare,
             },
-            options.chainId === ChainId.Mainnet ? [OpenSea, Alchemy_EVM, Rarible] : [Alchemy_EVM, OpenSea, Rarible],
+            options.chainId === ChainId.Mainnet
+                ? [OpenSea, Alchemy_EVM, Rarible, LooksRare]
+                : [Alchemy_EVM, OpenSea, Rarible, LooksRare],
             initial,
         )
 
@@ -482,7 +501,7 @@ class Hub implements EVM_Hub {
     async getNonFungibleCollections(
         account: string,
         initial?: HubOptions<ChainId>,
-    ): Promise<Pageable<NonFungibleTokenCollection<ChainId>>> {
+    ): Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>>> {
         const options = this.getOptions(initial, {
             account,
         })

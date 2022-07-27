@@ -8,6 +8,7 @@ const useStyles = makeStyles()(() => {
     return {
         recommendFeatureAppListWrapper: {
             display: 'flex',
+            scrollbarColor: 'transparent transparent',
             overflowX: 'scroll',
             margin: '0 2px 5px',
             padding: '8px 0px 0',
@@ -19,6 +20,7 @@ const useStyles = makeStyles()(() => {
             position: 'relative',
             zIndex: 100,
             overflowX: 'scroll',
+            scrollbarColor: 'transparent transparent',
             overscrollBehavior: 'contain',
             '& .carousel__slider': {
                 padding: '8px 2px 0',

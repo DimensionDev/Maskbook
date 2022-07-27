@@ -62,9 +62,7 @@ const useStyles = makeStyles()({
         color: '#15181B',
     },
     user: {
-        stroke: '#15181B',
-        fill: 'none',
-        fontSize: 20,
+        color: '#15181B',
         cursor: 'pointer',
     },
     title: {
@@ -439,7 +437,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                                 InputProps={{
                                     endAdornment: (
                                         <div onClick={openAccountMenu} style={{ marginLeft: 12 }}>
-                                            <UserIcon className={classes.user} />
+                                            <UserIcon size={20} className={classes.user} />
                                         </div>
                                     ),
                                     onClick: (event) => {

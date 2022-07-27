@@ -11,7 +11,7 @@ const BASE_URL = BASE_URL_MAP[process.env.NODE_ENV]
 
 export class RiskWarningAPI implements RiskWarningBaseAPI.Provider {
     async approve(address: string, pluginID = '') {
-        await fetch(`${BASE_URL}/v1/risk_warning/confirm`, {
+        await globalThis.r2d2Fetch(`${BASE_URL}/v1/risk_warning/confirm`, {
             method: 'POST',
             body: JSON.stringify({
                 address,

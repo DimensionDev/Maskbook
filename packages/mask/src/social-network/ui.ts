@@ -2,14 +2,15 @@ import '../utils/debug/general'
 import Services from '../extension/service'
 import { Flags } from '../../shared'
 import type { SocialNetworkUI } from './types'
-import { currentSetupGuideStatus } from '../settings/settings'
-import type { SetupGuideCrossContextStatus } from '../settings/types'
+import { currentSetupGuideStatus } from '../../shared/legacy-settings/settings'
+import type { SetupGuideContext } from '../../shared/legacy-settings/types'
 import {
     ECKeyIdentifier,
     EnhanceableSite,
     i18NextInstance,
     createSubscriptionFromValueRef,
     createSubscriptionFromAsync,
+    queryRemoteI18NBundle,
 } from '@masknet/shared-base'
 import { Environment, assertNotEnvironment, ValueRef } from '@dimensiondev/holoflows-kit'
 import { IdentityResolved, PluginId, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
@@ -109,6 +110,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             Services.Identity.createNewRelation(ref.identifier, currentProfile.linkedPersona)
         }
     })
+    signal.addEventListener('abort', queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle))
 
     startPluginSNSAdaptor(
         getCurrentSNSNetwork(ui.networkIdentifier),
@@ -214,7 +216,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         const id = currentSetupGuideStatus[network].value
         let started = false
         const onStatusUpdate = (id: string) => {
-            const { persona, status }: SetupGuideCrossContextStatus = JSON.parse(id || '{}')
+            const { persona, status }: SetupGuideContext = JSON.parse(id || '{}')
             if (persona && status && !started) {
                 started = true
                 ui.injection.setupWizard?.(signal, ECKeyIdentifier.from(persona).unwrap())

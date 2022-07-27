@@ -63,6 +63,11 @@ jobs:
         with:
           name: MaskNetwork.chromium-beta.zip
           path: MaskNetwork.chromium-beta.zip
+      - name: Upload `MaskNetwork.chromium-mv3.zip`
+        uses: actions/upload-artifact@v2
+        with:
+          name: MaskNetwork.chromium-mv3.zip
+          path: MaskNetwork.chromium-mv3.zip
       - name: Upload `MaskNetwork.firefox.zip`
         uses: actions/upload-artifact@v2
         with:

@@ -1,5 +1,6 @@
 import { delay } from '@dimensiondev/kit'
 import type { NormalizedBackup } from '@masknet/backup-format'
+import { activatedPluginsWorker, registeredPluginIDs } from '@masknet/plugin-infra/background-worker'
 import { ProfileIdentifier, RelationFavor } from '@masknet/shared-base'
 import { MaskMessages } from '../../../shared/messages'
 import {
@@ -11,17 +12,8 @@ import {
 } from '../../database/persona/db'
 import { withPostDBTransaction, createPostDB, PostRecord, queryPostDB, updatePostDB } from '../../database/post'
 import type { LatestRecipientDetailDB, LatestRecipientReasonDB } from '../../database/post/dbType'
+import { internal_wallet_restore } from './internal_wallet_restore'
 
-// Well, this is a bit of a hack, because we have not move those two parts into this project yet.
-// TODO: MV3 support
-let restorePlugins: (backup: NormalizedBackup.Data['plugins']) => Promise<void>
-let restoreWallets: (backup: NormalizedBackup.WalletBackup[]) => Promise<void>
-export function delegateWalletRestore(f: typeof restoreWallets) {
-    restoreWallets = f
-}
-export function delegatePluginRestore(f: typeof restorePlugins) {
-    restorePlugins = f
-}
 export async function restoreNormalizedBackup(backup: NormalizedBackup.Data) {
     const { plugins, posts, wallets } = backup
 
@@ -36,7 +28,7 @@ export async function restoreNormalizedBackup(backup: NormalizedBackup.Data) {
     }
     if (process.env.manifest === '2') {
         if (wallets.length) {
-            await restoreWallets(wallets)
+            await internal_wallet_restore(wallets)
         }
         await restorePlugins(plugins)
     }
@@ -178,4 +170,35 @@ function restorePosts(backup: Iterable<NormalizedBackup.PostBackup>) {
         }
         await Promise.all(promises)
     })
+}
+async function restorePlugins(backup: NormalizedBackup.Data['plugins']) {
+    const plugins = [...activatedPluginsWorker]
+    const works = new Set<Promise<void>>()
+    for (const [pluginID, item] of Object.entries(backup)) {
+        const plugin = plugins.find((x) => x.ID === pluginID)
+        // should we warn user here?
+        if (!plugin) {
+            if ([...registeredPluginIDs].includes(pluginID))
+                console.warn(`[@masknet/plugin-infra] Found a backup of a not enabled plugin ${plugin}`, item)
+            else console.warn(`[@masknet/plugin-infra] Found an unknown plugin backup of ${plugin}`, item)
+            continue
+        }
+
+        const f = plugin.backup?.onRestore
+        if (!f) {
+            console.warn(
+                `[@masknet/plugin-infra] Found a backup of plugin ${plugin} but it did not register a onRestore callback.`,
+                item,
+            )
+            continue
+        }
+        works.add(
+            (async () => {
+                const x = await f(item)
+                if (x.err) console.error(`[@masknet/plugin-infra] Plugin ${plugin} failed to restore its backup.`, item)
+                return x.unwrap()
+            })(),
+        )
+    }
+    await Promise.allSettled(works)
 }

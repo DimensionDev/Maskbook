@@ -72,7 +72,8 @@ const useStyles = makeStyles<{ iconFontSize?: string }>()((theme, { iconFontSize
         marginRight: 6,
     },
     iconFont: {
-        fontSize: iconFontSize,
+        height: iconFontSize,
+        width: iconFontSize,
     },
 }))
 export interface ToolboxHintProps {

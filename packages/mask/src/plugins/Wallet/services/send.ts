@@ -118,7 +118,7 @@ export async function send(
     payload: JsonRpcPayload,
     callback: (error: Error | null, response?: JsonRpcResponse) => void,
     options?: Options,
-) {
+): Promise<void> {
     const provider = await createProvider(options?.chainId)
 
     switch (payload.method) {

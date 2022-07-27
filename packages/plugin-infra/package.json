@@ -94,7 +94,6 @@
     "web3-utils": "1.7.4"
   },
   "devDependencies": {
-    "@types/lru-cache": "^7.10.10"
   },
   "peerDependencies": {
     "react-i18next": "^11.15.3"

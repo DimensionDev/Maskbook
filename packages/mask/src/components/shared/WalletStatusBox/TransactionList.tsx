@@ -54,7 +54,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     link: {
         display: 'flex',
-        fill: 'none',
     },
     linkIcon: {
         // TODO: replace with theme color

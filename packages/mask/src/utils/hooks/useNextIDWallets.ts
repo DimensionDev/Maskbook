@@ -1,7 +1,8 @@
-import { NextIDPersonaBindings, NextIDPlatform } from '@masknet/shared-base'
+import { NextIDPlatform } from '@masknet/shared-base'
 import { useAsyncRetry } from 'react-use'
 import { NextIDProof } from '@masknet/web3-providers'
 import { first } from 'lodash-unified'
+import { sortPersonaBindings } from '../utils'
 
 export function useNextIDWallets(userId?: string, platform?: NextIDPlatform) {
     return useAsyncRetry(async () => {
@@ -18,13 +19,4 @@ export function useNextIDWallets(userId?: string, platform?: NextIDPlatform) {
 
         return currentPersonaBinding?.proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum)
     }, [userId, platform])
-}
-
-const sortPersonaBindings = (a: NextIDPersonaBindings, b: NextIDPersonaBindings, userId: string): number => {
-    const p_a = first(a.proofs.filter((x) => x.identity === userId.toLowerCase()))
-    const p_b = first(b.proofs.filter((x) => x.identity === userId.toLowerCase()))
-
-    if (!p_a || !p_b) return 0
-    if (p_a.created_at > p_b.created_at) return -1
-    return 1
 }

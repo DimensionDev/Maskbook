@@ -81,4 +81,4 @@ function isEventItemBeforeSerialization(data: unknown): data is EventItemBeforeS
     if (!isArray(data[1])) return false
     return true
 }
-export * from './twitter'
+export * from './twitter.js'

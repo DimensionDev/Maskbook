@@ -46,7 +46,7 @@ export function OfferTab() {
             return (
                 offers.some(
                     (item) =>
-                        (item.paymentToken?.symbol !== 'WETH' && item.paymentToken?.symbol !== 'ETH') ||
+                        (item.priceInToken?.token?.symbol !== 'WETH' && item.priceInToken?.token?.symbol !== 'ETH') ||
                         (item.quantity && !isOne(item.quantity)),
                 ) && offers.filter((item) => isZero(item.expiredAt ?? 0)).length === 0
             )

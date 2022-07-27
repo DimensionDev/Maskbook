@@ -20,10 +20,6 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
     },
-    icon: {
-        fill: '#FF5F5F',
-        fontSize: 36,
-    },
     title: {
         fontSize: 18,
         fontWeight: 500,
@@ -139,7 +135,7 @@ export const LogoutUI = memo<LogoutUIProps>(({ backupPassword, loading, onLogout
     return (
         <>
             <div className={classes.content}>
-                <TipIcon className={classes.icon} />
+                <TipIcon color="#FF5F5F" size={56} />
                 <Typography className={classes.title}>{t('popups_persona_logout')}</Typography>
                 <div className={classes.personaContainer}>
                     <div className={classes.iconContainer}>

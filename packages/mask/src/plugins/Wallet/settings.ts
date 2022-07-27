@@ -1,4 +1,4 @@
-import { createGlobalSettings } from '../../settings/createSettings'
+import { createGlobalSettings } from '../../../shared/legacy-settings/createSettings'
 import { ChainId, NetworkType } from '@masknet/web3-shared-evm'
 import { PLUGIN_ID } from './constants'
 import { LockStatus } from './types'

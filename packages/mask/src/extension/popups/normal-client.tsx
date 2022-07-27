@@ -7,7 +7,7 @@ import Popups from './UI'
 import createCache from '@emotion/cache'
 import { CacheProvider } from '@emotion/react'
 import { TssCacheProvider } from '@masknet/theme'
-import { currentPersonaIdentifier } from '../../settings/settings'
+import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings'
 import { setInitialPersonaInformation } from './pages/Personas/hooks/PersonaContextInitialData'
 
 if (location.hash === '#/personas') {

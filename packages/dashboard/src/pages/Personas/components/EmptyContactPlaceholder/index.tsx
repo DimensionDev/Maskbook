@@ -21,11 +21,6 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: theme.typography.pxToRem(16),
         marginTop: theme.spacing(2.5),
     },
-    icon: {
-        width: 96,
-        height: 96,
-        fill: 'none',
-    },
     download: {
         display: 'flex',
         alignItems: 'center',
@@ -61,7 +56,7 @@ export const EmptyContactPlaceholderUI = memo<EmptyContactPlaceholderUIProps>(({
     const { classes } = useStyles()
     return (
         <Box className={classes.container}>
-            <EmptyIcon className={classes.icon} />
+            <EmptyIcon size={96} />
             <Typography className={classes.prompt}>
                 <DashboardTrans.personas_empty_contact_tips
                     components={{ i: <Link href={downloadUrl} /> }}

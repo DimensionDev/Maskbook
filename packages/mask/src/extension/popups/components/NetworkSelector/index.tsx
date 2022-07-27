@@ -40,10 +40,6 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '16px',
         marginLeft: 4,
     },
-    arrow: {
-        stroke: '#ffffff',
-        fontSize: 16,
-    },
     networkName: {
         marginLeft: 10,
     },
@@ -133,7 +129,7 @@ export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork,
                     )}
                     <Typography className={classes.title}>{currentNetwork.name}</Typography>
                 </div>
-                <ArrowDownRound className={classes.arrow} />
+                <ArrowDownRound size={16} color="#fff" />
             </Box>
             {menu}
         </>

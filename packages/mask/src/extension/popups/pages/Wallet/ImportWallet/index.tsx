@@ -255,8 +255,7 @@ const ImportWallet = memo(() => {
                         />
                     </Tabs>
                     <TabPanel value={tabs.mnemonic} className={classes.tabPanel}>
-                        <StyledInput
-                            type="password"
+                        <PasswordField
                             value={mnemonic}
                             onChange={(e) => {
                                 if (errorMessage) setErrorMessage('')
@@ -280,8 +279,7 @@ const ImportWallet = memo(() => {
                         />
                     </TabPanel>
                     <TabPanel value={tabs.privateKey} className={classes.tabPanel}>
-                        <StyledInput
-                            type="password"
+                        <PasswordField
                             value={privateKey}
                             onChange={(e) => {
                                 if (errorMessage) setErrorMessage('')

@@ -6,6 +6,7 @@ import * as CleanupProfileDatabase from './Cancellable/CleanProfileAndAvatar'
 import * as NotificationsToMobile from './Cancellable/NotificationsToMobile'
 import * as PopupSSR from './Cancellable/PopupSSR'
 import * as PopupSSR_MV3 from './Cancellable/PopupSSR/index.mv3'
+import * as SettingsListener from './Cancellable/SettingsListener'
 
 type CancelableJob = { default: (signal: AbortSignal) => void }
 const CancelableJobs: CancelableJob[] = [
@@ -13,6 +14,7 @@ const CancelableJobs: CancelableJob[] = [
     process.env.manifest === '2' ? InjectContentScript : InjectContentScriptMV3,
     IsolatedDashboardBridge,
     NotificationsToMobile,
+    SettingsListener,
 ]
 
 if (process.env.architecture === 'web') {

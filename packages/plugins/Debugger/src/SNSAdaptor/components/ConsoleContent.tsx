@@ -469,7 +469,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                     const address = formData.get('address') as string
                                     const tokenId = formData.get('tokenId') as string
                                     const options = {
-                                        sourceType: SourceType.OpenSea,
+                                        sourceType: SourceType.LooksRare,
                                     }
                                     const allSettled = await Promise.allSettled([
                                         hub?.getNonFungibleTokenBalance?.(address, options),

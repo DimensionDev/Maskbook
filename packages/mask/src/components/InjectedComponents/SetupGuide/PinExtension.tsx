@@ -1,6 +1,6 @@
 import { useWizardDialogStyles, WizardDialog } from './WizardDialog'
 import { useI18N } from '../../../utils'
-import { SetupGuideStep } from './types'
+import { SetupGuideStep } from '../../../../shared/legacy-settings/types'
 import { Box, Button, Typography } from '@mui/material'
 import { MaskIcon } from '../../../resources/MaskIcon'
 import ExtensionIcon from '@mui/icons-material/Extension'

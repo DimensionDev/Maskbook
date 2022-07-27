@@ -5,7 +5,6 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     CurrencyType,
     HubOptions,
-    FungibleToken,
     NonFungibleAsset,
     NonFungibleTokenEvent,
     NonFungibleTokenOrder,
@@ -20,7 +19,7 @@ import {
     createIndicator,
     createNextIndicator,
 } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, resolveIPFSLinkFromURL } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, resolveIPFSLinkFromURL, createERC20Token } from '@masknet/web3-shared-evm'
 import {
     Ownership,
     RaribleEventType,
@@ -206,16 +205,10 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 price: {
                     usd: order.buyPrice.toString(),
                 },
-                paymentToken: {
-                    name: order.token,
-                    id: order.tokenId,
-                    type: TokenType.NonFungible,
-                    schema: SchemaType.ERC20,
-                    chainId,
-                    address: tokenAddress,
-                    symbol: '',
-                    decimals: 0,
-                } as FungibleToken<ChainId, SchemaType>,
+                priceInToken: {
+                    amount: order.buyValue.toString(),
+                    token: createERC20Token(chainId, tokenAddress, order.token),
+                },
                 side: OrderSide.Buy,
                 quantity: order.value.toString(),
                 expiredAt: 0,
@@ -245,14 +238,10 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 price: {
                     usd: asset.price,
                 },
-                paymentToken: {
-                    name: asset.token,
-                    id: asset.tokenId,
-                    decimals: 0,
-                    chainId,
-                    address: tokenAddress,
-                    type: TokenType.NonFungible,
-                } as FungibleToken<ChainId, SchemaType>,
+                priceInToken: {
+                    amount: asset.buyValue.toString(),
+                    token: createERC20Token(chainId, tokenAddress, asset.token),
+                },
                 side: OrderSide.Buy,
                 quantity: asset.value.toString(),
                 expiredAt: 0,

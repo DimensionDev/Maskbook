@@ -1,6 +1,7 @@
 import type { KVStorageBackend } from '@masknet/shared-base'
 import { setupMaskKVStorageBackend } from '../shared/kv-storage'
 import Services from './extension/service'
+import { contentFetch } from './utils/fetcher'
 
 const memory: KVStorageBackend = {
     beforeAutoSync: Promise.resolve(),
@@ -29,3 +30,4 @@ if (process.env.NODE_ENV === 'development') {
     })
 }
 Reflect.set(globalThis, 'r2d2Fetch', Services.Helper.r2d2Fetch)
+Reflect.set(globalThis, 'fetch', contentFetch)
