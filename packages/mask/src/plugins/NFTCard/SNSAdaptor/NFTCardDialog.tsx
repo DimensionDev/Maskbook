@@ -39,6 +39,7 @@ export function NFTCardDialog() {
         sourceType,
         chainId: ChainId.Mainnet,
     })
+    console.log(asset, 'asset')
     const onClose = useCallback(() => {
         setOpen(false)
     }, [])
