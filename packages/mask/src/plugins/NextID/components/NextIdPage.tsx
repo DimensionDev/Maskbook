@@ -1,4 +1,4 @@
-import { NewLinkOutIcon, PluginIcon, Verified, WalletUnderTabsIcon, Web3ProfileIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { PluginId, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NextIDPlatform, PopupRoutes, EMPTY_LIST } from '@masknet/shared-base'
@@ -191,7 +191,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
         if (isWeb3ProfileDisable) {
             return (
                 <Button className={classes.button} variant="contained" onClick={onEnablePlugin}>
-                    <PluginIcon />
+                    <Icons.Plugin />
                     <Typography marginLeft="9px">{t.enable_plugin()}</Typography>
                 </Button>
             )
@@ -202,14 +202,14 @@ export function NextIdPage({ persona }: NextIdPageProps) {
         if (!isAccountVerified) {
             return (
                 <Button className={classes.button} variant="contained" onClick={onVerify}>
-                    <Verified />
+                    <Icons.Verified />
                     {t.verify_Twitter_ID_button()}
                 </Button>
             )
         }
         return (
             <Button className={classes.button} variant="contained" onClick={handleAddWallets}>
-                <WalletUnderTabsIcon className={classes.walletIcon} />
+                <Icons.WalletUnderTabs className={classes.walletIcon} />
                 {t.add_wallet_button()}
             </Button>
         )
@@ -234,7 +234,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
             <Box className={classes.container}>
                 <Box className={classes.header}>
                     <div className={classes.title}>
-                        <Web3ProfileIcon className={classes.web3Icon} />
+                        <Icons.Web3Profile className={classes.web3Icon} />
                         <Typography fontSize={16} fontWeight={700}>
                             {t.web3_profile()}
                         </Typography>
@@ -251,7 +251,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
                             width="22px"
                             height="22px"
                             style={{ alignSelf: 'center' }}>
-                            <NewLinkOutIcon />
+                            <Icons.NewLinkOut />
                         </Link>
                     </div>
                 </Box>

@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { ImageIcon } from './ImageIcon'
-import { MasksIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 
 interface StyleProps {
     size: number
@@ -69,10 +69,9 @@ export const PlatformAvatar = (props: PlatformAvatarProps) => {
                     icon={networkIcon}
                 />
             ) : (
-                <MasksIcon
+                <Icons.Masks
+                    size={size}
                     sx={{
-                        width: size,
-                        height: size,
                         display: 'inline-block',
                         borderRadius: '50%',
                     }}

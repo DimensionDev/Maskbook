@@ -4,7 +4,7 @@ import { Box, Link, Typography } from '@mui/material'
 import { CopyIconButton } from '../../../../components/CopyIconButton'
 import { ChainIcon, FormattedAddress, WalletIcon } from '@masknet/shared'
 import { ChainId, formatEthereumAddress, explorerResolver, NetworkType } from '@masknet/web3-shared-evm'
-import { ArrowDropIcon, MaskBlueIcon, PopupLinkIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import type { NetworkDescriptor, Wallet } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../../utils'
 
@@ -144,7 +144,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
                         <Typography className={classes.chainName}>
                             {currentNetwork.name}
                             {!disabled ? (
-                                <ArrowDropIcon
+                                <Icons.ArrowDrop
                                     className={classes.arrow}
                                     style={{ transform: status ? 'rotate(-180deg)' : undefined }}
                                 />
@@ -167,7 +167,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
                     onClick={() => {
                         if (!disabled) onActionClick()
                     }}>
-                    <MaskBlueIcon className={classes.avatar} />
+                    <Icons.MaskBlue className={classes.avatar} />
                     <div>
                         <Typography className={classes.nickname}>{wallet.name}</Typography>
                         <Typography className={classes.identifier}>
@@ -179,12 +179,12 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
                                 href={explorerResolver.addressLink(chainId, wallet.address ?? '')}
                                 target="_blank"
                                 rel="noopener noreferrer">
-                                <PopupLinkIcon className={classes.icon} />
+                                <Icons.PopupLink className={classes.icon} />
                             </Link>
                         </Typography>
                     </div>
                     {!disabled ? (
-                        <ArrowDropIcon
+                        <Icons.ArrowDrop
                             className={classes.arrow}
                             style={{ transform: isSwitchWallet ? 'rotate(-180deg)' : undefined }}
                         />

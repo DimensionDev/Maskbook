@@ -10,7 +10,7 @@ import { resolveGoLabLink } from '../../utils/helper'
 import { TokenPanel } from './TokenPanel'
 import { getMessageList, TokenIcon } from '@masknet/shared'
 import type { TokenAPI } from '@masknet/web3-providers'
-import { DefaultTokenIcon, LinkOutIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { formatCurrency, FungibleToken } from '@masknet/web3-shared-base'
 
@@ -110,7 +110,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                             chainId={tokenSecurity?.chainId}
                         />
                     ) : (
-                        <DefaultTokenIcon sx={{ fontSize: '48px' }} />
+                        <Icons.DefaultToken size={48} />
                     )}
                     <Stack>
                         <Typography className={classes.tokenName}>
@@ -169,7 +169,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                             href={resolveGoLabLink(tokenSecurity.chainId, tokenSecurity.contract)}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <LinkOutIcon
+                            <Icons.LinkOut
                                 style={{ color: theme.palette.text.strong, width: 18, height: 18, marginTop: 2 }}
                             />
                         </Link>

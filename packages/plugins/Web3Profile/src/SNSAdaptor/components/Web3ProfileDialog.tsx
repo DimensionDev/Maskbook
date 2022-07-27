@@ -18,7 +18,7 @@ import {
     mergeList,
     placeFirst,
 } from '../utils'
-import { WalletUnderTabsIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { context } from '../context'
 import { PersonaAction } from './PersonaAction'
 import { useChainId } from '@masknet/plugin-infra/web3'
@@ -145,7 +145,9 @@ export function Web3ProfileDialog() {
             fullWidth={false}
             open={open}
             isOnBack
-            titleTail={<WalletUnderTabsIcon size={24} onClick={openPopupsWindow} className={classes.titleTailButton} />}
+            titleTail={
+                <Icons.WalletUnderTabs size={24} onClick={openPopupsWindow} className={classes.titleTailButton} />
+            }
             onClose={() => setOpen(false)}>
             <DialogContent className={classes.content}>
                 <Main

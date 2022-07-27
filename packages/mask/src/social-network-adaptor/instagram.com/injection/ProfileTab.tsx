@@ -1,5 +1,5 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { CollectibleIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { useLayoutEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-use'
@@ -178,7 +178,7 @@ export function ProfileTabAtInstagram() {
     return (
         <ProfileTab
             title="Web3"
-            icon={<CollectibleIcon className={classes.icon} />}
+            icon={<Icons.Collectible className={classes.icon} />}
             classes={classes}
             reset={reset}
             clear={clear}
