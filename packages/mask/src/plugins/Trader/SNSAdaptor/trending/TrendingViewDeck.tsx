@@ -110,6 +110,9 @@ const useStyles = makeStyles()((theme) => {
             marginLeft: 'auto',
             marginBottom: theme.spacing(2),
         },
+        arrowDropIcon: {
+            color: theme.palette.maskColor.secondaryDark,
+        },
     }
 })
 
@@ -248,7 +251,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             sx={{ padding: 0 }}
                                             size="small"
                                             onClick={() => setCoinMenuOpen((v) => !v)}>
-                                            <ArrowDrop color="#767f8d" />
+                                            <ArrowDrop className={classes.arrowDropIcon} />
                                         </IconButton>
                                         <CoinMenu
                                             open={coinMenuOpen}

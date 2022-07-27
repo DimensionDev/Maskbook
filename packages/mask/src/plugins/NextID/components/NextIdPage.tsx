@@ -92,6 +92,10 @@ const useStyles = makeStyles()((theme) => ({
         marginRight: 6,
         marginTop: 2,
     },
+    walletIcon: {
+        marginRight: 8,
+        color: theme.palette.maskColor.white,
+    },
     item1: {
         color: '#767f8d',
         fontSize: '14px',
@@ -119,6 +123,9 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         fontSize: '14px',
         fontWeight: 400,
+    },
+    linkoutIcon: {
+        color: theme.palette.maskColor.secondaryDark,
     },
 }))
 
@@ -231,7 +238,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
         setDescription(t.add_wallet_intro())
         return (
             <Button className={classes.button} variant="contained" onClick={handleAddWallets}>
-                <WalletUnderTabs size={16} color="white" sx={{ marginRight: '8px' }} />
+                <WalletUnderTabs size={16} className={classes.walletIcon} />
                 {t.add_wallet_button()}
             </Button>
         )
@@ -273,7 +280,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
                             width="22px"
                             height="22px"
                             style={{ alignSelf: 'center', marginLeft: '4px' }}>
-                            <LinkOut size={16} color="#767f8d" />
+                            <LinkOut size={16} className={classes.linkoutIcon} />
                         </Link>
                     </div>
                 </Box>

@@ -105,6 +105,23 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         position: 'relative',
     },
+    addressLabel: {
+        color: theme.palette.maskColor.dark,
+        fontSize: 18,
+        fontWeight: 700,
+    },
+    linkoutIcon: {
+        color: theme.palette.maskColor.secondaryDark,
+    },
+    arrowDropIcon: {
+        color: theme.palette.maskColor.dark,
+    },
+    verifiedIcon: {
+        color: theme.palette.maskColor.success,
+    },
+    selectedIcon: {
+        color: theme.palette.maskColor.primary,
+    },
 }))
 
 export interface ProfileTabContentProps extends withClasses<'text' | 'button' | 'root'> {}
@@ -242,7 +259,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const onOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget)
     const onSelect = (option: SocialAddress<NetworkPluginID>) => {
         setSelectedAddress(option)
-        // onClose()
     }
     const handleOpenDialog = () => {
         CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToAll({
@@ -277,7 +293,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                     size="small"
                                     onClick={onOpen}
                                     className={classes.walletButton}>
-                                    <Typography fontSize="18px" fontWeight={700} color="#07101b">
+                                    <Typography className={classes.addressLabel}>
                                         {selectedAddress?.type === SocialAddressType.KV ||
                                         selectedAddress?.type === SocialAddressType.ADDRESS ||
                                         selectedAddress?.type === SocialAddressType.NEXT_ID ? (
@@ -302,9 +318,9 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                         }
                                         target="_blank"
                                         rel="noopener noreferrer">
-                                        <LinkOut color="#767f8d" size={20} />
+                                        <LinkOut size={20} className={classes.linkoutIcon} />
                                     </Link>
-                                    <ArrowDrop color="#07101b" />
+                                    <ArrowDrop className={classes.arrowDropIcon} />
                                 </Button>
                                 <ShadowRootMenu
                                     anchorEl={anchorEl}
@@ -349,11 +365,11 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                                             <LinkOut className={classes.linkIcon} />
                                                         </Link>
                                                         {x?.type === SocialAddressType.KV && (
-                                                            <NextIdPersonaVerified color="#3dc233" />
+                                                            <NextIdPersonaVerified className={classes.verifiedIcon} />
                                                         )}
                                                     </div>
                                                     {isSameAddress(selectedAddress?.address, x.address) && (
-                                                        <Selected color="#1c68f3" />
+                                                        <Selected className={classes.selectedIcon} />
                                                     )}
                                                 </div>
                                             </MenuItem>
@@ -362,10 +378,18 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                 </ShadowRootMenu>
                             </div>
                             <div className={classes.settingItem}>
-                                <Typography fontSize="14px" fontWeight={700} marginRight="5px" color="#767f8d">
+                                <Typography
+                                    fontSize="14px"
+                                    fontWeight={700}
+                                    marginRight="5px"
+                                    color={(theme) => theme.palette.maskColor.secondaryDark}>
                                     {t('powered_by')}
                                 </Typography>
-                                <Typography fontSize="14px" fontWeight={700} marginRight="4px" color="#07101b">
+                                <Typography
+                                    fontSize="14px"
+                                    fontWeight={700}
+                                    marginRight="4px"
+                                    color={(theme) => theme.palette.maskColor.dark}>
                                     {t('mask_network')}
                                 </Typography>
                                 {isOwnerIdentity ? (
@@ -376,7 +400,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                         href="https://mask.io"
                                         target="_blank"
                                         rel="noopener noreferrer">
-                                        <LinkOut color="#767f8d" size={20} />
+                                        <LinkOut className={classes.linkoutIcon} size={20} />
                                     </Link>
                                 )}
                             </div>
