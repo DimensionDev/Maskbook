@@ -3,9 +3,9 @@ import { CollectionList } from '../../../extension/options-page/DashboardCompone
 import { useCurrentVisitingProfile } from '../hooks/useContext'
 
 export interface NFTPageProps {
-    persona?: string
     identity?: SocialIdentity
     socialAddress?: SocialAddress<NetworkPluginID>
+    persona?: string
 }
 
 export function NFTPage({ socialAddress, persona }: NFTPageProps) {

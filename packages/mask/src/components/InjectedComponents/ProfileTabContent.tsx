@@ -9,23 +9,24 @@ import {
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
 import { useSocialAddressListAll, useAvailablePlugins } from '@masknet/plugin-infra/web3'
-import { ReversedAddress, SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID, useSharedI18N } from '@masknet/shared'
-import { CrossIsolationMessages, EMPTY_LIST, EnhanceableSite, getSiteType, NextIDPlatform } from '@masknet/shared-base'
+import { ReversedAddress, useSharedI18N } from '@masknet/shared'
+import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
 import { Box, Button, CircularProgress, Link, MenuItem, Tab, Typography } from '@mui/material'
+import { ArrowDrop, Gear, LinkOut, NextIdPersonaVerified, Selected } from '@masknet/icons'
+import { isSameAddress, NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
-import { MaskMessages, sortPersonaBindings, useLocationChange } from '../../utils'
-import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
-import { useNextIDBoundByPlatform } from '../DataSource/useNextID'
-import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
-import { NetworkPluginID, SocialAddressType, SocialAddress, isSameAddress } from '@masknet/web3-shared-base'
+import { MaskMessages } from '../../utils'
+import { useLocationChange } from '../../utils/hooks/useLocationChange'
+import {
+    useCurrentVisitingIdentity,
+    useCurrentVisitingSocialIdentity,
+    useIsCurrentVisitingOwnerIdentity,
+} from '../DataSource/useActivatedUI'
 import { NextIDProof } from '@masknet/web3-providers'
-import { ArrowDrop, Gear, LinkOut, NextIdPersonaVerified, Selected } from '@masknet/icons'
 import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
-
-const site = getSiteType()
 
 function getTabContent(tabId?: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
@@ -71,6 +72,14 @@ const useStyles = makeStyles()((theme) => ({
             textDecoration: 'none',
         },
     },
+    settingLink: {
+        cursor: 'pointer',
+        marginTop: 4,
+        zIndex: 1,
+        '&:hover': {
+            textDecoration: 'none',
+        },
+    },
     linkIcon: {
         color: theme.palette.maskColor.second,
         fontSize: '20px',
@@ -110,38 +119,22 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const [selectedAddress, setSelectedAddress] = useState<SocialAddress<NetworkPluginID> | undefined>()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
-    const currentIdentity = useLastRecognizedIdentity()
-    const identity = useCurrentVisitingIdentity()
-    const { currentConnectedPersona } = usePersonaConnectStatus()
+    const isOwnerIdentity = useIsCurrentVisitingOwnerIdentity()
+    const currentVisitingIdentity = useCurrentVisitingIdentity()
+    const currentVisitingUserId = currentVisitingIdentity.identifier?.userId
 
-    const { value: socialAddressList = EMPTY_LIST, loading: loadingSocialAddressList } =
-        useSocialAddressListAll(identity)
-    const { value: personaList = EMPTY_LIST, loading: loadingPersonaList } = useNextIDBoundByPlatform(
-        activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform | undefined,
-        identity.identifier?.userId?.toLowerCase(),
+    const { value: socialAddressList = EMPTY_LIST, loading: loadingSocialAddressList } = useSocialAddressListAll(
+        currentVisitingIdentity,
+        [SocialAddressType.NEXT_ID],
     )
 
-    const currentPersonaBinding = first(
-        personaList.sort((a, b) => sortPersonaBindings(a, b, identity.identifier?.userId?.toLowerCase() ?? '')),
-    )
-
-    const isOwn =
-        site &&
-        SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID.includes(site as EnhanceableSite) &&
-        currentIdentity?.identifier?.userId?.toLowerCase() === identity?.identifier?.userId?.toLowerCase()
-
-    const personaPublicKey = isOwn
-        ? currentConnectedPersona?.identifier?.publicKeyAsHex
-        : currentPersonaBinding?.persona
-
-    const isCurrentConnectedPersonaBind = personaList.some(
-        (persona) => persona.persona === currentConnectedPersona?.identifier?.publicKeyAsHex.toLowerCase(),
-    )
+    const { value: currentVisitingSocialIdentity, loading: loadingCurrentVisitingSocialIdentity } =
+        useCurrentVisitingSocialIdentity()
 
     const { value: personaProof, retry: retryProof } = useAsyncRetry(async () => {
-        if (!personaPublicKey) return
-        return NextIDProof.queryExistedBindingByPersona(personaPublicKey)
-    }, [personaPublicKey])
+        if (!currentVisitingSocialIdentity?.publicKey) return
+        return NextIDProof.queryExistedBindingByPersona(currentVisitingSocialIdentity?.publicKey)
+    }, [currentVisitingSocialIdentity?.publicKey])
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
@@ -152,7 +145,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const wallets = personaProof?.proofs?.filter((proof) => proof?.platform === NextIDPlatform.Ethereum)
 
     const addressList = useMemo(() => {
-        if (!wallets?.length || (!isOwn && socialAddressList?.length)) {
+        if (!wallets?.length || (!isOwnerIdentity && socialAddressList?.length)) {
             setSelectedAddress(first(socialAddressList))
             return socialAddressList
         }
@@ -167,61 +160,64 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         const addressList = [...addresses, ...socialAddressList]
         setSelectedAddress(first(addressList))
         return addressList
-    }, [socialAddressList, wallets?.map((x) => x.identity).join(), isOwn])
+    }, [socialAddressList, wallets?.map((x) => x.identity).join(), isOwnerIdentity])
 
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
-    const availablePlugins = useAvailablePlugins(activatedPlugins)
-    const isWeb3ProfileDisable = useIsMinimalMode(PluginId.Web3Profile)
-    const displayPlugins = useMemo(() => {
-        return availablePlugins
+    const displayPlugins = useAvailablePlugins(activatedPlugins, (plugins) => {
+        return plugins
             .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
-            .filter((z) => z.Utils?.shouldDisplay?.(identity, selectedAddress) ?? true)
-    }, [identity, availablePlugins.map((x) => x.ID).join(), selectedAddress])
+            .filter((x) => x.Utils?.shouldDisplay?.(currentVisitingIdentity, selectedAddress) ?? true)
+            .filter((x) => x.pluginID !== PluginId.NextID)
+            .sort((a, z) => {
+                // order those tabs from next id first
+                if (a.pluginID === PluginId.NextID) return -1
+                if (z.pluginID === PluginId.NextID) return 1
 
-    const tabs = displayPlugins
-        .sort((a, z) => {
-            // order those tabs from next id first
-            if (a.pluginID === PluginId.NextID) return -1
-            if (z.pluginID === PluginId.NextID) return 1
+                // order those tabs from collectible first
+                if (a.pluginID === PluginId.Collectible) return -1
+                if (z.pluginID === PluginId.Collectible) return 1
 
-            // order those tabs from collectible first
-            if (a.pluginID === PluginId.Collectible) return -1
-            if (z.pluginID === PluginId.Collectible) return 1
+                // place those tabs from debugger last
+                if (a.pluginID === PluginId.Debugger) return 1
+                if (z.pluginID === PluginId.Debugger) return -1
 
-            // place those tabs from debugger last
-            if (a.pluginID === PluginId.Debugger) return 1
-            if (z.pluginID === PluginId.Debugger) return -1
+                // place those tabs from dao before the last
+                if (a.pluginID === PluginId.DAO) return 1
+                if (z.pluginID === PluginId.DAO) return -1
 
-            // place those tabs from dao before the last
-            if (a.pluginID === PluginId.DAO) return 1
-            if (z.pluginID === PluginId.DAO) return -1
+                return a.priority - z.priority
+            })
+    })
+    const tabs = displayPlugins.map((x) => ({
+        id: x.ID,
+        label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
+    }))
 
-            return a.priority - z.priority
-        })
-        .filter((z) => z.pluginID !== PluginId.NextID)
-        .map((x) => ({
-            id: x.ID,
-            label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
-        }))
+    const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginId.Collectible, ...tabs.map((tab) => tab.id))
 
-    const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginId.NextID, ...tabs.map((tab) => tab.id))
+    const isWeb3ProfileDisable = useIsMinimalMode(PluginId.Web3Profile)
 
-    const showNextID =
+    const showNextID = !!(
         isTwitter(activatedSocialNetworkUI) &&
-        ((isOwn && addressList?.length === 0) ||
-            isWeb3ProfileDisable ||
-            (isOwn && !isCurrentConnectedPersonaBind) ||
-            (isOwn && !wallets?.length) ||
+        (isWeb3ProfileDisable ||
+            (isOwnerIdentity && !currentVisitingSocialIdentity?.hasBinding) ||
+            (isOwnerIdentity && !wallets?.length) ||
             !addressList?.length)
-    const componentTabId = showNextID
-        ? displayPlugins?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID
-        : currentTab
+    )
+
+    const componentTabId = showNextID ? `${PluginId.NextID}_tabContent` : currentTab
 
     const component = useMemo(() => {
         const Component = getTabContent(componentTabId)
 
-        return <Component identity={identity} persona={personaPublicKey} socialAddress={selectedAddress} />
-    }, [componentTabId, personaPublicKey, selectedAddress])
+        return (
+            <Component
+                identity={currentVisitingSocialIdentity}
+                persona={currentVisitingSocialIdentity?.publicKey}
+                socialAddress={selectedAddress}
+            />
+        )
+    }, [componentTabId, currentVisitingSocialIdentity?.publicKey, selectedAddress])
 
     useLocationChange(() => {
         onChange(undefined, first(tabs)?.id)
@@ -229,25 +225,24 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     useUpdateEffect(() => {
         onChange(undefined, first(tabs)?.id)
-    }, [identity.identifier?.userId])
+    }, [currentVisitingUserId])
 
     useEffect(() => {
         return MaskMessages.events.profileTabHidden.on((data) => {
             if (data.hidden) setHidden(data.hidden)
         })
-    }, [identity.identifier?.userId])
+    }, [currentVisitingUserId])
 
     useEffect(() => {
         return MaskMessages.events.profileTabUpdated.on((data) => {
             setHidden(!data.show)
         })
-    }, [identity.identifier?.userId])
-    const onClose = () => setAnchorEl(null)
+    }, [currentVisitingUserId])
 
     const onOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget)
     const onSelect = (option: SocialAddress<NetworkPluginID>) => {
         setSelectedAddress(option)
-        onClose()
+        // onClose()
     }
     const handleOpenDialog = () => {
         CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToAll({
@@ -256,8 +251,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }
     if (hidden) return null
 
-    // loadingSocialAddress
-    if (!identity.identifier?.userId || loadingPersonaList)
+    if (!currentVisitingUserId || loadingSocialAddressList || loadingCurrentVisitingSocialIdentity)
         return (
             <div className={classes.root}>
                 <Box
@@ -285,7 +279,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                     className={classes.walletButton}>
                                     <Typography fontSize="18px" fontWeight={700} color="#07101b">
                                         {selectedAddress?.type === SocialAddressType.KV ||
-                                        selectedAddress?.type === SocialAddressType.ADDRESS ? (
+                                        selectedAddress?.type === SocialAddressType.ADDRESS ||
+                                        selectedAddress?.type === SocialAddressType.NEXT_ID ? (
                                             <ReversedAddress
                                                 fontSize="18px"
                                                 address={selectedAddress.address}
@@ -328,7 +323,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                                 <div className={classes.menuItem}>
                                                     <div className={classes.addressItem}>
                                                         {x?.type === SocialAddressType.KV ||
-                                                        x?.type === SocialAddressType.ADDRESS ? (
+                                                        x?.type === SocialAddressType.ADDRESS ||
+                                                        selectedAddress?.type === SocialAddressType.NEXT_ID ? (
                                                             <ReversedAddress
                                                                 address={x.address}
                                                                 pluginId={x.networkSupporterPluginID}
@@ -366,13 +362,23 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                 </ShadowRootMenu>
                             </div>
                             <div className={classes.settingItem}>
-                                <Typography fontSize="14px" fontWeight={700} marginRight="8px" color="#767f8d">
+                                <Typography fontSize="14px" fontWeight={700} marginRight="5px" color="#767f8d">
                                     {t.powered_by()}
                                 </Typography>
-                                <Typography fontSize="14px" fontWeight={700} marginRight="8px" color="#07101b">
+                                <Typography fontSize="14px" fontWeight={700} marginRight="4px" color="#07101b">
                                     {t.mask_network()}
                                 </Typography>
-                                <Gear onClick={handleOpenDialog} sx={{ cursor: 'pointer' }} />
+                                {isOwnerIdentity ? (
+                                    <Gear onClick={handleOpenDialog} sx={{ cursor: 'pointer' }} />
+                                ) : (
+                                    <Link
+                                        className={classes.settingLink}
+                                        href="https://mask.io"
+                                        target="_blank"
+                                        rel="noopener noreferrer">
+                                        <LinkOut color="#767f8d" size={20} />
+                                    </Link>
+                                )}
                             </div>
                         </div>
                         <div className={classes.tabs}>

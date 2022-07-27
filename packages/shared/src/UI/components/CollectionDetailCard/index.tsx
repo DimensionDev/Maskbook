@@ -149,15 +149,15 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
         const icons = relatedURLs.map((url) => {
             let icon: ReactNode = null
             if (url.includes('etherscan.io')) {
-                icon = <EtherScan size={24} />
+                icon = <EtherScan size={24} sx={{ marginRight: '12px' }} />
             } else if (url.includes('polygonscan.com/tx')) {
-                icon = <PolygonScan size={24} />
+                icon = <PolygonScan size={24} sx={{ marginRight: '12px' }} />
             } else if (url.includes('polygonscan.com/token')) {
-                icon = <PolygonScan size={24} />
+                icon = <PolygonScan size={24} sx={{ marginRight: '12px' }} />
             } else if (url.includes('opensea.io')) {
-                icon = <OpenSeaColoredIcon size={24} />
+                icon = <OpenSeaColoredIcon size={24} sx={{ marginRight: '12px' }} />
             } else if (url.includes('gitcoin.co')) {
-                icon = <Gitcoin size={28} />
+                icon = <Gitcoin size={28} sx={{ marginRight: '12px' }} />
             }
             return icon ? (
                 <Link href={url} target="_blank" marginBottom="8px">

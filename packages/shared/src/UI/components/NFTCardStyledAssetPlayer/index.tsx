@@ -96,6 +96,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
         <div className={classes.imgWrapper}>
             <Image
                 width="100%"
+                height="100%"
                 style={{ objectFit: 'cover' }}
                 src={url || tokenDetailed?.metadata?.imageURL || tokenDetailed?.metadata?.mediaURL}
             />
@@ -128,6 +129,8 @@ export function NFTCardStyledAssetPlayer(props: Props) {
                 loadingFailImage: classes.loadingFailImage,
                 loadingIcon: classes.loadingIcon,
             }}
+            showNetwork={showNetwork}
+            networkIcon={networkIcon}
             fallbackResourceLoader={fallbackResourceLoader}
         />
     )
