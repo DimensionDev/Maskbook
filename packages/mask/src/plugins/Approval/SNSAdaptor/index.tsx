@@ -1,7 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { ApplicationEntry } from '@masknet/shared'
-import { ApprovalIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { useState } from 'react'
 import { base } from '../base'
@@ -12,7 +12,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal) {},
     ApplicationEntries: [
         (() => {
-            const icon = <ApprovalIcon />
+            const icon = <Icons.Approval />
             const name = { i18nKey: 'plugin_name', fallback: 'Approval' }
             const iconFilterColor = 'rgba(251, 176, 59, 0.3)'
             return {

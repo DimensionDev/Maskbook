@@ -1,7 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '@masknet/plugin-wallet'
 import { setWalletBackupProvider } from '../../../../background/services/backup/internal_wallet'
-import { MaskMessages } from '../../../utils'
+import { MaskMessages } from '../../../../shared/messages'
 import { setupDatabase } from '../database/Plugin.db'
 import '../messages'
 import {

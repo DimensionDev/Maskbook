@@ -19,7 +19,7 @@ import { Close as CloseIcon, Menu as MenuIcon } from '@mui/icons-material'
 import Color from 'color'
 import { DashboardContext } from '../DashboardFrame/context'
 import { Navigation } from '../DashboardFrame/Navigation'
-import { MaskBannerIcon, Mask } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { FeaturePromotions } from './FeaturePromotions'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
@@ -145,7 +145,11 @@ export const PageFrame = memo((props: PageFrameProps) => {
                             <MenuButton size="large" onClick={toggleDrawer}>
                                 {drawerOpen ? <CloseIcon /> : <MenuIcon />}
                             </MenuButton>
-                            {isDark ? <MaskBannerIcon width={90} height={40} /> : <Mask width={90} height={40} />}
+                            {isDark ? (
+                                <Icons.MaskBanner width={90} height={40} />
+                            ) : (
+                                <Icons.Mask width={90} height={40} />
+                            )}
                         </MaskLogo>
                     )}
                     <PageTitle item xs={isLargeScreen ? 12 : 10} container>

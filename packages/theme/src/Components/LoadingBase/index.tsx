@@ -1,4 +1,4 @@
-import { CircleLoadingIcon, GeneratedIconProps } from '@masknet/icons'
+import { GeneratedIconProps, Icons } from '@masknet/icons'
 import { makeStyles } from '../../UIHelper'
 
 const useStyles = makeStyles()({
@@ -17,5 +17,5 @@ const useStyles = makeStyles()({
 
 export const LoadingBase = (props: GeneratedIconProps) => {
     const { classes } = useStyles()
-    return <CircleLoadingIcon {...props} className={`${classes.animated} ${props.className}`} />
+    return <Icons.CircleLoading {...props} className={`${classes.animated} ${props.className}`} />
 }

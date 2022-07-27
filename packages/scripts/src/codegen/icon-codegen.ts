@@ -131,7 +131,6 @@ async function generateIcons() {
         const notSquare = intrinsicSize && intrinsicSize[0] !== intrinsicSize[1]
         if (notSquare) args.push(`[${intrinsicSize[0]}, ${intrinsicSize[1]}]`)
         asJSX.js.push(`export const ${Ident} = /*#__PURE__*/ __createIcon(${args.join(', ')})`)
-        if (!Ident.endsWith('Icon')) asJSX.js.push(`export const ${Ident}Icon = ${Ident}`)
 
         const variantNames = [...new Set(variant.flatMap((x) => x.args[0]))].map((x) => JSON.stringify(x))
 
@@ -162,23 +161,6 @@ async function generateIcons() {
             original: voidMapping,
             source: 'null',
         })
-
-        // export const TIcon: ...
-        if (!Ident.endsWith('Icon')) {
-            jsdoc.push(`@deprecated use \`${Ident}\` instead`)
-            attachJSDoc(jsdoc, asJSX.dts)
-            asJSX.dts.push(`export const ${Ident}Icon: typeof ${Ident}`)
-            asJSX.dtsMap.addMapping({
-                generated: { line: asJSX.dts.length, column: exportConst },
-                original: voidMapping,
-                source: variant[0].assetPath,
-            })
-            asJSX.dtsMap.addMapping({
-                generated: { line: asJSX.dts.length, column: exportConst + Ident.length + 4 },
-                original: voidMapping,
-                source: 'null',
-            })
-        }
     }
     asURL.dts.push(SOURCEMAP_HEAD + 'icon-generated-as-url.d.ts.map')
     asJSX.dts.push(SOURCEMAP_HEAD + 'icon-generated-as-jsx.d.ts.map')

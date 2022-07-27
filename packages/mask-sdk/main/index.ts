@@ -16,7 +16,7 @@ readyPromise.then((init) => {
         // @ts-expect-error
         if (process.env.NODE_ENV === 'development') {
             // @ts-expect-error
-            MaskSDK.reload = () => document.dispatchEvent(new Event('mask-sdk-reload'))
+            MaskSDK.reload = () => globalThis.dispatchEvent(new Event('mask-sdk-reload'))
         }
     } catch {}
 

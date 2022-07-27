@@ -1,4 +1,4 @@
-import { SuccessIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { PluginId, useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAsset } from '@masknet/plugin-infra/web3'
 import { InjectedDialog } from '@masknet/shared'
@@ -245,7 +245,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                     reset()
                     onClose?.()
                 }}
-                icon={isTokenTip ? <SuccessIcon size={64} /> : null}
+                icon={isTokenTip ? <Icons.Success size={64} /> : null}
                 message={successMessage}
                 confirmText={t.tip_share()}
                 onConfirm={handleConfirm}
