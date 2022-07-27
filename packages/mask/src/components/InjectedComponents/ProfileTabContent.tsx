@@ -9,7 +9,7 @@ import {
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
 import { useSocialAddressListAll, useAvailablePlugins } from '@masknet/plugin-infra/web3'
-import { ReversedAddress, useSharedI18N } from '@masknet/shared'
+import { ReversedAddress } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
 import { Box, Button, CircularProgress, Link, MenuItem, Tab, Typography } from '@mui/material'
@@ -17,7 +17,7 @@ import { ArrowDrop, Gear, LinkOut, NextIdPersonaVerified, Selected } from '@mask
 import { isSameAddress, NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
-import { MaskMessages } from '../../utils'
+import { MaskMessages, useI18N } from '../../utils'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 import {
     useCurrentVisitingIdentity,
@@ -112,7 +112,7 @@ export interface ProfileTabContentProps extends withClasses<'text' | 'button' | 
 export function ProfileTabContent(props: ProfileTabContentProps) {
     const classes = useStylesExtends(useStyles(), props)
 
-    const t = useSharedI18N()
+    const { t } = useI18N()
     const translate = usePluginI18NField()
 
     const [hidden, setHidden] = useState(true)
@@ -363,10 +363,10 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                             </div>
                             <div className={classes.settingItem}>
                                 <Typography fontSize="14px" fontWeight={700} marginRight="5px" color="#767f8d">
-                                    {t.powered_by()}
+                                    {t('powered_by')}
                                 </Typography>
                                 <Typography fontSize="14px" fontWeight={700} marginRight="4px" color="#07101b">
-                                    {t.mask_network()}
+                                    {t('mask_network')}
                                 </Typography>
                                 {isOwnerIdentity ? (
                                     <Gear onClick={handleOpenDialog} sx={{ cursor: 'pointer' }} />

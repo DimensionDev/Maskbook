@@ -1,4 +1,4 @@
-import { ArrowDropIcon, BuyIcon } from '@masknet/icons'
+import { ArrowDrop, BuyIcon } from '@masknet/icons'
 import { PluginId, useActivatedPluginsSNSAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { DataProvider } from '@masknet/public-api'
@@ -248,7 +248,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             sx={{ padding: 0 }}
                                             size="small"
                                             onClick={() => setCoinMenuOpen((v) => !v)}>
-                                            <ArrowDropIcon sx={{ fill: '#767F8D' }} />
+                                            <ArrowDrop color="#767f8d" />
                                         </IconButton>
                                         <CoinMenu
                                             open={coinMenuOpen}

@@ -56,7 +56,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     walletIcon: {
         marginRight: '8px',
-        fontSize: 16,
     },
     emptyItem: {
         marginTop: 'calc(50% - 104px)',
@@ -133,7 +132,7 @@ export function ImageManagement(props: ImageManagementProps) {
                     {!hasConnectedWallets && (
                         <Box className={classes.bottomButton}>
                             <Button onClick={openPopupsWindow} className={classes.button}>
-                                <WalletUnderTabsIcon className={classes.walletIcon} />
+                                <WalletUnderTabsIcon size={16} className={classes.walletIcon} />
                                 {t.add_wallet()}
                             </Button>
                         </Box>
