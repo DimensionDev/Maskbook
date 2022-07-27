@@ -4,14 +4,13 @@ import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { ActionsBarNFT } from '../ActionsBarNFT'
 import type { NonFungibleToken, SourceType, Wallet } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/plugin-infra/src/entry-web3'
-import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: '8px 8px 0 0',
+        borderRadius: 4,
         position: 'absolute',
         zIndex: 1,
         backgroundColor: theme.palette.mode === 'light' ? '#F7F9FA' : '#2F3336',
@@ -68,11 +67,7 @@ export function CollectibleCard(props: CollectibleCardProps) {
     const { classes } = useStyles()
 
     return (
-        <Link
-            target="_blank"
-            rel="noopener noreferrer"
-            href={resolveOpenSeaLink(token.address, token.tokenId)}
-            className={classes.linkWrapper}>
+        <Link target="_blank" rel="noopener noreferrer" className={classes.linkWrapper}>
             <div className={classes.blocker} />
             <Card className={classes.root}>
                 {readonly || !wallet ? null : (
@@ -88,7 +83,6 @@ export function CollectibleCard(props: CollectibleCardProps) {
                         loadingFailImage: classes.loadingFailImage,
                         wrapper: classes.wrapper,
                     }}
-                    showNetwork
                 />
             </Card>
         </Link>

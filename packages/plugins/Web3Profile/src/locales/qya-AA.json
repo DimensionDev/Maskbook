@@ -53,5 +53,6 @@
     "wallet_setting_hint": "crwdns18110:0crwdne18110:0",
     "no_authenticated_wallet": "crwdns18112:0crwdne18112:0",
     "no_items_found": "crwdns18114:0crwdne18114:0",
-    "account_empty": "crwdns18200:0crwdne18200:0"
+    "account_empty": "crwdns18200:0crwdne18200:0",
+    "load_more": "crwdns18236:0crwdne18236:0"
 }

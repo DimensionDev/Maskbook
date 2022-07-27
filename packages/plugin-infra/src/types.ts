@@ -592,15 +592,14 @@ export namespace Plugin.SNSAdaptor {
              */
             TabContent: InjectUI<{
                 identity?: SocialIdentity
-                persona?: string
-                socialAddress?: SocialAddress<NetworkPluginID>
+                socialAddressList?: Array<SocialAddress<NetworkPluginID>>
             }>
         }
         Utils?: {
             /**
              * If it returns false, this tab will not be displayed.
              */
-            shouldDisplay?(identity?: SocialIdentity, addressName?: SocialAddress<NetworkPluginID>): boolean
+            shouldDisplay?(identity?: SocialIdentity, addressNames?: Array<SocialAddress<NetworkPluginID>>): boolean
             /**
              * Filter social address.
              */
@@ -907,11 +906,11 @@ export enum CurrentSNSNetwork {
 }
 
 export interface IdentityResolved {
-    identifier?: ProfileIdentifier
     nickname?: string
     avatar?: string
     bio?: string
     homepage?: string
+    identifier?: ProfileIdentifier
 }
 
 /**
