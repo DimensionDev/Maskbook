@@ -3,39 +3,34 @@ import urlcat from 'urlcat'
 const R2D2_ROOT_URL = 'r2d2.to'
 
 enum R2d2Workers {
-    cors = 'cors',
-    alchemy = 'alchemy-proxy',
-    opensea = 'opensea-proxy',
-    nftscan = 'nftscan-proxy',
-    gitcoin = 'gitcoin-agent',
-    coinMarketCap = 'coinmarketcap-agent',
-    goPlusLabs = 'gopluslabs',
-    coingecko = 'coingecko-agent',
+    Alchemy_ETH = 'eth-mainnet',
+    Alchemy_ETH_IO = 'eth-mainnet-io',
+    Alchemy_Polygon = 'polygon-mainnet',
+    Alchemy_Flow = 'flow-mainnet',
+    CORS = 'cors',
+    CoinGecko = 'coingecko-agent',
+    CoinMarketCap = 'coinmarketcap-agent',
+    OpenSea = 'opensea-proxy',
+    NFTScan = 'nftscan-proxy',
+    GitCoin = 'gitcoin-agent',
+    GoPlusLabs = 'gopluslabs',
+    Twitter = 'twitter',
 }
-
-enum AlchemyProxies {
-    eth = 'eth-mainnet',
-    eth_io = 'eth-mainnet-io',
-    polygon = 'polygon-mainnet',
-    flow = 'flow-mainnet',
-}
-
-const AlchemyMatchers: Array<[string, AlchemyProxies]> = [
-    ['https://eth-mainnet.alchemyapi.io', AlchemyProxies.eth_io],
-    ['https://eth-mainnet.g.alchemy.com', AlchemyProxies.eth],
-    ['https://polygon-mainnet.g.alchemy.com', AlchemyProxies.polygon],
-    ['https://flow-mainnet.g.alchemy.com', AlchemyProxies.flow],
-]
 
 const WorkerMatchers: Array<[string, R2d2Workers]> = [
-    ['https://api-mainnet.magiceden.io', R2d2Workers.cors],
-    ['https://www.nftscan.com', R2d2Workers.cors],
-    ['https://api.opensea.io', R2d2Workers.opensea],
-    ['https://restapi.nftscan.com', R2d2Workers.nftscan],
-    ['https://gitcoin.co', R2d2Workers.gitcoin],
-    ['https://web-api.coinmarketcap.com', R2d2Workers.coinMarketCap],
-    ['https://api.gopluslabs.io', R2d2Workers.goPlusLabs],
-    ['https://api.coingecko.com', R2d2Workers.coingecko],
+    ['https://eth-mainnet.alchemyapi.io', R2d2Workers.Alchemy_ETH_IO],
+    ['https://eth-mainnet.g.alchemy.com', R2d2Workers.Alchemy_ETH],
+    ['https://polygon-mainnet.g.alchemy.com', R2d2Workers.Alchemy_Polygon],
+    ['https://flow-mainnet.g.alchemy.com', R2d2Workers.Alchemy_Flow],
+    ['https://api-mainnet.magiceden.io', R2d2Workers.CORS],
+    ['https://www.nftscan.com', R2d2Workers.CORS],
+    ['https://api.coingecko.com', R2d2Workers.CoinGecko],
+    ['https://web-api.coinmarketcap.com', R2d2Workers.CoinMarketCap],
+    ['https://api.opensea.io', R2d2Workers.OpenSea],
+    ['https://restapi.nftscan.com', R2d2Workers.NFTScan],
+    ['https://gitcoin.co', R2d2Workers.GitCoin],
+    ['https://api.gopluslabs.io', R2d2Workers.GoPlusLabs],
+    ['https://twitter.com', R2d2Workers.Twitter],
 ]
 
 const { fetch: originalFetch } = globalThis
@@ -43,6 +38,14 @@ const { fetch: originalFetch } = globalThis
 function proxiedFetch(url: string, info: Request) {
     const req = new Request(url, info)
     return originalFetch(req)
+}
+
+async function contentFetch(url: string, config?: RequestInit) {
+    const fetch =
+        process.env.engine === 'firefox' && process.env.manifest === '2' && typeof content === 'object'
+            ? content.fetch
+            : globalThis.fetch
+    return fetch(url, config)
 }
 
 /**
@@ -69,31 +72,27 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
     if (url.includes('r2d2.to')) return originalFetch(info)
 
     // r2d2 worker
-const r2d2WorkerType =
-WorkerMatchers.find((x) => url.startsWith(x[0]))?.[1] ??
-(AlchemyMatchers.find((x) => url.startsWith(x[0])) ? R2d2Workers.alchemy : undefined)
+    const r2d2WorkerType = WorkerMatchers.find((x) => url.startsWith(x[0]))?.[1]
+    if (!r2d2WorkerType) return originalFetch(input, init)
 
-
-    if (r2d2WorkerType) {
-        switch (r2d2WorkerType) {
-            case R2d2Workers.cors:
-                return globalThis.fetch(urlcat(`https://${r2d2WorkerType}.${R2D2_ROOT_URL}?:url`, url))
-            case R2d2Workers.alchemy:
-                const alchemyType = AlchemyMatchers.find((x) => u.origin === x[0])?.[1]
-
-                return globalThis.fetch(
-                    `https://${r2d2WorkerType}.${R2D2_ROOT_URL}/${alchemyType}${
-                        alchemyType === AlchemyProxies.eth ? '/nft' : ''
-                    }/v2/APIKEY/${u.pathname.replace('/nft', '').replace('/v2/', '')}${u.search}`,
-                    init,
-                )
-            default:
-                return globalThis.fetch(url.replace(u.origin, `https://${r2d2WorkerType}.${R2D2_ROOT_URL}`), init)
-        }
+    switch (r2d2WorkerType) {
+        case R2d2Workers.Alchemy_ETH:
+        case R2d2Workers.Alchemy_ETH_IO:
+        case R2d2Workers.Alchemy_Polygon:
+        case R2d2Workers.Alchemy_Flow:
+            return originalFetch(
+                `https://alchemy-proxy.${R2D2_ROOT_URL}/${r2d2WorkerType}${
+                    r2d2WorkerType === R2d2Workers.Alchemy_ETH ? '/nft' : ''
+                }/v2/APIKEY/${u.pathname.replace('/nft', '').replace('/v2/', '')}${u.search}`,
+                init,
+            )
+        case R2d2Workers.CORS:
+            return originalFetch(urlcat(`https://${r2d2WorkerType}.${R2D2_ROOT_URL}?:url`, url))
+        case R2d2Workers.Twitter:
+            return contentFetch(input, init)
+        default:
+            return originalFetch(url.replace(u.origin, `https://${r2d2WorkerType}.${R2D2_ROOT_URL}`), init)
     }
-
-    // fallback
-    return originalFetch(input, init)
 }
 
 Reflect.set(globalThis, 'r2d2Fetch', r2d2Fetch)
