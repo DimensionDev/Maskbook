@@ -1,4 +1,4 @@
-import { MaskBannerIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { styled } from '@mui/material/styles'
 import { memo } from 'react'
 import { Container } from '@mui/material'
@@ -45,7 +45,7 @@ export const RowLayout = memo(({ children }: RowLayoutProps) => {
     return (
         <LayoutContainer>
             <LeftSide>
-                <MaskBannerIcon width={128} height={37} />
+                <Icons.MaskBanner width={128} height={37} />
             </LeftSide>
             <RightContent>
                 <Container maxWidth="md">{children}</Container>

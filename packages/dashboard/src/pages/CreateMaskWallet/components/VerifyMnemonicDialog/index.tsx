@@ -3,7 +3,7 @@ import { Box, Typography, styled, Button, Dialog, DialogTitle, DialogContent } f
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { LoadingButton } from '@mui/lab'
 import { useSnackbarCallback } from '@masknet/shared'
-import { SuccessIcon, CopyIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { DesktopMnemonicConfirm } from '../../../../components/Mnemonic'
 import { useDashboardI18N } from '../../../../locales'
 import { useCopyToClipboard } from 'react-use'
@@ -54,10 +54,9 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '20px',
     },
     copy: {
-        fontSize: 20,
         marginLeft: 12,
         cursor: 'pointer',
-        stroke: MaskColorVar.textPrimary,
+        color: MaskColorVar.textPrimary,
     },
 }))
 
@@ -140,7 +139,7 @@ export const VerifyMnemonicDialogUI = memo<VerifyMnemonicDialogUIProps>(
                     <div className={classes.container}>
                         {address ? (
                             <>
-                                <SuccessIcon sx={{ fontSize: 54 }} />
+                                <Icons.Success size={54} />
                                 <SuccessTitle>{t.wallets_create_successfully_title()}</SuccessTitle>
                                 <Box style={{ width: '100%' }}>
                                     <Typography className={classes.addressTitle}>
@@ -149,7 +148,7 @@ export const VerifyMnemonicDialogUI = memo<VerifyMnemonicDialogUIProps>(
                                 </Box>
                                 <Typography className={classes.address}>
                                     {address}
-                                    <CopyIcon className={classes.copy} onClick={() => onCopy(address)} />
+                                    <Icons.Copy className={classes.copy} onClick={() => onCopy(address)} />
                                 </Typography>
                                 <Button fullWidth className={classes.button} onClick={onDoneClick}>
                                     {t.create_wallet_done()}

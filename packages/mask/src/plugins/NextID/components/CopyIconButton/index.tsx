@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
 import { IconProps, Tooltip, useTheme } from '@mui/material'
-import { CopyIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../locales'
 import { useSnackbarCallback } from '@masknet/shared'
@@ -28,7 +28,7 @@ export const CopyIconButton = memo<CopyIconButtonProps>(({ text, ...props }) => 
             onMouseLeave={() => setOpen(false)}
             disableFocusListener
             disableTouchListener>
-            <CopyIcon
+            <Icons.Copy
                 onClick={(e) => {
                     e.preventDefault()
                     e.stopPropagation()

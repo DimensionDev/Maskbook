@@ -4,7 +4,7 @@ import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plug
 import { base } from '../base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
-import { FurucomboIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { FurucomboView } from '../UI/FurucomboView'
 
 const matchLink = /^https:\/\/furucombo.app\/invest\/(pool|farm)\/(137|1)\/(0x\w+)/
@@ -29,7 +29,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         (() => {
-            const icon = <FurucomboIcon />
+            const icon = <Icons.Furucombo />
             const name = <Trans i18nKey="plugin_furucombo_dapp_name" />
             return {
                 ApplicationEntryID: base.ID,

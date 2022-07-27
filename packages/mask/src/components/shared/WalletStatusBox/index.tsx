@@ -18,7 +18,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Button, Link, Typography } from '@mui/material'
 import classNames from 'classnames'
-import { LinkOutIcon, CopyIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
 import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { useI18N } from '../../../utils'
@@ -193,7 +193,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             component="button"
                             title={t('wallet_status_button_copy_address')}
                             onClick={onCopy}>
-                            <CopyIcon className={classNames(classes.icon, classes.copyIcon)} />
+                            <Icons.Copy className={classNames(classes.icon, classes.copyIcon)} />
                         </Link>
                         <Link
                             className={classes.link}
@@ -201,7 +201,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             target="_blank"
                             title={t('plugin_wallet_view_on_explorer')}
                             rel="noopener noreferrer">
-                            <LinkOutIcon className={classNames(classes.icon, classes.linkIcon)} />
+                            <Icons.LinkOut className={classNames(classes.icon, classes.linkIcon)} />
                         </Link>
                     </div>
 

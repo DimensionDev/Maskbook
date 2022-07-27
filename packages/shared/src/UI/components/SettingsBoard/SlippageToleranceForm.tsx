@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
 import { makeStyles, MaskTextField, MaskAlert } from '@masknet/theme'
-import { WarningTriangleIcon, WarningIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { useSharedI18N } from '@masknet/shared'
 import { Box, Paper } from '@mui/material'
 import { isZero } from '@masknet/web3-shared-base'
@@ -131,15 +131,15 @@ export function SlippageToleranceForm(props: SlippageToleranceFormProps) {
                 </Box>
             </Paper>
             {error ? (
-                <MaskAlert icon={<WarningIcon />} severity="error">
+                <MaskAlert icon={<Icons.Warning />} severity="error">
                     {error}
                 </MaskAlert>
             ) : tolerance < slippageTolerances[0] ? (
-                <MaskAlert icon={<WarningTriangleIcon color="warning" />} severity="warning">
+                <MaskAlert icon={<Icons.WarningTriangle color="warning" />} severity="warning">
                     {t.gas_settings_alert_low_slippage_tolerance()}
                 </MaskAlert>
             ) : tolerance > slippageTolerances[slippageTolerances.length - 1] ? (
-                <MaskAlert icon={<WarningIcon />} severity="error">
+                <MaskAlert icon={<Icons.Warning />} severity="error">
                     {t.gas_settings_alert_high_slippage_tolerance({
                         percentage: tolerance.toString(),
                     })}

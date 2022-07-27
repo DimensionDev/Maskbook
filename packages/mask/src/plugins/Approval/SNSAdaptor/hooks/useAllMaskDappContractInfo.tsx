@@ -5,7 +5,7 @@ import {
     useITOConstants,
     useNftRedPacketConstants,
 } from '@masknet/web3-shared-evm'
-import { RedPacketIcon, Ito, MaskBoxIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 export function useAllMaskDappContractInfo(chainId: ChainId, type: 'token' | 'nft') {
     const {
         HAPPY_RED_PACKET_ADDRESS_V1,
@@ -21,44 +21,44 @@ export function useAllMaskDappContractInfo(chainId: ChainId, type: 'token' | 'nf
               {
                   address: HAPPY_RED_PACKET_ADDRESS_V1,
                   name: 'Lucky Drop V1',
-                  logo: <RedPacketIcon />,
+                  logo: <Icons.RedPacket />,
               },
               {
                   address: HAPPY_RED_PACKET_ADDRESS_V2,
                   name: 'Lucky Drop V2',
-                  logo: <RedPacketIcon />,
+                  logo: <Icons.RedPacket />,
               },
               {
                   address: HAPPY_RED_PACKET_ADDRESS_V3,
                   name: 'Lucky Drop V3',
-                  logo: <RedPacketIcon />,
+                  logo: <Icons.RedPacket />,
               },
               {
                   address: HAPPY_RED_PACKET_ADDRESS_V4,
                   name: 'Lucky Drop V4',
-                  logo: <RedPacketIcon />,
+                  logo: <Icons.RedPacket />,
               },
               {
                   address: ITO_CONTRACT_ADDRESS,
                   name: 'ITO V1',
-                  logo: <Ito />,
+                  logo: <Icons.Ito />,
               },
               {
                   address: ITO2_CONTRACT_ADDRESS,
                   name: 'ITO V2',
-                  logo: <Ito />,
+                  logo: <Icons.Ito />,
               },
           ]
         : [
               {
                   address: MASK_BOX_CONTRACT_ADDRESS,
                   name: 'Mask Box',
-                  logo: <MaskBoxIcon />,
+                  logo: <Icons.MaskBox />,
               },
               {
                   address: RED_PACKET_NFT_ADDRESS,
                   name: 'NFT Lucky Drop',
-                  logo: <RedPacketIcon />,
+                  logo: <Icons.RedPacket />,
               },
           ]
 }
