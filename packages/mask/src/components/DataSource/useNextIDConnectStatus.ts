@@ -1,6 +1,7 @@
 import { useAsyncRetry } from 'react-use'
-import { EMPTY_LIST, NextIDPlatform, PersonaIdentifier } from '@masknet/shared-base'
-import { useEffect, useMemo, useState } from 'react'
+import stringify from 'json-stable-stringify'
+import type { NextIDPlatform, PersonaIdentifier } from '@masknet/shared-base'
+import { NextIDProof } from '@masknet/web3-providers'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { usePersonaConnectStatus } from './usePersonaConnectStatus'
 import {
@@ -8,20 +9,10 @@ import {
     currentSetupGuideStatus,
     dismissVerifyNextID,
 } from '../../../shared/legacy-settings/settings'
-import stringify from 'json-stable-stringify'
 import { SetupGuideStep } from '../../../shared/legacy-settings/types'
-import type { SetupGuideCrossContextStatus } from '../../../shared/legacy-settings/types'
 import { useLastRecognizedIdentity } from './useActivatedUI'
-import { useValueRef } from '@masknet/shared-base-ui'
-import { NextIDProof } from '@masknet/web3-providers'
 import Services from '../../extension/service'
-import { MaskMessages } from '../../utils'
-
-export const usePersonaBoundPlatform = (personaPublicKey: string) => {
-    return useAsyncRetry(() => {
-        return NextIDProof.queryExistedBindingByPersona(personaPublicKey)
-    }, [personaPublicKey])
-}
+import { useSetupGuideStatus } from '../GuideStep/useSetupGuideStatus'
 
 let isOpenedVerifyDialog = false
 let isOpenedFromButton = false
@@ -35,15 +26,6 @@ export const verifyPersona = (personaIdentifier?: PersonaIdentifier, username?: 
     })
 }
 
-export const useNextIDBoundByPlatform = (platform?: NextIDPlatform, userId?: string) => {
-    const res = useAsyncRetry(async () => {
-        if (!platform || !userId) return EMPTY_LIST
-        return NextIDProof.queryAllExistedBindingsByPlatform(platform, userId)
-    }, [platform, userId])
-    useEffect(() => MaskMessages.events.ownProofChanged.on(res.retry), [res.retry])
-    return res
-}
-
 export enum NextIDVerificationStatus {
     WaitingLocalConnect = 'need-local-connect',
     WaitingVerify = 'waiting-verify',
@@ -52,23 +34,11 @@ export enum NextIDVerificationStatus {
     Other = 'Other',
 }
 
-export function useSetupGuideStatusState() {
-    const lastState_ = useValueRef(currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier])
-    return useMemo<SetupGuideCrossContextStatus>(() => {
-        try {
-            return JSON.parse(lastState_)
-        } catch {
-            return {}
-        }
-    }, [lastState_])
-}
-
 export function useNextIDConnectStatus(disableInitialVerify = false) {
     const ui = activatedSocialNetworkUI
-    const [enableNextID] = useState(ui.configuration.nextIDConfig?.enable)
-    const personaConnectStatus = usePersonaConnectStatus()
-    const lastState = useSetupGuideStatusState()
     const lastRecognized = useLastRecognizedIdentity()
+    const personaConnectStatus = usePersonaConnectStatus()
+    const lastState = useSetupGuideStatus()
     const username = lastRecognized.identifier?.userId || lastState.username || ''
     const {
         value: VerificationStatus = NextIDVerificationStatus.Other,
@@ -82,23 +52,20 @@ export function useNextIDConnectStatus(disableInitialVerify = false) {
         if (isOpenedVerifyDialog && !isOpenedFromButton) return NextIDVerificationStatus.HideVerifyDialog
 
         // Whether current platform support next id
-        if (!enableNextID || !username || !personaConnectStatus.connected)
+        if (!ui.configuration.nextIDConfig?.enable || !username || !personaConnectStatus.connected)
             return NextIDVerificationStatus.WaitingLocalConnect
 
-        const { currentConnectedPersona } = personaConnectStatus
+        const { currentPersona } = personaConnectStatus
 
         const currentPersonaIdentity = await Services.Settings.getCurrentPersonaIdentifier()
 
-        if (currentPersonaIdentity !== currentConnectedPersona?.identifier)
-            return NextIDVerificationStatus.WaitingLocalConnect
+        if (currentPersonaIdentity !== currentPersona?.identifier) return NextIDVerificationStatus.WaitingLocalConnect
 
-        if (!currentConnectedPersona) return NextIDVerificationStatus.WaitingLocalConnect
+        if (!currentPersona) return NextIDVerificationStatus.WaitingLocalConnect
 
         // Whether used 'Don't show me again
         if (
-            dismissVerifyNextID[ui.networkIdentifier].value[
-                `${username}_${currentConnectedPersona.identifier.toText()}`
-            ] &&
+            dismissVerifyNextID[ui.networkIdentifier].value[`${username}_${currentPersona.identifier.toText()}`] &&
             !isOpenedFromButton
         )
             return NextIDVerificationStatus.HideVerifyDialog
@@ -107,27 +74,16 @@ export function useNextIDConnectStatus(disableInitialVerify = false) {
         const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
         if (!platform) return NextIDVerificationStatus.Other
 
-        const isBound = await NextIDProof.queryIsBound(
-            currentConnectedPersona.identifier.publicKeyAsHex,
-            platform,
-            username,
-        )
+        const isBound = await NextIDProof.queryIsBound(currentPersona.identifier.publicKeyAsHex, platform, username)
         if (isBound) return NextIDVerificationStatus.Verified
 
         if (isOpenedFromButton && !disableInitialVerify) {
-            verifyPersona(personaConnectStatus.currentConnectedPersona?.identifier)()
+            verifyPersona(personaConnectStatus.currentPersona?.identifier)()
         }
         isOpenedVerifyDialog = true
         isOpenedFromButton = false
         return NextIDVerificationStatus.WaitingVerify
-    }, [
-        username,
-        enableNextID,
-        isOpenedVerifyDialog,
-        personaConnectStatus,
-        currentPersonaIdentifier.value,
-        disableInitialVerify,
-    ])
+    }, [username, isOpenedVerifyDialog, personaConnectStatus, currentPersonaIdentifier.value, disableInitialVerify])
 
     return {
         isVerified: VerificationStatus === NextIDVerificationStatus.Verified,
@@ -140,7 +96,7 @@ export function useNextIDConnectStatus(disableInitialVerify = false) {
         },
         action:
             VerificationStatus === NextIDVerificationStatus.WaitingVerify
-                ? verifyPersona(personaConnectStatus.currentConnectedPersona?.identifier, lastState.username)
+                ? verifyPersona(personaConnectStatus.currentPersona?.identifier, lastState.username)
                 : null,
     }
 }

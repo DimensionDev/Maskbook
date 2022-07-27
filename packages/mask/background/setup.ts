@@ -5,10 +5,7 @@ import { inMemory_KVStorageBackend, indexedDB_KVStorageBackend } from './databas
 import { setupLegacySettingsAtBackground } from '../shared/legacy-settings/createSettings'
 import { __deprecated__getStorage, __deprecated__setStorage } from './utils/deprecated-storage'
 
-import './services/setup'
-import './tasks/setup' // Setup Tasks
 import '../shared/site-adaptors'
-import '../shared/native-rpc' // setup Android and iOS API server
 
 polyfill()
 setupMaskKVStorageBackend(indexedDB_KVStorageBackend, inMemory_KVStorageBackend)

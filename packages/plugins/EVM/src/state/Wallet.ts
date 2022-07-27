@@ -2,7 +2,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { WalletState } from '@masknet/plugin-infra/web3'
 
 export class Wallet extends WalletState {
-    constructor(context: Plugin.Shared.SharedUIContext) {
+    constructor(context: Plugin.Shared.SharedContext) {
         super(context)
     }
 }

@@ -30,14 +30,14 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v2
       - run: npx markdownlint-cli .
-  # editorconfig:
-  #   runs-on: ubuntu-20.04
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #       with:
-  #         ref: ${{ github.event.pull_request.head.sha }}
-  #     - uses: DimensionDev/setup-editorconfig-action@latest
-  #     - run: editorconfig-checker
+  editorconfig:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: DimensionDev/setup-editorconfig-action@latest
+      - run: editorconfig-checker
   anti-trojan-source:
     runs-on: ubuntu-20.04
     steps:

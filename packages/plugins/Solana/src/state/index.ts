@@ -11,7 +11,7 @@ import type { SolanaWeb3State } from './Connection/types'
 import { IdentityService } from './IdentityService'
 import { NameService } from './NameService'
 
-export function createWeb3State(context: Plugin.Shared.SharedUIContext): SolanaWeb3State {
+export function createWeb3State(context: Plugin.Shared.SharedContext): SolanaWeb3State {
     const Provider_ = new Provider(context)
     const Settings_ = new Settings(context)
 

@@ -9,7 +9,7 @@ import { usePersonas } from '../hooks/usePersonas'
 import { useI18N } from '../locales/i18n_generated'
 import { PersonaItem } from './PersonaItem'
 import { InfoIcon } from '../assets/info'
-import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
+import { usePersonasFromDB } from '../../../components/DataSource/usePersonasFromDB'
 import type { AllChainsNonFungibleToken } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
@@ -37,7 +37,7 @@ export function PersonaPage(props: PersonaPageProps) {
     const currentIdentity = useSubscription(context.lastRecognizedProfile)
     const { classes } = useStyles()
     const { loading, value: persona } = usePersonas()
-    const myPersonas = useMyPersonas()
+    const myPersonas = usePersonasFromDB()
     const t = useI18N()
 
     const onSelect = useCallback(

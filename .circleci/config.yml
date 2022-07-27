@@ -66,6 +66,9 @@ jobs:
       - store_artifacts:
           path: MaskNetwork.chromium-beta.zip
           destination: /MaskNetwork.chromium-beta.zip
+      - store_artifacts:
+          path: MaskNetwork.chromium-mv3.zip
+          destination: /MaskNetwork.chromium-mv3.zip
       - persist_to_workspace:
           root: ~/repo/
           paths:
@@ -75,6 +78,7 @@ jobs:
             - MaskNetwork.chromium-beta.zip
             - MaskNetwork.firefox.zip
             - MaskNetwork.gecko.zip
+            - MaskNetwork.chromium-mv3.zip
   publish-github-release:
     docker:
       - image: cibuilds/github:0.10

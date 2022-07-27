@@ -1,21 +1,15 @@
-import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import type { PersonaInformation, NextIDPlatform } from '@masknet/shared-base'
+import type { PersonaInformation } from '@masknet/shared-base'
 import Services from '../../extension/service'
-import { activatedSocialNetworkUI } from '../../social-network'
 import { useLastRecognizedIdentity } from './useActivatedUI'
-import { useMyPersonas } from './useMyPersonas'
-import { useSetupGuideStatusState } from './useNextID'
+import { usePersonasFromDB } from './usePersonasFromDB'
+import { useSetupGuideStatus } from '../GuideStep/useSetupGuideStatus'
 
 export function usePersonaAgainstSNSConnectStatus() {
-    const ui = activatedSocialNetworkUI
-    const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform
-    const lastState = useSetupGuideStatusState()
+    const personas = usePersonasFromDB()
+    const lastState = useSetupGuideStatus()
     const lastRecognized = useLastRecognizedIdentity()
-    const username = useMemo(() => {
-        return lastState.username || lastRecognized.identifier?.userId
-    }, [lastState, lastRecognized])
-    const personas = useMyPersonas()
+    const username = lastState.username || lastRecognized.identifier?.userId
 
     return useAsyncRetry(async () => {
         const checkSNSConnectToCurrentPersona = (persona: PersonaInformation) =>
@@ -30,5 +24,5 @@ export function usePersonaAgainstSNSConnectStatus() {
             currentPersonaPublicKey: currentPersona?.identifier.rawPublicKey,
             currentSNSConnectedPersonaPublicKey: currentSNSConnectedPersona?.identifier.rawPublicKey,
         }
-    }, [platform, username, ui, personas])
+    }, [username, personas.map((x) => x.identifier.toText()).join()])
 }
