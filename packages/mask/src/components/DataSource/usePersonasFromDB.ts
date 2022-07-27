@@ -1,6 +1,6 @@
 import { useSubscription } from 'use-subscription'
-import Services from '../../extension/service'
 import { createSubscriptionFromAsyncSuspense } from '@masknet/shared-base'
+import Services from '../../extension/service'
 import { MaskMessages } from '../../utils/messages'
 
 const personas = createSubscriptionFromAsyncSuspense(
@@ -8,6 +8,9 @@ const personas = createSubscriptionFromAsyncSuspense(
     MaskMessages.events.ownPersonaChanged.on,
 )
 
-export function useMyPersonas() {
+/**
+ * Get all owned personas from DB
+ */
+export function usePersonasFromDB() {
     return useSubscription(personas)
 }

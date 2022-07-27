@@ -46,6 +46,7 @@ export const RestPartOfPluginUIContextShared = {
 
     personaSignMessage: Services.Identity.signWithPersona,
 
+    recordConnectedSites: WalletRPC.recordConnectedSites,
     updateAccount: WalletRPC.updateMaskAccount,
     resetAccount: WalletRPC.resetMaskAccount,
     selectAccount: WalletRPC.selectMaskAccount,

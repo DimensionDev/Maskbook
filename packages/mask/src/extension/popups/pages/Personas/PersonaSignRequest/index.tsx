@@ -4,7 +4,7 @@ import { Button, Typography } from '@mui/material'
 import { MaskMessages, useI18N } from '../../../../../utils'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { PersonaInformation, PopupRoutes } from '@masknet/shared-base'
-import { useMyPersonas } from '../../../../../components/DataSource/useMyPersonas'
+import { usePersonasFromDB } from '../../../../../components/DataSource/usePersonasFromDB'
 import { PersonaContext } from '../hooks/usePersonaContext'
 import { MethodAfterPersonaSign } from '../../Wallet/type'
 import { useAsyncFn } from 'react-use'
@@ -88,7 +88,7 @@ const PersonaSignRequest = memo(() => {
     const [requestID, setRequestID] = useState<string>()
     const [message, setMessage] = useState<string>()
     const [selected, setSelected] = useState<PersonaInformation>()
-    const personas = useMyPersonas()
+    const personas = usePersonasFromDB()
     const { currentPersona } = PersonaContext.useContainer()
     useEffect(() => {
         if (!personas.length) return

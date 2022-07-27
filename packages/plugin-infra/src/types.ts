@@ -11,6 +11,8 @@ import type {
     PopupRoutes,
     PersonaInformation,
     ECKeyIdentifier,
+    EnhanceableSite,
+    ExtensionSite,
 } from '@masknet/shared-base'
 import type {
     ChainDescriptor,
@@ -184,6 +186,8 @@ export namespace Plugin.Shared {
         }): Promise<void>
         /** Reset Mask Wallet account */
         resetAccount(): Promise<void>
+        /** Record which sites are connected to the Mask wallet  */
+        recordConnectedSites(site: EnhanceableSite | ExtensionSite, connected: boolean): void
 
         /** Sign a message with persona */
         personaSignMessage(payload: PersonaSignRequest): Promise<PersonaSignResult>
@@ -593,7 +597,6 @@ export namespace Plugin.SNSAdaptor {
              */
             TabContent: InjectUI<{
                 identity?: SocialIdentity
-                persona?: string
                 socialAddressList?: Array<SocialAddress<NetworkPluginID>>
             }>
         }
@@ -908,11 +911,11 @@ export enum CurrentSNSNetwork {
 }
 
 export interface IdentityResolved {
-    identifier?: ProfileIdentifier
     nickname?: string
     avatar?: string
     bio?: string
     homepage?: string
+    identifier?: ProfileIdentifier
 }
 
 /**
