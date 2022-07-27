@@ -70,6 +70,7 @@ export function SearchableList<T extends {}>({
         () =>
             new Fuse(data, {
                 shouldSort: true,
+                isCaseSensitive: false,
                 threshold: 0.45,
                 minMatchCharLength: 1,
                 keys: searchKey ?? Object.keys(data.length > 0 ? data[0] : []),
@@ -83,7 +84,7 @@ export function SearchableList<T extends {}>({
         if (!keyword) return data
         const filtered = fuse.search(keyword).map((x: any) => x.item)
         return itemKey ? uniqBy(filtered, (x) => x[itemKey]) : filtered
-    }, [keyword, fuse, data])
+    }, [keyword, fuse, JSON.stringify(data)])
     // #endregion
 
     const handleSearch = (word: string) => {

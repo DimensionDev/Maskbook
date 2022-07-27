@@ -110,7 +110,13 @@ export const FungibleTokenList = forwardRef(
 
         const filteredFungibleTokens = useMemo(() => {
             const allFungibleTokens = uniqBy(
-                [...(nativeToken ? [nativeToken] : []), ...tokens, ...fungibleTokens, ...trustedFungibleTokens],
+                [
+                    ...(nativeToken ? [nativeToken] : []),
+                    ...tokens,
+                    ...fungibleTokens,
+                    ...trustedFungibleTokens,
+                    ...(mode === TokenListMode.List ? [] : blockedFungibleTokens),
+                ],
                 (x) => x.address.toLowerCase(),
             )
 
@@ -144,7 +150,7 @@ export const FungibleTokenList = forwardRef(
             const isBlockedToken = currySameAddress(blockedFungibleTokens.map((x) => x.address))
 
             return filteredFungibleTokens
-                .filter((x) => !isBlockedToken(x))
+                .filter((x) => (mode === TokenListMode.List ? !isBlockedToken(x) : true))
                 .sort((a, z) => {
                     const aBalance = toZero(formatBalance(fungibleTokensBalance[a.address] ?? '0', a.decimals))
                     const zBalance = toZero(formatBalance(fungibleTokensBalance[z.address] ?? '0', z.decimals))
@@ -218,7 +224,12 @@ export const FungibleTokenList = forwardRef(
 
         const getPlaceholder = () => {
             // Search token which in list, and result is empty
-            if (keyword && !isSameAddress(searchedToken?.address, searchedTokenAddress) && !searchingToken)
+            if (
+                Object.keys(fungibleTokensBalance).length === 0 &&
+                keyword &&
+                !isSameAddress(searchedToken?.address, searchedTokenAddress) &&
+                !searchingToken
+            )
                 return <Content height={FixedSizeListProps?.height} message={<EmptyResult />} />
 
             // Add token in dashboard, includeTokens is empty
@@ -275,6 +286,7 @@ export const FungibleTokenList = forwardRef(
                             await Token?.addToken?.(token)
                             await Token?.trustToken?.(account, token)
                         },
+                        (address) => !!blockedFungibleTokens?.find((x) => isSameAddress(x.address, address)),
                     )}
                     placeholder={getPlaceholder()}
                     FixedSizeListProps={FixedSizeListProps}
