@@ -1,13 +1,13 @@
 import { useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
-import { ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
+import { Link, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import { formatBalance, FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { TokenIcon } from '../TokenIcon'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskLoadingButton, MaskSearchableListItemProps, LoadingBase } from '@masknet/theme'
 import { useSharedI18N } from '../../../locales'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import { useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { TokenListMode } from './type'
 
 const useStyles = makeStyles()((theme) => ({
@@ -33,7 +33,9 @@ const useStyles = makeStyles()((theme) => ({
         paddingRight: theme.spacing(1),
     },
     name: {
-        display: 'block',
+        display: 'flex',
+        gap: theme.spacing(0.5),
+        alignItems: 'center',
         lineHeight: '20px',
         fontSize: 16,
         // TODO: Should align dashboard and twitter theme in common component, depend twitter theme
@@ -83,6 +85,7 @@ export const getFungibleTokenItem =
     >) => {
         const t = useSharedI18N()
         const { classes } = useStyles()
+        const { Others } = useWeb3State()
 
         if (!token) return null
         const { chainId, address, name, symbol, decimals, logoURL } = token
@@ -108,6 +111,10 @@ export const getFungibleTokenItem =
             e.stopPropagation()
             onSelect(token)
         }
+
+        const explorerLink = useMemo(() => {
+            return Others?.explorerResolver.fungibleTokenLink(token.chainId, token.address)
+        }, [token.address, token.chainId, Others?.explorerResolver.fungibleTokenLink])
 
         const action = useMemo(() => {
             if (mode === TokenListMode.Manage) {
@@ -161,6 +168,14 @@ export const getFungibleTokenItem =
                         <span className={classes.symbol}>{symbol}</span>
                         <span className={`${classes.name} dashboard token-list-symbol`}>
                             {name}
+                            <Link
+                                onClick={(event) => event.stopPropagation()}
+                                href={explorerLink}
+                                style={{ width: 18, height: 18 }}
+                                target="_blank"
+                                rel="noopener noreferrer">
+                                <PopupLinkIcon size={18} />
+                            </Link>
                             {source === 'personal' && <span> &bull; Added By User</span>}
                         </span>
                     </Typography>

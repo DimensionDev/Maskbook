@@ -7,8 +7,8 @@ import { useSharedI18N } from '../../../locales'
 const useStyles = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(2.25, 0),
-        margin: theme.spacing(0, -3, -3, -3),
-        background: theme.palette.background.tipMask,
+        margin: theme.spacing(0),
+        // backgroundColor: theme.palette.maskColor.secondaryBottom,
         boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
         backdropFilter: 'blur(16px)',
         borderRadius: theme.spacing(0, 0, 1.5, 1.5),
