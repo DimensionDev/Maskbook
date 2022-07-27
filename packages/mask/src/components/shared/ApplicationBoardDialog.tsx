@@ -8,7 +8,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ApplicationBoard } from './ApplicationBoard'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
-import { GearIcon } from '@masknet/icons'
+import { Gear } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -46,14 +46,7 @@ export function ApplicationBoardDialog() {
             maxWidth="sm"
             onClose={closeDialog}
             title={t('applications')}
-            titleTail={
-                <GearIcon
-                    size={24}
-                    color={theme.palette.text.primary}
-                    className={classes.settingIcon}
-                    onClick={() => setOpenSettings(true)}
-                />
-            }>
+            titleTail={<Gear size={24} className={classes.settingIcon} onClick={() => setOpenSettings(true)} />}>
             <DialogContent className={classes.content}>
                 <ApplicationBoard closeDialog={closeDialog} />
                 {openSettings ? (

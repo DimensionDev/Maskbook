@@ -1,4 +1,4 @@
-import { mediaViewerUrl } from '@masknet/shared'
+import { MEDIA_VIEWER_URL } from '@masknet/shared'
 import urlcat from 'urlcat'
 import { ImageType } from './types'
 import { resolveIPFSLink } from '@masknet/web3-shared-evm'
@@ -34,7 +34,7 @@ export const initCollection = {
 export const Punk3D = {
     contract: '0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb',
     tokenId: '6128',
-    url: urlcat(mediaViewerUrl, {
+    url: urlcat(MEDIA_VIEWER_URL, {
         /* cspell:disable-next-line */
         url: resolveIPFSLink('QmZjfo1zKTfQZjqs4CaZJ7pQDZHrUBaozre8Z71c7ZXGMc'),
         type: 'model/gltf-binary',

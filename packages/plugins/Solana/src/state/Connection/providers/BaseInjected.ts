@@ -46,11 +46,11 @@ export class BaseInjectedProvider extends BaseProvider implements SolanaProvider
         await this.readyPromise
 
         const provider = await this.createWeb3Provider()
-        const response = await provider.connect()
+        const { publicKey } = await provider.connect()
 
         return {
             chainId,
-            account: response.publicKey,
+            account: publicKey,
         }
     }
 

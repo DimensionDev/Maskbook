@@ -20,6 +20,7 @@ async function getContentType(url: string) {
     if (!/^https?:/.test(url)) {
         return ''
     }
+    const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
     return Promise.race([
         new Promise((resolve) => setTimeout(() => resolve(''), 20000)),
         new Promise((resolve) => {

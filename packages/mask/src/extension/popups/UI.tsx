@@ -1,7 +1,7 @@
 import { lazy, useEffect, useState } from 'react'
 import { Navigate, Route, Routes, HashRouter } from 'react-router-dom'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
-import { PopupRoutes } from '@masknet/shared-base'
+import { PopupRoutes, queryRemoteI18NBundle } from '@masknet/shared-base'
 import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme'
 import '../../social-network-adaptor/browser-action'
 import { PopupContext } from './hook/usePopupContext'
@@ -9,9 +9,10 @@ import { PopupFrame } from './components/PopupFrame'
 import { MaskUIRoot } from '../../UIRoot'
 import { PageTitleContext } from './context'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { languageSettings } from '../../settings/settings'
+import { languageSettings } from '../../../shared/legacy-settings/settings'
 import { PopupSnackbarProvider } from '@masknet/theme'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder'
+import Services from '../service'
 
 function usePopupTheme() {
     return usePopupFullPageTheme(useValueRef(languageSettings))
@@ -33,6 +34,7 @@ function PluginRenderDelayed() {
 
 export default function Popups() {
     const [title, setTitle] = useState('')
+    useEffect(queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
     return (
         <MaskUIRoot fallback={frame(<LoadingPlaceholder />)} useTheme={usePopupTheme} kind="page">
             <PopupSnackbarProvider>

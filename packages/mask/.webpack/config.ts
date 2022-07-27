@@ -15,13 +15,12 @@ import { isAbsolute, join } from 'path'
 import { readFileSync } from 'fs'
 import { nonNullable, EntryDescription, normalizeEntryDescription, joinEntryItem } from './utils'
 import { BuildFlags, normalizeBuildFlags, computedBuildFlags } from './flags'
-import ResolveTypeScriptPlugin from 'resolve-typescript-plugin'
 
 import './clean-hmr'
 
 export function createConfiguration(rawFlags: BuildFlags): Configuration {
     const normalizedFlags = normalizeBuildFlags(rawFlags)
-    const { sourceMapKind, supportWebAssembly, lockdown } = computedBuildFlags(normalizedFlags)
+    const { sourceMapKind, lockdown } = computedBuildFlags(normalizedFlags)
     const { hmr, mode, profiling, reactRefresh, readonlyCache, reproducibleBuild, runtime, outputPath } =
         normalizedFlags
 
@@ -40,7 +39,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         devtool: sourceMapKind,
         target: ['web', 'es2021'],
         entry: {},
-        experiments: { backCompat: false, asyncWebAssembly: supportWebAssembly },
+        experiments: { backCompat: false, asyncWebAssembly: true },
         cache: {
             type: 'filesystem',
             buildDependencies: { config: [__filename] },
@@ -53,7 +52,10 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
             })(),
         },
         resolve: {
-            plugins: [new ResolveTypeScriptPlugin()],
+            extensionAlias: {
+                '.js': ['.tsx', '.ts', '.js'],
+                '.mjs': ['.mts', '.mjs'],
+            },
             extensions: ['.js', '.ts', '.tsx'],
             alias: (() => {
                 const alias = {
@@ -94,14 +96,6 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
             rules: [
                 // Opt in source map
                 { test: /(async-call|webextension).+\.js$/, enforce: 'pre', use: ['source-map-loader'] },
-                // Manifest v3 does not support
-                !supportWebAssembly
-                    ? {
-                          test: /\.wasm?$/,
-                          loader: require.resolve('./wasm-to-asm.ts'),
-                          type: 'javascript/auto',
-                      }
-                    : undefined!,
                 // Patch regenerator-runtime
                 lockdown
                     ? {
@@ -281,7 +275,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         }
         plugins.push(new WebExtensionPlugin({ background: { entry: 'background', manifest: 3 } }))
     } else {
-        entries.background = normalizeEntryDescription(join(__dirname, '../src/background-service.ts'))
+        entries.background = normalizeEntryDescription(join(__dirname, '../background/mv2-entry.ts'))
         plugins.push(new WebExtensionPlugin({ background: { entry: 'background', manifest: 2 } }))
         plugins.push(
             addHTMLEntry({
@@ -293,7 +287,9 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         )
     }
     for (const entry in entries) {
-        withReactDevTools(entries[entry])
+        if (entry !== 'background') {
+            withReactDevTools(entries[entry])
+        }
         with_iOSPatch(entries[entry])
     }
 

@@ -1,4 +1,5 @@
 /// <reference types="@masknet/global-types/firefox" />
+/// <reference types="@masknet/global-types/flag" />
 
 const shadowHeadMap = new WeakMap<ShadowRoot, HTMLHeadElement>()
 const constructableStyleSheetEnabled = true
@@ -21,7 +22,9 @@ export class StyleSheet {
         this.key = options.key
         if (options.container instanceof ShadowRoot) {
             this.implementation =
-                constructableStyleSheetEnabled && 'adoptedStyleSheets' in Document.prototype
+                constructableStyleSheetEnabled &&
+                'adoptedStyleSheets' in Document.prototype &&
+                process.env.engine !== 'firefox'
                     ? new ConstructableStyleSheet()
                     : new SynchronizeStyleSheet()
             this.addContainer(options.container)

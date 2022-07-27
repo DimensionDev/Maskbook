@@ -73,7 +73,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
         line: {},
         icon: {
             [`@media (min-width: ${theme.breakpoints.values.sm}px)`]: {
-                fontSize: props.fontSize,
+                height: props.fontSize,
+                width: props.fontSize,
                 paddingRight: 4,
             },
         },

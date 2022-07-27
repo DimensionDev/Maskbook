@@ -11,7 +11,7 @@ import { useI18N } from '../../utils'
 import { Application, getUnlistedApp } from './ApplicationSettingPluginList'
 import { ApplicationRecommendArea } from './ApplicationRecommendArea'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useNextIDConnectStatus, verifyPersona } from '../DataSource/useNextID'
+import { useNextIDConnectStatus, verifyPersona } from '../DataSource/useNextIDConnectStatus'
 import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus'
 import { WalletMessages } from '../../plugins/Wallet/messages'
@@ -23,7 +23,8 @@ const useStyles = makeStyles<{ shouldScroll: boolean; isCarouselReady: boolean }
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
         applicationWrapper: {
-            padding: theme.spacing(props.isCarouselReady ? 0 : 1, 0.25, 1),
+            padding: theme.spacing(1, process.env.engine === 'firefox' ? 1.5 : 0.25, 1, 1),
+            transform: props.isCarouselReady ? 'translate(-8px, -8px)' : 'translateX(-8px)',
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
             overflowY: 'auto',
@@ -32,7 +33,9 @@ const useStyles = makeStyles<{ shouldScroll: boolean; isCarouselReady: boolean }
             gridGap: 10,
             justifyContent: 'space-between',
             height: 320,
-            width: props.shouldScroll ? 583 : 576,
+            width: props.shouldScroll && process.env.engine !== 'firefox' ? 583 : 570,
+            scrollbarColor: `${theme.palette.maskColor.secondaryLine} ${theme.palette.maskColor.secondaryLine}`,
+            scrollbarWidth: 'thin',
             '::-webkit-scrollbar': {
                 backgroundColor: 'transparent',
                 width: 20,
@@ -332,7 +335,7 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
 
     const personaNextIDReset = useCallback(() => {
         nextIDConnectStatus.reset()
-        verifyPersona(personaConnectStatus.currentConnectedPersona?.identifier)()
+        verifyPersona(personaConnectStatus.currentPersona?.identifier)()
     }, [nextIDConnectStatus, personaConnectStatus])
 
     const { isSNSConnectToCurrentPersona, currentPersonaPublicKey, currentSNSConnectedPersonaPublicKey } =

@@ -47,17 +47,17 @@ const useStyles = makeStyles()({
         marginLeft: 4,
     },
     edit: {
-        fontSize: 16,
-        stroke: '#1C68F3',
-        fill: 'none',
+        width: 16,
+        height: 16,
+        color: '#1C68F3',
         marginLeft: 10,
         cursor: 'pointer',
     },
     setting: {
-        fontSize: 12,
+        width: 12,
+        height: 12,
         cursor: 'pointer',
-        fill: 'none',
-        stroke: '#1C68F3',
+        color: '#1C68F3',
         marginLeft: 4,
     },
 })

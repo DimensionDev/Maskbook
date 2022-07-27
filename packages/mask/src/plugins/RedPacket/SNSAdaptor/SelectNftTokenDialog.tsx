@@ -25,6 +25,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
     dialogContentFixedHeight: {
         height: 610,
+        overflowY: 'hidden',
     },
     tokenBox: {
         background: theme.palette.background.default,
@@ -37,7 +38,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     ownerTokenBox: {
         background: theme.palette.background.default,
         width: '96%',
-        height: 480,
+        height: 400,
         borderRadius: 12,
         margin: '14px auto',
         padding: 10,
@@ -97,6 +98,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         flexDirection: 'column',
         borderRadius: 8,
         padding: 0,
+        marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2.5),
         background: theme.palette.background.paper,
         width: 120,
@@ -136,7 +138,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         gridTemplateColumns: 'repeat(4, 1fr)',
         gap: 16,
         width: '100%',
-        height: 388,
+        height: 320,
         overflowY: 'auto',
         borderRadius: 12,
         marginTop: theme.spacing(1.5),
@@ -293,11 +295,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
     assetImgWrapper: {
         maxHeight: 155,
-    },
-    injectedDialog: {
-        '& [role="dialog"]': {
-            maxHeight: '720px !important',
-        },
     },
 }))
 
@@ -468,12 +465,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     const maxSharesOptions = { amount: NFT_RED_PACKET_MAX_SHARES.toString() }
 
     return (
-        <InjectedDialog
-            open={open}
-            onClose={onClose}
-            title={t.nft_select_collection()}
-            maxWidth="xs"
-            className={classes.injectedDialog}>
+        <InjectedDialog open={open} onClose={onClose} title={t.nft_select_collection()} maxWidth="xs">
             {tokenDetailedOwnerList.length === 0 ? (
                 <DialogContent className={classes.dialogContent}>
                     <Box className={classes.tokenBox}>

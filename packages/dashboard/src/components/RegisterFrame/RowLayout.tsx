@@ -45,7 +45,7 @@ export const RowLayout = memo(({ children }: RowLayoutProps) => {
     return (
         <LayoutContainer>
             <LeftSide>
-                <MaskBannerIcon />
+                <MaskBannerIcon width={128} height={37} />
             </LeftSide>
             <RightContent>
                 <Container maxWidth="md">{children}</Container>

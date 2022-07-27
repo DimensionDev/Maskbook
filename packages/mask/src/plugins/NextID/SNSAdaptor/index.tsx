@@ -12,7 +12,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             label: 'Wallets',
             priority: 10,
             UI: {
-                TabContent: ({ persona }) => <NextIdPage persona={persona} />,
+                TabContent: ({ identity }) => <NextIdPage persona={identity?.publicKey} />,
             },
         },
     ],

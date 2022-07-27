@@ -223,12 +223,12 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
     async getEvents(address: string, tokenId: string, { indicator, size = 50 }: HubOptions<ChainId> = {}) {
         const activities = await fetchFromMagicEden<TokenActivity[]>(
             urlcat('/v2/tokens/:mint_address/activities', {
-                mint_address: tokenId,
+                mint_address: address,
                 offset: (indicator?.index ?? 0) * size,
                 limit: size,
             }),
         )
-        return (activities || []).map((activity) => {
+        const events = (activities || []).map((activity) => {
             return {
                 id: activity.signature,
                 chainId: ChainId.Mainnet,
@@ -245,28 +245,38 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                 type: '',
             }
         })
+        return createPageable(
+            events,
+            createIndicator(indicator),
+            events.length === size ? createNextIndicator(indicator) : undefined,
+        )
     }
 
-    async getOrders(_: string, mintAddress: string, side: OrderSide, { indicator, size }: HubOptions<ChainId> = {}) {
+    async getOrders(address: string, tokenId: string, side: OrderSide, { indicator, size }: HubOptions<ChainId> = {}) {
         const limit = size || 20
-        const offset = (indicator?.index ?? 0) * limit
         const offers = await fetchFromMagicEden<WalletOffer[]>(
             urlcat('/tokens/:mint_address/offer_received', {
-                mint_address: mintAddress,
+                mint_address: address,
                 side,
-                offset,
+                offset: (indicator?.index ?? 0) * limit,
                 limit,
             }),
         )
-        return (offers || []).map((offer) => {
+        const orders = (offers || []).map((offer) => {
             return {
                 id: offer.pdaAddress,
                 chainId: ChainId.Mainnet,
+                side,
                 quantity: '1',
                 // TODO's
                 assetPermalink: '',
             }
         })
+        return createPageable(
+            orders,
+            createIndicator(indicator),
+            orders.length === size ? createNextIndicator(indicator) : undefined,
+        )
     }
 
     async getCollections(symbol: string, { indicator, size }: HubOptions<ChainId> = {}) {

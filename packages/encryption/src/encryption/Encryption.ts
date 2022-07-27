@@ -143,7 +143,7 @@ async function e2e_v38(
         // v38 does not support ephemeral encryption.
         ephemeralPublicKey: new Map(),
         iv: postIV,
-        ownersAESKeyEncrypted: await io.encryptByLocalKey(await postKeyEncoded, postIV),
+        ownersAESKeyEncrypted: new Uint8Array(await io.encryptByLocalKey(await postKeyEncoded, postIV)),
     }
     return [encryption, ecdhResult]
 }

@@ -39,7 +39,6 @@
     "web3-eth": "1.7.4"
   },
   "devDependencies": {
-    "@types/json-stable-stringify": "^1.0.34",
-    "@types/lru-cache": "^7.10.10"
+    "@types/json-stable-stringify": "^1.0.34"
   }
 }

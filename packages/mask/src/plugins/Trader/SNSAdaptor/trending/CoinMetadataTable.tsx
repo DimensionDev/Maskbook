@@ -12,7 +12,7 @@ import {
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { DataProvider } from '@masknet/public-api'
-import { useI18N, useMenu } from '../../../../utils'
+import { useI18N } from '../../../../utils'
 import { ContractSection } from './ContractSection'
 import type { CommunityType } from '../../types'
 import {
@@ -29,7 +29,7 @@ import {
 import { upperFirst } from 'lodash-unified'
 import type { TrendingAPI } from '@masknet/web3-providers'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
-import { Linking } from '@masknet/shared'
+import { Linking, useMenuConfig } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -106,13 +106,15 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
               ]
             : []
 
-    const [menu, openMenu] = useMenu(
+    const [menu, openMenu] = useMenuConfig(
         contracts.map((x) => (
             <MenuItem key={x.chainId}>
                 <ContractSection address={x.address} chainId={x.chainId} iconURL={x.iconURL} />
             </MenuItem>
         )),
-        false,
+        {
+            anchorSibling: false,
+        },
     )
 
     return (

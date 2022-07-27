@@ -2,7 +2,7 @@ import { decode, encode } from '@msgpack/msgpack'
 import { createContainer, parseEncryptedJSONContainer, SupportedVersions } from '../container'
 import { BackupErrors } from '../BackupErrors'
 
-export async function encryptBackup(password: BufferSource, binaryBackup: Uint8Array) {
+export async function encryptBackup(password: BufferSource, binaryBackup: BufferSource) {
     const [pbkdf2IV, AESKey] = await createAESFromPassword(password)
     const AESParam: AesGcmParams = { name: 'AES-GCM', iv: crypto.getRandomValues(new Uint8Array(16)) }
 

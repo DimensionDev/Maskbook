@@ -34,8 +34,8 @@ const useStyles = makeStyles()((theme) => ({
         overflowY: 'auto',
     },
     icon: {
-        width: '48px',
-        height: '48px',
+        width: 48,
+        height: 48,
     },
     tokenName: {
         fontSize: '18px',

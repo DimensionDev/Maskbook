@@ -62,10 +62,10 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
             marginLeft: '12px !important',
         },
         recommendFeatureApplicationBox: {
-            width: 220,
-            minWidth: 220,
+            width: 221,
+            minWidth: 221,
             height: 97,
-            marginRight: 9,
+            marginRight: 9.5,
             cursor: 'pointer',
             display: 'inline-flex',
             flexDirection: 'row',

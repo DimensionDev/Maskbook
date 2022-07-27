@@ -8,13 +8,14 @@ import { Box, Button, Link, Skeleton, Stack, Typography } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { useAsync, useAsyncRetry } from 'react-use'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
-import { useNextIDConnectStatus } from '../../../components/DataSource/useNextID'
+import { useNextIDConnectStatus } from '../../../components/DataSource/useNextIDConnectStatus'
 import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
 import Services from '../../../extension/service'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { TAB_SELECTOR } from '../constants'
 import { useI18N } from '../locales'
 import { BindDialog } from './BindDialog'
+import type { LiveSelector } from '@dimensiondev/holoflows-kit'
+import { searchAllProfileTabSelector } from '../../../social-network-adaptor/twitter.com/utils/selector'
 
 const useStyles = makeStyles()((theme) => ({
     tip: {
@@ -117,6 +118,10 @@ const useStyles = makeStyles()((theme) => ({
 
 interface NextIdPageProps {
     persona?: string
+}
+
+export const TAB_SELECTOR: { [key: string]: LiveSelector<HTMLElement, true> } = {
+    twitter: searchAllProfileTabSelector(),
 }
 
 export function NextIdPage({ persona }: NextIdPageProps) {

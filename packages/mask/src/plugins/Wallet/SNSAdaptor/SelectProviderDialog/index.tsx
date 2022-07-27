@@ -15,7 +15,7 @@ import { useI18N } from '../../../../utils/i18n-next-ui'
 import { WalletMessages } from '../../messages'
 import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc'
 import { PluginProviderRender } from './PluginProviderRender'
-import { pluginIDSettings } from '../../../../settings/settings'
+import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings'
 import { getSiteType, isDashboardPage } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 

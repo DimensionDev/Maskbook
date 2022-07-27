@@ -3,7 +3,7 @@ import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Typography, styled, Portal } from '@mui/material'
 import classNames from 'classnames'
 import { PropsWithChildren, useRef, cloneElement, useEffect, ReactElement, useState } from 'react'
-import { sayHelloShowed, userGuideStatus, userGuideVersion } from '../../settings/settings'
+import { sayHelloShowed, userGuideStatus, userGuideVersion } from '../../../shared/legacy-settings/settings'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { useI18N } from '../../utils'
 

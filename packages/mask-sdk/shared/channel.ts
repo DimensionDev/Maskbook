@@ -10,11 +10,11 @@ export function createMaskSDKChannel(side: 'user' | 'content'): EventBasedChanne
             const f = (e: Event) => {
                 if (e instanceof CustomEvent) callback(e.detail)
             }
-            document.addEventListener(thisSide, f)
+            globalThis.addEventListener(thisSide, f)
             return () => document.removeEventListener(thisSide, f)
         },
         send(data) {
-            document.dispatchEvent(new CustomEvent(otherSide, { detail: data }))
+            globalThis.dispatchEvent(new CustomEvent(otherSide, { detail: data }))
         },
     }
 }

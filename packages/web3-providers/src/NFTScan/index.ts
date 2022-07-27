@@ -1,4 +1,5 @@
 import { DataProvider } from '@masknet/public-api'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 import {
@@ -10,7 +11,7 @@ import {
     NonFungibleAsset,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { ChainId, createContract, formatWeiToEther, getRPCConstants, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, createContract, getRPCConstants, SchemaType } from '@masknet/web3-shared-evm'
 import addSeconds from 'date-fns/addSeconds'
 import getUnixTime from 'date-fns/getUnixTime'
 import isBefore from 'date-fns/isBefore'
@@ -174,7 +175,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         const total = response.data.total
         const rest = total - ((indicator?.index ?? 0) + 1) * size
         return createPageable(
-            response.data.content.map(createERC721TokenAsset) ?? [],
+            response.data.content.map(createERC721TokenAsset) ?? EMPTY_LIST,
             createIndicator(indicator),
             rest > 0 ? createNextIndicator(indicator) : undefined,
         )
@@ -246,7 +247,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         })
         const response = await fetch(courier(url))
         const result: { data: SearchNFTPlatformNameResult[] } = await response.json()
-        return result.data ?? []
+        return result.data ?? EMPTY_LIST
     }
 
     private async getContractVolumeAndFloorByRange(contract: string, range: string): Promise<VolumeAndFloorRecord[]> {
@@ -256,11 +257,11 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         })
         const response = await fetch(courier(url))
         const result: { data: VolumeAndFloorRecord[] } = await response.json()
-        return result.data ?? []
+        return result.data ?? EMPTY_LIST
     }
 
     async getCoins(keyword: string, chainId = ChainId.Mainnet): Promise<TrendingAPI.Coin[]> {
-        if (!keyword) return []
+        if (!keyword) return EMPTY_LIST
         const nfts = await this.searchNftPlatformName(keyword)
 
         const coins = await Promise.all(
@@ -303,8 +304,8 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         }
         const [symbol, openseaStats, looksrareStats] = await Promise.all([
             getContractSymbol(id, chainId),
-            OpenSea.getCollectionStats(platformInfo.address).catch(() => null),
-            LooksRare.getCollectionStats(platformInfo.address).catch(() => null),
+            OpenSea.getStats(platformInfo.address).catch(() => null),
+            LooksRare.getStats(platformInfo.address).catch(() => null),
         ])
         const tickers: TrendingAPI.Ticker[] = compact([
             openseaStats
@@ -313,9 +314,9 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                       // TODO
                       trade_url: `https://opensea.io/assets/ethereum/${platformInfo.address}`,
                       market_name: NonFungibleMarketplace.OpenSea,
-                      volume_24h: openseaStats.one_day_volume,
-                      floor_price: openseaStats.floor_price,
-                      sales_24: openseaStats.one_day_sales,
+                      volume_24h: openseaStats.volume24h,
+                      floor_price: openseaStats.floorPrice,
+                      sales_24: openseaStats.count24h,
                   }
                 : null,
             looksrareStats
@@ -323,8 +324,8 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                       logo_url: LooksRareLogo,
                       trade_url: `https://looksrare.org/collections/${platformInfo.address}`,
                       market_name: NonFungibleMarketplace.LooksRare,
-                      volume_24h: formatWeiToEther(looksrareStats.volume24h).toNumber(),
-                      floor_price: formatWeiToEther(looksrareStats.floorPrice).toNumber(),
+                      volume_24h: looksrareStats.volume24h,
+                      floor_price: looksrareStats.floorPrice,
                       sales_24: looksrareStats.count24h,
                   }
                 : null,

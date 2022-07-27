@@ -117,10 +117,8 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
                         <Box className={classes.favorite}>
                             {contact.fingerprint ? (
                                 <StarIcon
-                                    sx={{
-                                        fill: contact.favorite ? MaskColorVar.warning : MaskColorVar.iconLight,
-                                        cursor: 'pointer',
-                                    }}
+                                    color={contact.favorite ? MaskColorVar.warning : MaskColorVar.iconLight}
+                                    style={{ cursor: 'pointer' }}
                                     onClick={handleClickStar}
                                 />
                             ) : null}

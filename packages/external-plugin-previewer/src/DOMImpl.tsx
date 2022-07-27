@@ -1,6 +1,4 @@
 import { setDOMImpl } from 'ef.js'
-import type {} from 'react/next'
-import type {} from 'react-dom/next'
 import { createReactRootShadowedPartial, ReactRootShadowed } from '@masknet/theme'
 import * as Components from './Components'
 import { RenderContext } from './RenderContext'

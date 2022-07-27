@@ -8,7 +8,7 @@ import { useThemeLanguage } from './useThemeLanguage'
 import { createSubscriptionFromValueRef } from '@masknet/shared-base'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { languageSettings } from '../../settings/settings'
+import { languageSettings } from '../../../shared/legacy-settings/settings'
 import produce, { setAutoFreeze } from 'immer'
 import { MaskColors, parseColor } from '@masknet/theme'
 

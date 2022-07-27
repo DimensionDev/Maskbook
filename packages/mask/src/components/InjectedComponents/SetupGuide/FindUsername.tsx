@@ -1,7 +1,7 @@
 import { WizardDialog, WizardDialogProps, useWizardDialogStyles } from './WizardDialog'
 import { useI18N } from '../../../utils'
 import { useState } from 'react'
-import { SetupGuideStep } from './types'
+import { SetupGuideStep } from '../../../../shared/legacy-settings/types'
 import { Box, Typography } from '@mui/material'
 import { MaskIcon } from '../../../resources/MaskIcon'
 import classNames from 'classnames'

@@ -105,7 +105,7 @@ class Connection implements EVM_Connection {
         private chainId: ChainId,
         private account: string,
         private providerType: ProviderType,
-        private context?: Plugin.Shared.SharedContext,
+        private context?: Plugin.Shared.SharedUIContext,
     ) {}
 
     // Hijack RPC requests and process them with koa like middleware
@@ -517,7 +517,7 @@ class Connection implements EVM_Connection {
         address: string,
         schema?: SchemaType,
         initial?: EVM_Web3ConnectionOptions,
-    ): Promise<NonFungibleTokenCollection<ChainId>> {
+    ): Promise<NonFungibleTokenCollection<ChainId, SchemaType>> {
         const options = this.getOptions(initial)
         const actualSchema = schema ?? (await this.getTokenSchema(address, options))
 
@@ -979,7 +979,7 @@ class Connection implements EVM_Connection {
  * @returns
  */
 export function createConnection(
-    context?: Plugin.Shared.SharedContext,
+    context?: Plugin.Shared.SharedUIContext,
     options?: {
         chainId?: ChainId
         account?: string
