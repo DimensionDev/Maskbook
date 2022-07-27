@@ -7,5 +7,13 @@
     "contribution": "Contribution",
     "contribution_other": "Contributions",
     "contributed": "contributed",
-    "to": "to"
+    "to": "to",
+    "feed": "feed",
+    "donation": "Donation",
+    "footprint": "Footprint",
+    "day": "day",
+    "hour": "hour",
+    "days": "days",
+    "hours": "hours",
+    "ago": "ago"
 }

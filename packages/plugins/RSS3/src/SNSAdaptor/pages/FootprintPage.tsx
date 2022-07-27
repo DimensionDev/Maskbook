@@ -5,6 +5,7 @@ import { Box } from '@mui/material'
 import { useState } from 'react'
 import { FootprintCard, StatusBox } from '../components'
 import { useRss3Profile } from '../hooks'
+import { useI18N } from '../../locales'
 
 export interface FootprintPageProps {
     footprints?: RSS3BaseAPI.Footprint[]
@@ -16,10 +17,12 @@ export function FootprintPage({ footprints = [], address, loading }: FootprintPa
     const { value: profile } = useRss3Profile(address.address || '')
     const username = profile?.name
 
+    const t = useI18N()
+
     const [selectedFootprint, setSelectedFootprint] = useState<RSS3BaseAPI.Footprint | undefined>()
 
     if (loading || !footprints.length) {
-        return <StatusBox loading={loading} collection="Footprint" empty={!footprints.length} />
+        return <StatusBox loading={loading} collection={t.footprint()} empty={!footprints.length} />
     }
 
     return (

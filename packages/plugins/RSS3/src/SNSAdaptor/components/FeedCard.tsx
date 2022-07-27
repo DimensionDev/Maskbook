@@ -2,14 +2,13 @@ import { NFTCardStyledAssetPlayer, TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Alchemy_EVM, RSS3BaseAPI } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { resolveIPFSLinkFromURL, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { ChainId, resolveIPFSLinkFromURL, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Box, Typography, Card } from '@mui/material'
 import differenceInCalendarDays from 'date-fns/differenceInDays'
 import differenceInCalendarHours from 'date-fns/differenceInHours'
 import { useMemo } from 'react'
-import { ChainID } from '../constants'
 import { ReversedAddress } from './ReversedAddress'
-import { useI18N } from '../locales'
+import { useI18N } from '../../locales'
 import { useAsyncRetry } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
@@ -57,6 +56,12 @@ const useStyles = makeStyles()((theme) => ({
         height: 64,
     },
 }))
+
+export const ChainID = {
+    ethereum: ChainId.Mainnet,
+    polygon: ChainId.Matic,
+    bnb: ChainId.BSC,
+}
 
 export interface FeedCardProps {
     feed: RSS3BaseAPI.Web3Feed
@@ -174,8 +179,8 @@ export function FeedCard({ feed, address, onSelect }: FeedCardProps) {
         const days = differenceInCalendarDays(new Date(), new Date(feed.date_updated))
         const hours = differenceInCalendarHours(new Date(), new Date(feed.date_updated))
         return [
-            days > 0 ? `${days} ${t.day({ count: days })} ` : '',
-            hours > 0 ? `${hours} ${t.day({ count: hours })} ` : '',
+            days > 0 ? `${days} ${days > 1 ? t.days() : t.day()} ` : '',
+            hours > 0 ? `${hours} ${hours > 1 ? t.hours() : t.hour()} ` : '',
             t.ago(),
         ].join('')
     }, [feed.date_updated, t])

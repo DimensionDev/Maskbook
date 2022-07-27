@@ -41,6 +41,19 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 shouldDisplay,
             },
         },
+        {
+            ID: `${PLUGIN_ID}_feed`,
+            label: 'Feed',
+            priority: 3,
+            UI: {
+                TabContent: ({ socialAddress, persona }) => {
+                    return <TabCard socialAddress={socialAddress} type={TabCardType.Feed} persona={persona} />
+                },
+            },
+            Utils: {
+                shouldDisplay,
+            },
+        },
     ],
 }
 

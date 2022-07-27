@@ -3,15 +3,16 @@ import { RSS3, RSS3BaseAPI } from '@masknet/web3-providers'
 import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
 import { useState } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { FeedCard } from './FeedCard'
-import { StatusBox } from './StatusBox'
+import { FeedCard } from '../components/FeedCard'
+import { StatusBox } from '../components/StatusBox'
+import { useI18N } from '../../locales'
 
-export interface Web3FeedPageProps {
-    persona?: string
+export interface FeedPageProps {
     socialAddress?: SocialAddress<NetworkPluginID>
 }
 
-export function Web3FeedPage({ socialAddress, persona }: Web3FeedPageProps) {
+export function FeedPage({ socialAddress }: FeedPageProps) {
+    const t = useI18N()
     const [selectedFeed, setSelectedFeed] = useState<RSS3BaseAPI.Web3Feed>()
     const { value: feed, loading } = useAsyncRetry(async () => {
         if (!socialAddress?.address) return
@@ -20,7 +21,7 @@ export function Web3FeedPage({ socialAddress, persona }: Web3FeedPageProps) {
 
     if (!socialAddress) return null
     if (loading || !feed?.list?.length) {
-        return <StatusBox loading={loading} empty={!feed?.list?.length} />
+        return <StatusBox loading={loading} collection={t.feed()} empty={!feed?.list?.length} />
     }
 
     return (

@@ -7,10 +7,13 @@ import { useCurrentVisitingProfile } from './hooks/useContext'
 import { CollectionType, KVType } from '../types'
 import { useKV } from './hooks/useKV'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
+import { FeedPage } from './pages/FeedPage'
+import { useMemo } from 'react'
 
 export enum TabCardType {
     Donation = 1,
     Footprint = 2,
+    Feed = 3,
 }
 
 export interface TabCardProps {
@@ -44,21 +47,33 @@ export function TabCard({ type, socialAddress, persona }: TabCardProps) {
         socialAddress,
     )
 
+    const page = useMemo(() => {
+        if (!socialAddress) return null
+        if (type === TabCardType.Donation) {
+            return (
+                <DonationPage
+                    donations={unHiddenDonations as RSS3BaseAPI.Donation[]}
+                    loading={loadingDonations}
+                    address={socialAddress}
+                />
+            )
+        }
+        if (type === TabCardType.Footprint) {
+            return (
+                <FootprintPage
+                    address={socialAddress}
+                    loading={loadingFootprints}
+                    footprints={unHiddenFootprints as RSS3BaseAPI.Footprint[]}
+                />
+            )
+        }
+        if (type === TabCardType.Feed) {
+            return <FeedPage socialAddress={socialAddress} />
+        }
+        return null
+    }, [type, socialAddress, persona])
+
     if (!socialAddress) return null
 
-    const isDonation = type === TabCardType.Donation
-
-    return isDonation ? (
-        <DonationPage
-            donations={unHiddenDonations as RSS3BaseAPI.Donation[]}
-            loading={loadingDonations}
-            address={socialAddress}
-        />
-    ) : (
-        <FootprintPage
-            address={socialAddress}
-            loading={loadingFootprints}
-            footprints={unHiddenFootprints as RSS3BaseAPI.Footprint[]}
-        />
-    )
+    return page
 }
