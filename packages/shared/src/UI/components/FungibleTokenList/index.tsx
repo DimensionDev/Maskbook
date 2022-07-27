@@ -30,7 +30,6 @@ import {
 import { getFungibleTokenItem } from './FungibleTokenItem'
 import { ManageTokenListBar } from './ManageTokenListBar'
 import { TokenListMode } from './type'
-import { EmptyResult } from './EmptyResult'
 
 const DEFAULT_LIST_HEIGHT = 300
 const SEARCH_KEYS = ['address', 'symbol', 'name']
@@ -211,11 +210,12 @@ export const FungibleTokenList = forwardRef(
         const [keyword, setKeyword] = useState('')
 
         const searchedTokenAddress = useMemo(() => {
+            if (mode === TokenListMode.Manage) return ''
             return Others?.isValidAddress(keyword) &&
                 !sortedFungibleTokens.some((x) => isSameAddress(x.address, keyword))
                 ? keyword
                 : ''
-        }, [keyword, sortedFungibleTokens, Others])
+        }, [keyword, sortedFungibleTokens, Others, mode])
 
         const { value: searchedToken, loading: searchingToken } = useFungibleToken(pluginID, searchedTokenAddress, {
             chainId,
@@ -223,20 +223,15 @@ export const FungibleTokenList = forwardRef(
         // #endregion
 
         const getPlaceholder = () => {
-            // Search token which in list, and result is empty
-            if (
-                Object.keys(fungibleTokensBalance).length === 0 &&
-                keyword &&
-                !isSameAddress(searchedToken?.address, searchedTokenAddress) &&
-                !searchingToken
-            )
-                return <Content height={FixedSizeListProps?.height} message={<EmptyResult />} />
-
             // Add token in dashboard, includeTokens is empty
             if (Object.keys(fungibleTokensBalance).length === 0 && includeTokens?.length === 0 && !searchedToken)
                 return null
 
-            if ((Object.keys(fungibleTokensBalance).length === 0 || loadingFungibleTokensBalance) && !searchedToken)
+            if (
+                (Object.keys(fungibleTokensBalance).length === 0 || loadingFungibleTokensBalance) &&
+                !searchedToken &&
+                !keyword
+            )
                 return <Content height={FixedSizeListProps?.height} message={t.erc20_token_list_loading()} />
 
             if (searchingToken)
@@ -244,6 +239,10 @@ export const FungibleTokenList = forwardRef(
 
             if (searchedTokenAddress && !searchedToken)
                 return <Content height={FixedSizeListProps?.height} message={t.erc20_search_not_token_found()} />
+
+            // Search token which in list, and result is empty
+            // if (keyword && !isSameAddress(searchedToken?.address, searchedTokenAddress) && !searchingToken)
+            //     return <Content height={FixedSizeListProps?.height} message={<EmptyResult />} />
             return null
         }
 
@@ -282,9 +281,10 @@ export const FungibleTokenList = forwardRef(
                                 Web3Helper.Definition[T]['ChainId'],
                                 Web3Helper.Definition[T]['SchemaType']
                             >,
+                            strategy: 'add' | 'remove',
                         ) => {
-                            await Token?.addToken?.(token)
-                            await Token?.trustToken?.(account, token)
+                            if (strategy === 'add') await Token?.addToken?.(token)
+                            if (strategy === 'remove') await Token?.removeToken?.(token)
                         },
                         (address) => !!blockedFungibleTokens?.find((x) => isSameAddress(x.address, address)),
                     )}

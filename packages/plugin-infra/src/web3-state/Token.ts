@@ -76,6 +76,7 @@ export class TokenState<ChainId, SchemaType> implements Web3TokenState<ChainId, 
         }
     }
 
+    // add or remove by contract address from user
     private async addOrRemoveToken(token: Token<ChainId, SchemaType>, strategy: 'add' | 'remove') {
         if (!this.options.isValidAddress(token.address)) throw new Error('Not a valid token.')
 
@@ -104,6 +105,7 @@ export class TokenState<ChainId, SchemaType> implements Web3TokenState<ChainId, 
         }
     }
 
+    // trust or block exist token in token list
     private async blockOrUnblockToken(address: string, token: Token<ChainId, SchemaType>, strategy: 'trust' | 'block') {
         if (!this.options.isValidAddress(token.address)) throw new Error('Not a valid token.')
 

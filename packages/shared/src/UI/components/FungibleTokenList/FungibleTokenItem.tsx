@@ -83,8 +83,9 @@ export const getFungibleTokenItem =
         isSelected: (address: string) => boolean,
         isLoading: (address: string) => boolean,
         mode: TokenListMode,
-        importToken: (
+        addOrRemoveTokenToLocal: (
             token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
+            strategy: 'add' | 'remove',
         ) => Promise<void>,
         isBlocked: (address: string) => boolean,
     ) =>
@@ -110,12 +111,12 @@ export const getFungibleTokenItem =
             }
         }, [address, getSource, getBalance, isSelected, isLoading])
 
-        const onImport = useCallback(
-            async (event: React.MouseEvent<HTMLButtonElement>) => {
+        const onAddOrRemoveTokenToLocal = useCallback(
+            async (event: React.MouseEvent<HTMLButtonElement | HTMLElement>, strategy: 'add' | 'remove') => {
                 event.stopPropagation()
-                if (token) importToken(token)
+                if (token) addOrRemoveTokenToLocal(token, strategy)
             },
-            [token, importToken],
+            [token, addOrRemoveTokenToLocal],
         )
 
         const handleTokenSelect = (e: React.MouseEvent<HTMLElement>) => {
@@ -129,7 +130,8 @@ export const getFungibleTokenItem =
 
         const action = useMemo(() => {
             if (mode === TokenListMode.Manage) {
-                if (source === 'personal') return <TrashLineIcon size={24} />
+                if (source === 'personal')
+                    return <TrashLineIcon onClick={(e) => onAddOrRemoveTokenToLocal(e, 'remove')} size={24} />
                 return (
                     <SettingSwitch
                         classes={{ root: classes.switch }}
@@ -156,7 +158,7 @@ export const getFungibleTokenItem =
                 <MaskLoadingButton
                     variant="contained"
                     color="primary"
-                    onClick={onImport}
+                    onClick={(e) => onAddOrRemoveTokenToLocal(e, 'add')}
                     size="small"
                     className={classes.importButton}
                     soloLoading

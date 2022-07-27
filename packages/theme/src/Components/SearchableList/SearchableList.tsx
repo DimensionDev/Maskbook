@@ -2,11 +2,12 @@ import { ReactNode, useMemo, useState } from 'react'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-unified'
-import { Box, InputAdornment } from '@mui/material'
+import { Box, InputAdornment, Stack } from '@mui/material'
 import { makeStyles } from '../../UIHelper/makeStyles'
 import { MaskSearchableItemInList } from './MaskSearchableItemInList'
 import { MaskTextField, MaskTextFieldProps } from '../TextField'
 import { Icons } from '@masknet/icons'
+import { EmptyResult } from './EmptyResult'
 
 export interface MaskSearchableListProps<T> {
     /** The list data should be render */
@@ -114,7 +115,12 @@ export function SearchableList<T extends {}>({
                 </Box>
             )}
             {placeholder}
-            {!placeholder && (
+            {!placeholder && readyToRenderData.length === 0 && (
+                <Stack height={height ?? 300} justifyContent="center" alignContent="center" marginTop="12px">
+                    <EmptyResult />
+                </Stack>
+            )}
+            {!placeholder && readyToRenderData.length !== 0 && (
                 <div className={classes.listBox}>
                     <FixedSizeList
                         className={classes.list}
