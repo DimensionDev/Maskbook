@@ -3,7 +3,7 @@ import * as Web3 from '@solana/web3.js'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '../types'
-import { getTokenConstants, ZERO_ADDRESS } from '../constants'
+import { getTokenConstant, ZERO_ADDRESS } from '../constants'
 
 export function encodePublicKey(key: Web3.PublicKey) {
     return key.toBase58()
@@ -42,5 +42,5 @@ export function isZeroAddress(chainId?: ChainId, address?: string) {
 }
 
 export function isNativeTokenAddress(chainId?: ChainId, address?: string) {
-    return isSameAddress(address, getTokenConstants(chainId)?.SOL_ADDRESS)
+    return isSameAddress(address, getTokenConstant(chainId ?? ChainId.Mainnet, 'SOL_ADDRESS'))
 }

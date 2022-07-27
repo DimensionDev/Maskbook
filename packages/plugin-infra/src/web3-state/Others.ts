@@ -42,19 +42,19 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transac
     providerResolver = createProviderResolver<ChainId, ProviderType>(this.options.providerDescriptors)
     networkResolver = createNetworkResolver<ChainId, NetworkType>(this.options.networkDescriptors)
 
-    getZeroAddress(chainId?: ChainId | undefined): string {
+    getZeroAddress(chainId?: ChainId): string {
         return this.options.defaultAddress
     }
-    getNativeTokenAddress(chainId?: ChainId | undefined): string {
+    getNativeTokenAddress(chainId?: ChainId): string {
         return this.options.defaultAddress
     }
-    getMaskTokenAddress(chainId?: ChainId | undefined): string | undefined {
+    getMaskTokenAddress(chainId?: ChainId): string | undefined {
         return undefined
     }
     getAverageBlockDelay(chainId: ChainId, scale = 1): number {
         return this.options.defaultBlockDelay * scale * 1000
     }
-    getTransactionSignature(chainId?: ChainId | undefined, transaction?: Transaction | undefined): string | undefined {
+    getTransactionSignature(chainId?: ChainId, transaction?: Transaction | undefined): string | undefined {
         return
     }
 

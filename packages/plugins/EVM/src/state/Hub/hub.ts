@@ -47,7 +47,7 @@ import {
     formatEthereumAddress,
     getCoinGeckoConstants,
     getTokenAssetBaseURLConstants,
-    getTokenConstants,
+    getTokenConstant,
     getTokenListConstants,
     SchemaType,
     isNativeTokenAddress,
@@ -196,7 +196,7 @@ class Hub implements EVM_Hub {
         const { TOKEN_ASSET_BASE_URI = EMPTY_LIST } = getTokenAssetBaseURLConstants(options.chainId)
         const checkSummedAddress = formatEthereumAddress(address)
 
-        if (isSameAddress(getTokenConstants(options.chainId).NATIVE_TOKEN_ADDRESS, checkSummedAddress)) {
+        if (isSameAddress(getTokenConstant(options.chainId, 'NATIVE_TOKEN_ADDRESS'), checkSummedAddress)) {
             return TOKEN_ASSET_BASE_URI.map((x) => `${x}/info/logo.png`)
         }
 

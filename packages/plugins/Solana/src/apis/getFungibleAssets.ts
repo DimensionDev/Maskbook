@@ -10,7 +10,7 @@ import {
     Pageable,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { ChainId, getTokenConstants, SchemaType } from '@masknet/web3-shared-solana'
+import { ChainId, getTokenConstant, SchemaType } from '@masknet/web3-shared-solana'
 import { createFungibleAsset, createFungibleToken } from '../helpers'
 import {
     GetAccountInfoResponse,
@@ -21,7 +21,7 @@ import {
 } from './shared'
 
 export async function getSolAsset(chainId: ChainId, account: string) {
-    const { SOL_ADDRESS = '' } = getTokenConstants(chainId)
+    const SOL_ADDRESS = getTokenConstant(chainId, 'SOL_ADDRESS', '')!
 
     const priceData = await CoinGecko.getTokensPrice(['solana'])
     const price = priceData.solana
@@ -52,10 +52,10 @@ const fetchTokenList = memoizePromise(
     async (url: string): Promise<Array<FungibleToken<ChainId, SchemaType>>> => {
         const response = await fetch(url, { cache: 'force-cache' })
         const tokenList = (await response.json()) as RaydiumTokenList
-        const SOL_ADDRESS = getTokenConstants(ChainId.Mainnet).SOL_ADDRESS!
+        const SOL_ADDRESS = getTokenConstant(ChainId.Mainnet, 'SOL_ADDRESS')!
         const tokens: Array<FungibleToken<ChainId, SchemaType>> = [...tokenList.official, ...tokenList.unOfficial].map(
             (token) => {
-                const address = token.mint === FAKE_SOL_ADDRESS ? SOL_ADDRESS : token.mint
+                const address = isSameAddress(token.mint, FAKE_SOL_ADDRESS) ? SOL_ADDRESS : token.mint
                 return {
                     id: address,
                     chainId: ChainId.Mainnet,

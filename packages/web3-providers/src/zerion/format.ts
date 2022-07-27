@@ -10,8 +10,8 @@ import {
 import {
     ChainId,
     NetworkType,
-    getTokenConstants,
-    getZerionConstants,
+    getTokenConstant,
+    getZerionConstant,
     SchemaType,
     networkResolver,
     formatEthereumAddress,
@@ -28,7 +28,7 @@ import {
 } from './type'
 
 export function resolveZerionAssetsScopeName(networkType: NetworkType) {
-    return getZerionConstants(networkResolver.networkChainId(networkType)).ASSETS_SCOPE_NAME ?? ''
+    return getZerionConstant(networkResolver.networkChainId(networkType) ?? ChainId.Mainnet, 'ASSETS_SCOPE_NAME', '')!
 }
 
 export const resolveChainByScope = createLookupTableResolver<
@@ -65,7 +65,9 @@ export function formatAssets(
         const balance = leftShift(quantity, asset.decimals).toNumber()
         const value = (asset as ZerionAsset).price?.value ?? (asset as ZerionCovalentAsset).value ?? 0
         const isNativeToken = (symbol: string) => ['ETH', 'BNB', 'MATIC', 'ARETH', 'AETH', 'ONE'].includes(symbol)
-        const address = isNativeToken(asset.symbol) ? getTokenConstants().NATIVE_TOKEN_ADDRESS ?? '' : asset.asset_code
+        const address = isNativeToken(asset.symbol)
+            ? getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS', '')!
+            : asset.asset_code
 
         return {
             id: address,

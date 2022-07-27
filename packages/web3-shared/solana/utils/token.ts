@@ -1,12 +1,12 @@
 import { createFungibleToken } from '@masknet/web3-shared-base'
-import { getTokenConstants, ZERO_ADDRESS } from '../constants'
+import { getTokenConstant, ZERO_ADDRESS } from '../constants'
 import { ChainId, SchemaType } from '../types'
 
 export function createNativeToken(chainId: ChainId) {
     return createFungibleToken<ChainId, SchemaType.Native>(
         chainId,
         SchemaType.Native,
-        getTokenConstants(chainId).SOL_ADDRESS ?? ZERO_ADDRESS,
+        getTokenConstant(chainId, 'SOL_ADDRESS', ZERO_ADDRESS)!,
         'Solana',
         'SOL',
         9,

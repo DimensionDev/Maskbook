@@ -1,6 +1,6 @@
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { getTokenConstants, ZERO_ADDRESS } from '../constants'
-import type { ChainId } from '../types'
+import { getTokenConstant, ZERO_ADDRESS } from '../constants'
+import { ChainId } from '../types'
 
 export function formatDomainName(domain?: string, size?: number) {
     return domain ?? ''
@@ -15,5 +15,5 @@ export function isZeroAddress(chainId?: ChainId, address?: string) {
 }
 
 export function isNativeTokenAddress(chainId?: ChainId, address?: string) {
-    return isSameAddress(address, getTokenConstants(chainId).FLOW_ADDRESS)
+    return isSameAddress(address, getTokenConstant(chainId ?? ChainId.Mainnet, 'FLOW_ADDRESS'))
 }

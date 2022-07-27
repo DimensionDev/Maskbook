@@ -1,7 +1,7 @@
 import { EthereumAddress } from 'wallet.ts'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { getRedPacketConstants, getTokenConstants, ZERO_ADDRESS } from '../constants'
+import { getRedPacketConstants, getTokenConstant, ZERO_ADDRESS } from '../constants'
 import { ChainId } from '../types'
 
 export function isEmptyHex(hex?: string) {
@@ -22,7 +22,7 @@ export function isZeroAddress(chainId: ChainId, address?: string) {
 }
 
 export function isNativeTokenAddress(chainId: ChainId, address?: string) {
-    return isSameAddress(address, getTokenConstants(chainId).NATIVE_TOKEN_ADDRESS)
+    return isSameAddress(address, getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS'))
 }
 
 export function isRedPacketAddress(address: string, version?: 1 | 2 | 3 | 4) {
@@ -53,5 +53,5 @@ export function isRedPacketAddress(address: string, version?: 1 | 2 | 3 | 4) {
 }
 
 export function getMaskTokenAddress(chainId: ChainId) {
-    return getTokenConstants(chainId).MASK_ADDRESS
+    return getTokenConstant(chainId, 'MASK_ADDRESS')
 }

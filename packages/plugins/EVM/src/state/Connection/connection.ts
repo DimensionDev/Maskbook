@@ -25,13 +25,13 @@ import {
     TransactionDetailed,
     createNativeToken,
     createContract,
-    getTokenConstants,
+    getTokenConstant,
     sendTransaction,
     createERC20Token,
     parseStringOrBytes32,
     createWeb3,
     createWeb3Provider,
-    getEthereumConstants,
+    getEthereumConstant,
     isValidAddress,
     resolveIPFSLinkFromURL,
     encodeTransaction,
@@ -84,7 +84,7 @@ export function isReadOnlyMethod(method: EthereumMethodType) {
 
 function isNativeTokenAddress(chainId: ChainId, address: string) {
     if (!address) return false
-    return isSameAddress(address, getTokenConstants(chainId).NATIVE_TOKEN_ADDRESS)
+    return isSameAddress(address, getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS'))
 }
 
 async function fetchJSON<T extends unknown>(
@@ -577,8 +577,8 @@ class Connection implements EVM_Connection {
         if (!listOfAddress.length) return {}
 
         const options = this.getOptions(initial)
-        const { NATIVE_TOKEN_ADDRESS = '' } = getTokenConstants(options.chainId)
-        const { BALANCE_CHECKER_ADDRESS } = getEthereumConstants(options.chainId)
+        const NATIVE_TOKEN_ADDRESS = getTokenConstant(options.chainId, 'NATIVE_TOKEN_ADDRESS', '')!
+        const BALANCE_CHECKER_ADDRESS = getEthereumConstant(options.chainId, 'BALANCE_CHECKER_ADDRESS')
         const entities: Array<[string, string]> = []
 
         if (listOfAddress.some(currySameAddress(NATIVE_TOKEN_ADDRESS))) {
@@ -613,7 +613,7 @@ class Connection implements EVM_Connection {
         if (!listOfAddress.length) return {}
 
         const options = this.getOptions(initial)
-        const { BALANCE_CHECKER_ADDRESS } = getEthereumConstants(options.chainId)
+        const BALANCE_CHECKER_ADDRESS = getEthereumConstant(options.chainId, 'BALANCE_CHECKER_ADDRESS')
         const contract = await this.getWeb3Contract<BalanceChecker>(
             BALANCE_CHECKER_ADDRESS ?? '',
             BalanceCheckerABI as AbiItem[],

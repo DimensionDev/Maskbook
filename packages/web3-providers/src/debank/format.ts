@@ -4,7 +4,7 @@ import {
     chainResolver,
     createNativeToken,
     formatEthereumAddress,
-    getTokenConstants,
+    getTokenConstant,
     SchemaType,
 } from '@masknet/web3-shared-evm'
 import {
@@ -20,8 +20,8 @@ import {
 import DeBank from '@masknet/web3-constants/evm/debank.json'
 import { DebankTransactionDirection, HistoryResponse, WalletTokenRecord } from './type'
 
-export function formatAssets(data: WalletTokenRecord[], chainId?: ChainId): Array<FungibleAsset<ChainId, SchemaType>> {
-    const { NATIVE_TOKEN_ADDRESS } = getTokenConstants(chainId)
+export function formatAssets(chainId: ChainId, data: WalletTokenRecord[]): Array<FungibleAsset<ChainId, SchemaType>> {
+    const NATIVE_TOKEN_ADDRESS = getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS')
     const supportedChains = Object.values({ ...DeBank.CHAIN_ID, BSC: 'bnb' }).filter(Boolean)
 
     return data

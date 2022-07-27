@@ -1,9 +1,9 @@
+import { getEnumAsArray } from '@dimensiondev/kit'
 import { createFungibleToken, createFungibleTokensFromConstants } from '@masknet/web3-shared-base'
 import Token from '@masknet/web3-constants/evm/token.json'
-import { chainResolver } from '.'
-import { CHAIN_DESCRIPTORS, getTokenConstants, ZERO_ADDRESS } from '../constants'
+import { chainResolver } from './resolver'
+import { CHAIN_DESCRIPTORS, getTokenConstant, ZERO_ADDRESS } from '../constants'
 import { ChainId, SchemaType } from '../types'
-import { getEnumAsArray } from '@dimensiondev/kit'
 
 export function isNativeTokenSymbol(symbol: string) {
     return CHAIN_DESCRIPTORS.filter((x) => x.network === 'mainnet' && x.nativeCurrency)
@@ -16,7 +16,7 @@ export function createNativeToken(chainId: ChainId) {
     return createFungibleToken<ChainId, SchemaType.Native>(
         chainId,
         SchemaType.Native,
-        getTokenConstants(chainId).NATIVE_TOKEN_ADDRESS ?? ZERO_ADDRESS,
+        getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS', ZERO_ADDRESS)!,
         nativeCurrency?.name ?? 'Ether',
         nativeCurrency?.symbol ?? 'ETH',
         nativeCurrency?.decimals ?? 18,

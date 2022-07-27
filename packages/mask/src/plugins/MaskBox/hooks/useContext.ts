@@ -86,7 +86,8 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
         loading: loadingBoxInfo,
         retry: retryBoxInfo,
     } = useAsyncRetry<BoxInfo | null>(async () => {
-        if (!maskBoxInfo || !maskBoxStatus || isZeroAddress(chainId, maskBoxInfo?.creator)) return null
+        if (!maskBoxInfo || !maskBoxStatus || !maskBoxInfo?.creator || isZeroAddress(chainId, maskBoxInfo?.creator))
+            return null
         const personalLimit = Number.parseInt(maskBoxInfo.personal_limit, 10)
         const remaining = Number.parseInt(maskBoxStatus.remaining, 10) // the current balance of the creator's account
         const total = Number.parseInt(maskBoxStatus.total, 10) // the total amount of tokens in the box
