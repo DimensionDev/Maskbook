@@ -161,18 +161,6 @@ async function generateIcons() {
             original: voidMapping,
             source: 'null',
         })
-
-        attachJSDoc(jsdoc, asJSX.dts)
-        asJSX.dtsMap.addMapping({
-            generated: { line: asJSX.dts.length, column: exportConst },
-            original: voidMapping,
-            source: variant[0].assetPath,
-        })
-        asJSX.dtsMap.addMapping({
-            generated: { line: asJSX.dts.length, column: exportConst + Ident.length + 4 },
-            original: voidMapping,
-            source: 'null',
-        })
     }
     asURL.dts.push(SOURCEMAP_HEAD + 'icon-generated-as-url.d.ts.map')
     asJSX.dts.push(SOURCEMAP_HEAD + 'icon-generated-as-jsx.d.ts.map')
