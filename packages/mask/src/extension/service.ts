@@ -28,6 +28,7 @@ const message = new WebExtensionMessage<Record<string, any>>({ domain: 'services
 const log: AsyncCallOptions['log'] = {
     type: 'pretty',
     requestReplay: process.env.NODE_ENV === 'development',
+    sendLocalStack: process.env.NODE_ENV === 'development',
 }
 
 export const Services = {

@@ -52,6 +52,6 @@ function __validateRemoteContext() {
 let isContextDisconnected = false
 function onContextDisconnected() {
     isContextDisconnected = true
-    document.dispatchEvent(new Event('mask-sdk-disconnected'))
+    globalThis.dispatchEvent(new Event('mask-sdk-disconnected'))
     return new Error(SDKErrors.M2_Context_disconnected)
 }
