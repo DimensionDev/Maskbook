@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from 'react'
+import { memo, ReactNode, useMemo, useState } from 'react'
 import { uniqBy } from 'lodash-unified'
 import { EMPTY_LIST, EMPTY_OBJECT } from '@masknet/shared-base'
 import { makeStyles, MaskFixedSizeListProps, MaskTextFieldProps, SearchableList } from '@masknet/theme'
@@ -30,6 +30,7 @@ import {
 import { getFungibleTokenItem } from './FungibleTokenItem'
 import { ManageTokenListBar } from './ManageTokenListBar'
 import { TokenListMode } from './type'
+import { EmptyResult } from './EmptyResult'
 
 const DEFAULT_LIST_HEIGHT = 300
 const SEARCH_KEYS = ['address', 'symbol', 'name']
@@ -61,7 +62,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const Placeholder = memo(({ message, height }: { message: string; height?: number | string }) => (
+const Content = memo(({ message, height }: { message: ReactNode; height?: number | string }) => (
     <Stack minHeight={height ?? DEFAULT_LIST_HEIGHT} justifyContent="center" alignContent="center" marginTop="12px">
         <Typography color="textSecondary" textAlign="center">
             {message}
@@ -204,14 +205,22 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     // #endregion
 
     const getPlaceholder = () => {
+        // Search token which in list, and result is empty
+        if (keyword && !isSameAddress(searchedToken?.address, searchedTokenAddress) && !searchingToken)
+            return <Content height={FixedSizeListProps?.height} message={<EmptyResult />} />
+
+        // Add token in dashboard, includeTokens is empty
         if (Object.keys(fungibleTokensBalance).length === 0 && includeTokens?.length === 0 && !searchedToken)
             return null
+
         if ((Object.keys(fungibleTokensBalance).length === 0 || loadingFungibleTokensBalance) && !searchedToken)
-            return <Placeholder height={FixedSizeListProps?.height} message={t.erc20_token_list_loading()} />
+            return <Content height={FixedSizeListProps?.height} message={t.erc20_token_list_loading()} />
+
         if (searchingToken)
-            return <Placeholder height={FixedSizeListProps?.height} message={t.erc20_search_token_loading()} />
+            return <Content height={FixedSizeListProps?.height} message={t.erc20_search_token_loading()} />
+
         if (searchedTokenAddress && !searchedToken)
-            return <Placeholder height={FixedSizeListProps?.height} message={t.erc20_search_not_token_found()} />
+            return <Content height={FixedSizeListProps?.height} message={t.erc20_search_not_token_found()} />
         return null
     }
 
