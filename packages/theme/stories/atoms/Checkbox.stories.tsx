@@ -1,4 +1,4 @@
-import { Checkbox as MuiCheckbox, FormControlLabel, FormControlLabelProps } from '@mui/material'
+import { FormControlLabel, FormControlLabelProps, Checkbox as MuiCheckbox } from '@mui/material'
 import { story } from '../utils'
 
 function C(props: FormControlLabelProps) {

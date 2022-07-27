@@ -117,13 +117,14 @@ export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect, r
             />
             {NFTNameBar}
             <Box className={classes.checkbox}>
+                {/* TODO: replace to mask checkbox component */}
                 <Checkbox
                     defaultChecked={selectedTokenId === token.tokenId}
                     value={checked}
                     size="small"
                     disabled={isDisabled}
                     icon={<CheckboxBorder size={18} color="#D0D4DD" />}
-                    checkedIcon={<CheckBoxIcon size={18} />}
+                    checkedIcon={<CheckBoxIcon style={{ fill: '#1C68F3' }} size={18} />}
                     onChange={(e) => {
                         const value = e.target.checked
                         onSelect(value ? token.tokenId : '')

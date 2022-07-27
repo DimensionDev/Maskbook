@@ -1,6 +1,5 @@
-import { RadioButtonUnChecked, RadioButtonChecked } from '@masknet/icons'
-import type { PaletteMode, ThemeOptions } from '@mui/material'
-import { alpha, buttonClasses, radioClasses } from '@mui/material'
+import { RadioButtonUnChecked, RadioButtonChecked, CheckboxBlank, Checkbox as CheckboxIcon } from '@masknet/icons'
+import { alpha, buttonClasses, radioClasses, checkboxClasses, PaletteMode, ThemeOptions } from '@mui/material'
 import type { MaskColor } from './colors'
 
 export const Button = (mode: PaletteMode, colors: MaskColor): ThemeOptions => ({
@@ -661,6 +660,36 @@ export const Radio = (mode: PaletteMode, colors: MaskColor): ThemeOptions => ({
                         '& circle': {
                             fill: `${colors.maskColor.bg} !important`,
                         },
+                    },
+                },
+            },
+        },
+    },
+})
+
+export const Checkbox = (mode: PaletteMode, colors: MaskColor) => ({
+    components: {
+        MuiCheckbox: {
+            defaultProps: {
+                size: 'medium',
+                checkedIcon: <CheckboxIcon />,
+                icon: <CheckboxBlank />,
+                disableRipple: true,
+            },
+            styleOverrides: {
+                root: {
+                    color: colors.maskColor.secondaryLine,
+                    [`&.${checkboxClasses.checked} svg`]: {
+                        filter: 'drop-shadow(0px 4px 10px rgba(28, 104, 243, 0.2))',
+                    },
+                    [`&.${checkboxClasses.disabled} svg`]: {
+                        color: colors.maskColor.secondaryLine,
+                        fill: colors.maskColor.bg,
+                    },
+                    [`&.${checkboxClasses.checked}.${checkboxClasses.disabled} svg`]: {
+                        filter: 'none',
+                        fill: colors.maskColor.secondaryMain,
+                        color: colors.maskColor.secondaryMain,
                     },
                 },
             },
