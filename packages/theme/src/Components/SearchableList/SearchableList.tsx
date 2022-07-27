@@ -153,6 +153,11 @@ const useStyles = makeStyles()((theme) => ({
             backgroundColor: theme.palette.maskColor.secondaryLine,
             backgroundClip: 'padding-box',
         },
+        '& > div > div': {
+            position: 'relative',
+            width: 'calc(100% - 32px) !important',
+            margin: 'auto',
+        },
     },
     list: {
         scrollbarWidth: 'thin',
