@@ -4,6 +4,7 @@ import { PopupRoutes } from '@masknet/shared-base'
 import { PersonaHeaderUI } from './UI'
 import { NormalHeader } from '../../../../components/NormalHeader'
 import { PersonaContext } from '../../hooks/usePersonaContext'
+import Services from '../../../../../service'
 
 export const PersonaHeader = memo(() => {
     const navigate = useNavigate()
@@ -20,6 +21,6 @@ export const PersonaHeader = memo(() => {
             nickname={currentPersona.nickname}
         />
     ) : (
-        <NormalHeader />
+        <NormalHeader onClose={Services.Helper.removePopupWindow} />
     )
 })

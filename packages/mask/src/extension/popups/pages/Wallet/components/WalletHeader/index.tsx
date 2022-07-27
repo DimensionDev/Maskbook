@@ -14,10 +14,11 @@ import {
 import { Flags } from '../../../../../../../shared'
 import { MenuItem, Typography } from '@mui/material'
 import { useMenuConfig, WalletIcon, ChainIcon } from '@masknet/shared'
-import { currentMaskWalletAccountSettings } from '../../../../../../plugins/Wallet/settings'
+import { currentMaskWalletAccountSettings } from '../../../../../../../shared/legacy-settings/wallet-settings'
 import { WalletRPC } from '../../../../../../plugins/Wallet/messages'
 import { NormalHeader } from '../../../../components/NormalHeader'
 import { NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-base'
+import Services from '../../../../../service'
 import { useConnected } from '../../hooks/useConnected'
 
 const useStyles = makeStyles()({
@@ -88,7 +89,7 @@ export const WalletHeader = memo(() => {
         },
     )
 
-    if (!wallet) return <NormalHeader onlyTitle={!!matchWalletRecovered} />
+    if (!wallet) return <NormalHeader onlyTitle={!!matchWalletRecovered} onClose={Services.Helper.removePopupWindow} />
 
     if (matchContractInteraction && wallet) {
         return (
@@ -122,6 +123,6 @@ export const WalletHeader = memo(() => {
             {menu}
         </>
     ) : (
-        <NormalHeader />
+        <NormalHeader onClose={Services.Helper.removePopupWindow} />
     )
 })

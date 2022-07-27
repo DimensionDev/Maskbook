@@ -4,7 +4,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { asyncIteratorToArray } from '@masknet/shared-base'
 import { formatEthereumAddress, isValidAddress } from '@masknet/web3-shared-evm'
 import { PluginDB } from '../../../database/Plugin.db'
-import { currentMaskWalletAccountSettings } from '../../../settings'
+import { currentMaskWalletAccountSettings } from '../../../../../../shared/legacy-settings/wallet-settings'
 import type { WalletRecord } from '../type'
 
 function WalletRecordOutDB(record: WalletRecord) {
