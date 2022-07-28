@@ -23,6 +23,7 @@ import { FindTrumanContext } from '../context'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { useTabsStyles } from './FindTrumanDialog'
 import CompletionCard from './CompletionCard'
+import { Image } from './Image'
 
 const useStyles = makeStyles()((theme, props) => ({
     panel: {},
@@ -86,7 +87,7 @@ export default function ParticipatePanel(props: ParticipatePanelProps) {
         <div className={classes.panel}>
             {userStoryStatus && (
                 <>
-                    <img className={classes.cover} src={userStoryStatus.img} />
+                    <Image className={classes.cover} src={userStoryStatus.img} />
                     <StageCard userStoryStatus={userStoryStatus} />
                     <DialogActions className={classes.buttons}>
                         <Button

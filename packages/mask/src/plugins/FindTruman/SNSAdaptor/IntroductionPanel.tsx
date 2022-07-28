@@ -1,8 +1,9 @@
 import { makeStyles } from '@masknet/theme'
-import { Avatar, Box, Button, Chip, Divider, Link, Typography } from '@mui/material'
+import { Avatar, Box, Button, CardMedia, Chip, Divider, Link, Typography } from '@mui/material'
 import { ArrowForwardRounded } from '@mui/icons-material'
 import { useContext } from 'react'
 import { FindTrumanContext } from '../context'
+import { Image } from './Image'
 
 const useStyles = makeStyles()((theme) => ({
     section: {},
@@ -48,7 +49,7 @@ export default function IntroductionPanel(props: IntroductionPanelProps) {
                     {consts.introduction.banner.title}
                 </Typography>
                 <Box>
-                    <img className={classes.bannerImg} src={consts.introduction.banner.img} />
+                    <CardMedia component="img" className={classes.bannerImg} image={consts.introduction.banner.img} />
                     {consts.introduction.banner.desc.map((e, index) => (
                         <Typography key={index} variant="body1" color="text.secondary" gutterBottom>
                             {e}
@@ -64,7 +65,7 @@ export default function IntroductionPanel(props: IntroductionPanelProps) {
                 <Box>
                     {consts.introduction.step.steps.map((step, index) => (
                         <Box key={index} className={classes.stepCard}>
-                            <img className={classes.stepImg} src={step.img} />
+                            <Image className={classes.stepImg} src={step.img} />
                             <Box>
                                 <Typography variant="body1">{step.title}</Typography>
                                 <Typography variant="body2" color="text.secondary">
@@ -109,7 +110,7 @@ export default function IntroductionPanel(props: IntroductionPanelProps) {
                 <Typography variant="h6" gutterBottom>
                     {consts.introduction.plot.title}
                 </Typography>
-                <img
+                <Image
                     src={consts.introduction.plot.img}
                     style={{
                         width: '100%',

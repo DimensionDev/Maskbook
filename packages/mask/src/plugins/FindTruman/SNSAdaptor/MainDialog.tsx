@@ -9,7 +9,7 @@ import type { UserStoryStatus, FindTrumanConst } from '../types'
 import { BorderLinearProgress } from './ResultCard'
 import { FindTruman_Const } from '../constants'
 import { FindTrumanContext } from '../context'
-
+import { Image } from './Image'
 interface Props extends InjectedDialogProps {
     onClose: () => void
 }
@@ -85,7 +85,7 @@ const FindTrumanDialog: React.FC<Props> = (props) => {
             <Card className={classes.card} variant="outlined">
                 <Grid container rowSpacing={0} columnSpacing={2}>
                     <Grid item xs={5}>
-                        <img src={img} className={classes.media} />
+                        <Image src={img} className={classes.media} />
                     </Grid>
                     <Grid item xs={7}>
                         <Box sx={{ padding: '0 12px' }}>

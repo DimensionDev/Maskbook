@@ -4,6 +4,7 @@ import type { SxProps } from '@mui/system'
 import type { Theme } from '@mui/material/styles'
 import { makeStyles } from '@masknet/theme'
 import { PartType } from '../types'
+import { Image } from './Image'
 
 const useStyles = makeStyles()((theme, props) => ({
     box: {
@@ -45,7 +46,7 @@ export default function FusionFtg(props: FusionFtgProps) {
     return (
         <Box className={classes.box} sx={{ ...sx }}>
             {parts.map((part) => (
-                <img
+                <Image
                     className={classes.part}
                     key={part.tokenId}
                     src={part.img}
