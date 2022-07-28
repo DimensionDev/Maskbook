@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useAsyncRetry, useUpdateEffect } from 'react-use'
+import { useUpdateEffect } from 'react-use'
 import { first, uniqBy } from 'lodash-unified'
 import {
     createInjectHooksRenderer,
@@ -10,7 +10,7 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { useSocialAddressListAll, useAvailablePlugins } from '@masknet/plugin-infra/web3'
 import { ReversedAddress } from '@masknet/shared'
-import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
 import { Box, Button, CircularProgress, Link, MenuItem, Tab, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
@@ -24,7 +24,6 @@ import {
     useCurrentVisitingSocialIdentity,
     useIsCurrentVisitingOwnerIdentity,
 } from '../DataSource/useActivatedUI'
-import { NextIDProof } from '@masknet/web3-providers'
 import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 
@@ -122,6 +121,9 @@ const useStyles = makeStyles()((theme) => ({
     selectedIcon: {
         color: theme.palette.maskColor.primary,
     },
+    gearIcon: {
+        color: theme.palette.maskColor.dark,
+    },
 }))
 
 export interface ProfileTabContentProps extends withClasses<'text' | 'button' | 'root'> {}
@@ -140,44 +142,28 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const currentVisitingIdentity = useCurrentVisitingIdentity()
     const currentVisitingUserId = currentVisitingIdentity.identifier?.userId
 
-    const { value: socialAddressList = EMPTY_LIST, loading: loadingSocialAddressList } = useSocialAddressListAll(
-        currentVisitingIdentity,
-        [SocialAddressType.NEXT_ID],
-    )
+    const {
+        value: socialAddressList = EMPTY_LIST,
+        loading: loadingSocialAddressList,
+        retry: retrySocialAddress,
+    } = useSocialAddressListAll(currentVisitingIdentity)
 
     const { value: currentVisitingSocialIdentity, loading: loadingCurrentVisitingSocialIdentity } =
         useCurrentVisitingSocialIdentity()
 
-    const { value: personaProof, retry: retryProof } = useAsyncRetry(async () => {
-        if (!currentVisitingSocialIdentity?.publicKey) return
-        return NextIDProof.queryExistedBindingByPersona(currentVisitingSocialIdentity?.publicKey)
-    }, [currentVisitingSocialIdentity?.publicKey])
-
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
-            retryProof()
+            retrySocialAddress()
         })
-    }, [retryProof])
+    }, [retrySocialAddress])
 
-    const wallets = personaProof?.proofs?.filter((proof) => proof?.platform === NextIDPlatform.Ethereum)
-
-    const addressList = useMemo(() => {
-        if (!wallets?.length || (!isOwnerIdentity && socialAddressList?.length)) {
-            setSelectedAddress(first(socialAddressList))
-            return socialAddressList
-        }
-        const addresses = wallets.map((proof) => {
-            return {
-                networkSupporterPluginID: NetworkPluginID.PLUGIN_EVM,
-                type: SocialAddressType.KV,
-                label: proof?.identity,
-                address: proof?.identity,
-            }
+    useEffect(() => {
+        socialAddressList.sort((x) => {
+            if (x.type === SocialAddressType.NEXT_ID) return -1
+            return 1
         })
-        const addressList = [...addresses, ...socialAddressList]
-        setSelectedAddress(first(addressList))
-        return addressList
-    }, [socialAddressList, wallets?.map((x) => x.identity).join(), isOwnerIdentity])
+        setSelectedAddress(first(socialAddressList))
+    }, [socialAddressList])
 
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
     const displayPlugins = useAvailablePlugins(activatedPlugins, (plugins) => {
@@ -218,8 +204,11 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         isTwitter(activatedSocialNetworkUI) &&
         (isWeb3ProfileDisable ||
             (isOwnerIdentity && !currentVisitingSocialIdentity?.hasBinding) ||
-            (isOwnerIdentity && !wallets?.length) ||
-            !addressList?.length)
+            (isOwnerIdentity &&
+                socialAddressList.findIndex(
+                    (address: { type: SocialAddressType }) => address.type === SocialAddressType.NEXT_ID,
+                )) === -1 ||
+            !socialAddressList?.length)
     )
 
     const componentTabId = showNextID ? `${PluginId.NextID}_tabContent` : currentTab
@@ -333,14 +322,14 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                     }}
                                     aria-labelledby="demo-positioned-button"
                                     onClose={() => setAnchorEl(null)}>
-                                    {uniqBy(addressList ?? [], (x) => x.address.toLowerCase()).map((x) => {
+                                    {uniqBy(socialAddressList ?? [], (x) => x.address.toLowerCase()).map((x) => {
                                         return (
                                             <MenuItem key={x.address} value={x.address} onClick={() => onSelect(x)}>
                                                 <div className={classes.menuItem}>
                                                     <div className={classes.addressItem}>
-                                                        {x?.type === SocialAddressType.KV ||
-                                                        x?.type === SocialAddressType.ADDRESS ||
-                                                        selectedAddress?.type === SocialAddressType.NEXT_ID ? (
+                                                        {x.type === SocialAddressType.KV ||
+                                                        x.type === SocialAddressType.ADDRESS ||
+                                                        x.type === SocialAddressType.NEXT_ID ? (
                                                             <ReversedAddress
                                                                 address={x.address}
                                                                 pluginId={x.networkSupporterPluginID}
@@ -364,7 +353,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                                             rel="noopener noreferrer">
                                                             <Icons.LinkOut className={classes.linkIcon} />
                                                         </Link>
-                                                        {x?.type === SocialAddressType.KV && (
+                                                        {x?.type === SocialAddressType.NEXT_ID && (
                                                             <Icons.NextIdPersonaVerified
                                                                 className={classes.verifiedIcon}
                                                             />
@@ -395,7 +384,11 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                     {t('mask_network')}
                                 </Typography>
                                 {isOwnerIdentity ? (
-                                    <Icons.Gear onClick={handleOpenDialog} sx={{ cursor: 'pointer' }} />
+                                    <Icons.Gear
+                                        onClick={handleOpenDialog}
+                                        className={classes.gearIcon}
+                                        sx={{ cursor: 'pointer' }}
+                                    />
                                 ) : (
                                     <Link
                                         className={classes.settingLink}
