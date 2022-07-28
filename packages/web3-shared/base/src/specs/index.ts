@@ -1,4 +1,5 @@
 import type { Subscription } from 'use-subscription'
+import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Emitter } from '@servie/events'
 import type { EnhanceableSite, ExtensionSite, ProfileIdentifier } from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
@@ -484,6 +485,8 @@ export interface TransactionDescriptor<ChainId, Transaction> {
     description?: string
     /** a human-readable description for successful transaction. */
     successfulDescription?: string
+    /** a human-readable description for failed transaction. */
+    failedDescription?: string
     /** The original transaction object */
     _tx: Transaction
 }
@@ -627,7 +630,7 @@ export interface ProviderEvents<ChainId, ProviderType> {
 
 export interface WatchEvents<Transaction> {
     /** Emit when error occur */
-    error: [Error]
+    error: [Error, JsonRpcPayload]
     /** Emit when the watched transaction status updated. */
     progress: [string, TransactionStatusType, Transaction | undefined]
 }
@@ -1143,11 +1146,13 @@ export interface TransactionFormatterState<ChainId, Parameters, Transaction> {
         chainId: ChainId,
         transaction: Transaction,
         context: TransactionContext<ChainId, Parameters>,
+        isError?: boolean
     ) => Promise<TransactionDescriptor<ChainId, Transaction>>
     /** Elaborate a transaction in a human-readable format. */
     formatTransaction: (
         chainId: ChainId,
         transaction: Transaction,
+        isError?: boolean
     ) => Promise<TransactionDescriptor<ChainId, Transaction>>
 }
 export interface TransactionWatcherState<ChainId, Transaction> {
@@ -1158,7 +1163,7 @@ export interface TransactionWatcherState<ChainId, Transaction> {
     /** Remove a transaction from the watch list. */
     unwatchTransaction: (chainId: ChainId, id: string) => Promise<void>
     /** Notify error */
-    notifyError: (error: Error) => Promise<void>
+    notifyError: (error: Error, request: JsonRpcPayload) => Promise<void>
     /** Notify transaction status */
     notifyTransaction: (
         chainId: ChainId,
