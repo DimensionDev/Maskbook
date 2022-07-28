@@ -209,13 +209,15 @@ export function WalletStatusBox(props: WalletStatusBox) {
                         </Link>
                     </div>
 
-                    <div className={classes.infoRow}>
-                        <Typography className={classes.balance}>
-                            {loadingNativeToken || loadingBalance
-                                ? '-'
-                                : `${formatBalance(balance, nativeToken?.decimals, 3)} ${nativeToken?.symbol}`}
-                        </Typography>
-                    </div>
+                    {props.withinRiskWarningDialog ? null : (
+                        <div className={classes.infoRow}>
+                            <Typography className={classes.balance}>
+                                {loadingNativeToken || loadingBalance
+                                    ? '-'
+                                    : `${formatBalance(balance, nativeToken?.decimals, 3)} ${nativeToken?.symbol}`}
+                            </Typography>
+                        </div>
+                    )}
                 </div>
 
                 {!props.disableChange && (

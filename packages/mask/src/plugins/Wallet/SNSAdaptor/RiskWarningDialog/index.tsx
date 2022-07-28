@@ -122,7 +122,7 @@ export function WalletRiskWarningDialog() {
                     variant="body2"
                     children={<Trans i18nKey="multiline">{t('wallet_risk_warning_content')}</Trans>}
                 />
-                <WalletStatusBox disableChange />
+                <WalletStatusBox disableChange withinRiskWarningDialog />
             </DialogContent>
             <DialogActions className={classes.buttons}>
                 <ActionButton
