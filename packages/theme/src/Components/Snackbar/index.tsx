@@ -188,7 +188,7 @@ export interface CustomSnackbarContentProps {
 const IconMap: Record<VariantType, React.ReactNode> = {
     default: <InfoIcon color="inherit" />,
     success: <Icons.SuccessForSnackBar />,
-    error: <Icons.Risk />,
+    error: <Icons.TransactionFailed />,
     warning: <WarningIcon color="inherit" />,
     info: <InfoIcon color="inherit" />,
 }
