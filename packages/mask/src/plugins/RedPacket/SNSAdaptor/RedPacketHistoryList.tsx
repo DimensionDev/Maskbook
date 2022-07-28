@@ -3,10 +3,11 @@ import { makeStyles } from '@masknet/theme'
 import type { RedPacketJSONPayload } from '../types'
 import { RedPacketInHistoryList } from './RedPacketInHistoryList'
 import { useRedPacketHistory } from './hooks/useRedPacketHistory'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { LoadingAnimation } from '@masknet/shared'
+import { EmptySimpleIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -28,12 +29,18 @@ const useStyles = makeStyles()((theme) => {
         },
         placeholder: {
             display: 'flex',
-            height: 350,
+            flexDirection: 'column',
+            height: 240,
             justifyContent: 'center',
             alignItems: 'center',
             textAlign: 'center',
             width: 360,
             margin: '0 auto',
+        },
+        emptyIcon: {
+            width: 36,
+            height: 36,
+            marginBottom: 13,
         },
     }
 })
@@ -44,7 +51,7 @@ interface RedPacketHistoryListProps {
 
 export function RedPacketHistoryList(props: RedPacketHistoryListProps) {
     const { onSelect } = props
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
@@ -52,7 +59,7 @@ export function RedPacketHistoryList(props: RedPacketHistoryListProps) {
 
     if (loading) {
         return (
-            <Box style={{ height: 350, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
+            <Box style={{ height: 240, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
                 <LoadingAnimation />
             </Box>
         )
@@ -61,7 +68,8 @@ export function RedPacketHistoryList(props: RedPacketHistoryListProps) {
     if (!histories?.length) {
         return (
             <Typography className={classes.placeholder} color="textSecondary">
-                {t('no_data')}
+                <EmptySimpleIcon className={classes.emptyIcon} />
+                {t.token_no_history()}
             </Typography>
         )
     }
