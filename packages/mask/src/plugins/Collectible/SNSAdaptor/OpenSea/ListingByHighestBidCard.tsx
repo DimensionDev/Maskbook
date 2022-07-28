@@ -102,7 +102,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                     amount={amount}
                     balance={balance.value ?? '0'}
                     token={token.value}
-                    disableNativeToken={!paymentTokens.some((x) => isNativeTokenAddress(chainId, x.address))}
+                    disableNativeToken={!paymentTokens.some((x) => isNativeTokenAddress(x.address))}
                     onAmountChange={setAmount}
                     onTokenChange={(x) => setAddress(x.address)}
                     TokenAmountPanelProps={{

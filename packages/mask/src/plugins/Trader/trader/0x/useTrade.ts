@@ -58,10 +58,10 @@ export function useTrade(
             if (isZero(inputAmount) && isExactIn) return null
             if (isZero(outputAmount) && !isExactIn) return null
 
-            const sellToken = isNativeTokenAddress(targetChainId, inputToken.address)
+            const sellToken = isNativeTokenAddress(inputToken.address)
                 ? getNativeTokenLabel(chainResolver.chainNetworkType(targetChainId) ?? networkType)
                 : inputToken.address
-            const buyToken = isNativeTokenAddress(targetChainId, outputToken.address)
+            const buyToken = isNativeTokenAddress(outputToken.address)
                 ? getNativeTokenLabel(chainResolver.chainNetworkType(targetChainId) ?? networkType)
                 : outputToken.address
             return PluginTraderRPC.swapQuote(

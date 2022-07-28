@@ -40,8 +40,11 @@ export function transform<ChainId extends number, T extends Constants>(
 ) {
     type Entries = { [key in keyof T]?: T[key]['Mainnet'] }
     const getAllConstants = transformAll(chainIdEnum, constants, environment)
-    return <K extends keyof Entries>(chainId: ChainId, key: K, fallback?: Entries[K]) =>
-        getAllConstants(chainId)[key] ?? fallback
+    return <K extends keyof Entries, F extends Entries[K], R = F extends undefined ? Entries[K] : Required<Entries>[K]>(
+        chainId: ChainId,
+        key: K,
+        fallback?: F,
+    ): R => (getAllConstants(chainId)[key] ?? fallback) as R
 }
 
 export function transformAllFromJSON<ChainId extends number, T extends Constants>(

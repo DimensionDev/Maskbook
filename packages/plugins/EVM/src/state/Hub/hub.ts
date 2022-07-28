@@ -25,7 +25,6 @@ import {
     NonFungibleAsset,
     Pageable,
     createPageable,
-    isSameAddress,
     currySameAddress,
     CurrencyType,
     Transaction,
@@ -47,7 +46,6 @@ import {
     formatEthereumAddress,
     getCoinGeckoConstants,
     getTokenAssetBaseURLConstants,
-    getTokenConstant,
     getTokenListConstants,
     SchemaType,
     isNativeTokenAddress,
@@ -194,9 +192,9 @@ class Hub implements EVM_Hub {
             chainId,
         })
         const { TOKEN_ASSET_BASE_URI = EMPTY_LIST } = getTokenAssetBaseURLConstants(options.chainId)
-        const checkSummedAddress = formatEthereumAddress(address)
+        const formattedAddress = formatEthereumAddress(address)
 
-        if (isSameAddress(getTokenConstant(options.chainId, 'NATIVE_TOKEN_ADDRESS'), checkSummedAddress)) {
+        if (isNativeTokenAddress(formattedAddress)) {
             return TOKEN_ASSET_BASE_URI.map((x) => `${x}/info/logo.png`)
         }
 
@@ -204,7 +202,7 @@ class Hub implements EVM_Hub {
         if (specialIcon) return [specialIcon.logo_url]
 
         // load from remote
-        return TOKEN_ASSET_BASE_URI.map((x) => `${x}/assets/${checkSummedAddress}/logo.png`)
+        return TOKEN_ASSET_BASE_URI.map((x) => `${x}/assets/${formattedAddress}/logo.png`)
     }
     async getNonFungibleTokenIconURLs(
         chainId: ChainId,
@@ -221,7 +219,7 @@ class Hub implements EVM_Hub {
         })
         const { PLATFORM_ID = '', COIN_ID = '' } = getCoinGeckoConstants(options.chainId)
 
-        if (isNativeTokenAddress(chainId, address)) {
+        if (isNativeTokenAddress(address)) {
             return CoinGecko.getTokenPriceByCoinId(COIN_ID, options.currencyType)
         }
         return CoinGecko.getTokenPrice(PLATFORM_ID, address, options.currencyType)

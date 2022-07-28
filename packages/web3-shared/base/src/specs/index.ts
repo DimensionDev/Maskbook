@@ -1244,7 +1244,7 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Tra
     isValidDomain(domain?: string): boolean
     isValidAddress(address?: string): boolean
     isZeroAddress(address?: string): boolean
-    isNativeTokenAddress(chainId?: ChainId, address?: string): boolean
+    isNativeTokenAddress(address?: string): boolean
     isSameAddress(address?: string, otherAddress?: string): boolean
     // #endregion
 
@@ -1257,8 +1257,8 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Tra
     // #region customization
     getDefaultChainId(): ChainId
     getDefaultNetworkType(): NetworkType
-    getZeroAddress(chainId?: ChainId): string
-    getNativeTokenAddress(chainId?: ChainId): string
+    getZeroAddress(): string | undefined
+    getNativeTokenAddress(chainId?: ChainId): string | undefined
     getMaskTokenAddress(chainId?: ChainId): string | undefined
     getAverageBlockDelay(chainId?: ChainId, scale?: number): number
     getTransactionSignature(chainId?: ChainId, transaction?: Partial<Transaction>): string | undefined

@@ -8,7 +8,6 @@ import {
     createLookupTableResolver,
     NetworkPluginID,
     ZERO,
-    isSameAddress,
     formatBalance,
     formatCurrency,
 } from '@masknet/web3-shared-base'
@@ -17,9 +16,9 @@ import {
     createERC20Token,
     SchemaType,
     getAaveConstants,
-    useTokenConstants,
     ZERO_ADDRESS,
     chainResolver,
+    isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import { useAccount, useFungibleTokenBalance, useFungibleTokenPrice, useWeb3 } from '@masknet/plugin-infra/web3'
 import {
@@ -66,7 +65,6 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
 
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const [inputAmount, setInputAmount] = useState('')
     const [estimatedGas, setEstimatedGas] = useState<BigNumber.Value>(ZERO)
 
@@ -122,7 +120,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
 
     const { value: tokenPrice = 0 } = useFungibleTokenPrice(
         NetworkPluginID.PLUGIN_EVM,
-        !isSameAddress(protocol.bareToken.address, NATIVE_TOKEN_ADDRESS) ? protocol.bareToken.address : undefined,
+        !isNativeTokenAddress(protocol.bareToken.address) ? protocol.bareToken.address : undefined,
         { chainId },
     )
 

@@ -3,7 +3,6 @@ import {
     isNativeTokenAddress,
     SchemaType,
     useRPCConstants,
-    useTokenConstants,
     useTraderConstants,
 } from '@masknet/web3-shared-evm'
 import { PluginTraderRPC } from '../../messages'
@@ -26,7 +25,6 @@ export function useTrade(
     const slippageSetting = useSlippageTolerance()
     const slippage = temporarySlippage || slippageSetting
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
     const { RPC_URLS } = useRPCConstants(chainId)
     const providerURL = first(RPC_URLS)
     const { DODO_ETH_ADDRESS } = useTraderConstants(chainId)
@@ -37,14 +35,14 @@ export function useTrade(
         async () => {
             if (!inputToken || !outputToken) return null
             if (isZero(inputAmount)) return null
-            const sellToken = isNativeTokenAddress(chainId, inputToken.address)
+            const sellToken = isNativeTokenAddress(inputToken.address)
                 ? { ...inputToken, address: DODO_ETH_ADDRESS ?? '' }
                 : inputToken
-            const buyToken = isNativeTokenAddress(chainId, outputToken.address)
+            const buyToken = isNativeTokenAddress(outputToken.address)
                 ? { ...outputToken, address: DODO_ETH_ADDRESS ?? '' }
                 : outputToken
             return PluginTraderRPC.swapRoute({
-                isNativeSellToken: isNativeTokenAddress(chainId, inputToken.address),
+                isNativeSellToken: isNativeTokenAddress(inputToken.address),
                 fromToken: sellToken,
                 toToken: buyToken,
                 fromAmount: inputAmount,
@@ -55,7 +53,6 @@ export function useTrade(
             })
         },
         [
-            NATIVE_TOKEN_ADDRESS,
             strategy,
             inputAmount,
             outputAmount,

@@ -41,6 +41,19 @@ export function isZeroAddress(address?: string) {
     return isSameAddress(address, ZERO_ADDRESS)
 }
 
-export function isNativeTokenAddress(chainId?: ChainId, address?: string) {
-    return isSameAddress(address, getTokenConstant(chainId ?? ChainId.Mainnet, 'SOL_ADDRESS'))
+export function isNativeTokenAddress(address?: string) {
+    const set = new Set(getEnumAsArray(ChainId).map((x) => getTokenConstant(x.value, 'SOL_ADDRESS')))
+    return !!(address && set.has(address))
+}
+
+export function getZeroAddress() {
+    return ZERO_ADDRESS
+}
+
+export function getMaskTokenAddress(chainId = ChainId.Mainnet) {
+    return ''
+}
+
+export function getNativeTokenAddress(chainId = ChainId.Mainnet) {
+    return getTokenConstant(chainId, 'SOL_ADDRESS') ?? ''
 }

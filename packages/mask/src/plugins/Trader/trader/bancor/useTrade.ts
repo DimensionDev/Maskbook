@@ -1,10 +1,4 @@
-import {
-    useTokenConstants,
-    useTraderConstants,
-    ChainId,
-    isNativeTokenAddress,
-    SchemaType,
-} from '@masknet/web3-shared-evm'
+import { useTraderConstants, ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { PluginTraderRPC } from '../../messages'
 import { SwapBancorRequest, TradeStrategy } from '../../types'
 import { useSlippageTolerance } from './useSlippageTolerance'
@@ -24,7 +18,6 @@ export function useTrade(
     const slippageSetting = useSlippageTolerance()
     const slippage = temporarySlippage || slippageSetting
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
     const { BANCOR_ETH_ADDRESS } = useTraderConstants(chainId)
     const user = useAccount(NetworkPluginID.PLUGIN_EVM)
 
@@ -40,11 +33,11 @@ export function useTrade(
             if (outputAmountWei === '0' && !isExactIn) return null
             if (![ChainId.Mainnet, ChainId.Ropsten].includes(chainId)) return null
 
-            const fromToken = isNativeTokenAddress(chainId, inputToken.address)
+            const fromToken = isNativeTokenAddress(inputToken.address)
                 ? { ...inputToken, address: BANCOR_ETH_ADDRESS ?? '' }
                 : inputToken
 
-            const toToken = isNativeTokenAddress(chainId, outputToken.address)
+            const toToken = isNativeTokenAddress(outputToken.address)
                 ? { ...outputToken, address: BANCOR_ETH_ADDRESS ?? '' }
                 : outputToken
 
@@ -60,16 +53,6 @@ export function useTrade(
                 minimumReceived: '',
             })
         },
-        [
-            NATIVE_TOKEN_ADDRESS,
-            strategy,
-            inputAmountWei,
-            outputAmountWei,
-            inputToken?.address,
-            outputToken?.address,
-            slippage,
-            user,
-            chainId,
-        ],
+        [strategy, inputAmountWei, outputAmountWei, inputToken?.address, outputToken?.address, slippage, user, chainId],
     )
 }

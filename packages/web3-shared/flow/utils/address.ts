@@ -1,4 +1,5 @@
 import { getEnumAsArray } from '@dimensiondev/kit'
+import { getTokenConstant, ZERO_ADDRESS } from '../constants'
 import { ChainId } from '../types'
 
 export function formatAddress(address: string, size = 0) {
@@ -11,6 +12,18 @@ export function isValidAddress(address: string) {
     return /0x\w{16}/.test(address)
 }
 
-export function isValidChainId(chainId: number) {
+export function isValidChainId(chainId: ChainId) {
     return getEnumAsArray(ChainId).some((x) => x.value === chainId)
+}
+
+export function getZeroAddress() {
+    return ZERO_ADDRESS
+}
+
+export function getNativeTokenAddress(chainId = ChainId.Mainnet) {
+    return getTokenConstant(chainId, 'FLOW_ADDRESS')
+}
+
+export function getMaskTokenAddress(chainId = ChainId.Mainnet) {
+    return ''
 }

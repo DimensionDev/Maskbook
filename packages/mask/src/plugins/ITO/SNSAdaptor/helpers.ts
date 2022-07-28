@@ -41,8 +41,8 @@ export function gcd(a: BigNumber, b: BigNumber) {
 export function sortTokens(tokenA: { address: string }, tokenB: { address: string }) {
     const addressA = tokenA.address.toLowerCase()
     const addressB = tokenB.address.toLowerCase()
-    if (isNativeTokenAddress(ChainId.Mainnet, addressA)) return -1
-    if (isNativeTokenAddress(ChainId.Mainnet, addressB)) return 1
+    if (isNativeTokenAddress(addressA)) return -1
+    if (isNativeTokenAddress(addressB)) return 1
     return addressA < addressB ? -1 : 1
 }
 

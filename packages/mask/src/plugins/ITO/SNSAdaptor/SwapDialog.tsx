@@ -135,7 +135,7 @@ export function SwapDialog(props: SwapDialogProps) {
     const selectFungibleToken = useSelectFungibleToken(NetworkPluginID.PLUGIN_EVM)
     const onSelectTokenChipClick = useCallback(async () => {
         const picked = await selectFungibleToken({
-            disableNativeToken: !exchangeTokens.some((x) => isNativeTokenAddress(chainId, x.address)),
+            disableNativeToken: !exchangeTokens.some((x) => isNativeTokenAddress(x.address)),
             disableSearchBar: true,
             whitelist: exchangeTokens.map((x) => x.address),
         })
@@ -148,7 +148,6 @@ export function SwapDialog(props: SwapDialogProps) {
         setSwapAmount(initAmount.multipliedBy(ratio))
         setInputAmountForUI(initAmount.isZero() ? '' : formatBalance(initAmount.multipliedBy(ratio), picked.decimals))
     }, [
-        chainId,
         initAmount,
         payload,
         selectFungibleToken,

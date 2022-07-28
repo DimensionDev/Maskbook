@@ -27,7 +27,7 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
         nativeCurrency: createFungibleToken(
             ChainId.Mainnet,
             SchemaType.Fungible,
-            getTokenConstant(ChainId.Mainnet, 'SOL_ADDRESS')!,
+            getTokenConstant(ChainId.Mainnet, 'SOL_ADDRESS', ''),
             'Solana',
             'SOL',
             9,
@@ -51,7 +51,7 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
         nativeCurrency: createFungibleToken(
             ChainId.Devnet,
             SchemaType.Fungible,
-            getTokenConstant(ChainId.Devnet, 'SOL_ADDRESS')!,
+            getTokenConstant(ChainId.Devnet, 'SOL_ADDRESS', ''),
             'Solana',
             'SOL',
             9,
@@ -78,7 +78,7 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
         nativeCurrency: createFungibleToken(
             ChainId.Testnet,
             SchemaType.Fungible,
-            getTokenConstant(ChainId.Testnet, 'SOL_ADDRESS')!,
+            getTokenConstant(ChainId.Testnet, 'SOL_ADDRESS', ''),
             'Solana',
             'SOL',
             9,

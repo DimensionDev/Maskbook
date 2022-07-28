@@ -34,7 +34,7 @@ export class RedPacketDescriptor implements TransactionDescriptor {
                 const amount = formatBalance(
                     method.parameters?._total_tokens,
                     token?.decimals,
-                    isNativeTokenAddress(context.chainId, method.parameters?._token_addr) ? 6 : 0,
+                    isNativeTokenAddress(method.parameters?._token_addr) ? 6 : 0,
                 )
                 return {
                     chainId: context.chainId,

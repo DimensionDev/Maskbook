@@ -33,6 +33,7 @@ import {
     createWeb3Provider,
     getEthereumConstant,
     isValidAddress,
+    isNativeTokenAddress,
     resolveIPFSLinkFromURL,
     encodeTransaction,
 } from '@masknet/web3-shared-evm'
@@ -43,7 +44,6 @@ import {
     createNonFungibleTokenCollection,
     createNonFungibleTokenContract,
     createNonFungibleTokenMetadata,
-    currySameAddress,
     FungibleToken,
     isSameAddress,
     NonFungibleToken,
@@ -80,11 +80,6 @@ export function isReadOnlyMethod(method: EthereumMethodType) {
         EthereumMethodType.ETH_CALL,
         EthereumMethodType.ETH_GET_LOGS,
     ].includes(method)
-}
-
-function isNativeTokenAddress(chainId: ChainId, address: string) {
-    if (!address) return false
-    return isSameAddress(address, getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS'))
 }
 
 async function fetchJSON<T extends unknown>(
@@ -221,7 +216,7 @@ class Connection implements EVM_Connection {
         const options = this.getOptions(initial)
 
         // Native
-        if (!address || isNativeTokenAddress(options.chainId, address)) throw new Error('Invalid token address.')
+        if (!address || isNativeTokenAddress(address)) throw new Error('Invalid token address.')
 
         // ERC20
         const contract = await this.getERC20Contract(address, options)
@@ -249,7 +244,7 @@ class Connection implements EVM_Connection {
         const options = this.getOptions(initial)
 
         // Native
-        if (!address || isNativeTokenAddress(options.chainId, address)) throw new Error('Invalid token address.')
+        if (!address || isNativeTokenAddress(address)) throw new Error('Invalid token address.')
 
         // ERC721 & ERC1155
         const contract = await this.getERC721Contract(address, options)
@@ -265,7 +260,7 @@ class Connection implements EVM_Connection {
     ): Promise<string> {
         const options = this.getOptions(initial)
         // Native
-        if (!address || isNativeTokenAddress(options.chainId, address)) {
+        if (!address || isNativeTokenAddress(address)) {
             const tx: Transaction = {
                 from: options.account,
                 to: recipient,
@@ -545,7 +540,7 @@ class Connection implements EVM_Connection {
         const options = this.getOptions(initial)
 
         // Native
-        if (!address || isNativeTokenAddress(options.chainId, address)) return this.getNativeTokenBalance(options)
+        if (!address || isNativeTokenAddress(address)) return this.getNativeTokenBalance(options)
 
         // ERC20
         const contract = await this.getERC20Contract(address, options)
@@ -577,15 +572,15 @@ class Connection implements EVM_Connection {
         if (!listOfAddress.length) return {}
 
         const options = this.getOptions(initial)
-        const NATIVE_TOKEN_ADDRESS = getTokenConstant(options.chainId, 'NATIVE_TOKEN_ADDRESS', '')!
+        const NATIVE_TOKEN_ADDRESS = getTokenConstant(options.chainId, 'NATIVE_TOKEN_ADDRESS')
         const BALANCE_CHECKER_ADDRESS = getEthereumConstant(options.chainId, 'BALANCE_CHECKER_ADDRESS')
         const entities: Array<[string, string]> = []
 
-        if (listOfAddress.some(currySameAddress(NATIVE_TOKEN_ADDRESS))) {
-            entities.push([NATIVE_TOKEN_ADDRESS, await this.getBalance(options.account, options)])
+        if (listOfAddress.some(isNativeTokenAddress)) {
+            entities.push([NATIVE_TOKEN_ADDRESS ?? '', await this.getBalance(options.account, options)])
         }
 
-        const listOfNonNativeAddress = listOfAddress.filter((x) => !isSameAddress(NATIVE_TOKEN_ADDRESS, x))
+        const listOfNonNativeAddress = listOfAddress.filter((x) => !isNativeTokenAddress(x))
 
         if (listOfNonNativeAddress.length) {
             const contract = await this.getWeb3Contract<BalanceChecker>(
@@ -643,7 +638,7 @@ class Connection implements EVM_Connection {
         const options = this.getOptions(initial)
 
         // Native
-        if (!address || isNativeTokenAddress(options.chainId, address)) return this.getNativeToken(options)
+        if (!address || isNativeTokenAddress(address)) return this.getNativeToken(options)
 
         // ERC20
         const contract = await this.getERC20Contract(address, options)

@@ -4,7 +4,6 @@ import {
     isNativeTokenAddress,
     SchemaType,
     useRPCConstants,
-    useTokenConstants,
     useTraderConstants,
 } from '@masknet/web3-shared-evm'
 import { PluginTraderRPC } from '../../messages'
@@ -24,7 +23,6 @@ export function useTrade(
     outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
     temporarySlippage?: number,
 ): AsyncStateRetry<SwapOOData | null> {
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const slippageSetting = useSlippageTolerance()
     const slippage = temporarySlippage || slippageSetting
     const { targetChainId } = TargetChainIdContext.useContainer()
@@ -39,14 +37,14 @@ export function useTrade(
             if (!OPENOCEAN_SUPPORTED_CHAINS.includes(targetChainId)) return null
             if (!inputToken || !outputToken) return null
             if (isZero(inputAmount)) return null
-            const sellToken = isNativeTokenAddress(targetChainId, inputToken.address)
+            const sellToken = isNativeTokenAddress(inputToken.address)
                 ? { ...inputToken, address: OPENOCEAN_ETH_ADDRESS ?? '' }
                 : inputToken
-            const buyToken = isNativeTokenAddress(targetChainId, outputToken.address)
+            const buyToken = isNativeTokenAddress(outputToken.address)
                 ? { ...outputToken, address: OPENOCEAN_ETH_ADDRESS ?? '' }
                 : outputToken
             return PluginTraderRPC.swapOO({
-                isNativeSellToken: isNativeTokenAddress(targetChainId, inputToken.address),
+                isNativeSellToken: isNativeTokenAddress(inputToken.address),
                 fromToken: sellToken,
                 toToken: buyToken,
                 fromAmount: inputAmount,
@@ -57,7 +55,6 @@ export function useTrade(
             })
         },
         [
-            NATIVE_TOKEN_ADDRESS,
             strategy,
             inputAmount,
             outputAmount,

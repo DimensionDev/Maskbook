@@ -53,7 +53,7 @@ export function DashboardWalletHideTokenConfirmDialog(
         props.onClose,
     )
 
-    if (isNativeTokenAddress(ChainId.Mainnet, tokenAddress)) return null
+    if (isNativeTokenAddress(tokenAddress)) return null
     return (
         <DashboardDialogCore fullScreen={false} {...props}>
             <DashboardDialogWrapper

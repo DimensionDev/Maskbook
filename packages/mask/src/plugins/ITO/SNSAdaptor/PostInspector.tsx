@@ -1,10 +1,10 @@
 import { useCallback, useMemo } from 'react'
-import { ChainId, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
+import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { isCompactPayload } from './helpers'
 import { usePoolPayload } from './hooks/usePoolPayload'
 import type { JSON_PayloadInMask } from '../types'
 import { ITO, ITO_Error, ITO_Loading } from './ITO'
-import { NetworkPluginID, isSameAddress, FungibleToken, TokenType } from '@masknet/web3-shared-base'
+import { NetworkPluginID, FungibleToken, TokenType } from '@masknet/web3-shared-base'
 import { useChainId, useFungibleToken, useFungibleTokens } from '@masknet/plugin-infra/web3'
 
 export interface PostInspectorProps {
@@ -14,7 +14,6 @@ export interface PostInspectorProps {
 export function PostInspector(props: PostInspectorProps) {
     const { chain_id, pid } = props.payload
     const isCompactPayload_ = isCompactPayload(props.payload)
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const {
@@ -44,7 +43,7 @@ export function PostInspector(props: PostInspectorProps) {
                 (t) =>
                     ({
                         address: t.address,
-                        schema: isSameAddress(t.address, NATIVE_TOKEN_ADDRESS) ? SchemaType.Native : SchemaType.ERC20,
+                        schema: isNativeTokenAddress(t.address) ? SchemaType.Native : SchemaType.ERC20,
                         chainId: _payload.chain_id,
                         type: TokenType.Fungible,
                     } as Pick<
