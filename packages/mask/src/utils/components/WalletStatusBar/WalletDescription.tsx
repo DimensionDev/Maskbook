@@ -48,15 +48,8 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.warn,
     },
     linkIcon: {
-        width: 14,
-        height: 14,
-        fontSize: 14,
         color: theme.palette.maskColor.second,
         cursor: 'pointer',
-    },
-    verified: {
-        width: 18,
-        height: 18,
     },
 }))
 
@@ -111,12 +104,12 @@ export const WalletDescription = memo<WalletDescriptionProps>(
                 <Box className={classes.description}>
                     <Typography className={classes.walletName}>
                         <span>{name}</span>
-                        {verified ? <Icons.NextIdPersonaVerified className={classes.verified} /> : null}
+                        {verified ? <Icons.NextIdPersonaVerified size={18} /> : null}
                         {onPendingClick ? <Icons.ArrowDrop /> : null}
                     </Typography>
                     <Typography className={classes.address}>
                         <span>{formattedAddress}</span>
-                        {address ? <Icons.PopupCopy onClick={onCopy} className={classes.linkIcon} /> : null}
+                        {address ? <Icons.PopupCopy onClick={onCopy} size={14} className={classes.linkIcon} /> : null}
                         <Link
                             href={addressLink}
                             target="_blank"
@@ -126,7 +119,7 @@ export const WalletDescription = memo<WalletDescriptionProps>(
                                 event.stopPropagation()
                             }}
                             className={classes.linkIcon}>
-                            <Icons.LinkOut className={classes.linkIcon} />
+                            <Icons.LinkOut size={14} className={classes.linkIcon} />
                         </Link>
                         {pending ? (
                             <span

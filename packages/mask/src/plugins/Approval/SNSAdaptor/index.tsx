@@ -12,7 +12,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal) {},
     ApplicationEntries: [
         (() => {
-            const icon = <Icons.Approval />
+            const icon = <Icons.Approval size={36} />
             const name = { i18nKey: 'plugin_name', fallback: 'Approval' }
             const iconFilterColor = 'rgba(251, 176, 59, 0.3)'
             return {
