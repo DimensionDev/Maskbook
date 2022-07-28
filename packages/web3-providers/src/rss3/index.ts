@@ -116,7 +116,7 @@ const createCollection = (collectionResponse: RSS3BaseAPI.CollectionResponse[]):
     return collectionResponse.map((collection: RSS3BaseAPI.CollectionResponse) => {
         return {
             ...collection,
-            tiele: collection?.actions?.[0]?.metadata?.title,
+            title: collection?.actions?.[0]?.metadata?.title,
             id:
                 collection?.actions?.[0]?.metadata?.id ??
                 getIdFromDonationURL(collection?.actions?.[0]?.related_urls?.[0]) ??
