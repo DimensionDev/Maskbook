@@ -1,4 +1,4 @@
-import { Edit2Icon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
 import { memo } from 'react'
@@ -29,7 +29,7 @@ export const ManageTokenListBar = memo<ManageTokenListBarProps>(({ onClick }) =>
     return (
         <Stack className={classes.root} direction="row" justifyContent="center">
             <Stack className={classes.target} display="inline-flex" gap={2} direction="row" onClick={onClick}>
-                <Edit2Icon />
+                <Icons.Edit2 />
                 <Typography>{t.erc20_manage_token_list()}</Typography>
             </Stack>
         </Stack>

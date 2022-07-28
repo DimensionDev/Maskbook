@@ -131,7 +131,7 @@ export const getFungibleTokenItem =
         const action = useMemo(() => {
             if (mode === TokenListMode.Manage) {
                 if (source === 'personal')
-                    return <TrashLineIcon onClick={(e) => onAddOrRemoveTokenToLocal(e, 'remove')} size={24} />
+                    return <Icons.TrashLine onClick={(e) => onAddOrRemoveTokenToLocal(e, 'remove')} size={24} />
                 return (
                     <SettingSwitch
                         classes={{ root: classes.switch }}
@@ -199,7 +199,7 @@ export const getFungibleTokenItem =
                                 style={{ width: 18, height: 18 }}
                                 target="_blank"
                                 rel="noopener noreferrer">
-                                <PopupLinkIcon size={18} />
+                                <Icons.PopupLink size={18} />
                             </Link>
                             {source === 'personal' && <span> &bull; Added By User</span>}
                         </span>
