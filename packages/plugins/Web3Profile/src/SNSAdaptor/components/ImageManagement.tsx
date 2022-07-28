@@ -11,7 +11,7 @@ import type { AccountType, WalletTypes } from '../types'
 import WalletSetting from './WalletSetting'
 import { Empty } from './Empty'
 import { context } from '../context'
-import { Gear, WalletUnderTabsIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { CurrentStatusMap, CURRENT_STATUS } from '../../constants'
 import { isSameAddress } from '@masknet/web3-shared-base'
 
@@ -40,7 +40,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         '::-webkit-scrollbar': {
             backgroundColor: 'transparent',
-            width: 5,
+            width: 20,
         },
         '::-webkit-scrollbar-thumb': {
             borderRadius: '20px',
@@ -109,7 +109,7 @@ export function ImageManagement(props: ImageManagementProps) {
             classes={{ dialogContent: classes.content }}
             fullWidth={false}
             open={open}
-            titleTail={<Gear className={classes.settingIcon} onClick={() => setWalletSettingOpen(true)} />}
+            titleTail={<Icons.Gear className={classes.settingIcon} onClick={() => setWalletSettingOpen(true)} />}
             onClose={onClose}>
             <DialogContent className={classes.content}>
                 <div>
@@ -133,7 +133,7 @@ export function ImageManagement(props: ImageManagementProps) {
                     {!hasConnectedWallets && (
                         <Box className={classes.bottomButton}>
                             <Button onClick={openPopupsWindow} className={classes.button}>
-                                <WalletUnderTabsIcon className={classes.walletIcon} />
+                                <Icons.WalletUnderTabs className={classes.walletIcon} />
                                 {t.add_wallet()}
                             </Button>
                         </Box>

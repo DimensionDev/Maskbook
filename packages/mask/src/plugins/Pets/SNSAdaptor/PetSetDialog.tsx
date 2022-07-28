@@ -29,7 +29,7 @@ import { petShowSettings } from '../settings'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { saveCustomEssayToRSS } from '../Services/rss3'
-import { Rss3 } from '@masknet/icons'
+import { RSS3Icon } from '../assets/rss3'
 
 const useStyles = makeStyles()((theme) => ({
     desBox: {
@@ -375,7 +375,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     <Typography fontSize={14} color="textSecondary" fontWeight={700} className={classes.des}>
                         RSS3
                     </Typography>
-                    <Rss3 className={classes.RSS3Icon} />
+                    <RSS3Icon className={classes.RSS3Icon} />
                 </Box>
             </Box>
 

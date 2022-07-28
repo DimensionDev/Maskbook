@@ -15,17 +15,7 @@ import type { DataProvider } from '@masknet/public-api'
 import { useI18N } from '../../../../utils'
 import { ContractSection } from './ContractSection'
 import type { CommunityType } from '../../types'
-import {
-    DiscordRoundIcon,
-    FacebookRoundIcon,
-    GitHubIcon,
-    InstagramRoundIcon,
-    MediumIcon,
-    RedditRoundIcon,
-    TelegramRoundIcon,
-    TwitterRoundIcon,
-    YouTubeIcon,
-} from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { upperFirst } from 'lodash-unified'
 import type { TrendingAPI } from '@masknet/web3-providers'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
@@ -76,15 +66,15 @@ export interface CoinMetadataTableProps {
 }
 
 const brands: Record<CommunityType, React.ReactNode> = {
-    discord: <DiscordRoundIcon sx={{ fontSize: 16 }} />,
-    facebook: <FacebookRoundIcon sx={{ fontSize: 16 }} />,
-    github: <GitHubIcon sx={{ fontSize: 16 }} />,
-    instagram: <InstagramRoundIcon sx={{ fontSize: 16 }} />,
-    medium: <MediumIcon sx={{ fontSize: 16 }} />,
-    reddit: <RedditRoundIcon sx={{ fontSize: 16 }} />,
-    telegram: <TelegramRoundIcon sx={{ fontSize: 16 }} />,
-    twitter: <TwitterRoundIcon sx={{ fontSize: 16 }} />,
-    youtube: <YouTubeIcon sx={{ fontSize: 16 }} />,
+    discord: <Icons.DiscordRound size={16} />,
+    facebook: <Icons.FacebookRound size={16} />,
+    github: <Icons.GitHub size={16} />,
+    instagram: <Icons.InstagramRound size={16} />,
+    medium: <Icons.Medium size={16} />,
+    reddit: <Icons.RedditRound size={16} />,
+    telegram: <Icons.TelegramRound size={16} />,
+    twitter: <Icons.TwitterRound size={16} />,
+    youtube: <Icons.YouTube size={16} />,
     other: null,
 }
 

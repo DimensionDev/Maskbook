@@ -13,7 +13,7 @@ import {
 } from '@masknet/shared-base'
 import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { PersonaContext } from '../../hooks/usePersonaContext'
-import { NextIdPersonaWarning, NextIdPersonaVerified } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -143,9 +143,9 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                             {proof.loading ? (
                                 <LoadingAnimation />
                             ) : isProved?.is_valid ? (
-                                <NextIdPersonaVerified color="#1C68F3" size={18} />
+                                <Icons.NextIdPersonaVerified size={18} />
                             ) : (
-                                <NextIdPersonaWarning size={18} />
+                                <Icons.NextIdPersonaWarning size={18} />
                             )}
                         </Typography>
                     )}

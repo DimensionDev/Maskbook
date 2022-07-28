@@ -3,7 +3,7 @@ import { ListItem, List, Typography, Link } from '@mui/material'
 import { useERC721ContractSetApproveForAllCallback } from '@masknet/plugin-infra/web3-evm'
 import { TokenIcon } from '@masknet/shared'
 import { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
-import { LinkOutIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { ActionButton } from '@masknet/theme'
 import {
     useAccount,
@@ -118,7 +118,7 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
                             href={Others?.explorerResolver.addressLink?.(chainId, spender.address) ?? ''}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <LinkOutIcon className={cx(classes.spenderLogoIcon, classes.linkOutIcon)} />
+                            <Icons.LinkOut className={cx(classes.spenderLogoIcon, classes.linkOutIcon)} />
                         </Link>
                     </div>
                     <div>

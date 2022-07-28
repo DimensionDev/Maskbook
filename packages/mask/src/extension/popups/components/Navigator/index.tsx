@@ -2,7 +2,7 @@
 
 import { memo } from 'react'
 import { BottomNavigation, BottomNavigationAction, Box } from '@mui/material'
-import { PersonasIcon, WalletNavIcon, DashboardIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { useMatch, useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useEnterDashboard } from '../../hook/useEnterDashboard'
@@ -45,21 +45,21 @@ export const Navigator = memo(() => {
                 value={matchPersona ? NavRouter.Personas : matchWallet ? NavRouter.Wallet : null}>
                 <BottomNavigationAction
                     label={t('personas')}
-                    icon={<PersonasIcon />}
+                    icon={<Icons.Personas />}
                     value={NavRouter.Personas}
                     onClick={() => navigate(PopupRoutes.Personas, { replace: true })}
                     classes={{ label: classes.label, selected: classes.selected }}
                 />
                 <BottomNavigationAction
                     label={t('wallet')}
-                    icon={<WalletNavIcon />}
+                    icon={<Icons.WalletNav />}
                     value={NavRouter.Wallet}
                     onClick={() => navigate(PopupRoutes.Wallet, { replace: true })}
                     classes={{ label: classes.label, selected: classes.selected }}
                 />
                 <BottomNavigationAction
                     label={t('dashboard')}
-                    icon={<DashboardIcon />}
+                    icon={<Icons.Dashboard />}
                     onClick={onEnter}
                     classes={{ label: classes.label, selected: classes.selected }}
                 />

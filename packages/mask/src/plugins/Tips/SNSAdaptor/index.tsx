@@ -1,4 +1,4 @@
-import { TipsIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
@@ -17,7 +17,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const name = base.name
-            const icon = <TipsIcon />
+            const icon = <Icons.Tips />
             const iconFilterColor = 'rgba(247, 147, 30, 0.3)'
             return {
                 RenderEntryComponent(EntryComponentProps) {

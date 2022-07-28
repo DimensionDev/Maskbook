@@ -21,7 +21,7 @@
     "@types/dompurify": "^2.3.3",
     "@types/react": "18.0.15",
     "anchorme": "^2.1.2",
-    "async-call-rpc": "^6.1.0",
+    "async-call-rpc": "^6.1.1",
     "bignumber.js": "^9.0.2",
     "dompurify": "^2.3.10",
     "i18next-browser-languagedetector": "^6.1.4",

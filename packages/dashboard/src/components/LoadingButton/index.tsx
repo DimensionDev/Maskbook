@@ -1,4 +1,4 @@
-import { getMaskColor, makeStyles, MaskLoadingButton , LoadingAnimation } from '@masknet/theme'
+import { getMaskColor, makeStyles, MaskLoadingButton, LoadingAnimation } from '@masknet/theme'
 import { memo } from 'react'
 import classNames from 'classnames'
 import type { LoadingButtonProps } from '@mui/lab'

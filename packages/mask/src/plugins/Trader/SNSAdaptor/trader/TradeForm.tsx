@@ -24,7 +24,7 @@ import {
     useSelectAdvancedSettings,
     useTokenSecurity,
 } from '@masknet/shared'
-import { ChevronUpIcon, Drop, RefreshIcon, ArrowDownward } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import classnames from 'classnames'
 import { isNativeTokenWrapper } from '../../helpers'
 import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo'
@@ -473,7 +473,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 onClick: () => onTokenChipClick(TokenPanelType.Input),
                                 onDelete: () => onTokenChipClick(TokenPanelType.Input),
                                 deleteIcon: (
-                                    <Drop
+                                    <Icons.Drop
                                         className={styles.cx(classes.dropIcon, !inputToken ? classes.whiteDrop : null)}
                                     />
                                 ),
@@ -482,7 +482,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                     />
                     <Box className={classes.reverseWrapper}>
                         <Box className={classes.reverse}>
-                            <ArrowDownward className={classes.reverseIcon} onClick={onSwitch} />
+                            <Icons.ArrowDownward className={classes.reverseIcon} onClick={onSwitch} />
                         </Box>
                     </Box>
                     <Box className={classes.section} marginBottom={2.5}>
@@ -500,7 +500,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     onClick: () => onTokenChipClick(TokenPanelType.Output),
                                     onDelete: () => onTokenChipClick(TokenPanelType.Output),
                                     deleteIcon: (
-                                        <Drop
+                                        <Icons.Drop
                                             className={styles.cx(
                                                 classes.dropIcon,
                                                 !outputToken ? classes.whiteDrop : null,
@@ -538,7 +538,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 </Collapse>
                                 {trades.filter((x) => !!x.value).length > 1 ? (
                                     <Box width="100%" display="flex" justifyContent="center" marginTop={1.5}>
-                                        <ChevronUpIcon
+                                        <Icons.ChevronUp
                                             className={classnames(
                                                 classes.chevron,
                                                 isExpand ? classes.reverseChevron : null,
@@ -563,7 +563,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         className={classes.icon}
                                         size="small"
                                         onClick={() => allTradeComputed.forEach((x) => x.retry())}>
-                                        <RefreshIcon />
+                                        <Icons.Refresh />
                                     </IconButton>
                                     <IconButton className={classes.icon} size="small" onClick={openSwapSettingDialog}>
                                         <TuneIcon fontSize="small" />

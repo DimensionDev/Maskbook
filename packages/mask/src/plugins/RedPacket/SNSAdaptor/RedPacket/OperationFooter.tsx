@@ -5,7 +5,7 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { ActionButton } from '@masknet/theme'
 import { Box, useTheme } from '@mui/material'
-import { SharedIcon, ConnectWallet } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { useI18N as useBaseI18n } from '../../../../utils'
 import { useI18N } from '../../locales'
 import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
@@ -90,14 +90,14 @@ export function OperationFooter({
                 ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                 <WalletConnectedBoundary
                     hideRiskWarningConfirmed
-                    startIcon={<ConnectWallet size={18} />}
+                    startIcon={<Icons.ConnectWallet size={18} />}
                     ActionButtonProps={{ variant: 'roundedDark' }}>
                     <Box className={classes.footer}>
                         {canRefund ? null : (
                             <ActionButton
                                 fullWidth
                                 variant="roundedDark"
-                                startIcon={<SharedIcon size={18} />}
+                                startIcon={<Icons.Shared size={18} />}
                                 onClick={onShare}>
                                 {tr('share')}
                             </ActionButton>

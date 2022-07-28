@@ -1,6 +1,6 @@
 export { fetch, fetchJSON } from './fetch'
 export { resolveTCOLink } from './short-link-resolver'
-export { openPopupWindow, removePopupWindow, openDashboard } from './popup-opener'
+export { openPopupWindow, removePopupWindow, openDashboard, queryCurrentActiveTab } from './popup-opener'
 export { queryExtensionPermission, requestExtensionPermission } from './request-permission'
 export { saveFileFromBuffer, type SaveFileOptions } from '../../../shared/helpers/download'
 export { r2d2Fetch } from './r2d2Fetch'

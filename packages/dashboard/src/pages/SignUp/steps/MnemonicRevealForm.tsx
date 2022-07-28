@@ -21,7 +21,7 @@ import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
 import { Services } from '../../../API'
 import PrintIcon from '@mui/icons-material/Print'
 import { PreviewDialog } from './PreviewDialog'
-import { DownloadIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { useAsync } from 'react-use'
 
 export const MnemonicRevealForm = memo(() => {
@@ -140,7 +140,7 @@ export const MnemonicRevealForm = memo(() => {
                                 />
                             </IconButton>
                             <IconButton onClick={() => onPreview('download')}>
-                                <DownloadIcon color="MaskColorVar.textLink" />
+                                <Icons.Download color="MaskColorVar.textLink" />
                             </IconButton>
                         </ButtonContainer>
                     </Box>
