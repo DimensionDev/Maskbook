@@ -157,7 +157,6 @@ export const getDonationList = async (walletList: WalletTypes[]) => {
 export const getFootprintList = async (walletList: WalletTypes[]) => {
     const promises = walletList.map(({ address, platform }) => {
         return RSS3.getFootprints(formatEthereumAddress(address)).then((result) => {
-            console.log({ result })
             if (result) {
                 return {
                     address,
