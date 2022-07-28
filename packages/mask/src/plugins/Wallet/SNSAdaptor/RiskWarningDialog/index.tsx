@@ -109,7 +109,7 @@ export function WalletRiskWarningDialog() {
             onClose={onClose}>
             <DialogContent className={classes.paper}>
                 <div className={classes.icon}>
-                    <Warning size={90} />
+                    <Warning size={90} sx={{ filter: 'drop-shadow(0px 6px 12px rgba(255, 53, 69, 0.2))' }} />
                 </div>
                 <Typography
                     className={classes.title}
