@@ -257,6 +257,7 @@
         "zubin"
     ],
     "ignoreWords": [
+        "multipass",
         "aicanft",
         "algr",
         "anft",
