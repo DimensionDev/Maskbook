@@ -24,95 +24,98 @@ import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { useI18N } from '../../../utils'
 import { usePendingTransactions } from './usePendingTransactions'
 
-const useStyles = makeStyles<{ contentBackground?: string; disableChange?: boolean }>()(
-    (theme, { contentBackground, disableChange }) => ({
-        content: {
-            padding: theme.spacing(2, 3, 3),
-        },
-        currentAccount: {
-            padding: theme.spacing(0, 1.5),
-            marginBottom: theme.spacing(2),
-            display: 'flex',
-            background:
-                contentBackground ??
-                (isDashboardPage() ? getMaskColor(theme).primaryBackground2 : theme.palette.background.default),
-            borderRadius: 8,
-            alignItems: 'center',
-            height: disableChange ? 60 : 82,
-        },
-        dashboardBackground: {
-            background: theme.palette.background.default,
-        },
-        accountInfo: {
-            fontSize: 16,
-            flexGrow: 1,
-            marginLeft: theme.spacing(1.5),
-        },
-        accountName: {
-            color: theme.palette.maskColor.dark,
-            fontWeight: 700,
-            fontSize: 14,
-            marginRight: 5,
-            lineHeight: '18px',
-        },
-        balance: {
-            color: theme.palette.maskColor.dark,
-            fontSize: 14,
-            paddingTop: 2,
-            lineHeight: '18px',
-        },
-        infoRow: {
-            display: 'flex',
-            alignItems: 'center',
-        },
-        actionButton: {
-            fontSize: 12,
-            color: 'white',
+const useStyles = makeStyles<{
+    contentBackground?: string
+    disableChange?: boolean
+    withinRiskWarningDialog?: boolean
+}>()((theme, { contentBackground, disableChange, withinRiskWarningDialog }) => ({
+    content: {
+        padding: theme.spacing(2, 3, 3),
+    },
+    currentAccount: {
+        padding: theme.spacing(0, 1.5),
+        marginBottom: withinRiskWarningDialog ? '7px' : theme.spacing(2),
+        display: 'flex',
+        background:
+            contentBackground ??
+            (isDashboardPage() ? getMaskColor(theme).primaryBackground2 : theme.palette.background.default),
+        borderRadius: 8,
+        alignItems: 'center',
+        height: disableChange ? 60 : 82,
+    },
+    dashboardBackground: {
+        background: theme.palette.background.default,
+    },
+    accountInfo: {
+        fontSize: 16,
+        flexGrow: 1,
+        marginLeft: theme.spacing(1.5),
+    },
+    accountName: {
+        color: theme.palette.maskColor.dark,
+        fontWeight: 700,
+        fontSize: 14,
+        marginRight: 5,
+        lineHeight: '18px',
+    },
+    balance: {
+        color: theme.palette.maskColor.dark,
+        fontSize: 14,
+        paddingTop: 2,
+        lineHeight: '18px',
+    },
+    infoRow: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    actionButton: {
+        fontSize: 12,
+        color: 'white',
+        backgroundColor: theme.palette.maskColor.dark,
+        marginLeft: theme.spacing(1),
+        padding: theme.spacing(1, 2),
+        '&:hover': {
             backgroundColor: theme.palette.maskColor.dark,
-            marginLeft: theme.spacing(1),
-            padding: theme.spacing(1, 2),
-            '&:hover': {
-                backgroundColor: theme.palette.maskColor.dark,
-            },
         },
-        address: {
-            fontSize: 16,
-            marginRight: theme.spacing(1),
-            display: 'inline-block',
-        },
-        link: {
-            fontSize: 14,
-            display: 'flex',
-            alignItems: 'center',
-        },
-        twitterProviderBorder: {
-            width: 14,
-            height: 14,
-        },
-        connectButtonWrapper: {
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            margin: theme.spacing(2, 0),
-        },
-        icon: {
-            width: 17.5,
-            height: 17.5,
-            marginRight: theme.spacing(0.5),
-        },
-        copyIcon: {
-            color: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor.dark,
-        },
-        linkIcon: {
-            color: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor?.dark,
-        },
-        statusBox: {
-            position: 'relative',
-        },
-    }),
-)
+    },
+    address: {
+        fontSize: 16,
+        marginRight: theme.spacing(1),
+        display: 'inline-block',
+    },
+    link: {
+        fontSize: 14,
+        display: 'flex',
+        alignItems: 'center',
+    },
+    twitterProviderBorder: {
+        width: 14,
+        height: 14,
+    },
+    connectButtonWrapper: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: theme.spacing(2, 0),
+    },
+    icon: {
+        width: 17.5,
+        height: 17.5,
+        marginRight: theme.spacing(0.5),
+    },
+    copyIcon: {
+        color: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor.dark,
+    },
+    linkIcon: {
+        color: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor?.dark,
+    },
+    statusBox: {
+        position: 'relative',
+    },
+}))
 interface WalletStatusBox {
     disableChange?: boolean
+    withinRiskWarningDialog?: boolean
     showPendingTransaction?: boolean
     closeDialog?: () => void
 }
@@ -123,6 +126,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const { classes } = useStyles({
         contentBackground: providerDescriptor?.backgroundGradient,
         disableChange: props.disableChange,
+        withinRiskWarningDialog: props.withinRiskWarningDialog,
     })
     const connection = useWeb3Connection()
     const chainId = useChainId()

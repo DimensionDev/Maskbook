@@ -18,6 +18,8 @@ const useStyles = makeStyles()((theme) => ({
     paper: {
         color: getMaskColor(theme).redMain,
         paddingBottom: 0,
+        paddingLeft: 16,
+        paddingRight: 16,
         overflowY: 'hidden',
     },
     buttons: {
