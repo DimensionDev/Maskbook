@@ -1,8 +1,14 @@
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
-import { ChainDescriptor, NetworkDescriptor, NetworkPluginID, ProviderDescriptor } from '@masknet/web3-shared-base'
+import {
+    ChainDescriptor,
+    createFungibleToken,
+    NetworkDescriptor,
+    NetworkPluginID,
+    ProviderDescriptor,
+} from '@masknet/web3-shared-base'
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types'
-import { createNativeToken } from '../utils/token'
+import { getTokenConstant } from './constants'
 
 const PLUGIN_ID = NetworkPluginID.PLUGIN_SOLANA
 
@@ -18,7 +24,15 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
         fullName: 'Solana',
         shortName: 'Solana',
         network: 'mainnet',
-        nativeCurrency: createNativeToken(ChainId.Mainnet),
+        nativeCurrency: createFungibleToken(
+            ChainId.Mainnet,
+            SchemaType.Fungible,
+            getTokenConstant(ChainId.Mainnet, 'SOL_ADDRESS')!,
+            'Solana',
+            'SOL',
+            9,
+            'https://assets.coingecko.com/coins/images/4128/small/solana.png',
+        ),
         explorerURL: {
             url: 'https://explorer.solana.com/',
         },
@@ -34,7 +48,15 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
         fullName: 'Solana',
         shortName: 'Solana',
         network: 'devnet',
-        nativeCurrency: createNativeToken(ChainId.Devnet),
+        nativeCurrency: createFungibleToken(
+            ChainId.Devnet,
+            SchemaType.Fungible,
+            getTokenConstant(ChainId.Devnet, 'SOL_ADDRESS')!,
+            'Solana',
+            'SOL',
+            9,
+            'https://assets.coingecko.com/coins/images/4128/small/solana.png',
+        ),
         explorerURL: {
             url: 'https://explorer.solana.com/',
             parameters: {
@@ -53,7 +75,15 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
         fullName: 'Solana',
         shortName: 'Solana',
         network: 'testnet',
-        nativeCurrency: createNativeToken(ChainId.Devnet),
+        nativeCurrency: createFungibleToken(
+            ChainId.Testnet,
+            SchemaType.Fungible,
+            getTokenConstant(ChainId.Testnet, 'SOL_ADDRESS')!,
+            'Solana',
+            'SOL',
+            9,
+            'https://assets.coingecko.com/coins/images/4128/small/solana.png',
+        ),
         explorerURL: {
             url: 'https://explorer.solana.com/',
             parameters: {
