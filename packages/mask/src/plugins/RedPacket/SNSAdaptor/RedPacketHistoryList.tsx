@@ -7,7 +7,7 @@ import { useI18N } from '../locales'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { LoadingAnimation } from '@masknet/shared'
-import { EmptySimpleIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -68,7 +68,7 @@ export function RedPacketHistoryList(props: RedPacketHistoryListProps) {
     if (!histories?.length) {
         return (
             <Typography className={classes.placeholder} color="textSecondary">
-                <EmptySimpleIcon className={classes.emptyIcon} />
+                <Icons.EmptySimple className={classes.emptyIcon} />
                 {t.token_no_history()}
             </Typography>
         )
