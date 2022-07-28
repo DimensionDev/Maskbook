@@ -1,4 +1,3 @@
-import { throttle } from 'lodash-unified'
 import { Flags } from '../../../shared/flags'
 import list from './i18n-cache-query-list'
 
@@ -11,57 +10,27 @@ export async function queryRemoteI18NBundle(lang: string): Promise<Bundle[]> {
     const updateLang = getCurrentLanguage(lang)
     if (!updateLang) return []
 
-    const timestamp = await fetchManifest()
+    const responses = updateLang === 'en-US' ? fetchEnglishBundle() : fetchTranslatedBundle(lang)
+    const results = await Promise.allSettled(responses)
+    return results.filter((x): x is PromiseFulfilledResult<Bundle> => x.status === 'fulfilled').map((x) => x.value)
+}
 
-    const storage = await caches.open('i18n')
-    const results = await Promise.allSettled(
-        Object.entries(list).map(async ([url, namespace]): Promise<[object | null, string]> => {
-            url =
-                'https://distributions.crowdin.net/c4267b19b900d4c0b67f018ulde/content' +
-                url.replace('%locale%', updateLang)
-
-            // for each URL, we query the cache storage
-            const res: Response | undefined = await storage.match(url)
-            const lastModified = res?.headers.get('Last-Modified')
-            if (lastModified) {
-                const lastModifiedDate = new Date(lastModified)
-
-                // if it is newer than the timestamp, we don't need to fetch it again
-                if (lastModifiedDate >= new Date(timestamp * 1000)) {
-                    if (res?.ok) return [await res.json(), namespace]
-                    // it failed, we'll not retry it until lastModified outdated.
-                    else return [null, namespace]
-                }
-            }
-
-            // fill the cache storage
-            const res2 = await fetch(url, fetchOption)
-            if (res2.ok) storage.put(url, res2.clone())
-            else {
-                const failed = new Response(null, {
-                    headers: new Headers({
-                        ...res2.headers,
-                        'Last-Modified': new Date(timestamp * 1000).toUTCString(),
-                    }),
-                    status: res2.status,
-                })
-                storage.put(url, failed)
-            }
-
-            if (res2.ok) return [await res2.json(), namespace]
-            return [null, namespace]
-        }),
-    )
-
-    const bundle: Bundle[] = []
-    for (const result of results) {
-        if (result.status === 'rejected') continue
-        const [json, namespace] = result.value
-        if (!json || !namespace) continue
-        bundle.push([namespace, updateLang, json])
-    }
-
-    return bundle
+function fetchTranslatedBundle(lang: string) {
+    return Object.entries(list).map(async ([url, namespace]): Promise<Bundle> => {
+        const path = url.replace('%locale%', lang)
+        const response = await fetch(
+            'https://distributions.crowdin.net/c4267b19b900d4c0b67f018ulde/content' + path,
+            fetchOption,
+        )
+        return [namespace, lang, await response.json()]
+    })
+}
+function fetchEnglishBundle() {
+    return Object.entries(list).map(async ([url, namespace]): Promise<Bundle> => {
+        const path = url.replace('/[DimensionDev.Maskbook] ', '').replace('%locale%', 'en-US')
+        const response = await fetch('https://raw.githubusercontent.com/DimensionDev/Maskbook/' + path, fetchOption)
+        return [namespace, 'en-US', await response.json()]
+    })
 }
 
 const fetchOption = {
@@ -69,18 +38,9 @@ const fetchOption = {
     referrerPolicy: 'no-referrer',
 } as const
 
-const fetchManifest = throttle(async () => {
-    const { timestamp } = await fetch(
-        'https://distributions.crowdin.net/c4267b19b900d4c0b67f018ulde/manifest.json',
-        fetchOption,
-    ).then((x) => x.json())
-    return timestamp
-}, 1000 * 60)
-
 function getCurrentLanguage(lang: string) {
-    // en-US is not hosted on crowdin
-    if (lang === 'en-US') return null
     if (['zh-CN', 'zh-TW'].includes(lang)) return lang
+    if (lang.startsWith('en')) return 'en-US'
     if (lang.startsWith('zh')) return 'zh-TW'
     if (lang.startsWith('ja')) return 'ja-JP'
     if (lang.startsWith('ko')) return 'ko-KR'
