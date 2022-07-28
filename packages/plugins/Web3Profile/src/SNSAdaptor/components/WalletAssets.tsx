@@ -10,6 +10,7 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Empty } from './Empty'
 import { CollectionList } from './CollectionList'
 import { useMemo, useState } from 'react'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -111,9 +112,9 @@ export interface WalletAssetsCardProps extends withClasses<never | 'root'> {
 }
 
 const enum LOAD_STATUS {
-    'Unnecessary' = 1,
-    'Necessary' = 2,
-    'Finish' = 3,
+    Unnecessary = 1,
+    Necessary = 2,
+    Finish = 3,
 }
 
 export function WalletAssetsCard(props: WalletAssetsCardProps) {
@@ -135,7 +136,7 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
     const collections = useMemo(() => {
         const filterCollections = collectionList?.filter((collection) => !collection?.hidden)
         if (!filterCollections || filterCollections?.length === 0) {
-            return []
+            return EMPTY_LIST
         }
         if (filterCollections?.length > 8 && loadStatus !== LOAD_STATUS.Finish) {
             return filterCollections?.slice(0, 8)

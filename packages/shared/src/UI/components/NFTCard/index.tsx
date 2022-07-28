@@ -133,7 +133,7 @@ export function NFTImageCollectibleAvatar({
     ) : (
         <ShadowRootTooltip title={token?.contract?.name ?? ''} placement="top" arrow>
             <Box sx={{ width: size, height: size }} className={classes.defaultImage}>
-                <Icons.MaskAvatarIcon className={classes.maskIcon} />
+                <Icons.MaskAvatar className={classes.maskIcon} />
             </Box>
         </ShadowRootTooltip>
     )

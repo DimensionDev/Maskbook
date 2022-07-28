@@ -98,7 +98,7 @@ export function FeedCard({ feed, address, onSelect }: FeedCardProps) {
             if (feed.metadata?.to?.toLowerCase() === address) {
                 return (
                     <span>
-                        {t.acquire_a_NFT_from()} <ReversedAddress address={feed.metadata?.from} />
+                        {t.acquired_a_NFT_from()} <ReversedAddress address={feed.metadata?.from} />
                     </span>
                 )
             }

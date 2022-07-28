@@ -6,7 +6,7 @@ import { Box, Card, DialogContent, Link, Typography } from '@mui/material'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import differenceInCalendarDays from 'date-fns/differenceInDays'
 import differenceInCalendarHours from 'date-fns/differenceInHours'
-import { Gitcoin, LinkOut, OpenSeaColoredIcon, PolygonScan, EtherScan } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
@@ -149,15 +149,15 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
         const icons = relatedURLs.map((url) => {
             let icon: ReactNode = null
             if (url.includes('etherscan.io')) {
-                icon = <EtherScan size={24} sx={{ marginRight: '12px' }} />
+                icon = <Icons.EtherScan size={24} sx={{ marginRight: '12px' }} />
             } else if (url.includes('polygonscan.com/tx')) {
-                icon = <PolygonScan size={24} sx={{ marginRight: '12px' }} />
+                icon = <Icons.PolygonScan size={24} sx={{ marginRight: '12px' }} />
             } else if (url.includes('polygonscan.com/token')) {
-                icon = <PolygonScan size={24} sx={{ marginRight: '12px' }} />
+                icon = <Icons.PolygonScan size={24} sx={{ marginRight: '12px' }} />
             } else if (url.includes('opensea.io')) {
-                icon = <OpenSeaColoredIcon size={24} sx={{ marginRight: '12px' }} />
+                icon = <Icons.OpenSeaColored size={24} sx={{ marginRight: '12px' }} />
             } else if (url.includes('gitcoin.co')) {
-                icon = <Gitcoin size={28} sx={{ marginRight: '12px' }} />
+                icon = <Icons.Gitcoin size={28} sx={{ marginRight: '12px' }} />
             }
             return icon ? (
                 <Link href={url} target="_blank" marginBottom="8px">
@@ -237,7 +237,7 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                                         className={classes.linkBox}
                                         target="_blank"
                                         href={explorerResolver.transactionLink(ChainId.Mainnet, contribution.txHash)}>
-                                        <LinkOut size={18} color="white" />
+                                        <Icons.LinkOut size={18} color="white" />
                                     </Link>
                                 </div>
                             </div>

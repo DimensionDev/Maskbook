@@ -1,4 +1,5 @@
 import { CollectionDetailCard } from '@masknet/shared'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
@@ -44,7 +45,7 @@ export interface DonationPageProps {
     address: SocialAddress<NetworkPluginID>
 }
 
-export function DonationPage({ donations = [], loading, address }: DonationPageProps) {
+export function DonationPage({ donations = EMPTY_LIST, loading, address }: DonationPageProps) {
     const { classes } = useStyles()
     const t = useI18N()
 
