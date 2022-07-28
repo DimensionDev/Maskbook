@@ -117,7 +117,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
                     reject(error)
                 })
         })
-    }, [web3, account, chainId, ITO_Contract, poolSettings, paramResult, connection])
+    }, [web3, account, ITO_Contract, poolSettings, paramResult, connection])
 
     return [state, fillCallback] as const
 }
@@ -209,7 +209,7 @@ export function useFillParams(poolSettings: PoolSettings | undefined) {
         ) as Parameters<ITO2['methods']['fill_pool']>
 
         return { params, paramsObj }
-    }, [poolSettings]).value
+    }, [poolSettings, ITO_Contract]).value
 }
 
 function checkParams(paramsObj: paramsObjType) {

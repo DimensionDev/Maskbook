@@ -1,5 +1,5 @@
-import { ZERO, NetworkPluginID, isSameAddress, FungibleToken } from '@masknet/web3-shared-base'
-import { useTokenConstants, ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { ZERO, NetworkPluginID, FungibleToken } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
@@ -56,7 +56,6 @@ export function SwapGuide(props: SwapGuideProps) {
         onClose,
     } = props
     const [isPending, startTransition] = useTransition()
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const onCloseShareDialog = useCallback(() => {
         startTransition(() => {
             onClose()
@@ -104,7 +103,7 @@ export function SwapGuide(props: SwapGuideProps) {
                                 <UnlockDialog
                                     tokens={
                                         payload.exchange_tokens.filter(
-                                            (x) => !isSameAddress(NATIVE_TOKEN_ADDRESS, x.address),
+                                            (x) => !isNativeTokenAddress(x.address),
                                         ) as Array<FungibleToken<ChainId, SchemaType.ERC20>>
                                     }
                                 />

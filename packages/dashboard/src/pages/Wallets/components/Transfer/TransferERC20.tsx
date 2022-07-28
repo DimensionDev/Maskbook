@@ -1,3 +1,6 @@
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useUpdateEffect } from 'react-use'
+import BigNumber from 'bignumber.js'
 import { Icons } from '@masknet/icons'
 import { useGasLimit, useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
 import {
@@ -16,7 +19,6 @@ import {
     TokenType,
     FungibleToken,
     isGreaterThan,
-    isSameAddress,
     isZero,
     multipliedBy,
     NetworkPluginID,
@@ -26,18 +28,15 @@ import {
     addGasMargin,
     SchemaType,
     formatWeiToEther,
-    useTokenConstants,
     ChainId,
     chainResolver,
     explorerResolver,
     isValidAddress,
     NetworkType,
+    isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import TuneIcon from '@mui/icons-material/Tune'
 import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/material'
-import BigNumber from 'bignumber.js'
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useUpdateEffect } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
 import { useGasConfig } from '../../hooks/useGasConfig'
 
@@ -49,7 +48,6 @@ const GAS_LIMIT = 21000
 
 export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const t = useDashboardI18N()
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const anchorEl = useRef<HTMLDivElement | null>(null)
     const [amount, setAmount] = useState('')
     const [address, setAddress] = useState('')
@@ -73,7 +71,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     }, [token])
 
     // workaround: transferERC20 should support non-evm network
-    const isNativeToken = isSameAddress(selectedToken?.address, NATIVE_TOKEN_ADDRESS)
+    const isNativeToken = isNativeTokenAddress(selectedToken.address)
     const tokenType = isNativeToken ? SchemaType.Native : SchemaType.ERC20
 
     // balance

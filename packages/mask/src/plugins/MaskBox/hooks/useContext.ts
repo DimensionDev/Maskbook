@@ -8,14 +8,7 @@ import { omit, clamp, first, uniq } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import { createContainer } from 'unstated-next'
 import { unreachable } from '@dimensiondev/kit'
-import {
-    ChainId,
-    useTokenConstants,
-    useMaskBoxConstants,
-    ZERO_ADDRESS,
-    isZeroAddress,
-    SchemaType,
-} from '@masknet/web3-shared-evm'
+import { useMaskBoxConstants, isZeroAddress, SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { BoxInfo, BoxState } from '../type'
 import { useMaskBoxInfo } from './useMaskBoxInfo'
@@ -51,7 +44,6 @@ import { useERC20TokenAllowance } from '@masknet/plugin-infra/web3-evm'
 function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const now = new Date()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(ChainId.Mainnet)
     const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants()
     const coder = ABICoder as unknown as ABICoder.AbiCoder
 
@@ -91,7 +83,7 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
         loading: loadingBoxInfo,
         retry: retryBoxInfo,
     } = useAsyncRetry<BoxInfo | null>(async () => {
-        if (!maskBoxInfo || !maskBoxStatus || isZeroAddress(maskBoxInfo?.creator ?? ZERO_ADDRESS)) return null
+        if (!maskBoxInfo || !maskBoxStatus || !maskBoxInfo?.creator || isZeroAddress(maskBoxInfo?.creator)) return null
         const personalLimit = Number.parseInt(maskBoxInfo.personal_limit, 10)
         const remaining = Number.parseInt(maskBoxStatus.remaining, 10) // the current balance of the creator's account
         const total = Number.parseInt(maskBoxStatus.total, 10) // the total amount of tokens in the box
@@ -273,14 +265,14 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const { value: paymentNativeTokenBalance = '0' } = useBalance()
     const { value: paymentERC20TokenBalance = '0' } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
-        isSameAddress(paymentTokenAddress, NATIVE_TOKEN_ADDRESS) ? '' : paymentTokenAddress,
+        isNativeTokenAddress(paymentTokenAddress) ? '' : paymentTokenAddress,
     )
     const paymentTokenInfo = boxInfo?.payments.find((x) => isSameAddress(x.token.address, paymentTokenAddress))
     const paymentTokenIndex =
         boxInfo?.payments.findIndex((x) => isSameAddress(x.token.address ?? '', paymentTokenAddress)) ?? -1
     const paymentTokenPrice = paymentTokenInfo?.price ?? '0'
     const costAmount = multipliedBy(paymentTokenPrice, paymentCount)
-    const isNativeToken = isSameAddress(paymentTokenAddress, NATIVE_TOKEN_ADDRESS)
+    const isNativeToken = isNativeTokenAddress(paymentTokenAddress)
     const paymentTokenBalance = isNativeToken ? paymentNativeTokenBalance : paymentERC20TokenBalance
     const paymentTokenDetailed = paymentTokenInfo?.token ?? null
     const isBalanceInsufficient = costAmount.gt(paymentTokenBalance)

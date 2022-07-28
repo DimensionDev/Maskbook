@@ -1,9 +1,9 @@
 import bs58 from 'bs58'
 import * as Web3 from '@solana/web3.js'
 import { getEnumAsArray } from '@dimensiondev/kit'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '../types'
-import { ZERO_ADDRESS } from '../constants'
-import { currySameAddress } from '@masknet/web3-shared-base'
+import { getTokenConstant, ZERO_ADDRESS } from '../constants'
 
 export function encodePublicKey(key: Web3.PublicKey) {
     return key.toBase58()
@@ -33,8 +33,27 @@ export function isValidAddress(address?: string) {
     }
 }
 
-export function isValidChainId(chainId: number) {
+export function isValidChainId(chainId: ChainId) {
     return getEnumAsArray(ChainId).some((x) => x.value === chainId)
 }
 
-export const isZeroAddress = currySameAddress(ZERO_ADDRESS)
+export function isZeroAddress(address?: string) {
+    return isSameAddress(address, ZERO_ADDRESS)
+}
+
+export function isNativeTokenAddress(address?: string) {
+    const set = new Set(getEnumAsArray(ChainId).map((x) => getTokenConstant(x.value, 'SOL_ADDRESS')))
+    return !!(address && set.has(address))
+}
+
+export function getZeroAddress() {
+    return ZERO_ADDRESS
+}
+
+export function getMaskTokenAddress(chainId = ChainId.Mainnet) {
+    return ''
+}
+
+export function getNativeTokenAddress(chainId = ChainId.Mainnet) {
+    return getTokenConstant(chainId, 'SOL_ADDRESS') ?? ''
+}

@@ -17,8 +17,6 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transac
     constructor(
         protected context: Plugin.Shared.SharedContext,
         protected options: {
-            /** Default address or nullish address */
-            defaultAddress: string
             /** Default block time in seconds */
             defaultBlockDelay: number
             /** Built-in chain descriptors */
@@ -42,23 +40,31 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transac
     providerResolver = createProviderResolver<ChainId, ProviderType>(this.options.providerDescriptors)
     networkResolver = createNetworkResolver<ChainId, NetworkType>(this.options.networkDescriptors)
 
-    getZeroAddress(chainId?: ChainId | undefined): string {
-        return this.options.defaultAddress
+    getZeroAddress(): string | undefined {
+        throw new Error('Method not implemented.')
     }
-    getNativeTokenAddress(chainId?: ChainId | undefined): string {
-        return this.options.defaultAddress
+    getNativeTokenAddress(chainId?: ChainId): string | undefined {
+        throw new Error('Method not implemented.')
     }
-    getMaskTokenAddress(chainId?: ChainId | undefined): string | undefined {
+    getMaskTokenAddress(chainId?: ChainId): string | undefined {
         return undefined
     }
     getAverageBlockDelay(chainId: ChainId, scale = 1): number {
         return this.options.defaultBlockDelay * scale * 1000
     }
-    getTransactionSignature(chainId?: ChainId | undefined, transaction?: Transaction | undefined): string | undefined {
+    getTransactionSignature(chainId?: ChainId, transaction?: Transaction | undefined): string | undefined {
         return
     }
 
     isSameAddress = isSameAddress
+
+    isZeroAddress(address?: string): boolean {
+        throw new Error('Method not implemented.')
+    }
+
+    isNativeTokenAddress(address?: string): boolean {
+        throw new Error('Method not implemented.')
+    }
 
     isValidChain(chainId: ChainId, testnet = false): boolean {
         return this.options.chainDescriptors.find((x) => x.chainId === chainId)?.network === 'mainnet' || testnet

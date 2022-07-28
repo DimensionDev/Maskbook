@@ -1,21 +1,21 @@
 import { i18NextInstance } from '@masknet/shared-base'
 import {
     ChainId,
-    getNftRedPacketConstants,
-    getRedPacketConstants,
+    getNftRedPacketConstant,
+    getRedPacketConstant,
     isNativeTokenAddress,
     TransactionParameter,
 } from '@masknet/web3-shared-evm'
+import { isSameAddress, formatBalance, TransactionContext } from '@masknet/web3-shared-base'
 import type { TransactionDescriptor } from '../types'
 import { Web3StateSettings } from '../../../settings'
-import { isSameAddress, formatBalance, TransactionContext } from '@masknet/web3-shared-base'
 
 export class RedPacketDescriptor implements TransactionDescriptor {
     // TODO: 6002: avoid using i18n text in a service. delegate it to ui.
     async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
         const context = context_ as TransactionContext<ChainId, string | undefined>
-        const { HAPPY_RED_PACKET_ADDRESS_V4 } = getRedPacketConstants(context.chainId)
-        const { RED_PACKET_NFT_ADDRESS } = getNftRedPacketConstants(context.chainId)
+        const HAPPY_RED_PACKET_ADDRESS_V4 = getRedPacketConstant(context.chainId, 'HAPPY_RED_PACKET_ADDRESS_V4')
+        const RED_PACKET_NFT_ADDRESS = getNftRedPacketConstant(context.chainId, 'RED_PACKET_NFT_ADDRESS')
 
         const method = context.methods?.find((x) => ['create_red_packet', 'claim'].includes(x.name ?? ''))
 

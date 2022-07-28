@@ -1,7 +1,7 @@
 import { EthereumAddress } from 'wallet.ts'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { currySameAddress, isSameAddress } from '@masknet/web3-shared-base'
-import { getRedPacketConstants, getTokenConstants, ZERO_ADDRESS } from '../constants'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { getRedPacketConstants, getTokenConstant, ZERO_ADDRESS } from '../constants'
 import { ChainId } from '../types'
 
 export function isEmptyHex(hex?: string) {
@@ -13,15 +13,18 @@ export function isValidAddress(address?: string) {
     return EthereumAddress.isValid(address)
 }
 
-export function isValidChainId(chainId: number) {
+export function isValidChainId(chainId: ChainId) {
     return getEnumAsArray(ChainId).some((x) => x.value === chainId)
 }
 
-export const isZeroAddress = currySameAddress(ZERO_ADDRESS)
+export function isZeroAddress(address?: string) {
+    return isSameAddress(address, ZERO_ADDRESS)
+}
 
-export const isNativeTokenAddress = currySameAddress(
-    getEnumAsArray(ChainId).map(({ value }) => getTokenConstants(value).NATIVE_TOKEN_ADDRESS!),
-)
+export function isNativeTokenAddress(address?: string) {
+    const set = new Set(getEnumAsArray(ChainId).map((x) => getTokenConstant(x.value, 'NATIVE_TOKEN_ADDRESS')))
+    return !!(address && set.has(address))
+}
 
 export function isRedPacketAddress(address: string, version?: 1 | 2 | 3 | 4) {
     const {
@@ -50,6 +53,14 @@ export function isRedPacketAddress(address: string, version?: 1 | 2 | 3 | 4) {
     }
 }
 
-export function getMaskTokenAddress(chainId: ChainId) {
-    return getTokenConstants(chainId).MASK_ADDRESS
+export function getZeroAddress() {
+    return ZERO_ADDRESS
+}
+
+export function getNativeTokenAddress(chainId = ChainId.Mainnet) {
+    return getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS') ?? ''
+}
+
+export function getMaskTokenAddress(chainId = ChainId.Mainnet) {
+    return getTokenConstant(chainId, 'MASK_ADDRESS') ?? ''
 }
