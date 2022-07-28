@@ -42,6 +42,7 @@ export class ERC721Descriptor implements TransactionDescriptor {
                         title: `${action} ${symbol ?? 'token'} contract`,
                         description: `${action} ${symbol ?? 'token'} contract`,
                         successfulDescription: `${action} the approval successfully.`,
+                        failedDescription: `${action} requestion rejected.`,
                     }
                 }
 
