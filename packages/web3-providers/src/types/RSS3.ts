@@ -40,92 +40,107 @@ export namespace RSS3BaseAPI {
         name: string
     }
 
-    export interface NFT_Contract {
-        address: string
-        name: string
-        symbol: string
+    export interface Token {
+        name?: string
+        image?: string
+        value?: string
+        symbol?: string
+        decimals?: number
+        standard?: string
+    }
+    export interface Metadata {
+        id?: string
+        logo?: string
+        title?: string
+        token?: Token
+        platform?: PLATFORM
+        description?: string
+        image?: string
+        attributes?: Array<{
+            value: string
+            trait_type: string
+        }>
+        standard?: string
     }
 
-    export interface NFT_Trait {
-        trait_type: string
-        value: string
-    }
-    export interface NFT_Type {
-        asset_contract: NFT_Contract
-        chain: string
-        description: string
-        image_preview_url: string
-        image_preview_url_ct: string
-        image_thumbnail_url: string
-        image_thumbnail_url_ct: string
-        image_url: string
-        image_url_ct: string
-        name: string
-        received_at: string
-        token_id: string
-        traits: NFT_Trait[]
+    export interface Action {
+        tag: TAG
+        type: TYPE
+        address_from?: string
+        address_to?: string
+        metadata?: Metadata
+        platform?: PLATFORM
+        related_urls?: string[]
     }
 
-    export interface NFT {
+    export type NETWORK =
+        | 'ethereum'
+        | 'ethereum_classic'
+        | 'binance_smart_chain'
+        | 'polygon'
+        | 'zksync'
+        | 'xdai'
+        | 'arweave'
+        | 'arbitrum'
+        | 'optimism'
+        | 'fantom'
+        | 'avalanche'
+        | 'crossbell'
+
+    export type PLATFORM = 'mirror' | 'lens' | 'gitcoin' | 'snapshot' | 'uniswap' | 'binance' | 'crossbell'
+
+    export type TAG = 'social' | 'transaction' | 'exchange' | 'collectible' | 'donation' | 'governance'
+
+    export type TYPE =
+        | 'transfer'
+        | 'mint'
+        | 'burn'
+        | 'withdraw'
+        | 'deposit'
+        | 'swap'
+        | 'trade'
+        | 'poap'
+        | 'post'
+        | 'comment'
+        | 'share'
+        | 'profile'
+        | 'follow'
+        | 'unfollow'
+        | 'like'
+        | 'propose'
+        | 'vote'
+        | 'launch'
+        | 'donate'
+    export interface CollectionResponse {
+        timestamp: string
+        hash: string
+        owner?: string
+        address_from?: string
+        address_to?: string
+        network?: NETWORK
+        platform?: PLATFORM
+        tag?: TAG
+        type?: TYPE
+        success?: boolean
+        actions?: Action[]
+    }
+
+    export interface Collection {
+        timestamp: string
+        hash: string
+        owner?: string
+        address_from?: string
+        address_to?: string
+        network?: NETWORK
+        platform?: PLATFORM
         id: string
-        detail: NFT_Type
-    }
-
-    export interface DonationTx {
-        adminAddr: string
-        amount: string
-        approach: string
-        donor: string
-        formatedAmount: string
-        symbol: string
-        timeStamp: string
-        tokenAddr: string
-        txHash: string
-    }
-
-    export interface DonationGrant {
-        active: boolean
-        admin_address: string
-        contract_address: string
-        description: string
-        id: number
-        logo: string
-        reference_url: string
-        slug: string
-        title: string
-        token_address: string
-        token_symbol: string
-    }
-
-    export interface DonationType {
-        grant: DonationGrant
-        txs: DonationTx[]
-    }
-
-    export interface Donation {
-        id: string
-        detail: DonationType
-    }
-
-    export interface FootprintType {
-        id: number
-        fancy_id: string
-        name: string
-        event_url: string
-        image_url: string
-        country: string
-        city: string
-        description: string
-        year: number
-        start_date: string
-        end_date: string
-        expiry_date: string
-        supply: number
-    }
-
-    export interface Footprint {
-        id: string
-        detail: FootprintType
+        imageURL?: string
+        title?: string
+        description?: string
+        actions?: Action[]
+        tokenAmount?: number
+        tokenSymbol?: string
+        location: string
     }
 
     export type FeedType = 'Token' | 'Donation' | 'NFT'
@@ -202,8 +217,8 @@ export namespace RSS3BaseAPI {
         createRSS3(address: string): RSS3
         getFileData<T>(rss3: RSS3, address: string, key: string): Promise<T | undefined>
         setFileData<T>(rss3: RSS3, address: string, key: string, data: T): Promise<T>
-        getDonations(address: string): Promise<Donation[] | undefined>
-        getFootprints(address: string): Promise<Footprint[] | undefined>
+        getDonations(address: string): Promise<Collection[] | undefined>
+        getFootprints(address: string): Promise<Collection[] | undefined>
         getNameInfo(id: string): Promise<NameInfo | undefined>
         getProfileInfo(address: string): Promise<ProfileInfo | undefined>
     }

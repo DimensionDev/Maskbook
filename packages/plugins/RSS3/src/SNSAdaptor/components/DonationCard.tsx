@@ -10,7 +10,7 @@ import { RSS3_DEFAULT_IMAGE } from '../../constants'
 import { useI18N } from '../../locales'
 
 export interface DonationCardProps extends HTMLProps<HTMLDivElement> {
-    donation: RSS3BaseAPI.Donation
+    donation: RSS3BaseAPI.Collection
     address: SocialAddress<NetworkPluginID>
     onSelect: () => void
 }
@@ -70,15 +70,14 @@ export const DonationCard = ({ donation, address, onSelect, className, ...rest }
             ? Others?.formatAddress?.(address.address, 5) ?? address.address
             : Others.formatDomainName(domain)
 
-    const date = donation.detail?.txs?.[0]
-        ? formatDateTime(new Date(Number(donation.detail?.txs?.[0]?.timeStamp) * 1000), 'MMM dd, yyyy')
-        : '--'
+    const date = donation.timestamp ? formatDateTime(new Date(donation.timestamp), 'MMM dd, yyyy') : '--'
+
     return (
         <div onClick={onSelect} className={classnames(classes.card, className)} {...rest}>
             <img
                 className={classes.cover}
-                src={donation.detail?.grant?.logo || RSS3_DEFAULT_IMAGE}
-                alt={donation.detail?.grant?.title || t.inactive_project()}
+                src={donation.imageURL || RSS3_DEFAULT_IMAGE}
+                alt={donation.title || t.inactive_project()}
             />
             <div className={classes.info}>
                 <div className={classes.infoRow}>
@@ -89,9 +88,9 @@ export const DonationCard = ({ donation, address, onSelect, className, ...rest }
                 <div className={classes.infoRow}>
                     <Typography className={classes.activity}>
                         <span className={classes.fontColor}>{reversedAddress}</span> {t.contributed()}{' '}
-                        {donation.detail?.txs?.[0]?.formatedAmount}
-                        {donation.detail?.txs?.[0]?.symbol} <span className={classes.fontColor}>{t.to()}</span>{' '}
-                        {donation.detail?.grant?.title}
+                        {donation.tokenAmount}
+                        {donation.tokenSymbol ?? 'ETH'} <span className={classes.fontColor}>{t.to()}</span>{' '}
+                        {donation.title}
                     </Typography>
                 </div>
             </div>

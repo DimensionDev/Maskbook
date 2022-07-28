@@ -6,7 +6,6 @@ import { DonationPage, FootprintPage } from './pages'
 import { useCurrentVisitingProfile } from './hooks/useContext'
 import { CollectionType, KVType } from '../types'
 import { useKV } from './hooks/useKV'
-import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import { FeedPage } from './pages/FeedPage'
 import { useMemo } from 'react'
 
@@ -34,15 +33,15 @@ export function TabCard({ type, socialAddress, persona }: TabCardProps) {
     const { value: kvValue } = useKV(persona)
     const unHiddenDonations = useCollectionFilter(
         kvValue?.proofs ?? EMPTY_LIST,
-        donations,
         CollectionType.Donations,
+        donations,
         currentVisitingProfile,
         socialAddress,
     )
     const unHiddenFootprints = useCollectionFilter(
         (kvValue as KVType)?.proofs,
-        footprints,
         CollectionType.Footprints,
+        footprints,
         currentVisitingProfile,
         socialAddress,
     )
@@ -50,28 +49,16 @@ export function TabCard({ type, socialAddress, persona }: TabCardProps) {
     const page = useMemo(() => {
         if (!socialAddress) return null
         if (type === TabCardType.Donation) {
-            return (
-                <DonationPage
-                    donations={unHiddenDonations as RSS3BaseAPI.Donation[]}
-                    loading={loadingDonations}
-                    address={socialAddress}
-                />
-            )
+            return <DonationPage donations={unHiddenDonations} loading={loadingDonations} address={socialAddress} />
         }
         if (type === TabCardType.Footprint) {
-            return (
-                <FootprintPage
-                    address={socialAddress}
-                    loading={loadingFootprints}
-                    footprints={unHiddenFootprints as RSS3BaseAPI.Footprint[]}
-                />
-            )
+            return <FootprintPage address={socialAddress} loading={loadingFootprints} footprints={unHiddenFootprints} />
         }
         if (type === TabCardType.Feed) {
             return <FeedPage socialAddress={socialAddress} />
         }
         return null
-    }, [type, socialAddress, persona])
+    }, [type, socialAddress, persona, unHiddenDonations, unHiddenFootprints])
 
     if (!socialAddress) return null
 

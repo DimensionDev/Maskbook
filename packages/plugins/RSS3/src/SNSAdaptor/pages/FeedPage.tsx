@@ -46,6 +46,7 @@ export function FeedPage({ socialAddress }: FeedPageProps) {
                 description={selectedFeed?.summary}
                 metadata={selectedFeed?.metadata}
                 traits={selectedFeed?.traits}
+                type={CollectionType.feeds}
             />
         </div>
     )

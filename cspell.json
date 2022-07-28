@@ -57,6 +57,7 @@
         "contribs",
         "cooldown",
         "corepack",
+        "crossbell",
         "cyberconnect",
         "cyberlab",
         "datas",
@@ -226,6 +227,7 @@
         "typehash",
         "typeson",
         "unencrypted",
+        "unfollow",
         "unreviewed",
         "unstake",
         "unstyled",
@@ -248,6 +250,7 @@
         "xdai",
         "xlarge",
         "zerion",
+        "zksync",
         "zora",
         "zubin"
     ],

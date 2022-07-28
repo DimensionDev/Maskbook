@@ -7,7 +7,7 @@ import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import differenceInCalendarDays from 'date-fns/differenceInDays'
 import differenceInCalendarHours from 'date-fns/differenceInHours'
 import { Icons } from '@masknet/icons'
-import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
+import { ChainId, explorerResolver, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
@@ -17,7 +17,6 @@ interface CollectionDetailCardProps {
     title?: string
     referenceURL?: string
     description?: string
-    contributions?: RSS3BaseAPI.DonationTx[]
     onClose: () => void
     date?: string
     location?: string
@@ -27,6 +26,11 @@ interface CollectionDetailCardProps {
         type: string
         value: string
     }>
+    type: CollectionType
+    time?: string
+    tokenAmount?: number
+    tokenSymbol?: string
+    hash?: string
 }
 const useStyles = makeStyles()((theme) => ({
     img: {
@@ -128,6 +132,12 @@ const ChainID = {
     bnb: ChainId.BSC,
 }
 
+export enum CollectionType {
+    donations = 'Donations',
+    footprints = 'Footprints',
+    feeds = 'Feeds',
+}
+
 export const CollectionDetailCard = memo<CollectionDetailCardProps>(
     ({
         img,
@@ -137,11 +147,15 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
         referenceURL,
         metadata,
         description,
-        contributions = EMPTY_LIST,
         date,
         location,
         relatedURLs = EMPTY_LIST,
         traits,
+        type,
+        time,
+        tokenAmount,
+        tokenSymbol,
+        hash,
     }) => {
         const t = useSharedI18N()
         const { classes } = useStyles()
@@ -165,6 +179,9 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                 </Link>
             ) : null
         })
+
+        const days = differenceInCalendarDays(Date.now(), new Date(time ?? 0))
+        const hours = differenceInCalendarHours(Date.now(), new Date(time ?? 0))
 
         return (
             <InjectedDialog open={open} onClose={onClose} title={t.details()}>
@@ -211,38 +228,34 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                         {description}
                     </div>
 
-                    {contributions.length ? (
+                    {type === CollectionType.donations ? (
                         <>
                             <Typography fontSize="16px" fontWeight={700} marginTop="16px">
                                 {t.contributions()}
                             </Typography>
                             <Typography fontSize="16px" fontWeight={700} marginBottom="16px">
-                                {contributions.length}
+                                {1}
                             </Typography>
                         </>
                     ) : null}
-                    {contributions.map((contribution) => {
-                        const days = differenceInCalendarDays(Date.now(), Number(contribution.timeStamp) * 1000)
-                        const hours = differenceInCalendarHours(Date.now(), Number(contribution.timeStamp) * 1000)
-                        return (
-                            <div key={contribution.txHash} className={classes.txItem}>
-                                <Typography className={classes.donationAmount}>
-                                    {contribution.formatedAmount} {contribution.symbol}
-                                </Typography>
-                                <div className={classes.dayBox}>
-                                    {days > 0 ? `${days} ${t.day({ count: days })} ` : ''}
-                                    {hours > 0 ? `${hours} ${t.day({ count: hours })} ` : ''}
-                                    {t.ago()}
-                                    <Link
-                                        className={classes.linkBox}
-                                        target="_blank"
-                                        href={explorerResolver.transactionLink(ChainId.Mainnet, contribution.txHash)}>
-                                        <Icons.LinkOut size={18} color="white" />
-                                    </Link>
-                                </div>
+                    {type === CollectionType.donations && (
+                        <div className={classes.txItem}>
+                            <Typography className={classes.donationAmount}>
+                                {tokenAmount} {tokenSymbol}
+                            </Typography>
+                            <div className={classes.dayBox}>
+                                {days > 0 ? `${days} ${t.day({ count: days })} ` : ''}
+                                {hours > 0 ? `${hours} ${t.day({ count: hours })} ` : ''}
+                                {t.ago()}
+                                <Link
+                                    className={classes.linkBox}
+                                    target="_blank"
+                                    href={explorerResolver.transactionLink(ChainId.Mainnet, hash ?? ZERO_ADDRESS)}>
+                                    <Icons.LinkOut size={18} color="white" />
+                                </Link>
                             </div>
-                        )
-                    })}
+                        </div>
+                    )}
                     {traits && (
                         <Typography fontSize="16px" fontWeight={700}>
                             {t.properties()}

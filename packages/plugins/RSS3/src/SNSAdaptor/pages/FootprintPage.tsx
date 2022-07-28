@@ -10,7 +10,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { CollectionType } from '../../constants'
 
 export interface FootprintPageProps {
-    footprints?: RSS3BaseAPI.Footprint[]
+    footprints?: RSS3BaseAPI.Collection[]
     loading?: boolean
     address: SocialAddress<NetworkPluginID>
 }
@@ -21,7 +21,7 @@ export function FootprintPage({ footprints = EMPTY_LIST, address, loading }: Foo
 
     const t = useI18N()
 
-    const [selectedFootprint, setSelectedFootprint] = useState<RSS3BaseAPI.Footprint | undefined>()
+    const [selectedFootprint, setSelectedFootprint] = useState<RSS3BaseAPI.Collection | undefined>()
 
     if (loading || !footprints.length) {
         return <StatusBox loading={loading} collection={CollectionType.footprints} empty={!footprints.length} />
@@ -42,12 +42,13 @@ export function FootprintPage({ footprints = EMPTY_LIST, address, loading }: Foo
             <CollectionDetailCard
                 open={Boolean(selectedFootprint)}
                 onClose={() => setSelectedFootprint(undefined)}
-                img={selectedFootprint?.detail?.image_url}
-                title={selectedFootprint?.detail?.name}
-                referenceURL={selectedFootprint?.detail?.event_url}
-                description={selectedFootprint?.detail?.description}
-                date={selectedFootprint?.detail?.end_date}
-                location={selectedFootprint?.detail?.city || selectedFootprint?.detail?.country || 'Metaverse'}
+                img={selectedFootprint?.imageURL}
+                title={selectedFootprint?.title}
+                referenceURL={selectedFootprint?.actions?.[0]?.related_urls?.[0]}
+                description={selectedFootprint?.description}
+                type={CollectionType.footprints}
+                time={selectedFootprint?.timestamp}
+                location={selectedFootprint?.location}
             />
         </Box>
     )
