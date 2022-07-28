@@ -2,12 +2,10 @@ import { Link, Stack, Tooltip, Typography } from '@mui/material'
 import type { TokenSecurity } from './Common'
 import { useSharedI18N } from '../../../../locales'
 import React from 'react'
-import { useTheme } from '@mui/system'
-import { ExternalLink } from 'react-feather'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { formatCurrency, formatSupply } from '@masknet/web3-shared-base'
-import { LinkOutIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -32,6 +30,8 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
     },
     linkIcon: {
+        height: 18,
+        width: 18,
         color: theme.palette.maskColor.main,
     },
 }))
@@ -51,7 +51,6 @@ interface TokenPanelProps {
 export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: TokenPanelProps, ref) => {
     const t = useSharedI18N()
     const { classes } = useStyles()
-    const theme = useTheme()
 
     const totalSupply = usePortalShadowRoot((container) => {
         const supply = tokenSecurity.total_supply ? formatSupply(tokenSecurity.total_supply) : DEFAULT_PLACEHOLDER
@@ -92,7 +91,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                             href={explorerResolver.fungibleTokenLink(tokenSecurity.chainId, tokenSecurity.contract)}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <LinkOutIcon size={18} className={classes.linkIcon} />
+                            <Icons.LinkOut className={classes.linkIcon} />
                         </Link>
                     </Stack>
                 </Stack>
@@ -113,7 +112,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                                 )}
                                 target="_blank"
                                 rel="noopener noreferrer">
-                                <LinkOutIcon className={classes.linkIcon} />
+                                <Icons.LinkOut className={classes.linkIcon} />
                             </Link>
                         )}
                     </Stack>
@@ -132,7 +131,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                                 href={explorerResolver.addressLink(tokenSecurity.chainId, tokenSecurity.owner_address)}
                                 target="_blank"
                                 rel="noopener noreferrer">
-                                <ExternalLink color={theme.palette.text.strong} size={14} />
+                                <Icons.LinkOut className={classes.linkIcon} />
                             </Link>
                         )}
                     </Stack>

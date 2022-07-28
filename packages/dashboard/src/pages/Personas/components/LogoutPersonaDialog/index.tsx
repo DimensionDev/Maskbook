@@ -1,4 +1,4 @@
-import { WarningIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { DashboardRoutes, PersonaIdentifier } from '@masknet/shared-base'
 import { MaskDialog } from '@masknet/theme'
 import { LoadingButton } from '@mui/lab'
@@ -37,7 +37,7 @@ export const LogoutPersonaDialog = memo<LogoutPersonaDialogProps>(({ open, onClo
             <DialogContent>
                 <Box>
                     <Box textAlign="center" py={2}>
-                        <WarningIcon size={64} color="warning" />
+                        <Icons.Warning size={64} color="warning" />
                     </Box>
                 </Box>
                 <Typography color="error" variant="body2" fontSize={13}>

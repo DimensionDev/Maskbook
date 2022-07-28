@@ -10,9 +10,9 @@ import {
     Web3Helper,
     useProviderType,
 } from '@masknet/plugin-infra/web3'
-import { currentMaskWalletAccountSettings } from '../../../../plugins/Wallet/settings'
+import { currentMaskWalletAccountSettings } from '../../../../../shared/legacy-settings/wallet-settings'
 import { ChainIcon, useMenuConfig, WalletIcon } from '@masknet/shared'
-import { ArrowDownRound } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import { NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-base'
 
@@ -129,7 +129,7 @@ export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork,
                     )}
                     <Typography className={classes.title}>{currentNetwork.name}</Typography>
                 </div>
-                <ArrowDownRound size={16} color="#fff" />
+                <Icons.ArrowDownRound size={16} color="#fff" />
             </Box>
             {menu}
         </>

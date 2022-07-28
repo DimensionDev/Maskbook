@@ -1,6 +1,6 @@
 import { story } from '@masknet/storybook-shared'
 import { CreateWalletForm as C } from '../../../src/components/CreateWalletForm'
-import { Eth } from '@masknet/icons'
+import { ETH } from '@masknet/icons'
 
 const { meta, of } = story(C)
 
@@ -10,6 +10,6 @@ export default meta({
 
 export const CreateWalletForm = of({
     args: {
-        options: [{ label: 'ETH', value: 1, icon: <Eth /> }],
+        options: [{ label: 'ETH', value: 1, icon: <ETH /> }],
     },
 })

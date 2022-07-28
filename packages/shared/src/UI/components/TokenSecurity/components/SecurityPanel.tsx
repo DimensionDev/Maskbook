@@ -6,14 +6,13 @@ import { DefineMapping, SecurityMessageLevel, TokenSecurity } from './Common'
 import { SecurityMessages } from '../rules'
 import { RiskCard, RiskCardUI } from './RiskCard'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import { useTheme } from '@mui/system'
 import { TokenPanel } from './TokenPanel'
 import { TokenIcon } from '@masknet/shared'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
 import type { TokenAPI } from '@masknet/web3-providers'
 import { formatCurrency, FungibleToken } from '@masknet/web3-shared-base'
-import { LinkOutIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 
 interface TokenCardProps {
     tokenSecurity: TokenSecurity
@@ -69,7 +68,6 @@ function resolveGoLabLink(chainId: ChainId, address: string) {
 export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, tokenPrice, tokenMarketCap }) => {
     const { classes } = useStyles()
     const t = useSharedI18N()
-    const theme = useTheme()
     const price = tokenPrice ?? tokenMarketCap?.price
     const [isCollapse, setCollapse] = useState(false)
 
@@ -165,7 +163,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                             href={resolveGoLabLink(tokenSecurity.chainId, tokenSecurity.contract)}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <LinkOutIcon size={18} className={classes.linkIcon} />
+                            <Icons.LinkOut size={18} className={classes.linkIcon} />
                         </Link>
                     </Stack>
                 </Stack>

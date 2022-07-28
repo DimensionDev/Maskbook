@@ -62,7 +62,7 @@ class ArweaveAgent implements ProviderAgent {
 
     async *upload(id: Transaction['id']) {
         this.init()
-        for await (const uploader of this.instance.transactions.upload(ArweaveAgent.stage[id])) {
+        for await (const uploader of this.instance.transactions.upload(ArweaveAgent.stage[id], new Uint8Array())) {
             yield uploader.pctComplete
         }
     }

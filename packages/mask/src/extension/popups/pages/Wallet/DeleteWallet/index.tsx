@@ -1,7 +1,7 @@
 import { memo, useCallback, useState } from 'react'
 import { Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { WalletIcon, WarningIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { useNavigate } from 'react-router-dom'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { PopupRoutes } from '@masknet/shared-base'
@@ -10,7 +10,7 @@ import { FormattedAddress } from '@masknet/shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 import { PasswordField } from '../../../components/PasswordField'
-import { currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
+import { currentMaskWalletAccountSettings } from '../../../../../../shared/legacy-settings/wallet-settings'
 import { useWallet } from '@masknet/plugin-infra/web3'
 import { WalletContext } from '../hooks/useWalletContext'
 import { useTitle } from '../../../hook/useTitle'
@@ -137,12 +137,12 @@ const DeleteWallet = memo(() => {
         <>
             <div className={classes.content}>
                 <div className={classes.warning}>
-                    <WarningIcon style={{ fontSize: 48 }} />
+                    <Icons.Warning size={48} />
                     <Typography className={classes.title}>{t('delete_wallet')}</Typography>
                 </div>
                 <div className={classes.info}>
                     <div className={classes.iconContainer}>
-                        <WalletIcon />
+                        <Icons.Wallet />
                     </div>
                     <div>
                         <Typography className={classes.name}>{wallet?.name}</Typography>

@@ -12,7 +12,7 @@ import { WalletMessages } from '../../messages'
 import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
 import ActionButton, { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { isDashboardPage } from '@masknet/shared-base'
-import { Warning } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -75,7 +75,7 @@ export function WalletRiskWarningDialog() {
     const [account, setAccount] = useState('')
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
 
-    const { RiskWarning, Others } = useWeb3State(pluginID)
+    const { RiskWarning } = useWeb3State(pluginID)
 
     const { open, setDialog: setRiskWarningDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletRiskWarningDialogUpdated,
@@ -109,7 +109,7 @@ export function WalletRiskWarningDialog() {
             onClose={onClose}>
             <DialogContent className={classes.paper}>
                 <div className={classes.icon}>
-                    <Warning size={90} sx={{ filter: 'drop-shadow(0px 6px 12px rgba(255, 53, 69, 0.2))' }} />
+                    <Icons.Warning size={90} sx={{ filter: 'drop-shadow(0px 6px 12px rgba(255, 53, 69, 0.2))' }} />
                 </div>
                 <Typography
                     className={classes.title}

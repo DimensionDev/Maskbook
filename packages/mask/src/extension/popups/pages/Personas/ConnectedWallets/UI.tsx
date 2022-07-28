@@ -5,7 +5,7 @@ import { useNetworkDescriptor } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, ImageIcon } from '@masknet/shared'
 import { Button, Link, Typography } from '@mui/material'
 import { CopyIconButton } from '../../../components/CopyIconButton'
-import { CircleLoadingIcon, DeleteIcon, EmptyIcon, PopupLinkIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import type { ConnectedWalletInfo } from '../type'
 import { DisconnectWalletDialog } from '../components/DisconnectWalletDialog'
 import { useI18N } from '../../../../../utils'
@@ -128,7 +128,7 @@ export const ConnectedWalletsUI = memo<ConnectedWalletsUIProps>(
         if (loading)
             return (
                 <div className={classes.loading}>
-                    <CircleLoadingIcon className={classes.animated} />
+                    <Icons.CircleLoading className={classes.animated} />
                     <Typography>{t('popups_loading')}</Typography>
                     <Button className={classes.button} onClick={onAddVerifyWallet}>
                         {t('popups_add_and_verify_wallet')}
@@ -156,16 +156,16 @@ export const ConnectedWalletsUI = memo<ConnectedWalletsUIProps>(
                                         href={explorerResolver.addressLink(chainId, wallet.identity ?? '')}
                                         target="_blank"
                                         rel="noopener noreferrer">
-                                        <PopupLinkIcon className={classes.icon} />
+                                        <Icons.PopupLink className={classes.icon} />
                                     </Link>
                                 </Typography>
                             </div>
-                            <DeleteIcon color="#536471" onClick={() => onDelete(wallet)} />
+                            <Icons.Delete color="#536471" onClick={() => onDelete(wallet)} />
                         </div>
                     ))
                 ) : (
                     <div className={classes.placeholder}>
-                        <EmptyIcon size={60} />
+                        <Icons.Empty size={60} />
                     </div>
                 )}
                 <DisconnectWalletDialog

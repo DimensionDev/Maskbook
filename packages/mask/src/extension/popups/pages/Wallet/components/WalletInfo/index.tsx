@@ -3,7 +3,7 @@ import { useNavigate, useLocation, useMatch } from 'react-router-dom'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { MoreHoriz } from '@mui/icons-material'
-import { EditIcon, MaskWalletIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
 import { PopupRoutes } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
@@ -104,12 +104,12 @@ export const WalletInfoUI = memo<WalletInfoUIProps>(
             <div className={classes.container}>
                 <div className={classes.left}>
                     <div className={classes.walletBackground}>
-                        <MaskWalletIcon />
+                        <Icons.MaskWallet />
                     </div>
                     <div>
                         <Box display="flex" justifyContent="space-between" alignItems="center">
                             <Typography className={classes.name}>
-                                {name} <EditIcon size={16} onClick={onEditClick} className={classes.edit} />
+                                {name} <Icons.Edit size={16} onClick={onEditClick} className={classes.edit} />
                             </Typography>
                             {domain && formatDomainName ? (
                                 <Typography className={classes.name}>{formatDomainName(domain)}</Typography>

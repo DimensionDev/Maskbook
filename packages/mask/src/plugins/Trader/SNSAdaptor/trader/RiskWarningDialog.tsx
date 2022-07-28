@@ -1,4 +1,4 @@
-import { SecurityRiskIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { InjectedDialog, TokenSecurity, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { explorerResolver, formatEthereumAddress, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
@@ -87,7 +87,7 @@ export function RiskWarningDialog(props: RiskWarningDialogProps) {
             title={t('plugin_trader_swap_risk')}>
             <DialogContent className={classes.content}>
                 <Stack alignItems="center">
-                    <SecurityRiskIcon sx={{ fontSize: '68px' }} />
+                    <Icons.SecurityRisk size={68} />
                     <Typography className={classes.warningTitle}>{t('plugin_trader_risk_warning_short')}</Typography>
                 </Stack>
                 <Stack marginTop="51px">

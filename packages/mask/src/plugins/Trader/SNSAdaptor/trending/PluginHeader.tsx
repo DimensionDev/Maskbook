@@ -1,4 +1,4 @@
-import { TrendingIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { Stack, Typography, useTheme } from '@mui/material'
 import { Box } from '@mui/system'
 
@@ -10,7 +10,7 @@ export const PluginHeader = ({ children }: PluginHeaderProps) => {
     return (
         <Stack flexDirection="row" justifyContent="space-between" alignItems="center">
             <Stack flexDirection="row" justifyContent="space-between" gap={0.5} alignItems="center">
-                <TrendingIcon />
+                <Icons.Trending />
                 <Typography color={t.palette.maskColor.dark} fontWeight="bolder">
                     Market Trending
                 </Typography>

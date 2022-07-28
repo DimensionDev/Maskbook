@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { UnlockIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { base } from '../base'
 import { pluginMetaKey, pluginName } from '../constants'
 import type { UnlockLockInMetadata } from '../types'
@@ -21,7 +21,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     CompositionDialogEntry: {
         label: (
             <>
-                <UnlockIcon style={{ width: 16, height: 16 }} />
+                <Icons.Unlock size={16} />
                 {pluginName}
             </>
         ),

@@ -16,7 +16,7 @@ import {
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { Alert, alpha, Box, Button, DialogActions, DialogContent, dialogTitleClasses, Typography } from '@mui/material'
 import { ArrowDownward } from '@mui/icons-material'
-import { CircleWarningIcon, InfoIcon, RetweetIcon, WarningTriangleIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { ONE_BIPS, MIN_SLIPPAGE, MAX_SLIPPAGE } from '../../../constants'
 import { useUpdateEffect } from 'react-use'
 
@@ -241,7 +241,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                     <Alert
                         classes={{ message: classes.alertMessage, icon: classes.alertIcon }}
                         className={cx(classes.alert, classes.warning)}
-                        icon={<WarningTriangleIcon />}
+                        icon={<Icons.WarningTriangle />}
                         severity="warning">
                         {t('plugin_trader_price_impact_warning_tips')}
                     </Alert>
@@ -251,7 +251,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                     <Alert
                         classes={{ message: classes.alertMessage, icon: classes.alertIcon }}
                         className={cx(classes.alert, classes.warning)}
-                        icon={<WarningTriangleIcon />}
+                        icon={<Icons.WarningTriangle />}
                         severity="warning">
                         {t('plugin_trader_confirm_tips')}
                     </Alert>
@@ -261,7 +261,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                     <Alert
                         classes={{ message: classes.alertMessage, icon: classes.alertIcon }}
                         className={cx(classes.alert, classes.error)}
-                        icon={<CircleWarningIcon className={classes.danger} />}
+                        icon={<Icons.CircleWarning className={classes.danger} />}
                         severity="error">
                         {t('plugin_trader_price_impact_too_high_tips', {
                             impact: formatPercentage(cacheTrade?.priceImpact),
@@ -417,7 +417,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                                     </span>
                                 </span>
                             )}
-                            <RetweetIcon
+                            <Icons.Retweet
                                 style={{ marginLeft: 4, cursor: 'pointer' }}
                                 onClick={() => setPriceReversed((x) => !x)}
                             />
@@ -482,7 +482,7 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                         <Alert
                             classes={{ action: classes.action, message: classes.alertMessage, icon: classes.alertIcon }}
                             className={cx(classes.alert, classes.info)}
-                            icon={<InfoIcon className={classes.infoIcon} />}
+                            icon={<Icons.Info className={classes.infoIcon} />}
                             action={
                                 <Button
                                     variant="roundedOutlined"

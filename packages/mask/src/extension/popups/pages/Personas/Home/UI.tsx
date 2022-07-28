@@ -4,7 +4,7 @@ import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Navigator } from '../../../components/Navigator'
 import { Avatar, Button, Typography } from '@mui/material'
-import { AddUserIcon, ArrowRightIosIcon, EmptyIcon, MenuPersonasActiveIcon, PopupRestoreIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { formatPersonaFingerprint, PopupRoutes, formatPersonaName } from '@masknet/shared-base'
 import { CopyIconButton } from '../../../components/CopyIconButton'
 import { useI18N } from '../../../../../utils/i18n-next-ui'
@@ -116,7 +116,7 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                 {avatar ? (
                                     <Avatar src={avatar} className={classes.avatar} />
                                 ) : (
-                                    <MenuPersonasActiveIcon
+                                    <Icons.MenuPersonasActive
                                         className={classes.avatar}
                                         color="#f9fafa"
                                         size={48}
@@ -137,28 +137,28 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                 <Typography>{t('popups_name')}</Typography>
                                 <Typography className={classes.content} onClick={onEdit}>
                                     {formatPersonaName(nickname)}
-                                    <ArrowRightIosIcon className={classes.arrow} />
+                                    <Icons.ArrowRightIos className={classes.arrow} />
                                 </Typography>
                             </Link>
                             <Link className={classes.item} to={PopupRoutes.SocialAccounts}>
                                 <Typography>{t('popups_social_account')}</Typography>
                                 <Typography className={classes.content}>
                                     {!fetchProofsLoading ? accountsCount : '...'}
-                                    <ArrowRightIosIcon className={classes.arrow} />
+                                    <Icons.ArrowRightIos className={classes.arrow} />
                                 </Typography>
                             </Link>
                             <Link className={classes.item} to={PopupRoutes.ConnectedWallets}>
                                 <Typography>{t('popups_connected_wallets')}</Typography>
                                 <Typography className={classes.content}>
                                     {!fetchProofsLoading ? walletsCount : '...'}
-                                    <ArrowRightIosIcon className={classes.arrow} />
+                                    <Icons.ArrowRightIos className={classes.arrow} />
                                 </Typography>
                             </Link>
                         </>
                     ) : (
                         <>
                             <div className={classes.placeholder}>
-                                <EmptyIcon size={60} />
+                                <Icons.Empty size={60} />
                             </div>
                             <div className={classes.controller}>
                                 <Button
@@ -166,14 +166,14 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                     style={{ backgroundColor: '#07101B', color: '#F2F5F6' }}
                                     onClick={onCreatePersona}>
                                     {t('popups_create_persona')}
-                                    <AddUserIcon color="#F2F5F6" size={18} />
+                                    <Icons.AddUser color="#F2F5F6" size={18} />
                                 </Button>
                                 <Button
                                     className={classes.button}
                                     style={{ backgroundColor: '#FFFFFF', color: '#07101B' }}
                                     onClick={onRestore}>
                                     {t('popups_restore_and_login')}
-                                    <PopupRestoreIcon color="#07101B" size={18} />
+                                    <Icons.PopupRestore color="#07101B" size={18} />
                                 </Button>
                             </div>
                         </>

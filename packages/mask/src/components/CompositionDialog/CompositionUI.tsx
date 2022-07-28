@@ -3,7 +3,7 @@ import { Typography, Chip, Button } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
 import { makeStyles } from '@masknet/theme'
-import { SendIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { PluginEntryRender, PluginEntryRenderRef } from './PluginEntryRender'
 import { TypedMessageEditor, TypedMessageEditorRef } from './TypedMessageEditor'
 import { CharLimitIndicator } from './CharLimitIndicator'
@@ -269,7 +269,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     loadingPosition="start"
                     variant="roundedContained"
                     onClick={onSubmit}
-                    startIcon={<SendIcon size={18} color={theme.palette.text.buttonText} />}>
+                    startIcon={<Icons.Send size={18} color={theme.palette.text.buttonText} />}>
                     {t('post_dialog__button')}
                 </LoadingButton>
             </div>
