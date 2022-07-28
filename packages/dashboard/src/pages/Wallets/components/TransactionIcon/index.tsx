@@ -80,7 +80,7 @@ export const TransactionIconUI = memo<TransactionIconUIProps>(({ isFailed, isRed
             case TransactionType.CREATE_RED_PACKET:
                 return <Icons.RedPacket className={classes.icon} />
             case TransactionType.FILL_POOL:
-                return <Icons.Ito className={classes.icon} />
+                return <Icons.ITO className={classes.icon} />
             default:
                 return <Icons.Interaction color={MaskColorVar.warning} className={classes.icon} />
         }

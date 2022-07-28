@@ -115,7 +115,7 @@ async function generateIcons() {
     )
 
     for (const [icon, variant] of Object.entries(variants)) {
-        const Ident = upperFirst(camelCase(icon))
+        const Ident = upperFirst(icon.replace(/\.(\w)/, (_, c: string) => c.toUpperCase()))
         const nameField = JSON.stringify(icon)
         const variantsField = variant
             .sort((a, b) => a.args[0].length - b.args[0].length)
