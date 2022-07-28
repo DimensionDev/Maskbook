@@ -61,6 +61,7 @@ export namespace RSS3BaseAPI {
             trait_type: string
         }>
         standard?: string
+        name?: string
     }
 
     export interface Action {

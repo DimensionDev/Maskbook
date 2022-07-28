@@ -22,8 +22,6 @@ export const useCollectionFilter = (
         )
         const hiddenList =
             proof?.content?.[PluginId.Web3Profile]?.unListedCollections?.[address?.address?.toLowerCase()]?.[type] ?? []
-        return collections?.filter(
-            (collection: { id: string }) => hiddenList?.findIndex((url) => url === collection?.id) === -1,
-        )
+        return collections?.filter((collection) => hiddenList?.findIndex((url) => url === collection?.id) === -1)
     }, [address, currentVisitingProfile?.identifier?.userId, type, hiddenInfo?.length, collections?.length])
 }

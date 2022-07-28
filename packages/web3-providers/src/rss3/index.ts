@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
 import RSS3 from 'rss3-next'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { NETWORK_PLUGINID, NEW_RSS3_ENDPOINT, RSS3_ENDPOINT, RSS3_FEED_ENDPOINT, TAG, TYPE } from './constants'
+import { NETWORK_PLUGIN, NEW_RSS3_ENDPOINT, RSS3_ENDPOINT, RSS3_FEED_ENDPOINT, TAG, TYPE } from './constants'
 import { NonFungibleTokenAPI, RSS3BaseAPI } from '../types'
 import { fetchJSON } from '../helpers'
 import {
@@ -120,7 +120,7 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
         type?: RSS3BaseAPI.FeedType,
     ) {
         if (!address) return
-        const url = `${RSS3_FEED_ENDPOINT}account:${address}@${NETWORK_PLUGINID[networkPluginId]}/notes?limit=100&exclude_tags=POAP&tags=Gitcoin&tags=POAP&tags=NFT&tags=Donation&latest=false`
+        const url = `${RSS3_FEED_ENDPOINT}account:${address}@${NETWORK_PLUGIN[networkPluginId]}/notes?limit=100&exclude_tags=POAP&tags=Gitcoin&tags=POAP&tags=NFT&tags=Donation&latest=false`
         const res = fetchJSON<RSS3BaseAPI.Web3FeedResponse>(url)
         return res
     }
