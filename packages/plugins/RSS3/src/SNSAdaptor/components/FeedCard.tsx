@@ -128,7 +128,7 @@ export function FeedCard({ feed, address, onSelect }: FeedCardProps) {
             }
         }
         if (feed.metadata?.from?.toLowerCase() === address) {
-            return t.receied()
+            return t.received()
         }
         return t.sent()
     }, [address, feed])

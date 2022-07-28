@@ -6,6 +6,7 @@ import { useAsyncRetry } from 'react-use'
 import { FeedCard } from '../components/FeedCard'
 import { StatusBox } from '../components/StatusBox'
 import { useI18N } from '../../locales'
+import { CollectionType } from '../../constants'
 
 export interface FeedPageProps {
     socialAddress?: SocialAddress<NetworkPluginID>
@@ -21,7 +22,7 @@ export function FeedPage({ socialAddress }: FeedPageProps) {
 
     if (!socialAddress) return null
     if (loading || !feed?.list?.length) {
-        return <StatusBox loading={loading} collection={t.feed()} empty={!feed?.list?.length} />
+        return <StatusBox loading={loading} collection={CollectionType.feed} empty={!feed?.list?.length} />
     }
 
     return (

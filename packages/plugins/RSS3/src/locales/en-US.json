@@ -8,9 +8,6 @@
     "contribution_other": "Contributions",
     "contributed": "contributed",
     "to": "to",
-    "feed": "feed",
-    "donation": "Donation",
-    "footprint": "Footprint",
     "day": "day",
     "hour": "hour",
     "days": "days",
@@ -23,6 +20,6 @@
     "received_from": "received from",
     "donated": "donated",
     "received_donation_from": "received donation from",
-    "receied": "receied",
+    "received": "received",
     "sent": "sent"
 }

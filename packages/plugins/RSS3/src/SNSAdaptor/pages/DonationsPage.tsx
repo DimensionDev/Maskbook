@@ -5,6 +5,7 @@ import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
 import { Box, List, ListItem } from '@mui/material'
 import { useState } from 'react'
+import { CollectionType } from '../../constants'
 import { useI18N } from '../../locales'
 import { DonationCard, StatusBox } from '../components'
 
@@ -52,7 +53,7 @@ export function DonationPage({ donations = EMPTY_LIST, loading, address }: Donat
     const [selectedDonation, setSelectedDonation] = useState<RSS3BaseAPI.Donation | undefined>()
 
     if (loading || !donations.length) {
-        return <StatusBox loading={loading} collection={t.donation()} empty={!donations.length} />
+        return <StatusBox loading={loading} collection={CollectionType.donation} empty={!donations.length} />
     }
     return (
         <Box margin="16px 0 0 16px">

@@ -6,6 +6,8 @@ import { useState } from 'react'
 import { FootprintCard, StatusBox } from '../components'
 import { useRSS3Profile } from '../hooks'
 import { useI18N } from '../../locales'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { CollectionType } from '../../constants'
 
 export interface FootprintPageProps {
     footprints?: RSS3BaseAPI.Footprint[]
@@ -13,7 +15,7 @@ export interface FootprintPageProps {
     address: SocialAddress<NetworkPluginID>
 }
 
-export function FootprintPage({ footprints = [], address, loading }: FootprintPageProps) {
+export function FootprintPage({ footprints = EMPTY_LIST, address, loading }: FootprintPageProps) {
     const { value: profile } = useRSS3Profile(address.address || '')
     const username = profile?.name
 
@@ -22,7 +24,7 @@ export function FootprintPage({ footprints = [], address, loading }: FootprintPa
     const [selectedFootprint, setSelectedFootprint] = useState<RSS3BaseAPI.Footprint | undefined>()
 
     if (loading || !footprints.length) {
-        return <StatusBox loading={loading} collection={t.footprint()} empty={!footprints.length} />
+        return <StatusBox loading={loading} collection={CollectionType.footprint} empty={!footprints.length} />
     }
 
     return (
