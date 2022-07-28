@@ -1,9 +1,10 @@
+import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
+import { ApplicationEntry } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { Trans } from 'react-i18next'
 import { base } from '../base'
 import { PluginGameMessages } from '../messages'
-import { Trans } from 'react-i18next'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { ApplicationEntry } from '@masknet/shared'
 import WalletConnectDialog, { ConnectContext } from './WalletConnectDialog'
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -18,7 +19,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         (() => {
-            const icon = <img src={new URL('../assets/game.png', import.meta.url).toString()} />
+            const icon = <Icons.Game size={36} />
             const name = <Trans i18nKey="plugin_game_name" />
             return {
                 ApplicationEntryID: base.ID,

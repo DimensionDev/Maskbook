@@ -22,7 +22,7 @@ import { PoolList } from './PoolList'
 import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { PoolSettings, useFillCallback } from './hooks/useFill'
-import { HistoryIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 
 interface StyleProps {
@@ -236,7 +236,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
         <InjectedDialog
             titleTail={
                 step === ITOCreateFormPageStep.NewItoPage && !showHistory ? (
-                    <HistoryIcon onClick={() => setShowHistory((history) => !history)} className={classes.tail} />
+                    <Icons.History onClick={() => setShowHistory((history) => !history)} className={classes.tail} />
                 ) : null
             }
             isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}

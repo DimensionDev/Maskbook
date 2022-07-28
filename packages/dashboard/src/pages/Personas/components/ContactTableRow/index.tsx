@@ -2,7 +2,7 @@ import type { RelationProfile } from '@masknet/shared-base'
 import { memo, useCallback } from 'react'
 import { Box, TableCell, TableRow, Typography, Avatar, useTheme } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { StarIcon, MaskBlueIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { Services } from '../../../../API'
 import { useDashboardI18N } from '../../../../locales'
 import { useAddContactToFavorite, useRemoveContactFromFavorite } from '../../hooks/useFavoriteContact'
@@ -116,7 +116,7 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
                         <Typography>{index}</Typography>
                         <Box className={classes.favorite}>
                             {contact.fingerprint ? (
-                                <StarIcon
+                                <Icons.Star
                                     color={contact.favorite ? MaskColorVar.warning : MaskColorVar.iconLight}
                                     style={{ cursor: 'pointer' }}
                                     onClick={handleClickStar}
@@ -138,7 +138,7 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
                                     last?.codePointAt(0) ?? SPACE_POINT,
                                 )}
                             </Avatar>
-                            {contact.fingerprint ? <MaskBlueIcon className={classes.maskIcon} /> : null}
+                            {contact.fingerprint ? <Icons.MaskBlue className={classes.maskIcon} /> : null}
                         </Box>
                         <Box className={classes.info}>
                             <Typography>{contact.name}</Typography>

@@ -86,7 +86,6 @@ function Loader(props: { url: string }) {
     const { t } = useI18N()
     const { loading, retry, error, value } = useExternalPluginManifest(props.url)
     if (error) return <SnackbarContent message={'Failed to load the plugin from ' + props.url} />
-    const contribution = value?.contribution?.composition
     const skeleton = <Skeleton variant="text" sx={{ display: 'inline-block' }} width={150} />
     const manifestURL = `${props.url}mask-manifest.json`
 

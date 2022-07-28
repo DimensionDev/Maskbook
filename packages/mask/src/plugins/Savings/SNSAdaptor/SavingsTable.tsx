@@ -2,7 +2,7 @@ import { useAsync } from 'react-use'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Grid, Typography } from '@mui/material'
 import { FormattedBalance, TokenIcon } from '@masknet/shared'
-import { CircleLoadingIcon, DirectIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { isZero, rightShift, formatBalance, isSameAddress, NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
 import type { ChainId, Web3 } from '@masknet/web3-shared-evm'
 import { ProviderIconURLs } from './IconURL'
@@ -165,7 +165,7 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
 
             {loading || getAssetsLoading ? (
                 <div className={classes.placeholder}>
-                    <CircleLoadingIcon className={classes.animated} />
+                    <Icons.CircleLoading className={classes.animated} />
                     <Typography className={classes.loading}>{t('popups_loading')}</Typography>
                 </div>
             ) : protocols.length ? (
@@ -234,7 +234,7 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
                 </div>
             ) : (
                 <div className={classes.placeholder}>
-                    <DirectIcon size={36} className={classes.direct} />
+                    <Icons.Direct size={36} className={classes.direct} />
                 </div>
             )}
         </Box>
