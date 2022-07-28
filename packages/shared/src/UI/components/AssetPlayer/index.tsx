@@ -40,7 +40,7 @@ interface AssetPlayerProps
     setERC721TokenName?: (name: string) => void
     setSourceType?: (type: string) => void
     showNetwork?: boolean
-    networkIcon?: URL
+    networkIcon?: URL | string
 }
 const useStyles = makeStyles()({
     hidden: {

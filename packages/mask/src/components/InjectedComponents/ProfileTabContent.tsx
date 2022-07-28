@@ -13,7 +13,7 @@ import { ReversedAddress } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
 import { Box, Button, CircularProgress, Link, MenuItem, Tab, Typography } from '@mui/material'
-import { ArrowDrop, Gear, LinkOut, NextIdPersonaVerified, Selected } from '@masknet/icons'
+import { ArrowDrop, Gear, NextIdPersonaVerified, Selected, LinkOut } from '@masknet/icons'
 import { isSameAddress, NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
@@ -110,7 +110,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 18,
         fontWeight: 700,
     },
-    linkoutIcon: {
+    linkOutIcon: {
         color: theme.palette.maskColor.secondaryDark,
     },
     arrowDropIcon: {
@@ -318,7 +318,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                         }
                                         target="_blank"
                                         rel="noopener noreferrer">
-                                        <LinkOut size={20} className={classes.linkoutIcon} />
+                                        <LinkOut size={20} className={classes.linkOutIcon} />
                                     </Link>
                                     <ArrowDrop className={classes.arrowDropIcon} />
                                 </Button>
@@ -400,7 +400,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                         href="https://mask.io"
                                         target="_blank"
                                         rel="noopener noreferrer">
-                                        <LinkOut className={classes.linkoutIcon} size={20} />
+                                        <LinkOut className={classes.linkOutIcon} size={20} />
                                     </Link>
                                 )}
                             </div>

@@ -88,17 +88,17 @@ export function FeedCard({ feed, address, onSelect }: FeedCardProps) {
             if (feed.metadata?.from?.toLowerCase() === address) {
                 return (
                     <span>
-                        sent a NFT to <ReversedAddress address={feed.metadata?.to} />
+                        {t.sent_a_NFT_to()} <ReversedAddress address={feed.metadata?.to} />
                     </span>
                 )
             }
             if (feed.metadata?.from === ZERO_ADDRESS) {
-                return 'minted a NFT'
+                return t.minted_a_NFT()
             }
             if (feed.metadata?.to?.toLowerCase() === address) {
                 return (
                     <span>
-                        acquire a NFT from <ReversedAddress address={feed.metadata?.from} />
+                        {t.acquire_a_NFT_from()} <ReversedAddress address={feed.metadata?.from} />
                     </span>
                 )
             }
@@ -107,30 +107,30 @@ export function FeedCard({ feed, address, onSelect }: FeedCardProps) {
             if (feed.metadata?.from?.toLowerCase() === address) {
                 return (
                     <span>
-                        sent to <ReversedAddress address={feed.metadata?.to} />
+                        {t.sent_to()} <ReversedAddress address={feed.metadata?.to} />
                     </span>
                 )
             }
             if (feed.metadata?.to?.toLowerCase() === address) {
                 return (
                     <span>
-                        received from <ReversedAddress address={feed.metadata?.from} />
+                        {t.received_from()} <ReversedAddress address={feed.metadata?.from} />
                     </span>
                 )
             }
         }
         if (feed.tags?.includes('Gitcoin')) {
             if (feed.metadata?.from?.toLowerCase() === address) {
-                return 'donated'
+                return t.donated()
             }
             if (feed.metadata?.to?.toLowerCase() === address) {
-                return 'received donation from'
+                return t.received_donation_from()
             }
         }
         if (feed.metadata?.from?.toLowerCase() === address) {
-            return 'received'
+            return t.receied()
         }
-        return 'sent'
+        return t.sent()
     }, [address, feed])
 
     const logo = useMemo(() => {
@@ -207,7 +207,9 @@ export function FeedCard({ feed, address, onSelect }: FeedCardProps) {
                 })
             }>
             <div>
-                <ReversedAddress address={address} /> {action} <span className={classes.time}>{time}</span>
+                <>
+                    <ReversedAddress address={address} /> {action} <span className={classes.time}>{time}</span>
+                </>
                 <Box className={classes.collection}>
                     <Typography fontWeight={700} className={classes.summary}>
                         {feed.title ||

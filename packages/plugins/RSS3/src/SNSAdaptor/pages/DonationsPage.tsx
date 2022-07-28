@@ -72,7 +72,7 @@ export function DonationPage({ donations = [], loading, address }: DonationPageP
                 onClose={() => setSelectedDonation(undefined)}
                 img={selectedDonation?.detail?.grant?.logo}
                 title={selectedDonation?.detail?.grant?.title}
-                referenceUrl={selectedDonation?.detail?.grant?.reference_url}
+                referenceURL={selectedDonation?.detail?.grant?.reference_url}
                 description={selectedDonation?.detail?.grant?.description}
                 contributions={selectedDonation?.detail?.txs}
             />

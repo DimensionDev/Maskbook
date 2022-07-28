@@ -15,7 +15,7 @@ interface CollectionDetailCardProps {
     img?: string
     open: boolean
     title?: string
-    referenceUrl?: string
+    referenceURL?: string
     description?: string
     contributions?: RSS3BaseAPI.DonationTx[]
     onClose: () => void
@@ -134,7 +134,7 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
         open,
         onClose,
         title,
-        referenceUrl,
+        referenceURL,
         metadata,
         description,
         contributions = EMPTY_LIST,
@@ -188,10 +188,10 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                     <Typography fontSize="16px" fontWeight={700} marginTop="38px">
                         {title}
                     </Typography>
-                    <div className={classes.icons}> {icons}</div>
+                    <div className={classes.icons}>{icons}</div>
 
-                    <Link rel="noopener noreferrer" target="_blank" href={referenceUrl} className={classes.link}>
-                        {referenceUrl}
+                    <Link rel="noopener noreferrer" target="_blank" href={referenceURL} className={classes.link}>
+                        {referenceURL}
                     </Link>
                     {date && (
                         <Typography fontSize="14px" fontWeight={400} marginTop="12px">
@@ -251,8 +251,8 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                     <Box className={classes.traitsBox}>
                         {traits?.map((trait) => (
                             <div key={trait.type + trait.value} className={classes.traitItem}>
-                                <Typography className={classes.secondText}> {trait.type}</Typography>
-                                <Typography className={classes.traitValue}> {trait.value}</Typography>
+                                <Typography className={classes.secondText}>{trait.type}</Typography>
+                                <Typography className={classes.traitValue}>{trait.value}</Typography>
                             </div>
                         ))}
                     </Box>

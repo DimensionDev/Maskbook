@@ -4,7 +4,7 @@ import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
 import { Box } from '@mui/material'
 import { useState } from 'react'
 import { FootprintCard, StatusBox } from '../components'
-import { useRss3Profile } from '../hooks'
+import { useRSS3Profile } from '../hooks'
 import { useI18N } from '../../locales'
 
 export interface FootprintPageProps {
@@ -14,7 +14,7 @@ export interface FootprintPageProps {
 }
 
 export function FootprintPage({ footprints = [], address, loading }: FootprintPageProps) {
-    const { value: profile } = useRss3Profile(address.address || '')
+    const { value: profile } = useRSS3Profile(address.address || '')
     const username = profile?.name
 
     const t = useI18N()
@@ -42,7 +42,7 @@ export function FootprintPage({ footprints = [], address, loading }: FootprintPa
                 onClose={() => setSelectedFootprint(undefined)}
                 img={selectedFootprint?.detail?.image_url}
                 title={selectedFootprint?.detail?.name}
-                referenceUrl={selectedFootprint?.detail?.event_url}
+                referenceURL={selectedFootprint?.detail?.event_url}
                 description={selectedFootprint?.detail?.description}
                 date={selectedFootprint?.detail?.end_date}
                 location={selectedFootprint?.detail?.city || selectedFootprint?.detail?.country || 'Metaverse'}

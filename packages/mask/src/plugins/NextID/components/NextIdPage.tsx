@@ -124,7 +124,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: '14px',
         fontWeight: 400,
     },
-    linkoutIcon: {
+    linkOutIcon: {
         color: theme.palette.maskColor.secondaryDark,
     },
 }))
@@ -280,7 +280,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
                             width="22px"
                             height="22px"
                             style={{ alignSelf: 'center', marginLeft: '4px' }}>
-                            <LinkOut size={16} className={classes.linkoutIcon} />
+                            <LinkOut size={16} className={classes.linkOutIcon} />
                         </Link>
                     </div>
                 </Box>
