@@ -3,7 +3,7 @@ import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-unified'
 import { Box, InputAdornment, Stack } from '@mui/material'
-import { makeStyles } from '../../UIHelper/makeStyles'
+import { makeStyles } from '../../UIHelper'
 import { MaskSearchableItemInList } from './MaskSearchableItemInList'
 import { MaskTextField, MaskTextFieldProps } from '../TextField'
 import { Icons } from '@masknet/icons'
@@ -98,6 +98,7 @@ export function SearchableList<T extends {}>({
             {!disableSearch && (
                 <Box style={{ padding: '4px 16px 16px' }}>
                     <MaskTextField
+                        value={keyword}
                         placeholder="Search"
                         autoFocus
                         fullWidth
@@ -107,6 +108,14 @@ export function SearchableList<T extends {}>({
                                     <Icons.Search />
                                 </InputAdornment>
                             ),
+                            endAdornment: keyword ? (
+                                <InputAdornment
+                                    position="end"
+                                    className={classes.closeIcon}
+                                    onClick={() => setKeyword('')}>
+                                    <Icons.FilledClose size={18} />
+                                </InputAdornment>
+                            ) : null,
                             ...InputProps,
                         }}
                         onChange={(e) => handleSearch(e.currentTarget.value)}
@@ -168,6 +177,9 @@ const useStyles = makeStyles()((theme) => ({
     },
     list: {
         scrollbarWidth: 'thin',
+    },
+    closeIcon: {
+        cursor: 'pointer',
     },
 }))
 
