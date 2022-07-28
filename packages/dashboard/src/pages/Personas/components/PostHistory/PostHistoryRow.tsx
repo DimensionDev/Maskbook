@@ -59,17 +59,17 @@ const SUPPORT_PLUGIN: Record<
     },
     'com.maskbook.red_packet_nft:1': {
         pluginId: PluginId.RedPacket,
-        icon: <Icons.NftRedPacket />,
+        icon: <Icons.NFTRedPacket />,
         messageParse: (body: { message: string }) => body.message,
     },
     'com.maskbook.ito:1': {
         pluginId: PluginId.ITO,
-        icon: <Icons.Ito />,
+        icon: <Icons.ITO />,
         messageParse: (body: any) => body.message.split(MSG_DELIMITER)[1],
     },
     'com.maskbook.ito:2': {
         pluginId: PluginId.ITO,
-        icon: <Icons.Ito />,
+        icon: <Icons.ITO />,
         messageParse: (body: any) => body.message.split(MSG_DELIMITER)[1],
     },
     'com.maskbook.poll:1': {

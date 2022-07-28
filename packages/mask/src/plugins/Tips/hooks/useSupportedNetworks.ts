@@ -6,7 +6,7 @@ export interface SupportedNetworkMap {
 }
 
 export const networkMap: Record<NetworkPluginID, SupportedNetworkMap> = {
-    [NetworkPluginID.PLUGIN_EVM]: { name: 'EVM Chain', icon: Icons.EvmChains },
+    [NetworkPluginID.PLUGIN_EVM]: { name: 'EVM Chain', icon: Icons.EVMChains },
     [NetworkPluginID.PLUGIN_FLOW]: { name: 'Solana Chain', icon: Icons.Flow },
     [NetworkPluginID.PLUGIN_SOLANA]: { name: 'Flow Chain', icon: Icons.Solana },
 }
