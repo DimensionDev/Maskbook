@@ -208,9 +208,20 @@ export const FungibleTokenList = forwardRef(
 
         // #region add token by address
         const [keyword, setKeyword] = useState('')
+        const [searchError, setSearchError] = useState<string>()
 
         const searchedTokenAddress = useMemo(() => {
+            if (!keyword) {
+                setSearchError(undefined)
+                return
+            }
             if (mode === TokenListMode.Manage) return ''
+
+            if (keyword.startsWith('0x') && keyword.length > 3 && !Others?.isValidAddress(keyword)) {
+                setSearchError(t.erc20_search_wrong_address())
+                return
+            }
+
             return Others?.isValidAddress(keyword) &&
                 !sortedFungibleTokens.some((x) => isSameAddress(x.address, keyword))
                 ? keyword
@@ -292,6 +303,8 @@ export const FungibleTokenList = forwardRef(
                     FixedSizeListProps={FixedSizeListProps}
                     SearchFieldProps={{
                         placeholder: t.erc20_token_list_placeholder(),
+                        helperText: searchError,
+                        error: !!searchError,
                         ...props.SearchTextFieldProps,
                     }}
                 />

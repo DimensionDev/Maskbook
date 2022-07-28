@@ -112,7 +112,7 @@ export function SearchableList<T extends {}>({
                                 <InputAdornment
                                     position="end"
                                     className={classes.closeIcon}
-                                    onClick={() => setKeyword('')}>
+                                    onClick={() => handleSearch('')}>
                                     <Icons.FilledClose size={18} />
                                 </InputAdornment>
                             ) : null,
