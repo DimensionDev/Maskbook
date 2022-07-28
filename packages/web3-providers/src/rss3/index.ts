@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
 import RSS3 from 'rss3-next'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { CollectionType, NEW_RSS3_ENDPOINT, RSS3_ENDPOINT } from './constants'
+import { NEW_RSS3_ENDPOINT, RSS3_ENDPOINT, TAG, TYPE } from './constants'
 import { NonFungibleTokenAPI, RSS3BaseAPI } from '../types'
 import { fetchJSON } from '../helpers'
 import { createIndicator, createPageable, HubOptions, TokenType } from '@masknet/web3-shared-base'
@@ -39,27 +39,23 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
     }
     async getDonations(address: string) {
         if (!address) return
-        const allCollectionIdURL = urlcat(NEW_RSS3_ENDPOINT, `/${address}-list-assets.auto-0`)
-        const res = await fetchJSON<{ list: string[] }>(allCollectionIdURL)
-        const footprints = res.list.filter((str) => !!str.match(CollectionType.donation))
-        const collectionURL = urlcat(NEW_RSS3_ENDPOINT, '/assets/details', {
-            assets: footprints?.join(','),
-            full: 1,
+        const collectionURL = urlcat(NEW_RSS3_ENDPOINT, address, {
+            tag: TAG.donation,
+            type: TYPE.donate,
+            include_poap: true,
         })
-        const collectionRes = await fetchJSON<{ data: RSS3BaseAPI.Donation[] }>(collectionURL)
-        return collectionRes.data
+        const res = await fetchJSON<{ result: RSS3BaseAPI.CollectionResponse[] }>(collectionURL)
+        return createCollection(res.result)
     }
     async getFootprints(address: string) {
         if (!address) return
-        const allCollectionIdURL = urlcat(NEW_RSS3_ENDPOINT, `/${address}-list-assets.auto-0`)
-        const res = await fetchJSON<{ list: string[] }>(allCollectionIdURL)
-        const footprints = res.list.filter((str) => !!str.match(CollectionType.footprint))
-        const collectionURL = urlcat(NEW_RSS3_ENDPOINT, '/assets/details', {
-            assets: footprints?.join(','),
-            full: 1,
+        const collectionURL = urlcat(NEW_RSS3_ENDPOINT, address, {
+            tag: TAG.collectible,
+            type: TYPE.poap,
+            include_poap: true,
         })
-        const collectionRes = await fetchJSON<{ data: RSS3BaseAPI.Footprint[] }>(collectionURL)
-        return collectionRes.data
+        const res = await fetchJSON<{ result: RSS3BaseAPI.CollectionResponse[] }>(collectionURL)
+        return createCollection(res.result)
     }
     async getNameInfo(id: string) {
         if (!id) return
@@ -109,4 +105,23 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
             .filter((x) => x.chainId === chainId)
         return createPageable(data, createIndicator(indicator))
     }
+}
+
+const getIdFromDonationURL = (url?: string) => {
+    if (!url) return
+    return url?.match(/(?<=https:\/\/gitcoin.co\/grants)\d+/g)?.[0]
+}
+
+const createCollection = (collectionResponse: RSS3BaseAPI.CollectionResponse[]): RSS3BaseAPI.Collection[] => {
+    return collectionResponse.map((collection: RSS3BaseAPI.CollectionResponse) => {
+        return {
+            ...collection,
+            tiele: collection?.actions?.[0]?.metadata?.title,
+            id:
+                collection?.actions?.[0]?.metadata?.id ??
+                getIdFromDonationURL(collection?.actions?.[0]?.related_urls?.[0]) ??
+                collection?.hash,
+            imageURL: collection?.actions?.[0]?.metadata?.logo ?? collection?.actions?.[0]?.metadata?.image,
+        }
+    })
 }

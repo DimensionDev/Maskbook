@@ -137,10 +137,10 @@ export const getDonationList = async (walletList: WalletTypes[]) => {
                     address,
                     collections: result?.map((asset) => ({
                         key: asset?.id,
-                        address: asset?.id,
+                        address: asset?.hash,
                         platform: platform ?? NetworkPluginID.PLUGIN_EVM,
-                        iconURL: asset.detail.grant?.logo ?? undefined,
-                        name: asset?.detail.grant?.title ?? asset?.detail.grant?.slug,
+                        iconURL: asset?.imageURL,
+                        name: asset?.title,
                     })),
                 }
             } else {
@@ -157,15 +157,16 @@ export const getDonationList = async (walletList: WalletTypes[]) => {
 export const getFootprintList = async (walletList: WalletTypes[]) => {
     const promises = walletList.map(({ address, platform }) => {
         return RSS3.getFootprints(formatEthereumAddress(address)).then((result) => {
+            console.log({ result })
             if (result) {
                 return {
                     address,
                     collections: result?.map((asset) => ({
                         key: asset?.id,
-                        address: asset?.id,
+                        address: asset?.hash,
                         platform: platform ?? NetworkPluginID.PLUGIN_EVM,
-                        iconURL: asset?.detail?.image_url ?? undefined,
-                        name: asset?.detail?.name,
+                        iconURL: asset?.imageURL,
+                        name: asset?.title,
                     })),
                 }
             } else {
