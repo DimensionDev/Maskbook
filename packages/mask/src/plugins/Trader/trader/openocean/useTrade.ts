@@ -39,14 +39,14 @@ export function useTrade(
             if (!OPENOCEAN_SUPPORTED_CHAINS.includes(targetChainId)) return null
             if (!inputToken || !outputToken) return null
             if (isZero(inputAmount)) return null
-            const sellToken = isNativeTokenAddress(inputToken.address)
+            const sellToken = isNativeTokenAddress(targetChainId, inputToken.address)
                 ? { ...inputToken, address: OPENOCEAN_ETH_ADDRESS ?? '' }
                 : inputToken
-            const buyToken = isNativeTokenAddress(outputToken.address)
+            const buyToken = isNativeTokenAddress(targetChainId, outputToken.address)
                 ? { ...outputToken, address: OPENOCEAN_ETH_ADDRESS ?? '' }
                 : outputToken
             return PluginTraderRPC.swapOO({
-                isNativeSellToken: isNativeTokenAddress(inputToken.address),
+                isNativeSellToken: isNativeTokenAddress(targetChainId, inputToken.address),
                 fromToken: sellToken,
                 toToken: buyToken,
                 fromAmount: inputAmount,

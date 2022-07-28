@@ -711,7 +711,7 @@ export function ITO(props: ITO_Props) {
 
                     if (
                         (!ifQualified || !(ifQualified as Qual_V2).qualified) &&
-                        !isNativeTokenAddress(qualificationAddress)
+                        !isNativeTokenAddress(chainId, qualificationAddress)
                     ) {
                         return (
                             <>

@@ -253,7 +253,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                             align="right"
                             className={classNames(classes.account, classes.bold, classes.text)}>
                             {formatEthereumAddress(account, 4)}
-                            {isNativeTokenAddress(wallet?.address) ? null : (
+                            {isNativeTokenAddress(chainId, wallet?.address) ? null : (
                                 <Link
                                     color="textPrimary"
                                     className={classes.link}

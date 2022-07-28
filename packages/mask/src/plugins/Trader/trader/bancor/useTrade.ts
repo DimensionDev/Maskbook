@@ -40,11 +40,11 @@ export function useTrade(
             if (outputAmountWei === '0' && !isExactIn) return null
             if (![ChainId.Mainnet, ChainId.Ropsten].includes(chainId)) return null
 
-            const fromToken = isNativeTokenAddress(inputToken)
+            const fromToken = isNativeTokenAddress(chainId, inputToken.address)
                 ? { ...inputToken, address: BANCOR_ETH_ADDRESS ?? '' }
                 : inputToken
 
-            const toToken = isNativeTokenAddress(outputToken)
+            const toToken = isNativeTokenAddress(chainId, outputToken.address)
                 ? { ...outputToken, address: BANCOR_ETH_ADDRESS ?? '' }
                 : outputToken
 

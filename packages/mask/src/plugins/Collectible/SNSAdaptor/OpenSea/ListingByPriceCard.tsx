@@ -143,7 +143,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                     amount={amount}
                     balance={balance.value ?? '0'}
                     token={token.value}
-                    disableNativeToken={!paymentTokens.some(isNativeTokenAddress)}
+                    disableNativeToken={!paymentTokens.some((x) => isNativeTokenAddress(chainId, x.address))}
                     onAmountChange={setAmount}
                     onTokenChange={(x) => setAddress(x.address)}
                     TokenAmountPanelProps={{

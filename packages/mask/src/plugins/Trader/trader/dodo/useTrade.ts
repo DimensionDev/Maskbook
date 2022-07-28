@@ -37,14 +37,14 @@ export function useTrade(
         async () => {
             if (!inputToken || !outputToken) return null
             if (isZero(inputAmount)) return null
-            const sellToken = isNativeTokenAddress(inputToken)
+            const sellToken = isNativeTokenAddress(chainId, inputToken.address)
                 ? { ...inputToken, address: DODO_ETH_ADDRESS ?? '' }
                 : inputToken
-            const buyToken = isNativeTokenAddress(outputToken)
+            const buyToken = isNativeTokenAddress(chainId, outputToken.address)
                 ? { ...outputToken, address: DODO_ETH_ADDRESS ?? '' }
                 : outputToken
             return PluginTraderRPC.swapRoute({
-                isNativeSellToken: isNativeTokenAddress(inputToken),
+                isNativeSellToken: isNativeTokenAddress(chainId, inputToken.address),
                 fromToken: sellToken,
                 toToken: buyToken,
                 fromAmount: inputAmount,

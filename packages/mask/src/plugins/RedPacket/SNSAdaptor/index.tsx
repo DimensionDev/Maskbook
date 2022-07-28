@@ -171,7 +171,7 @@ function ERC20RedpacketBadge(props: ERC20RedpacketBadgeProps) {
                 balance: formatBalance(
                     payload.total,
                     tokenDetailed?.decimals ?? 0,
-                    isNativeTokenAddress(payload.token?.address) ? 6 : 0,
+                    isNativeTokenAddress(chainId, payload.token?.address) ? 6 : 0,
                 ),
                 tokenName: tokenDetailed?.symbol ?? tokenDetailed?.name ?? 'Token',
                 sender: payload.sender.name,

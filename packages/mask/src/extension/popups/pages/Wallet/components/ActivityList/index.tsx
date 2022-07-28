@@ -109,7 +109,7 @@ export const ActivityList = memo<ActivityListProps>(({ tokenAddress }) => {
 
         return formattedTransactions.filter(({ transaction, formatterTransaction }) => {
             if (!tokenAddress) return true
-            else if (isNativeTokenAddress(tokenAddress))
+            else if (isNativeTokenAddress(chainId, tokenAddress))
                 return formatterTransaction.type === TransactionDescriptorType.TRANSFER
             else if (formatterTransaction.type === TransactionDescriptorType.INTERACTION) {
                 return isSameAddress(transaction._tx.to, tokenAddress)
@@ -117,7 +117,7 @@ export const ActivityList = memo<ActivityListProps>(({ tokenAddress }) => {
 
             return false
         })
-    }, [tokenAddress, transactions, chainId])
+    }, [chainId, tokenAddress, transactions])
 
     return (
         <ActivityListUI
