@@ -334,7 +334,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         name: 'Fortmatic',
         icon: new URL('../assets/fortmatic.png', import.meta.url),
         enableRequirements: {
-            supportedChainIds: [ChainId.Mainnet, ChainId.BSC],
+            supportedChainIds: process.env.engine === 'firefox' ? [] : [ChainId.Mainnet, ChainId.BSC],
             supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
             supportedExtensionSites: getEnumAsArray(ExtensionSite).map((x) => x.value),
         },
