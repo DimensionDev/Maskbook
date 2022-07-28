@@ -10,7 +10,7 @@ export function isValidDomain(domain: string) {
     return false
 }
 
-export function isZeroAddress(chainId?: ChainId, address?: string) {
+export function isZeroAddress(address?: string) {
     return isSameAddress(address, ZERO_ADDRESS)
 }
 

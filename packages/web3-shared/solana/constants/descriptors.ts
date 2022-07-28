@@ -2,7 +2,7 @@ import { getEnumAsArray } from '@dimensiondev/kit'
 import { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
 import { ChainDescriptor, NetworkDescriptor, NetworkPluginID, ProviderDescriptor } from '@masknet/web3-shared-base'
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types'
-import { createNativeToken } from '../utils'
+import { createNativeToken } from '../utils/token'
 
 const PLUGIN_ID = NetworkPluginID.PLUGIN_SOLANA
 

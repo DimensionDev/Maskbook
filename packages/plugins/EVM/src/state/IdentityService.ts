@@ -59,7 +59,7 @@ export class IdentityService extends IdentityServiceState {
         address: string,
         label = address,
     ): SocialAddress<NetworkPluginID.PLUGIN_EVM> | undefined {
-        if (isValidAddress(address) && !isZeroAddress(ChainId.Mainnet, address))
+        if (isValidAddress(address) && !isZeroAddress(address))
             return {
                 networkSupporterPluginID: NetworkPluginID.PLUGIN_EVM,
                 type,

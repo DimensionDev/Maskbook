@@ -5,6 +5,7 @@ import { formatDomainName } from '@masknet/web3-shared-evm'
 import {
     isValidDomain,
     isValidAddress,
+    isZeroAddress,
     ChainId,
     formatAddress,
     ProviderType,
@@ -34,6 +35,7 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
     override isValidDomain = isValidDomain
     override isValidAddress = isValidAddress
     override isSameAddress = isSameAddress
+    override isZeroAddress = isZeroAddress
 
     override formatAddress = formatAddress
     override formatDomainName = formatDomainName

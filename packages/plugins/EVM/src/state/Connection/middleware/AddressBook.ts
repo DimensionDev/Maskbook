@@ -36,8 +36,7 @@ export class AddressBook implements Middleware<Context> {
             const from = this.getFrom(formatContext)
             const to = this.getTo(formatContext) as string
 
-            if (!isSameAddress(from, to) && !isZeroAddress(context.chainId, to) && to)
-                await AddressBook?.addAddress(context.chainId, to)
+            if (!isSameAddress(from, to) && !isZeroAddress(to) && to) await AddressBook?.addAddress(context.chainId, to)
         } catch {
             // to scan the context for available recipient address, allow to fail silently.
         }

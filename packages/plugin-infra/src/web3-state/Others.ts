@@ -60,7 +60,7 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transac
 
     isSameAddress = isSameAddress
 
-    isZeroAddress(chainId: ChainId, address?: string): boolean {
+    isZeroAddress(address?: string): boolean {
         throw new Error('Method not implemented.')
     }
 
