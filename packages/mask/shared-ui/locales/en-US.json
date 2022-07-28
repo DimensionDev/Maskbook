@@ -115,7 +115,7 @@
     "copied": "Copied",
     "daily": "Daily",
     "dashboard_no_collectible_found": "No collectible found.",
-    "no_nft_at_current_address": "No NFT at the current address",
+    "no_NFTs_found": "No NFTs found.",
     "dashboard_collectible_menu_all": "All ({{count}})",
     "days": "Every {{days}} days",
     "decrypted_postbox_add_recipients": "Append recipients",

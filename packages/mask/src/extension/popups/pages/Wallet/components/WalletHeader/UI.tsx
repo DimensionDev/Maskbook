@@ -61,6 +61,7 @@ const useStyles = makeStyles()((theme) => ({
     arrow: {
         fontSize: 20,
         transition: 'all 300ms',
+        color: theme.palette.maskColor.secondaryDark,
     },
     colorChainICon: {
         borderRadius: '999px!important',
@@ -146,7 +147,6 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
                             {!disabled ? (
                                 <Icons.ArrowDrop
                                     className={classes.arrow}
-                                    color="#767F8D"
                                     style={{ transform: status ? 'rotate(-180deg)' : undefined }}
                                 />
                             ) : null}
@@ -187,7 +187,6 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
                     {!disabled ? (
                         <Icons.ArrowDrop
                             className={classes.arrow}
-                            color="#767F8D"
                             style={{ transform: isSwitchWallet ? 'rotate(-180deg)' : undefined }}
                         />
                     ) : null}

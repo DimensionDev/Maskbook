@@ -98,24 +98,24 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.white,
     },
     item1: {
-        color: '#767f8d',
+        color: theme.palette.maskColor.secondaryDark,
         fontSize: '14px',
         fontWeight: 400,
     },
     item2: {
-        color: '#07101B',
+        color: theme.palette.maskColor.dark,
         fontSize: '14px',
         fontWeight: 500,
         marginLeft: '2px',
     },
     button: {
         borderRadius: '99px',
-        backgroundColor: '#07101b',
+        backgroundColor: theme.palette.maskColor.dark,
         color: '#fff',
         marginTop: 'auto',
         ':hover': {
             color: 'fff',
-            backgroundColor: '#07101b',
+            backgroundColor: theme.palette.maskColor.dark,
         },
     },
     content: {

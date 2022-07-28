@@ -10,7 +10,7 @@ export const PLUGIN_NAME = 'RSS3'
 export const RSS3_DEFAULT_IMAGE = resolveIPFSLink('QmVFq9qimnudPcs6QkQv8ZVEsvwD3aqETHWtS5yXgdbYY5')
 
 export enum CollectionType {
-    donation = 'Donation',
-    footprint = 'Footprint',
-    feed = 'Feed',
+    donations = 'Donations',
+    footprints = 'Footprints',
+    feeds = 'Feeds',
 }

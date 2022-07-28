@@ -110,9 +110,6 @@ const useStyles = makeStyles()((theme) => {
             marginLeft: 'auto',
             marginBottom: theme.spacing(2),
         },
-        arrowDropIcon: {
-            color: theme.palette.maskColor.secondaryDark,
-        },
     }
 })
 

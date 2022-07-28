@@ -22,7 +22,7 @@ export function FeedPage({ socialAddress }: FeedPageProps) {
 
     if (!socialAddress) return null
     if (loading || !feed?.list?.length) {
-        return <StatusBox loading={loading} collection={CollectionType.feed} empty={!feed?.list?.length} />
+        return <StatusBox loading={loading} collection={CollectionType.feeds} empty={!feed?.list?.length} />
     }
 
     return (
