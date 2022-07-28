@@ -22,7 +22,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         title={PLUGIN_NAME}
                         disabled={false}
                         iconFilterColor=""
-                        icon={<Icons.MaskBlue />}
+                        icon={<Icons.MaskBlue size={36} />}
                         onClick={() => {
                             openDialog()
                         }}
@@ -31,7 +31,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             },
             appBoardSortingDefaultPriority: Number.MAX_SAFE_INTEGER,
             marketListSortingPriority: Number.MAX_SAFE_INTEGER,
-            icon: <Icons.MaskBlue />,
+            icon: <Icons.MaskBlue size={36} />,
             name: PLUGIN_NAME,
         },
     ],

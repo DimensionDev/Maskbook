@@ -27,7 +27,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         (() => {
-            const icon = <Icons.CryptoArt />
+            const icon = <Icons.CryptoArt size={36} />
             const name = <Trans i18nKey="plugin_cryptoartai_dapp_name" />
             return {
                 ApplicationEntryID: base.ID,

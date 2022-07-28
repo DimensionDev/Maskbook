@@ -61,7 +61,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         (() => {
-            const icon = <Icons.Markets />
+            const icon = <Icons.Markets size={36} />
             const name = <Trans i18nKey="plugin_ito_name" />
             const iconFilterColor = 'rgba(56, 228, 239, 0.3)'
             const clickHandler = () =>
@@ -102,7 +102,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
         })(),
         (() => {
-            const icon = <Icons.MarketsClaim />
+            const icon = <Icons.MarketsClaim size={36} />
             const name = <Trans i18nKey="plugin_ito_claim" />
             const iconFilterColor = 'rgba(240, 51, 51, 0.3)'
             return {
