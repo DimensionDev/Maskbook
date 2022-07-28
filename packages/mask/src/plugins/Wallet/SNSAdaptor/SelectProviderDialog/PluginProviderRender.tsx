@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { first } from 'lodash-unified'
-import { SelectedIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
 import { getSiteType } from '@masknet/shared-base'
 import { Web3Helper, Web3Plugin, useWeb3State } from '@masknet/plugin-infra/web3'
@@ -274,7 +274,7 @@ function NetworkItem({
                 ) : (
                     <ImageIcon size={30} icon={network.icon} />
                 )}
-                {selected && <SelectedIcon size={12} color="#3dc233" className={classes.checkedBadge} />}
+                {selected && <Icons.Selected size={12} className={classes.checkedBadge} />}
             </div>
             <Typography className={cx(classes.networkName, selected ? classes.selected : '')}>
                 {Others?.chainResolver.chainName(network.chainId)}

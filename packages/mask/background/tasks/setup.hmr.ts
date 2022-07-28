@@ -7,6 +7,7 @@ import * as NotificationsToMobile from './Cancellable/NotificationsToMobile'
 import * as PopupSSR from './Cancellable/PopupSSR'
 import * as PopupSSR_MV3 from './Cancellable/PopupSSR/index.mv3'
 import * as SettingsListener from './Cancellable/SettingsListener'
+import * as StartPluginHost from './Cancellable/StartPluginHost'
 
 type CancelableJob = { default: (signal: AbortSignal) => void }
 const CancelableJobs: CancelableJob[] = [
@@ -15,6 +16,7 @@ const CancelableJobs: CancelableJob[] = [
     IsolatedDashboardBridge,
     NotificationsToMobile,
     SettingsListener,
+    StartPluginHost,
 ]
 
 if (process.env.architecture === 'web') {

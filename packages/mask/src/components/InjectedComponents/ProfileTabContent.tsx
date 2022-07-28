@@ -13,7 +13,7 @@ import { ReversedAddress } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
 import { Box, Button, CircularProgress, Link, MenuItem, Tab, Typography } from '@mui/material'
-import { ArrowDrop, Gear, NextIdPersonaVerified, Selected, LinkOut } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { isSameAddress, NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
@@ -318,9 +318,9 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                         }
                                         target="_blank"
                                         rel="noopener noreferrer">
-                                        <LinkOut size={20} className={classes.linkOutIcon} />
+                                        <Icons.LinkOut size={20} className={classes.linkOutIcon} />
                                     </Link>
-                                    <ArrowDrop className={classes.arrowDropIcon} />
+                                    <Icons.ArrowDrop className={classes.arrowDropIcon} />
                                 </Button>
                                 <ShadowRootMenu
                                     anchorEl={anchorEl}
@@ -362,14 +362,16 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                                             }
                                                             target="_blank"
                                                             rel="noopener noreferrer">
-                                                            <LinkOut className={classes.linkIcon} />
+                                                            <Icons.LinkOut className={classes.linkIcon} />
                                                         </Link>
                                                         {x?.type === SocialAddressType.KV && (
-                                                            <NextIdPersonaVerified className={classes.verifiedIcon} />
+                                                            <Icons.NextIdPersonaVerified
+                                                                className={classes.verifiedIcon}
+                                                            />
                                                         )}
                                                     </div>
                                                     {isSameAddress(selectedAddress?.address, x.address) && (
-                                                        <Selected className={classes.selectedIcon} />
+                                                        <Icons.Selected className={classes.selectedIcon} />
                                                     )}
                                                 </div>
                                             </MenuItem>
@@ -393,14 +395,14 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                     {t('mask_network')}
                                 </Typography>
                                 {isOwnerIdentity ? (
-                                    <Gear onClick={handleOpenDialog} sx={{ cursor: 'pointer' }} />
+                                    <Icons.Gear onClick={handleOpenDialog} sx={{ cursor: 'pointer' }} />
                                 ) : (
                                     <Link
                                         className={classes.settingLink}
                                         href="https://mask.io"
                                         target="_blank"
                                         rel="noopener noreferrer">
-                                        <LinkOut className={classes.linkOutIcon} size={20} />
+                                        <Icons.LinkOut className={classes.linkOutIcon} size={20} />
                                     </Link>
                                 )}
                             </div>

@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { Stack, Typography, useTheme } from '@mui/material'
-import { ArrowDrop } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()({
     root: {
@@ -31,8 +31,8 @@ export function PriceChanged(props: PriceChangedProps) {
     if (props.amount === 0) return null
     return (
         <Stack alignItems="center" direction="row">
-            {props.amount > 0 ? <ArrowDrop color="#767f8d" style={{ transform: 'rotate(180deg)' }} /> : null}
-            {props.amount < 0 ? <ArrowDrop color="#767f8d" /> : null}
+            {props.amount > 0 ? <Icons.ArrowDrop style={{ transform: 'rotate(180deg)' }} /> : null}
+            {props.amount < 0 ? <Icons.ArrowDrop /> : null}
             <Typography className={classes.value} color={props.amount > 0 ? colors?.success : colors?.danger}>
                 {props.amount.toFixed(2)}%
             </Typography>

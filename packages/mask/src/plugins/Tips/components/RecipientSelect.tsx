@@ -5,7 +5,7 @@ import { useI18N } from '../locales'
 import { FC, useRef } from 'react'
 import { CopyIconButton } from '../../NextID/components/CopyIconButton'
 import { useTip } from '../contexts'
-import { CheckIcon, LinkOutIcon, VerifiedIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles<{}, 'icon'>()((theme, _, refs) => {
     return {
@@ -79,11 +79,13 @@ export const RecipientSelect: FC = () => {
                         target="_blank"
                         title={t.view_on_explorer()}
                         rel="noopener noreferrer">
-                        <LinkOutIcon className={classes.actionIcon} />
+                        <Icons.LinkOut className={classes.actionIcon} />
                     </Link>
-                    {addressConfig.verified ? <VerifiedIcon className={cx(classes.actionIcon, classes.icon)} /> : null}
+                    {addressConfig.verified ? (
+                        <Icons.Verified className={cx(classes.actionIcon, classes.icon)} />
+                    ) : null}
                     {Others?.isSameAddress(addressConfig.address, recipient) ? (
-                        <CheckIcon className={cx(classes.checkIcon, classes.icon)} />
+                        <Icons.Check className={cx(classes.checkIcon, classes.icon)} />
                     ) : null}
                 </MenuItem>
             ))}

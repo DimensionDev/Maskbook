@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
 import { Link } from '@mui/material'
-import { LinkOut } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { createLookupTableResolver, NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
 import { useWeb3State, useChainId, Web3Helper } from '@masknet/plugin-infra/web3'
 import { makeStyles, ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
@@ -111,7 +111,7 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
                         {progress.status === TransactionStatusType.SUCCEED
                             ? computed.successfulDescription ?? computed.description
                             : computed.description}{' '}
-                        <LinkOut color="#07101B" size={16} sx={{ ml: 0.5 }} />
+                        <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
                     </Link>
                 ),
             },

@@ -6,7 +6,7 @@ import { Box, InputAdornment } from '@mui/material'
 import { makeStyles } from '../../UIHelper/makeStyles'
 import { MaskSearchableItemInList } from './MaskSearchableItemInList'
 import { MaskTextField, MaskTextFieldProps } from '../TextField'
-import { SearchIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 
 export interface MaskSearchableListProps<T> {
     /** The list data should be render */
@@ -102,7 +102,7 @@ export function SearchableList<T extends {}>({
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
-                                    <SearchIcon />
+                                    <Icons.Search />
                                 </InputAdornment>
                             ),
                             ...InputProps,

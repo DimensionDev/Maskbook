@@ -6,7 +6,7 @@ import { MEDIA_VIEWER_URL } from '../../../constants'
 import { useUpdateEffect } from 'react-use'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box } from '@mui/material'
-import { AssetLoadingIcon, GeneratedIconProps, MaskPlaceholder } from '@masknet/icons'
+import { GeneratedIconProps, Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { ImageIcon } from '@masknet/shared'
 
@@ -211,9 +211,9 @@ export const AssetPlayer = memo<AssetPlayerProps>((props) => {
                       (props.fallbackImage ? (
                           <img className={classes.loadingFailImage} src={props.fallbackImage.toString()} />
                       ) : (
-                          <MaskPlaceholder className={classes.errorIcon} {...iconProps} />
+                          <Icons.MaskPlaceholder className={classes.errorIcon} {...iconProps} />
                       ))
-                    : props.loadingIcon ?? <AssetLoadingIcon className={classes.loadingIcon} />}
+                    : props.loadingIcon ?? <Icons.AssetLoading className={classes.loadingIcon} />}
             </Box>
             {IframeResizerMemo}
             {showNetwork && <ImageIcon icon={networkIcon} size={20} classes={{ icon: classes.networkIcon }} />}

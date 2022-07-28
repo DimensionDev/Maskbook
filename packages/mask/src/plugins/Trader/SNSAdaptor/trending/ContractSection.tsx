@@ -1,4 +1,4 @@
-import { PopupCopyIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { useNetworkDescriptor } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, TokenIcon, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
@@ -47,7 +47,7 @@ export const ContractSection = ({ address, chainId, iconURL }: ContractSectionPr
                 <FormattedAddress address={address} size={4} formatter={formatEthereumAddress} />
             </Typography>
             <IconButton sx={{ padding: 0 }} color="primary" size="small" onClick={onCopyAddress}>
-                <PopupCopyIcon className={classes.copy} />
+                <Icons.PopupCopy className={classes.copy} />
             </IconButton>
         </Stack>
     )

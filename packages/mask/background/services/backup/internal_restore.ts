@@ -26,12 +26,10 @@ export async function restoreNormalizedBackup(backup: NormalizedBackup.Data) {
         const tag = `[Backup] Restore ${backup.posts.size} posts`
         await restorePosts(posts.values())
     }
-    if (process.env.manifest === '2') {
-        if (wallets.length) {
-            await internal_wallet_restore(wallets)
-        }
-        await restorePlugins(plugins)
+    if (wallets.length) {
+        await internal_wallet_restore(wallets)
     }
+    await restorePlugins(plugins)
 
     // Note: it looks like the restore will not immediately available to the dashboard, maybe due to
     // serialization cost or indexedDB transaction apply cost?

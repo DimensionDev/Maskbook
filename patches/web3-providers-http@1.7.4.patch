@@ -1,0 +1,257 @@
+diff --git a/lib/index.js b/lib/index.js
+index 0c660d72d00b546bebad057102ca30dbbcdb6d6b..b514e2d3404ecef64ad03475c8d72eeaf31e0485 100644
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -22,9 +22,6 @@
+  * @date 2015
+  */
+ var errors = require('web3-core-helpers').errors;
+-var XHR2 = require('xhr2-cookies').XMLHttpRequest; // jshint ignore: line
+-var http = require('http');
+-var https = require('https');
+ /**
+  * HttpProvider should be used to send rpc calls over http
+  */
+@@ -35,44 +32,7 @@ var HttpProvider = function HttpProvider(host, options) {
+     this.headers = options.headers;
+     this.agent = options.agent;
+     this.connected = false;
+-    // keepAlive is true unless explicitly set to false
+-    const keepAlive = options.keepAlive !== false;
+     this.host = host || 'http://localhost:8545';
+-    if (!this.agent) {
+-        if (this.host.substring(0, 5) === "https") {
+-            this.httpsAgent = new https.Agent({ keepAlive });
+-        }
+-        else {
+-            this.httpAgent = new http.Agent({ keepAlive });
+-        }
+-    }
+-};
+-HttpProvider.prototype._prepareRequest = function () {
+-    var request;
+-    // the current runtime is a browser
+-    if (typeof XMLHttpRequest !== 'undefined') {
+-        request = new XMLHttpRequest();
+-    }
+-    else {
+-        request = new XHR2();
+-        var agents = { httpsAgent: this.httpsAgent, httpAgent: this.httpAgent, baseUrl: this.baseUrl };
+-        if (this.agent) {
+-            agents.httpsAgent = this.agent.https;
+-            agents.httpAgent = this.agent.http;
+-            agents.baseUrl = this.agent.baseUrl;
+-        }
+-        request.nodejsSet(agents);
+-    }
+-    request.open('POST', this.host, true);
+-    request.setRequestHeader('Content-Type', 'application/json');
+-    request.timeout = this.timeout;
+-    request.withCredentials = this.withCredentials;
+-    if (this.headers) {
+-        this.headers.forEach(function (header) {
+-            request.setRequestHeader(header.name, header.value);
+-        });
+-    }
+-    return request;
+ };
+ /**
+  * Should be used to make async request
+@@ -82,33 +42,48 @@ HttpProvider.prototype._prepareRequest = function () {
+  * @param {Function} callback triggered on end with (err, result)
+  */
+ HttpProvider.prototype.send = function (payload, callback) {
+-    var _this = this;
+-    var request = this._prepareRequest();
+-    request.onreadystatechange = function () {
+-        if (request.readyState === 4 && request.timeout !== 1) {
+-            var result = request.responseText;
+-            var error = null;
++    const controller = new AbortController();
++    if (this.timeout) {
++        setTimeout(() => controller.abort(), this.timeout);
++    }
++    const headers = new Headers();
++    headers.set('Content-Type', 'application/json');
++    this.headers?.forEach(header => headers.set(header.name, header.value));
++
++    let text_payload
++    try {
++        text_payload = JSON.stringify(payload)
++    } catch (err) {
++        callback(errors.InvalidConnection(this.host));
++        return;
++    }
++    const run = async () => {
++        try {
++            const response = await fetch(this.host, {
++                credentials: 'omit',
++                signal: controller.signal,
++                method: 'POST',
++                mode: 'cors',
++                headers,
++                body: text_payload
++            });
++            const text = await response.text();
++            if (!response.ok) throw new Error(text);
++            this.connected = true;
+             try {
+-                result = JSON.parse(result);
++                callback(null, JSON.parse(text));
++            } catch (err) {
++                callback(errors.InvalidResponse(text), null);
+             }
+-            catch (e) {
+-                error = errors.InvalidResponse(request.responseText);
+-            }
+-            _this.connected = true;
+-            callback(error, result);
++        } catch (err) {
++            callback(errors.InvalidConnection(err));
+         }
+-    };
+-    request.ontimeout = function () {
+-        _this.connected = false;
+-        callback(errors.ConnectionTimeout(this.timeout));
+-    };
+-    try {
+-        request.send(JSON.stringify(payload));
+     }
+-    catch (error) {
++    run();
++    controller.signal.addEventListener('abort', () => {
+         this.connected = false;
+-        callback(errors.InvalidConnection(this.host));
+-    }
++        callback(errors.ConnectionTimeout(this.timeout));
++    })
+ };
+ HttpProvider.prototype.disconnect = function () {
+     //NO OP
+diff --git a/src/index.js b/src/index.js
+index 6b2a7e2b0bf819ab9721496bcdfa77d7c694ab0f..66c674f4a097bce34fc3b3a3b0cfa04680df5dfe 100644
+--- a/src/index.js
++++ b/src/index.js
+@@ -23,9 +23,6 @@
+  */
+ 
+ var errors = require('web3-core-helpers').errors;
+-var XHR2 = require('xhr2-cookies').XMLHttpRequest; // jshint ignore: line
+-var http = require('http');
+-var https = require('https');
+ 
+ 
+ /**
+@@ -52,38 +49,6 @@ var HttpProvider = function HttpProvider(host, options) {
+     }
+ };
+ 
+-HttpProvider.prototype._prepareRequest = function(){
+-    var request;
+-
+-    // the current runtime is a browser
+-    if (typeof XMLHttpRequest !== 'undefined') {
+-        request = new XMLHttpRequest();
+-    } else {
+-        request = new XHR2();
+-        var agents = {httpsAgent: this.httpsAgent, httpAgent: this.httpAgent, baseUrl: this.baseUrl};
+-
+-        if (this.agent) {
+-            agents.httpsAgent = this.agent.https;
+-            agents.httpAgent = this.agent.http;
+-            agents.baseUrl = this.agent.baseUrl;
+-        }
+-
+-        request.nodejsSet(agents);
+-    }
+-
+-    request.open('POST', this.host, true);
+-    request.setRequestHeader('Content-Type','application/json');
+-    request.timeout = this.timeout;
+-    request.withCredentials = this.withCredentials;
+-
+-    if(this.headers) {
+-        this.headers.forEach(function(header) {
+-            request.setRequestHeader(header.name, header.value);
+-        });
+-    }
+-
+-    return request;
+-};
+ 
+ /**
+  * Should be used to make async request
+@@ -93,36 +58,48 @@ HttpProvider.prototype._prepareRequest = function(){
+  * @param {Function} callback triggered on end with (err, result)
+  */
+ HttpProvider.prototype.send = function (payload, callback) {
+-    var _this = this;
+-    var request = this._prepareRequest();
+-
+-    request.onreadystatechange = function() {
+-        if (request.readyState === 4 && request.timeout !== 1) {
+-            var result = request.responseText;
+-            var error = null;
++    const controller = new AbortController();
++    if (this.timeout) {
++        setTimeout(() => controller.abort(), this.timeout);
++    }
++    const headers = new Headers();
++    headers.set('Content-Type', 'application/json');
++    this.headers?.forEach(header => headers.set(header.name, header.value));
+ 
++    let text_payload
++    try {
++        text_payload = JSON.stringify(payload)
++    } catch (err) {
++        callback(errors.InvalidConnection(this.host));
++        return;
++    }
++    const run = async () => {
++        try {
++            const response = await fetch(this.host, {
++                credentials: 'omit',
++                signal: controller.signal,
++                method: 'POST',
++                mode: 'cors',
++                headers,
++                body: text_payload
++            });
++            const text = await response.text();
++            if (!response.ok) throw new Error(text);
++            this.connected = true;
+             try {
+-                result = JSON.parse(result);
+-            } catch(e) {
+-                error = errors.InvalidResponse(request.responseText);
++                callback(null, JSON.parse(text));
++            } catch (err) {
++                callback(errors.InvalidResponse(text), null);
+             }
+-
+-            _this.connected = true;
+-            callback(error, result);
++        } catch (err) {
++            callback(errors.InvalidConnection(err));
+         }
+-    };
+-
+-    request.ontimeout = function() {
+-        _this.connected = false;
+-        callback(errors.ConnectionTimeout(this.timeout));
+-    };
+-
+-    try {
+-        request.send(JSON.stringify(payload));
+-    } catch(error) {
+-        this.connected = false;
+-        callback(errors.InvalidConnection(this.host));
+     }
++    run();
++    controller.signal.addEventListener('abort', () => {
++        this.connected = false;
++        callback(errors.ConnectionTimeout(this.timeout));
++    })
+ };
+ 
+ HttpProvider.prototype.disconnect = function () {

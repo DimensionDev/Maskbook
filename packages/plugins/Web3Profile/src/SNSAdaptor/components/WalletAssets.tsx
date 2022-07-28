@@ -1,5 +1,5 @@
 import { Card, Typography, Link, Box } from '@mui/material'
-import { Edit2Icon, LinkOutIcon, DoubleArrowUp } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../locales'
 import { ImageIcon } from './ImageIcon'
@@ -168,18 +168,18 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
                         href={address ? explorerResolver.addressLink(chainId, address?.address) ?? '' : ''}
                         target="_blank"
                         rel="noopener noreferrer">
-                        <LinkOutIcon className={classes.linkIcon} />
+                        <Icons.LinkOut className={classes.linkIcon} />
                     </Link>
                 </div>
                 <div className={classes.rightIcons}>
                     {loadStatus === LOAD_STATUS.Finish && (
-                        <DoubleArrowUp
+                        <Icons.DoubleArrowUp
                             size={16}
                             className={classes.arrowUp}
                             onClick={() => setLoadStatus(LOAD_STATUS.Necessary)}
                         />
                     )}
-                    <Edit2Icon size={20} onClick={onSetting} className={classes.editIcon} />
+                    <Icons.Edit2 size={20} onClick={onSetting} className={classes.editIcon} />
                 </div>
             </div>
 

@@ -21,7 +21,7 @@
     "@masknet/typed-message": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
     "@msgpack/msgpack": "^2.7.2",
-    "arweave": "^1.10.3",
+    "arweave": "^1.11.4",
     "date-fns": "^2.28.0",
     "ipfs-http-client": "^54.0.2",
     "react-feather": "^2.0.9",

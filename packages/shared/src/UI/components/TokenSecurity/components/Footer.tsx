@@ -1,6 +1,6 @@
+import { Icons } from '@masknet/icons'
 import { Link, Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../../locales'
-import { GoPlusLabLogo } from '../icons/Logo'
 
 const PLUGIN_OFFICIAL_WEBSITE = 'https://gopluslabs.io'
 
@@ -21,7 +21,7 @@ export const Footer = () => {
                 </Typography>
             </Stack>
             <Link href={PLUGIN_OFFICIAL_WEBSITE} target="_blank" rel="noopener noreferrer">
-                <GoPlusLabLogo sx={{ fontSize: '16px' }} />
+                <Icons.GoPlusLab size={16} />
             </Link>
         </Stack>
     )
