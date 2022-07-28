@@ -137,7 +137,7 @@ export const getDonationList = async (walletList: WalletTypes[]) => {
                     address,
                     collections: result?.map((asset) => ({
                         key: asset?.id,
-                        address: asset?.hash,
+                        address: asset?.id,
                         platform: platform ?? NetworkPluginID.PLUGIN_EVM,
                         iconURL: asset?.imageURL,
                         name: asset?.title,
@@ -163,7 +163,7 @@ export const getFootprintList = async (walletList: WalletTypes[]) => {
                     address,
                     collections: result?.map((asset) => ({
                         key: asset?.id,
-                        address: asset?.hash,
+                        address: asset?.id,
                         platform: platform ?? NetworkPluginID.PLUGIN_EVM,
                         iconURL: asset?.imageURL,
                         name: asset?.title,
