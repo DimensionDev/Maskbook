@@ -92,7 +92,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         (() => {
-            const icon = <Icons.RedPacket />
+            const icon = <Icons.RedPacket size={36} />
             const name = <Trans ns={PluginId.RedPacket} i18nKey="name" />
             const recommendFeature = {
                 description: <Trans ns={PluginId.RedPacket} i18nKey="recommend_feature_description" />,
