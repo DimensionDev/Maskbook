@@ -26,7 +26,6 @@ import {
 export class Others extends OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
     constructor(context: Plugin.Shared.SharedContext) {
         super(context, {
-            defaultBlockDelay: 15,
             chainDescriptors: CHAIN_DESCRIPTORS,
             networkDescriptors: NETWORK_DESCRIPTORS,
             providerDescriptors: PROVIDER_DESCRIPTORS,

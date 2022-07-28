@@ -170,7 +170,7 @@ export interface ChainDescriptor<ChainId, SchemaType, NetworkType> {
 export interface NetworkDescriptor<ChainId, NetworkType> {
     /** An unique ID for each network */
     ID: string
-    /** The ID of a plugin that provides the functionality of this network. */
+    /** The ID of the plugin that provides the functionality of the network. */
     networkSupporterPluginID: NetworkPluginID
     /** The chain id */
     chainId: ChainId
@@ -180,6 +180,8 @@ export interface NetworkDescriptor<ChainId, NetworkType> {
     icon: URL
     /** The network icon in fixed color */
     iconColor: Color
+    /** The avarage time for mining a block (unit: seconds). */
+    averageBlockDelay: number
     /** The background gradient color for relative network bar */
     backgroundGradient?: string
     /** The network name */
@@ -215,7 +217,7 @@ export interface ProviderDescriptor<ChainId, ProviderType> {
     homeLink: string
     /** A link only contains domain name */
     shortenLink: string
-    /** A link to download the client */
+    /** A link to download the client application */
     downloadLink?: string
 }
 

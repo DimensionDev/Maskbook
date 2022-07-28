@@ -102,6 +102,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         name: 'Solana',
         icon: new URL('../assets/solana.png', import.meta.url),
         iconColor: '#5d6fc0',
+        averageBlockDelay: 15,
         isMainnet: true,
     },
     {
@@ -112,6 +113,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         name: 'Solana Testnet',
         icon: new URL('../assets/solana.png', import.meta.url),
         iconColor: '#5d6fc0',
+        averageBlockDelay: 15,
         isMainnet: false,
     },
 ]
