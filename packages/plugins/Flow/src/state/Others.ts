@@ -16,6 +16,9 @@ import {
     CHAIN_DESCRIPTORS,
     NETWORK_DESCRIPTORS,
     PROVIDER_DESCRIPTORS,
+    getDefaultChainId,
+    getDefaultNetworkType,
+    getDefaultProviderType,
     getZeroAddress,
     getMaskTokenAddress,
     getNativeTokenAddress,
@@ -24,7 +27,6 @@ import {
 export class Others extends OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
     constructor(context: Plugin.Shared.SharedContext) {
         super(context, {
-            defaultBlockDelay: 15,
             chainDescriptors: CHAIN_DESCRIPTORS,
             networkDescriptors: NETWORK_DESCRIPTORS,
             providerDescriptors: PROVIDER_DESCRIPTORS,
@@ -48,6 +50,9 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
     override isZeroAddress = isZeroAddress
     override isNativeTokenAddress = isNativeTokenAddress
 
+    override getDefaultChainId = getDefaultChainId
+    override getDefaultNetworkType = getDefaultNetworkType
+    override getDefaultProviderType = getDefaultProviderType
     override getZeroAddress = getZeroAddress
     override getNativeTokenAddress = getNativeTokenAddress
     override getMaskTokenAddress = getMaskTokenAddress

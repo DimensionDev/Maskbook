@@ -18,6 +18,9 @@ import {
     CHAIN_DESCRIPTORS,
     NETWORK_DESCRIPTORS,
     PROVIDER_DESCRIPTORS,
+    getDefaultChainId,
+    getDefaultNetworkType,
+    getDefaultProviderType,
     getZeroAddress,
     getMaskTokenAddress,
     getNativeTokenAddress,
@@ -38,6 +41,9 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
     override isZeroAddress = isZeroAddress
     override isNativeTokenAddress = isNativeTokenAddress
 
+    override getDefaultChainId = getDefaultChainId
+    override getDefaultNetworkType = getDefaultNetworkType
+    override getDefaultProviderType = getDefaultProviderType
     override getZeroAddress = getZeroAddress
     override getMaskTokenAddress = getMaskTokenAddress
     override getNativeTokenAddress = getNativeTokenAddress

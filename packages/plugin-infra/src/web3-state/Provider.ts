@@ -42,7 +42,7 @@ export class ProviderState<
             isSameAddress(a?: string, b?: string): boolean
             getDefaultChainId(): ChainId
             getDefaultNetworkType(): NetworkType
-            getDefaultProviderType(site?: EnhanceableSite | ExtensionSite): ProviderType
+            getDefaultProviderType(): ProviderType
             getNetworkTypeFromChainId(chainId: ChainId): NetworkType
         },
     ) {
@@ -52,7 +52,7 @@ export class ProviderState<
                 account: '',
                 chainId: options.getDefaultChainId(),
             },
-            providerType: options.getDefaultProviderType(site),
+            providerType: options.getDefaultProviderType(),
         }
 
         const { storage } = this.context.createKVStorage('memory', {}).createSubScope(site ?? 'Provider', defaultValue)
@@ -116,7 +116,7 @@ export class ProviderState<
                 const siteType = getSiteType()
                 if (!siteType) return
 
-                this.storage.providerType.setValue(this.options.getDefaultProviderType(siteType))
+                this.storage.providerType.setValue(this.options.getDefaultProviderType())
             })
         })
     }

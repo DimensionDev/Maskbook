@@ -1,6 +1,6 @@
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { getTokenConstant, ZERO_ADDRESS } from '../constants'
-import { ChainId } from '../types'
+import { ChainId, NetworkType, ProviderType } from '../types'
 
 export function formatAddress(address: string, size = 0) {
     if (!isValidAddress(address)) return address
@@ -14,6 +14,18 @@ export function isValidAddress(address: string) {
 
 export function isValidChainId(chainId: ChainId) {
     return getEnumAsArray(ChainId).some((x) => x.value === chainId)
+}
+
+export function getDefaultChainId() {
+    return ChainId.Mainnet
+}
+
+export function getDefaultNetworkType() {
+    return NetworkType.Flow
+}
+
+export function getDefaultProviderType() {
+    return ProviderType.None
 }
 
 export function getZeroAddress() {

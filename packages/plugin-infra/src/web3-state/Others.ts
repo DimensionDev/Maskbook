@@ -1,3 +1,4 @@
+import type { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
 import {
     ChainDescriptor,
     createChainResolver,
@@ -30,6 +31,9 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transac
         throw new Error('Method not implemented.')
     }
     getDefaultNetworkType(): NetworkType {
+        throw new Error('Method not implemented.')
+    }
+    getDefaultProviderType(): ProviderType {
         throw new Error('Method not implemented.')
     }
 

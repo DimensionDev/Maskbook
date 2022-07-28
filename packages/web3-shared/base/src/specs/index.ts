@@ -180,7 +180,7 @@ export interface NetworkDescriptor<ChainId, NetworkType> {
     icon: URL
     /** The network icon in fixed color */
     iconColor: Color
-    /** The avarage time for mining a block (unit: seconds). */
+    /** The average time for mining a block (unit: seconds). */
     averageBlockDelay: number
     /** The background gradient color for relative network bar */
     backgroundGradient?: string
@@ -1264,6 +1264,7 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Tra
     // #region customization
     getDefaultChainId(): ChainId
     getDefaultNetworkType(): NetworkType
+    getDefaultProviderType(): ProviderType
     getZeroAddress(): string | undefined
     getNativeTokenAddress(chainId?: ChainId): string | undefined
     getMaskTokenAddress(chainId?: ChainId): string | undefined
