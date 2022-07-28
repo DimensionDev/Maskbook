@@ -126,11 +126,8 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
             : undefined
         const title = computed?.title ?? errorInfo?.error.message
         const message = computed?.failedDescription
-        if (!title) return
 
-        console.log({
-            error: errorInfo?.error,
-        })
+        if (!title) return
 
         const snackbarConfig = resolveSnackbarConfig(TransactionStatusType.FAILED)
 
