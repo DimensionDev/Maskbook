@@ -51,7 +51,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             category: 'dapp',
             description: <Trans i18nKey="plugin_dhedge_description" />,
             name: <Trans i18nKey="plugin_dhedge_name" />,
-            icon: <Icons.Dhedge />,
+            icon: <Icons.Dhedge size={36} />,
             marketListSortingPriority: 11,
             tutorialLink: 'https://realmasknetwork.notion.site/fb00ff2e626949279c83b59ed9207b9a',
         },

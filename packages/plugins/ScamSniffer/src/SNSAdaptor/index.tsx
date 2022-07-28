@@ -47,7 +47,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         (() => {
-            const icon = <Icons.ScamSniffer />
+            const icon = <Icons.ScamSniffer size={36} />
             return {
                 ApplicationEntryID: base.ID,
                 marketListSortingPriority: 19,
