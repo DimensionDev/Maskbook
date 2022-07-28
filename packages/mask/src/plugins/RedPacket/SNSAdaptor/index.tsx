@@ -73,7 +73,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 return {
                     text: (
                         <div style={containerStyle}>
-                            <Icons.NftRedPacket size={16} />
+                            <Icons.NFTRedPacket size={16} />
                             {payload.message ? payload.message : 'An NFT Lucky Drop'}
                         </div>
                     ),

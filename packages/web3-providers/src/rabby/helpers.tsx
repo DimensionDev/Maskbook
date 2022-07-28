@@ -44,12 +44,12 @@ export function getAllMaskDappContractInfo(chainId: ChainId, type: 'token' | 'nf
               {
                   address: ITO_CONTRACT_ADDRESS,
                   name: 'ITO V1',
-                  logo: <Icons.Ito />,
+                  logo: <Icons.ITO />,
               },
               {
                   address: ITO2_CONTRACT_ADDRESS,
                   name: 'ITO V2',
-                  logo: <Icons.Ito />,
+                  logo: <Icons.ITO />,
               },
           ]
         : [

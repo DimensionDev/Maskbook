@@ -17,7 +17,7 @@ export function DataProviderIconUI(props: DataProviderIconProps) {
         case DataProvider.UNISWAP_INFO:
             return <Icons.Uniswap size={size} />
         case DataProvider.NFTSCAN:
-            return <Icons.NftScan size={size} />
+            return <Icons.NFTScan size={size} />
         default:
             unreachable(props.provider)
     }
