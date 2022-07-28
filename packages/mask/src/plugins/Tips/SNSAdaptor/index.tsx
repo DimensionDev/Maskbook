@@ -17,7 +17,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const name = base.name
-            const icon = <Icons.Tips />
+            const icon = <Icons.Tips size={36} />
             const iconFilterColor = 'rgba(247, 147, 30, 0.3)'
             return {
                 RenderEntryComponent(EntryComponentProps) {

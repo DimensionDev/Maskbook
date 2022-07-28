@@ -77,8 +77,8 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
         recommendFeatureAppIconWrapper: {
             marginRight: 12,
             '> *': {
-                width: 48,
-                height: 48,
+                width: '48px !important',
+                height: '48px !important',
             },
         },
         recommendFeatureAppListItemName: {
