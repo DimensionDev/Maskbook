@@ -124,6 +124,12 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 400,
         color: theme.palette.maskColor.second,
     },
+    singleRow: {
+        maxWidth: 400,
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+    },
 }))
 
 const ChainID = {
@@ -181,7 +187,7 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
         })
 
         const days = differenceInCalendarDays(Date.now(), new Date(time ?? 0))
-        const hours = differenceInCalendarHours(Date.now(), new Date(time ?? 0))
+        const hours = differenceInCalendarHours(Date.now(), new Date(time ?? 0)) % 24
 
         return (
             <InjectedDialog open={open} onClose={onClose} title={t.details()}>
@@ -205,11 +211,13 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                     <Typography fontSize="16px" fontWeight={700} marginTop="38px">
                         {title}
                     </Typography>
-                    <div className={classes.icons}>{icons}</div>
+                    {icons.length > 0 && <div className={classes.icons}>{icons}</div>}
 
-                    <Link rel="noopener noreferrer" target="_blank" href={referenceURL} className={classes.link}>
-                        {referenceURL}
-                    </Link>
+                    <Typography className={classes.singleRow}>
+                        <Link rel="noopener noreferrer" target="_blank" href={referenceURL} className={classes.link}>
+                            {referenceURL}
+                        </Link>
+                    </Typography>
                     {date && (
                         <Typography fontSize="14px" fontWeight={400} marginTop="12px">
                             {date}
@@ -245,7 +253,7 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                             </Typography>
                             <div className={classes.dayBox}>
                                 {days > 0 ? `${days} ${t.day({ count: days })} ` : ''}
-                                {hours > 0 ? `${hours} ${t.day({ count: hours })} ` : ''}
+                                {hours > 0 ? `${hours} ${t.hour({ count: hours })} ` : ''}
                                 {t.ago()}
                                 <Link
                                     className={classes.linkBox}

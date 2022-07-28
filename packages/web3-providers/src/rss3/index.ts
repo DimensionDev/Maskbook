@@ -134,7 +134,6 @@ const getIdFromDonationURL = (url?: string) => {
 const createCollection = (collectionResponse: RSS3BaseAPI.CollectionResponse[]): RSS3BaseAPI.Collection[] => {
     return collectionResponse.map((collection: RSS3BaseAPI.CollectionResponse) => {
         const firstAction = first(collection.actions)
-        console.log({ collection })
         return {
             ...collection,
             title: firstAction?.metadata?.title || firstAction?.metadata?.name,
