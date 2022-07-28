@@ -1,3 +1,4 @@
+import type BigNumber from 'bignumber.js'
 import type RSS3 from 'rss3-next'
 
 export namespace RSS3BaseAPI {
@@ -139,7 +140,7 @@ export namespace RSS3BaseAPI {
         title?: string
         description?: string
         actions?: Action[]
-        tokenAmount?: number
+        tokenAmount?: BigNumber
         tokenSymbol?: string
         location: string
     }

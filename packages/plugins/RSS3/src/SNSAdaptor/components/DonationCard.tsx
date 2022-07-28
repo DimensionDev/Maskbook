@@ -58,6 +58,9 @@ const useStyles = makeStyles()((theme) => ({
     fontColor: {
         color: theme.palette.maskColor.primary,
     },
+    tokenInfoColor: {
+        color: theme.palette.maskColor.main,
+    },
 }))
 
 export const DonationCard = ({ donation, address, onSelect, className, ...rest }: DonationCardProps) => {
@@ -87,10 +90,12 @@ export const DonationCard = ({ donation, address, onSelect, className, ...rest }
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.activity}>
-                        <span className={classes.fontColor}>{reversedAddress}</span> {t.contributed()}{' '}
-                        {donation.tokenAmount}
-                        {donation.tokenSymbol ?? 'ETH'} <span className={classes.fontColor}>{t.to()}</span>{' '}
-                        {donation.title}
+                        <span className={classes.fontColor}>{reversedAddress}</span>{' '}
+                        <span className={classes.fontColor}>{t.contributed()}</span>{' '}
+                        <span className={classes.tokenInfoColor}>{donation.tokenAmount?.toString()}</span>
+                        <span className={classes.tokenInfoColor}>{donation.tokenSymbol ?? 'ETH'}</span>{' '}
+                        <span className={classes.fontColor}>{t.to()}</span>{' '}
+                        <span className={classes.tokenInfoColor}>{donation.title}</span>
                     </Typography>
                 </div>
             </div>

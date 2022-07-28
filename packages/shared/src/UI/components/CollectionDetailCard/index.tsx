@@ -4,12 +4,11 @@ import { InjectedDialog } from '../../../contexts'
 import { useSharedI18N } from '../../../locales'
 import { Box, Card, DialogContent, Link, Typography } from '@mui/material'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
-import differenceInCalendarDays from 'date-fns/differenceInDays'
-import differenceInCalendarHours from 'date-fns/differenceInHours'
 import { Icons } from '@masknet/icons'
 import { ChainId, explorerResolver, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 
 interface CollectionDetailCardProps {
     img?: string
@@ -28,7 +27,7 @@ interface CollectionDetailCardProps {
     }>
     type: CollectionType
     time?: string
-    tokenAmount?: number
+    tokenAmount?: string
     tokenSymbol?: string
     hash?: string
 }
@@ -186,9 +185,6 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
             ) : null
         })
 
-        const days = differenceInCalendarDays(Date.now(), new Date(time ?? 0))
-        const hours = differenceInCalendarHours(Date.now(), new Date(time ?? 0)) % 24
-
         return (
             <InjectedDialog open={open} onClose={onClose} title={t.details()}>
                 <DialogContent>
@@ -252,9 +248,7 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                                 {tokenAmount} {tokenSymbol}
                             </Typography>
                             <div className={classes.dayBox}>
-                                {days > 0 ? `${days} ${t.day({ count: days })} ` : ''}
-                                {hours > 0 ? `${hours} ${t.hour({ count: hours })} ` : ''}
-                                {t.ago()}
+                                {formatDistanceToNow(new Date(time ?? 0))} {t.ago()}
                                 <Link
                                     className={classes.linkBox}
                                     target="_blank"
@@ -264,19 +258,21 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                             </div>
                         </div>
                     )}
-                    {traits && (
+                    {traits && traits.length > 0 && (
                         <Typography fontSize="16px" fontWeight={700}>
                             {t.properties()}
                         </Typography>
                     )}
-                    <Box className={classes.traitsBox}>
-                        {traits?.map((trait) => (
-                            <div key={trait.type + trait.value} className={classes.traitItem}>
-                                <Typography className={classes.secondText}>{trait.type}</Typography>
-                                <Typography className={classes.traitValue}>{trait.value}</Typography>
-                            </div>
-                        ))}
-                    </Box>
+                    {traits && traits.length > 0 && (
+                        <Box className={classes.traitsBox}>
+                            {traits?.map((trait) => (
+                                <div key={trait.type + trait.value} className={classes.traitItem}>
+                                    <Typography className={classes.secondText}>{trait.type}</Typography>
+                                    <Typography className={classes.traitValue}>{trait.value}</Typography>
+                                </div>
+                            ))}
+                        </Box>
+                    )}
                 </DialogContent>
             </InjectedDialog>
         )

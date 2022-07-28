@@ -1,7 +1,7 @@
 import { NFTCardStyledAssetPlayer, TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Alchemy_EVM, RSS3BaseAPI } from '@masknet/web3-providers'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, resolveIPFSLinkFromURL, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Box, Typography, Card } from '@mui/material'
 import differenceInCalendarDays from 'date-fns/differenceInDays'
@@ -34,6 +34,7 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.third,
         marginLeft: 10,
     },
+
     summary: {
         textOverflow: 'ellipsis',
         '-webkit-line-clamp': '1',
@@ -41,6 +42,7 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
         display: '-webkit-box',
         '-webkit-box-orient': 'vertical',
+        color: theme.palette.maskColor.main,
     },
     defaultImage: {
         background: theme.palette.maskColor.modalTitleBg,
@@ -55,12 +57,24 @@ const useStyles = makeStyles()((theme) => ({
         width: 64,
         height: 64,
     },
+    action: {
+        color: theme.palette.maskColor.main,
+    },
 }))
 
 export const ChainID = {
     ethereum: ChainId.Mainnet,
     polygon: ChainId.Matic,
     bnb: ChainId.BSC,
+}
+
+enum TAG {
+    NFT = 'NFT',
+    Token = 'Token',
+    POAP = 'POAP',
+    Gitcoin = 'Gitcoin',
+    Mirror = 'Mirror Entry',
+    ETH = 'ETH',
 }
 
 export interface FeedCardProps {
@@ -84,18 +98,18 @@ export function FeedCard({ feed, address, onSelect }: FeedCardProps) {
 
     const action = useMemo(() => {
         if (!feed) return
-        if (feed.tags?.includes('NFT')) {
-            if (feed.metadata?.from?.toLowerCase() === address) {
+        if (feed.tags?.includes(TAG.NFT)) {
+            if (isSameAddress(feed.metadata?.from?.toLowerCase(), address)) {
                 return (
                     <span>
                         {t.sent_a_NFT_to()} <ReversedAddress address={feed.metadata?.to} />
                     </span>
                 )
             }
-            if (feed.metadata?.from === ZERO_ADDRESS) {
+            if (isSameAddress(feed.metadata?.from, ZERO_ADDRESS)) {
                 return t.minted_a_NFT()
             }
-            if (feed.metadata?.to?.toLowerCase() === address) {
+            if (isSameAddress(feed.metadata?.to?.toLowerCase(), address)) {
                 return (
                     <span>
                         {t.acquired_a_NFT_from()} <ReversedAddress address={feed.metadata?.from} />
@@ -103,15 +117,15 @@ export function FeedCard({ feed, address, onSelect }: FeedCardProps) {
                 )
             }
         }
-        if (feed.tags?.includes('Token') || feed.tags?.includes('ETH')) {
-            if (feed.metadata?.from?.toLowerCase() === address) {
+        if (feed.tags?.includes(TAG.Token) || feed.tags?.includes(TAG.ETH)) {
+            if (isSameAddress(feed.metadata?.from?.toLowerCase(), address)) {
                 return (
                     <span>
                         {t.sent_to()} <ReversedAddress address={feed.metadata?.to} />
                     </span>
                 )
             }
-            if (feed.metadata?.to?.toLowerCase() === address) {
+            if (isSameAddress(feed.metadata?.to?.toLowerCase(), address)) {
                 return (
                     <span>
                         {t.received_from()} <ReversedAddress address={feed.metadata?.from} />
@@ -119,22 +133,22 @@ export function FeedCard({ feed, address, onSelect }: FeedCardProps) {
                 )
             }
         }
-        if (feed.tags?.includes('Gitcoin')) {
-            if (feed.metadata?.from?.toLowerCase() === address) {
+        if (feed.tags?.includes(TAG.Gitcoin)) {
+            if (isSameAddress(feed.metadata?.from?.toLowerCase(), address)) {
                 return t.donated()
             }
-            if (feed.metadata?.to?.toLowerCase() === address) {
+            if (isSameAddress(feed.metadata?.to?.toLowerCase(), address)) {
                 return t.received_donation_from()
             }
         }
-        if (feed.metadata?.from?.toLowerCase() === address) {
+        if (isSameAddress(feed.metadata?.from?.toLowerCase(), address)) {
             return t.received()
         }
         return t.sent()
     }, [address, feed])
 
     const logo = useMemo(() => {
-        if (feed.tags?.includes('NFT')) {
+        if (feed.tags?.includes(TAG.NFT)) {
             return (
                 <Card className={classes.img}>
                     <NFTCardStyledAssetPlayer
@@ -155,7 +169,7 @@ export function FeedCard({ feed, address, onSelect }: FeedCardProps) {
                 </Card>
             )
         }
-        if (feed.tags.includes('Token') || feed.tags.includes('ETH')) {
+        if (feed.tags.includes(TAG.Token) || feed.tags.includes(TAG.ETH)) {
             return (
                 <TokenIcon
                     pluginID={NetworkPluginID.PLUGIN_EVM}
@@ -164,7 +178,7 @@ export function FeedCard({ feed, address, onSelect }: FeedCardProps) {
                 />
             )
         }
-        if (feed.tags.includes('Gitcoin')) {
+        if (feed.tags.includes(TAG.Gitcoin)) {
             return (
                 <img
                     className={classes.img}
@@ -208,7 +222,10 @@ export function FeedCard({ feed, address, onSelect }: FeedCardProps) {
             }>
             <div>
                 <>
-                    <ReversedAddress address={address} /> {action} <span className={classes.time}>{time}</span>
+                    <span className={classes.action}>
+                        <ReversedAddress address={address} /> {action}
+                    </span>{' '}
+                    <span className={classes.time}>{time}</span>
                 </>
                 <Box className={classes.collection}>
                     <Typography fontWeight={700} className={classes.summary}>

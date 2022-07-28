@@ -79,7 +79,7 @@ export function DonationPage({ donations = EMPTY_LIST, loading, address }: Donat
                 type={CollectionType.donations}
                 time={selectedDonation?.timestamp}
                 tokenSymbol={selectedDonation?.tokenSymbol}
-                tokenAmount={selectedDonation?.tokenAmount}
+                tokenAmount={selectedDonation?.tokenAmount?.toString()}
                 hash={selectedDonation?.hash}
             />
         </Box>
