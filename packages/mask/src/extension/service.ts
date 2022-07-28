@@ -19,12 +19,12 @@ import type {
     HelperService,
     IdentityService,
     SettingsService,
-    SocialNetworkService,
+    SiteAdaptorService,
     ThirdPartyPluginService,
 } from '../../background/services/types'
 assertNotEnvironment(Environment.ManifestBackground)
 
-const message = new WebExtensionMessage<Record<string, any>>({ domain: 'services' })
+const message = new WebExtensionMessage<Record<string, any>>({ domain: '$' })
 const log: AsyncCallOptions['log'] = {
     type: 'pretty',
     requestReplay: process.env.NODE_ENV === 'development',
@@ -36,7 +36,7 @@ export const Services = {
     Identity: add<IdentityService>('Identity'),
     Backup: add<BackupService>('Backup'),
     Helper: add<HelperService>('Helper'),
-    SocialNetwork: add<SocialNetworkService>('SocialNetwork'),
+    SocialNetwork: add<SiteAdaptorService>('SiteAdaptor'),
     Settings: add<SettingsService>('Settings'),
     ThirdPartyPlugin: add<ThirdPartyPluginService>('ThirdPartyPlugin'),
 }
