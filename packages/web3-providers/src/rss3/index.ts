@@ -5,6 +5,7 @@ import { NEW_RSS3_ENDPOINT, RSS3_ENDPOINT, TAG, TYPE } from './constants'
 import { NonFungibleTokenAPI, RSS3BaseAPI } from '../types'
 import { fetchJSON } from '../helpers'
 import { createIndicator, createPageable, HubOptions, TokenType } from '@masknet/web3-shared-base'
+import { first } from 'lodash-unified'
 
 export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     createRSS3(
@@ -114,14 +115,12 @@ const getIdFromDonationURL = (url?: string) => {
 
 const createCollection = (collectionResponse: RSS3BaseAPI.CollectionResponse[]): RSS3BaseAPI.Collection[] => {
     return collectionResponse.map((collection: RSS3BaseAPI.CollectionResponse) => {
+        const firstAction = first(collection.actions)
         return {
             ...collection,
-            title: collection?.actions?.[0]?.metadata?.title,
-            id:
-                collection?.actions?.[0]?.metadata?.id ??
-                getIdFromDonationURL(collection?.actions?.[0]?.related_urls?.[0]) ??
-                collection?.hash,
-            imageURL: collection?.actions?.[0]?.metadata?.logo ?? collection?.actions?.[0]?.metadata?.image,
+            title: firstAction?.metadata?.title,
+            id: firstAction?.metadata?.id ?? getIdFromDonationURL(firstAction?.related_urls?.[0]) ?? collection?.hash,
+            imageURL: firstAction?.metadata?.logo ?? firstAction?.metadata?.image,
         }
     })
 }
