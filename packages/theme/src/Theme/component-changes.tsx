@@ -10,6 +10,7 @@ import {
     ThemeOptions,
     InputBase as MuiInputBase,
     switchClasses,
+    tooltipClasses,
 } from '@mui/material'
 import type { MaskColor } from './colors'
 
@@ -901,6 +902,37 @@ export const Switch = (mode: PaletteMode, colors: MaskColor) => ({
                 thumb: {
                     width: 14,
                     height: 14,
+                },
+            },
+        },
+    },
+})
+
+export const Tooltip = (mode: PaletteMode, colors: MaskColor) => ({
+    components: {
+        MuiTooltip: {
+            defaultProps: {
+                arrow: true,
+            },
+            styleOverrides: {
+                tooltip: {
+                    padding: 10,
+                    fontSize: 14,
+                    lineHeight: '18px',
+                    backgroundColor: colors.maskColor.tips,
+                    color: colors.maskColor.bottom,
+                },
+                arrow: {
+                    color: colors.maskColor.tips,
+                },
+                popper: {
+                    // `variants` can't override placement prop, So here we use css selector.
+                    [`&[data-popper-placement*="top-start"] .${tooltipClasses.arrow}`]: {
+                        transform: 'translate3d(10px, 0, 0)!important',
+                    },
+                    [`&[data-popper-placement*="top-end"] .${tooltipClasses.arrow}`]: {
+                        transform: 'translate3d(300px, 0, 0)!important',
+                    },
                 },
             },
         },

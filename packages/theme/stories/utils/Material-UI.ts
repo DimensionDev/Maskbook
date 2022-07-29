@@ -1,4 +1,4 @@
-import type { ButtonProps, SelectProps, TextFieldProps } from '@mui/material'
+import type { ButtonProps, SelectProps, TextFieldProps, TooltipProps } from '@mui/material'
 import type { ArgType, ArgTypes } from '@storybook/addons'
 import { argsOfArr, ControlType } from './args'
 function enumIn<T>(enums: {
@@ -42,5 +42,8 @@ export const MuiArgs = {
     select: enumIn<SelectProps>({
         size: (e) => e(['medium', 'small']),
         variant: (e) => e(['filled', 'outlined', 'standard']),
+    }),
+    tooltip: enumIn<TooltipProps>({
+        placement: (e) => e(['top', 'bottom', 'left', 'right', 'top-start', 'top-end']),
     }),
 }
