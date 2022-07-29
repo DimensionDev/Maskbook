@@ -49,7 +49,7 @@ export default function IntroductionPanel(props: IntroductionPanelProps) {
                     {consts.introduction.banner.title}
                 </Typography>
                 <Box>
-                    <CardMedia component="img" className={classes.bannerImg} image={consts.introduction.banner.img} />
+                    <Image className={classes.bannerImg} src={consts.introduction.banner.img} />
                     {consts.introduction.banner.desc.map((e, index) => (
                         <Typography key={index} variant="body1" color="text.secondary" gutterBottom>
                             {e}
