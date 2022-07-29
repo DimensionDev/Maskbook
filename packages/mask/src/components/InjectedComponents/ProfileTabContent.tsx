@@ -59,6 +59,11 @@ const useStyles = makeStyles()((theme) => ({
         flexGrow: 1,
         justifyContent: 'space-between',
     },
+    addressMenu: {
+        maxHeight: 192,
+        width: 248,
+        backgroundColor: theme.palette.maskColor.bottom,
+    },
     addressItem: {
         display: 'flex',
         alignItems: 'center',
@@ -312,10 +317,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                     anchorEl={anchorEl}
                                     open={Boolean(anchorEl)}
                                     PaperProps={{
-                                        style: {
-                                            maxHeight: 192,
-                                            width: 248,
-                                        },
+                                        className: classes.addressMenu,
                                     }}
                                     aria-labelledby="demo-positioned-button"
                                     onClose={() => setAnchorEl(null)}>
