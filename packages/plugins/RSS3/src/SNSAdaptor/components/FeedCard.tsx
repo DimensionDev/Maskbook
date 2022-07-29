@@ -100,7 +100,7 @@ export function FeedCard({ feed, address, onSelect }: FeedCardProps) {
             if (isSameAddress(feed.metadata?.from, address)) {
                 return (
                     <span>
-                        {t.sent_a_NFT_to()} <ReversedAddress address={feed.metadata?.to ?? ZERO_ADDRESS} />
+                        {t.sent_a_NFT_to()} <ReversedAddress isInline address={feed.metadata?.to ?? ZERO_ADDRESS} />
                     </span>
                 )
             }
@@ -110,7 +110,8 @@ export function FeedCard({ feed, address, onSelect }: FeedCardProps) {
             if (isSameAddress(feed.metadata?.to, address)) {
                 return (
                     <span>
-                        {t.acquired_a_NFT_from()} <ReversedAddress address={feed.metadata?.from ?? ZERO_ADDRESS} />
+                        {t.acquired_a_NFT_from()}{' '}
+                        <ReversedAddress isInline address={feed.metadata?.from ?? ZERO_ADDRESS} />
                     </span>
                 )
             }
@@ -119,14 +120,14 @@ export function FeedCard({ feed, address, onSelect }: FeedCardProps) {
             if (isSameAddress(feed.metadata?.from, address)) {
                 return (
                     <span>
-                        {t.sent_to()} <ReversedAddress address={feed.metadata?.to ?? ZERO_ADDRESS} />
+                        {t.sent_to()} <ReversedAddress isInline address={feed.metadata?.to ?? ZERO_ADDRESS} />
                     </span>
                 )
             }
             if (isSameAddress(feed.metadata?.to, address)) {
                 return (
                     <span>
-                        {t.received_from()} <ReversedAddress address={feed.metadata?.from ?? ZERO_ADDRESS} />
+                        {t.received_from()} <ReversedAddress isInline address={feed.metadata?.from ?? ZERO_ADDRESS} />
                     </span>
                 )
             }
