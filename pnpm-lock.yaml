@@ -360,7 +360,7 @@ importers:
 
   packages/mask:
     specifiers:
-      '@azuro-protocol/sdk': ^0.3.0
+      '@azuro-protocol/sdk': ^0.4.4
       '@balancer-labs/sor': ^1.0.0
       '@dimensiondev/holoflows-kit': ^0.9.0-20220520093249-0870919
       '@dimensiondev/mask-wallet-core': 0.1.0-20211013082857-eb62e5f
@@ -512,7 +512,7 @@ importers:
       z-schema: ^5.0.3
       zod: 3.16.0
     dependencies:
-      '@azuro-protocol/sdk': 0.3.1_ucgwbh47t2kt6xn37tycmtxace
+      '@azuro-protocol/sdk': 0.4.4_ucgwbh47t2kt6xn37tycmtxace
       '@balancer-labs/sor': 1.0.0
       '@dimensiondev/holoflows-kit': 0.9.0-20220520093249-0870919_5owzivba7saavwcb3imbrcsadu
       '@dimensiondev/mask-wallet-core': 0.1.0-20211013082857-eb62e5f_protobufjs@6.11.2
@@ -1957,9 +1957,9 @@ packages:
       '@jridgewell/gen-mapping': 0.1.1
       '@jridgewell/trace-mapping': 0.3.13
 
-  /@azuro-protocol/sdk/0.3.1_ucgwbh47t2kt6xn37tycmtxace:
-    resolution: {integrity: sha512-0NT7Xszk5C781qkF1YYz0ZH74relHVCKp+tXtefARHRs47uSW/m9fwxtJRJjGKRA5XduYuCvgX/AUAcn5KbbnQ==}
-    engines: {node: '=14.17.4', npm: '=6.14.14'}
+  /@azuro-protocol/sdk/0.4.4_ucgwbh47t2kt6xn37tycmtxace:
+    resolution: {integrity: sha512-MQyeX6BFDZd+1cv66xnrzcvxs4j7YBo9RckXFzWicmLcxA8ri1zdRw128YY5VAMvJ15f5oZ/fAyfK9/AM7yK1w==}
+    engines: {node: '>=14.17.4', npm: '>=6.14.14'}
     peerDependencies:
       '@ethersproject/contracts': ^5.5.0
       '@ethersproject/providers': ^5.5.3
@@ -2084,7 +2084,7 @@ packages:
     dependencies:
       '@babel/compat-data': 7.17.10
       '@babel/helper-validator-option': 7.16.7
-      browserslist: 4.21.0
+      browserslist: 4.20.3
       semver: 6.3.0
     dev: false
 
@@ -13090,6 +13090,7 @@ packages:
       electron-to-chromium: 1.4.168
       node-releases: 2.0.5
       update-browserslist-db: 1.0.4_browserslist@4.21.0
+    dev: true
 
   /bs-logger/0.2.6:
     resolution: {integrity: sha512-pd8DCoxmbgc7hyPKOvxtqNcjYoOsABPQdcCUjGp3d42VR2CX1ORhk2A87oqqu5R1kk+76nsxZupkmyd+MVtCog==}
@@ -24855,7 +24856,7 @@ packages:
       webpack: ^4.0.0 || ^5.0.0
     dependencies:
       tslib: 2.3.1
-      webpack: 5.73.0_@swc+core@1.2.177
+      webpack: 5.73.0_webpack-cli@4.10.0
     dev: true
 
   /resolve-url/0.2.1:
@@ -26311,7 +26312,7 @@ packages:
       is-utf8: 0.2.1
 
   /strip-bom/3.0.0:
-    resolution: {integrity: sha1-IzTBjpx1n3vdVv3vfprj1YjmjtM=}
+    resolution: {integrity: sha512-vavAMRXOgBVNF6nyEEmL3DBK19iRpDcoIwW+swQ+CbGiu7lju6t+JklA1MHweoWtadgt4ISVUsXLyDq34ddcwA==}
     engines: {node: '>=4'}
 
   /strip-bom/4.0.0:
@@ -26693,7 +26694,7 @@ packages:
       schema-utils: 3.1.1
       serialize-javascript: 6.0.0
       terser: 5.14.1
-      webpack: 5.73.0
+      webpack: 5.73.0_webpack-cli@4.10.0
 
   /terser/4.8.0:
     resolution: {integrity: sha512-EAPipTNeWsb/3wLPeup1tVPaXfIaU68xMnVdPafIL1TV05OhASArYyIfFvnvJCNrR2NIOvDVNNTFRa+Re2MWyw==}
@@ -27885,6 +27886,7 @@ packages:
       browserslist: 4.21.0
       escalade: 3.1.1
       picocolors: 1.0.0
+    dev: true
 
   /uri-js/4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
@@ -29011,6 +29013,7 @@ packages:
       - '@swc/core'
       - esbuild
       - uglify-js
+    dev: true
 
   /webpack/5.73.0_@swc+core@1.2.177:
     resolution: {integrity: sha512-svjudQRPPa0YiOYa2lM/Gacw0r6PvxptHj4FuEKQ2kX05ZLkjbVc5MnPs6its5j7IZljnIqSVo/OsY2X0IpHGA==}
@@ -29219,7 +29222,7 @@ packages:
     dev: false
 
   /wordwrap/1.0.0:
-    resolution: {integrity: sha1-J1hIEIkUVqQXHI0CJkQa3pDLyus=}
+    resolution: {integrity: sha512-gvVzJFlPycKc5dZN4yPkP8w7Dc37BtP1yczEneOb4uq34pXZcvrtRTmWV8W+Ume+XCxKgbjM+nevkyFPMybd4Q==}
 
   /worker-farm/1.7.0:
     resolution: {integrity: sha512-rvw3QTZc8lAxyVrqcSGVm5yP/IJ2UcB3U0graE3LCFoZ0Yn2x4EoVSqJKdB/T5M+FLcRPjz4TDacRf3OCfNUzw==}

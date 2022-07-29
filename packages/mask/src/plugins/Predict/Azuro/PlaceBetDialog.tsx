@@ -6,7 +6,6 @@ import { useI18N as useBaseI18N } from '../../../utils'
 import { isGreaterThan, rightShift, isZero, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useFungibleToken, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 import { useState, useMemo, useCallback } from 'react'
-import { RATE_DECIMALS, USDT_DECIMALS } from '@azuro-protocol/sdk'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { marketRegistry, outcomeRegistry, outcomeSecondParam } from './helpers'
@@ -81,9 +80,10 @@ export function PlaceBetDialog() {
     const [slippage, setSlippage] = useState(2)
     const { value: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM)
     const { value: balance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address)
+    const RATE_DECIMALS = 18
 
     const { value: actualRate, loading: actualRateLoading } = useActualRate(condition, amount)
-    const rawAmount = rightShift(String(amount), USDT_DECIMALS)
+    const rawAmount = rightShift(String(amount), token?.decimals)
     const deadline = Math.floor(Date.now() / 1000) + 2000
     const minRate = (1 + (((actualRate ?? 0) - 1) * (100 - slippage)) / 100).toFixed(8)
     const rawMinRate = rightShift(minRate ?? '0', RATE_DECIMALS)

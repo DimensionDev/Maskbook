@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../locales'
 import { ConditionStatus, UserBet } from '../types'
 import { useAsyncFn } from 'react-use'
-import { useAzuroContract } from '../hooks/useAzuroContract'
+import { useAzuroLPContract } from '../hooks/useAzuroContract'
 import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { encodeContractTransaction } from '@masknet/web3-shared-evm'
@@ -23,7 +23,7 @@ export function RedeemButton(props: RedeemButtonProps) {
     const t = useI18N()
     const { bet, retry } = props
     const { classes } = useStyles()
-    const azuroContract = useAzuroContract()
+    const azuroContract = useAzuroLPContract()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const isResultPositive = bet.result > 0

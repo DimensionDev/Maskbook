@@ -10,6 +10,8 @@ export function useFetchUserGames(filter: UserFilter): AsyncStateRetry<UserBet[]
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     return useAsyncRetry(async () => {
+        if (!account || !chainId) return
+
         const userBets = await PluginPredictRPC.fetchMyBets(account, chainId)
 
         return userBets.filter((userBet) =>
@@ -20,5 +22,5 @@ export function useFetchUserGames(filter: UserFilter): AsyncStateRetry<UserBet[]
                   userBet.gameInfo.state === ConditionStatus.CANCELED
                 : true,
         )
-    }, [filter, account])
+    }, [filter, account, chainId])
 }

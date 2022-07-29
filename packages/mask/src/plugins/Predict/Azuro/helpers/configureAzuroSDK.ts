@@ -7,7 +7,7 @@ export async function configureAzuroSDK(chainId: ChainId) {
 
     setSelectedChainId(chainId)
     configure({
-        rpcUrl: RPC_URLS?.[0] ?? '',
+        rpcUrl: 'https://cors.r2d2.to?' + RPC_URLS?.[0] ?? '',
         ipfsGateway: 'https://ipfs-gateway.azuro.org/ipfs/',
     })
 

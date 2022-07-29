@@ -22,5 +22,29 @@
         "Conflux": "",
         "Harmony": "",
         "Harmony_Test": ""
+    },
+    "CORE": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "0x4fE6A9e47db94a9b2a4FfeDE8db1602FD1fdd37d",
+        "Sokol": "0xEf182ba80c2DA39710Fe0834b5Ac2E8e68820704",
+        "Avalanche": "",
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": "",
+        "Conflux": "",
+        "Harmony": "",
+        "Harmony_Test": ""
     }
 }

@@ -4,7 +4,7 @@ import { ApplicationEntry, InjectedDialog } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useI18N } from '../locales'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { ChainId, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { useAsync, useUpdateEffect } from 'react-use'
@@ -99,7 +99,7 @@ export function PredictDialog(props: PredictDialogProps) {
                         onClick={() => setOpenAzuro(true)}
                     />
                 </div>
-                <AzuroDialog open={openAzuro} onClose={() => setOpenAzuro(false)} />
+                <AzuroDialog open={openAzuro} onClose={useCallback(() => setOpenAzuro(false), [])} />
             </DialogContent>
             <DialogActions style={{ padding: 0, position: 'sticky', bottom: 0 }}>
                 <PluginWalletStatusBar>

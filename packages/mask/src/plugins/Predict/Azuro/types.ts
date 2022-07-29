@@ -78,3 +78,34 @@ export enum Markets {
     WinnerOf1stMap = 20,
     WinnerOf2ndMap = 21,
 }
+
+export interface ConditionStruct {
+    0: [string, string]
+    1: [string, string]
+    2: [string, string]
+    3: string
+    4: string
+    5: string
+    6: [string, string]
+    7: string
+    8: string
+    9: string
+    10: string
+    11: string
+    fundBank: [string, string]
+    payouts: [string, string]
+    totalNetBets: [string, string]
+    reinforcement: string
+    margin: string
+    ipfsHash: string
+    outcomes: [string, string]
+    scopeId: string
+    outcomeWin: string
+    timestamp: string
+    state: string
+    leaf: string
+}
+
+export type ConditionOutput =
+    | [string[], string[], string[], string, string, string, string[], string, string, string, string, string]
+    | undefined
