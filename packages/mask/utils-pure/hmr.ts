@@ -1,4 +1,4 @@
-export function startEffects(hot: __WebpackModuleApi.Hot | undefined) {
+export function hmr(hot: __WebpackModuleApi.Hot | undefined) {
     const ac = new AbortController()
     hot?.dispose(() => ac.abort())
     return {

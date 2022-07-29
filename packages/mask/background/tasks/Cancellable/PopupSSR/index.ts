@@ -1,18 +1,16 @@
 import { OnDemandWorker, serializer } from '@masknet/shared-base'
+import { hmr } from '../../../../utils-pure'
 import { cache, startListen } from './cache'
 
 const worker = new OnDemandWorker(new URL('./worker_init.ts', import.meta.url), { name: 'PopupSSR-Worker' })
-export default async function PopupSSR(signal: AbortSignal) {
+const { signal } = hmr(import.meta.webpackHot)
+if (process.env.manifest === '2') {
     browser.runtime.onMessage.addListener(listener)
 
-    signal.addEventListener(
-        'abort',
-        () => {
-            browser.runtime.onMessage.removeListener(listener)
-            worker.terminate()
-        },
-        { once: true },
-    )
+    signal.addEventListener('abort', () => {
+        browser.runtime.onMessage.removeListener(listener)
+        worker.terminate()
+    })
 
     startListen((props) => {
         return new Promise((resolve) => {

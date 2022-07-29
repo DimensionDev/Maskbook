@@ -2,6 +2,12 @@ import { consistentPersonaDBWriteAccess } from '../../database/persona/db'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { cleanAvatarDB } from '../../database/avatar-cache/cleanup'
 import { hasNativeAPI } from '../../../shared/native-rpc'
+import { hmr } from '../../../utils-pure'
+
+const { signal } = hmr(import.meta.webpackHot)
+if (process.env.architecture === 'web') {
+    cleanProfileWithNoLinkedPersona(signal)
+}
 
 async function cleanRelationDB(anotherList: Set<ProfileIdentifier>) {
     await consistentPersonaDBWriteAccess(async (t) => {
@@ -12,7 +18,7 @@ async function cleanRelationDB(anotherList: Set<ProfileIdentifier>) {
     })
 }
 
-export default async function cleanProfileWithNoLinkedPersona(signal: AbortSignal) {
+async function cleanProfileWithNoLinkedPersona(signal: AbortSignal) {
     if (hasNativeAPI) return // we don't do database house keeping work on mobile
 
     const timeout = setTimeout(cleanProfileWithNoLinkedPersona, 1000 * 60 * 60 * 24 /** 1 day */)
@@ -33,5 +39,3 @@ export default async function cleanProfileWithNoLinkedPersona(signal: AbortSigna
     await cleanAvatarDB(cleanedList)
     await cleanRelationDB(cleanedList)
 }
-
-export {}
