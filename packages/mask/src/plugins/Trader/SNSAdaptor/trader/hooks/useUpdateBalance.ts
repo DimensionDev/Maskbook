@@ -1,12 +1,11 @@
 import { useEffect } from 'react'
 import { useAccount, useBalance } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext'
 
 export function useUpdateBalance(chainId: ChainId) {
     const currentAccount = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
     const {
         tradeState: [{ inputToken, outputToken }, dispatchTradeStore],
@@ -41,7 +40,7 @@ export function useUpdateBalance(chainId: ChainId) {
     useEffect(() => {
         if (!currentAccount) return
         const value =
-            outputToken?.schema === SchemaType.Native || isSameAddress(outputToken?.address, NATIVE_TOKEN_ADDRESS)
+            outputToken?.schema === SchemaType.Native || isNativeTokenAddress(outputToken?.address)
                 ? balance.value
                 : '0'
         dispatchTradeStore({

@@ -1,7 +1,11 @@
 import { useMemo } from 'react'
 import type { ChainIdEnum, Constants, Primitive } from './types'
 
-export function transform<ChainId extends number, T extends Constants>(
+function replaceAll(input: string, values: Record<string, string>) {
+    return input.replace(/\${([^}]+)}/g, (match, p1) => values[p1] ?? match)
+}
+
+export function transformAll<ChainId extends number, T extends Constants>(
     chainIdEnum: ChainIdEnum<ChainId>,
     constants: T,
     environment: Record<string, string> = {},
@@ -29,6 +33,34 @@ export function transform<ChainId extends number, T extends Constants>(
     }
 }
 
+export function transform<ChainId extends number, T extends Constants>(
+    chainIdEnum: ChainIdEnum<ChainId>,
+    constants: T,
+    environment: Record<string, string> = {},
+) {
+    type Entries = { [key in keyof T]?: T[key]['Mainnet'] }
+    const getAllConstants = transformAll(chainIdEnum, constants, environment)
+    return <K extends keyof Entries, F extends Entries[K], R = F extends undefined ? Entries[K] : Required<Entries>[K]>(
+        chainId: ChainId,
+        key: K,
+        fallback?: F,
+    ): R => (getAllConstants(chainId)[key] ?? fallback) as R
+}
+
+export function transformAllFromJSON<ChainId extends number, T extends Constants>(
+    chainIdEnum: ChainIdEnum<ChainId>,
+    json: string,
+    fallbackConstants: T,
+    environment: Record<string, string> = {},
+) {
+    try {
+        const constants = JSON.parse(json) as T
+        return transformAll(chainIdEnum, constants, environment)
+    } catch {
+        return transformAll(chainIdEnum, fallbackConstants, environment)
+    }
+}
+
 export function transformFromJSON<ChainId extends number, T extends Constants>(
     chainIdEnum: ChainIdEnum<ChainId>,
     json: string,
@@ -43,12 +75,19 @@ export function transformFromJSON<ChainId extends number, T extends Constants>(
     }
 }
 
-export function hookTransform<ChainId extends number, T>(getConstants: (chainId: ChainId) => Partial<T>) {
+export function transformAllHook<ChainId extends number, T>(getConstants: (chainId: ChainId) => Partial<T>) {
     return function useConstants(chainId: ChainId = 1 as ChainId) {
         return useMemo(() => getConstants(chainId), [chainId])
     }
 }
 
-function replaceAll(input: string, values: Record<string, string>) {
-    return input.replace(/\${([^}]+)}/g, (match, p1) => values[p1] ?? match)
+export function transformHook<ChainId extends number, T, K extends keyof T>(
+    getConstant: (chainId: ChainId) => Partial<T>,
+) {
+    return function useConstant(chainId: ChainId = 1 as ChainId, key?: K, fallback?: T[K]) {
+        return useMemo(() => {
+            if (!key) return fallback
+            return getConstant(chainId)[key] ?? fallback
+        }, [chainId])
+    }
 }

@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
     formatEthereumAddress,
-    useTokenConstants,
     isNativeTokenAddress,
     explorerResolver,
     chainResolver,
@@ -207,7 +206,6 @@ interface TokenItemProps {
 
 const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
     const { classes } = useStyles({})
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
     return (
         <>
@@ -219,7 +217,7 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
             />
             <Typography component="span">
                 <strong>{price}</strong>{' '}
-                {isSameAddress(exchangeToken.address, NATIVE_TOKEN_ADDRESS)
+                {isNativeTokenAddress(exchangeToken.address)
                     ? chainResolver.nativeCurrency(exchangeToken.chainId)?.symbol
                     : exchangeToken.symbol}{' '}
                 / {token.symbol}

@@ -1,5 +1,6 @@
 import urlcat from 'urlcat'
 import { memo, useState } from 'react'
+import { useAsync } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { useContainer } from 'unstated-next'
@@ -12,13 +13,12 @@ import {
     TransactionDescriptorType,
 } from '@masknet/web3-shared-base'
 import type { ChainId, Transaction } from '@masknet/web3-shared-evm'
-import { PopupRoutes } from '@masknet/shared-base'
+import { EMPTY_LIST, PopupRoutes } from '@masknet/shared-base'
 import { WalletContext } from '../../hooks/useWalletContext'
 import { useI18N } from '../../../../../../utils'
 import { ReplaceType } from '../../type'
 import { ActivityListItem } from './ActivityListItem'
 import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
-import { useAsync } from 'react-use'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()({
@@ -94,8 +94,8 @@ export const ActivityList = memo<ActivityListProps>(({ tokenAddress }) => {
     const { Others, TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
-    const { value: dataSource } = useAsync(async () => {
-        if (!TransactionFormatter) return []
+    const { value: dataSource = EMPTY_LIST } = useAsync(async () => {
+        if (!TransactionFormatter) return
         const formattedTransactions = await Promise.all(
             transactions.map(async (transaction) => {
                 const formatterTransaction = await TransactionFormatter.formatTransaction(chainId, transaction._tx)
@@ -117,11 +117,11 @@ export const ActivityList = memo<ActivityListProps>(({ tokenAddress }) => {
 
             return false
         })
-    }, [tokenAddress, transactions, chainId])
+    }, [chainId, tokenAddress, transactions])
 
     return (
         <ActivityListUI
-            dataSource={dataSource ?? []}
+            dataSource={dataSource}
             chainId={chainId}
             formatterTransactionLink={Others?.explorerResolver.transactionLink}
         />

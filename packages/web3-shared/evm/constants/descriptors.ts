@@ -8,7 +8,7 @@ import {
 } from '@masknet/web3-shared-base'
 import CHAINS from './chains.json'
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types'
-import { getTokenConstants } from './constants'
+import { getTokenConstant } from './constants'
 import { ZERO_ADDRESS } from './primitives'
 import { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
 
@@ -22,8 +22,8 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
     type: (x.type as NetworkType | undefined) ?? NetworkType.Ethereum,
     color: x.color ?? 'rgb(24, 163, 138)',
     nativeCurrency: {
-        id: getTokenConstants(x.chainId).NATIVE_TOKEN_ADDRESS ?? ZERO_ADDRESS,
-        address: getTokenConstants(x.chainId).NATIVE_TOKEN_ADDRESS ?? ZERO_ADDRESS,
+        id: getTokenConstant(x.chainId, 'NATIVE_TOKEN_ADDRESS', ZERO_ADDRESS)!,
+        address: getTokenConstant(x.chainId, 'NATIVE_TOKEN_ADDRESS', ZERO_ADDRESS)!,
         type: TokenType.Fungible,
         schema: SchemaType.Native,
         ...x.nativeCurrency,

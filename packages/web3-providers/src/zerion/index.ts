@@ -2,7 +2,7 @@ import io from 'socket.io-client'
 import { unionWith, values } from 'lodash-unified'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { FungibleAsset, Transaction, HubOptions, createPageable, createIndicator } from '@masknet/web3-shared-base'
-import { ChainId, getZerionConstants, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, getZerionConstant, SchemaType } from '@masknet/web3-shared-evm'
 import type {
     SocketRequestBody,
     SocketNameSpace,
@@ -23,7 +23,7 @@ const ZERION_TOKEN = 'Mask.yEUEfDnoxgLBwNEcYPVussxxjdrGwapj'
 let socket: SocketIOClient.Socket | null = null
 
 export function resolveZerionAssetsScopeName(chainId: ChainId) {
-    return getZerionConstants(chainId).ASSETS_SCOPE_NAME ?? ''
+    return getZerionConstant(chainId, 'ASSETS_SCOPE_NAME', '')!
 }
 
 function createSocket() {
@@ -107,7 +107,7 @@ export class ZerionAPI
     async getAssets(address: string, options?: HubOptions<ChainId>) {
         let result: Array<FungibleAsset<ChainId, SchemaType>> = []
         const pairs = getEnumAsArray(ChainId).map(
-            (x) => [x.value, getZerionConstants(x.value).ASSETS_SCOPE_NAME] as const,
+            (x) => [x.value, getZerionConstant(x.value, 'ASSETS_SCOPE_NAME')] as const,
         )
         for (const [chainId, scope] of pairs) {
             if (!scope) continue
@@ -144,7 +144,7 @@ export class ZerionAPI
         let result: Array<Transaction<ChainId, SchemaType>> = []
         // xdai-assets is not support
         const pairs = getEnumAsArray(ChainId).map(
-            (x) => [x.value, getZerionConstants(x.value).TRANSACTIONS_SCOPE_NAME] as const,
+            (x) => [x.value, getZerionConstant(x.value, 'TRANSACTIONS_SCOPE_NAME')] as const,
         )
         for (const [chainId, scope] of pairs) {
             if (!scope) continue
