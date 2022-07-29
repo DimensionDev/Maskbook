@@ -1,4 +1,5 @@
 import Airdrop from '@masknet/web3-constants/evm/airdrop.json'
+import Azuro from '@masknet/web3-constants/evm/azuro.json'
 import Ethereum from '@masknet/web3-constants/evm/ethereum.json'
 import DeBank from '@masknet/web3-constants/evm/debank.json'
 import CoinGecko from '@masknet/web3-constants/evm/coingecko.json'
@@ -192,3 +193,8 @@ export const getPetConstant = transform(ChainId, Pet)
 export const getPetConstants = transformAll(ChainId, Pet)
 export const usePetConstant = transformHook(getPetConstants)
 export const usePetConstants = transformAllHook(getPetConstants)
+
+export const getAzuroConstant = transform(ChainId, Azuro)
+export const getAzuroConstants = transformAll(ChainId, Azuro)
+export const useAzuroConstant = transformHook(getPetConstants)
+export const useAzuroConstants = transformAllHook(getAzuroConstants)
