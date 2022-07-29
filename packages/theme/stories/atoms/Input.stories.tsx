@@ -1,4 +1,4 @@
-import { TextField as MuiInput, TextFieldProps } from '@mui/material'
+import { InputBase as MuiInput, TextFieldProps } from '@mui/material'
 import { story, MuiArgs, matrix } from '../utils'
 
 const { meta, of } = story(MuiInput)
@@ -14,5 +14,8 @@ export default meta({
 })
 
 export const Input = of({
-    args: { label: 'Label', helperText: 'Helper message' },
+    args: {
+        placeholder: 'Hello World',
+        error: false,
+    },
 })

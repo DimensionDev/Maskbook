@@ -1,5 +1,15 @@
-import { RadioButtonUnChecked, RadioButtonChecked, CheckboxBlank, Checkbox as CheckboxIcon } from '@masknet/icons'
-import { alpha, buttonClasses, radioClasses, checkboxClasses, PaletteMode, ThemeOptions } from '@mui/material'
+import { Icons } from '@masknet/icons'
+import {
+    alpha,
+    buttonClasses,
+    radioClasses,
+    checkboxClasses,
+    inputBaseClasses,
+    menuItemClasses,
+    PaletteMode,
+    ThemeOptions,
+    InputBase as MuiInputBase,
+} from '@mui/material'
 import type { MaskColor } from './colors'
 
 export const Button = (mode: PaletteMode, colors: MaskColor): ThemeOptions => ({
@@ -642,8 +652,8 @@ export const Radio = (mode: PaletteMode, colors: MaskColor): ThemeOptions => ({
         MuiRadio: {
             defaultProps: {
                 size: 'medium',
-                icon: <RadioButtonUnChecked />,
-                checkedIcon: <RadioButtonChecked />,
+                icon: <Icons.RadioButtonUnChecked />,
+                checkedIcon: <Icons.RadioButtonChecked />,
                 disableRipple: true,
             },
             styleOverrides: {
@@ -672,8 +682,8 @@ export const Checkbox = (mode: PaletteMode, colors: MaskColor) => ({
         MuiCheckbox: {
             defaultProps: {
                 size: 'medium',
-                checkedIcon: <CheckboxIcon />,
-                icon: <CheckboxBlank />,
+                checkedIcon: <Icons.Checkbox />,
+                icon: <Icons.CheckboxBlank />,
                 disableRipple: true,
             },
             styleOverrides: {
@@ -690,6 +700,132 @@ export const Checkbox = (mode: PaletteMode, colors: MaskColor) => ({
                         filter: 'none',
                         fill: colors.maskColor.secondaryMain,
                         color: colors.maskColor.secondaryMain,
+                    },
+                },
+            },
+        },
+    },
+})
+
+export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
+    components: {
+        MuiInputBase: {
+            defaultProps: {
+                size: 'medium',
+            },
+            variants: [
+                {
+                    props: {
+                        size: 'small',
+                    },
+                    style: {
+                        [`& .${inputBaseClasses.input}`]: {
+                            padding: 8,
+                            height: 16,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        size: 'medium',
+                    },
+                    style: {
+                        [`& .${inputBaseClasses.input}`]: {
+                            padding: 11,
+                            height: 18,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        size: 'large',
+                    },
+                    style: {
+                        [`& .${inputBaseClasses.input}`]: {
+                            padding: 14,
+                            height: 20,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        color: 'error',
+                    },
+                    style: {
+                        [`&.${inputBaseClasses.focused} > .${inputBaseClasses.input}`]: {
+                            outline: `2px solid ${alpha(colors.maskColor.danger, 0.2)}`,
+                            border: `1px solid ${alpha(colors.maskColor.danger, 0.5)}`,
+                        },
+                        [`& .${inputBaseClasses.input}`]: {
+                            outline: `2px solid ${alpha(colors.maskColor.danger, 0.2)}`,
+                            border: `1px solid ${alpha(colors.maskColor.danger, 0.5)}`,
+                        },
+                    },
+                },
+                {
+                    props: {
+                        color: 'warning',
+                    },
+                    style: {
+                        [`&.${inputBaseClasses.focused} > .${inputBaseClasses.input}`]: {
+                            outline: `2px solid ${alpha(colors.maskColor.warn, 0.2)}`,
+                            border: `1px solid ${alpha(colors.maskColor.warn, 0.5)}`,
+                        },
+                        [`& .${inputBaseClasses.input}`]: {
+                            outline: `2px solid ${alpha(colors.maskColor.warn, 0.2)}`,
+                            border: `1px solid ${alpha(colors.maskColor.warn, 0.5)}`,
+                        },
+                    },
+                },
+            ],
+            styleOverrides: {
+                root: {
+                    borderRadius: 8,
+                    [`&.${inputBaseClasses.focused} > .${inputBaseClasses.input}`]: {
+                        outline: `2px solid ${alpha(colors.maskColor.primary, 0.2)}`,
+                        border: `1px solid ${alpha(colors.maskColor.primary, 0.5)}`,
+                    },
+                    [`&.${inputBaseClasses.error} > .${inputBaseClasses.input}`]: {
+                        outline: `2px solid ${alpha(colors.maskColor.danger, 0.2)}`,
+                        border: `1px solid ${alpha(colors.maskColor.danger, 0.5)}`,
+                    },
+                    [`&.${inputBaseClasses.disabled} > .${inputBaseClasses.input}`]: {
+                        WebkitTextFillColor: 'unset',
+                        '&::placeholder': {
+                            opacity: '0.5',
+                        },
+                    },
+                },
+                input: {
+                    borderRadius: 8,
+                    backgroundColor: colors.maskColor.input,
+                    '&::placeholder': {
+                        color: colors.maskColor.third,
+                    },
+                },
+            },
+        },
+    },
+})
+
+export const Select = (mode: PaletteMode, colors: MaskColor) => ({
+    components: {
+        MuiSelect: {
+            defaultProps: {
+                IconComponent: null,
+                input: <MuiInputBase />,
+            },
+        },
+    },
+})
+
+export const MenuItem = (mode: PaletteMode, colors: MaskColor) => ({
+    components: {
+        MuiMenuItem: {
+            styleOverrides: {
+                root: {
+                    [`&.${menuItemClasses.selected}`]: {
+                        backgroundColor: `${colors.maskColor.bg}!important`,
                     },
                 },
             },

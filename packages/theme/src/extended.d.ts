@@ -12,6 +12,11 @@ declare global {
             error: true
         }
     }
+    module '@mui/material/InputBase' {
+        interface InputBasePropsSizeOverrides {
+            large: true
+        }
+    }
     module '@mui/material/Paper' {
         interface PaperPropsVariantOverrides {
             background: true

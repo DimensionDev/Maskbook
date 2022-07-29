@@ -35,7 +35,8 @@ export const MuiArgs = {
     textField: {
         disabled: { type: 'boolean' },
         ...enumIn<TextFieldProps>({
-            size: (e) => e(['small', 'medium']),
+            size: (e) => e(['small', 'medium', 'large']),
+            color: (e) => e(['error', 'warning']),
         }),
     },
     select: enumIn<SelectProps>({
