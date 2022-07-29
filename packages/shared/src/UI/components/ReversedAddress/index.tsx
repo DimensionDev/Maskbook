@@ -10,21 +10,26 @@ export interface ReverseAddressProps {
     size?: number
     fontSize?: string
     fontWeight?: number
+    isInline?: boolean
 }
 
 export const ReversedAddress = memo<ReverseAddressProps>(
-    ({ address, pluginId, domainSize, size = 5, fontSize = '14px', fontWeight = 700 }) => {
+    ({ address, pluginId, domainSize, size = 5, fontSize = '14px', fontWeight = 700, isInline = false }) => {
         const { value: domain } = useReverseAddress(pluginId, address)
         const { Others } = useWeb3State(pluginId)
 
         if (!domain || !Others?.formatDomainName)
-            return (
+            return isInline ? (
+                <span style={{ fontSize, fontWeight }}>{Others?.formatAddress?.(address, size) ?? address}</span>
+            ) : (
                 <Typography fontSize={fontSize} fontWeight={fontWeight}>
                     {Others?.formatAddress?.(address, size) ?? address}
                 </Typography>
             )
 
-        return (
+        return isInline ? (
+            <span style={{ fontSize, fontWeight }}>{Others.formatDomainName(domain, domainSize)}</span>
+        ) : (
             <Typography fontSize={fontSize} fontWeight={fontWeight}>
                 {Others.formatDomainName(domain, domainSize)}
             </Typography>

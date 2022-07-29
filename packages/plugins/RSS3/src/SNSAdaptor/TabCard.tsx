@@ -16,12 +16,12 @@ export enum TabCardType {
 }
 
 export interface TabCardProps {
-    persona?: string
     type: TabCardType
     socialAddress?: SocialAddress<NetworkPluginID>
+    publicKey?: string
 }
 
-export function TabCard({ type, socialAddress, persona }: TabCardProps) {
+export function TabCard({ type, socialAddress, publicKey }: TabCardProps) {
     const { value: donations = EMPTY_LIST, loading: loadingDonations } = useDonations(
         formatEthereumAddress(socialAddress?.address ?? ZERO_ADDRESS),
     )
@@ -30,7 +30,7 @@ export function TabCard({ type, socialAddress, persona }: TabCardProps) {
     )
     const currentVisitingProfile = useCurrentVisitingProfile()
 
-    const { value: kvValue } = useKV(persona)
+    const { value: kvValue } = useKV(publicKey)
     const unHiddenDonations = useCollectionFilter(
         kvValue?.proofs ?? EMPTY_LIST,
         CollectionType.Donations,
@@ -58,7 +58,7 @@ export function TabCard({ type, socialAddress, persona }: TabCardProps) {
             return <FeedPage socialAddress={socialAddress} />
         }
         return null
-    }, [type, socialAddress, persona, unHiddenDonations, unHiddenFootprints])
+    }, [type, socialAddress, publicKey, unHiddenDonations, unHiddenFootprints])
 
     if (!socialAddress) return null
 

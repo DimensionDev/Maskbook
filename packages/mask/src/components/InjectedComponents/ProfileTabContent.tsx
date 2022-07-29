@@ -158,9 +158,10 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }, [retrySocialAddress])
 
     useEffect(() => {
-        socialAddressList.sort((x) => {
-            if (x.type === SocialAddressType.NEXT_ID) return -1
-            return 1
+        socialAddressList.sort((a, z) => {
+            if (a.type === SocialAddressType.NEXT_ID) return -1
+            if (z.type === SocialAddressType.NEXT_ID) return 1
+            return 0
         })
         setSelectedAddress(first(socialAddressList))
     }, [socialAddressList])
@@ -169,8 +170,10 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const displayPlugins = useAvailablePlugins(activatedPlugins, (plugins) => {
         return plugins
             .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
-            .filter((x) => x.Utils?.shouldDisplay?.(currentVisitingIdentity, selectedAddress) ?? true)
-            .filter((x) => x.pluginID !== PluginId.NextID)
+            .filter((x) => {
+                const shouldDisplay = x.Utils?.shouldDisplay?.(currentVisitingIdentity, selectedAddress)
+                return x.pluginID !== PluginId.NextID && (shouldDisplay === undefined || shouldDisplay === true)
+            })
             .sort((a, z) => {
                 // order those tabs from next id first
                 if (a.pluginID === PluginId.NextID) return -1
@@ -216,13 +219,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const component = useMemo(() => {
         const Component = getTabContent(componentTabId)
 
-        return (
-            <Component
-                identity={currentVisitingSocialIdentity}
-                persona={currentVisitingSocialIdentity?.publicKey}
-                socialAddress={selectedAddress}
-            />
-        )
+        return <Component identity={currentVisitingSocialIdentity} socialAddress={selectedAddress} />
     }, [componentTabId, currentVisitingSocialIdentity?.publicKey, selectedAddress])
 
     useLocationChange(() => {
@@ -385,6 +382,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                 </Typography>
                                 {isOwnerIdentity ? (
                                     <Icons.Gear
+                                        variant="light"
                                         onClick={handleOpenDialog}
                                         className={classes.gearIcon}
                                         sx={{ cursor: 'pointer' }}

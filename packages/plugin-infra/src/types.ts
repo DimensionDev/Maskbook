@@ -597,7 +597,6 @@ export namespace Plugin.SNSAdaptor {
              */
             TabContent: InjectUI<{
                 identity?: SocialIdentity
-                persona?: string
                 socialAddress?: SocialAddress<NetworkPluginID>
             }>
         }
@@ -965,7 +964,6 @@ export enum PluginId {
     Referral = 'com.maskbook.referral',
     Web3Profile = 'io.mask.web3-profile',
     ScamSniffer = 'io.scamsniffer.mask-plugin',
-    Web3Feed = 'io.mask.web3-feed',
     // @masknet/scripts: insert-here
 }
 /**
