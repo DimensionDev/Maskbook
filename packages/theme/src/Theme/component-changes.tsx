@@ -9,6 +9,7 @@ import {
     PaletteMode,
     ThemeOptions,
     InputBase as MuiInputBase,
+    switchClasses,
 } from '@mui/material'
 import type { MaskColor } from './colors'
 
@@ -827,6 +828,79 @@ export const MenuItem = (mode: PaletteMode, colors: MaskColor) => ({
                     [`&.${menuItemClasses.selected}`]: {
                         backgroundColor: `${colors.maskColor.bg}!important`,
                     },
+                },
+            },
+        },
+    },
+})
+
+export const Slider = (mode: PaletteMode, colors: MaskColor) => ({
+    components: {
+        MuiSlider: {
+            styleOverrides: {
+                root: {
+                    color: colors.maskColor.primary,
+                },
+                rail: {
+                    opacity: 1,
+                    backgroundColor: colors.maskColor.thirdMain,
+                },
+            },
+        },
+    },
+})
+
+export const Switch = (mode: PaletteMode, colors: MaskColor) => ({
+    components: {
+        MuiSwitch: {
+            defaultProps: {
+                disableRipple: true,
+            },
+            styleOverrides: {
+                root: {
+                    padding: 8,
+                },
+                switchBase: {
+                    padding: 12,
+                    '&:hover': {
+                        backgroundColor: 'transparent',
+                    },
+                    [`&.${switchClasses.checked}`]: {
+                        color: colors.maskColor.white,
+                        '&:hover': {
+                            backgroundColor: 'transparent',
+                        },
+                        [`&+.${switchClasses.track}`]: {
+                            backgroundColor: colors.maskColor.success,
+                            opacity: 1,
+                        },
+                        [`&.${switchClasses.disabled}`]: {
+                            color: colors.maskColor.white,
+                        },
+                    },
+                    [`&.${switchClasses.disabled}`]: {
+                        color: colors.maskColor.white,
+                        [`&+.${switchClasses.track}`]: {
+                            opacity: 0.5,
+                        },
+                    },
+                },
+                track: {
+                    borderRadius: 11,
+                    backgroundColor: colors.maskColor.primaryMain,
+                    opacity: 1,
+                    '&:before, &:after': {
+                        content: '""',
+                        position: 'absolute',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        width: 16,
+                        height: 16,
+                    },
+                },
+                thumb: {
+                    width: 14,
+                    height: 14,
                 },
             },
         },
