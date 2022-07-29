@@ -1,4 +1,3 @@
-import type { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
 import {
     ChainDescriptor,
     createChainResolver,
