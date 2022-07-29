@@ -227,6 +227,7 @@ export function CreateFarm(props: PageInterface) {
 
     const connection = useWeb3Connection<void, NetworkPluginID.PLUGIN_EVM>()
     const onDeposit = useCallback(async () => {
+        if (!web3 || !connection) return
         if (!tokenRefer?.address || !tokenReward?.address) {
             showSnackbar(t.error_token_not_select(), { variant: 'error' })
             return

@@ -6,7 +6,7 @@ import { Box, InputAdornment } from '@mui/material'
 import { makeStyles } from '../../UIHelper/makeStyles'
 import { MaskSearchableItemInList } from './MaskSearchableItemInList'
 import { MaskTextField, MaskTextFieldProps } from '../TextField'
-import { SearchIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 
 export interface MaskSearchableListProps<T> {
     /** The list data should be render */
@@ -94,7 +94,7 @@ export function SearchableList<T extends {}>({
     return (
         <div className={classes.container}>
             {!disableSearch && (
-                <Box pt={0.5}>
+                <Box style={{ padding: '4px 16px 16px' }}>
                     <MaskTextField
                         placeholder="Search"
                         autoFocus
@@ -102,7 +102,7 @@ export function SearchableList<T extends {}>({
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
-                                    <SearchIcon />
+                                    <Icons.Search />
                                 </InputAdornment>
                             ),
                             ...InputProps,
@@ -114,8 +114,9 @@ export function SearchableList<T extends {}>({
             )}
             {placeholder}
             {!placeholder && (
-                <div className={classes.list}>
+                <div className={classes.listBox}>
                     <FixedSizeList
+                        className={classes.list}
                         width="100%"
                         height={height ?? 300}
                         overscanCount={25}
@@ -135,21 +136,31 @@ export function SearchableList<T extends {}>({
         </div>
     )
 }
+
 const useStyles = makeStyles()((theme) => ({
-    container: {},
+    container: {
+        overflow: 'hidden',
+    },
+    listBox: {
+        '::-webkit-scrollbar': {
+            backgroundColor: 'transparent',
+            width: 20,
+        },
+        '::-webkit-scrollbar-thumb': {
+            borderRadius: '20px',
+            width: 5,
+            border: '7px solid rgba(0, 0, 0, 0)',
+            backgroundColor: theme.palette.maskColor.secondaryLine,
+            backgroundClip: 'padding-box',
+        },
+        '& > div > div': {
+            position: 'relative',
+            width: 'calc(100% - 32px) !important',
+            margin: 'auto',
+        },
+    },
     list: {
-        marginTop: theme.spacing(1.5),
-        '& > div::-webkit-scrollbar': {
-            width: '7px',
-        },
-        '& > div::-webkit-scrollbar-track': {
-            boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
-            webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
-        },
-        '& > div::-webkit-scrollbar-thumb': {
-            borderRadius: '4px',
-            backgroundColor: theme.palette.background.default,
-        },
+        scrollbarWidth: 'thin',
     },
 }))
 

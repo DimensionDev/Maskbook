@@ -1,7 +1,7 @@
 import { createIcon } from '@masknet/icons'
 
-export const CheckedIcon = createIcon(
-    'CheckedIcon',
+export const Checkbox = createIcon(
+    'Checkbox',
     <g>
         <circle cx="12" cy="12" r="10" fill="#1C68F3" />
         <path

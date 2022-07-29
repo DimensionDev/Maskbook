@@ -12,13 +12,7 @@ function sorter(a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPlugi
 }
 
 function shouldDisplay(identity?: SocialIdentity, addressNames?: Array<SocialAddress<NetworkPluginID>>) {
-    return (
-        addressNames?.some(
-            (x) =>
-                (x.type === SocialAddressType.RSS3 || x.type === SocialAddressType.KV) &&
-                x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM,
-        ) ?? false
-    )
+    return !!addressNames?.some((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM)
 }
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -32,9 +26,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
             label: 'Donations',
             priority: 1,
             UI: {
-                TabContent: ({ socialAddressList = [], persona }) => {
+                TabContent: ({ socialAddressList = [], identity }) => {
                     return (
-                        <TabCard socialAddressList={socialAddressList} type={TabCardType.Donation} persona={persona} />
+                        <TabCard
+                            socialAddressList={socialAddressList}
+                            type={TabCardType.Donation}
+                            persona={identity?.publicKey}
+                        />
                     )
                 },
             },
@@ -48,9 +46,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
             label: 'Footprints',
             priority: 2,
             UI: {
-                TabContent: ({ socialAddressList = [], persona }) => {
+                TabContent: ({ socialAddressList = [], identity }) => {
                     return (
-                        <TabCard socialAddressList={socialAddressList} type={TabCardType.Footprint} persona={persona} />
+                        <TabCard
+                            socialAddressList={socialAddressList}
+                            type={TabCardType.Footprint}
+                            persona={identity?.publicKey}
+                        />
                     )
                 },
             },

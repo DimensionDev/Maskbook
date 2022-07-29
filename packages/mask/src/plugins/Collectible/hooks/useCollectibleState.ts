@@ -3,6 +3,7 @@ import { createContainer } from 'unstated-next'
 import { CollectibleTab, CollectibleToken } from '../types'
 import { useNonFungibleAsset } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 function useCollectibleState(token?: CollectibleToken) {
     const [tabIndex, setTabIndex] = useState(CollectibleTab.ARTICLE)
@@ -10,6 +11,7 @@ function useCollectibleState(token?: CollectibleToken) {
 
     const asset = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, token?.contractAddress ?? '', token?.tokenId ?? '', {
         sourceType: provider,
+        chainId: ChainId.Mainnet,
     })
 
     return {

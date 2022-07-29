@@ -137,17 +137,16 @@ export function BuyToFarm(props: PageInterface) {
     )
 
     const onClickBuyToFarm = useCallback(async () => {
-        if (!token?.address) {
-            return onError(t.error_token_not_select())
-        }
+        if (!web3) return
+        if (!token?.address) return onError(t.error_token_not_select())
 
         try {
             onConfirmReferFarm()
             await singAndPostProofOfRecommendationWithReferrer(web3, account, token.address, MASK_REFERRER)
             props?.onChangePage?.(PagesType.BUY_TO_FARM, PagesType.BUY_TO_FARM)
             swapToken()
-        } catch (error: any) {
-            onError(error?.message)
+        } catch (error: unknown) {
+            if (error instanceof Error) onError(error?.message)
         }
     }, [props?.onChangePage, web3, account, token])
 

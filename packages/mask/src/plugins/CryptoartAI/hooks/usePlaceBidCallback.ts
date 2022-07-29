@@ -12,6 +12,7 @@ export function usePlaceBidCallback(is24Auction: boolean, editionNumber: string)
 
     return useAsyncFn(
         async (priceInWei: number) => {
+            if (!connection) return
             if (!is24Auction && !artistAcceptingBidsV2_contract) return
             if (is24Auction && !cANFTMarket_contract) return
 

@@ -11,7 +11,7 @@ import {
 import { InjectedDialog, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import classNames from 'classnames'
-import { Grid, Link, Typography, DialogContent, List, ListItem } from '@mui/material'
+import { Grid, Link, Typography, DialogContent, List, ListItem, Box } from '@mui/material'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import LaunchIcon from '@mui/icons-material/Launch'
 import { PluginWalletStatusBar, useI18N as useBaseI18N } from '../../../utils'
@@ -32,6 +32,7 @@ import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 const useStyles = makeStyles()((theme) => ({
     root: {
         fontSize: 16,
+        height: 700,
     },
     link: {
         display: 'flex',
@@ -85,7 +86,7 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: theme.spacing(2.5),
         background: theme.palette.mode === 'light' ? '#fff' : '#2F3336',
         width: 120,
-        height: 180,
+        height: 195,
         overflow: 'hidden',
     },
     nftImg: {
@@ -320,28 +321,30 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                         </Typography>
                     </Grid>
                 </Grid>
-                <PluginWalletStatusBar>
-                    <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
-                        <WalletConnectedBoundary
-                            classes={{
-                                connectWallet: classNames(classes.button, classes.sendButton),
-                                unlockMetaMask: classNames(classes.button, classes.sendButton),
-                            }}>
-                            <ActionButton
-                                size="medium"
-                                loading={isSending}
-                                disabled={isSending}
-                                onClick={onSendTx}
-                                className={classNames(classes.button, classes.sendButton)}
-                                fullWidth>
-                                {t.send_symbol({
-                                    amount: tokenList.length.toString(),
-                                    symbol: tokenList.length > 1 ? 'NFTs' : 'NFT',
-                                })}
-                            </ActionButton>
-                        </WalletConnectedBoundary>
-                    </ChainBoundary>
-                </PluginWalletStatusBar>
+                <Box style={{ position: 'absolute', bottom: 0, left: 0, width: '100%' }}>
+                    <PluginWalletStatusBar>
+                        <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                            <WalletConnectedBoundary
+                                classes={{
+                                    connectWallet: classNames(classes.button, classes.sendButton),
+                                    unlockMetaMask: classNames(classes.button, classes.sendButton),
+                                }}>
+                                <ActionButton
+                                    size="medium"
+                                    loading={isSending}
+                                    disabled={isSending}
+                                    onClick={onSendTx}
+                                    className={classNames(classes.button, classes.sendButton)}
+                                    fullWidth>
+                                    {t.send_symbol({
+                                        amount: tokenList.length.toString(),
+                                        symbol: tokenList.length > 1 ? 'NFTs' : 'NFT',
+                                    })}
+                                </ActionButton>
+                            </WalletConnectedBoundary>
+                        </ChainBoundary>
+                    </PluginWalletStatusBar>
+                </Box>
             </DialogContent>
         </InjectedDialog>
     )

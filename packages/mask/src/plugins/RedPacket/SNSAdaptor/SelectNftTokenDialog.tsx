@@ -8,7 +8,7 @@ import { DialogContent, Box, InputBase, Paper, Button, Typography, ListItem, Cir
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useCallback, useState, useEffect } from 'react'
-import { SearchIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import CheckIcon from '@mui/icons-material/Check'
 import { useUpdate } from 'react-use'
 import { findLastIndex } from 'lodash-unified'
@@ -25,6 +25,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
     dialogContentFixedHeight: {
         height: 610,
+        overflowY: 'hidden',
     },
     tokenBox: {
         background: theme.palette.background.default,
@@ -37,7 +38,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     ownerTokenBox: {
         background: theme.palette.background.default,
         width: '96%',
-        height: 480,
+        height: 400,
         borderRadius: 12,
         margin: '14px auto',
         padding: 10,
@@ -97,6 +98,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         flexDirection: 'column',
         borderRadius: 8,
         padding: 0,
+        marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2.5),
         background: theme.palette.background.paper,
         width: 120,
@@ -136,7 +138,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         gridTemplateColumns: 'repeat(4, 1fr)',
         gap: 16,
         width: '100%',
-        height: 388,
+        height: 320,
         overflowY: 'auto',
         borderRadius: 12,
         marginTop: theme.spacing(1.5),
@@ -469,7 +471,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                     <Box className={classes.tokenBox}>
                         <div className={classes.searchWrapperSingle}>
                             <Paper className={classes.search} elevation={0}>
-                                <SearchIcon className={classes.iconButton} />
+                                <Icons.Search className={classes.iconButton} />
                                 <InputBase
                                     value={tokenId}
                                     placeholder="Input Token ID"
@@ -548,7 +550,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                     <Box className={classes.ownerTokenBox}>
                         <div className={classes.searchWrapper}>
                             <Paper className={classes.search} elevation={0}>
-                                <SearchIcon className={classes.iconButton} />
+                                <Icons.Search className={classes.iconButton} />
                                 <InputBase
                                     value={tokenDetailedOwnerList.length === 0 ? tokenId : tokenIdListInput}
                                     placeholder="Token ID separated by comma, e.g. 1224, 7873, 8948"

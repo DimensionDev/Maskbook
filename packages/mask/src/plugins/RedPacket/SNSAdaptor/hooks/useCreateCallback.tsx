@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { useAsyncFn } from 'react-use'
+import { useAsync, useAsyncFn } from 'react-use'
 import Web3Utils from 'web3-utils'
 import { omit } from 'lodash-unified'
 import { useAccount, useChainId, useWeb3Connection, useWeb3 } from '@masknet/plugin-infra/web3'
@@ -58,7 +58,11 @@ interface CreateParams {
     gasError: Error | null
 }
 
-export function useCreateParams(redPacketSettings: RedPacketSettings | undefined, version: number, publicKey: string) {
+export function useCreateParamsCallback(
+    redPacketSettings: RedPacketSettings | undefined,
+    version: number,
+    publicKey: string,
+) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
@@ -111,15 +115,22 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
     return getCreateParams
 }
 
+export function useCreateParams(redPacketSettings: RedPacketSettings, version: number, publicKey: string) {
+    const getCreateParams = useCreateParamsCallback(redPacketSettings, version, publicKey)
+    return useAsync(() => getCreateParams(), [redPacketSettings, version, publicKey])
+}
+
 export function useCreateCallback(redPacketSettings: RedPacketSettings, version: number, publicKey: string) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const redPacketContract = useRedPacketContract(chainId, version)
-    const getCreateParams = useCreateParams(redPacketSettings, version, publicKey)
+    const getCreateParams = useCreateParamsCallback(redPacketSettings, version, publicKey)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
 
     return useAsyncFn(async () => {
+        if (!web3 || !connection) return
+
         const { token } = redPacketSettings
         const createParams = await getCreateParams()
         if (!token || !redPacketContract || !createParams) return
@@ -162,5 +173,5 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
             }
         }
         return { hash, receipt }
-    }, [account, connection, redPacketContract, redPacketSettings, chainId, getCreateParams])
+    }, [account, chainId, web3, connection, redPacketContract, redPacketSettings])
 }

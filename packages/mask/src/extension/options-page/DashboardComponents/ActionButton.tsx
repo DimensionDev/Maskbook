@@ -169,16 +169,7 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
     }, [executor, noUpdateEffect])
 
     if (state === 'wait')
-        return (
-            <ActionButton
-                {...b}
-                startIcon={waitingIcon}
-                loading
-                disabled={!waitingOnClick}
-                children={waiting}
-                onClick={cancel}
-            />
-        )
+        return <ActionButton {...b} loading disabled={!waitingOnClick} children={waiting} onClick={cancel} />
     if (state === 'complete')
         return (
             <ActionButton

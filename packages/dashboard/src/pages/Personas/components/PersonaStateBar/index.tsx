@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Box, IconButton, Stack, Typography } from '@mui/material'
 import { MaskAvatar } from '../../../../components/MaskAvatar'
-import { ArrowDownRound, ArrowUpRound } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { formatPersonaFingerprint } from '@masknet/shared-base'
 
@@ -13,10 +13,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 28,
         borderRadius: '50%',
         border: `1px solid ${MaskColorVar.blue.alpha(0.1)}`,
-    },
-    arrow: {
-        fill: 'none',
-        stroke: MaskColorVar.primary,
+        color: MaskColorVar.primary,
     },
     nickname: {
         margin: theme.spacing(0, 1.5),
@@ -47,11 +44,7 @@ export const PersonaStateBar = memo<PersonaStateBarProps>(({ nickname, toggleDra
                 </Typography>
             </Stack>
             <IconButton onClick={toggleDrawer} size="small" className={classes.iconButton}>
-                {drawerOpen ? (
-                    <ArrowUpRound className={classes.arrow} sx={{ fontSize: 28 }} />
-                ) : (
-                    <ArrowDownRound className={classes.arrow} sx={{ fontSize: 16 }} />
-                )}
+                {drawerOpen ? <Icons.ArrowUpRound size={28} /> : <Icons.ArrowDownRound size={16} />}
             </IconButton>
         </Box>
     )

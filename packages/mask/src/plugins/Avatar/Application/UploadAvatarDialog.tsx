@@ -1,6 +1,6 @@
 import { Button, DialogActions, DialogContent, Slider } from '@mui/material'
 import AvatarEditor from 'react-avatar-editor'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, parseColor, useCustomSnackbar } from '@masknet/theme'
 import { useCallback, useState } from 'react'
 import { Twitter } from '@masknet/web3-providers'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -17,7 +17,9 @@ import type { AllChainsNonFungibleToken } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
-        padding: theme.spacing(0, 2, 2, 2),
+        padding: 16,
+        boxShadow: `0 0 20px ${parseColor(theme.palette.maskColor.highlight).setAlpha(0.2).toRgbString()}`,
+        backdropFilter: 'blur(16px)',
     },
     cancel: {
         backgroundColor: theme.palette.background.default,
@@ -26,6 +28,14 @@ const useStyles = makeStyles()((theme) => ({
         '&:hover': {
             border: 'none',
         },
+    },
+    content: {
+        margin: 0,
+        padding: 16,
+        '::-webkit-scrollbar': {
+            display: 'none',
+        },
+        textAlign: 'center',
     },
 }))
 
@@ -63,13 +73,13 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
     const [scale, setScale] = useState(1)
     const { showSnackbar } = useCustomSnackbar()
     const [disabled, setDisabled] = useState(false)
-    const { currentConnectedPersona } = usePersonaConnectStatus()
+    const { currentPersona } = usePersonaConnectStatus()
     const t = useI18N()
 
     const [, saveAvatar] = useSave(currentPluginId, (token?.chainId ?? ChainId.Mainnet) as ChainId)
 
     const onSave = useCallback(async () => {
-        if (!editor || !account || !token || !currentConnectedPersona?.identifier || !proof) return
+        if (!editor || !account || !token || !currentPersona?.identifier || !proof) return
         editor.getImage().toBlob(async (blob) => {
             if (!blob) return
             setDisabled(true)
@@ -83,7 +93,7 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                 isBindAccount,
                 token,
                 avatarData,
-                currentConnectedPersona.identifier,
+                currentPersona.identifier,
                 proof,
             )
             if (!response) {
@@ -96,17 +106,17 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
             onClose()
             setDisabled(false)
         }, 'image/png')
-    }, [account, editor, identifier, onClose, currentConnectedPersona, proof, isBindAccount, saveAvatar])
+    }, [account, editor, identifier, onClose, currentPersona, proof, isBindAccount, saveAvatar])
 
     if (!account || !image || !token || !proof) return null
 
     return (
         <>
-            <DialogContent sx={{ overFlow: 'hidden' }}>
+            <DialogContent className={classes.content}>
                 <AvatarEditor
                     ref={(e) => setEditor(e)}
                     image={image!}
-                    style={{ width: '100%', height: '100%' }}
+                    style={{ width: 'auto', height: 400 }}
                     scale={scale ?? 1}
                     rotate={0}
                     border={50}
@@ -120,6 +130,18 @@ export function UploadAvatarDialog(props: UploadAvatarDialogProps) {
                     defaultValue={1}
                     onChange={(_, value) => setScale(value as number)}
                     aria-label="Scale"
+                    sx={{
+                        color: (theme) => theme.palette.maskColor.primary,
+                        '& .MuiSlider-thumb': {
+                            width: 12,
+                            height: 12,
+                            backgroundColor: (theme) => theme.palette.maskColor.primary,
+                        },
+                        '& .MuiSlider-rail': {
+                            opacity: 0.5,
+                            backgroundColor: (theme) => theme.palette.maskColor.dark,
+                        },
+                    }}
                 />
             </DialogContent>
             <DialogActions className={classes.actions}>

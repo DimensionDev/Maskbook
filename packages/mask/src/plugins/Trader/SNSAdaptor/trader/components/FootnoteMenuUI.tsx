@@ -1,9 +1,9 @@
 import { Typography, MenuItem, Link, Stack, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useMenu } from '../../../../../utils'
+import { useMenuConfig } from '@masknet/shared'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
-import { CheckCircleIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -40,7 +40,7 @@ export function FootnoteMenuUI(props: FootnoteMenuProps) {
     const onSelect = (option: FootnoteMenuOption) => {
         onChange?.(option)
     }
-    const [menu, openMenu] = useMenu(
+    const [menu, openMenu] = useMenuConfig(
         options.map((x, i) => (
             <MenuItem disabled={x.disabled} key={x.value} onClick={() => onSelect(x)}>
                 <Stack direction="row" justifyContent="space-around" gap={1} alignItems="center" width="100%">
@@ -48,9 +48,9 @@ export function FootnoteMenuUI(props: FootnoteMenuProps) {
                         {x.name}
                     </Stack>
                     {selectedIndex === i ? (
-                        <CheckCircleIcon
+                        <Icons.CheckCircle
+                            size={20}
                             style={{
-                                fontSize: 20,
                                 color: theme.palette.maskColor.primary,
                                 boxShadow: '0px 4px 10px rgba(28, 104, 243, 0.2)',
                             }}
@@ -63,8 +63,8 @@ export function FootnoteMenuUI(props: FootnoteMenuProps) {
                 </Stack>
             </MenuItem>
         )),
-        false,
         {
+            anchorSibling: false,
             anchorOrigin: {
                 vertical: 'bottom',
                 horizontal: 'right',
@@ -73,7 +73,7 @@ export function FootnoteMenuUI(props: FootnoteMenuProps) {
                 vertical: 'top',
                 horizontal: 'right',
             },
-            paperProps: {
+            PaperProps: {
                 style: { background: theme.palette.maskColor.bottom },
             },
         },

@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
     ProfileInformation as Profile,
-    EMPTY_LIST,
     NextIDPlatform,
     ECKeyIdentifier,
     ProfileInformationFromNextID,
@@ -10,7 +9,7 @@ import {
 import type { LazyRecipients } from '../../CompositionDialog/CompositionUI'
 import { SelectRecipientsDialogUI } from './SelectRecipientsDialog'
 import { useCurrentIdentity } from '../../DataSource/useActivatedUI'
-import { useNextIDBoundByPlatform } from '../../DataSource/useNextID'
+import { usePersonasFromNextID } from '../../DataSource/usePersonasFromNextID'
 import { useTwitterIdByWalletSearch } from './useTwitterIdByWalletSearch'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
@@ -47,17 +46,13 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
     const currentIdentity = useCurrentIdentity()
     const type = resolveNextIDPlatform(valueToSearch)
     const value = resolveValueToSearch(valueToSearch)
-    const { loading: searchLoading, value: NextIDResults } = useNextIDBoundByPlatform(
-        type ?? NextIDPlatform.NextID,
-        value,
-    )
-    const NextIDItems = useTwitterIdByWalletSearch(NextIDResults, value, type)
-    const profileItems = items.recipients?.filter((x) => x.identifier !== currentIdentity?.identifier)
+    const { loading: searchLoading, value: NextIDResults } = usePersonasFromNextID(value, type ?? NextIDPlatform.NextID)
 
-    const searchedList = uniqBy(
-        profileItems?.concat(NextIDItems) ?? [],
-        ({ linkedPersona }) => linkedPersona?.rawPublicKey,
-    )
+    const NextIDItems = useTwitterIdByWalletSearch(NextIDResults, value, type)
+    const searchedList = useMemo(() => {
+        const profileItems = items.recipients?.filter((x) => x.identifier !== currentIdentity?.identifier)
+        return uniqBy(profileItems?.concat(NextIDItems) ?? [], ({ linkedPersona }) => linkedPersona?.rawPublicKey)
+    }, [NextIDItems, items.recipients])
 
     const onSelect = async (item: ProfileInformationFromNextID) => {
         onSetSelected([...selected, item])
@@ -85,7 +80,7 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
                 setValueToSearch(v)
             }}
             open={open}
-            items={searchedList || EMPTY_LIST}
+            items={searchedList}
             selected={selected}
             disabled={false}
             submitDisabled={false}

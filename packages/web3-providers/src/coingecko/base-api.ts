@@ -103,7 +103,7 @@ export interface CoinInfo {
 }
 
 export async function getCoinInfo(coinId: string) {
-    return fetchJSON<CoinInfo>(
+    return fetchJSON<CoinInfo | { error: string }>(
         `${COINGECKO_URL_BASE}/coins/${coinId}?developer_data=false&community_data=false&tickers=true`,
         { cache: getTraderAllAPICachedFlag() },
     )

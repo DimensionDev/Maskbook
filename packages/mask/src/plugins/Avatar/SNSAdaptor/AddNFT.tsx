@@ -147,6 +147,9 @@ export function AddNFT(props: AddNFTProps) {
                 </Button>
                 <div className={classes.input}>
                     <InputBase
+                        // Workaround for pure-react-carousel bug:
+                        // https://stackoverflow.com/questions/70434847/not-able-to-type-anything-in-input-field-inside-pure-react-carousel
+                        onClick={(e) => e.currentTarget.getElementsByTagName('input')[0].focus()}
                         sx={{ width: '100%' }}
                         placeholder={t('plugin_avatar_input_token_address')}
                         onChange={(e) => onAddressChange(e.target.value)}
@@ -154,6 +157,7 @@ export function AddNFT(props: AddNFTProps) {
                 </div>
                 <div className={classes.input}>
                     <InputBase
+                        onClick={(e) => e.currentTarget.getElementsByTagName('input')[0].focus()}
                         sx={{ width: '100%' }}
                         placeholder={t('plugin_avatar_input_token_id')}
                         onChange={(e) => onTokenIdChange(e.target.value)}

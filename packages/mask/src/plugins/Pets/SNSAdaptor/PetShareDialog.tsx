@@ -8,6 +8,10 @@ import { Share_Twitter_TXT } from '../constants'
 const useStyles = makeStyles()((theme) => ({
     root: {
         margin: theme.spacing(0, 2.5),
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
     },
     shareNotice: {
         color: theme.palette.maskColor.main,

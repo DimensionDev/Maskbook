@@ -1,7 +1,7 @@
 import { FormControl, InputAdornment, ListItemIcon, MenuItem, OutlinedInput, Typography } from '@mui/material'
-import { useI18N, useMenu } from '../../../utils'
+import { useI18N } from '../../../utils'
 import { useEffect, useState, useCallback, useRef, useMemo, ChangeEvent } from 'react'
-import { FormattedBalance, TokenIcon } from '@masknet/shared'
+import { FormattedBalance, TokenIcon, useMenuConfig } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import Check from '@mui/icons-material/Check'
@@ -59,7 +59,7 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
         if (tokens.length <= 1) setHaveMenu(false)
     }, [tokens])
 
-    const [menu, openMenu] = useMenu(
+    const [menu, openMenu] = useMenuConfig(
         tokens.map((x, i) => {
             return (
                 <MenuItem
@@ -82,8 +82,8 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
                 </MenuItem>
             )
         }) ?? [],
-        false,
         {
+            anchorSibling: false,
             anchorOrigin: {
                 vertical: 'bottom',
                 horizontal: 'left',
@@ -92,7 +92,7 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
                 vertical: 'top',
                 horizontal: 'left',
             },
-            paperProps: {
+            PaperProps: {
                 style: { width },
             },
         },

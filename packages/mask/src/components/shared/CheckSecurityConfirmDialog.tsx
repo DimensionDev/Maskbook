@@ -6,13 +6,10 @@ import { useI18N } from '../../utils'
 const useStyles = makeStyles()((theme) => ({
     paper: {
         maxWidth: '320px !important',
-        padding: '24px',
+        padding: 0,
     },
     content: {
-        marginLeft: 12,
-        marginRight: 12,
-        paddingLeft: 0,
-        paddingRight: 0,
+        padding: '48px 24px',
         '&::-webkit-scrollbar': {
             display: 'none',
         },
@@ -29,7 +26,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface CheckSecurityConfirmDialogProps extends withClasses<never> {
+interface CheckSecurityConfirmDialogProps {
     open: boolean
     onConfirm: () => void
     onClose: () => void
@@ -41,7 +38,10 @@ function CheckSecurityConfirmDialog(props: CheckSecurityConfirmDialogProps) {
     const { classes } = useStyles()
 
     return (
-        <InjectedDialog open={open} onClose={onClose} classes={{ paper: classes.paper }}>
+        <InjectedDialog
+            open={open}
+            onClose={onClose}
+            classes={{ paper: classes.paper, dialogContent: classes.content }}>
             <DialogContent className={classes.content}>
                 <Stack alignItems="center">
                     <Typography style={{ fontSize: '14px', fontWeight: 500 }}>{t('close_check_security')}</Typography>

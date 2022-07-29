@@ -6,7 +6,8 @@ globalThis.regeneratorRuntime = undefined
     const fix = () => {
         // Do not apply fix for iOS
         if (typeof webkit === 'object' && webkit.messageHandlers) return
-
+        // MV3 service worker
+        if (typeof window === 'undefined') return
         // In the content script, globalThis !== window.
         if (globalThis === window || typeof browser !== 'object') return
 

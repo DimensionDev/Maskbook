@@ -11,13 +11,11 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
                 TradeProvider.UNISWAP_V2,
                 TradeProvider.UNISWAP_V3,
                 TradeProvider.SUSHISWAP,
-                TradeProvider.SASHIMISWAP,
                 TradeProvider.ZRX,
                 TradeProvider.BALANCER,
                 TradeProvider.DODO,
                 TradeProvider.BANCOR,
                 TradeProvider.OPENOCEAN,
-                TradeProvider.MDEX,
             ]
         case NetworkType.Polygon:
             return [

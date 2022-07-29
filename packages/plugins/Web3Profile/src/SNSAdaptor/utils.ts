@@ -135,12 +135,12 @@ export const getDonationList = async (walletList: WalletTypes[]) => {
             if (result) {
                 return {
                     address,
-                    collections: result?.assets?.map((asset) => ({
-                        key: asset?.id,
-                        address: asset?.id,
+                    collections: result.map((asset) => ({
+                        key: asset.id,
+                        address: asset.id,
                         platform: platform ?? NetworkPluginID.PLUGIN_EVM,
-                        iconURL: asset?.info?.image_preview_url ?? undefined,
-                        name: asset?.info?.title ?? asset?.info?.collection,
+                        iconURL: asset.imageURL,
+                        name: asset.title,
                     })),
                 }
             } else {
@@ -160,12 +160,12 @@ export const getFootprintList = async (walletList: WalletTypes[]) => {
             if (result) {
                 return {
                     address,
-                    collections: result?.assets?.map((asset) => ({
-                        key: asset?.id,
-                        address: asset?.id,
+                    collections: result.map((asset) => ({
+                        key: asset.id,
+                        address: asset.id,
                         platform: platform ?? NetworkPluginID.PLUGIN_EVM,
-                        iconURL: asset?.info?.image_preview_url ?? undefined,
-                        name: asset?.info?.title ?? asset?.info?.collection,
+                        iconURL: asset.imageURL,
+                        name: asset.title,
                     })),
                 }
             } else {

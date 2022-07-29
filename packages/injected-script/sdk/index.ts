@@ -38,7 +38,12 @@ export function hookInputUploadOnce(
     sendEvent('hookInputUploadOnce', format, fileName, Array.from(image), triggerOnActiveElementNow)
 }
 
-document.addEventListener(CustomEventId, (e) => {
+if (typeof document !== 'object') {
+    // eslint-disable-next-line no-debugger
+    debugger
+    throw new Error('This script should not be included in the Manifest V3 background')
+}
+globalThis?.document?.addEventListener?.(CustomEventId, (e) => {
     const r = decodeEvent((e as CustomEvent).detail)
     if (r[1].length < 1) return
 

@@ -1,4 +1,4 @@
-import { ThirdPartyPluginPermission } from '../../background-script/ThirdPartyPlugin/types'
+import { ThirdPartyPluginPermission } from '../../../../shared/definitions/routes'
 import { useI18N } from '../../../utils'
 import { Trans } from 'react-i18next'
 export interface ThirdPartyRequestPermissionProps {

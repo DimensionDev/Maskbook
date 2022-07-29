@@ -1,7 +1,7 @@
+import { useAsyncFn } from 'react-use'
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
 import { encodeContractTransaction } from '@masknet/web3-shared-evm'
-import { useAsyncFn } from 'react-use'
 import { useCryptoArtAI_Contract } from './useCryptoArtAI_Contract'
 
 export function usePurchaseCallback(editionNumber: string, priceInWei: number) {
@@ -11,7 +11,7 @@ export function usePurchaseCallback(editionNumber: string, priceInWei: number) {
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
     return useAsyncFn(async () => {
-        if (!knownOriginDigitalAssetV2_contract) return
+        if (!connection || !knownOriginDigitalAssetV2_contract) return
 
         const config = {
             from: account,

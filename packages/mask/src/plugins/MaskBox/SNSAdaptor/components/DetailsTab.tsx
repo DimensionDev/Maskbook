@@ -26,11 +26,13 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 500,
         lineHeight: '24px',
         marginBottom: theme.spacing(4),
+        color: theme.palette.maskColor.dark,
     },
     content: {
         fontSize: 14,
         lineHeight: '24px',
         whiteSpace: 'pre-line',
+        color: theme.palette.maskColor.dark,
     },
 }))
 

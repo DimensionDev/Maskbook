@@ -9,7 +9,7 @@ import {
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
 import type { ChainId, Transaction } from '@masknet/web3-shared-evm'
-import { ArrowRightIcon, CircleCloseIcon, InteractionCircleIcon, LoaderIcon, UploadIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../../../../utils'
 import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
@@ -19,26 +19,6 @@ const useStyles = makeStyles()({
         padding: 14,
         borderBottom: '1px solid #F7F9FA',
         cursor: 'pointer',
-    },
-    arrow: {
-        stroke: '#15181B',
-        fill: 'none',
-        fontSize: 20,
-    },
-    icon: {
-        width: 20,
-        height: 20,
-    },
-    loader: {
-        fill: '#FFB915',
-    },
-    interaction: {
-        stroke: '#1C68F3',
-        fill: 'none',
-    },
-    send: {
-        stroke: '#FFB915',
-        fill: 'none',
     },
     description: {
         color: '#000000',
@@ -82,17 +62,17 @@ export const ActivityListItem = memo<ActivityListItemProps>(
         const transactionIcon = useMemo(() => {
             switch (transaction.status) {
                 case TransactionStatusType.NOT_DEPEND:
-                    return <LoaderIcon className={classes.loader} />
+                    return <Icons.Loader color="#FFB915" />
                 case TransactionStatusType.SUCCEED:
                     if (
                         formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
                         formatterTransaction.title === 'Transfer Token'
                     )
-                        return <UploadIcon className={classes.send} />
-                    return <InteractionCircleIcon className={classes.interaction} />
+                        return <Icons.Upload color="#FFB915" />
+                    return <Icons.InteractionCircle color="#1C68F3" />
                 case TransactionStatusType.FAILED:
                 default:
-                    return <CircleCloseIcon style={{ fill: 'none' }} />
+                    return <Icons.CircleClose />
             }
         }, [formatterTransaction])
 
@@ -142,7 +122,7 @@ export const ActivityListItem = memo<ActivityListItemProps>(
                         </Typography>
                     ) : null}
                 </ListItemText>
-                <ArrowRightIcon className={classes.arrow} style={{ fill: 'none' }} />
+                <Icons.ArrowRight color="#15181B" size={20} />
             </ListItem>
         )
     },

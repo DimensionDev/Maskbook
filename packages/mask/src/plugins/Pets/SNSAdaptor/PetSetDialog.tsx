@@ -1,6 +1,5 @@
 import { useState, useMemo, ReactNode, Fragment } from 'react'
 import { useTimeout } from 'react-use'
-import classNames from 'classnames'
 import { Constant, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends, useCustomSnackbar, ShadowRootPopper } from '@masknet/theme'
@@ -16,6 +15,7 @@ import {
     FormControlLabel,
     Checkbox,
     CircularProgress,
+    useTheme,
 } from '@mui/material'
 import { PluginPetMessages, PluginPetRPC } from '../messages'
 import { initMeta, initCollection, GLB3DIcon } from '../constants'
@@ -29,8 +29,8 @@ import { petShowSettings } from '../settings'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { saveCustomEssayToRSS } from '../Services/rss3'
-import { RSS3Icon } from '../assets/rss3'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     desBox: {
@@ -109,11 +109,9 @@ const useStyles = makeStyles()((theme) => ({
     },
     icon: {
         margin: theme.spacing(0, 1),
-        width: 21,
-        height: 15,
     },
-    logo: {
-        height: 21,
+    RSS3Icon: {
+        color: theme.palette.mode === 'light' ? '#000' : '#fff',
     },
 }))
 
@@ -125,6 +123,7 @@ interface PetSetDialogProps {
 export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const t = useI18N()
     const classes = useStylesExtends(useStyles(), {})
+    const theme = useTheme()
     const { showSnackbar } = useCustomSnackbar()
     const [loading, setLoading] = useState(false)
     const checked = useValueRef<boolean>(petShowSettings)
@@ -363,17 +362,14 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     <Typography color="textPrimary" fontSize={14} fontWeight={700}>
                         MintTeam
                     </Typography>
-                    <img
-                        className={classNames(classes.icon, classes.logo)}
-                        src={new URL('../assets/pets.png', import.meta.url).toString()}
-                    />
+                    <Icons.Pets className={classes.icon} />
                     <Typography fontSize={14} color="textSecondary" fontWeight={700} className={classes.des}>
                         &
                     </Typography>
                     <Typography fontSize={14} color="textSecondary" fontWeight={700} className={classes.des}>
                         RSS3
                     </Typography>
-                    <RSS3Icon style={{ fontSize: 24 }} />
+                    <Icons.RSS3 color={theme.palette.mode === 'light' ? '#000' : '#fff'} />
                 </Box>
             </Box>
 
@@ -385,11 +381,6 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     noSwitchNetworkTip
                     ActionButtonPromiseProps={{
                         fullWidth: true,
-                        sx: {
-                            height: 40,
-                            padding: 0,
-                            margin: 0,
-                        },
                     }}>
                     <ActionButton
                         loading={loading}

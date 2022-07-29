@@ -5,14 +5,26 @@
   "type": "module",
   "exports": {
     ".": {
-      "webpack": "./index.ts",
-      "default": "./dist/index.js"
+      "type": "./index.d.ts",
+      "default": "./index.js"
+    },
+    "./jsx": {
+      "type": "./icon-generated-as-jsx.d.ts",
+      "default": "./generated-icon-as-jsx.js"
+    },
+    "./url": {
+      "type": "./icon-generated-as-url.d.ts",
+      "default": "./icon-generated-as-url.js"
     }
   },
-  "types": "./dist/index.d.ts",
-  "scripts": {
-    "build": "node --es-module-specifier-resolution=node ./dist/utils/ssr.js"
+  "types": "./index.d.ts",
+  "typesVersions": {
+    "*": {
+      "jsx": ["./icon-generated-as-jsx.d.ts"],
+      "url": ["./icon-generated-as-url.d.ts"]
+    }
   },
+  "scripts": {},
   "dependencies": {
     "@emotion/server": "^11.4.0"
   }

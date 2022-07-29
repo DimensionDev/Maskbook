@@ -2,11 +2,11 @@ import { first } from 'lodash-unified'
 import { memo, useRef, useCallback, useState, useEffect, useMemo } from 'react'
 import { getRPCConstants } from '@masknet/web3-shared-evm'
 import IframeResizer, { IFrameComponent } from 'iframe-resizer-react'
-import { mediaViewerUrl } from '../../../constants'
+import { MEDIA_VIEWER_URL } from '../../../constants'
 import { useUpdateEffect } from 'react-use'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { Box, SvgIconProps } from '@mui/material'
-import { AssetLoadingIcon, MaskPlaceholder } from '@masknet/icons'
+import { Box } from '@mui/material'
+import { GeneratedIconProps, Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 
 interface ERC721TokenQuery {
@@ -31,7 +31,7 @@ interface AssetPlayerProps
     loadingIcon?: React.ReactNode
     erc721Token?: ERC721TokenQuery
     renderTimeout?: number
-    iconProps?: SvgIconProps
+    iconProps?: GeneratedIconProps
     fallbackImage?: URL
     isFixedIframeSize?: boolean
     showIframeFromInit?: boolean
@@ -157,7 +157,7 @@ export const AssetPlayer = memo<AssetPlayerProps>((props) => {
         () =>
             hidden ? null : (
                 <IframeResizer
-                    src={mediaViewerUrl}
+                    src={MEDIA_VIEWER_URL}
                     onInit={(iframe: IFrameComponent) => {
                         ref.current = iframe
                         setPlayerState(AssetPlayerState.INIT)
@@ -184,7 +184,7 @@ export const AssetPlayer = memo<AssetPlayerProps>((props) => {
                     allowFullScreen
                 />
             ),
-        [hidden, playerState, classes.hidden, classes.iframe, mediaViewerUrl],
+        [hidden, playerState, classes.hidden, classes.iframe, MEDIA_VIEWER_URL],
     )
 
     return (
@@ -203,9 +203,9 @@ export const AssetPlayer = memo<AssetPlayerProps>((props) => {
                       (props.fallbackImage ? (
                           <img className={classes.loadingFailImage} src={props.fallbackImage.toString()} />
                       ) : (
-                          <MaskPlaceholder className={classes.errorIcon} {...iconProps} />
+                          <Icons.MaskPlaceholder className={classes.errorIcon} {...iconProps} />
                       ))
-                    : props.loadingIcon ?? <AssetLoadingIcon className={classes.loadingIcon} />}
+                    : props.loadingIcon ?? <Icons.AssetLoading className={classes.loadingIcon} />}
             </Box>
             {IframeResizerMemo}
         </>

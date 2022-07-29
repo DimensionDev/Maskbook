@@ -155,7 +155,7 @@ const SignRequest = memo(() => {
                 <Typography className={classes.title}>{t('popups_wallet_signature_request')}</Typography>
                 <Typography className={classes.walletName}>{wallet?.name ?? ''}</Typography>
                 <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
-                    {address}
+                    {typeof address === 'string' ? address : undefined}
                 </Typography>
             </div>
             <Typography className={classes.secondary} style={{ marginTop: 20 }}>

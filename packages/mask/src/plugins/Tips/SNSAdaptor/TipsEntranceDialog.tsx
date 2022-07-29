@@ -51,6 +51,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(1.5),
     },
     dialogContent: {
+        padding: '12px 16px',
         position: 'relative',
         boxSizing: 'border-box',
     },

@@ -5,7 +5,7 @@ import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { PopupRoutes } from '@masknet/shared-base'
 import { List, ListItem, ListItemText } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { ArrowRightIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { TokenIcon, FormattedBalance } from '@masknet/shared'
 import { WalletContext } from '../../hooks/useWalletContext'
 import { isNaN } from 'lodash-unified'
@@ -24,11 +24,6 @@ const useStyles = makeStyles()({
     tokenIcon: {
         width: 20,
         height: 20,
-    },
-    arrow: {
-        stroke: '#15181B',
-        fill: 'none',
-        fontSize: 20,
     },
     text: {
         margin: '0 0 0 15px',
@@ -84,7 +79,7 @@ export const AssetsListUI = memo<AssetsListUIProps>(({ dataSource, onItemClick }
                                 formatter={formatBalance}
                             />
                         </ListItemText>
-                        <ArrowRightIcon className={classes.arrow} style={{ fill: 'none' }} />
+                        <Icons.ArrowRight size={20} color="#15181B" />
                     </ListItem>
                 )
             })}

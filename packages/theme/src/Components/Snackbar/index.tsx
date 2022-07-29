@@ -11,12 +11,12 @@ import {
     SnackbarAction,
     OptionsObject,
 } from 'notistack'
-import { Typography, IconButton } from '@mui/material'
+import { Typography, IconButton, alpha } from '@mui/material'
 import classnames from 'classnames'
 import { Close as CloseIcon } from '@mui/icons-material'
 import WarningIcon from '@mui/icons-material/Warning'
 import InfoIcon from '@mui/icons-material/Info'
-import { CircleLoadingIcon, RiskIcon, SuccessForSnackBarIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '../../UIHelper'
 import { MaskColorVar } from '../../CSSVariables'
 
@@ -64,15 +64,15 @@ to {
         },
     }
     const success = {
-        backgroundColor: MaskColorVar.greenMain,
+        backgroundColor: theme.palette.maskColor.success,
         color: '#ffffff',
         [`& .${refs.title}`]: {
             color: 'inherit',
         },
         [`& .${refs.message}`]: {
-            color: MaskColorVar.normalTextLight,
+            color: alpha(theme.palette.maskColor.white, 0.8),
             '& svg': {
-                color: MaskColorVar.white,
+                color: theme.palette.maskColor.white,
             },
         },
     } as const
@@ -187,8 +187,8 @@ export interface CustomSnackbarContentProps {
 }
 const IconMap: Record<VariantType, React.ReactNode> = {
     default: <InfoIcon color="inherit" />,
-    success: <SuccessForSnackBarIcon />,
-    error: <RiskIcon />,
+    success: <Icons.SuccessForSnackBar />,
+    error: <Icons.TransactionFailed />,
     warning: <WarningIcon color="inherit" />,
     info: <InfoIcon color="inherit" />,
 }
@@ -196,7 +196,7 @@ const IconMap: Record<VariantType, React.ReactNode> = {
 export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarContentProps>((props, ref) => {
     const classes = useStylesExtends(useStyles({ offsetY: props.offsetY }), props)
     const snackbar = useSnackbar()
-    const loadingIcon = <CircleLoadingIcon color="inherit" className={classes.spinning} />
+    const loadingIcon = <Icons.CircleLoading className={classes.spinning} />
     const variantIcon = props.processing ? loadingIcon : props.variant ? IconMap[props.variant] : null
     let renderedAction: React.ReactNode = (
         <IconButton className={classes.closeButton} onClick={() => snackbar.closeSnackbar(props.id)}>

@@ -89,6 +89,7 @@ export default function FollowTab({
                 sx={{
                     color: 'black',
                     width: '100%',
+                    boxSizing: 'border-box',
                 }}>
                 {followingList.map((f: IFollowIdentity) => {
                     return <FollowRow key={f.address} identity={f} />
@@ -100,6 +101,7 @@ export default function FollowTab({
                 sx={{
                     color: 'black',
                     width: '100%',
+                    boxSizing: 'border-box',
                 }}>
                 {followerList.map((f: IFollowIdentity) => {
                     return <FollowRow key={f.address} identity={f} />

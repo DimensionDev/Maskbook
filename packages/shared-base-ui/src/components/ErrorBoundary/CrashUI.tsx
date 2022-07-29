@@ -98,7 +98,6 @@ const ErrorTitle = styled('div')`
 const ErrorStack = styled('div')`
     user-select: text;
     overflow-x: auto;
-    contain: strict;
     height: 300px;
 `
 

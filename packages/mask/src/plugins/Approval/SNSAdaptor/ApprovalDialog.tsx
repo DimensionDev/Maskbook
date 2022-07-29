@@ -1,17 +1,16 @@
-import { DialogContent, Button, Tab, Typography } from '@mui/material'
+import { DialogContent, Button, Tab } from '@mui/material'
 import { MaskTabList, useTabs } from '@masknet/theme'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useState } from 'react'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { PluginWalletStatusBar } from '../../../utils/components/PluginWalletStatusBar'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { PluginId } from '@masknet/plugin-infra'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useI18N } from '../locales'
-import { useI18N as useBaseI18n } from '../../../utils'
+import { useI18N as useBaseI18n, PluginWalletStatusBar } from '../../../utils'
 import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { InjectedDialog } from '@masknet/shared'
 import { useStyles } from './useStyles'
@@ -45,8 +44,8 @@ export function ApprovalDialog({ open, onClose }: ApprovalDialogProps) {
                 classes={{ paper: classes.dialogRoot, dialogTitle: classes.dialogTitle }}
                 titleTabs={
                     <MaskTabList variant="base" onChange={onChange} aria-label="Savings">
-                        <Tab label={<Typography>{t.tokens()}</Typography>} value={t.tokens()} />
-                        <Tab label={<Typography>{t.collectibles()}</Typography>} value={t.collectibles()} />
+                        <Tab label={t.tokens()} value={t.tokens()} />
+                        <Tab label={t.collectibles()} value={t.collectibles()} />
                     </MaskTabList>
                 }>
                 <DialogContent className={classes.dialogContent}>

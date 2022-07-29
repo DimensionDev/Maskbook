@@ -30,6 +30,7 @@ export interface Proposal {
         id: string
         name: string
         symbol: string
+        avatar: string
     }
     start: number
     snapshot: string

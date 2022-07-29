@@ -1,19 +1,18 @@
 import { Collapse, Link, Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../../locales'
-import { ExternalLink } from 'react-feather'
 import { makeStyles } from '@masknet/theme'
 import { memo, useMemo, useState } from 'react'
 import { DefineMapping, SecurityMessageLevel, TokenSecurity } from './Common'
 import { SecurityMessages } from '../rules'
 import { RiskCard, RiskCardUI } from './RiskCard'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import { useTheme } from '@mui/system'
 import { TokenPanel } from './TokenPanel'
 import { TokenIcon } from '@masknet/shared'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
 import type { TokenAPI } from '@masknet/web3-providers'
 import { formatCurrency, FungibleToken } from '@masknet/web3-shared-base'
+import { Icons } from '@masknet/icons'
 
 interface TokenCardProps {
     tokenSecurity: TokenSecurity
@@ -24,33 +23,36 @@ interface TokenCardProps {
 
 const useStyles = makeStyles()((theme) => ({
     header: {
-        fontWeight: 500,
+        fontWeight: 700,
         fontSize: 18,
-    },
-    root: {
-        width: '600px',
     },
     detectionCard: {
         backgroundColor: theme.palette.background.default,
     },
     detectionCollection: {
         overflowY: 'auto',
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
     },
     icon: {
-        width: '48px',
-        height: '48px',
+        width: 48,
+        height: 48,
     },
     tokenName: {
-        fontSize: '16px',
+        fontSize: '18px',
         fontWeight: 700,
+        color: theme.palette.maskColor.main,
     },
     tokenPrice: {
-        fontSize: '16px',
+        fontSize: '18px',
         fontWeight: 700,
-        color: theme.palette.text.secondary,
+        color: theme.palette.maskColor.main,
+    },
+    arrowIcon: {
+        fontSize: 15,
+        cursor: 'pointer',
+        fill: theme.palette.maskColor.second,
+    },
+    linkIcon: {
+        color: theme.palette.maskColor.main,
     },
 }))
 
@@ -66,7 +68,6 @@ function resolveGoLabLink(chainId: ChainId, address: string) {
 export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, tokenPrice, tokenMarketCap }) => {
     const { classes } = useStyles()
     const t = useSharedI18N()
-    const theme = useTheme()
     const price = tokenPrice ?? tokenMarketCap?.price
     const [isCollapse, setCollapse] = useState(false)
 
@@ -90,7 +91,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
     }, [riskyFactors, attentionFactors])
 
     return (
-        <Stack spacing={2}>
+        <Stack width="100%" spacing={2}>
             <Stack
                 spacing={1}
                 direction="row"
@@ -150,13 +151,8 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
             <Stack spacing={1}>
                 <Stack direction="row" justifyContent="space-between">
                     <Stack display="inline-flex" direction="row" alignItems="center" spacing={0.6}>
-                        <Typography variant="h6" className={classes.header}>
-                            {t.token_info()}
-                        </Typography>
-                        <KeyboardArrowDownIcon
-                            onClick={() => setCollapse(!isCollapse)}
-                            sx={{ fontSize: 15, cursor: 'pointer' }}
-                        />
+                        <Typography className={classes.header}>{t.token_info()}</Typography>
+                        <KeyboardArrowDownIcon onClick={() => setCollapse(!isCollapse)} className={classes.arrowIcon} />
                     </Stack>
                     <Stack direction="row" alignItems="center" spacing={1}>
                         <Typography component="span" lineHeight="14px" fontSize={14}>
@@ -167,7 +163,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                             href={resolveGoLabLink(tokenSecurity.chainId, tokenSecurity.contract)}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <ExternalLink color={theme.palette.text.strong} size={14} />
+                            <Icons.LinkOut size={18} className={classes.linkIcon} />
                         </Link>
                     </Stack>
                 </Stack>

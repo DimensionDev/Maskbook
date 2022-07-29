@@ -63,7 +63,7 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
         approvalContentWrapper: {
             flexGrow: 1,
             width: 565,
-            paddingTop: 0,
+            paddingTop: 8,
             marginLeft: 16,
             display: 'flex',
             flexDirection: 'column',
@@ -178,6 +178,10 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
                 width: 16,
                 height: 16,
             },
+            '& > span': {
+                width: 16,
+                height: 16,
+            },
         },
         contractInfo: {
             display: 'flex',
@@ -196,10 +200,6 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
             color: theme.palette.maskColor.secondaryDark,
         },
         footer: {
-            boxShadow:
-                theme.palette.mode === 'dark'
-                    ? '0px 0px 20px rgba(255, 255, 255, 0.12)'
-                    : '0px 0px 20px rgba(0, 0, 0, 0.05)',
             position: 'sticky',
             bottom: 0,
         },
@@ -218,6 +218,9 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
                 background: theme.palette.common.black,
                 boxShadow: `0 8px 25px ${parseColor(theme.palette.common.black).setAlpha(0.3).toRgbString()}`,
             },
+        },
+        chainBoundary: {
+            width: 'auto !important',
         },
     }),
 )

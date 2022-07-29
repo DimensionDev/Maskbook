@@ -1,6 +1,6 @@
 import { CoinGeckoAPI } from './coingecko'
 import { OpenSeaAPI } from './opensea'
-import { LooksRareAPI } from './LooksRare'
+import { LooksRareAPI } from './looksrare'
 import { RaribleAPI } from './rarible'
 import { NFTScanAPI } from './NFTScan'
 import { ZoraAPI } from './zora'
@@ -22,6 +22,8 @@ import { MagicEdenAPI } from './MagicEden'
 import { TokenViewAPI } from './token-view'
 import { CoinMarketCapAPI } from './CoinMarketCap'
 import { UniSwapAPI } from './uniswap'
+import { RabbyAPI } from './rabby'
+import { GemAPI } from './gem'
 
 export * from './helpers'
 export * from './types'
@@ -33,6 +35,7 @@ export const MagicEden = new MagicEdenAPI()
 export const Rarible = new RaribleAPI()
 export const NFTScan = new NFTScanAPI()
 export const Zora = new ZoraAPI()
+export const Gem = new GemAPI()
 export const CoinGecko = new CoinGeckoAPI()
 export const Explorer = new NativeExplorerAPI()
 export const RiskWarning = new RiskWarningAPI()
@@ -53,3 +56,4 @@ export const Alchemy_FLOW = new Alchemy_FLOW_API()
 export const TokenView = new TokenViewAPI()
 export const CoinMarketCap = new CoinMarketCapAPI()
 export const UniSwap = new UniSwapAPI()
+export const Rabby = new RabbyAPI()

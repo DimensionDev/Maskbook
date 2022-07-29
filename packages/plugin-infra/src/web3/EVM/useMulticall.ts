@@ -118,7 +118,7 @@ export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?
                 return
             }
 
-            const blockNumber = targetBlockNumber ?? (await connection.getBlockNumber())
+            const blockNumber = targetBlockNumber ?? (await connection?.getBlockNumber()) ?? 0
 
             try {
                 setMulticallState({

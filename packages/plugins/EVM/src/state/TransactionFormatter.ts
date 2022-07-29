@@ -106,7 +106,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
         if (to) {
             let code = ''
             try {
-                code = await this.connection.getCode(to)
+                code = await this.connection.getCode(to, { chainId })
             } catch {
                 code = ''
             }

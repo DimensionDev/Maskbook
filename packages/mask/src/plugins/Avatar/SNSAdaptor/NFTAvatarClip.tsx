@@ -69,11 +69,7 @@ const useStyles = makeStyles()((theme) => ({
         strokeLinecap: 'round',
     },
     text: {
-        transform: 'translate(1px, -5px) ',
-        '@supports (translate: 0)': {
-            transform: 'none',
-            translate: '1px, -5px',
-        },
+        transform: process.env.engine === 'firefox' ? 'translate(1px, -1px)' : 'translate(1px, -5px) ',
     },
     price: {
         transform: 'translate(0, -5px) ',
@@ -128,14 +124,15 @@ interface TextProps extends withClasses<'root'> {
     fontSize?: number
     text?: string
     fill?: string
+    dominantBaseline?: string
 }
 
 function Text(props: TextProps) {
-    const { xlinkHref, fontSize = 12, text, fill } = props
+    const { xlinkHref, fontSize = 12, text, fill, dominantBaseline = 'mathematical' } = props
     const classes = useStylesExtends(useStyles(), props)
     return (
         <text x="0%" textAnchor="middle" fill={fill} fontFamily="sans-serif" className={classes.root}>
-            <textPath xlinkHref={xlinkHref} startOffset="50%" rotate="auto" dominantBaseline="mathematical">
+            <textPath xlinkHref={xlinkHref} startOffset="50%" rotate="auto" dominantBaseline={dominantBaseline}>
                 <tspan fontWeight="bold" fontSize={fontSize}>
                     {text}
                 </tspan>
@@ -209,6 +206,7 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
                     <Text
                         xlinkHref={`#${id}-name-path`}
                         fill={`url(#${id}-pattern)`}
+                        dominantBaseline={process.env.engine === 'firefox' ? 'text-before-edge' : 'mathematical'}
                         text={
                             loading || loadingNFT
                                 ? 'loading...'
@@ -222,6 +220,7 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
                     <Text
                         fill={`url(#${id}-pattern)`}
                         xlinkHref={`#${id}-price-path`}
+                        dominantBaseline={process.env.engine === 'firefox' ? 'central' : 'mathematical'}
                         text={loading || loadingNFT ? '' : formatPrice(amount, symbol)}
                     />
                 </g>

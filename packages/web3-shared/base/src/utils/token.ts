@@ -64,7 +64,7 @@ export function createNonFungibleTokenContract<ChainId, SchemaType>(
         address,
     }
 }
-export function createNonFungibleTokenCollection<ChainId>(
+export function createNonFungibleTokenCollection<ChainId, SchemaType>(
     chainId: ChainId,
     name: string,
     slug: string,
@@ -72,7 +72,7 @@ export function createNonFungibleTokenCollection<ChainId>(
     iconURL?: string,
     verified?: boolean,
     createdAt?: number,
-): NonFungibleTokenCollection<ChainId> {
+): NonFungibleTokenCollection<ChainId, SchemaType> {
     return {
         chainId,
         name,

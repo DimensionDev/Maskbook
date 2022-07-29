@@ -1,11 +1,4 @@
-import {
-    ChainId,
-    chainResolver,
-    isNativeTokenAddress,
-    NetworkType,
-    SchemaType,
-    useTokenConstants,
-} from '@masknet/web3-shared-evm'
+import { ChainId, chainResolver, isNativeTokenAddress, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 import { safeUnreachable } from '@dimensiondev/kit'
 import { ZRX_AFFILIATE_ADDRESS } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
@@ -54,7 +47,6 @@ export function useTrade(
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
     const { targetChainId } = TargetChainIdContext.useContainer()
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(targetChainId)
 
     const slippageSetting = useSlippageTolerance()
     const slippage = temporarySlippage || slippageSetting
@@ -66,10 +58,10 @@ export function useTrade(
             if (isZero(inputAmount) && isExactIn) return null
             if (isZero(outputAmount) && !isExactIn) return null
 
-            const sellToken = isNativeTokenAddress(inputToken)
+            const sellToken = isNativeTokenAddress(inputToken.address)
                 ? getNativeTokenLabel(chainResolver.chainNetworkType(targetChainId) ?? networkType)
                 : inputToken.address
-            const buyToken = isNativeTokenAddress(outputToken)
+            const buyToken = isNativeTokenAddress(outputToken.address)
                 ? getNativeTokenLabel(chainResolver.chainNetworkType(targetChainId) ?? networkType)
                 : outputToken.address
             return PluginTraderRPC.swapQuote(
@@ -87,7 +79,6 @@ export function useTrade(
             )
         },
         [
-            NATIVE_TOKEN_ADDRESS,
             networkType,
             account,
             strategy,
@@ -96,6 +87,7 @@ export function useTrade(
             inputToken?.address,
             outputToken?.address,
             slippage,
+            targetChainId,
         ],
     )
 }

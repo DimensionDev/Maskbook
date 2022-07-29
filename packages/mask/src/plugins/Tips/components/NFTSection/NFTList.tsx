@@ -2,9 +2,8 @@ import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State, Web3Helper } f
 import { ElementAnchor, NFTCardStyledAssetPlayer, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
-import { Checkbox, Link, List, ListItem, Radio, Stack, Tooltip } from '@mui/material'
+import { Checkbox, List, ListItem, Radio, Stack, Tooltip } from '@mui/material'
 import classnames from 'classnames'
-import { noop } from 'lodash-unified'
 import { FC, useCallback } from 'react'
 import type { TipNFTKeyPair } from '../../types'
 
@@ -153,13 +152,6 @@ export const NFTList: FC<Props> = ({
             {tokens.map((token) => {
                 const selected = includes(selectedPairs, [token.contract?.address!, token.tokenId])
                 const disabled = !isRadio && reachedLimit && !selected
-                const link = token.contract
-                    ? Others?.explorerResolver?.nonFungibleTokenLink(
-                          token.contract.chainId,
-                          token.contract.address,
-                          token.tokenId,
-                      )
-                    : undefined
                 const name = token.collection?.name || token.contract?.name
                 const title = `${name} ${Others?.formatTokenId(token.tokenId, 2)}`
                 return (
@@ -181,22 +173,19 @@ export const NFTList: FC<Props> = ({
                                 [classes.disabled]: disabled,
                                 [classes.selected]: selected,
                                 [classes.unselected]: selectedPairs.length > 0 && !selected,
-                            })}>
-                            <Link target={link ? '_blank' : 'self'} rel="noreferrer noopener" href={link}>
-                                <NFTItem token={token} />
-                            </Link>
+                            })}
+                            onClick={() => {
+                                if (disabled) return
+                                if (selected) {
+                                    toggleItem(null, '')
+                                } else {
+                                    toggleItem(token.tokenId, token.contract?.address)
+                                }
+                            }}>
+                            <NFTItem token={token} />
                             <SelectComponent
                                 size="small"
-                                onChange={noop}
                                 disabled={disabled}
-                                onClick={() => {
-                                    if (disabled) return
-                                    if (selected) {
-                                        toggleItem(null, '')
-                                    } else {
-                                        toggleItem(token.tokenId, token.contract?.address)
-                                    }
-                                }}
                                 className={classes.checkbox}
                                 checked={selected}
                             />

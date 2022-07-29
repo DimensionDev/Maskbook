@@ -26,7 +26,7 @@ export function useDepositCallback(
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
     return useAsyncFn(async () => {
-        if (!token || !poolContract) {
+        if (!connection || !token || !poolContract) {
             return
         }
 

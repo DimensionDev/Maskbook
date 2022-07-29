@@ -11,7 +11,7 @@ import { useUser } from './useUser'
 export function useEssay(user: User, refresh?: number) {
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     return useAsync(async () => {
-        if (!user.address) return null
+        if (!connection || !user.address) return null
         const metaData = await PluginPetRPC.getCustomEssayFromRSS(user.address, connection)
         return metaData?.userId === user.userId ? metaData : null
     }, [user, refresh, connection]).value

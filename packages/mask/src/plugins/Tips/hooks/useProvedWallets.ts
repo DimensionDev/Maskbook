@@ -5,7 +5,7 @@ import { head } from 'lodash-unified'
 import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import Services from '../../../extension/service'
-import { currentPersonaIdentifier } from '../../../settings/settings'
+import { currentPersonaIdentifier } from '../../../../shared/legacy-settings/settings'
 import { MaskMessages } from '../../../utils'
 
 export function useProvedWallets() {

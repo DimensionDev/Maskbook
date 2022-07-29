@@ -1,36 +1,26 @@
 import type { ReactNode } from 'react'
-import {
-    FacebookColoredIcon,
-    InstagramColoredIcon,
-    MindsIcon,
-    TwitterColoredIcon,
-    OpenSeaColoredIcon,
-    FacebookRoundIcon,
-    TwitterRoundIcon,
-    InstagramRoundIcon,
-    MindsRoundIcon,
-} from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { EnhanceableSite, NextIDPlatform } from '@masknet/shared-base'
 
-export const SOCIAL_MEDIA_ICON_MAPPING: Record<string, ReactNode> = {
-    [EnhanceableSite.Twitter]: <TwitterColoredIcon />,
-    [EnhanceableSite.Facebook]: <FacebookColoredIcon />,
-    [EnhanceableSite.Minds]: <MindsIcon />,
-    [EnhanceableSite.Instagram]: <InstagramColoredIcon />,
-    [EnhanceableSite.OpenSea]: <OpenSeaColoredIcon />,
+export const SOCIAL_MEDIA_ICON_MAPPING: Record<EnhanceableSite | string, ReactNode> = {
+    [EnhanceableSite.Twitter]: <Icons.TwitterColored />,
+    [EnhanceableSite.Facebook]: <Icons.FacebookColored />,
+    [EnhanceableSite.Minds]: <Icons.Minds />,
+    [EnhanceableSite.Instagram]: <Icons.InstagramColored />,
+    [EnhanceableSite.OpenSea]: <Icons.OpenSeaColored />,
     [EnhanceableSite.Localhost]: null,
 }
 
-export const SOCIAL_MEDIA_ROUND_ICON_MAPPING: Record<string, ReactNode> = {
-    [EnhanceableSite.Twitter]: <TwitterRoundIcon />,
-    [EnhanceableSite.Facebook]: <FacebookRoundIcon />,
-    [EnhanceableSite.Minds]: <MindsRoundIcon />,
-    [EnhanceableSite.Instagram]: <InstagramRoundIcon />,
-    [EnhanceableSite.OpenSea]: <OpenSeaColoredIcon />,
+export const SOCIAL_MEDIA_ROUND_ICON_MAPPING: Record<EnhanceableSite | string, ReactNode> = {
+    [EnhanceableSite.Twitter]: <Icons.TwitterRound />,
+    [EnhanceableSite.Facebook]: <Icons.FacebookRound />,
+    [EnhanceableSite.Minds]: <Icons.MindsRound />,
+    [EnhanceableSite.Instagram]: <Icons.InstagramRound />,
+    [EnhanceableSite.OpenSea]: <Icons.OpenSeaColored />,
     [EnhanceableSite.Localhost]: null,
 }
 
-export const SOCIAL_MEDIA_NAME: Record<string, string> = {
+export const SOCIAL_MEDIA_NAME: Record<EnhanceableSite | string, string> = {
     [EnhanceableSite.Twitter]: 'Twitter',
     [EnhanceableSite.Facebook]: 'Facebook',
     [EnhanceableSite.Minds]: 'Mind',
@@ -45,6 +35,6 @@ export const NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP: Record<string, string> = {
 
 export const SOCIAL_MEDIA_SUPPORTING_NEXT_DOT_ID = [EnhanceableSite.Twitter]
 
-export const mediaViewerUrl = 'https://media-viewer.r2d2.to/index.html'
+export const MEDIA_VIEWER_URL = 'https://media-viewer.r2d2.to/index.html'
 
 export const MAX_WALLET_LIMIT = 100

@@ -18,18 +18,13 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: theme.typography.pxToRem(16),
         marginTop: theme.spacing(2.5),
     },
-    icon: {
-        width: 30,
-        height: 30,
-        fill: MaskColorVar.primary,
-    },
 }))
 
 export const LoadingPlaceholder = memo(() => {
     const { classes } = useStyles()
     return (
         <Box className={classes.container}>
-            <LoadingAnimation className={classes.icon} />
+            <LoadingAnimation size={30} color={MaskColorVar.primary} />
             <Typography className={classes.prompt}>loading...</Typography>
         </Box>
     )

@@ -31,8 +31,12 @@ jobs:
       - uses: pnpm/action-setup@v2.2.1
       - uses: actions/setup-node@v2
         with:
-          node-version: '17'
+          node-version: '18'
           cache: 'pnpm'
+      - name: Authenticate NPM
+        uses: DimensionDev/github-token-action@latest
+        with:
+            registry: true
       - name: Restore Webpack cache
         uses: actions/cache@v2
         with:
@@ -63,6 +67,11 @@ jobs:
         with:
           name: MaskNetwork.chromium-beta.zip
           path: MaskNetwork.chromium-beta.zip
+      - name: Upload `MaskNetwork.chromium-mv3.zip`
+        uses: actions/upload-artifact@v2
+        with:
+          name: MaskNetwork.chromium-mv3.zip
+          path: MaskNetwork.chromium-mv3.zip
       - name: Upload `MaskNetwork.firefox.zip`
         uses: actions/upload-artifact@v2
         with:

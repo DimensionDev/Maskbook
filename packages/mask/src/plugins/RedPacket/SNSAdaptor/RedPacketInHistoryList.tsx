@@ -1,4 +1,4 @@
-import { MouseEvent, useCallback, useState } from 'react'
+import { MouseEvent, useCallback, useState, useMemo } from 'react'
 import { useAsync } from 'react-use'
 import { Interface } from '@ethersproject/abi'
 import BigNumber from 'bignumber.js'
@@ -12,7 +12,6 @@ import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import intervalToDuration from 'date-fns/intervalToDuration'
 import nextDay from 'date-fns/nextDay'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { useI18N as useBaseI18N } from '../../../utils'
 import { Translate, useI18N } from '../locales'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
 import { StyledLinearProgress } from '../../ITO/SNSAdaptor/StyledLinearProgress'
@@ -181,7 +180,6 @@ export interface RedPacketInHistoryListProps {
 }
 export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const { history, onSelect } = props
-    const i18n = useBaseI18N()
     const t = useI18N()
     const { classes } = useStyles()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
@@ -191,7 +189,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
 
     const { value: receipt } = useAsync(async () => {
-        const result = await connection.getTransactionReceipt(history.txid)
+        const result = await connection?.getTransactionReceipt(history.txid)
         if (!result) return null
 
         const log = result.logs.find((log) => isSameAddress(log.address, HAPPY_RED_PACKET_ADDRESS_V4))
@@ -211,32 +209,37 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
             rpid: eventParams.id,
             creation_time: eventParams.creation_time.toNumber() * 1000,
         }
-    }, [connection, history, HAPPY_RED_PACKET_ADDRESS_V4])
+    }, [connection, history.txid, HAPPY_RED_PACKET_ADDRESS_V4])
 
     const rpid = receipt?.rpid ?? ''
     const creation_time = receipt?.creation_time ?? 0
 
+    const patchedHistory: RedPacketJSONPayload | RedPacketJSONPayloadFromChain = useMemo(
+        () => ({ ...props.history, rpid }),
+        [props.history, rpid],
+    )
     const {
         value: availability,
         computed: { canRefund, canSend, listOfStatus, isPasswordValid },
         retry: revalidateAvailability,
-    } = useAvailabilityComputed(account, { ...history, rpid, creation_time })
+    } = useAvailabilityComputed(account, { ...patchedHistory, creation_time })
 
     const claimerNumber = availability ? Number(availability.claimed) : 0
     const total_remaining = availability?.balance
 
     const [{ loading: isRefunding }, refunded, refundCallback] = useRefundCallback(
-        history.contract_version,
+        patchedHistory.contract_version,
         account,
         rpid,
     )
     const tokenAddress =
-        (history as RedPacketJSONPayload).token?.address ?? (history as RedPacketJSONPayloadFromChain).token_address
+        (patchedHistory as RedPacketJSONPayload).token?.address ??
+        (patchedHistory as RedPacketJSONPayloadFromChain).token_address
 
     const { value: tokenDetailed } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, tokenAddress ?? '')
 
     const historyToken = {
-        ...pick(tokenDetailed ?? (history as RedPacketJSONPayload).token, ['decimals', 'symbol']),
+        ...pick(tokenDetailed ?? (patchedHistory as RedPacketJSONPayload).token, ['decimals', 'symbol']),
         address: tokenAddress,
     } as FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
 
@@ -245,8 +248,8 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
             await refundCallback()
             revalidateAvailability()
         }
-        if (canSend) onSelect(removeUselessSendParams({ ...history, token: historyToken }))
-    }, [onSelect, refundCallback, canRefund, canSend, history, historyToken])
+        if (canSend) onSelect(removeUselessSendParams({ ...patchedHistory, token: historyToken }))
+    }, [onSelect, refundCallback, canRefund, canSend, patchedHistory, historyToken])
 
     // #region password lost tips
     const [anchorEl, setAnchorEl] = useState<(EventTarget & HTMLButtonElement) | null>(null)
@@ -273,24 +276,26 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                         <div className={classes.div}>
                             <div className={classes.fullWidthBox}>
                                 <Typography variant="body1" className={classNames(classes.title, classes.message)}>
-                                    {history.sender.message === '' ? t.best_wishes() : history.sender.message}
+                                    {patchedHistory.sender.message === ''
+                                        ? t.best_wishes()
+                                        : patchedHistory.sender.message}
                                 </Typography>
                             </div>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
                                 {t.history_duration({
                                     startTime: dateTimeFormat(new Date(creation_time)),
-                                    endTime: dateTimeFormat(new Date(creation_time + history.duration), false),
+                                    endTime: dateTimeFormat(new Date(creation_time + patchedHistory.duration), false),
                                 })}
                             </Typography>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
                                 {t.history_total_amount({
-                                    amount: formatBalance(history.total, historyToken?.decimals, 6),
+                                    amount: formatBalance(patchedHistory.total, historyToken?.decimals, 6),
                                     symbol: historyToken?.symbol,
                                 })}
                             </Typography>
                             <Typography variant="body1" className={classNames(classes.info, classes.message)}>
                                 {t.history_split_mode({
-                                    mode: history.is_random ? t.random() : t.average(),
+                                    mode: patchedHistory.is_random ? t.random() : t.average(),
                                 })}
                             </Typography>
                         </div>
@@ -315,6 +320,8 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                     {canSend
                                         ? t.send()
                                         : refunded
+                                        ? t.refund()
+                                        : isRefunding
                                         ? t.refunding()
                                         : listOfStatus.includes(RedPacketStatus.empty)
                                         ? t.empty()
@@ -337,7 +344,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                     </section>
                     <StyledLinearProgress
                         variant="determinate"
-                        value={100 * (1 - Number(total_remaining) / Number(history.total))}
+                        value={100 * (1 - Number(total_remaining) / Number(patchedHistory.total))}
                     />
                     <section className={classes.footer}>
                         <Typography variant="body1" className={classes.footerInfo}>
@@ -347,7 +354,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                 }}
                                 values={{
                                     claimedShares: String(claimerNumber),
-                                    shares: String(history.shares),
+                                    shares: String(patchedHistory.shares),
                                 }}
                             />
                         </Typography>
@@ -358,9 +365,9 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                                     span: <span className={classes.span} />,
                                 }}
                                 values={{
-                                    amount: formatBalance(history.total, historyToken?.decimals, 6),
+                                    amount: formatBalance(patchedHistory.total, historyToken?.decimals, 6),
                                     claimedAmount: formatBalance(
-                                        new BigNumber(history.total).minus(total_remaining ?? 0),
+                                        new BigNumber(patchedHistory.total).minus(total_remaining ?? 0),
                                         historyToken?.decimals,
                                         6,
                                     ),

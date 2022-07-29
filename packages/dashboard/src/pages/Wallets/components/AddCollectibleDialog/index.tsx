@@ -1,12 +1,12 @@
 import { FormEvent, memo, useCallback, useEffect, useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { EthereumAddress } from 'wallet.ts'
 import { MaskDialog, MaskTextField } from '@masknet/theme'
 import { Box, Button, DialogActions, DialogContent } from '@mui/material'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { EthereumAddress } from 'wallet.ts'
-import { useDashboardI18N } from '../../../../locales'
 import { z } from 'zod'
-import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useDashboardI18N } from '../../../../locales'
 import {
     useWeb3Connection,
     useNonFungibleTokenContract,
@@ -51,7 +51,7 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
     })
 
     const onSubmit = useCallback(async () => {
-        if (loading || !account || !hub?.getNonFungibleAsset) return
+        if (loading || !account || !hub?.getNonFungibleAsset || !connection) return
         if (address && tokenId && !contract) throw new Error(FormErrorType.NotExist)
 
         // If the NonFungible token is added
@@ -61,8 +61,8 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
         )
         if (tokenInDB) throw new Error(FormErrorType.Added)
 
-        const tokenAsset = await hub?.getNonFungibleAsset(address ?? '', tokenId, { chainId: selectedNetwork.chainId })
-        const token = await connection?.getNonFungibleToken(address ?? '', tokenId, undefined, {
+        const tokenAsset = await hub.getNonFungibleAsset(address ?? '', tokenId, { chainId: selectedNetwork.chainId })
+        const token = await connection.getNonFungibleToken(address ?? '', tokenId, undefined, {
             chainId: selectedNetwork.chainId as ChainId,
         })
         const tokenDetailed = { ...token, ...tokenAsset }

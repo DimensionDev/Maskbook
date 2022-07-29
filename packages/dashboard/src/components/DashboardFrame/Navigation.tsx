@@ -17,16 +17,7 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import { useContext } from 'react'
 import { useMatch, useNavigate } from 'react-router-dom'
 import { DashboardContext } from './context'
-import {
-    MaskBannerIcon,
-    MaskNotSquareIcon,
-    MenuPersonasActiveIcon,
-    MenuPersonasIcon,
-    MenuSettingsActiveIcon,
-    MenuSettingsIcon,
-    MenuWalletsActiveIcon,
-    MenuWalletsIcon,
-} from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import { MaskColorVar } from '@masknet/theme'
 import { DashboardRoutes } from '@masknet/shared-base'
@@ -87,12 +78,6 @@ const LogoItem = styled(MuiListItem)(({ theme }) => ({
     },
 })) as any as typeof MuiListItem
 
-const ItemIcon = styled(ListItemIcon)(({ theme }) => ({
-    '& svg': {
-        fontSize: 36,
-    },
-}))
-
 const ListSubTextItem = styled(ListItemText)(({ theme }) => ({
     [`&.${listItemTextClasses.inset}`]: {
         marginLeft: theme.spacing(2),
@@ -131,21 +116,33 @@ export function Navigation({ onClose }: NavigationProps) {
 
     return (
         <List onClick={() => onClose?.()}>
-            {isLargeScreen && <LogoItem>{mode === 'dark' ? <MaskBannerIcon /> : <MaskNotSquareIcon />}</LogoItem>}
+            {isLargeScreen && (
+                <LogoItem>
+                    {mode === 'dark' ? (
+                        <Icons.MaskBanner width={130} height={40} />
+                    ) : (
+                        <Icons.Mask width={130} height={40} />
+                    )}
+                </LogoItem>
+            )}
             <ListItemLink to={DashboardRoutes.Personas}>
-                <ItemIcon>
-                    {useMatch(DashboardRoutes.Personas) ? <MenuPersonasActiveIcon /> : <MenuPersonasIcon />}
-                </ItemIcon>
+                <ListItemIcon>
+                    {useMatch(DashboardRoutes.Personas) ? (
+                        <Icons.MenuPersonasActive size={36} />
+                    ) : (
+                        <Icons.MenuPersonas size={36} />
+                    )}
+                </ListItemIcon>
                 <ListItemText primary={t.personas()} />
             </ListItemLink>
             <ListItemLink to="" selected={!!useMatch(DashboardRoutes.Wallets)} onClick={onExpand}>
-                <ItemIcon>
+                <ListItemIcon>
                     {isWalletPath || isWalletHistoryPath || isWalletTransferPath ? (
-                        <MenuWalletsActiveIcon />
+                        <Icons.MenuWalletsActive size={36} />
                     ) : (
-                        <MenuWalletsIcon />
+                        <Icons.MenuWallets size={36} />
                     )}
-                </ItemIcon>
+                </ListItemIcon>
                 <ListItemText>{t.wallets()}</ListItemText>
                 {expanded ? <ExpandLess /> : <ExpandMore />}
             </ListItemLink>
@@ -167,9 +164,13 @@ export function Navigation({ onClose }: NavigationProps) {
                 </List>
             </Collapse>
             <ListItemLink to={DashboardRoutes.Settings}>
-                <ItemIcon sx={{ fontSize: 36 }}>
-                    {useMatch(DashboardRoutes.Settings) ? <MenuSettingsActiveIcon /> : <MenuSettingsIcon />}
-                </ItemIcon>
+                <ListItemIcon>
+                    {useMatch(DashboardRoutes.Settings) ? (
+                        <Icons.MenuSettingsActive size={36} />
+                    ) : (
+                        <Icons.MenuSettings size={36} />
+                    )}
+                </ListItemIcon>
                 <ListItemText primary={t.settings()} />
             </ListItemLink>
         </List>

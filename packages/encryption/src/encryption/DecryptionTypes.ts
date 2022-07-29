@@ -33,7 +33,11 @@ export interface DecryptIO {
      * @param iv
      * @returns The decrypted data
      */
-    decryptByLocalKey(authorHint: ProfileIdentifier | null, data: Uint8Array, iv: Uint8Array): Promise<Uint8Array>
+    decryptByLocalKey(
+        authorHint: ProfileIdentifier | null,
+        data: Uint8Array,
+        iv: Uint8Array,
+    ): Promise<Uint8Array | ArrayBuffer>
     /**
      * If the author is null, the host should use some heuristic approach (e.g. where they found the post).
      * @param author ProfileIdentifier of the author. Might be empty.

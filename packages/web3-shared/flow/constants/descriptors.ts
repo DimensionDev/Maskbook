@@ -71,6 +71,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         name: 'Flow',
         icon: new URL('../assets/flow.png', import.meta.url),
         iconColor: 'rgb(54, 173, 104)',
+        averageBlockDelay: 15,
         isMainnet: true,
     },
     {
@@ -81,6 +82,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         name: 'Flow Testnet',
         icon: new URL('../assets/flow.png', import.meta.url),
         iconColor: 'rgb(54, 173, 104)',
+        averageBlockDelay: 15,
         isMainnet: false,
     },
 ]

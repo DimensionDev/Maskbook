@@ -170,11 +170,8 @@ export async function getAvailableDataProviders(chainId: ChainId, type?: TagType
 export async function getAvailableCoins(chainId: ChainId, keyword: string, type: TagType, dataProvider: DataProvider) {
     if (!(await checkAvailabilityOnDataProvider(chainId, keyword, type, dataProvider))) return []
     const ids = coinNamespace.get(dataProvider)?.supportedSymbolIdsMap
-    return (
-        ids
-            ?.get(resolveAlias(chainId, keyword, dataProvider).toLowerCase())
-            ?.filter((x) => !isBlockedAddress(chainId, x.address || x.contract_address || '')) ?? []
-    )
+    const alias = resolveAlias(chainId, keyword, dataProvider).toLowerCase()
+    return ids?.get(alias)?.filter((x) => !isBlockedAddress(chainId, x.address || x.contract_address || '')) ?? []
 }
 // #endregion
 

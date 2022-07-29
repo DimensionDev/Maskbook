@@ -34,7 +34,7 @@ export function TrendingViewSkeleton(props: TrendingViewSkeletonProps) {
                 <PluginHeader />
                 <CardContent className={classes.content}>
                     <Stack height="100%" alignItems="center" justifyContent="center">
-                        <LoadingBase fontSize="large" />
+                        <LoadingBase />
                         <Typography fontSize="14px" mt={1.5}>
                             {t('loading')}
                         </Typography>

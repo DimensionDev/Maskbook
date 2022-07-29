@@ -124,7 +124,7 @@ export function PersonaItem(props: PersonaItemProps) {
                 }
             />
 
-            <MoreIcon style={{ marginLeft: 24 }} />
+            <MoreIcon style={{ marginLeft: 8 }} />
         </ListItemButton>
     )
 }
