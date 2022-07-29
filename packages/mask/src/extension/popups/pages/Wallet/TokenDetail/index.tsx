@@ -56,7 +56,7 @@ const useStyles = makeStyles()({
         },
     },
     icon: {
-        stroke: '#1C68F3',
+        color: '#1C68F3',
         fill: 'none',
     },
 })
