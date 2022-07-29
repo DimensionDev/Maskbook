@@ -18,7 +18,7 @@ export function contentFetch(input: RequestInfo, init?: RequestInit) {
 const extensionOrigin = (() => {
     try {
         return new URL(browser.runtime.getURL('')).origin
-    } catch (e) {
+    } catch {
         return null
     }
 })()
