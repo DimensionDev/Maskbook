@@ -10,6 +10,9 @@ import {
     ProviderType,
     Web3,
     Web3Provider,
+    getDefaultChainId,
+    getDefaultProviderType,
+    getDefaultNetworkType,
 } from '@masknet/web3-shared-flow'
 import { Providers } from './Connection/provider'
 
@@ -19,9 +22,9 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
             isSameAddress,
             isValidChainId,
             isValidAddress,
-            getDefaultChainId: () => ChainId.Mainnet,
-            getDefaultProviderType: () => ProviderType.None,
-            getDefaultNetworkType: () => NetworkType.Flow,
+            getDefaultChainId,
+            getDefaultProviderType,
+            getDefaultNetworkType,
             getNetworkTypeFromChainId: (chainId: ChainId) =>
                 chainResolver.chainNetworkType(chainId) ?? NetworkType.Flow,
         })

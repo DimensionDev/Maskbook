@@ -134,7 +134,7 @@ export function SwapDialog(props: SwapDialogProps) {
     const selectFungibleToken = useSelectFungibleToken(NetworkPluginID.PLUGIN_EVM)
     const onSelectTokenChipClick = useCallback(async () => {
         const picked = await selectFungibleToken({
-            disableNativeToken: !exchangeTokens.some(isNativeTokenAddress),
+            disableNativeToken: !exchangeTokens.some((x) => isNativeTokenAddress(x.address)),
             disableSearchBar: true,
             whitelist: exchangeTokens.map((x) => x.address),
         })

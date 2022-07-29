@@ -49,6 +49,7 @@ export function queryRemoteI18NBundle(
             i18NextInstance.addResourceBundle(lang, ns, json, true, true)
         }
     }, 1500))
+    closure()
     i18n.on('languageChanged', closure)
     return () => i18n.off('languageChanged', closure)
 }

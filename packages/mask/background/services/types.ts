@@ -4,7 +4,7 @@ import type * as Helper from './helper'
 import type * as Backup from './backup'
 import type * as Identity from './identity'
 import type * as Settings from './settings'
-import type * as SocialNetwork from './site-adaptors'
+import type * as SiteAdaptor from './site-adaptors'
 import type * as ThirdPartyPlugin from './third-party-plugins'
 
 export type CryptoService = typeof Crypto
@@ -12,7 +12,7 @@ export type IdentityService = typeof Identity
 export type BackupService = typeof Backup
 export type HelperService = typeof Helper
 export type SettingsService = typeof Settings
-export type SocialNetworkService = typeof SocialNetwork
+export type SiteAdaptorService = typeof SiteAdaptor
 export type ThirdPartyPluginService = typeof ThirdPartyPlugin
 export interface Services {
     Crypto: CryptoService
@@ -20,7 +20,7 @@ export interface Services {
     Backup: BackupService
     Helper: HelperService
     Settings: SettingsService
-    SocialNetwork: SocialNetworkService
+    SiteAdaptor: SiteAdaptorService
     ThirdPartyPlugin: ThirdPartyPluginService
 }
 export type GeneratorServices = {

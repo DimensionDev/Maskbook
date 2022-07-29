@@ -11,40 +11,34 @@ export function startListen(
     render: (props: PopupSSR_Props) => Promise<{ html: string; css: string }>,
     signal: AbortSignal,
 ) {
-    const task = throttle(
-        async function task() {
-            cache = await prepareData().then(render)
-            if (process.env.manifest === '3') {
-                browser.storage.session.set({ [CACHE_KEY]: cache })
-            }
-        },
-        2000,
-        { leading: true },
-    )
-    import.meta.webpackHot?.accept('../../../../src/extension/popups/SSR-server.tsx', () => {
-        if (signal.aborted) return
-        task()
-    })
+    async function task() {
+        cache = await prepareData().then(render)
+        if (process.env.manifest === '3') {
+            browser.storage.session.set({ [CACHE_KEY]: cache })
+        }
+        console.log('[Popup SSR] Page ready.')
+    }
+    const throttledTask = throttle(task, 2000, { leading: true })
 
     if (process.env.manifest === '2') {
-        task()?.then(() => console.log('[Popup SSR] Page ready.'))
+        throttledTask()
     } else {
-        browser.storage.session
-            .get(CACHE_KEY)
-            .then((result) => {
-                if (result[CACHE_KEY]) return (cache = result[CACHE_KEY] as any)
-                else return task()
-            })
-            .then(() => console.log('[Popup SSR] Page ready.'))
+        browser.storage.session.get(CACHE_KEY).then((result) => {
+            if (result[CACHE_KEY]) cache = result[CACHE_KEY] as any
+            else throttledTask()
+        })
     }
-    MaskMessages.events.ownPersonaChanged.on(task, { signal })
+    MaskMessages.events.ownPersonaChanged.on(throttledTask, { signal })
     MaskMessages.events.createInternalSettingsUpdated.on(
         (event) => {
             if (event.initial) return
-            if (event.key === InternalStorageKeys.currentPersona || event.key === InternalStorageKeys.language) task()
+            if (event.key === InternalStorageKeys.currentPersona || event.key === InternalStorageKeys.language)
+                throttledTask()
         },
         { signal },
     )
+
+    return { task, throttledTask }
 }
 
 async function prepareData(): Promise<PopupSSR_Props> {

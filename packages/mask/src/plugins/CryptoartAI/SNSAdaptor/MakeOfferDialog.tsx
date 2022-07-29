@@ -189,7 +189,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                             amount={amount}
                             balance={balance.value ?? '0'}
                             token={token.value}
-                            disableNativeToken={!paymentTokens.some(isNativeTokenAddress)}
+                            disableNativeToken={!paymentTokens.some((x) => isNativeTokenAddress(x.address))}
                             onAmountChange={setAmount}
                             onTokenChange={(x) => setAddress(x.address)}
                             TokenAmountPanelProps={{

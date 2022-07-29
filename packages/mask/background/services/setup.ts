@@ -10,7 +10,7 @@ import type { GeneratorServices, Services } from './types'
 assertEnvironment(Environment.ManifestBackground)
 
 const debugMode = process.env.NODE_ENV === 'development' || process.env.engine === 'safari'
-const message = new WebExtensionMessage<Record<string, any>>({ domain: 'services' })
+const message = new WebExtensionMessage<Record<string, any>>({ domain: '$' })
 const hmr = new EventTarget()
 
 // #region Setup services
@@ -18,7 +18,7 @@ setup('Crypto', () => import(/* webpackPreload: true */ './crypto'))
 setup('Identity', () => import(/* webpackPreload: true */ './identity'))
 setup('Backup', () => import(/* webpackPreload: true */ './backup'))
 setup('Helper', () => import(/* webpackPreload: true */ './helper'))
-setup('SocialNetwork', () => import(/* webpackPreload: true */ './site-adaptors'))
+setup('SiteAdaptor', () => import(/* webpackPreload: true */ './site-adaptors'))
 setup('Settings', () => import(/* webpackPreload: true */ './settings'), false)
 setup('ThirdPartyPlugin', () => import(/* webpackPreload: true */ './third-party-plugins'))
 
@@ -73,7 +73,7 @@ import { decryptionWithSocialNetworkDecoding } from './crypto/decryption'
         import.meta.webpackHot.accept(['./crypto/decryption'], async () => {
             GeneratorService.decryption = (await import('./crypto/decryption')).decryptionWithSocialNetworkDecoding
         })
-    const channel = message.events.GeneratorService.bind(MessageTarget.Broadcast)
+    const channel = message.events.GeneratorServices.bind(MessageTarget.Broadcast)
 
     if (debugMode) {
         Reflect.defineProperty(globalThis, 'GeneratorService', { configurable: true, value: GeneratorService })

@@ -4,7 +4,6 @@ import {
     isNativeTokenAddress,
     SchemaType,
     useRPCConstants,
-    useTokenConstants,
     useTraderConstants,
 } from '@masknet/web3-shared-evm'
 import { PluginTraderRPC } from '../../messages'
@@ -24,7 +23,6 @@ export function useTrade(
     outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
     temporarySlippage?: number,
 ): AsyncStateRetry<SwapOOData | null> {
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const slippageSetting = useSlippageTolerance()
     const slippage = temporarySlippage || slippageSetting
     const { targetChainId } = TargetChainIdContext.useContainer()
@@ -57,7 +55,6 @@ export function useTrade(
             })
         },
         [
-            NATIVE_TOKEN_ADDRESS,
             strategy,
             inputAmount,
             outputAmount,

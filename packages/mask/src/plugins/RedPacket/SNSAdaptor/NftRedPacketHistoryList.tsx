@@ -11,6 +11,7 @@ import { useNftRedPacketHistory } from './hooks/useNftRedPacketHistory'
 import { NftRedPacketHistoryItem } from './NftRedPacketHistoryItem'
 import { useI18N as useBaseI18n } from '../../../utils'
 import { useI18N } from '../locales'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles<void, 'atBottom'>()((theme, _, refs) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -34,12 +35,18 @@ const useStyles = makeStyles<void, 'atBottom'>()((theme, _, refs) => {
         },
         placeholder: {
             display: 'flex',
-            height: 350,
+            flexDirection: 'column',
+            height: 240,
             justifyContent: 'center',
             alignItems: 'center',
             textAlign: 'center',
             width: 360,
             margin: '0 auto',
+        },
+        emptyIcon: {
+            width: 36,
+            height: 36,
+            marginBottom: 13,
         },
         popper: {
             overflow: 'visible',
@@ -112,7 +119,7 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
 
     if (loading) {
         return (
-            <Box style={{ height: 350, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
+            <Box style={{ height: 240, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
                 <LoadingAnimation />
             </Box>
         )
@@ -121,6 +128,7 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
     if (!histories?.length) {
         return (
             <Typography className={classes.placeholder} color="textSecondary">
+                <Icons.EmptySimple className={classes.emptyIcon} />
                 {t.nft_no_history()}
             </Typography>
         )
