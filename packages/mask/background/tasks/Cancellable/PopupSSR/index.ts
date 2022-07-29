@@ -12,12 +12,23 @@ if (process.env.manifest === '2') {
         worker.terminate()
     })
 
-    startListen((props) => {
+    const { task } = startListen((props) => {
         return new Promise((resolve) => {
             Promise.resolve(serializer.serialization(props)).then((data) => worker.postMessage(data))
-            worker.addEventListener('message', (data) => resolve(data.data), { once: true })
+            worker.addEventListener('message', (data) => resolve(data.data))
         })
     }, signal)
+
+    if (process.env.NODE_ENV === 'development') {
+        Object.defineProperty(globalThis, '__popup__ssr__recompute__', {
+            get: () => {
+                worker.terminate()
+                return task().then(() => cache)
+            },
+            configurable: true,
+            enumerable: true,
+        })
+    }
 }
 
 function isRequestPopupSSRCache(x: unknown): boolean {

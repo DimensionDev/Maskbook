@@ -27,6 +27,8 @@ const init = once(() =>
     }),
 )
 export async function render(props: PopupSSR_Props) {
+    if (Object.keys(props).length === 0) throw new Error('PopupSSR: props is empty')
+
     await init()
     updateLanguage(props.language)
     const muiCache = createCache({ key: 'css' })
