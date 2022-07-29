@@ -2,14 +2,14 @@ import { forwardRef, useCallback, useEffect, useImperativeHandle, useState, useM
 import { useUnmount, useUpdateEffect } from 'react-use'
 import { delay } from '@dimensiondev/kit'
 import { useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
-import { NetworkPluginID, isSameAddress, FungibleToken, formatBalance } from '@masknet/web3-shared-base'
+import { NetworkPluginID, FungibleToken, formatBalance } from '@masknet/web3-shared-base'
 import {
     ChainId,
     createERC20Token,
     createNativeToken,
     GasOptionConfig,
+    isNativeTokenAddress,
     SchemaType,
-    useTokenConstants,
     UST,
 } from '@masknet/web3-shared-evm'
 import { useGasConfig, TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
@@ -50,7 +50,6 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const chainId = targetChainId ?? currentChainId
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const t = useI18N()
     const { setTargetChainId } = TargetChainIdContext.useContainer()
 
@@ -116,7 +115,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
 
         // if coin be native token and input token also be native token, reset it
         if (
-            isSameAddress(coin.contract_address, NATIVE_TOKEN_ADDRESS) &&
+            isNativeTokenAddress(coin.contract_address) &&
             inputToken?.schema === SchemaType.Native &&
             coin.symbol === inputToken.symbol
         ) {
@@ -128,7 +127,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
         if (!outputToken) {
             updateTradingCoin(AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN, coin)
         }
-    }, [coin, NATIVE_TOKEN_ADDRESS, inputToken, outputToken, currentChainId, targetChainId, updateTradingCoin])
+    }, [coin, inputToken, outputToken, currentChainId, targetChainId, updateTradingCoin])
 
     useEffect(() => {
         if (!defaultInputCoin) return

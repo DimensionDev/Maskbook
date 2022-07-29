@@ -1,5 +1,5 @@
 import { memo, useState } from 'react'
-import { EmptyIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import type { EnhanceableSite } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Button, Typography } from '@mui/material'
@@ -90,7 +90,7 @@ export const AccountsUI = memo<AccountsUIProps>(({ accounts, networks, onConnect
                 </div>
             ) : (
                 <div className={classes.placeholder}>
-                    <EmptyIcon style={{ fontSize: 60 }} />
+                    <Icons.Empty size={60} />
                 </div>
             )}
             <Button className={classes.connect} onClick={() => setOpen(true)}>

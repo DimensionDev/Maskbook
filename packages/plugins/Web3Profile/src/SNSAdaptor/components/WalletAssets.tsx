@@ -1,5 +1,5 @@
 import { Card, Typography, Link, Box } from '@mui/material'
-import { Edit2Icon, LinkOutIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../locales'
 import { ImageIcon } from './ImageIcon'
@@ -108,10 +108,10 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
                         href={address ? explorerResolver.addressLink(chainId, address?.address) ?? '' : ''}
                         target="_blank"
                         rel="noopener noreferrer">
-                        <LinkOutIcon className={classes.linkIcon} />
+                        <Icons.LinkOut className={classes.linkIcon} />
                     </Link>
                 </div>
-                <Edit2Icon size={20} onClick={onSetting} className={classes.editIcon} />
+                <Icons.Edit2 size={20} onClick={onSetting} className={classes.editIcon} />
             </div>
 
             {collectionList && collectionList?.filter((collection) => !collection?.hidden)?.length > 0 ? (

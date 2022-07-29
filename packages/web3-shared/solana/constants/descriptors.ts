@@ -8,7 +8,7 @@ import {
     ProviderDescriptor,
 } from '@masknet/web3-shared-base'
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types'
-import { ZERO_ADDRESS } from './primitives'
+import { getTokenConstant } from './constants'
 
 const PLUGIN_ID = NetworkPluginID.PLUGIN_SOLANA
 
@@ -27,7 +27,7 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
         nativeCurrency: createFungibleToken(
             ChainId.Mainnet,
             SchemaType.Fungible,
-            ZERO_ADDRESS,
+            getTokenConstant(ChainId.Mainnet, 'SOL_ADDRESS', ''),
             'Solana',
             'SOL',
             9,
@@ -51,7 +51,7 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
         nativeCurrency: createFungibleToken(
             ChainId.Devnet,
             SchemaType.Fungible,
-            ZERO_ADDRESS,
+            getTokenConstant(ChainId.Devnet, 'SOL_ADDRESS', ''),
             'Solana',
             'SOL',
             9,
@@ -78,7 +78,7 @@ export const CHAIN_DESCRIPTORS: Array<ChainDescriptor<ChainId, SchemaType, Netwo
         nativeCurrency: createFungibleToken(
             ChainId.Testnet,
             SchemaType.Fungible,
-            ZERO_ADDRESS,
+            getTokenConstant(ChainId.Testnet, 'SOL_ADDRESS', ''),
             'Solana',
             'SOL',
             9,
@@ -102,6 +102,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         name: 'Solana',
         icon: new URL('../assets/solana.png', import.meta.url),
         iconColor: '#5d6fc0',
+        averageBlockDelay: 15,
         isMainnet: true,
     },
     {
@@ -112,6 +113,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         name: 'Solana Testnet',
         icon: new URL('../assets/solana.png', import.meta.url),
         iconColor: '#5d6fc0',
+        averageBlockDelay: 15,
         isMainnet: false,
     },
 ]

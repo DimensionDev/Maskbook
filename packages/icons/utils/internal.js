@@ -45,16 +45,15 @@ export function __createIcon(name, variants, intrinsicSize = [24, 24]) {
             return {
                 ...base,
                 ...bg,
-                ...sx,
             }
-        }, [selected, size, sx, hasClickHandler])
+        }, [selected, height, width, size, hasClickHandler])
 
         const iconProps = {
             'aria-hidden': true,
             ...rest,
             ref,
             'data-icon': name,
-            sx: iconStyle,
+            sx: { ...iconStyle, ...sx },
             // To align icon center.
             fontSize: 0,
         }

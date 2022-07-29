@@ -79,6 +79,7 @@ export class DeBankAPI
             return createPageable(
                 unionWith(
                     formatAssets(
+                        options?.chainId ?? ChainId.Mainnet,
                         (result ?? []).map((x) => ({
                             ...x,
 
@@ -92,7 +93,6 @@ export class DeBankAPI
                                     ? 'https://assets.debank.com/static/media/arbitrum.8e326f58.svg'
                                     : x.logo_url,
                         })),
-                        options?.chainId,
                     ),
                     getAllEVMNativeAssets(),
                     (a, z) => a.symbol === z.symbol && a.chainId === z.chainId,

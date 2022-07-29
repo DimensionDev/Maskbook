@@ -1,14 +1,20 @@
 import Auth from '@masknet/web3-constants/flow/auth.json'
 import Chain from '@masknet/web3-constants/flow/chain.json'
 import Token from '@masknet/web3-constants/flow/token.json'
-import { hookTransform, transform } from '@masknet/web3-shared-base'
+import { transformAllHook, transformHook, transformAll, transform } from '@masknet/web3-shared-base'
 import { ChainId } from '../types'
 
-export const getAuthConstants = transform(ChainId, Auth)
-export const useAuthConstants = hookTransform(getAuthConstants)
+export const getAuthConstants = transformAll(ChainId, Auth)
+export const getAuthConstant = transform(ChainId, Auth)
+export const useAuthConstants = transformAllHook(getAuthConstants)
+export const useAuthConstant = transformHook(getAuthConstants)
 
-export const getChainConstants = transform(ChainId, Chain)
-export const useChainConstants = hookTransform(getChainConstants)
+export const getChainConstants = transformAll(ChainId, Chain)
+export const getChainConstant = transform(ChainId, Chain)
+export const useChainConstants = transformAllHook(getChainConstants)
+export const useChainConstant = transformHook(getChainConstants)
 
-export const getTokenConstants = transform(ChainId, Token)
-export const useTokenConstants = hookTransform(getTokenConstants)
+export const getTokenConstants = transformAll(ChainId, Token)
+export const getTokenConstant = transform(ChainId, Token)
+export const useTokenConstants = transformAllHook(getTokenConstants)
+export const useTokenConstant = transformHook(getTokenConstants)

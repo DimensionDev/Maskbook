@@ -10,7 +10,7 @@ import {
     Pageable,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { ChainId, getTokenConstants, SchemaType } from '@masknet/web3-shared-solana'
+import { ChainId, createNativeToken, SchemaType } from '@masknet/web3-shared-solana'
 import { createFungibleAsset, createFungibleToken } from '../helpers'
 import {
     GetAccountInfoResponse,
@@ -21,8 +21,6 @@ import {
 } from './shared'
 
 export async function getSolAsset(chainId: ChainId, account: string) {
-    const { SOL_ADDRESS = '' } = getTokenConstants(chainId)
-
     const priceData = await CoinGecko.getTokensPrice(['solana'])
     const price = priceData.solana
 
@@ -31,37 +29,25 @@ export async function getSolAsset(chainId: ChainId, account: string) {
         params: [account],
     })
     const balance = data.result?.value.lamports.toString() ?? '0'
-    return createFungibleAsset(
-        createFungibleToken(
-            chainId,
-            SOL_ADDRESS,
-            'Solana',
-            'SOL',
-            9,
-            new URL('../assets/solana.png', import.meta.url).toString(),
-        ),
-        balance,
-        {
-            [CurrencyType.USD]: price.toString(),
-        },
-    )
+    return createFungibleAsset(createNativeToken(chainId), balance, {
+        [CurrencyType.USD]: price.toString(),
+    })
 }
 
-const FAKE_SOL_ADDRESS = '11111111111111111111111111111111'
 const fetchTokenList = memoizePromise(
     async (url: string): Promise<Array<FungibleToken<ChainId, SchemaType>>> => {
         const response = await fetch(url, { cache: 'force-cache' })
         const tokenList = (await response.json()) as RaydiumTokenList
-        const SOL_ADDRESS = getTokenConstants(ChainId.Mainnet).SOL_ADDRESS!
         const tokens: Array<FungibleToken<ChainId, SchemaType>> = [...tokenList.official, ...tokenList.unOfficial].map(
             (token) => {
-                const address = token.mint === FAKE_SOL_ADDRESS ? SOL_ADDRESS : token.mint
+                if (isSameAddress(token.mint, '11111111111111111111111111111111'))
+                    return createNativeToken(ChainId.Mainnet)
                 return {
-                    id: address,
+                    id: token.mint,
                     chainId: ChainId.Mainnet,
                     type: TokenType.Fungible,
                     schema: SchemaType.Fungible,
-                    address,
+                    address: token.mint,
                     name: token.name,
                     symbol: token.symbol,
                     decimals: token.decimals,

@@ -4,7 +4,7 @@ import { useDashboardI18N } from '../../../../locales'
 import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { useState } from 'react'
-import { Warning } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     svg: {
@@ -82,7 +82,7 @@ export const DisconnectProfileDialog = ({
                 {currentStep === steps.action && profileIdentifier && (
                     <Box>
                         <Box textAlign="center" py={2}>
-                            <Warning className={classes.svg} size={64} />
+                            <Icons.Warning className={classes.svg} size={64} />
                         </Box>
                         <Typography variant="caption" sx={{ color: MaskColorVar.textPrimary, fontSize: 13, mr: 1 }}>
                             {t.personas_disconnect_warning()}

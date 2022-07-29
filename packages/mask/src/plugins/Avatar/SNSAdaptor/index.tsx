@@ -1,4 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra/content-script'
+import { Icons } from '@masknet/icons'
 import { ApplicationEntry } from '@masknet/shared'
 import { useState } from 'react'
 import { NFTAvatarDialog } from '../Application/NFTAvatarsDialog'
@@ -6,7 +7,6 @@ import { base } from '../base'
 import { setupContext } from '../context'
 import { Trans } from 'react-i18next'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
-import { ApplicationIcon } from '../assets/application'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -16,7 +16,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const name = { fallback: 'NFT PFP' }
-            const icon = <ApplicationIcon />
+            const icon = <Icons.NFTAvatar size={36} />
             const recommendFeature = {
                 description: <Trans i18nKey="plugin_nft_avatar_recommend_feature_description" />,
                 backgroundGradient: 'linear-gradient(360deg, #FFECD2 -0.43%, #FCB69F 99.57%)',

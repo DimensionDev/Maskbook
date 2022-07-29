@@ -1,4 +1,5 @@
 import { createIcon } from '@masknet/icons'
+
 export const Verify2Icon = createIcon(
     'Verify2Icon',
     <g>

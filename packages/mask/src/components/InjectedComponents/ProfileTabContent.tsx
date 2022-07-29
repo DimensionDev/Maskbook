@@ -12,7 +12,7 @@ import { ConcealableTabs } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, CircularProgress } from '@mui/material'
-import { Gear } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { SocialAddressType } from '@masknet/web3-shared-base'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
@@ -156,7 +156,9 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                         tabs={tabs}
                         selectedId={selectedTabId}
                         onChange={setSelectedTab}
-                        tail={isOwnerIdentity && <Gear onClick={handleOpenDialog} className={classes.settingIcon} />}
+                        tail={
+                            isOwnerIdentity && <Icons.Gear onClick={handleOpenDialog} className={classes.settingIcon} />
+                        }
                     />
                 </div>
             )}

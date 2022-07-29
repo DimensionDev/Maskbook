@@ -6,7 +6,7 @@ import { Box, InputAdornment } from '@mui/material'
 import { makeStyles } from '../../UIHelper/makeStyles'
 import { MaskSearchableItemInList } from './MaskSearchableItemInList'
 import { MaskTextField, MaskTextFieldProps } from '../TextField'
-import { SearchIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 
 export interface MaskSearchableListProps<T> {
     /** The list data should be render */
@@ -94,7 +94,7 @@ export function SearchableList<T extends {}>({
     return (
         <div className={classes.container}>
             {!disableSearch && (
-                <Box pt={0.5} style={{ padding: '0px 16px 16px' }}>
+                <Box style={{ padding: '4px 16px 16px' }}>
                     <MaskTextField
                         placeholder="Search"
                         autoFocus
@@ -102,7 +102,7 @@ export function SearchableList<T extends {}>({
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
-                                    <SearchIcon />
+                                    <Icons.Search />
                                 </InputAdornment>
                             ),
                             ...InputProps,
@@ -152,6 +152,11 @@ const useStyles = makeStyles()((theme) => ({
             border: '7px solid rgba(0, 0, 0, 0)',
             backgroundColor: theme.palette.maskColor.secondaryLine,
             backgroundClip: 'padding-box',
+        },
+        '& > div > div': {
+            position: 'relative',
+            width: 'calc(100% - 32px) !important',
+            margin: 'auto',
         },
     },
     list: {

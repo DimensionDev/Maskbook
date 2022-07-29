@@ -10,10 +10,12 @@ import {
     Web3Provider,
     chainResolver,
     isValidChainId,
+    getDefaultChainId,
+    getDefaultNetworkType,
+    getDefaultProviderType,
 } from '@masknet/web3-shared-evm'
 import { Providers } from './Connection/provider'
-import { ExtensionSite, mapSubscription, mergeSubscription } from '@masknet/shared-base'
-import { getEnumAsArray } from '@dimensiondev/kit'
+import { mapSubscription, mergeSubscription } from '@masknet/shared-base'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {
     constructor(context: Plugin.Shared.SharedUIContext) {
@@ -21,12 +23,9 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
             isSameAddress,
             isValidAddress,
             isValidChainId,
-            getDefaultChainId: () => ChainId.Mainnet,
-            getDefaultNetworkType: () => NetworkType.Ethereum,
-            getDefaultProviderType: (site) =>
-                getEnumAsArray(ExtensionSite).some(({ value }) => value === site)
-                    ? ProviderType.MaskWallet
-                    : ProviderType.None,
+            getDefaultChainId,
+            getDefaultNetworkType,
+            getDefaultProviderType,
             getNetworkTypeFromChainId: (chainId: ChainId) =>
                 chainResolver.chainNetworkType(chainId) ?? NetworkType.Ethereum,
         })

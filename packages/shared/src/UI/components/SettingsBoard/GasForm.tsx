@@ -3,7 +3,7 @@ import { useUpdateEffect } from 'react-use'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
 import { makeStyles, MaskAlert, MaskTextField } from '@masknet/theme'
 import { Grid, Typography } from '@mui/material'
-import { InfoIcon, CircleWarningIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { useSharedI18N } from '@masknet/shared'
 import { ChainId, formatGweiToWei, formatWeiToGwei, GasOption, Transaction } from '@masknet/web3-shared-evm'
 import { formatBalance, GasOptionType, isPositive, isZero, NetworkPluginID, scale10 } from '@masknet/web3-shared-base'
@@ -163,7 +163,7 @@ export function GasForm(props: GasFormProps) {
                         message: classes.alertMessage,
                         standardSuccess: classes.alertStandardSuccess,
                     }}
-                    icon={<InfoIcon />}>
+                    icon={<Icons.Info />}>
                     {t.gas_settings_info_gas_fee({
                         fee: formatBalance(scale10(baseFeePerGas, 2), 2, 2),
                     })}
@@ -227,7 +227,7 @@ export function GasForm(props: GasFormProps) {
                         name="gasLimit"
                     />
                     {errorCenter ? (
-                        <MaskAlert icon={<CircleWarningIcon />} severity="error">
+                        <MaskAlert icon={<Icons.CircleWarning />} severity="error">
                             {errorCenter}
                         </MaskAlert>
                     ) : null}
@@ -302,7 +302,7 @@ export function GasForm(props: GasFormProps) {
                 </Grid>
             ) : null}
             {errorBottom ? (
-                <MaskAlert icon={<CircleWarningIcon />} severity="error">
+                <MaskAlert icon={<Icons.CircleWarning />} severity="error">
                     {errorBottom}
                 </MaskAlert>
             ) : null}

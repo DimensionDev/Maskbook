@@ -2,7 +2,7 @@ import { ChainId, explorerResolver, formatEthereumAddress } from '@masknet/web3-
 import { Box, Link, Stack, Typography } from '@mui/material'
 import { memo, useMemo } from 'react'
 import { NextIDPlatform } from '@masknet/shared-base'
-import { DeleteIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { CopyIconButton } from './CopyIconButton'
 import { ExternalLink } from 'react-feather'
@@ -98,7 +98,9 @@ export const BindingItem = memo<Item>(({ platform, identity, tipable, deletable,
                             <span className={classes.tipButtonLabel}>{t.tips()}</span>
                         </TipButton>
                     ) : null}
-                    {deletable ? <DeleteIcon className={classes.delButton} onClick={() => onUnBind(identity)} /> : null}
+                    {deletable ? (
+                        <Icons.Delete className={classes.delButton} onClick={() => onUnBind(identity)} />
+                    ) : null}
                 </Box>
             </Stack>
         )

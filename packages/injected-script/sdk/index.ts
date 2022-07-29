@@ -43,13 +43,6 @@ if (typeof document !== 'object') {
     debugger
     throw new Error('This script should not be included in the Manifest V3 background')
 }
-if (process.env.NODE_ENV === 'development' && location.href.includes('extension://')) {
-    // eslint-disable-next-line no-debugger
-    debugger
-    throw new Error(
-        'This script should not be included in the extension context. Please make sure it only imported in the content script.',
-    )
-}
 globalThis?.document?.addEventListener?.(CustomEventId, (e) => {
     const r = decodeEvent((e as CustomEvent).detail)
     if (r[1].length < 1) return
