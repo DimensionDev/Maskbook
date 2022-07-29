@@ -22,7 +22,7 @@ import { useWalletLockStatus } from '../hooks/useWalletLockStatus'
 
 const useStyles = makeStyles()((theme) => ({
     box: {
-        height: 'calc( 100% - 50px )',
+        height: 'calc(100% - 50px)',
         background: '#F7F9FA',
     },
     container: {
