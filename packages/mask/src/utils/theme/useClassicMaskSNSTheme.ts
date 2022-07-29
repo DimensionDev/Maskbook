@@ -385,6 +385,25 @@ export function useClassicMaskSNSTheme() {
                     },
                 },
 
+                {
+                    props: {
+                        variant: 'containedDark',
+                    },
+                    style: {
+                        backgroundColor: theme.palette.maskColor.dark,
+                        color: theme.palette.maskColor.white,
+                        ['&:hover']: {
+                            backgroundColor: theme.palette.maskColor.dark,
+                            boxShadow: '0 8px 25px rgba(0, 0, 0, 0.2)',
+                        },
+                        [`&.${buttonClasses.disabled}`]: {
+                            background: theme.palette.maskColor.secondaryDark,
+                            opacity: 0.6,
+                            color: theme.palette.maskColor.white,
+                        },
+                    },
+                },
+
                 // rounded button
                 {
                     props: {
@@ -416,7 +435,7 @@ export function useClassicMaskSNSTheme() {
                         borderRadius: 99,
                         ['&:hover']: {
                             backgroundColor: theme.palette.maskColor.dark,
-                            boxShadow: '0 8px 25px rgba(255, 255, 255, 0.2)',
+                            boxShadow: '0px 8px 25px rgba(0, 0, 0, 0.2)',
                         },
                         [`&.${buttonClasses.disabled}`]: {
                             background: theme.palette.maskColor.secondaryDark,

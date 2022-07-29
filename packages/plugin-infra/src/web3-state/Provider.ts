@@ -1,14 +1,7 @@
 import { clone, first } from 'lodash-unified'
 import type { Subscription } from 'use-subscription'
 import { delay } from '@dimensiondev/kit'
-import {
-    EnhanceableSite,
-    ExtensionSite,
-    getSiteType,
-    mapSubscription,
-    mergeSubscription,
-    StorageObject,
-} from '@masknet/shared-base'
+import { getSiteType, mapSubscription, mergeSubscription, StorageObject } from '@masknet/shared-base'
 import type { Account, WalletProvider, ProviderState as Web3ProviderState } from '@masknet/web3-shared-base'
 import type { Plugin } from '../types'
 
@@ -34,7 +27,7 @@ export class ProviderState<
     public providerType?: Subscription<ProviderType>
 
     constructor(
-        protected context: Plugin.Shared.SharedContext,
+        protected context: Plugin.Shared.SharedUIContext,
         protected providers: Record<ProviderType, WalletProvider<ChainId, ProviderType, Web3Provider, Web3>>,
         protected options: {
             isValidAddress(a?: string): boolean
@@ -42,7 +35,7 @@ export class ProviderState<
             isSameAddress(a?: string, b?: string): boolean
             getDefaultChainId(): ChainId
             getDefaultNetworkType(): NetworkType
-            getDefaultProviderType(site?: EnhanceableSite | ExtensionSite): ProviderType
+            getDefaultProviderType(): ProviderType
             getNetworkTypeFromChainId(chainId: ChainId): NetworkType
         },
     ) {
@@ -52,7 +45,7 @@ export class ProviderState<
                 account: '',
                 chainId: options.getDefaultChainId(),
             },
-            providerType: options.getDefaultProviderType(site),
+            providerType: options.getDefaultProviderType(),
         }
 
         const { storage } = this.context.createKVStorage('memory', {}).createSubScope(site ?? 'Provider', defaultValue)
@@ -116,7 +109,7 @@ export class ProviderState<
                 const siteType = getSiteType()
                 if (!siteType) return
 
-                this.storage.providerType.setValue(this.options.getDefaultProviderType(siteType))
+                this.storage.providerType.setValue(this.options.getDefaultProviderType())
             })
         })
     }

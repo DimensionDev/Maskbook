@@ -160,7 +160,7 @@ export const ConnectedWalletsUI = memo<ConnectedWalletsUIProps>(
                                     </Link>
                                 </Typography>
                             </div>
-                            <Icons.Delete color="#536471" onClick={() => onDelete(wallet)} />
+                            <Icons.Delete color="#767F8D" onClick={() => onDelete(wallet)} />
                         </div>
                     ))
                 ) : (

@@ -1,4 +1,5 @@
 import type { Subscription } from 'use-subscription'
+import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Emitter } from '@servie/events'
 import type { EnhanceableSite, ExtensionSite, ProfileIdentifier } from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
@@ -169,7 +170,7 @@ export interface ChainDescriptor<ChainId, SchemaType, NetworkType> {
 export interface NetworkDescriptor<ChainId, NetworkType> {
     /** An unique ID for each network */
     ID: string
-    /** The ID of a plugin that provides the functionality of this network. */
+    /** The ID of the plugin that provides the functionality of the network. */
     networkSupporterPluginID: NetworkPluginID
     /** The chain id */
     chainId: ChainId
@@ -179,6 +180,8 @@ export interface NetworkDescriptor<ChainId, NetworkType> {
     icon: URL
     /** The network icon in fixed color */
     iconColor: Color
+    /** The average time for mining a block (unit: seconds). */
+    averageBlockDelay: number
     /** The background gradient color for relative network bar */
     backgroundGradient?: string
     /** The network name */
@@ -214,7 +217,7 @@ export interface ProviderDescriptor<ChainId, ProviderType> {
     homeLink: string
     /** A link only contains domain name */
     shortenLink: string
-    /** A link to download the client */
+    /** A link to download the client application */
     downloadLink?: string
 }
 
@@ -484,6 +487,8 @@ export interface TransactionDescriptor<ChainId, Transaction> {
     description?: string
     /** a human-readable description for successful transaction. */
     successfulDescription?: string
+    /** a human-readable description for failed transaction. */
+    failedDescription?: string
     /** The original transaction object */
     _tx: Transaction
 }
@@ -627,7 +632,7 @@ export interface ProviderEvents<ChainId, ProviderType> {
 
 export interface WatchEvents<Transaction> {
     /** Emit when error occur */
-    error: [Error]
+    error: [Error, JsonRpcPayload]
     /** Emit when the watched transaction status updated. */
     progress: [string, TransactionStatusType, Transaction | undefined]
 }
@@ -1143,11 +1148,13 @@ export interface TransactionFormatterState<ChainId, Parameters, Transaction> {
         chainId: ChainId,
         transaction: Transaction,
         context: TransactionContext<ChainId, Parameters>,
+        isError?: boolean
     ) => Promise<TransactionDescriptor<ChainId, Transaction>>
     /** Elaborate a transaction in a human-readable format. */
     formatTransaction: (
         chainId: ChainId,
         transaction: Transaction,
+        isError?: boolean
     ) => Promise<TransactionDescriptor<ChainId, Transaction>>
 }
 export interface TransactionWatcherState<ChainId, Transaction> {
@@ -1158,7 +1165,7 @@ export interface TransactionWatcherState<ChainId, Transaction> {
     /** Remove a transaction from the watch list. */
     unwatchTransaction: (chainId: ChainId, id: string) => Promise<void>
     /** Notify error */
-    notifyError: (error: Error) => Promise<void>
+    notifyError: (error: Error, request: JsonRpcPayload) => Promise<void>
     /** Notify transaction status */
     notifyTransaction: (
         chainId: ChainId,
@@ -1243,6 +1250,8 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Tra
     isValidChain(chainId?: ChainId, testnet?: boolean): boolean
     isValidDomain(domain?: string): boolean
     isValidAddress(address?: string): boolean
+    isZeroAddress(address?: string): boolean
+    isNativeTokenAddress(address?: string): boolean
     isSameAddress(address?: string, otherAddress?: string): boolean
     // #endregion
 
@@ -1255,8 +1264,9 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Tra
     // #region customization
     getDefaultChainId(): ChainId
     getDefaultNetworkType(): NetworkType
-    getZeroAddress(chainId?: ChainId): string
-    getNativeTokenAddress(chainId?: ChainId): string
+    getDefaultProviderType(): ProviderType
+    getZeroAddress(): string | undefined
+    getNativeTokenAddress(chainId?: ChainId): string | undefined
     getMaskTokenAddress(chainId?: ChainId): string | undefined
     getAverageBlockDelay(chainId?: ChainId, scale?: number): number
     getTransactionSignature(chainId?: ChainId, transaction?: Partial<Transaction>): string | undefined

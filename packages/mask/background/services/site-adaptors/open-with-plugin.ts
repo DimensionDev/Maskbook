@@ -20,6 +20,6 @@ export async function getDesignatedAutoStartPluginID(): Promise<string | null> {
     } else {
         const val = await browser.storage.session.get(key)
         await browser.storage.session.remove(key)
-        return String(val[key])
+        return (val[key] as string) ?? null
     }
 }

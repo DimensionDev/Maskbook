@@ -10,7 +10,7 @@ import type { GeneratorServices, Services } from './types'
 assertEnvironment(Environment.ManifestBackground)
 
 const debugMode = process.env.NODE_ENV === 'development' || process.env.engine === 'safari'
-const message = new WebExtensionMessage<Record<string, any>>({ domain: 'services' })
+const message = new WebExtensionMessage<Record<string, any>>({ domain: '$' })
 const hmr = new EventTarget()
 
 // #region Setup services
@@ -18,8 +18,8 @@ setup('Crypto', () => import(/* webpackPreload: true */ './crypto'))
 setup('Identity', () => import(/* webpackPreload: true */ './identity'))
 setup('Backup', () => import(/* webpackPreload: true */ './backup'))
 setup('Helper', () => import(/* webpackPreload: true */ './helper'))
-setup('SocialNetwork', () => import(/* webpackPreload: true */ './site-adaptors'))
-setup('Settings', () => import(/* webpackPreload: true */ './settings'))
+setup('SiteAdaptor', () => import(/* webpackPreload: true */ './site-adaptors'))
+setup('Settings', () => import(/* webpackPreload: true */ './settings'), false)
 setup('ThirdPartyPlugin', () => import(/* webpackPreload: true */ './third-party-plugins'))
 
 if (import.meta.webpackHot) {
@@ -32,13 +32,13 @@ if (import.meta.webpackHot) {
     import.meta.webpackHot.accept(['./third-party-plugins'], () => hmr.dispatchEvent(new Event('thirdPartyPlugin')))
 }
 
-function setup<K extends keyof Services>(key: K, implementation: () => Promise<Services[K]>) {
+function setup<K extends keyof Services>(key: K, implementation: () => Promise<Services[K]>, hasLog = true) {
     const channel = message.events[key].bind(MessageTarget.Broadcast)
 
     async function load() {
         const val = await getLocalImplementation(true, `Services.${key}`, implementation, channel)
         if (debugMode) {
-            Reflect.defineProperty(globalThis, key + 'Service', { configurable: true, value: val })
+            Reflect.defineProperty(globalThis, key + 'Service', { configurable: true, enumerable: true, value: val })
         }
         return val
     }
@@ -49,18 +49,15 @@ function setup<K extends keyof Services>(key: K, implementation: () => Promise<S
         key,
         serializer,
         channel,
-        log: {
-            beCalled: true,
-            remoteError: false,
-            type: 'pretty',
-            requestReplay: debugMode,
-        },
-        preferLocalImplementation: true,
-        strict: {
-            // temporally
-            methodNotFound: false,
-            unknownMessage: true,
-        },
+        log: hasLog
+            ? {
+                  beCalled: true,
+                  remoteError: false,
+                  type: 'pretty',
+                  requestReplay: debugMode,
+              }
+            : false,
+        strict: true,
         thenable: false,
     })
 }
@@ -76,7 +73,7 @@ import { decryptionWithSocialNetworkDecoding } from './crypto/decryption'
         import.meta.webpackHot.accept(['./crypto/decryption'], async () => {
             GeneratorService.decryption = (await import('./crypto/decryption')).decryptionWithSocialNetworkDecoding
         })
-    const channel = message.events.GeneratorService.bind(MessageTarget.Broadcast)
+    const channel = message.events.GeneratorServices.bind(MessageTarget.Broadcast)
 
     if (debugMode) {
         Reflect.defineProperty(globalThis, 'GeneratorService', { configurable: true, value: GeneratorService })

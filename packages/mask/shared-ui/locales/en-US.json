@@ -975,7 +975,7 @@
     "popups_wallet_name_mnemonic": "Mnemonic",
     "popups_wallet_name_json_file": "Json File",
     "popups_wallet_name_private_key": "Private Key",
-    "popups_wallet_name_mnemonic_placeholder": "Enter 12 or 24 mnemonic words separated by space.",
+    "popups_wallet_name_mnemonic_placeholder": "Enter 12 or 24 mnemonic words.",
     "popups_wallet_name_origin_password": "Original Password",
     "popups_wallet_tab_assets": "Assets",
     "popups_wallet_tab_activity": "Activity",

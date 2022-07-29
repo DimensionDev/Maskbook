@@ -1,8 +1,12 @@
 import { noop } from 'lodash-unified'
 import { Flags } from '../../../shared/flags'
+import { hmr } from '../../../utils-pure'
 import { fetchInjectContentScriptList, contentScriptURL, injectedScriptURL, maskSDK_URL } from './InjectContentScripts'
+
 type Args = browser.webNavigation.TransitionNavListener extends browser.webNavigation.NavListener<infer U> ? U : never
-export default function (signal: AbortSignal) {
+
+const { signal } = hmr(import.meta.webpackHot)
+if (process.env.manifest === '3') {
     if (Flags.use_register_content_script) NewImplementation(signal)
     else OldImplementation(signal)
 }
