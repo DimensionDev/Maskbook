@@ -147,14 +147,14 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const currentVisitingIdentity = useCurrentVisitingIdentity()
     const currentVisitingUserId = currentVisitingIdentity.identifier?.userId
 
+    const { value: currentVisitingSocialIdentity, loading: loadingCurrentVisitingSocialIdentity } =
+        useCurrentVisitingSocialIdentity()
+
     const {
         value: socialAddressList = EMPTY_LIST,
         loading: loadingSocialAddressList,
         retry: retrySocialAddress,
-    } = useSocialAddressListAll(currentVisitingIdentity)
-
-    const { value: currentVisitingSocialIdentity, loading: loadingCurrentVisitingSocialIdentity } =
-        useCurrentVisitingSocialIdentity()
+    } = useSocialAddressListAll(currentVisitingSocialIdentity, isOwnerIdentity)
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {

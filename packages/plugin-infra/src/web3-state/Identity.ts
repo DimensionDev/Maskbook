@@ -26,7 +26,7 @@ export class IdentityServiceState implements Web3SocialIdentityState {
         throw new Error('Method not implemented.')
     }
 
-    async lookup(identity: SocialIdentity): Promise<Array<SocialAddress<NetworkPluginID>>> {
+    async lookup(identity: SocialIdentity, isOwnerIdentity = false): Promise<Array<SocialAddress<NetworkPluginID>>> {
         const ID = this.getIdentityID(identity)
         if (!ID) return EMPTY_LIST
 
@@ -34,7 +34,9 @@ export class IdentityServiceState implements Web3SocialIdentityState {
         if (fromCache) return fromCache
 
         const fromRemote = this.getFromRemote(identity)
-        this.cache.set(ID, fromRemote)
+        if (!isOwnerIdentity) {
+            this.cache.set(ID, fromRemote)
+        }
 
         return fromRemote
     }

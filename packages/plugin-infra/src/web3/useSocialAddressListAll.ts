@@ -17,6 +17,7 @@ const addressCache = new LRUCache<string, CacheValue>({
  */
 export function useSocialAddressListAll(
     identity?: SocialIdentity,
+    isOwnerIdentity?: boolean,
     includes?: SocialAddressType[],
     sorter?: (a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>) => number,
 ) {
@@ -26,18 +27,21 @@ export function useSocialAddressListAll(
 
     return useAsyncRetry(async () => {
         const userId = identity?.identifier?.userId
-        if (!userId || userId === '$unknown') return EMPTY_LIST
-
+        const publicKey = identity?.publicKey
+        if (!userId || userId === '$unknown' || !publicKey) return EMPTY_LIST
         let cached = addressCache.get(userId)
+
         if (!cached) {
             cached = Promise.allSettled<AddressList>(
-                [EVM_IdentityService, SolanaIdentityService].map((x) => x?.lookup(identity) ?? []),
+                [EVM_IdentityService, SolanaIdentityService].map((x) => x?.lookup(identity, isOwnerIdentity) ?? []),
             )
-            addressCache.set(userId, cached)
+            if (!isOwnerIdentity) {
+                addressCache.set(userId, cached)
+            }
         }
         const allSettled = await cached
         const listOfAddress = allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
         const sorted = sorter && listOfAddress.length ? listOfAddress.sort(sorter) : listOfAddress
         return includes?.length ? sorted.filter((x) => includes.includes(x.type)) : sorted
-    }, [identity, sorter, includes?.join(), EVM_IdentityService?.lookup, SolanaIdentityService?.lookup])
+    }, [identity?.publicKey, sorter, includes?.join(), EVM_IdentityService?.lookup, SolanaIdentityService?.lookup])
 }
