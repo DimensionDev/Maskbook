@@ -124,7 +124,7 @@ function resolveCurrentVisitingIdentityInner(
 ) {
     const update = async (twitterId: string) => {
         const user = await Twitter.getUserByScreenName(twitterId)
-        if (!user) return
+        if (!user?.legacy) return
         const bio = user.legacy.description
 
         const nickname = user.legacy.name
