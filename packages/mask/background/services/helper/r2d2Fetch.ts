@@ -63,7 +63,7 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
         )
 
     // r2d2
-    if (url.includes('r2d2.to')) return originalFetch(info)
+    if (url.includes('r2d2.to')) return originalFetch(info, init)
 
     // r2d2 worker
     const r2deWorkerType =

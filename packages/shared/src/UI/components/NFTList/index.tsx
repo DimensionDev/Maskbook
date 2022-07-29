@@ -233,11 +233,11 @@ export const NFTList: FC<Props> = ({
                     )
                 })}
             </List>
-            {hasError && !finished && tokens.length && (
+            {hasError && !finished && tokens.length ? (
                 <Stack py={1}>
                     <RetryHint hint={false} retry={onNextPage} />
                 </Stack>
-            )}
+            ) : null}
             <Stack py={1}>
                 <ElementAnchor callback={onNextPage}>{!finished && <LoadingBase />}</ElementAnchor>
             </Stack>

@@ -116,7 +116,7 @@ class Hub implements EVM_Hub {
         address: string,
         initial?: HubOptions<ChainId>,
     ): Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>> {
-        throw new Error('Method not implemented.')
+        return NFTScan.getAssetsByCollection(address, initial)
     }
 
     async getNonFungibleAssetsByCollection(
