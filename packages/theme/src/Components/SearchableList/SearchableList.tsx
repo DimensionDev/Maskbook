@@ -94,7 +94,7 @@ export function SearchableList<T extends {}>({
     return (
         <div className={classes.container}>
             {!disableSearch && (
-                <Box pt={0.5} style={{ padding: '0px 16px 16px' }}>
+                <Box style={{ padding: '4px 16px 16px' }}>
                     <MaskTextField
                         placeholder="Search"
                         autoFocus

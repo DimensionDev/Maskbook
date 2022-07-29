@@ -135,7 +135,7 @@ export const LogoutUI = memo<LogoutUIProps>(({ backupPassword, loading, onLogout
     return (
         <>
             <div className={classes.content}>
-                <Icons.Tip color="#FF5F5F" size={56} />
+                <Icons.CircleWarning size={64} />
                 <Typography className={classes.title}>{t('popups_persona_logout')}</Typography>
                 <div className={classes.personaContainer}>
                     <div className={classes.iconContainer}>

@@ -266,7 +266,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                         className={classes.buyButton}
                                         size="small"
                                         startIcon={<Icons.Buy size={16} />}
-                                        variant="contained"
+                                        variant="containedDark"
                                         onClick={onBuyButtonClicked}>
                                         {t('buy_now')}
                                     </Button>
