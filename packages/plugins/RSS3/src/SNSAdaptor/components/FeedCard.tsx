@@ -1,15 +1,13 @@
-import { NFTCardStyledAssetPlayer, TokenIcon } from '@masknet/shared'
+import { NFTCardStyledAssetPlayer, ReversedAddress, TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Alchemy_EVM, RSS3BaseAPI } from '@masknet/web3-providers'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainId, resolveIPFSLinkFromURL, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { ChainId, formatTokenId, isZeroAddress, resolveIPFSLinkFromURL, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Box, Typography, Card } from '@mui/material'
-import differenceInCalendarDays from 'date-fns/differenceInDays'
-import differenceInCalendarHours from 'date-fns/differenceInHours'
 import { useMemo } from 'react'
-import { ReversedAddress } from './ReversedAddress'
 import { useI18N } from '../../locales'
 import { useAsyncRetry } from 'react-use'
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -99,49 +97,49 @@ export function FeedCard({ feed, address, onSelect }: FeedCardProps) {
     const action = useMemo(() => {
         if (!feed) return
         if (feed.tags?.includes(TAG.NFT)) {
-            if (isSameAddress(feed.metadata?.from?.toLowerCase(), address)) {
+            if (isSameAddress(feed.metadata?.from, address)) {
                 return (
                     <span>
-                        {t.sent_a_NFT_to()} <ReversedAddress address={feed.metadata?.to} />
+                        {t.sent_a_NFT_to()} <ReversedAddress address={feed.metadata?.to ?? ZERO_ADDRESS} />
                     </span>
                 )
             }
-            if (isSameAddress(feed.metadata?.from, ZERO_ADDRESS)) {
+            if (isZeroAddress(feed.metadata?.from)) {
                 return t.minted_a_NFT()
             }
-            if (isSameAddress(feed.metadata?.to?.toLowerCase(), address)) {
+            if (isSameAddress(feed.metadata?.to, address)) {
                 return (
                     <span>
-                        {t.acquired_a_NFT_from()} <ReversedAddress address={feed.metadata?.from} />
+                        {t.acquired_a_NFT_from()} <ReversedAddress address={feed.metadata?.from ?? ZERO_ADDRESS} />
                     </span>
                 )
             }
         }
         if (feed.tags?.includes(TAG.Token) || feed.tags?.includes(TAG.ETH)) {
-            if (isSameAddress(feed.metadata?.from?.toLowerCase(), address)) {
+            if (isSameAddress(feed.metadata?.from, address)) {
                 return (
                     <span>
-                        {t.sent_to()} <ReversedAddress address={feed.metadata?.to} />
+                        {t.sent_to()} <ReversedAddress address={feed.metadata?.to ?? ZERO_ADDRESS} />
                     </span>
                 )
             }
-            if (isSameAddress(feed.metadata?.to?.toLowerCase(), address)) {
+            if (isSameAddress(feed.metadata?.to, address)) {
                 return (
                     <span>
-                        {t.received_from()} <ReversedAddress address={feed.metadata?.from} />
+                        {t.received_from()} <ReversedAddress address={feed.metadata?.from ?? ZERO_ADDRESS} />
                     </span>
                 )
             }
         }
         if (feed.tags?.includes(TAG.Gitcoin)) {
-            if (isSameAddress(feed.metadata?.from?.toLowerCase(), address)) {
+            if (isSameAddress(feed.metadata?.from, address)) {
                 return t.donated()
             }
-            if (isSameAddress(feed.metadata?.to?.toLowerCase(), address)) {
+            if (isSameAddress(feed.metadata?.to, address)) {
                 return t.received_donation_from()
             }
         }
-        if (isSameAddress(feed.metadata?.from?.toLowerCase(), address)) {
+        if (isSameAddress(feed.metadata?.from, address)) {
             return t.received()
         }
         return t.sent()
@@ -189,15 +187,6 @@ export function FeedCard({ feed, address, onSelect }: FeedCardProps) {
         return null
     }, [feed])
 
-    const time = useMemo(() => {
-        const days = differenceInCalendarDays(new Date(), new Date(feed.date_updated))
-        const hours = differenceInCalendarHours(new Date(), new Date(feed.date_updated))
-        return [
-            days > 0 ? `${days} ${days > 1 ? t.days() : t.day()} ` : '',
-            hours > 0 ? `${hours} ${hours > 1 ? t.hours() : t.hour()} ` : '',
-            t.ago(),
-        ].join('')
-    }, [feed.date_updated, t])
     return (
         <Box
             className={classes.wrapper}
@@ -223,9 +212,9 @@ export function FeedCard({ feed, address, onSelect }: FeedCardProps) {
             <div>
                 <>
                     <span className={classes.action}>
-                        <ReversedAddress address={address} /> {action}
+                        <ReversedAddress isInline address={address!} /> {action}
                     </span>{' '}
-                    <span className={classes.time}>{time}</span>
+                    <span className={classes.time}>{formatDistanceToNow(new Date(feed.date_updated))}</span> {t.ago()}
                 </>
                 <Box className={classes.collection}>
                     <Typography fontWeight={700} className={classes.summary}>
@@ -237,7 +226,7 @@ export function FeedCard({ feed, address, onSelect }: FeedCardProps) {
                     </Typography>
                     <Typography className={classes.summary}>
                         {feed.summary || NFTMetadata?.metadata?.description || NFTMetadata?.collection?.description} ||
-                        `#${feed.metadata?.token_id}`
+                        {formatTokenId(feed.metadata?.token_id ?? '0x00')}
                     </Typography>
                 </Box>
             </div>

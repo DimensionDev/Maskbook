@@ -153,7 +153,7 @@ export namespace RSS3BaseAPI {
         NFT = 'NFT',
     }
 
-    export type Tags = 'NFT' | 'Token' | 'POAP' | 'Gitcoin' | 'Mirror Entry' | 'ETH'
+    export type Tag = 'NFT' | 'Token' | 'POAP' | 'Gitcoin' | 'Mirror Entry' | 'ETH'
 
     export interface NameInfo {
         rnsName: string
@@ -176,7 +176,7 @@ export namespace RSS3BaseAPI {
         token_address?: string
     }
 
-    export interface Attachments {
+    export interface Attachment {
         address?: string
         mime_type?: string
         size_in_bytes?: string
@@ -184,7 +184,7 @@ export namespace RSS3BaseAPI {
     }
 
     export interface Web3Feed {
-        attachments?: Attachments[]
+        attachments?: Attachment[]
         authors: string[]
         /* cspell:disable-next-line */
         backlinks: string
@@ -195,7 +195,7 @@ export namespace RSS3BaseAPI {
         related_urls?: string[]
         // this field works different from API doc
         source: string
-        tags: Tags[]
+        tags: Tag[]
         summary?: string
         title?: string
         metadata?: Metadata

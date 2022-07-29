@@ -80,7 +80,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     threeLine: {
         display: '-webkit-box',
-        '-webkit-line-clamp': 3,
+        '-webkit-line-clamp': '3',
         height: 60,
         fontSize: 14,
         fontWeight: 400,
@@ -128,6 +128,9 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
+    },
+    linkOutIcon: {
+        color: theme.palette.mode === 'light' ? 'white' : 'black',
     },
 }))
 
@@ -253,7 +256,7 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                                     className={classes.linkBox}
                                     target="_blank"
                                     href={explorerResolver.transactionLink(ChainId.Mainnet, hash ?? ZERO_ADDRESS)}>
-                                    <Icons.LinkOut size={18} color="white" />
+                                    <Icons.LinkOut size={18} className={classes.linkOutIcon} />
                                 </Link>
                             </div>
                         </div>

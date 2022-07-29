@@ -11,9 +11,9 @@ import {
     leftShift,
     NetworkPluginID,
     TokenType,
+    ZERO,
 } from '@masknet/web3-shared-base'
 import { first } from 'lodash-unified'
-import BigNumber from 'bignumber.js'
 
 export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     createRSS3(
@@ -143,11 +143,9 @@ const createCollection = (collectionResponse: RSS3BaseAPI.CollectionResponse[]):
             description: firstAction?.metadata?.description,
             tokenAmount: collection.actions?.reduce((pre, cur) => {
                 return pre.plus(
-                    new BigNumber(
-                        leftShift(cur?.metadata?.token?.value || '0', cur?.metadata?.token?.decimals).toFixed(8),
-                    ),
+                    leftShift(cur?.metadata?.token?.value || '0', cur?.metadata?.token?.decimals).toFixed(8),
                 )
-            }, new BigNumber(0)),
+            }, ZERO),
             tokenSymbol: firstAction?.metadata?.token?.symbol,
             location:
                 firstAction?.metadata?.attributes?.find((trait) => trait.trait_type === 'city')?.value ||
