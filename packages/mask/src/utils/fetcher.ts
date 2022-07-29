@@ -6,13 +6,13 @@ export function contentFetch(input: RequestInfo, init?: RequestInit) {
 
     if (isSameOrigin(info.url)) {
         if (process.env.engine === 'firefox' && process.env.manifest === '2' && typeof content === 'object') {
-            return content.fetch(info)
+            return content.fetch(info, init)
         } else {
-            return original_fetch(info)
+            return original_fetch(info, init)
         }
     }
 
-    return Services.Helper.r2d2Fetch(info)
+    return Services.Helper.r2d2Fetch(info, init)
 }
 
 function isSameOrigin(url: string) {
