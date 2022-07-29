@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Button, Stack, Typography } from '@mui/material'
+import { Button, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { FungibleTokenList } from '@masknet/shared'
 import { useBlockedFungibleTokens } from '@masknet/plugin-infra/web3'
@@ -49,7 +49,6 @@ const AddToken = memo(() => {
     return (
         <>
             <div className={classes.content}>
-                <Typography className={classes.label}>{t('popups_wallet_token')}</Typography>
                 <FungibleTokenList
                     blacklist={blackList.map((x) => x.address)}
                     FixedSizeListProps={{ height: 340, itemSize: 54 }}
