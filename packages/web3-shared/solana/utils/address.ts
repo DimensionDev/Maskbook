@@ -2,7 +2,7 @@ import bs58 from 'bs58'
 import * as Web3 from '@solana/web3.js'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { ChainId } from '../types'
+import { ChainId, NetworkType, ProviderType } from '../types'
 import { getTokenConstant, ZERO_ADDRESS } from '../constants'
 
 export function encodePublicKey(key: Web3.PublicKey) {
@@ -44,6 +44,18 @@ export function isZeroAddress(address?: string) {
 export function isNativeTokenAddress(address?: string) {
     const set = new Set(getEnumAsArray(ChainId).map((x) => getTokenConstant(x.value, 'SOL_ADDRESS')))
     return !!(address && set.has(address))
+}
+
+export function getDefaultChainId() {
+    return ChainId.Mainnet
+}
+
+export function getDefaultNetworkType() {
+    return NetworkType.Solana
+}
+
+export function getDefaultProviderType() {
+    return ProviderType.None
 }
 
 export function getZeroAddress() {

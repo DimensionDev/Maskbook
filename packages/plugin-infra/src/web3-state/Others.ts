@@ -1,3 +1,4 @@
+import type { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
 import {
     ChainDescriptor,
     createChainResolver,
@@ -17,8 +18,6 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transac
     constructor(
         protected context: Plugin.Shared.SharedContext,
         protected options: {
-            /** Default block time in seconds */
-            defaultBlockDelay: number
             /** Built-in chain descriptors */
             chainDescriptors: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>>
             /** Built-in network descriptors */
@@ -32,6 +31,9 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transac
         throw new Error('Method not implemented.')
     }
     getDefaultNetworkType(): NetworkType {
+        throw new Error('Method not implemented.')
+    }
+    getDefaultProviderType(): ProviderType {
         throw new Error('Method not implemented.')
     }
 
@@ -50,7 +52,8 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transac
         return undefined
     }
     getAverageBlockDelay(chainId: ChainId, scale = 1): number {
-        return this.options.defaultBlockDelay * scale * 1000
+        const descriptor = this.options.networkDescriptors.find((x) => x.chainId === chainId)
+        return (descriptor?.averageBlockDelay ?? 15) * scale * 1000
     }
     getTransactionSignature(chainId?: ChainId, transaction?: Transaction | undefined): string | undefined {
         return
@@ -61,13 +64,12 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transac
     isZeroAddress(address?: string): boolean {
         throw new Error('Method not implemented.')
     }
-
     isNativeTokenAddress(address?: string): boolean {
         throw new Error('Method not implemented.')
     }
-
     isValidChain(chainId: ChainId, testnet = false): boolean {
-        return this.options.chainDescriptors.find((x) => x.chainId === chainId)?.network === 'mainnet' || testnet
+        const descriptor = this.options.chainDescriptors.find((x) => x.chainId === chainId)
+        return descriptor?.network === 'mainnet' || testnet
     }
     isValidDomain(domain: string): boolean {
         throw new Error('Method not implemented.')

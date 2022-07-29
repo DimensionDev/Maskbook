@@ -10,6 +10,9 @@ import {
     ProviderType,
     Web3Provider,
     Web3,
+    getDefaultChainId,
+    getDefaultNetworkType,
+    getDefaultProviderType,
 } from '@masknet/web3-shared-solana'
 import { Providers } from './Connection/provider'
 
@@ -19,9 +22,9 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
             isSameAddress,
             isValidChainId,
             isValidAddress,
-            getDefaultChainId: () => ChainId.Mainnet,
-            getDefaultProviderType: () => ProviderType.None,
-            getDefaultNetworkType: () => NetworkType.Solana,
+            getDefaultChainId,
+            getDefaultNetworkType,
+            getDefaultProviderType,
             getNetworkTypeFromChainId: (chainId: ChainId) =>
                 chainResolver.chainNetworkType(chainId) ?? NetworkType.Solana,
         })
