@@ -1,14 +1,7 @@
 import { clone, first } from 'lodash-unified'
 import type { Subscription } from 'use-subscription'
 import { delay } from '@dimensiondev/kit'
-import {
-    EnhanceableSite,
-    ExtensionSite,
-    getSiteType,
-    mapSubscription,
-    mergeSubscription,
-    StorageObject,
-} from '@masknet/shared-base'
+import { getSiteType, mapSubscription, mergeSubscription, StorageObject } from '@masknet/shared-base'
 import type { Account, WalletProvider, ProviderState as Web3ProviderState } from '@masknet/web3-shared-base'
 import type { Plugin } from '../types'
 
