@@ -6,7 +6,7 @@ export const cloneIntoContent = <T>(obj: T) => {
         if ($.exportFunction) return $.exportFunction(obj, $Content.window)
         return obj
     } else {
-        if ($.cloneInto) return $.cloneInto(obj, $Content.window)
+        if ($.cloneInto) return $.cloneInto(obj, $Content.window, { cloneFunctions: true })
         return obj
     }
 }
