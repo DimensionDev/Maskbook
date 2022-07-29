@@ -10,7 +10,7 @@ import CHAINS from './chains.json'
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types'
 import { getTokenConstant } from './constants'
 import { ZERO_ADDRESS } from './primitives'
-import { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
+import { EnhanceableSite, ExtensionSite, isFirefox } from '@masknet/shared-base'
 
 const PLUGIN_ID = NetworkPluginID.PLUGIN_EVM
 
@@ -352,9 +352,9 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
         name: 'Fortmatic',
         icon: new URL('../assets/fortmatic.png', import.meta.url),
         enableRequirements: {
-            supportedChainIds: [ChainId.Mainnet, ChainId.BSC],
-            supportedEnhanceableSites: getEnumAsArray(EnhanceableSite).map((x) => x.value),
-            supportedExtensionSites: getEnumAsArray(ExtensionSite).map((x) => x.value),
+            supportedChainIds: isFirefox() ? [] : [ChainId.Mainnet, ChainId.BSC],
+            supportedEnhanceableSites: isFirefox() ? [] : getEnumAsArray(EnhanceableSite).map((x) => x.value),
+            supportedExtensionSites: isFirefox() ? [] : getEnumAsArray(ExtensionSite).map((x) => x.value),
         },
         homeLink: 'https://fortmatic.com',
         shortenLink: 'fortmatic.com',
