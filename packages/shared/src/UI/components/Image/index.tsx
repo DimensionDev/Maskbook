@@ -16,19 +16,19 @@ export function Image(props: ImageProps) {
         theme.palette.mode === 'dark'
             ? new URL('./mask_dark.png', import.meta.url)
             : new URL('./mask_light.png', import.meta.url)
-
     const { loading, value } = useAsync(async () => {
         if (!props.src) return
-        const data = await globalThis.r2d2Fetch(props.src)
+        const data = await globalThis.r2d2Fetch(`https://cors.r2d2.to?${props.src}`)
         return URL.createObjectURL(await data.blob())
     }, [props.src])
 
     return (
         <>
             {loading ? (
-                <CircularProgress size="small" />
+                <CircularProgress style={{ width: 24, height: 24 }} />
             ) : (
                 <img
+                    crossOrigin="anonymous"
                     {...props}
                     src={value ?? props.src}
                     onError={(event) => {

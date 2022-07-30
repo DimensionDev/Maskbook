@@ -2,7 +2,7 @@ import { DialogContent, Card, Grid, Alert, Box, Typography, Button } from '@mui/
 import { makeStyles } from '@masknet/theme'
 import { useContext, useEffect, useState } from 'react'
 import { useI18N } from '../../../utils'
-import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
+import { InjectedDialog, InjectedDialogProps, Image } from '@masknet/shared'
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { fetchConst, fetchUserParticipatedStoryStatus } from '../Worker/apis'
 import type { UserStoryStatus, FindTrumanConst } from '../types'
@@ -85,7 +85,7 @@ const FindTrumanDialog: React.FC<Props> = (props) => {
             <Card className={classes.card} variant="outlined">
                 <Grid container rowSpacing={0} columnSpacing={2}>
                     <Grid item xs={5}>
-                        <img src={img} className={classes.media} />
+                        <Image src={img} className={classes.media} />
                     </Grid>
                     <Grid item xs={7}>
                         <Box sx={{ padding: '0 12px' }}>
