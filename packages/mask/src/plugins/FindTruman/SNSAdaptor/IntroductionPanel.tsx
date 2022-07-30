@@ -1,9 +1,9 @@
 import { makeStyles } from '@masknet/theme'
-import { Avatar, Box, Button, CardMedia, Chip, Divider, Link, Typography } from '@mui/material'
+import { Avatar, Box, Button, Chip, Divider, Link, Typography } from '@mui/material'
 import { ArrowForwardRounded } from '@mui/icons-material'
 import { useContext } from 'react'
 import { FindTrumanContext } from '../context'
-import { Image } from './Image'
+import { Image } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     section: {},

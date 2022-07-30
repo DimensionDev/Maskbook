@@ -2,14 +2,14 @@ import { DialogContent, Card, Grid, Alert, Box, Typography, Button } from '@mui/
 import { makeStyles } from '@masknet/theme'
 import { useContext, useEffect, useState } from 'react'
 import { useI18N } from '../../../utils'
-import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
+import { InjectedDialog, InjectedDialogProps, Image } from '@masknet/shared'
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { fetchConst, fetchUserParticipatedStoryStatus } from '../Worker/apis'
 import type { UserStoryStatus, FindTrumanConst } from '../types'
 import { BorderLinearProgress } from './ResultCard'
 import { FindTruman_Const } from '../constants'
 import { FindTrumanContext } from '../context'
-import { Image } from './Image'
+
 interface Props extends InjectedDialogProps {
     onClose: () => void
 }

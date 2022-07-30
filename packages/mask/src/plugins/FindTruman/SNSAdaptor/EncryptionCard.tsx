@@ -7,7 +7,7 @@ import { useAsync } from 'react-use'
 import FlipCard from './FlipCard'
 import type { ClueCondition } from '../types'
 import { ClueConditionType } from '../types'
-import { Image } from './Image'
+import { Image } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => {
     return {

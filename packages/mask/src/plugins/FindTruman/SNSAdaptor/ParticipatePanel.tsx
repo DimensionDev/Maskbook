@@ -6,7 +6,7 @@ import { Box, Button, Card, DialogActions, DialogContent, Typography } from '@mu
 import { TabContext, TabPanel } from '@mui/lab'
 import StageCard from './StageCard'
 import { useControlledDialog } from '../../../utils'
-import { InjectedDialog } from '@masknet/shared'
+import { InjectedDialog, Image } from '@masknet/shared'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import OptionsCard from './OptionsCard'
 import ResultCard from './ResultCard'
@@ -23,7 +23,6 @@ import { FindTrumanContext } from '../context'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { useTabsStyles } from './FindTrumanDialog'
 import CompletionCard from './CompletionCard'
-import { Image } from './Image'
 
 const useStyles = makeStyles()((theme, props) => ({
     panel: {},
