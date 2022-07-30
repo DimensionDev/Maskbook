@@ -69,6 +69,7 @@ export enum SourceType {
     NFTScan = 'NFTScan',
     Alchemy_EVM = 'Alchemy_EVM',
     Alchemy_FLOW = 'Alchemy_FLOW',
+    X2Y2 = 'X2Y2',
 
     // Rarity
     RaritySniper = 'RaritySniper',
