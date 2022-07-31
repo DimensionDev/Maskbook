@@ -1,4 +1,5 @@
 import type { TransactionContext } from '@masknet/web3-shared-base'
+import { i18NextInstance } from '@masknet/shared-base'
 import type { ChainId, TransactionParameter } from '@masknet/web3-shared-evm'
 import { Web3StateSettings } from '../../../settings'
 import { getTokenAmountDescription } from '../utils'
@@ -9,15 +10,20 @@ export class TransferTokenDescriptor {
             chainId: context.chainId,
         })
 
+        const token = await connection?.getFungibleToken(context.to ?? '', {
+            chainId: context.chainId,
+        })
+
         return {
             chainId: context.chainId,
-            title: 'Transfer',
-            description: `Send token -${getTokenAmountDescription(
-                context.value,
-                await connection?.getNativeToken({
-                    chainId: context.chainId,
-                }),
-            )}`,
+            title: i18NextInstance.t('plugin_infra_descriptor_token_transfer_title'),
+            description: i18NextInstance.t('plugin_infra_descriptor_token_transfer', {
+                symbol: token?.symbol,
+            }),
+            successfulDescription: i18NextInstance.t('plugin_infra_descriptor_token_transfer_success', {
+                tokenAmountDescription: getTokenAmountDescription(context.value, token),
+            }),
+            failedDescription: i18NextInstance.t('plugin_infra_descriptor_token_transfer_fail'),
         }
     }
 }

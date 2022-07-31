@@ -31,11 +31,9 @@ import {
 } from '@masknet/shared'
 import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider'
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginWalletStatusBar, useI18N } from '../../../utils'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import { PluginTraderMessages } from '../../Trader/messages'
 import { ProtocolType, SavingsProtocol, TabType } from '../types'
 import { useStyles } from './SavingsFormStyles'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
@@ -69,8 +67,6 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
     const [estimatedGas, setEstimatedGas] = useState<BigNumber.Value>(ZERO)
 
     const { value: nativeTokenBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, '', { chainId })
-
-    const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
     // #region form variables
     const { value: inputTokenBalance } = useFungibleTokenBalance(

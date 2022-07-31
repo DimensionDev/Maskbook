@@ -1,3 +1,4 @@
+import { i18NextInstance } from '@masknet/shared-base'
 import { TransactionContext, isZero } from '@masknet/web3-shared-base'
 import type { ChainId, TransactionParameter } from '@masknet/web3-shared-evm'
 import type { TransactionDescriptor } from '../types'
@@ -18,40 +19,48 @@ export class ERC20Descriptor implements TransactionDescriptor {
             switch (method.name) {
                 case 'approve':
                     if (parameters?.spender === undefined || parameters?.value === undefined) break
-
+                    const token = await connection?.getFungibleToken(context.to ?? '', {
+                        chainId: context.chainId,
+                    })
                     if (isZero(parameters?.value)) {
                         return {
                             chainId: context.chainId,
-                            title: 'Revoke',
-                            description: 'Revoke the approval for the token.',
-                            successfulDescription: 'Revoke the approval successfully.',
-                            failedDescription: 'Revoke requestion rejected.',
+                            title: i18NextInstance.t('plugin_infra_descriptor_token_revoke_title'),
+                            description: i18NextInstance.t('plugin_infra_descriptor_token_revoke', {
+                                symbol: token?.symbol ?? 'token',
+                            }),
+                            successfulDescription: i18NextInstance.t('plugin_infra_descriptor_token_revoke_success'),
+                            failedDescription: i18NextInstance.t('plugin_infra_descriptor_token_revoke_fail'),
                         }
                     }
 
                     return {
                         chainId: context.chainId,
-                        title: 'Approve',
-                        description: `Approve spend ${getTokenAmountDescription(
-                            parameters?.value,
-                            await connection?.getFungibleToken(context.to ?? '', {
-                                chainId: context.chainId,
-                            }),
-                        )}`,
+                        title: i18NextInstance.t('plugin_infra_descriptor_token_approve_title'),
+                        description: i18NextInstance.t('plugin_infra_descriptor_token_approve', {
+                            tokenAmountDescription: getTokenAmountDescription(parameters?.value, token),
+                        }),
+                        successfulDescription: i18NextInstance.t('plugin_infra_descriptor_token_approve_success', {
+                            tokenAmountDescription: getTokenAmountDescription(parameters?.value, token),
+                        }),
+                        failedDescription: i18NextInstance.t('plugin_infra_descriptor_token_fail'),
                     }
             }
 
             if ((method.name === 'transfer' || method.name === 'transferFrom') && parameters?.to && parameters?.value) {
+                const token = await connection?.getFungibleToken(context.to ?? '', {
+                    chainId: context.chainId,
+                })
                 return {
                     chainId: context.chainId,
-                    title: 'Transfer Token',
-                    description: `Transfer token ${getTokenAmountDescription(
-                        parameters?.value,
-                        await connection?.getFungibleToken(context.to ?? '', {
-                            chainId: context.chainId,
-                        }),
-                        true,
-                    )}`,
+                    title: i18NextInstance.t('plugin_infra_descriptor_token_transfer_title'),
+                    description: i18NextInstance.t('plugin_infra_descriptor_token_transfer', {
+                        symbol: token?.symbol,
+                    }),
+                    successfulDescription: i18NextInstance.t('plugin_infra_descriptor_token_transfer_success', {
+                        tokenAmountDescription: getTokenAmountDescription(parameters?.value, token),
+                    }),
+                    failedDescription: i18NextInstance.t('plugin_infra_descriptor_token_transfer_fail'),
                 }
             }
         }

@@ -31,5 +31,6 @@ export interface TransactionComputationContext {
 export interface TransactionDescriptor {
     compute: (
         context: TransactionContext<ChainId, TransactionParameter>,
+        txHash?: string,
     ) => Promise<Omit<TransactionDescriptorBase<ChainId, Transaction>, 'type' | '_tx'> | undefined>
 }

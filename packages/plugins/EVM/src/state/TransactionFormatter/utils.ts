@@ -1,14 +1,45 @@
 import { FungibleToken, scale10, formatBalance } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { decodeEvents, createContract } from '@masknet/web3-shared-evm'
+import { Web3StateSettings } from '../../settings'
+import BigNumber from 'bignumber.js'
+import type { AbiItem } from 'web3-utils'
 
-export function getTokenAmountDescription(
-    amount = '0',
-    token?: FungibleToken<ChainId, SchemaType>,
-    negative?: boolean,
-) {
-    const symbol = negative ? '- ' : ''
+export function getTokenAmountDescription(amount = '0', token?: FungibleToken<ChainId, SchemaType>) {
+    if (new BigNumber(amount).isLessThan(new BigNumber('0.000001'))) {
+        return `<0.000001 ${token?.symbol?.trim()}`
+    }
     const value = scale10(1, 9 + (token?.decimals ?? 18)).isGreaterThanOrEqualTo(amount)
         ? formatBalance(amount, token?.decimals ?? 0, 4)
         : 'infinite'
-    return `${symbol}${value} ${token?.symbol?.trim()}`
+    return `${value} ${token?.symbol?.trim()}`
+}
+
+export class DescriptorWithTransactionReceipt {
+    async getReceipt(
+        chainId: ChainId,
+        contractAddress: string | undefined,
+        abi: AbiItem[] | undefined,
+        hash: string | undefined,
+    ) {
+        const connection = await Web3StateSettings.value.Connection?.getConnection?.({
+            chainId,
+        })
+
+        const web3 = await Web3StateSettings.value.Connection?.getWeb3?.({
+            chainId,
+        })
+
+        if (!connection || !web3 || !hash || !contractAddress || !abi) return
+
+        const receipt = await connection.getTransactionReceipt(hash)
+
+        if (!receipt) return
+
+        const contract = createContract(web3, contractAddress, abi)
+
+        if (!contract) return
+
+        return decodeEvents(web3, contract.options.jsonInterface, receipt)
+    }
 }

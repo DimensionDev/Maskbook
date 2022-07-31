@@ -16,7 +16,6 @@ import {
     formatBalance,
     FungibleToken,
 } from '@masknet/web3-shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Box, Card, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
@@ -30,7 +29,6 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { getAssetAsBlobURL, getTextUILength, useI18N } from '../../../utils'
-import { WalletMessages } from '../../Wallet/messages'
 import { ITO_EXCHANGE_RATION_MAX, MSG_DELIMITER, TIME_WAIT_BLOCKCHAIN } from '../constants'
 import { sortTokens } from './helpers'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
@@ -295,12 +293,6 @@ export function ITO(props: ITO_Props) {
 
     const isAccountSeller = isSameAddress(payload.seller.address, account) && chainId === payload.chain_id
     const noRemain = total_remaining.isZero()
-
-    // #region remote controlled select provider dialog
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
-    // #endregion
 
     // #region buy info
     const { value: tradeInfo, loading: loadingTradeInfo, retry: retryPoolTradeInfo } = usePoolTradeInfo(pid, account)
