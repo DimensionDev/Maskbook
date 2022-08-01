@@ -5,7 +5,7 @@ import { ROOT_PATH, task } from '../utils/index.js'
 import { codegen } from '../codegen/index.js'
 import { fileURLToPath } from 'url'
 
-const BUILD_PATH = new URL('build', ROOT_PATH)
+const BUILD_PATH = new URL('build/', ROOT_PATH)
 export const ciBuild = series(
     printBranchName,
     codegen,

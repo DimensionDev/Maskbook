@@ -76,7 +76,7 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
     // Copy package template
     if (type === 'plugin') {
         // cp -r packages/plugins/template packages/plugins/NEW_PLUGIN
-        await copy(fileURLToPath(new URL('packages/plugins/template', ROOT_PATH)), packagePath, {
+        await copy(fileURLToPath(new URL('packages/plugins/template/', ROOT_PATH)), packagePath, {
             filter: (src) => {
                 if (src.includes('node_modules') || src.includes('dist')) return false
                 return true
@@ -84,7 +84,7 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
         })
     } else {
         // cp -r packages/empty packages/NEW_PACKAGE
-        await copy(fileURLToPath(new URL('packages/empty', ROOT_PATH)), packagePath, {
+        await copy(fileURLToPath(new URL('packages/empty/', ROOT_PATH)), packagePath, {
             filter: (src) => {
                 if (src.includes('node_modules') || src.includes('dist')) return false
                 return true

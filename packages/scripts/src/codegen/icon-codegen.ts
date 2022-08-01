@@ -2,13 +2,13 @@ import { readFile, writeFile } from 'fs/promises'
 import { watch } from 'gulp'
 import { camelCase, snakeCase, upperFirst } from 'lodash-unified'
 import { parse as parsePath } from 'path'
-import { ROOT_PATH, watchTask } from '../utils/index.js'
+import { PKG_PATH, ROOT_PATH, watchTask } from '../utils/index.js'
 import type { Position } from 'source-map'
 import { fileURLToPath } from 'url'
 
 const pattern = 'packages/icons/**/*.@(svg|jpe?g|png)'
-const iconRoot = new URL('../../../icons', import.meta.url)
-const CODE_FILE = new URL('./icon-generated-as', iconRoot)
+const iconRoot = new URL('icons/', PKG_PATH)
+const CODE_FILE = fileURLToPath(new URL('icon-generated-as', iconRoot))
 
 const currentColorRe = /\w=('|")currentColor\1/
 
@@ -189,7 +189,7 @@ function createImage(x: string) {
     // Cannot render images in JSDoc in VSCode by relative path
     // Blocked by: https://github.com/microsoft/TypeScript/issues/47718
     //             https://github.com/microsoft/vscode/issues/86564
-    const absolutePath = new URL(x, new URL('./packages/icons/', ROOT_PATH))
+    const absolutePath = new URL(x, iconRoot)
     return `[${x}](${absolutePath}) ![${x}](${absolutePath})`
 }
 
