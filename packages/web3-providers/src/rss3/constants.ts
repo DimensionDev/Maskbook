@@ -17,6 +17,15 @@ export const CollectionType = {
     footprint: /Mirror.XYZ|xDai.POAP/,
 }
 
+export enum TAG {
+    NFT = 'NFT',
+    Token = 'Token',
+    POAP = 'POAP',
+    Gitcoin = 'Gitcoin',
+    Mirror = 'Mirror Entry',
+    ETH = 'ETH',
+}
+
 export enum NETWORK {
     ethereum = 'ethereum',
     ethereum_classic = 'ethereum_classic',

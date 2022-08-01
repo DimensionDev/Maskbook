@@ -141,6 +141,7 @@ export function useCurrentVisitingSocialIdentity() {
         )
         return {
             ...identity,
+            isOwner: isOwnerIdentity,
             publicKey: isOwnerIdentity ? persona?.identifier.publicKeyAsHex : first(sortedBindings)?.persona,
             hasBinding: !!bindings?.find((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()),
         }

@@ -222,7 +222,6 @@ export function NextIdPage({ persona }: NextIdPageProps) {
 
     const handleAddWallets = () => {
         Services.Helper.openPopupWindow(PopupRoutes.ConnectedWallets, {
-            chainId,
             internal: true,
         })
     }

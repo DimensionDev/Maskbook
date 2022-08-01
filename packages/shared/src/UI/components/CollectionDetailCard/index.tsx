@@ -231,9 +231,7 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                     <Typography fontSize="16px" fontWeight={700} marginTop="16px">
                         {t.description()}
                     </Typography>
-                    <div style={{ display: '-webkit-box' }} className={classes.threeLine}>
-                        {description}
-                    </div>
+                    <div className={classes.threeLine}>{description}</div>
 
                     {type === CollectionType.donations ? (
                         <>

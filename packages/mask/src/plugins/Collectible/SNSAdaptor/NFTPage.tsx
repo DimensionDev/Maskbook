@@ -5,13 +5,18 @@ import { useCurrentVisitingProfile } from '../hooks/useContext'
 export interface NFTPageProps {
     identity?: SocialIdentity
     socialAddress?: SocialAddress<NetworkPluginID>
-    persona?: string
 }
 
-export function NFTPage({ socialAddress, persona }: NFTPageProps) {
+export function NFTPage({ socialAddress, identity }: NFTPageProps) {
     const currentVisitingProfile = useCurrentVisitingProfile()
 
     if (!socialAddress) return null
 
-    return <CollectionList addressName={socialAddress} persona={persona} visitingProfile={currentVisitingProfile} />
+    return (
+        <CollectionList
+            addressName={socialAddress}
+            persona={identity?.publicKey}
+            visitingProfile={currentVisitingProfile}
+        />
+    )
 }
