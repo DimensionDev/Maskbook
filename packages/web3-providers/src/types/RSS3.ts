@@ -140,7 +140,7 @@ export namespace RSS3BaseAPI {
         title?: string
         description?: string
         actions?: Action[]
-        tokenAmount?: BigNumber
+        tokenAmount?: BigNumber.Value
         tokenSymbol?: string
         location: string
     }
@@ -223,5 +223,6 @@ export namespace RSS3BaseAPI {
         getFootprints(address: string): Promise<Collection[] | undefined>
         getNameInfo(id: string): Promise<NameInfo | undefined>
         getProfileInfo(address: string): Promise<ProfileInfo | undefined>
+        getWeb3Feed(address: string, type: FeedType, option: HubOptions): Promise<Web3FeedResponse | undefined>
     }
 }

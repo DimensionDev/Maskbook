@@ -211,14 +211,14 @@ export function FeedCard({ feed, address, onSelect }: FeedCardProps) {
                 })
             }>
             <div>
-                <>
+                <Typography>
                     <span className={classes.action}>
                         <ReversedAddress isInline address={address!} /> {action}
                     </span>{' '}
                     <span className={classes.time}>
                         {formatDistanceToNow(new Date(feed.date_updated))} {t.ago()}
                     </span>
-                </>
+                </Typography>
                 <Box className={classes.collection}>
                     <Typography fontWeight={700} className={classes.summary}>
                         {feed.title ||

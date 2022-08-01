@@ -163,12 +163,12 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }, [retrySocialAddress])
 
     useEffect(() => {
-        socialAddressList.sort((a, z) => {
+        const sortedList = socialAddressList.slice(0).sort((a, z) => {
             if (a.type === SocialAddressType.NEXT_ID) return -1
             if (z.type === SocialAddressType.NEXT_ID) return 1
             return 0
         })
-        setSelectedAddress(first(socialAddressList))
+        setSelectedAddress(first(sortedList))
     }, [socialAddressList])
 
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
@@ -176,8 +176,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         return plugins
             .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
             .filter((x) => {
-                const shouldDisplay = x.Utils?.shouldDisplay?.(currentVisitingIdentity, selectedAddress)
-                return x.pluginID !== PluginId.NextID && (shouldDisplay === undefined || shouldDisplay === true)
+                const shouldDisplay = x.Utils?.shouldDisplay?.(currentVisitingIdentity, selectedAddress) ?? true
+                return x.pluginID !== PluginId.NextID && shouldDisplay
             })
             .sort((a, z) => {
                 // order those tabs from next id first
@@ -213,9 +213,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         (isWeb3ProfileDisable ||
             (isOwnerIdentity && !currentVisitingSocialIdentity?.hasBinding) ||
             (isOwnerIdentity &&
-                socialAddressList.findIndex(
-                    (address: { type: SocialAddressType }) => address.type === SocialAddressType.NEXT_ID,
-                )) === -1 ||
+                socialAddressList.findIndex((address) => address.type === SocialAddressType.NEXT_ID)) === -1 ||
             !socialAddressList?.length)
     )
 
@@ -289,7 +287,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                         selectedAddress?.type === SocialAddressType.ADDRESS ||
                                         selectedAddress?.type === SocialAddressType.NEXT_ID ? (
                                             <ReversedAddress
-                                                fontSize="18px"
+                                                TypographyProps={{ fontSize: '18px' }}
                                                 address={selectedAddress.address}
                                                 pluginId={selectedAddress.networkSupporterPluginID}
                                             />

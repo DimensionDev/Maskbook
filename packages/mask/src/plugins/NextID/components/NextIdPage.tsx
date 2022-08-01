@@ -142,7 +142,6 @@ export function NextIdPage({ persona }: NextIdPageProps) {
     const t = useI18N()
     const { classes } = useStyles()
 
-    const [description, setDescription] = useState('')
     const currentProfileIdentifier = useLastRecognizedIdentity()
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
     const personaConnectStatus = usePersonaConnectStatus()
@@ -156,7 +155,6 @@ export function NextIdPage({ persona }: NextIdPageProps) {
     const personaActionButton = useMemo(() => {
         if (!personaConnectStatus.action) return null
         const button = personaConnectStatus.hasPersona ? t.connect_persona() : t.create_persona()
-        setDescription(personaConnectStatus.hasPersona ? '' : t.create_persona_intro())
         const icon = personaConnectStatus.hasPersona ? (
             <Icons.Connect sx={{ marginRight: '8px' }} />
         ) : (
@@ -186,6 +184,19 @@ export function NextIdPage({ persona }: NextIdPageProps) {
             visitingPersonaIdentifier.identifier.userId?.toLowerCase(),
         )
     }, [publicKeyAsHex, visitingPersonaIdentifier, isVerified])
+
+    const description = useMemo(() => {
+        if (personaConnectStatus.action && !personaConnectStatus.hasPersona) {
+            return t.create_persona_intro()
+        }
+        if (!isOwn) {
+            return t.others_lack_wallet()
+        }
+        if (isAccountVerified) {
+            return t.add_wallet_intro()
+        }
+        return ''
+    }, [personaConnectStatus, isOwn, isAccountVerified, t])
 
     const isWeb3ProfileDisable = useIsMinimalMode(PluginId.Web3Profile)
 
@@ -218,7 +229,6 @@ export function NextIdPage({ persona }: NextIdPageProps) {
 
     const getButton = useMemo(() => {
         if (!isOwn) {
-            setDescription(t.others_lack_wallet())
             return
         }
         if (isWeb3ProfileDisable) {
@@ -240,7 +250,6 @@ export function NextIdPage({ persona }: NextIdPageProps) {
                 </Button>
             )
         }
-        setDescription(t.add_wallet_intro())
         return (
             <Button className={classes.button} variant="contained" onClick={handleAddWallets}>
                 <Icons.WalletUnderTabs size={16} className={classes.walletIcon} />
@@ -289,7 +298,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
                         </Link>
                     </div>
                 </Box>
-                <Box className={classes.content}>{description}</Box>
+                <Typography className={classes.content}>{description}</Typography>
                 <Stack justifyContent="center" direction="row">
                     {getButton}
                 </Stack>
