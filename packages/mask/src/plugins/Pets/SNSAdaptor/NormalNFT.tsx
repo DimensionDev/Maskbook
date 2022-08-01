@@ -7,7 +7,7 @@ import Drag from './Drag'
 import type { ShowMeta } from '../types'
 import { CloseIcon } from '../constants'
 import RightMenu from './RightMenu'
-import { Image } from '../../../components/shared/Image'
+import { Image } from '@masknet/shared'
 
 const useStyles = makeStyles()(() => ({
     imgContent: {

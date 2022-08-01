@@ -25,6 +25,8 @@ import { CoinMarketCapAPI } from './CoinMarketCap'
 import { UniSwapAPI } from './uniswap'
 import { RabbyAPI } from './rabby'
 import { GemAPI } from './gem'
+import { X2Y2API } from './x2y2'
+import { ChainbaseHistoryAPI, ChainbaseFungibleTokenAPI, ChainbaseNonFungibleTokenAPI } from './chainbase'
 
 export * from './helpers'
 export * from './types'
@@ -59,3 +61,7 @@ export const TokenView = new TokenViewAPI()
 export const CoinMarketCap = new CoinMarketCapAPI()
 export const UniSwap = new UniSwapAPI()
 export const Rabby = new RabbyAPI()
+export const X2Y2 = new X2Y2API()
+export const ChainbaseHistory = new ChainbaseHistoryAPI()
+export const ChainbaseFungibleToken = new ChainbaseFungibleTokenAPI()
+export const ChainbaseNonFungibleToken = new ChainbaseNonFungibleTokenAPI()

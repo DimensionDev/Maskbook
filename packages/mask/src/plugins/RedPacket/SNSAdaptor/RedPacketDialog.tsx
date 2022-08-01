@@ -33,19 +33,12 @@ const useStyles = makeStyles()((theme) => ({
         borderBottom: `1px solid ${theme.palette.divider}`,
     },
     dialogContent: {
-        minHeight: 305,
         padding: 0,
         '::-webkit-scrollbar': {
             display: 'none',
         },
 
         overflowX: 'hidden',
-    },
-    nftDialogContent: {
-        height: 305,
-    },
-    nftDialogContentLoaded: {
-        height: 620,
     },
     tabPaper: {
         position: 'sticky',
@@ -187,15 +180,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 onClose={() => (showHistory ? setShowHistory(false) : onBack())}
                 isOnBack={showHistory || step !== CreateRedPacketPageStep.NewRedPacketPage}
                 disableTitleBorder>
-                <DialogContent
-                    className={cx(
-                        classes.dialogContent,
-                        currentTab === 'collectibles'
-                            ? isNFTRedPacketLoaded
-                                ? classes.nftDialogContentLoaded
-                                : classes.nftDialogContent
-                            : '',
-                    )}>
+                <DialogContent className={classes.dialogContent}>
                     {step === CreateRedPacketPageStep.NewRedPacketPage ? (
                         <>
                             <div

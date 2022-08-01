@@ -104,7 +104,7 @@ class Hub implements EVM_Hub {
         chainId: ChainId,
         account: string,
         initial?: HubOptions<ChainId>,
-    ): Promise<Array<Transaction<ChainId, SchemaType>>> {
+    ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
         const options = this.getOptions(initial, {
             account,
             chainId,
