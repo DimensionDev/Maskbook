@@ -1,8 +1,8 @@
 #!/usr/bin/env ts-node
 import git from '@nice-labs/git-rev'
-import zip from 'gulp-zip'
+import * as WebExt from 'web-ext'
 import { extension as buildBaseVersion, ExtensionBuildArgs } from './normal'
-import { dest, src, series, parallel, TaskFunction } from 'gulp'
+import { series, parallel, TaskFunction } from 'gulp'
 import { BUILD_PATH, ROOT_PATH, task } from '../utils'
 import { codegen } from '../codegen'
 import path from 'path'
@@ -41,9 +41,12 @@ function buildTarget(name: string, options: ExtensionBuildArgs, outFile: string)
 }
 function zipTo(absBuildDir: string, fileName: string): TaskFunction {
     const f: TaskFunction = () =>
-        src(`./**/*`, { cwd: absBuildDir })
-            .pipe(zip(fileName))
-            .pipe(dest('./', { cwd: ROOT_PATH }))
+        WebExt.default.cmd.build({
+            sourceDir: absBuildDir,
+            artifactsDir: ROOT_PATH,
+            filename: fileName,
+            overwriteDest: true,
+        })
     f.displayName = `zip ${absBuildDir} into ${fileName}`
     return f
 }
