@@ -115,14 +115,16 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
         return createPageable(data, createIndicator(indicator))
     }
 
-    async getWeb3Feed(
-        address: string,
-        type?: RSS3BaseAPI.FeedType,
-        { networkPluginId = NetworkPluginID.PLUGIN_EVM }: HubOptions<ChainId> = {},
-    ) {
+    async getWeb3Feed(address: string, type?: RSS3BaseAPI.FeedType, networkPluginId = NetworkPluginID.PLUGIN_EVM) {
         if (!address) return
-        const url = `${RSS3_FEED_ENDPOINT}account:${address}@${NETWORK_PLUGIN[networkPluginId]}/notes?limit=100&exclude_tags=POAP&tags=Gitcoin&tags=POAP&tags=NFT&tags=Donation&latest=false`
-        const res = fetchJSON<RSS3BaseAPI.Web3FeedResponse>(url)
+        const url = urlcat(RSS3_FEED_ENDPOINT, 'account::address@:network/notes', {
+            address,
+            network: NETWORK_PLUGIN[networkPluginId],
+            limit: 100,
+            exclude_tags: TAG.POAP,
+            latest: false,
+        })
+        const res = fetchJSON<RSS3BaseAPI.Web3FeedResponse>(url + '&tags=Gitcoin&tags=POAP&tags=NFT&tags=Donation')
         return res
     }
 }
