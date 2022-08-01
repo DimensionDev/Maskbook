@@ -1,6 +1,7 @@
 import type { ButtonProps, SelectProps, TextFieldProps, TooltipProps, AlertProps } from '@mui/material'
 import type { ArgType, ArgTypes } from '@storybook/addons'
 import { argsOfArr, ControlType } from './args'
+import { SnackbarProviderProps } from 'notistack'
 function enumIn<T>(enums: {
     [Prop in keyof T]?: (
         argsFromEnum: (enumString: Array<NonNullable<T[Prop]>>, type?: ControlType) => ArgType,
@@ -50,6 +51,11 @@ export const MuiArgs = {
         icon: { type: 'boolean' },
         ...enumIn<AlertProps>({
             severity: (e) => e(['error', 'warning', 'info', 'success']),
+        }),
+    },
+    snackbar: {
+        ...enumIn<SnackbarProviderProps>({
+            variant: (e) => e(['default', 'warning', 'info', 'success', 'error']),
         }),
     },
 }
