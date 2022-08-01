@@ -1,5 +1,6 @@
 import type { BindingProof, NextIDPlatform, ProfileInformation } from '@masknet/shared-base'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 export interface GeneralAsset {
     platform: string
@@ -53,6 +54,7 @@ export interface CollectionTypes {
     iconURL?: string
     hidden?: boolean
     name?: string
+    chainId?: ChainId
 }
 
 export interface Collection {

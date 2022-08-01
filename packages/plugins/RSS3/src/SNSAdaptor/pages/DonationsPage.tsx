@@ -1,20 +1,13 @@
+import { CollectionDetailCard } from '@masknet/shared'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { List, ListItem } from '@mui/material'
-import urlcat from 'urlcat'
-import { RSS3_DEFAULT_IMAGE } from '../../constants'
+import type { RSS3BaseAPI } from '@masknet/web3-providers'
+import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
+import { Box, List, ListItem } from '@mui/material'
+import { useState } from 'react'
+import { CollectionType } from '../../constants'
 import { useI18N } from '../../locales'
-import type { GeneralAsset, GeneralAssetWithTags } from '../../types'
 import { DonationCard, StatusBox } from '../components'
-
-const getDonationLink = (label: string, donation: GeneralAssetWithTags) => {
-    const { platform, identity, id, type } = donation
-    return urlcat(`https://${label}.bio/singlegitcoin/:platform/:identity/:id/:type`, {
-        platform,
-        identity,
-        id,
-        type: type.replaceAll('-', '.'),
-    })
-}
 
 const useStyles = makeStyles()((theme) => ({
     statusBox: {
@@ -25,7 +18,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     list: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(2, 1fr)',
+        gridTemplateColumns: 'repeat(1, 1fr)',
         gridGap: theme.spacing(2),
     },
     listItem: {
@@ -48,31 +41,47 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface DonationPageProps {
-    donations?: GeneralAsset[]
+    donations?: RSS3BaseAPI.Collection[]
     loading?: boolean
-    addressLabel: string
+    address: SocialAddress<NetworkPluginID>
 }
 
-export function DonationPage({ donations = [], loading, addressLabel }: DonationPageProps) {
+export function DonationPage({ donations = EMPTY_LIST, loading, address }: DonationPageProps) {
     const { classes } = useStyles()
     const t = useI18N()
 
+    const [selectedDonation, setSelectedDonation] = useState<RSS3BaseAPI.Collection | undefined>()
+
     if (loading || !donations.length) {
-        return <StatusBox loading={loading} empty={!donations.length} />
+        return <StatusBox loading={loading} description={t.no_Donation_found()} empty={!donations.length} />
     }
     return (
-        <List className={classes.list}>
-            {donations.map((donation) => (
-                <ListItem key={donation.id} className={classes.listItem}>
-                    <DonationCard
-                        className={classes.donationCard}
-                        imageUrl={donation.info.image_preview_url || RSS3_DEFAULT_IMAGE}
-                        name={donation.info.title || t.inactive_project()}
-                        contribCount={donation.info.total_contribs || 0}
-                        contribDetails={donation.info.token_contribs || []}
-                    />
-                </ListItem>
-            ))}
-        </List>
+        <Box margin="16px 0 0 16px">
+            <List className={classes.list}>
+                {donations.map((donation) => (
+                    <ListItem key={donation.id} className={classes.listItem}>
+                        <DonationCard
+                            onSelect={() => setSelectedDonation(donation)}
+                            className={classes.donationCard}
+                            donation={donation}
+                            address={address}
+                        />
+                    </ListItem>
+                ))}
+            </List>
+            <CollectionDetailCard
+                open={Boolean(selectedDonation)}
+                onClose={() => setSelectedDonation(undefined)}
+                img={selectedDonation?.imageURL}
+                title={selectedDonation?.title}
+                referenceURL={selectedDonation?.actions?.[0]?.related_urls?.[0]}
+                description={selectedDonation?.description}
+                type={CollectionType.donations}
+                time={selectedDonation?.timestamp}
+                tokenSymbol={selectedDonation?.tokenSymbol}
+                tokenAmount={selectedDonation?.tokenAmount?.toString()}
+                hash={selectedDonation?.hash}
+            />
+        </Box>
     )
 }

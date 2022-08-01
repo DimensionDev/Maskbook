@@ -70,6 +70,7 @@ export enum SourceType {
     Alchemy_EVM = 'Alchemy_EVM',
     Alchemy_FLOW = 'Alchemy_FLOW',
     Chainbase = 'Chainbase',
+    X2Y2 = 'X2Y2',
 
     // Rarity
     RaritySniper = 'RaritySniper',
@@ -131,6 +132,8 @@ export interface SocialIdentity {
     hasBinding?: boolean
     /** The public key of persona in hex */
     publicKey?: string
+    /** Is own user account identity */
+    isOwner?: boolean
 }
 
 export interface SocialAddress<PluginID> {

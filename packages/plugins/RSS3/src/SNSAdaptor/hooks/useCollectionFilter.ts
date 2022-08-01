@@ -1,13 +1,14 @@
 import { IdentityResolved, PluginId } from '@masknet/plugin-infra'
 import { NextIDPlatform } from '@masknet/shared-base'
+import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
 import { useMemo } from 'react'
-import type { CollectionType, GeneralAsset, Proof } from '../../types'
+import type { CollectionType, Proof } from '../../types'
 
 export const useCollectionFilter = (
     hiddenInfo: Proof[],
-    collections: GeneralAsset[],
     type: CollectionType,
+    collections?: RSS3BaseAPI.Collection[],
     currentVisitingProfile?: IdentityResolved,
     address?: SocialAddress<NetworkPluginID>,
 ) => {
