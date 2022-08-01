@@ -1,3 +1,5 @@
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type BigNumber from 'bignumber.js'
 import type RSS3 from 'rss3-next'
 
 export namespace RSS3BaseAPI {
@@ -41,7 +43,7 @@ export namespace RSS3BaseAPI {
     }
 
     export interface Token {
-        name: string
+        name?: string
         image?: string
         value?: string
         symbol?: string
@@ -56,6 +58,12 @@ export namespace RSS3BaseAPI {
         platform?: PLATFORM
         description?: string
         image?: string
+        attributes?: Array<{
+            value: string
+            trait_type: string
+        }>
+        standard?: string
+        name?: string
     }
 
     export interface Action {
@@ -131,7 +139,14 @@ export namespace RSS3BaseAPI {
         id: string
         imageURL?: string
         title?: string
+        description?: string
+        actions?: Action[]
+        tokenAmount?: BigNumber.Value
+        tokenSymbol?: string
+        location: string
     }
+
+    export type FeedType = 'Token' | 'Donation' | 'NFT'
 
     export enum AssetType {
         GitcoinDonation = 'Gitcoin-Donation',
@@ -139,10 +154,66 @@ export namespace RSS3BaseAPI {
         NFT = 'NFT',
     }
 
+    export type Tag = 'NFT' | 'Token' | 'POAP' | 'Gitcoin' | 'Mirror Entry' | 'ETH'
+
     export interface NameInfo {
         rnsName: string
         ensName: string | null
         address: string
+    }
+
+    export interface Metadata {
+        collection_address?: string
+        collection_name?: string
+        contract_type?: string
+        from?: string
+        log_index?: string
+        network?: 'polygon' | 'ethereum' | 'bnb'
+        proof?: string
+        to?: string
+        token_id?: string
+        token_standard?: string
+        token_symbol?: string
+        token_address?: string
+    }
+
+    export interface Attachment {
+        address?: string
+        mime_type?: string
+        size_in_bytes?: string
+        type?: string
+    }
+
+    export interface Web3Feed {
+        attachments?: Attachment[]
+        authors: string[]
+        /* cspell:disable-next-line */
+        backlinks: string
+        date_created: string
+        date_updated: string
+        identifier: string
+        links: string
+        related_urls?: string[]
+        // this field works different from API doc
+        source: string
+        tags: Tag[]
+        summary?: string
+        title?: string
+        metadata?: Metadata
+        imageURL?: string
+        traits?: Array<{
+            type: string
+            value: string
+        }>
+    }
+
+    export interface Web3FeedResponse {
+        version: string
+        date_updated: string
+        identifier: string
+        identifier_next?: string
+        total: string
+        list: Web3Feed[]
     }
 
     export interface Provider {
@@ -153,5 +224,10 @@ export namespace RSS3BaseAPI {
         getFootprints(address: string): Promise<Collection[] | undefined>
         getNameInfo(id: string): Promise<NameInfo | undefined>
         getProfileInfo(address: string): Promise<ProfileInfo | undefined>
+        getWeb3Feed(
+            address: string,
+            type?: FeedType,
+            networkPluginId?: NetworkPluginID,
+        ): Promise<Web3FeedResponse | undefined>
     }
 }

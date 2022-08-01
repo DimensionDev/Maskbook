@@ -130,6 +130,8 @@ export interface SocialIdentity {
     hasBinding?: boolean
     /** The public key of persona in hex */
     publicKey?: string
+    /** Is own user account identity */
+    isOwner?: boolean
 }
 
 export interface SocialAddress<PluginID> {

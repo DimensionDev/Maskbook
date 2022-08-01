@@ -9,6 +9,8 @@ import { ChainId, explorerResolver, NETWORK_DESCRIPTORS } from '@masknet/web3-sh
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Empty } from './Empty'
 import { CollectionList } from './CollectionList'
+import { useMemo, useState } from 'react'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -32,10 +34,14 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             // overflow: 'hidden',
             padding: 0,
-            flexDirection: 'column',
+            width: 126,
+            height: 126,
             borderRadius: 12,
             userSelect: 'none',
             lineHeight: 0,
+            '&:nth-last-child(-n+4)': {
+                marginBottom: 0,
+            },
         },
         link: {
             cursor: 'pointer',
@@ -62,17 +68,38 @@ const useStyles = makeStyles()((theme) => {
         },
         list: {
             gridRowGap: 16,
-            gridColumnGap: 14,
+            gridColumnGap: 20,
             display: 'grid',
             justifyItems: 'center',
             gridTemplateColumns: 'repeat(4, 1fr)',
-            paddingBottom: '20px',
         },
         listBox: {
             display: 'flex',
             flexWrap: 'wrap',
-            height: 298,
-            overflow: 'hidden',
+            minHeight: 298,
+            justifyContent: 'center',
+        },
+        loadIcon: {
+            width: 82,
+            height: 32,
+            borderRadius: 99,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: theme.palette.maskColor.thirdMain,
+            fontSize: 12,
+            fontWeight: 700,
+            marginTop: 4,
+            cursor: 'pointer',
+        },
+        arrowUp: {
+            cursor: 'pointer',
+            color: theme.palette.maskColor.second,
+            marginRight: 10,
+        },
+        rightIcons: {
+            display: 'flex',
+            alignItems: 'center',
         },
     }
 })
@@ -84,14 +111,48 @@ export interface WalletAssetsCardProps extends withClasses<never | 'root'> {
     collectionList?: CollectionTypes[]
 }
 
+const enum LOAD_STATUS {
+    Unnecessary = 1,
+    Necessary = 2,
+    Finish = 3,
+}
+
 export function WalletAssetsCard(props: WalletAssetsCardProps) {
     const { address, onSetting, collectionList } = props
     const t = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const chainId = ChainId.Mainnet
+
+    const [loadStatus, setLoadStatus] = useState(
+        collectionList && collectionList?.filter((collection) => !collection?.hidden)?.length > 8
+            ? LOAD_STATUS.Necessary
+            : LOAD_STATUS.Unnecessary,
+    )
+
     const { Others } = useWeb3State(address?.platform ?? NetworkPluginID.PLUGIN_EVM)
 
     const iconURL = NETWORK_DESCRIPTORS.find((network) => network?.chainId === ChainId.Mainnet)?.icon
+
+    const collections = useMemo(() => {
+        const filterCollections = collectionList?.filter((collection) => !collection?.hidden)
+        if (!filterCollections || filterCollections?.length === 0) {
+            return EMPTY_LIST
+        }
+        if (filterCollections?.length > 8 && loadStatus !== LOAD_STATUS.Finish) {
+            return filterCollections?.slice(0, 8)
+        }
+        return filterCollections
+    }, [loadStatus, collectionList])
+
+    const loadIcon = useMemo(() => {
+        if (loadStatus === LOAD_STATUS.Necessary)
+            return (
+                <Box onClick={() => setLoadStatus(LOAD_STATUS.Finish)} className={classes.loadIcon}>
+                    {t.load_more()}
+                </Box>
+            )
+        return null
+    }, [loadStatus, setLoadStatus])
 
     const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, address?.address)
 
@@ -111,7 +172,16 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
                         <Icons.LinkOut className={classes.linkIcon} />
                     </Link>
                 </div>
-                <Icons.Edit2 size={20} onClick={onSetting} className={classes.editIcon} />
+                <div className={classes.rightIcons}>
+                    {loadStatus === LOAD_STATUS.Finish && (
+                        <Icons.DoubleArrowUp
+                            size={16}
+                            className={classes.arrowUp}
+                            onClick={() => setLoadStatus(LOAD_STATUS.Necessary)}
+                        />
+                    )}
+                    <Icons.Edit2 size={20} onClick={onSetting} className={classes.editIcon} />
+                </div>
             </div>
 
             {collectionList && collectionList?.filter((collection) => !collection?.hidden)?.length > 0 ? (
@@ -119,8 +189,10 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
                     <CollectionList
                         classes={{ list: classes.list, collectionWrap: classes.imageIconWrapper }}
                         size={126}
-                        collections={collectionList?.filter((collection) => !collection?.hidden)?.slice(0, 8)}
+                        collections={collections}
+                        showNetwork
                     />
+                    {loadIcon}
                 </Box>
             ) : (
                 <Box>
