@@ -1,5 +1,5 @@
 import { ROOT_PATH, task, prettier } from '../utils/index.js'
-import { readdir, writeFile } from 'fs/promises'
+import { readdir, writeFile, readFile } from 'fs/promises'
 import { dirname } from 'path'
 import { upperFirst } from 'lodash-unified'
 
@@ -13,11 +13,11 @@ const header = `${basicHeader}
 `
 
 export async function syncLanguages() {
-    const config = require('../../../../.i18n-codegen.json').list
+    const config = JSON.parse(await readFile(new URL('.i18n-codegen.json', ROOT_PATH), 'utf-8')).list
     for (const { input, generator } of config) {
         const { namespace } = generator
 
-        const inputDir = new URL(dirname(input), ROOT_PATH)
+        const inputDir = new URL(dirname(input) + '/', ROOT_PATH)
 
         const languages = await getLanguages(inputDir)
 

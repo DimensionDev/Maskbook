@@ -8,7 +8,9 @@ import { iconCodegen, iconCodegenWatch } from './icon-codegen.js'
 
 export function codegen(cb: TaskFunctionCallback) {
     if (isLocked('codegen')) return cb()
-    const codegen = series(i18nCodegen, iconCodegen, typescript, resourceCopy)
+    // typescript is explicitly eliminated from this task.
+    // our build process does not rely on tsc to give output, we have an extra check for tsc.
+    const codegen = series(i18nCodegen, iconCodegen, resourceCopy)
     codegen(cb)
 }
 export const codegenWatch = series(
