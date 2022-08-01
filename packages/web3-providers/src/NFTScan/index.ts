@@ -56,6 +56,14 @@ async function getToken() {
     return data.accessToken
 }
 
+const fetchFromNFTScan = (url: string) => {
+    return fetch(courier(url), {
+        headers: {
+            chain: 'ETH',
+        },
+    })
+}
+
 async function getContractSymbol(address: string, chainId: ChainId) {
     const RPC_URL = first(getRPCConstants(chainId).RPC_URLS)
     if (!RPC_URL) return ''
@@ -191,7 +199,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             pageIndex: index,
             pageSize: size,
         })
-        const response = await fetch(courier(url))
+        const response = await fetchFromNFTScan(url)
         if (!response.ok) return createPageable([], createIndicator(indicator))
         const result: Result<NFTSearchData> = await response.json()
         if (!result.data) return createPageable([], createIndicator(indicator))
@@ -237,7 +245,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         const url = urlcat(NFTSCAN_BASE, '/nftscan/getNftPlatformInfo', {
             keyword: address,
         })
-        const response = await fetch(courier(url))
+        const response = await fetchFromNFTScan(url)
         const result: { data: NFTPlatformInfo } = await response.json()
         return result.data
     }
@@ -245,7 +253,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         const url = urlcat(NFTSCAN_BASE, '/nftscan/searchNftPlatformName', {
             keyword,
         })
-        const response = await fetch(courier(url))
+        const response = await fetchFromNFTScan(url)
         const result: { data: SearchNFTPlatformNameResult[] } = await response.json()
         return result.data ?? EMPTY_LIST
     }
@@ -255,7 +263,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             contract,
             range,
         })
-        const response = await fetch(courier(url))
+        const response = await fetchFromNFTScan(url)
         const result: { data: VolumeAndFloorRecord[] } = await response.json()
         return result.data ?? EMPTY_LIST
     }

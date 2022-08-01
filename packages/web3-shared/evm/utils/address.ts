@@ -2,7 +2,8 @@ import { EthereumAddress } from 'wallet.ts'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { getRedPacketConstants, getTokenConstant, ZERO_ADDRESS } from '../constants'
-import { ChainId } from '../types'
+import { ChainId, NetworkType, ProviderType } from '../types'
+import { isExtensionSiteType } from '@masknet/shared-base'
 
 export function isEmptyHex(hex?: string) {
     return !hex || ['0x', '0x0'].includes(hex)
@@ -51,6 +52,18 @@ export function isRedPacketAddress(address: string, version?: 1 | 2 | 3 | 4) {
                 isSameAddress(HAPPY_RED_PACKET_ADDRESS_V4, address)
             )
     }
+}
+
+export function getDefaultChainId() {
+    return ChainId.Mainnet
+}
+
+export function getDefaultNetworkType() {
+    return NetworkType.Ethereum
+}
+
+export function getDefaultProviderType() {
+    return isExtensionSiteType() ? ProviderType.MaskWallet : ProviderType.None
 }
 
 export function getZeroAddress() {

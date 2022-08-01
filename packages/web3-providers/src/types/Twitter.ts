@@ -45,7 +45,7 @@ export namespace TwitterBaseAPI {
         rest_id: string
         affiliates_highlighted_label: {}
         has_nft_avatar: boolean
-        legacy: {
+        legacy?: {
             blocked_by: boolean
             blocking: boolean
             can_dm: boolean

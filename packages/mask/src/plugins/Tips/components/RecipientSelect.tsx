@@ -32,6 +32,8 @@ const useStyles = makeStyles<{}, 'icon'>()((theme, _, refs) => {
         actionIcon: {
             marginLeft: theme.spacing(1),
             color: theme.palette.text.secondary,
+            height: 24,
+            width: 24,
         },
         checkIcon: {
             marginLeft: 'auto',
