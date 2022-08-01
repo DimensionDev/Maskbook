@@ -6,8 +6,7 @@ import { codegen } from '../codegen/index.js'
 import { fileURLToPath } from 'url'
 
 const BUILD_PATH = new URL('build/', ROOT_PATH)
-export const ciBuild = series(
-    printBranchName,
+export const ciBuild: TaskFunction = series(
     codegen,
     // The base version need to be build in serial in order to prepare webpack cache.
     buildBaseVersion,
@@ -35,8 +34,9 @@ export const ciBuild = series(
 task(ciBuild, 'build-ci', 'Build the extension on CI')
 function buildTarget(name: string, options: ExtensionBuildArgs, outFile: string) {
     options.readonlyCache = true
-    options['output-path'] = fileURLToPath(new URL(options['output-path']!, ROOT_PATH))
-    return series(buildWith(name, options), zipTo(options['output-path']!, outFile))
+    const output = new URL(options['output-path']!, ROOT_PATH)
+    options['output-path'] = fileURLToPath(output)
+    return series(buildWith(name, options), zipTo(output, outFile))
 }
 function zipTo(absBuildDir: URL, fileName: string): TaskFunction {
     const f: TaskFunction = async () => {
@@ -55,9 +55,4 @@ function buildWith(name: string, buildArgs: ExtensionBuildArgs) {
     const f: TaskFunction = () => buildBaseVersion(buildArgs)
     f.displayName = `Build target ${name}`
     return f
-}
-
-async function printBranchName() {
-    const { default: git } = await import('@nice-labs/git-rev')
-    console.log('Building on branch: ', git.branchName())
 }

@@ -55,7 +55,7 @@ patchedDependencies:
     hash: ahzudsmhupf7p4bmwwjbswnubi
     path: patches/web3-providers-http@1.7.4.patch
   gulp@4.0.2:
-    hash: m3svxilvixud6kccfycrdar27y
+    hash: 2y5kpiugqogdejwrac5fzdim7y
     path: patches/gulp@4.0.2.patch
 
 importers:
@@ -197,7 +197,7 @@ importers:
         version: 2.0.0_dybqwpoymejh472jjrl4zrch44
       gulp:
         specifier: ^4.0.2
-        version: 4.0.2_m3svxilvixud6kccfycrdar27y
+        version: 4.0.2_2y5kpiugqogdejwrac5fzdim7y
       husky:
         specifier: ^8.0.1
         version: 8.0.1
@@ -21394,7 +21394,7 @@ packages:
       - supports-color
     dev: true
 
-  /gulp/4.0.2_m3svxilvixud6kccfycrdar27y:
+  /gulp/4.0.2_2y5kpiugqogdejwrac5fzdim7y:
     resolution: {integrity: sha512-dvEs27SCZt2ibF29xYgmnwwCYZxdxhQ/+LFWlbAW8y7jt68L/65402Lz3+CKy0Ov4rOs+NERmDq7YlZaDqUIfA==}
     engines: {node: '>= 0.10'}
     hasBin: true

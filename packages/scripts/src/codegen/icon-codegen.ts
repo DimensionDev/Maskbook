@@ -71,7 +71,7 @@ async function generateIcons() {
         dtsMap: new SourceMapGenerator({ file: 'icon-generated-as-url.d.ts' }),
     }
 
-    const relativePrefix = iconRoot.toString().length + 1
+    const relativePrefix = iconRoot.toString().length
     /* cspell:disable-next-line */
     const filePaths = await glob.promise(pattern, { cwd: fileURLToPath(ROOT_PATH), nodir: true })
 

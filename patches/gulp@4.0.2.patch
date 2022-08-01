@@ -1,16 +1,17 @@
 diff --git a/bin/ts-gulp.js b/bin/ts-gulp.js
 new file mode 100644
-index 0000000000000000000000000000000000000000..7396ecb38106e6892df69f5df6a38482429657fe
+index 0000000000000000000000000000000000000000..85befe094b23d419bed97c7bb52208fd9fafe2ad
 --- /dev/null
 +++ b/bin/ts-gulp.js
-@@ -0,0 +1,7 @@
+@@ -0,0 +1,8 @@
 +#!/usr/bin/env node
 +
 +const { spawnSync } = require('child_process')
 +const { join } = require('path')
-+spawnSync(process.execPath, ['--loader', 'ts-node/esm', join(__dirname, './gulp.js'), ...process.argv.slice(2)], {
++const child = spawnSync(process.execPath, ['--loader', 'ts-node/esm', join(__dirname, './gulp.js'), ...process.argv.slice(2)], {
 +    stdio: 'inherit',
 +})
++if (child.status) process.exit(child.status)
 diff --git a/index.mjs b/index.mjs
 new file mode 100644
 index 0000000000000000000000000000000000000000..598c2a06ad1337aed1e67c3d8cd3c0be076edb34

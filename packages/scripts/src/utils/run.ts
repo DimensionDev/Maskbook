@@ -14,18 +14,20 @@ function logShell(e: string, args: string[], url: URL | string) {
 }
 function cwdShell(e: string, args: string[], cwd: URL | string) {
     logShell(e, args, cwd)
-    return spawn(e, args, {
-        cwd: cwd,
+    const process = spawn(e, args, {
+        cwd,
         stdio: 'inherit',
         shell: true,
     })
+    Object.assign(process, { cwd })
+    return process
 }
 export function shell(command: TemplateStringsArray, ...rest: string[]) {
     const [e, ...args] = join(command, ...rest).split(' ')
     return cwdShell(e, args, ROOT_PATH)
 }
 shell.cwd = (cwd: URL | string) => {
-    return (command: TemplateStringsArray, ...rest: string[]) => {
+    return (command: TemplateStringsArray | string[], ...rest: string[]) => {
         const [e, ...args] = join(command, ...rest).split(' ')
         return cwdShell(e, args, cwd)
     }
@@ -40,7 +42,7 @@ printShell.cwd = (cwd: URL | string) => {
         return logShell(e, args, cwd)
     }
 }
-function join(command: TemplateStringsArray, ...rest: string[]) {
+function join(command: TemplateStringsArray | string[], ...rest: string[]) {
     let text = ''
     for (const [i, t] of command.entries()) {
         text += t
