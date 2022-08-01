@@ -1,5 +1,5 @@
 import { resolve } from 'path'
-import { identity, kebabCase, upperFirst } from 'lodash-unified'
+import { camelCase, identity, kebabCase, upperFirst } from 'lodash-unified'
 import { task } from '../utils/task.js'
 import { ROOT_PATH } from '../utils/paths.js'
 import { awaitChildProcess, changeFile, shell } from '../utils/index.js'
@@ -46,7 +46,6 @@ export async function createPackageInteractive() {
                     message: 'Create a new package at: ' + base,
                 }).then((x) => x.name),
             )
-        packageDetail.path
     }
 
     // Choose npm package name
@@ -98,7 +97,7 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
     })
 
     if (type === 'plugin') {
-        const NormativeName = path.split('/').at(-1)
+        const NormativeName = upperFirst(camelCase(path.split('/').at(-1)))
         await changeFile.typescript(resolve(packagePath, 'src/constants.ts'), (content) =>
             content.replace('PluginId.Example', `PluginId.${NormativeName}`),
         )
