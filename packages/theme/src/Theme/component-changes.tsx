@@ -12,6 +12,7 @@ import {
     switchClasses,
     tooltipClasses,
     alertClasses,
+    linearProgressClasses,
 } from '@mui/material'
 import type { MaskColor } from './colors'
 
@@ -981,6 +982,23 @@ export const Alert = (mode: PaletteMode, colors: MaskColor) => ({
                     marginRight: 6,
                     width: 20,
                     height: 20,
+                },
+            },
+        },
+    },
+})
+
+export const LinearProgress = (mode: PaletteMode, colors: MaskColor) => ({
+    components: {
+        MuiLinearProgress: {
+            styleOverrides: {
+                determinate: {
+                    height: 6,
+                    borderRadius: 8,
+                    backgroundColor: colors.maskColor.bg,
+                    [`& .${linearProgressClasses.bar}`]: {
+                        backgroundColor: colors.maskColor.success,
+                    },
                 },
             },
         },
