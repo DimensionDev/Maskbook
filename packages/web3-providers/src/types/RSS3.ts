@@ -1,3 +1,5 @@
+import type { HubOptions } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import type BigNumber from 'bignumber.js'
 import type RSS3 from 'rss3-next'
 
@@ -223,6 +225,6 @@ export namespace RSS3BaseAPI {
         getFootprints(address: string): Promise<Collection[] | undefined>
         getNameInfo(id: string): Promise<NameInfo | undefined>
         getProfileInfo(address: string): Promise<ProfileInfo | undefined>
-        getWeb3Feed(address: string, type: FeedType, option: HubOptions): Promise<Web3FeedResponse | undefined>
+        getWeb3Feed(address: string, type: FeedType, option: HubOptions<ChainId>): Promise<Web3FeedResponse | undefined>
     }
 }
