@@ -1,5 +1,5 @@
-import { series } from 'gulp'
-import { createBuildStorybook6, PKG_PATH, task } from '../utils/index.js'
+import { series, TaskFunction } from 'gulp'
+import { createBuildStorybook6, fromNPMTask, PKG_PATH, task } from '../utils/index.js'
 import { codegen } from '../codegen/index.js'
 
 const STATIC_PATH = new URL('netlify/storybook-static/', PKG_PATH)
@@ -17,5 +17,11 @@ const themeSB = createBuildStorybook6(
     'theme',
 )
 
-export const buildNetlify = series(codegen, dashboardSB, themeSB)
+const [buildStorybookShared] = fromNPMTask(
+    new URL('storybook-shared/', PKG_PATH),
+    'build-storybook-shared',
+    'Build shared files in Storybook',
+)
+
+export const buildNetlify: TaskFunction = series(codegen, buildStorybookShared, dashboardSB, themeSB)
 task(buildNetlify, 'build-ci-netlify', 'Build for Netlify')
