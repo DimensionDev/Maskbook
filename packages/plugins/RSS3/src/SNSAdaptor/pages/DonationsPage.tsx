@@ -53,7 +53,7 @@ export function DonationPage({ donations = EMPTY_LIST, loading, address }: Donat
     const [selectedDonation, setSelectedDonation] = useState<RSS3BaseAPI.Collection | undefined>()
 
     if (loading || !donations.length) {
-        return <StatusBox loading={loading} collection={CollectionType.donations} empty={!donations.length} />
+        return <StatusBox loading={loading} description={t.no_Donation_found()} empty={!donations.length} />
     }
     return (
         <Box margin="16px 0 0 16px">

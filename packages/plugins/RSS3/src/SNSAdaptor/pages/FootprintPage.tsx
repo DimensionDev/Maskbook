@@ -24,7 +24,7 @@ export function FootprintPage({ footprints = EMPTY_LIST, address, loading }: Foo
     const [selectedFootprint, setSelectedFootprint] = useState<RSS3BaseAPI.Collection | undefined>()
 
     if (loading || !footprints.length) {
-        return <StatusBox loading={loading} collection={CollectionType.footprints} empty={!footprints.length} />
+        return <StatusBox loading={loading} description={no_Footprint_found()} empty={!footprints.length} />
     }
 
     return (

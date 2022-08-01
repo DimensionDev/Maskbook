@@ -100,18 +100,25 @@ export function FeedCard({ feed, address, onSelect }: FeedCardProps) {
             if (isSameAddress(feed.metadata?.from, address)) {
                 return (
                     <span>
-                        {t.sent_a_NFT_to()} <ReversedAddress isInline address={feed.metadata?.to ?? ZERO_ADDRESS} />
+                        {t.sent_an_NFT_to()}{' '}
+                        <ReversedAddress
+                            TypographyProps={{ display: 'inline' }}
+                            address={feed.metadata?.to ?? ZERO_ADDRESS}
+                        />
                     </span>
                 )
             }
             if (isZeroAddress(feed.metadata?.from)) {
-                return t.minted_a_NFT()
+                return t.minted_an_NFT()
             }
             if (isSameAddress(feed.metadata?.to, address)) {
                 return (
                     <span>
-                        {t.acquired_a_NFT_from()}{' '}
-                        <ReversedAddress isInline address={feed.metadata?.from ?? ZERO_ADDRESS} />
+                        {t.acquired_an_NFT_from()}{' '}
+                        <ReversedAddress
+                            TypographyProps={{ display: 'inline' }}
+                            address={feed.metadata?.from ?? ZERO_ADDRESS}
+                        />
                     </span>
                 )
             }
@@ -120,14 +127,22 @@ export function FeedCard({ feed, address, onSelect }: FeedCardProps) {
             if (isSameAddress(feed.metadata?.from, address)) {
                 return (
                     <span>
-                        {t.sent_to()} <ReversedAddress isInline address={feed.metadata?.to ?? ZERO_ADDRESS} />
+                        {t.sent_to()}{' '}
+                        <ReversedAddress
+                            TypographyProps={{ display: 'inline' }}
+                            address={feed.metadata?.to ?? ZERO_ADDRESS}
+                        />
                     </span>
                 )
             }
             if (isSameAddress(feed.metadata?.to, address)) {
                 return (
                     <span>
-                        {t.received_from()} <ReversedAddress isInline address={feed.metadata?.from ?? ZERO_ADDRESS} />
+                        {t.received_from()}{' '}
+                        <ReversedAddress
+                            TypographyProps={{ display: 'inline' }}
+                            address={feed.metadata?.from ?? ZERO_ADDRESS}
+                        />
                     </span>
                 )
             }
@@ -213,7 +228,7 @@ export function FeedCard({ feed, address, onSelect }: FeedCardProps) {
             <div>
                 <Typography>
                     <span className={classes.action}>
-                        <ReversedAddress isInline address={address!} /> {action}
+                        <ReversedAddress TypographyProps={{ display: 'inline' }} address={address!} /> {action}
                     </span>{' '}
                     <span className={classes.time}>
                         {formatDistanceToNow(new Date(feed.date_updated))} {t.ago()}
