@@ -26,18 +26,20 @@ export function useSocialAddressListAll(
 
     return useAsyncRetry(async () => {
         const userId = identity?.identifier?.userId
-        if (!userId || userId === '$unknown') return EMPTY_LIST
-
+        if (!userId || userId === '$unknown' || !identity?.publicKey) return EMPTY_LIST
         let cached = addressCache.get(userId)
+
         if (!cached) {
             cached = Promise.allSettled<AddressList>(
                 [EVM_IdentityService, SolanaIdentityService].map((x) => x?.lookup(identity) ?? []),
             )
-            addressCache.set(userId, cached)
+            if (!identity.isOwner) {
+                addressCache.set(userId, cached)
+            }
         }
         const allSettled = await cached
         const listOfAddress = allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
         const sorted = sorter && listOfAddress.length ? listOfAddress.sort(sorter) : listOfAddress
         return includes?.length ? sorted.filter((x) => includes.includes(x.type)) : sorted
-    }, [identity, sorter, includes?.join(), EVM_IdentityService?.lookup, SolanaIdentityService?.lookup])
+    }, [identity?.publicKey, sorter, includes?.join(), EVM_IdentityService?.lookup, SolanaIdentityService?.lookup])
 }

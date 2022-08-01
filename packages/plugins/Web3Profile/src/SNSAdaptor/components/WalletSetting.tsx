@@ -102,7 +102,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     walletIcon: {
         marginRight: '8px',
-        fontSize: 16,
     },
 }))
 
@@ -279,7 +278,7 @@ const WalletSetting = memo(
                         ) : (
                             <Box className={classes.bottomButton}>
                                 <Button onClick={openPopupsWindow} fullWidth>
-                                    <Icons.WalletUnderTabs className={classes.walletIcon} />
+                                    <Icons.WalletUnderTabs size={16} className={classes.walletIcon} />
                                     {t.add_wallet()}
                                 </Button>
                             </Box>
