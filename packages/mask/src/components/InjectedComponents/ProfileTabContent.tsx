@@ -9,7 +9,7 @@ import {
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
 import { useSocialAddressListAll, useAvailablePlugins } from '@masknet/plugin-infra/web3'
-import { ReversedAddress } from '@masknet/shared'
+import { AddressItem } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
 import { Box, Button, CircularProgress, Link, MenuItem, Tab, Typography } from '@mui/material'
@@ -24,7 +24,6 @@ import {
     useCurrentVisitingSocialIdentity,
     useIsCurrentVisitingOwnerIdentity,
 } from '../DataSource/useActivatedUI'
-import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 
 function getTabContent(tabId?: string) {
@@ -114,9 +113,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 18,
         fontWeight: 700,
     },
-    linkOutIcon: {
-        color: theme.palette.maskColor.secondaryDark,
-    },
     arrowDropIcon: {
         color: theme.palette.maskColor.dark,
     },
@@ -128,6 +124,17 @@ const useStyles = makeStyles()((theme) => ({
     },
     gearIcon: {
         color: theme.palette.maskColor.dark,
+    },
+    linkOutIcon: {
+        color: theme.palette.maskColor.secondaryDark,
+    },
+    mainLinkIcon: {
+        margin: '0px 2px',
+        color: theme.palette.maskColor.secondaryDark,
+    },
+    secondLinkIcon: {
+        margin: '4px 2px 0 2px',
+        color: theme.palette.maskColor.secondaryDark,
     },
 }))
 
@@ -154,7 +161,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         value: socialAddressList = EMPTY_LIST,
         loading: loadingSocialAddressList,
         retry: retrySocialAddress,
-    } = useSocialAddressListAll(currentVisitingSocialIdentity, isOwnerIdentity)
+    } = useSocialAddressListAll(currentVisitingSocialIdentity)
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
@@ -213,8 +220,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         (isWeb3ProfileDisable ||
             (isOwnerIdentity && !currentVisitingSocialIdentity?.hasBinding) ||
             (isOwnerIdentity &&
-                socialAddressList.findIndex((address) => address.type === SocialAddressType.NEXT_ID)) === -1 ||
-            !socialAddressList?.length)
+                socialAddressList.findIndex((address) => address.type === SocialAddressType.NEXT_ID)) === -1)
     )
 
     const componentTabId = showNextID ? `${PluginId.NextID}_tabContent` : currentTab
@@ -282,33 +288,16 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                     size="small"
                                     onClick={onOpen}
                                     className={classes.walletButton}>
-                                    <Typography className={classes.addressLabel}>
-                                        {selectedAddress?.type === SocialAddressType.KV ||
-                                        selectedAddress?.type === SocialAddressType.ADDRESS ||
-                                        selectedAddress?.type === SocialAddressType.NEXT_ID ? (
-                                            <ReversedAddress
-                                                TypographyProps={{ fontSize: '18px' }}
-                                                address={selectedAddress.address}
-                                                pluginId={selectedAddress.networkSupporterPluginID}
-                                            />
-                                        ) : (
-                                            selectedAddress?.label
-                                        )}
-                                    </Typography>
-                                    <Link
-                                        className={classes.link}
-                                        href={
-                                            selectedAddress
-                                                ? explorerResolver.addressLink(
-                                                      ChainId.Mainnet,
-                                                      selectedAddress?.address,
-                                                  ) ?? ''
-                                                : ''
+                                    <AddressItem
+                                        reverse={
+                                            selectedAddress?.type === SocialAddressType.KV ||
+                                            selectedAddress?.type === SocialAddressType.ADDRESS ||
+                                            selectedAddress?.type === SocialAddressType.NEXT_ID
                                         }
-                                        target="_blank"
-                                        rel="noopener noreferrer">
-                                        <Icons.LinkOut size={20} className={classes.linkOutIcon} />
-                                    </Link>
+                                        iconProps={classes.mainLinkIcon}
+                                        TypographyProps={{ fontSize: '18px', fontWeight: 700 }}
+                                        identityAddress={selectedAddress}
+                                    />
                                     <Icons.ArrowDrop className={classes.arrowDropIcon} />
                                 </Button>
                                 <ShadowRootMenu
@@ -324,32 +313,15 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                             <MenuItem key={x.address} value={x.address} onClick={() => onSelect(x)}>
                                                 <div className={classes.menuItem}>
                                                     <div className={classes.addressItem}>
-                                                        {x.type === SocialAddressType.KV ||
-                                                        x.type === SocialAddressType.ADDRESS ||
-                                                        x.type === SocialAddressType.NEXT_ID ? (
-                                                            <ReversedAddress
-                                                                address={x.address}
-                                                                pluginId={x.networkSupporterPluginID}
-                                                            />
-                                                        ) : (
-                                                            <Typography fontSize="14px" fontWeight={700}>
-                                                                {x.label}
-                                                            </Typography>
-                                                        )}
-                                                        <Link
-                                                            className={classes.link}
-                                                            href={
-                                                                selectedAddress
-                                                                    ? explorerResolver.addressLink(
-                                                                          ChainId.Mainnet,
-                                                                          x?.address,
-                                                                      ) ?? ''
-                                                                    : ''
+                                                        <AddressItem
+                                                            reverse={
+                                                                x.type === SocialAddressType.KV ||
+                                                                x.type === SocialAddressType.ADDRESS ||
+                                                                x.type === SocialAddressType.NEXT_ID
                                                             }
-                                                            target="_blank"
-                                                            rel="noopener noreferrer">
-                                                            <Icons.LinkOut className={classes.linkIcon} />
-                                                        </Link>
+                                                            identityAddress={x}
+                                                            iconProps={classes.secondLinkIcon}
+                                                        />
                                                         {x?.type === SocialAddressType.NEXT_ID && (
                                                             <Icons.NextIdPersonaVerified
                                                                 className={classes.verifiedIcon}
