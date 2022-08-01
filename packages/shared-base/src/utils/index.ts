@@ -1,3 +1,4 @@
+export * from './array'
 export * from './asyncIterator'
 export * from './detect'
 export * from './getLocalImplementation'

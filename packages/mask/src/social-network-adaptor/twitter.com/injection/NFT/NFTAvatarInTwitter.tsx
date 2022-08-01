@@ -63,7 +63,6 @@ function NFTAvatarInTwitter() {
         getAvatarId(identity.avatar ?? ''),
         RSS3_KEY_SNS.TWITTER,
     )
-    const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
 
     const account = useAccount()
     const { loading: loadingWallet, value: storage } = useWallet(_avatar?.userId ?? '')
@@ -107,7 +106,6 @@ function NFTAvatarInTwitter() {
         if (!identity.identifier) return
 
         if (!NFTEvent?.address || !NFTEvent?.tokenId) {
-            setAvatar(undefined)
             MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll({
                 userId: identity.identifier.userId,
                 avatarId: getAvatarId(identity.avatar ?? ''),
@@ -130,13 +128,11 @@ function NFTAvatarInTwitter() {
             RSS3_KEY_SNS.TWITTER,
         ).catch((error) => {
             setNFTEvent(undefined)
-            setAvatar(undefined)
             window.alert(error.message)
             return
         })
         if (!avatar) {
             setNFTEvent(undefined)
-            setAvatar(undefined)
             window.alert('Sorry, failed to save NFT Avatar. Please set again.')
             return
         }
@@ -156,7 +152,6 @@ function NFTAvatarInTwitter() {
             },
         })
 
-        setAvatar(avatar)
         MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll(
             (avatar ?? {
                 userId: identity.identifier.userId,
@@ -171,10 +166,6 @@ function NFTAvatarInTwitter() {
 
         setNFTEvent(undefined)
     }, [identity.avatar, openConfirmDialog, t, saveNFTAvatar])
-
-    useEffect(() => {
-        setAvatar(_avatar)
-    }, [_avatar])
 
     useEffect(() => {
         return MaskMessages.events.NFTAvatarUpdated.on((data) => onUpdate(data))

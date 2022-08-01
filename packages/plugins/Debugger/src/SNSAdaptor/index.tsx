@@ -72,6 +72,16 @@ const sns: Plugin.SNSAdaptor.Definition = {
             },
         },
     ],
+    AvatarRealm: {
+        ID: `${PLUGIN_ID}_avatar`,
+        label: 'Debugger',
+        priority: 99999,
+        UI: {
+            Decorator() {
+                return <span>debugger decorator</span>
+            },
+        },
+    },
 }
 
 export default sns

@@ -314,6 +314,14 @@ export const searchTwitterAvatarNFTSelector = () =>
 
 export const searchTwitterAvatarNFTLinkSelector = () => querySelector<E>('a[href$="/nft"]')
 
+export const inpageAvatarSelector = () =>
+    querySelectorAll<HTMLDivElement>(
+        [
+            'main[role="main"] [data-testid="cellInnerDiv"] [data-testid="Tweet-User-Avatar"]',
+            '[data-testid="UserCell"] [data-testid^="UserAvatar-Container-"]',
+        ].join(','),
+    )
+
 export const searchReplyToolbarSelector = () =>
     querySelector<E>('div[data-testid="primaryColumn"] div[data-testid="toolBar"]').querySelector<E>(
         'div[data-testid="geoButton"]',

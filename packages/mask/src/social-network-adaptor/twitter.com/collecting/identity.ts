@@ -125,11 +125,11 @@ function resolveCurrentVisitingIdentityInner(
     const update = async (twitterId: string) => {
         const user = await Twitter.getUserByScreenName(twitterId)
         if (!user?.legacy) return
-        const bio = user.legacy.description
 
         const nickname = user.legacy.name
         const handle = user.legacy.screen_name
         const avatar = user.legacy.profile_image_url_https.replace(/_normal(\.\w+)$/, '_400x400$1')
+        const bio = user.legacy.description
         const homepage = user.legacy.entities.url?.urls[0]?.expanded_url ?? ''
 
         ref.value = {

@@ -441,6 +441,8 @@ export namespace Plugin.SNSAdaptor {
         ProfileTabs?: ProfileTab[]
         /** This UI will be rendered as cover on the profile page */
         ProfileCover?: ProfileCover[]
+        /** This UI will be rendered as tabs on the profile card */
+        AvatarRealm?: AvatarRealm
         /** This UI will be rendered as plugin wrapper page */
         wrapperProps?: PluginWrapperProps
         /**
@@ -562,6 +564,47 @@ export namespace Plugin.SNSAdaptor {
         icon?: React.ReactNode
         title?: string
         backgroundGradient?: string
+    }
+    export enum AvatarRealmSourceType {
+        ProfilePage = 'ProfilePage',
+        ProfileCard = 'ProfileCard',
+        Post = 'Post',
+        Editor = 'Editor',
+        Menu = 'Menu',
+        Suggestion = 'Suggestion',
+    }
+    export interface AvatarRealm {
+        ID: string
+        priority: number
+        label: I18NStringField | string
+        UI?: {
+            /**
+             * The injected avatar decorator component
+             */
+            Decorator: InjectUI<{
+                identity?: SocialIdentity
+                persona?: string
+                socialAddressList?: Array<SocialAddress<NetworkPluginID>>
+            }>
+            /**
+             * The injected avatar settings button component
+             */
+            Settings?: InjectUI<{
+                identity?: SocialIdentity
+                persona?: string
+                socialAddressList?: Array<SocialAddress<NetworkPluginID>>
+            }>
+        }
+        Utils?: {
+            /**
+             * If it returns false, this cover will not be displayed.
+             */
+            shouldDisplay?(
+                identity?: SocialIdentity,
+                addressNames?: Array<SocialAddress<NetworkPluginID>>,
+                sourceType?: AvatarRealmSourceType,
+            ): boolean
+        }
     }
     export interface ProfileSlider {
         ID: string
@@ -858,7 +901,7 @@ export namespace Plugin.GeneralUI {
         export type DynamicRenderProps = Context<unknown> &
             React.RefAttributes<RenderActions<unknown>> & { metadata: TypedMessage['meta'] }
         // #endregion
-        export type RenderActions<T> = {
+        export type RenderActions = {
             /**
              * This action make the render into the edit state.
              * It should report the result via onEditComplete() props.
