@@ -109,13 +109,7 @@ export const FungibleTokenList = forwardRef(
 
         const filteredFungibleTokens = useMemo(() => {
             const allFungibleTokens = uniqBy(
-                [
-                    ...(nativeToken ? [nativeToken] : []),
-                    ...tokens,
-                    ...fungibleTokens,
-                    ...trustedFungibleTokens,
-                    ...(mode === TokenListMode.List ? [] : blockedFungibleTokens),
-                ],
+                [...(nativeToken ? [nativeToken] : []), ...tokens, ...fungibleTokens, ...trustedFungibleTokens],
                 (x) => x.address.toLowerCase(),
             )
 
@@ -251,9 +245,6 @@ export const FungibleTokenList = forwardRef(
             if (searchedTokenAddress && !searchedToken)
                 return <Content height={FixedSizeListProps?.height} message={t.erc20_search_not_token_found()} />
 
-            // Search token which in list, and result is empty
-            // if (keyword && !isSameAddress(searchedToken?.address, searchedTokenAddress) && !searchingToken)
-            //     return <Content height={FixedSizeListProps?.height} message={<EmptyResult />} />
             return null
         }
 
@@ -294,8 +285,18 @@ export const FungibleTokenList = forwardRef(
                             >,
                             strategy: 'add' | 'remove',
                         ) => {
-                            if (strategy === 'add') await Token?.addToken?.(token)
-                            if (strategy === 'remove') await Token?.removeToken?.(token)
+                            if (strategy === 'add') await Token?.addToken?.(account, token)
+                            if (strategy === 'remove') await Token?.removeToken?.(account, token)
+                        },
+                        async (
+                            token: FungibleToken<
+                                Web3Helper.Definition[T]['ChainId'],
+                                Web3Helper.Definition[T]['SchemaType']
+                            >,
+                            strategy: 'trust' | 'block',
+                        ) => {
+                            if (strategy === 'trust') await Token?.trustToken?.(account, token)
+                            if (strategy === 'block') await Token?.blockToken?.(account, token)
                         },
                         (address) => !!blockedFungibleTokens?.find((x) => isSameAddress(x.address, address)),
                     )}

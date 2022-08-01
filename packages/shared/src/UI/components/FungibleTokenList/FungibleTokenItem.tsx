@@ -87,6 +87,10 @@ export const getFungibleTokenItem =
             token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
             strategy: 'add' | 'remove',
         ) => Promise<void>,
+        trustOrBlockTokenToLocal: (
+            token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
+            strategy: 'trust' | 'block',
+        ) => Promise<void>,
         isBlocked: (address: string) => boolean,
     ) =>
     ({
@@ -119,6 +123,14 @@ export const getFungibleTokenItem =
             [token, addOrRemoveTokenToLocal],
         )
 
+        const onTrustOrBlockTokenToLocal = useCallback(
+            async (event: React.ChangeEvent<HTMLInputElement>) => {
+                event.stopPropagation()
+                if (token) trustOrBlockTokenToLocal(token, event.target.checked ? 'trust' : 'block')
+            },
+            [token, trustOrBlockTokenToLocal],
+        )
+
         const handleTokenSelect = (e: React.MouseEvent<HTMLElement>) => {
             e.stopPropagation()
             onSelect(token)
@@ -142,6 +154,7 @@ export const getFungibleTokenItem =
                         checked={!isBlocked(address)}
                         onChange={(event) => {
                             event.stopPropagation()
+                            onTrustOrBlockTokenToLocal(event)
                         }}
                     />
                 )

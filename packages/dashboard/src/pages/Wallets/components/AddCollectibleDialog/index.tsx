@@ -76,7 +76,7 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
         } else {
             tokenDetailed.owner = { address: account }
             tokenDetailed.ownerId = account
-            await Token?.addToken?.(tokenDetailed)
+            await Token?.addToken?.(account, tokenDetailed)
             onClose()
         }
     }, [

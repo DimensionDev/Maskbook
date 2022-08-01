@@ -14,6 +14,8 @@ export class Token extends TokenState<ChainId, SchemaType> {
         const defaultValue: TokenStorage<ChainId, SchemaType> = {
             fungibleTokens: [],
             nonFungibleTokens: [],
+            fungibleTokenList: {},
+            nonFungibleTokenList: {},
             fungibleTokenBlockedBy: {},
             nonFungibleTokenBlockedBy: {},
         }
