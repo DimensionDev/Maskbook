@@ -642,7 +642,7 @@ export const Button = (mode: PaletteMode, colors: MaskColor): ThemeOptions => ({
             ],
             styleOverrides: {
                 root: {
-                    textTransform: 'initial',
+                    textTransform: 'unset',
                     fontWeight: 700,
                     color: colors.background.paper,
                 },

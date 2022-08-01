@@ -12,6 +12,7 @@ initReactI18next.init(i18NextInstance)
 export const parameters = {
     actions: { argTypesRegex: '^on[A-Z].*' },
 }
+console.log(MaskLightTheme)
 export const decorators = [
     // withMatrix,
     (Story) => {
