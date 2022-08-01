@@ -77,6 +77,7 @@ export class ERC721Descriptor implements TransactionDescriptor {
                 }
                 case 'transferFrom':
                 case 'safeTransferFrom': {
+                    if (!parameters?.tokenId) return
                     const symbol = await this.getContractSymbol(context.chainId, context.to)
                     return {
                         chainId: context.chainId,

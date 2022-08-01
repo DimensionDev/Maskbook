@@ -1,6 +1,6 @@
 import { i18NextInstance } from '@masknet/shared-base'
 import { TransactionContext, isZero } from '@masknet/web3-shared-base'
-import type { ChainId, TransactionParameter } from '@masknet/web3-shared-evm'
+import { ChainId, TransactionParameter, SchemaType } from '@masknet/web3-shared-evm'
 import type { TransactionDescriptor } from '../types'
 import { getTokenAmountDescription } from '../utils'
 import { Web3StateSettings } from '../../../settings'
@@ -47,7 +47,14 @@ export class ERC20Descriptor implements TransactionDescriptor {
                     }
             }
 
-            if ((method.name === 'transfer' || method.name === 'transferFrom') && parameters?.to && parameters?.value) {
+            if (
+                (method.name === 'transfer' || method.name === 'transferFrom') &&
+                parameters?.to &&
+                parameters?.value &&
+                !parameters?.tokenId
+            ) {
+                const schemaType = await connection?.getTokenSchema(context.to ?? '', { chainId: context.chainId })
+                if (schemaType === SchemaType.ERC721) return
                 const token = await connection?.getFungibleToken(context.to ?? '', {
                     chainId: context.chainId,
                 })

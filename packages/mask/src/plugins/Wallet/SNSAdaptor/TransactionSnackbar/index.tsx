@@ -58,6 +58,10 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
         }
     }, [TransactionWatcher, chainId, pluginID])
 
+    useEffect(() => {
+        setErrorInfo(undefined)
+    }, [chainId])
+
     const resolveSnackbarConfig = createLookupTableResolver<
         TransactionStatusType,
         Pick<ShowSnackbarOptions, 'message' | 'processing' | 'variant'>

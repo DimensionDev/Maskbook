@@ -9,8 +9,7 @@ export class TransferTokenDescriptor {
         const connection = await Web3StateSettings.value.Connection?.getConnection?.({
             chainId: context.chainId,
         })
-
-        const token = await connection?.getFungibleToken(context.to ?? '', {
+        const token = await connection?.getNativeToken({
             chainId: context.chainId,
         })
 

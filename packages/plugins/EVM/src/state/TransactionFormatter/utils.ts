@@ -6,12 +6,13 @@ import BigNumber from 'bignumber.js'
 import type { AbiItem } from 'web3-utils'
 
 export function getTokenAmountDescription(amount = '0', token?: FungibleToken<ChainId, SchemaType>) {
-    if (new BigNumber(amount).isLessThan(new BigNumber('0.000001'))) {
-        return `<0.000001 ${token?.symbol?.trim()}`
-    }
     const value = scale10(1, 9 + (token?.decimals ?? 18)).isGreaterThanOrEqualTo(amount)
         ? formatBalance(amount, token?.decimals ?? 0, 4)
         : 'infinite'
+
+    if (value !== 'infinite' && new BigNumber(value).isLessThan(new BigNumber('0.000001'))) {
+        return `<0.000001 ${token?.symbol?.trim()}`
+    }
     return `${value} ${token?.symbol?.trim()}`
 }
 
