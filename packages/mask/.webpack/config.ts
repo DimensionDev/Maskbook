@@ -15,7 +15,6 @@ import { isAbsolute, join } from 'path'
 import { readFileSync } from 'fs'
 import { nonNullable, EntryDescription, normalizeEntryDescription, joinEntryItem } from './utils'
 import { BuildFlags, normalizeBuildFlags, computedBuildFlags } from './flags'
-import svgConfig from '../../../svgo.config.mjs'
 
 import './clean-hmr'
 
@@ -137,20 +136,28 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                         },
                     },
                 },
-                {
-                    test: /\.svg$/,
-                    use: [
-                        {
-                            loader: 'svgo-loader',
-                            // overrides
-                            options: {
-                                js2svg: {
-                                    pretty: false,
-                                },
-                            },
-                        },
-                    ],
-                },
+                mode === 'production'
+                    ? {
+                          test: /\.svg$/,
+                          loader: 'svgo-loader',
+                          // overrides
+                          options: {
+                              js2svg: {
+                                  pretty: false,
+                              },
+                          },
+                          dependency(data) {
+                              if (data === '') return false
+                              if (data !== 'url')
+                                  throw new TypeError(
+                                      'The only import mode valid for a non-JS file is via new URL(). Current import mode: ' +
+                                          data,
+                                  )
+                              return true
+                          },
+                          type: 'asset/resource',
+                      }
+                    : undefined,
             ],
         },
         plugins: [
