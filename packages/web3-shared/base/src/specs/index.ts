@@ -131,7 +131,7 @@ export interface SocialIdentity {
     /** The public key of persona in hex */
     publicKey?: string
     /** Is own user account identity */
-    isOwner?:boolean
+    isOwner?: boolean
 }
 
 export interface SocialAddress<PluginID> {
