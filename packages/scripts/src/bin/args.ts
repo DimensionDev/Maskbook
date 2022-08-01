@@ -1,7 +1,7 @@
 import yargs from 'yargs'
-import type { ExtensionBuildArgs } from '../extension'
+import type { ExtensionBuildArgs } from '../extension/index.js'
+import { hideBin } from 'yargs/helpers'
 
-const { hideBin } = require('yargs/helpers')
 const presets = ['chromium', 'firefox', 'android', 'iOS', 'base'] as const
 export function extensionArgsParser() {
     const opts = yargs(hideBin(process.argv))

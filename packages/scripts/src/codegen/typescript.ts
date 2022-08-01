@@ -1,4 +1,4 @@
-import { watchTask, shell } from '../utils'
+import { watchTask, shell } from '../utils/index.js'
 
 export function typescript() {
     return shell`npx tsc -b`

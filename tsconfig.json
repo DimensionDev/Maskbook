@@ -160,8 +160,10 @@
   "files": [],
   "ts-node": {
     "compilerOptions": {
-      "module": "CommonJS"
+      "module": "NodeNext",
+      "noEmit": false
     },
+    "esm": true,
     "swc": true
   }
 }

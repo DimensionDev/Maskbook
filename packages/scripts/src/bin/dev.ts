@@ -1,22 +1,19 @@
 #!/usr/bin/env ts-node
 import { spawn } from 'child_process'
-import { codegenWatch } from '../codegen'
-import { awaitChildProcess } from '../utils'
-import { extensionWatch } from '../extension'
-import { extensionArgsParser } from './args'
+import { codegenWatch } from '../codegen/index.js'
+import { awaitChildProcess } from '../utils/index.js'
+import { extensionWatch } from '../extension/index.js'
+import { extensionArgsParser } from './args.js'
 
-async function main() {
-    codegenWatch(console.error)
-    // \\-- is used for debug
-    if (process.argv[2] === '--' || process.argv[2] === '\\--') {
-        return spawn(process.argv[3], process.argv.slice(4), {
-            stdio: 'inherit',
-            shell: true,
-        })
-    }
-    return extensionWatch(extensionArgsParser())
-}
+codegenWatch(console.error)
+// \\-- is used for debug
+let child
+if (process.argv[2] === '--' || process.argv[2] === '\\--') {
+    child = spawn(process.argv[3], process.argv.slice(4), {
+        stdio: 'inherit',
+        shell: true,
+    })
+} else child = await extensionWatch(extensionArgsParser())
 
-main().then(async (child) => {
-    typeof child === 'number' ? process.exit(child) : process.exit(await awaitChildProcess(child))
-})
+if (typeof child === 'number') process.exit(child)
+else process.exit(await awaitChildProcess(child))

@@ -1,8 +1,7 @@
-import { ROOT_PATH, task } from '../utils'
-import { readdir, writeFile } from 'fs/promises'
-import { resolve, dirname, join } from 'path'
+import { ROOT_PATH, task, prettier } from '../utils/index.js'
+import { readdir, writeFile, readFile } from 'fs/promises'
+import { dirname } from 'path'
 import { upperFirst } from 'lodash-unified'
-import { prettier } from '../utils/prettier'
 
 const mainFallbackMap = new Map([['zh', 'zh-TW']])
 
@@ -14,11 +13,11 @@ const header = `${basicHeader}
 `
 
 export async function syncLanguages() {
-    const config = require('../../../../.i18n-codegen.json').list
+    const config = JSON.parse(await readFile(new URL('.i18n-codegen.json', ROOT_PATH), 'utf-8')).list
     for (const { input, generator } of config) {
         const { namespace } = generator
 
-        const inputDir = resolve(ROOT_PATH, dirname(input))
+        const inputDir = new URL(dirname(input) + '/', ROOT_PATH)
 
         const languages = await getLanguages(inputDir)
 
@@ -26,7 +25,7 @@ export async function syncLanguages() {
             let code = header
             code += `\nexport * from './i18n_generated'\n`
             code = await prettier(code)
-            await writeFile(join(inputDir, 'index.ts'), code, { encoding: 'utf8' })
+            await writeFile(new URL('index.ts', inputDir), code, { encoding: 'utf8' })
         }
 
         {
@@ -66,7 +65,7 @@ export async function syncLanguages() {
                         `
             }
             code = await prettier(code)
-            await writeFile(join(inputDir, 'languages.ts'), code, { encoding: 'utf8' })
+            await writeFile(new URL('languages.ts', inputDir), code, { encoding: 'utf8' })
         }
     }
 
@@ -77,7 +76,7 @@ export async function syncLanguages() {
             map[`/[DimensionDev.Maskbook] develop/${input.slice(2).replace('en-US', '%locale%')}`] = namespace
         }
         const code = await prettier(`${basicHeader}\nexport default ${JSON.stringify(map)}`)
-        await writeFile(join(ROOT_PATH, 'packages/mask/background/services/helper/i18n-cache-query-list.ts'), code, {
+        await writeFile(new URL('packages/mask/background/services/helper/i18n-cache-query-list.ts', ROOT_PATH), code, {
             encoding: 'utf8',
         })
     }
@@ -87,7 +86,7 @@ task(
     'sync-languages',
     "Run this when adding a new language support or adding a new package with it's own i18n files.",
 )
-async function getLanguages(inputDir: string): Promise<Map<string, string>> {
+async function getLanguages(inputDir: URL): Promise<Map<string, string>> {
     const languages = (await readdir(inputDir))
         .filter((x) => x.endsWith('.json'))
         .sort()
