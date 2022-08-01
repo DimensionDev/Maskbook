@@ -10,8 +10,8 @@ import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar'
 interface NFTBadgeTimelineProps extends withClasses<'root'> {
     userId: string
     avatarId: string
-    width: number
-    height: number
+    width: number | string
+    height: number | string
     snsKey: RSS3_KEY_SNS
 }
 
