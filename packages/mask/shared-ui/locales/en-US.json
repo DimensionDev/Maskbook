@@ -52,6 +52,7 @@
     "application_tooltip_hint_switch_to_evm_wallet": "Only EVM chains are supported, other chains will be supported later.",
     "application_settings_tab_app_list": "APP list",
     "application_settings_tab_plug_in_switch": "Plug-in switch",
+    "application_settings_tab_plug_app-list-listed": "Listed",
     "application_settings_tab_plug_app-list-unlisted": "Unlisted",
     "application_settings_tab_plug_app-listed-placeholder": "Click the application icon to hide in the APP list.",
     "application_display_tab_plug_app-unlisted-placeholder": "Click the setting icon to list it on the App board.",
