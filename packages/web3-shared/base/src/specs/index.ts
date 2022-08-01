@@ -887,7 +887,7 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         chainId: ChainId,
         account: string,
         initial?: Web3HubOptions,
-    ) => Promise<Array<Transaction<ChainId, SchemaType>>>
+    ) => Promise<Pageable<Transaction<ChainId, SchemaType>>>
     /** Get non-fungible tokens search by the give keyword. */
     getNonFungibleTokensByKeyword?: (
         keyword: string,
