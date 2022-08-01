@@ -1,13 +1,13 @@
 import yargs, { Argv } from 'yargs'
-const { hideBin } = require('yargs/helpers')
+import { hideBin } from 'yargs/helpers'
 import { spawn } from 'child_process'
 import { compact } from 'lodash-unified'
 import { resolve } from 'path'
-import { awaitChildProcess, PKG_PATH, watchTask } from '../utils'
-import { buildInjectedScript, watchInjectedScript } from '../projects/injected-scripts'
-import { buildMaskSDK, watchMaskSDK } from '../projects/mask-sdk'
-import { buildPolyfill } from '../projects/polyfill'
-import { buildGun } from '../projects/gun'
+import { awaitChildProcess, PKG_PATH, watchTask } from '../utils/index.js'
+import { buildInjectedScript, watchInjectedScript } from '../projects/injected-scripts.js'
+import { buildMaskSDK, watchMaskSDK } from '../projects/mask-sdk.js'
+import { buildPolyfill } from '../projects/polyfill.js'
+import { buildGun } from '../projects/gun.js'
 
 const presets = ['chromium', 'firefox', 'android', 'iOS', 'base'] as const
 const otherFlags = ['beta', 'insider', 'reproducible', 'profile', 'mv3', 'readonlyCache', 'progress'] as const

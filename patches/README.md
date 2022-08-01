@@ -20,6 +20,7 @@
 ## ESM-CJS compatibility
 
 - ts-results: provide invalid pure-esm support. <https://github.com/vultix/ts-results/issues/37>
+- gulp: cannot be used with ts-node/esm mode.
 
 ## Other problems
 

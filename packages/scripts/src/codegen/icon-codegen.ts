@@ -1,16 +1,14 @@
 import { readFile, writeFile } from 'fs/promises'
-import glob from 'glob-promise'
 import { watch } from 'gulp'
 import { camelCase, snakeCase, upperFirst } from 'lodash-unified'
-import { parse as parsePath, join, resolve } from 'path'
-import { pathToFileURL } from 'url'
-import { ROOT_PATH, watchTask } from '../utils'
-import { transform } from '@swc/core'
-import { Position, SourceMapGenerator } from 'source-map'
+import { parse as parsePath } from 'path'
+import { ROOT_PATH, watchTask } from '../utils/index.js'
+import type { Position } from 'source-map'
+import { fileURLToPath } from 'url'
 
 const pattern = 'packages/icons/**/*.@(svg|jpe?g|png)'
-const iconRoot = resolve(__dirname, '../../../icons')
-const CODE_FILE = resolve(iconRoot, 'icon-generated-as')
+const iconRoot = new URL('../../../icons', import.meta.url)
+const CODE_FILE = new URL('./icon-generated-as', iconRoot)
 
 const currentColorRe = /\w=('|")currentColor\1/
 
@@ -52,6 +50,9 @@ const exportConst = 'export const '.length
 const SOURCEMAP_HEAD = '//# sourceMappingURL='
 
 async function generateIcons() {
+    const { SourceMapGenerator } = await import('source-map')
+    const { transform } = await import('@swc/core')
+    const glob = await import('glob-promise')
     const asJSX = {
         js: [
             //
@@ -70,9 +71,9 @@ async function generateIcons() {
         dtsMap: new SourceMapGenerator({ file: 'icon-generated-as-url.d.ts' }),
     }
 
-    const relativePrefix = pathToFileURL(iconRoot).toString().length + 1
+    const relativePrefix = iconRoot.toString().length + 1
     /* cspell:disable-next-line */
-    const filePaths = await glob.promise(pattern, { cwd: ROOT_PATH, nodir: true })
+    const filePaths = await glob.promise(pattern, { cwd: fileURLToPath(ROOT_PATH), nodir: true })
 
     const variants: Record<
         string,
@@ -91,7 +92,7 @@ async function generateIcons() {
             variants[base] ??= []
 
             // cross platform, use URL to calculate relative path
-            const importPath = './' + pathToFileURL(join(ROOT_PATH, path)).toString().slice(relativePrefix)
+            const importPath = './' + new URL(path, ROOT_PATH).toString().slice(relativePrefix)
             const identifier = snakeCase(parsedPath.name)
 
             const url = ` /*#__PURE__*/ (new URL(${JSON.stringify(importPath)}, import.meta.url).href)`
@@ -188,7 +189,7 @@ function createImage(x: string) {
     // Cannot render images in JSDoc in VSCode by relative path
     // Blocked by: https://github.com/microsoft/TypeScript/issues/47718
     //             https://github.com/microsoft/vscode/issues/86564
-    const absolutePath = pathToFileURL(join(ROOT_PATH, './packages/icons/', x))
+    const absolutePath = new URL(x, new URL('./packages/icons/', ROOT_PATH))
     return `[${x}](${absolutePath}) ![${x}](${absolutePath})`
 }
 

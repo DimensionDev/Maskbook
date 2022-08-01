@@ -2,18 +2,18 @@
   "name": "@masknet/cli",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "bin": {
     "build": "./src/bin/build.ts",
     "dev": "./src/bin/dev.ts"
   },
   "dependencies": {
     "@types/rimraf": "^3.0.2",
-    "chalk": "^4.1.2",
+    "chalk": "^5.0.1",
     "enquirer": "^2.3.6",
     "fs-extra": "^10.1.0",
     "glob": "^7.2.0",
     "glob-promise": "^4.2.2",
-    "gulp-zip": "^5.1.0",
     "proper-lockfile": "^4.1.1",
     "rimraf": "^3.0.2",
     "source-map": "^0.7.4",
@@ -24,6 +24,8 @@
     "@types/gulp": "^4.0.9",
     "@types/lodash": "^4.14.182",
     "@types/proper-lockfile": "^4.1.2",
+    "@types/yargs": "^17.0.10",
+    "gulp-cli": "^2.3.0",
     "ts-node": "^10.9.1",
     "web-ext": "^7.1.1"
   }

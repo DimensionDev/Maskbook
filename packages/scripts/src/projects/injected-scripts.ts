@@ -1,7 +1,6 @@
-import { fromNPMTask } from '../utils'
-import { resolve } from 'path'
+import { fromNPMTask, PKG_PATH } from '../utils/index.js'
 export const [buildInjectedScript, watchInjectedScript] = fromNPMTask(
-    resolve(__dirname, '../../../injected-script'),
+    new URL('injected-scripts', PKG_PATH),
     'injected-script',
     'An extra script that runs in the main frame to provide some extra functionality of Mask Network.',
 )

@@ -1,7 +1,7 @@
-import { fromNPMTask } from '../utils'
-import { resolve } from 'path'
+import { fromNPMTask, PKG_PATH } from '../utils/index.js'
 export const [buildGun] = fromNPMTask(
-    resolve(__dirname, '../../../gun-utils'),
+    //
+    new URL('gun-utils', PKG_PATH),
     'gun',
     'Build gun required for Mask Network.',
 )

@@ -1,20 +1,19 @@
 import { series } from 'gulp'
-import { createBuildStorybook6, NETLIFY_PATH, PKG_PATH, shell, task } from '../utils'
-import { resolve } from 'path'
-import { codegen } from '../codegen'
+import { createBuildStorybook6, PKG_PATH, task } from '../utils/index.js'
+import { codegen } from '../codegen/index.js'
 
-const STATIC_PATH = resolve(NETLIFY_PATH, 'storybook-static')
+const STATIC_PATH = new URL('netlify/storybook-static', PKG_PATH)
 
 // prettier-ignore
 const dashboardSB = createBuildStorybook6(
-    resolve(PKG_PATH, 'dashboard'),
-    resolve(STATIC_PATH, 'dashboard'),
+    new URL('dashboard', PKG_PATH),
+    new URL('dashboard', STATIC_PATH),
     'dashboard-storybook',
 )
 // prettier-ignore
 const themeSB = createBuildStorybook6(
-    resolve(PKG_PATH, 'theme'),
-    resolve(STATIC_PATH, 'theme'),
+    new URL('theme', PKG_PATH),
+    new URL('theme', STATIC_PATH),
     'theme',
 )
 
