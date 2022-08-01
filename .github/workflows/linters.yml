@@ -67,6 +67,7 @@ jobs:
             registry: true
       - run: pnpm install
       - run: npx gulp codegen
+      - run: npx gulp typescript
       - run: npx gulp polyfill
       - run: node --experimental-vm-modules ./node_modules/jest/bin/jest.js
   eslint:
