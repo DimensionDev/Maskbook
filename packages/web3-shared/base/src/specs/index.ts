@@ -69,6 +69,7 @@ export enum SourceType {
     NFTScan = 'NFTScan',
     Alchemy_EVM = 'Alchemy_EVM',
     Alchemy_FLOW = 'Alchemy_FLOW',
+    Chainbase = 'Chainbase',
 
     // Rarity
     RaritySniper = 'RaritySniper',
@@ -883,6 +884,16 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         account: string,
         initial?: Web3HubOptions,
     ) => Promise<Array<Transaction<ChainId, SchemaType>>>
+    /** Get non-fungible tokens search by the give keyword. */
+    getNonFungibleTokensByKeyword?: (
+        keyword: string,
+        initial?: Web3HubOptions,
+    ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>>
+    /** Get non-fungible assets search by the give keyword. */
+    getNonFungibleAssetsByKeyword?: (
+        keyword: string,
+        initial?: Web3HubOptions,
+    ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
     /** Get non-fungible tokens of the given collection. */
     getNonFungibleTokensByCollection?: (
         address: string,
@@ -893,6 +904,18 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         address: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
+    /** Get a non-fungible token owner address. */
+    getNonFungibleTokenOwner?: (
+        address: string,
+        tokenId: string,
+        initial?: Web3HubOptions,
+    ) => Promise<string>
+    /** Get a non-fungible token floor price. */
+    getNonFungibleTokenFloorPrice?: (
+        address: string,
+        tokenId: string,
+        initial?: Web3HubOptions,
+    ) => Promise<PriceInToken<ChainId, SchemaType>>
     /** Get a non-fungible contract. */
     getNonFungibleTokenContract?: (
         address: string,

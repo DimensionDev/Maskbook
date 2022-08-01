@@ -182,6 +182,7 @@ export const resolveSourceName = createLookupTableResolver<SourceType, string>(
         [SourceType.Alchemy_FLOW]: 'Alchemy_FLOW',
         [SourceType.RaritySniper]: 'RaritySniper',
         [SourceType.TraitSniper]: 'TraitSniper',
+        [SourceType.Chainbase]: 'Chainbase',
     },
     (providerType) => {
         throw new Error(`Unknown provider type: ${providerType}.`)
