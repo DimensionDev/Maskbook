@@ -11,6 +11,7 @@ import {
     InputBase as MuiInputBase,
     switchClasses,
     tooltipClasses,
+    alertClasses,
 } from '@mui/material'
 import type { MaskColor } from './colors'
 
@@ -933,6 +934,53 @@ export const Tooltip = (mode: PaletteMode, colors: MaskColor) => ({
                     [`&[data-popper-placement*="top-end"] .${tooltipClasses.arrow}`]: {
                         transform: 'translate3d(300px, 0, 0)!important',
                     },
+                },
+            },
+        },
+    },
+})
+
+export const Alert = (mode: PaletteMode, colors: MaskColor) => ({
+    components: {
+        MuiAlert: {
+            defaultProps: {
+                iconMapping: {
+                    info: <Icons.Info size={20} />,
+                    warning: <Icons.WarningTriangle size={20} />,
+                    success: <Icons.FillSuccess size={20} />,
+                    error: <Icons.Warning size={20} />,
+                },
+                variant: 'standard',
+            },
+            styleOverrides: {
+                root: {
+                    padding: '4px 12px',
+                    backdropFilter: 'blur(10px)',
+                },
+                standardInfo: {
+                    backgroundColor: colors.maskColor.bg,
+                    color: colors.maskColor.main,
+                    [`& .${alertClasses.icon}`]: {
+                        color: colors.maskColor.main,
+                    },
+                },
+                standardWarning: {
+                    backgroundColor: alpha(colors.maskColor.warn, 0.1),
+                    color: colors.maskColor.warn,
+                },
+                standardError: {
+                    backgroundColor: alpha(colors.maskColor.danger, 0.1),
+                    color: colors.maskColor.danger,
+                },
+                standardSuccess: {
+                    backgroundColor: alpha(colors.maskColor.success, 0.1),
+                    color: colors.maskColor.success,
+                },
+                icon: {
+                    padding: '8px 0',
+                    marginRight: 6,
+                    width: 20,
+                    height: 20,
                 },
             },
         },
