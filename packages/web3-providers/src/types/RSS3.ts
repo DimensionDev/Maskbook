@@ -225,6 +225,10 @@ export namespace RSS3BaseAPI {
         getFootprints(address: string): Promise<Collection[] | undefined>
         getNameInfo(id: string): Promise<NameInfo | undefined>
         getProfileInfo(address: string): Promise<ProfileInfo | undefined>
-        getWeb3Feed(address: string, type: FeedType, option: HubOptions<ChainId>): Promise<Web3FeedResponse | undefined>
+        getWeb3Feed(
+            address: string,
+            type?: FeedType,
+            option?: HubOptions<ChainId>,
+        ): Promise<Web3FeedResponse | undefined>
     }
 }
