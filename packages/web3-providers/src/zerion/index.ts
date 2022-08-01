@@ -1,14 +1,7 @@
 import io from 'socket.io-client'
 import { unionWith, values } from 'lodash-unified'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import {
-    FungibleAsset,
-    Transaction,
-    HubOptions,
-    createPageable,
-    createIndicator,
-    Pageable,
-} from '@masknet/web3-shared-base'
+import { Transaction, HubOptions, createPageable, createIndicator, Pageable } from '@masknet/web3-shared-base'
 import { ChainId, getZerionConstant, SchemaType } from '@masknet/web3-shared-evm'
 import type {
     SocketRequestBody,
@@ -112,7 +105,6 @@ export class ZerionAPI
     implements FungibleTokenAPI.Provider<ChainId, SchemaType>, HistoryAPI.Provider<ChainId, SchemaType>
 {
     async getAssets(address: string, options?: HubOptions<ChainId>) {
-        let result: Array<FungibleAsset<ChainId, SchemaType>> = []
         const pairs = getEnumAsArray(ChainId).map(
             (x) => [x.value, getZerionConstant(x.value, 'ASSETS_SCOPE_NAME')] as const,
         )
