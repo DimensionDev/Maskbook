@@ -31,7 +31,7 @@ export function useSocialAddressListAll(
 
         if (!cached) {
             cached = Promise.allSettled<AddressList>(
-                [EVM_IdentityService, SolanaIdentityService].map((x) => x?.lookup(identity, identity.isOwner) ?? []),
+                [EVM_IdentityService, SolanaIdentityService].map((x) => x?.lookup(identity) ?? []),
             )
             if (!identity.isOwner) {
                 addressCache.set(userId, cached)

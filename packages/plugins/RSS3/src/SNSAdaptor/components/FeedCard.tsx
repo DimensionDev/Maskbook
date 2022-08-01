@@ -35,11 +35,9 @@ const useStyles = makeStyles()((theme) => ({
 
     summary: {
         textOverflow: 'ellipsis',
-        '-webkit-line-clamp': '1',
         maxWidth: '400px',
         overflow: 'hidden',
-        display: '-webkit-box',
-        '-webkit-box-orient': 'vertical',
+        whiteSpace: 'nowrap',
         color: theme.palette.maskColor.main,
     },
     defaultImage: {
