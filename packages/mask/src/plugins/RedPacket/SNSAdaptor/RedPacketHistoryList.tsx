@@ -1,5 +1,5 @@
 import { Typography, List, Box } from '@mui/material'
-import { makeStyles, LoadingAnimation } from '@masknet/theme'
+import { makeStyles, LoadingBase } from '@masknet/theme'
 import type { RedPacketJSONPayload } from '../types'
 import { RedPacketInHistoryList } from './RedPacketInHistoryList'
 import { useRedPacketHistory } from './hooks/useRedPacketHistory'
@@ -59,7 +59,7 @@ export function RedPacketHistoryList(props: RedPacketHistoryListProps) {
     if (loading) {
         return (
             <Box style={{ height: 240, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
-                <LoadingAnimation />
+                <LoadingBase />
             </Box>
         )
     }

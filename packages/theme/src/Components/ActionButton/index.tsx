@@ -1,6 +1,6 @@
 import { Box, Button } from '@mui/material'
 import type { ButtonProps } from '@mui/material/Button'
-import { CircleLoadingAnimation } from '../LoadingAnimation'
+import { LoadingBase } from '../LoadingBase'
 import { makeStyles } from '../../UIHelper'
 
 export interface ActionButtonProps extends ButtonProps {
@@ -37,7 +37,7 @@ export function ActionButton<T extends React.ComponentType<any> = React.Componen
                     justifyContent="center"
                     alignItems="center"
                     style={{ opacity: 1 }}>
-                    <CircleLoadingAnimation />
+                    <LoadingBase />
                 </Box>
             ) : null}
             <span>{children}</span>

@@ -1,4 +1,4 @@
-import { getMaskColor, makeStyles, MaskLoadingButton, LoadingAnimation } from '@masknet/theme'
+import { getMaskColor, makeStyles, MaskLoadingButton, LoadingBase } from '@masknet/theme'
 import { memo } from 'react'
 import classNames from 'classnames'
 import type { LoadingButtonProps } from '@mui/lab'
@@ -26,7 +26,7 @@ export const LoadingButton = memo<DashboardLoadingButtonProps>((props) => {
             loadingPosition="end"
             soloLoading={false}
             fullWidth
-            loadingIndicator={<LoadingAnimation style={{ fontSize: '1.2rem' }} />}
+            loadingIndicator={<LoadingBase style={{ fontSize: '1.2rem' }} />}
             onClick={onClick}
             {...rest}>
             {children}

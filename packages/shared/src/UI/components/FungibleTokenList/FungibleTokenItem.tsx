@@ -5,7 +5,7 @@ import { ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import { formatBalance, FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { TokenIcon } from '../TokenIcon'
 import { Icons } from '@masknet/icons'
-import { makeStyles, MaskLoadingButton, MaskSearchableListItemProps, LoadingAnimation } from '@masknet/theme'
+import { makeStyles, MaskLoadingButton, MaskSearchableListItemProps, LoadingBase } from '@masknet/theme'
 import { useSharedI18N } from '../../../locales'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 
@@ -111,7 +111,7 @@ export const getFungibleTokenItem =
             return source !== 'external' ? (
                 <span>
                     {loading ? (
-                        <LoadingAnimation size={16} />
+                        <LoadingBase size={16} />
                     ) : (
                         Number.parseFloat(new BigNumber(formatBalance(balance ?? 0, decimals, 6)).toFixed(6))
                     )}

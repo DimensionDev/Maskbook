@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Box, Typography } from '@mui/material'
-import { makeStyles, MaskColorVar, LoadingAnimation } from '@masknet/theme'
+import { makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -23,7 +23,7 @@ export const LoadingPlaceholder = memo(() => {
     const { classes } = useStyles()
     return (
         <Box className={classes.container}>
-            <LoadingAnimation size={30} color={MaskColorVar.primary} />
+            <LoadingBase size={30} color={MaskColorVar.primary} />
             <Typography className={classes.prompt}>loading...</Typography>
         </Box>
     )

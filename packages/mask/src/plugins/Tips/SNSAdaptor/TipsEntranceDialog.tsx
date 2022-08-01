@@ -8,7 +8,7 @@ import {
     NextIDStoragePayload,
 } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles, useCustomSnackbar, LoadingAnimation, ActionButton } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar, LoadingBase, ActionButton } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { Button, ButtonProps, DialogActions, DialogContent } from '@mui/material'
 import formatDateTime from 'date-fns/format'
@@ -261,7 +261,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             {loading ? (
                 <DialogContent className={classes.dialogContent}>
                     <div className={classes.loading}>
-                        <LoadingAnimation />
+                        <LoadingBase />
                     </div>
                 </DialogContent>
             ) : (

@@ -11,7 +11,7 @@ import {
     formatBalance,
     formatCurrency,
 } from '@masknet/web3-shared-base'
-import { LoadingAnimation } from '@masknet/theme'
+import { LoadingBase } from '@masknet/theme'
 import {
     createContract,
     createERC20Token,
@@ -262,7 +262,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
 
                             {loading ? (
                                 <Typography variant="body2" textAlign="right" className={classes.tokenValueUSD}>
-                                    <LoadingAnimation width={16} height={16} />
+                                    <LoadingBase width={16} height={16} />
                                 </Typography>
                             ) : (
                                 <Typography variant="body2" textAlign="right" className={classes.tokenValueUSD}>

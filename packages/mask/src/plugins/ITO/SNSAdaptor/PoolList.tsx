@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { Box, Typography } from '@mui/material'
-import { makeStyles, LoadingAnimation } from '@masknet/theme'
+import { makeStyles, LoadingBase } from '@masknet/theme'
 import { useAllPoolsAsSeller } from './hooks/useAllPoolsAsSeller'
 import type { JSON_PayloadInMask } from '../types'
 import { PoolInList } from './PoolInList'
@@ -47,7 +47,7 @@ export function PoolList(props: PoolListProps) {
     if (loading) {
         return (
             <Box className={classes.placeholder}>
-                <LoadingAnimation />
+                <LoadingBase />
             </Box>
         )
     }

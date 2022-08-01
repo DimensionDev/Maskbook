@@ -4,7 +4,7 @@ import { ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import type { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
 import type { MaskSearchableListItemProps } from '@masknet/theme'
-import { makeStyles, MaskLoadingButton, LoadingAnimation } from '@masknet/theme'
+import { makeStyles, MaskLoadingButton, LoadingBase } from '@masknet/theme'
 import { TokenIcon, useSharedI18N } from '@masknet/shared'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { Box } from '@mui/system'
@@ -125,7 +125,7 @@ export const getFungibleTokenItem =
 
         const action = useMemo(() => {
             return source !== 'external' ? (
-                <span>{loading ? <LoadingAnimation /> : null}</span>
+                <span>{loading ? <LoadingBase /> : null}</span>
             ) : (
                 <MaskLoadingButton
                     color="primary"

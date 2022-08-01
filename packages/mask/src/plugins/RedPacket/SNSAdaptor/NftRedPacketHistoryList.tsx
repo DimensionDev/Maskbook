@@ -1,5 +1,5 @@
 import { useScrollBottomEvent } from '@masknet/shared-base-ui'
-import { makeStyles, LoadingAnimation } from '@masknet/theme'
+import { makeStyles, LoadingBase } from '@masknet/theme'
 import classNames from 'classnames'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
@@ -120,7 +120,7 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
     if (loading) {
         return (
             <Box style={{ height: 240, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
-                <LoadingAnimation />
+                <LoadingBase />
             </Box>
         )
     }

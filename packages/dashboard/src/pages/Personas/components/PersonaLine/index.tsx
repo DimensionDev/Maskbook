@@ -1,6 +1,6 @@
 import { memo, MouseEvent, useState } from 'react'
 import { Box, Button, Link, Stack, Typography } from '@mui/material'
-import { getMaskColor, MaskColorVar, makeStyles, LoadingAnimation } from '@masknet/theme'
+import { getMaskColor, MaskColorVar, makeStyles, LoadingBase } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { DisconnectProfileDialog } from '../DisconnectProfileDialog'
 import {
@@ -141,7 +141,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                             className={classes.proofIconBox}
                             onClick={(e: MouseEvent) => handleProofIconClick(e, isProved, profile)}>
                             {proof.loading ? (
-                                <LoadingAnimation />
+                                <LoadingBase />
                             ) : isProved?.is_valid ? (
                                 <Icons.NextIdPersonaVerified size={18} />
                             ) : (
