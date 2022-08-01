@@ -211,6 +211,11 @@ function RenderEntryComponent({ application }: { application: Application }) {
     const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
+
+    const { setDialog: setPersonaListDialog } = useRemoteControlledDialog(
+        WalletMessages.events.ApplicationPersonaListDialogUpdated,
+    )
+
     const { closeDialog: closeApplicationBoard } = useRemoteControlledDialog(
         WalletMessages.events.ApplicationDialogUpdated,
     )
@@ -239,8 +244,7 @@ function RenderEntryComponent({ application }: { application: Application }) {
     }, [ApplicationEntryStatus])
 
     const verifyPersona = useCallback(() => {
-        closeApplicationBoard()
-        ApplicationEntryStatus.personaNextIDReset?.()
+        setPersonaListDialog({ open: true })
     }, [])
 
     const clickHandler = useMemo(() => {

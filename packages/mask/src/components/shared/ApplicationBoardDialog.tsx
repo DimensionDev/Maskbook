@@ -11,6 +11,7 @@ import { ApplicationBoard } from './ApplicationBoard'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
 import { Icons } from '@masknet/icons'
+import { PersonaList } from './PersonaList'
 
 const useStyles = makeStyles<{ openSettings: boolean }>()((theme, { openSettings }) => {
     return {
@@ -38,6 +39,10 @@ export function ApplicationBoardDialog() {
 
     const { open, closeDialog: _closeDialog } = useRemoteControlledDialog(
         WalletMessages.events.ApplicationDialogUpdated,
+    )
+
+    const { open: openPersonaListDialog, closeDialog: _closePersonaListDialog } = useRemoteControlledDialog(
+        WalletMessages.events.ApplicationPersonaListDialogUpdated,
     )
 
     const closeDialog = useCallback(() => {
@@ -81,8 +86,10 @@ export function ApplicationBoardDialog() {
                     ) : (
                         <ApplicationBoard closeDialog={closeDialog} />
                     )}
-                </DialogContent>
-            </InjectedDialog>
-        </TabContext>
+                {openPersonaListDialog ? (
+                    <PersonaList open={openPersonaListDialog} onClose={_closePersonaListDialog} />
+                ) : null}
+            </DialogContent>
+        </InjectedDialog></TabContext>
     ) : null
 }
