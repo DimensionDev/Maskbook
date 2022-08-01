@@ -4,7 +4,7 @@ export interface FT {
     contract_address: string
     name: string
     symbol: string
-    decimals: string
+    decimals: number
     balance: string
 }
 
@@ -59,7 +59,7 @@ export interface NFT_FloorPrice {
     updated_at: string
 }
 
-export interface Transaction {
+export interface Tx {
     chain_id: ChainId
     type: 0
     status: 0 | 1

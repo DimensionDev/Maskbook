@@ -4,18 +4,21 @@ import {
     createIndicator,
     createNextIndicator,
     createPageable,
+    FungibleAsset,
     HubIndicator,
     HubOptions,
     NonFungibleAsset,
     NonFungibleTokenContract,
     NonFungibleTokenEvent,
+    Pageable,
     scale10,
     TokenType,
+    Transaction,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, createNativeToken, explorerResolver, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import type { NFT, NFT_FloorPrice, NFT_Metadata, NFT_TransferEvent } from './types'
-import type { NonFungibleTokenAPI } from '../types'
+import type { FT, NFT, NFT_FloorPrice, NFT_Metadata, NFT_TransferEvent, Tx } from './types'
+import type { FungibleTokenAPI, HistoryAPI, NonFungibleTokenAPI } from '../types'
 import { CHAINBASE_API_URL } from './constants'
 
 async function fetchFromChainbase<T>(pathname: string) {
@@ -31,7 +34,90 @@ async function fetchFromChainbase<T>(pathname: string) {
     return data?.code === 0 ? data.data : undefined
 }
 
-export class ChainbaseAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+export class ChainbaseHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaType> {
+    createTransactionFromTx(chainId: ChainId, tx: Tx): Transaction<ChainId, SchemaType> {
+        return {
+            id: tx.transaction_hash,
+            chainId,
+            status: tx.status,
+            timestamp: getUnixTime(new Date(tx.block_timestamp)),
+            from: tx.from_address,
+            to: tx.to_address,
+            tokens: EMPTY_LIST,
+        }
+    }
+
+    async getTransactions(
+        address: string,
+        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {},
+    ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
+        const txs = await fetchFromChainbase<Tx[]>(
+            urlcat('/v1/account/txs', {
+                chainId,
+                address,
+                page: (indicator?.index ?? 0) + 1,
+            }),
+        )
+
+        if (!txs) return createPageable(EMPTY_LIST, createIndicator(indicator))
+        const assets = txs.map((x) => this.createTransactionFromTx(chainId, x))
+        return createPageable(
+            assets,
+            createIndicator(indicator),
+            assets.length ? createNextIndicator(indicator) : undefined,
+        )
+    }
+}
+
+export class ChainbaseFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId, SchemaType> {
+    createFungibleAssetFromFT(chainId: ChainId, token: FT) {
+        return {
+            chainId,
+            id: token.contract_address,
+            address: token.contract_address,
+            type: TokenType.Fungible,
+            schema: SchemaType.ERC20,
+            name: token.name,
+            symbol: token.symbol,
+            decimals: token.decimals,
+            balance: token.balance,
+        }
+    }
+
+    async getAsset(address: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+        const token = await fetchFromChainbase<FT>(
+            urlcat('/v1/token/metadata', {
+                chain_id: chainId,
+                contract_address: address,
+            }),
+        )
+
+        if (!token) return
+        return this.createFungibleAssetFromFT(chainId, token)
+    }
+    async getAssets(
+        address: string,
+        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {},
+    ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>, HubIndicator>> {
+        const tokens = await fetchFromChainbase<FT[]>(
+            urlcat('/v1/account/tokens', {
+                chain_id: chainId,
+                address,
+                page: (indicator?.index ?? 0) + 1,
+            }),
+        )
+
+        if (!tokens) return createPageable(EMPTY_LIST, createIndicator(indicator))
+        const assets = tokens.map((x) => this.createFungibleAssetFromFT(chainId, x))
+        return createPageable(
+            assets,
+            createIndicator(indicator),
+            assets.length ? createNextIndicator(indicator) : undefined,
+        )
+    }
+}
+
+export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     createNonFungibleTokenPermalink(chainId: ChainId, address: string, tokenId: string) {
         if (chainId === ChainId.Mainnet || chainId === ChainId.Matic) {
             return urlcat('https://opensea.com/:protocol/:contract/:tokenId', {
@@ -162,15 +248,12 @@ export class ChainbaseAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         return this.createNonFungibleAssetFromNFTMetadata(chainId, address, tokenId, metadata)
     }
 
-    async getToken(address: string, tokenId: string, options: HubOptions<ChainId> = {}) {
-        return this.getAsset(address, tokenId, options)
-    }
-
     async getAssets(account: string, { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {}) {
         const tokens = await fetchFromChainbase<NFT[]>(
             urlcat('/v1/account/nfts', {
                 chain_id: chainId,
                 address: account.toLowerCase(),
+                page: (indicator?.index ?? 0) + 1,
             }),
         )
         if (!tokens) return createPageable(EMPTY_LIST, createIndicator(indicator))
@@ -190,6 +273,7 @@ export class ChainbaseAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
             urlcat('/v1/nft/search', {
                 chain_id: chainId,
                 name: keyword,
+                page: (indicator?.index ?? 0) + 1,
             }),
         )
         if (!tokens) return createPageable(EMPTY_LIST, createIndicator(indicator))
@@ -226,10 +310,11 @@ export class ChainbaseAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                 chainId,
                 contract_address: address,
                 token_id: tokenId,
+                page: (indicator?.index ?? 0) + 1,
             }),
         )
 
-        if (!transferEvents?.length) return createPageable([], createIndicator(indicator))
+        if (!transferEvents?.length) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const events = transferEvents.map((x) =>
             this.createNonFungibleTokenEventFromNFT_TransferEvent(chainId, address, x),
         )

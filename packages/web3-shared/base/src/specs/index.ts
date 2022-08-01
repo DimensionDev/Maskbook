@@ -558,6 +558,7 @@ export interface Wallet {
 
 export interface Transaction<ChainId, SchemaType> {
     id: string
+    chainId: ChainId
     type?: string
     filterType?: string
     from: string
