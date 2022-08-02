@@ -1,130 +1,114 @@
-import { getAssetQuery, getTokenHistoryQuery, getBidsQuery, getAsksQuery } from './queries'
+import { GetCollectionsByKeywordQuery, GetTokenQuery } from './queries'
 import { ZORA_MAINNET_GRAPHQL_URL } from './constants'
 import { GraphQLClient } from 'graphql-request'
 import {
+    createIndicator,
+    createNextIndicator,
+    createPageable,
+    CurrencyType,
+    HubIndicator,
+    HubOptions,
     NonFungibleAsset,
-    NonFungibleToken,
+    NonFungibleTokenCollection,
     NonFungibleTokenEvent,
-    NonFungibleTokenOrder,
     OrderSide,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { ChainId, formatWeiToEther, NonFungibleAssetProvider, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, createNativeToken, formatWeiToEther, SchemaType } from '@masknet/web3-shared-evm'
 import { first } from 'lodash-es'
-import type { ZoraAsk, ZoraBid, ZoraHistory, ZoraToken } from './types'
+import type { Collection, Token } from './types'
 import type { NonFungibleTokenAPI } from '../types'
-
-function createNonFungibleAssetFromToken(asset: ZoraToken): NonFungibleAsset<ChainId, SchemaType> {
-    const image_url =
-        asset.metadata.json.image ?? asset.metadata.json.animation_url ?? asset.metadata.json.image_url ?? ''
-    const animation_url = asset.metadata.json.image ?? asset.metadata.json.animation_url ?? ''
-    return {
-        is_verified: false,
-        is_auction: asset.currentAuction !== null,
-        image_url: resolveIPFSLinkFromURL(image_url),
-        asset_contract: {
-            name: asset.tokenContract.name,
-            description: '',
-            schemaName: '',
-        },
-        current_price: asset.v3Ask ? formatWeiToEther(asset.v3Ask.askPrice).toNumber() : null,
-        current_symbol: asset.symbol ?? 'ETH',
-        owner: asset.owner
-            ? {
-                  address: asset.owner,
-                  profile_img_url: '',
-                  user: { username: asset.owner },
-                  link: `https://zora.co/${asset?.owner}`,
-              }
-            : null,
-        creator: asset.metadata.json.created_by
-            ? {
-                  address: asset.metadata.json.created_by,
-                  profile_img_url: '',
-                  user: { username: asset.metadata.json.created_by },
-                  link: `https://zora.co/${asset?.metadata.json.created_by}`,
-              }
-            : null,
-        token_id: asset.tokenId,
-        token_address: asset.address,
-        traits: asset.metadata.json.attributes,
-        safelist_request_status: '',
-        description: asset.metadata.json.description,
-        name: asset.name ?? asset.metadata.json.name,
-        collection_name: '',
-        animation_url: resolveIPFSLinkFromURL(animation_url),
-        end_time: asset.currentAuction ? new Date(asset.currentAuction.expiresAt) : null,
-        order_payment_tokens: [] as FungibleTokenDetailed[],
-        offer_payment_tokens: [] as FungibleTokenDetailed[],
-        slug: '',
-        top_ownerships: asset.owner
-            ? [
-                  {
-                      owner: {
-                          address: asset.owner,
-                          profile_img_url: '',
-                          user: { username: asset.owner },
-                          link: `https://zora.co/${asset.owner}`,
-                      },
-                  },
-              ]
-            : [],
-        response_: asset,
-        last_sale: null,
-    }
-}
-
-// function createNonFungibleAssetFromAsset(chainId: ChainId, address: string, tokenId: string, asset: ZoraToken): NonFungibleAsset<ChainId, SchemaType> {
-//     return {
-//         id: `${chainId}_${address}_${tokenId}`,
-//         schema: SchemaType.ERC721,
-//         type: TokenType.NonFungible,
-//         chainId,
-//         address,
-//         collection: {
-//             chainId,
-//             address,
-//             name: asset.name,
-//             symbol: asset.symbol,
-//             slug: asset.symbol,
-//         },
-//         contract: {
-//             chainId: ChainId.Mainnet,
-//             address: tokenAddress,
-//             name: asset?.tokenContract.name ?? '',
-//             symbol: '',
-//         },
-//         info: {
-//             name: asset?.metadata.json.name ?? '',
-//             description: asset?.metadata.json.description ?? '',
-//             mediaUrl: asset?.metadata.json.animation_url ?? asset?.metadata.json.image_url ?? '',
-//             owner: asset?.owner,
-//         },
-//         tokenId,
-//     }
-// }
-
+import { EMPTY_LIST } from '@masknet/shared-base'
+import urlcat from 'urlcat'
 export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     private client = new GraphQLClient(ZORA_MAINNET_GRAPHQL_URL)
 
+    private createZoraLink(chainId: ChainId, address: string, tokenId: string) {
+        return urlcat('https://zora.co/collections/:address/:tokenId', {
+            address,
+            tokenId,
+        })
+    }
+
+    private createNonFungibleAssetFromToken(chainId: ChainId, token: Token): NonFungibleAsset<ChainId, SchemaType> {
+        const shared = {
+            chainId,
+            address: token.tokenContract?.collectionAddress ?? token.collectionAddress,
+            name: token.tokenContract?.name ?? token.name ?? token.collectionName ?? 'Unknown Token',
+            symbol: token.tokenContract?.symbol ?? 'UNKNOWN',
+            schema: SchemaType.ERC721,
+        }
+        return {
+            id: `${token.collectionAddress}_${token.tokenId}`,
+            chainId,
+            type: TokenType.NonFungible,
+            schema: SchemaType.ERC721,
+            link: this.createZoraLink(chainId, token.collectionAddress, token.tokenId),
+            address: token.collectionAddress,
+            tokenId: token.tokenId,
+            contract: {
+                ...shared,
+                owner: token.owner,
+            },
+            collection: {
+                ...shared,
+                slug: token.tokenContract?.symbol ?? 'UNKNOWN',
+                description: token.tokenContract?.description ?? token.description,
+            },
+            metadata: {
+                ...shared,
+            },
+            traits:
+                token.attributes
+                    ?.filter((x) => x.traitType && x.value)
+                    .map((x) => ({
+                        type: x.traitType!,
+                        value: x.value!,
+                    })) ?? EMPTY_LIST,
+            price: token.mimtInfo?.price.usdcPrice?.decimals
+                ? {
+                      [CurrencyType.USD]: token.mimtInfo?.price.usdcPrice.decimals.toString(),
+                  }
+                : undefined,
+            priceInToken: token.mimtInfo?.price.nativePrice.raw
+                ? {
+                      amount: token.mimtInfo?.price.nativePrice.raw,
+                      token: createNativeToken(chainId),
+                  }
+                : undefined,
+            owner: token.owner
+                ? {
+                      address: token.owner,
+                  }
+                : undefined,
+            ownerId: token.owner,
+        }
+    }
+
+    private createNonFungibleCollectionFromCollection(
+        chainId: ChainId,
+        collection: Collection,
+    ): NonFungibleTokenCollection<ChainId, SchemaType> {
+        return {
+            chainId,
+            address: collection.address,
+            name: collection.name ?? 'Unknown Token',
+            symbol: collection.symbol ?? 'UNKNOWN',
+            slug: collection.symbol ?? 'UNKNOWN',
+            description: collection.description,
+            schema: SchemaType.ERC721,
+        }
+    }
+
     async getAsset(address: string, tokenId: string) {
-        const variables = {
+        const token = await this.client.request<Token>(GetTokenQuery, {
             address,
             tokenId,
-        }
-        const assetData = await this.client.request(getAssetQuery, variables)
-        if (!assetData) return
-        return createNonFungibleAssetFromToken(assetData.Token[0])
+        })
+        if (!token) return
+        return this.createNonFungibleAssetFromToken(ChainId.Mainnet, token)
     }
-    async getToken(address: string, tokenId: string) {
-        const variables = {
-            address,
-            tokenId,
-        }
-        const asset = await this.client.request(getAssetQuery, variables)
-        if (!asset) return
-        return createERC721TokenFromAsset(address, tokenId, asset.Token[0])
-    }
+
     async getHistory(address: string, tokenId: string): Promise<NonFungibleTokenAPI.History[]> {
         const variables = {
             address,
@@ -268,6 +252,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         )
         return history.filter((event) => event !== undefined)
     }
+
     async getOffers(tokenAddress: string, tokenId: string) {
         const variables = {
             tokenAddress,
@@ -305,6 +290,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         })
         return offers.filter((offer) => offer !== undefined)
     }
+
     async getListings(tokenAddress: string, tokenId: string) {
         const variables = {
             tokenAddress,
@@ -342,6 +328,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         })
         return orders.filter((order) => order !== undefined)
     }
+
     async getOrders(tokenAddress: string, tokenId: string, side: OrderSide) {
         switch (side) {
             case OrderSide.Buy:
@@ -351,5 +338,21 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             default:
                 return []
         }
+    }
+
+    async getCollectionsByKeyword(
+        keyword: string,
+        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
+    ) {
+        const collections = await this.client.request<Collection[]>(GetCollectionsByKeywordQuery, {
+            keyword,
+        })
+        if (!collections.length) return createPageable(EMPTY_LIST, createIndicator(indicator))
+        const collections_ = collections.map((x) => this.createNonFungibleCollectionFromCollection(chainId, x))
+        return createPageable(
+            collections_,
+            createIndicator(indicator),
+            collections_.length ? createNextIndicator(indicator) : undefined,
+        )
     }
 }

@@ -102,6 +102,7 @@ export function formatTransactions(
 
             return {
                 id: transaction.hash,
+                chainId,
                 type: transaction.type,
                 filterType: transaction.type,
                 from: transaction.address_from ?? '',
