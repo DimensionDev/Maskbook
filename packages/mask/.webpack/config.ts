@@ -246,7 +246,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
             liveReload: false,
             client: hmr ? undefined : false,
         } as DevServerConfiguration,
-        stats: process.env.CI ? 'errors-warnings' : undefined,
+        stats: mode === 'production' ? 'errors-only' : undefined,
     }
     baseConfig.module!.rules = baseConfig.module!.rules!.filter(Boolean)
 
