@@ -93,8 +93,8 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ./.eslintcache
-          key: eslint-${{ steps.get-date.outputs.date }}
-          restore-keys: extension-
+          key: linter-${{ steps.get-date.outputs.date }}
+          restore-keys: linter-
       - run: pnpm install
       - name: Run Eslint
         run: |
