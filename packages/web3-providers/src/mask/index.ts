@@ -37,6 +37,16 @@ const ErrorMessage = {
 const worker = new OnDemandWorker('./worker.ts')
 
 function send<I extends keyof MaskBaseAPI.Request, O extends keyof MaskBaseAPI.Response>(input: I, output: O) {
+    if (process.env.manifest === '3') {
+        return async (value: MaskBaseAPI.Request[I]): Promise<MaskBaseAPI.Response[O]> => {
+            const { request } = await import('@dimensiondev/mask-wallet-core/bundle')
+            const { api } = await import('@dimensiondev/mask-wallet-core/proto')
+
+            const payload = api.MWRequest.encode({ [input]: value }).finish()
+            const wasmResult = request(payload)
+            return api.MWResponse.decode(wasmResult) as any
+        }
+    }
     return (value: MaskBaseAPI.Request[I]) => {
         return new Promise<MaskBaseAPI.Response[O]>((resolve, reject) => {
             const req: MaskBaseAPI.Input = { id: Math.random(), data: { [input]: value } }
