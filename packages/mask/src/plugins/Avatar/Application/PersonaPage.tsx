@@ -87,7 +87,7 @@ export function PersonaPage(props: PersonaPageProps) {
                         myPersonas[0].linkedProfiles
                             .filter((x) => x.identifier.network === currentIdentity?.identifier?.network)
                             .map((x, i) =>
-                                persona?.binds.proofs.some(
+                                persona?.binds?.proofs.some(
                                     (y) => y.identity === x.identifier.userId.toLowerCase(),
                                 ) ? null : (
                                     <PersonaItem
