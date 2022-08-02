@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { memo } from 'react'
 import { makeStyles } from '../../UIHelper'
-import { alpha } from '@mui/material'
+import { alpha, Typography } from '@mui/material'
 
 type TagVariant = 'info' | 'success' | 'warning' | 'error'
 
@@ -15,7 +15,7 @@ const defaultIconMapping = {
     success: <Icons.FillSuccess size={16} />,
     warning: <Icons.WarningTriangle size={16} />,
     error: <Icons.Warning size={16} />,
-    info: <Icons.Info size={16} />,
+    info: <Icons.PrimaryInfo size={16} />,
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -57,7 +57,7 @@ export const Tag = memo<TagProps>(({ variant = 'info', iconMapping, children, ..
     return (
         <div className={cx(classes.root, classes[variant])}>
             <div className={classes.icon}>{iconMapping?.[variant] || defaultIconMapping[variant]}</div>
-            {children}
+            <Typography component="span">{children}</Typography>
         </div>
     )
 })
