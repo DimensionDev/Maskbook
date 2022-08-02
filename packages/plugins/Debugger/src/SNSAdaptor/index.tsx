@@ -8,6 +8,8 @@ import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { useRemoteControlledDialog } from '../../../../shared-base-ui/src/hooks'
 import { PluginDebuggerMessages } from '../messages'
+import { ConnectionDialog } from './components/ConnectionDialog'
+import { HubDialog } from './components/HubDialog'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -34,11 +36,55 @@ const sns: Plugin.SNSAdaptor.Definition = {
             icon: <Icons.MaskBlue size={36} />,
             name: PLUGIN_NAME,
         },
+        {
+            ApplicationEntryID: PLUGIN_ID,
+            RenderEntryComponent() {
+                const { openDialog } = useRemoteControlledDialog(PluginDebuggerMessages.hubDialogUpdated)
+                return (
+                    <ApplicationEntry
+                        title="Connection"
+                        disabled={false}
+                        iconFilterColor=""
+                        icon={<Icons.MaskBlue size={36} />}
+                        onClick={() => {
+                            openDialog()
+                        }}
+                    />
+                )
+            },
+            appBoardSortingDefaultPriority: Number.MAX_SAFE_INTEGER,
+            marketListSortingPriority: Number.MAX_SAFE_INTEGER,
+            icon: <Icons.MaskBlue size={36} />,
+            name: PLUGIN_NAME,
+        },
+        {
+            ApplicationEntryID: PLUGIN_ID,
+            RenderEntryComponent() {
+                const { openDialog } = useRemoteControlledDialog(PluginDebuggerMessages.hubDialogUpdated)
+                return (
+                    <ApplicationEntry
+                        title="Hub"
+                        disabled={false}
+                        iconFilterColor=""
+                        icon={<Icons.MaskBlue size={36} />}
+                        onClick={() => {
+                            openDialog()
+                        }}
+                    />
+                )
+            },
+            appBoardSortingDefaultPriority: Number.MAX_SAFE_INTEGER,
+            marketListSortingPriority: Number.MAX_SAFE_INTEGER,
+            icon: <Icons.MaskBlue size={36} />,
+            name: PLUGIN_NAME,
+        },
     ],
     GlobalInjection() {
         return (
             <>
                 <ConsoleDialog />
+                <ConnectionDialog />
+                <HubDialog />
             </>
         )
     },
