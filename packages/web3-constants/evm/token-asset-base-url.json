@@ -69,6 +69,9 @@
             "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/harmony"
         ],
         "Harmony_Test": [],
-        "Astar": []
+        "Astar": [
+            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/astar",
+            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/astar"
+        ]
     }
 }
