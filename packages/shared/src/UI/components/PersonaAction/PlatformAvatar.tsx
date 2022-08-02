@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { ImageIcon } from './ImageIcon'
 import { Icons } from '@masknet/icons'
+import { PersonaImageIcon } from './ImageIcon'
 
 interface StyleProps {
     size: number
@@ -61,7 +61,7 @@ export const PlatformAvatar = (props: PlatformAvatarProps) => {
                 width: size,
             }}>
             {networkIcon ? (
-                <ImageIcon
+                <PersonaImageIcon
                     classes={{
                         icon: names[0],
                     }}
@@ -78,7 +78,7 @@ export const PlatformAvatar = (props: PlatformAvatarProps) => {
                 />
             )}
             {providerIcon ? (
-                <ImageIcon
+                <PersonaImageIcon
                     classes={{
                         icon: names[1],
                     }}
