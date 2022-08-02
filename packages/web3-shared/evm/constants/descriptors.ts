@@ -255,6 +255,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         name: 'Astar',
         icon: new URL('../assets/astar.png', import.meta.url),
         iconColor: 'rgb(36, 150, 238)',
+        averageBlockDelay: 15,
         isMainnet: true,
     },
 ]
