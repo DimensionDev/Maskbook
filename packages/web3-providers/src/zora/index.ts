@@ -1,6 +1,8 @@
-import { GetCollectionsByKeywordQuery, GetTokenQuery } from './queries'
-import { ZORA_MAINNET_GRAPHQL_URL } from './constants'
+import urlcat from 'urlcat'
+import { first } from 'lodash-es'
 import { GraphQLClient } from 'graphql-request'
+import getUnixTime from 'date-fns/getUnixTime'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     createIndicator,
     createNextIndicator,
@@ -11,15 +13,25 @@ import {
     NonFungibleAsset,
     NonFungibleTokenCollection,
     NonFungibleTokenEvent,
+    NonFungibleTokenOrder,
     OrderSide,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { ChainId, createNativeToken, formatWeiToEther, SchemaType } from '@masknet/web3-shared-evm'
-import { first } from 'lodash-es'
-import type { Collection, Token } from './types'
+import { ChainId, createNativeToken, SchemaType } from '@masknet/web3-shared-evm'
+import {
+    Collection,
+    Event,
+    EventType,
+    MintEventProperty,
+    SaleEventProperty,
+    Token,
+    TransferEventProperty,
+    V3AskEventProperty,
+} from './types'
 import type { NonFungibleTokenAPI } from '../types'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import urlcat from 'urlcat'
+import { GetCollectionsByKeywordQuery, GetEventsQuery, GetTokenQuery } from './queries'
+import { ZORA_MAINNET_GRAPHQL_URL } from './constants'
+
 export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     private client = new GraphQLClient(ZORA_MAINNET_GRAPHQL_URL)
 
@@ -100,6 +112,104 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         }
     }
 
+    private createNonFungibleEventFromEvent(
+        chainId: ChainId,
+        event: Event<MintEventProperty | SaleEventProperty | TransferEventProperty>,
+    ): NonFungibleTokenEvent<ChainId, SchemaType> {
+        const pairs = event.properties?.map((x) => {
+            const mintEventProperty = x as MintEventProperty
+            if (mintEventProperty.originatorAddress && mintEventProperty.toAddress)
+                return {
+                    from: mintEventProperty.originatorAddress,
+                    to: mintEventProperty.toAddress,
+                }
+
+            const saleEventProperty = x as SaleEventProperty
+            if (saleEventProperty.buyerAddress && saleEventProperty.sellerAddress)
+                return {
+                    from: saleEventProperty.sellerAddress,
+                    to: saleEventProperty.buyerAddress,
+                }
+
+            const transferEventProperty = x as TransferEventProperty
+            if (transferEventProperty.fromAddress && transferEventProperty.toAddress) {
+                return {
+                    from: transferEventProperty.fromAddress,
+                    to: transferEventProperty.toAddress,
+                }
+            }
+            return
+        })
+        const pair = pairs?.find((x) => x?.from && x.to)
+
+        return {
+            id: event.transactionInfo.transactionHash ?? `${event.transactionInfo.blockNumber}_${event.tokenId}`,
+            chainId,
+            quantity: '1',
+            from: {
+                address: pair?.from,
+            },
+            to: {
+                address: pair?.to,
+            },
+            timestamp: getUnixTime(new Date(event.transactionInfo.blockTimestamp)),
+            hash: event.transactionInfo.transactionHash,
+            type: event.eventType,
+        }
+    }
+
+    private createNonFungibleOrderFromEvent(
+        chainId: ChainId,
+        event: Event<SaleEventProperty | V3AskEventProperty>,
+    ): NonFungibleTokenOrder<ChainId, SchemaType> {
+        const shared = {
+            id: event.transactionInfo.transactionHash ?? `${event.transactionInfo.blockNumber}_${event.tokenId}`,
+            chainId,
+            assetPermalink:
+                event.collectionAddress && event.tokenId
+                    ? this.createZoraLink(chainId, event.collectionAddress, event.tokenId)
+                    : '',
+            quantity: '1',
+            hash: event.transactionInfo.transactionHash,
+        }
+
+        switch (event.eventType) {
+            case EventType.SALE_EVENT:
+                const saleProperty = first(event.properties) as SaleEventProperty | undefined
+                return {
+                    ...shared,
+                    side: OrderSide.Sell,
+                    maker: saleProperty
+                        ? {
+                              address: saleProperty.sellerAddress,
+                          }
+                        : undefined,
+                    taker: saleProperty
+                        ? {
+                              address: saleProperty.buyerAddress,
+                          }
+                        : undefined,
+                }
+            case EventType.V3_ASK_EVENT:
+                return {
+                    ...shared,
+                    side: OrderSide.Buy,
+                }
+            default:
+                return {
+                    ...shared,
+                }
+        }
+    }
+
+    private createPageable<T>(items: T[], indicator?: HubIndicator) {
+        return createPageable(
+            items,
+            createIndicator(indicator),
+            items.length ? createNextIndicator(indicator) : undefined,
+        )
+    }
+
     async getAsset(address: string, tokenId: string) {
         const token = await this.client.request<Token>(GetTokenQuery, {
             address,
@@ -109,235 +219,50 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         return this.createNonFungibleAssetFromToken(ChainId.Mainnet, token)
     }
 
-    async getHistory(address: string, tokenId: string): Promise<NonFungibleTokenAPI.History[]> {
-        const variables = {
+    async getEventsFiltered<T extends unknown>(address: string, tokenId: string, predicate?: (x: Event<T>) => boolean) {
+        const events = await this.client.request<Array<Event<T>>>(GetEventsQuery, {
             address,
             tokenId,
-        }
-        const nftEventHistory = await this.client.request(getTokenHistoryQuery, variables)
-        const history: Array<NonFungibleTokenEvent<ChainId, SchemaType>> = nftEventHistory.Token[0].transferEvents.map(
-            (event: ZoraHistory): NonFungibleTokenAPI.History | undefined => {
-                if (event.transaction.mediaMints?.length !== 0) {
-                    const mint = first(event.transaction.mediaMints)
-                    return {
-                        id: mint?.id || '',
-                        eventType: 'mint',
-                        timestamp: new Date(`${event.blockTimestamp}Z`).getTime(),
-                        price: {
-                            quantity: '0',
-                            price: '0',
-                            paymentToken: {
-                                name: 'Ether',
-                                symbol: 'ETH',
-                                decimals: 18,
-                                address: '0x0000000000000000000000000000000000000000',
-                            },
-                        },
-                        accountPair: {
-                            from: {
-                                username: '',
-                                address: mint?.address,
-                                imageUrl: '',
-                                link: `https://zora.co/${mint?.address}`,
-                            },
-                            to: {
-                                username: '',
-                                address: mint?.creator,
-                                imageUrl: '',
-                                link: `https://zora.co/${mint?.creator}`,
-                            },
-                        },
-                    }
-                }
-                if (event.transaction.auctionCreatedEvents?.length !== 0) {
-                    const list = first(event.transaction.auctionCreatedEvents)
-                    return {
-                        id: list?.id || '',
-                        eventType: 'List',
-                        timestamp: new Date(`${event.blockTimestamp}Z`).getTime(),
-                        price: {
-                            quantity: list?.reservePrice ? formatWeiToEther(list?.reservePrice).toFixed(4) : '',
-                            price: '1',
-                            paymentToken: {
-                                name: 'Ether',
-                                symbol: 'ETH',
-                                decimals: 18,
-                                address: list?.auctionCurrency || '',
-                            },
-                        },
-                        accountPair: {
-                            from: {
-                                username: list?.tokenOwner,
-                                address: list?.tokenOwner,
-                                imageUrl: '',
-                                link: `https://zora.co/${list?.tokenOwner}`,
-                            },
-                            to: {
-                                username: '',
-                                address: '',
-                                imageUrl: '',
-                                link: '',
-                            },
-                        },
-                    }
-                }
-                if (event.transaction.marketBidEvents?.length !== 0) {
-                    const bid = first(event.transaction.marketBidEvents)
-                    return {
-                        id: bid?.id || '',
-                        eventType: 'Bid',
-                        timestamp: new Date(`${event.blockTimestamp}Z`).getTime(),
-                        price: {
-                            quantity: bid?.amount ? formatWeiToEther(bid?.amount).toFixed(4) : '',
-                            price: '1',
-                            paymentToken: {
-                                name: 'Ether',
-                                symbol: 'ETH',
-                                decimals: 18,
-                                address: bid?.currencyAddress || '',
-                            },
-                        },
-                        accountPair: {
-                            from: {
-                                username: bid?.bidder,
-                                address: bid?.bidder,
-                                imageUrl: '',
-                                link: `https://zora.co/${bid?.bidder}`,
-                            },
-                            to: {
-                                username: bid?.recipient,
-                                address: bid?.recipient,
-                                imageUrl: '',
-                                link: `https://zora.co/${bid?.recipient}`,
-                            },
-                        },
-                    }
-                }
-                if (event.transaction.auctionEndedEvents?.length !== 0) {
-                    const buy = first(event.transaction.auctionEndedEvents)
-                    return {
-                        id: buy?.id || '',
-                        eventType: 'Buy',
-                        timestamp: new Date(`${event.blockTimestamp}Z`).getTime(),
-                        price: {
-                            quantity: buy?.auction.lastBidAmount
-                                ? formatWeiToEther(buy?.auction.lastBidAmount).toFixed(4)
-                                : '',
-                            price: '1',
-                            paymentToken: {
-                                name: 'Ether',
-                                symbol: 'ETH',
-                                decimals: 18,
-                                address: buy?.auction.auctionCurrency || '',
-                            },
-                        },
-                        accountPair: {
-                            from: {
-                                username: buy?.tokenOwner,
-                                address: buy?.tokenOwner,
-                                imageUrl: '',
-                                link: `https://zora.co/${buy?.tokenOwner}`,
-                            },
-                            to: {
-                                username: buy?.winner,
-                                address: buy?.winner,
-                                imageUrl: '',
-                                link: `https://zora.co/${buy?.winner}`,
-                            },
-                        },
-                    }
-                }
-                return
-            },
+        })
+        const events_ = predicate ? events.filter(predicate) : events
+        return events_ as Array<Event<T>>
+    }
+
+    async getEvents(
+        address: string,
+        tokenId: string,
+        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
+    ) {
+        const events = await this.getEventsFiltered<MintEventProperty | SaleEventProperty | TransferEventProperty>(
+            address,
+            tokenId,
+            (x) => [EventType.MINT_EVENT, EventType.SALE_EVENT, EventType.TRANSFER_EVENT].includes(x.eventType),
         )
-        return history.filter((event) => event !== undefined)
+        const events_ = events.length ? events.map((x) => this.createNonFungibleEventFromEvent(chainId, x)) : EMPTY_LIST
+        return this.createPageable(events_, indicator)
     }
 
-    async getOffers(tokenAddress: string, tokenId: string) {
-        const variables = {
-            tokenAddress,
-            tokenId,
-        }
-        const nftBids = await this.client.request(getBidsQuery, variables)
-        const offers = nftBids.Token[0].transferEvents.map((event: ZoraBid) => {
-            if (event.transaction.marketBidEvents?.length !== 0) {
-                const bid = first(event.transaction.marketBidEvents)
-                return {
-                    created_time: new Date(`${bid?.blockTimestamp}Z`).getTime().toString(),
-                    current_price: bid?.amount,
-                    payment_token: bid?.currencyAddress || '',
-                    payment_token_contract: {
-                        name: 'Ether',
-                        symbol: 'ETH',
-                        decimals: 18,
-                        address: bid?.currencyAddress || '',
-                    },
-                    listing_time: 0,
-                    side: OrderSide.Buy,
-                    quantity: '1',
-                    expiration_time: 0,
-                    order_hash: bid?.transactionHash || '',
-                    approved_on_chain: false,
-                    maker_account: {
-                        user: { username: bid?.recipient || '' },
-                        address: bid?.recipient || '',
-                        profile_img_url: '',
-                        link: `https://zora.co/${bid?.recipient}`,
-                    },
-                }
-            }
-            return
-        })
-        return offers.filter((offer) => offer !== undefined)
+    async getOffers(address: string, tokenId: string, options: HubOptions<ChainId, HubIndicator> = {}) {
+        return this.getOrders(address, tokenId, OrderSide.Buy, options)
     }
 
-    async getListings(tokenAddress: string, tokenId: string) {
-        const variables = {
-            tokenAddress,
-            tokenId,
-        }
-        const nftAsks = await this.client.request(getAsksQuery, variables)
-        const orders = nftAsks.Token[0].transferEvents.map((event: ZoraAsk) => {
-            if (event.transaction.auctionCreatedEvents?.length !== 0) {
-                const ask = first(event.transaction.auctionCreatedEvents)
-                return {
-                    created_time: new Date(`${ask?.blockTimestamp}Z`).getTime().toString(),
-                    approved_on_chain: false,
-                    current_price: formatWeiToEther(ask?.reservePrice || 0).toString(),
-                    payment_token: ask?.auctionCurrency,
-                    payment_token_contract: {
-                        name: 'Ether',
-                        symbol: 'ETH',
-                        decimals: 18,
-                        address: ask?.auctionCurrency || '',
-                    },
-                    listing_time: 0,
-                    side: OrderSide.Sell,
-                    quantity: '1',
-                    expiration_time: 0,
-                    order_hash: ask?.transactionHash || '',
-                    maker_account: {
-                        user: { username: ask?.tokenOwner || '' },
-                        address: ask?.tokenOwner || '',
-                        profile_img_url: '',
-                        link: `https://zora.co/${ask?.tokenOwner}`,
-                    },
-                }
-            }
-            return
-        })
-        return orders.filter((order) => order !== undefined)
+    async getListings(address: string, tokenId: string, options: HubOptions<ChainId, HubIndicator> = {}) {
+        return this.getOrders(address, tokenId, OrderSide.Sell, options)
     }
 
-    async getOrders(tokenAddress: string, tokenId: string, side: OrderSide) {
-        switch (side) {
-            case OrderSide.Buy:
-                return this.getOffers(tokenAddress, tokenId)
-            case OrderSide.Sell:
-                return this.getListings(tokenAddress, tokenId)
-            default:
-                return []
-        }
+    async getOrders(
+        address: string,
+        tokenId: string,
+        side: OrderSide,
+        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
+    ) {
+        const events = await this.getEventsFiltered<SaleEventProperty | V3AskEventProperty>(address, tokenId, (x) =>
+            [EventType.SALE_EVENT, EventType.V1_MARKET_EVENT].includes(x.eventType),
+        )
+        const orders = events.length
+            ? events.map((x) => this.createNonFungibleOrderFromEvent(chainId, x)).filter((x) => x.side === side)
+            : EMPTY_LIST
+        return this.createPageable(orders, indicator)
     }
 
     async getCollectionsByKeyword(
@@ -349,10 +274,6 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         })
         if (!collections.length) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const collections_ = collections.map((x) => this.createNonFungibleCollectionFromCollection(chainId, x))
-        return createPageable(
-            collections_,
-            createIndicator(indicator),
-            collections_.length ? createNextIndicator(indicator) : undefined,
-        )
+        return this.createPageable(collections_, indicator)
     }
 }

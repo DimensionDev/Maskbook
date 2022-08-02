@@ -291,23 +291,11 @@ export interface V3ReserveAuctionEventProperty<T = unknown> {
     properties: T[]
 }
 
-export interface Event {
+export interface Event<T = unknown> {
     networkInfo: Network
     transactionInfo: Transaction
     eventType: EventType
     collectionAddress?: string
     tokenId?: string
-    properties?: Array<
-        | ApprovalEventProperty
-        | LilNounsAuctionEventProperty
-        | MintEventProperty
-        | NounsAuctionEventProperty
-        | SaleEventProperty
-        | SeaportEventProperty
-        | TransferEventProperty
-        | V1MarketEventProperty
-        | V2AuctionEventProperty
-        | V3AskEventProperty
-        | V3ReserveAuctionEventProperty
-    >
+    properties?: T[]
 }
