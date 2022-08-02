@@ -36,6 +36,9 @@ const useStyles = makeStyles()(() => {
                 display: 'none',
             },
             overflow: 'hidden',
+            '& .carousel__slide-focus-ring': {
+                display: 'none',
+            },
         },
         isHoveringCarousel: {
             height: 270,

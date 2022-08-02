@@ -51,3 +51,8 @@ export interface NFTInfo {
     slug: string
     permalink: string
 }
+
+export enum PFP_TYPE {
+    BACKGROUND = 'background',
+    PFP = 'pfp',
+}

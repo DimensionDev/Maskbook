@@ -11,9 +11,9 @@ import { ElementAnchor, ReversedAddress } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import type { AllChainsNonFungibleToken, SelectTokenInfo } from '../types'
-import { NFTImageCollectibleAvatar } from '../Application/NFTListPage'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { NFTImage } from './NFTImage'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -195,9 +195,10 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                     (x) => x.contract?.address && x.tokenId,
                                 ).map((token: AllChainsNonFungibleToken, i) => (
                                     <ListItem className={classes.nftItem} key={i}>
-                                        <NFTImageCollectibleAvatar
+                                        <NFTImage
                                             key={i}
                                             pluginId={NetworkPluginID.PLUGIN_EVM}
+                                            showBadge
                                             token={token}
                                             selectedToken={selectedToken}
                                             onChange={(token) => _onChange(token)}
