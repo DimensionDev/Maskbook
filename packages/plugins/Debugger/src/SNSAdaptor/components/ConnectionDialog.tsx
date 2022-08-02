@@ -3,7 +3,7 @@ import { DialogContent } from '@mui/material'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { PluginIDContextProvider, PluginWeb3ContextProvider } from '@masknet/plugin-infra/web3'
-import { ConsoleContent } from './ConsoleContent'
+import { ConnectionContent } from './ConnectionContent'
 import { useRemoteControlledDialog } from '../../../../../shared-base-ui/src/hooks'
 import { PluginDebuggerMessages } from '../../messages'
 
@@ -20,7 +20,7 @@ export function ConnectionDialog(props: ConnectionDialogProps) {
                         value={{
                             chainId: ChainId.Mainnet,
                         }}>
-                        <ConsoleContent onClose={closeDialog} />
+                        <ConnectionContent onClose={closeDialog} />
                     </PluginWeb3ContextProvider>
                 </PluginIDContextProvider>
             </DialogContent>

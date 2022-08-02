@@ -42,7 +42,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 const { openDialog } = useRemoteControlledDialog(PluginDebuggerMessages.hubDialogUpdated)
                 return (
                     <ApplicationEntry
-                        title="Connection"
+                        title="Hub"
                         disabled={false}
                         iconFilterColor=""
                         icon={<Icons.MaskBlue size={36} />}
@@ -60,10 +60,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
         {
             ApplicationEntryID: PLUGIN_ID,
             RenderEntryComponent() {
-                const { openDialog } = useRemoteControlledDialog(PluginDebuggerMessages.hubDialogUpdated)
+                const { openDialog } = useRemoteControlledDialog(PluginDebuggerMessages.connectionDialogUpdated)
                 return (
                     <ApplicationEntry
-                        title="Hub"
+                        title="Connection"
                         disabled={false}
                         iconFilterColor=""
                         icon={<Icons.MaskBlue size={36} />}
