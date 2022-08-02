@@ -888,16 +888,6 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         account: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<Transaction<ChainId, SchemaType>>>
-    /** Get non-fungible tokens search by the give keyword. */
-    getNonFungibleTokensByKeyword?: (
-        keyword: string,
-        initial?: Web3HubOptions,
-    ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>>
-    /** Get non-fungible assets search by the give keyword. */
-    getNonFungibleAssetsByKeyword?: (
-        keyword: string,
-        initial?: Web3HubOptions,
-    ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
     /** Get non-fungible tokens of the given collection. */
     getNonFungibleTokensByCollection?: (
         address: string,
@@ -1055,6 +1045,11 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
     /** Get non-fungible collections owned by the given account. */
     getNonFungibleCollections?: (
         account: string,
+        initial?: Web3HubOptions,
+    ) => Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>>>
+    /** Get non-fungible tokens search by the give keyword. */
+    getNonFungibleCollectionsByKeyword?: (
+        keyword: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>>>
 
