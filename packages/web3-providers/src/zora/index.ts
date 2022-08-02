@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 import { GraphQLClient } from 'graphql-request'
 import getUnixTime from 'date-fns/getUnixTime'
 import { EMPTY_LIST } from '@masknet/shared-base'
@@ -77,14 +77,14 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
                         type: x.traitType!,
                         value: x.value!,
                     })) ?? EMPTY_LIST,
-            price: token.mimtInfo?.price.usdcPrice?.decimals
+            price: token.mintInfo?.price.usdcPrice?.decimals
                 ? {
-                      [CurrencyType.USD]: token.mimtInfo?.price.usdcPrice.decimals.toString(),
+                      [CurrencyType.USD]: token.mintInfo?.price.usdcPrice.decimals.toString(),
                   }
                 : undefined,
-            priceInToken: token.mimtInfo?.price.nativePrice.raw
+            priceInToken: token.mintInfo?.price.nativePrice.raw
                 ? {
-                      amount: token.mimtInfo?.price.nativePrice.raw,
+                      amount: token.mintInfo?.price.nativePrice.raw,
                       token: createNativeToken(chainId),
                   }
                 : undefined,

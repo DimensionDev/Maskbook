@@ -1,3 +1,4 @@
+/* cspell:disable */
 export interface Page {
     limit: number
     endCursor?: string
@@ -59,7 +60,7 @@ export interface Token<T = unknown> {
     collectionAddress: string
     collectionName?: string
     tokenId: string
-    mimtInfo?: {
+    mintInfo?: {
         mintContext: Transaction
         originatorAddress: string
         toAddress: string
@@ -231,7 +232,7 @@ export interface NounsAuctionEventProperty<T = unknown> {
 }
 
 export interface SaleEventProperty {
-    saleContractAddress?: String
+    saleContractAddress?: string
     transactionInfo: Transaction
     networkInfo: Network
     buyerAddress: string
