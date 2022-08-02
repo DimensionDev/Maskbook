@@ -3,7 +3,7 @@ import { spawn } from 'child_process'
 import { codegen } from '../codegen/index.js'
 import { awaitChildProcess } from '../utils/index.js'
 import { promisify } from 'util'
-import { extension } from '../extension/index.js'
+import { buildExtensionFlag } from '../extension/index.js'
 import { extensionArgsParser } from './args.js'
 
 await promisify(codegen)()
@@ -14,7 +14,7 @@ if (process.argv[2] === '--' || process.argv[2] === '\\--') {
         stdio: 'inherit',
         shell: true,
     })
-} else child = await extension(extensionArgsParser())
+} else child = await buildExtensionFlag('build', extensionArgsParser())(() => {})
 
 if (typeof child === 'number') process.exit(child)
 else process.exit(await awaitChildProcess(child))

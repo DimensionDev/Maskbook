@@ -1,5 +1,5 @@
 #!/usr/bin/env ts-node
-import { extension as buildBaseVersion, ExtensionBuildArgs } from './normal.js'
+import { buildBaseExtension, ExtensionBuildArgs, buildWebpackFlag } from './normal.js'
 import { series, parallel, TaskFunction } from 'gulp'
 import { ROOT_PATH, task } from '../utils/index.js'
 import { codegen } from '../codegen/index.js'
@@ -9,13 +9,14 @@ const BUILD_PATH = new URL('build/', ROOT_PATH)
 export const ciBuild: TaskFunction = series(
     codegen,
     // The base version need to be build in serial in order to prepare webpack cache.
-    buildBaseVersion,
-    // If we build parallel on CI, it will be slower eventually
-    (process.env.CI ? series : parallel)(
-        // zip base version to zip
-        zipTo(BUILD_PATH, 'MaskNetwork.base.zip'),
-        // Chrome version is the same with base version
-        zipTo(BUILD_PATH, 'MaskNetwork.chromium.zip'),
+    buildBaseExtension,
+    parallel(
+        parallel(
+            // zip base version to zip
+            zipTo(BUILD_PATH, 'MaskNetwork.base.zip'),
+            // Chrome version is the same with base version
+            zipTo(BUILD_PATH, 'MaskNetwork.chromium.zip'),
+        ),
         buildTarget('Firefox', { firefox: true, 'output-path': 'build-firefox' }, 'MaskNetwork.firefox.zip'),
         buildTarget('Android', { android: true, 'output-path': 'build-android' }, 'MaskNetwork.gecko.zip'),
         buildTarget('iOS', { iOS: true, 'output-path': 'build-iOS' }, 'MaskNetwork.iOS.zip'),
@@ -36,23 +37,18 @@ function buildTarget(name: string, options: ExtensionBuildArgs, outFile: string)
     options.readonlyCache = true
     const output = new URL(options['output-path']!, ROOT_PATH)
     options['output-path'] = fileURLToPath(output)
-    return series(buildWith(name, options), zipTo(output, outFile))
+    return series(buildWebpackFlag(name, options), zipTo(output, outFile))
 }
 function zipTo(absBuildDir: URL, fileName: string): TaskFunction {
     const f: TaskFunction = async () => {
         const { cmd } = await import('web-ext')
-        cmd.build({
+        await cmd.build({
             sourceDir: fileURLToPath(absBuildDir),
             artifactsDir: fileURLToPath(ROOT_PATH),
             filename: fileName,
             overwriteDest: true,
         })
     }
-    f.displayName = `zip ${absBuildDir} into ${fileName}`
-    return f
-}
-function buildWith(name: string, buildArgs: ExtensionBuildArgs) {
-    const f: TaskFunction = () => buildBaseVersion(buildArgs)
-    f.displayName = `Build target ${name}`
+    f.displayName = `Build extension zip at ${fileName}`
     return f
 }
