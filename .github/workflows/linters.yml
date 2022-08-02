@@ -85,6 +85,16 @@ jobs:
         uses: DimensionDev/github-token-action@latest
         with:
             registry: true
+      - name: Get cache date
+        id: get-date
+        run: echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+        shell: bash
+      - name: Restore ESLint cache
+        uses: actions/cache@v2
+        with:
+          path: ./.eslintcache
+          key: eslint-${{ steps.get-date.outputs.date }}
+          restore-keys: extension-
       - run: pnpm install
       - name: Run Eslint
         run: |
