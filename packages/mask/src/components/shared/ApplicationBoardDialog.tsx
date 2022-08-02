@@ -11,7 +11,7 @@ import { ApplicationBoard } from './ApplicationBoard'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
 import { Icons } from '@masknet/icons'
-import { PersonaList } from './PersonaList'
+import { PersonaListDialog } from './PersonaListDialog'
 
 const useStyles = makeStyles<{ openSettings: boolean }>()((theme, { openSettings }) => {
     return {
@@ -87,7 +87,7 @@ export function ApplicationBoardDialog() {
                         <ApplicationBoard closeDialog={closeDialog} />
                     )}
                 {openPersonaListDialog ? (
-                    <PersonaList open={openPersonaListDialog} onClose={_closePersonaListDialog} />
+                    <PersonaListDialog open={openPersonaListDialog} onClose={_closePersonaListDialog} />
                 ) : null}
             </DialogContent>
         </InjectedDialog></TabContext>
