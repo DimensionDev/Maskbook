@@ -49,7 +49,7 @@ function send<I extends keyof Request, O extends keyof Response>(input: I, outpu
 
             const payload = api.MWRequest.encode({ [input]: value }).finish()
             const wasmResult = request(payload)
-            return api.MWResponse.decode(wasmResult) as any
+            return api.MWResponse.decode(wasmResult)[output]
         }
     }
     return (value: Request[I]) => {
