@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { toChecksumAddress } from 'web3-utils'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { AssetType, GeneralAsset, RSS3Profile } from '../types'
 
 async function fetchJSON<T = unknown>(url: string): Promise<T> {
@@ -36,7 +36,7 @@ export function getFootprints(address: string): Promise<Response> {
 
 export async function getRSS3ProfileByAddress(address: string) {
     if (!address) return
-    const url = urlcat('https://hub.pass3.me/:address', { address: toChecksumAddress(address) })
+    const url = urlcat('https://hub.pass3.me/:address', { address: formatEthereumAddress(address) })
     const rsp = await fetchJSON<RSS3Info>(url)
     return rsp?.profile
 }
