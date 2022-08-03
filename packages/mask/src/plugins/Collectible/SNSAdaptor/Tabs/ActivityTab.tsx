@@ -1,7 +1,7 @@
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useMemo } from 'react'
 import { CollectibleTab } from '../CollectibleTab'
-import { Typography } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { CollectibleState } from '../../hooks/useCollectibleState'
 
@@ -29,11 +29,20 @@ export interface ActivityTabProps {}
 export function ActivityTab(props: ActivityTabProps) {
     const { classes } = useStyles()
     const { events } = CollectibleState.useContainer()
-    const _events = events.value ?? []
+    const _events = events.value?.data ?? []
     console.log(_events, 'events')
     return useMemo(() => {
         if (events.loading) return <LoadingBase />
-        if (!_events)
+        if (events.error || !events.value)
+            return (
+                <div className={classes.body}>
+                    <Typography className={classes.emptyText}>LoadFailed</Typography>
+                    <Button variant="text" onClick={() => events.retry()}>
+                        retry
+                    </Button>
+                </div>
+            )
+        if (!_events.length)
             return (
                 <div className={classes.body}>
                     <Icons.EmptySimple className={classes.emptyIcon} />

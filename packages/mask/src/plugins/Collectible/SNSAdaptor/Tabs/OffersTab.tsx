@@ -1,7 +1,7 @@
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useMemo } from 'react'
 import { CollectibleTab } from '../CollectibleTab'
-import { Typography } from '@mui/material'
+import { Typography, Button } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { CollectibleState } from '../../hooks/useCollectibleState'
 
@@ -27,11 +27,20 @@ const useStyles = makeStyles()((theme) => ({
 export function OffersTab() {
     const { classes } = useStyles()
     const { orders } = CollectibleState.useContainer()
-    const _orders = orders.value ?? []
+    const _orders = orders.value?.data ?? []
     console.log(_orders, 'orders')
     return useMemo(() => {
         if (orders.loading) return <LoadingBase />
-        if (!_orders)
+        if (orders.error || !orders.value)
+            return (
+                <div className={classes.body}>
+                    <Typography className={classes.emptyText}>LoadFailed</Typography>
+                    <Button variant="text" onClick={() => orders.retry()}>
+                        retry
+                    </Button>
+                </div>
+            )
+        if (!_orders.length)
             return (
                 <div className={classes.body}>
                     <Icons.EmptySimple className={classes.emptyIcon} />
