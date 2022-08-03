@@ -12,7 +12,7 @@ export interface HubDialogProps {}
 export function HubDialog(props: HubDialogProps) {
     const { open, closeDialog } = useRemoteControlledDialog(PluginDebuggerMessages.hubDialogUpdated)
     return (
-        <InjectedDialog title="Debugger" fullWidth open={open} onClose={closeDialog}>
+        <InjectedDialog title="Hub" fullWidth open={open} onClose={closeDialog}>
             <DialogContent>
                 <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
                     <PluginWeb3ContextProvider

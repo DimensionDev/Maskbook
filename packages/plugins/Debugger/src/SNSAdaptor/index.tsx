@@ -16,7 +16,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal) {},
     ApplicationEntries: [
         {
-            ApplicationEntryID: PLUGIN_ID,
+            ApplicationEntryID: `${PLUGIN_ID}_Debugger`,
             RenderEntryComponent() {
                 const { openDialog } = useRemoteControlledDialog(PluginDebuggerMessages.consoleDialogUpdated)
                 return (
@@ -37,7 +37,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             name: PLUGIN_NAME,
         },
         {
-            ApplicationEntryID: PLUGIN_ID,
+            ApplicationEntryID: `${PLUGIN_ID}_Hub`,
             RenderEntryComponent() {
                 const { openDialog } = useRemoteControlledDialog(PluginDebuggerMessages.hubDialogUpdated)
                 return (
@@ -58,7 +58,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             name: PLUGIN_NAME,
         },
         {
-            ApplicationEntryID: PLUGIN_ID,
+            ApplicationEntryID: `${PLUGIN_ID}_Connection`,
             RenderEntryComponent() {
                 const { openDialog } = useRemoteControlledDialog(PluginDebuggerMessages.connectionDialogUpdated)
                 return (

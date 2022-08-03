@@ -1,5 +1,11 @@
 import { useCallback } from 'react'
-import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3Connection, Web3Helper } from '@masknet/plugin-infra/web3'
+import {
+    useAccount,
+    useChainId,
+    useCurrentWeb3NetworkPluginID,
+    useWeb3Connection,
+    Web3Helper,
+} from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import {
@@ -27,6 +33,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const pluginID = useCurrentWeb3NetworkPluginID()
     const chainId = useChainId()
+    const account = useAccount()
     const connection = useWeb3Connection()
 
     const onTransferCallback = useCallback(() => {
@@ -127,6 +134,14 @@ export function ConnectionContent(props: ConnectionContentProps) {
         [connection],
     )
 
+    if (!account) {
+        return (
+            <section className={classes.container}>
+                <Typography>Please connect a wallet.</Typography>
+            </section>
+        )
+    }
+
     return (
         <section className={classes.container}>
             <Table size="small">
@@ -160,6 +175,11 @@ export function ConnectionContent(props: ConnectionContentProps) {
                             <Typography variant="body2" whiteSpace="nowrap">
                                 Approve Non-Fungible Token
                             </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button size="small" onClick={onApproveFungibleTokenCallback}>
+                                Approve
+                            </Button>
                         </TableCell>
                     </TableRow>
                     <TableRow>
