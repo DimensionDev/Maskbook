@@ -1,13 +1,6 @@
 import { FormattedBalance, TokenIcon } from '@masknet/shared'
-import { SchemaType, useTokenConstants, chainResolver, ChainId } from '@masknet/web3-shared-evm'
-import {
-    isZero,
-    formatBalance,
-    NetworkPluginID,
-    isSameAddress,
-    FungibleToken,
-    TokenType,
-} from '@masknet/web3-shared-base'
+import { SchemaType, chainResolver, ChainId, isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { isZero, formatBalance, NetworkPluginID, FungibleToken, TokenType } from '@masknet/web3-shared-base'
 import {
     Box,
     Card,
@@ -136,7 +129,6 @@ export function PoolInList(props: PoolInListProps) {
     const { pool, exchange_in_volumes, exchange_out_volumes, onSend, onRetry } = props
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
     const isDebugging = useSubscription(PersistentStorages.Settings.storage.debugging.subscription)
     // #region Fetch tokens detailed
@@ -150,9 +142,9 @@ export function PoolInList(props: PoolInListProps) {
         ? exchange_token_addresses.map(
               (v) =>
                   ({
-                      address: v,
-                      schema: isSameAddress(v, NATIVE_TOKEN_ADDRESS) ? SchemaType.Native : SchemaType.ERC20,
                       type: TokenType.Fungible,
+                      address: v,
+                      schema: isNativeTokenAddress(v) ? SchemaType.Native : SchemaType.ERC20,
                   } as Pick<
                       FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>,
                       'address' | 'type' | 'schema'
@@ -335,7 +327,7 @@ export function PoolInList(props: PoolInListProps) {
                                                 align="center"
                                                 size="small"
                                                 style={{ whiteSpace: 'nowrap' }}>
-                                                {isSameAddress(token.address, NATIVE_TOKEN_ADDRESS)
+                                                {isNativeTokenAddress(token.address)
                                                     ? chainResolver.nativeCurrency(token.chainId)?.symbol
                                                     : token.symbol}
                                             </TableCell>
@@ -349,7 +341,7 @@ export function PoolInList(props: PoolInListProps) {
                                                     token.decimals,
                                                     6,
                                                 )}{' '}
-                                                {isSameAddress(token.address, NATIVE_TOKEN_ADDRESS)
+                                                {isNativeTokenAddress(token.address)
                                                     ? chainResolver.nativeCurrency(token.chainId)?.symbol
                                                     : token.symbol}{' '}
                                                 / {poolToken.symbol}

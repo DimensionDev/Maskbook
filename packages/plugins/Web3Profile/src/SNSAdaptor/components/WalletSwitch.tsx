@@ -5,7 +5,7 @@ import { useI18N } from '../../locales'
 import { useState } from 'react'
 import type { WalletTypes } from '../types'
 import { ChainId, explorerResolver, NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
-import { LinkOutIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { ImageIcon } from './ImageIcon'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
@@ -148,7 +148,7 @@ export function WalletSwitch({ type, address, isPublic, hiddenItems = [], setHid
                         target="_blank"
                         title={t.plugin_wallet_view_on_explorer()}
                         rel="noopener noreferrer">
-                        <LinkOutIcon className={classes.linkIcon} />
+                        <Icons.LinkOut className={classes.linkIcon} />
                     </Link>
                 </div>
             </div>

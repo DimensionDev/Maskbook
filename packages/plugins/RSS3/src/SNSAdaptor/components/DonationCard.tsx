@@ -1,8 +1,9 @@
 import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
-import { Typography } from '@mui/material'
+import { Card, Typography } from '@mui/material'
 import classnames from 'classnames'
 import formatDateTime from 'date-fns/format'
 import type { HTMLProps } from 'react'
@@ -10,7 +11,7 @@ import { RSS3_DEFAULT_IMAGE } from '../../constants'
 import { useI18N } from '../../locales'
 
 export interface DonationCardProps extends HTMLProps<HTMLDivElement> {
-    donation: RSS3BaseAPI.Donation
+    donation: RSS3BaseAPI.Collection
     address: SocialAddress<NetworkPluginID>
     onSelect: () => void
 }
@@ -58,6 +59,21 @@ const useStyles = makeStyles()((theme) => ({
     fontColor: {
         color: theme.palette.maskColor.primary,
     },
+    tokenInfoColor: {
+        color: theme.palette.maskColor.main,
+    },
+    img: {
+        width: '126px !important',
+        height: '126px !important',
+        borderRadius: '8px',
+        objectFit: 'cover',
+    },
+    loadingFailImage: {
+        minHeight: '0 !important',
+        maxWidth: 'none',
+        width: 64,
+        height: 64,
+    },
 }))
 
 export const DonationCard = ({ donation, address, onSelect, className, ...rest }: DonationCardProps) => {
@@ -70,16 +86,23 @@ export const DonationCard = ({ donation, address, onSelect, className, ...rest }
             ? Others?.formatAddress?.(address.address, 5) ?? address.address
             : Others.formatDomainName(domain)
 
-    const date = donation.detail?.txs?.[0]
-        ? formatDateTime(new Date(Number(donation.detail?.txs?.[0]?.timeStamp) * 1000), 'MMM dd, yyyy')
-        : '--'
+    const date = donation.timestamp ? formatDateTime(new Date(donation.timestamp), 'MMM dd, yyyy') : '--'
+
     return (
         <div onClick={onSelect} className={classnames(classes.card, className)} {...rest}>
-            <img
-                className={classes.cover}
-                src={donation.detail?.grant?.logo || RSS3_DEFAULT_IMAGE}
-                alt={donation.detail?.grant?.title || t.inactive_project()}
-            />
+            <section className="flex flex-row flex-shrink-0 w-max h-max">
+                <Card className={classes.img}>
+                    <NFTCardStyledAssetPlayer
+                        url={donation.imageURL || RSS3_DEFAULT_IMAGE}
+                        classes={{
+                            loadingFailImage: classes.loadingFailImage,
+                            wrapper: classes.img,
+                            iframe: classes.img,
+                        }}
+                    />
+                </Card>
+            </section>
+
             <div className={classes.info}>
                 <div className={classes.infoRow}>
                     <Typography className={classes.date} title={date}>
@@ -88,10 +111,12 @@ export const DonationCard = ({ donation, address, onSelect, className, ...rest }
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.activity}>
-                        <span className={classes.fontColor}>{reversedAddress}</span> {t.contributed()}{' '}
-                        {donation.detail?.txs?.[0]?.formatedAmount}
-                        {donation.detail?.txs?.[0]?.symbol} <span className={classes.fontColor}>{t.to()}</span>{' '}
-                        {donation.detail?.grant?.title}
+                        <span className={classes.fontColor}>{reversedAddress}</span>{' '}
+                        <span className={classes.fontColor}>{t.contributed()}</span>{' '}
+                        <span className={classes.tokenInfoColor}>{donation.tokenAmount?.toString()}</span>
+                        <span className={classes.tokenInfoColor}>{donation.tokenSymbol ?? 'ETH'}</span>{' '}
+                        <span className={classes.fontColor}>{t.to()}</span>{' '}
+                        <span className={classes.tokenInfoColor}>{donation.title}</span>
                     </Typography>
                 </div>
             </div>

@@ -1,13 +1,13 @@
 import { useMemo } from 'react'
+import { Trans } from 'react-i18next'
 import { usePostInfoDetails, Plugin, usePluginWrapper, PluginId } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
-import { GitcoinIcon } from '@masknet/icons'
-import { Trans } from 'react-i18next'
+import { Icons } from '@masknet/icons'
+import { PreviewCard } from './PreviewCard'
 import { base } from '../base'
 import { PLUGIN_META_KEY, PLUGIN_NAME } from '../constants'
 import { DonateDialog } from './DonateDialog'
-import { PreviewCard } from './PreviewCard'
 
 const isGitcoin = (x: string): boolean => /^https:\/\/gitcoin.co\/grants\/\d+/.test(x)
 
@@ -40,17 +40,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
             category: 'dapp',
             description: <Trans ns={PluginId.Gitcoin} i18nKey="description" />,
             name: <Trans ns={PluginId.Gitcoin} i18nKey="name" />,
-            icon: <GitcoinIcon />,
+            icon: <Icons.Gitcoin size={36} />,
             marketListSortingPriority: 9,
             tutorialLink: 'https://realmasknetwork.notion.site/98ed83784ed4446a8a13fa685c7bddfb',
         },
     ],
     wrapperProps: {
-        icon: (
-            <GitcoinIcon
-                style={{ width: 24, height: 24, filter: 'drop-shadow(0px 6px 12px rgba(255, 159, 10, 0.2))' }}
-            />
-        ),
+        icon: <Icons.Gitcoin size={24} style={{ filter: 'drop-shadow(0px 6px 12px rgba(255, 159, 10, 0.2))' }} />,
     },
 }
 

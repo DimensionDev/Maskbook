@@ -1,1 +1,1 @@
-export * from './story-of'
+export * from './story-of.js'

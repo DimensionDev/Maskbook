@@ -3,15 +3,20 @@ import { CollectionList } from '../../../extension/options-page/DashboardCompone
 import { useCurrentVisitingProfile } from '../hooks/useContext'
 
 export interface NFTPageProps {
-    persona?: string
     identity?: SocialIdentity
     socialAddress?: SocialAddress<NetworkPluginID>
 }
 
-export function NFTPage({ socialAddress, persona }: NFTPageProps) {
+export function NFTPage({ socialAddress, identity }: NFTPageProps) {
     const currentVisitingProfile = useCurrentVisitingProfile()
 
     if (!socialAddress) return null
 
-    return <CollectionList addressName={socialAddress} persona={persona} visitingProfile={currentVisitingProfile} />
+    return (
+        <CollectionList
+            addressName={socialAddress}
+            persona={identity?.publicKey}
+            visitingProfile={currentVisitingProfile}
+        />
+    )
 }

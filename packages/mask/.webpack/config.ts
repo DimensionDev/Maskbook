@@ -136,6 +136,28 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                         },
                     },
                 },
+                mode === 'production'
+                    ? {
+                          test: /\.svg$/,
+                          loader: 'svgo-loader',
+                          // overrides
+                          options: {
+                              js2svg: {
+                                  pretty: false,
+                              },
+                          },
+                          dependency(data) {
+                              if (data === '') return false
+                              if (data !== 'url')
+                                  throw new TypeError(
+                                      'The only import mode valid for a non-JS file is via new URL(). Current import mode: ' +
+                                          data,
+                                  )
+                              return true
+                          },
+                          type: 'asset/resource',
+                      }
+                    : undefined,
             ],
         },
         plugins: [
@@ -246,7 +268,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
             liveReload: false,
             client: hmr ? undefined : false,
         } as DevServerConfiguration,
-        stats: process.env.CI ? 'errors-warnings' : undefined,
+        stats: mode === 'production' ? 'errors-only' : undefined,
     }
     baseConfig.module!.rules = baseConfig.module!.rules!.filter(Boolean)
 
@@ -275,7 +297,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         }
         plugins.push(new WebExtensionPlugin({ background: { entry: 'background', manifest: 3 } }))
     } else {
-        entries.background = normalizeEntryDescription(join(__dirname, '../src/background-service.ts'))
+        entries.background = normalizeEntryDescription(join(__dirname, '../background/mv2-entry.ts'))
         plugins.push(new WebExtensionPlugin({ background: { entry: 'background', manifest: 2 } }))
         plugins.push(
             addHTMLEntry({

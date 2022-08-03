@@ -17,16 +17,7 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import { useContext } from 'react'
 import { useMatch, useNavigate } from 'react-router-dom'
 import { DashboardContext } from './context'
-import {
-    MaskBannerIcon,
-    Mask,
-    MenuPersonasActiveIcon,
-    MenuPersonasIcon,
-    MenuSettingsActiveIcon,
-    MenuSettingsIcon,
-    MenuWalletsActiveIcon,
-    MenuWalletsIcon,
-} from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import { MaskColorVar } from '@masknet/theme'
 import { DashboardRoutes } from '@masknet/shared-base'
@@ -127,15 +118,19 @@ export function Navigation({ onClose }: NavigationProps) {
         <List onClick={() => onClose?.()}>
             {isLargeScreen && (
                 <LogoItem>
-                    {mode === 'dark' ? <MaskBannerIcon width={130} height={40} /> : <Mask width={130} height={40} />}
+                    {mode === 'dark' ? (
+                        <Icons.MaskBanner width={130} height={40} />
+                    ) : (
+                        <Icons.Mask width={130} height={40} />
+                    )}
                 </LogoItem>
             )}
             <ListItemLink to={DashboardRoutes.Personas}>
                 <ListItemIcon>
                     {useMatch(DashboardRoutes.Personas) ? (
-                        <MenuPersonasActiveIcon size={36} />
+                        <Icons.MenuPersonasActive size={36} />
                     ) : (
-                        <MenuPersonasIcon size={36} />
+                        <Icons.MenuPersonas size={36} />
                     )}
                 </ListItemIcon>
                 <ListItemText primary={t.personas()} />
@@ -143,9 +138,9 @@ export function Navigation({ onClose }: NavigationProps) {
             <ListItemLink to="" selected={!!useMatch(DashboardRoutes.Wallets)} onClick={onExpand}>
                 <ListItemIcon>
                     {isWalletPath || isWalletHistoryPath || isWalletTransferPath ? (
-                        <MenuWalletsActiveIcon size={36} />
+                        <Icons.MenuWalletsActive size={36} />
                     ) : (
-                        <MenuWalletsIcon size={36} />
+                        <Icons.MenuWallets size={36} />
                     )}
                 </ListItemIcon>
                 <ListItemText>{t.wallets()}</ListItemText>
@@ -171,9 +166,9 @@ export function Navigation({ onClose }: NavigationProps) {
             <ListItemLink to={DashboardRoutes.Settings}>
                 <ListItemIcon>
                     {useMatch(DashboardRoutes.Settings) ? (
-                        <MenuSettingsActiveIcon size={36} />
+                        <Icons.MenuSettingsActive size={36} />
                     ) : (
-                        <MenuSettingsIcon size={36} />
+                        <Icons.MenuSettings size={36} />
                     )}
                 </ListItemIcon>
                 <ListItemText primary={t.settings()} />

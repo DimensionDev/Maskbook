@@ -5,40 +5,50 @@ import { formatDomainName } from '@masknet/web3-shared-evm'
 import {
     isValidDomain,
     isValidAddress,
+    isZeroAddress,
     ChainId,
     formatAddress,
     ProviderType,
     NetworkType,
     Transaction,
     SchemaType,
-    ZERO_ADDRESS,
     CHAIN_DESCRIPTORS,
     NETWORK_DESCRIPTORS,
     PROVIDER_DESCRIPTORS,
     formatTokenId,
+    getDefaultChainId,
+    getDefaultNetworkType,
+    getDefaultProviderType,
+    getZeroAddress,
+    getMaskTokenAddress,
+    getNativeTokenAddress,
     explorerResolver,
 } from '@masknet/web3-shared-solana'
-import { getNativeTokenAddress } from '../utils'
 
 export class Others extends OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
     constructor(context: Plugin.Shared.SharedContext) {
         super(context, {
-            defaultAddress: ZERO_ADDRESS,
-            defaultBlockDelay: 15,
             chainDescriptors: CHAIN_DESCRIPTORS,
             networkDescriptors: NETWORK_DESCRIPTORS,
             providerDescriptors: PROVIDER_DESCRIPTORS,
         })
     }
 
+    override explorerResolver = explorerResolver
+
     override isValidDomain = isValidDomain
     override isValidAddress = isValidAddress
     override isSameAddress = isSameAddress
+    override isZeroAddress = isZeroAddress
+
+    override getDefaultChainId = getDefaultChainId
+    override getDefaultNetworkType = getDefaultNetworkType
+    override getDefaultProviderType = getDefaultProviderType
+    override getZeroAddress = getZeroAddress
+    override getMaskTokenAddress = getMaskTokenAddress
+    override getNativeTokenAddress = getNativeTokenAddress
 
     override formatAddress = formatAddress
     override formatDomainName = formatDomainName
     override formatTokenId = formatTokenId
-    override explorerResolver = explorerResolver
-    override getMaskTokenAddress = () => ''
-    override getNativeTokenAddress = getNativeTokenAddress
 }

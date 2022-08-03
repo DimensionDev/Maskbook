@@ -1,4 +1,5 @@
 import type { Subscription } from 'use-subscription'
+import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Emitter } from '@servie/events'
 import type { EnhanceableSite, ExtensionSite, ProfileIdentifier } from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
@@ -68,6 +69,8 @@ export enum SourceType {
     NFTScan = 'NFTScan',
     Alchemy_EVM = 'Alchemy_EVM',
     Alchemy_FLOW = 'Alchemy_FLOW',
+    Chainbase = 'Chainbase',
+    X2Y2 = 'X2Y2',
 
     // Rarity
     RaritySniper = 'RaritySniper',
@@ -115,11 +118,22 @@ export interface Identity {
 }
 
 export interface SocialIdentity {
+    /** The identifier of the social account */
     identifier?: ProfileIdentifier
+    /** The avatar image link of the social account */
     avatar?: string
+    /** The bio content of the social account */
     bio?: string
+    /** The nickname of the social account */
     nickname?: string
+    /** The homepage link of the social account */
     homepage?: string
+    /** Has a NextID binding or not */
+    hasBinding?: boolean
+    /** The public key of persona in hex */
+    publicKey?: string
+    /** Is own user account identity */
+    isOwner?: boolean
 }
 
 export interface SocialAddress<PluginID> {
@@ -160,7 +174,7 @@ export interface ChainDescriptor<ChainId, SchemaType, NetworkType> {
 export interface NetworkDescriptor<ChainId, NetworkType> {
     /** An unique ID for each network */
     ID: string
-    /** The ID of a plugin that provides the functionality of this network. */
+    /** The ID of the plugin that provides the functionality of the network. */
     networkSupporterPluginID: NetworkPluginID
     /** The chain id */
     chainId: ChainId
@@ -170,6 +184,8 @@ export interface NetworkDescriptor<ChainId, NetworkType> {
     icon: URL
     /** The network icon in fixed color */
     iconColor: Color
+    /** The average time for mining a block (unit: seconds). */
+    averageBlockDelay: number
     /** The background gradient color for relative network bar */
     backgroundGradient?: string
     /** The network name */
@@ -205,7 +221,7 @@ export interface ProviderDescriptor<ChainId, ProviderType> {
     homeLink: string
     /** A link only contains domain name */
     shortenLink: string
-    /** A link to download the client */
+    /** A link to download the client application */
     downloadLink?: string
 }
 
@@ -475,6 +491,8 @@ export interface TransactionDescriptor<ChainId, Transaction> {
     description?: string
     /** a human-readable description for successful transaction. */
     successfulDescription?: string
+    /** a human-readable description for failed transaction. */
+    failedDescription?: string
     /** The original transaction object */
     _tx: Transaction
 }
@@ -540,6 +558,7 @@ export interface Wallet {
 
 export interface Transaction<ChainId, SchemaType> {
     id: string
+    chainId: ChainId
     type?: string
     filterType?: string
     from: string
@@ -618,7 +637,7 @@ export interface ProviderEvents<ChainId, ProviderType> {
 
 export interface WatchEvents<Transaction> {
     /** Emit when error occur */
-    error: [Error]
+    error: [Error, JsonRpcPayload]
     /** Emit when the watched transaction status updated. */
     progress: [string, TransactionStatusType, Transaction | undefined]
 }
@@ -868,7 +887,7 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         chainId: ChainId,
         account: string,
         initial?: Web3HubOptions,
-    ) => Promise<Array<Transaction<ChainId, SchemaType>>>
+    ) => Promise<Pageable<Transaction<ChainId, SchemaType>>>
     /** Get non-fungible tokens of the given collection. */
     getNonFungibleTokensByCollection?: (
         address: string,
@@ -879,6 +898,18 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         address: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
+    /** Get a non-fungible token owner address. */
+    getNonFungibleTokenOwner?: (
+        address: string,
+        tokenId: string,
+        initial?: Web3HubOptions,
+    ) => Promise<string>
+    /** Get a non-fungible token floor price. */
+    getNonFungibleTokenFloorPrice?: (
+        address: string,
+        tokenId: string,
+        initial?: Web3HubOptions,
+    ) => Promise<PriceInToken<ChainId, SchemaType>>
     /** Get a non-fungible contract. */
     getNonFungibleTokenContract?: (
         address: string,
@@ -1016,6 +1047,11 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         account: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>>>
+    /** Get non-fungible tokens search by the give keyword. */
+    getNonFungibleCollectionsByKeyword?: (
+        keyword: string,
+        initial?: Web3HubOptions,
+    ) => Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>>>
 
     /** Place a bid on a token. */
     createBuyOrder?: (/** TODO: add parameters */) => Promise<void>
@@ -1134,11 +1170,13 @@ export interface TransactionFormatterState<ChainId, Parameters, Transaction> {
         chainId: ChainId,
         transaction: Transaction,
         context: TransactionContext<ChainId, Parameters>,
+        isError?: boolean
     ) => Promise<TransactionDescriptor<ChainId, Transaction>>
     /** Elaborate a transaction in a human-readable format. */
     formatTransaction: (
         chainId: ChainId,
         transaction: Transaction,
+        isError?: boolean
     ) => Promise<TransactionDescriptor<ChainId, Transaction>>
 }
 export interface TransactionWatcherState<ChainId, Transaction> {
@@ -1149,7 +1187,7 @@ export interface TransactionWatcherState<ChainId, Transaction> {
     /** Remove a transaction from the watch list. */
     unwatchTransaction: (chainId: ChainId, id: string) => Promise<void>
     /** Notify error */
-    notifyError: (error: Error) => Promise<void>
+    notifyError: (error: Error, request: JsonRpcPayload) => Promise<void>
     /** Notify transaction status */
     notifyTransaction: (
         chainId: ChainId,
@@ -1234,6 +1272,8 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Tra
     isValidChain(chainId?: ChainId, testnet?: boolean): boolean
     isValidDomain(domain?: string): boolean
     isValidAddress(address?: string): boolean
+    isZeroAddress(address?: string): boolean
+    isNativeTokenAddress(address?: string): boolean
     isSameAddress(address?: string, otherAddress?: string): boolean
     // #endregion
 
@@ -1246,8 +1286,9 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Tra
     // #region customization
     getDefaultChainId(): ChainId
     getDefaultNetworkType(): NetworkType
-    getZeroAddress(chainId?: ChainId): string
-    getNativeTokenAddress(chainId?: ChainId): string
+    getDefaultProviderType(): ProviderType
+    getZeroAddress(): string | undefined
+    getNativeTokenAddress(chainId?: ChainId): string | undefined
     getMaskTokenAddress(chainId?: ChainId): string | undefined
     getAverageBlockDelay(chainId?: ChainId, scale?: number): number
     getTransactionSignature(chainId?: ChainId, transaction?: Partial<Transaction>): string | undefined

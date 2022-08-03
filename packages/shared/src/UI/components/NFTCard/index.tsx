@@ -1,4 +1,4 @@
-import { MaskAvatarIcon, SelectedIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { ImageIcon, useImageChecker } from '@masknet/shared'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
@@ -133,7 +133,7 @@ export function NFTImageCollectibleAvatar({
     ) : (
         <ShadowRootTooltip title={token?.contract?.name ?? ''} placement="top" arrow>
             <Box sx={{ width: size, height: size }} className={classes.defaultImage}>
-                <MaskAvatarIcon className={classes.maskIcon} />
+                <Icons.MaskAvatar className={classes.maskIcon} />
             </Box>
         </ShadowRootTooltip>
     )
@@ -182,7 +182,7 @@ export function NFTImage(props: NFTImageProps) {
                 {showNetwork && <ImageIcon classes={{ icon: classes.networkIcon }} icon={iconURL} size={20} />}
 
                 {showBadge && isSameNFT(pluginId, token, selectedToken) ? (
-                    <SelectedIcon className={classes.itemIcon} />
+                    <Icons.Selected className={classes.itemIcon} />
                 ) : null}
             </Box>
         </ShadowRootTooltip>

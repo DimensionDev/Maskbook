@@ -1,4 +1,4 @@
-import { CircleLoadingIcon, GeneratedIconProps } from '@masknet/icons'
+import { GeneratedIconProps, Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 
@@ -18,10 +18,10 @@ const useStyles = makeStyles()({
 
 export const LoadingAnimation = (props: GeneratedIconProps) => {
     const { classes } = useStyles()
-    return <CircleLoadingIcon {...props} className={classNames(classes.animated, props.className)} />
+    return <Icons.CircleLoading {...props} className={classNames(classes.animated, props.className)} />
 }
 
 export const CircleLoadingAnimation = (props: GeneratedIconProps) => {
     const { classes } = useStyles()
-    return <CircleLoadingIcon {...props} className={classNames(classes.animated, props.className)} />
+    return <Icons.CircleLoading {...props} className={classNames(classes.animated, props.className)} />
 }

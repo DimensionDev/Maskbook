@@ -23,7 +23,7 @@ const resolveRarityId = createLookupTableResolver<
 )
 
 async function fetchFromGem<T>(pathname: string) {
-    const response = await globalThis.r2d2Fetch(urlcat(GEM_API_URL, pathname))
+    const response = await globalThis.fetch(urlcat(GEM_API_URL, pathname))
     const data = await response.json()
     return data as T
 }

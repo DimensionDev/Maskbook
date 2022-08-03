@@ -1,7 +1,6 @@
-import { fromNPMTask } from '../utils'
-import { resolve } from 'path'
+import { fromNPMTask, PKG_PATH } from '../utils/index.js'
 export const [buildPolyfill] = fromNPMTask(
-    resolve(__dirname, '../../../polyfills'),
+    new URL('polyfills/', PKG_PATH),
     'polyfill',
     'Build polyfill required for Mask Network.',
 )

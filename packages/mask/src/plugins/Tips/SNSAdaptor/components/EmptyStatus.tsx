@@ -1,8 +1,9 @@
+import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { memo } from 'react'
-import { ExternalLink } from 'react-feather'
 import { useI18N } from '../../locales'
+
 const useStyles = makeStyles()((theme) => ({
     container: {
         position: 'relative',
@@ -19,10 +20,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-    },
-    tipIcon: {
-        width: 20,
-        height: 20,
     },
     iconBox: {
         display: 'flex',
@@ -70,9 +67,6 @@ const useStyles = makeStyles()((theme) => ({
         maxHeight: 40,
         boxSizing: 'border-box',
     },
-    walletIcon: {
-        width: 18,
-    },
 }))
 interface EmptyStatusProps {
     toAdd: () => void
@@ -84,18 +78,14 @@ export const EmptyStatus = memo(({ toAdd }: EmptyStatusProps) => {
         <div className={classes.container}>
             <div className={classes.topBox}>
                 <div className={classes.iconBox}>
-                    <img
-                        className={classes.tipIcon}
-                        src={new URL('../../assets/Tip.png', import.meta.url).toString()}
-                        alt=""
-                    />
+                    <Icons.TipCoin size={20} />
                     <Typography sx={{ fontSize: 16, fontWeight: 700 }}>Tips</Typography>
                 </div>
                 <div className={classes.provided}>
                     <Typography sx={{ fontSize: 14 }}>Provided by</Typography>
                     <Typography className={classes.badge}>Mask Network</Typography>
                     <a href="https://mask.io" className={classes.linkIcon} target="_blank">
-                        <ExternalLink size={16} />
+                        <Icons.LinkOut size={16} />
                     </a>
                 </div>
             </div>
@@ -105,11 +95,7 @@ export const EmptyStatus = memo(({ toAdd }: EmptyStatusProps) => {
                 alt=""
             />
             <div className={classes.actionBtn} onClick={toAdd}>
-                <img
-                    className={classes.walletIcon}
-                    src={new URL('../../assets/wallet.png', import.meta.url).toString()}
-                    alt=""
-                />
+                <Icons.ConnectWallet size={18} />
                 <Typography sx={{ fontSize: 14, lineHeight: 18, fontWeight: 700 }}>
                     {t.tip_connect_your_wallet()}
                 </Typography>

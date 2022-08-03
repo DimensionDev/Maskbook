@@ -1,7 +1,7 @@
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { NetworkPluginID, SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
 import LRUCache from 'lru-cache'
 import { useAsyncRetry } from 'react-use'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { NetworkPluginID, SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
 import { useWeb3State } from './useWeb3State'
 
 type AddressList = Array<SocialAddress<NetworkPluginID>>
@@ -17,6 +17,7 @@ const addressCache = new LRUCache<string, CacheValue>({
  */
 export function useSocialAddressListAll(
     identity?: SocialIdentity,
+    includes?: SocialAddressType[],
     sorter?: (a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>) => number,
 ) {
     // TODO: to add flow
@@ -25,17 +26,20 @@ export function useSocialAddressListAll(
 
     return useAsyncRetry(async () => {
         const userId = identity?.identifier?.userId
-        if (!userId || userId === '$unknown') return EMPTY_LIST
-
+        if (!userId || userId === '$unknown' || !identity?.publicKey) return EMPTY_LIST
         let cached = addressCache.get(userId)
+
         if (!cached) {
             cached = Promise.allSettled<AddressList>(
                 [EVM_IdentityService, SolanaIdentityService].map((x) => x?.lookup(identity) ?? []),
             )
-            addressCache.set(userId, cached)
+            if (!identity.isOwner) {
+                addressCache.set(userId, cached)
+            }
         }
         const allSettled = await cached
         const listOfAddress = allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
-        return sorter && listOfAddress.length ? listOfAddress.sort(sorter) : listOfAddress
-    }, [identity, sorter, EVM_IdentityService?.lookup, SolanaIdentityService?.lookup])
+        const sorted = sorter && listOfAddress.length ? listOfAddress.sort(sorter) : listOfAddress
+        return includes?.length ? sorted.filter((x) => includes.includes(x.type)) : sorted
+    }, [identity?.publicKey, sorter, includes?.join(), EVM_IdentityService?.lookup, SolanaIdentityService?.lookup])
 }

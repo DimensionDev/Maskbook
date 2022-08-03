@@ -20,8 +20,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
             label: 'Donations',
             priority: 1,
             UI: {
-                TabContent: ({ socialAddress, persona }) => {
-                    return <TabCard socialAddress={socialAddress} type={TabCardType.Donation} persona={persona} />
+                TabContent: ({ socialAddress, identity }) => {
+                    return (
+                        <TabCard
+                            socialAddress={socialAddress}
+                            type={TabCardType.Donation}
+                            publicKey={identity?.publicKey}
+                        />
+                    )
                 },
             },
             Utils: {
@@ -33,8 +39,33 @@ const sns: Plugin.SNSAdaptor.Definition = {
             label: 'Footprints',
             priority: 2,
             UI: {
-                TabContent: ({ socialAddress, persona }) => {
-                    return <TabCard socialAddress={socialAddress} type={TabCardType.Footprint} persona={persona} />
+                TabContent: ({ socialAddress, identity }) => {
+                    return (
+                        <TabCard
+                            socialAddress={socialAddress}
+                            type={TabCardType.Footprint}
+                            publicKey={identity?.publicKey}
+                        />
+                    )
+                },
+            },
+            Utils: {
+                shouldDisplay,
+            },
+        },
+        {
+            ID: `${PLUGIN_ID}_feed`,
+            label: 'Feed',
+            priority: 3,
+            UI: {
+                TabContent: ({ socialAddress, identity }) => {
+                    return (
+                        <TabCard
+                            socialAddress={socialAddress}
+                            type={TabCardType.Feed}
+                            publicKey={identity?.publicKey}
+                        />
+                    )
                 },
             },
             Utils: {

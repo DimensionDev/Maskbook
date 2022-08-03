@@ -6,7 +6,7 @@ import { useI18N } from '../../locales'
 interface Props {
     loading?: boolean
     empty?: boolean
-    collection?: string
+    description?: string
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -18,7 +18,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const StatusBox: FC<Props> = ({ loading, empty, collection = 'Donation' }) => {
+export const StatusBox: FC<Props> = ({ loading, empty, description }) => {
     const { classes } = useStyles()
     const t = useI18N()
     if (loading) {
@@ -32,7 +32,7 @@ export const StatusBox: FC<Props> = ({ loading, empty, collection = 'Donation' }
     if (empty) {
         return (
             <Box className={classes.statusBox}>
-                <Typography color="textPrimary">{t.no_data({ collection })}</Typography>
+                <Typography color="textPrimary">{description}</Typography>
             </Box>
         )
     }

@@ -11,6 +11,7 @@ import { getPartName } from './PartsPanel'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useERC721TokenContract } from '@masknet/plugin-infra/web3-evm'
+import { Image } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     ftgCover: {
@@ -97,7 +98,7 @@ export default function FtgPanel(props: FtgPanelProps) {
                     <Typography textAlign="center" variant="body1" color="text.secondary" gutterBottom>
                         {t('plugin_find_truman_dialog_buy_ftg_tip')}
                     </Typography>
-                    <img src={consts?.ftgImg} className={classes.ftgCover} />
+                    <Image src={consts?.ftgImg ?? ''} className={classes.ftgCover} />
                     <Button
                         component="a"
                         href="https://findtruman.io/#/buy"
@@ -138,7 +139,7 @@ function FtgItem(props: { ftg: FtgInfo }) {
 
     return (
         <Box className={classes.ftgRow}>
-            <img className={classes.ftgCover} src={ftg.image} />
+            <Image className={classes.ftgCover} src={ftg.image} />
             <Box sx={{ width: '250px' }}>
                 <Typography textAlign="center" variant="h6" color="text.primary" gutterBottom>
                     {ftg.name}

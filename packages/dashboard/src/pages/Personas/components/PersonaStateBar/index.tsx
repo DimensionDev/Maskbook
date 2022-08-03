@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Box, IconButton, Stack, Typography } from '@mui/material'
 import { MaskAvatar } from '../../../../components/MaskAvatar'
-import { ArrowDownRound, ArrowUpRound } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { formatPersonaFingerprint } from '@masknet/shared-base'
 
@@ -44,7 +44,7 @@ export const PersonaStateBar = memo<PersonaStateBarProps>(({ nickname, toggleDra
                 </Typography>
             </Stack>
             <IconButton onClick={toggleDrawer} size="small" className={classes.iconButton}>
-                {drawerOpen ? <ArrowUpRound size={28} /> : <ArrowDownRound size={16} />}
+                {drawerOpen ? <Icons.ArrowUpRound size={28} /> : <Icons.ArrowDownRound size={16} />}
             </IconButton>
         </Box>
     )

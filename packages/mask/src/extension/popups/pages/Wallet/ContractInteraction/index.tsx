@@ -3,7 +3,7 @@ import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
-import { formatGweiToWei, formatWeiToEther, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
+import { formatGweiToWei, formatWeiToEther, SchemaType } from '@masknet/web3-shared-evm'
 import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { Link, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
@@ -154,7 +154,6 @@ const ContractInteraction = memo(() => {
     const navigate = useNavigate()
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
     const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
     const [transferError, setTransferError] = useState(false)
     const { value: request, loading: requestLoading } = useUnconfirmedRequest()
@@ -246,7 +245,7 @@ const ContractInteraction = memo(() => {
             default:
                 unreachable(type)
         }
-    }, [request, t, NATIVE_TOKEN_ADDRESS])
+    }, [request, t])
 
     const { value: contractType } = useTokenSchema(NetworkPluginID.PLUGIN_EVM, contractAddress)
 

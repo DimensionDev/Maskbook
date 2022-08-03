@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import type { JsonRpcPayload } from 'web3-core-helpers'
 import { useAsync } from 'react-use'
 import { Link } from '@mui/material'
-import { LinkOutIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { createLookupTableResolver, NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
 import { useWeb3State, useChainId, Web3Helper } from '@masknet/plugin-infra/web3'
 import { makeStyles, ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
@@ -23,7 +24,7 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
     const snackbarKeyRef = useRef<SnackbarKey>()
 
     const chainId = useChainId(pluginID)
-    const [error, setError] = useState<Error | undefined>()
+    const [errorInfo, setErrorInfo] = useState<{ error: Error; request: JsonRpcPayload } | undefined>()
     const [progress, setProgress] = useState<{
         chainId: Web3Helper.Definition[T]['ChainId']
         status: TransactionStatusType
@@ -33,8 +34,8 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
     const { Others, TransactionFormatter, TransactionWatcher } = useWeb3State(pluginID)
 
     useEffect(() => {
-        const off = TransactionWatcher?.emitter.on('error', (error) => {
-            setError(error)
+        const off = TransactionWatcher?.emitter.on('error', (error, request) => {
+            setErrorInfo({ error, request })
         })
         return () => {
             off?.()
@@ -111,7 +112,7 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
                         {progress.status === TransactionStatusType.SUCCEED
                             ? computed.successfulDescription ?? computed.description
                             : computed.description}{' '}
-                        <LinkOutIcon color="#07101B" sx={{ ml: 0.5, width: '16px', height: '16px' }} />
+                        <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
                     </Link>
                 ),
             },
@@ -119,16 +120,22 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
     }, [progress])
 
     useAsync(async () => {
-        if (!error?.message) return
+        const transaction = errorInfo?.request?.params?.[0] as Web3Helper.Definition[T]['Transaction'] | undefined
+        const computed = transaction
+            ? await TransactionFormatter?.formatTransaction?.(chainId, transaction, true)
+            : undefined
+        const title = computed?.title ?? errorInfo?.error.message
+        const message = computed?.failedDescription
 
-        console.log({
-            error,
-        })
+        if (!title) return
 
-        showSingletonSnackbar(error.message, {
-            ...resolveSnackbarConfig(TransactionStatusType.FAILED),
+        const snackbarConfig = resolveSnackbarConfig(TransactionStatusType.FAILED)
+
+        showSingletonSnackbar(title, {
+            ...snackbarConfig,
+            message: message ?? snackbarConfig.message,
         })
-    }, [error?.message])
+    }, [JSON.stringify(errorInfo), chainId])
 
     return null
 }

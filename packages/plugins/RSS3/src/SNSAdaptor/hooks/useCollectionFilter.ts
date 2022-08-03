@@ -3,12 +3,12 @@ import { NextIDPlatform } from '@masknet/shared-base'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
 import { useMemo } from 'react'
-import { CollectionType, Proof } from '../../types'
+import type { CollectionType, Proof } from '../../types'
 
 export const useCollectionFilter = (
     hiddenInfo: Proof[],
-    collections: RSS3BaseAPI.Donation[] | RSS3BaseAPI.Footprint[],
     type: CollectionType,
+    collections?: RSS3BaseAPI.Collection[],
     currentVisitingProfile?: IdentityResolved,
     address?: SocialAddress<NetworkPluginID>,
 ) => {
@@ -22,13 +22,6 @@ export const useCollectionFilter = (
         )
         const hiddenList =
             proof?.content?.[PluginId.Web3Profile]?.unListedCollections?.[address?.address?.toLowerCase()]?.[type] ?? []
-        if (type === CollectionType.Donations) {
-            return (collections as RSS3BaseAPI.Donation[])?.filter(
-                (collection: { id: string }) => hiddenList?.findIndex((url) => url === collection?.id) === -1,
-            )
-        }
-        return (collections as RSS3BaseAPI.Footprint[])?.filter(
-            (collection: { id: string }) => hiddenList?.findIndex((url) => url === collection?.id) === -1,
-        )
+        return collections?.filter((collection) => hiddenList?.findIndex((url) => url === collection?.id) === -1)
     }, [address, currentVisitingProfile?.identifier?.userId, type, hiddenInfo?.length, collections?.length])
 }

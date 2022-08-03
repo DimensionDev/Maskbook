@@ -59,10 +59,15 @@ jobs:
       - uses: pnpm/action-setup@v2.2.1
       - uses: actions/setup-node@v2
         with:
-          node-version: "17"
+          node-version: "18"
           cache: "pnpm"
+      - name: Authenticate NPM
+        uses: DimensionDev/github-token-action@latest
+        with:
+            registry: true
       - run: pnpm install
       - run: npx gulp codegen
+      - run: npx gulp typescript
       - run: npx gulp polyfill
       - run: node --experimental-vm-modules ./node_modules/jest/bin/jest.js
   eslint:
@@ -74,8 +79,22 @@ jobs:
       - uses: pnpm/action-setup@v2.2.1
       - uses: actions/setup-node@v2
         with:
-          node-version: "17"
+          node-version: "18"
           cache: "pnpm"
+      - name: Authenticate NPM
+        uses: DimensionDev/github-token-action@latest
+        with:
+            registry: true
+      - name: Get cache date
+        id: get-date
+        run: echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+        shell: bash
+      - name: Restore ESLint cache
+        uses: actions/cache@v2
+        with:
+          path: ./.eslintcache
+          key: linter-${{ steps.get-date.outputs.date }}
+          restore-keys: linter-
       - run: pnpm install
       - name: Run Eslint
         run: |

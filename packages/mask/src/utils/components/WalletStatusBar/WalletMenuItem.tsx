@@ -1,7 +1,7 @@
 import { Button, ListItemIcon, MenuItem } from '@mui/material'
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { Unchecked, Checked } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { useI18N } from '../../i18n-next-ui'
 import { resolveNextIdPlatformPluginId, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { NextIDPlatform } from '@masknet/shared-base'
@@ -68,12 +68,12 @@ export const WalletMenuItem = memo<WalletMenuItemProps>(
             <MenuItem value={address} onClick={() => onSelect?.(descriptionProps, chainId, pluginId)}>
                 <ListItemIcon>
                     {selected ? (
-                        <Checked
+                        <Icons.Checked
                             className={classes.icon}
                             style={{ filter: 'drop-shadow(0px 0px 6px rgba(28, 104, 243, 0.6))' }}
                         />
                     ) : (
-                        <Unchecked className={classes.icon} />
+                        <Icons.Unchecked className={classes.icon} />
                     )}
                 </ListItemIcon>
                 <WalletDescription {...descriptionProps} />

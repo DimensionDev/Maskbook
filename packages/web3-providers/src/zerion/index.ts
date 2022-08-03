@@ -1,8 +1,8 @@
 import io from 'socket.io-client'
 import { unionWith, values } from 'lodash-unified'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { FungibleAsset, Transaction, HubOptions, createPageable, createIndicator } from '@masknet/web3-shared-base'
-import { ChainId, getZerionConstants, SchemaType } from '@masknet/web3-shared-evm'
+import { Transaction, HubOptions, createPageable, createIndicator, Pageable } from '@masknet/web3-shared-base'
+import { ChainId, getZerionConstant, SchemaType } from '@masknet/web3-shared-evm'
 import type {
     SocketRequestBody,
     SocketNameSpace,
@@ -23,7 +23,7 @@ const ZERION_TOKEN = 'Mask.yEUEfDnoxgLBwNEcYPVussxxjdrGwapj'
 let socket: SocketIOClient.Socket | null = null
 
 export function resolveZerionAssetsScopeName(chainId: ChainId) {
-    return getZerionConstants(chainId).ASSETS_SCOPE_NAME ?? ''
+    return getZerionConstant(chainId, 'ASSETS_SCOPE_NAME', '')!
 }
 
 function createSocket() {
@@ -105,56 +105,59 @@ export class ZerionAPI
     implements FungibleTokenAPI.Provider<ChainId, SchemaType>, HistoryAPI.Provider<ChainId, SchemaType>
 {
     async getAssets(address: string, options?: HubOptions<ChainId>) {
-        let result: Array<FungibleAsset<ChainId, SchemaType>> = []
         const pairs = getEnumAsArray(ChainId).map(
-            (x) => [x.value, getZerionConstants(x.value).ASSETS_SCOPE_NAME] as const,
+            (x) => [x.value, getZerionConstant(x.value, 'ASSETS_SCOPE_NAME')] as const,
         )
-        for (const [chainId, scope] of pairs) {
-            if (!scope) continue
+        const allSettled = await Promise.allSettled(
+            pairs.map(async ([chainId, scope]) => {
+                if (!scope) return []
 
-            const { meta, payload } = await getAssetsList(address, scope)
-            if (meta.status !== 'ok') throw new Error('Fail to load assets.')
+                const { meta, payload } = await getAssetsList(address, scope)
+                if (meta.status !== 'ok') []
 
-            const assets = Object.entries(payload).map(([key, value]) => {
-                if (key === 'assets') {
-                    const assetsList = (values(value) as ZerionAddressAsset[]).filter(
-                        ({ asset }) =>
-                            asset.is_displayable &&
-                            !filterAssetType.some((type) => type === asset.type) &&
-                            asset.icon_url,
-                    )
-                    return formatAssets(chainId, assetsList)
-                }
-                return formatAssets(chainId, values(value) as ZerionAddressCovalentAsset[])
-            })
+                return Object.entries(payload)
+                    .map(([key, value]) => {
+                        if (key === 'assets') {
+                            const assetsList = (values(value) as ZerionAddressAsset[]).filter(
+                                ({ asset }) =>
+                                    asset.is_displayable &&
+                                    !filterAssetType.some((type) => type === asset.type) &&
+                                    asset.icon_url,
+                            )
+                            return formatAssets(chainId, assetsList)
+                        }
+                        return formatAssets(chainId, values(value) as ZerionAddressCovalentAsset[])
+                    })
+                    .flat()
+            }),
+        )
 
-            result = [...result, ...assets.flat()]
-        }
+        const assets = allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
 
         return createPageable(
-            unionWith(result, getAllEVMNativeAssets(), (a, z) => a.symbol === z.symbol),
+            unionWith(assets, getAllEVMNativeAssets(), (a, z) => a.symbol === z.symbol),
             createIndicator(options?.indicator),
         )
     }
 
     async getTransactions(
         address: string,
-        options?: HubOptions<ChainId>,
-    ): Promise<Array<Transaction<ChainId, SchemaType>>> {
-        let result: Array<Transaction<ChainId, SchemaType>> = []
+        { indicator }: HubOptions<ChainId> = {},
+    ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
         // xdai-assets is not support
         const pairs = getEnumAsArray(ChainId).map(
-            (x) => [x.value, getZerionConstants(x.value).TRANSACTIONS_SCOPE_NAME] as const,
+            (x) => [x.value, getZerionConstant(x.value, 'TRANSACTIONS_SCOPE_NAME')] as const,
         )
-        for (const [chainId, scope] of pairs) {
-            if (!scope) continue
+        const allSettled = await Promise.allSettled(
+            pairs.map(async ([chainId, scope]) => {
+                if (!scope) return []
+                const { meta, payload } = await getTransactionList(address, scope)
+                if (meta.status !== 'ok') return []
+                return formatTransactions(chainId, payload.transactions)
+            }),
+        )
+        const transactions = allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
 
-            const { meta, payload } = await getTransactionList(address, scope)
-            if (meta.status !== 'ok') throw new Error('Fail to load transactions.')
-
-            result = [...result, ...formatTransactions(chainId, payload.transactions)]
-        }
-
-        return result
+        return createPageable(transactions, createIndicator(indicator))
     }
 }

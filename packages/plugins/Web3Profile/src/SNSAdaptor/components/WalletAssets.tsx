@@ -1,5 +1,5 @@
 import { Card, Typography, Link, Box } from '@mui/material'
-import { Edit2Icon, LinkOutIcon, DoubleArrowUp } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../locales'
 import { ImageIcon } from './ImageIcon'
@@ -10,6 +10,7 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Empty } from './Empty'
 import { CollectionList } from './CollectionList'
 import { useMemo, useState } from 'react'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -111,9 +112,9 @@ export interface WalletAssetsCardProps extends withClasses<never | 'root'> {
 }
 
 const enum LOAD_STATUS {
-    'Unnecessary' = 1,
-    'Necessary' = 2,
-    'Finish' = 3,
+    Unnecessary = 1,
+    Necessary = 2,
+    Finish = 3,
 }
 
 export function WalletAssetsCard(props: WalletAssetsCardProps) {
@@ -135,7 +136,7 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
     const collections = useMemo(() => {
         const filterCollections = collectionList?.filter((collection) => !collection?.hidden)
         if (!filterCollections || filterCollections?.length === 0) {
-            return []
+            return EMPTY_LIST
         }
         if (filterCollections?.length > 8 && loadStatus !== LOAD_STATUS.Finish) {
             return filterCollections?.slice(0, 8)
@@ -168,18 +169,18 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
                         href={address ? explorerResolver.addressLink(chainId, address?.address) ?? '' : ''}
                         target="_blank"
                         rel="noopener noreferrer">
-                        <LinkOutIcon className={classes.linkIcon} />
+                        <Icons.LinkOut className={classes.linkIcon} />
                     </Link>
                 </div>
                 <div className={classes.rightIcons}>
                     {loadStatus === LOAD_STATUS.Finish && (
-                        <DoubleArrowUp
+                        <Icons.DoubleArrowUp
                             size={16}
                             className={classes.arrowUp}
                             onClick={() => setLoadStatus(LOAD_STATUS.Necessary)}
                         />
                     )}
-                    <Edit2Icon size={20} onClick={onSetting} className={classes.editIcon} />
+                    <Icons.Edit2 size={20} onClick={onSetting} className={classes.editIcon} />
                 </div>
             </div>
 

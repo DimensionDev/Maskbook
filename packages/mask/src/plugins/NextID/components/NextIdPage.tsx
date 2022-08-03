@@ -1,4 +1,3 @@
-import { Plugin, WalletUnderTabs, Web3Profile, Connect, Identity, LinkOut } from '@masknet/icons'
 import { PluginId, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NextIDPlatform, PopupRoutes, EMPTY_LIST } from '@masknet/shared-base'
@@ -8,13 +7,15 @@ import { Box, Button, Link, Skeleton, Stack, Typography } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { useAsync, useAsyncRetry } from 'react-use'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
-import { useNextIDConnectStatus } from '../../../components/DataSource/useNextID'
+import { useNextIDConnectStatus } from '../../../components/DataSource/useNextIDConnectStatus'
 import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
 import Services from '../../../extension/service'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { TAB_SELECTOR } from '../constants'
 import { useI18N } from '../locales'
 import { BindDialog } from './BindDialog'
+import type { LiveSelector } from '@dimensiondev/holoflows-kit'
+import { searchAllProfileTabSelector } from '../../../social-network-adaptor/twitter.com/utils/selector'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     tip: {
@@ -92,25 +93,29 @@ const useStyles = makeStyles()((theme) => ({
         marginRight: 6,
         marginTop: 2,
     },
+    walletIcon: {
+        marginRight: 8,
+        color: theme.palette.maskColor.white,
+    },
     item1: {
-        color: '#767f8d',
+        color: theme.palette.maskColor.secondaryDark,
         fontSize: '14px',
         fontWeight: 400,
     },
     item2: {
-        color: '#07101B',
+        color: theme.palette.maskColor.dark,
         fontSize: '14px',
         fontWeight: 500,
         marginLeft: '2px',
     },
     button: {
         borderRadius: '99px',
-        backgroundColor: '#07101b',
+        backgroundColor: theme.palette.maskColor.dark,
         color: '#fff',
         marginTop: 'auto',
         ':hover': {
             color: 'fff',
-            backgroundColor: '#07101b',
+            backgroundColor: theme.palette.maskColor.dark,
         },
     },
     content: {
@@ -120,17 +125,23 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: '14px',
         fontWeight: 400,
     },
+    linkOutIcon: {
+        color: theme.palette.maskColor.secondaryDark,
+    },
 }))
 
 interface NextIdPageProps {
     persona?: string
 }
 
+export const TAB_SELECTOR: { [key: string]: LiveSelector<HTMLElement, true> } = {
+    twitter: searchAllProfileTabSelector(),
+}
+
 export function NextIdPage({ persona }: NextIdPageProps) {
     const t = useI18N()
     const { classes } = useStyles()
 
-    const [description, setDescription] = useState('')
     const currentProfileIdentifier = useLastRecognizedIdentity()
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
     const personaConnectStatus = usePersonaConnectStatus()
@@ -144,11 +155,10 @@ export function NextIdPage({ persona }: NextIdPageProps) {
     const personaActionButton = useMemo(() => {
         if (!personaConnectStatus.action) return null
         const button = personaConnectStatus.hasPersona ? t.connect_persona() : t.create_persona()
-        setDescription(personaConnectStatus.hasPersona ? '' : t.create_persona_intro())
         const icon = personaConnectStatus.hasPersona ? (
-            <Connect sx={{ marginRight: '8px' }} />
+            <Icons.Connect sx={{ marginRight: '8px' }} />
         ) : (
-            <Identity size={18} sx={{ marginRight: '8px' }} />
+            <Icons.Identity size={18} sx={{ marginRight: '8px' }} />
         )
 
         return (
@@ -177,6 +187,20 @@ export function NextIdPage({ persona }: NextIdPageProps) {
 
     const isWeb3ProfileDisable = useIsMinimalMode(PluginId.Web3Profile)
 
+    const description = useMemo(() => {
+        if (isWeb3ProfileDisable) return ''
+        if (personaConnectStatus.action && !personaConnectStatus.hasPersona) {
+            return t.create_persona_intro()
+        }
+        if (!isOwn) {
+            return t.others_lack_wallet()
+        }
+        if (isAccountVerified) {
+            return t.add_wallet_intro()
+        }
+        return ''
+    }, [personaConnectStatus, isOwn, isAccountVerified, t, isWeb3ProfileDisable])
+
     const {
         value: bindings,
         loading: loadingBindings,
@@ -199,20 +223,18 @@ export function NextIdPage({ persona }: NextIdPageProps) {
 
     const handleAddWallets = () => {
         Services.Helper.openPopupWindow(PopupRoutes.ConnectedWallets, {
-            chainId,
             internal: true,
         })
     }
 
     const getButton = useMemo(() => {
         if (!isOwn) {
-            setDescription(t.others_lack_wallet())
             return
         }
         if (isWeb3ProfileDisable) {
             return (
                 <Button className={classes.button} variant="contained" onClick={onEnablePlugin}>
-                    <Plugin />
+                    <Icons.Plugin />
                     <Typography marginLeft="9px">{t.enable_plugin()}</Typography>
                 </Button>
             )
@@ -223,15 +245,14 @@ export function NextIdPage({ persona }: NextIdPageProps) {
         if (!isAccountVerified && isOwn) {
             return (
                 <Button className={classes.button} variant="contained" onClick={onVerify}>
-                    <Connect sx={{ margin: '2px 8px 0 0' }} />
+                    <Icons.Connect sx={{ margin: '2px 8px 0 0' }} />
                     {t.verify_Twitter_ID_button()}
                 </Button>
             )
         }
-        setDescription(t.add_wallet_intro())
         return (
             <Button className={classes.button} variant="contained" onClick={handleAddWallets}>
-                <WalletUnderTabs size={16} color="white" sx={{ marginRight: '8px' }} />
+                <Icons.WalletUnderTabs size={16} className={classes.walletIcon} />
                 {t.add_wallet_button()}
             </Button>
         )
@@ -256,7 +277,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
             <Box className={classes.container}>
                 <Box className={classes.header}>
                     <div className={classes.title}>
-                        <Web3Profile className={classes.web3Icon} />
+                        <Icons.Web3Profile className={classes.web3Icon} />
                         <Typography fontSize={16} fontWeight={700}>
                             {t.web3_profile()}
                         </Typography>
@@ -273,11 +294,11 @@ export function NextIdPage({ persona }: NextIdPageProps) {
                             width="22px"
                             height="22px"
                             style={{ alignSelf: 'center', marginLeft: '4px' }}>
-                            <LinkOut size={16} color="#767f8d" />
+                            <Icons.LinkOut size={16} className={classes.linkOutIcon} />
                         </Link>
                     </div>
                 </Box>
-                <Box className={classes.content}>{description}</Box>
+                <Typography className={classes.content}>{description}</Typography>
                 <Stack justifyContent="center" direction="row">
                     {getButton}
                 </Stack>

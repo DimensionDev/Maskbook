@@ -25,7 +25,6 @@ import {
     NonFungibleAsset,
     Pageable,
     createPageable,
-    isSameAddress,
     currySameAddress,
     CurrencyType,
     Transaction,
@@ -47,7 +46,6 @@ import {
     formatEthereumAddress,
     getCoinGeckoConstants,
     getTokenAssetBaseURLConstants,
-    getTokenConstants,
     getTokenListConstants,
     SchemaType,
     isNativeTokenAddress,
@@ -104,7 +102,7 @@ class Hub implements EVM_Hub {
         chainId: ChainId,
         account: string,
         initial?: HubOptions<ChainId>,
-    ): Promise<Array<Transaction<ChainId, SchemaType>>> {
+    ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
         const options = this.getOptions(initial, {
             account,
             chainId,
@@ -116,7 +114,7 @@ class Hub implements EVM_Hub {
         address: string,
         initial?: HubOptions<ChainId>,
     ): Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>> {
-        throw new Error('Method not implemented.')
+        return NFTScan.getAssetsByCollection(address, initial)
     }
 
     async getNonFungibleAssetsByCollection(
@@ -194,9 +192,9 @@ class Hub implements EVM_Hub {
             chainId,
         })
         const { TOKEN_ASSET_BASE_URI = EMPTY_LIST } = getTokenAssetBaseURLConstants(options.chainId)
-        const checkSummedAddress = formatEthereumAddress(address)
+        const formattedAddress = formatEthereumAddress(address)
 
-        if (isSameAddress(getTokenConstants(options.chainId).NATIVE_TOKEN_ADDRESS, checkSummedAddress)) {
+        if (isNativeTokenAddress(formattedAddress)) {
             return TOKEN_ASSET_BASE_URI.map((x) => `${x}/info/logo.png`)
         }
 
@@ -204,7 +202,7 @@ class Hub implements EVM_Hub {
         if (specialIcon) return [specialIcon.logo_url]
 
         // load from remote
-        return TOKEN_ASSET_BASE_URI.map((x) => `${x}/assets/${checkSummedAddress}/logo.png`)
+        return TOKEN_ASSET_BASE_URI.map((x) => `${x}/assets/${formattedAddress}/logo.png`)
     }
     async getNonFungibleTokenIconURLs(
         chainId: ChainId,

@@ -4,22 +4,27 @@ import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
 import { Box } from '@mui/material'
 import { useState } from 'react'
 import { FootprintCard, StatusBox } from '../components'
-import { useRss3Profile } from '../hooks'
+import { useRSS3Profile } from '../hooks'
+import { useI18N } from '../../locales'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { CollectionType } from '../../constants'
 
 export interface FootprintPageProps {
-    footprints?: RSS3BaseAPI.Footprint[]
+    footprints?: RSS3BaseAPI.Collection[]
     loading?: boolean
     address: SocialAddress<NetworkPluginID>
 }
 
-export function FootprintPage({ footprints = [], address, loading }: FootprintPageProps) {
-    const { value: profile } = useRss3Profile(address.address || '')
+export function FootprintPage({ footprints = EMPTY_LIST, address, loading }: FootprintPageProps) {
+    const { value: profile } = useRSS3Profile(address.address || '')
     const username = profile?.name
 
-    const [selectedFootprint, setSelectedFootprint] = useState<RSS3BaseAPI.Footprint | undefined>()
+    const t = useI18N()
+
+    const [selectedFootprint, setSelectedFootprint] = useState<RSS3BaseAPI.Collection | undefined>()
 
     if (loading || !footprints.length) {
-        return <StatusBox loading={loading} collection="Footprint" empty={!footprints.length} />
+        return <StatusBox loading={loading} description={t.no_Footprint_found()} empty={!footprints.length} />
     }
 
     return (
@@ -37,12 +42,13 @@ export function FootprintPage({ footprints = [], address, loading }: FootprintPa
             <CollectionDetailCard
                 open={Boolean(selectedFootprint)}
                 onClose={() => setSelectedFootprint(undefined)}
-                img={selectedFootprint?.detail?.image_url}
-                title={selectedFootprint?.detail?.name}
-                referenceUrl={selectedFootprint?.detail?.event_url}
-                description={selectedFootprint?.detail?.description}
-                date={selectedFootprint?.detail?.end_date}
-                location={selectedFootprint?.detail?.city || selectedFootprint?.detail?.country || 'Metaverse'}
+                img={selectedFootprint?.imageURL}
+                title={selectedFootprint?.title}
+                referenceURL={selectedFootprint?.actions?.[0]?.related_urls?.[0]}
+                description={selectedFootprint?.description}
+                type={CollectionType.footprints}
+                time={selectedFootprint?.timestamp}
+                location={selectedFootprint?.location}
             />
         </Box>
     )

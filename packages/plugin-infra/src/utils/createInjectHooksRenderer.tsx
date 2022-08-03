@@ -48,7 +48,7 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
     }
     function PluginsInjectionHookRender(props: PropsType) {
         const allPlugins = usePlugins()
-        const availablePlugins = useAvailablePlugins(allPlugins) as PluginDefinition[]
+        const availablePlugins = useAvailablePlugins<PluginDefinition>(allPlugins)
         const all = availablePlugins.filter(pickInjectorHook).map((plugin) => (
             <PropsContext.Provider key={plugin.ID} value={props}>
                 <ShadowRootIsolation data-plugin={plugin.ID}>

@@ -1,4 +1,4 @@
-import { EvmChains, SolanaIcon, FlowIcon, GeneratedIconProps } from '@masknet/icons'
+import { Icons, GeneratedIconProps } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 export interface SupportedNetworkMap {
     name: string
@@ -6,9 +6,9 @@ export interface SupportedNetworkMap {
 }
 
 export const networkMap: Record<NetworkPluginID, SupportedNetworkMap> = {
-    [NetworkPluginID.PLUGIN_EVM]: { name: 'EVM Chain', icon: EvmChains },
-    [NetworkPluginID.PLUGIN_FLOW]: { name: 'Solana Chain', icon: FlowIcon },
-    [NetworkPluginID.PLUGIN_SOLANA]: { name: 'Flow Chain', icon: SolanaIcon },
+    [NetworkPluginID.PLUGIN_EVM]: { name: 'EVM Chain', icon: Icons.EVMChains },
+    [NetworkPluginID.PLUGIN_FLOW]: { name: 'Solana Chain', icon: Icons.Flow },
+    [NetworkPluginID.PLUGIN_SOLANA]: { name: 'Flow Chain', icon: Icons.Solana },
 }
 
 // todo provide a function to support when Next.ID supports Flow and Solana

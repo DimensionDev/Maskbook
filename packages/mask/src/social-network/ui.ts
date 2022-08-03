@@ -3,7 +3,7 @@ import Services from '../extension/service'
 import { Flags } from '../../shared'
 import type { SocialNetworkUI } from './types'
 import { currentSetupGuideStatus } from '../../shared/legacy-settings/settings'
-import type { SetupGuideCrossContextStatus } from '../../shared/legacy-settings/types'
+import type { SetupGuideContext } from '../../shared/legacy-settings/types'
 import {
     ECKeyIdentifier,
     EnhanceableSite,
@@ -13,14 +13,15 @@ import {
     queryRemoteI18NBundle,
 } from '@masknet/shared-base'
 import { Environment, assertNotEnvironment, ValueRef } from '@dimensiondev/holoflows-kit'
-import { IdentityResolved, PluginId, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { IdentityResolved, Plugin, PluginId, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { getCurrentIdentifier, getCurrentSNSNetwork } from '../social-network-adaptor/utils'
-import { createPluginHost, createSharedContext } from '../plugin-infra/host'
+import { createPluginHost, createPartialSharedUIContext } from '../../shared/plugin-infra/host'
 import { definedSocialNetworkUIs } from './define'
 import { setupShadowRootPortal, MaskMessages } from '../utils'
 import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
 import { sharedUINetworkIdentifier, sharedUIComponentOverwrite } from '@masknet/shared'
 import { SocialNetworkEnum } from '@masknet/encryption'
+import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
@@ -112,38 +113,47 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     })
     signal.addEventListener('abort', queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle))
 
+    const allPersonaSub = createSubscriptionFromAsync(
+        () => {
+            console.log('DEBUG: currentPersonaIdentifier')
+            return Services.Identity.queryOwnedPersonaInformation(true)
+        },
+        [],
+        MaskMessages.events.currentPersonaIdentifier.on,
+        signal,
+    )
+    const empty = new ValueRef<IdentityResolved | undefined>(undefined)
+    const lastRecognizedSub = createSubscriptionFromValueRef(
+        ui.collecting.identityProvider?.recognized || empty,
+        signal,
+    )
+    const currentVisitingSub = createSubscriptionFromValueRef(
+        ui.collecting.currentVisitingIdentityProvider?.recognized || empty,
+        signal,
+    )
+
     startPluginSNSAdaptor(
         getCurrentSNSNetwork(ui.networkIdentifier),
-        createPluginHost(signal, (pluginID, signal) => {
-            const empty = new ValueRef<IdentityResolved | undefined>(undefined)
-            const lastRecognizedSub = createSubscriptionFromValueRef(
-                ui.collecting.identityProvider?.recognized || empty,
-                signal,
-            )
-            const currentVisitingSub = createSubscriptionFromValueRef(
-                ui.collecting.currentVisitingIdentityProvider?.recognized || empty,
-                signal,
-            )
-            const allPersonaSub = createSubscriptionFromAsync(
-                () => Services.Identity.queryOwnedPersonaInformation(true),
-                [],
-                MaskMessages.events.currentPersonaIdentifier.on,
-                signal,
-            )
-            return {
-                ...createSharedContext(pluginID, signal),
-                lastRecognizedProfile: lastRecognizedSub,
-                currentVisitingProfile: currentVisitingSub,
-                allPersonas: allPersonaSub,
-                privileged_silentSign: () => {
-                    if (pluginID !== PluginId.Web3Profile)
-                        throw new TypeError("current plugin doesn't support silent sign function")
-                    return Services.Identity.generateSignResult
-                },
-                getPersonaAvatar: Services.Identity.getPersonaAvatar,
-                MaskMessages,
-            }
-        }),
+        createPluginHost(
+            signal,
+            (pluginID, signal): Plugin.SNSAdaptor.SNSAdaptorContext => {
+                return {
+                    ...createPartialSharedUIContext(pluginID, signal),
+                    ...RestPartOfPluginUIContextShared,
+                    lastRecognizedProfile: lastRecognizedSub,
+                    currentVisitingProfile: currentVisitingSub,
+                    allPersonas: allPersonaSub,
+                    privileged_silentSign: () => {
+                        if (pluginID !== PluginId.Web3Profile)
+                            throw new TypeError("current plugin doesn't support silent sign function")
+                        return Services.Identity.generateSignResult
+                    },
+                    getPersonaAvatar: Services.Identity.getPersonaAvatar,
+                    ownProofChanged: MaskMessages.events.ownProofChanged,
+                }
+            },
+            Services.Settings.getPluginMinimalModeEnabled,
+        ),
     )
 
     setupShadowRootPortal()
@@ -216,7 +226,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         const id = currentSetupGuideStatus[network].value
         let started = false
         const onStatusUpdate = (id: string) => {
-            const { persona, status }: SetupGuideCrossContextStatus = JSON.parse(id || '{}')
+            const { persona, status }: SetupGuideContext = JSON.parse(id || '{}')
             if (persona && status && !started) {
                 started = true
                 ui.injection.setupWizard?.(signal, ECKeyIdentifier.from(persona).unwrap())

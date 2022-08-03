@@ -27,7 +27,14 @@ import Aave from '@masknet/web3-constants/evm/aave.json'
 import Lido from '@masknet/web3-constants/evm/lido.json'
 import Game from '@masknet/web3-constants/evm/game.json'
 import Pet from '@masknet/web3-constants/evm/pet.json'
-import { hookTransform, transform, transformFromJSON } from '@masknet/web3-shared-base'
+import {
+    transformAllHook,
+    transformHook,
+    transformAll,
+    transform,
+    transformAllFromJSON,
+    transformFromJSON,
+} from '@masknet/web3-shared-base'
 import { ChainId } from '../types'
 
 function getEnvConstants(key: 'WEB3_CONSTANTS_RPC') {
@@ -41,89 +48,147 @@ function getEnvConstants(key: 'WEB3_CONSTANTS_RPC') {
     }
 }
 
-export const getAirdropConstants = transform(ChainId, Airdrop)
-export const useAirdropConstants = hookTransform(getAirdropConstants)
+export const getAirdropConstant = transform(ChainId, Airdrop)
+export const getAirdropConstants = transformAll(ChainId, Airdrop)
+export const useAirdropConstant = transformHook(getAirdropConstants)
+export const useAirdropConstants = transformAllHook(getAirdropConstants)
 
-export const getEthereumConstants = transform(ChainId, Ethereum)
-export const useEthereumConstants = hookTransform(getEthereumConstants)
+export const getEthereumConstant = transform(ChainId, Ethereum)
+export const getEthereumConstants = transformAll(ChainId, Ethereum)
+export const useEthereumConstant = transformHook(getEthereumConstants)
+export const useEthereumConstants = transformAllHook(getEthereumConstants)
 
-export const getDeBankConstants = transform(ChainId, DeBank)
-export const useDeBankConstants = hookTransform(getDeBankConstants)
+export const getDeBankConstant = transform(ChainId, DeBank)
+export const getDeBankConstants = transformAll(ChainId, DeBank)
+export const useDeBankConstant = transformHook(getDeBankConstants)
+export const useDeBankConstants = transformAllHook(getDeBankConstants)
 
-export const getCoinGeckoConstants = transform(ChainId, CoinGecko)
-export const useCoinGeckoConstants = hookTransform(getCoinGeckoConstants)
+export const getCoinGeckoConstant = transform(ChainId, CoinGecko)
+export const getCoinGeckoConstants = transformAll(ChainId, CoinGecko)
+export const useCoinGeckoConstant = transformHook(getCoinGeckoConstants)
+export const useCoinGeckoConstants = transformAllHook(getCoinGeckoConstants)
 
-export const getCoinMarketCapConstants = transform(ChainId, CoinMarketCap)
-export const useCoinMarketCapConstants = hookTransform(getCoinMarketCapConstants)
+export const getCoinMarketCapConstant = transform(ChainId, CoinMarketCap)
+export const getCoinMarketCapConstants = transformAll(ChainId, CoinMarketCap)
+export const useCoinMarketCapConstant = transformHook(getCoinMarketCapConstants)
+export const useCoinMarketCapConstants = transformAllHook(getCoinMarketCapConstants)
 
-export const getZerionConstants = transform(ChainId, Zerion)
-export const useZerionConstants = hookTransform(getZerionConstants)
+export const getZerionConstant = transform(ChainId, Zerion)
+export const getZerionConstants = transformAll(ChainId, Zerion)
+export const useZerionConstant = transformHook(getZerionConstants)
+export const useZerionConstants = transformAllHook(getZerionConstants)
 
-export const getGitcoinConstants = transform(ChainId, Gitcoin)
-export const useGitcoinConstants = hookTransform(getGitcoinConstants)
+export const getGitcoinConstant = transform(ChainId, Gitcoin)
+export const getGitcoinConstants = transformAll(ChainId, Gitcoin)
+export const useGitcoinConstant = transformHook(getGitcoinConstants)
+export const useGitcoinConstants = transformAllHook(getGitcoinConstants)
 
-export const getOpenOceanConstants = transform(ChainId, OpenOcean)
-export const useOpenOceanConstants = hookTransform(getOpenOceanConstants)
+export const getOpenOceanConstant = transform(ChainId, OpenOcean)
+export const getOpenOceanConstants = transformAll(ChainId, OpenOcean)
+export const useOpenOceanConstant = transformHook(getOpenOceanConstants)
+export const useOpenOceanConstants = transformAllHook(getOpenOceanConstants)
 
-export const getITOConstants = transform(ChainId, ITO)
-export const useITOConstants = hookTransform(getITOConstants)
+export const getITOConstant = transform(ChainId, ITO)
+export const getITOConstants = transformAll(ChainId, ITO)
+export const useITOConstant = transformHook(getITOConstants)
+export const useITOConstants = transformAllHook(getITOConstants)
 
-export const getRedPacketConstants = transform(ChainId, RedPacket)
-export const useRedPacketConstants = hookTransform(getRedPacketConstants)
+export const getRedPacketConstant = transform(ChainId, RedPacket)
+export const getRedPacketConstants = transformAll(ChainId, RedPacket)
+export const useRedPacketConstant = transformHook(getRedPacketConstants)
+export const useRedPacketConstants = transformAllHook(getRedPacketConstants)
 
-export const getTokenConstants = transform(ChainId, Token)
-export const useTokenConstants = hookTransform(getTokenConstants)
+export const getTokenConstant = transform(ChainId, Token)
+export const getTokenConstants = transformAll(ChainId, Token)
+export const useTokenConstant = transformHook(getTokenConstants)
+export const useTokenConstants = transformAllHook(getTokenConstants)
 
-export const getTraderConstants = transform(ChainId, Trader)
-export const useTraderConstants = hookTransform(getTraderConstants)
+export const getTraderConstant = transform(ChainId, Trader)
+export const getTraderConstants = transformAll(ChainId, Trader)
+export const useTraderConstant = transformHook(getTraderConstants)
+export const useTraderConstants = transformAllHook(getTraderConstants)
 
-export const getTrendingConstants = transform(ChainId, Trending)
-export const useTrendingConstants = hookTransform(getTrendingConstants)
+export const getTrendingConstant = transform(ChainId, Trending)
+export const getTrendingConstants = transformAll(ChainId, Trending)
+export const useTrendingConstant = transformHook(getTrendingConstants)
+export const useTrendingConstants = transformAllHook(getTrendingConstants)
 
-export const getMaskBoxConstants = transform(ChainId, MaskBox)
-export const useMaskBoxConstants = hookTransform(getMaskBoxConstants)
+export const getMaskBoxConstant = transform(ChainId, MaskBox)
+export const getMaskBoxConstants = transformAll(ChainId, MaskBox)
+export const useMaskBoxConstant = transformHook(getMaskBoxConstants)
+export const useMaskBoxConstants = transformAllHook(getMaskBoxConstants)
 
-export const getRPCConstants = transformFromJSON(ChainId, getEnvConstants('WEB3_CONSTANTS_RPC'), RPC)
-export const useRPCConstants = hookTransform(getRPCConstants)
+export const getRPCConstants = transformAllFromJSON(ChainId, getEnvConstants('WEB3_CONSTANTS_RPC'), RPC)
+export const getRPCConstant = transformFromJSON(ChainId, getEnvConstants('WEB3_CONSTANTS_RPC'), RPC)
+export const useRPCConstant = transformHook(getRPCConstants)
+export const useRPCConstants = transformAllHook(getRPCConstants)
 
-export const getExplorerConstants = transform(ChainId, Explorer)
-export const useExplorerConstants = hookTransform(getExplorerConstants)
+export const getExplorerConstant = transform(ChainId, Explorer)
+export const getExplorerConstants = transformAll(ChainId, Explorer)
+export const useExplorerConstant = transformHook(getExplorerConstants)
+export const useExplorerConstants = transformAllHook(getExplorerConstants)
 
-export const getTokenListConstants = transform(ChainId, TokenList)
-export const useTokenListConstants = hookTransform(getTokenListConstants)
+export const getTokenListConstant = transform(ChainId, TokenList)
+export const getTokenListConstants = transformAll(ChainId, TokenList)
+export const useTokenListConstant = transformHook(getTokenListConstants)
+export const useTokenListConstants = transformAllHook(getTokenListConstants)
 
-export const getTokenAssetBaseURLConstants = transform(ChainId, TokenAssetBaseURL)
-export const useTokenAssetBaseURLConstants = hookTransform(getTokenAssetBaseURLConstants)
+export const getTokenAssetBaseURLConstant = transform(ChainId, TokenAssetBaseURL)
+export const getTokenAssetBaseURLConstants = transformAll(ChainId, TokenAssetBaseURL)
+export const useTokenAssetBaseURLConstant = transformHook(getTokenAssetBaseURLConstants)
+export const useTokenAssetBaseURLConstants = transformAllHook(getTokenAssetBaseURLConstants)
 
-export const getPoolTogetherConstants = transform(ChainId, PoolTogether)
-export const usePoolTogetherConstants = hookTransform(getPoolTogetherConstants)
+export const getPoolTogetherConstant = transform(ChainId, PoolTogether)
+export const getPoolTogetherConstants = transformAll(ChainId, PoolTogether)
+export const usePoolTogetherConstant = transformHook(getPoolTogetherConstants)
+export const usePoolTogetherConstants = transformAllHook(getPoolTogetherConstants)
 
-export const getGoodGhostingConstants = transform(ChainId, GoodGhosting)
-export const useGoodGhostingConstants = hookTransform(getGoodGhostingConstants)
+export const getGoodGhostingConstant = transform(ChainId, GoodGhosting)
+export const getGoodGhostingConstants = transformAll(ChainId, GoodGhosting)
+export const useGoodGhostingConstant = transformHook(getGoodGhostingConstants)
+export const useGoodGhostingConstants = transformAllHook(getGoodGhostingConstants)
 
-export const getSpaceStationGalaxyConstants = transform(ChainId, SpaceStationGalaxy)
-export const useSpaceStationGalaxyConstants = hookTransform(getSpaceStationGalaxyConstants)
+export const getSpaceStationGalaxyConstant = transform(ChainId, SpaceStationGalaxy)
+export const getSpaceStationGalaxyConstants = transformAll(ChainId, SpaceStationGalaxy)
+export const useSpaceStationGalaxyConstant = transformHook(getSpaceStationGalaxyConstants)
+export const useSpaceStationGalaxyConstants = transformAllHook(getSpaceStationGalaxyConstants)
 
-export const getOpenseaAPIConstants = transform(ChainId, OpenseaAPI)
-export const useOpenseaAPIConstants = hookTransform(getOpenseaAPIConstants)
+export const getOpenseaAPIConstant = transform(ChainId, OpenseaAPI)
+export const getOpenseaAPIConstants = transformAll(ChainId, OpenseaAPI)
+export const useOpenseaAPIConstant = transformHook(getOpenseaAPIConstants)
+export const useOpenseaAPIConstants = transformAllHook(getOpenseaAPIConstants)
 
-export const getCryptoArtAIConstants = transform(ChainId, CryptoArtAI)
-export const useCryptoArtAIConstants = hookTransform(getCryptoArtAIConstants)
+export const getCryptoArtAIConstant = transform(ChainId, CryptoArtAI)
+export const getCryptoArtAIConstants = transformAll(ChainId, CryptoArtAI)
+export const useCryptoArtAIConstant = transformHook(getCryptoArtAIConstants)
+export const useCryptoArtAIConstants = transformAllHook(getCryptoArtAIConstants)
 
-export const getArtBlocksConstants = transform(ChainId, ArtBlocks)
-export const useArtBlocksConstants = hookTransform(getArtBlocksConstants)
+export const getArtBlocksConstant = transform(ChainId, ArtBlocks)
+export const getArtBlocksConstants = transformAll(ChainId, ArtBlocks)
+export const useArtBlocksConstant = transformHook(getArtBlocksConstants)
+export const useArtBlocksConstants = transformAllHook(getArtBlocksConstants)
 
-export const getNftRedPacketConstants = transform(ChainId, NftRedPacket)
-export const useNftRedPacketConstants = hookTransform(getNftRedPacketConstants)
+export const getNftRedPacketConstant = transform(ChainId, NftRedPacket)
+export const getNftRedPacketConstants = transformAll(ChainId, NftRedPacket)
+export const useNftRedPacketConstant = transformHook(getNftRedPacketConstants)
+export const useNftRedPacketConstants = transformAllHook(getNftRedPacketConstants)
 
-export const getAaveConstants = transform(ChainId, Aave)
-export const useAaveConstants = hookTransform(getAaveConstants)
+export const getAaveConstant = transform(ChainId, Aave)
+export const getAaveConstants = transformAll(ChainId, Aave)
+export const useAaveConstant = transformHook(getAaveConstants)
+export const useAaveConstants = transformAllHook(getAaveConstants)
 
-export const getLidoConstants = transform(ChainId, Lido)
-export const useLidoConstants = hookTransform(getLidoConstants)
+export const getLidoConstant = transform(ChainId, Lido)
+export const getLidoConstants = transformAll(ChainId, Lido)
+export const useLidoConstant = transformHook(getLidoConstants)
+export const useLidoConstants = transformAllHook(getLidoConstants)
 
-export const getGameConstants = transform(ChainId, Game)
-export const useGameConstants = hookTransform(getGameConstants)
+export const getGameConstant = transform(ChainId, Game)
+export const getGameConstants = transformAll(ChainId, Game)
+export const useGameConstant = transformHook(getGameConstants)
+export const useGameConstants = transformAllHook(getGameConstants)
 
-export const getPetConstants = transform(ChainId, Pet)
-export const usePetConstants = hookTransform(getPetConstants)
+export const getPetConstant = transform(ChainId, Pet)
+export const getPetConstants = transformAll(ChainId, Pet)
+export const usePetConstant = transformHook(getPetConstants)
+export const usePetConstants = transformAllHook(getPetConstants)

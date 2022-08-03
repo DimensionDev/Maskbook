@@ -8,7 +8,7 @@ import type { AccountType, WalletTypes } from '../types'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { TabContext } from '@mui/lab'
 import { Close as CloseIcon } from '@mui/icons-material'
-import { SettingInfoIcon, WalletUnderTabsIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { useI18N } from '../../locales'
 import { Empty } from './Empty'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -102,7 +102,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     walletIcon: {
         marginRight: '8px',
-        fontSize: 16,
     },
 }))
 
@@ -214,7 +213,11 @@ const WalletSetting = memo(
                     fullWidth={false}
                     open={open}
                     titleTail={
-                        <WalletUnderTabsIcon size={24} onClick={openPopupsWindow} className={classes.titleTailButton} />
+                        <Icons.WalletUnderTabs
+                            size={24}
+                            onClick={openPopupsWindow}
+                            className={classes.titleTailButton}
+                        />
                     }
                     titleTabs={
                         <MaskTabList variant="base" onChange={onChange} aria-label="Web3ProfileWalletSetting">
@@ -230,7 +233,7 @@ const WalletSetting = memo(
                                 {visible && (
                                     <Box className={classes.messageBox}>
                                         <Box display="flex" flexDirection="row" gap={1} alignItems="center">
-                                            <SettingInfoIcon className={classes.infoIcon} />
+                                            <Icons.SettingInfo className={classes.infoIcon} />
                                             <Typography color="currentColor" fontSize={14}>
                                                 {t.wallet_setting_hint()}
                                             </Typography>
@@ -275,7 +278,7 @@ const WalletSetting = memo(
                         ) : (
                             <Box className={classes.bottomButton}>
                                 <Button onClick={openPopupsWindow} fullWidth>
-                                    <WalletUnderTabsIcon className={classes.walletIcon} />
+                                    <Icons.WalletUnderTabs size={16} className={classes.walletIcon} />
                                     {t.add_wallet()}
                                 </Button>
                             </Box>

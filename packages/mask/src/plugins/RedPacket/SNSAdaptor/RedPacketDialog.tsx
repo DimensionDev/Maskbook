@@ -20,7 +20,7 @@ import type { RedPacketSettings } from './hooks/useCreateCallback'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog'
 import { RedPacketPast } from './RedPacketPast'
 import { TabContext, TabPanel } from '@mui/lab'
-import { History } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { RedPacketERC20Form } from './RedPacketERC20Form'
 import { RedPacketERC721Form } from './RedPacketERC721Form'
 
@@ -33,19 +33,12 @@ const useStyles = makeStyles()((theme) => ({
         borderBottom: `1px solid ${theme.palette.divider}`,
     },
     dialogContent: {
-        minHeight: 305,
         padding: 0,
         '::-webkit-scrollbar': {
             display: 'none',
         },
 
         overflowX: 'hidden',
-    },
-    nftDialogContent: {
-        height: 305,
-    },
-    nftDialogContentLoaded: {
-        height: 620,
     },
     tabPaper: {
         position: 'sticky',
@@ -173,7 +166,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 title={title}
                 titleTail={
                     step === CreateRedPacketPageStep.NewRedPacketPage && !showHistory ? (
-                        <History onClick={() => setShowHistory((history) => !history)} />
+                        <Icons.History onClick={() => setShowHistory((history) => !history)} />
                     ) : null
                 }
                 titleTabs={
@@ -187,20 +180,13 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 onClose={() => (showHistory ? setShowHistory(false) : onBack())}
                 isOnBack={showHistory || step !== CreateRedPacketPageStep.NewRedPacketPage}
                 disableTitleBorder>
-                <DialogContent
-                    className={cx(
-                        classes.dialogContent,
-                        currentTab === 'collectibles'
-                            ? isNFTRedPacketLoaded
-                                ? classes.nftDialogContentLoaded
-                                : classes.nftDialogContent
-                            : '',
-                    )}>
+                <DialogContent className={classes.dialogContent}>
                     {step === CreateRedPacketPageStep.NewRedPacketPage ? (
                         <>
                             <div
                                 style={{
                                     visibility: showHistory ? 'hidden' : 'visible',
+                                    ...(showHistory ? { display: 'none' } : {}),
                                     height: showHistory
                                         ? 0
                                         : currentTab === 'collectibles' && isNFTRedPacketLoaded
