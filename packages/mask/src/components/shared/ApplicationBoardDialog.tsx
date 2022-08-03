@@ -17,7 +17,7 @@ const useStyles = makeStyles<{ openSettings: boolean }>()((theme, { openSettings
         content: {
             padding: theme.spacing(1.5, 2, '6px'),
             height: openSettings ? 'auto' : 470,
-            overflow: 'scroll',
+            overflow: openSettings ? 'hidden scroll' : 'hidden',
         },
         settingIcon: {
             cursor: 'pointer',
