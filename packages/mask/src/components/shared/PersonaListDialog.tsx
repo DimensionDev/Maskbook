@@ -31,13 +31,6 @@ interface PersonaNextIDMixture {
     proof: BindingProof[]
 }
 
-enum ActionType {
-    noop = 0,
-    connect = 1,
-    verify = 2,
-    connectAndVerify = 4,
-}
-
 function isSamePersona(p1?: PersonaIdentifier | PersonaInformation, p2?: PersonaIdentifier | PersonaInformation) {
     if (!p1 || !p2) return false
     const p1Identifier = 'toText' in p1 ? p1 : p1.identifier
@@ -66,7 +59,7 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
     useEffect(() => {
         if (!currentPersonaIdentifier) return
         setSelectedPersona(personas.find((x) => isSamePersona(x.persona, currentPersonaIdentifier)))
-    }, [currentPersonaIdentifier])
+    }, [currentPersonaIdentifier, personas.length])
 
     const [, connect] = useAsyncFn(
         async (profileIdentifier?: ProfileIdentifier, personaIdentifier?: PersonaIdentifier) => {
@@ -74,6 +67,7 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
             await Services.Identity.attachProfile(profileIdentifier, personaIdentifier, {
                 connectionConfirmState: 'confirmed',
             })
+            await Services.Settings.setCurrentPersonaIdentifier(personaIdentifier)
         },
         [],
     )
@@ -82,15 +76,17 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
         let isConnected = true
         let isVerified = true
 
-        if (!currentProfileIdentify) return null
-        const currentPersonaWithNextID = personas.find((x) => isSamePersona(x.persona, currentPersonaIdentifier))
+        if (!currentProfileIdentify || !selectedPersona) return null
+        const currentPersonaWithNextID = personas.find((x) => isSamePersona(x.persona, selectedPersona.persona))
 
         if (!currentPersonaWithNextID) return null
-        if (!currentPersonaWithNextID.proof.length) return null
+        if (!currentPersonaWithNextID.proof.length) {
+            isVerified = false
+        }
 
-        if (!isSamePersona(selectedPersona?.persona, currentPersonaIdentifier)) isConnected = false
+        if (!isSamePersona(selectedPersona.persona, currentPersonaIdentifier)) isConnected = false
         // TODO: also need platform
-        const verifiedSns = selectedPersona?.proof.find(
+        const verifiedSns = selectedPersona.proof.find(
             (x) => x.identity.toLowerCase() === currentProfileIdentify?.identifier.userId.toLowerCase(),
         )
         if (!verifiedSns) {
@@ -98,25 +94,32 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
         }
 
         const handleClick = async () => {
-            if (!isConnected) await connect?.(currentProfileIdentify.identifier, selectedPersona?.persona.identifier)
-            if (isVerified) {
-                await handleVerifyNextID(selectedPersona?.persona, currentProfileIdentify?.identifier.userId)
+            if (!isConnected) {
+                await connect?.(currentProfileIdentify.identifier, selectedPersona.persona.identifier)
+            }
+            if (!isVerified) {
+                handleVerifyNextID(selectedPersona.persona, currentProfileIdentify?.identifier.userId)
                 closeDialog()
                 closeApplicationBoard()
             }
+
+            closeDialog()
         }
 
         return (
-            <Button variant="rounded" color="primary" onClick={handleClick}>
+            <Button color="primary" onClick={handleClick}>
                 {(() => {
-                    if (!isConnected && !isVerified) return t('applications_persona_verify_connect')
-                    if (!isConnected) return t('applications_persona_connect')
-                    if (!isVerified) return t('applications_persona_verify')
+                    if (!isConnected && !isVerified)
+                        return t('applications_persona_verify_connect', { nickname: selectedPersona?.persona.nickname })
+                    if (!isConnected)
+                        return t('applications_persona_connect', { nickname: selectedPersona?.persona.nickname })
+                    if (!isVerified)
+                        return t('applications_persona_verify', { nickname: selectedPersona?.persona.nickname })
                     return ''
                 })()}
             </Button>
         )
-    }, [])
+    }, [currentPersonaIdentifier, currentProfileIdentify, selectedPersona, personas])
 
     const onSelectPersona = useCallback((x: PersonaNextIDMixture) => {
         setSelectedPersona(x)
@@ -142,7 +145,7 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
                                     </Typography>
                                 </Stack>
                                 <Stack flexGrow={0}>
-                                    {currentPersonaIdentifier?.toText() === x.persona.identifier.toText() ? (
+                                    {isSamePersona(selectedPersona?.persona, x.persona) ? (
                                         <Icons.CheckCircle />
                                     ) : (
                                         <RadioButtonUncheckedIcon />
