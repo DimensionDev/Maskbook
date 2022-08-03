@@ -1,11 +1,9 @@
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useMemo } from 'react'
 import { CollectibleTab } from '../CollectibleTab'
-import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import { NFTOfferCard } from '../../../../components/shared/NFTCard/NFTOfferCard'
 import { Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
+import { CollectibleState } from '../../hooks/useCollectibleState'
 
 const useStyles = makeStyles()((theme) => ({
     body: {
@@ -26,20 +24,14 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface OffersTabProps {
-    asset: {
-        loading?: boolean
-        value?: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
-    }
-}
-
-export function OffersTab(props: OffersTabProps) {
-    const { asset } = props
+export function OffersTab() {
     const { classes } = useStyles()
-    const _asset = asset.value
+    const { orders } = CollectibleState.useContainer()
+    const _orders = orders.value ?? []
+    console.log(_orders, 'orders')
     return useMemo(() => {
-        if (asset.loading) return <LoadingBase />
-        if (!_asset?.orders)
+        if (orders.loading) return <LoadingBase />
+        if (!_orders)
             return (
                 <div className={classes.body}>
                     <Icons.EmptySimple className={classes.emptyIcon} />
@@ -50,12 +42,12 @@ export function OffersTab(props: OffersTabProps) {
             <CollectibleTab>
                 <div className={classes.body} style={{ justifyContent: 'unset' }}>
                     <>
-                        {_asset?.orders?.map((x, idx) => (
+                        {/* {_orders?.map((x, idx) => (
                             <NFTOfferCard key={idx} offer={x} />
-                        ))}
+                        ))} */}
                     </>
                 </div>
             </CollectibleTab>
         )
-    }, [asset, classes])
+    }, [orders, classes])
 }

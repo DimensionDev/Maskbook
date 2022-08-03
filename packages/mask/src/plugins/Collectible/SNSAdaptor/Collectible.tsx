@@ -167,8 +167,8 @@ export function Collectible(props: CollectibleProps) {
         const tabMap = {
             [tabs.about]: <AboutTab asset={asset} />,
             [tabs.details]: <DetailTab asset={asset} />,
-            [tabs.offers]: <OffersTab asset={asset} />,
-            [tabs.activity]: <ActivityTab asset={asset} />,
+            [tabs.offers]: <OffersTab />,
+            [tabs.activity]: <ActivityTab />,
         }
 
         return tabMap[currentTab] || null

@@ -1,12 +1,9 @@
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useMemo } from 'react'
 import { CollectibleTab } from '../CollectibleTab'
-import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { ActivityType, NFTActivityCard } from '../../../../components/shared/NFTCard/NFTActivityCard'
+import { CollectibleState } from '../../hooks/useCollectibleState'
 
 const useStyles = makeStyles()((theme) => ({
     body: {
@@ -27,20 +24,16 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ActivityTabProps {
-    asset: {
-        loading?: boolean
-        value?: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
-    }
-}
+export interface ActivityTabProps {}
 
 export function ActivityTab(props: ActivityTabProps) {
-    const { asset } = props
     const { classes } = useStyles()
-    const events = asset.value?.events ?? EMPTY_LIST
+    const { events } = CollectibleState.useContainer()
+    const _events = events.value ?? []
+    console.log(_events, 'events')
     return useMemo(() => {
-        if (asset.loading) return <LoadingBase />
-        if (!events.length)
+        if (events.loading) return <LoadingBase />
+        if (!_events)
             return (
                 <div className={classes.body}>
                     <Icons.EmptySimple className={classes.emptyIcon} />
@@ -51,12 +44,12 @@ export function ActivityTab(props: ActivityTabProps) {
             <CollectibleTab>
                 <div className={classes.body} style={{ justifyContent: 'unset' }}>
                     <>
-                        {events.map((x, idx) => (
+                        {/* {_events.map((x, idx) => (
                             <NFTActivityCard type={ActivityType.Mint} key={idx} activity={x} />
-                        ))}
+                        ))} */}
                     </>
                 </div>
             </CollectibleTab>
         )
-    }, [asset, classes])
+    }, [events, classes])
 }
