@@ -81,6 +81,7 @@ export function useTradeCallback(
     const nativeTokenWrapper = useNativeTokenWrapperCallback(
         tradeComputed as TradeComputed<NativeTokenWrapper>,
         gasConfig,
+        targetChainId,
     )
     if (isNativeTokenWrapper_) return nativeTokenWrapper
 
