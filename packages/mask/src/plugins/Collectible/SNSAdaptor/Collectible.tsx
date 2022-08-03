@@ -31,18 +31,18 @@ const useStyles = makeStyles()((theme) => {
             backgroundColor: 'unset',
         },
         content: {
-            width: '100%',
             height: 'var(--contentHeight)',
             display: 'flex',
             flexDirection: 'column',
             padding: '0 !important',
+            margin: '0 12px',
         },
         body: {
             flex: 1,
             backgroundColor: theme.palette.maskColor.white,
             overflow: 'auto',
             maxHeight: 350,
-            borderRadius: 0,
+            borderRadius: '0 0 12px 12px',
             scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
