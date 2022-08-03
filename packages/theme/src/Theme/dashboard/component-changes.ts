@@ -122,6 +122,9 @@ export const Dialog: Theme = (mode, colors): ThemeOptions => ({
                     // workaround for common component be used in dashboard and twitter
                     '& .dashboard.token-list': {
                         padding: '10px 16px',
+                        '&:hover': {
+                            background: mode === 'dark' ? 'transparent !important' : '#F9F9F9',
+                        },
                     },
                     '& .dashboard.token-list-symbol': {
                         color: mode === 'dark' ? 'rgba(255, 255, 255, 0.8)' : '#7B8192',

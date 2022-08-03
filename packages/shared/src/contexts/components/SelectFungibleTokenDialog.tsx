@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { useCurrentWeb3NetworkPluginID, useNativeTokenAddress, Web3Helper } from '@masknet/plugin-infra/web3'
 import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
 import { EMPTY_LIST, EnhanceableSite, isDashboardPage } from '@masknet/shared-base'
@@ -13,16 +13,21 @@ import { TokenListMode } from '../../UI/components/FungibleTokenList/type'
 
 interface StyleProps {
     compact: boolean
-    disablePaddingTop: boolean
+    isDashboard: boolean
 }
 
-const useStyles = makeStyles<StyleProps>()((theme, { compact, disablePaddingTop }) => ({
+const useStyles = makeStyles<StyleProps>()((theme, { compact, isDashboard }) => ({
     content: {
         ...(compact ? { minWidth: 552 } : {}),
         padding: theme.spacing(2),
         display: 'flex',
         flexDirection: 'column',
         overflow: 'auto',
+        '-ms-overflow-style': 'none',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     list: {
         scrollbarWidth: 'none',
@@ -37,8 +42,11 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, disablePaddingTop 
         boxSizing: 'border-box',
     },
     search: {
-        backgroundColor: 'transparent !important',
+        backgroundColor: isDashboard ? 'transparent !important' : theme.palette.maskColor.input,
         border: `solid 1px ${MaskColorVar.twitterBorderLine}`,
+    },
+    wrapper: {
+        paddingTop: theme.spacing(2),
     },
 }))
 
@@ -77,25 +85,27 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
     const { networkIdentifier } = useBaseUIRuntime()
     const compact = networkIdentifier === EnhanceableSite.Minds
     const pluginId = useCurrentWeb3NetworkPluginID(pluginID)
-    const { classes } = useStyles({ compact, disablePaddingTop: isDashboard })
+    const { classes } = useStyles({ compact, isDashboard })
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
 
     const rowSize = useRowSize()
-    const [currentMode, setCurrentMode] = useState<TokenListMode>(TokenListMode.List)
 
     const nativeTokenAddress = useNativeTokenAddress(pluginId)
 
     const modeRef = useRef<{
         updateMode(mode: TokenListMode): void
+        getCurrentMode(): TokenListMode
     }>(null)
 
     return (
         <InjectedDialog
             titleBarIconStyle={isDashboard ? 'close' : 'back'}
             open={open}
-            onClose={
-                currentMode === TokenListMode.List ? onClose : () => modeRef?.current?.updateMode(TokenListMode.List)
-            }
+            onClose={() => {
+                modeRef?.current?.getCurrentMode() === TokenListMode.List
+                    ? onClose?.()
+                    : modeRef?.current?.updateMode(TokenListMode.List)
+            }}
             title={title ?? t.select_token()}>
             <DialogContent classes={{ root: classes.content }}>
                 <FungibleTokenList
@@ -113,7 +123,8 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
                     onSelect={onSubmit}
                     FixedSizeListProps={{
                         itemSize: rowSize + 16,
-                        height: isMdScreen ? 300 : 466,
+                        height: isMdScreen ? 300 : 470,
+                        className: classes.wrapper,
                     }}
                     SearchTextFieldProps={{
                         InputProps: { classes: { root: classes.search } },

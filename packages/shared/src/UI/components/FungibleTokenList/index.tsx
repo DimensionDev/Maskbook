@@ -88,11 +88,16 @@ export const FungibleTokenList = forwardRef(
 
         // #region control mode
         const [mode, setMode] = useState(TokenListMode.List)
-        useImperativeHandle(ref, () => ({
-            updateMode: (mode: TokenListMode) => {
-                setMode(mode)
-            },
-        }))
+        useImperativeHandle(
+            ref,
+            () => ({
+                updateMode: (mode: TokenListMode) => {
+                    setMode(mode)
+                },
+                getCurrentMode: () => mode,
+            }),
+            [mode],
+        )
         // #endregion
 
         const pluginID = useCurrentWeb3NetworkPluginID(props.pluginID) as T

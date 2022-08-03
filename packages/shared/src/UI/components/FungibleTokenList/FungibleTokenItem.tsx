@@ -140,7 +140,10 @@ export const getFungibleTokenItem =
 
         const handleTokenSelect = (e: React.MouseEvent<HTMLElement>) => {
             e.stopPropagation()
-            onSelect(token)
+            e.preventDefault()
+            if (mode === TokenListMode.List) {
+                onSelect(token)
+            }
         }
 
         const explorerLink = useMemo(() => {
