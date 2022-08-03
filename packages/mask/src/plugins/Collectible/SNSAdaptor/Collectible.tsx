@@ -7,7 +7,6 @@ import isValidDate from 'date-fns/isValid'
 import isAfter from 'date-fns/isAfter'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
 import { useI18N, useSwitcher } from '../../../utils'
-import { ArticleTab } from './ArticleTab'
 import { TokenTab } from './TokenTab'
 import { OfferTab } from './OfferTab'
 import { ListingTab } from './ListingTab'
@@ -22,6 +21,7 @@ import { CurrencyType, NetworkPluginID, resolveSourceName, SourceType } from '@m
 import type { FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/components/FootnoteMenuUI'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { TabContext } from '@mui/lab'
+import { AboutTab } from './Tabs/AboutTab'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -154,9 +154,11 @@ export function Collectible(props: CollectibleProps) {
             </Box>
         )
 
+    const _asset = asset.value
+    const endDate = _asset.auction?.endAt
     const renderTab = () => {
         const tabMap = {
-            [tabs.about]: <ArticleTab />,
+            [tabs.about]: <AboutTab asset={asset} />,
             [tabs.details]: <TokenTab />,
             [tabs.offers]: <OfferTab />,
             [tabs.activity]: <ListingTab />,
@@ -164,9 +166,6 @@ export function Collectible(props: CollectibleProps) {
 
         return tabMap[currentTab] || null
     }
-
-    const _asset = asset.value
-    const endDate = _asset.auction?.endAt
     return (
         <>
             <CollectibleCard classes={{ root: classes.root }}>
