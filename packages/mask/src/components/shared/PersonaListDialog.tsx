@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { Box, Button, DialogContent, Stack, Typography } from '@mui/material'
+import { Avatar, Box, Button, DialogContent, Stack, Typography } from '@mui/material'
 import {
     BindingProof,
     EMPTY_LIST,
@@ -8,7 +8,7 @@ import {
     PersonaInformation,
     ProfileIdentifier,
 } from '@masknet/shared-base'
-import { useAsync, useAsyncFn } from 'react-use'
+import { useAsync, useAsyncFn, useCopyToClipboard } from 'react-use'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI'
 // TODO: move to share
 import { useConnectedPersonas } from '../../plugins/NextID/hooks/useConnectedPersonas'
@@ -42,6 +42,9 @@ const useStyles = makeStyles()((theme) => {
             fontSize: 16,
             lineHeight: '20px',
             color: theme.palette.maskColor.main,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
         },
         fingerprint: {
             fontSize: 12,
@@ -62,6 +65,7 @@ interface PersonaListProps {
 interface PersonaNextIDMixture {
     persona: PersonaInformation
     proof: BindingProof[]
+    avatar?: string
 }
 
 function isSamePersona(p1?: PersonaIdentifier | PersonaInformation, p2?: PersonaIdentifier | PersonaInformation) {
@@ -74,6 +78,7 @@ function isSamePersona(p1?: PersonaIdentifier | PersonaInformation, p2?: Persona
 export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
     const { t } = useI18N()
     const { classes } = useStyles()
+    const [, copyToClipboard] = useCopyToClipboard()
     const [selectedPersona, setSelectedPersona] = useState<PersonaNextIDMixture>()
 
     const [, handleVerifyNextID] = useNextIDVerify()
@@ -181,6 +186,8 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
         setSelectedPersona(x)
     }, [])
 
+    console.log(personas)
+
     return open ? (
         <InjectedDialog
             disableTitleBorder
@@ -204,7 +211,18 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
                                 gap={1}
                                 onClick={() => onSelectPersona(x)}>
                                 <Box flexGrow={0}>
-                                    <Icons.MenuPersonasActive size={30} />
+                                    {x.avatar && (
+                                        <Avatar
+                                            src={x.avatar}
+                                            sx={{
+                                                width: 30,
+                                                height: 30,
+                                                display: 'inline-block',
+                                                borderRadius: '50%',
+                                            }}
+                                        />
+                                    )}
+                                    {!x.avatar && <Icons.MenuPersonasActive size={30} />}
                                 </Box>
                                 <Stack flexGrow={1}>
                                     <Typography className={classes.nickname}>
@@ -222,7 +240,15 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
                                     <Typography className={classes.fingerprint}>
                                         <Stack display="inline-flex" direction="row" alignItems="center" gap={0.25}>
                                             {formatPersonaFingerprint(x.persona.identifier.rawPublicKey, 4)}
-                                            <Icons.Copy size={14} />
+                                            <Icons.Copy
+                                                style={{ cursor: 'pointer' }}
+                                                size={14}
+                                                onClick={(e) => {
+                                                    e.preventDefault()
+                                                    e.stopPropagation()
+                                                    copyToClipboard(x.persona.identifier.rawPublicKey)
+                                                }}
+                                            />
                                         </Stack>
                                     </Typography>
                                 </Stack>
