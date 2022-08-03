@@ -18,8 +18,15 @@ const useStyles = makeStyles()((theme) => ({
     },
     list: {
         maxHeight: '100%',
-        padding: theme.spacing(2),
+        height: 'calc(100% - 16px)',
+        padding: theme.spacing(1.5),
+        marginBottom: theme.spacing(2),
         borderRadius: theme.spacing(1),
+        boxShadow: '0 0 20px rgba(0, 0, 0, 0.05)',
+        backdropFilter: 'blur(16px)',
+        '&:hover': {
+            background: theme.palette.maskColor.bg,
+        },
     },
     text: {
         display: 'flex',
@@ -149,24 +156,26 @@ export const getFungibleTokenItem =
                         classes={{ root: classes.switch }}
                         onClick={(event) => {
                             event.stopPropagation()
+                            event.preventDefault()
                         }}
                         size="small"
                         checked={!isBlocked(address)}
                         onChange={(event) => {
                             event.stopPropagation()
+                            event.preventDefault()
                             onTrustOrBlockTokenToLocal(event)
                         }}
                     />
                 )
             }
             return source !== 'external' ? (
-                <span>
+                <Typography fontSize="16" fontWeight={700} color={(t) => t.palette.maskColor.main}>
                     {loading ? (
-                        <LoadingBase size={16} />
+                        <LoadingBase size={24} />
                     ) : (
                         Number.parseFloat(new BigNumber(formatBalance(balance ?? 0, decimals, 6)).toFixed(6))
                     )}
-                </span>
+                </Typography>
             ) : (
                 <MaskLoadingButton
                     variant="contained"
@@ -188,7 +197,7 @@ export const getFungibleTokenItem =
                 button
                 className={`${classes.list} dashboard token-list`}
                 onClick={handleTokenSelect}
-                disabled={selected}>
+                disabled={selected && mode === TokenListMode.List}>
                 <ListItemIcon>
                     <TokenIcon
                         classes={{ icon: classes.icon }}

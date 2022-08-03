@@ -96,7 +96,7 @@ export function SearchableList<T extends {}>({
     return (
         <div className={classes.container}>
             {!disableSearch && (
-                <Box style={{ padding: '4px 16px 16px' }}>
+                <Box>
                     <MaskTextField
                         value={keyword}
                         placeholder="Search"
@@ -158,11 +158,11 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
     },
     listBox: {
-        '::-webkit-scrollbar': {
+        '& > div::-webkit-scrollbar': {
             backgroundColor: 'transparent',
-            width: 20,
+            width: 0,
         },
-        '::-webkit-scrollbar-thumb': {
+        '& > div::-webkit-scrollbar-thumb': {
             borderRadius: '20px',
             width: 5,
             border: '7px solid rgba(0, 0, 0, 0)',
@@ -171,7 +171,6 @@ const useStyles = makeStyles()((theme) => ({
         },
         '& > div > div': {
             position: 'relative',
-            width: 'calc(100% - 32px) !important',
             margin: 'auto',
         },
     },

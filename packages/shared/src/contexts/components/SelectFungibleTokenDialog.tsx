@@ -19,7 +19,7 @@ interface StyleProps {
 const useStyles = makeStyles<StyleProps>()((theme, { compact, disablePaddingTop }) => ({
     content: {
         ...(compact ? { minWidth: 552 } : {}),
-        padding: theme.spacing(3, 1),
+        padding: theme.spacing(2),
         display: 'flex',
         flexDirection: 'column',
         overflow: 'auto',
@@ -112,10 +112,12 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
                     selectedTokens={selectedTokens}
                     onSelect={onSubmit}
                     FixedSizeListProps={{
-                        itemSize: rowSize,
-                        height: isMdScreen ? 300 : 503,
+                        itemSize: rowSize + 16,
+                        height: isMdScreen ? 300 : 466,
                     }}
-                    SearchTextFieldProps={{ InputProps: { classes: { root: classes.search } } }}
+                    SearchTextFieldProps={{
+                        InputProps: { classes: { root: classes.search } },
+                    }}
                 />
             </DialogContent>
         </InjectedDialog>
