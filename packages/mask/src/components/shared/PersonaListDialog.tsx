@@ -4,12 +4,13 @@ import {
     BindingProof,
     EMPTY_LIST,
     formatPersonaFingerprint,
+    NextIDPlatform,
     PersonaIdentifier,
     PersonaInformation,
     ProfileIdentifier,
 } from '@masknet/shared-base'
 import { useAsync, useAsyncFn, useCopyToClipboard } from 'react-use'
-import { useCurrentIdentity } from '../DataSource/useActivatedUI'
+import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 // TODO: move to share
 import { useConnectedPersonas } from '../../plugins/NextID/hooks/useConnectedPersonas'
 import Services from '../../extension/service'
@@ -20,6 +21,7 @@ import { useI18N } from '../../utils'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
+import { activatedSocialNetworkUI } from '../../social-network'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -80,9 +82,10 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
     const { classes } = useStyles()
     const [, copyToClipboard] = useCopyToClipboard()
     const [selectedPersona, setSelectedPersona] = useState<PersonaNextIDMixture>()
+    const currentPlatform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
 
     const [, handleVerifyNextID] = useNextIDVerify()
-    const currentProfileIdentify = useCurrentIdentity()
+    const currentProfileIdentify = useLastRecognizedIdentity()
     const { value: personas = EMPTY_LIST, loading } = useConnectedPersonas()
 
     const { closeDialog } = useRemoteControlledDialog(WalletMessages.events.ApplicationPersonaListDialogUpdated)
@@ -119,14 +122,22 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
         const currentPersonaWithNextID = personas.find((x) => isSamePersona(x.persona, selectedPersona.persona))
 
         if (!currentPersonaWithNextID) return null
-        if (!currentPersonaWithNextID.proof.length) {
-            isVerified = false
+
+        // Selected Persona not link current SNS
+        if (
+            !selectedPersona.persona.linkedProfiles.find(
+                (x) => x.identifier.userId === currentProfileIdentify.identifier?.userId,
+            )
+        ) {
+            isConnected = false
         }
 
         if (!isSamePersona(selectedPersona.persona, currentPersonaIdentifier)) isConnected = false
-        // TODO: also need platform
+
         const verifiedSns = selectedPersona.proof.find(
-            (x) => x.identity.toLowerCase() === currentProfileIdentify?.identifier.userId.toLowerCase(),
+            (x) =>
+                x.identity.toLowerCase() === currentProfileIdentify.identifier?.userId.toLowerCase() &&
+                x.platform === currentPlatform,
         )
         if (!verifiedSns) {
             isVerified = false
@@ -137,9 +148,9 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
                 await connect?.(currentProfileIdentify.identifier, selectedPersona.persona.identifier)
             }
             if (!isVerified) {
-                handleVerifyNextID(selectedPersona.persona, currentProfileIdentify?.identifier.userId)
                 closeDialog()
                 closeApplicationBoard()
+                await handleVerifyNextID(selectedPersona.persona, currentProfileIdentify.identifier?.userId)
             }
 
             closeDialog()
@@ -186,8 +197,6 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
         setSelectedPersona(x)
     }, [])
 
-    console.log(personas)
-
     return open ? (
         <InjectedDialog
             disableTitleBorder
@@ -226,19 +235,29 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
                                 </Box>
                                 <Stack flexGrow={1}>
                                     <Typography className={classes.nickname}>
-                                        <Stack display="inline-flex" direction="row" alignItems="center" gap={0.25}>
+                                        <Stack
+                                            component="span"
+                                            display="inline-flex"
+                                            direction="row"
+                                            alignItems="center"
+                                            gap={0.25}>
                                             {x.persona.nickname}
                                             <>
                                                 {!!x.proof.find(
                                                     (p) =>
                                                         p.identity.toLowerCase() ===
-                                                        currentProfileIdentify?.identifier.userId.toLowerCase(),
+                                                        currentProfileIdentify.identifier?.userId.toLowerCase(),
                                                 ) && <Icons.NextIDMini width={32} height={18} />}
                                             </>
                                         </Stack>
                                     </Typography>
                                     <Typography className={classes.fingerprint}>
-                                        <Stack display="inline-flex" direction="row" alignItems="center" gap={0.25}>
+                                        <Stack
+                                            component="span"
+                                            display="inline-flex"
+                                            direction="row"
+                                            alignItems="center"
+                                            gap={0.25}>
                                             {formatPersonaFingerprint(x.persona.identifier.rawPublicKey, 4)}
                                             <Icons.Copy
                                                 style={{ cursor: 'pointer' }}
