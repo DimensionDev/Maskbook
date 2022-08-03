@@ -9153,7 +9153,7 @@ packages:
       react-refresh: 0.11.0
       schema-utils: 3.1.1
       source-map: 0.7.4
-      webpack: 5.74.0_@swc+core@1.2.218
+      webpack: 5.74.0
     dev: true
 
   /@pnpm/network.ca-file/1.0.1:
@@ -11141,7 +11141,7 @@ packages:
       micromatch: 4.0.5
       react-docgen-typescript: 2.2.2
       tslib: 2.4.0
-      webpack: 5.74.0_@swc+core@1.2.218
+      webpack: 5.74.0
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -22135,7 +22135,7 @@ packages:
     patched: true
 
   /immutable/3.8.1:
-    resolution: {integrity: sha1-IAgH8Rqw9ycQ6khVQt4IgHX2jNI=}
+    resolution: {integrity: sha512-0R2q5f83L0h+zizu3lAA3ZR/mzEl04U1jVVXIqf2rQbZs9eX5YGtx1EFQuuJJHzVXH10ur6hGKehR8yBOQmZlQ==}
     engines: {node: '>=0.10.0'}
     dev: false
 

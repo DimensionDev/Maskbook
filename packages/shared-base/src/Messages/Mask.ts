@@ -3,6 +3,7 @@ import type { SerializableTypedMessages } from '@masknet/typed-message'
 import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier'
 import type { RelationFavor } from '../Persona/type'
 import type { EnhanceableSite, ExtensionSite } from '../Site'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 enum NetworkPluginID {
     PLUGIN_EVM = 'com.mask.evm',
@@ -103,6 +104,13 @@ export interface Web3ProfileDialogRequest {
 
 export interface CheckSecurityCloseConfirmDialogRequest {
     open: boolean
+}
+
+export interface CheckSecurityDialogRequest {
+    open: boolean
+    searchHidden: boolean
+    tokenAddress?: string
+    chainId?: ChainId
 }
 
 export interface NFTAvatarEvent {

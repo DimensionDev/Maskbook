@@ -1,12 +1,12 @@
 import { Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales'
-import { memo, useMemo, useState } from 'react'
+import { memo, useMemo } from 'react'
 import { DefineMapping, SecurityMessageLevel } from './Common'
-import { CheckSecurityDialog } from './CheckSecurityDialog'
 import { Icons } from '@masknet/icons'
 import type { SecurityAPI } from '@masknet/web3-providers'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { getMessageList, isHighRisk } from './utils'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 
 interface TokenCardProps {
     tokenSecurity: TokenSecurity
@@ -20,7 +20,6 @@ export { getMessageList, isHighRisk }
 
 export const TokenSecurityBar = memo<TokenCardProps>(({ tokenSecurity }) => {
     const t = useSharedI18N()
-    const [open, setOpen] = useState(false)
 
     const { riskyFactors, attentionFactors } = useMemo(() => {
         const makeMessageList = getMessageList(tokenSecurity)
@@ -32,6 +31,15 @@ export const TokenSecurityBar = memo<TokenCardProps>(({ tokenSecurity }) => {
             attentionFactors,
         }
     }, [tokenSecurity])
+
+    const handleOpenDialog = () => {
+        CrossIsolationMessages.events.requestCheckSecurityDialog.sendToAll({
+            open: true,
+            searchHidden: true,
+            tokenAddress: tokenSecurity.contract,
+            chainId: tokenSecurity.chainId,
+        })
+    }
 
     return (
         <Stack direction="row" alignItems="center" spacing={1.5}>
@@ -81,7 +89,7 @@ export const TokenSecurityBar = memo<TokenCardProps>(({ tokenSecurity }) => {
                     padding="4px 8px"
                     bgcolor="rgba(28, 104, 243, 0.1)"
                     sx={{ cursor: 'pointer' }}
-                    onClick={() => setOpen(true)}
+                    onClick={handleOpenDialog}
                     spacing={0.5}>
                     <Typography component="span" fontSize="12px" color="#1C68F3">
                         {t.more()}
@@ -89,7 +97,6 @@ export const TokenSecurityBar = memo<TokenCardProps>(({ tokenSecurity }) => {
                     <Icons.RightArrow size={14} color="#1C68F3" />
                 </Stack>
             )}
-            <CheckSecurityDialog tokenSecurity={tokenSecurity} open={open} onClose={() => setOpen(false)} />
         </Stack>
     )
 })

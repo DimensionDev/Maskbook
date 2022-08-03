@@ -1,5 +1,5 @@
 import { Box, DialogActions, DialogContent, Stack } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../locales'
 import { SearchBox } from './components/SearchBox'
 import { useAsync, useAsyncFn } from 'react-use'
@@ -15,7 +15,8 @@ import { InjectedDialog } from '@masknet/shared'
 import { first, isEmpty } from 'lodash-unified'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useFungibleToken, useFungibleTokenPrice } from '@masknet/plugin-infra/web3'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -36,16 +37,22 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface BuyTokenDialogProps extends withClasses<never | 'root'> {
-    open: boolean
-    onClose(): void
-}
-
-export function CheckSecurityDialog(props: BuyTokenDialogProps) {
+export function CheckSecurityDialog() {
     const t = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
-    const { open, onClose } = props
+    const { classes } = useStyles()
     const [chainId, setChainId] = useState<ChainId>()
+    const [open, setOpen] = useState(false)
+    const [searchHidden, setSearchHidden] = useState(false)
+
+    useEffect(() => {
+        return CrossIsolationMessages.events.requestCheckSecurityDialog.on(
+            ({ open, searchHidden, tokenAddress, chainId }) => {
+                setOpen(open)
+                setSearchHidden(searchHidden)
+                onSearch(chainId ?? ChainId.Mainnet, tokenAddress ?? ZERO_ADDRESS)
+            },
+        )
+    }, [])
 
     const [{ value, loading: searching, error }, onSearch] = useAsyncFn(
         async (chainId: ChainId, content: string): Promise<TokenSecurity | undefined> => {
@@ -71,13 +78,17 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
         return TokenView.getTokenInfo(value.token_symbol)
     }, [value])
 
+    const onClose = () => setOpen(false)
+
     return (
         <InjectedDialog title={t.__plugin_name()} open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
                 <Stack height="100%" spacing={2}>
-                    <Box>
-                        <SearchBox onSearch={onSearch} />
-                    </Box>
+                    {!searchHidden && (
+                        <Box>
+                            <SearchBox onSearch={onSearch} />
+                        </Box>
+                    )}
                     <Stack flex={1}>
                         {(searching || loadingToken) && (
                             <Center>
