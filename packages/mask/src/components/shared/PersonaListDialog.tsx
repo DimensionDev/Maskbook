@@ -20,7 +20,7 @@ import { useNextIDVerify } from '../../plugins/NextID/hooks/useNextIDVerify'
 import { useI18N } from '../../utils'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { activatedSocialNetworkUI } from '../../social-network'
 
 const useStyles = makeStyles()((theme) => {
@@ -94,6 +94,7 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [, copyToClipboard] = useCopyToClipboard()
+    const { showSnackbar } = useCustomSnackbar()
     const [selectedPersona, setSelectedPersona] = useState<PersonaNextIDMixture>()
     const currentPlatform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
 
@@ -210,6 +211,13 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
         setSelectedPersona(x)
     }, [])
 
+    const onCopyPersons = (e: React.MouseEvent<HTMLElement>, p: PersonaNextIDMixture) => {
+        e.preventDefault()
+        e.stopPropagation()
+        copyToClipboard(p.persona.identifier.rawPublicKey)
+        showSnackbar(t('applications_persona_copy'), { variant: 'success' })
+    }
+
     return open ? (
         <InjectedDialog
             disableTitleBorder
@@ -278,11 +286,7 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
                                             <Icons.Copy
                                                 style={{ cursor: 'pointer' }}
                                                 size={14}
-                                                onClick={(e) => {
-                                                    e.preventDefault()
-                                                    e.stopPropagation()
-                                                    copyToClipboard(x.persona.identifier.rawPublicKey)
-                                                }}
+                                                onClick={(e) => onCopyPersons(e, x)}
                                             />
                                         </Stack>
                                     </Typography>

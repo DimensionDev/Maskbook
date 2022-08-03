@@ -58,6 +58,7 @@
     "application_display_tab_plug_app-unlisted-placeholder": "Click the setting icon to list it on the App board.",
     "application_settings_tab_plug_app-unlisted-placeholder": "Click the application icon to list it on the App board.",
     "applications_persona_title": "Persona",
+    "applications_persona_copy": "Copy Success",
     "applications_persona_connect": "Connect {{nickname}}",
     "applications_persona_connect_hint": "Please connect {{nickname}} before using dApps.",
     "applications_persona_verify": "Verify {{nickname}}",
