@@ -8,7 +8,6 @@ import {
     PersonaInformation,
     ProfileIdentifier,
 } from '@masknet/shared-base'
-import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import { useAsync, useAsyncFn } from 'react-use'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI'
 // TODO: move to share
@@ -20,6 +19,40 @@ import { useNextIDVerify } from '../../plugins/NextID/hooks/useNextIDVerify'
 import { useI18N } from '../../utils'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { makeStyles } from '@masknet/theme'
+
+const useStyles = makeStyles()((theme) => {
+    return {
+        root: {
+            width: 384,
+            height: 386,
+            padding: theme.spacing(1),
+        },
+        content: {
+            padding: theme.spacing(0, 2, 2, 2),
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
+        },
+        header: {
+            background: theme.palette.maskColor.bottom,
+        },
+        nickname: {
+            fontSize: 16,
+            lineHeight: '20px',
+            color: theme.palette.maskColor.main,
+        },
+        fingerprint: {
+            fontSize: 12,
+            lineHeight: '16px',
+            color: theme.palette.maskColor.second,
+        },
+        copyIcon: {
+            color: 'red',
+        },
+    }
+})
 
 interface PersonaListProps {
     open: boolean
@@ -40,6 +73,7 @@ function isSamePersona(p1?: PersonaIdentifier | PersonaInformation, p2?: Persona
 
 export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
     const { t } = useI18N()
+    const { classes } = useStyles()
     const [selectedPersona, setSelectedPersona] = useState<PersonaNextIDMixture>()
 
     const [, handleVerifyNextID] = useNextIDVerify()
@@ -106,19 +140,41 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
             closeDialog()
         }
 
-        return (
-            <Button color="primary" onClick={handleClick}>
-                {(() => {
-                    if (!isConnected && !isVerified)
-                        return t('applications_persona_verify_connect', { nickname: selectedPersona?.persona.nickname })
-                    if (!isConnected)
-                        return t('applications_persona_connect', { nickname: selectedPersona?.persona.nickname })
-                    if (!isVerified)
-                        return t('applications_persona_verify', { nickname: selectedPersona?.persona.nickname })
-                    return ''
-                })()}
-            </Button>
-        )
+        const actionProps = {
+            ...(() => {
+                if (!isConnected && !isVerified)
+                    return {
+                        buttonText: t('applications_persona_verify_connect', {
+                            nickname: selectedPersona?.persona.nickname,
+                        }),
+                        hint: t('applications_persona_verify_connect_hint', {
+                            nickname: selectedPersona?.persona.nickname,
+                        }),
+                    }
+                if (!isConnected)
+                    return {
+                        buttonText: t('applications_persona_connect', {
+                            nickname: selectedPersona?.persona.nickname,
+                        }),
+                        hint: t('applications_persona_connect_hint', {
+                            nickname: selectedPersona?.persona.nickname,
+                        }),
+                    }
+                if (!isVerified)
+                    return {
+                        buttonText: t('applications_persona_verify', {
+                            nickname: selectedPersona?.persona.nickname,
+                        }),
+                        hint: t('applications_persona_verify_hint', {
+                            nickname: selectedPersona?.persona.nickname,
+                        }),
+                    }
+                return {}
+            })(),
+            onClick: handleClick,
+        }
+
+        return <ActionContent {...actionProps} />
     }, [currentPersonaIdentifier, currentProfileIdentify, selectedPersona, personas])
 
     const onSelectPersona = useCallback((x: PersonaNextIDMixture) => {
@@ -126,29 +182,55 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
     }, [])
 
     return open ? (
-        <InjectedDialog disableTitleBorder open={open} maxWidth="sm" onClose={onClose} title="test">
-            <DialogContent>
-                <Stack>
+        <InjectedDialog
+            disableTitleBorder
+            open={open}
+            classes={{
+                paper: classes.root,
+                dialogTitle: classes.header,
+            }}
+            maxWidth="sm"
+            onClose={onClose}
+            title={t('applications_persona_title')}
+            titleBarIconStyle="close">
+            <DialogContent classes={{ root: classes.content }}>
+                <Stack gap={1.5}>
                     {personas.map((x) => {
                         return (
                             <Stack
                                 key={x.persona.identifier.toText()}
                                 direction="row"
+                                alignItems="center"
+                                gap={1}
                                 onClick={() => onSelectPersona(x)}>
                                 <Box flexGrow={0}>
                                     <Icons.MenuPersonasActive size={30} />
                                 </Box>
                                 <Stack flexGrow={1}>
-                                    <Typography>{x.persona.nickname}</Typography>
-                                    <Typography>
-                                        {formatPersonaFingerprint(x.persona.identifier.rawPublicKey, 4)}
+                                    <Typography className={classes.nickname}>
+                                        <Stack display="inline-flex" direction="row" alignItems="center" gap={0.25}>
+                                            {x.persona.nickname}
+                                            <>
+                                                {!!x.proof.find(
+                                                    (p) =>
+                                                        p.identity.toLowerCase() ===
+                                                        currentProfileIdentify?.identifier.userId.toLowerCase(),
+                                                ) && <Icons.NextIDMini width={32} height={18} />}
+                                            </>
+                                        </Stack>
+                                    </Typography>
+                                    <Typography className={classes.fingerprint}>
+                                        <Stack display="inline-flex" direction="row" alignItems="center" gap={0.25}>
+                                            {formatPersonaFingerprint(x.persona.identifier.rawPublicKey, 4)}
+                                            <Icons.Copy size={14} />
+                                        </Stack>
                                     </Typography>
                                 </Stack>
                                 <Stack flexGrow={0}>
                                     {isSamePersona(selectedPersona?.persona, x.persona) ? (
-                                        <Icons.CheckCircle />
+                                        <Icons.CheckCircle size={20} />
                                     ) : (
-                                        <RadioButtonUncheckedIcon />
+                                        <Icons.RadioNo size={20} />
                                     )}
                                 </Stack>
                             </Stack>
@@ -159,4 +241,24 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
             </DialogContent>
         </InjectedDialog>
     ) : null
+}
+
+interface ActionContentProps {
+    buttonText?: string
+    hint?: string
+    onClick(): Promise<void>
+}
+
+function ActionContent({ buttonText, hint, onClick }: ActionContentProps) {
+    if (!buttonText || !hint) return null
+    return (
+        <Stack gap={3} mt={1.5}>
+            <Typography color={(t) => t.palette.maskColor.main} fontSize={14} lineHeight="18px">
+                {hint}
+            </Typography>
+            <Button color="primary" style={{ borderRadius: 20 }} onClick={onClick}>
+                {buttonText}
+            </Button>
+        </Stack>
+    )
 }
