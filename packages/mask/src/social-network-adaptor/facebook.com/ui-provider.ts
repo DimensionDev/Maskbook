@@ -34,6 +34,7 @@ import { injectPostReplacerAtFacebook } from './injection/PostReplacer'
 import { injectProfileTabContentAtFacebook } from './injection/ProfileContent'
 import { FacebookRenderFragments } from './customization/render-fragments'
 import { enableFbStyleTextPayloadReplace } from '../../../shared-ui/TypedMessageRender/transformer'
+import { injectFacebookProfileCover } from './injection/ProfileCover'
 
 const useInjectedDialogClassesOverwriteFacebook = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -192,6 +193,7 @@ const facebookUI: SocialNetworkUI.Definition = {
         userAvatar: injectUserNFTAvatarAtFacebook,
         enhancedProfileNFTAvatar: injectProfileNFTAvatarInFaceBook,
         profileAvatar: injectNFTAvatarInFacebook,
+        profileCover: injectFacebookProfileCover,
         openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
         openNFTAvatarSettingDialog,
         enhancedPostRenderer: injectPostReplacerAtFacebook,

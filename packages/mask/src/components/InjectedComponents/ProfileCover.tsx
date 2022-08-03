@@ -1,7 +1,8 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
+import { first } from 'lodash-unified'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useAvailablePlugins, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
-import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { useActivatedPluginsSNSAdaptor, createInjectHooksRenderer } from '@masknet/plugin-infra/content-script'
 
 import { MaskMessages } from '../../utils'
 import { useCurrentVisitingIdentity } from '../DataSource/useActivatedUI'
@@ -30,6 +31,17 @@ export function ProfileCover({ classes }: ProfileCoverProps) {
             .sort((a, z) => a.priority - z.priority)
     })
 
-    if (loadingSocialAddressList || !currentVisitingIdentity.identifier?.userId) return null
-    return <div className={classes?.root}>test</div>
+    // TODO: Multi-plugin rendering support
+    const component = useMemo(() => {
+        const plugin = first(displayPlugins)
+
+        const Component = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, () => {
+            return plugin?.UI?.Cover
+        })
+
+        return <Component identity={currentVisitingIdentity} />
+    }, [displayPlugins])
+
+    if (loadingSocialAddressList || !currentVisitingIdentity.identifier?.userId || !component) return null
+    return <div className={classes?.root}>{component}</div>
 }

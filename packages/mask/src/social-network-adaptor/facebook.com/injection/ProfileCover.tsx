@@ -1,13 +1,13 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { searchProfileCoverSelector } from '../utils/selector'
+import { makeStyles } from '@masknet/theme'
+import { searchFacebookProfileCoverSelector } from '../utils/selector'
 import { createReactRootShadowed, startWatch } from '../../../utils'
 import { ProfileCover } from '../../../components/InjectedComponents/ProfileCover'
-import { makeStyles } from '@masknet/theme'
 
-export function injectProfileCover(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchProfileCoverSelector())
+export function injectFacebookProfileCover(signal: AbortSignal) {
+    const watcher = new MutationObserverWatcher(searchFacebookProfileCoverSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileCoverAtTwitter />)
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileCoverAtFacebook />)
 }
 
 const useStyles = makeStyles()(() => ({
@@ -19,7 +19,7 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
-export function ProfileCoverAtTwitter() {
+export function ProfileCoverAtFacebook() {
     const { classes } = useStyles()
     return <ProfileCover classes={classes} />
 }
