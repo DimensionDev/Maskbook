@@ -1,7 +1,7 @@
-import { useCallback, useState } from 'react'
-import { useAccount, useChainId, useWeb3Hub } from '@masknet/plugin-infra/web3'
+import { useState } from 'react'
+import { useAccount, useChainId, useWeb3Hub, Web3Helper } from '@masknet/plugin-infra/web3'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
-import { OrderSide, resolveSourceName, SourceType } from '@masknet/web3-shared-base'
+import { Hub, OrderSide, resolveSourceName, SourceType } from '@masknet/web3-shared-base'
 import { Button, MenuItem, Table, TableBody, TableCell, TableRow, TextField, Typography } from '@mui/material'
 import { getEnumAsArray } from '@dimensiondev/kit'
 
@@ -15,90 +15,87 @@ const useStyles = makeStyles()({
     },
 })
 
-const TransactionAPIs = ['getTransactions']
-
-const NonFungibleTokenAPIs = [
-    'getNonFungibleTokenBalance',
-    'getNonFungibleTokenContract',
-    'getNonFungibleTokenEvents',
-    'getNonFungibleTokenOffers',
-    'getNonFungibleTokenListings',
-    'getNonFungibleTokenOrders',
-    'getNonFungibleAsset',
-    'getNonFungibleToken',
-] as const
-
 export function HubContent(props: HubContentProps) {
     const { classes } = useStyles()
     const hub = useWeb3Hub()
     const chainId = useChainId()
     const account = useAccount()
+    const [keyword, setKeyword] = useState<string>('PUNK')
     const [address, setAddress] = useState<string>('0x7c3e8096b70a4ddc04c4344b8f33b97c9d12bc4e')
     const [tokenId, setTokenId] = useState<string>('1')
     const [sourceType, setSourceType] = useState(SourceType.OpenSea)
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
-    const onQueryTransactionAPI = useCallback(
-        (method: typeof TransactionAPIs[number]) => {
-            if (!account) throw new Error('Not account found.')
-            switch (method) {
-                case 'getTransactions':
-                    return hub?.getTransactions?.(chainId, account)
-                default:
-                    throw new Error(`Not supported ${method}.`)
-            }
-        },
-        [account, chainId, hub],
-    )
+    type HubAll = Required<Hub<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll, Web3Helper.GasOptionAll>>
+    type API<T extends keyof HubAll = keyof HubAll> = readonly [T, Parameters<HubAll[T]>]
 
-    const onQueryNonFungibleTokenAPI = useCallback(
-        (method: typeof NonFungibleTokenAPIs[number]) => {
-            if (!address) throw new Error('No contract address.')
+    const APIs: API[] = [
+        // gas options
+        ['getGasOptions', [chainId]],
 
-            switch (method) {
-                case 'getNonFungibleTokenBalance':
-                    return hub?.getNonFungibleTokenBalance?.(address, {
-                        sourceType,
-                    })
-                case 'getNonFungibleTokenContract':
-                    return hub?.getNonFungibleTokenContract?.(address, {
-                        sourceType,
-                    })
-                case 'getNonFungibleTokenEvents':
-                    return hub?.getNonFungibleTokenEvents?.(address, tokenId, {
-                        sourceType,
-                    })
-                case 'getNonFungibleTokenOffers':
-                    return hub?.getNonFungibleTokenOffers?.(address, tokenId, {
-                        sourceType,
-                    })
-                case 'getNonFungibleTokenListings':
-                    return hub?.getNonFungibleTokenListings?.(address, tokenId, {
-                        sourceType,
-                    })
-                case 'getNonFungibleTokenOrders':
-                    return hub?.getNonFungibleTokenOrders?.(address, tokenId, OrderSide.Buy, {
-                        sourceType,
-                    })
-                case 'getNonFungibleAsset':
-                    return hub?.getNonFungibleAsset?.(address, tokenId, {
-                        sourceType,
-                    })
-                case 'getNonFungibleToken':
-                    return hub?.getNonFungibleToken?.(address, tokenId, {
-                        sourceType,
-                    })
-                default:
-                    throw new Error(`Not supported ${method}.`)
-            }
-        },
-        [hub, address, tokenId, sourceType],
-    )
+        // transactions
+        ['getTransactions', [chainId, account]],
+
+        // fungible tokens
+        ['getFungibleToken', [address]],
+        ['getFungibleTokens', [account]],
+        ['getFungibleAsset', [address]],
+        ['getFungibleAssets', [account]],
+        ['getFungibleTokenBalance', [address]],
+        ['getFungibleTokenPrice', [chainId, address]],
+        ['getFungibleTokenSecurity', [chainId, address]],
+
+        ['getFungibleTokenIconURLs', [chainId, address]],
+        ['getNonFungibleTokenIconURLs', [chainId, address, tokenId]],
+
+        ['getFungibleTokenStats', [address]],
+        ['getFungibleTokensFromTokenList', [chainId]],
+        ['getApprovedFungibleTokenSpenders', [chainId, account]],
+
+        // non-fungible tokens
+        ['getNonFungibleTokenOwner', [address, tokenId]],
+        ['getNonFungibleTokenPrice', [chainId, address, tokenId]],
+        ['getNonFungibleTokensFromTokenList', [chainId]],
+        ['getApprovedNonFungibleContracts', [chainId, address]],
+        ['getNonFungibleTokenBalance', [address]],
+        ['getNonFungibleTokenStats', [address]],
+        ['getNonFungibleTokenSecurity', [chainId, address]],
+        ['getNonFungibleTokenContract', [address]],
+        ['getNonFungibleCollections', [account]],
+        ['getNonFungibleCollectionsByKeyword', [keyword]],
+        ['getNonFungibleTokenEvents', [address, tokenId]],
+        ['getNonFungibleTokenOffers', [address, tokenId]],
+        ['getNonFungibleTokenListings', [address, tokenId]],
+        ['getNonFungibleTokenOrders', [address, tokenId, OrderSide.Buy]],
+        ['getNonFungibleAsset', [address, tokenId]],
+        ['getNonFungibleAssets', [account]],
+        ['getNonFungibleToken', [address, tokenId]],
+        ['getNonFungibleTokens', [account]],
+        ['getNonFungibleTokenFloorPrice', [address, tokenId]],
+        ['getNonFungibleTokensByCollection', [address]],
+        ['getNonFungibleAssetsByCollection', [address]],
+    ]
 
     return (
         <section className={classes.container}>
             <Table size="small">
                 <TableBody>
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Keyword
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <TextField
+                                label="Keyword"
+                                value={keyword}
+                                placeholder="Enter keyword to search"
+                                size="small"
+                                onChange={(e) => setKeyword(e.target.value)}
+                            />
+                        </TableCell>
+                    </TableRow>
                     <TableRow>
                         <TableCell>
                             <Typography variant="body2" whiteSpace="nowrap">
@@ -111,6 +108,7 @@ export function HubContent(props: HubContentProps) {
                                 value={address}
                                 placeholder="Enter contract address"
                                 size="small"
+                                onChange={(e) => setAddress(e.target.value)}
                             />
                         </TableCell>
                     </TableRow>
@@ -127,6 +125,7 @@ export function HubContent(props: HubContentProps) {
                                 placeholder="Enter token id"
                                 size="small"
                                 style={{ marginTop: 8 }}
+                                onChange={(e) => setTokenId(e.target.value)}
                             />
                         </TableCell>
                     </TableRow>
@@ -155,12 +154,12 @@ export function HubContent(props: HubContentProps) {
                             </ShadowRootMenu>
                         </TableCell>
                     </TableRow>
-                    {TransactionAPIs.map((x) => {
+                    {APIs.map(([key, parameters]) => {
                         return (
-                            <TableRow key={x}>
+                            <TableRow key={key}>
                                 <TableCell>
                                     <Typography variant="body2" whiteSpace="nowrap">
-                                        {x}
+                                        {key}
                                     </Typography>
                                 </TableCell>
                                 <TableCell>
@@ -168,33 +167,15 @@ export function HubContent(props: HubContentProps) {
                                         size="small"
                                         onClick={async () => {
                                             try {
-                                                console.log(`Query ${x}:`)
-                                                console.log(await onQueryTransactionAPI(x))
-                                            } catch (error) {
-                                                console.error(error)
-                                            }
-                                        }}>
-                                        Query
-                                    </Button>
-                                </TableCell>
-                            </TableRow>
-                        )
-                    })}
-                    {NonFungibleTokenAPIs.map((x) => {
-                        return (
-                            <TableRow key={x}>
-                                <TableCell>
-                                    <Typography variant="body2" whiteSpace="nowrap">
-                                        {x}
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Button
-                                        size="small"
-                                        onClick={async () => {
-                                            try {
-                                                console.log(`Query ${x}:`)
-                                                console.log(await onQueryNonFungibleTokenAPI(x))
+                                                console.log(`Query ${key}:`)
+                                                console.log(
+                                                    // @ts-ignore
+                                                    await hub?.[key]?.(...parameters, {
+                                                        chainId,
+                                                        account,
+                                                        sourceType,
+                                                    }),
+                                                )
                                             } catch (error) {
                                                 console.error(error)
                                             }
