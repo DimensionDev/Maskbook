@@ -1,27 +1,25 @@
 import { useCallback } from 'react'
-import { Box, Button, CardContent, CardHeader, Link, Paper, Tab, Typography } from '@mui/material'
+import { Box, Button, CardContent, CardHeader, Paper, Tab, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
-import { Trans } from 'react-i18next'
 import formatDateTime from 'date-fns/format'
 import isValidDate from 'date-fns/isValid'
 import isAfter from 'date-fns/isAfter'
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
 import { useI18N, useSwitcher } from '../../../utils'
-import { TokenTab } from './TokenTab'
 import { OfferTab } from './OfferTab'
 import { ListingTab } from './ListingTab'
 import { LinkingAvatar } from './LinkingAvatar'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleCard } from './CollectibleCard'
-import { resolveAssetLinkOnCurrentProvider } from '../pipes'
 import { ActionBar } from './OpenSea/ActionBar'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { useChainId } from '@masknet/plugin-infra/web3'
-import { CurrencyType, NetworkPluginID, resolveSourceName, SourceType } from '@masknet/web3-shared-base'
+import { NetworkPluginID, resolveSourceName, SourceType } from '@masknet/web3-shared-base'
 import type { FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/components/FootnoteMenuUI'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { TabContext } from '@mui/lab'
 import { AboutTab } from './Tabs/AboutTab'
+import { DetailTab } from './Tabs/DetailTab'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -36,6 +34,9 @@ const useStyles = makeStyles()((theme) => {
             flexDirection: 'column',
             padding: '0 !important',
             margin: '0 12px',
+        },
+        header: {
+            alignItems: 'unset',
         },
         body: {
             flex: 1,
@@ -66,7 +67,7 @@ const useStyles = makeStyles()((theme) => {
             whiteSpace: 'nowrap',
         },
         subtitle: {
-            fontSize: 12,
+            fontSize: 14,
             marginRight: theme.spacing(0.5),
             maxHeight: '3.5rem',
             overflow: 'hidden',
@@ -110,6 +111,12 @@ const useStyles = makeStyles()((theme) => {
             display: '-webkit-box',
             webkitBoxOrient: 'vertical',
             webkitLineClamp: '3',
+        },
+        cardTitle: {
+            fontSize: 16,
+            lineHeight: '20px',
+            fontWeight: 700,
+            color: theme.palette.maskColor.main,
         },
     }
 })
@@ -159,7 +166,7 @@ export function Collectible(props: CollectibleProps) {
     const renderTab = () => {
         const tabMap = {
             [tabs.about]: <AboutTab asset={asset} />,
-            [tabs.details]: <TokenTab />,
+            [tabs.details]: <DetailTab asset={asset} />,
             [tabs.offers]: <OfferTab />,
             [tabs.activity]: <ListingTab />,
         }
@@ -170,6 +177,7 @@ export function Collectible(props: CollectibleProps) {
         <>
             <CollectibleCard classes={{ root: classes.root }}>
                 <CardHeader
+                    className={classes.header}
                     avatar={
                         <LinkingAvatar
                             href={_asset.link ?? ''}
@@ -181,25 +189,8 @@ export function Collectible(props: CollectibleProps) {
                     }
                     title={
                         <Typography style={{ display: 'flex', alignItems: 'center' }}>
-                            {token ? (
-                                <Link
-                                    color="primary"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    href={resolveAssetLinkOnCurrentProvider(
-                                        chainId,
-                                        token.contractAddress,
-                                        token.tokenId,
-                                        provider,
-                                    )}>
-                                    {_asset.metadata?.name ?? ''}
-                                </Link>
-                            ) : (
-                                _asset.metadata?.name ?? ''
-                            )}
-                            {_asset.collection?.verified ? (
-                                <VerifiedUserIcon color="primary" fontSize="small" sx={{ marginLeft: 0.5 }} />
-                            ) : null}
+                            <Typography className={classes.cardTitle}>{_asset.metadata?.name ?? ''}</Typography>
+                            {_asset.collection?.verified ? <Icons.VerifiedCollection sx={{ marginLeft: 0.5 }} /> : null}
                         </Typography>
                     }
                     subheader={
@@ -210,20 +201,6 @@ export function Collectible(props: CollectibleProps) {
                                         <Markdown
                                             classes={{ root: classes.markdown }}
                                             content={_asset.metadata.description}
-                                        />
-                                    </Typography>
-                                </Box>
-                            ) : null}
-
-                            {_asset?.price?.[CurrencyType.USD] ? (
-                                <Box display="flex" alignItems="center" sx={{ marginTop: 1 }}>
-                                    <Typography className={classes.description} component="span">
-                                        <Trans
-                                            i18nKey="plugin_collectible_description"
-                                            values={{
-                                                price: _asset.price[CurrencyType.USD],
-                                                symbol: CurrencyType.USD,
-                                            }}
                                         />
                                     </Typography>
                                 </Box>

@@ -1,10 +1,10 @@
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useMemo } from 'react'
 import { CollectibleTab } from '../CollectibleTab'
-import { NFTBasicInfo } from '../../../../components/shared/NFTCard/NFTBasicInfo'
-import { NFTPriceCard } from '../../../../components/shared/NFTCard/NFTPriceCard'
 import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NFTInfoCard } from '../../../../components/shared/NFTCard/NFTInfoCard'
+import { NFTPropertiesCard } from '../../../../components/shared/NFTCard/NFTPropertiesCard'
 
 const useStyles = makeStyles()((theme) => ({
     body: {
@@ -52,16 +52,20 @@ const useStyles = makeStyles()((theme) => ({
     imgWrapper: {
         maxWidth: 300,
     },
+    info: {
+        width: '100%',
+        marginBottom: 24,
+    },
 }))
 
-export interface AboutTabProps {
+export interface DetailTabProps {
     asset: {
         loading?: boolean
         value?: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
     }
 }
 
-export function AboutTab(props: AboutTabProps) {
+export function DetailTab(props: DetailTabProps) {
     const { asset } = props
     const { classes } = useStyles()
     return useMemo(() => {
@@ -72,10 +76,10 @@ export function AboutTab(props: AboutTabProps) {
                         <LoadingBase />
                     ) : (
                         <>
-                            <div className={classes.basic}>
-                                <NFTBasicInfo hideSubTitle asset={asset} />
+                            <div className={classes.info}>
+                                <NFTInfoCard asset={asset} />
                             </div>
-                            <NFTPriceCard asset={asset} />
+                            <NFTPropertiesCard asset={asset} />
                         </>
                     )}
                 </div>
