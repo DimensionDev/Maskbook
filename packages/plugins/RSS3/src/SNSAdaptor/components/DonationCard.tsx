@@ -1,8 +1,9 @@
 import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
-import { Typography } from '@mui/material'
+import { Card, Typography } from '@mui/material'
 import classnames from 'classnames'
 import formatDateTime from 'date-fns/format'
 import type { HTMLProps } from 'react'
@@ -61,6 +62,18 @@ const useStyles = makeStyles()((theme) => ({
     tokenInfoColor: {
         color: theme.palette.maskColor.main,
     },
+    img: {
+        width: '126px !important',
+        height: '126px !important',
+        borderRadius: '8px',
+        objectFit: 'cover',
+    },
+    loadingFailImage: {
+        minHeight: '0 !important',
+        maxWidth: 'none',
+        width: 64,
+        height: 64,
+    },
 }))
 
 export const DonationCard = ({ donation, address, onSelect, className, ...rest }: DonationCardProps) => {
@@ -77,11 +90,19 @@ export const DonationCard = ({ donation, address, onSelect, className, ...rest }
 
     return (
         <div onClick={onSelect} className={classnames(classes.card, className)} {...rest}>
-            <img
-                className={classes.cover}
-                src={donation.imageURL || RSS3_DEFAULT_IMAGE}
-                alt={donation.title || t.inactive_project()}
-            />
+            <section className="flex flex-row flex-shrink-0 w-max h-max">
+                <Card className={classes.img}>
+                    <NFTCardStyledAssetPlayer
+                        url={donation.imageURL || RSS3_DEFAULT_IMAGE}
+                        classes={{
+                            loadingFailImage: classes.loadingFailImage,
+                            wrapper: classes.img,
+                            iframe: classes.img,
+                        }}
+                    />
+                </Card>
+            </section>
+
             <div className={classes.info}>
                 <div className={classes.infoRow}>
                     <Typography className={classes.date} title={date}>
