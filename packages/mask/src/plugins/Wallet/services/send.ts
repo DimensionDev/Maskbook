@@ -203,7 +203,7 @@ export async function sendPayload(payload: JsonRpcPayload, options?: Options) {
                 return
             }
 
-            if (options?.chainId === 592) {
+            if (options?.chainId === ChainId.Astar) {
                 await send(
                     {
                         ...payload,
