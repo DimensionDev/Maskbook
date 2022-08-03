@@ -56,6 +56,19 @@ const useStyles = makeStyles()((theme) => {
         copyIcon: {
             color: 'red',
         },
+        dot: {
+            display: 'inline-block',
+            background: '#2DDF00',
+            borderRadius: '50%',
+            width: 7,
+            height: 7,
+            position: 'absolute',
+            left: '77.62%',
+            right: '5.84%',
+            top: '5.84%',
+            bottom: '77.62',
+            border: `1px solid ${theme.palette.maskColor.bottom}`,
+        },
     }
 })
 
@@ -219,7 +232,7 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
                                 alignItems="center"
                                 gap={1}
                                 onClick={() => onSelectPersona(x)}>
-                                <Box flexGrow={0}>
+                                <Box flexGrow={0} position="relative">
                                     {x.avatar && (
                                         <Avatar
                                             src={x.avatar}
@@ -232,6 +245,9 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
                                         />
                                     )}
                                     {!x.avatar && <Icons.MenuPersonasActive size={30} />}
+                                    {isSamePersona(currentPersonaIdentifier, x.persona) && (
+                                        <Box className={classes.dot} />
+                                    )}
                                 </Box>
                                 <Stack flexGrow={1}>
                                     <Typography className={classes.nickname}>
