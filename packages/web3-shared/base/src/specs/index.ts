@@ -265,6 +265,7 @@ export interface NonFungibleTokenContract<ChainId, SchemaType> {
     owner?: string
     logoURL?: string
     iconURL?: string
+    creatorEarning?: string
 }
 
 export interface NonFungibleTokenMetadata<ChainId> {

@@ -69,12 +69,12 @@ export function NFTPriceCard(props: NFTPriceCardProps) {
                 </Typography>
             </div>
             <div className={classes.priceZone}>
-                <img width={48} height={48} src={priceTokenImg} alt="tokenImg" />
+                <img width={48} height={48} src={priceTokenImg} />
                 <Typography className={classes.priceText}>{_asset.priceInToken?.amount ?? '-'}</Typography>
             </div>
             <div className={classes.offerBox}>
                 <Typography className={classes.textBase}>Top Offer</Typography>
-                <img width={18} height={18} src={priceTokenImg} alt="tokenImg" />
+                <img width={18} height={18} src={priceTokenImg} />
                 <Typography className={classes.textBase}>
                     <strong>{_asset.priceInToken?.amount ?? '-'}</strong>
                 </Typography>

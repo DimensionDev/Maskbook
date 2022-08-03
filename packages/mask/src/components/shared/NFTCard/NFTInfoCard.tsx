@@ -1,5 +1,9 @@
 import { makeStyles } from '@masknet/theme'
 import { Skeleton, Typography } from '@mui/material'
+import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -32,21 +36,25 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NFTInfoCardProps {
-    asset: any
+    asset: {
+        loading?: boolean
+        value?: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
+    }
 }
 
 export function NFTInfoCard(props: NFTInfoCardProps) {
     const { asset } = props
     const { classes } = useStyles()
+    const { Others } = useWeb3State()
     if (!asset.value || asset.loading) return <Skeleton width="100%" height={172} />
     const _asset = asset.value
     const infoConfigMapping = [
         { title: 'Token ID', value: _asset.tokenId },
-        { title: 'Contract', value: _asset.address },
+        { title: 'Contract', value: Others?.formatAddress(_asset.address, 4) ?? '-' },
         { title: 'Blockchain', value: 'Ethereum' },
-        { title: 'Token Standard', value: 'ERC721' },
-        { title: 'Creator Royalties', value: '5.0%' },
-        { title: 'OpenSea Platform costs', value: '2%' },
+        { title: 'Token Standard', value: _asset.contract?.schema ?? SchemaType.ERC721 },
+        { title: 'Creator Royalties', value: _asset.contract?.creatorEarning ?? '0' },
+        { title: 'OpenSea Platform costs', value: '2.5%' },
     ]
     return (
         <div className={classes.wrapper}>
