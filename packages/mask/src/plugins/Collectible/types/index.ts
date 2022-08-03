@@ -10,11 +10,10 @@ export interface CollectibleJSON_Payload {
 }
 
 export enum CollectibleTab {
-    ARTICLE = 0,
-    TOKEN = 1,
-    OFFER = 2,
-    LISTING = 3,
-    HISTORY = 4,
+    ABOUT = 0,
+    DETAILS = 1,
+    OFFERS = 2,
+    ACTIVITY = 3,
 }
 
 export interface CollectibleToken {

@@ -1,18 +1,6 @@
-import { ReactElement, useCallback } from 'react'
-import {
-    Box,
-    Button,
-    CardActions,
-    CardContent,
-    CardHeader,
-    Link,
-    Paper,
-    Stack,
-    Tab,
-    Tabs,
-    Typography,
-} from '@mui/material'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { useCallback } from 'react'
+import { Box, Button, CardContent, CardHeader, Link, Paper, Tab, Typography } from '@mui/material'
+import { makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import formatDateTime from 'date-fns/format'
 import isValidDate from 'date-fns/isValid'
@@ -23,26 +11,24 @@ import { ArticleTab } from './ArticleTab'
 import { TokenTab } from './TokenTab'
 import { OfferTab } from './OfferTab'
 import { ListingTab } from './ListingTab'
-import { HistoryTab } from './HistoryTab'
 import { LinkingAvatar } from './LinkingAvatar'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleCard } from './CollectibleCard'
-import { CollectibleTab } from '../types'
 import { resolveAssetLinkOnCurrentProvider } from '../pipes'
 import { ActionBar } from './OpenSea/ActionBar'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { CurrencyType, NetworkPluginID, resolveSourceName, SourceType } from '@masknet/web3-shared-base'
-import { FootnoteMenuUI, FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/components/FootnoteMenuUI'
-import { CollectibleProviderIcon } from './CollectibleProviderIcon'
+import type { FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/components/FootnoteMenuUI'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { findIndex } from 'lodash-unified'
+import { TabContext } from '@mui/lab'
 
 const useStyles = makeStyles()((theme) => {
     return {
         root: {
             width: '100%',
             padding: 0,
+            backgroundColor: 'unset',
         },
         content: {
             width: '100%',
@@ -53,6 +39,7 @@ const useStyles = makeStyles()((theme) => {
         },
         body: {
             flex: 1,
+            backgroundColor: theme.palette.maskColor.white,
             overflow: 'auto',
             maxHeight: 350,
             borderRadius: 0,
@@ -76,9 +63,6 @@ const useStyles = makeStyles()((theme) => {
             borderBottom: `solid 1px ${theme.palette.divider}`,
         },
         tab: {
-            height: 'var(--tabHeight)',
-            minHeight: 'unset',
-            minWidth: 'unset',
             whiteSpace: 'nowrap',
         },
         subtitle: {
@@ -138,7 +122,7 @@ export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const { token, asset, provider, setProvider, tabIndex, setTabIndex } = CollectibleState.useContainer()
+    const { token, asset, provider, setProvider } = CollectibleState.useContainer()
 
     // #region sync with settings
     const collectibleProviderOptions = getEnumAsArray(SourceType).filter((x) => supportedProvider.includes(x.value))
@@ -151,6 +135,7 @@ export function Collectible(props: CollectibleProps) {
     // #region provider switcher
     const CollectibleProviderSwitcher = useSwitcher(provider, setProvider, supportedProvider, resolveSourceName, true)
     // #endregion
+    const [currentTab, onChange, tabs, setTab] = useTabs('about', 'details', 'offers', 'activity')
 
     if (!asset.value || !token)
         return (
@@ -168,24 +153,16 @@ export function Collectible(props: CollectibleProps) {
                 </Box>
             </Box>
         )
-    const tabs = [
-        <Tab className={classes.tab} key="article" label={t('plugin_collectible_article')} />,
-        <Tab className={classes.tab} key="details" label={t('plugin_collectible_details')} />,
-        <Tab className={classes.tab} key="offers" label={t('plugin_collectible_offers')} />,
-        <Tab className={classes.tab} key="listing" label={t('plugin_collectible_listing')} />,
-        <Tab className={classes.tab} key="history" label={t('plugin_collectible_history')} />,
-    ]
 
-    const renderTab = (tabIndex: CollectibleTab) => {
-        const tabMap: Record<CollectibleTab, ReactElement> = {
-            [CollectibleTab.ARTICLE]: <ArticleTab />,
-            [CollectibleTab.TOKEN]: <TokenTab />,
-            [CollectibleTab.OFFER]: <OfferTab />,
-            [CollectibleTab.LISTING]: <ListingTab />,
-            [CollectibleTab.HISTORY]: <HistoryTab />,
+    const renderTab = () => {
+        const tabMap = {
+            [tabs.about]: <ArticleTab />,
+            [tabs.details]: <TokenTab />,
+            [tabs.offers]: <OfferTab />,
+            [tabs.activity]: <ListingTab />,
         }
 
-        return tabMap[tabIndex] || null
+        return tabMap[currentTab] || null
     }
 
     const _asset = asset.value
@@ -256,24 +233,21 @@ export function Collectible(props: CollectibleProps) {
                     }
                 />
                 <CardContent className={classes.content}>
-                    <Tabs
-                        className={classes.tabs}
-                        indicatorColor="primary"
-                        textColor="primary"
-                        variant="fullWidth"
-                        value={tabIndex}
-                        onChange={(ev: React.ChangeEvent<{}>, newValue: number) => setTabIndex(newValue)}
-                        TabIndicatorProps={{
-                            style: {
-                                display: 'none',
-                            },
-                        }}>
-                        {tabs}
-                    </Tabs>
-                    <Paper className={classes.body}>{renderTab(tabIndex)}</Paper>
+                    <TabContext value={currentTab}>
+                        <MaskTabList variant="base" aria-label="collectible" onChange={onChange}>
+                            <Tab className={classes.tab} value={tabs.about} label={t('plugin_collectible_about')} />
+                            <Tab className={classes.tab} value={tabs.details} label={t('plugin_collectible_details')} />
+                            <Tab className={classes.tab} value={tabs.offers} label={t('plugin_collectible_offers')} />
+                            <Tab
+                                className={classes.tab}
+                                value={tabs.activity}
+                                label={t('plugin_collectible_activity')}
+                            />
+                        </MaskTabList>
+                    </TabContext>
+                    <Paper className={classes.body}>{renderTab()}</Paper>
                 </CardContent>
-                <CardActions className={classes.footer}>
-                    {/* flex to make foot menu right */}
+                {/* <CardActions className={classes.footer}>
                     <div />
                     <div className={classes.footMenu}>
                         <FootnoteMenuUI
@@ -290,7 +264,7 @@ export function Collectible(props: CollectibleProps) {
                             onChange={onDataProviderChange}
                         />
                     </div>
-                </CardActions>
+                </CardActions> */}
             </CollectibleCard>
             {endDate && isValidDate(endDate) && isAfter(endDate, Date.now()) && (
                 <Box sx={{ marginTop: 1 }}>

@@ -1,12 +1,11 @@
 import { useState } from 'react'
 import { createContainer } from 'unstated-next'
-import { CollectibleTab, CollectibleToken } from '../types'
+import type { CollectibleToken } from '../types'
 import { useNonFungibleAsset } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 
 function useCollectibleState(token?: CollectibleToken) {
-    const [tabIndex, setTabIndex] = useState(CollectibleTab.ARTICLE)
     const [provider, setProvider] = useState(token?.provider ?? SourceType.OpenSea)
 
     const asset = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, token?.contractAddress ?? '', token?.tokenId ?? '', {
@@ -18,9 +17,7 @@ function useCollectibleState(token?: CollectibleToken) {
         token,
         asset,
         provider,
-        tabIndex,
         setProvider,
-        setTabIndex,
     }
 }
 
