@@ -6,10 +6,20 @@ import { useActivatedPluginsSNSAdaptor, createInjectHooksRenderer } from '@maskn
 
 import { MaskMessages } from '../../utils'
 import { useCurrentVisitingIdentity } from '../DataSource/useActivatedUI'
+import { makeStyles } from '@masknet/theme'
 
 export interface ProfileCoverProps extends withClasses<'root'> {}
 
-export function ProfileCover({ classes }: ProfileCoverProps) {
+const useStyles = makeStyles()(() => ({
+    root: {
+        position: 'absolute',
+        top: 0,
+        width: '100%',
+        height: '100%',
+    },
+}))
+export function ProfileCover(props: ProfileCoverProps) {
+    const { classes } = useStyles(undefined, { props: { classes: props.classes } })
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
 
     const currentVisitingIdentity = useCurrentVisitingIdentity()
