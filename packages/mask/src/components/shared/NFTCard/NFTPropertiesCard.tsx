@@ -13,6 +13,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
+        marginBottom: 24,
     },
     rankBox: {
         display: 'flex',

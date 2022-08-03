@@ -5,8 +5,6 @@ import formatDateTime from 'date-fns/format'
 import isValidDate from 'date-fns/isValid'
 import isAfter from 'date-fns/isAfter'
 import { useI18N, useSwitcher } from '../../../utils'
-import { OfferTab } from './OfferTab'
-import { ListingTab } from './ListingTab'
 import { LinkingAvatar } from './LinkingAvatar'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleCard } from './CollectibleCard'
@@ -20,6 +18,8 @@ import { TabContext } from '@mui/lab'
 import { AboutTab } from './Tabs/AboutTab'
 import { DetailTab } from './Tabs/DetailTab'
 import { Icons } from '@masknet/icons'
+import { OffersTab } from './Tabs/OffersTab'
+import { ActivityTab } from './Tabs/ActivityTab'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -167,8 +167,8 @@ export function Collectible(props: CollectibleProps) {
         const tabMap = {
             [tabs.about]: <AboutTab asset={asset} />,
             [tabs.details]: <DetailTab asset={asset} />,
-            [tabs.offers]: <OfferTab />,
-            [tabs.activity]: <ListingTab />,
+            [tabs.offers]: <OffersTab asset={asset} />,
+            [tabs.activity]: <ActivityTab asset={asset} />,
         }
 
         return tabMap[currentTab] || null

@@ -67,7 +67,6 @@ interface NFTActivityCardProps {
 export function NFTActivityCard(props: NFTActivityCardProps) {
     const { activity, type } = props
     const { classes, cx } = useStyles()
-    // if (!asset.value || asset.loading) return <Skeleton width="100%" height={60} />
 
     return (
         <div className={classes.wrapper}>

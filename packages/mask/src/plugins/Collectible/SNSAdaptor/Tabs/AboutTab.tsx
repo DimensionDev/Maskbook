@@ -14,43 +14,8 @@ const useStyles = makeStyles()((theme) => ({
         minHeight: 300,
     },
     basic: {
+        width: '100%',
         marginBottom: 16,
-    },
-    player: {
-        maxWidth: '100%',
-        maxHeight: '100%',
-        border: 'none',
-    },
-    errorPlaceholder: {
-        padding: '82px 0',
-        backgroundColor: theme.palette.background.default,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 12,
-        width: '100%',
-    },
-    loadingPlaceholder: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        padding: '74px 0',
-    },
-    loadingIcon: {
-        width: 36,
-        height: 52,
-    },
-    errorIcon: {
-        width: 36,
-        height: 36,
-    },
-    iframe: {
-        minWidth: 300,
-        minHeight: 300,
-    },
-    imgWrapper: {
-        maxWidth: 300,
     },
 }))
 
