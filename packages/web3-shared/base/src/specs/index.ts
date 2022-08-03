@@ -69,6 +69,8 @@ export enum SourceType {
     NFTScan = 'NFTScan',
     Alchemy_EVM = 'Alchemy_EVM',
     Alchemy_FLOW = 'Alchemy_FLOW',
+    Chainbase = 'Chainbase',
+    X2Y2 = 'X2Y2',
 
     // Rarity
     RaritySniper = 'RaritySniper',
@@ -130,6 +132,8 @@ export interface SocialIdentity {
     hasBinding?: boolean
     /** The public key of persona in hex */
     publicKey?: string
+    /** Is own user account identity */
+    isOwner?: boolean
 }
 
 export interface SocialAddress<PluginID> {
@@ -554,6 +558,7 @@ export interface Wallet {
 
 export interface Transaction<ChainId, SchemaType> {
     id: string
+    chainId: ChainId
     type?: string
     filterType?: string
     from: string
@@ -882,7 +887,7 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         chainId: ChainId,
         account: string,
         initial?: Web3HubOptions,
-    ) => Promise<Array<Transaction<ChainId, SchemaType>>>
+    ) => Promise<Pageable<Transaction<ChainId, SchemaType>>>
     /** Get non-fungible tokens of the given collection. */
     getNonFungibleTokensByCollection?: (
         address: string,
@@ -893,6 +898,18 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         address: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
+    /** Get a non-fungible token owner address. */
+    getNonFungibleTokenOwner?: (
+        address: string,
+        tokenId: string,
+        initial?: Web3HubOptions,
+    ) => Promise<string>
+    /** Get a non-fungible token floor price. */
+    getNonFungibleTokenFloorPrice?: (
+        address: string,
+        tokenId: string,
+        initial?: Web3HubOptions,
+    ) => Promise<PriceInToken<ChainId, SchemaType>>
     /** Get a non-fungible contract. */
     getNonFungibleTokenContract?: (
         address: string,
@@ -1028,6 +1045,11 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
     /** Get non-fungible collections owned by the given account. */
     getNonFungibleCollections?: (
         account: string,
+        initial?: Web3HubOptions,
+    ) => Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>>>
+    /** Get non-fungible tokens search by the give keyword. */
+    getNonFungibleCollectionsByKeyword?: (
+        keyword: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>>>
 

@@ -21,7 +21,7 @@ async function queryPersonasFromNextID(identityResolved: IdentityResolved) {
     if (!activatedSocialNetworkUI.configuration.nextIDConfig?.platform) return
     return NextIDProof.queryAllExistedBindingsByPlatform(
         activatedSocialNetworkUI.configuration.nextIDConfig?.platform,
-        identityResolved.identifier.userId,
+        identityResolved.identifier.userId.toLowerCase(),
     )
 }
 
@@ -141,8 +141,9 @@ export function useCurrentVisitingSocialIdentity() {
         )
         return {
             ...identity,
+            isOwner: isOwnerIdentity,
             publicKey: isOwnerIdentity ? persona?.identifier.publicKeyAsHex : first(sortedBindings)?.persona,
             hasBinding: !!bindings?.find((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()),
         }
-    }, [isOwnerIdentity, identity.identifier?.toText()])
+    }, [isOwnerIdentity, identity.identifier?.userId])
 }

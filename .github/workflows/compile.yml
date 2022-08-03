@@ -41,44 +41,44 @@ jobs:
         uses: actions/cache@v2
         with:
           path: packages/mask/node_modules/.cache/
-          key: ${{ runner.os }}-extension-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
+          key: extension-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
           # Not fallback to different dependencies. Webpack seems like have bug.
           # An example caused by the webpack cache bug: https://github.com/facebook/react/issues/21587
-          restore-keys: ${{ runner.os }}-extension-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: extension-${{ hashFiles('pnpm-lock.yaml') }}
       - run: pnpm install
       - run: npx gulp build-ci
       - name: Upload `MaskNetwork.base.zip`
         uses: actions/upload-artifact@v2
         with:
           name: MaskNetwork.base.zip
-          path: MaskNetwork.base.zip
+          path: masknetwork.base.zip
       - name: Upload `MaskNetwork.iOS.zip`
         uses: actions/upload-artifact@v2
         with:
           name: MaskNetwork.iOS.zip
-          path: MaskNetwork.iOS.zip
+          path: masknetwork.ios.zip
       - name: Upload `MaskNetwork.chromium.zip`
         uses: actions/upload-artifact@v2
         with:
           name: MaskNetwork.chromium.zip
-          path: MaskNetwork.chromium.zip
+          path: masknetwork.chromium.zip
       - name: Upload `MaskNetwork.chromium-beta.zip`
         uses: actions/upload-artifact@v2
         with:
           name: MaskNetwork.chromium-beta.zip
-          path: MaskNetwork.chromium-beta.zip
+          path: masknetwork.chromium-beta.zip
       - name: Upload `MaskNetwork.chromium-mv3.zip`
         uses: actions/upload-artifact@v2
         with:
           name: MaskNetwork.chromium-mv3.zip
-          path: MaskNetwork.chromium-mv3.zip
+          path: masknetwork.chromium-mv3.zip
       - name: Upload `MaskNetwork.firefox.zip`
         uses: actions/upload-artifact@v2
         with:
           name: MaskNetwork.firefox.zip
-          path: MaskNetwork.firefox.zip
+          path: masknetwork.firefox.zip
       - name: Upload `MaskNetwork.gecko.zip`
         uses: actions/upload-artifact@v2
         with:
           name: MaskNetwork.gecko.zip
-          path: MaskNetwork.gecko.zip
+          path: masknetwork.gecko.zip

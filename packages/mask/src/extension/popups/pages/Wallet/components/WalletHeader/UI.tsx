@@ -61,6 +61,7 @@ const useStyles = makeStyles()((theme) => ({
     arrow: {
         fontSize: 20,
         transition: 'all 300ms',
+        color: theme.palette.maskColor.secondaryDark,
     },
     colorChainICon: {
         borderRadius: '999px!important',

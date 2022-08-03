@@ -4,7 +4,7 @@ import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { SelectedIcon } from '../assets/selected'
 import type { AllChainsNonFungibleToken } from '../types'
 import { Box } from '@mui/material'
-import { Image } from '../../../components/shared/Image'
+import { Image } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

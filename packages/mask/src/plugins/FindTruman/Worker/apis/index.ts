@@ -153,3 +153,8 @@ export function exchangeFtgWhitelist() {
         body: JSON.stringify({}),
     })
 }
+
+export async function fetchImage(url: string) {
+    const res = await globalThis.r2d2Fetch(`https://cors.r2d2.to?${url}`)
+    return res.blob()
+}

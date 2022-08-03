@@ -1,5 +1,7 @@
-import path from 'path'
+// TODO: load this lazy
 import Lock from 'proper-lockfile'
+import { fileURLToPath } from 'url'
+const __filename = fileURLToPath(import.meta.url)
 
 export async function getProcessLock(lockName: string) {
     const lockfilePath = getLockPosition(lockName)
@@ -23,6 +25,6 @@ export function isLocked(lockName: string) {
 }
 
 function getLockPosition(lockName: string) {
-    const lockfilePath = path.join(__dirname, `${lockName}.lock.log`)
-    return lockfilePath
+    const lockfilePath = new URL(`${lockName}.lock.log`, import.meta.url)
+    return fileURLToPath(lockfilePath)
 }

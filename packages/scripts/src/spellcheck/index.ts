@@ -1,8 +1,7 @@
 import { readFile, writeFile } from 'fs/promises'
-import { resolve } from 'path'
-import { prettier, ROOT_PATH, task } from '../utils'
+import { prettier, ROOT_PATH, task } from '../utils/index.js'
 
-const CONFIGURE_PATH = resolve(ROOT_PATH, 'cspell.json')
+const CONFIGURE_PATH = new URL('cspell.json', ROOT_PATH)
 
 interface RootConfigure extends Configure {
     overrides?: Configure[]

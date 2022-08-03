@@ -1,19 +1,12 @@
 import { isNull } from 'lodash-unified'
 import Services from '../../../extension/service'
 import { NextIDProof, NextIDStorage } from '@masknet/web3-providers'
-import { formatBalance, NonFungibleTokenEvent } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import type { NextIDPlatform } from '@masknet/shared-base'
 import type { NextIDAvatarMeta } from '../types'
 import { PLUGIN_ID } from '../constants'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { sortPersonaBindings } from '../../../utils'
-
-function getLastSalePrice(lastSale?: NonFungibleTokenEvent<ChainId, SchemaType> | null) {
-    if (!lastSale?.price?.usd || !lastSale.paymentToken?.decimals) return
-    return formatBalance(lastSale.price.usd, lastSale.paymentToken.decimals)
-}
 
 export async function getImage(image: string): Promise<string> {
     const blob = await Services.Helper.fetch(image)

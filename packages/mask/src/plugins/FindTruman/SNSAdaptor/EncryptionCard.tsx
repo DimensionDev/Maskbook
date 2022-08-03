@@ -7,6 +7,7 @@ import { useAsync } from 'react-use'
 import FlipCard from './FlipCard'
 import type { ClueCondition } from '../types'
 import { ClueConditionType } from '../types'
+import { Image } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -69,7 +70,7 @@ export default function EncryptionCard(props: EncryptionCardProps) {
                     <CardContent sx={{ display: 'flex', justifyContent: 'center' }}>
                         <div style={{ width: 250 }}>
                             <FlipCard isFlipped={flipped}>
-                                <img
+                                <Image
                                     onLoad={({ currentTarget }) => {
                                         setBackImgHeight(currentTarget.parentElement?.offsetHeight || 0)
                                     }}
@@ -81,7 +82,7 @@ export default function EncryptionCard(props: EncryptionCardProps) {
                                     style={{ width: '100%', objectFit: 'cover', cursor: 'pointer' }}
                                 />
                                 {clue.decrypted ? (
-                                    <img
+                                    <Image
                                         onClick={() => setFlipped(false)}
                                         src={clue.frontImg}
                                         style={{ width: '100%', objectFit: 'cover', cursor: 'pointer' }}

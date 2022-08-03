@@ -52,14 +52,14 @@ const useStyles = makeStyles<{
         marginLeft: theme.spacing(1.5),
     },
     accountName: {
-        color: theme.palette.maskColor.dark,
+        color: !isDashboardPage() ? theme.palette.maskColor.dark : undefined,
         fontWeight: 700,
         fontSize: 14,
         marginRight: 5,
         lineHeight: '18px',
     },
     balance: {
-        color: theme.palette.maskColor.dark,
+        color: !isDashboardPage() ? theme.palette.maskColor.dark : undefined,
         fontSize: 14,
         paddingTop: 2,
         lineHeight: '18px',

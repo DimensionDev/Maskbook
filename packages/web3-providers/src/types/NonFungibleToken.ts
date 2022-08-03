@@ -11,6 +11,7 @@ import type {
     HubIndicator,
     NonFungibleTokenRarity,
     NonFungibleTokenStats,
+    PriceInToken,
 } from '@masknet/web3-shared-base'
 
 export namespace NonFungibleTokenAPI {
@@ -23,11 +24,19 @@ export namespace NonFungibleTokenAPI {
             tokenId: string,
             options?: HubOptions<ChainId, Indicator>,
         ) => Promise<NonFungibleTokenRarity | undefined>
+        /** Get owner address. */
+        getOwner?: (address: string, tokenId: string, options?: HubOptions<ChainId, Indicator>) => Promise<string>
         /** Get a non-fungible contract. */
         getContract?: (
             address: string,
             options?: HubOptions<ChainId>,
         ) => Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined>
+        /** Get a non-fungible token floor price. */
+        getFloorPrice?: (
+            address: string,
+            tokenId: string,
+            options?: HubOptions<ChainId>,
+        ) => Promise<PriceInToken<ChainId, SchemaType> | undefined>
         /** Get a non-fungible asset. */
         getAsset?: (
             address: string,
@@ -93,6 +102,11 @@ export namespace NonFungibleTokenAPI {
         /** Get non-fungible collections owned by the given account. */
         getCollections?: (
             account: string,
+            options?: HubOptions<ChainId, Indicator>,
+        ) => Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>, Indicator>>
+        /** Get non-fungible collections search by given keyword */
+        getCollectionsByKeyword?: (
+            keyword: string,
             options?: HubOptions<ChainId, Indicator>,
         ) => Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>, Indicator>>
 
