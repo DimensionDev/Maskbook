@@ -150,6 +150,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                     },
                     getPersonaAvatar: Services.Identity.getPersonaAvatar,
                     ownProofChanged: MaskMessages.events.ownProofChanged,
+                    setPluginEnable: Services.Settings.setPluginMinimalModeEnabled,
                 }
             },
             Services.Settings.getPluginMinimalModeEnabled,

@@ -6,10 +6,17 @@ import { useState } from 'react'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { Trans } from 'react-i18next'
+import { setupContext } from './context'
+import CheckSecurityConfirmDialog from './components/CheckSecurityConfirmDialog'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal) {},
+    init(signal, context) {
+        setupContext(context)
+    },
+    GlobalInjection: function Component() {
+        return <CheckSecurityConfirmDialog />
+    },
     ApplicationEntries: [
         (() => {
             const icon = <Icons.SecurityChecker size={36} />
