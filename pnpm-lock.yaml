@@ -1508,6 +1508,9 @@ importers:
       use-subscription:
         specifier: 1.6.0
         version: 1.6.0
+      web3-utils:
+        specifier: 1.7.4
+        version: 1.7.4
 
   packages/plugins/ScamSniffer:
     dependencies:
