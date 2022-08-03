@@ -256,6 +256,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         icon: new URL('../assets/optimism.png', import.meta.url),
         iconColor: 'rgb(232, 65, 66)',
         isMainnet: true,
+        averageBlockDelay: 15,
     },
 ]
 export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderType>> = [
