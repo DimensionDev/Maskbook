@@ -18,6 +18,6 @@ export function useNonFungibleOrders<S extends 'all' | void = void, T extends Ne
 
     return useAsyncRetry(async () => {
         if (!address || !id || !hub) return
-        return hub.getNonFungibleTokenOrders?.(address, id, OrderSide.Buy, options)
+        return hub.getNonFungibleTokenOrders?.(address, id, OrderSide.Sell, options)
     }, [address, id, hub])
 }

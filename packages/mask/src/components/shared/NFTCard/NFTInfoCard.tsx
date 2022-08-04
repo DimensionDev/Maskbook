@@ -3,7 +3,7 @@ import { Skeleton, Typography } from '@mui/material'
 import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
-import { SchemaType } from '@masknet/web3-shared-evm'
+import { SchemaType, formatTokenId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -49,7 +49,7 @@ export function NFTInfoCard(props: NFTInfoCardProps) {
     if (!asset.value || asset.loading) return <Skeleton width="100%" height={172} />
     const _asset = asset.value
     const infoConfigMapping = [
-        { title: 'Token ID', value: _asset.tokenId },
+        { title: 'Token ID', value: formatTokenId(_asset.tokenId, 4) },
         { title: 'Contract', value: Others?.formatAddress(_asset.address, 4) ?? '-' },
         { title: 'Blockchain', value: 'Ethereum' },
         { title: 'Token Standard', value: _asset.contract?.schema ?? SchemaType.ERC721 },

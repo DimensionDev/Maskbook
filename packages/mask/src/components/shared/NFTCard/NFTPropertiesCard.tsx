@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     traitsItem: {
         padding: 12,
-        width: 128,
+        width: 'calc(100%/3 - 48px)',
         display: 'flex',
         flexDirection: 'column',
         gap: 8,
