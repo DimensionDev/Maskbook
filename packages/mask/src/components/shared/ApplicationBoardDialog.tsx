@@ -86,10 +86,11 @@ export function ApplicationBoardDialog() {
                     ) : (
                         <ApplicationBoard closeDialog={closeDialog} />
                     )}
-                {openPersonaListDialog ? (
-                    <PersonaListDialog open={openPersonaListDialog} onClose={_closePersonaListDialog} />
-                ) : null}
-            </DialogContent>
-        </InjectedDialog></TabContext>
+                    {openPersonaListDialog ? (
+                        <PersonaListDialog open={openPersonaListDialog} onClose={_closePersonaListDialog} />
+                    ) : null}
+                </DialogContent>
+            </InjectedDialog>
+        </TabContext>
     ) : null
 }

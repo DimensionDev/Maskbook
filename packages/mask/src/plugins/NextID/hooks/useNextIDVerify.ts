@@ -1,10 +1,4 @@
-import {
-    fromHex,
-    NextIDAction,
-    NextIDPlatform,
-    PersonaInformation,
-    toBase64,
-} from '@masknet/shared-base'
+import { fromHex, NextIDAction, NextIDPlatform, PersonaInformation, toBase64 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import Services from '../../../extension/service'
 import { MaskMessages } from '../../../utils'
