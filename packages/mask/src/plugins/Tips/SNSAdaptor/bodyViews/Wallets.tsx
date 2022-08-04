@@ -35,6 +35,7 @@ const WalletsPage = memo(({ wallets, releaseLoading, onRelease, personaName }: W
     const [walletToDel, setWalletToDel] = useState<BindingProof>()
     const deleteWallet = useCallback((wallet: BindingProof) => {
         setWalletToDel(wallet)
+        console.log(walletToDel, 'sss')
         setOpen(true)
     }, [])
 

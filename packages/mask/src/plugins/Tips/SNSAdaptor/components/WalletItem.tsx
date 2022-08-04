@@ -74,13 +74,21 @@ interface WalletItemProps {
     address: string
     isDefault?: boolean
     canDelete?: boolean
-    onDelete?: any
+    onDelete?: () => void
     fallbackName?: string
     nowIdx: number
     setAsDefault?: (idx: number) => void
 }
 
-export function WalletItem({ address, isDefault, canDelete, fallbackName, setAsDefault, nowIdx }: WalletItemProps) {
+export function WalletItem({
+    address,
+    isDefault,
+    canDelete,
+    fallbackName,
+    setAsDefault,
+    nowIdx,
+    onDelete,
+}: WalletItemProps) {
     const { classes } = useStyles()
     const t = useI18N()
     const [, copyToClipboard] = useCopyToClipboard()
@@ -120,7 +128,7 @@ export function WalletItem({ address, isDefault, canDelete, fallbackName, setAsD
                     {t.tip_set_as_default()}
                 </Typography>
             )
-        if (canDelete) return <Icons.Trash size={24} className={classes.actionBtn} />
+        if (canDelete) return <Icons.Trash onClick={onDelete} size={24} className={classes.actionBtn} />
         return null
     }
     return (
