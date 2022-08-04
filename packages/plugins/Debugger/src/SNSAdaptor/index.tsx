@@ -9,6 +9,7 @@ import { Icons } from '@masknet/icons'
 import { useRemoteControlledDialog } from '../../../../shared-base-ui/src/hooks'
 import { PluginDebuggerMessages } from '../messages'
 import { ProfileCover } from './components/ProfileCover'
+import { AvatarDecorator } from './components/AvatarDecorator'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -77,9 +78,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         label: 'Debugger',
         priority: 99999,
         UI: {
-            Decorator() {
-                return <span>debugger decorator</span>
-            },
+            Decorator: AvatarDecorator,
         },
     },
 }

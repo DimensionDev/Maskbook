@@ -40,6 +40,9 @@ export const selfInfoSelectors = () => ({
     ),
 })
 
+export const inpageAvatarSelector = () =>
+    new LiveSelector().querySelectorAll<HTMLDivElement>('.m-activityOwnerBlock__avatar')
+
 export const composeButtonSelector = () =>
     querySelector(
         [

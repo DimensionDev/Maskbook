@@ -1,6 +1,5 @@
 import { PluginId } from '@masknet/plugin-infra'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { EnhanceableSite } from '@masknet/shared-base'
 
 export const NFT_AVATAR_JSON_SERVER = 'https://configuration.r2d2.to/com.maskbook.avatar.json'
 export const NFT_AVATAR_DB_NAME = 'com.maskbook.user'
@@ -15,12 +14,6 @@ export enum RSS3_KEY_SNS {
     TWITTER = '_nfts',
     FACEBOOK = '_facebook_nfts',
     INSTAGRAM = '_instagram_nfts',
-}
-
-export const SNS_KEY_MAP: Partial<Record<EnhanceableSite, RSS3_KEY_SNS>> = {
-    [EnhanceableSite.Facebook]: RSS3_KEY_SNS.FACEBOOK,
-    [EnhanceableSite.Twitter]: RSS3_KEY_SNS.TWITTER,
-    [EnhanceableSite.Instagram]: RSS3_KEY_SNS.INSTAGRAM,
 }
 
 export enum Application_NFT_LIST_PAGE {

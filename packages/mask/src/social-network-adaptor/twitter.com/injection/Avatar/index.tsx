@@ -1,7 +1,8 @@
 import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { Plugin } from '@masknet/plugin-infra'
 import { Twitter } from '@masknet/web3-providers'
 import { ProfileIdentifier } from '@masknet/shared-base'
-import { AvatarSlot } from '../../../../components/InjectedComponents/AvatarSlot'
+import { Avatar } from '../../../../components/InjectedComponents/Avatar'
 import { createReactRootShadowed, startWatch } from '../../../../utils'
 import { inpageAvatarSelector } from '../../utils/selector'
 import { twitterBase } from '../../base'
@@ -12,8 +13,7 @@ function getTwitterId(ele: HTMLElement) {
     return profileLink.getAttribute('href')?.slice(1)
 }
 
-export async function injectAvatarSlot(signal: AbortSignal) {
-    console.log('injection avatar slot startWatch')
+export async function injectAvatar(signal: AbortSignal) {
     startWatch(
         new MutationObserverWatcher(inpageAvatarSelector()).useForeach((ele) => {
             let remover = () => {}
@@ -26,12 +26,14 @@ export async function injectAvatarSlot(signal: AbortSignal) {
                 const proxy = DOMProxy({ afterShadowRootInit: { mode: 'closed' } })
                 proxy.realCurrent = ele.firstChild as HTMLElement
                 const identity = await getUserIdentity(twitterId)
+                const isSuggestion = ele.closest('[data-testid=UserCell]')
+                const sourceType = isSuggestion
+                    ? Plugin.SNSAdaptor.AvatarRealmSourceType.Suggestion
+                    : Plugin.SNSAdaptor.AvatarRealmSourceType.Post
 
                 const root = createReactRootShadowed(proxy.afterShadow, { signal })
-                console.log('injection avatar slot')
                 root.render(
                     <div
-                        data-testid="avatar-slot"
                         style={{
                             position: 'absolute',
                             left: 0,
@@ -40,7 +42,7 @@ export async function injectAvatarSlot(signal: AbortSignal) {
                             height: '100%',
                             zIndex: 2,
                         }}>
-                        {identity ? <AvatarSlot identity={identity} /> : null}
+                        {identity ? <Avatar identity={identity} sourceType={sourceType} /> : null}
                     </div>,
                 )
                 remover = root.destroy

@@ -1,15 +1,12 @@
-import type { Plugin } from '@masknet/plugin-infra/content-script'
 import { Icons } from '@masknet/icons'
+import type { Plugin } from '@masknet/plugin-infra/content-script'
+import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
-import { EnhanceableSite } from '@masknet/shared-base'
 import { useState } from 'react'
+import { Trans } from 'react-i18next'
 import { NFTAvatarDialog } from '../Application/NFTAvatarsDialog'
 import { base } from '../base'
 import { setupContext } from '../context'
-import { PLUGIN_ID, SNS_KEY_MAP } from '../constants'
-import { Trans } from 'react-i18next'
-import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
-import { NFTBadgeTimeline } from './NFTBadgeTimeline'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -59,27 +56,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
         })(),
     ],
-    AvatarRealm: {
-        ID: `${PLUGIN_ID}_profile_card`,
-        label: 'Avatar',
-        priority: 99999,
-        UI: {
-            Decorator({ identity }) {
-                if (!identity?.identifier?.userId) return null
-                const snsKey = SNS_KEY_MAP[identity.identifier.network as EnhanceableSite]
-                if (!snsKey) return null
-                return (
-                    <NFTBadgeTimeline
-                        avatarId=""
-                        width="100%"
-                        height="100%"
-                        snsKey={snsKey}
-                        userId={identity.identifier.userId}
-                    />
-                )
-            },
-        },
-    },
 }
 
 export default sns

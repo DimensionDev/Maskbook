@@ -129,8 +129,7 @@ export namespace SocialNetworkUI {
             postAndReplyNFTAvatar?(signal: AbortSignal): void
             /** @deprecated same reason as useAvatar */
             avatarClipNFT?(signal: AbortSignal): void
-            profileCard?(signal: AbortSignal): void
-            avatarSlot(signal: AbortSignal): void
+            avatar?(signal: AbortSignal): void
         }
         export interface NewPostComposition {
             start(signal: AbortSignal): void

@@ -317,7 +317,9 @@ export const searchTwitterAvatarNFTLinkSelector = () => querySelector<E>('a[href
 export const inpageAvatarSelector = () =>
     querySelectorAll<HTMLDivElement>(
         [
+            // Avatars in post
             'main[role="main"] [data-testid="cellInnerDiv"] [data-testid="Tweet-User-Avatar"]',
+            // Avatars in side panel
             '[data-testid="UserCell"] [data-testid^="UserAvatar-Container-"]',
         ].join(','),
     )

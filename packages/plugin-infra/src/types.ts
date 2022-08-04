@@ -901,7 +901,7 @@ export namespace Plugin.GeneralUI {
         export type DynamicRenderProps = Context<unknown> &
             React.RefAttributes<RenderActions<unknown>> & { metadata: TypedMessage['meta'] }
         // #endregion
-        export type RenderActions = {
+        export type RenderActions<T> = {
             /**
              * This action make the render into the edit state.
              * It should report the result via onEditComplete() props.
