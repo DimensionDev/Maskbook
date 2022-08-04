@@ -32,7 +32,6 @@ function useCollectibleState(token?: CollectibleToken) {
             chainId: ChainId.Mainnet,
         },
     )
-
     return {
         token,
         asset,

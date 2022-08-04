@@ -4,6 +4,7 @@ import { CollectibleTab } from '../CollectibleTab'
 import { Typography, Button } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { CollectibleState } from '../../hooks/useCollectibleState'
+import { NFTOfferCard } from '../../../../components/shared/NFTCard/NFTOfferCard'
 
 const useStyles = makeStyles()((theme) => ({
     body: {
@@ -28,7 +29,7 @@ export function OffersTab() {
     const { classes } = useStyles()
     const { orders } = CollectibleState.useContainer()
     const _orders = orders.value?.data ?? []
-    console.log(_orders, 'orders')
+    console.log(orders, 'orders')
     return useMemo(() => {
         if (orders.loading) return <LoadingBase />
         if (orders.error || !orders.value)
@@ -51,9 +52,9 @@ export function OffersTab() {
             <CollectibleTab>
                 <div className={classes.body} style={{ justifyContent: 'unset' }}>
                     <>
-                        {/* {_orders?.map((x, idx) => (
+                        {_orders?.map((x, idx) => (
                             <NFTOfferCard key={idx} offer={x} />
-                        ))} */}
+                        ))}
                     </>
                 </div>
             </CollectibleTab>

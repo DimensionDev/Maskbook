@@ -1,7 +1,11 @@
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { ETHIcon } from '../../../plugins/VCent/icons/ETH'
 import { ExternalLink } from 'react-feather'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
+import formatDateTime from 'date-fns/format'
+import fromUnixTime from 'date-fns/fromUnixTime'
+import type { NonFungibleTokenEvent } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -61,12 +65,13 @@ export enum ActivityType {
 }
 interface NFTActivityCardProps {
     type: ActivityType
-    activity: any
+    activity: NonFungibleTokenEvent<ChainId, SchemaType>
 }
 
 export function NFTActivityCard(props: NFTActivityCardProps) {
     const { activity, type } = props
     const { classes, cx } = useStyles()
+    const { Others } = useWeb3State()
 
     return (
         <div className={classes.wrapper}>
@@ -77,17 +82,23 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
                 </Typography>
                 {type === ActivityType.Sale && (
                     <div className={classes.salePrice}>
-                        <ETHIcon width={24} height={24} />
-                        <Typography className={classes.salePriceText}>3.3</Typography>
+                        <img src={activity.paymentToken?.logoURL} width={24} height={24} />
+                        <Typography className={classes.salePriceText}>{activity.price?.usd ?? '-'}</Typography>
                     </div>
                 )}
             </div>
             <div className={classes.flex}>
                 <Typography className={classes.textBase}>
-                    From <strong>B7000A2</strong>
+                    From{' '}
+                    <strong> {activity.from.address ? Others?.formatAddress(activity.from.address, 4) : '-'}</strong>
                 </Typography>
                 <Typography className={classes.textBase}>
-                    to <strong>josh1991</strong> 3 months ago
+                    to{' '}
+                    <strong>
+                        {activity.to.nickname ||
+                            (activity.to.address ? Others?.formatAddress(activity.to.address, 4) : '-')}
+                    </strong>
+                    {formatDateTime(fromUnixTime(activity.timestamp / 1000), 'yyyy-MM-dd HH:mm')}
                     <ExternalLink size={14} style={{ marginLeft: 4 }} />
                 </Typography>
             </div>
