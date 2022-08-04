@@ -29,6 +29,7 @@ const useStyles = makeStyles()((theme) => {
             width: 384,
             height: 386,
             padding: theme.spacing(1),
+            background: theme.palette.maskColor.bottom,
         },
         content: {
             padding: theme.spacing(0, 2, 2, 2),
