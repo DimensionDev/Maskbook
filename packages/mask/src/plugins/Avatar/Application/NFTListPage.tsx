@@ -135,21 +135,3 @@ export function NFTListPage(props: NFTListPageProps) {
         </Box>
     )
 }
-
-interface NFTImageCollectibleAvatarProps {
-    token: AllChainsNonFungibleToken
-    onChange: (token: AllChainsNonFungibleToken) => void
-    selectedToken?: AllChainsNonFungibleToken
-    pluginId: NetworkPluginID
-}
-
-export function NFTImageCollectibleAvatar({
-    token,
-    onChange,
-    selectedToken,
-    pluginId,
-}: NFTImageCollectibleAvatarProps) {
-    const { classes } = useStyles({ networkPluginID: pluginId })
-
-    return
-}
