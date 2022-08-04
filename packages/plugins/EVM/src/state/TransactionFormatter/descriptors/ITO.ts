@@ -34,7 +34,6 @@ export class ITODescriptor extends DescriptorWithTransactionReceipt implements T
         const { ITO2_CONTRACT_ADDRESS } = getITOConstants(context.chainId)
         if (!isSameAddress(context.to, ITO2_CONTRACT_ADDRESS)) return
         const method = context.methods?.find((x) => ['fill_pool', 'swap', 'claim', 'destruct'].includes(x.name ?? ''))
-        console.log({ method })
         if (method?.name === 'fill_pool') {
             const connection = await Web3StateSettings.value.Connection?.getConnection?.({
                 chainId: context.chainId,

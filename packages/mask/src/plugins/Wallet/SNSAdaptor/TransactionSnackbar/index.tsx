@@ -99,7 +99,6 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
 
     useAsync(async () => {
         if (!progress) return
-        console.log({ progress })
         const computed = await TransactionFormatter?.formatTransaction?.(
             progress.chainId,
             progress.transaction,
