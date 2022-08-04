@@ -247,6 +247,17 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         averageBlockDelay: 15,
         isMainnet: true,
     },
+    {
+        ID: `${PLUGIN_ID}_optimism`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Optimism,
+        type: NetworkType.Optimism,
+        name: 'Optimism',
+        icon: new URL('../assets/optimism.png', import.meta.url),
+        iconColor: 'rgb(232, 65, 66)',
+        isMainnet: true,
+        averageBlockDelay: 15,
+    },
 ]
 export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderType>> = [
     {
@@ -375,7 +386,7 @@ export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderTyp
                 ChainId.BSC,
                 ChainId.Matic,
                 ChainId.xDai,
-                ChainId.Optimistic,
+                ChainId.Optimism,
                 ChainId.Arbitrum,
                 ChainId.Avalanche,
             ],

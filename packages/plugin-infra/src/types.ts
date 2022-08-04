@@ -440,6 +440,8 @@ export namespace Plugin.SNSAdaptor {
         ApplicationEntries?: ApplicationEntry[]
         /** This UI will be rendered as tabs on the profile page */
         ProfileTabs?: ProfileTab[]
+        /** This UI will be rendered as cover on the profile page */
+        ProfileCover?: ProfileCover[]
         /** This UI will be rendered as plugin wrapper page */
         wrapperProps?: PluginWrapperProps
         /**
@@ -614,6 +616,43 @@ export namespace Plugin.SNSAdaptor {
              * Sort social address in expected order.
              */
             sorter?: (a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>) => number
+        }
+    }
+    export interface ProfileCover {
+        ID: string
+
+        /**
+         * The name of the cover
+         */
+        label: I18NStringField | string
+
+        /**
+         * Used to order the sliders
+         */
+        priority: number
+
+        UI?: {
+            /**
+             * The injected cover component
+             */
+            Cover: InjectUI<{
+                identity?: SocialIdentity
+                socialAddressList?: Array<SocialAddress<NetworkPluginID>>
+            }>
+        }
+        Utils: {
+            /**
+             * If it returns false, this cover will not be displayed
+             */
+            shouldDisplay?(identity?: SocialIdentity, addressNames?: Array<SocialAddress<NetworkPluginID>>): boolean
+            /**
+             * Filter social address
+             */
+            filterSocialAddress?(x: SocialAddress<NetworkPluginID>): boolean
+            /**
+             * Sort social address in expected order
+             */
+            sortSocialAddress?(a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>): number
         }
     }
 }

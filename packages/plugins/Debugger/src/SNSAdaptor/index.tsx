@@ -8,6 +8,7 @@ import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { useRemoteControlledDialog } from '../../../../shared-base-ui/src/hooks'
 import { PluginDebuggerMessages } from '../messages'
+import { ProfileCover } from './components/ProfileCover'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -42,6 +43,17 @@ const sns: Plugin.SNSAdaptor.Definition = {
             </>
         )
     },
+    ProfileCover: [
+        {
+            ID: `${PLUGIN_ID}_cover`,
+            label: 'Cover',
+            priority: 99999,
+            UI: {
+                Cover: ProfileCover,
+            },
+            Utils: {},
+        },
+    ],
     ProfileTabs: [
         {
             ID: `${PLUGIN_ID}_tabContent`,
