@@ -12,11 +12,11 @@ import {
 import { useAsync, useAsyncFn, useCopyToClipboard } from 'react-use'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 // TODO: move to share
-import { useConnectedPersonas } from '../../plugins/NextID/hooks/useConnectedPersonas'
+import { useConnectedPersonas } from '../DataSource/useConnectedPersonas'
 import Services from '../../extension/service'
 import { InjectedDialog } from '@masknet/shared'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useNextIDVerify } from '../../plugins/NextID/hooks/useNextIDVerify'
+import { useNextIDVerify } from '../DataSource/useNextIDVerify'
 import { useI18N } from '../../utils'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'

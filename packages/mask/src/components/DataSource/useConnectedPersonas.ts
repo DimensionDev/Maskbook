@@ -1,7 +1,7 @@
 import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useAsync } from 'react-use'
-import Services from '../../../extension/service'
+import Services from '../../extension/service'
 
 export function useConnectedPersonas() {
     return useAsync(async () => {

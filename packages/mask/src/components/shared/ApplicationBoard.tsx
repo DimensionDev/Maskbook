@@ -225,10 +225,7 @@ function RenderEntryComponent({ application }: { application: Application }) {
         if (!application.enabled) return true
 
         if (application.entry.nextIdRequired) {
-            return Boolean(
-                ApplicationEntryStatus.isLoading || ApplicationEntryStatus.isNextIDVerify === undefined,
-                // (!ApplicationEntryStatus.isSNSConnectToCurrentPersona && ApplicationEntryStatus.isPersonaConnected),
-            )
+            return Boolean(ApplicationEntryStatus.isLoading || ApplicationEntryStatus.isNextIDVerify === undefined)
         } else {
             return false
         }
@@ -251,9 +248,7 @@ function RenderEntryComponent({ application }: { application: Application }) {
                 setSelectProviderDialog({ open: true, walletConnectedCallback })
         }
         if (!application.entry.nextIdRequired) return
-        if (ApplicationEntryStatus.isPersonaCreated === false)
-            // TODO handle create persona
-            return createOrConnectPersona
+        if (ApplicationEntryStatus.isPersonaCreated === false) return createOrConnectPersona
         if (ApplicationEntryStatus.shouldVerifyNextId) return verifyPersona
         return
     }, [setSelectProviderDialog, createOrConnectPersona, ApplicationEntryStatus, verifyPersona, application])
