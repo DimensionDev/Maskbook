@@ -402,7 +402,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     )
     // #region fetch token detail
     const onSearch = useCallback(async () => {
-        if (!/^(\s?(\d+)?\s?,?)+$/.test(searchTokenListInput)) return
+        if (!/^(\s?(\w+)?\s?,?)+$/.test(searchTokenListInput)) return
         const tokenIdList = uniq(searchTokenListInput.split(',').map((v) => Number(v).toString()))
         setLoadingToken(true)
         const allSettled = await Promise.allSettled(
@@ -436,7 +436,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     // #endregion
 
     const onFilter = useCallback(() => {
-        if (!/^(\s?(\d+)?\s?,?)+$/.test(tokenIdListInput)) return
+        if (!/^(\s?(\w+)?\s?,?)+$/.test(tokenIdListInput)) return
         const list = tokenIdListInput.split(',').map((v) => Number(v).toString())
         setTokenIdFilterList(list)
     }, [tokenIdListInput])
