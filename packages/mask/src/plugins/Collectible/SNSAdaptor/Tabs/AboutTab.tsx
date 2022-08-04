@@ -4,7 +4,7 @@ import { CollectibleTab } from '../CollectibleTab'
 import { NFTBasicInfo } from '../../../../components/shared/NFTCard/NFTBasicInfo'
 import { NFTPriceCard } from '../../../../components/shared/NFTCard/NFTPriceCard'
 import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     body: {
@@ -24,10 +24,11 @@ export interface AboutTabProps {
         loading?: boolean
         value?: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
     }
+    onChangeProvider: (v: SourceType) => void
 }
 
 export function AboutTab(props: AboutTabProps) {
-    const { asset } = props
+    const { asset, onChangeProvider } = props
     const { classes } = useStyles()
     return useMemo(() => {
         return (
@@ -38,7 +39,7 @@ export function AboutTab(props: AboutTabProps) {
                     ) : (
                         <>
                             <div className={classes.basic}>
-                                <NFTBasicInfo hideSubTitle asset={asset} />
+                                <NFTBasicInfo onChangeProvider={onChangeProvider} hideSubTitle asset={asset} />
                             </div>
                             <NFTPriceCard asset={asset} />
                         </>

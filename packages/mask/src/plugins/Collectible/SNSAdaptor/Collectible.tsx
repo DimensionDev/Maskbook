@@ -12,7 +12,6 @@ import { ActionBar } from './OpenSea/ActionBar'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, resolveSourceName, SourceType } from '@masknet/web3-shared-base'
-import type { FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/components/FootnoteMenuUI'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { TabContext } from '@mui/lab'
 import { AboutTab } from './Tabs/AboutTab'
@@ -134,8 +133,8 @@ export function Collectible(props: CollectibleProps) {
     // #region sync with settings
     const collectibleProviderOptions = getEnumAsArray(SourceType).filter((x) => supportedProvider.includes(x.value))
 
-    const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
-        setProvider(option.value as SourceType)
+    const onDataProviderChange = useCallback((v: SourceType) => {
+        setProvider(v)
     }, [])
     // #endregion
 
@@ -165,7 +164,7 @@ export function Collectible(props: CollectibleProps) {
     const endDate = _asset.auction?.endAt
     const renderTab = () => {
         const tabMap = {
-            [tabs.about]: <AboutTab asset={asset} />,
+            [tabs.about]: <AboutTab onChangeProvider={onDataProviderChange} asset={asset} />,
             [tabs.details]: <DetailTab asset={asset} />,
             [tabs.offers]: <OffersTab />,
             [tabs.activity]: <ActivityTab />,
@@ -223,24 +222,6 @@ export function Collectible(props: CollectibleProps) {
                     </TabContext>
                     <Paper className={classes.body}>{renderTab()}</Paper>
                 </CardContent>
-                {/* <CardActions className={classes.footer}>
-                    <div />
-                    <div className={classes.footMenu}>
-                        <FootnoteMenuUI
-                            options={collectibleProviderOptions.map((x) => ({
-                                name: (
-                                    <Stack direction="row" alignItems="center" gap={1}>
-                                        <CollectibleProviderIcon provider={x.value} />
-                                        <span className={classes.footName}>{resolveSourceName(x.value)}</span>
-                                    </Stack>
-                                ),
-                                value: x.value,
-                            }))}
-                            selectedIndex={findIndex(collectibleProviderOptions, (x) => x.value === provider)}
-                            onChange={onDataProviderChange}
-                        />
-                    </div>
-                </CardActions> */}
             </CollectibleCard>
             {endDate && isValidDate(endDate) && isAfter(endDate, Date.now()) && (
                 <Box sx={{ marginTop: 1 }}>

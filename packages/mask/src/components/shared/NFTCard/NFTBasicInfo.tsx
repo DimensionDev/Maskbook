@@ -6,6 +6,7 @@ import { SourceType } from '@masknet/web3-shared-base'
 import { CollectibleProviderIcon } from '../../../plugins/Collectible/SNSAdaptor/CollectibleProviderIcon'
 import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { getEnumAsArray } from '@dimensiondev/kit'
 
 const useStyles = makeStyles()((theme) => ({
     layout: {
@@ -17,11 +18,6 @@ const useStyles = makeStyles()((theme) => ({
         position: 'relative',
         width: '100%',
         marginBottom: 36,
-    },
-    player: {
-        width: 300,
-        height: 300,
-        border: 'none',
     },
     errorPlaceholder: {
         padding: '82px 0',
@@ -76,12 +72,13 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: 12,
     },
     absoluteProvider: {
-        top: '10%',
-        right: '10%',
+        top: 16,
+        right: '1%',
         position: 'absolute',
         display: 'flex',
         alignItems: 'center',
         gap: 8,
+        zIndex: 99,
     },
 }))
 
@@ -91,14 +88,17 @@ interface NFTBasicInfoProps {
         loading?: boolean
         value?: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
     }
+    onChangeProvider: (v: SourceType) => void
 }
 
-const providersMap = [SourceType.Rarible]
+const providersMap = [SourceType.Rarible, SourceType.Gem, SourceType.X2Y2, SourceType.LooksRare, SourceType.OpenSea]
 
 export function NFTBasicInfo(props: NFTBasicInfoProps) {
-    const { asset, hideSubTitle } = props
+    const { asset, hideSubTitle, onChangeProvider } = props
     const { classes } = useStyles()
     if (!asset.value || asset.loading) return <Skeleton width={300} height={300} />
+
+    const collectibleProviderOptions = getEnumAsArray(SourceType).filter((x) => providersMap.includes(x.value))
 
     const _asset = asset.value
     const resourceUrl = _asset.metadata?.imageURL ?? _asset.metadata?.mediaURL
@@ -106,8 +106,12 @@ export function NFTBasicInfo(props: NFTBasicInfoProps) {
         <div className={classes.layout}>
             <div className={classes.body}>
                 <div className={classes.absoluteProvider}>
-                    {providersMap.map((x) => {
-                        return <CollectibleProviderIcon key={x} provider={x} />
+                    {collectibleProviderOptions.map((x) => {
+                        return (
+                            <div key={x.key} onClick={() => onChangeProvider(x.value)}>
+                                <CollectibleProviderIcon provider={x.value} />
+                            </div>
+                        )
                     })}
                 </div>
                 <NFTCardStyledAssetPlayer url={resourceUrl} classes={classes} isNative={false} />
