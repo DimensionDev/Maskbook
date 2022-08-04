@@ -16,7 +16,7 @@ export function getTokenAmountDescription(amount = '0', token?: FungibleToken<Ch
     return `${value} ${token?.symbol?.trim()}`
 }
 
-export class DescriptorWithTransactionReceipt {
+export class DescriptorWithTransactionDecodedReceipt {
     async getReceipt(
         chainId: ChainId,
         contractAddress: string | undefined,

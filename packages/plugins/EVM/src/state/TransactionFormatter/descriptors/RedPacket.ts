@@ -6,9 +6,9 @@ import { isSameAddress, TransactionContext } from '@masknet/web3-shared-base'
 import type { TransactionDescriptor } from '../types'
 import { Web3StateSettings } from '../../../settings'
 import type { AbiItem } from 'web3-utils'
-import { DescriptorWithTransactionReceipt, getTokenAmountDescription } from '../utils'
+import { DescriptorWithTransactionDecodedReceipt, getTokenAmountDescription } from '../utils'
 
-export class RedPacketDescriptor extends DescriptorWithTransactionReceipt implements TransactionDescriptor {
+export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt implements TransactionDescriptor {
     async getClaimTokenInfo(chainId: ChainId, contractAddress: string | undefined, hash: string | undefined) {
         const connection = await Web3StateSettings.value.Connection?.getConnection?.({
             chainId,

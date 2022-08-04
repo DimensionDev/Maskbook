@@ -5,9 +5,9 @@ import MaskBox_ABI from '@masknet/web3-contracts/abis/MaskBox.json'
 import { Web3StateSettings } from '../../../settings'
 import type { TransactionDescriptor } from '../types'
 import type { AbiItem } from 'web3-utils'
-import { DescriptorWithTransactionReceipt, getTokenAmountDescription } from '../utils'
+import { DescriptorWithTransactionDecodedReceipt, getTokenAmountDescription } from '../utils'
 
-export class MaskBoxDescriptor extends DescriptorWithTransactionReceipt implements TransactionDescriptor {
+export class MaskBoxDescriptor extends DescriptorWithTransactionDecodedReceipt implements TransactionDescriptor {
     async getPurchaseTokenInfo(chainId: ChainId, contractAddress: string | undefined, hash: string | undefined) {
         const connection = await Web3StateSettings.value.Connection?.getConnection?.({
             chainId,
