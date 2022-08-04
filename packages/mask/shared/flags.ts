@@ -31,6 +31,7 @@ export const Flags = {
     polygon_enabled: true,
     arbitrum_enabled: true,
     xdai_enabled: true,
+    optimism_enabled: true,
     avalanche_enabled: true,
     fantom_enabled: true,
     celo_enabled: true,
@@ -52,7 +53,7 @@ export const Flags = {
 
     // we still need to handle image encoding
     v37PayloadDefaultEnabled: false, // new Date() > new Date('2022-07-01'),
-    i18nTranslationHotUpdate: betaOrInsiderOnly,
+    i18nTranslationHotUpdate: true,
 } as const
 
 if (process.env.NODE_ENV === 'development') {

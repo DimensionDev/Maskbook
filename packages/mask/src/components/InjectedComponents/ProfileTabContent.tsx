@@ -295,7 +295,11 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                             selectedAddress?.type === SocialAddressType.NEXT_ID
                                         }
                                         iconProps={classes.mainLinkIcon}
-                                        TypographyProps={{ fontSize: '18px', fontWeight: 700 }}
+                                        TypographyProps={{
+                                            fontSize: '18px',
+                                            fontWeight: 700,
+                                            color: (theme) => theme.palette.maskColor.dark,
+                                        }}
                                         identityAddress={selectedAddress}
                                     />
                                     <Icons.ArrowDrop className={classes.arrowDropIcon} />

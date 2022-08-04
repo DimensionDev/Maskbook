@@ -59,6 +59,7 @@ export const OPENX = createERC20Tokens('OPENX_ADDRESS', 'OpenSwap Token', 'OpenX
 export const JEWEL = createERC20Tokens('JEWEL_ADDRESS', 'Jewels', 'JEWEL', 18)
 export const YUMI = createERC20Tokens('YUMI_ADDRESS', 'YumiSwap Token', 'YUMI', 18)
 export const xYUMI = createERC20Tokens('xYUMI_ADDRESS', 'Yumi Staking Token', 'xYUMI', 18)
+export const OP = createERC20Tokens('OP_ADDRESS', 'Optimism', 'OP', 18)
 
 export const WNATIVE = createERC20Tokens(
     'WNATIVE_ADDRESS',
@@ -86,6 +87,8 @@ export const WNATIVE_ONLY: ERC20AgainstToken = {
     [ChainId.Fantom]: [WNATIVE[ChainId.Fantom]],
     [ChainId.Aurora]: [WNATIVE[ChainId.Aurora]],
     [ChainId.Aurora_Testnet]: [WNATIVE[ChainId.Aurora_Testnet]],
+    [ChainId.Optimism]: [WNATIVE[ChainId.Optimism]],
+    [ChainId.Optimism_Goerli]: [WNATIVE[ChainId.Optimism_Goerli]],
     [ChainId.Astar]: [WNATIVE[ChainId.Astar]],
     [ChainId.Harmony]: [WNATIVE[ChainId.Harmony]],
 }

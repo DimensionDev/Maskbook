@@ -32,6 +32,7 @@ export const base: Plugin.Shared.Definition = {
                     ChainId.Harmony,
                     ChainId.Conflux,
                     ChainId.Astar,
+                    ChainId.Optimism,
                 ],
             },
             [NetworkPluginID.PLUGIN_FLOW]: { supportedChainIds: [] },

@@ -111,6 +111,7 @@
         "ipfshttp",
         "ittr",
         "jsbi",
+        "jsonml",
         "juicebox",
         "kdfparams",
         "keccak",
@@ -153,8 +154,11 @@
         "nftrss",
         "nftscan",
         "nums",
+        "oeth",
+        "opensea",
         "openswap",
         "openx",
+        "optimism",
         "overridable",
         "overscan",
         "pageable",
@@ -260,6 +264,7 @@
         "zubin"
     ],
     "ignoreWords": [
+        "multipass",
         "aicanft",
         "algr",
         "anft",

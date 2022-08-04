@@ -74,3 +74,5 @@ export const postContentSelector = () =>
             'm-activity:not(.m-activity--minimalMode) m-activity__content .m-activityContent__mediaDescriptionText',
         ].join(),
     )
+
+export const searchMindsProfileCover = () => querySelector('div[data-cy="data-minds-channel-banner"]')

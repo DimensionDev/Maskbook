@@ -185,7 +185,10 @@ export function NextIdPage({ persona }: NextIdPageProps) {
         )
     }, [publicKeyAsHex, visitingPersonaIdentifier, isVerified])
 
+    const isWeb3ProfileDisable = useIsMinimalMode(PluginId.Web3Profile)
+
     const description = useMemo(() => {
+        if (isWeb3ProfileDisable) return ''
         if (personaConnectStatus.action && !personaConnectStatus.hasPersona) {
             return t.create_persona_intro()
         }
@@ -196,9 +199,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
             return t.add_wallet_intro()
         }
         return ''
-    }, [personaConnectStatus, isOwn, isAccountVerified, t])
-
-    const isWeb3ProfileDisable = useIsMinimalMode(PluginId.Web3Profile)
+    }, [personaConnectStatus, isOwn, isAccountVerified, t, isWeb3ProfileDisable])
 
     const {
         value: bindings,

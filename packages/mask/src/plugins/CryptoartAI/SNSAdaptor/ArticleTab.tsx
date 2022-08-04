@@ -17,6 +17,7 @@ const useStyles = makeStyles()({
     iframe: {
         minWidth: 300,
         minHeight: 300,
+        margin: 'auto',
     },
 })
 

@@ -259,7 +259,8 @@
             "chainId": 421611,
             "name": "Arbitrum Rinkeby Ether",
             "symbol": "ARETH",
-            "decimals": 18
+            "decimals": 18,
+            "logoURL": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
         },
         "infoURL": "https://arbitrum.io",
         "explorers": [
@@ -328,18 +329,61 @@
     },
     {
         "chainId": 10,
-        "type": "Optimistic",
-        "name": "OPT",
+        "name": "Optimism",
+        "type": "Optimism",
+        "chain": "Optimism",
         "network": "mainnet",
-        "shortName": "oeth",
         "features": [],
         "nativeCurrency": {
             "chainId": 10,
             "name": "Ether",
-            "symbol": "OETH",
+            "symbol": "ETH",
+            "decimals": 18,
+            "logoURL": "https://logo.chainbit.xyz/eth"
+        },
+        "infoURL": "https://optimistic.etherscan.io/",
+        "shortName": "op",
+        "explorers": [
+            {
+                "name": "optimisc",
+                "url": "https://optimistic.etherscan.io/"
+            }
+        ]
+    },
+    {
+        "chainId": 69,
+        "name": "Optimism Testnet Kovan",
+        "chain": "Optimism",
+        "network": "testnet",
+        "rpc": ["https://kovan.optimism.io/"],
+        "faucets": [],
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 69,
+            "name": "Ether",
+            "symbol": "KOR",
+            "decimals": 18,
+            "logoURL": "https://static.debank.com/image/chain/logo_url/op/01ae734fe781c9c2ae6a4cc7e9244056.png"
+        },
+        "infoURL": "https://optimism.io",
+        "shortName": "kor"
+    },
+    {
+        "chainId": 420,
+        "name": "Optimism Testnet Goerli",
+        "chain": "Optimism",
+        "network": "testnet",
+        "rpc": ["https://goerli.optimism.io/"],
+        "faucets": [],
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 420,
+            "name": "Ether",
+            "symbol": "GOR",
             "decimals": 18
         },
-        "infoURL": "https://optimism.io"
+        "infoURL": "https://optimism.io",
+        "shortName": "gor"
     },
     {
         "chainId": 11,
@@ -892,7 +936,7 @@
     {
         "chainId": 69,
         "type": "Optimistic",
-        "name": "OPT",
+        "name": "Optimism",
         "network": "kovan",
         "shortName": "okov",
         "features": [],
@@ -1402,8 +1446,7 @@
     },
     {
         "chainId": 420,
-        "type": "Optimistic",
-        "name": "OPT",
+        "name": "Optimism",
         "network": "goerli",
         "shortName": "ogor",
         "features": [],

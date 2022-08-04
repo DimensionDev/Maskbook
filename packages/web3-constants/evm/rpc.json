@@ -54,6 +54,13 @@
         "Arbitrum": ["https://arb1.arbitrum.io/rpc"],
         "Arbitrum_Rinkeby": ["https://rinkeby.arbitrum.io/rpc"],
         "xDai": ["https://rpc.gnosischain.com"],
+        "Optimism": [
+            "https://opt-mainnet.g.alchemy.com/v2/si4Ts8BGkOpDGesRfjdRZHFzUukHvURN",
+            "https://optimism-mainnet.infura.io/v3/c44fac7726a64d5bbbb3a1c51f02d75b",
+            "https://mainnet.optimism.io"
+        ],
+        "Optimism_Kovan": ["https://kovan.optimism.io"],
+        "Optimism_Goerli": ["https://goerli.optimism.io"],
         "Avalanche": ["https://api.avax.network/ext/bc/C/rpc"],
         "Avalanche_Fuji": ["https://api.avax-test.network/ext/bc/C/rpc"],
         "Celo": ["https://forno.celo.org"],
@@ -84,6 +91,9 @@
         "Arbitrum": [0, 0, 0, 0, 0],
         "Arbitrum_Rinkeby": [0, 0, 0, 0, 0],
         "xDai": [0, 0, 0, 0, 0],
+        "Optimism": [0, 1, 2, 2],
+        "Optimism_Kovan": [0, 0, 0, 0],
+        "Optimism_Goerli": [0, 0, 0, 0],
         "Avalanche": [0, 0, 0, 0, 0],
         "Avalanche_Fuji": [0, 0, 0, 0, 0],
         "Celo": [0, 0, 0, 0, 0],

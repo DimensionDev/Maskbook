@@ -1,24 +1,29 @@
 import yargs, { Argv } from 'yargs'
 import { hideBin } from 'yargs/helpers'
-import { spawn } from 'child_process'
 import { compact } from 'lodash-unified'
-import { awaitChildProcess, PKG_PATH, shell, watchTask } from '../utils/index.js'
+import { awaitChildProcess, PKG_PATH, shell, task, watchTask } from '../utils/index.js'
 import { buildInjectedScript, watchInjectedScript } from '../projects/injected-scripts.js'
 import { buildMaskSDK, watchMaskSDK } from '../projects/mask-sdk.js'
 import { buildPolyfill } from '../projects/polyfill.js'
 import { buildGun } from '../projects/gun.js'
+import { parallel, series, TaskFunction } from 'gulp'
 
 const presets = ['chromium', 'firefox', 'android', 'iOS', 'base'] as const
 const otherFlags = ['beta', 'insider', 'reproducible', 'profile', 'mv3', 'readonlyCache', 'progress'] as const
 
-export async function extension(f?: Function | ExtensionBuildArgs) {
-    await buildPolyfill()
-    await buildInjectedScript()
-    await buildGun()
-    await buildMaskSDK()
-    if (typeof f === 'function') return awaitChildProcess(webpack('build'))
-    return awaitChildProcess(webpack('build', f))
+export function buildWebpackFlag(name: string, args: ExtensionBuildArgs | undefined) {
+    const f = () => awaitChildProcess(webpack('build', args))
+    const desc = 'Build webpack for ' + name
+    task(f, desc, desc)
+    return f
 }
+export function buildExtensionFlag(name: string, args: ExtensionBuildArgs | undefined): TaskFunction {
+    const f = series(parallel(buildPolyfill, buildInjectedScript, buildGun, buildMaskSDK), buildWebpackFlag(name, args))
+    const desc = 'Build extension for ' + name
+    task(f, desc, desc)
+    return f
+}
+export const buildBaseExtension: TaskFunction = buildExtensionFlag('default', undefined)
 export async function extensionWatch(f?: Function | ExtensionBuildArgs) {
     buildPolyfill()
     buildGun()
@@ -27,7 +32,7 @@ export async function extensionWatch(f?: Function | ExtensionBuildArgs) {
     if (typeof f === 'function') return awaitChildProcess(webpack('dev'))
     return awaitChildProcess(webpack('dev', f))
 }
-watchTask(extension, extensionWatch, 'webpack', 'Build Mask Network extension', {
+watchTask(buildBaseExtension, extensionWatch, 'webpack', 'Build Mask Network extension', {
     '[Warning]': 'For normal development, use task "dev" or "build"',
 })
 
