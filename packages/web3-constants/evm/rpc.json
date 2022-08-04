@@ -75,7 +75,8 @@
             "https://api.s0.t.hmny.io",
             "https://rpc.hermesdefi.io/"
         ],
-        "Harmony_Test": ["https://api.s0.b.hmny.io/"]
+        "Harmony_Test": ["https://api.s0.b.hmny.io/"],
+        "Astar": ["https://astar.api.onfinality.io/public"]
     },
     "RPC_WEIGHTS": {
         "Mainnet": [0, 1, 2, 3, 4],
@@ -101,6 +102,7 @@
         "Aurora_Testnet": [0, 0, 0, 0, 0],
         "Conflux": [0, 0, 0, 0, 0],
         "Harmony": [0, 0, 0, 0, 0],
-        "Harmony_Test": [0, 0, 0, 0, 0]
+        "Harmony_Test": [0, 0, 0, 0, 0],
+        "Astar": [0, 0, 0, 0, 0]
     }
 }

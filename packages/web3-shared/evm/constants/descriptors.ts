@@ -248,6 +248,17 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         isMainnet: true,
     },
     {
+        ID: `${PLUGIN_ID}_astar`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Astar,
+        type: NetworkType.Astar,
+        name: 'Astar',
+        icon: new URL('../assets/astar.png', import.meta.url),
+        iconColor: 'rgb(36, 150, 238)',
+        averageBlockDelay: 15,
+        isMainnet: true,
+    },
+    {
         ID: `${PLUGIN_ID}_optimism`,
         networkSupporterPluginID: PLUGIN_ID,
         chainId: ChainId.Optimism,

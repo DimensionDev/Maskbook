@@ -23,7 +23,8 @@
         "Aurora_Testnet": "",
         "Conflux": "",
         "Harmony": "",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V2": {
         "Mainnet": "0x8D8912E1237F9FF3EF661F32743CFB276E052F98",
@@ -49,7 +50,8 @@
         "Aurora_Testnet": "",
         "Conflux": "",
         "Harmony": "",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V3": {
         "Mainnet": "",
@@ -75,7 +77,8 @@
         "Aurora_Testnet": "",
         "Conflux": "",
         "Harmony": "",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V4": {
         "Mainnet": "0xaBBe1101FD8fa5847c452A6D70C8655532B03C33",
@@ -101,7 +104,8 @@
         "Aurora_Testnet": "0xdB93cCd481012bB5D1E2c8d0aF7C5f2940c00fdC",
         "Conflux": "0x96c7d011cdfd467f551605f0f5fce279f86f4186",
         "Harmony": "0xab7b1be4233a04e5c43a810e75657eced8e5463b",
-        "Harmony_Test": "0x96c7d011cdfd467f551605f0f5fce279f86f4186"
+        "Harmony_Test": "0x96c7d011cdfd467f551605f0f5fce279f86f4186",
+        "Astar": "0x2cF46Db820e279c5fBF778367D49d9C931D54524"
     },
     "HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT": {
         "Mainnet": 12939427,
@@ -127,7 +131,8 @@
         "Aurora_Testnet": 77918765,
         "Conflux": 37670572,
         "Harmony": 24134162,
-        "Harmony_Test": 22701101
+        "Harmony_Test": 22701101,
+        "Astar": 910985
     },
     "SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-mainnet",
@@ -153,6 +158,7 @@
         "Aurora_Testnet": "",
         "Conflux": "",
         "Harmony": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-harmony",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-astar"
     }
 }

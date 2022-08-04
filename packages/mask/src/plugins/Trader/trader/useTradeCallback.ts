@@ -81,6 +81,7 @@ export function useTradeCallback(
     const nativeTokenWrapper = useNativeTokenWrapperCallback(
         tradeComputed as TradeComputed<NativeTokenWrapper>,
         gasConfig,
+        targetChainId,
     )
     if (isNativeTokenWrapper_) return nativeTokenWrapper
 
@@ -105,6 +106,14 @@ export function useTradeCallback(
         case TradeProvider.OPENSWAP:
             return uniswapV2Like
         case TradeProvider.MDEX:
+            return uniswapV2Like
+        case TradeProvider.ARTHSWAP:
+            return uniswapV2Like
+        case TradeProvider.VERSA:
+            return uniswapV2Like
+        case TradeProvider.ASTAREXCHANGE:
+            return uniswapV2Like
+        case TradeProvider.YUMISWAP:
             return uniswapV2Like
         case TradeProvider.DEFIKINGDOMS:
             return uniswapV2Like

@@ -53,9 +53,12 @@ export const CUSD = createERC20Tokens('cUSD_ADDRESS', 'Celo Dollar', 'cUSD', 18)
 export const CEUR = createERC20Tokens('cEUR_ADDRESS', 'Celo Euro', 'cEUR', 18)
 export const JOE = createERC20Tokens('JOE_ADDRESS', 'JoeToken', 'JOE', 18)
 export const PNG = createERC20Tokens('PNG_ADDRESS', 'Pangolin', 'PNG', 18)
+export const VERSA = createERC20Tokens('VERSA_ADDRESS', 'Versa Finance', 'VERSA', 18)
 export const VIPER = createERC20Tokens('VIPER_ADDRESS', 'Viper', 'VIPER', 18)
 export const OPENX = createERC20Tokens('OPENX_ADDRESS', 'OpenSwap Token', 'OpenX', 18)
 export const JEWEL = createERC20Tokens('JEWEL_ADDRESS', 'Jewels', 'JEWEL', 18)
+export const YUMI = createERC20Tokens('YUMI_ADDRESS', 'YumiSwap Token', 'YUMI', 18)
+export const xYUMI = createERC20Tokens('xYUMI_ADDRESS', 'Yumi Staking Token', 'xYUMI', 18)
 export const OP = createERC20Tokens('OP_ADDRESS', 'Optimism', 'OP', 18)
 
 export const WNATIVE = createERC20Tokens(
@@ -86,5 +89,6 @@ export const WNATIVE_ONLY: ERC20AgainstToken = {
     [ChainId.Aurora_Testnet]: [WNATIVE[ChainId.Aurora_Testnet]],
     [ChainId.Optimism]: [WNATIVE[ChainId.Optimism]],
     [ChainId.Optimism_Goerli]: [WNATIVE[ChainId.Optimism_Goerli]],
+    [ChainId.Astar]: [WNATIVE[ChainId.Astar]],
     [ChainId.Harmony]: [WNATIVE[ChainId.Harmony]],
 }
