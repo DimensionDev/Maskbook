@@ -44,7 +44,7 @@ export function PersonaPage(props: PersonaPageProps) {
     const _persona = useSubscription(context.currentPersona)
 
     const currentPersona = myPersonas?.find(
-        (x: PersonaInformation) => x.identifier.rawPublicKey === _persona?.rawPublicKey,
+        (x: PersonaInformation) => x.identifier.rawPublicKey.toLowerCase() === _persona?.rawPublicKey.toLowerCase(),
     )
 
     const t = useI18N()
@@ -101,7 +101,7 @@ export function PersonaPage(props: PersonaPageProps) {
                                 .filter((x) => x.identifier.network === currentIdentity?.identifier?.network)
                                 .map((x, i) =>
                                     persona?.binds.proofs.some(
-                                        (y) => y.identity === x.identifier.userId.toLowerCase(),
+                                        (y) => y.identity.toLowerCase() === x.identifier.userId.toLowerCase(),
                                     ) ? null : (
                                         <PersonaItem
                                             avatar=""
@@ -112,7 +112,7 @@ export function PersonaPage(props: PersonaPageProps) {
                                     ),
                                 )}
                         {persona?.binds?.proofs
-                            .filter((proof) => proof.platform === NextIDPlatform.Twitter)
+                            .filter((proof) => proof.platform === currentIdentity?.identifier?.network)
                             .filter(
                                 (x) => x.identity.toLowerCase() !== currentIdentity?.identifier?.userId.toLowerCase(),
                             )
