@@ -63,7 +63,7 @@ export function SearchableList<T extends {}>({
 }: MaskSearchableListProps<T>) {
     const [keyword, setKeyword] = useState('')
     const { classes } = useStyles()
-    const { height, itemSize, ...rest } = FixedSizeListProps
+    const { height = 300, itemSize, ...rest } = FixedSizeListProps
     const { InputProps, ...textFieldPropsRest } = SearchFieldProps ?? {}
 
     // #region fuse
@@ -92,6 +92,8 @@ export function SearchableList<T extends {}>({
         setKeyword(word)
         onSearch?.(word)
     }
+
+    const windowHeight = !!textFieldPropsRest.error && typeof height === 'number' ? height - 28 : height
 
     return (
         <div className={classes.container}>
@@ -125,7 +127,12 @@ export function SearchableList<T extends {}>({
             )}
             {placeholder}
             {!placeholder && readyToRenderData.length === 0 && (
-                <Stack height={height ?? 300} justifyContent="center" alignContent="center" marginTop="12px">
+                <Stack
+                    height={windowHeight}
+                    justifyContent="center"
+                    alignContent="center"
+                    marginTop="18px"
+                    marginBottom="48px">
                     <EmptyResult />
                 </Stack>
             )}
@@ -134,7 +141,7 @@ export function SearchableList<T extends {}>({
                     <FixedSizeList
                         className={classes.list}
                         width="100%"
-                        height={height ?? 300}
+                        height={windowHeight}
                         overscanCount={25}
                         itemSize={itemSize ?? 100}
                         itemData={{

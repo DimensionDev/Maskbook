@@ -157,17 +157,13 @@ export const getFungibleTokenItem =
                 return (
                     <SettingSwitch
                         classes={{ root: classes.switch }}
-                        onClick={(event) => {
+                        onClick={async (event) => {
                             event.stopPropagation()
                             event.preventDefault()
+                            await onTrustOrBlockTokenToLocal(event as any)
                         }}
                         size="small"
                         checked={!isBlocked(address)}
-                        onChange={(event) => {
-                            event.stopPropagation()
-                            event.preventDefault()
-                            onTrustOrBlockTokenToLocal(event)
-                        }}
                     />
                 )
             }

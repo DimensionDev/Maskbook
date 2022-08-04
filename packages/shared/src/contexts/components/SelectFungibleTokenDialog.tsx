@@ -47,6 +47,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, isDashboard }) => 
     },
     wrapper: {
         paddingTop: theme.spacing(2),
+        paddingBottom: theme.spacing(6),
     },
 }))
 
@@ -123,7 +124,7 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
                     onSelect={onSubmit}
                     FixedSizeListProps={{
                         itemSize: rowSize + 16,
-                        height: isMdScreen ? 300 : 470,
+                        height: isMdScreen ? 300 : 422,
                         className: classes.wrapper,
                     }}
                     SearchTextFieldProps={{

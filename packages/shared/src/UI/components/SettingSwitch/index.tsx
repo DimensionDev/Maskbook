@@ -14,13 +14,13 @@ export const SettingSwitch = styled<typeof Switch>(Switch)(({ size }) => {
             height: base,
         },
         [`& .${switchClasses.checked}`]: {
-            color: 'white',
+            color: 'white !important',
             [`&.${switchClasses.switchBase}`]: {
                 transform: `translateX(${isSmall ? 20 : 28}px)`,
             },
             [`&+.${switchClasses.track}`]: {
                 opacity: '1 !important',
-                backgroundColor: '#3DC233',
+                backgroundColor: '#3DC233 !important',
             },
         },
         [`& .${switchClasses.track}`]: {
