@@ -8,6 +8,7 @@ import { setupContext } from './context'
 import CheckSecurityConfirmDialog from './components/CheckSecurityConfirmDialog'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { CheckSecurityDialog } from './CheckSecurityDialog'
+import { RiskWarningDialog } from './components/RiskWarningDialog'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -19,6 +20,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             <>
                 <CheckSecurityConfirmDialog />
                 <CheckSecurityDialog />
+                <RiskWarningDialog />
             </>
         )
     },

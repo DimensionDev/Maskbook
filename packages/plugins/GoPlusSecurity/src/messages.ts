@@ -1,10 +1,19 @@
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { PLUGIN_ID } from './constants'
+
+interface Token {
+    contract: string
+    name: string
+    chainId: ChainId
+}
 
 type CheckSecurityDialogEvent = { open: boolean }
 
-interface PluginGoPlusSecurityMessage {
+type tokenRiskWarningDialogEvent = { open: boolean; token?: Token; swap: boolean }
+export interface PluginGoPlusSecurityMessage {
     checkSecurityDialogEvent: CheckSecurityDialogEvent
+    tokenRiskWarningDialogEvent: tokenRiskWarningDialogEvent
     rpc: unknown
 }
 

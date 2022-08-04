@@ -216,6 +216,7 @@
     "sharing": "Sharing",
     "transfer": "Transfer",
     "export": "Export",
+    "confirm_swap_risk": "Confirm swap risk",
     "wallet_load_retry": "Failed to load {{symbol}}. Click to retry.",
     "wallet_name": "Wallet Name",
     "wallet_rename": "Rename Wallet",

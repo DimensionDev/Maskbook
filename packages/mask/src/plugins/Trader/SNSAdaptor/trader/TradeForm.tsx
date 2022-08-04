@@ -3,7 +3,7 @@ import { PluginWalletStatusBar, useI18N } from '../../../../utils'
 import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
 import { alpha, Box, chipClasses, Collapse, IconButton, lighten, Typography } from '@mui/material'
-import { ChainId, formatWeiToEther, GasOptionConfig, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, formatWeiToEther, GasOptionConfig, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import {
     FungibleToken,
     isLessThan,
@@ -11,7 +11,6 @@ import {
     NetworkPluginID,
     rightShift,
     multipliedBy,
-    formatPercentage,
 } from '@masknet/web3-shared-base'
 import TuneIcon from '@mui/icons-material/Tune'
 import { TokenPanelType, TradeInfo } from '../../types'
@@ -39,6 +38,7 @@ import { isDashboardPage, isPopupPage, PopupRoutes } from '@masknet/shared-base'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
+import { TokenSecurityBoundary } from '../../../../web3/UI/TokenSecurityBoundary'
 import { currentSlippageSettings } from '../../settings'
 import { PluginTraderMessages } from '../../messages'
 import Services from '../../../../extension/service'
@@ -610,19 +610,20 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         style: { borderRadius: 8 },
                                         size: 'medium',
                                     }}>
-                                    {isTokenSecurityEnable && isRisky ? (
-                                        <ActionButton
-                                            fullWidth
-                                            variant="contained"
-                                            color="error"
-                                            disabled={focusedTrade?.loading || !focusedTrade?.value}
-                                            classes={{ root: classes.button, disabled: classes.disabledButton }}
-                                            onClick={() => setIsWarningOpen(true)}>
-                                            {t('plugin_trader_risk_warning', {
-                                                percent: formatPercentage(focusedTrade?.value?.priceImpact ?? 0),
-                                            })}
-                                        </ActionButton>
-                                    ) : (
+                                    <TokenSecurityBoundary
+                                        tokenInfo={{
+                                            name: tokenSecurityInfo?.token_name ?? '--',
+                                            chainId: tokenSecurityInfo?.chainId ?? ChainId.Mainnet,
+                                            contract: tokenSecurityInfo?.contract ?? ZERO_ADDRESS,
+                                        }}
+                                        disabled={
+                                            focusedTrade?.loading ||
+                                            !focusedTrade?.value ||
+                                            !!validationMessage ||
+                                            isSwapping
+                                        }
+                                        onSwap={onSwap}
+                                        showTokenSecurity={isTokenSecurityEnable && isRisky}>
                                         <ActionButton
                                             fullWidth
                                             loading={isSwapping}
@@ -638,7 +639,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                             onClick={onSwap}>
                                             {validationMessage || nativeWrapMessage}
                                         </ActionButton>
-                                    )}
+                                    </TokenSecurityBoundary>
                                 </EthereumERC20TokenApprovedBoundary>
                             </WalletConnectedBoundary>
                         </ChainBoundary>
