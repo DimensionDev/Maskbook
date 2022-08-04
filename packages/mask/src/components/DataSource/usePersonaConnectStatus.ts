@@ -2,11 +2,12 @@ import { useMemo } from 'react'
 import stringify from 'json-stable-stringify'
 import { DashboardRoutes } from '@masknet/shared-base'
 import Services from '../../extension/service'
-import { currentSetupGuideStatus } from '../../../shared/legacy-settings/settings'
+import { currentPersonaIdentifier, currentSetupGuideStatus } from '../../../shared/legacy-settings/settings'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { SetupGuideStep } from '../../../shared/legacy-settings/types'
 import { useLastRecognizedIdentity } from './useActivatedUI'
 import { usePersonasFromDB } from './usePersonasFromDB'
+import { useValueRef } from '@masknet/shared-base-ui'
 
 const createPersona = () => {
     Services.Helper.openDashboard(DashboardRoutes.Setup)
@@ -34,4 +35,21 @@ export function usePersonaConnectStatus() {
             hasPersona: !!personas.length,
         }
     }, [personas, lastRecognized.identifier?.toText(), activatedSocialNetworkUI])
+}
+
+export function useCurrentPersonaConnectStatus() {
+    const personas = usePersonasFromDB()
+    const lastRecognized = useLastRecognizedIdentity()
+    const currentIdentifier = useValueRef(currentPersonaIdentifier)
+    return useMemo(() => {
+        const currentPersona = personas.find((x) => x.identifier.toText() === currentIdentifier)
+        const currentProfile = currentPersona?.linkedProfiles.find((x) => x.identifier === lastRecognized.identifier)
+
+        return {
+            action: !personas.length ? createPersona : !currentProfile ? connectPersona : undefined,
+            currentPersona,
+            connected: !!currentProfile,
+            hasPersona: !!personas.length,
+        }
+    }, [currentIdentifier, personas, lastRecognized.identifier?.toText(), activatedSocialNetworkUI])
 }

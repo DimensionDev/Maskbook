@@ -4,7 +4,6 @@ import { Typography } from '@mui/material'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useCurrentWeb3NetworkPluginID, useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { formatPersonaPublicKey } from '@masknet/shared-base'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { useI18N } from '../../utils'
@@ -12,7 +11,7 @@ import { Application, getUnlistedApp } from './ApplicationSettingPluginList'
 import { ApplicationRecommendArea } from './ApplicationRecommendArea'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useNextIDConnectStatus, verifyPersona } from '../DataSource/useNextIDConnectStatus'
-import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
+import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext'
@@ -272,17 +271,6 @@ function RenderEntryComponent({ application }: { application: Application }) {
         if (ApplicationEntryStatus.isPersonaConnected === false && !disabled)
             return t('application_tooltip_hint_connect_persona')
         if (ApplicationEntryStatus.shouldVerifyNextId && !disabled) return t('application_tooltip_hint_verify')
-        if (ApplicationEntryStatus.shouldDisplayTooltipHint)
-            return t('application_tooltip_hint_sns_persona_unmatched', {
-                currentPersonaPublicKey: formatPersonaPublicKey(
-                    ApplicationEntryStatus.currentPersonaPublicKey ?? '',
-                    4,
-                ),
-                currentSNSConnectedPersonaPublicKey: formatPersonaPublicKey(
-                    ApplicationEntryStatus.currentSNSConnectedPersonaPublicKey ?? '',
-                    4,
-                ),
-            })
         return
     })()
     // #endregion
@@ -319,7 +307,8 @@ const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContex
 })
 
 function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
-    const personaConnectStatus = usePersonaConnectStatus()
+    const personaConnectStatus = useCurrentPersonaConnectStatus()
+    console.log(personaConnectStatus)
     const nextIDConnectStatus = useNextIDConnectStatus(true)
 
     const {
