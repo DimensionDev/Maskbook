@@ -510,6 +510,8 @@ export interface TransactionContext<ChainId, Parameter = string | undefined> {
     value: string
     /** code to deploy */
     code?: string
+    /** transaction hash */
+    hash?: string
     /** methods */
     methods?: Array<{
         /** name */
@@ -1170,13 +1172,12 @@ export interface TransactionFormatterState<ChainId, Parameters, Transaction> {
         chainId: ChainId,
         transaction: Transaction,
         context: TransactionContext<ChainId, Parameters>,
-        isError?: boolean
     ) => Promise<TransactionDescriptor<ChainId, Transaction>>
     /** Elaborate a transaction in a human-readable format. */
     formatTransaction: (
         chainId: ChainId,
         transaction: Transaction,
-        isError?: boolean
+        txHash?: string
     ) => Promise<TransactionDescriptor<ChainId, Transaction>>
 }
 export interface TransactionWatcherState<ChainId, Transaction> {
