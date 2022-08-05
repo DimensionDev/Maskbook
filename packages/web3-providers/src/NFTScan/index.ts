@@ -1,192 +1,62 @@
 import { DataProvider } from '@masknet/public-api'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
-import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 import {
     createIndicator,
     createNextIndicator,
     createPageable,
-    CurrencyType,
     HubOptions,
     NonFungibleAsset,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { ChainId, createContract, getRPCConstants, SchemaType } from '@masknet/web3-shared-evm'
-import addSeconds from 'date-fns/addSeconds'
-import getUnixTime from 'date-fns/getUnixTime'
-import isBefore from 'date-fns/isBefore'
-import { compact, first } from 'lodash-unified'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { compact } from 'lodash-unified'
 import urlcat from 'urlcat'
-import Web3SDK from 'web3'
-import type { AbiItem } from 'web3-utils'
-import { courier } from '../helpers'
 import { LooksRare, OpenSea } from '../index'
 import { LooksRareLogo, OpenSeaLogo } from '../resources'
 import { NonFungibleMarketplace, NonFungibleTokenAPI, TrendingAPI } from '../types'
-import { NFTSCAN_ACCESS_TOKEN_URL, NFTSCAN_BASE, NFTSCAN_BASE_API, NFTSCAN_LOGO_BASE } from './constants'
-import type {
+import { NFTSCAN_API, NFTSCAN_BASE } from './constants'
+import {
+    Collection,
+    ErcType,
     NFTPlatformInfo,
     NFTScanAsset,
     NFTSearchData,
     SearchNFTPlatformNameResult,
+    UserAssetsGroup,
     VolumeAndFloorRecord,
 } from './types'
-
-const IPFS_BASE = 'https://ipfs.io/ipfs/:id'
-const tokenCache = new Map<'token', { token: string; expiration: Date }>()
+import { createERC721TokenAsset, fetchFromNFTScan, fetchV2, getContractSymbol, prependIpfs } from './utils'
 
 type Result<T> = { data?: T; code: number }
 
-async function getToken() {
-    const token = tokenCache.get('token')
-    if (token && isBefore(Date.now(), token.expiration)) {
-        return token.token
-    }
-    const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
-    const response = await fetch(NFTSCAN_ACCESS_TOKEN_URL, { method: 'GET' })
-    const {
-        data,
-    }: {
-        data: { accessToken: string; expiration: number }
-    } = await response.json()
-    tokenCache.set('token', {
-        token: data.accessToken,
-        expiration: addSeconds(Date.now(), data.expiration),
-    })
-    return data.accessToken
-}
-
-const fetchFromNFTScan = (url: string) => {
-    return fetch(courier(url), {
-        headers: {
-            chain: 'ETH',
-        },
-    })
-}
-
-async function getContractSymbol(address: string, chainId: ChainId) {
-    const RPC_URL = first(getRPCConstants(chainId).RPC_URLS)
-    if (!RPC_URL) return ''
-
-    try {
-        const web3 = new Web3SDK(RPC_URL)
-        const contract = createContract<ERC721>(web3, address, ERC721ABI as AbiItem[])
-        const symbol = await contract?.methods.symbol().call({})
-        return symbol ?? ''
-    } catch {
-        return ''
-    }
-}
-
-async function fetchAsset<T>(path: string, body?: unknown) {
-    const url = courier(urlcat(NFTSCAN_BASE_API, path))
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Access-Token': await getToken(), 'Content-type': 'application/json' },
-        body: JSON.stringify(body),
-    })
-    if (!response.ok) return
-    return response.json() as Promise<{ data: T }>
-}
-
-function createERC721TokenAsset(asset: NFTScanAsset): NonFungibleAsset<ChainId, SchemaType> {
-    const payload: {
-        name?: string
-        description?: string
-        image?: string
-    } = JSON.parse(asset.nft_json ?? '{}')
-    const name = payload?.name ?? asset.nft_name ?? asset.nft_platform_name ?? ''
-    const description = payload?.description ?? asset.nft_detail
-    const mediaURL = urlcat(IPFS_BASE, { id: asset.nft_cover })
-    const chainId = ChainId.Mainnet
-    const creator = asset.nft_creator
-    const owner = asset.nft_holder
-
-    return {
-        id: asset.nft_contract_address,
-        chainId,
-        tokenId: asset.token_id ?? asset.nft_asset_id,
-        type: TokenType.NonFungible,
-        address: asset.nft_contract_address,
-        schema: SchemaType.ERC721,
-        creator: {
-            address: creator,
-            avatarURL: '',
-            nickname: creator,
-            link: urlcat(NFTSCAN_BASE + '/:id', { id: creator }),
-        },
-        owner: {
-            address: owner,
-            avatarURL: '',
-            nickname: owner,
-            link: urlcat(NFTSCAN_BASE + '/:id', { id: owner }),
-        },
-        traits: [],
-        price: {
-            [CurrencyType.USD]: asset.last_price,
-        },
-
-        metadata: {
-            chainId,
-            name,
-            symbol: asset.trade_symbol,
-            description,
-            imageURL: mediaURL,
-            mediaURL,
-        },
-        contract: {
-            chainId,
-            schema: SchemaType.ERC721,
-            address: asset.nft_contract_address,
-            name,
-            symbol: asset.trade_symbol,
-        },
-        collection: {
-            chainId,
-            name,
-            slug: name,
-            description,
-            iconURL: urlcat(NFTSCAN_LOGO_BASE + '/:id', { id: asset.nft_contract_address + '.png' }),
-            verified: !!asset.nft_asset_id,
-            createdAt: getUnixTime(new Date(asset.nft_create_time)),
-        },
-    }
-}
-
-const prependIpfs = (url: string) => {
-    if (!url || url.match(/^\w+:/)) return url
-    return `https://nftscan.mypinata.cloud/ipfs/${url}`
-}
-
 export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType>, TrendingAPI.Provider<ChainId> {
     async getAsset(address: string, tokenId: string) {
-        const response = await fetchAsset<NFTScanAsset>('getSingleNft', {
-            nft_address: address,
+        const path = urlcat('/assets/:address/:token_id', {
+            address,
             token_id: tokenId,
         })
-        if (!response) return
-        return createERC721TokenAsset(response.data)
+        const [data, verifiedStatus] = await Promise.all([
+            fetchV2<NFTScanAsset>(path),
+            this.getCollectionVerifiedStatus(address),
+        ])
+        if (!data) return
+        const token = createERC721TokenAsset(data)
+        if (token.collection) {
+            token.collection = {
+                ...token.collection,
+                verified: verifiedStatus,
+            }
+        }
+        return token
     }
 
     async getAssets(from: string, { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {}) {
-        const response = await fetchAsset<{
-            content: NFTScanAsset[]
-            page_index: number
-            page_size: number
-            total: number
-        }>('getAllNftByUserAddress', {
-            page_size: size,
-            page_index: (indicator?.index ?? 0) + 1,
-            user_address: from,
+        const path = urlcat('/account/own/all/:from', {
+            from,
         })
-        if (!response?.data) return createPageable([], createIndicator(indicator))
-        const total = response.data.total
-        const rest = total - ((indicator?.index ?? 0) + 1) * size
-        return createPageable(
-            response.data.content.map(createERC721TokenAsset) ?? EMPTY_LIST,
-            createIndicator(indicator),
-            rest > 0 ? createNextIndicator(indicator) : undefined,
-        )
+        const assetGroup = await fetchV2<UserAssetsGroup[]>(path, { erc_type: ErcType.ERC721 })
+        const assets = assetGroup?.flatMap((x) => x.assets.map(createERC721TokenAsset)) ?? []
+        return createPageable(assets, createIndicator(indicator))
     }
 
     async getAssetsByCollection(
@@ -194,7 +64,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {},
     ) {
         const index = indicator?.index ?? 0
-        const url = urlcat(NFTSCAN_BASE, '/nftscan/nftSearch', {
+        const url = urlcat(NFTSCAN_API, '/nftscan/nftSearch', {
             searchValue: address,
             pageIndex: index,
             pageSize: size,
@@ -241,8 +111,13 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         )
     }
 
+    private async getCollectionVerifiedStatus(address: string) {
+        const collection = await fetchV2<Collection>(urlcat('collections/:address', { address }))
+        return collection?.verified ?? false
+    }
+
     private async getNftPlatformInfo(address: string): Promise<NFTPlatformInfo> {
-        const url = urlcat(NFTSCAN_BASE, '/nftscan/getNftPlatformInfo', {
+        const url = urlcat(NFTSCAN_API, '/nftscan/getNftPlatformInfo', {
             keyword: address,
         })
         const response = await fetchFromNFTScan(url)
@@ -250,7 +125,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         return result.data
     }
     private async searchNftPlatformName(keyword: string): Promise<SearchNFTPlatformNameResult[]> {
-        const url = urlcat(NFTSCAN_BASE, '/nftscan/searchNftPlatformName', {
+        const url = urlcat(NFTSCAN_API, '/nftscan/searchNftPlatformName', {
             keyword,
         })
         const response = await fetchFromNFTScan(url)
@@ -259,7 +134,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     }
 
     private async getContractVolumeAndFloorByRange(contract: string, range: string): Promise<VolumeAndFloorRecord[]> {
-        const url = urlcat(NFTSCAN_BASE, '/nftscan/getContractVolumeAndFloorByRange', {
+        const url = urlcat(NFTSCAN_API, '/nftscan/getContractVolumeAndFloorByRange', {
             contract,
             range,
         })
