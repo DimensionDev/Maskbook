@@ -99,7 +99,7 @@ export async function fetch3BoxProfiles(addresses: string[]): Promise<Profile3Bo
                 ids: addresses,
             },
             name: true,
-            contract_address: true,
+            eth_address: true,
             image: true,
         },
     })
