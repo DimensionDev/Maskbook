@@ -4,7 +4,7 @@ import { MaskTextField as TextField } from '../../src/Components/TextField'
 
 const { meta, of } = story(TextField)
 export default meta({
-    title: 'Atoms/MaskTextField',
+    title: 'Components/MaskTextField',
     argTypes: MuiArgs.textField,
     parameters: {
         ...matrix<TextFieldProps>({

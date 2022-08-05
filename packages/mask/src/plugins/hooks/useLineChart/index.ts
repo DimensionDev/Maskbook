@@ -1,9 +1,10 @@
 import * as d3 from 'd3'
 import { useEffect, RefObject } from 'react'
 import stringify from 'json-stable-stringify'
-import type { Dimension } from './useDimension'
+import type { Dimension } from '../useDimension'
 import format from 'date-fns/format'
 import { alpha, useTheme } from '@mui/material'
+import { fixOverPosition } from './utils'
 
 export function useLineChart(
     svgRef: RefObject<SVGSVGElement>,
@@ -58,10 +59,13 @@ export function useLineChart(
             y: (y(max) ?? 0) - 16,
         }
 
+        const minFixedPosition = fixOverPosition(contentWidth, contentHeight, minPosition.x, minPosition.y, 40)
+        const maxFixedPosition = fixOverPosition(contentWidth, contentHeight, maxPosition.x, maxPosition.y, 40)
+
         graph
             .append('g')
             .append('text')
-            .attr('transform', `translate(${minPosition.x}, ${minPosition.y})`)
+            .attr('transform', `translate(${minFixedPosition.x}, ${minFixedPosition.y})`)
             .style('font-size', 14)
             .style('font-weight', 700)
             .style('font-family', 'Helvetica')
@@ -71,7 +75,7 @@ export function useLineChart(
         graph
             .append('g')
             .append('text')
-            .attr('transform', `translate(${maxPosition.x}, ${maxPosition.y})`)
+            .attr('transform', `translate(${maxFixedPosition.x}, ${maxFixedPosition.y})`)
             .style('font-size', 14)
             .style('font-weight', 700)
             .style('font-family', 'Helvetica')

@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useContainer } from 'unstated-next'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import { Add, Remove } from '@mui/icons-material'
 import { useAccount, useChainId, useProviderDescriptor } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, FormattedBalance, ImageIcon, InjectedDialog } from '@masknet/shared'
@@ -14,7 +14,6 @@ import { GasSettingBar } from '../../../Wallet/SNSAdaptor/GasSettingDialog/GasSe
 import { TokenPrice } from '../../../../components/shared/TokenPrice'
 import { Context } from '../../hooks/useContext'
 import { PluginWalletStatusBar } from '../../../../utils'
-import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../locales'
 
 const useStyles = makeStyles()((theme) => ({

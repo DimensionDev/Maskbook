@@ -92,6 +92,8 @@ export const searchFacebookSaveAvatarButtonSelector = () =>
 
 export const searchFacebookConfirmAvatarImageSelector = () =>
     querySelector('[role="dialog"] [role="slider"]').closest(7).querySelector('img')
+
+export const inpageAvatarSelector = () => querySelectorAll('[type="nested/pressable"]').closest<HTMLAnchorElement>(2)
 // #region
 
 export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>

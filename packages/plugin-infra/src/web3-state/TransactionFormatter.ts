@@ -10,13 +10,14 @@ export class TransactionFormatterState<ChainId, TransactionParameter, Transactio
 {
     constructor(context: Plugin.Shared.SharedContext) {}
 
-    async formatTransaction(chainId: ChainId, transaction: Transaction) {
-        const context = await this.createContext(chainId, transaction)
+    async formatTransaction(chainId: ChainId, transaction: Transaction, txHash?: string) {
+        const context = await this.createContext(chainId, transaction, txHash)
         return this.createDescriptor(chainId, transaction, context)
     }
     createContext(
         chainId: ChainId,
         transaction: Transaction,
+        txHash?: string,
     ): Promise<TransactionContext<ChainId, TransactionParameter>> {
         throw new Error('Method not implemented.')
     }

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ListItem, List, Typography, Link, Avatar } from '@mui/material'
 import { Icons } from '@masknet/icons'
+import { ActionButton } from '@masknet/theme'
 import type { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 import { useERC20TokenApproveCallback } from '@masknet/plugin-infra/web3-evm'
 import { useAccount, useWeb3State, useNetworkDescriptor, useWeb3Hub } from '@masknet/plugin-infra/web3'
@@ -11,7 +12,6 @@ import {
     FungibleTokenSpenderAuthorization,
 } from '@masknet/web3-shared-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../locales'
 import { useStyles } from './useStyles'
 import { ApprovalLoadingContent } from './ApprovalLoadingContent'

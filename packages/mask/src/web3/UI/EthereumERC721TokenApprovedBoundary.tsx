@@ -1,7 +1,6 @@
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../utils'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
-import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
+import { makeStyles, useStylesExtends, ActionButtonProps, ActionButton } from '@masknet/theme'
 import { useMemo } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'

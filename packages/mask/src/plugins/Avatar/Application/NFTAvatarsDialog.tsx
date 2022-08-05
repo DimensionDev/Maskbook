@@ -3,12 +3,13 @@ import { NFTListDialog } from './NFTListDialog'
 import { InjectedDialog } from '@masknet/shared'
 import { UploadAvatarDialog } from './UploadAvatarDialog'
 import type { BindingProof } from '@masknet/shared-base'
-import type { AllChainsNonFungibleToken, SelectTokenInfo } from '../types'
+import { AllChainsNonFungibleToken, PFP_TYPE, SelectTokenInfo } from '../types'
 import { PersonaPage } from './PersonaPage'
-import { DialogContent } from '@mui/material'
+import { DialogContent, Tab } from '@mui/material'
 import { useI18N } from '../locales/i18n_generated'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { TabContext } from '@mui/lab'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -65,36 +66,53 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
         props.onClose()
     }, [props.onClose])
 
+    const [currentTab, onChange, tabs] = useTabs(PFP_TYPE.PFP, PFP_TYPE.BACKGROUND)
     return (
-        <InjectedDialog
-            title={
-                step === CreateNFTAvatarStep.UploadAvatar
-                    ? t.application_edit_profile_dialog_title()
-                    : t.application_dialog_title()
-            }
-            isOnBack={step !== CreateNFTAvatarStep.Persona}
-            open={props.open}
-            onClose={onBack}>
-            <DialogContent className={classes.root}>
-                {step === CreateNFTAvatarStep.Persona ? (
-                    <PersonaPage onClose={onClose} onNext={onNext} onChange={onPersonaChange} />
-                ) : null}
-                {step === CreateNFTAvatarStep.NFTList ? (
-                    <NFTListDialog tokenInfo={tokenInfo} wallets={wallets} onNext={onNext} onSelected={onSelected} />
-                ) : null}
-                {step === CreateNFTAvatarStep.UploadAvatar ? (
-                    <UploadAvatarDialog
-                        proof={proof}
-                        isBindAccount={wallets?.some((x) => isSameAddress(x.identity, selectedTokenInfo?.account))}
-                        account={selectedTokenInfo?.account}
-                        image={selectedTokenInfo?.image}
-                        token={selectedTokenInfo?.token}
-                        pluginId={selectedTokenInfo?.pluginId}
-                        onBack={onBack}
-                        onClose={onClose}
-                    />
-                ) : null}
-            </DialogContent>
-        </InjectedDialog>
+        <TabContext value={currentTab}>
+            <InjectedDialog
+                title={
+                    step === CreateNFTAvatarStep.UploadAvatar
+                        ? t.application_edit_profile_dialog_title()
+                        : t.application_dialog_title()
+                }
+                titleTabs={
+                    step === CreateNFTAvatarStep.NFTList ? (
+                        <MaskTabList variant="base" onChange={onChange} aria-label="Avatar">
+                            <Tab label={t.pfp_title()} value={tabs.pfp} />
+                            <Tab label={t.background_title()} value={tabs.background} />
+                        </MaskTabList>
+                    ) : null
+                }
+                isOnBack={step !== CreateNFTAvatarStep.Persona}
+                open={props.open}
+                onClose={onBack}>
+                <DialogContent className={classes.root}>
+                    {step === CreateNFTAvatarStep.Persona ? (
+                        <PersonaPage onClose={onClose} onNext={onNext} onChange={onPersonaChange} />
+                    ) : null}
+                    {step === CreateNFTAvatarStep.NFTList ? (
+                        <NFTListDialog
+                            tokenInfo={tokenInfo}
+                            wallets={wallets}
+                            onNext={onNext}
+                            onSelected={onSelected}
+                            pfpType={currentTab}
+                        />
+                    ) : null}
+                    {step === CreateNFTAvatarStep.UploadAvatar ? (
+                        <UploadAvatarDialog
+                            proof={proof}
+                            isBindAccount={wallets?.some((x) => isSameAddress(x.identity, selectedTokenInfo?.account))}
+                            account={selectedTokenInfo?.account}
+                            image={selectedTokenInfo?.image}
+                            token={selectedTokenInfo?.token}
+                            pluginId={selectedTokenInfo?.pluginId}
+                            onBack={onBack}
+                            onClose={onClose}
+                        />
+                    ) : null}
+                </DialogContent>
+            </InjectedDialog>
+        </TabContext>
     )
 }

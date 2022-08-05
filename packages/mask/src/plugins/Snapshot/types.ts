@@ -129,7 +129,7 @@ export interface ProposalResult {
  * https://3boxlabs.com/
  */
 export interface Profile3Box {
-    contract_address: string
+    eth_address: string
     image: string | null
     name: string | null
 }

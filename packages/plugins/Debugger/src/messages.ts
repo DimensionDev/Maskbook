@@ -1,7 +1,7 @@
 import { createPluginMessage, PluginMessageEmitter, createPluginRPC } from '@masknet/plugin-infra'
 import { PLUGIN_ID } from './constants'
 
-type ConsoleDialogUpdated = {
+type DialogUpdated = {
     open: boolean
 }
 
@@ -9,7 +9,17 @@ interface DebuggerMessages {
     /**
      * Open console dialog
      */
-    consoleDialogUpdated: ConsoleDialogUpdated
+    consoleDialogUpdated: DialogUpdated
+
+    /**
+     * Open connection dialog
+     */
+    connectionDialogUpdated: DialogUpdated
+
+    /**
+     * Open hub dialog
+     */
+    hubDialogUpdated: DialogUpdated
 
     rpc: unknown
 }
