@@ -52,16 +52,16 @@ export const personalHomepage = createNetworkSettings('personalHomepage', '')
  * @deprecated DO NOT EXPORT THIS
  */
 // This was "currentPluginEnabled" before, but we used it to represent minimal mode now to make the settings be able to migrate.
-const pluginMinimalMode: NetworkSettings<boolean | 'enabled'> = createNetworkSettings('pluginsEnabled', true)
+const pluginMinimalModeReversed: NetworkSettings<boolean | 'enabled'> = createNetworkSettings('pluginsEnabled', true)
 export function getCurrentPluginMinimalMode(id: string) {
-    if (pluginMinimalMode['plugin:' + id].value === 'enabled') return BooleanPreference.True
-    if (pluginMinimalMode['plugin:' + id].value === false) return BooleanPreference.False
+    if (pluginMinimalModeReversed['plugin:' + id].value === 'enabled') return BooleanPreference.False
+    if (pluginMinimalModeReversed['plugin:' + id].value === false) return BooleanPreference.True
     return BooleanPreference.Default
 }
 export function setCurrentPluginMinimalMode(id: string, value: BooleanPreference) {
-    if (value === BooleanPreference.Default) pluginMinimalMode['plugin:' + id].value = true
-    else if (value === BooleanPreference.True) pluginMinimalMode['plugin:' + id].value = 'enabled'
-    else if (value === BooleanPreference.False) pluginMinimalMode['plugin:' + id].value = false
+    if (value === BooleanPreference.Default) pluginMinimalModeReversed['plugin:' + id].value = true
+    else if (value === BooleanPreference.True) pluginMinimalModeReversed['plugin:' + id].value = false
+    else if (value === BooleanPreference.False) pluginMinimalModeReversed['plugin:' + id].value = 'enabled'
 }
 /** @deprecated No use site. */
 export const launchPageSettings = createGlobalSettings<LaunchPage>('launchPage', LaunchPage.dashboard)
