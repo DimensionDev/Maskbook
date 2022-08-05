@@ -1,4 +1,4 @@
-import type { PersonaIdentifier , ProfileIdentifier } from '../Identifier'
+import type { PersonaIdentifier, ProfileIdentifier } from '../Identifier'
 import type { PersonaInformation, ProfileInformation } from '../Persona/type'
 
 export function formatPersonaFingerprint(fingerprint: string, size = 0) {
