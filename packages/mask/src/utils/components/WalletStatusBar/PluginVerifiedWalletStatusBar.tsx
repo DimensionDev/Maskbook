@@ -98,12 +98,10 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                 providerIcon: account ? providerDescriptor?.icon : undefined,
                 iconFilterColor: account ? providerDescriptor?.iconFilterColor : '',
                 formattedAddress: Others?.formatAddress(account || (defaultVerifiedWallet?.identity ?? ''), 4),
-                addressLink:
-                    account ??
-                    Others?.explorerResolver.addressLink?.(
-                        account ? chainId : defaultChainId,
-                        account || (defaultVerifiedWallet?.identity ?? ''),
-                    ),
+                addressLink: Others?.explorerResolver.addressLink?.(
+                    account ? chainId : defaultChainId,
+                    account || (defaultVerifiedWallet?.identity ?? ''),
+                ),
                 address: account || defaultVerifiedWallet?.identity,
                 verified: account ? isVerifiedAccount : true,
             }),
