@@ -5,11 +5,13 @@ import {
     appearanceSettings,
     currentPersonaIdentifier,
     languageSettings,
-    currentPluginMinimalModeNOTEnabled,
     pluginIDSettings,
+    getCurrentPluginMinimalMode,
+    setCurrentPluginMinimalMode,
 } from '../../../shared/legacy-settings/settings'
 import { MaskMessages } from '../../../shared/messages'
 import { queryPersonasDB } from '../../../background/database/persona/db'
+import { BooleanPreference } from '@masknet/plugin-infra'
 
 function create<T>(settings: InternalSettings<T>) {
     async function get() {
@@ -41,11 +43,11 @@ export async function setCurrentPersonaIdentifier(x: PersonaIdentifier) {
     await currentPersonaIdentifier.readyPromise
     currentPersonaIdentifier.value = x.toText()
 }
-export async function getPluginMinimalModeEnabled(id: string) {
-    return !currentPluginMinimalModeNOTEnabled['plugin:' + id].value
+export async function getPluginMinimalModeEnabled(id: string): Promise<BooleanPreference> {
+    return getCurrentPluginMinimalMode(id)
 }
 export async function setPluginMinimalModeEnabled(id: string, enabled: boolean) {
-    currentPluginMinimalModeNOTEnabled['plugin:' + id].value = !enabled
+    setCurrentPluginMinimalMode(id, enabled ? BooleanPreference.True : BooleanPreference.False)
 
     MaskMessages.events.pluginMinimalModeChanged.sendToAll([id, enabled])
 }

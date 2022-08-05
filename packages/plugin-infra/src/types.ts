@@ -243,6 +243,10 @@ export namespace Plugin.Shared {
          * This does not affect if the plugin enable or not.
          */
         experimentalMark?: boolean
+        /**
+         * If the plugin is in the minimal mode by default.
+         */
+        inMinimalModeByDefault?: boolean
         /** i18n resources of this plugin */
         i18n?: I18NResource
         /** Introduce sub-network information. */
@@ -1065,7 +1069,13 @@ export namespace Plugin.__Host {
         signal?: AbortSignal
     }
     export interface EnabledStatusReporter {
-        isEnabled(id: string): boolean | Promise<boolean>
+        isEnabled(id: string): BooleanPreference | Promise<BooleanPreference>
         events: Emitter<{ enabled: [id: string]; disabled: [id: string] }>
     }
+}
+
+export enum BooleanPreference {
+    False = 0,
+    Default = 1,
+    True = 2,
 }
