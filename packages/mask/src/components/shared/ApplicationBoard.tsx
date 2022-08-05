@@ -303,7 +303,6 @@ const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContex
 
 function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
     const personaConnectStatus = useCurrentPersonaConnectStatus()
-    console.log(personaConnectStatus)
     const nextIDConnectStatus = useNextIDConnectStatus(true)
 
     const {

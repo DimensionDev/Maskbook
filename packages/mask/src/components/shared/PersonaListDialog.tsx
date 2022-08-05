@@ -4,6 +4,7 @@ import {
     BindingProof,
     EMPTY_LIST,
     formatPersonaFingerprint,
+    isSamePersona,
     NextIDPlatform,
     PersonaIdentifier,
     PersonaInformation,
@@ -11,7 +12,6 @@ import {
 } from '@masknet/shared-base'
 import { useAsync, useAsyncFn, useCopyToClipboard } from 'react-use'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
-// TODO: move to share
 import { useConnectedPersonas } from '../DataSource/useConnectedPersonas'
 import Services from '../../extension/service'
 import { InjectedDialog } from '@masknet/shared'
@@ -82,13 +82,6 @@ interface PersonaNextIDMixture {
     persona: PersonaInformation
     proof: BindingProof[]
     avatar?: string
-}
-
-function isSamePersona(p1?: PersonaIdentifier | PersonaInformation, p2?: PersonaIdentifier | PersonaInformation) {
-    if (!p1 || !p2) return false
-    const p1Identifier = 'toText' in p1 ? p1 : p1.identifier
-    const p2Identifier = 'toText' in p2 ? p2 : p2.identifier
-    return p1Identifier.toText() === p2Identifier.toText()
 }
 
 export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {

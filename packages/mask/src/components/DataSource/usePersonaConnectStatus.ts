@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import stringify from 'json-stable-stringify'
-import { DashboardRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, isSameProfile } from '@masknet/shared-base'
 import Services from '../../extension/service'
 import { currentPersonaIdentifier, currentSetupGuideStatus } from '../../../shared/legacy-settings/settings'
 import { activatedSocialNetworkUI } from '../../social-network'
@@ -41,9 +41,12 @@ export function useCurrentPersonaConnectStatus() {
     const personas = usePersonasFromDB()
     const lastRecognized = useLastRecognizedIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
+
     return useMemo(() => {
         const currentPersona = personas.find((x) => x.identifier.toText() === currentIdentifier)
-        const currentProfile = currentPersona?.linkedProfiles.find((x) => x.identifier === lastRecognized.identifier)
+        const currentProfile = currentPersona?.linkedProfiles.find((x) =>
+            isSameProfile(x.identifier, lastRecognized.identifier),
+        )
 
         return {
             action: !personas.length ? createPersona : !currentProfile ? connectPersona : undefined,
