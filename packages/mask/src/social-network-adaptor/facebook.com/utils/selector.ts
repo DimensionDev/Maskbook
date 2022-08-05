@@ -70,6 +70,13 @@ export const searchFacebookAvatarContainerSelector = () =>
 export const searchFacebookProfileSettingButtonSelector = () =>
     querySelector('[role="button"] [role="img"]').closest(10).querySelector('input[type="file"] ~ div').closest<E>(2)
 
+export const searchFacebookProfileCoverSelector = () =>
+    querySelector('[role="button"] [role="img"]')
+        .closest(10)
+        .querySelector('input[type="file"] ~ div')
+        .closest<E>(6)
+        .querySelector('div')
+
 export const searchFacebookEditProfileSelector = () =>
     querySelector('[role="main"] [role="button"] [role="img"]')
         .closest(1)

@@ -119,7 +119,6 @@
     "wallet_rename": "월렛 이름 바꾸기",
     "wallet_loading_nft_contract": "NFT 컨트렉트 로딩...",
     "wallet_search_contract_no_result": "검색 포준에 맞추는 결과나 컨트렉트 주소가 없습니다.",
-    "wallet_search_no_result": "결과 없음.",
     "wallet_airdrop_nft_unclaimed_title": "수령하지 않는 NFT 에어드랍:",
     "plugin_airdrop_nft_start_time": "시작 시간: {{date}}",
     "plugin_airdrop_nft_end_time": "종료 시간: {{date}}",
