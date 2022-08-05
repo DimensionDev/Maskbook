@@ -8,6 +8,8 @@ import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { useRemoteControlledDialog } from '../../../../shared-base-ui/src/hooks'
 import { PluginDebuggerMessages } from '../messages'
+import { ConnectionDialog } from './components/ConnectionDialog'
+import { HubDialog } from './components/HubDialog'
 import { ProfileCover } from './components/ProfileCover'
 import { AvatarDecorator } from './components/AvatarDecorator'
 
@@ -16,7 +18,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal) {},
     ApplicationEntries: [
         {
-            ApplicationEntryID: PLUGIN_ID,
+            ApplicationEntryID: `${PLUGIN_ID}_Debugger`,
             RenderEntryComponent() {
                 const { openDialog } = useRemoteControlledDialog(PluginDebuggerMessages.consoleDialogUpdated)
                 return (
@@ -36,11 +38,55 @@ const sns: Plugin.SNSAdaptor.Definition = {
             icon: <Icons.MaskBlue size={36} />,
             name: PLUGIN_NAME,
         },
+        {
+            ApplicationEntryID: `${PLUGIN_ID}_Hub`,
+            RenderEntryComponent() {
+                const { openDialog } = useRemoteControlledDialog(PluginDebuggerMessages.hubDialogUpdated)
+                return (
+                    <ApplicationEntry
+                        title="Hub"
+                        disabled={false}
+                        iconFilterColor=""
+                        icon={<Icons.MaskBlue size={36} />}
+                        onClick={() => {
+                            openDialog()
+                        }}
+                    />
+                )
+            },
+            appBoardSortingDefaultPriority: Number.MAX_SAFE_INTEGER,
+            marketListSortingPriority: Number.MAX_SAFE_INTEGER,
+            icon: <Icons.MaskBlue size={36} />,
+            name: PLUGIN_NAME,
+        },
+        {
+            ApplicationEntryID: `${PLUGIN_ID}_Connection`,
+            RenderEntryComponent() {
+                const { openDialog } = useRemoteControlledDialog(PluginDebuggerMessages.connectionDialogUpdated)
+                return (
+                    <ApplicationEntry
+                        title="Connection"
+                        disabled={false}
+                        iconFilterColor=""
+                        icon={<Icons.MaskBlue size={36} />}
+                        onClick={() => {
+                            openDialog()
+                        }}
+                    />
+                )
+            },
+            appBoardSortingDefaultPriority: Number.MAX_SAFE_INTEGER,
+            marketListSortingPriority: Number.MAX_SAFE_INTEGER,
+            icon: <Icons.MaskBlue size={36} />,
+            name: PLUGIN_NAME,
+        },
     ],
     GlobalInjection() {
         return (
             <>
                 <ConsoleDialog />
+                <ConnectionDialog />
+                <HubDialog />
             </>
         )
     },
