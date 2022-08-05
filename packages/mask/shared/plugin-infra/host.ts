@@ -1,6 +1,6 @@
 // All plugin manager need to call createPluginHost so let's register plugins implicitly.
 import './register'
-import type { Plugin } from '@masknet/plugin-infra'
+import type { BooleanPreference, Plugin } from '@masknet/plugin-infra'
 import { Emitter } from '@servie/events'
 import { MaskMessages } from '../../shared/messages'
 import { createI18NBundle, createSubscriptionFromValueRef, i18NextInstance } from '@masknet/shared-base'
@@ -36,7 +36,7 @@ export function createSharedContext(pluginID: string, signal: AbortSignal): Plug
 export function createPluginHost<Context>(
     signal: AbortSignal | undefined,
     createContext: (plugin: string, signal: AbortSignal) => Context,
-    getPluginMinimalModeEnabled: (id: string) => Promise<boolean>,
+    getPluginMinimalModeEnabled: (id: string) => Promise<BooleanPreference>,
 ): Plugin.__Host.Host<Context> {
     const minimalMode: Plugin.__Host.EnabledStatusReporter = {
         isEnabled: getPluginMinimalModeEnabled,
