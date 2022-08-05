@@ -10,6 +10,7 @@ import {
     createComplexNetworkSettings,
     createComplexGlobalSettings,
 } from './createSettings'
+import { PluginId } from '@masknet/plugin-infra'
 
 export const appearanceSettings = createGlobalSettings<Appearance>('appearance', Appearance.default)
 export const languageSettings = createGlobalSettings<LanguageOptions>('language', LanguageOptions.__auto__)
@@ -51,6 +52,10 @@ export const personalHomepage = createNetworkSettings('personalHomepage', '')
  */
 // This was "currentPluginEnabled" before, but we used it to represent minimal mode now to make the settings be able to migrate.
 export const currentPluginMinimalModeNOTEnabled = createNetworkSettings('pluginsEnabled', true)
+
+// TODO: Remove this when the infra supports disabling a plugin by default
+currentPluginMinimalModeNOTEnabled[`plugin:${PluginId.ScamSniffer}`].value = false
+
 export const launchPageSettings = createGlobalSettings<LaunchPage>('launchPage', LaunchPage.dashboard)
 export const currentPersonaIdentifier = createGlobalSettings('currentPersonaIdentifier', '')
 
