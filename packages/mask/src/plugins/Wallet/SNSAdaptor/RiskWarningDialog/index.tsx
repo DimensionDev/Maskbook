@@ -23,7 +23,7 @@ const useStyles = makeStyles()((theme) => ({
         overflowY: 'hidden',
     },
     buttons: {
-        padding: theme.spacing(2),
+        padding: `${theme.spacing(2)} !important`,
         boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
     },
     button: {

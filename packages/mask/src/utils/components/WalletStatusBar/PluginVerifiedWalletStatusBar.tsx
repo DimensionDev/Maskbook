@@ -98,10 +98,12 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                 providerIcon: account ? providerDescriptor?.icon : undefined,
                 iconFilterColor: account ? providerDescriptor?.iconFilterColor : '',
                 formattedAddress: Others?.formatAddress(account || (defaultVerifiedWallet?.identity ?? ''), 4),
-                addressLink: Others?.explorerResolver.addressLink?.(
-                    account ? chainId : defaultChainId,
-                    account || (defaultVerifiedWallet?.identity ?? ''),
-                ),
+                addressLink:
+                    account ??
+                    Others?.explorerResolver.addressLink?.(
+                        account ? chainId : defaultChainId,
+                        account || (defaultVerifiedWallet?.identity ?? ''),
+                    ),
                 address: account || defaultVerifiedWallet?.identity,
                 verified: account ? isVerifiedAccount : true,
             }),
@@ -174,7 +176,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
             setDescriptionProps(description)
         }, [description])
 
-        if (!account && !verifiedWallets) {
+        if (!account && verifiedWallets.length === 0) {
             return (
                 <Box className={cx(classes.root, className)}>
                     <Button fullWidth onClick={openSelectProviderDialog}>

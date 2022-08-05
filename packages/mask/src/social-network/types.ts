@@ -102,6 +102,8 @@ export namespace SocialNetworkUI {
             searchResult?(signal: AbortSignal): void
             /** Inject UI to the profile tab */
             profileTab?(signal: AbortSignal): void
+            /** Inject UI to the profile cover */
+            profileCover?(signal: AbortSignal): void
             /** Inject UI to the profile page */
             profileTabContent?(signal: AbortSignal): void
             setupWizard?(signal: AbortSignal, for_: PersonaIdentifier): void

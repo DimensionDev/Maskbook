@@ -12,6 +12,9 @@
         "Arbitrum": "arbitrum-assets",
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai-assets",
+        "Optimism": "optimism-assets",
+        "Optimism_Kovan": "",
+        "Optimism_Goerli": "",
         "Avalanche": "avalanche-assets",
         "Avalanche_Fuji": "",
         "Celo": "celo-assets",
@@ -20,7 +23,8 @@
         "Aurora_Testnet": "",
         "Conflux": "",
         "Harmony": "harmony-assets",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": "astar-assets"
     },
     "TRANSACTIONS_SCOPE_NAME": {
         "Mainnet": "transactions",
@@ -35,6 +39,9 @@
         "Arbitrum": "arbitrum-transactions",
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai-transactions",
+        "Optimism": "Optimism-transactions",
+        "Optimism_Kovan": "",
+        "Optimism_Goerli": "",
         "Avalanche": "avalanche-transactions",
         "Avalanche_Fuji": "",
         "Celo": "celo-transactions",
@@ -43,6 +50,7 @@
         "Aurora_Testnet": "",
         "Conflux": "",
         "Harmony": "harmony-transactions",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": "astar-transactions"
     }
 }

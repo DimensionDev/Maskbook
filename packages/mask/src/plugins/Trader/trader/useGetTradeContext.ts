@@ -25,8 +25,16 @@ import {
     OPENSWAP_CUSTOM_BASES,
     MDEX_BASE_AGAINST_TOKENS,
     MDEX_CUSTOM_BASES,
+    ARTHSWAP_BASE_AGAINST_TOKENS,
+    ARTHSWAP_CUSTOM_BASES,
+    VERSA_BASE_AGAINST_TOKENS,
+    VERSA_CUSTOM_BASES,
+    ASTAREXCHANGE_BASE_AGAINST_TOKENS,
+    ASTAREXCHANGE_CUSTOM_BASES,
     DEFIKINGDOMS_BASE_AGAINST_TOKENS,
     DEFIKINGDOMS_CUSTOM_BASES,
+    YUMISWAP_BASE_AGAINST_TOKENS,
+    YUMISWAP_CUSTOM_BASES,
 } from '../constants'
 import { unreachable } from '@dimensiondev/kit'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
@@ -165,6 +173,58 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     AGAINST_TOKENS: MDEX_BASE_AGAINST_TOKENS,
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: MDEX_CUSTOM_BASES,
+                }
+            case TradeProvider.ARTHSWAP:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.ARTHSWAP_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.ARTHSWAP_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.ARTHSWAP_ROUTER_ADDRESS,
+                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.ARTHSWAP_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.ARTHSWAP_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: ARTHSWAP_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: ARTHSWAP_CUSTOM_BASES,
+                }
+            case TradeProvider.VERSA:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.VERSA_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.VERSA_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.VERSA_ROUTER_ADDRESS,
+                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.VERSA_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.VERSA_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: VERSA_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: VERSA_CUSTOM_BASES,
+                }
+            case TradeProvider.ASTAREXCHANGE:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.ASTAREXCHANGE_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.ASTAREXCHANGE_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.ASTAREXCHANGE_ROUTER_ADDRESS,
+                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.ASTAREXCHANGE_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.ASTAREXCHANGE_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: ASTAREXCHANGE_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: ASTAREXCHANGE_CUSTOM_BASES,
+                }
+            case TradeProvider.YUMISWAP:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: DEX_TRADE.YUMISWAP_THEGRAPH,
+                    INIT_CODE_HASH: DEX_TRADE.YUMISWAP_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: DEX_TRADE.YUMISWAP_ROUTER_ADDRESS,
+                    SPENDER_CONTRACT_ADDRESS: DEX_TRADE.YUMISWAP_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: DEX_TRADE.YUMISWAP_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: YUMISWAP_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: YUMISWAP_CUSTOM_BASES,
                 }
             case TradeProvider.VENOMSWAP:
                 return {

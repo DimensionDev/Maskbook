@@ -26,7 +26,7 @@ export function useSocialAddressListAll(
 
     return useAsyncRetry(async () => {
         const userId = identity?.identifier?.userId
-        if (!userId || userId === '$unknown' || !identity?.publicKey) return EMPTY_LIST
+        if (!userId || userId === '$unknown') return EMPTY_LIST
         let cached = addressCache.get(userId)
 
         if (!cached) {
@@ -41,5 +41,5 @@ export function useSocialAddressListAll(
         const listOfAddress = allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
         const sorted = sorter && listOfAddress.length ? listOfAddress.sort(sorter) : listOfAddress
         return includes?.length ? sorted.filter((x) => includes.includes(x.type)) : sorted
-    }, [identity?.publicKey, sorter, includes?.join(), EVM_IdentityService?.lookup, SolanaIdentityService?.lookup])
+    }, [identity, sorter, includes?.join(), EVM_IdentityService?.lookup, SolanaIdentityService?.lookup])
 }

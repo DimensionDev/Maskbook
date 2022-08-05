@@ -26,9 +26,10 @@ export function getNativeTokenLabel(networkType: NetworkType) {
         case NetworkType.Fuse:
         case NetworkType.Metis:
         case NetworkType.Avalanche:
-        case NetworkType.Optimistic:
+        case NetworkType.Optimism:
         case NetworkType.Harmony:
         case NetworkType.Conflux:
+        case NetworkType.Astar:
             return NATIVE_TOKEN_ADDRESS
         default:
             safeUnreachable(networkType)

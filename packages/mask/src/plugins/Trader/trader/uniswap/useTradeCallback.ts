@@ -44,7 +44,6 @@ export function useTradeCallback(
         if (!tradeParameters.length || !connection) {
             return
         }
-        const web3 = await connection.getWeb3()
         // step 1: estimate each trade parameter
         const estimatedCalls: SwapCallEstimate[] = await Promise.all(
             tradeParameters.map(async (x) => {
@@ -64,30 +63,28 @@ export function useTradeCallback(
                         gasEstimate: ZERO,
                     }
                 }
-                return connection
-                    .estimateTransaction(config)
-                    .then((gasEstimate) => {
-                        return {
-                            call: x,
-                            gasEstimate: new BigNumber(gasEstimate),
-                        }
-                    })
-                    .catch(() => {
-                        return web3.eth
-                            .call(config)
-                            .then(() => {
-                                return {
-                                    call: x,
-                                    error: new Error('Gas estimate failed.'),
-                                }
-                            })
-                            .catch((error) => {
-                                return {
-                                    call: x,
-                                    error: new Error(swapErrorToUserReadableMessage(error)),
-                                }
-                            })
-                    })
+                try {
+                    const gas = await connection.estimateTransaction?.(config)
+                    return {
+                        call: x,
+                        gasEstimate: new BigNumber(gas ?? 0),
+                    }
+                } catch (error) {
+                    return connection
+                        .callTransaction(config)
+                        .then(() => {
+                            return {
+                                call: x,
+                                error: new Error('Gas estimate failed'),
+                            }
+                        })
+                        .catch((error) => {
+                            return {
+                                call: x,
+                                error: new Error(swapErrorToUserReadableMessage(error)),
+                            }
+                        })
+                }
             }),
         )
 

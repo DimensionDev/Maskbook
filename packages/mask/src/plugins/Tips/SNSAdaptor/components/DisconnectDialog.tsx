@@ -11,6 +11,9 @@ import { InjectedDialog } from '@masknet/shared'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => ({
+    paper: {
+        minHeight: 'unset',
+    },
     content: {
         width: '320px',
         position: 'fixed',
@@ -88,7 +91,11 @@ export const DisconnectWalletDialog = memo<DisconnectWalletDialogProps>(
         }, [onConfirmDisconnect, address])
 
         return (
-            <InjectedDialog open={open}>
+            <InjectedDialog
+                classes={{
+                    paper: classes.paper,
+                }}
+                open={open}>
                 <DialogContent className={classes.content}>
                     <Typography className={classes.title}>{t.tip_disconnect_dialog_title()}</Typography>
                     <Typography>
