@@ -11,7 +11,7 @@ export function useConnectedPersonas() {
         const allPersonaIdentifiers = personasInDB.map((x) => x.identifier)
 
         const avatars = await Services.Identity.getPersonaAvatars(allPersonaIdentifiers)
-        const allNextIDBinds = await NextIDProof.queryExistedBindingByPlatform(
+        const allNextIDBindings = await NextIDProof.queryExistedBindingByPlatform(
             NextIDPlatform.NextID,
             allPersonaHexIdentifiers.join(','),
         )
@@ -20,7 +20,7 @@ export function useConnectedPersonas() {
             return {
                 persona: x,
                 proof:
-                    allNextIDBinds
+                    allNextIDBindings
                         .find((p) => p.persona.toLowerCase() === x.identifier.publicKeyAsHex.toLowerCase())
                         ?.proofs.filter((x) => x.is_valid) ?? EMPTY_LIST,
                 avatar: avatars.get(x.identifier),

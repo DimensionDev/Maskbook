@@ -13,55 +13,58 @@ export function useNextIDVerify() {
     const postMessage = activatedSocialNetworkUI.automation?.nativeCompositionDialog?.appendText
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
 
-    return useAsyncFn(async (persona?: PersonaInformation, username?: string) => {
-        if (!platform || !persona || !username) return
+    return useAsyncFn(
+        async (persona?: PersonaInformation, username?: string) => {
+            if (!platform || !persona || !username) return
 
-        const payload = await NextIDProof.createPersonaPayload(
-            persona.identifier.publicKeyAsHex,
-            NextIDAction.Create,
-            username,
-            platform,
-            languageSettings.value ?? 'default',
-        )
-        if (!payload) throw new Error('Failed to create persona payload.')
-        const signResult = await Services.Identity.generateSignResult(persona.identifier, payload.signPayload)
-        if (!signResult) throw new Error('Failed to sign by persona.')
+            const payload = await NextIDProof.createPersonaPayload(
+                persona.identifier.publicKeyAsHex,
+                NextIDAction.Create,
+                username,
+                platform,
+                languageSettings.value ?? 'default',
+            )
+            if (!payload) throw new Error('Failed to create persona payload.')
+            const signResult = await Services.Identity.generateSignResult(persona.identifier, payload.signPayload)
+            if (!signResult) throw new Error('Failed to sign by persona.')
 
-        const signature = signResult.signature.signature
-        const postContent = payload.postContent.replace('%SIG_BASE64%', toBase64(fromHex(signature)))
-        postMessage?.(postContent, { recover: false })
+            const signature = signResult.signature.signature
+            const postContent = payload.postContent.replace('%SIG_BASE64%', toBase64(fromHex(signature)))
+            postMessage?.(postContent, { recover: false })
 
-        const waitingPost = new Promise<void>((resolve, reject) => {
-            verifyPostCollectTimer.current = setInterval(async () => {
-                const post = collectVerificationPost?.(postContent)
-                if (post && persona.identifier.publicKeyAsHex) {
+            await new Promise<void>((resolve, reject) => {
+                verifyPostCollectTimer.current = setInterval(async () => {
+                    const post = collectVerificationPost?.(postContent)
+                    if (post && persona.identifier.publicKeyAsHex) {
+                        clearInterval(verifyPostCollectTimer.current!)
+                        await NextIDProof.bindProof(
+                            payload.uuid,
+                            persona.identifier.publicKeyAsHex,
+                            NextIDAction.Create,
+                            platform,
+                            username,
+                            payload.createdAt,
+                            {
+                                signature,
+                                proofLocation: post.postId,
+                            },
+                        )
+                        resolve()
+                    }
+                }, 1000)
+
+                setTimeout(() => {
                     clearInterval(verifyPostCollectTimer.current!)
-                    await NextIDProof.bindProof(
-                        payload.uuid,
-                        persona.identifier.publicKeyAsHex,
-                        NextIDAction.Create,
-                        platform,
-                        username,
-                        payload.createdAt,
-                        {
-                            signature,
-                            proofLocation: post.postId,
-                        },
-                    )
-                    resolve()
-                }
-            }, 1000)
+                    // reject({ message: t('setup_guide_verify_post_not_found') })
+                    reject()
+                }, 1000 * 20)
+            })
 
-            setTimeout(() => {
-                clearInterval(verifyPostCollectTimer.current!)
-                // reject({ message: t('setup_guide_verify_post_not_found') })
-                reject()
-            }, 1000 * 20)
-        })
+            const isBound = await NextIDProof.queryIsBound(persona.identifier.publicKeyAsHex, platform, username)
+            if (!isBound) throw new Error('Failed to verify.')
 
-        await waitingPost
-        const isBound = await NextIDProof.queryIsBound(persona.identifier.publicKeyAsHex, platform, username)
-        if (!isBound) throw new Error('Failed to verify.')
-        MaskMessages.events.ownProofChanged.sendToAll(undefined)
-    }, [])
+            MaskMessages.events.ownProofChanged.sendToAll(undefined)
+        },
+        [postMessage, platform],
+    )
 }
