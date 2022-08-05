@@ -22,3 +22,6 @@ export enum Application_NFT_LIST_PAGE {
 }
 
 export const SUPPORTED_CHAIN_IDS: ChainId[] = [ChainId.Mainnet, ChainId.Matic]
+
+export const mask_avatar_dark = new URL('./assets/mask.dark.svg', import.meta.url)
+export const mask_avatar_light = new URL('./assets/mask.light.svg', import.meta.url)

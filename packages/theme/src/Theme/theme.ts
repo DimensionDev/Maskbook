@@ -1,40 +1,93 @@
-import { createTheme, PaletteMode, ThemeOptions } from '@mui/material'
-import * as Changes from './changes'
-import * as Components from './component-changes'
-import { merge } from 'lodash-unified'
-import type { PaletteOptions } from '@mui/material/styles/createPalette'
-import { DarkColor, LightColor, Color } from '../CSSVariables'
 import { MaskColors } from './colors'
+import type { PaletteMode, ThemeOptions } from '@mui/material'
+import { createTheme } from '@mui/material'
+import { merge } from 'lodash-unified'
+import * as Components from './component-changes'
+import { grey } from '@mui/material/colors'
 
-/**
- * TODO: Remove this and css color var after the dashboard be removed.
- */
-const color = (mode: PaletteMode, color: Color): PaletteOptions => ({
-    mode,
-    primary: { main: color.primary, contrastText: color.primaryContrastText },
-    secondary: { main: color.primary, contrastText: color.primaryContrastText }, // Yes, not a typo, it's primary
-    background: { paper: color.primaryBackground, default: color.secondaryBackground },
-    error: { main: color.redMain, contrastText: color.redContrastText },
-    success: { main: color.greenMain },
-    warning: { main: color.orangeMain },
-    divider: color.divider,
-    text: { primary: color.textPrimary, secondary: color.textSecondary },
-})
+function getFontFamily(monospace?: boolean) {
+    // We want to look native.
+    // Windows has no CJK sans monospace. Accommodate that.
+    // We only use it for fingerprints anyway so CJK coverage ain't a problem... yet.
+    const monofont = navigator.platform.startsWith('Win') ? 'Consolas, monospace' : 'monospace'
+    // https://caniuse.com/font-family-system-ui
+    // Firefox does NOT support yet it in any form on Windows, but tests indicate that it agrees with Edge in using the UI font for sans-serif:
+    // Microsoft YaHei on zh-Hans-CN.
+    return !monospace ? '-apple-system, system-ui, sans-serif' : monofont
+}
 
 function MaskTheme(mode: PaletteMode) {
-    const colors = mode === 'dark' ? DarkColor : LightColor
     const maskColors = MaskColors[mode]
-
     const theme = merge(
-        { palette: { ...color(mode, colors), maskColor: maskColors.maskColor } } as ThemeOptions,
-        ...Object.values(Changes).map(applyColors),
+        {
+            palette: {
+                ...maskColors,
+                primary: { main: '#1c68f3' },
+                text: {
+                    ...maskColors.text,
+                    hint: 'rgba(0, 0, 0, 0.38)',
+                },
+            },
+            typography: {
+                fontFamily: getFontFamily(),
+            },
+            breakpoints: {
+                values: {
+                    xs: 0,
+                    sm: 600,
+                    md: 1112,
+                    lg: 1280,
+                    xl: 1920,
+                },
+            },
+            components: {
+                MuiLink: { defaultProps: { underline: 'hover' } },
+                MuiTab: {
+                    styleOverrides: {
+                        root: {
+                            textTransform: 'unset',
+                            padding: '0',
+                            // up-sm
+                            '@media screen and (min-width: 600px)': {
+                                minWidth: 160,
+                            },
+                        },
+                    },
+                },
+                MuiDialog: {
+                    styleOverrides: {
+                        paper: {
+                            borderRadius: '12px',
+                        },
+                    },
+                },
+            },
+        },
+        mode === 'dark'
+            ? {
+                  palette: {
+                      mode: 'dark',
+                      background: {
+                          paper: grey[900],
+                      },
+                  },
+                  components: {
+                      MuiPaper: {
+                          // https://github.com/mui-org/material-ui/pull/25522
+                          styleOverrides: { root: { backgroundImage: 'unset' } },
+                      },
+                  },
+              }
+            : {},
         ...Object.values(Components).map(applyColors),
-    )
+    ) as ThemeOptions
+
     return createTheme(theme)
     function applyColors(x: any) {
-        if (typeof x === 'function') return x(mode, colors)
+        if (typeof x === 'function') return x(mode, maskColors)
         return x
     }
 }
+
 export const MaskLightTheme = MaskTheme('light')
 export const MaskDarkTheme = MaskTheme('dark')

@@ -1,5 +1,5 @@
 import { useMemo, useCallback, useState } from 'react'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import {
     formatEthereumAddress,
     explorerResolver,
@@ -26,7 +26,6 @@ import { useAccount, useChainId, useWallet, useWeb3 } from '@masknet/plugin-infr
 import { NetworkPluginID, NonFungibleTokenContract, NonFungibleToken } from '@masknet/web3-shared-base'
 import { useAsync } from 'react-use'
 import Services from '../../../extension/service'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({

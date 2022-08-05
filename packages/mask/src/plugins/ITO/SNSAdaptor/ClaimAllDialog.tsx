@@ -9,7 +9,7 @@ import { PluginId, useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useState, useLayoutEffect, useRef, useCallback } from 'react'
 import { flatten, uniq } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
-import { SnackbarProvider, makeStyles } from '@masknet/theme'
+import { SnackbarProvider, makeStyles, ActionButton } from '@masknet/theme'
 import { InjectedDialog, FormattedBalance, useOpenShareTxDialog } from '@masknet/shared'
 import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme, DialogActions } from '@mui/material'
 import { formatBalance, NetworkPluginID, isSameAddress, FungibleToken } from '@masknet/web3-shared-base'
@@ -22,7 +22,6 @@ import { useClaimCallback } from './hooks/useClaimCallback'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import type { SwappedTokenType } from '../types'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 interface StyleProps {
     shortITOwrapper: boolean

@@ -591,7 +591,7 @@ class Connection implements EVM_Connection {
             const balances = await contract?.methods.balances([options.account], listOfNonNativeAddress).call({
                 // cannot check the sender's balance in the same contract
                 from: undefined,
-                chainId: numberToHex(options.account),
+                chainId: numberToHex(options.chainId),
             })
 
             listOfNonNativeAddress.forEach((x, i) => {

@@ -71,6 +71,9 @@ export enum ChainId {
 
     // Conflux
     Conflux = 1030,
+
+    // Astar
+    Astar = 592,
 }
 
 /**
@@ -261,6 +264,7 @@ export enum NetworkType {
     Optimism = 'Optimism',
     Harmony = 'Harmony',
     Conflux = 'Conflux',
+    Astar = 'Astar',
 }
 
 export enum ProviderType {

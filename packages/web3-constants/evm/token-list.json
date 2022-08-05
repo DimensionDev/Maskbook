@@ -23,7 +23,8 @@
         "Aurora_Testnet": [],
         "Conflux": ["https://tokens.r2d2.to/latest/1030/tokens.json"],
         "Harmony": ["https://tokens.r2d2.to/latest/1666600000/tokens.json"],
-        "Harmony_Test": ["https://tokens.r2d2.to/latest/1666700000/tokens.json"]
+        "Harmony_Test": ["https://tokens.r2d2.to/latest/1666700000/tokens.json"],
+        "Astar": ["https://tokens.r2d2.to/latest/592/tokens.json"]
     },
     "NON_FUNGIBLE_TOKEN_LISTS": {
         "Mainnet": ["https://tokens.r2d2.to/latest/1/non-fungible-tokens.json"],
@@ -49,6 +50,7 @@
         "Aurora_Testnet": [],
         "Conflux": [],
         "Harmony": [],
-        "Harmony_Test": []
+        "Harmony_Test": [],
+        "Astar": ["https://tokens.r2d2.to/latest/592/non-fungible-tokens.json"]
     }
 }

@@ -1,7 +1,7 @@
 // @ts-check
 import React from 'react'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material'
-import { applyMaskColorVars, CustomSnackbarProvider, MaskDarkTheme } from '@masknet/theme'
+import { applyMaskColorVars, CustomSnackbarProvider, DashboardDarkTheme } from '@masknet/theme'
 import { addSharedI18N, I18NextProviderHMR } from '@masknet/shared'
 // import { withMatrix } from 'storybook-addon-matrix'
 import { addDashboardI18N } from '../src/locales/languages'
@@ -19,7 +19,7 @@ export const decorators = [
     (Story) => (
         <React.Suspense fallback="">
             <StyledEngineProvider injectFirst>
-                <ThemeProvider theme={MaskDarkTheme}>
+                <ThemeProvider theme={DashboardDarkTheme}>
                     <I18NextProviderHMR i18n={i18NextInstance}>
                         <CustomSnackbarProvider>
                             <DisableShadowRootContext.Provider value>

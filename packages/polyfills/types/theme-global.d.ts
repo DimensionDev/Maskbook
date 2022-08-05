@@ -23,9 +23,12 @@ declare module '@mui/material/styles/createPalette.d' {
             warn: string
             danger: string
             white: string
-            secondaryDark: string
             dark: string
             secondaryDark: string
+            publicMain: string
+            publicSecond: string
+            publicThird: string
+            publicLine: string
         }
     }
     export interface TypeText {

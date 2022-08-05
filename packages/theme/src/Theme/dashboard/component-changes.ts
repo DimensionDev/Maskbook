@@ -1,6 +1,6 @@
 import type { PaletteMode, ThemeOptions } from '@mui/material'
-import type { Color } from '../CSSVariables'
-import { css_var } from '../CSSVariables/createVars'
+import type { Color } from '../../CSSVariables'
+import { css_var } from '../../CSSVariables/createVars'
 
 type Theme = ThemeOptions | ((mode: PaletteMode, colors: Color) => ThemeOptions)
 

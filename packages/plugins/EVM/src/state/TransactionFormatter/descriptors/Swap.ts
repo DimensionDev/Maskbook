@@ -1,8 +1,9 @@
 import { first, last } from 'lodash-unified'
-import { formatBalance, TransactionContext } from '@masknet/web3-shared-base'
+import type { TransactionContext } from '@masknet/web3-shared-base'
 import type { ChainId, TransactionParameter } from '@masknet/web3-shared-evm'
 import type { TransactionDescriptor } from '../types'
 import { Web3StateSettings } from '../../../settings'
+import { getTokenAmountDescription } from '../utils'
 
 export class SwapDescriptor implements TransactionDescriptor {
     async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
@@ -21,27 +22,34 @@ export class SwapDescriptor implements TransactionDescriptor {
 
             if (method.name === 'swapExactETHForTokens' && parameters?.path && parameters.amountOutMin) {
                 const outputToken = await connection?.getFungibleToken(last(parameters!.path) ?? '')
-                const inputAmount = formatBalance(context.value, nativeToken?.decimals, 2)
-                const outputAmount = formatBalance(parameters!.amountOutMin, outputToken?.decimals, 2)
                 return {
                     chainId: context.chainId,
                     title: 'Swap Token',
-                    description: `Swap ${inputAmount} ${nativeToken?.symbol ?? ''} for ${outputAmount} ${
+                    description: `Swap ${getTokenAmountDescription(context.value, nativeToken)} for ${
                         outputToken?.symbol ?? ''
-                    }`,
+                    }.`,
+                    successfulDescription: `Swap ${getTokenAmountDescription(
+                        context.value,
+                        nativeToken,
+                    )} for ${getTokenAmountDescription(parameters!.amountOutMin, outputToken)} successfully.`,
+                    failedDescription: `Failed to swap ${outputToken?.symbol ?? ''}.`,
                 }
             }
 
             if (method.name === 'swapExactTokensForETH' && parameters?.path && parameters?.amountOutMin) {
                 const outputToken = await connection?.getFungibleToken(last(parameters!.path) ?? '')
-                const inputAmount = formatBalance(context.value, nativeToken?.decimals, 2)
-                const outputAmount = formatBalance(parameters!.amountOutMin, outputToken?.decimals, 2)
+
                 return {
                     chainId: context.chainId,
                     title: 'Swap Token',
-                    description: `Swap ${inputAmount} ${nativeToken?.symbol ?? ''} for ${outputAmount} ${
+                    description: `Swap ${getTokenAmountDescription(context.value, nativeToken)} for ${
                         outputToken?.symbol ?? ''
-                    }`,
+                    }.`,
+                    successfulDescription: `Swap ${getTokenAmountDescription(
+                        context.value,
+                        nativeToken,
+                    )} for ${getTokenAmountDescription(parameters!.amountOutMin, outputToken)} successfully.`,
+                    failedDescription: `Failed to swap ${outputToken?.symbol ?? ''}.`,
                 }
             }
 
@@ -54,20 +62,24 @@ export class SwapDescriptor implements TransactionDescriptor {
                 const tokenIn = await connection?.getFungibleToken(first(parameters!.path) ?? '')
                 const tokenOut = await connection?.getFungibleToken(last(parameters!.path) ?? '')
 
-                const amountIn = formatBalance(parameters!.amountIn, tokenIn?.decimals, 2)
-                const amountOut = formatBalance(parameters!.amountOutMin, tokenOut?.decimals, 2)
-
                 return {
                     chainId: context.chainId,
-                    title: 'SwapToken',
-                    description: `Swap ${amountIn} ${tokenIn?.symbol ?? ''} for ${amountOut} ${tokenOut?.symbol ?? ''}`,
+                    title: 'Swap Token',
+                    description: `Swap ${getTokenAmountDescription(parameters!.amountIn, tokenIn)} for ${
+                        tokenOut?.symbol ?? ''
+                    }.`,
+                    successfulDescription: `Swap ${getTokenAmountDescription(
+                        parameters!.amountIn,
+                        tokenIn,
+                    )} for ${getTokenAmountDescription(parameters!.amountOut, tokenOut)} successfully.`,
+                    failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
                 }
             }
 
             if (method.name === 'multicall') {
                 return {
                     chainId: context.chainId,
-                    title: 'SwapToken',
+                    title: 'Swap Token',
                     description: 'Swap with UniSwap V3',
                 }
             }

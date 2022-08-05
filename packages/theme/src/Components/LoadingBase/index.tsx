@@ -1,7 +1,7 @@
 import { GeneratedIconProps, Icons } from '@masknet/icons'
 import { makeStyles } from '../../UIHelper'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     animated: {
         '@keyframes loadingAnimation': {
             '0%': {
@@ -13,9 +13,9 @@ const useStyles = makeStyles()({
         },
         animation: 'loadingAnimation 1s linear infinite',
     },
-})
+}))
 
 export const LoadingBase = (props: GeneratedIconProps) => {
-    const { classes } = useStyles()
-    return <Icons.CircleLoading {...props} className={`${classes.animated} ${props.className}`} />
+    const { classes, cx } = useStyles()
+    return <Icons.CircleLoading {...props} className={cx(classes.animated, props.className)} />
 }

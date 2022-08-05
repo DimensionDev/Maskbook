@@ -1,7 +1,7 @@
 import { SchemaType, formatAmount, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
 import { formatBalance, isGreaterThan, isZero, NetworkPluginID, FungibleToken } from '@masknet/web3-shared-base'
 import { Box, CircularProgress, Stack, TextField, Typography } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
 import CheckIcon from '@mui/icons-material/Check'
 import UnCheckIcon from '@mui/icons-material/Close'
 import classNames from 'classnames'
@@ -26,7 +26,6 @@ import { AdvanceSettingData, AdvanceSetting } from './AdvanceSetting'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { RegionSelect } from './RegionSelect'
 import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => {

@@ -23,7 +23,8 @@
         "Aurora_Testnet": "",
         "Conflux": "",
         "Harmony": "0xc119574d5fb333f5ac018658d4d8b5035e16bf39",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": "0xf5056B96ab242C566002852d0b98ce0BcDf1af51"
     },
     "MULTICALL_ADDRESS": {
         "Mainnet": "0x1F98415757620B543A52E61c46B32eB19261F984",
@@ -49,7 +50,8 @@
         "Aurora_Testnet": "",
         "Conflux": "0x19f179d7e0d7d9f9d5386afff64271d98a91615b",
         "Harmony": "0x6cc1b1058f9153358278c35e0b2d382f1585854b",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": "0x1410304B91a280ad083196B0B50e9d8df749d860"
     },
     "ENS_REGISTRAR_ADDRESS": {
         "Mainnet": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
@@ -75,7 +77,8 @@
         "Aurora_Testnet": "",
         "Conflux": "",
         "Harmony": "",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": ""
     },
     "ENS_REVERSE_RECORDS_ADDRESS": {
         "Mainnet": "0x3671aE578E63FdF66ad4F3E12CC0c0d71Ac7510C",
@@ -101,6 +104,7 @@
         "Aurora_Testnet": "",
         "Conflux": "",
         "Harmony": "",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": ""
     }
 }

@@ -2,7 +2,6 @@ import { Card, Typography, Link, Box } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../locales'
-import { ImageIcon } from './ImageIcon'
 import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
 import type { CollectionTypes, WalletTypes } from '../types'
 import { ChainId, explorerResolver, NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
@@ -11,6 +10,7 @@ import { Empty } from './Empty'
 import { CollectionList } from './CollectionList'
 import { useMemo, useState } from 'react'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { PersonaImageIcon } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -160,7 +160,7 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
         <Card className={classes.wrapper}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div className={classes.walletInfo}>
-                    <ImageIcon icon={iconURL} size={20} borderRadius="99px" />
+                    <PersonaImageIcon icon={iconURL} size={20} borderRadius="99px" />
                     <Typography className={classes.walletName}>
                         {domain || Others?.formatAddress(address?.address, 4)}
                     </Typography>
