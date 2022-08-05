@@ -11,6 +11,7 @@ import {
     formatBalance,
     formatCurrency,
 } from '@masknet/web3-shared-base'
+import { LoadingBase } from '@masknet/theme'
 import {
     createContract,
     createERC20Token,
@@ -21,14 +22,7 @@ import {
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import { useAccount, useFungibleTokenBalance, useFungibleTokenPrice, useWeb3 } from '@masknet/plugin-infra/web3'
-import {
-    FormattedCurrency,
-    InjectedDialog,
-    LoadingAnimation,
-    TokenAmountPanel,
-    TokenIcon,
-    useOpenShareTxDialog,
-} from '@masknet/shared'
+import { FormattedCurrency, InjectedDialog, TokenAmountPanel, TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
 import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider'
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
 import { PluginWalletStatusBar, useI18N } from '../../../utils'
@@ -264,7 +258,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
 
                             {loading ? (
                                 <Typography variant="body2" textAlign="right" className={classes.tokenValueUSD}>
-                                    <LoadingAnimation width={16} height={16} />
+                                    <LoadingBase width={16} height={16} />
                                 </Typography>
                             ) : (
                                 <Typography variant="body2" textAlign="right" className={classes.tokenValueUSD}>

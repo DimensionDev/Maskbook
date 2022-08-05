@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import { first } from 'lodash-unified'
 import { InjectedDialog, NFTCardStyledAssetPlayer, useOpenShareTxDialog } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import { Box, Card, CardActions, CardContent, DialogContent, Link, Typography } from '@mui/material'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import type { useAsset } from '../hooks/useAsset'
@@ -14,7 +14,6 @@ import { useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 import { PluginWalletStatusBar, useI18N } from '../../../utils'
 import { resolveAssetLinkOnCryptoartAI, resolvePaymentTokensOnCryptoartAI } from '../pipes'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => {
     return {

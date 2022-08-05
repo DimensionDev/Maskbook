@@ -10,14 +10,14 @@ import {
     Typography,
     Link,
 } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { UnreviewedWarning } from '../UnreviewedWarning'
 import { useI18N } from '../../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
-import ActionButton, { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
+import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
 import { PluginTraderMessages } from '../../../Trader/messages'
 import { CheckoutOrder } from './CheckoutOrder'

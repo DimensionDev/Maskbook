@@ -8,6 +8,9 @@ interface MaskLoadingButtonProps extends Exclude<LoadingButtonProps, 'loading' |
     soloLoading?: boolean
 }
 
+/**
+ * @deprecated Please use <ActionButton />
+ * */
 export const MaskLoadingButton = memo(
     forwardRef<HTMLButtonElement, MaskLoadingButtonProps>((props, ref) => {
         const { onClick, children, soloLoading, variant, ...rest } = props

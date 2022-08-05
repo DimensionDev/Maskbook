@@ -7,7 +7,7 @@ const { meta, of } = story(MaskLoadingButton)
 
 const f = () => delay(3000)
 export default meta({
-    title: 'Atoms/LoadingButton',
+    title: 'Components/LoadingButton',
     parameters: {},
 })
 
