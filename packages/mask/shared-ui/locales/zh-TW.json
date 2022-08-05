@@ -98,6 +98,7 @@
     "wallet_name": "錢包名稱",
     "wallet_rename": "重新命名錢包",
     "wallet_loading_nft_contract": "加載NFT合約中...",
+    "wallet_search_no_result": "無結果",
     "wallet_confirm_with_password": "確認密碼",
     "wallet_airdrop_nft_unclaimed_title": "尚未認領的NFT空投",
     "plugin_external_loader_search_holder": "搜尋外部插件",
