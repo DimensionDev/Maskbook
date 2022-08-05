@@ -258,15 +258,9 @@ export function NextIdPage({ persona }: NextIdPageProps) {
 
     if (loadingBindings || loadingPersona || loadingVerifyInfo) {
         return (
-            <>
-                {Array.from({ length: 1 })
-                    .fill(0)
-                    .map((_, i) => (
-                        <div key={i}>
-                            <Skeleton className={classes.skeleton} animation="wave" variant="rectangular" />
-                        </div>
-                    ))}
-            </>
+            <div>
+                <Skeleton className={classes.skeleton} animation="wave" variant="rectangular" />
+            </div>
         )
     }
 
