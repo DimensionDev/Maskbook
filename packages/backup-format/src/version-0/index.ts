@@ -10,8 +10,8 @@ import {
 } from '@masknet/shared-base'
 import { isObjectLike } from 'lodash-unified'
 import { None, Some } from 'ts-results'
-import { createEmptyNormalizedBackup } from '../normalize'
-import type { NormalizedBackup } from '../normalize/type'
+import { createEmptyNormalizedBackup } from '../normalize/index.js'
+import type { NormalizedBackup } from '../normalize/type.js'
 
 export function isBackupVersion0(obj: unknown): obj is BackupJSONFileVersion0 {
     if (!isObjectLike(obj)) return false

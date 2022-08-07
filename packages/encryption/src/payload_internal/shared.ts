@@ -1,8 +1,8 @@
 import { ProfileIdentifier, CheckedError, OptionalResult, EnhanceableSite } from '@masknet/shared-base'
 import { Ok } from 'ts-results'
-import { PayloadParseResult, SocialNetworkEnum } from '../payload'
-import { CryptoException, PayloadException } from '../types'
-import { importAES } from '../utils'
+import { PayloadParseResult, SocialNetworkEnum } from '../payload/index.js'
+import { CryptoException, PayloadException } from '../types/index.js'
+import { importAES } from '../utils/index.js'
 
 const import_AES_GCM_256 = CheckedError.withErr(importAES, CryptoException.InvalidCryptoKey)
 

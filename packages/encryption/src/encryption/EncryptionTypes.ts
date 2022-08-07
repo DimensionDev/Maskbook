@@ -7,7 +7,7 @@ import {
     registerSerializableClass,
 } from '@masknet/shared-base'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
-import type { EC_Key, EC_KeyCurveEnum } from '../payload'
+import type { EC_Key, EC_KeyCurveEnum } from '../payload/index.js'
 
 export interface EncryptOptions {
     /** Payload version to use. */
