@@ -27,15 +27,9 @@ const boundaryValues = [
  * @returns format result
  * @param value
  * @param currency
- * @param fallback
  */
-export function formatMarketCap(
-    value: BigNumber.Value | null | undefined,
-    currency = 'USD',
-    fallback?: string | number,
-) {
+export function formatMarketCap(value: BigNumber.Value, currency = 'USD') {
     const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency, currencyDisplay: 'narrowSymbol' })
-    if (value === undefined || value === null) return fallback
     const bgValue = new BigNumber(value)
 
     const boundary = boundaryValues.find(

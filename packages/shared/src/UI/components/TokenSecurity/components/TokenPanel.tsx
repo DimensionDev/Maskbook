@@ -4,7 +4,7 @@ import { useSharedI18N } from '../../../../locales'
 import React from 'react'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { formatCurrency, formatSupply } from '@masknet/web3-shared-base'
+import { formatCurrency, formatMarketCap, formatSupply } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
@@ -143,7 +143,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                 <Stack direction="row" justifyContent="space-between">
                     <Typography className={classes.subtitle}>{t.token_info_market_cap()}</Typography>
                     <Typography className={classes.cardValue}>
-                        {tokenMarketCap ? `$${formatSupply(tokenMarketCap)}` : DEFAULT_PLACEHOLDER}
+                        {tokenMarketCap ? formatMarketCap(tokenMarketCap) : DEFAULT_PLACEHOLDER}
                     </Typography>
                 </Stack>
             </Stack>
