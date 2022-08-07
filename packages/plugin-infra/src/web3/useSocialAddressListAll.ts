@@ -29,7 +29,7 @@ export function useSocialAddressListAll(
         if (!userId || userId === '$unknown') return EMPTY_LIST
         let cached = addressCache.get(userId)
 
-        if (!cached) {
+        if (!cached || identity.isOwner) {
             cached = Promise.allSettled<AddressList>(
                 [EVM_IdentityService, SolanaIdentityService].map((x) => x?.lookup(identity) ?? []),
             )
