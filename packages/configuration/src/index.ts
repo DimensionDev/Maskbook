@@ -1,4 +1,4 @@
-import urlcat from 'urlcat'
+import urlcat = require('urlcat')
 import { DEFAULT_HOST, DEFAULT_PREFIX } from './constants.js'
 
 class Configuration<T extends unknown> {
@@ -29,7 +29,7 @@ class Configuration<T extends unknown> {
 const cache = new Map<string, Configuration<unknown>>()
 
 export function create<T extends unknown>(name: string, prefix?: string, initialData?: T) {
-    const url = (urlcat.default || urlcat)(DEFAULT_HOST, prefix ? ':prefix.:name.json' : ':name.json', {
+    const url = urlcat(DEFAULT_HOST, prefix ? ':prefix.:name.json' : ':name.json', {
         name,
         prefix: prefix ?? DEFAULT_PREFIX,
     })
