@@ -1,4 +1,4 @@
-import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
+import { makeStyles, usePopupCustomSnackbar, ActionButton } from '@masknet/theme'
 import { CurrentWalletBox } from './CurrentWalletBox'
 import {
     step1ActiveIcon,
@@ -16,7 +16,6 @@ import { useI18N } from '../../../utils'
 import type { Account } from '@masknet/web3-shared-base'
 import type { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { LoadingButton } from '@mui/lab'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles()((theme) => ({

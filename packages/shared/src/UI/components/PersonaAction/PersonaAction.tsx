@@ -1,14 +1,13 @@
 import { useStylesExtends, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
-import { useAsyncRetry, useCopyToClipboard } from 'react-use'
-import { useI18N } from '../../locales'
+import { useCopyToClipboard } from 'react-use'
 import { PlatformAvatar } from './PlatformAvatar'
-import { formatPublicKey } from '../utils'
 import type { PersonaInformation } from '@masknet/shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
-import { context } from '../context'
 import { Icons } from '@masknet/icons'
 import { useCallback, useState } from 'react'
+import { formatPublicKey } from '../../../utils'
+import { useSharedI18N } from '../../../locales'
 
 const useStyles = makeStyles()((theme) => ({
     bottomFixed: {
@@ -39,20 +38,16 @@ const useStyles = makeStyles()((theme) => ({
 interface PersonaActionProps {
     currentPersona?: PersonaInformation
     currentVisitingProfile?: IdentityResolved
+    avatar?: string
 }
 
 export function PersonaAction(props: PersonaActionProps) {
     const classes = useStylesExtends(useStyles(), {})
-    const { currentPersona } = props
-    const t = useI18N()
+    const { currentPersona, avatar } = props
+    const t = useSharedI18N()
 
     const [open, setOpen] = useState(false)
 
-    const { value: avatar } = useAsyncRetry(async () => {
-        const avatar = await context.getPersonaAvatar(currentPersona?.identifier)
-        if (!avatar) return undefined
-        return avatar
-    })
     const [, copyToClipboard] = useCopyToClipboard()
 
     const onCopy = useCallback(

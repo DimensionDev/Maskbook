@@ -13,6 +13,9 @@ const useStyles = makeStyles()((theme) => ({
         boxShadow: `0 0 0 3000px ${theme.palette.mode === 'light' ? 'rgba(0,0,0,.3)' : 'rgba(110,118,125,.3)'}`,
         borderRadius: 8,
     },
+    noBoxShadowCover: {
+        boxShadow: `0 0 0 3000px ${theme.palette.mode === 'light' ? 'rgba(0,0,0,.2)' : 'rgba(110,118,125,.2)'}`,
+    },
     target: {
         background: 'transparent',
     },
@@ -106,7 +109,7 @@ export default function GuideStep({
     onComplete,
 }: GuideStepProps) {
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const childrenRef = useRef<HTMLElement>()
     const [clientRect, setClientRect] = useState<any>({})
     const [open, setOpen] = useState(false)
@@ -184,7 +187,9 @@ export default function GuideStep({
                     <Portal container={container}>
                         <div className={classes.mask} onClick={(e) => e.stopPropagation()}>
                             <div
-                                className={classes.container}
+                                className={
+                                    step === 3 ? cx(classes.container, classes.noBoxShadowCover) : classes.container
+                                }
                                 style={{
                                     top: clientRect.top,
                                     left: clientRect.left,

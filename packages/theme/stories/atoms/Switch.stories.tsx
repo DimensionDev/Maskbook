@@ -1,10 +1,10 @@
-import { Switch as MuiSwitch, FormControlLabel } from '@mui/material'
+import { Switch as MuiSwitch, FormControlLabel, SwitchProps } from '@mui/material'
 import { story } from '../utils'
 
-function C() {
+function C(props: SwitchProps) {
     return (
         <>
-            <FormControlLabel control={<MuiSwitch />} label="Switch" />
+            <FormControlLabel control={<MuiSwitch {...props} />} label="Switch" />
             <FormControlLabel control={<MuiSwitch disabled />} label="Switch" />
             <FormControlLabel control={<MuiSwitch disabled checked />} label="Switch" />
         </>
@@ -16,4 +16,8 @@ export default meta({
     parameters: {},
 })
 
-export const Switch = of({})
+export const Switch = of({
+    args: {
+        checked: false,
+    },
+})

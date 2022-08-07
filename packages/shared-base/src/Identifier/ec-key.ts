@@ -1,7 +1,7 @@
 import { decodeArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
 import { Convert } from 'pvtsutils'
 import { type Option, None, Some } from 'ts-results'
-import { Identifier } from './base'
+import { Identifier } from './base.js'
 
 const instance = new WeakSet()
 const k256Cache: Record<string, ECKeyIdentifier> = Object.create(null)

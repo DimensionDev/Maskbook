@@ -1,8 +1,7 @@
 import { memo, useMemo } from 'react'
 import { Box, ImageList, Typography, ImageListItem, Stack } from '@mui/material'
 import { NFTCard } from './NFTCard'
-import { LoadingAnimation } from '@masknet/shared'
-import { MaskColorVar } from '@masknet/theme'
+import { MaskColorVar, LoadingBase } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import type { NonFungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -23,7 +22,7 @@ export const SelectNFTList = memo<SelectNFTListProps>(({ list, onSelect, selecte
             return (
                 <ImageListItem sx={{ height: '30px !important' }} cols={4}>
                     <Stack direction="row" justifyContent="center">
-                        <LoadingAnimation />
+                        <LoadingBase />
                     </Stack>
                 </ImageListItem>
             )

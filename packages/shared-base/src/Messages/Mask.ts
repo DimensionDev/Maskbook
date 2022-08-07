@@ -1,8 +1,8 @@
 import type { Appearance, LanguageOptions } from '@masknet/public-api'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
-import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier'
-import type { RelationFavor } from '../Persona/type'
-import type { EnhanceableSite, ExtensionSite } from '../Site'
+import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier/index.js'
+import type { RelationFavor } from '../Persona/type.js'
+import type { EnhanceableSite, ExtensionSite } from '../Site/index.js'
 
 enum NetworkPluginID {
     PLUGIN_EVM = 'com.mask.evm',

@@ -1,6 +1,6 @@
 import { concatArrayBuffer, decodeArrayBuffer } from '@dimensiondev/kit'
 import type { AESCryptoKey, EC_Public_CryptoKey } from '@masknet/shared-base'
-import { encryptWithAES } from '../utils'
+import { encryptWithAES } from '../utils/index.js'
 import {
     EncryptError,
     EncryptErrorReasons,
@@ -9,8 +9,8 @@ import {
     EncryptionResultE2EMap,
     EncryptResult,
     EncryptTargetE2E,
-} from './EncryptionTypes'
-import { fillIV } from './utils'
+} from './EncryptionTypes.js'
+import { fillIV } from './utils.js'
 
 const KEY = decodeArrayBuffer('KEY')
 const IV = decodeArrayBuffer('IV')

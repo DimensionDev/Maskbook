@@ -1,7 +1,7 @@
 import { ObservableSet } from '@masknet/shared-base'
 import { Emitter } from '@servie/events'
 import { noop } from 'lodash-unified'
-import type { Plugin } from '../types'
+import { BooleanPreference, Plugin } from '../types'
 import { getPluginDefine, registeredPluginIDs, registeredPlugins } from './store'
 
 // Plugin state machine
@@ -95,10 +95,15 @@ export function createManager<
         const definition = await __getDefinition(id)
         if (!definition) return
 
-        Promise.resolve(_host.minimalMode.isEnabled(id)).then(
-            (enabled) => (enabled ? minimalModePluginIDs.add(id) : minimalModePluginIDs.delete(id)),
-            noop,
-        )
+        Promise.resolve(_host.minimalMode.isEnabled(id)).then((enabled) => {
+            let result: boolean
+            if (enabled === BooleanPreference.True) result = true
+            else if (enabled === BooleanPreference.False) result = false
+            // plugin default minimal mode is false
+            else result = !definition.inMinimalModeByDefault
+
+            result ? minimalModePluginIDs.add(id) : minimalModePluginIDs.delete(id)
+        }, noop)
         if (definition.enableRequirement.target !== 'stable' && !definition.experimentalMark) {
             console.warn(
                 `[@masknet/plugin-infra] Plugin ${id} is not enabled in stable release, expected it's "experimentalMark" to be true.`,

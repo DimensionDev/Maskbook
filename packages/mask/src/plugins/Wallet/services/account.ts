@@ -78,10 +78,12 @@ export async function getSupportedNetworks() {
         Flags.polygon_enabled ? NetworkType.Polygon : undefined,
         Flags.arbitrum_enabled ? NetworkType.Arbitrum : undefined,
         Flags.xdai_enabled ? NetworkType.xDai : undefined,
+        Flags.optimism_enabled ? NetworkType.Optimism : undefined,
         Flags.celo_enabled ? NetworkType.Celo : undefined,
         Flags.fantom_enabled ? NetworkType.Fantom : undefined,
         Flags.avalanche_enabled ? NetworkType.Avalanche : undefined,
         Flags.aurora_enabled ? NetworkType.Aurora : undefined,
+        Flags.astar_enabled ? NetworkType.Astar : undefined,
         Flags.harmony_enabled ? NetworkType.Harmony : undefined,
     ].filter(Boolean) as NetworkType[]
 }

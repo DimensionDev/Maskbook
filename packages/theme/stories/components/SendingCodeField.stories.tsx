@@ -3,7 +3,7 @@ import { SendingCodeFieldExample } from './SendingCodeFieldExample'
 
 const { meta, of } = story(SendingCodeFieldExample)
 export default meta({
-    title: 'Atoms/SendingCodeField',
+    title: 'Components/SendingCodeField',
     parameters: {},
 })
 

@@ -113,14 +113,14 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                 </Box>
             </TableCell>
             <TableCell className={classes.cell} align="center" variant="body">
-                <Typography>{toFixed(formatBalance(asset.balance, asset.decimals) ?? '', 6)}</Typography>
+                <Typography>{toFixed(formatBalance(asset.balance, asset.decimals) ?? '', 2)}</Typography>
             </TableCell>
             <TableCell className={classes.cell} align="center" variant="body">
                 <Typography>
                     {asset.price?.[CurrencyType.USD]
-                        ? new BigNumber(asset.price[CurrencyType.USD] ?? '').gt(pow10(-6))
+                        ? new BigNumber(asset.price[CurrencyType.USD] ?? '').gt(pow10(-2))
                             ? formatCurrency(Number.parseFloat(asset.price[CurrencyType.USD] ?? ''))
-                            : '<0.000001'
+                            : '<0.01'
                         : '-'}
                 </Typography>
             </TableCell>

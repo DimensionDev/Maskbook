@@ -197,6 +197,10 @@ export enum TradeProvider {
     VENOMSWAP = 16,
     OPENSWAP = 17,
     DEFIKINGDOMS = 18,
+    ARTHSWAP = 19,
+    VERSA = 20,
+    ASTAREXCHANGE = 21,
+    YUMISWAP = 22,
 }
 
 /** Supported language settings */

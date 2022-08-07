@@ -1,1 +1,1 @@
-export { deleteGunData, getGunData, pushToGunDataArray, setGunData, subscribeGunMapData } from './utils'
+export { deleteGunData, getGunData, pushToGunDataArray, setGunData, subscribeGunMapData } from './utils.js'

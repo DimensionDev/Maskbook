@@ -174,7 +174,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
             setDescriptionProps(description)
         }, [description])
 
-        if (!account && !verifiedWallets) {
+        if (!account && verifiedWallets.length === 0) {
             return (
                 <Box className={cx(classes.root, className)}>
                     <Button fullWidth onClick={openSelectProviderDialog}>

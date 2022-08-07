@@ -69,6 +69,11 @@ export const profileFollowButtonSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
         '[data-testid="primaryColumn"] [aria-haspopup="menu"][data-testid="userActions"] ~ [data-testid="placementTracking"]',
     )
+
+export const searchProfileCoverSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>(
+        '[data-testid="primaryColumn"] > div > div:last-child > div > div > div > div > div > div[style], [data-testid="primaryColumn"] > div > div:last-child > div > div > div > a > div > div[style]',
+    ).closest(1)
 // To get margin bottom of menu button, and apply it to tip button to align it.
 export const profileMenuButtonSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] [aria-haspopup="menu"][data-testid="userActions"]')
@@ -308,6 +313,16 @@ export const searchTwitterAvatarNFTSelector = () =>
     querySelector<E>('a[href$="/nft"]').closest<E>(1).querySelector('a div:nth-child(3) > div')
 
 export const searchTwitterAvatarNFTLinkSelector = () => querySelector<E>('a[href$="/nft"]')
+
+export const inpageAvatarSelector = () =>
+    querySelectorAll<HTMLDivElement>(
+        [
+            // Avatars in post
+            'main[role="main"] [data-testid="cellInnerDiv"] [data-testid="Tweet-User-Avatar"]',
+            // Avatars in side panel
+            '[data-testid="UserCell"] [data-testid^="UserAvatar-Container-"]',
+        ].join(','),
+    )
 
 export const searchReplyToolbarSelector = () =>
     querySelector<E>('div[data-testid="primaryColumn"] div[data-testid="toolBar"]').querySelector<E>(

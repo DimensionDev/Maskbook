@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { DEFAULT_HOST, DEFAULT_PREFIX } from './constants'
+import { DEFAULT_HOST, DEFAULT_PREFIX } from './constants.js'
 
 class Configuration<T extends unknown> {
     private ac: AbortController | undefined

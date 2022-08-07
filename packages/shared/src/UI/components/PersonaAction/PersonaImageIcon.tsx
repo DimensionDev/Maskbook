@@ -8,13 +8,13 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface ImageIconProps extends withClasses<'icon'> {
+export interface PersonaImageIconProps extends withClasses<'icon'> {
     size?: number
     icon?: URL | string
     borderRadius?: string
 }
 
-export function ImageIcon(props: ImageIconProps) {
+export function PersonaImageIcon(props: PersonaImageIconProps) {
     const { size = 48, icon, borderRadius = '50%' } = props
     const classes = useStylesExtends(useStyles(), props)
     return <img height={size} width={size} src={icon?.toString()} className={classes.icon} style={{ borderRadius }} />

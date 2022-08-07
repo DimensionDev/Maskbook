@@ -1,12 +1,12 @@
 import { Stack, Card, Typography, Divider } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { PlatformAvatar } from './PlatformAvatar'
 
 import { useI18N } from '../../locales'
 import type { AccountType } from '../types'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { CollectionItem } from './CollectionItem'
 import { CURRENT_STATUS } from '../../constants'
+import { PlatformAvatar } from '@masknet/shared'
 const DEFAULT_PLACEHOLDER = '--'
 
 const useStyles = makeStyles()((theme) => {

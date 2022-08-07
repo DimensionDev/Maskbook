@@ -1,12 +1,12 @@
-import type { Plugin } from '@masknet/plugin-infra/content-script'
 import { Icons } from '@masknet/icons'
+import type { Plugin } from '@masknet/plugin-infra/content-script'
+import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
 import { useState } from 'react'
+import { Trans } from 'react-i18next'
 import { NFTAvatarDialog } from '../Application/NFTAvatarsDialog'
 import { base } from '../base'
 import { setupContext } from '../context'
-import { Trans } from 'react-i18next'
-import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
