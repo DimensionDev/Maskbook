@@ -13,7 +13,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 if (!i18NextInstance.isInitialized) {
-    i18NextInstance.use(Detector.default).init({
+    i18NextInstance.use(Detector.default || Detector).init({
         keySeparator: false,
         interpolation: { escapeValue: false },
         contextSeparator: '$',
