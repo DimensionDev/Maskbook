@@ -1,5 +1,4 @@
-import type { PersonaIdentifier, ProfileIdentifier } from '../Identifier'
-import type { PersonaInformation, ProfileInformation } from '../Persona/type'
+import type { PersonaIdentifier, PersonaInformation, ProfileIdentifier, ProfileInformation } from '../index.js'
 
 export function formatPersonaFingerprint(fingerprint: string, size = 0) {
     if (size === 0) return fingerprint

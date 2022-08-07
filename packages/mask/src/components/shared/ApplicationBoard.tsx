@@ -17,6 +17,7 @@ import { WalletMessages } from '../../plugins/Wallet/messages'
 import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext'
 import { MaskMessages } from '../../../shared'
 import { useTimeout } from 'react-use'
+import { DashboardRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{ shouldScroll: boolean; isCarouselReady: boolean }>()((theme, props) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -215,6 +216,8 @@ function RenderEntryComponent({ application }: { application: Application }) {
         WalletMessages.events.ApplicationPersonaListDialogUpdated,
     )
 
+    const { setDialog: setCreatePersonaConfirmDialog } = useRemoteControlledDialog(MaskMessages.events.openPageConfirm)
+
     const { closeDialog: closeApplicationBoard } = useRemoteControlledDialog(
         WalletMessages.events.ApplicationDialogUpdated,
     )
@@ -233,9 +236,15 @@ function RenderEntryComponent({ application }: { application: Application }) {
     // #endregion
 
     // #region entry click effect
-    const createOrConnectPersona = useCallback(() => {
-        closeApplicationBoard()
-        ApplicationEntryStatus.personaConnectAction?.()
+    const createPersona = useCallback(() => {
+        setCreatePersonaConfirmDialog({
+            open: true,
+            type: 'dashboard',
+            url: DashboardRoutes.Setup,
+            text: t('applications_create_persona_hint'),
+            title: t('applications_create_persona_title'),
+            actionHint: t('applications_create_persona_action'),
+        })
     }, [ApplicationEntryStatus])
 
     const verifyPersona = useCallback(() => {
@@ -248,10 +257,10 @@ function RenderEntryComponent({ application }: { application: Application }) {
                 setSelectProviderDialog({ open: true, walletConnectedCallback })
         }
         if (!application.entry.nextIdRequired) return
-        if (ApplicationEntryStatus.isPersonaCreated === false) return createOrConnectPersona
+        if (ApplicationEntryStatus.isPersonaCreated === false) return createPersona
         if (ApplicationEntryStatus.shouldVerifyNextId) return verifyPersona
         return
-    }, [setSelectProviderDialog, createOrConnectPersona, ApplicationEntryStatus, verifyPersona, application])
+    }, [setSelectProviderDialog, createPersona, ApplicationEntryStatus, verifyPersona, application])
 
     // #endregion
 
