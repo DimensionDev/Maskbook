@@ -1,4 +1,4 @@
-import urlcat = require('urlcat')
+import urlcat from 'urlcat'
 import { DEFAULT_HOST, DEFAULT_PREFIX } from './constants.js'
 
 class Configuration<T extends unknown> {

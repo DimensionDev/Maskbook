@@ -1,0 +1,27 @@
+diff --git a/dist/module.mjs b/dist/module.mjs
+new file mode 100644
+index 0000000000000000000000000000000000000000..112301f0bcf85de93809b4e5b709fc58bc86d450
+--- /dev/null
++++ b/dist/module.mjs
+@@ -0,0 +1,3 @@
++import lib from "./index.js"
++export const { join, subst, query } = lib;
++export default lib.default;
+diff --git a/package.json b/package.json
+index 83ab937ed57b6825a43848f62007eebf22c62fae..e64ca94a0ba757ba646bda86d6282f5bb3154aaf 100644
+--- a/package.json
++++ b/package.json
+@@ -1,6 +1,13 @@
+ {
+   "name": "urlcat",
+   "version": "2.0.4",
++  "exports": {
++    ".": {
++      "types": "./dist/index.d.ts",
++      "require": "./dist/index.js",
++      "import": "./dist/module.mjs"
++    }
++  },
+   "description": "A library for concatenating URL's.",
+   "repository": {
+     "type": "git",

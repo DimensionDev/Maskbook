@@ -57,6 +57,9 @@ patchedDependencies:
   gulp@4.0.2:
     hash: 2y5kpiugqogdejwrac5fzdim7y
     path: patches/gulp@4.0.2.patch
+  urlcat@2.0.4:
+    hash: rbtnkqaptq75u32ovzkfd3ieoe
+    path: patches/urlcat@2.0.4.patch
 
 importers:
 
