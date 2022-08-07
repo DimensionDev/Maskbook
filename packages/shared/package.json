@@ -2,6 +2,7 @@
   "name": "@masknet/shared",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "webpack": "./src/index.ts",
       "default": "./dist/index.js"
     }

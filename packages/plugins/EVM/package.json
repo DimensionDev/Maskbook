@@ -3,10 +3,12 @@
   "private": true,
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "webpack": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },
+  "types": "./dist/index.d.ts",
   "dependencies": {
     "@dimensiondev/metamask-extension-provider": "^3.0.6-20210519045409-1835d4d",
     "@masknet/icons": "workspace:*",
