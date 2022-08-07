@@ -6,9 +6,9 @@ import * as BN from 'bignumber.js'
 
 // @ts-ignore
 import { blob, builtin, cryptokey, file, filelist, imagebitmap, specialNumbers } from 'typeson-registry'
-import { Identifier } from '../Identifier'
-import { responseRegedit } from './response'
-import { requestRegedit } from './request'
+import { Identifier } from '../Identifier/index.js'
+import { responseRegedit } from './response.js'
+import { requestRegedit } from './request.js'
 
 const pendingRegister = new Set<() => void>()
 let typeson: Typeson | undefined

@@ -1,8 +1,8 @@
-import { Identifier } from './base'
-import { ProfileIdentifier as A } from './profile'
-import { ECKeyIdentifier as B } from './ec-key'
-import { PostIdentifier as C } from './post'
-import { PostIVIdentifier as D } from './post-iv'
+import { Identifier } from './base.js'
+import { ProfileIdentifier as A } from './profile.js'
+import { ECKeyIdentifier as B } from './ec-key.js'
+import { PostIdentifier as C } from './post.js'
+import { PostIVIdentifier as D } from './post-iv.js'
 
 type I<T> = Iterable<readonly [string, T]>
 

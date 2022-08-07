@@ -1,5 +1,5 @@
 import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import type { CompositionRequest, Web3ProfileDialogRequest } from './Mask'
+import type { CompositionRequest, Web3ProfileDialogRequest } from './Mask.js'
 
 /**
  * @deprecated

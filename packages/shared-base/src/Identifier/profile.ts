@@ -1,7 +1,7 @@
 import { type Option, None, Some } from 'ts-results'
-import { EnhanceableSite } from '../Site/type'
-import { Identifier } from './base'
-import { banSlash } from './utils'
+import { EnhanceableSite } from '../Site/type.js'
+import { Identifier } from './base.js'
+import { banSlash } from './utils.js'
 
 const instance = new WeakSet()
 const id: Record<string, Record<string, ProfileIdentifier>> = Object.create(null)

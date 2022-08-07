@@ -1,7 +1,7 @@
 import { decodeArrayBuffer } from '@dimensiondev/kit'
 import { type Option, None } from 'ts-results'
-import { Identifier } from './base'
-import { banSlash } from './utils'
+import { Identifier } from './base.js'
+import { banSlash } from './utils.js'
 
 const instance = new WeakSet()
 const id: Record<string, Record<string, PostIVIdentifier>> = Object.create(null)
