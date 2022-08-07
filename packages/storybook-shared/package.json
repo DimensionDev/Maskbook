@@ -2,6 +2,17 @@
   "name": "@masknet/storybook-shared",
   "private": true,
   "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "webpack": "./src/index.ts",
+      "default": "./dist/index.js"
+    },
+    "./patch-webpack": "./patch-webpack.cjs",
+    "./patch-webpack.cjs": "./patch-webpack.cjs"
+  },
   "scripts": {
     "build": "tsc -p ./tsconfig.json"
   },
