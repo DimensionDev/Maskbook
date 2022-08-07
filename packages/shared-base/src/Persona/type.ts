@@ -1,5 +1,5 @@
-import type { PersonaIdentifier, ProfileIdentifier } from '../Identifier'
-import type { NextIDPersonaBindings } from '../NextID/type'
+import type { PersonaIdentifier, ProfileIdentifier } from '../Identifier/index.js'
+import type { NextIDPersonaBindings } from '../NextID/type.js'
 /**
  * This interface contains the minimal information for UI display
  */

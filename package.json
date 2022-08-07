@@ -30,6 +30,7 @@
     "spellcheck": "cspell lint --no-must-find-files"
   },
   "dependencies": {
+    "@dimensiondev/holoflows-kit": "^0.9.0-20220807034934-68f04f1",
     "@dimensiondev/kit": "0.0.0-20220617045824-8bc7a27",
     "@emotion/cache": "11.9.3",
     "@emotion/react": "11.9.3",
@@ -45,7 +46,7 @@
     "@types/react": "18.0.15",
     "@types/react-dom": "^18.0.6",
     "@types/web": "^0.0.70",
-    "i18next": "^21.8.2",
+    "i18next": "^21.8.16",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
     "lodash-unified": "1.0.2",

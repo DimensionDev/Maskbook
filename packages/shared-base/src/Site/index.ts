@@ -1,6 +1,6 @@
-import { EnhanceableSite, ExtensionSite } from './type'
+import { EnhanceableSite, ExtensionSite } from './type.js'
 
-export * from './type'
+export * from './type.js'
 
 const matchEnhanceableSiteHost: Record<EnhanceableSite, RegExp> = {
     [EnhanceableSite.Localhost]: /localhost/i,
