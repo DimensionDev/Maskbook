@@ -1,13 +1,13 @@
-import type { PayloadParserResult } from '.'
-import type { PayloadParseResult } from '../payload'
-import { CryptoException, PayloadException, assertArray, assertUint8Array } from '../types'
+import type { PayloadParserResult } from './index.js'
+import type { PayloadParseResult } from '../payload/index.js'
+import { CryptoException, PayloadException, assertArray, assertUint8Array } from '../types/index.js'
 import { andThenAsync, CheckedError, decompressSecp256k1KeyRaw, OptionalResult } from '@masknet/shared-base'
 import { Ok, Result } from 'ts-results'
-import { EC_Key, EC_KeyCurveEnum } from '../payload/types'
-import { decodeMessagePackF, assertIVLengthEq16, importAES, importEC_Key } from '../utils'
+import { EC_Key, EC_KeyCurveEnum } from '../payload/types.js'
+import { decodeMessagePackF, assertIVLengthEq16, importAES, importEC_Key } from '../utils/index.js'
 import { safeUnreachable } from '@dimensiondev/kit'
-import { parseSignatureContainer } from './SignatureContainer'
-import { parseAuthor } from './shared'
+import { parseSignatureContainer } from './SignatureContainer.js'
+import { parseAuthor } from './shared.js'
 // ? Payload format: (binary format)
 // ? See: docs/rfc/000-Payload-37.md
 

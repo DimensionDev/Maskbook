@@ -10,7 +10,7 @@ export {
     type PayloadParseResult,
     type PayloadWellFormed,
     type SupportedPayloadVersions,
-} from './payload'
+} from './payload/index.js'
 
 export {
     decrypt,
@@ -26,12 +26,12 @@ export {
     type DecryptIntermediateProgress,
     type DecryptReportedInfo,
     type DecryptSuccess,
-} from './encryption'
+} from './encryption/index.js'
 
-export { socialNetworkEncoder, socialNetworkDecoder } from './social-network-encode-decode'
+export { socialNetworkEncoder, socialNetworkDecoder } from './social-network-encode-decode/index.js'
 
-export { type TypedMessage, type Meta } from '../../typed-message/dist/base'
-export * from '../../typed-message/dist/base/core'
+export { type TypedMessage, type Meta } from '../../typed-message/dist/base/index.js'
+export * from '../../typed-message/dist/base/core/index.js'
 export {
     ProfileIdentifier,
     PostIVIdentifier,

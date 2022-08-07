@@ -1,10 +1,10 @@
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import { encodeText, encodeArrayBuffer } from '@dimensiondev/kit'
 import { Ok, Option, Result } from 'ts-results'
-import type { PayloadWellFormed, Signature } from '..'
-import { CryptoException, PayloadException } from '../types'
-import { encryptWithAES, exportCryptoKeyToJWK } from '../utils'
-import { get_v38PublicSharedCryptoKey } from './shared'
+import type { PayloadWellFormed, Signature } from '../index.js'
+import { CryptoException, PayloadException } from '../types/index.js'
+import { encryptWithAES, exportCryptoKeyToJWK } from '../utils/index.js'
+import { get_v38PublicSharedCryptoKey } from './shared.js'
 import { CheckedError, compressSecp256k1Point } from '@masknet/shared-base'
 
 const enum Index {
