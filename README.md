@@ -1,4 +1,4 @@
-\*\*\*\*<!-- cspell:disable -->
+<!-- cspell:disable -->
 
 <!-- markdownlint-disable no-inline-html first-line-heading -->
 <a href="https://mask.io">
