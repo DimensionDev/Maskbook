@@ -23,7 +23,7 @@ export async function syncLanguages() {
 
         {
             let code = header
-            code += `\nexport * from './i18n_generated'\n`
+            code += `\nexport * from './i18n_generated.js'\n`
             code = await prettier(code)
             await writeFile(new URL('index.ts', inputDir), code, { encoding: 'utf8' })
         }

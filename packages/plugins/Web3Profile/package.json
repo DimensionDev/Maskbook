@@ -1,7 +1,13 @@
 {
   "name": "@masknet/plugin-web3-profile",
   "private": true,
-  "exports": { ".": { "webpack": "./src/index.ts", "default": "./dist/index.js" } },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "webpack": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
   "types": "./dist/index.d.ts",
   "dependencies": {
       "@masknet/plugin-infra": "workspace:*",

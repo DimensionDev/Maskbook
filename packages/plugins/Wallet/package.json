@@ -3,10 +3,12 @@
   "private": true,
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "webpack": "./src/index.ts",
       "default": "./dist/index.js"
     },
     "./components": {
+      "types": "./dist/components.d.ts",
       "webpack": "./src/components.ts",
       "default": "./dist/components.js"
     }

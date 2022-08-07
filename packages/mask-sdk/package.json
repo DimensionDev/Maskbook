@@ -4,6 +4,7 @@
   "private": true,
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "webpack": "./server/index.ts",
       "default": "./dist/server/index.js"
     }
