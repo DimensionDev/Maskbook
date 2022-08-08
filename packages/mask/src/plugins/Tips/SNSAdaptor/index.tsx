@@ -20,6 +20,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const icon = <Icons.Tips size={36} />
             const iconFilterColor = 'rgba(247, 147, 30, 0.3)'
             return {
+                category: 'dapp',
                 RenderEntryComponent(EntryComponentProps) {
                     const [open, setOpen] = useState(false)
                     const clickHandler = () => setOpen(true)
