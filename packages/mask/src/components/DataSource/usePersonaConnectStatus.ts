@@ -21,6 +21,10 @@ const connectPersona = async () => {
     })
 }
 
+/**
+ * @deprecated Should use useCurrentPersonaConnectStatus
+ * We are fixing the current persona logic on SNS
+ */
 export function usePersonaConnectStatus() {
     const personas = usePersonasFromDB()
     const lastRecognized = useLastRecognizedIdentity()
