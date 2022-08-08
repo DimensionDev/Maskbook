@@ -83,8 +83,6 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.grey[700],
     },
     skeleton: {
-        borderRadius: 8,
-        margin: theme.spacing(1),
         marginTop: 0,
         backgroundColor: theme.palette.background.default,
         height: '196px',
@@ -260,15 +258,9 @@ export function NextIdPage({ persona }: NextIdPageProps) {
 
     if (loadingBindings || loadingPersona || loadingVerifyInfo) {
         return (
-            <>
-                {Array.from({ length: 2 })
-                    .fill(0)
-                    .map((_, i) => (
-                        <div key={i}>
-                            <Skeleton className={classes.skeleton} animation="wave" variant="rectangular" />
-                        </div>
-                    ))}
-            </>
+            <div>
+                <Skeleton className={classes.skeleton} animation="wave" variant="rectangular" />
+            </div>
         )
     }
 

@@ -1,3 +1,4 @@
+import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Box, CircularProgress, Typography } from '@mui/material'
 import type { FC } from 'react'
@@ -15,6 +16,8 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: theme.spacing(6),
+        height: 380,
+        flexDirection: 'column',
     },
 }))
 
@@ -32,7 +35,10 @@ export const StatusBox: FC<Props> = ({ loading, empty, description }) => {
     if (empty) {
         return (
             <Box className={classes.statusBox}>
-                <Typography color="textPrimary">{description}</Typography>
+                <Icons.EmptySimple size={32} />
+                <Typography marginTop="12px" color="textPrimary">
+                    {description}
+                </Typography>
             </Box>
         )
     }

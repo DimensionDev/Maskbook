@@ -2,8 +2,7 @@
 import './setup'
 import { test } from '@jest/globals'
 import type { AESCryptoKey, EC_Private_CryptoKey, EC_Public_CryptoKey, ProfileIdentifier } from '@masknet/shared-base'
-import { type EC_Key, EC_KeyCurveEnum } from '../src/payload'
-import { importEC_Key } from '../src/utils'
+import { type EC_Key, EC_KeyCurveEnum, importEC_Key } from '@masknet/encryption'
 import { unreachable } from '@dimensiondev/kit'
 test('test keys', () => {})
 

@@ -1,5 +1,5 @@
 import { Result, Option, Ok, None, Some } from 'ts-results'
-import type { CheckedError } from './CheckedError'
+import type { CheckedError } from './CheckedError.js'
 export type OptionalResult<T, E> = Result<Option<T>, CheckedError<E>>
 export const OptionalResult = {
     Some<T>(x: T): OptionalResult<T, any> {

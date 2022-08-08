@@ -2,8 +2,10 @@
   "name": "@masknet/encryption",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "webpack": "./src/index.ts",
       "default": "./dist/index.js"
     }
