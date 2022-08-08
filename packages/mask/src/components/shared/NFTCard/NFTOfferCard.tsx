@@ -2,6 +2,8 @@ import { makeStyles } from '@masknet/theme'
 import { OpenSeaIcon } from '../../../resources/OpenSeaIcon'
 import { Typography } from '@mui/material'
 import { ETHIcon } from '../../../plugins/VCent/icons/ETH'
+import type { NonFungibleTokenOrder } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -32,10 +34,14 @@ const useStyles = makeStyles()((theme) => ({
             color: theme.palette.text.primary,
         },
     },
+    currencyIcon: {
+        width: 24,
+        height: 24,
+    },
 }))
 
 interface NFTOfferCardProps {
-    offer: any
+    offer: NonFungibleTokenOrder<ChainId, SchemaType>
 }
 
 export function NFTOfferCard(props: NFTOfferCardProps) {
@@ -48,14 +54,16 @@ export function NFTOfferCard(props: NFTOfferCardProps) {
             <OpenSeaIcon width={24} height={24} />
             <div className={classes.offerDetail}>
                 <div className={classes.flex}>
-                    <ETHIcon width={20} height={20} />
+                    {<img className={classes.currencyIcon} src="" alt="" /> || <ETHIcon width={20} height={20} />}
                     <Typography className={classes.textBase}>
-                        <strong style={{ fontSize: 14 }}>9,999,99.00</strong> <strong>$232.00</strong> 2% below{' '}
+                        <strong style={{ fontSize: 14 }}>{offer.priceInToken?.amount}</strong>{' '}
+                        <strong>{offer.price?.usd || '-'}</strong> - below
                     </Typography>
                 </div>
                 <div className={classes.flex} style={{ marginLeft: 40 }}>
                     <Typography className={classes.textBase}>
-                        From <strong style={{ fontSize: 14 }}>B7000A2</strong> 11 hours ago Expires in 3 days
+                        From <strong style={{ fontSize: 14 }}>{offer.maker?.address}</strong> {offer.createdAt} Expires
+                        in {offer.expiredAt}
                     </Typography>
                 </div>
             </div>
