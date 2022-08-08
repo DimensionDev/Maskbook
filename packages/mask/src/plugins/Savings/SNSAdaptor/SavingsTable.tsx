@@ -106,7 +106,9 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
-    const { value: assets, loading: getAssetsLoading } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM)
+    const { value: assets, loading: getAssetsLoading } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
+        chainId,
+    })
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
     // Only fetch protocol APR and Balance on chainId change
     const { loading } = useAsync(async () => {
