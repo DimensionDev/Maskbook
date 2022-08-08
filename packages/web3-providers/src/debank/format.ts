@@ -71,7 +71,7 @@ export function formatTransactions(
                 timestamp: transaction.time_at,
                 from: transaction.tx?.from_addr ?? '',
                 to: transaction.other_addr,
-                status: transaction.tx?.status ?? 0,
+                status: transaction.tx?.status,
                 tokens: [
                     ...transaction.sends.map(({ amount, token_id }) => ({
                         id: token_id,

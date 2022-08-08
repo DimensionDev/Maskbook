@@ -248,7 +248,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             sx={{ padding: 0 }}
                                             size="small"
                                             onClick={() => setCoinMenuOpen((v) => !v)}>
-                                            <Icons.ArrowDrop />
+                                            <Icons.ArrowDrop size={24} />
                                         </IconButton>
                                         <CoinMenu
                                             open={coinMenuOpen}
