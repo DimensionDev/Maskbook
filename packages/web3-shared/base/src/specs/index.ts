@@ -1,7 +1,7 @@
 import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Emitter } from '@servie/events'
-import type { EnhanceableSite, ExtensionSite, ProfileIdentifier } from '@masknet/shared-base'
+import type { EnhanceableSite, ExtensionSite, ProfileIdentifier, ECKeyIdentifier } from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type {
     ReturnChainResolver,
@@ -108,6 +108,14 @@ export enum SocialAddressType {
     TWITTER_BLUE = 'TWITTER_BLUE',
     NEXT_ID = 'NEXT_ID',
     SOL = 'SOL',
+}
+
+export enum StorageProviderType {
+    NextID = 'NextID',
+    // RSS3 File API
+    RSS3 = 'RSS3',
+    // KV storage powered by CloudFlare
+    KV = 'kv',
 }
 
 export interface Identity {
@@ -430,7 +438,7 @@ export interface NonFungibleAsset<ChainId, SchemaType> extends NonFungibleToken<
  * Authorization about a fungible token.
  */
 export interface FungibleTokenSpenderAuthorization<ChainId, SchemaType> {
-    tokenInfo:  Pick<FungibleToken<ChainId, SchemaType>, 'address' | 'logoURL' | 'symbol' | 'name'>
+    tokenInfo: Pick<FungibleToken<ChainId, SchemaType>, 'address' | 'logoURL' | 'symbol' | 'name'>
     /** spender address */
     address: string
     /** spender name */
@@ -444,7 +452,7 @@ export interface FungibleTokenSpenderAuthorization<ChainId, SchemaType> {
 /**
  * Authorization about a non-fungible contract.
  */
- export interface NonFungibleContractSpenderAuthorization<ChainId, SchemaType> {
+export interface NonFungibleContractSpenderAuthorization<ChainId, SchemaType> {
     amount: string
     contract: Pick<NonFungibleTokenContract<ChainId, SchemaType>, 'name' | 'address'>
     address: string
@@ -901,11 +909,7 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
     /** Get a non-fungible token owner address. */
-    getNonFungibleTokenOwner?: (
-        address: string,
-        tokenId: string,
-        initial?: Web3HubOptions,
-    ) => Promise<string>
+    getNonFungibleTokenOwner?: (address: string, tokenId: string, initial?: Web3HubOptions) => Promise<string>
     /** Get a non-fungible token floor price. */
     getNonFungibleTokenFloorPrice?: (
         address: string,
@@ -1065,6 +1069,14 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
     cancelOrder?: (/** TODO: add parameters */) => Promise<void>
 }
 
+export interface Storage {
+    has(key: string): Promise<boolean>
+    get<T>(key: string): Promise<T>
+    set<T>(key: string, value: T): Promise<void>
+    delete?(key: string): Promise<void>
+    clearAll?(key: string): Promise<void>
+}
+
 export interface SettingsState {
     /** Is testnets valid */
     allowTestnet?: Subscription<boolean>
@@ -1107,6 +1119,17 @@ export interface HubState<
 > {
     /** Get external data hub */
     getHub?: (options: Web3HubOptions) => Promise<Web3Hub>
+}
+
+export interface Web3StorageServiceState {
+    getStorage: (
+        providerType: StorageProviderType,
+        options: {
+            namespace: string
+            personaIdentifier: ECKeyIdentifier
+            address: string
+        },
+    ) => Promise<Storage>
 }
 
 export interface IdentityServiceState {
@@ -1177,7 +1200,7 @@ export interface TransactionFormatterState<ChainId, Parameters, Transaction> {
     formatTransaction: (
         chainId: ChainId,
         transaction: Transaction,
-        txHash?: string
+        txHash?: string,
     ) => Promise<TransactionDescriptor<ChainId, Transaction>>
 }
 export interface TransactionWatcherState<ChainId, Transaction> {
