@@ -76,7 +76,6 @@ const useStyles = makeStyles()((theme, props) => ({
         marginTop: 12,
     },
     animated: {
-        fontSize: 36,
         '@keyframes loadingAnimation': {
             '0%': {
                 transform: 'rotate(0deg)',
@@ -165,10 +164,10 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
 
             {loading || getAssetsLoading ? (
                 <div className={classes.placeholder}>
-                    <Icons.CircleLoading className={classes.animated} />
+                    <Icons.CircleLoading size={36} className={classes.animated} />
                     <Typography className={classes.loading}>{t('popups_loading')}</Typography>
                 </div>
-            ) : protocols.length ? (
+            ) : protocols.filter((x) => !x.balance.isZero()).length ? (
                 <div className={classes.tableContainer}>
                     {protocols
                         .filter((x) => !x.balance.isZero())
