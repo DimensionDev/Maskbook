@@ -13,7 +13,6 @@
   "dependencies": {
     "@masknet/public-api": "workspace:*",
     "@masknet/typed-message": "workspace:*",
-    "@masknet/web3-shared-evm": "workspace:*",
     "@msgpack/msgpack": "^2.7.2",
     "@mui/icons-material": "link:..\\empty",
     "@mui/lab": "link:..\\empty",

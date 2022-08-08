@@ -44,7 +44,7 @@ function CheckSecurityConfirmDialog() {
 
     const onClose = () => setOpen(false)
 
-    const onConfirm = () => context.setPluginEnable(PluginId.GoPlusSecurity, true)
+    const onConfirm = () => context.setMinimalMode(PluginId.GoPlusSecurity, true)
 
     return (
         <InjectedDialog
