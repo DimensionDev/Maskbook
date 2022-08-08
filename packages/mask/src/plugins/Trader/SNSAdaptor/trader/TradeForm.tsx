@@ -16,13 +16,7 @@ import TuneIcon from '@mui/icons-material/Tune'
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
-import {
-    isHighRisk,
-    SelectTokenChip,
-    TokenSecurityBar,
-    useSelectAdvancedSettings,
-    useTokenSecurity,
-} from '@masknet/shared'
+import { SelectTokenChip, TokenSecurityBar, useSelectAdvancedSettings, useTokenSecurity } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import classnames from 'classnames'
 import { isNativeTokenWrapper } from '../../helpers'
@@ -43,7 +37,6 @@ import { PluginTraderMessages } from '../../messages'
 import Services from '../../../../extension/service'
 import { PluginId, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
-import { RiskWarningDialog } from './RiskWarningDialog'
 
 const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((theme, { isDashboard, isPopup }) => {
     return {
@@ -279,7 +272,7 @@ export const TradeForm = memo<AllTradeFormProps>(
             isTokenSecurityEnable,
         )
 
-        const isRisky = isHighRisk(tokenSecurityInfo)
+        const isRisky = tokenSecurityInfo?.is_high_risk
 
         // #region approve token
         const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(
@@ -643,17 +636,6 @@ export const TradeForm = memo<AllTradeFormProps>(
                             </WalletConnectedBoundary>
                         </ChainBoundary>
                     </PluginWalletStatusBar>
-                    {isTokenSecurityEnable && tokenSecurityInfo && (
-                        <RiskWarningDialog
-                            open={isWarningOpen}
-                            onClose={() => setIsWarningOpen(false)}
-                            onConfirm={() => {
-                                onSwap()
-                                setIsWarningOpen(false)
-                            }}
-                            tokenInfo={tokenSecurityInfo}
-                        />
-                    )}
                 </Box>
             </>
         )

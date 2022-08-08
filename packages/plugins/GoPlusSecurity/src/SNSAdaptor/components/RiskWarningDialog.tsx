@@ -148,7 +148,7 @@ export function RiskWarningDialog() {
                     {t.cancel()}
                 </Button>
                 <Button className={classes.warningButton} onClick={onConfirm}>
-                    {t.plugin_trader_make_risk_trade()}
+                    {t.make_risk_trade()}
                 </Button>
             </DialogActions>
         </InjectedDialog>

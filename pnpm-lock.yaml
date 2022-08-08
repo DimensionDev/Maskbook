@@ -252,7 +252,7 @@ importers:
     dependencies:
       urlcat:
         specifier: ^2.0.4
-        version: 2.0.4
+        version: 2.0.4_rbtnkqaptq75u32ovzkfd3ieoe
 
   packages/dashboard:
     dependencies:
@@ -378,7 +378,7 @@ importers:
         version: 1.1.0
       urlcat:
         specifier: ^2.0.4
-        version: 2.0.4
+        version: 2.0.4_rbtnkqaptq75u32ovzkfd3ieoe
       use-subscription:
         specifier: 1.6.0
         version: 1.6.0
@@ -876,7 +876,7 @@ importers:
         version: 1.1.0
       urlcat:
         specifier: ^2.0.4
-        version: 2.0.4
+        version: 2.0.4_rbtnkqaptq75u32ovzkfd3ieoe
       use-subscription:
         specifier: 1.6.0
         version: 1.6.0
@@ -1046,7 +1046,7 @@ importers:
         version: 1.1.0
       urlcat:
         specifier: ^2.0.4
-        version: 2.0.4
+        version: 2.0.4_rbtnkqaptq75u32ovzkfd3ieoe
       use-subscription:
         specifier: 1.6.0
         version: 1.6.0
@@ -1154,7 +1154,7 @@ importers:
         version: 17.4.0
       urlcat:
         specifier: ^2.0.4
-        version: 2.0.4
+        version: 2.0.4_rbtnkqaptq75u32ovzkfd3ieoe
 
   packages/plugins/Debugger:
     dependencies:
@@ -1199,7 +1199,7 @@ importers:
         version: 17.4.0
       urlcat:
         specifier: ^2.0.4
-        version: 2.0.4
+        version: 2.0.4_rbtnkqaptq75u32ovzkfd3ieoe
 
   packages/plugins/EVM:
     dependencies:
@@ -1277,7 +1277,7 @@ importers:
         version: 17.4.0
       urlcat:
         specifier: ^2.0.4
-        version: 2.0.4
+        version: 2.0.4_rbtnkqaptq75u32ovzkfd3ieoe
       wallet.ts:
         specifier: ^1.0.1
         version: 1.0.1
@@ -1359,7 +1359,7 @@ importers:
         version: 17.4.0
       urlcat:
         specifier: ^2.0.4
-        version: 2.0.4
+        version: 2.0.4_rbtnkqaptq75u32ovzkfd3ieoe
 
   packages/plugins/Flow:
     dependencies:
@@ -1450,7 +1450,7 @@ importers:
         version: 17.4.0
       urlcat:
         specifier: ^2.0.4
-        version: 2.0.4
+        version: 2.0.4_rbtnkqaptq75u32ovzkfd3ieoe
       wallet.ts:
         specifier: 1.0.1
         version: 1.0.1
@@ -1498,7 +1498,7 @@ importers:
         version: 17.4.0
       urlcat:
         specifier: ^2.0.4
-        version: 2.0.4
+        version: 2.0.4_rbtnkqaptq75u32ovzkfd3ieoe
       use-subscription:
         specifier: 1.6.0
         version: 1.6.0
@@ -1543,7 +1543,7 @@ importers:
         version: 3.3.0_g2bdan7o336xxsymnx5nlozu2m
       urlcat:
         specifier: 2.0.4
-        version: 2.0.4
+        version: 2.0.4_rbtnkqaptq75u32ovzkfd3ieoe
 
   packages/plugins/Solana:
     dependencies:
@@ -1715,7 +1715,7 @@ importers:
         version: 17.4.0
       urlcat:
         specifier: ^2.0.4
-        version: 2.0.4
+        version: 2.0.4_rbtnkqaptq75u32ovzkfd3ieoe
       use-subscription:
         specifier: 1.7.0
         version: 1.7.0
@@ -1934,7 +1934,7 @@ importers:
         version: 1.1.0
       urlcat:
         specifier: ^2.0.4
-        version: 2.0.4
+        version: 2.0.4_rbtnkqaptq75u32ovzkfd3ieoe
       use-subscription:
         specifier: 1.6.0
         version: 1.6.0
@@ -1950,6 +1950,9 @@ importers:
       '@masknet/typed-message':
         specifier: workspace:*
         version: link:../typed-message
+      '@masknet/web3-shared-evm':
+        specifier: workspace:*
+        version: link:../web3-shared/evm
       '@msgpack/msgpack':
         specifier: ^2.7.2
         version: 2.7.2
@@ -2241,7 +2244,7 @@ importers:
         version: 2.4.0
       urlcat:
         specifier: ^2.0.4
-        version: 2.0.4
+        version: 2.0.4_rbtnkqaptq75u32ovzkfd3ieoe
       uuid:
         specifier: ^8.3.2
         version: 8.3.2
@@ -2296,7 +2299,7 @@ importers:
         version: 4.4.0
       urlcat:
         specifier: ^2.0.4
-        version: 2.0.4
+        version: 2.0.4_rbtnkqaptq75u32ovzkfd3ieoe
       web3-core-helpers:
         specifier: 1.7.4
         version: 1.7.4
@@ -2357,7 +2360,7 @@ importers:
         version: 1.1.0
       urlcat:
         specifier: ^2.0.4
-        version: 2.0.4
+        version: 2.0.4_rbtnkqaptq75u32ovzkfd3ieoe
       use-subscription:
         specifier: 1.6.0
         version: 1.6.0
@@ -2424,7 +2427,7 @@ importers:
         version: 17.4.0
       urlcat:
         specifier: ^2.0.4
-        version: 2.0.4
+        version: 2.0.4_rbtnkqaptq75u32ovzkfd3ieoe
 
   packages/web3-shared/solana:
     dependencies:
@@ -2460,7 +2463,7 @@ importers:
         version: 17.4.0
       urlcat:
         specifier: ^2.0.4
-        version: 2.0.4
+        version: 2.0.4_rbtnkqaptq75u32ovzkfd3ieoe
 
 packages:
 
@@ -9108,7 +9111,7 @@ packages:
       react-refresh: 0.11.0
       schema-utils: 3.1.1
       source-map: 0.7.4
-      webpack: 5.74.0
+      webpack: 5.74.0_@swc+core@1.2.218
     dev: true
 
   /@pnpm/network.ca-file/1.0.1:
@@ -11096,7 +11099,7 @@ packages:
       micromatch: 4.0.5
       react-docgen-typescript: 2.2.2
       tslib: 2.4.0
-      webpack: 5.74.0
+      webpack: 5.74.0_@swc+core@1.2.218
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -31661,9 +31664,10 @@ packages:
       punycode: 1.3.2
       querystring: 0.2.0
 
-  /urlcat/2.0.4:
+  /urlcat/2.0.4_rbtnkqaptq75u32ovzkfd3ieoe:
     resolution: {integrity: sha512-12c4Vi40DHVdZ/8mOLjZjp0asCzM6hi8Gj116fpImRP1FN4gBMCtMi9XhLNOmre/FEQYNqHbZmX8iyYAtIcy8Q==}
     dev: false
+    patched: true
 
   /use-subscription/1.6.0:
     resolution: {integrity: sha512-0Y/cTLlZfw547tJhJMoRA16OUbVqRm6DmvGpiGbmLST6BIA5KU5cKlvlz8DVMrACnWpyEjCkgmhLatthP4jUbA==}

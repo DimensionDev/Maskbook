@@ -1,36 +1,19 @@
 import { Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales'
-import { memo, useMemo } from 'react'
+import { memo } from 'react'
 import { DefineMapping, SecurityMessageLevel } from './Common'
 import { Icons } from '@masknet/icons'
 import type { SecurityAPI } from '@masknet/web3-providers'
-import type { ChainId } from '@masknet/web3-shared-evm'
-import { getMessageList, isHighRisk } from './utils'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 
 interface TokenCardProps {
-    tokenSecurity: TokenSecurity
+    tokenSecurity: SecurityAPI.TokenSecurityType
 }
-
-export type TokenSecurity = SecurityAPI.ContractSecurity &
-    SecurityAPI.TokenSecurity &
-    SecurityAPI.TradingSecurity & { contract: string; chainId: ChainId }
-
-export { getMessageList, isHighRisk }
 
 export const TokenSecurityBar = memo<TokenCardProps>(({ tokenSecurity }) => {
     const t = useSharedI18N()
 
-    const { riskyFactors, attentionFactors } = useMemo(() => {
-        const makeMessageList = getMessageList(tokenSecurity)
-
-        const riskyFactors = makeMessageList.filter((x) => x.level === SecurityMessageLevel.High).length
-        const attentionFactors = makeMessageList.filter((x) => x.level === SecurityMessageLevel.Medium).length
-        return {
-            riskyFactors,
-            attentionFactors,
-        }
-    }, [tokenSecurity])
+    const { warn_item_quantity: attentionFactors = 0, risk_item_quantity: riskyFactors = 0 } = tokenSecurity
 
     const handleOpenDialog = () => {
         CrossIsolationMessages.events.requestCheckSecurityDialog.sendToAll({

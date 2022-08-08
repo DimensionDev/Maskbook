@@ -4,7 +4,7 @@ import type {
     CompositionRequest,
     Web3ProfileDialogRequest,
     CheckSecurityDialogRequest,
-} from './Mask'
+} from './Mask.js'
 
 /**
  * @deprecated
