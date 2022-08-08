@@ -47,6 +47,7 @@ export interface FungibleTokenListProps<T extends NetworkPluginID> extends withC
     ): void
     FixedSizeListProps?: Partial<MaskFixedSizeListProps>
     SearchTextFieldProps?: MaskTextFieldProps
+    enableManage?: boolean
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -81,6 +82,7 @@ export const FungibleTokenList = forwardRef(
             onSelect,
             FixedSizeListProps,
             selectedTokens = EMPTY_LIST,
+            enableManage = false,
         } = props
 
         const t = useSharedI18N()
@@ -315,7 +317,7 @@ export const FungibleTokenList = forwardRef(
                         ...props.SearchTextFieldProps,
                     }}
                 />
-                {mode === TokenListMode.List && (
+                {mode === TokenListMode.List && enableManage && (
                     <Box className={classes.bar}>
                         <ManageTokenListBar onClick={() => setMode(TokenListMode.Manage)} />
                     </Box>

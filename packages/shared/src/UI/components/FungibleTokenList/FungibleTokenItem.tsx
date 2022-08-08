@@ -45,7 +45,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(0.5),
         alignItems: 'center',
         lineHeight: '20px',
-        fontSize: 16,
+        fontSize: 14,
         // TODO: Should align dashboard and twitter theme in common component, depend twitter theme
         color: theme.palette.mode === 'dark' ? '#6E767D' : '#536471',
     },
