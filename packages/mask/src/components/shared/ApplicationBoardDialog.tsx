@@ -12,6 +12,7 @@ import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
 import { Icons } from '@masknet/icons'
 import { PersonaListDialog } from './PersonaListDialog'
+import { PluginNextIDMessages } from '../../plugins/NextID/messages'
 
 const useStyles = makeStyles<{ openSettings: boolean }>()((theme, { openSettings }) => {
     return {
@@ -42,7 +43,7 @@ export function ApplicationBoardDialog() {
     )
 
     const { open: openPersonaListDialog, closeDialog: _closePersonaListDialog } = useRemoteControlledDialog(
-        WalletMessages.events.ApplicationPersonaListDialogUpdated,
+        PluginNextIDMessages.PersonaListDialogUpdated,
     )
 
     const closeDialog = useCallback(() => {

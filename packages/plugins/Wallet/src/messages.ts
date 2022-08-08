@@ -109,11 +109,6 @@ export interface WalletMessage {
     ApplicationDialogUpdated: ApplicationDialogEvent
 
     /**
-     * Application Persona List dialog
-     */
-    ApplicationPersonaListDialogUpdated: ApplicationDialogEvent
-
-    /**
      * Gas setting dialog
      */
     gasSettingDialogUpdated: GasSettingDialogEvent

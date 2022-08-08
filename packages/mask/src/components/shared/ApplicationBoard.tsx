@@ -18,6 +18,7 @@ import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/useP
 import { MaskMessages } from '../../../shared'
 import { useTimeout } from 'react-use'
 import { DashboardRoutes } from '@masknet/shared-base'
+import { PluginNextIDMessages } from '../../plugins/NextID/messages'
 
 const useStyles = makeStyles<{ shouldScroll: boolean; isCarouselReady: boolean }>()((theme, props) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -212,15 +213,10 @@ function RenderEntryComponent({ application }: { application: Application }) {
         WalletMessages.events.selectProviderDialogUpdated,
     )
 
-    const { setDialog: setPersonaListDialog } = useRemoteControlledDialog(
-        WalletMessages.events.ApplicationPersonaListDialogUpdated,
-    )
+    const { setDialog: setPersonaListDialog } = useRemoteControlledDialog(PluginNextIDMessages.PersonaListDialogUpdated)
 
     const { setDialog: setCreatePersonaConfirmDialog } = useRemoteControlledDialog(MaskMessages.events.openPageConfirm)
 
-    const { closeDialog: closeApplicationBoard } = useRemoteControlledDialog(
-        WalletMessages.events.ApplicationDialogUpdated,
-    )
     const ApplicationEntryStatus = useContext(ApplicationEntryStatusContext)
 
     // #region entry disabled

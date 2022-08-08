@@ -22,6 +22,7 @@ import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { activatedSocialNetworkUI } from '../../social-network'
+import { PluginNextIDMessages } from '../../plugins/NextID/messages'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -96,7 +97,7 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
     const currentProfileIdentify = useLastRecognizedIdentity()
     const { value: personas = EMPTY_LIST, loading } = useConnectedPersonas()
 
-    const { closeDialog } = useRemoteControlledDialog(WalletMessages.events.ApplicationPersonaListDialogUpdated)
+    const { closeDialog } = useRemoteControlledDialog(PluginNextIDMessages.PersonaListDialogUpdated)
 
     const { closeDialog: closeApplicationBoard } = useRemoteControlledDialog(
         WalletMessages.events.ApplicationDialogUpdated,
