@@ -441,12 +441,14 @@ export namespace Plugin.SNSAdaptor {
         CompositionDialogMetadataBadgeRender?: CompositionMetadataBadgeRender
         /** This UI will be rendered as an entry in the wallet status dialog */
         ApplicationEntries?: ApplicationEntry[]
+        /** This UI will be rendered as tabs on the profile card */
+        AvatarRealm?: AvatarRealm
         /** This UI will be rendered as tabs on the profile page */
         ProfileTabs?: ProfileTab[]
         /** This UI will be rendered as cover on the profile page */
         ProfileCover?: ProfileCover[]
         /** This UI will be rendered as tabs on the profile card */
-        AvatarRealm?: AvatarRealm
+        TagInspector?: TagInspector
         /** This UI will be rendered as plugin wrapper page */
         wrapperProps?: PluginWrapperProps
         /**
@@ -563,7 +565,6 @@ export namespace Plugin.SNSAdaptor {
             isFirst?: boolean
         }
     }
-
     export interface PluginWrapperProps {
         icon?: React.ReactNode
         title?: string
@@ -610,9 +611,12 @@ export namespace Plugin.SNSAdaptor {
             ): boolean
         }
     }
-    export interface ProfileSlider {
+    export interface TagType {
+        Cash: 'Cash'
+        Hash: 'Hash'
+    }
+    export interface TagInspector {
         ID: string
-
         /**
          * The name of the slider card
          */
@@ -624,22 +628,29 @@ export namespace Plugin.SNSAdaptor {
         /**
          * The injected UI
          */
-        children: InjectUI<{}>
+        UI?: {
+            /**
+             * The injected tag inspector
+             */
+            TagInspector: InjectUI<{
+                type: TagType
+                name: string
+            }>
+        }
     }
-
     export interface ProfileTab {
         ID: string
-
         /**
          * The name of the tab
          */
         label: I18NStringField | string
-
         /**
          * Used to order the sliders
          */
         priority: number
-
+        /**
+         * The injected UI
+         */
         UI?: {
             /**
              * The injected tab content

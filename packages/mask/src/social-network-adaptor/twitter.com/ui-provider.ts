@@ -15,7 +15,6 @@ import { i18NOverwriteTwitter } from './customization/i18n'
 import { injectSearchResultBoxAtTwitter } from './injection/SearchResultBox'
 import { injectProfileTabAtTwitter } from './injection/ProfileTab'
 import { injectProfileTabContentAtTwitter } from './injection/ProfileTabContent'
-import { injectPostReplacerAtTwitter } from './injection/PostReplacer'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector'
 import { injectSetupPromptAtTwitter } from './injection/SetupPrompt'
 import { injectPostBoxComposed } from './injection/inject'
@@ -35,6 +34,7 @@ import { injectNFTAvatarClipInTwitter } from './injection/NFT/NFTAvatarClip'
 import { TwitterRenderFragments } from './customization/render-fragments'
 import { injectProfileCover } from './injection/ProfileCover'
 import { injectAvatar } from './injection/Avatar'
+import { injectPostTagAtTwitter } from './injection/PostTag'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -160,16 +160,6 @@ const twitterUI: SocialNetworkUI.Definition = {
         return { profiles }
     },
     injection: {
-        toolbox: injectToolboxHintAtTwitter,
-        searchResult: injectSearchResultBoxAtTwitter,
-        profileTab: injectProfileTabAtTwitter,
-        profileCover: injectProfileCover,
-        profileTabContent: injectProfileTabContentAtTwitter,
-        enhancedPostRenderer: injectPostReplacerAtTwitter,
-        pageInspector: injectPageInspectorDefault(),
-        postInspector: injectPostInspectorAtTwitter,
-        postActions: injectPostActionsAtTwitter,
-        setupPrompt: injectSetupPromptAtTwitter,
         newPostComposition: {
             start: injectPostBoxComposed,
             supportedInputTypes: {
@@ -181,9 +171,20 @@ const twitterUI: SocialNetworkUI.Definition = {
                 image: true,
             },
         },
+        commentComposition: undefined,
+        toolbox: injectToolboxHintAtTwitter,
+        searchResult: injectSearchResultBoxAtTwitter,
+        profileTab: injectProfileTabAtTwitter,
+        profileCover: injectProfileCover,
+        profileTabContent: injectProfileTabContentAtTwitter,
+        // enhancedPostRenderer: injectPostReplacerAtTwitter,
+        pageInspector: injectPageInspectorDefault(),
+        postInspector: injectPostInspectorAtTwitter,
+        postTagInspector: injectPostTagAtTwitter,
+        postActions: injectPostActionsAtTwitter,
+        setupPrompt: injectSetupPromptAtTwitter,
         setupWizard: createTaskStartSetupGuideDefault(),
         userBadge: injectMaskUserBadgeAtTwitter,
-        commentComposition: undefined,
         userAvatar: injectUserNFTAvatarAtTwitter,
         profileAvatar: injectNFTAvatarInTwitter,
         profileTip: injectOpenTipButtonOnProfile,

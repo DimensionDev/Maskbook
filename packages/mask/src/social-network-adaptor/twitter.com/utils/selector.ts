@@ -64,6 +64,8 @@ export const searchNFTAvatarSelector = () =>
     querySelector<HTMLImageElement>('[data-testid="primaryColumn"] a[href$="/nft"] img[src*="profile_images"]')
 export const searchAvatarMetaSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('head > meta[property="og:image"]:last-child')
+export const searchTagSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>(['a[href$="cashtag_click"]', 'a[href$="hashtag_click"]'].join())
 
 export const profileFollowButtonSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(

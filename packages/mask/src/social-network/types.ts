@@ -87,7 +87,9 @@ export namespace SocialNetworkUI {
             /** Display the additional content (decrypted, plugin, ...) below the post */
             postInspector?(signal: AbortSignal, current: PostInfo): void
             /** Add custom actions buttons to the post */
-            postActions?(signal: AbortSignal, author: PostInfo): void
+            postActions?(signal: AbortSignal, current: PostInfo): void
+            /** Add a hook for plugins to inject tag inspectors */
+            postTagInspector?(signal: AbortSignal, current: PostInfo): void
             /** Inject a tool box that displayed in the navigation bar of the SNS */
             toolbox?(signal: AbortSignal, category: 'wallet' | 'application'): void
             /** Inject the UI that used to notify if the user has not completely setup the current network. */
