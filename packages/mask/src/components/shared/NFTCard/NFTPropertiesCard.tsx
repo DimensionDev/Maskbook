@@ -1,6 +1,9 @@
 import { makeStyles } from '@masknet/theme'
 import { Skeleton, Typography } from '@mui/material'
 import { NFTRank } from './NFTRank'
+import { useI18N } from '../../../utils'
+import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -50,29 +53,36 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 interface NFTPropertiesCardProps {
-    asset: any
+    asset: {
+        loading?: boolean
+        value?: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
+    }
 }
 
 export function NFTPropertiesCard(props: NFTPropertiesCardProps) {
     const { asset } = props
     const { classes } = useStyles()
-    const _asset = asset.value
+    const { t } = useI18N()
     if (!asset.value || asset.loading) return <Skeleton width="100%" height={96} />
+
+    const _asset = asset.value
+
     return (
         <div className={classes.wrapper}>
             <div className={classes.titleBox}>
-                <Typography className={classes.title}>Properties</Typography>
+                <Typography className={classes.title}>{t('plugin_collectible_properties')}</Typography>
                 <div className={classes.rankBox}>
-                    <NFTRank />
+                    {/* gem rank */}
+                    <NFTRank rank={1} />
                 </div>
             </div>
             <div className={classes.content}>
-                {_asset.traits.map((x: any) => {
+                {_asset.traits?.map((x: any) => {
                     return (
                         <div key={x.type} className={classes.traitsItem}>
                             <Typography className={classes.traitsTitle}>{x.type}</Typography>
                             <Typography>{x.value}</Typography>
-                            <Typography>{x.rarity ?? '18,532(19.0%)'}</Typography>
+                            <Typography>{x.rarity ?? '(-)%'}</Typography>
                         </div>
                     )
                 })}

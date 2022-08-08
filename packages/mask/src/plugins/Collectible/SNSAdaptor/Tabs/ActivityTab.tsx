@@ -5,6 +5,7 @@ import { Button, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { CollectibleState } from '../../hooks/useCollectibleState'
 import { NFTActivityCard, ActivityType } from '../../../../components/shared/NFTCard/NFTActivityCard'
+import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     body: {
@@ -30,15 +31,16 @@ export interface ActivityTabProps {}
 export function ActivityTab(props: ActivityTabProps) {
     const { classes } = useStyles()
     const { events } = CollectibleState.useContainer()
+    const { t } = useI18N()
     const _events = events.value?.data ?? []
     return useMemo(() => {
         if (events.loading) return <LoadingBase />
         if (events.error || !events.value)
             return (
                 <div className={classes.body}>
-                    <Typography className={classes.emptyText}>LoadFailed</Typography>
+                    <Typography className={classes.emptyText}>{t('plugin_furucombo_load_failed')}</Typography>
                     <Button variant="text" onClick={() => events.retry()}>
-                        retry
+                        {t('retry')}
                     </Button>
                 </div>
             )
@@ -46,7 +48,7 @@ export function ActivityTab(props: ActivityTabProps) {
             return (
                 <div className={classes.body}>
                     <Icons.EmptySimple className={classes.emptyIcon} />
-                    <Typography className={classes.emptyText}>This NFT didn't have any activity</Typography>
+                    <Typography className={classes.emptyText}>{t('plugin_collectible_nft_activity_empty')}</Typography>
                 </div>
             )
         return (

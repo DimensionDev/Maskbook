@@ -6,6 +6,7 @@ import formatDateTime from 'date-fns/format'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import type { NonFungibleTokenEvent } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -72,6 +73,7 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
     const { activity, type } = props
     const { classes, cx } = useStyles()
     const { Others } = useWeb3State()
+    const { t } = useI18N()
 
     return (
         <div className={classes.wrapper}>
@@ -89,11 +91,11 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
             </div>
             <div className={classes.flex}>
                 <Typography className={classes.textBase}>
-                    From{' '}
+                    {t('plugin_collectible_from')}
                     <strong> {activity.from.address ? Others?.formatAddress(activity.from.address, 4) : '-'}</strong>
                 </Typography>
                 <Typography className={classes.textBase}>
-                    to{' '}
+                    {t('plugin_collectible_to')}
                     <strong>
                         {activity.to.nickname ||
                             (activity.to.address ? Others?.formatAddress(activity.to.address, 4) : '-')}

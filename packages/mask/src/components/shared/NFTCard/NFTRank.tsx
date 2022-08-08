@@ -1,5 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
+import { SourceType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -14,12 +15,19 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function NFTRank() {
+interface NFTRankProps {
+    providerType?: SourceType
+    rank: number
+}
+
+export function NFTRank(props: NFTRankProps) {
+    const { providerType, rank } = props
     // todo: multiple style to provider
     const { classes } = useStyles()
+    const _providerType = providerType || SourceType.Gem
     return (
         <div className={classes.wrapper}>
-            <Typography># 20875</Typography>
+            <Typography># {rank ?? '-'}</Typography>
         </div>
     )
 }

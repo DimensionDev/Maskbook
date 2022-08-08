@@ -4,6 +4,7 @@ import { Typography } from '@mui/material'
 import { ETHIcon } from '../../../plugins/VCent/icons/ETH'
 import type { NonFungibleTokenOrder } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -47,6 +48,7 @@ interface NFTOfferCardProps {
 export function NFTOfferCard(props: NFTOfferCardProps) {
     const { offer } = props
     const { classes } = useStyles()
+    const { t } = useI18N()
     // if (!offer.value || offer.loading) return <Skeleton width="100%" height={60} />
 
     return (
@@ -62,8 +64,8 @@ export function NFTOfferCard(props: NFTOfferCardProps) {
                 </div>
                 <div className={classes.flex} style={{ marginLeft: 40 }}>
                     <Typography className={classes.textBase}>
-                        From <strong style={{ fontSize: 14 }}>{offer.maker?.address}</strong> {offer.createdAt} Expires
-                        in {offer.expiredAt}
+                        {t('plugin_collectible_from')} <strong style={{ fontSize: 14 }}>{offer.maker?.address}</strong>{' '}
+                        {offer.createdAt} {t('plugin_collectible_expires_in')} {offer.expiredAt}
                     </Typography>
                 </div>
             </div>

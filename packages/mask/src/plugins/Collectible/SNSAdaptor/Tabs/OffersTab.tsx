@@ -5,6 +5,7 @@ import { Typography, Button } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { CollectibleState } from '../../hooks/useCollectibleState'
 import { NFTOfferCard } from '../../../../components/shared/NFTCard/NFTOfferCard'
+import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     body: {
@@ -29,15 +30,15 @@ export function OffersTab() {
     const { classes } = useStyles()
     const { orders } = CollectibleState.useContainer()
     const _orders = orders.value?.data ?? []
-    console.log(orders, 'orders')
+    const { t } = useI18N()
     return useMemo(() => {
         if (orders.loading) return <LoadingBase />
         if (orders.error || !orders.value)
             return (
                 <div className={classes.body}>
-                    <Typography className={classes.emptyText}>LoadFailed</Typography>
+                    <Typography className={classes.emptyText}>{t('plugin_furucombo_load_failed')}</Typography>
                     <Button variant="text" onClick={() => orders.retry()}>
-                        retry
+                        {t('retry')}
                     </Button>
                 </div>
             )
@@ -45,7 +46,7 @@ export function OffersTab() {
             return (
                 <div className={classes.body}>
                     <Icons.EmptySimple className={classes.emptyIcon} />
-                    <Typography className={classes.emptyText}>This NFT didn't get any offer</Typography>
+                    <Typography className={classes.emptyText}>{t('plugin_collectible_nft_activity_empty')}</Typography>
                 </div>
             )
         return (
