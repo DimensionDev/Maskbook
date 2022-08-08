@@ -22,7 +22,8 @@ export function formatPersonaPublicKey(address: string, size = 0) {
 
 export function isSamePersona(...personas: Array<PersonaIdentifier | PersonaInformation | undefined>) {
     return personas.reduce((previousValue, currentValue, key) => {
-        if (key === 0 || !currentValue) return false
+        if (key === 0) return true
+        if (!currentValue || !personas[key - 1]) return false
         const p1Identifier =
             'toText' in personas[key - 1]!
                 ? (personas[key - 1] as PersonaIdentifier)
@@ -37,13 +38,14 @@ export function currySamePersona(persona?: PersonaIdentifier | PersonaInformatio
         isSamePersona(...[persona, ...personas])
 }
 
-export function isSameProfile(...personas: Array<ProfileIdentifier | ProfileInformation | undefined>) {
-    return personas.reduce((previousValue, currentValue, key) => {
-        if (key === 0 || !currentValue) return false
+export function isSameProfile(...profiles: Array<ProfileIdentifier | ProfileInformation | undefined>) {
+    return profiles.reduce((previousValue, currentValue, key) => {
+        if (key === 0) return true
+        if (!currentValue || !profiles[key - 1]) return false
         const p1Identifier =
-            'toText' in personas[key - 1]!
-                ? (personas[key - 1] as ProfileIdentifier)
-                : (personas[key - 1] as ProfileInformation).identifier
+            'toText' in profiles[key - 1]!
+                ? (profiles[key - 1] as ProfileIdentifier)
+                : (profiles[key - 1] as ProfileInformation).identifier
         const p2Identifier = 'toText' in currentValue ? currentValue : currentValue.identifier
         return previousValue && p1Identifier.toText() === p2Identifier.toText()
     }, false)
