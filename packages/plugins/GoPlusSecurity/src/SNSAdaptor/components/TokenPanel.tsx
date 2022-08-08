@@ -4,7 +4,7 @@ import React from 'react'
 import { useTheme } from '@mui/system'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { explorerResolver, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { formatSupply } from '@masknet/web3-shared-base'
+import { formatMarketCap, formatSupply } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
 import type { SecurityAPI } from '@masknet/web3-providers'
 
@@ -140,7 +140,7 @@ export const TokenPanel = React.forwardRef(({ tokenSecurity, tokenMarketCap }: T
                 <Stack direction="row" justifyContent="space-between">
                     <Typography className={classes.subtitle}>{t.token_market_cap()}</Typography>
                     <Typography className={classes.cardValue}>
-                        {tokenMarketCap ? `$${formatSupply(tokenMarketCap)}` : DEFAULT_PLACEHOLDER}
+                        {tokenMarketCap ? formatMarketCap(tokenMarketCap) : DEFAULT_PLACEHOLDER}
                     </Typography>
                 </Stack>
             </Stack>

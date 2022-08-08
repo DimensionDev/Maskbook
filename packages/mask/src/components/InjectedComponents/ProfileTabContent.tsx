@@ -116,9 +116,6 @@ const useStyles = makeStyles()((theme) => ({
     arrowDropIcon: {
         color: theme.palette.maskColor.dark,
     },
-    verifiedIcon: {
-        color: theme.palette.maskColor.success,
-    },
     selectedIcon: {
         color: theme.palette.maskColor.primary,
     },
@@ -326,11 +323,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                                             identityAddress={x}
                                                             iconProps={classes.secondLinkIcon}
                                                         />
-                                                        {x?.type === SocialAddressType.NEXT_ID && (
-                                                            <Icons.NextIdPersonaVerified
-                                                                className={classes.verifiedIcon}
-                                                            />
-                                                        )}
+                                                        {x?.type === SocialAddressType.NEXT_ID && <Icons.Verified />}
                                                     </div>
                                                     {isSameAddress(selectedAddress?.address, x.address) && (
                                                         <Icons.Selected className={classes.selectedIcon} />
