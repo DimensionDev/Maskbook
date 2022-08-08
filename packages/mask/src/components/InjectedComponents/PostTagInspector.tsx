@@ -2,14 +2,14 @@ import { createInjectHooksRenderer, TagType, useActivatedPluginsSNSAdaptor } fro
 
 const PluginRenderer = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useAnyMode,
-    (x) => x.TagInspector?.UI?.TagInspector,
+    (x) => x.PostTagInspector,
 )
 
-export interface TagInspectorProps {
+export interface PostTagInspectorProps {
     type: TagType
     name: string
 }
 
-export function TagInspector(props: TagInspectorProps) {
+export function PostTagInspector(props: PostTagInspectorProps) {
     return <PluginRenderer {...props} />
 }

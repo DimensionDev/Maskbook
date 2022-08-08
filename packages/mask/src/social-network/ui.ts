@@ -93,8 +93,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.injection.profileTab?.(signal)
     ui.injection.profileTabContent?.(signal)
 
-    ui.injection.tagInspector?.(signal)
-
     ui.injection.profileCover?.(signal)
     ui.injection.userAvatar?.(signal)
     ui.injection.profileAvatar?.(signal)
@@ -212,6 +210,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             ui.injection.enhancedPostRenderer?.(postSignal, value)
             ui.injection.postInspector?.(postSignal, value)
             ui.injection.postActions?.(postSignal, value)
+            ui.injection.postTagInspector?.(postSignal, value)
             ui.injection.commentComposition?.compositionBox(postSignal, value)
             ui.injection.commentComposition?.commentInspector(postSignal, value)
         })

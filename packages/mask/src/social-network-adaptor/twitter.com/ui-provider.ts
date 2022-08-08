@@ -23,6 +23,7 @@ import { injectMaskUserBadgeAtTwitter } from './injection/MaskIcon'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector'
 import { injectPostActionsAtTwitter } from './injection/PostActions'
+import { injectPostTagInspectorAtTwitter } from './injection/PostTagInspector'
 import { EnhanceableSite, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { injectNFTAvatarInTwitter } from './injection/NFT/NFTAvatarInTwitter'
@@ -34,7 +35,6 @@ import { injectNFTAvatarClipInTwitter } from './injection/NFT/NFTAvatarClip'
 import { TwitterRenderFragments } from './customization/render-fragments'
 import { injectProfileCover } from './injection/ProfileCover'
 import { injectAvatar } from './injection/Avatar'
-import { injectTagInspectorAtTwitter } from './injection/TagInspector'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -180,7 +180,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         // enhancedPostRenderer: injectPostReplacerAtTwitter,
         pageInspector: injectPageInspectorDefault(),
         postInspector: injectPostInspectorAtTwitter,
-        tagInspector: injectTagInspectorAtTwitter,
+        postTagInspector: injectPostTagInspectorAtTwitter,
         postActions: injectPostActionsAtTwitter,
         setupPrompt: injectSetupPromptAtTwitter,
         setupWizard: createTaskStartSetupGuideDefault(),

@@ -88,6 +88,8 @@ export namespace SocialNetworkUI {
             postInspector?(signal: AbortSignal, current: PostInfo): void
             /** Add custom actions buttons to the post */
             postActions?(signal: AbortSignal, current: PostInfo): void
+            /** Add a hook for plugins to inject tag inspectors */
+            postTagInspector?(signal: AbortSignal, current: PostInfo): void
             /** Inject a tool box that displayed in the navigation bar of the SNS */
             toolbox?(signal: AbortSignal, category: 'wallet' | 'application'): void
             /** Inject the UI that used to notify if the user has not completely setup the current network. */
@@ -106,8 +108,6 @@ export namespace SocialNetworkUI {
             profileCover?(signal: AbortSignal): void
             /** Inject UI to the profile page */
             profileTabContent?(signal: AbortSignal): void
-            /** Add a hook for plugins to inject tag inspectors */
-            tagInspector?(signal: AbortSignal): void
             setupWizard?(signal: AbortSignal, for_: PersonaIdentifier): void
             openNFTAvatarSettingDialog?(): void
 

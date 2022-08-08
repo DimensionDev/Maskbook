@@ -410,6 +410,11 @@ export namespace Plugin.SNSAdaptor {
         PostInspector?: InjectUI<{}>
         /** This UI will be rendered for action of each post found. */
         PostActions?: InjectUI<{}>
+        /** This UI will be rendered as tabs on the profile card */
+        PostTagInspector?: InjectUI<{
+            type: TagType
+            name: string
+        }>
         /** This UI will be rendered for each decrypted post. */
         DecryptedInspector?: InjectUI<{ message: TypedMessage }>
         /** This UI will be rendered under the Search of the SNS. */
@@ -447,8 +452,6 @@ export namespace Plugin.SNSAdaptor {
         ProfileTabs?: ProfileTab[]
         /** This UI will be rendered as cover on the profile page */
         ProfileCover?: ProfileCover[]
-        /** This UI will be rendered as tabs on the profile card */
-        TagInspector?: TagInspector
         /** This UI will be rendered as plugin wrapper page */
         Wrapper?: PluginWrapperProps
         /**
@@ -609,25 +612,6 @@ export namespace Plugin.SNSAdaptor {
                 addressNames?: Array<SocialAddress<NetworkPluginID>>,
                 sourceType?: AvatarRealmSourceType,
             ): boolean
-        }
-    }
-    export interface TagInspector {
-        ID: string
-        /**
-         * Used to order the sliders
-         */
-        priority: number
-        /**
-         * The injected UI
-         */
-        UI?: {
-            /**
-             * The injected tag inspector
-             */
-            TagInspector: InjectUI<{
-                type: TagType
-                name: string
-            }>
         }
     }
     export interface ProfileTab {
