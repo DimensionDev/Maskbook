@@ -1,6 +1,5 @@
 import { registerPlugin } from '@masknet/plugin-infra'
 import { base } from './base'
-export * from './messages'
 
 registerPlugin({
     ...base,

@@ -1,6 +1,6 @@
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { PluginGoPlusSecurityMessages } from '@masknet/plugin-go-plus-security'
+import { PluginGoPlusSecurityMessages } from '@masknet/plugin-go-plus-security/src/messages'
 import { useI18N } from '../../utils'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
