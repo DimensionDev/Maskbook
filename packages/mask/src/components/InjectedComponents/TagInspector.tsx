@@ -1,5 +1,4 @@
-import type { Plugin } from '@masknet/plugin-infra'
-import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { createInjectHooksRenderer, TagType, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 
 const PluginRenderer = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useAnyMode,
@@ -7,7 +6,7 @@ const PluginRenderer = createInjectHooksRenderer(
 )
 
 export interface TagInspectorProps {
-    type: Plugin.SNSAdaptor.TagType
+    type: TagType
     name: string
 }
 

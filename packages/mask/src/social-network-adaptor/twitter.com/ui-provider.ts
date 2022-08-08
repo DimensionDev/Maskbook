@@ -34,7 +34,7 @@ import { injectNFTAvatarClipInTwitter } from './injection/NFT/NFTAvatarClip'
 import { TwitterRenderFragments } from './customization/render-fragments'
 import { injectProfileCover } from './injection/ProfileCover'
 import { injectAvatar } from './injection/Avatar'
-import { injectPostTagAtTwitter } from './injection/PostTag'
+import { injectTagInspectorAtTwitter } from './injection/TagInspector'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -180,7 +180,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         // enhancedPostRenderer: injectPostReplacerAtTwitter,
         pageInspector: injectPageInspectorDefault(),
         postInspector: injectPostInspectorAtTwitter,
-        postTagInspector: injectPostTagAtTwitter,
+        tagInspector: injectTagInspectorAtTwitter,
         postActions: injectPostActionsAtTwitter,
         setupPrompt: injectSetupPromptAtTwitter,
         setupWizard: createTaskStartSetupGuideDefault(),

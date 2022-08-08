@@ -1,10 +1,11 @@
 import { useAsync } from 'react-use'
 import { PluginTraderRPC } from '../messages'
-import type { Coin, TagType } from '../types'
+import type { Coin } from '../types'
 import type { DataProvider } from '@masknet/public-api'
 import { useCurrentCurrency } from './useCurrentCurrency'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useChainId, useFungibleToken } from '@masknet/plugin-infra/web3'
+import type { TagType } from '@masknet/plugin-infra'
 
 export function useTrendingByKeyword(tagType: TagType, keyword: string, dataProvider: DataProvider) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)

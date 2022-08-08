@@ -75,7 +75,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
         })(),
     ],
-    wrapperProps: {
+    Wrapper: {
         backgroundGradient: 'linear-gradient(235.14deg, #E8F4FF 0%, #E5E3FF 100%)',
         icon: <ReferralFarmsIcon style={{ width: 24, height: 23 }} />,
     },

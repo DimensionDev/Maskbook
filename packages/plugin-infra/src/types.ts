@@ -450,11 +450,11 @@ export namespace Plugin.SNSAdaptor {
         /** This UI will be rendered as tabs on the profile card */
         TagInspector?: TagInspector
         /** This UI will be rendered as plugin wrapper page */
-        wrapperProps?: PluginWrapperProps
+        Wrapper?: PluginWrapperProps
         /**
          * A hook for if this plugin can enhance the #hash or $cash tag.
          */
-        enhanceTag?: {
+        EnhancedTag?: {
             onClick?: (kind: 'cash' | 'hash', content: string, event: React.MouseEvent<HTMLAnchorElement>) => void
             onHover?: (
                 kind: 'cash' | 'hash',
@@ -611,16 +611,8 @@ export namespace Plugin.SNSAdaptor {
             ): boolean
         }
     }
-    export interface TagType {
-        Cash: 'Cash'
-        Hash: 'Hash'
-    }
     export interface TagInspector {
         ID: string
-        /**
-         * The name of the slider card
-         */
-        label: I18NStringField | string
         /**
          * Used to order the sliders
          */
@@ -1005,6 +997,11 @@ export enum CurrentSNSNetwork {
     Twitter = 2,
     Instagram = 3,
     Minds = 4,
+}
+
+export enum TagType {
+    CASH = 1,
+    HASH = 2,
 }
 
 export interface IdentityResolved {

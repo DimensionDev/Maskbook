@@ -146,7 +146,7 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
 
 export const MaskPostExtraPluginWrapper: PluginWrapperComponent<Plugin.SNSAdaptor.Definition> = forwardRef(
     (props, ref) => {
-        const { ID, name, publisher, wrapperProps } = props.definition
+        const { ID, name, publisher, Wrapper: wrapperProps } = props.definition
         const t = usePluginI18NField()
         const [width, setWidth] = useState<undefined | number>(undefined)
         const [open, setOpen] = useState<boolean>(false)

@@ -1,6 +1,7 @@
 import { first, groupBy } from 'lodash-unified'
-import type { Coin, CommunityUrls, Currency, Stat, TagType, Trending } from '../../types'
+import type { Coin, CommunityUrls, Currency, Stat, Trending } from '../../types'
 import { DataProvider } from '@masknet/public-api'
+import type { TagType } from '@masknet/plugin-infra'
 import { getEnumAsArray, unreachable } from '@dimensiondev/kit'
 import { CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants'
 import { isBlockedId, isBlockedKeyword, resolveAlias, resolveCoinId, isBlockedAddress } from './hotfix'

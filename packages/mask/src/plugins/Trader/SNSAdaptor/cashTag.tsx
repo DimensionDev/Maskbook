@@ -1,11 +1,11 @@
 import { PluginTraderMessages, PluginTraderRPC } from '../messages'
-import { TagType } from '../types'
+import { TagType } from '@masknet/plugin-infra'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import type { Plugin } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 
-export const enhanceTag: Plugin.SNSAdaptor.Definition<ChainId>['enhanceTag'] = {
+export const EnhancedTag: Plugin.SNSAdaptor.Definition<ChainId>['EnhancedTag'] = {
     onHover(kind, content, event, chainId: Web3Helper.Definition[NetworkPluginID.PLUGIN_EVM]['ChainId']) {
         const element = event.currentTarget
         const timer = setTimeout(async () => {

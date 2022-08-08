@@ -1,8 +1,9 @@
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { FungibleToken, multipliedBy, pow10 } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useTrade as useNativeTokenTrade } from './native/useTrade'
 import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed'
-import { SwapOOData, TagType, TradeInfo, TradeStrategy } from '../types'
+import { SwapOOData, TradeInfo, TradeStrategy } from '../types'
 import { useV3Trade as useUniswapV3Trade } from './uniswap/useTrade'
 import { useTradeComputed as useUniswapTradeComputed } from './uniswap/useTradeComputed'
 import { useTradeGasLimit as useUniswapTradeGasLimit } from './uniswap/useTradeGasLimit'
@@ -27,7 +28,7 @@ import { useAvailableTraderProviders } from '../trending/useAvailableTraderProvi
 import { useNativeTradeGasLimit } from './useNativeTradeGasLimit'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import type { TradeComputed } from '../types'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { TagType } from '@masknet/plugin-infra'
 
 export function useAllTradeComputed(
     inputAmount: string,

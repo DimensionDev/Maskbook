@@ -45,7 +45,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             tutorialLink: 'https://realmasknetwork.notion.site/98ed83784ed4446a8a13fa685c7bddfb',
         },
     ],
-    wrapperProps: {
+    Wrapper: {
         icon: <Icons.Gitcoin size={24} style={{ filter: 'drop-shadow(0px 6px 12px rgba(255, 159, 10, 0.2))' }} />,
     },
 }

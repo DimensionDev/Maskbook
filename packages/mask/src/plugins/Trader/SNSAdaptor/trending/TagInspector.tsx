@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
+import { TagType } from '@masknet/plugin-infra'
 import { TrendingPopper } from './TrendingPopper'
-import { TagType } from '../../types'
 import type { DataProvider } from '@masknet/public-api'
 import { TraderView } from './TraderView'
 import { useAvailableDataProviders } from '../../trending/useAvailableDataProviders'

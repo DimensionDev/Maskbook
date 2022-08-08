@@ -2,10 +2,10 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { useLocation, useWindowScroll } from 'react-use'
 import { Popper, ClickAwayListener, PopperProps, Fade } from '@mui/material'
 import type { DataProvider } from '@masknet/public-api'
+import type { TagType } from '@masknet/plugin-infra'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginTraderMessages } from '../../messages'
 import { WalletMessages } from '../../../Wallet/messages'
-import type { TagType } from '../../types'
 import { PluginTransakMessages } from '../../../Transak/messages'
 
 export interface TrendingPopperProps {

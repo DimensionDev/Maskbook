@@ -3,9 +3,9 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import type { TradeProvider } from '@masknet/public-api'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
 import { PluginTraderRPC } from '../messages'
-import type { TagType } from '../types'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useChainId } from '@masknet/plugin-infra/web3'
+import type { TagType } from '@masknet/plugin-infra'
 
 export function useAvailableTraderProviders(
     type?: TagType,

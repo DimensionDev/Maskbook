@@ -1,7 +1,7 @@
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useAvailableDataProviders } from '../../trending/useAvailableDataProviders'
 import { useSearchedKeyword } from '../../trending/useSearchedKeyword'
-import { TagType } from '../../types'
+import { TagType } from '@masknet/plugin-infra'
 import { TraderView } from './TraderView'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 

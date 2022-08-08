@@ -6,10 +6,6 @@ export namespace TrendingAPI {
     export interface Settings {
         currency: Currency
     }
-    export enum TagType {
-        CASH = 1,
-        HASH = 2,
-    }
 
     export interface Currency {
         id: string

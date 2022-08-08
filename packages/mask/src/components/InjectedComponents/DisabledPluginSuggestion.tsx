@@ -75,7 +75,7 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
                         x.publisher ? <PluginI18NFieldRender pluginID={x.ID} field={x.publisher.name} /> : undefined
                     }
                     publisherLink={x.publisher?.link}
-                    wrapperProps={_plugins.find((y) => y.ID === x.ID)?.wrapperProps}
+                    wrapperProps={_plugins.find((y) => y.ID === x.ID)?.Wrapper}
                     action={
                         <Button
                             size="small"
