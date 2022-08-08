@@ -11,4 +11,5 @@ export * from './function'
 export * from './percentage'
 export * from './supply'
 export * from './locale'
+export * from './marketCap'
 export const HD_PATH_WITHOUT_INDEX_ETHEREUM = "m/44'/60'/0'/0"
