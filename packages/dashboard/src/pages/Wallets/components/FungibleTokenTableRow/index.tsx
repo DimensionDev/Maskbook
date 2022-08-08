@@ -7,7 +7,6 @@ import {
     useChainId,
     useNetworkDescriptors,
     useCurrentWeb3NetworkPluginID,
-    useWeb3State,
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
 import {
@@ -84,7 +83,6 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const currentChainId = useChainId()
-    const { Others } = useWeb3State()
     const networkDescriptors = useNetworkDescriptors()
     const currentPluginId = useCurrentWeb3NetworkPluginID()
     const isOnCurrentChain = useMemo(() => currentChainId === asset.chainId, [asset, currentChainId])
