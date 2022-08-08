@@ -11,7 +11,7 @@ enum NetworkPluginID {
 }
 
 // Learn more about ethereum ChainId https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md
-export enum EVM_ChainId {
+export enum ChainId {
     // Mainnet
     Mainnet = 1,
     Ropsten = 3,
@@ -172,7 +172,7 @@ export interface CheckSecurityDialogRequest {
     open: boolean
     searchHidden: boolean
     tokenAddress?: string
-    chainId?: EVM_ChainId
+    chainId?: ChainId
 }
 
 export interface NFTAvatarEvent {
