@@ -3,6 +3,7 @@ import { Plugin, PluginId } from '@masknet/plugin-infra'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
 import { MaskColorVar } from '@masknet/theme'
+import { Link } from '@mui/material'
 import { useState } from 'react'
 import { Trans } from 'react-i18next'
 import { base } from '../base'
@@ -28,7 +29,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         ns={PluginId.Tips}
                         i18nKey="description"
                         components={{
-                            span: <span style={{ color: MaskColorVar.primary }} />,
+                            Link: (
+                                <Link
+                                    href="https://next.id/"
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                    style={{ color: MaskColorVar.primary }}
+                                />
+                            ),
                         }}
                     />
                 ),
