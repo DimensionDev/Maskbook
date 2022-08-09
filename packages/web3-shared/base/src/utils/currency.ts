@@ -82,4 +82,5 @@ export function formatCurrency(value: BigNumber.Value, currency = 'USD'): string
             }
         })
         .join('')
+        .replace(/(?:\.0*|(\.\d+?)0+)$/, '')
 }
