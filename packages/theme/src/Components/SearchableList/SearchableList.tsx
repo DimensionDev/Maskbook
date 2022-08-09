@@ -115,7 +115,7 @@ export function SearchableList<T extends {}>({
                                     position="end"
                                     className={classes.closeIcon}
                                     onClick={() => handleSearch('')}>
-                                    <Icons.FilledClose size={18} />
+                                    <Icons.Clear size={18} />
                                 </InputAdornment>
                             ) : null,
                             ...InputProps,
@@ -162,7 +162,7 @@ export function SearchableList<T extends {}>({
 
 const useStyles = makeStyles()((theme) => ({
     container: {
-        overflow: 'hidden',
+        overflow: 'visible',
     },
     listBox: {
         '& > div::-webkit-scrollbar': {

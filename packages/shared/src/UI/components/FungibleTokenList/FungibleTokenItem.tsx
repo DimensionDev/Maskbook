@@ -22,7 +22,8 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1.5),
         marginBottom: theme.spacing(2),
         borderRadius: theme.spacing(1),
-        boxShadow: '0 0 20px rgba(0, 0, 0, 0.05)',
+        boxShadow:
+            theme.palette.mode === 'dark' ? '0px 0px 20px rgba(255, 255, 255, 0.12)' : '0 0 20px rgba(0, 0, 0, 0.05)',
         backdropFilter: 'blur(16px)',
         '&:hover': {
             background: theme.palette.maskColor.bg,
