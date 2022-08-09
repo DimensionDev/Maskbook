@@ -36,9 +36,7 @@ const digitalCurrencyModifier = (parts: Intl.NumberFormatPart[]) => {
  * @param value
  * @param currency
  */
-export function formatCurrency(value?: BigNumber.Value, currency = 'USD'): string {
-    if (!value) return '-'
-
+export function formatCurrency(value: BigNumber.Value, currency = 'USD'): string {
     const bgValue = new BigNumber(value)
 
     const integerValue = bgValue.integerValue(1)
