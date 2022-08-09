@@ -137,7 +137,7 @@ export class ZerionAPI
                         x.asset.icon_url &&
                         x.asset.is_displayable &&
                         !filterAssetType.includes(x.asset.type) &&
-                        !/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/.test(x.asset.asset_code) &&
+                        !/\w{8}(?:-\w{4}){3}-\w{12}/.test(x.asset.asset_code) &&
                         zerionChainIdResolver(x.chain),
                 )
                 ?.map((x) => {
