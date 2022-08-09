@@ -132,7 +132,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                         '<0.01'
                     ) : (
                         <FormattedCurrency
-                            value={getTokenUSDValue(asset.value)}
+                            value={getTokenUSDValue(asset.value).toFixed(2)}
                             sign="USD"
                             formatter={formatCurrency}
                         />

@@ -66,7 +66,7 @@ export function formatCurrency(value: BigNumber.Value, currency = 'USD'): string
             .join('')
         return `< ${value}`
     }
-
+    console.log(formatter.formatToParts(bgValue.toNumber()), 'sss')
     return digitalCurrencyModifier(formatter.formatToParts(bgValue.toNumber()))
         .map(({ type, value }) => {
             switch (type) {
