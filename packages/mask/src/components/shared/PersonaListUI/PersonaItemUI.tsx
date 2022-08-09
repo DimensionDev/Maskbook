@@ -11,6 +11,7 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 
+/* cspell:disable-next-line */
 // TODO: Migrate to SocialIdentity by @Lanttcat
 export interface PersonaNextIDMixture {
     persona: PersonaInformation
