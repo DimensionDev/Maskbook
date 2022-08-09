@@ -4,13 +4,23 @@ import type { Web3StorageServiceState, StorageProviderType, Storage } from '@mas
 export class StorageState implements Web3StorageServiceState {
     constructor(
         protected createStorage: (
-            namespace: string,
-            personaIdentifier: ECKeyIdentifier,
             providerType: StorageProviderType,
+            options: {
+                namespace: string
+                personaIdentifier: ECKeyIdentifier
+                address: string
+            },
         ) => Storage,
     ) {}
 
-    getStorage(namespace: string, personaIdentifier: ECKeyIdentifier, providerType: StorageProviderType) {
-        return Promise.resolve(this.createStorage(namespace, personaIdentifier, providerType))
+    getStorage(
+        providerType: StorageProviderType,
+        options: {
+            namespace: string
+            personaIdentifier: ECKeyIdentifier
+            address: string
+        },
+    ) {
+        return Promise.resolve(this.createStorage(providerType, options))
     }
 }

@@ -192,6 +192,9 @@ export namespace Plugin.Shared {
         /** Sign a message with persona */
         personaSignMessage(payload: PersonaSignRequest): Promise<PersonaSignResult>
 
+        /** Generate sign message with persona */
+        generateSignResult(signer: ECKeyIdentifier, message: string): Promise<PersonaSignResult>
+
         /** Sign transaction */
         signTransaction(address: string, transaction: Transaction): Promise<string>
         /** Sign personal message, aka. eth.personal.sign() */
