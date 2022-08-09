@@ -48,7 +48,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, isDashboard }) => 
     wrapper: {
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(6),
-        overflow: 'visible !important',
+        // overflow: 'visible !important',
     },
 }))
 
@@ -117,6 +117,7 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
                     chainId={chainId}
                     tokens={tokens ?? []}
                     whitelist={whitelist}
+                    enableManage
                     blacklist={
                         disableNativeToken && nativeTokenAddress ? [nativeTokenAddress, ...blacklist] : blacklist
                     }
