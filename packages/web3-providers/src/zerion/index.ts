@@ -127,7 +127,7 @@ export class ZerionAPI
 {
     async getAssets(address: string, options?: HubOptions<ChainId>) {
         const { meta, payload } = await getAssetsList(address, 'positions')
-        if (meta.status !== 'ok') EMPTY_LIST
+        if (meta.status !== 'ok') return createPageable(EMPTY_LIST, createIndicator(options?.indicator))
 
         const assets =
             payload.positions?.positions
@@ -137,7 +137,6 @@ export class ZerionAPI
                         x.asset.icon_url &&
                         x.asset.is_displayable &&
                         !filterAssetType.includes(x.asset.type) &&
-                        !/\w{8}(?:-\w{4}){3}-\w{12}/.test(x.asset.asset_code) &&
                         zerionChainIdResolver(x.chain),
                 )
                 ?.map((x) => {

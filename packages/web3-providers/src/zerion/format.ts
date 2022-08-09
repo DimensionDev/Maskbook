@@ -5,15 +5,12 @@ import { ZerionAddressPosition, ZerionRBDTransactionType, ZerionTransactionItem,
 
 export function formatAsset(chainId: ChainId, data: ZerionAddressPosition): FungibleAsset<ChainId, SchemaType> {
     const { asset, chain, quantity } = data
-    // The asset.decimals is wrong
-    const decimals = asset.implementations[chain].decimals
+    const { address: address_, decimals } = asset.implementations[chain]
     const balance = leftShift(quantity, decimals).toNumber()
     const price = asset.price?.value ?? 0
     const isNativeToken = (symbol: string) =>
         ['ETH', 'BNB', 'MATIC', 'ARETH', 'AETH', 'ONE', 'ASTR', 'XDAI'].includes(symbol)
-    const address = isNativeToken(asset.symbol)
-        ? getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS', '')
-        : asset.asset_code
+    const address = isNativeToken(asset.symbol) ? getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS', '') : address_
 
     return {
         id: address,
