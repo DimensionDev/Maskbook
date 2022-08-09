@@ -110,7 +110,7 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
     useEffect(() => {
         if (!currentPersonaIdentifier) return
         setSelectedPersona(personas.find((x) => isSamePersona(x.persona, currentPersonaIdentifier)))
-    }, [currentPersonaIdentifier, personas.length])
+    }, [currentPersonaIdentifier?.toText(), personas.length])
 
     const [, connect] = useAsyncFn(
         async (profileIdentifier?: ProfileIdentifier, personaIdentifier?: PersonaIdentifier) => {

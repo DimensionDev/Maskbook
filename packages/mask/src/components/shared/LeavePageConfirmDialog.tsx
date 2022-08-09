@@ -36,7 +36,7 @@ export const LeavePageConfirmDialog = () => {
     const [open, setOpen] = useState(false)
 
     const [info, setInfo] = useState<{
-        type: 'dashboard' | 'other'
+        target: 'dashboard' | 'other'
         url: string
         title: string
         text: string
@@ -49,13 +49,13 @@ export const LeavePageConfirmDialog = () => {
         return MaskMessages.events.openPageConfirm.on((evt) => {
             setOpen(evt.open)
             if (!evt.open) return
-            setInfo({ ...evt })
+            setInfo(evt)
         })
     }, [])
 
     const onClick = useCallback(() => {
         if (!info) return
-        if (info.type === 'dashboard') {
+        if (info.target === 'dashboard') {
             Services.Helper.openDashboard(DashboardRoutes.Setup)
             closeDialog()
             return

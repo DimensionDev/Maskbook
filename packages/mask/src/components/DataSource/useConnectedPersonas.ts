@@ -7,13 +7,13 @@ export function useConnectedPersonas() {
     return useAsync(async () => {
         const personasInDB = await Services.Identity.queryOwnedPersonaInformation(false)
 
-        const allPersonaHexIdentifiers = personasInDB.map((x) => x.identifier.publicKeyAsHex)
+        const allPersonaPublicKeys = personasInDB.map((x) => x.identifier.publicKeyAsHex)
         const allPersonaIdentifiers = personasInDB.map((x) => x.identifier)
 
         const avatars = await Services.Identity.getPersonaAvatars(allPersonaIdentifiers)
         const allNextIDBindings = await NextIDProof.queryExistedBindingByPlatform(
             NextIDPlatform.NextID,
-            allPersonaHexIdentifiers.join(','),
+            allPersonaPublicKeys.join(','),
         )
 
         return personasInDB.map((x) => {

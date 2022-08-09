@@ -102,7 +102,7 @@ export interface ProfileNFTsPageEvent {
 
 export interface OpenPageConfirmEvent {
     open: boolean
-    type: 'dashboard' | 'other'
+    target: 'dashboard' | 'other'
     url: string
     title: string
     text: string
