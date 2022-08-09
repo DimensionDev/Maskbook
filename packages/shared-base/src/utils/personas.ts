@@ -1,4 +1,5 @@
-import type { PersonaIdentifier, PersonaInformation, ProfileIdentifier, ProfileInformation } from '../index.js'
+import type { PersonaIdentifier, PersonaInformation, ProfileInformation } from '../index.js'
+import { ECKeyIdentifier, ProfileIdentifier, Identifier } from '../index.js'
 
 export function formatPersonaFingerprint(fingerprint: string, size = 0) {
     if (size === 0) return fingerprint
@@ -15,22 +16,37 @@ export const formatPersonaName = (nickname?: string) => {
     return `${nickname.slice(0, 12)}...`
 }
 
-export function formatPersonaPublicKey(address: string, size = 0) {
-    if (size === 0 || size >= 20) return address
-    return `${address.slice(0, Math.max(0, 2 + size))}...${address.slice(-size)}`
+export function isSameIdentity<T extends Identifier>(
+    formatString: (i: string) => T,
+    ...identities: Array<T | { identifier: T } | string | undefined>
+) {
+    return identities.reduce((previousValue, currentIdentity, key) => {
+        if (key === 0) return true
+        const preIdentity = identities[key - 1]
+        if (!currentIdentity || !preIdentity) return false
+
+        const i1IdentifierText =
+            typeof preIdentity === 'string'
+                ? formatString(preIdentity).toText()
+                : 'toText' in preIdentity
+                ? preIdentity.toText()
+                : preIdentity.identifier.toText()
+        const i2IdentifierText =
+            typeof currentIdentity === 'string'
+                ? formatString(currentIdentity).toText()
+                : 'toText' in currentIdentity
+                ? currentIdentity.toText()
+                : currentIdentity.identifier.toText()
+
+        return previousValue && i1IdentifierText === i2IdentifierText
+    }, false)
 }
 
-export function isSamePersona(...personas: Array<PersonaIdentifier | PersonaInformation | undefined>) {
-    return personas.reduce((previousValue, currentValue, key) => {
-        if (key === 0) return true
-        if (!currentValue || !personas[key - 1]) return false
-        const p1Identifier =
-            'toText' in personas[key - 1]!
-                ? (personas[key - 1] as PersonaIdentifier)
-                : (personas[key - 1] as PersonaInformation).identifier
-        const p2Identifier = 'toText' in currentValue ? currentValue : currentValue.identifier
-        return previousValue && p1Identifier.toText() === p2Identifier.toText()
-    }, false)
+export function isSamePersona(...personas: Array<PersonaIdentifier | PersonaInformation | string | undefined>) {
+    return isSameIdentity((i) => {
+        if (i.startsWith('ec_key:')) return ECKeyIdentifier.from(i).unwrap()
+        return new ECKeyIdentifier('secp256k1', i)
+    }, ...personas)
 }
 
 export function currySamePersona(persona?: PersonaIdentifier | PersonaInformation) {
@@ -38,17 +54,8 @@ export function currySamePersona(persona?: PersonaIdentifier | PersonaInformatio
         isSamePersona(...[persona, ...personas])
 }
 
-export function isSameProfile(...profiles: Array<ProfileIdentifier | ProfileInformation | undefined>) {
-    return profiles.reduce((previousValue, currentValue, key) => {
-        if (key === 0) return true
-        if (!currentValue || !profiles[key - 1]) return false
-        const p1Identifier =
-            'toText' in profiles[key - 1]!
-                ? (profiles[key - 1] as ProfileIdentifier)
-                : (profiles[key - 1] as ProfileInformation).identifier
-        const p2Identifier = 'toText' in currentValue ? currentValue : currentValue.identifier
-        return previousValue && p1Identifier.toText() === p2Identifier.toText()
-    }, false)
+export function isSameProfile(...profiles: Array<ProfileIdentifier | ProfileInformation | string | undefined>) {
+    return isSameIdentity((i) => ProfileIdentifier.from(i).unwrap(), ...profiles)
 }
 
 export function currySameProfile(profile?: ProfileIdentifier | ProfileInformation) {
