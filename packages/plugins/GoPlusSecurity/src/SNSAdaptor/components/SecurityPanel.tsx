@@ -13,6 +13,7 @@ import { Icons } from '@masknet/icons'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { formatCurrency, FungibleToken } from '@masknet/web3-shared-base'
 import { DefineMapping, SecurityMessageLevel } from '../constants'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 interface TokenCardProps {
     tokenSecurity: SecurityAPI.TokenSecurityType
@@ -73,7 +74,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
     const {
         risk_item_quantity: riskyFactors = 0,
         warn_item_quantity: attentionFactors = 0,
-        message_list: makeMessageList = [],
+        message_list: makeMessageList = EMPTY_LIST,
     } = tokenSecurity
 
     const hasWarningFactor = riskyFactors !== 0 || attentionFactors !== 0

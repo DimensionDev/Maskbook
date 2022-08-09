@@ -10,69 +10,6 @@ enum NetworkPluginID {
     PLUGIN_SOLANA = 'com.mask.solana',
 }
 
-// Learn more about ethereum ChainId https://github.com/ethereum/EIPs/blob/master/EIPS/eip-155.md
-export enum ChainId {
-    // Mainnet
-    Mainnet = 1,
-    Ropsten = 3,
-    Rinkeby = 4,
-    Gorli = 5,
-    Kovan = 42,
-
-    // BSC
-    BSC = 56,
-    BSCT = 97,
-
-    // Matic
-    Matic = 137,
-    Mumbai = 80001,
-
-    // Arbitrum
-    Arbitrum = 42161,
-    Arbitrum_Rinkeby = 421611,
-
-    // xDai
-    xDai = 100,
-
-    // Avalanche
-    Avalanche = 43114,
-    Avalanche_Fuji = 43113,
-
-    // Celo
-    Celo = 42220,
-
-    // Fantom
-    Fantom = 250,
-
-    // Aurora
-    Aurora = 1313161554,
-    Aurora_Testnet = 1313161555,
-
-    // Fuse
-    Fuse = 122,
-
-    // Boba
-    Boba = 288,
-
-    // Metis
-    Metis = 1088,
-
-    // Optimism
-    Optimism = 10,
-    Optimism_Kovan = 69,
-    Optimism_Goerli = 420,
-
-    // Harmony
-    Harmony = 1666600000,
-    Harmony_Test = 1666700000,
-
-    // Conflux
-    Conflux = 1030,
-
-    // Astar
-    Astar = 592,
-}
-
 export interface MaskSettingsEvents {
     appearanceSettings: Appearance
     pluginIDSettings: Record<EnhanceableSite | ExtensionSite, NetworkPluginID>
@@ -168,12 +105,16 @@ export interface CheckSecurityCloseConfirmDialogRequest {
     open: boolean
 }
 
-export interface CheckSecurityDialogRequest {
-    open: boolean
-    searchHidden: boolean
-    tokenAddress?: string
-    chainId?: ChainId
-}
+export type CheckSecurityDialogRequest =
+    | {
+          open: true
+          searchHidden: boolean
+          tokenAddress?: string
+          chainId?: number
+      }
+    | {
+          open: false
+      }
 
 export interface NFTAvatarEvent {
     userId: string

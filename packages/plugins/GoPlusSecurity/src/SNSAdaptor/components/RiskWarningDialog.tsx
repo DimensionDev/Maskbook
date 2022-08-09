@@ -131,7 +131,7 @@ export function RiskWarningDialog() {
                             className={classes.link}
                             href={
                                 explorerResolver.fungibleTokenLink?.(
-                                    token?.chainId ?? 1,
+                                    token?.chainId ?? ChainId.Mainnet,
                                     token?.contract ?? ZERO_ADDRESS,
                                 ) ?? ''
                             }

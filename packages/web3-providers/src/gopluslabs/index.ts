@@ -45,11 +45,13 @@ export class GoPlusLabsAPI implements SecurityAPI.Provider<ChainId> {
 
 export const createTokenSecurity = (
     chainId: ChainId,
-    response: Record<string, SecurityAPI.ContractSecurity & SecurityAPI.TokenSecurity & SecurityAPI.TradingSecurity>,
+    response: Record<
+        string,
+        SecurityAPI.ContractSecurity & SecurityAPI.TokenSecurity & SecurityAPI.TradingSecurity
+    > = {},
 ) => {
-    response ??= {}
     if (isEmpty(response)) return
-    const entity = first(Object.entries(response ?? {}))
+    const entity = first(Object.entries(response))
     if (!entity) return
     const tokenSecurity = { ...entity[1], contract: entity[0], chainId }
     const is_high_risk = isHighRisk(tokenSecurity)
@@ -71,10 +73,15 @@ export const isHighRisk = (tokenSecurity?: SecurityAPI.TokenSecurityType) => {
         ? false
         : SecurityMessages.filter(
               (x) =>
-                  x.condition(tokenSecurity) && x.level !== SecurityMessageLevel.Safe && !x.shouldHide(tokenSecurity),
-          )
-              .sort((a) => (a.level === SecurityMessageLevel.High ? -1 : 1))
-              .filter((x) => x.level === SecurityMessageLevel.High).length > 0
+                  x.condition(tokenSecurity) &&
+                  x.level !== SecurityMessageLevel.Safe &&
+                  !x.shouldHide(tokenSecurity) &&
+                  x.level === SecurityMessageLevel.High,
+          ).sort((a, z) => {
+              if (a.level === SecurityMessageLevel.High) return -1
+              if (z.level === SecurityMessageLevel.High) return 1
+              return 0
+          }).length > 0
 }
 
 export const getMessageList = (tokenSecurity: SecurityAPI.TokenSecurityType) =>
@@ -83,4 +90,8 @@ export const getMessageList = (tokenSecurity: SecurityAPI.TokenSecurityType) =>
         : SecurityMessages.filter(
               (x) =>
                   x.condition(tokenSecurity) && x.level !== SecurityMessageLevel.Safe && !x.shouldHide(tokenSecurity),
-          ).sort((a) => (a.level === SecurityMessageLevel.High ? -1 : 1))
+          ).sort((a, z) => {
+              if (a.level === SecurityMessageLevel.High) return -1
+              if (z.level === SecurityMessageLevel.High) return 1
+              return 0
+          })
