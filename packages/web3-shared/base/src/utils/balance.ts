@@ -1,13 +1,12 @@
 import BigNumber from 'bignumber.js'
 import { pow10 } from './number'
-import { toFixed } from '@masknet/web3-shared-base'
 
 export function formatBalance(rawValue: BigNumber.Value = '0', decimals = 0, significant = decimals) {
     let balance = new BigNumber(rawValue)
     if (balance.isNaN()) return '0'
     const negative = balance.isNegative() // balance < 0n
     const base = pow10(decimals) // 10n ** decimals
-
+    if (balance.isLessThan(0.000001)) return '<0.0000001'
     if (negative) balance = balance.absoluteValue() // balance * -1n
 
     let fraction = balance.modulo(base).toString(10) // (balance % base).toString(10)
@@ -26,6 +25,5 @@ export function formatBalance(rawValue: BigNumber.Value = '0', decimals = 0, sig
     const value = `${whole}${fraction === '' ? '' : `.${fraction}`}`
 
     const raw = negative ? `-${value}` : value
-    const res = raw.includes('.') ? raw.replace(/0+$/, '').replace(/\.$/, '') : raw
-    return new BigNumber(res).gt(pow10(-6)) ? Number.parseFloat(toFixed(res ?? '', 6)).toString() : '<0.000001'
+    return raw.includes('.') ? raw.replace(/0+$/, '').replace(/\.$/, '') : raw
 }
