@@ -124,10 +124,11 @@ interface CollectibleItemProps {
     token: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     readonly?: boolean
     renderOrder: number
+    address?: SocialAddress<NetworkPluginID>
 }
 
 function CollectibleItem(props: CollectibleItemProps) {
-    const { provider, wallet, token, readonly, renderOrder } = props
+    const { provider, wallet, token, readonly, renderOrder, address } = props
     const { classes } = useStyles()
     return (
         <div className={classes.card}>
@@ -137,6 +138,7 @@ function CollectibleItem(props: CollectibleItemProps) {
                 wallet={wallet}
                 readonly={readonly}
                 renderOrder={renderOrder}
+                address={address}
             />
             <div className={classes.description}>
                 <Typography className={classes.name} color="textPrimary" variant="body2">
@@ -156,9 +158,20 @@ interface CollectibleListUIProps extends withClasses<'empty' | 'button' | 'text'
     error: string | undefined
     readonly?: boolean
     hasRetry?: boolean
+    address?: SocialAddress<NetworkPluginID>
 }
 function CollectibleListUI(props: CollectibleListUIProps) {
-    const { provider, wallet, collectibles, loading, collectiblesRetry, error, readonly, hasRetry = true } = props
+    const {
+        provider,
+        wallet,
+        collectibles,
+        loading,
+        collectiblesRetry,
+        error,
+        readonly,
+        hasRetry = true,
+        address,
+    } = props
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
@@ -185,6 +198,7 @@ function CollectibleListUI(props: CollectibleListUIProps) {
                                 wallet={wallet}
                                 readonly={readonly}
                                 key={index}
+                                address={address}
                             />
                         ))}
                     </Box>
@@ -215,6 +229,7 @@ export function CollectibleList(props: CollectibleListProps) {
             collectiblesRetry={retry}
             error={error}
             readonly
+            address={address}
             hasRetry={!!address}
         />
     )
