@@ -1,30 +1,33 @@
 import io from 'socket.io-client'
-import { unionWith, values } from 'lodash-unified'
+import { unionWith } from 'lodash-unified'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { Transaction, HubOptions, createPageable, createIndicator, Pageable } from '@masknet/web3-shared-base'
-import { ChainId, getZerionConstant, SchemaType } from '@masknet/web3-shared-evm'
+import {
+    Transaction,
+    HubOptions,
+    createPageable,
+    createIndicator,
+    Pageable,
+    createLookupTableResolver,
+    isSameAddress,
+} from '@masknet/web3-shared-base'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type {
     SocketRequestBody,
     SocketNameSpace,
     SocketResponseBody,
     ZerionTransactionResponseBody,
     ZerionAssetResponseBody,
-    ZerionAddressAsset,
-    ZerionAddressCovalentAsset,
 } from './type'
-import { formatAssets, formatTransactions } from './format'
+import { formatAsset, formatTransactions } from './format'
 import type { FungibleTokenAPI, HistoryAPI } from '../types'
 import { getAllEVMNativeAssets } from '../helpers'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 const ZERION_API = 'wss://api-v4.zerion.io'
 // cspell:disable-next-line
 const ZERION_TOKEN = 'Mask.yEUEfDnoxgLBwNEcYPVussxxjdrGwapj'
 
 let socket: SocketIOClient.Socket | null = null
-
-export function resolveZerionAssetsScopeName(chainId: ChainId) {
-    return getZerionConstant(chainId, 'ASSETS_SCOPE_NAME', '')!
-}
 
 function createSocket() {
     if (socket?.connected) return socket
@@ -46,6 +49,9 @@ function verify(request: SocketRequestBody, response: any) {
         const responseMetaValue = response.meta[key]
         if (typeof requestValue === 'object') {
             return JSON.stringify(requestValue) === JSON.stringify(responseMetaValue)
+        }
+        if (typeof requestValue === 'string') {
+            return responseMetaValue.toLowerCase() === requestValue.toLowerCase()
         }
         return responseMetaValue === requestValue
     })
@@ -101,41 +107,49 @@ async function getTransactionList(address: string, scope: string, page?: number,
 
 const filterAssetType = ['compound', 'trash', 'uniswap', 'uniswap-v2', 'nft']
 
+const zerionChainIdResolver = createLookupTableResolver<string, ChainId | undefined>(
+    {
+        ethereum: ChainId.Mainnet,
+        optimism: ChainId.Optimism,
+        fantom: ChainId.Fantom,
+        avalanche: ChainId.Avalanche,
+        arbitrum: ChainId.Arbitrum,
+        aurora: ChainId.Aurora,
+        'binance-smart-chain': ChainId.BSC,
+        xdai: ChainId.xDai,
+        polygon: ChainId.Matic,
+    },
+    () => undefined,
+)
+
 export class ZerionAPI
     implements FungibleTokenAPI.Provider<ChainId, SchemaType>, HistoryAPI.Provider<ChainId, SchemaType>
 {
     async getAssets(address: string, options?: HubOptions<ChainId>) {
-        const pairs = getEnumAsArray(ChainId).map(
-            (x) => [x.value, getZerionConstant(x.value, 'ASSETS_SCOPE_NAME')] as const,
-        )
-        const allSettled = await Promise.allSettled(
-            pairs.map(async ([chainId, scope]) => {
-                if (!scope) return []
+        const { meta, payload } = await getAssetsList(address, 'positions')
+        if (meta.status !== 'ok') EMPTY_LIST
 
-                const { meta, payload } = await getAssetsList(address, scope)
-                if (meta.status !== 'ok') []
-
-                return Object.entries(payload)
-                    .map(([key, value]) => {
-                        if (key === 'assets') {
-                            const assetsList = (values(value) as ZerionAddressAsset[]).filter(
-                                ({ asset }) =>
-                                    asset.is_displayable &&
-                                    !filterAssetType.some((type) => type === asset.type) &&
-                                    asset.icon_url,
-                            )
-                            return formatAssets(chainId, assetsList)
-                        }
-                        return formatAssets(chainId, values(value) as ZerionAddressCovalentAsset[])
-                    })
-                    .flat()
-            }),
-        )
-
-        const assets = allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
+        const assets =
+            payload.positions?.positions
+                .filter(
+                    (x) =>
+                        x.type === 'asset' &&
+                        x.asset.icon_url &&
+                        x.asset.is_displayable &&
+                        !filterAssetType.includes(x.asset.type) &&
+                        !/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/.test(x.asset.asset_code) &&
+                        zerionChainIdResolver(x.chain),
+                )
+                ?.map((x) => {
+                    return formatAsset(zerionChainIdResolver(x.chain)!, x)
+                }) ?? EMPTY_LIST
 
         return createPageable(
-            unionWith(assets, getAllEVMNativeAssets(), (a, z) => a.symbol === z.symbol),
+            unionWith(
+                assets,
+                getAllEVMNativeAssets(),
+                (a, z) => isSameAddress(a.address, z.address) && a.chainId === z.chainId,
+            ),
             createIndicator(options?.indicator),
         )
     }
@@ -144,15 +158,12 @@ export class ZerionAPI
         address: string,
         { indicator }: HubOptions<ChainId> = {},
     ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
-        // xdai-assets is not support
-        const pairs = getEnumAsArray(ChainId).map(
-            (x) => [x.value, getZerionConstant(x.value, 'TRANSACTIONS_SCOPE_NAME')] as const,
-        )
+        const pairs = getEnumAsArray(ChainId).map((x) => [x.value, 'transactions'] as const)
         const allSettled = await Promise.allSettled(
             pairs.map(async ([chainId, scope]) => {
-                if (!scope) return []
+                if (!scope) return EMPTY_LIST
                 const { meta, payload } = await getTransactionList(address, scope)
-                if (meta.status !== 'ok') return []
+                if (meta.status !== 'ok') return EMPTY_LIST
                 return formatTransactions(chainId, payload.transactions)
             }),
         )

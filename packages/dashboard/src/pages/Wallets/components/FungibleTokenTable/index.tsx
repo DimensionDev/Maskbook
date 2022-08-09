@@ -258,14 +258,10 @@ export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading
     return (
         <>
             <TableContainer className={classes.container}>
-                {isLoading || isEmpty ? (
-                    <>
-                        {isLoading ? (
-                            <LoadingPlaceholder />
-                        ) : isEmpty ? (
-                            <EmptyPlaceholder children={t.wallets_empty_tokens_tip()} />
-                        ) : null}
-                    </>
+                {isLoading ? (
+                    <LoadingPlaceholder />
+                ) : isEmpty ? (
+                    <EmptyPlaceholder children={t.wallets_empty_tokens_tip()} />
                 ) : (
                     <Table stickyHeader className={classes.table}>
                         <TableHead>
@@ -311,14 +307,16 @@ export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading
                                             isNativeTokenAddress(asset.address) ||
                                             isGreaterThanOrEqualTo(asset.value?.usd ?? 0, 1),
                                     )
-                                    .map((asset) => (
-                                        <FungibleTokenTableRow
-                                            onSend={() => onSend(asset)}
-                                            onSwap={() => onSwap(asset)}
-                                            asset={asset}
-                                            key={`${asset.address}_${asset.chainId}`}
-                                        />
-                                    ))}
+                                    .map((asset) => {
+                                        return (
+                                            <FungibleTokenTableRow
+                                                onSend={() => onSend(asset)}
+                                                onSwap={() => onSwap(asset)}
+                                                asset={asset}
+                                                key={`${asset.address}_${asset.chainId}`}
+                                            />
+                                        )
+                                    })}
                             </TableBody>
                         ) : null}
                     </Table>
