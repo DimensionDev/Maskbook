@@ -59,6 +59,9 @@ export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, Ma
     __kv_backend_in_memory__: [string, unknown]
     /** @deprecated do not use it in new code. */
     wallet_is_locked: ['request'] | ['response', boolean]
+
+    /** emit when open new page . */
+    openPageConfirm: OpenPageConfirmEvent
 }
 
 export interface UpdateEvent<Data> {
@@ -95,6 +98,15 @@ export interface SettingsUpdateEvent {
 
 export interface ProfileNFTsPageEvent {
     show: boolean
+}
+
+export interface OpenPageConfirmEvent {
+    open: boolean
+    target: 'dashboard' | 'other'
+    url: string
+    title: string
+    text: string
+    actionHint: string
 }
 
 export interface Web3ProfileDialogRequest {
