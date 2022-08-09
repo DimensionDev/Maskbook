@@ -74,9 +74,21 @@ export interface ImageManagementProps {
     getWalletHiddenRetry: () => void
 }
 const getAddressesByStatus = (status: CURRENT_STATUS, accountList: AccountType) => {
-    if (status === CURRENT_STATUS.Donations_setting) return accountList?.walletList?.donations
-    if (status === CURRENT_STATUS.Footprints_setting) return accountList?.walletList?.footprints
-    return accountList?.walletList?.NFTs
+    let addresses
+    if (status === CURRENT_STATUS.Donations_setting) addresses = accountList?.walletList?.donations
+    if (status === CURRENT_STATUS.Footprints_setting) addresses = accountList?.walletList?.footprints
+    addresses = accountList?.walletList?.NFTs
+    return addresses
+        ?.sort((a, z) => {
+            if (!a?.updateTime || !z?.updateTime) return 0
+            if (Number(a.updateTime) > Number(z.updateTime)) return -1
+            return 0
+        })
+        ?.sort((a, z) => {
+            if (z?.collections && z.collections.filter?.((collection) => !collection?.hidden)?.length > 0) return 1
+            if (a?.collections && a.collections.filter?.((collection) => !collection?.hidden)?.length > 0) return -1
+            return 0
+        })
 }
 export function ImageManagement(props: ImageManagementProps) {
     const t = useI18N()
@@ -116,6 +128,7 @@ export function ImageManagement(props: ImageManagementProps) {
                         addresses.map((address) => (
                             <WalletAssetsCard
                                 key={address.address}
+                                collectionName={CurrentStatusMap[status].title}
                                 onSetting={() => {
                                     setSettingAddress(address)
                                     setImageListOpen(true)
