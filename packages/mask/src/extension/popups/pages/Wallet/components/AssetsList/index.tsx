@@ -12,7 +12,7 @@ import { isNaN } from 'lodash-unified'
 import { formatBalance, FungibleAsset, isGreaterThanOrEqualTo, isLessThan } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../../utils'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     list: {
         backgroundColor: '#ffffff',
         padding: 0,
@@ -38,19 +38,17 @@ const useStyles = makeStyles()({
     },
     more: {
         fontSize: 14,
-        display: 'flex',
         textAlign: 'center',
-        alignItems: 'center',
-        justifyContent: 'center',
-        margin: '16px 0 8px',
+        margin: theme.spacing(2, 0, 1),
     },
     moreButton: {
         cursor: 'pointer',
-        display: 'flex',
-        alignItems: 'center',
-        margin: '0 4px',
+        margin: theme.spacing(0, 0.5),
     },
-})
+    moreIcon: {
+        verticalAlign: 'middle',
+    },
+}))
 
 type Asset = FungibleAsset<ChainId, SchemaType>
 
@@ -89,7 +87,7 @@ export const MoreBarUI = memo<MoreBarUIProps>(({ isExpand, dataSource, onClick }
             <Typography className={classes.more}>
                 <span>{t('popups_wallet_more_collapse')}</span>
                 <span className={classes.moreButton} onClick={onClick}>
-                    <Icons.ArrowUpRound />
+                    <Icons.ArrowUpRound className={classes.moreIcon} />
                 </span>
             </Typography>
         )
@@ -98,7 +96,7 @@ export const MoreBarUI = memo<MoreBarUIProps>(({ isExpand, dataSource, onClick }
             <span>{t('popups_wallet_more_expand')}</span>
             <span className={classes.moreButton} onClick={onClick}>
                 <span style={{ textDecoration: 'underline' }}>{t('popups_wallet_more_show_all')}</span>
-                <Icons.ArrowUpRound style={{ transform: 'rotate(180deg)' }} />
+                <Icons.ArrowUpRound className={classes.moreIcon} style={{ transform: 'rotate(180deg)' }} />
             </span>
         </Typography>
     )

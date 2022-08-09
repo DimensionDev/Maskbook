@@ -71,17 +71,15 @@ const useStyles = makeStyles()((theme) => ({
     },
     more: {
         fontSize: 14,
-        display: 'flex',
         textAlign: 'center',
-        alignItems: 'center',
-        justifyContent: 'center',
         margin: theme.spacing(2, 0, 1),
     },
     moreButton: {
         cursor: 'pointer',
-        display: 'flex',
-        alignItems: 'center',
         margin: theme.spacing(0, 0.5),
+    },
+    moreIcon: {
+        verticalAlign: 'middle',
     },
 }))
 
@@ -211,7 +209,7 @@ export const MoreBarUI = memo<MoreBarUIProps>(({ isExpand, isEmpty, isLoading, d
             <Typography className={classes.more}>
                 <span>{t.wallets_assets_more_collapse()}</span>
                 <span className={classes.moreButton} onClick={onSwitch}>
-                    <Icons.ArrowUpRound />
+                    <Icons.ArrowUpRound className={classes.moreIcon} />
                 </span>
             </Typography>
         )
@@ -220,7 +218,7 @@ export const MoreBarUI = memo<MoreBarUIProps>(({ isExpand, isEmpty, isLoading, d
             <span>{t.wallets_assets_more_expand()}</span>
             <span className={classes.moreButton} onClick={onSwitch}>
                 <span style={{ textDecoration: 'underline' }}>{t.wallets_assets_more_show_all()}</span>
-                <Icons.ArrowUpRound style={{ transform: 'rotate(180deg)' }} />
+                <Icons.ArrowUpRound className={classes.moreIcon} style={{ transform: 'rotate(180deg)' }} />
             </span>
         </Typography>
     )
