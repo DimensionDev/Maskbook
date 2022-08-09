@@ -1,6 +1,7 @@
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useMemo } from 'react'
 import { CollectibleTab } from '../CollectibleTab'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { Typography, Button } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { CollectibleState } from '../../hooks/useCollectibleState'
@@ -29,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
 export function OffersTab() {
     const { classes } = useStyles()
     const { orders } = CollectibleState.useContainer()
-    const _orders = orders.value?.data ?? []
+    const _orders = orders.value?.data ?? EMPTY_LIST
     const { t } = useI18N()
     return useMemo(() => {
         if (orders.loading) return <LoadingBase />
@@ -52,11 +53,9 @@ export function OffersTab() {
         return (
             <CollectibleTab>
                 <div className={classes.body} style={{ justifyContent: 'unset' }}>
-                    <>
-                        {_orders?.map((x, idx) => (
-                            <NFTOfferCard key={idx} offer={x} />
-                        ))}
-                    </>
+                    {_orders?.map((x, idx) => (
+                        <NFTOfferCard key={idx} offer={x} />
+                    ))}
                 </div>
             </CollectibleTab>
         )

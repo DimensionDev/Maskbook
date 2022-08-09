@@ -1,6 +1,8 @@
 import { makeStyles } from '@masknet/theme'
-import { Skeleton, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import { useI18N } from '../../../utils'
+import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -27,20 +29,18 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 interface NFTDescriptionProps {
-    asset: any
+    asset: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
 }
 
 export function NFTDescription(props: NFTDescriptionProps) {
     const { asset } = props
     const { classes } = useStyles()
     const { t } = useI18N()
-    const _asset = asset.value
-    if (!asset.value || asset.loading) return <Skeleton width="100%" height={96} />
     return (
         <div className={classes.wrapper}>
             <Typography className={classes.title}>{t('plugin_collectible_description_title')}</Typography>
             <div className={classes.content}>
-                <Typography className={classes.textContent}>{_asset.metadata.description}</Typography>
+                <Typography className={classes.textContent}>{asset.metadata?.description ?? '-'}</Typography>
             </div>
         </div>
     )

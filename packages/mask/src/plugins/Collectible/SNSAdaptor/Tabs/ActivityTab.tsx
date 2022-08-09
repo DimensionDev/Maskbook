@@ -4,6 +4,7 @@ import { CollectibleTab } from '../CollectibleTab'
 import { Button, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { CollectibleState } from '../../hooks/useCollectibleState'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { NFTActivityCard, ActivityType } from '../../../../components/shared/NFTCard/NFTActivityCard'
 import { useI18N } from '../../../../utils'
 
@@ -32,7 +33,7 @@ export function ActivityTab(props: ActivityTabProps) {
     const { classes } = useStyles()
     const { events } = CollectibleState.useContainer()
     const { t } = useI18N()
-    const _events = events.value?.data ?? []
+    const _events = events.value?.data ?? EMPTY_LIST
     return useMemo(() => {
         if (events.loading) return <LoadingBase />
         if (events.error || !events.value)
@@ -54,11 +55,9 @@ export function ActivityTab(props: ActivityTabProps) {
         return (
             <CollectibleTab>
                 <div className={classes.body} style={{ justifyContent: 'unset' }}>
-                    <>
-                        {_events.map((x, idx) => (
-                            <NFTActivityCard type={ActivityType.Transfer} key={idx} activity={x} />
-                        ))}
-                    </>
+                    {_events.map((x, idx) => (
+                        <NFTActivityCard type={ActivityType.Transfer} key={idx} activity={x} />
+                    ))}
                 </div>
             </CollectibleTab>
         )

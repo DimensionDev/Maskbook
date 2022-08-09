@@ -5,6 +5,7 @@ import { NFTBasicInfo } from '../../../../components/shared/NFTCard/NFTBasicInfo
 import { NFTPriceCard } from '../../../../components/shared/NFTCard/NFTPriceCard'
 import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
 import type { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
+import type { AsyncState } from 'react-use/lib/useAsyncFn'
 
 const useStyles = makeStyles()((theme) => ({
     body: {
@@ -20,10 +21,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface AboutTabProps {
-    asset: {
-        loading?: boolean
-        value?: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
-    }
+    asset: AsyncState<Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>>
     onChangeProvider: (v: SourceType) => void
 }
 
@@ -31,19 +29,21 @@ export function AboutTab(props: AboutTabProps) {
     const { asset, onChangeProvider } = props
     const { classes } = useStyles()
     return useMemo(() => {
+        if (asset.loading || !asset.value)
+            return (
+                <CollectibleTab>
+                    <div className={classes.body}>
+                        <LoadingBase />
+                    </div>
+                </CollectibleTab>
+            )
         return (
             <CollectibleTab>
                 <div className={classes.body}>
-                    {asset.loading ? (
-                        <LoadingBase />
-                    ) : (
-                        <>
-                            <div className={classes.basic}>
-                                <NFTBasicInfo onChangeProvider={onChangeProvider} hideSubTitle asset={asset} />
-                            </div>
-                            <NFTPriceCard asset={asset} />
-                        </>
-                    )}
+                    <div className={classes.basic}>
+                        <NFTBasicInfo onChangeProvider={onChangeProvider} hideSubTitle asset={asset} />
+                    </div>
+                    <NFTPriceCard asset={asset.value} />
                 </div>
             </CollectibleTab>
         )

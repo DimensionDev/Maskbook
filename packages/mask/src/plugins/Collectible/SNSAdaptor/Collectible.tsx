@@ -142,7 +142,7 @@ export function Collectible(props: CollectibleProps) {
     const CollectibleProviderSwitcher = useSwitcher(provider, setProvider, supportedProvider, resolveSourceName, true)
     // #endregion
     const [currentTab, onChange, tabs, setTab] = useTabs('about', 'details', 'offers', 'activity')
-    console.log(asset, 'asset')
+
     if (!asset.value || !token)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">

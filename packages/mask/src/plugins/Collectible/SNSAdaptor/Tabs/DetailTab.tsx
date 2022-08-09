@@ -5,6 +5,7 @@ import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { NFTInfoCard } from '../../../../components/shared/NFTCard/NFTInfoCard'
 import { NFTPropertiesCard } from '../../../../components/shared/NFTCard/NFTPropertiesCard'
+import type { AsyncState } from 'react-use/lib/useAsyncFn'
 
 const useStyles = makeStyles()((theme) => ({
     body: {
@@ -20,29 +21,28 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface DetailTabProps {
-    asset: {
-        loading?: boolean
-        value?: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
-    }
+    asset: AsyncState<Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>>
 }
 
 export function DetailTab(props: DetailTabProps) {
     const { asset } = props
     const { classes } = useStyles()
     return useMemo(() => {
+        if (asset.loading || !asset.value)
+            return (
+                <CollectibleTab>
+                    <div className={classes.body}>
+                        <LoadingBase />
+                    </div>
+                </CollectibleTab>
+            )
         return (
             <CollectibleTab>
                 <div className={classes.body}>
-                    {asset.loading ? (
-                        <LoadingBase />
-                    ) : (
-                        <>
-                            <div className={classes.info}>
-                                <NFTInfoCard asset={asset} />
-                            </div>
-                            <NFTPropertiesCard asset={asset} />
-                        </>
-                    )}
+                    <div className={classes.info}>
+                        <NFTInfoCard asset={asset.value} />
+                    </div>
+                    <NFTPropertiesCard asset={asset.value} />
                 </div>
             </CollectibleTab>
         )

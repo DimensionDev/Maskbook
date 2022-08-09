@@ -431,7 +431,6 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             }),
             chainId,
         )
-        console.log(response, 'orders123')
         const orders = response?.orders?.map((x) => createAssetOrder(chainId, x)) ?? EMPTY_LIST
         return createPageable(
             orders,

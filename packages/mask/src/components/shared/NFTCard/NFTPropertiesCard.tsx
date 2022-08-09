@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { Skeleton, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import { NFTRank } from './NFTRank'
 import { useI18N } from '../../../utils'
 import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
@@ -53,19 +53,13 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 interface NFTPropertiesCardProps {
-    asset: {
-        loading?: boolean
-        value?: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
-    }
+    asset: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
 }
 
 export function NFTPropertiesCard(props: NFTPropertiesCardProps) {
     const { asset } = props
     const { classes } = useStyles()
     const { t } = useI18N()
-    if (!asset.value || asset.loading) return <Skeleton width="100%" height={96} />
-
-    const _asset = asset.value
 
     return (
         <div className={classes.wrapper}>
@@ -77,7 +71,7 @@ export function NFTPropertiesCard(props: NFTPropertiesCardProps) {
                 </div>
             </div>
             <div className={classes.content}>
-                {_asset.traits?.map((x: any) => {
+                {asset.traits?.map((x) => {
                     return (
                         <div key={x.type} className={classes.traitsItem}>
                             <Typography className={classes.traitsTitle}>{x.type}</Typography>

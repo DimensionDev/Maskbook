@@ -1,7 +1,8 @@
 import { makeStyles } from '@masknet/theme'
-import { Skeleton, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -42,44 +43,35 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NFTPriceCardProps {
-    asset: {
-        loading?: boolean
-        value?: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
-    }
+    asset: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
 }
 
 export function NFTPriceCard(props: NFTPriceCardProps) {
     const { asset } = props
     const { classes } = useStyles()
-    if (!asset.value || asset.loading) return <Skeleton width="100%" height={146} />
-    const _asset = asset.value
-    console.log(_asset, 'ggg')
-    const priceTokenImg =
-        _asset.priceInToken?.token.logoURL ||
-        (_asset.paymentTokens?.length
-            ? _asset.paymentTokens[0].logoURL
-            : 'https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png')
+    const { t } = useI18N()
+    const priceTokenImg = asset.priceInToken?.token.logoURL
 
     return (
         <div className={classes.wrapper}>
             <div className={classes.header}>
-                <Typography className={classes.textBase}>Price</Typography>
+                <Typography className={classes.textBase}>{t('price')}</Typography>
                 <Typography className={classes.textBase}>
-                    Time left <strong>-</strong> h <strong>-</strong> m
+                    {t('plugin_collectible_time_left')} <strong>-</strong> h <strong>-</strong> m
                 </Typography>
             </div>
             <div className={classes.priceZone}>
                 <img width={48} height={48} src={priceTokenImg} />
-                <Typography className={classes.priceText}>{_asset.priceInToken?.amount ?? '-'}</Typography>
+                <Typography className={classes.priceText}>{asset.priceInToken?.amount ?? '-'}</Typography>
             </div>
             <div className={classes.offerBox}>
-                <Typography className={classes.textBase}>Top Offer</Typography>
+                <Typography className={classes.textBase}>{t('plugin_collectible_top_offer')}</Typography>
                 <img width={18} height={18} src={priceTokenImg} />
                 <Typography className={classes.textBase}>
-                    <strong>{_asset.priceInToken?.amount ?? '-'}</strong>
+                    <strong>{asset.priceInToken?.amount ?? '-'}</strong>
                 </Typography>
                 <Typography className={classes.textBase}>
-                    <strong>(${_asset.price?.usd ?? '-'})</strong>
+                    <strong>(${asset.price?.usd ?? '-'})</strong>
                 </Typography>
             </div>
         </div>

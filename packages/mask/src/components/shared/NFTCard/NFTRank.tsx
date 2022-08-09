@@ -1,9 +1,9 @@
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { SourceType } from '@masknet/web3-shared-base'
+import type { SourceType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
-    wrapper: {
+    gemRankWrapper: {
         boxSizing: 'border-box',
         borderRadius: 8,
         padding: '4px 8px',
@@ -21,12 +21,11 @@ interface NFTRankProps {
 }
 
 export function NFTRank(props: NFTRankProps) {
-    const { providerType, rank } = props
+    const { rank } = props
     // todo: multiple style to provider
     const { classes } = useStyles()
-    const _providerType = providerType || SourceType.Gem
     return (
-        <div className={classes.wrapper}>
+        <div className={classes.gemRankWrapper}>
             <Typography># {rank ?? '-'}</Typography>
         </div>
     )
