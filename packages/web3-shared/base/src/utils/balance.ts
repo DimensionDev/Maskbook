@@ -27,5 +27,5 @@ export function formatBalance(rawValue: BigNumber.Value = '0', decimals = 0, sig
 
     const raw = negative ? `-${value}` : value
     const res = raw.includes('.') ? raw.replace(/0+$/, '').replace(/\.$/, '') : raw
-    return new BigNumber(res).gt(pow10(-6)) ? Number.parseFloat(toFixed(res ?? '', 6)) : '<0.000001'
+    return new BigNumber(res).gt(pow10(-6)) ? Number.parseFloat(toFixed(res ?? '', 6)).toString() : '<0.000001'
 }
