@@ -1,11 +1,10 @@
-import { memo, useMemo } from 'react'
 import { Icons } from '@masknet/icons'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { FilterTransactionType, TransactionType, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { TransactionType, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { Box } from '@mui/material'
-import classNames from 'classnames'
+import { memo, useMemo } from 'react'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -15,16 +14,21 @@ const useStyles = makeStyles()(() => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        background: MaskColorVar.warning.alpha(0.15),
+        // default backgroundColor
+        background: MaskColorVar.warning.alpha(0.1),
     },
     success: {
-        background: MaskColorVar.greenMain.alpha(0.15),
+        background: MaskColorVar.success.alpha(0.1),
+    },
+    warning: {
+        background: MaskColorVar.warning.alpha(0.1),
     },
     error: {
-        background: MaskColorVar.redMain.alpha(0.15),
+        background: MaskColorVar.redMain.alpha(0.1),
     },
     icon: {
-        fontSize: 20,
+        height: 20,
+        width: 20,
     },
 }))
 
@@ -63,7 +67,7 @@ export interface TransactionIconUIProps {
 }
 
 export const TransactionIconUI = memo<TransactionIconUIProps>(({ isFailed, isRedPacket, type, transactionType }) => {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const icon = useMemo(() => {
         if (isFailed) return <Icons.Close color={MaskColorVar.redMain} className={classes.icon} />
         if (isRedPacket) return <Icons.RedPacket className={classes.icon} />
@@ -73,24 +77,43 @@ export const TransactionIconUI = memo<TransactionIconUIProps>(({ isFailed, isRed
                 return <Icons.Upload color={MaskColorVar.warning} className={classes.icon} />
             case TransactionType.TRANSFER:
                 return <Icons.Upload color={MaskColorVar.warning} className={classes.icon} />
+            case TransactionType.WITHDRAW:
             case TransactionType.RECEIVE:
-                return <Icons.Download color={MaskColorVar.greenMain} className={classes.icon} />
+                return <Icons.Download color={MaskColorVar.success} className={classes.icon} />
             case TransactionType.CREATE_LUCKY_DROP:
-                return <Icons.RedPacket className={classes.icon} />
             case TransactionType.CREATE_RED_PACKET:
                 return <Icons.RedPacket className={classes.icon} />
             case TransactionType.FILL_POOL:
-                return <Icons.ITO className={classes.icon} />
+                return <Icons.ITO color={MaskColorVar.warning} className={classes.icon} />
             default:
                 return <Icons.Interaction color={MaskColorVar.warning} className={classes.icon} />
         }
     }, [isFailed, isRedPacket, type])
 
+    const isNotFailed = !isFailed && !!transactionType
+    const isSuccess =
+        isNotFailed &&
+        [TransactionType.RECEIVE, TransactionType.CLAIM, TransactionType.WITHDRAW].includes(
+            transactionType as TransactionType,
+        )
+    const isWarning =
+        isNotFailed &&
+        [
+            TransactionType.SEND,
+            TransactionType.FILL_POOL,
+            TransactionType.CREATE_RED_PACKET,
+            TransactionType.CREATE_LUCKY_DROP,
+            TransactionType.TRANSFER,
+            TransactionType.SWAP,
+        ].includes(transactionType as TransactionType)
+
     return (
         <Box
-            className={classNames(classes.container, {
+            data-type={transactionType}
+            className={cx(classes.container, {
                 [classes.error]: isFailed,
-                [classes.success]: transactionType === FilterTransactionType.RECEIVE,
+                [classes.success]: isSuccess,
+                [classes.warning]: isWarning,
             })}>
             {icon}
         </Box>
