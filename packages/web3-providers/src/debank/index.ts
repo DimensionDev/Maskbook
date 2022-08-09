@@ -78,7 +78,7 @@ export class DeBankAPI
         const response = await global.r2d2Fetch(
             urlcat(DEBANK_OPEN_API, '/v1/user/token_list', {
                 id: address.toLowerCase(),
-                is_all: true,
+                is_all: false,
                 has_balance: true,
             }),
         )
