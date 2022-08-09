@@ -568,7 +568,7 @@ export interface Transaction<ChainId, SchemaType> {
     /** unix timestamp */
     timestamp: number
     /** 0: failed 1: succeed */
-    status: 0 | 1
+    status?: 0 | 1
     /** transferred tokens */
     tokens: Array<
         Token<ChainId, SchemaType> & {
