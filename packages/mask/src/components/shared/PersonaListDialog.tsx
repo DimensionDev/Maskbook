@@ -7,7 +7,7 @@ import {
     PersonaIdentifier,
     ProfileIdentifier,
 } from '@masknet/shared-base'
-import { useAsync, useAsyncFn, useCopyToClipboard } from 'react-use'
+import { useAsyncFn, useCopyToClipboard } from 'react-use'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { useConnectedPersonas } from '../DataSource/useConnectedPersonas'
 import Services from '../../extension/service'
@@ -22,6 +22,7 @@ import { activatedSocialNetworkUI } from '../../social-network'
 import { PluginNextIDMessages } from '../../plugins/NextID/messages'
 import type { PersonaNextIDMixture } from './PersonaListUI/PersonaItemUI'
 import { PersonaItemUI } from './PersonaListUI/PersonaItemUI'
+import { useCurrentPersona } from '../DataSource/usePersonaConnectStatus'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -54,8 +55,11 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
     const { classes } = useStyles()
     const [, copyToClipboard] = useCopyToClipboard()
     const { showSnackbar } = useCustomSnackbar()
-    const [selectedPersona, setSelectedPersona] = useState<PersonaNextIDMixture>()
     const currentPlatform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
+    const currentPersona = useCurrentPersona()
+    const currentPersonaIdentifier = currentPersona?.identifier
+
+    const [selectedPersona, setSelectedPersona] = useState<PersonaNextIDMixture>()
 
     const [, handleVerifyNextID] = useNextIDVerify()
     const currentProfileIdentify = useLastRecognizedIdentity()
@@ -66,10 +70,6 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
     const { closeDialog: closeApplicationBoard } = useRemoteControlledDialog(
         WalletMessages.events.ApplicationDialogUpdated,
     )
-
-    const { value: currentPersonaIdentifier } = useAsync(() => {
-        return Services.Settings.getCurrentPersonaIdentifier()
-    }, [])
 
     useEffect(() => {
         if (!currentPersonaIdentifier) return

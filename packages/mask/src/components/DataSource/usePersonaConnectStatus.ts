@@ -8,6 +8,7 @@ import { SetupGuideStep } from '../../../shared/legacy-settings/types'
 import { useLastRecognizedIdentity } from './useActivatedUI'
 import { usePersonasFromDB } from './usePersonasFromDB'
 import { useValueRef } from '@masknet/shared-base-ui'
+import { useAsync } from 'react-use'
 
 const createPersona = () => {
     Services.Helper.openDashboard(DashboardRoutes.Setup)
@@ -39,6 +40,22 @@ export function usePersonaConnectStatus() {
             hasPersona: !!personas.length,
         }
     }, [personas, lastRecognized.identifier?.toText(), activatedSocialNetworkUI])
+}
+
+/**
+ * Get current setting persona
+ */
+export function useCurrentPersona() {
+    const currentIdentifier = useValueRef(currentPersonaIdentifier)
+
+    const { value } = useAsync(async () => {
+        const identifier = await Services.Settings.getCurrentPersonaIdentifier()
+
+        if (!identifier) return
+        return Services.Identity.queryPersona(identifier)
+    }, [currentIdentifier])
+
+    return value
 }
 
 export function useCurrentPersonaConnectStatus() {
