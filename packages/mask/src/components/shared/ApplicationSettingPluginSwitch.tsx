@@ -5,8 +5,8 @@ import { useActivatedPluginsSNSAdaptor, PluginI18NFieldRender, PluginId } from '
 import { SettingSwitch } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Services } from '../../extension/service'
-import CheckSecurityConfirmDialog from './CheckSecurityConfirmDialog'
 import { useState } from 'react'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 
 interface Props {}
 const useStyles = makeStyles()((theme) => ({
@@ -70,7 +70,8 @@ export function ApplicationSettingPluginSwitch(props: Props) {
     const [open, setOpen] = useState(false)
 
     async function onSwitch(id: string, checked: boolean) {
-        if (id === PluginId.GoPlusSecurity && checked === false) return setOpen(true)
+        if (id === PluginId.GoPlusSecurity && checked === false)
+            return CrossIsolationMessages.events.requestCheckSecurityCloseConfirmDialog.sendToAll({ open: true })
         await Services.Settings.setPluginMinimalModeEnabled(id, !checked)
     }
 
@@ -117,13 +118,6 @@ export function ApplicationSettingPluginSwitch(props: Props) {
                         </ListItem>
                     ))}
             </List>
-            <CheckSecurityConfirmDialog
-                open={open}
-                onClose={() => setOpen(false)}
-                onConfirm={() => {
-                    Services.Settings.setPluginMinimalModeEnabled(PluginId.GoPlusSecurity, true)
-                }}
-            />
         </>
     )
 }

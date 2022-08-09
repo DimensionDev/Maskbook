@@ -101,6 +101,21 @@ export interface Web3ProfileDialogRequest {
     open: boolean
 }
 
+export interface CheckSecurityCloseConfirmDialogRequest {
+    open: boolean
+}
+
+export type CheckSecurityDialogRequest =
+    | {
+          open: true
+          searchHidden: boolean
+          tokenAddress?: string
+          chainId?: number
+      }
+    | {
+          open: false
+      }
+
 export interface NFTAvatarEvent {
     userId: string
     avatarId: string

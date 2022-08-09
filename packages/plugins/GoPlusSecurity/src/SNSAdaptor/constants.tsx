@@ -1,25 +1,13 @@
-import type { SecurityAPI } from '@masknet/web3-providers'
+export const GO_PLUS_LABS_ROOT_URL = 'https://api.gopluslabs.io'
 import { Icons } from '@masknet/icons'
-import { memo, ReactNode } from 'react'
-import { Stack } from '@mui/material'
-import type { useI18N } from '../../locales'
-import type { ChainId } from '@masknet/web3-shared-evm'
-
-export type TokenSecurity = SecurityAPI.ContractSecurity &
-    SecurityAPI.TokenSecurity &
-    SecurityAPI.TradingSecurity & { contract: string; chainId: ChainId }
+import type { ReactNode } from 'react'
+import type { useI18N } from '../locales'
 
 export enum SecurityMessageLevel {
     High = 'High',
     Medium = 'Medium',
     Safe = 'Safe',
 }
-
-export const Center = memo(({ children }: { children: ReactNode }) => (
-    <Stack height="100%" justifyContent="center" alignItems="center">
-        {children}
-    </Stack>
-))
 
 type DefineMapping = {
     [key in SecurityMessageLevel]: {
@@ -42,7 +30,7 @@ export const DefineMapping: DefineMapping = {
         titleColor: '#FFB100',
         bgColor: 'rgba(255, 177, 0, 0.1)',
         // TODO: Merge duplicate icon in a another PR.
-        icon: (size: number) => <Icons.SecurityWarning size={size ?? 24} sx={{ color: '#FFB915' }} />,
+        icon: (size: number) => <Icons.SecurityWarning size={size ?? 24} color="#FFB915" />,
     },
     [SecurityMessageLevel.Safe]: {
         i18nKey: 'low_risk',

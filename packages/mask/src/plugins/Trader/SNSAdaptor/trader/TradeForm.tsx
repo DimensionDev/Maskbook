@@ -3,7 +3,7 @@ import { PluginWalletStatusBar, useI18N } from '../../../../utils'
 import { makeStyles, MaskColorVar, useStylesExtends, ActionButton } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
 import { alpha, Box, chipClasses, Collapse, IconButton, lighten, Typography } from '@mui/material'
-import { ChainId, formatWeiToEther, GasOptionConfig, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, formatWeiToEther, GasOptionConfig, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import {
     FungibleToken,
     isLessThan,
@@ -11,19 +11,12 @@ import {
     NetworkPluginID,
     rightShift,
     multipliedBy,
-    formatPercentage,
 } from '@masknet/web3-shared-base'
 import TuneIcon from '@mui/icons-material/Tune'
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
-import {
-    isHighRisk,
-    SelectTokenChip,
-    TokenSecurityBar,
-    useSelectAdvancedSettings,
-    useTokenSecurity,
-} from '@masknet/shared'
+import { SelectTokenChip, TokenSecurityBar, useSelectAdvancedSettings, useTokenSecurity } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import classnames from 'classnames'
 import { isNativeTokenWrapper } from '../../helpers'
@@ -38,12 +31,12 @@ import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { isDashboardPage, isPopupPage, PopupRoutes } from '@masknet/shared-base'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
+import { TokenSecurityBoundary } from '../../../../web3/UI/TokenSecurityBoundary'
 import { currentSlippageSettings } from '../../settings'
 import { PluginTraderMessages } from '../../messages'
 import Services from '../../../../extension/service'
 import { PluginId, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
-import { RiskWarningDialog } from './RiskWarningDialog'
 
 const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((theme, { isDashboard, isPopup }) => {
     return {
@@ -279,7 +272,7 @@ export const TradeForm = memo<AllTradeFormProps>(
             isTokenSecurityEnable,
         )
 
-        const isRisky = isHighRisk(tokenSecurityInfo)
+        const isRisky = tokenSecurityInfo?.is_high_risk
 
         // #region approve token
         const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(
@@ -609,19 +602,20 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         style: { borderRadius: 8 },
                                         size: 'medium',
                                     }}>
-                                    {isTokenSecurityEnable && isRisky ? (
-                                        <ActionButton
-                                            fullWidth
-                                            variant="contained"
-                                            color="error"
-                                            disabled={focusedTrade?.loading || !focusedTrade?.value}
-                                            classes={{ root: classes.button, disabled: classes.disabledButton }}
-                                            onClick={() => setIsWarningOpen(true)}>
-                                            {t('plugin_trader_risk_warning', {
-                                                percent: formatPercentage(focusedTrade?.value?.priceImpact ?? 0),
-                                            })}
-                                        </ActionButton>
-                                    ) : (
+                                    <TokenSecurityBoundary
+                                        tokenInfo={{
+                                            name: tokenSecurityInfo?.token_name ?? '--',
+                                            chainId: tokenSecurityInfo?.chainId ?? ChainId.Mainnet,
+                                            contract: tokenSecurityInfo?.contract ?? ZERO_ADDRESS,
+                                        }}
+                                        disabled={
+                                            focusedTrade?.loading ||
+                                            !focusedTrade?.value ||
+                                            !!validationMessage ||
+                                            isSwapping
+                                        }
+                                        onSwap={onSwap}
+                                        showTokenSecurity={isTokenSecurityEnable && isRisky}>
                                         <ActionButton
                                             fullWidth
                                             loading={isSwapping}
@@ -637,22 +631,11 @@ export const TradeForm = memo<AllTradeFormProps>(
                                             onClick={onSwap}>
                                             {validationMessage || nativeWrapMessage}
                                         </ActionButton>
-                                    )}
+                                    </TokenSecurityBoundary>
                                 </EthereumERC20TokenApprovedBoundary>
                             </WalletConnectedBoundary>
                         </ChainBoundary>
                     </PluginWalletStatusBar>
-                    {isTokenSecurityEnable && tokenSecurityInfo && (
-                        <RiskWarningDialog
-                            open={isWarningOpen}
-                            onClose={() => setIsWarningOpen(false)}
-                            onConfirm={() => {
-                                onSwap()
-                                setIsWarningOpen(false)
-                            }}
-                            tokenInfo={tokenSecurityInfo}
-                        />
-                    )}
                 </Box>
             </>
         )

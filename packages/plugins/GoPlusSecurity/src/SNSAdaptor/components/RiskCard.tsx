@@ -1,9 +1,10 @@
 import { memo, ReactNode } from 'react'
-import { DefineMapping, TokenSecurity } from './Common'
 import { Box, Stack, Typography } from '@mui/material'
-import type { SecurityMessage } from '../rules'
 import { useI18N } from '../../locales'
 import { makeStyles } from '@masknet/theme'
+import type { SecurityMessage } from '@masknet/web3-providers/src/gopluslabs/rules'
+import { DefineMapping } from '../constants'
+import type { SecurityAPI } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     detectionCard: {
@@ -35,7 +36,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface RiskCardProps {
     info: SecurityMessage
-    tokenSecurity: TokenSecurity
+    tokenSecurity: SecurityAPI.TokenSecurityType
 }
 
 export const RiskCard = memo<RiskCardProps>(({ info, tokenSecurity }) => {
@@ -43,9 +44,9 @@ export const RiskCard = memo<RiskCardProps>(({ info, tokenSecurity }) => {
     return (
         <RiskCardUI
             icon={DefineMapping[info.level].icon(14)}
-            title={t[info.titleKey]({ quantity: '', rate: info.i18nParams?.(tokenSecurity).rate ?? '' })}
+            title={t[info.titleKey]({ rate: info.i18nParams?.(tokenSecurity).rate ?? '' })}
             titleColor={DefineMapping[info.level].titleColor}
-            description={t[info.messageKey]({ quantity: '', rate: info.i18nParams?.(tokenSecurity).rate ?? '' })}
+            description={t[info.messageKey]({ rate: info.i18nParams?.(tokenSecurity).rate ?? '' })}
         />
     )
 })
