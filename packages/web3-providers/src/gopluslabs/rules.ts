@@ -1,10 +1,10 @@
-import { SecurityMessageLevel, TokenSecurity } from './components/Common'
-import type { useI18N } from '../locales'
+import { SecurityKey, SecurityMessageLevel } from './constants'
 import parseInt from 'lodash-es/parseInt'
+import type { SecurityAPI } from '../types/Security'
 
 export type I18nOptions = 'rate' | 'quantity'
 
-enum SecurityType {
+export enum SecurityType {
     Contract = 'contract-security',
     Transaction = 'transaction-security',
     Info = 'info-security',
@@ -13,22 +13,23 @@ enum SecurityType {
 export interface SecurityMessage {
     type: SecurityType
     level: SecurityMessageLevel
-    condition(info: TokenSecurity): boolean
-    titleKey: keyof ReturnType<typeof useI18N>
-    messageKey: keyof ReturnType<typeof useI18N>
-    i18nParams?: (info: TokenSecurity) => { [key in I18nOptions]: string }
-    shouldHide(info: TokenSecurity): boolean
+    condition(info: SecurityAPI.TokenSecurityType): boolean
+    titleKey: SecurityKey
+    messageKey: SecurityKey
+    i18nParams?: (info: SecurityAPI.TokenSecurityType) => { [key in I18nOptions]: string }
+    shouldHide(info: SecurityAPI.TokenSecurityType): boolean
 }
 
 const percentageToNumber = (value?: string) => parseInt((value ?? '').replace('%', '')) * 100
-const isUnset = (name: keyof TokenSecurity) => (info: TokenSecurity) => info[name] === undefined
+const isUnset = (name: keyof SecurityAPI.TokenSecurityType) => (info: SecurityAPI.TokenSecurityType) =>
+    info[name] === undefined
 
 export const SecurityMessages: SecurityMessage[] = [
     // open source
     {
         type: SecurityType.Contract,
         level: SecurityMessageLevel.Safe,
-        condition: (info: TokenSecurity) => info.is_open_source === '1',
+        condition: (info: SecurityAPI.TokenSecurityType) => info.is_open_source === '1',
         titleKey: 'risk_contract_source_code_verified_title',
         messageKey: 'risk_contract_source_code_verified_body',
         shouldHide: isUnset('is_open_source'),
@@ -36,7 +37,7 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Contract,
         level: SecurityMessageLevel.High,
-        condition: (info: TokenSecurity) => info.is_open_source === '0',
+        condition: (info: SecurityAPI.TokenSecurityType) => info.is_open_source === '0',
         titleKey: 'risk_contract_source_code_not_verified_title',
         messageKey: 'risk_contract_source_code_not_verified_body',
         shouldHide: isUnset('is_open_source'),
@@ -45,7 +46,7 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Contract,
         level: SecurityMessageLevel.Medium,
-        condition: (info: TokenSecurity) => info.is_proxy === '1',
+        condition: (info: SecurityAPI.TokenSecurityType) => info.is_proxy === '1',
         titleKey: 'risk_proxy_contract_title',
         messageKey: 'risk_proxy_contract_body',
         shouldHide: isUnset('is_proxy'),
@@ -53,7 +54,7 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Contract,
         level: SecurityMessageLevel.Safe,
-        condition: (info: TokenSecurity) => info.is_proxy === '0',
+        condition: (info: SecurityAPI.TokenSecurityType) => info.is_proxy === '0',
         titleKey: 'risk_no_proxy_title',
         messageKey: 'risk_no_proxy_body',
         shouldHide: isUnset('is_proxy'),
@@ -62,7 +63,7 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Contract,
         level: SecurityMessageLevel.Safe,
-        condition: (info: TokenSecurity) => info.is_mintable === '0',
+        condition: (info: SecurityAPI.TokenSecurityType) => info.is_mintable === '0',
         titleKey: 'risk_no_mint_function_title',
         messageKey: 'risk_no_mint_function_body',
         shouldHide: isUnset('is_mintable'),
@@ -70,7 +71,7 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Contract,
         level: SecurityMessageLevel.Medium,
-        condition: (info: TokenSecurity) => info.is_mintable === '1',
+        condition: (info: SecurityAPI.TokenSecurityType) => info.is_mintable === '1',
         titleKey: 'risk_mint_function_title',
         messageKey: 'risk_mint_function_body',
         shouldHide: isUnset('is_mintable'),
@@ -79,7 +80,7 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Contract,
         level: SecurityMessageLevel.Safe,
-        condition: (info: TokenSecurity) => info.owner_change_balance === '0',
+        condition: (info: SecurityAPI.TokenSecurityType) => info.owner_change_balance === '0',
         titleKey: 'risk_owner_can_not_change_balance_title',
         messageKey: 'risk_owner_can_not_change_balance_body',
         shouldHide: isUnset('owner_change_balance'),
@@ -87,7 +88,7 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Contract,
         level: SecurityMessageLevel.Medium,
-        condition: (info: TokenSecurity) => info.owner_change_balance === '1',
+        condition: (info: SecurityAPI.TokenSecurityType) => info.owner_change_balance === '1',
         titleKey: 'risk_owner_change_balance_title',
         messageKey: 'risk_owner_change_balance_body',
         shouldHide: isUnset('owner_change_balance'),
@@ -96,7 +97,7 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Contract,
         level: SecurityMessageLevel.Safe,
-        condition: (info: TokenSecurity) => info.can_take_back_ownership === '0',
+        condition: (info: SecurityAPI.TokenSecurityType) => info.can_take_back_ownership === '0',
         titleKey: 'risk_no_can_take_back_ownership_title',
         messageKey: 'risk_no_can_take_back_ownership_body',
         shouldHide: isUnset('can_take_back_ownership'),
@@ -104,7 +105,7 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Contract,
         level: SecurityMessageLevel.Medium,
-        condition: (info: TokenSecurity) => info.can_take_back_ownership === '1',
+        condition: (info: SecurityAPI.TokenSecurityType) => info.can_take_back_ownership === '1',
         titleKey: 'risk_can_take_back_ownership_title',
         messageKey: 'risk_can_take_back_ownership_body',
         shouldHide: isUnset('can_take_back_ownership'),
@@ -113,10 +114,10 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Transaction,
         level: SecurityMessageLevel.Safe,
-        condition: (info: TokenSecurity) => percentageToNumber(info.buy_tax) < 10,
+        condition: (info: SecurityAPI.TokenSecurityType) => percentageToNumber(info.buy_tax) < 10,
         titleKey: 'risk_buy_tax_title',
         messageKey: 'risk_buy_tax_body',
-        i18nParams: (info: TokenSecurity) => ({
+        i18nParams: (info: SecurityAPI.TokenSecurityType) => ({
             rate: `${percentageToNumber(info.buy_tax)}%`,
             quantity: '',
         }),
@@ -125,11 +126,11 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Transaction,
         level: SecurityMessageLevel.Medium,
-        condition: (info: TokenSecurity) =>
+        condition: (info: SecurityAPI.TokenSecurityType) =>
             percentageToNumber(info.buy_tax) >= 10 && percentageToNumber(info.buy_tax) < 50,
         titleKey: 'risk_buy_tax_title',
         messageKey: 'risk_buy_tax_body',
-        i18nParams: (info: TokenSecurity) => ({
+        i18nParams: (info: SecurityAPI.TokenSecurityType) => ({
             rate: `${percentageToNumber(info.buy_tax)}%`,
             quantity: '',
         }),
@@ -138,10 +139,10 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Transaction,
         level: SecurityMessageLevel.High,
-        condition: (info: TokenSecurity) => percentageToNumber(info.buy_tax) >= 50,
+        condition: (info: SecurityAPI.TokenSecurityType) => percentageToNumber(info.buy_tax) >= 50,
         titleKey: 'risk_buy_tax_title',
         messageKey: 'risk_buy_tax_body',
-        i18nParams: (info: TokenSecurity) => ({
+        i18nParams: (info: SecurityAPI.TokenSecurityType) => ({
             rate: `${percentageToNumber(info.buy_tax)}%`,
             quantity: '',
         }),
@@ -151,10 +152,10 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Transaction,
         level: SecurityMessageLevel.Safe,
-        condition: (info: TokenSecurity) => percentageToNumber(info.sell_tax) < 10,
+        condition: (info: SecurityAPI.TokenSecurityType) => percentageToNumber(info.sell_tax) < 10,
         titleKey: 'risk_sell_tax_title',
         messageKey: 'risk_sell_tax_body',
-        i18nParams: (info: TokenSecurity) => ({
+        i18nParams: (info: SecurityAPI.TokenSecurityType) => ({
             rate: `${percentageToNumber(info.sell_tax)}%`,
             quantity: '',
         }),
@@ -163,11 +164,11 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Transaction,
         level: SecurityMessageLevel.Medium,
-        condition: (info: TokenSecurity) =>
+        condition: (info: SecurityAPI.TokenSecurityType) =>
             percentageToNumber(info.sell_tax) >= 10 && percentageToNumber(info.sell_tax) < 50,
         titleKey: 'risk_sell_tax_title',
         messageKey: 'risk_sell_tax_body',
-        i18nParams: (info: TokenSecurity) => ({
+        i18nParams: (info: SecurityAPI.TokenSecurityType) => ({
             rate: `${percentageToNumber(info.sell_tax)}%`,
             quantity: '',
         }),
@@ -176,10 +177,10 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Transaction,
         level: SecurityMessageLevel.High,
-        condition: (info: TokenSecurity) => percentageToNumber(info.sell_tax) >= 50,
+        condition: (info: SecurityAPI.TokenSecurityType) => percentageToNumber(info.sell_tax) >= 50,
         titleKey: 'risk_sell_tax_title',
         messageKey: 'risk_sell_tax_body',
-        i18nParams: (info: TokenSecurity) => ({
+        i18nParams: (info: SecurityAPI.TokenSecurityType) => ({
             rate: `${percentageToNumber(info.sell_tax)}%`,
             quantity: '',
         }),
@@ -189,7 +190,7 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Transaction,
         level: SecurityMessageLevel.Safe,
-        condition: (info: TokenSecurity) => info.is_honeypot === '0',
+        condition: (info: SecurityAPI.TokenSecurityType) => info.is_honeypot === '0',
         titleKey: 'risk_is_not_honeypot_title',
         messageKey: 'risk_is_not_honeypot_body',
         shouldHide: isUnset('is_honeypot'),
@@ -197,7 +198,7 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Transaction,
         level: SecurityMessageLevel.High,
-        condition: (info: TokenSecurity) => info.is_honeypot === '1',
+        condition: (info: SecurityAPI.TokenSecurityType) => info.is_honeypot === '1',
         titleKey: 'risk_is_honeypot_title',
         messageKey: 'risk_is_honeypot_body',
         shouldHide: isUnset('is_honeypot'),
@@ -206,7 +207,7 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Transaction,
         level: SecurityMessageLevel.Safe,
-        condition: (info: TokenSecurity) => info.transfer_pausable === '0',
+        condition: (info: SecurityAPI.TokenSecurityType) => info.transfer_pausable === '0',
         titleKey: 'risk_no_code_transfer_pausable_title',
         messageKey: 'risk_no_code_transfer_pausable_title',
         shouldHide: isUnset('transfer_pausable'),
@@ -214,7 +215,7 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Transaction,
         level: SecurityMessageLevel.Medium,
-        condition: (info: TokenSecurity) => info.transfer_pausable === '1',
+        condition: (info: SecurityAPI.TokenSecurityType) => info.transfer_pausable === '1',
         titleKey: 'risk_transfer_pausable_title',
         messageKey: 'risk_transfer_pausable_body',
         shouldHide: isUnset('transfer_pausable'),
@@ -223,7 +224,7 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Transaction,
         level: SecurityMessageLevel.Safe,
-        condition: (info: TokenSecurity) => info.is_anti_whale === '0',
+        condition: (info: SecurityAPI.TokenSecurityType) => info.is_anti_whale === '0',
         titleKey: 'risk_is_no_anti_whale_title',
         messageKey: 'risk_is_no_anti_whale_body',
         shouldHide: isUnset('is_anti_whale'),
@@ -231,7 +232,7 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Transaction,
         level: SecurityMessageLevel.Medium,
-        condition: (info: TokenSecurity) => info.is_anti_whale === '1',
+        condition: (info: SecurityAPI.TokenSecurityType) => info.is_anti_whale === '1',
         titleKey: 'risk_is_anti_whale_title',
         messageKey: 'risk_is_anti_whale_body',
         shouldHide: isUnset('is_anti_whale'),
@@ -240,7 +241,7 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Transaction,
         level: SecurityMessageLevel.Safe,
-        condition: (info: TokenSecurity) => info.slippage_modifiable === '0',
+        condition: (info: SecurityAPI.TokenSecurityType) => info.slippage_modifiable === '0',
         titleKey: 'risk_not_slippage_modifiable_title',
         messageKey: 'risk_not_slippage_modifiable_body',
         shouldHide: isUnset('slippage_modifiable'),
@@ -248,7 +249,7 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Transaction,
         level: SecurityMessageLevel.Medium,
-        condition: (info: TokenSecurity) => info.slippage_modifiable === '1',
+        condition: (info: SecurityAPI.TokenSecurityType) => info.slippage_modifiable === '1',
         titleKey: 'risk_slippage_modifiable_title',
         messageKey: 'risk_slippage_modifiable_body',
         shouldHide: isUnset('slippage_modifiable'),
@@ -257,7 +258,7 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Transaction,
         level: SecurityMessageLevel.Safe,
-        condition: (info: TokenSecurity) => info.is_blacklisted === '0',
+        condition: (info: SecurityAPI.TokenSecurityType) => info.is_blacklisted === '0',
         titleKey: 'risk_not_is_blacklisted_title',
         messageKey: 'risk_not_is_blacklisted_body',
         shouldHide: isUnset('is_blacklisted'),
@@ -265,7 +266,7 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Transaction,
         level: SecurityMessageLevel.Medium,
-        condition: (info: TokenSecurity) => info.is_blacklisted === '1',
+        condition: (info: SecurityAPI.TokenSecurityType) => info.is_blacklisted === '1',
         titleKey: 'risk_is_blacklisted_title',
         messageKey: 'risk_is_blacklisted_body',
         shouldHide: isUnset('is_blacklisted'),
@@ -274,7 +275,7 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Transaction,
         level: SecurityMessageLevel.Safe,
-        condition: (info: TokenSecurity) => info.is_whitelisted === '0',
+        condition: (info: SecurityAPI.TokenSecurityType) => info.is_whitelisted === '0',
         titleKey: 'risk_not_is_whitelisted_title',
         messageKey: 'risk_not_is_whitelisted_body',
         shouldHide: isUnset('is_whitelisted'),
@@ -282,7 +283,7 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Transaction,
         level: SecurityMessageLevel.Medium,
-        condition: (info: TokenSecurity) => info.is_whitelisted === '1',
+        condition: (info: SecurityAPI.TokenSecurityType) => info.is_whitelisted === '1',
         titleKey: 'risk_is_whitelisted_title',
         messageKey: 'risk_is_whitelisted_body',
         shouldHide: isUnset('is_whitelisted'),
@@ -291,7 +292,7 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Info,
         level: SecurityMessageLevel.Safe,
-        condition: (info: TokenSecurity) => info.is_true_token === '1',
+        condition: (info: SecurityAPI.TokenSecurityType) => info.is_true_token === '1',
         titleKey: 'risk_is_true_token_title',
         messageKey: 'risk_is_true_token_body',
         shouldHide: isUnset('is_true_token'),
@@ -299,7 +300,7 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Info,
         level: SecurityMessageLevel.High,
-        condition: (info: TokenSecurity) => info.is_true_token === '0',
+        condition: (info: SecurityAPI.TokenSecurityType) => info.is_true_token === '0',
         titleKey: 'risk_not_is_true_token_title',
         messageKey: 'risk_not_is_true_token_body',
         shouldHide: isUnset('is_true_token'),
@@ -308,7 +309,7 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Info,
         level: SecurityMessageLevel.Safe,
-        condition: (info: TokenSecurity) => info.is_airdrop_scam === '0',
+        condition: (info: SecurityAPI.TokenSecurityType) => info.is_airdrop_scam === '0',
         titleKey: 'risk_is_airdrop_scam_title',
         messageKey: 'risk_is_airdrop_scam_body',
         shouldHide: isUnset('is_airdrop_scam'),
@@ -316,7 +317,7 @@ export const SecurityMessages: SecurityMessage[] = [
     {
         type: SecurityType.Info,
         level: SecurityMessageLevel.High,
-        condition: (info: TokenSecurity) => info.is_airdrop_scam === '1',
+        condition: (info: SecurityAPI.TokenSecurityType) => info.is_airdrop_scam === '1',
         titleKey: 'risk_not_is_airdrop_scam_title',
         messageKey: 'risk_not_is_airdrop_scam_body',
         shouldHide: isUnset('is_airdrop_scam'),

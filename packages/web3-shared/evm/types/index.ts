@@ -202,6 +202,7 @@ export enum TransactionType {
     CREATE_RED_PACKET = 'create_red_packet',
     FILL_POOL = 'fill_pool',
     CLAIM = 'claim',
+    WITHDRAW = 'withdraw',
     REFUND = 'refund',
 }
 

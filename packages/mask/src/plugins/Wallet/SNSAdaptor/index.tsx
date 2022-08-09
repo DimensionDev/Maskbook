@@ -11,6 +11,7 @@ import { ApplicationBoardDialog } from '../../../components/shared/ApplicationBo
 import { WalletConnectQRCodeDialog } from './WalletConnectQRCodeDialog'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { LeavePageConfirmDialog } from '../../../components/shared/LeavePageConfirmDialog'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -29,6 +30,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     <TransactionSnackbar key={key} pluginID={pluginID} />
                 ))}
                 <WalletConnectQRCodeDialog />
+                <LeavePageConfirmDialog />
             </>
         )
     },

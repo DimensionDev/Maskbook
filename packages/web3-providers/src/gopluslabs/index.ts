@@ -1,9 +1,10 @@
 import urlcat from 'urlcat'
-import { parseInt, uniqBy } from 'lodash-unified'
+import { first, isEmpty, parseInt, uniqBy } from 'lodash-unified'
 import { ChainId } from '@masknet/web3-shared-evm'
 import type { SecurityAPI } from '..'
 import { fetchJSON } from '../helpers'
-import { GO_PLUS_LABS_ROOT_URL } from './constants'
+import { GO_PLUS_LABS_ROOT_URL, SecurityMessageLevel } from './constants'
+import { SecurityMessages } from './rules'
 
 export interface SupportedChainResponse {
     id: string
@@ -27,7 +28,7 @@ export class GoPlusLabsAPI implements SecurityAPI.Provider<ChainId> {
         )
 
         if (response.code !== 1) return
-        return response.result
+        return createTokenSecurity(chainId, response.result)
     }
 
     async getSupportedChain(): Promise<Array<SecurityAPI.SupportedChain<ChainId>>> {
@@ -41,3 +42,56 @@ export class GoPlusLabsAPI implements SecurityAPI.Provider<ChainId> {
         return result.map((x) => ({ chainId: parseInt(x.id) ?? ChainId.Mainnet, name: x.name }))
     }
 }
+
+export const createTokenSecurity = (
+    chainId: ChainId,
+    response: Record<
+        string,
+        SecurityAPI.ContractSecurity & SecurityAPI.TokenSecurity & SecurityAPI.TradingSecurity
+    > = {},
+) => {
+    if (isEmpty(response)) return
+    const entity = first(Object.entries(response))
+    if (!entity) return
+    const tokenSecurity = { ...entity[1], contract: entity[0], chainId }
+    const is_high_risk = isHighRisk(tokenSecurity)
+    const makeMessageList = getMessageList(tokenSecurity)
+    const risk_item_quantity = makeMessageList.filter((x) => x.level === SecurityMessageLevel.High).length
+    const warn_item_quantity = makeMessageList.filter((x) => x.level === SecurityMessageLevel.Medium).length
+    return {
+        ...tokenSecurity,
+        is_high_risk,
+        risk_item_quantity,
+        warn_item_quantity,
+        message_list: makeMessageList,
+    }
+}
+
+export const isHighRisk = (tokenSecurity?: SecurityAPI.TokenSecurityType) => {
+    if (!tokenSecurity) return false
+    return tokenSecurity.trust_list === '1'
+        ? false
+        : SecurityMessages.filter(
+              (x) =>
+                  x.condition(tokenSecurity) &&
+                  x.level !== SecurityMessageLevel.Safe &&
+                  !x.shouldHide(tokenSecurity) &&
+                  x.level === SecurityMessageLevel.High,
+          ).sort((a, z) => {
+              if (a.level === SecurityMessageLevel.High) return -1
+              if (z.level === SecurityMessageLevel.High) return 1
+              return 0
+          }).length > 0
+}
+
+export const getMessageList = (tokenSecurity: SecurityAPI.TokenSecurityType) =>
+    tokenSecurity.trust_list === '1'
+        ? []
+        : SecurityMessages.filter(
+              (x) =>
+                  x.condition(tokenSecurity) && x.level !== SecurityMessageLevel.Safe && !x.shouldHide(tokenSecurity),
+          ).sort((a, z) => {
+              if (a.level === SecurityMessageLevel.High) return -1
+              if (z.level === SecurityMessageLevel.High) return 1
+              return 0
+          })
