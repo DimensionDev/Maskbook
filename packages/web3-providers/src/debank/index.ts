@@ -87,7 +87,6 @@ export class DeBankAPI
             return createPageable(
                 unionWith(
                     formatAssets(
-                        options?.chainId ?? ChainId.Mainnet,
                         (result ?? []).map((x) => ({
                             ...x,
 
