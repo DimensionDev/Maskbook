@@ -49,8 +49,8 @@ export function isSamePersona(...personas: Array<PersonaIdentifier | PersonaInfo
     }, ...personas)
 }
 
-export function currySamePersona(persona?: PersonaIdentifier | PersonaInformation) {
-    return (...personas: Array<PersonaIdentifier | PersonaInformation | undefined>) =>
+export function currySamePersona(persona?: PersonaIdentifier | PersonaInformation | string) {
+    return (...personas: Array<PersonaIdentifier | PersonaInformation | string | undefined>) =>
         isSamePersona(...[persona, ...personas])
 }
 
@@ -58,7 +58,7 @@ export function isSameProfile(...profiles: Array<ProfileIdentifier | ProfileInfo
     return isSameIdentity((i) => ProfileIdentifier.from(i).unwrap(), ...profiles)
 }
 
-export function currySameProfile(profile?: ProfileIdentifier | ProfileInformation) {
-    return (...profiles: Array<ProfileIdentifier | ProfileInformation | undefined>) =>
+export function currySameProfile(profile?: ProfileIdentifier | ProfileInformation | string) {
+    return (...profiles: Array<ProfileIdentifier | ProfileInformation | string | undefined>) =>
         isSameProfile(...[profile, ...profiles])
 }

@@ -5,6 +5,7 @@ import {
     EMPTY_LIST,
     formatPersonaFingerprint,
     isSamePersona,
+    isSameProfile,
     NextIDPlatform,
     PersonaIdentifier,
     PersonaInformation,
@@ -133,11 +134,7 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
         if (!currentPersonaWithNextID) return null
 
         // Selected Persona not link current SNS
-        if (
-            !selectedPersona.persona.linkedProfiles.find(
-                (x) => x.identifier.userId === currentProfileIdentify.identifier?.userId,
-            )
-        ) {
+        if (!selectedPersona.persona.linkedProfiles.find((x) => isSameProfile(x, currentProfileIdentify.identifier))) {
             isConnected = false
         }
 

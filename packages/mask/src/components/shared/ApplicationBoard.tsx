@@ -235,7 +235,7 @@ function RenderEntryComponent({ application }: { application: Application }) {
     const createPersona = useCallback(() => {
         setCreatePersonaConfirmDialog({
             open: true,
-            type: 'dashboard',
+            target: 'dashboard',
             url: DashboardRoutes.Setup,
             text: t('applications_create_persona_hint'),
             title: t('applications_create_persona_title'),
