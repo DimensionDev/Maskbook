@@ -36,7 +36,9 @@ const digitalCurrencyModifier = (parts: Intl.NumberFormatPart[]) => {
  * @param value
  * @param currency
  */
-export function formatCurrency(value: BigNumber.Value, currency = 'USD'): string {
+export function formatCurrency(value?: BigNumber.Value, currency = 'USD'): string {
+    if (!value) return '-'
+
     const bgValue = new BigNumber(value)
 
     const integerValue = bgValue.integerValue(1)
@@ -45,7 +47,6 @@ export function formatCurrency(value: BigNumber.Value, currency = 'USD'): string
     const isLessMinValue = bgValue.isLessThan(boundaryValues.min)
 
     const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency, currencyDisplay: 'narrowSymbol' })
-
     if (bgValue.isZero()) {
         const symbol = DigitalCurrencyMap[currency]
         return symbol ? `0.00 ${symbol}` : formatter.format(0)

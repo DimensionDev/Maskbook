@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js'
 import { pow10 } from './number'
+import { toFixed } from '@masknet/web3-shared-base'
 
 export function formatBalance(rawValue: BigNumber.Value = '0', decimals = 0, significant = decimals) {
     let balance = new BigNumber(rawValue)
@@ -25,5 +26,6 @@ export function formatBalance(rawValue: BigNumber.Value = '0', decimals = 0, sig
     const value = `${whole}${fraction === '' ? '' : `.${fraction}`}`
 
     const raw = negative ? `-${value}` : value
-    return raw.includes('.') ? raw.replace(/0+$/, '').replace(/\.$/, '') : raw
+    const res = raw.includes('.') ? raw.replace(/0+$/, '').replace(/\.$/, '') : raw
+    return new BigNumber(res).gt(pow10(-6)) ? Number.parseFloat(toFixed(res ?? '', 6)) : '<0.000001'
 }
