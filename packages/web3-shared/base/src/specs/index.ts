@@ -431,7 +431,7 @@ export interface NonFungibleAsset<ChainId, SchemaType> extends NonFungibleToken<
  * Authorization about a fungible token.
  */
 export interface FungibleTokenSpenderAuthorization<ChainId, SchemaType> {
-    tokenInfo:  Pick<FungibleToken<ChainId, SchemaType>, 'address' | 'logoURL' | 'symbol' | 'name'>
+    tokenInfo: Pick<FungibleToken<ChainId, SchemaType>, 'address' | 'logoURL' | 'symbol' | 'name'>
     /** spender address */
     address: string
     /** spender name */
@@ -445,7 +445,7 @@ export interface FungibleTokenSpenderAuthorization<ChainId, SchemaType> {
 /**
  * Authorization about a non-fungible contract.
  */
- export interface NonFungibleContractSpenderAuthorization<ChainId, SchemaType> {
+export interface NonFungibleContractSpenderAuthorization<ChainId, SchemaType> {
     amount: string
     contract: Pick<NonFungibleTokenContract<ChainId, SchemaType>, 'name' | 'address'>
     address: string
@@ -1131,9 +1131,9 @@ export interface TokenState<ChainId, SchemaType> {
     blockedNonFungibleTokens?: Subscription<Array<NonFungibleToken<ChainId, SchemaType>>>
 
     /** Add a token */
-    addToken?: (token: Token<ChainId, SchemaType>) => Promise<void>
+    addToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
     /** Remove a token */
-    removeToken?: (token: Token<ChainId, SchemaType>) => Promise<void>
+    removeToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
     /** Unblock a token */
     trustToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
     /** Block a token */
