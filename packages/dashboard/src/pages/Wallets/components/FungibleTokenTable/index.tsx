@@ -202,7 +202,7 @@ export const MoreBarUI = memo<MoreBarUIProps>(({ isExpand, isEmpty, isLoading, d
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const hasLowValueToken = !!dataSource.find(
-        (x) => !isNativeTokenAddress(x.address) && isLessThan(x.price?.usd ?? 0, 1),
+        (x) => !isNativeTokenAddress(x.address) && isLessThan(x.value?.usd ?? 0, 1),
     )
 
     if (isEmpty || isLoading || !hasLowValueToken || !dataSource.length) return null

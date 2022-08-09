@@ -81,7 +81,7 @@ export const MoreBarUI = memo<MoreBarUIProps>(({ isExpand, dataSource, onClick }
     const { classes } = useStyles()
     const { t } = useI18N()
     const hasLowValueToken = !!dataSource.find(
-        (x) => !isNativeTokenAddress(x.address) && isLessThan(x.price?.usd ?? 0, 1),
+        (x) => !isNativeTokenAddress(x.address) && isLessThan(x.value?.usd ?? 0, 1),
     )
     if (!hasLowValueToken) return null
     if (isExpand)
