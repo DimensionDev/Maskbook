@@ -49,13 +49,12 @@ export function CheckSecurityDialog() {
     const [searchHidden, setSearchHidden] = useState(false)
 
     useEffect(() => {
-        return CrossIsolationMessages.events.requestCheckSecurityDialog.on(
-            ({ open, searchHidden, chainId, tokenAddress }) => {
-                setOpen(open)
-                setSearchHidden(searchHidden)
-                onSearch(chainId ?? ChainId.Mainnet, tokenAddress ?? ZERO_ADDRESS)
-            },
-        )
+        return CrossIsolationMessages.events.requestCheckSecurityDialog.on((env) => {
+            if (!env.open) return
+            setOpen(env.open)
+            setSearchHidden(env.searchHidden)
+            onSearch(env.chainId ?? ChainId.Mainnet, env.tokenAddress ?? ZERO_ADDRESS)
+        })
     }, [])
 
     const [{ value, loading: searching, error }, onSearch] = useAsyncFn(

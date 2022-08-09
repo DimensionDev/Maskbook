@@ -69,9 +69,9 @@ export function RiskWarningDialog() {
 
     const { open, setDialog: setRiskWarningDialog } = useRemoteControlledDialog(
         PluginGoPlusSecurityMessages.tokenRiskWarningDialogEvent,
-        ({ open, token }) => {
-            if (!open) return
-            setToken(token)
+        (env) => {
+            if (!env.open) return
+            setToken(env.token)
         },
     )
 

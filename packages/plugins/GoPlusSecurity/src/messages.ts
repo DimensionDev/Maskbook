@@ -10,7 +10,7 @@ interface Token {
 
 type CheckSecurityDialogEvent = { open: boolean }
 
-type tokenRiskWarningDialogEvent = { open: true; token?: Token; swap: boolean } | { open: false }
+type tokenRiskWarningDialogEvent = { open: true; token?: Token; swap: boolean } | { open: false; swap: boolean }
 export interface PluginGoPlusSecurityMessage {
     checkSecurityDialogEvent: CheckSecurityDialogEvent
     tokenRiskWarningDialogEvent: tokenRiskWarningDialogEvent
