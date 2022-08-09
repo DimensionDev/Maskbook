@@ -11,14 +11,6 @@ import {
 import type { Plugin } from '../types'
 
 export interface TokenStorage<ChainId, SchemaType> {
-    /**
-     * @deprecated Use fungibleTokenList instead.
-     */
-    fungibleTokens: Array<FungibleToken<ChainId, SchemaType>>
-    /**
-     * @deprecated Use nonFungibleTokenList instead.
-     */
-    nonFungibleTokens: Array<NonFungibleToken<ChainId, SchemaType>>
     fungibleTokenList: Record<string, Array<FungibleToken<ChainId, SchemaType>>>
     nonFungibleTokenList: Record<string, Array<NonFungibleToken<ChainId, SchemaType>>>
     fungibleTokenBlockedBy: Record<string, string[]>
