@@ -14,5 +14,5 @@ export const FormattedCurrency: FC<FormattedCurrencyProps> = ({
     symbol,
     formatter = (value, sign, symbol) => `${sign} ${value} ${symbol?.toUpperCase()}`.trim(),
 }) => {
-    return <Fragment>{formatter(value, sign, symbol).replace(/(?:\.0*|(\.\d+?)0+)$/, '')}</Fragment>
+    return <Fragment>{formatter(value, sign, symbol)}</Fragment>
 }

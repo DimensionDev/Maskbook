@@ -121,10 +121,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                 <Typography>
                     {asset.price?.[CurrencyType.USD]
                         ? new BigNumber(asset.price[CurrencyType.USD] ?? '').gt(pow10(-6))
-                            ? formatCurrency(Number.parseFloat(asset.price[CurrencyType.USD] ?? '')).replace(
-                                  /(?:\.0*|(\.\d+?)0+)$/,
-                                  '',
-                              )
+                            ? formatCurrency(Number.parseFloat(asset.price[CurrencyType.USD] ?? ''))
                             : '<0.000001'
                         : '-'}
                 </Typography>
@@ -135,7 +132,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                         '<0.01'
                     ) : (
                         <FormattedCurrency
-                            value={getTokenUSDValue(asset.value).toFixed(2)}
+                            value={getTokenUSDValue(asset.value)}
                             sign="USD"
                             formatter={formatCurrency}
                         />
