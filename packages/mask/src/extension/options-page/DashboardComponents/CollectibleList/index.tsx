@@ -195,7 +195,7 @@ function CollectibleListUI(props: CollectibleListUIProps) {
 }
 
 export interface CollectibleListProps extends withClasses<'empty' | 'button'> {
-    address: string
+    address: SocialAddress<NetworkPluginID>
     collectibles: Array<NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     error?: string
     loading: boolean
@@ -291,7 +291,7 @@ export function CollectionList({
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height={400}>
                 <Icons.EmptySimple size={32} />
-                <Typography color="textPrimary" marginTop="12px">
+                <Typography color={(theme) => theme.palette.maskColor.second} fontSize="14px" marginTop="12px">
                     {t('no_NFTs_found')}
                 </Typography>
             </Box>
@@ -328,7 +328,7 @@ export function CollectionList({
                             </Box>
                         )}
                         <CollectibleList
-                            address={account}
+                            address={addressName}
                             retry={retryFetchCollectible}
                             collectibles={renderCollectibles}
                             loading={renderCollectibles.length === 0}
