@@ -1,5 +1,5 @@
-/// <reference types="@masknet/web3-shared-flow/env" />
-/// <reference types="@masknet/web3-shared-solana/env" />
+/// <reference types="@masknet/web3-shared-flow/src/env" />
+/// <reference types="@masknet/web3-shared-solana/src/env" />
 
 import { useCallback, useEffect, useState } from 'react'
 import { createContainer } from 'unstated-next'

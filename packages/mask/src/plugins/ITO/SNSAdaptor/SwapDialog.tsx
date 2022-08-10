@@ -198,8 +198,8 @@ export function SwapDialog(props: SwapDialogProps) {
             }, 2000)
         }
         if (payload.token.schema !== SchemaType.ERC20) return
-        await Token?.addToken?.(payload.token)
-    }, [swapCallback, payload.token, Token])
+        await Token?.addToken?.(account, payload.token)
+    }, [swapCallback, payload.token, Token, account])
 
     const validationMessage = useMemo(() => {
         if (swapAmount.isZero() || tokenAmount.isZero() || swapAmount.dividedBy(ratio).isLessThan(1))

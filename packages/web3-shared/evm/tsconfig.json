@@ -1,11 +1,11 @@
 {
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
-    "rootDir": "./",
-    "outDir": "../dist/evm",
-    "tsBuildInfoFile": "../dist/evm.tsbuildinfo"
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
-  "include": ["./", "./**/*.json"],
+  "include": ["./src", "./src/**/*.json"],
   "references": [
     { "path": "../base" },
     { "path": "../../shared-base" },

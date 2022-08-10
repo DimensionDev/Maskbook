@@ -88,5 +88,20 @@
     "risk_not_is_airdrop_scam_title": "No Airdrop Scam",
     "risk_not_is_airdrop_scam_body": "This is not an airdrop scam. Many scams attract users through airdrops.",
     "contract_not_found": "Contract Not Found",
-    "unnamed": "Unnamed"
+    "unnamed": "Unnamed",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "close_check_security": "Close [Check Security]?",
+    "check_security_intro": "The [Check Security] dApp provides quick, reliable, and convenient Web3 security services.",
+    "check_security_close_warning": "If you decide to close [Check Security], you will no longer see security notifications when interacting with suspicious, blacklisted, or potentially fraudulent contracts and addresses.",
+    "check_security_close_advice": "We recommend new Web3 users to keep [Check Security] open. ",
+    "risk_warning_short": "Risk Warning",
+    "risk_warning": "Confirm swap token contract risk",
+    "make_risk_trade": "Swap Anyway",
+    "dear_user": "Dear Users,",
+    "user_warning": "Clicking the confirm button means that you agree to take the potential risks and proceed with the transaction.",
+    "wallet_status_button_copy_address": "Copy Address",
+    "view_on_explorer": "View on Explorer",
+    "copy_success_of_token_addr": "Copy token successfully!",
+    "swap_risk": "Confirm swap risk"
 }

@@ -2,7 +2,6 @@ import { escapeRegExp } from 'lodash-unified'
 import urlcat from 'urlcat'
 import LRUCache from 'lru-cache'
 import type { TwitterBaseAPI } from '../types'
-import { contentFetch } from '../helpers'
 
 const UPLOAD_AVATAR_URL = 'https://upload.twitter.com/i/media/upload.json'
 
@@ -30,7 +29,7 @@ function getCSRFToken() {
 }
 
 async function fetchContentAsTwitterDotCom(url: string) {
-    const res = await contentFetch(url)
+    const res = await globalThis.fetch(url)
     return res.text()
 }
 
@@ -69,7 +68,7 @@ async function getUserNftContainer(
         }
     }
 }> {
-    const response = await contentFetch(
+    const response = await globalThis.fetch(
         urlcat(
             `https://twitter.com/i/api/graphql/:queryToken/userNftContainer_Query?variables=${encodeURIComponent(
                 JSON.stringify({
@@ -95,7 +94,7 @@ async function getUserNftContainer(
 }
 
 async function getSettings(bearerToken: string, csrfToken: string): Promise<TwitterBaseAPI.Settings> {
-    const response = await contentFetch(
+    const response = await globalThis.fetch(
         urlcat('https://twitter.com/i/api/1.1/account/settings.json', {
             include_mention_filter: false,
             include_nsfw_user_flag: false,
@@ -143,6 +142,17 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
     }
 
     async uploadUserAvatar(screenName: string, image: File | Blob): Promise<TwitterBaseAPI.TwitterResult> {
+        const { bearerToken, queryToken, csrfToken } = await getTokens()
+        if (!bearerToken || !queryToken || !csrfToken) throw new Error('Token Error')
+
+        const headers = {
+            authorization: `Bearer ${bearerToken}`,
+            'x-csrf-token': csrfToken,
+            'x-twitter-auth-type': 'OAuth2Session',
+            'x-twitter-active-user': 'yes',
+            referer: `https://twitter.com/${screenName}`,
+        }
+
         // INIT
         const initURL = `${UPLOAD_AVATAR_URL}?command=INIT&total_bytes=${image.size}&media_type=${encodeURIComponent(
             image.type,
@@ -150,17 +160,19 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         const initRes = await request<{ media_id_string: string }>(initURL, {
             method: 'POST',
             credentials: 'include',
+            headers,
         })
         const mediaId = initRes.media_id_string
         // APPEND
+
         const appendURL = `${UPLOAD_AVATAR_URL}?command=APPEND&media_id=${mediaId}&segment_index=0`
         const formData = new FormData()
         formData.append('media', image)
-
-        await contentFetch(appendURL, {
+        await globalThis.fetch(appendURL, {
             method: 'POST',
             credentials: 'include',
             body: formData,
+            headers,
         })
 
         // FINALIZE
@@ -168,6 +180,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         return request<TwitterBaseAPI.TwitterResult>(finalizeURL, {
             method: 'POST',
             credentials: 'include',
+            headers,
         })
     }
     async updateProfileImage(screenName: string, media_id_str: string): Promise<TwitterBaseAPI.AvatarInfo | undefined> {
@@ -183,7 +196,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         const updateProfileImageURL = 'https://twitter.com/i/api/1.1/account/update_profile_image.json'
         if (!bearerToken || !queryToken || !csrfToken) return
 
-        const response = await contentFetch(
+        const response = await globalThis.fetch(
             urlcat(updateProfileImageURL, {
                 media_id: media_id_str,
                 skip_status: 1,
@@ -218,7 +231,7 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         const cacheKey = `${bearerToken}/${csrfToken}/${url}`
         const fetchingTask: Promise<Response> =
             cache.get(cacheKey) ??
-            contentFetch(url, {
+            globalThis.fetch(url, {
                 headers: {
                     authorization: `Bearer ${bearerToken}`,
                     'x-csrf-token': csrfToken,
@@ -251,7 +264,8 @@ function request<TResponse>(
     // Inside, we call the `fetch` function with
     // a URL and config given:
     return (
-        contentFetch(url, config)
+        globalThis
+            .fetch(url, config)
             // When got a response call a `json` method on it
             .then((response) => response.json())
             // and return the result data.

@@ -1,5 +1,4 @@
 import { PluginId, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import { useChainId } from '@masknet/plugin-infra/web3'
 import { NextIDPlatform, PopupRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
@@ -136,7 +135,7 @@ export const TAB_SELECTOR: { [key: string]: LiveSelector<HTMLElement, true> } = 
     twitter: searchAllProfileTabSelector(),
 }
 
-export function NextIdPage({ persona }: NextIdPageProps) {
+export function NextIdPage() {
     const t = useI18N()
     const { classes } = useStyles()
 
@@ -144,7 +143,6 @@ export function NextIdPage({ persona }: NextIdPageProps) {
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
     const personaConnectStatus = usePersonaConnectStatus()
     const { reset, isVerified } = useNextIDConnectStatus()
-    const chainId = useChainId()
 
     const [openBindDialog, toggleBindDialog] = useState(false)
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform

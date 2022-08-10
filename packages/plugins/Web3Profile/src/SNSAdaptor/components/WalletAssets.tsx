@@ -11,6 +11,7 @@ import { CollectionList } from './CollectionList'
 import { useMemo, useState } from 'react'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { PersonaImageIcon } from '@masknet/shared'
+import { CurrentStatusMap, CURRENT_STATUS } from '../../constants'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -109,6 +110,7 @@ export interface WalletAssetsCardProps extends withClasses<never | 'root'> {
     address: WalletTypes
     onSetting: () => void
     collectionList?: CollectionTypes[]
+    collectionName?: string
 }
 
 const enum LOAD_STATUS {
@@ -118,7 +120,7 @@ const enum LOAD_STATUS {
 }
 
 export function WalletAssetsCard(props: WalletAssetsCardProps) {
-    const { address, onSetting, collectionList } = props
+    const { address, onSetting, collectionList, collectionName } = props
     const t = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const chainId = ChainId.Mainnet
@@ -143,6 +145,8 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
         }
         return filterCollections
     }, [loadStatus, collectionList])
+
+    const hasHiddenCollection = collectionList && collectionList?.filter((collection) => collection.hidden).length > 0
 
     const loadIcon = useMemo(() => {
         if (loadStatus === LOAD_STATUS.Necessary)
@@ -196,7 +200,18 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
                 </Box>
             ) : (
                 <Box>
-                    <Empty content={t.no_collection_item()} />
+                    <Empty
+                        showIcon={false}
+                        content={
+                            hasHiddenCollection
+                                ? t.all_collection_hidden({
+                                      collection: collectionName ?? CurrentStatusMap[CURRENT_STATUS.NFT_Setting].title,
+                                  })
+                                : t.no_collection_item({
+                                      collection: collectionName ?? CurrentStatusMap[CURRENT_STATUS.NFT_Setting].title,
+                                  })
+                        }
+                    />
                 </Box>
             )}
         </Card>

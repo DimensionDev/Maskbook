@@ -62,7 +62,7 @@ export default function FileUpload({ width, height, readAsText, onChange, accept
     return (
         <Card variant="background" className={classes.root} style={{ width, height }}>
             <div className={classes.container}>
-                {icon ?? <Icons.File />}
+                {icon ?? <Icons.File size={48} />}
                 <Typography className={classes.text}>Please click or drag the file to here</Typography>
             </div>
             <input type="file" className={classes.file} accept={accept} onChange={handleChange} />

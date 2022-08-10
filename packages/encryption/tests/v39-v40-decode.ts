@@ -1,7 +1,7 @@
 import './setup'
-import { expect, test } from '@jest/globals'
-import { encodePayload, parsePayload } from '@masknet/encryption'
-import { PayloadException } from '../dist/types'
+import { expect, test } from 'vitest'
+import { encodePayload, parsePayload } from '../src/index.js'
+import { PayloadException } from '../src/types/index.js'
 
 /* cspell:disable */
 const oldInfraOutput =

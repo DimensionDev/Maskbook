@@ -1,10 +1,10 @@
 {
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
-    "rootDir": "./",
-    "outDir": "../dist/flow",
-    "tsBuildInfoFile": "../dist/flow.tsbuildinfo"
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
-  "include": ["./", "./**/*.json"],
+  "include": ["./src", "./src/**/*.json"],
   "references": [{ "path": "../base" }, { "path": "../../shared-base" }]
 }
