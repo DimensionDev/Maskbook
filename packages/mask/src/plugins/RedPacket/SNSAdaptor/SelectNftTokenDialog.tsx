@@ -24,7 +24,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         minHeight: 380,
     },
     dialogContentFixedHeight: {
-        height: 610,
         overflowY: 'hidden',
     },
     tokenBox: {
@@ -38,7 +37,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     ownerTokenBox: {
         background: theme.palette.background.default,
         width: '96%',
-        height: 400,
+        height: 320,
         borderRadius: 12,
         margin: '14px auto',
         padding: 10,
@@ -141,9 +140,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         height: 320,
         overflowY: 'auto',
         borderRadius: 12,
-        marginTop: theme.spacing(1.5),
         marginBottom: theme.spacing(1.5),
-        padding: theme.spacing(1, 1.5, 1, 1),
+        padding: theme.spacing(1.5, 1.5, 1, 1),
         boxSizing: 'border-box',
         '&::-webkit-scrollbar': {
             display: 'none',
@@ -238,7 +236,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginTop: 12,
         padding: '0 8px',
     },
     selectAll: {
@@ -400,8 +397,8 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     )
     // #region fetch token detail
     const onSearch = useCallback(async () => {
-        if (!/^(\s?(\w+)?\s?,?)+$/.test(searchTokenListInput)) return
-        const tokenIdList = uniq(searchTokenListInput.split(',').map((v) => Number(v).toString()))
+        if (!/^(\s?(\w+)?\s?,?\uFF0C?)+$/u.test(searchTokenListInput)) return
+        const tokenIdList = uniq(searchTokenListInput.split(/,|\uFF0C/u).map((v) => v.trim()))
         setLoadingToken(true)
         const allSettled = await Promise.allSettled(
             tokenIdList.map(
@@ -427,15 +424,22 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     }, [searchTokenListInput])
 
     useEffect(() => {
+        const tokenIdOwnerList = tokenDetailedOwnerList.map((t) => t.tokenId)
         setNonExistedTokenIdList(
-            tokenDetailedSelectedList.filter((token) => !isSameAddress(token.ownerId, account)).map((t) => t.tokenId),
+            tokenIdFilterList
+                .filter((tokenId) => !tokenIdOwnerList.includes(tokenId))
+                .concat(
+                    tokenDetailedSelectedList
+                        .filter((token) => !isSameAddress(token.ownerId, account))
+                        .map((t) => t.tokenId),
+                ),
         )
-    }, [tokenDetailedSelectedList])
+    }, [tokenDetailedSelectedList, tokenIdFilterList, tokenDetailedOwnerList])
     // #endregion
 
     const onFilter = useCallback(() => {
-        if (!/^(\s?(\w+)?\s?,?)+$/.test(tokenIdListInput)) return
-        const list = tokenIdListInput.split(',').map((v) => Number(v).toString())
+        if (!/^(\s?(\w+)?\s?,?\uFF0C?)+$/u.test(tokenIdListInput)) return
+        const list = uniq(tokenIdListInput.split(/,|\uFF0C/u).map((v) => v.trim()))
         setTokenIdFilterList(list)
     }, [tokenIdListInput])
 
@@ -540,28 +544,28 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         </DialogContent>
     ) : (
         <DialogContent className={classNames(classes.dialogContent, classes.dialogContentFixedHeight)}>
+            <div className={classes.searchWrapper}>
+                <Paper className={classes.search} elevation={0}>
+                    <Icons.Search className={classes.iconButton} />
+                    <InputBase
+                        value={tokenDetailedOwnerList.length === 0 ? searchTokenListInput : tokenIdListInput}
+                        placeholder="Token ID separated by comma, e.g. 1224, 7873, 8948"
+                        className={classes.textField}
+                        onChange={(e) =>
+                            tokenDetailedOwnerList.length === 0
+                                ? setSearchTokenListInput(e.target.value)
+                                : setTokenIdListInput(e.target.value)
+                        }
+                    />
+                </Paper>
+                <Button
+                    disabled={tokenDetailedOwnerList.length === 0 ? !searchTokenListInput : !tokenIdListInput}
+                    className={classes.searchButton}
+                    onClick={tokenDetailedOwnerList.length === 0 ? onSearch : onFilter}>
+                    {t.search()}
+                </Button>
+            </div>
             <Box className={classes.ownerTokenBox}>
-                <div className={classes.searchWrapper}>
-                    <Paper className={classes.search} elevation={0}>
-                        <Icons.Search className={classes.iconButton} />
-                        <InputBase
-                            value={tokenDetailedOwnerList.length === 0 ? searchTokenListInput : tokenIdListInput}
-                            placeholder="Token ID separated by comma, e.g. 1224, 7873, 8948"
-                            className={classes.textField}
-                            onChange={(e) =>
-                                tokenDetailedOwnerList.length === 0
-                                    ? setSearchTokenListInput(e.target.value)
-                                    : setTokenIdListInput(e.target.value)
-                            }
-                        />
-                    </Paper>
-                    <Button
-                        disabled={tokenDetailedOwnerList.length === 0 ? !searchTokenListInput : !tokenIdListInput}
-                        className={classes.searchButton}
-                        onClick={tokenDetailedOwnerList.length === 0 ? onSearch : onFilter}>
-                        {t.search()}
-                    </Button>
-                </div>
                 {loadingToken && searched ? (
                     <Box className={classes.noResultBox}>
                         <Typography>{loadingToken ? t.loading_token() : t.search_no_result()}</Typography>
@@ -632,7 +636,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
             </Box>
             <div className={classes.selectSharesExceedBox}>
                 <div>
-                    <Typography color="textPrimary">
+                    <Typography color="textPrimary" sx={{ maxWidth: 480 }}>
                         {nonExistedTokenIdList.length > 0 &&
                         nonExistedTokenIdList.length !== tokenIdFilterList.length ? (
                             <NonExistedTokenList />
