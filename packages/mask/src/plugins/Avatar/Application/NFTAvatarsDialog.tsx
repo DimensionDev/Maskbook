@@ -1,8 +1,9 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { NFTListDialog } from './NFTListDialog'
 import { InjectedDialog } from '@masknet/shared'
 import { UploadAvatarDialog } from './UploadAvatarDialog'
 import type { BindingProof } from '@masknet/shared-base'
+import { useAccount } from '@masknet/plugin-infra/web3'
 import { AllChainsNonFungibleToken, PFP_TYPE, SelectTokenInfo } from '../types'
 import { PersonaPage } from './PersonaPage'
 import { DialogContent, Tab } from '@mui/material'
@@ -32,8 +33,11 @@ interface NFTAvatarsDialogProps {
 }
 
 export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
+    const account = useAccount()
     const [step, setStep] = useState(CreateNFTAvatarStep.Persona)
     const [wallets, setWallets] = useState<BindingProof[]>()
+
+    const [selectedAccount, setSelectedAccount] = useState((account || wallets?.[0]?.identity) ?? '')
     const [selectedTokenInfo, setSelectedTokenInfo] = useState<SelectTokenInfo>()
     const [tokenInfo, setTokenInfo] = useState<AllChainsNonFungibleToken>()
     const [proof, setProof] = useState<BindingProof>()
@@ -66,6 +70,8 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
         props.onClose()
     }, [props.onClose])
 
+    useEffect(() => setSelectedAccount(account || wallets?.[0]?.identity || ''), [account, wallets])
+
     const [currentTab, onChange, tabs] = useTabs(PFP_TYPE.PFP, PFP_TYPE.BACKGROUND)
     return (
         <TabContext value={currentTab}>
@@ -97,6 +103,8 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
                             onNext={onNext}
                             onSelected={onSelected}
                             pfpType={currentTab}
+                            selectedAccount={selectedAccount}
+                            setSelectedAccount={setSelectedAccount}
                         />
                     ) : null}
                     {step === CreateNFTAvatarStep.UploadAvatar ? (
