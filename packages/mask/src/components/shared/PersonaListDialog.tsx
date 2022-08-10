@@ -42,6 +42,15 @@ const useStyles = makeStyles()((theme) => {
         header: {
             background: theme.palette.maskColor.bottom,
         },
+        items: {
+            height: 196,
+            maxHeight: 196,
+            overflow: 'auto',
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
+        },
     }
 })
 
@@ -186,7 +195,7 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
             title={t('applications_persona_title')}
             titleBarIconStyle="close">
             <DialogContent classes={{ root: classes.content }}>
-                <Stack gap={1.5}>
+                <Stack gap={1.5} className={classes.items}>
                     {personas.map((x) => {
                         return (
                             <PersonaItemUI
@@ -217,7 +226,7 @@ function ActionContent({ buttonText, hint, onClick }: ActionContentProps) {
     if (!buttonText || !hint) return null
     return (
         <Stack gap={3} mt={1.5}>
-            <Typography color={(t) => t.palette.maskColor.main} fontSize={14} lineHeight="18px">
+            <Typography color={(t) => t.palette.maskColor.main} fontSize={14} lineHeight="18px" height={36}>
                 {hint}
             </Typography>
             <Button color="primary" style={{ borderRadius: 20 }} onClick={onClick}>
