@@ -1,7 +1,8 @@
 import BigNumber from 'bignumber.js'
 import {
-    createLookupTableResolver,
     FungibleAsset,
+    createLookupTableResolver,
+    isGreaterThanOrEqualTo,
     leftShift,
     multipliedBy,
     TokenType,
@@ -61,33 +62,36 @@ export function formatAssets(
     chainId: ChainId,
     data: ZerionAddressAsset[] | ZerionAddressCovalentAsset[],
 ): Array<FungibleAsset<ChainId, SchemaType>> {
-    return data.map(({ asset, quantity }) => {
-        const balance = leftShift(quantity, asset.decimals).toNumber()
-        const value = (asset as ZerionAsset).price?.value ?? (asset as ZerionCovalentAsset).value ?? 0
-        const isNativeToken = (symbol: string) => ['ETH', 'BNB', 'MATIC', 'ARETH', 'AETH', 'ONE'].includes(symbol)
-        const address = isNativeToken(asset.symbol)
-            ? getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS', '')
-            : asset.asset_code
+    return data
+        .map(({ asset, quantity }) => {
+            const balance = leftShift(quantity, asset.decimals).toNumber()
+            const value = (asset as ZerionAsset).price?.value ?? (asset as ZerionCovalentAsset).value ?? 0
+            const isNativeToken = (symbol: string) =>
+                ['ETH', 'BNB', 'MATIC', 'ARETH', 'AETH', 'ONE', 'ASTR'].includes(symbol)
+            const address = isNativeToken(asset.symbol)
+                ? getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS', '')
+                : asset.asset_code
 
-        return {
-            id: address,
-            chainId,
-            type: TokenType.Fungible,
-            schema: SchemaType.ERC20,
-            name: asset.name ?? 'Unknown Token',
-            symbol: asset.symbol,
-            decimals: asset.decimals,
-            address: formatEthereumAddress(address),
-            logoURI: asset.icon_url,
-            balance: quantity,
-            price: {
-                usd: new BigNumber(value).toString(),
-            },
-            value: {
-                usd: multipliedBy(balance, value).toString(),
-            },
-        }
-    })
+            return {
+                id: address,
+                chainId,
+                type: TokenType.Fungible,
+                schema: SchemaType.ERC20,
+                name: asset.name ?? 'Unknown Token',
+                symbol: asset.symbol,
+                decimals: asset.decimals,
+                address: formatEthereumAddress(address),
+                logoURI: asset.icon_url,
+                balance: quantity,
+                price: {
+                    usd: new BigNumber(value).toString(),
+                },
+                value: {
+                    usd: multipliedBy(balance, value).toString(),
+                },
+            }
+        })
+        .filter((x) => isGreaterThanOrEqualTo(x.price.usd, 1))
 }
 
 export function formatTransactions(

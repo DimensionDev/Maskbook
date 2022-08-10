@@ -1,10 +1,10 @@
 import { unreachable } from '@dimensiondev/kit'
 import type { ProfileIdentifier, AESCryptoKey } from '@masknet/shared-base'
-import { encodePostKey } from './Encryption'
-import type { EncryptIO, EncryptionResultE2EMap, EncryptTargetE2E } from './EncryptionTypes'
-import { createEphemeralKeysMap } from './utils'
-import { v37_addReceiver } from './v37-ecdh'
-import { v38_addReceiver } from './v38-ecdh'
+import { encodePostKey } from './Encryption.js'
+import type { EncryptIO, EncryptionResultE2EMap, EncryptTargetE2E } from './EncryptionTypes.js'
+import { createEphemeralKeysMap } from './utils.js'
+import { v37_addReceiver } from './v37-ecdh.js'
+import { v38_addReceiver } from './v38-ecdh.js'
 
 export interface AppendEncryptionOptions {
     version: -38 | -37

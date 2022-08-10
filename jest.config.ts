@@ -23,7 +23,6 @@ const config: InitialOptionsTsJest = {
     modulePathIgnorePatterns: ['dist'],
     extensionsToTreatAsEsm: ['.ts', '.tsx'],
     moduleNameMapper: {
-        '@masknet/shared-base': '<rootDir>/packages/shared-base/src/index.ts',
         'jest-websocket-mock': '<rootDir>/packages/web3-shared/base/node_modules/jest-websocket-mock',
         'reconnecting-websocket': '<rootDir>/packages/web3-shared/base/node_modules/reconnecting-websocket',
         'date-fns/(.*)': '<rootDir>/packages/web3-shared/base/node_modules/date-fns/$1',

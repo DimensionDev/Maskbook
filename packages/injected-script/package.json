@@ -5,10 +5,12 @@
   "private": true,
   "exports": {
     ".": {
+      "types": "./dist/sdk/index.d.ts",
       "webpack": "./sdk/index.ts",
       "default": "./dist/sdk/index.js"
     },
     "./shared": {
+      "types": "./dist/shared/index.d.ts",
       "webpack": "./shared/index.ts",
       "default": "./dist/shared/index.js"
     }

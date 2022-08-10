@@ -1,12 +1,11 @@
 import { makeStyles } from '@masknet/theme'
 import { Link, styled, Switch, SwitchProps, Typography } from '@mui/material'
-import { FormattedAddress } from '@masknet/shared'
+import { FormattedAddress, PersonaImageIcon } from '@masknet/shared'
 import { useI18N } from '../../locales'
 import { useState } from 'react'
 import type { WalletTypes } from '../types'
 import { ChainId, explorerResolver, NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
-import { ImageIcon } from './ImageIcon'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 
@@ -132,7 +131,7 @@ export function WalletSwitch({ type, address, isPublic, hiddenItems = [], setHid
     }
     return (
         <div className={classes.currentAccount}>
-            <ImageIcon icon={iconURL} size={30} borderRadius="99px" />
+            <PersonaImageIcon icon={iconURL} size={30} borderRadius="99px" />
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
                     <Typography className={classes.accountName}>{getWalletName()}</Typography>

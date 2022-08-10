@@ -4,13 +4,13 @@ import { Trans } from 'react-i18next'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
-import { getMaskColor, makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { getMaskColor, makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useI18N, useMatchXS } from '../../../../utils'
 import { WalletMessages } from '../../messages'
 import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
-import ActionButton, { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
+import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { isDashboardPage } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 
@@ -23,7 +23,7 @@ const useStyles = makeStyles()((theme) => ({
         overflowY: 'hidden',
     },
     buttons: {
-        padding: theme.spacing(2),
+        padding: `${theme.spacing(2)} !important`,
         boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
     },
     button: {

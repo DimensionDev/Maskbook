@@ -1,12 +1,11 @@
 import { Typography, List, Box } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, LoadingBase } from '@masknet/theme'
 import type { RedPacketJSONPayload } from '../types'
 import { RedPacketInHistoryList } from './RedPacketInHistoryList'
 import { useRedPacketHistory } from './hooks/useRedPacketHistory'
 import { useI18N } from '../locales'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { LoadingAnimation } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => {
@@ -60,7 +59,7 @@ export function RedPacketHistoryList(props: RedPacketHistoryListProps) {
     if (loading) {
         return (
             <Box style={{ height: 240, alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
-                <LoadingAnimation />
+                <LoadingBase />
             </Box>
         )
     }

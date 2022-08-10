@@ -1,8 +1,11 @@
 import { Icons } from '@masknet/icons'
-import type { Plugin } from '@masknet/plugin-infra'
+import { Plugin, PluginId } from '@masknet/plugin-infra'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
+import { MaskColorVar } from '@masknet/theme'
+import { Link } from '@mui/material'
 import { useState } from 'react'
+import { Trans } from 'react-i18next'
 import { base } from '../base'
 import { PostTipButton, TipTaskManager } from '../components'
 import { RootContext } from '../contexts'
@@ -20,6 +23,23 @@ const sns: Plugin.SNSAdaptor.Definition = {
             const icon = <Icons.Tips size={36} />
             const iconFilterColor = 'rgba(247, 147, 30, 0.3)'
             return {
+                category: 'dapp',
+                description: (
+                    <Trans
+                        ns={PluginId.Tips}
+                        i18nKey="description"
+                        components={{
+                            Link: (
+                                <Link
+                                    href="https://next.id/"
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                    style={{ color: MaskColorVar.primary }}
+                                />
+                            ),
+                        }}
+                    />
+                ),
                 RenderEntryComponent(EntryComponentProps) {
                     const [open, setOpen] = useState(false)
                     const clickHandler = () => setOpen(true)

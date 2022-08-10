@@ -243,6 +243,10 @@ export namespace Plugin.Shared {
          * This does not affect if the plugin enable or not.
          */
         experimentalMark?: boolean
+        /**
+         * If the plugin is in the minimal mode by default.
+         */
+        inMinimalModeByDefault?: boolean
         /** i18n resources of this plugin */
         i18n?: I18NResource
         /** Introduce sub-network information. */
@@ -361,6 +365,7 @@ export namespace Plugin.SNSAdaptor {
         privileged_silentSign: () => (signer: ECKeyIdentifier, message: string) => Promise<PersonaSignResult>
         getPersonaAvatar: (identifier: ECKeyIdentifier | null | undefined) => Promise<string | null | undefined>
         ownProofChanged: UnboundedRegistry<void>
+        setMinimalMode: (id: string, enabled: boolean) => Promise<void>
     }
 
     export type SelectProviderDialogEvent =
@@ -439,6 +444,10 @@ export namespace Plugin.SNSAdaptor {
         ApplicationEntries?: ApplicationEntry[]
         /** This UI will be rendered as tabs on the profile page */
         ProfileTabs?: ProfileTab[]
+        /** This UI will be rendered as cover on the profile page */
+        ProfileCover?: ProfileCover[]
+        /** This UI will be rendered as tabs on the profile card */
+        AvatarRealm?: AvatarRealm
         /** This UI will be rendered as plugin wrapper page */
         wrapperProps?: PluginWrapperProps
         /**
@@ -561,6 +570,47 @@ export namespace Plugin.SNSAdaptor {
         title?: string
         backgroundGradient?: string
     }
+    export enum AvatarRealmSourceType {
+        ProfilePage = 'ProfilePage',
+        ProfileCard = 'ProfileCard',
+        Post = 'Post',
+        Editor = 'Editor',
+        Menu = 'Menu',
+        Suggestion = 'Suggestion',
+    }
+    export interface AvatarRealm {
+        ID: string
+        priority: number
+        label: I18NStringField | string
+        UI?: {
+            /**
+             * The injected avatar decorator component
+             */
+            Decorator: InjectUI<{
+                identity?: SocialIdentity
+                persona?: string
+                socialAddressList?: Array<SocialAddress<NetworkPluginID>>
+            }>
+            /**
+             * The injected avatar settings button component
+             */
+            Settings?: InjectUI<{
+                identity?: SocialIdentity
+                persona?: string
+                socialAddressList?: Array<SocialAddress<NetworkPluginID>>
+            }>
+        }
+        Utils?: {
+            /**
+             * If it returns false, this cover will not be displayed.
+             */
+            shouldDisplay?(
+                identity?: SocialIdentity,
+                addressNames?: Array<SocialAddress<NetworkPluginID>>,
+                sourceType?: AvatarRealmSourceType,
+            ): boolean
+        }
+    }
     export interface ProfileSlider {
         ID: string
 
@@ -613,6 +663,43 @@ export namespace Plugin.SNSAdaptor {
              * Sort social address in expected order.
              */
             sorter?: (a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>) => number
+        }
+    }
+    export interface ProfileCover {
+        ID: string
+
+        /**
+         * The name of the cover
+         */
+        label: I18NStringField | string
+
+        /**
+         * Used to order the sliders
+         */
+        priority: number
+
+        UI?: {
+            /**
+             * The injected cover component
+             */
+            Cover: InjectUI<{
+                identity?: SocialIdentity
+                socialAddressList?: Array<SocialAddress<NetworkPluginID>>
+            }>
+        }
+        Utils: {
+            /**
+             * If it returns false, this cover will not be displayed
+             */
+            shouldDisplay?(identity?: SocialIdentity, addressNames?: Array<SocialAddress<NetworkPluginID>>): boolean
+            /**
+             * Filter social address
+             */
+            filterSocialAddress?(x: SocialAddress<NetworkPluginID>): boolean
+            /**
+             * Sort social address in expected order
+             */
+            sortSocialAddress?(a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>): number
         }
     }
 }
@@ -983,7 +1070,13 @@ export namespace Plugin.__Host {
         signal?: AbortSignal
     }
     export interface EnabledStatusReporter {
-        isEnabled(id: string): boolean | Promise<boolean>
+        isEnabled(id: string): BooleanPreference | Promise<BooleanPreference>
         events: Emitter<{ enabled: [id: string]; disabled: [id: string] }>
     }
+}
+
+export enum BooleanPreference {
+    False = 0,
+    Default = 1,
+    True = 2,
 }

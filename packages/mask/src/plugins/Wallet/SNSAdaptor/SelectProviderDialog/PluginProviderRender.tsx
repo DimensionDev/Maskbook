@@ -70,6 +70,7 @@ const useStyles = makeStyles()((theme) => {
             bottom: 0,
             backgroundColor: theme.palette.background.paper,
             borderRadius: '50%',
+            color: theme.palette.maskColor.success,
         },
         alert: {
             fontSize: 12,

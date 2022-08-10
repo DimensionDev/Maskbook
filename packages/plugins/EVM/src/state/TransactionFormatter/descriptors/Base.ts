@@ -16,7 +16,7 @@ export class BaseTransactionDescriptor implements TransactionDescriptor {
         return {
             chainId: context.chainId,
             title: context.methods?.find((x) => x.name)?.name ?? 'Contract Interaction',
-            description: context.value ? getTokenAmountDescription(context.value, nativeToken, true) : '-',
+            description: getTokenAmountDescription(context.value, nativeToken),
         }
     }
 }

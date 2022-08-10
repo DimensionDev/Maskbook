@@ -2,9 +2,9 @@ import { HashRouter } from 'react-router-dom'
 import { CssBaseline, ThemeProvider, StyledEngineProvider, Theme } from '@mui/material'
 import {
     CustomSnackbarProvider,
-    MaskLightTheme,
     applyMaskColorVars,
-    MaskDarkTheme,
+    DashboardDarkTheme,
+    DashboardLightTheme,
     useSystemPreferencePalette,
 } from '@masknet/theme'
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
@@ -38,9 +38,9 @@ export default function DashboardRoot() {
     const appearance = useAppearance()
     const mode = useSystemPreferencePalette()
     const themes: Record<typeof appearance, Theme> = {
-        dark: MaskDarkTheme,
-        light: MaskLightTheme,
-        default: mode === 'dark' ? MaskDarkTheme : MaskLightTheme,
+        dark: DashboardDarkTheme,
+        light: DashboardLightTheme,
+        default: mode === 'dark' ? DashboardDarkTheme : DashboardLightTheme,
     }
     const theme = themes[appearance]
 

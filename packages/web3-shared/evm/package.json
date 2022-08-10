@@ -4,13 +4,13 @@
   "sideEffects": false,
   "exports": {
     ".": {
+      "types": "../dist/evm/index.d.ts",
       "webpack": "./index.ts",
       "default": "../dist/evm/index.js"
     }
   },
-  "types": "./dist/index.d.ts",
+  "types": "../dist/evm/index.d.ts",
   "dependencies": {
-    "@dimensiondev/holoflows-kit": "^0.9.0-20220520093249-0870919",
     "@ensdomains/address-encoder": "^0.2.6",
     "@masknet/shared-base": "workspace:*",
     "@masknet/web3-constants": "workspace:*",

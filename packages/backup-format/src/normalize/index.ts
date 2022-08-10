@@ -1,11 +1,11 @@
 import { None } from 'ts-results'
-import { BackupErrors } from '../BackupErrors'
-import { isBackupVersion0, normalizeBackupVersion0 } from '../version-0'
-import { isBackupVersion1, normalizeBackupVersion1 } from '../version-1'
-import { generateBackupVersion2, isBackupVersion2, normalizeBackupVersion2 } from '../version-2'
-import type { NormalizedBackup } from './type'
+import { BackupErrors } from '../BackupErrors.js'
+import { isBackupVersion0, normalizeBackupVersion0 } from '../version-0/index.js'
+import { isBackupVersion1, normalizeBackupVersion1 } from '../version-1/index.js'
+import { generateBackupVersion2, isBackupVersion2, normalizeBackupVersion2 } from '../version-2/index.js'
+import type { NormalizedBackup } from './type.js'
 
-export * from './type'
+export * from './type.js'
 async function __normalizeBackup(data: unknown): Promise<NormalizedBackup.Data> {
     if (isBackupVersion2(data)) return normalizeBackupVersion2(data)
     if (isBackupVersion1(data)) return normalizeBackupVersion1(data)

@@ -1,6 +1,6 @@
 import type { EC_Public_CryptoKey, EC_Private_CryptoKey } from '@masknet/shared-base'
-import { EC_KeyCurveEnum } from '../payload'
-import type { EncryptIO } from './Encryption'
+import { EC_KeyCurveEnum } from '../payload/index.js'
+import type { EncryptIO } from './Encryption.js'
 
 /** @internal */
 export type EphemeralKeys = Map<

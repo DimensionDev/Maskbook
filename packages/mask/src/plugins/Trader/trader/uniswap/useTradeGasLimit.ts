@@ -1,5 +1,5 @@
 import type { Trade, TradeComputed, SwapCall } from '../../types'
-import { useAccount, useWeb3 } from '@masknet/plugin-infra/web3'
+import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
 import type { TradeProvider } from '@masknet/public-api'
@@ -32,12 +32,11 @@ interface FailedCall extends SwapCallEstimate {
 
 export function useTradeGasLimit(trade: TradeComputed<Trade> | null, tradeProvider: TradeProvider): AsyncState<number> {
     const { targetChainId } = TargetChainIdContext.useContainer()
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId: targetChainId })
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const tradeParameters = useTradeParameters(trade, tradeProvider)
-
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: targetChainId })
     return useAsync(async () => {
-        if (!web3) return 0
+        if (!connection) return 0
 
         // step 1: estimate each trade parameter
         const estimatedCalls: SwapCallEstimate[] = await Promise.all(
@@ -50,30 +49,28 @@ export function useTradeGasLimit(trade: TradeComputed<Trade> | null, tradeProvid
                     ...(!value || /^0x0*$/.test(value) ? {} : { value: toHex(value) }),
                 }
 
-                return web3.eth
-                    .estimateGas(config)
-                    .then((gasEstimate) => {
-                        return {
-                            call: x,
-                            gasEstimate: new BigNumber(gasEstimate),
-                        }
-                    })
-                    .catch((error) => {
-                        return web3.eth
-                            .call(config)
-                            .then(() => {
-                                return {
-                                    call: x,
-                                    error: new Error('Gas estimate failed.'),
-                                }
-                            })
-                            .catch((error) => {
-                                return {
-                                    call: x,
-                                    error: new Error(swapErrorToUserReadableMessage(error)),
-                                }
-                            })
-                    })
+                try {
+                    const gas = await connection.estimateTransaction?.(config)
+                    return {
+                        call: x,
+                        gasEstimate: new BigNumber(gas ?? 0),
+                    }
+                } catch (error) {
+                    return connection
+                        .callTransaction(config)
+                        .then(() => {
+                            return {
+                                call: x,
+                                error: new Error('Gas estimate failed'),
+                            }
+                        })
+                        .catch((error) => {
+                            return {
+                                call: x,
+                                error: new Error(swapErrorToUserReadableMessage(error)),
+                            }
+                        })
+                }
             }),
         )
 
@@ -97,5 +94,5 @@ export function useTradeGasLimit(trade: TradeComputed<Trade> | null, tradeProvid
         }
 
         return 'gasEstimate' in bestCallOption ? bestCallOption.gasEstimate.toNumber() : 0
-    }, [tradeParameters.length])
+    }, [tradeParameters.length, connection])
 }

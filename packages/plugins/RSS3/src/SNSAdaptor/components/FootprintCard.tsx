@@ -1,10 +1,11 @@
-import { Typography } from '@mui/material'
+import { Card, Typography } from '@mui/material'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import formatDateTime from 'date-fns/format'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../locales'
-import { RSS3_DEFAULT_IMAGE } from '../../constants'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { RSS3_DEFAULT_IMAGE } from '../../constants'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -30,6 +31,18 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 400,
         color: theme.palette.maskColor.main,
     },
+    img: {
+        width: '126px !important',
+        height: '126px !important',
+        borderRadius: '8px',
+        objectFit: 'cover',
+    },
+    loadingFailImage: {
+        minHeight: '0 !important',
+        maxWidth: 'none',
+        width: 64,
+        height: 64,
+    },
 }))
 
 const formatDate = (ts: string): string => {
@@ -52,11 +65,16 @@ export const FootprintCard = ({ footprint, onSelect }: FootprintProps) => {
     return (
         <div className={classes.card} onClick={onSelect}>
             <section className="flex flex-row flex-shrink-0 w-max h-max">
-                <img
-                    className={classes.cover}
-                    src={footprint.imageURL || RSS3_DEFAULT_IMAGE}
-                    alt={t.inactive_project()}
-                />
+                <Card className={classes.img}>
+                    <NFTCardStyledAssetPlayer
+                        url={footprint.imageURL || RSS3_DEFAULT_IMAGE}
+                        classes={{
+                            loadingFailImage: classes.loadingFailImage,
+                            wrapper: classes.img,
+                            iframe: classes.img,
+                        }}
+                    />
+                </Card>
             </section>
             <section className={classes.content}>
                 <Typography className={classes.infoRow}>{date}</Typography>

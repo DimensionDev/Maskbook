@@ -11,7 +11,7 @@ import {
     Link,
     DialogActions,
 } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import { first } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import formatDateTime from 'date-fns/format'
@@ -19,7 +19,7 @@ import { PluginWalletStatusBar, useI18N } from '../../../../utils'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { UnreviewedWarning } from '.././UnreviewedWarning'
-import ActionButton, { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
+import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { DateTimePanel } from '../../../../web3/UI/DateTimePanel'
 import { toAsset } from '../../helpers'
 import { PluginTraderMessages } from '../../../Trader/messages'

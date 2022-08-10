@@ -60,8 +60,10 @@ export enum ChainId {
     // Metis
     Metis = 1088,
 
-    // Optimistic
-    Optimistic = 10,
+    // Optimism
+    Optimism = 10,
+    Optimism_Kovan = 69,
+    Optimism_Goerli = 420,
 
     // Harmony
     Harmony = 1666600000,
@@ -69,6 +71,9 @@ export enum ChainId {
 
     // Conflux
     Conflux = 1030,
+
+    // Astar
+    Astar = 592,
 }
 
 /**
@@ -197,6 +202,7 @@ export enum TransactionType {
     CREATE_RED_PACKET = 'create_red_packet',
     FILL_POOL = 'fill_pool',
     CLAIM = 'claim',
+    WITHDRAW = 'withdraw',
     REFUND = 'refund',
 }
 
@@ -256,9 +262,10 @@ export enum NetworkType {
     Boba = 'Boba',
     Fuse = 'Fuse',
     Metis = 'Metis',
-    Optimistic = 'Optimistic',
+    Optimism = 'Optimism',
     Harmony = 'Harmony',
     Conflux = 'Conflux',
+    Astar = 'Astar',
 }
 
 export enum ProviderType {

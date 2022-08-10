@@ -17,7 +17,6 @@ export class ContractDeploymentDescriptor {
                 await connection?.getNativeToken({
                     chainId: context.chainId,
                 }),
-                true,
             )}`,
         }
     }

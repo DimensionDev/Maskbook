@@ -31,7 +31,7 @@ export class IdentityServiceState implements Web3SocialIdentityState {
         if (!ID) return EMPTY_LIST
 
         const fromCache = this.getFromCache(identity)
-        if (fromCache) return fromCache
+        if (fromCache && !identity.isOwner) return fromCache
 
         const fromRemote = this.getFromRemote(identity)
         if (!identity.isOwner) {

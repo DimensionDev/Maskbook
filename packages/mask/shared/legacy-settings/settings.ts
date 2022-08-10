@@ -9,7 +9,9 @@ import {
     createNetworkSettings,
     createComplexNetworkSettings,
     createComplexGlobalSettings,
+    NetworkSettings,
 } from './createSettings'
+import { BooleanPreference } from '@masknet/plugin-infra'
 
 export const appearanceSettings = createGlobalSettings<Appearance>('appearance', Appearance.default)
 export const languageSettings = createGlobalSettings<LanguageOptions>('language', LanguageOptions.__auto__)
@@ -47,9 +49,20 @@ export const personalHomepage = createNetworkSettings('personalHomepage', '')
  *
  * use `useActivatedPluginsSNSAdaptor().find((x) => x.ID === PLUGIN_ID)` or
  * `useActivatedPluginsDashboard().find((x) => x.ID === PLUGIN_ID)` instead
+ * @deprecated DO NOT EXPORT THIS
  */
 // This was "currentPluginEnabled" before, but we used it to represent minimal mode now to make the settings be able to migrate.
-export const currentPluginMinimalModeNOTEnabled = createNetworkSettings('pluginsEnabled', true)
+const pluginMinimalModeReversed: NetworkSettings<boolean | 'enabled'> = createNetworkSettings('pluginsEnabled', true)
+export function getCurrentPluginMinimalMode(id: string) {
+    if (pluginMinimalModeReversed['plugin:' + id].value === 'enabled') return BooleanPreference.False
+    if (pluginMinimalModeReversed['plugin:' + id].value === false) return BooleanPreference.True
+    return BooleanPreference.Default
+}
+export function setCurrentPluginMinimalMode(id: string, value: BooleanPreference) {
+    if (value === BooleanPreference.Default) pluginMinimalModeReversed['plugin:' + id].value = true
+    else if (value === BooleanPreference.True) pluginMinimalModeReversed['plugin:' + id].value = false
+    else if (value === BooleanPreference.False) pluginMinimalModeReversed['plugin:' + id].value = 'enabled'
+}
 /** @deprecated No use site. */
 export const launchPageSettings = createGlobalSettings<LaunchPage>('launchPage', LaunchPage.dashboard)
 export const currentPersonaIdentifier = createGlobalSettings('currentPersonaIdentifier', '')

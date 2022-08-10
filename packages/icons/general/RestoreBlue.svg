@@ -1,77 +1,24 @@
-<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-<g>
-        <g filter="url(#filter0_b)">
-            <path
-                d="M4 11.0952C4 9.93807 4.98806 9 6.2069 9H17.7931C19.0119 9 20 9.93807 20 11.0952V17.9048C20 19.0619 19.0119 20 17.7931 20H6.2069C4.98806 20 4 19.0619 4 17.9048V11.0952Z"
-                fill="#1C68F3"
-                fill-opacity="0.1"
-            />
-        </g>
-        <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
-            d="M6.58743 4.19336C6.78674 4.19336 6.94831 4.35493 6.94831 4.55423V7.08034H9.47441C9.67372 7.08034 9.83528 7.24191 9.83528 7.44121C9.83528 7.64051 9.67372 7.80208 9.47441 7.80208H6.58743C6.38813 7.80208 6.22656 7.64051 6.22656 7.44121V4.55423C6.22656 4.35493 6.38813 4.19336 6.58743 4.19336Z"
-            fill="#1C68F3"
-            stroke="#1C68F3"
-            stroke-width="0.2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-        />
-        <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
-            d="M14.166 9.45706C14.166 9.25776 14.3276 9.09619 14.5269 9.09619H17.4139C17.6132 9.09619 17.7747 9.25776 17.7747 9.45706V12.344C17.7747 12.5433 17.6132 12.7049 17.4139 12.7049C17.2146 12.7049 17.053 12.5433 17.053 12.344V9.81794H14.5269C14.3276 9.81794 14.166 9.65637 14.166 9.45706Z"
-            fill="#1C68F3"
-            stroke="#1C68F3"
-            stroke-width="0.2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-        />
-        <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
-            d="M10.672 3.59451C11.4494 3.35731 12.2712 3.33171 13.0606 3.5201C13.85 3.70848 14.5812 4.10471 15.1862 4.67181C15.7911 5.23891 16.25 5.9584 16.5199 6.76314C16.5878 6.96553 16.4873 7.18765 16.2955 7.25927C16.1036 7.33089 15.893 7.22488 15.8251 7.02249C15.5966 6.34156 15.2083 5.73276 14.6965 5.25291C14.1846 4.77306 13.5659 4.43779 12.8979 4.27838C12.23 4.11898 11.5346 4.14064 10.8768 4.34134C10.2189 4.54204 9.62 4.91525 9.13588 5.42612C9.13316 5.429 9.13039 5.43183 9.12759 5.43461L6.84749 7.6944C6.69915 7.84141 6.46591 7.83376 6.32653 7.67731C6.18715 7.52085 6.19441 7.27484 6.34274 7.12783L8.61871 4.87213C9.19012 4.27061 9.8964 3.83112 10.672 3.59451ZM17.6745 9.21813C17.8139 9.37458 17.8066 9.62059 17.6583 9.76761L15.3823 12.0233C14.8109 12.6248 14.1046 13.0643 13.3291 13.3009C12.5516 13.5381 11.7298 13.5637 10.9405 13.3753C10.1511 13.187 9.4198 12.7907 8.81488 12.2236C8.20995 11.6565 7.75108 10.937 7.48109 10.1323C7.41319 9.92991 7.5137 9.70778 7.70558 9.63616C7.89747 9.56455 8.10807 9.67056 8.17597 9.87294C8.40442 10.5539 8.79269 11.1627 9.30456 11.6425C9.81642 12.1224 10.4352 12.4577 11.1031 12.6171C11.7711 12.7765 12.4664 12.7548 13.1243 12.5541C13.7821 12.3534 14.381 11.9802 14.8652 11.4693C14.8679 11.4664 14.8706 11.4636 14.8735 11.4608L17.1535 9.20104C17.3019 9.05402 17.5351 9.06168 17.6745 9.21813Z"
-            fill="#1C68F3"
-            stroke="#1C68F3"
-            stroke-width="0.2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-        />
-        <g filter="url(#filter1_b)">
-            <path
-                d="M4 12.8947C4 11.8483 4.98806 11 6.2069 11H17.7931C19.0119 11 20 11.8483 20 12.8947V18.1053C20 19.1517 19.0119 20 17.7931 20H6.2069C4.98806 20 4 19.1517 4 18.1053V12.8947Z"
-                fill="#1C68F3"
-                fill-opacity="0.05"
-            />
-        </g>
-        <defs>
-            <filter
-                id="filter0_b"
-                x="0"
-                y="5"
-                width="24"
-                height="19"
-                filter-units="userSpaceOnUse"
-                color-interpolation-filters="sRGB">
-                <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                <feGaussianBlur in="BackgroundImage" std-deviation="2" />
-                <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur" />
-                <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />
-            </filter>
-            <filter
-                id="filter1_b"
-                x="1"
-                y="8"
-                width="22"
-                height="15"
-                filter-units="userSpaceOnUse"
-                color-interpolation-filters="sRGB">
-                <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                <feGaussianBlur in="BackgroundImage" std-deviation="1.5" />
-                <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur" />
-                <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur" result="shape" />
-            </filter>
-        </defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <g filter="url(#RestoreBlue_svg__a)">
+        <path fill="#1C68F3" fill-opacity=".1" d="M4 11.095C4 9.938 4.988 9 6.207 9h11.586C19.012 9 20 9.938 20 11.095v6.81C20 19.062 19.012 20 17.793 20H6.207C4.988 20 4 19.062 4 17.905v-6.81Z"/>
     </g>
+    <path fill="#1C68F3" fill-rule="evenodd" stroke="#1C68F3" stroke-linecap="round" stroke-linejoin="round" stroke-width=".2" d="M6.587 4.193c.2 0 .361.162.361.361V7.08h2.526a.36.36 0 1 1 0 .722H6.587a.36.36 0 0 1-.36-.36V4.553c0-.2.161-.36.36-.36Zm7.579 5.264c0-.2.162-.36.36-.36h2.888c.2 0 .36.16.36.36v2.887a.36.36 0 1 1-.721 0V9.818h-2.526a.36.36 0 0 1-.361-.36Z" clip-rule="evenodd"/>
+    <path fill="#1C68F3" fill-rule="evenodd" stroke="#1C68F3" stroke-linecap="round" stroke-linejoin="round" stroke-width=".2" d="M10.672 3.595a4.551 4.551 0 0 1 2.389-.075c.789.188 1.52.585 2.125 1.152a5.076 5.076 0 0 1 1.334 2.091.395.395 0 0 1-.224.496.364.364 0 0 1-.47-.237 4.297 4.297 0 0 0-1.13-1.77 3.984 3.984 0 0 0-1.798-.974 3.851 3.851 0 0 0-2.021.063 4.016 4.016 0 0 0-1.75 1.094l-2.28 2.26a.355.355 0 0 1-.52-.018.404.404 0 0 1 .016-.55l2.276-2.255a4.745 4.745 0 0 1 2.053-1.277Zm7.002 5.623a.404.404 0 0 1-.016.55l-2.276 2.255a4.745 4.745 0 0 1-2.053 1.278c-.777.237-1.6.263-2.389.074a4.707 4.707 0 0 1-2.125-1.151 5.077 5.077 0 0 1-1.334-2.092.395.395 0 0 1 .225-.496.364.364 0 0 1 .47.237c.228.68.617 1.29 1.129 1.77a3.97 3.97 0 0 0 1.798.974c.668.16 1.363.138 2.021-.063a4.016 4.016 0 0 0 1.75-1.093l2.28-2.26a.355.355 0 0 1 .52.017Z" clip-rule="evenodd"/>
+    <g filter="url(#RestoreBlue_svg__b)">
+        <path fill="#1C68F3" fill-opacity=".05" d="M4 12.895C4 11.848 4.988 11 6.207 11h11.586c1.219 0 2.207.848 2.207 1.895v5.21C20 19.152 19.012 20 17.793 20H6.207C4.988 20 4 19.152 4 18.105v-5.21Z"/>
+    </g>
+    <defs>
+        <filter id="RestoreBlue_svg__a" width="24" height="19" x="0" y="5" color-interpolation-filters="sRGB">
+            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+            <feGaussianBlur in="BackgroundImage"/>
+            <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur"/>
+            <feBlend in="SourceGraphic" in2="effect1_backgroundBlur" result="shape"/>
+        </filter>
+        <filter id="RestoreBlue_svg__b" width="22" height="15" x="1" y="8" color-interpolation-filters="sRGB">
+            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+            <feGaussianBlur in="BackgroundImage"/>
+            <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur"/>
+            <feBlend in="SourceGraphic" in2="effect1_backgroundBlur" result="shape"/>
+        </filter>
+    </defs>
 </svg>
-  

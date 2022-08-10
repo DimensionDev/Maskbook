@@ -9,8 +9,8 @@ import {
     EncryptIO,
     EncryptOptions,
     parsePayload,
-} from '../src'
-import { importAES } from '../src/utils'
+    importAESFromJWK,
+} from '@masknet/encryption'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { makeTypedMessageText, makeTypedMessageTupleSerializable } from '@masknet/typed-message'
 import {
@@ -339,7 +339,7 @@ async function returnFalse(): Promise<boolean> {
     return false
 }
 async function returnTestKey() {
-    return (await importAES(testKey)).unwrap()
+    return (await importAESFromJWK(testKey)).unwrap()
 }
 
 function complexMessage() {

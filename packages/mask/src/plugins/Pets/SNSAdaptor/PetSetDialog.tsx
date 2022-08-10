@@ -2,7 +2,7 @@ import { useState, useMemo, ReactNode, Fragment } from 'react'
 import { useTimeout } from 'react-use'
 import { Constant, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { makeStyles, useStylesExtends, useCustomSnackbar, ShadowRootPopper } from '@masknet/theme'
+import { makeStyles, useStylesExtends, useCustomSnackbar, ShadowRootPopper, ActionButton } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
 import {
     TextField,
@@ -29,7 +29,6 @@ import { petShowSettings } from '../settings'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { saveCustomEssayToRSS } from '../Services/rss3'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({

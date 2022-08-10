@@ -5,8 +5,8 @@ import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
 import { LoadingButton } from '@mui/lab'
 import DoneIcon from '@mui/icons-material/Done'
 import { useI18N } from '../locales'
-import { getMaskColor, makeStyles, MaskColorVar } from '@masknet/theme'
-import { InjectedDialog, LoadingAnimation } from '@masknet/shared'
+import { getMaskColor, makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
+import { InjectedDialog } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { formatPersonaFingerprint, PersonaInformation } from '@masknet/shared-base'
@@ -132,7 +132,7 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                                 loading={signature.wallet.loading}
                                 onClick={onWalletSign}
                                 endIcon={isWalletSigned ? <DoneIcon sx={{ color: MaskColorVar.white }} /> : null}
-                                loadingIndicator={<LoadingAnimation />}>
+                                loadingIndicator={<LoadingBase />}>
                                 {isWalletSigned ? t.done() : t.wallet_sign()}
                             </LoadingButton>
                         </Box>
@@ -177,7 +177,7 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                                 loading={signature.persona.loading}
                                 onClick={onPersonaSign}
                                 endIcon={isPersonaSigned ? <DoneIcon sx={{ color: MaskColorVar.white }} /> : null}
-                                loadingIndicator={<LoadingAnimation />}>
+                                loadingIndicator={<LoadingBase />}>
                                 {isPersonaSigned ? t.done() : t.persona_sign()}
                             </LoadingButton>
                         </Box>

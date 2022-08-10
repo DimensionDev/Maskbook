@@ -9,7 +9,7 @@ import {
     AESCryptoKey,
 } from '@masknet/shared-base'
 import type { Result, Option } from 'ts-results'
-import type { CryptoException, PayloadException } from '../types'
+import type { CryptoException, PayloadException } from '../types/index.js'
 
 /** A parse result, that try to preserve as many info as possible. */
 export declare namespace PayloadParseResult {

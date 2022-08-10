@@ -430,7 +430,7 @@ export interface NonFungibleAsset<ChainId, SchemaType> extends NonFungibleToken<
  * Authorization about a fungible token.
  */
 export interface FungibleTokenSpenderAuthorization<ChainId, SchemaType> {
-    tokenInfo:  Pick<FungibleToken<ChainId, SchemaType>, 'address' | 'logoURL' | 'symbol' | 'name'>
+    tokenInfo: Pick<FungibleToken<ChainId, SchemaType>, 'address' | 'logoURL' | 'symbol' | 'name'>
     /** spender address */
     address: string
     /** spender name */
@@ -444,7 +444,7 @@ export interface FungibleTokenSpenderAuthorization<ChainId, SchemaType> {
 /**
  * Authorization about a non-fungible contract.
  */
- export interface NonFungibleContractSpenderAuthorization<ChainId, SchemaType> {
+export interface NonFungibleContractSpenderAuthorization<ChainId, SchemaType> {
     amount: string
     contract: Pick<NonFungibleTokenContract<ChainId, SchemaType>, 'name' | 'address'>
     address: string
@@ -510,6 +510,8 @@ export interface TransactionContext<ChainId, Parameter = string | undefined> {
     value: string
     /** code to deploy */
     code?: string
+    /** transaction hash */
+    hash?: string
     /** methods */
     methods?: Array<{
         /** name */
@@ -566,7 +568,7 @@ export interface Transaction<ChainId, SchemaType> {
     /** unix timestamp */
     timestamp: number
     /** 0: failed 1: succeed */
-    status: 0 | 1
+    status?: 0 | 1
     /** transferred tokens */
     tokens: Array<
         Token<ChainId, SchemaType> & {
@@ -888,16 +890,6 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         account: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<Transaction<ChainId, SchemaType>>>
-    /** Get non-fungible tokens search by the give keyword. */
-    getNonFungibleTokensByKeyword?: (
-        keyword: string,
-        initial?: Web3HubOptions,
-    ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>>
-    /** Get non-fungible assets search by the give keyword. */
-    getNonFungibleAssetsByKeyword?: (
-        keyword: string,
-        initial?: Web3HubOptions,
-    ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
     /** Get non-fungible tokens of the given collection. */
     getNonFungibleTokensByCollection?: (
         address: string,
@@ -1057,6 +1049,11 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         account: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>>>
+    /** Get non-fungible tokens search by the give keyword. */
+    getNonFungibleCollectionsByKeyword?: (
+        keyword: string,
+        initial?: Web3HubOptions,
+    ) => Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>>>
 
     /** Place a bid on a token. */
     createBuyOrder?: (/** TODO: add parameters */) => Promise<void>
@@ -1133,9 +1130,9 @@ export interface TokenState<ChainId, SchemaType> {
     blockedNonFungibleTokens?: Subscription<Array<NonFungibleToken<ChainId, SchemaType>>>
 
     /** Add a token */
-    addToken?: (token: Token<ChainId, SchemaType>) => Promise<void>
+    addToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
     /** Remove a token */
-    removeToken?: (token: Token<ChainId, SchemaType>) => Promise<void>
+    removeToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
     /** Unblock a token */
     trustToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
     /** Block a token */
@@ -1175,13 +1172,12 @@ export interface TransactionFormatterState<ChainId, Parameters, Transaction> {
         chainId: ChainId,
         transaction: Transaction,
         context: TransactionContext<ChainId, Parameters>,
-        isError?: boolean
     ) => Promise<TransactionDescriptor<ChainId, Transaction>>
     /** Elaborate a transaction in a human-readable format. */
     formatTransaction: (
         chainId: ChainId,
         transaction: Transaction,
-        isError?: boolean
+        txHash?: string
     ) => Promise<TransactionDescriptor<ChainId, Transaction>>
 }
 export interface TransactionWatcherState<ChainId, Transaction> {

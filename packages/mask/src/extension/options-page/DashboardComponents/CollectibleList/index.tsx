@@ -22,6 +22,7 @@ import { LoadingSkeleton } from './LoadingSkeleton'
 import { useCollectionFilter } from '../../hooks/useCollectionFilter'
 import { useKV } from '../../hooks/useKV'
 import { COLLECTION_TYPE } from '../../types'
+import { Icons } from '@masknet/icons'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -288,8 +289,9 @@ export function CollectionList({
 
     if ((done && !allCollectibles.length) || !account)
         return (
-            <Box display="flex" alignItems="center" justifyContent="center">
-                <Typography color="textPrimary" sx={{ paddingTop: 4, paddingBottom: 4 }}>
+            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height={400}>
+                <Icons.EmptySimple size={32} />
+                <Typography color="textPrimary" marginTop="12px">
                     {t('no_NFTs_found')}
                 </Typography>
             </Box>

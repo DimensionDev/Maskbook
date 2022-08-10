@@ -1,6 +1,6 @@
-import { SocialNetworkEnum } from '../payload/types'
-import { sharedDecoder, sharedEncoder } from './shared'
-import { TwitterDecoder, __TwitterEncoder } from './twitter'
+import { SocialNetworkEnum } from '../payload/types.js'
+import { sharedDecoder, sharedEncoder } from './shared.js'
+import { TwitterDecoder, __TwitterEncoder } from './twitter.js'
 
 export function socialNetworkDecoder(network: SocialNetworkEnum, content: string): Array<string | Uint8Array> {
     if (network === SocialNetworkEnum.Twitter) {
@@ -27,4 +27,4 @@ export function socialNetworkEncoder(network: SocialNetworkEnum, content: string
     return sharedEncoder(content)
 }
 
-export * from './twitter'
+export * from './twitter.js'

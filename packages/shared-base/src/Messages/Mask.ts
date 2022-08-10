@@ -1,8 +1,8 @@
 import type { Appearance, LanguageOptions } from '@masknet/public-api'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
-import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier'
-import type { RelationFavor } from '../Persona/type'
-import type { EnhanceableSite, ExtensionSite } from '../Site'
+import type { ProfileIdentifier, PersonaIdentifier } from '../Identifier/index.js'
+import type { RelationFavor } from '../Persona/type.js'
+import type { EnhanceableSite, ExtensionSite } from '../Site/index.js'
 
 enum NetworkPluginID {
     PLUGIN_EVM = 'com.mask.evm',
@@ -59,6 +59,9 @@ export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, Ma
     __kv_backend_in_memory__: [string, unknown]
     /** @deprecated do not use it in new code. */
     wallet_is_locked: ['request'] | ['response', boolean]
+
+    /** emit when open new page . */
+    openPageConfirm: OpenPageConfirmEvent
 }
 
 export interface UpdateEvent<Data> {
@@ -97,9 +100,33 @@ export interface ProfileNFTsPageEvent {
     show: boolean
 }
 
+export interface OpenPageConfirmEvent {
+    open: boolean
+    target: 'dashboard' | 'other'
+    url: string
+    title: string
+    text: string
+    actionHint: string
+}
+
 export interface Web3ProfileDialogRequest {
     open: boolean
 }
+
+export interface CheckSecurityCloseConfirmDialogRequest {
+    open: boolean
+}
+
+export type CheckSecurityDialogRequest =
+    | {
+          open: true
+          searchHidden: boolean
+          tokenAddress?: string
+          chainId?: number
+      }
+    | {
+          open: false
+      }
 
 export interface NFTAvatarEvent {
     userId: string

@@ -3,6 +3,7 @@
   "private": true,
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "webpack": "./src/index.ts",
       "default": "./dist/index.js"
     }
@@ -17,6 +18,7 @@
     "@masknet/web3-providers": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
+    "web3-utils": "1.7.4",
     "bignumber.js": "^9.0.2",
     "classnames": "^2.3.1",
     "date-fns": "^2.28.0",

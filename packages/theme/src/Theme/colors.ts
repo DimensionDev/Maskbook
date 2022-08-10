@@ -39,6 +39,10 @@ export const MaskColors = {
             white: '#ffffff',
             secondaryDark: '#767F8D',
             dark: '#07101B',
+            publicMain: '#07101B',
+            publicSecond: '#767F8D',
+            publicThird: '#ACB4C1',
+            publicLine: '#F2F5F6',
         },
         background: {
             default: '#F9F9F9',
@@ -89,6 +93,10 @@ export const MaskColors = {
             white: '#ffffff',
             secondaryDark: '#767F8D',
             dark: '#07101B',
+            publicMain: '#07101B',
+            publicSecond: '#767F8D',
+            publicThird: '#ACB4C1',
+            publicLine: '#F2F5F6',
         },
         text: {
             primary: '#F5F5F5',
@@ -116,3 +124,5 @@ export const MaskColors = {
         },
     },
 }
+
+export type MaskColor = typeof MaskColors.light

@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { InjectedDialog, useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
 import { formatBalance, FungibleToken, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
 import { useAccount, useChainId, useFungibleToken, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
@@ -16,7 +16,6 @@ import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundar
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useDonateCallback } from '../hooks/useDonateCallback'
 import { PluginGitcoinMessages } from '../messages'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {

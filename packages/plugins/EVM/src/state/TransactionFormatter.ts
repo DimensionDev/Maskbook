@@ -29,6 +29,7 @@ import { ContractDeploymentDescriptor } from './TransactionFormatter/descriptors
 import { CancelDescriptor } from './TransactionFormatter/descriptors/Cancel'
 import { BaseTransactionDescriptor } from './TransactionFormatter/descriptors/Base'
 import { ITODescriptor } from './TransactionFormatter/descriptors/ITO'
+import { MaskBoxDescriptor } from './TransactionFormatter/descriptors/MaskBox'
 import { RedPacketDescriptor } from './TransactionFormatter/descriptors/RedPacket'
 import { ERC20Descriptor } from './TransactionFormatter/descriptors/ERC20'
 import { ERC721Descriptor } from './TransactionFormatter/descriptors/ERC721'
@@ -41,6 +42,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
         [TransactionDescriptorType.TRANSFER]: [new TransferTokenDescriptor()],
         [TransactionDescriptorType.INTERACTION]: [
             new ITODescriptor(),
+            new MaskBoxDescriptor(),
             new RedPacketDescriptor(),
             new ERC20Descriptor(),
             new ERC721Descriptor(),
@@ -59,6 +61,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
     override async createContext(
         chainId: ChainId,
         transaction: Transaction,
+        hash?: string,
     ): Promise<TransactionContext<ChainId, string | undefined>> {
         const from = (transaction.from as string | undefined) ?? ''
         const value = (transaction.value as string | undefined) ?? '0x0'
@@ -72,6 +75,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
             from,
             to,
             value,
+            hash,
         }
 
         if (data) {

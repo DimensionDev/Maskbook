@@ -83,8 +83,6 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.grey[700],
     },
     skeleton: {
-        borderRadius: 8,
-        margin: theme.spacing(1),
         marginTop: 0,
         backgroundColor: theme.palette.background.default,
         height: '196px',
@@ -185,7 +183,10 @@ export function NextIdPage({ persona }: NextIdPageProps) {
         )
     }, [publicKeyAsHex, visitingPersonaIdentifier, isVerified])
 
+    const isWeb3ProfileDisable = useIsMinimalMode(PluginId.Web3Profile)
+
     const description = useMemo(() => {
+        if (isWeb3ProfileDisable) return ''
         if (personaConnectStatus.action && !personaConnectStatus.hasPersona) {
             return t.create_persona_intro()
         }
@@ -196,9 +197,7 @@ export function NextIdPage({ persona }: NextIdPageProps) {
             return t.add_wallet_intro()
         }
         return ''
-    }, [personaConnectStatus, isOwn, isAccountVerified, t])
-
-    const isWeb3ProfileDisable = useIsMinimalMode(PluginId.Web3Profile)
+    }, [personaConnectStatus, isOwn, isAccountVerified, t, isWeb3ProfileDisable])
 
     const {
         value: bindings,
@@ -259,15 +258,9 @@ export function NextIdPage({ persona }: NextIdPageProps) {
 
     if (loadingBindings || loadingPersona || loadingVerifyInfo) {
         return (
-            <>
-                {Array.from({ length: 2 })
-                    .fill(0)
-                    .map((_, i) => (
-                        <div key={i}>
-                            <Skeleton className={classes.skeleton} animation="wave" variant="rectangular" />
-                        </div>
-                    ))}
-            </>
+            <div>
+                <Skeleton className={classes.skeleton} animation="wave" variant="rectangular" />
+            </div>
         )
     }
 

@@ -8,6 +8,7 @@ import {
     HubIndicator,
     HubOptions,
     NonFungibleAsset,
+    NonFungibleTokenCollection,
     NonFungibleTokenContract,
     NonFungibleTokenEvent,
     Pageable,
@@ -134,7 +135,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
             chainId,
             id: `${chainId}_${nft.contract_address}_${nft.token_id}`,
             type: TokenType.NonFungible,
-            schema: nft.contract_type === 'ERC721' ? SchemaType.ERC721 : SchemaType.ERC1155,
+            schema: nft.contract_type === 'ERC1155' ? SchemaType.ERC1155 : SchemaType.ERC721,
             address: nft.contract_address,
             tokenId: nft.token_id,
             owner: {
@@ -142,7 +143,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
             },
             contract: {
                 chainId,
-                schema: nft.contract_type === 'ERC721' ? SchemaType.ERC721 : SchemaType.ERC1155,
+                schema: nft.contract_type === 'ERC1155' ? SchemaType.ERC1155 : SchemaType.ERC721,
                 address: nft.contract_address,
                 name: nft.contract_name,
                 symbol: nft.contract_symbol,
@@ -185,6 +186,17 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
             symbol: metadata.symbol,
             schema: SchemaType.ERC721,
             owner: metadata.owner,
+        }
+    }
+
+    createNonFungibleCollectionFromNFT(chainId: ChainId, nft: NFT): NonFungibleTokenCollection<ChainId, SchemaType> {
+        return {
+            chainId,
+            schema: nft.contract_type === 'ERC1155' ? SchemaType.ERC1155 : SchemaType.ERC721,
+            name: nft.contract_name,
+            symbol: nft.contract_symbol,
+            slug: nft.contract_symbol,
+            address: nft.contract_address,
         }
     }
 
@@ -265,7 +277,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
         )
     }
 
-    async getAssetsByKeyword(
+    async getCollectionsByKeyword(
         keyword: string,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
     ) {
@@ -277,7 +289,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
             }),
         )
         if (!tokens) return createPageable(EMPTY_LIST, createIndicator(indicator))
-        const assets = tokens.map((x) => this.createNonFungibleTokenAssetFromNFT(chainId, x))
+        const assets = tokens.map((x) => this.createNonFungibleCollectionFromNFT(chainId, x))
         return createPageable(
             assets,
             createIndicator(indicator),

@@ -93,6 +93,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.injection.profileTab?.(signal)
     ui.injection.profileTabContent?.(signal)
 
+    ui.injection.profileCover?.(signal)
     ui.injection.userAvatar?.(signal)
     ui.injection.profileAvatar?.(signal)
     ui.injection.profileTip?.(signal)
@@ -101,6 +102,8 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.injection.openNFTAvatar?.(signal)
     ui.injection.postAndReplyNFTAvatar?.(signal)
     ui.injection.avatarClipNFT?.(signal)
+
+    ui.injection.avatar?.(signal)
 
     // Update user avatar
     ui.collecting.currentVisitingIdentityProvider?.recognized.addListener((ref) => {
@@ -150,6 +153,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                     },
                     getPersonaAvatar: Services.Identity.getPersonaAvatar,
                     ownProofChanged: MaskMessages.events.ownProofChanged,
+                    setMinimalMode: Services.Settings.setPluginMinimalModeEnabled,
                 }
             },
             Services.Settings.getPluginMinimalModeEnabled,

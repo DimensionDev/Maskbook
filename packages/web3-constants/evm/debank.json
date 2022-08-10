@@ -12,6 +12,9 @@
         "Arbitrum": "arb",
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai",
+        "Optimism": "op",
+        "Optimism_Kovan": "",
+        "Optimism_Goerli": "",
         "Avalanche": "avax",
         "Avalanche_Fuji": "",
         "Celo": "celo",
@@ -20,6 +23,7 @@
         "Aurora_Testnet": "",
         "Conflux": "",
         "Harmony": "hmy",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": "astar"
     }
 }
