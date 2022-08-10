@@ -1,5 +1,6 @@
 import { Button, DialogContent, Stack, Typography } from '@mui/material'
 import {
+    CrossIsolationMessages,
     EMPTY_LIST,
     isSamePersona,
     isSameProfile,
@@ -54,12 +55,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-interface PersonaListProps {
-    open: boolean
-    onClose(): void
-}
-
-export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
+export const PersonaListDialog = () => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [, copyToClipboard] = useCopyToClipboard()
@@ -67,14 +63,21 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
     const currentPlatform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
     const currentPersona = useCurrentPersona()
     const currentPersonaIdentifier = currentPersona?.identifier
+    const [finishTarget, setFinishTarget] = useState<string>()
+
+    const { open, closeDialog } = useRemoteControlledDialog(PluginNextIDMessages.PersonaListDialogUpdated, (ev) => {
+        if (!ev.open) {
+            setFinishTarget(undefined)
+        } else {
+            setFinishTarget(ev.target)
+        }
+    })
 
     const [selectedPersona, setSelectedPersona] = useState<PersonaNextIDMixture>()
 
     const [, handleVerifyNextID] = useNextIDVerify()
     const currentProfileIdentify = useLastRecognizedIdentity()
     const { value: personas = EMPTY_LIST, loading } = useConnectedPersonas()
-
-    const { closeDialog } = useRemoteControlledDialog(PluginNextIDMessages.PersonaListDialogUpdated)
 
     const { closeDialog: closeApplicationBoard } = useRemoteControlledDialog(
         WalletMessages.events.ApplicationDialogUpdated,
@@ -131,6 +134,12 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
                 await handleVerifyNextID(selectedPersona.persona, currentProfileIdentify.identifier?.userId)
             }
 
+            if (finishTarget) {
+                CrossIsolationMessages.events.requestOpenApplication.sendToLocal({
+                    open: true,
+                    application: finishTarget,
+                })
+            }
             closeDialog()
         }
 
@@ -191,7 +200,7 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
                 dialogTitle: classes.header,
             }}
             maxWidth="sm"
-            onClose={onClose}
+            onClose={closeDialog}
             title={t('applications_persona_title')}
             titleBarIconStyle="close">
             <DialogContent classes={{ root: classes.content }}>

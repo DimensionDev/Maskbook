@@ -116,6 +116,10 @@ export interface Web3ProfileDialogRequest {
 export interface CheckSecurityCloseConfirmDialogRequest {
     open: boolean
 }
+export type OpenApplicationRequestEvent = {
+    open: boolean
+    application: string
+}
 
 export type CheckSecurityDialogRequest =
     | {

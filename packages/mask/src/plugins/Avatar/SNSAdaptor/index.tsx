@@ -1,8 +1,8 @@
 import { Icons } from '@masknet/icons'
-import type { Plugin } from '@masknet/plugin-infra/content-script'
-import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import { Plugin, PluginId, PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
-import { useState } from 'react'
+import { CrossIsolationMessages } from '@masknet/shared-base'
+import { useEffect, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { NFTAvatarDialog } from '../Application/NFTAvatarsDialog'
 import { base } from '../base'
@@ -25,6 +25,15 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 RenderEntryComponent(EntryComponentProps) {
                     const [open, setOpen] = useState(false)
                     const clickHandler = () => setOpen(true)
+                    useEffect(
+                        () => () => {
+                            CrossIsolationMessages.events.requestOpenApplication.on(({ open, application }) => {
+                                if (application !== PluginId.Avatar) return
+                                setOpen(open)
+                            })
+                        },
+                        [],
+                    )
                     return (
                         <>
                             <ApplicationEntry
