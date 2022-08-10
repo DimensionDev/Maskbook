@@ -8,14 +8,7 @@ import {
     useCurrentWeb3NetworkPluginID,
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
-import {
-    CurrencyType,
-    formatBalance,
-    formatCurrency,
-    FungibleAsset,
-    NetworkPluginID,
-    toFixed,
-} from '@masknet/web3-shared-base'
+import { CurrencyType, formatBalance, formatCurrency, FungibleAsset, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useDashboardI18N } from '../../../../locales'
 import { ChangeNetworkTip } from './ChangeNetworkTip'
@@ -109,9 +102,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                 </Box>
             </TableCell>
             <TableCell className={classes.cell} align="center" variant="body">
-                <Typography>
-                    {Number.parseFloat(toFixed(formatBalance(asset.balance, asset.decimals))) ?? '-'}
-                </Typography>
+                <Typography>{formatBalance(asset.balance, asset.decimals)}</Typography>
             </TableCell>
             <TableCell className={classes.cell} align="center" variant="body">
                 <Typography>
