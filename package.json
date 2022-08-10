@@ -24,7 +24,7 @@
     "postinstall": "gulp fix-lockfile",
     "prepare": "husky install",
     "svgo": "svgo packages/icons/*/*.svg",
-    "test": "vitest --coverage",
+    "test": "vitest",
     "spellcheck": "cspell lint --no-must-find-files"
   },
   "dependencies": {
