@@ -45,6 +45,7 @@ export function formatCurrency(value: BigNumber.Value, currency = 'USD'): string
     const isLessMinValue = bgValue.isLessThan(boundaryValues.min)
 
     const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency, currencyDisplay: 'narrowSymbol' })
+
     if (bgValue.isZero()) {
         const symbol = DigitalCurrencyMap[currency]
         return symbol ? `0.00 ${symbol}` : formatter.format(0)
