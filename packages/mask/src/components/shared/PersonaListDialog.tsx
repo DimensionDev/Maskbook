@@ -24,6 +24,7 @@ import { PluginNextIDMessages } from '../../plugins/NextID/messages'
 import type { PersonaNextIDMixture } from './PersonaListUI/PersonaItemUI'
 import { PersonaItemUI } from './PersonaListUI/PersonaItemUI'
 import { useCurrentPersona } from '../DataSource/usePersonaConnectStatus'
+import { delay } from '@dimensiondev/kit'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -140,6 +141,8 @@ export const PersonaListDialog = () => {
                     application: finishTarget,
                 })
             }
+
+            await delay(100)
             closeDialog()
         }
 
