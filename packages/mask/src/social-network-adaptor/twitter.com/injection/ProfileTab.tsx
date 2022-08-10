@@ -12,6 +12,7 @@ import {
     searchProfileTabPageSelector,
     searchProfileTabSelector,
     searchProfileTabLoseConnectionPageSelector,
+    searchNameTag,
 } from '../utils/selector'
 import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab'
 
@@ -80,10 +81,25 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-function handler() {
+function handler(html: HTMLElement) {
     MaskMessages.events.profileTabUpdated.sendToLocal({ show: false })
     MaskMessages.events.profileTabActive.sendToLocal({ active: false })
+
     resetTwitterActivatedContent()
+
+    if (html.closest('#open-nft-button')) {
+        const nameTag = searchNameTag().evaluate()
+        if (nameTag) nameTag.style.display = ''
+
+        const eleEmpty = searchProfileEmptySelector().evaluate()
+        if (eleEmpty) eleEmpty.style.display = 'none'
+
+        const elePage = searchProfileTabPageSelector().evaluate()
+        if (elePage) {
+            elePage.style.visibility = 'hidden'
+            elePage.style.height = '0'
+        }
+    }
 }
 
 async function hideTwitterActivatedContent() {
@@ -99,7 +115,7 @@ async function hideTwitterActivatedContent() {
         _v.style.color = style.color
         const line = v.querySelector('div > div') as HTMLDivElement
         line.style.display = 'none'
-        v.addEventListener('click', handler)
+        v.addEventListener('click', () => handler(v))
     })
 
     if (loseConnectionEle) return
@@ -107,6 +123,9 @@ async function hideTwitterActivatedContent() {
     // hide the empty list indicator on the page
     const eleEmpty = searchProfileEmptySelector().evaluate()
     if (eleEmpty) eleEmpty.style.display = 'none'
+
+    const nameTag = searchNameTag().evaluate()
+    if (nameTag) nameTag.style.display = 'none'
 
     // hide the content page
     await untilElementAvailable(searchProfileTabPageSelector())
@@ -129,7 +148,7 @@ function resetTwitterActivatedContent() {
         _v.style.color = ''
         const line = v.querySelector('div > div') as HTMLDivElement
         line.style.display = ''
-        v.removeEventListener('click', handler)
+        v.removeEventListener('click', () => handler(v))
     })
 
     if (loseConnectionEle) return

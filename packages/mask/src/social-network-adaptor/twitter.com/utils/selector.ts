@@ -331,3 +331,6 @@ export const searchReplyToolbarSelector = () =>
 
 export const searchRejectReplyTextSelector = () =>
     querySelector<E>('div[data-testid="tweetTextarea_0"] > div > div > div > span')
+
+// nameTag dom
+export const searchNameTag = () => querySelector<E>('#nft-gallery')
