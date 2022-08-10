@@ -151,8 +151,11 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const currentVisitingIdentity = useCurrentVisitingIdentity()
     const currentVisitingUserId = currentVisitingIdentity.identifier?.userId
 
-    const { value: currentVisitingSocialIdentity, loading: loadingCurrentVisitingSocialIdentity } =
-        useCurrentVisitingSocialIdentity()
+    const {
+        value: currentVisitingSocialIdentity,
+        loading: loadingCurrentVisitingSocialIdentity,
+        retry: retryIdentity,
+    } = useCurrentVisitingSocialIdentity()
 
     const {
         value: socialAddressList = EMPTY_LIST,
@@ -169,6 +172,12 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             retrySocialAddress()
         })
     }, [retrySocialAddress])
+
+    useEffect(() => {
+        return MaskMessages.events.ownPersonaChanged.on(() => {
+            retryIdentity()
+        })
+    }, [retryIdentity])
 
     useEffect(() => {
         setSelectedAddress(first(socialAddressList))
