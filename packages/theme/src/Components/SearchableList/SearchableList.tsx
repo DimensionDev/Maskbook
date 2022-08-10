@@ -105,6 +105,7 @@ export function SearchableList<T extends {}>({
                         autoFocus
                         fullWidth
                         InputProps={{
+                            style: { height: 40 },
                             startAdornment: (
                                 <InputAdornment position="start">
                                     <Icons.Search />

@@ -135,8 +135,8 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
                     selectedTokens={selectedTokens}
                     onSelect={onSubmit}
                     FixedSizeListProps={{
-                        itemSize: rowSize + 16,
-                        height: isMdScreen ? 300 : 422,
+                        itemSize: rowSize + 22,
+                        height: isMdScreen ? 300 : 428,
                         className: classes.wrapper,
                     }}
                     SearchTextFieldProps={{
