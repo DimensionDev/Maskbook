@@ -17,7 +17,7 @@ import { useNextIDVerify } from '../DataSource/useNextIDVerify'
 import { useI18N } from '../../utils'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { PluginNextIDMessages } from '../../plugins/NextID/messages'
 import type { PersonaNextIDMixture } from './PersonaListUI/PersonaItemUI'
@@ -195,22 +195,30 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
             title={t('applications_persona_title')}
             titleBarIconStyle="close">
             <DialogContent classes={{ root: classes.content }}>
-                <Stack gap={1.5} className={classes.items}>
-                    {personas.map((x) => {
-                        return (
-                            <PersonaItemUI
-                                key={x.persona.identifier.toText()}
-                                data={x}
-                                onCopy={(e) => onCopyPersons(e, x)}
-                                onClick={() => onSelectPersona(x)}
-                                currentPersona={selectedPersona}
-                                currentPersonaIdentifier={currentPersonaIdentifier}
-                                currentProfileIdentify={currentProfileIdentify}
-                            />
-                        )
-                    })}
-                </Stack>
-                <Stack>{actionButton}</Stack>
+                {loading ? (
+                    <Stack justifyContent="center" alignItems="center" height="100%">
+                        <LoadingBase width={24} height={24} />
+                    </Stack>
+                ) : (
+                    <>
+                        <Stack gap={1.5} className={classes.items}>
+                            {personas.map((x) => {
+                                return (
+                                    <PersonaItemUI
+                                        key={x.persona.identifier.toText()}
+                                        data={x}
+                                        onCopy={(e) => onCopyPersons(e, x)}
+                                        onClick={() => onSelectPersona(x)}
+                                        currentPersona={selectedPersona}
+                                        currentPersonaIdentifier={currentPersonaIdentifier}
+                                        currentProfileIdentify={currentProfileIdentify}
+                                    />
+                                )
+                            })}
+                        </Stack>
+                        <Stack>{actionButton}</Stack>
+                    </>
+                )}
             </DialogContent>
         </InjectedDialog>
     ) : null
