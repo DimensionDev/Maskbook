@@ -4,12 +4,12 @@
   "sideEffects": false,
   "exports": {
     ".": {
-      "types": "../dist/evm/index.d.ts",
-      "webpack": "./index.ts",
-      "default": "../dist/evm/index.js"
+      "types": "./dist/index.d.ts",
+      "webpack": "./src/index.ts",
+      "default": "./dist/index.js"
     }
   },
-  "types": "../dist/evm/index.d.ts",
+  "types": "./dist/index.d.ts",
   "dependencies": {
     "@ensdomains/address-encoder": "^0.2.6",
     "@masknet/shared-base": "workspace:*",
