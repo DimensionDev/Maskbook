@@ -17,7 +17,7 @@ import { Icons } from '@masknet/icons'
 import { isSameAddress, NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
-import { MaskMessages, useI18N } from '../../utils'
+import { MaskMessages, useI18N, sorter } from '../../utils'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 import {
     useCurrentVisitingIdentity,
@@ -158,7 +158,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         value: socialAddressList = EMPTY_LIST,
         loading: loadingSocialAddressList,
         retry: retrySocialAddress,
-    } = useSocialAddressListAll(currentVisitingSocialIdentity)
+    } = useSocialAddressListAll(currentVisitingSocialIdentity, undefined, sorter)
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
@@ -167,12 +167,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }, [retrySocialAddress])
 
     useEffect(() => {
-        const sortedList = socialAddressList.slice(0).sort((a, z) => {
-            if (a.type === SocialAddressType.NEXT_ID) return -1
-            if (z.type === SocialAddressType.NEXT_ID) return 1
-            return 0
-        })
-        setSelectedAddress(first(sortedList))
+        setSelectedAddress(first(socialAddressList))
     }, [socialAddressList])
 
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')

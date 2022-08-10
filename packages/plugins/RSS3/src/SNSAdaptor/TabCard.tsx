@@ -58,7 +58,7 @@ export function TabCard({ type, socialAddress, publicKey }: TabCardProps) {
             return <FeedPage socialAddress={socialAddress} />
         }
         return null
-    }, [type, socialAddress, publicKey, unHiddenDonations, unHiddenFootprints])
+    }, [type, socialAddress, publicKey, unHiddenDonations, unHiddenFootprints, loadingDonations, loadingFootprints])
 
     if (!socialAddress) return null
 
