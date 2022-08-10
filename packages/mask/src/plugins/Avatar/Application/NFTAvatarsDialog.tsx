@@ -70,7 +70,7 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
         props.onClose()
     }, [props.onClose])
 
-    useEffect(() => setSelectedAccount(account || wallets?.[0]?.identity || ''), [account, wallets])
+    useEffect(() => setSelectedAccount(account || wallets?.[0]?.identity || ''), [account, wallets?.[0]?.identity])
 
     const [currentTab, onChange, tabs] = useTabs(PFP_TYPE.PFP, PFP_TYPE.BACKGROUND)
     return (

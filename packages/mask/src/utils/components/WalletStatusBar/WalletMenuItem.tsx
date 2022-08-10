@@ -1,5 +1,4 @@
 import { Button, ListItemIcon, MenuItem } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { memo } from 'react'
 import { useI18N } from '../../i18n-next-ui'
@@ -17,14 +16,6 @@ import {
 } from '@masknet/plugin-infra/web3'
 import { WalletDescription, WalletDescriptionProps } from './WalletDescription'
 
-const useStyles = makeStyles()((theme) => ({
-    icon: {
-        fontSize: 24,
-        width: 24,
-        height: 24,
-    },
-}))
-
 interface WalletMenuItemProps {
     onSelect?: (value: WalletDescriptionProps, chainId: Web3Helper.ChainIdAll, pluginId: NetworkPluginID) => void
     address: string
@@ -37,7 +28,6 @@ interface WalletMenuItemProps {
 export const WalletMenuItem = memo<WalletMenuItemProps>(
     ({ address, selected, onChangeWallet, platform, onSelect, verified }) => {
         const { t } = useI18N()
-        const { classes } = useStyles()
 
         const pluginId = useCurrentWeb3NetworkPluginID(platform ? resolveNextIdPlatformPluginId(platform) : undefined)
         const currentChainId = useChainId()
@@ -70,11 +60,11 @@ export const WalletMenuItem = memo<WalletMenuItemProps>(
                 <ListItemIcon>
                     {selected ? (
                         <Icons.RadioButtonChecked
-                            className={classes.icon}
+                            size={24}
                             style={{ filter: 'drop-shadow(0px 0px 6px rgba(28, 104, 243, 0.6))' }}
                         />
                     ) : (
-                        <Icons.RadioButtonUnChecked className={classes.icon} />
+                        <Icons.RadioButtonUnChecked size={24} />
                     )}
                 </ListItemIcon>
                 <WalletDescription {...descriptionProps} />
