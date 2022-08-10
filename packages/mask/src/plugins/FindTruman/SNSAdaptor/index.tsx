@@ -10,6 +10,7 @@ import { Icons } from '@masknet/icons'
 import { PostInspector } from './PostInspector'
 import { ApplicationEntry } from '@masknet/shared'
 import { FindTrumanDialog } from './FindTrumanDialog'
+import { range } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -51,18 +52,16 @@ const isFindTrumanURL = (input: string): boolean => {
 function Renderer({ url }: { url: string }) {
     const { classes } = useStyles()
     usePluginWrapper(true)
-    const fallbackUI = Array.from({ length: 2 })
-        .fill(0)
-        .map((_, i) => (
-            <Skeleton
-                key={i}
-                className={classes.skeleton}
-                animation="wave"
-                variant="rectangular"
-                width={i === 0 ? '80%' : '60%'}
-                height={15}
-            />
-        ))
+    const fallbackUI = range(2).map((i) => (
+        <Skeleton
+            key={i}
+            className={classes.skeleton}
+            animation="wave"
+            variant="rectangular"
+            width={i === 0 ? '80%' : '60%'}
+            height={15}
+        />
+    ))
     return (
         <Suspense fallback={fallbackUI}>
             <PostInspector url={url} />

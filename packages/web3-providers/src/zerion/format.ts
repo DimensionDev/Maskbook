@@ -1,94 +1,35 @@
 import BigNumber from 'bignumber.js'
-import {
-    createLookupTableResolver,
-    FungibleAsset,
-    leftShift,
-    multipliedBy,
-    TokenType,
-    Transaction,
-} from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    NetworkType,
-    getTokenConstant,
-    getZerionConstant,
-    SchemaType,
-    networkResolver,
-    formatEthereumAddress,
-} from '@masknet/web3-shared-evm'
-import {
-    SocketRequestAssetScope,
-    ZerionAddressAsset,
-    ZerionAddressCovalentAsset,
-    ZerionAsset,
-    ZerionCovalentAsset,
-    ZerionRBDTransactionType,
-    ZerionTransactionItem,
-    ZerionTransactionStatus,
-} from './type'
+import { FungibleAsset, leftShift, multipliedBy, TokenType, Transaction } from '@masknet/web3-shared-base'
+import { ChainId, getTokenConstant, SchemaType, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { ZerionAddressPosition, ZerionRBDTransactionType, ZerionTransactionItem, ZerionTransactionStatus } from './type'
 
-export function resolveZerionAssetsScopeName(networkType: NetworkType) {
-    return getZerionConstant(networkResolver.networkChainId(networkType) ?? ChainId.Mainnet, 'ASSETS_SCOPE_NAME', '')!
-}
+export function formatAsset(chainId: ChainId, data: ZerionAddressPosition): FungibleAsset<ChainId, SchemaType> {
+    const { asset, chain, quantity } = data
+    const { address: address_, decimals } = asset.implementations[chain]
+    const balance = leftShift(quantity, decimals).toNumber()
+    const price = asset.price?.value ?? 0
+    const isNativeToken = (symbol: string) =>
+        ['ETH', 'BNB', 'MATIC', 'ARETH', 'AETH', 'ONE', 'ASTR', 'XDAI'].includes(symbol)
+    const address = isNativeToken(asset.symbol) ? getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS', '') : address_
 
-export const resolveChainByScope = createLookupTableResolver<
-    SocketRequestAssetScope,
-    {
-        chain: string
-        chainId?: ChainId
+    return {
+        id: address,
+        chainId,
+        type: TokenType.Fungible,
+        schema: SchemaType.ERC20,
+        name: asset.name ?? 'Unknown Token',
+        symbol: asset.symbol,
+        decimals,
+        address: formatEthereumAddress(address),
+        logoURL: asset.icon_url,
+        balance: quantity,
+        price: {
+            usd: new BigNumber(price).toString(),
+        },
+        value: {
+            usd: multipliedBy(balance, price).toString(),
+        },
     }
->(
-    {
-        assets: {
-            chain: 'eth',
-            chainId: ChainId.Mainnet,
-        },
-        'bsc-assets': {
-            chain: 'bsc',
-            chainId: ChainId.BSC,
-        },
-        'polygon-assets': {
-            chain: 'matic',
-            chainId: ChainId.Matic,
-        },
-    },
-    {
-        chain: 'unknown',
-    },
-)
-
-export function formatAssets(
-    chainId: ChainId,
-    data: ZerionAddressAsset[] | ZerionAddressCovalentAsset[],
-): Array<FungibleAsset<ChainId, SchemaType>> {
-    return data.map(({ asset, quantity }) => {
-        const balance = leftShift(quantity, asset.decimals).toNumber()
-        const value = (asset as ZerionAsset).price?.value ?? (asset as ZerionCovalentAsset).value ?? 0
-        const isNativeToken = (symbol: string) =>
-            ['ETH', 'BNB', 'MATIC', 'ARETH', 'AETH', 'ONE', 'ASTR'].includes(symbol)
-        const address = isNativeToken(asset.symbol)
-            ? getTokenConstant(chainId, 'NATIVE_TOKEN_ADDRESS', '')
-            : asset.asset_code
-
-        return {
-            id: address,
-            chainId,
-            type: TokenType.Fungible,
-            schema: SchemaType.ERC20,
-            name: asset.name ?? 'Unknown Token',
-            symbol: asset.symbol,
-            decimals: asset.decimals,
-            address: formatEthereumAddress(address),
-            logoURI: asset.icon_url,
-            balance: quantity,
-            price: {
-                usd: new BigNumber(value).toString(),
-            },
-            value: {
-                usd: multipliedBy(balance, value).toString(),
-            },
-        }
-    })
 }
 
 export function formatTransactions(

@@ -18,6 +18,7 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../../../utils'
 import { useWeb3 } from '@masknet/plugin-infra/web3'
 import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
+import { range } from 'lodash-unified'
 
 const useStyles = makeStyles()({
     header: {
@@ -78,21 +79,19 @@ export const DeriveWalletTable = memo<DeriveWalletTableProps>(({ loading, dataSo
                               confirmLoading={confirmLoading}
                           />
                       ))
-                    : Array.from({ length: 10 })
-                          .fill(0)
-                          .map((_, index) => (
-                              <TableRow key={index}>
-                                  <TableCell align="center" variant="body" className={classes.cell}>
-                                      <Skeleton animation="wave" variant="rectangular" width="90%" height={24} />
-                                  </TableCell>
-                                  <TableCell align="center" variant="body" className={classes.cell}>
-                                      <Skeleton animation="wave" variant="rectangular" width="90%" height={24} />
-                                  </TableCell>
-                                  <TableCell align="center" variant="body" className={classes.cell}>
-                                      <Skeleton animation="wave" variant="rectangular" width="90%" height={24} />
-                                  </TableCell>
-                              </TableRow>
-                          ))}
+                    : range(10).map((index) => (
+                          <TableRow key={index}>
+                              <TableCell align="center" variant="body" className={classes.cell}>
+                                  <Skeleton animation="wave" variant="rectangular" width="90%" height={24} />
+                              </TableCell>
+                              <TableCell align="center" variant="body" className={classes.cell}>
+                                  <Skeleton animation="wave" variant="rectangular" width="90%" height={24} />
+                              </TableCell>
+                              <TableCell align="center" variant="body" className={classes.cell}>
+                                  <Skeleton animation="wave" variant="rectangular" width="90%" height={24} />
+                              </TableCell>
+                          </TableRow>
+                      ))}
             </TableBody>
         </Table>
     )

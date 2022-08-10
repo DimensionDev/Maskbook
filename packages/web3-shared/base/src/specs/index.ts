@@ -576,7 +576,7 @@ export interface Transaction<ChainId, SchemaType> {
     /** unix timestamp */
     timestamp: number
     /** 0: failed 1: succeed */
-    status: 0 | 1
+    status?: 0 | 1
     /** transferred tokens */
     tokens: Array<
         Token<ChainId, SchemaType> & {
@@ -1153,9 +1153,9 @@ export interface TokenState<ChainId, SchemaType> {
     blockedNonFungibleTokens?: Subscription<Array<NonFungibleToken<ChainId, SchemaType>>>
 
     /** Add a token */
-    addToken?: (token: Token<ChainId, SchemaType>) => Promise<void>
+    addToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
     /** Remove a token */
-    removeToken?: (token: Token<ChainId, SchemaType>) => Promise<void>
+    removeToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
     /** Unblock a token */
     trustToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
     /** Block a token */

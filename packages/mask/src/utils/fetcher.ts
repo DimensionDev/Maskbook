@@ -30,7 +30,11 @@ const extensionOrigin = (() => {
 
 function canAccessAsContent(url: string) {
     const target = new URL(url, location.href)
-    if (location.origin.endsWith('twitter.com') && target.origin === 'https://abs.twimg.com') return true
+    if (
+        location.origin.endsWith('twitter.com') &&
+        ['https://abs.twimg.com', 'https://upload.twitter.com'].includes(target.origin)
+    )
+        return true
     if (extensionOrigin === target.origin) return true
     return target.origin === location.origin
 }

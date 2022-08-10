@@ -1,4 +1,4 @@
-import { Typography, MenuItem, Link, Stack, useTheme } from '@mui/material'
+import { Typography, MenuItem, Link, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useMenuConfig } from '@masknet/shared'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
@@ -15,7 +15,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'inline-flex',
         alignItems: 'center',
         fontSize: 10,
-        color: theme.palette.maskColor.dark,
+        color: theme.palette.text.primary,
     },
 }))
 
@@ -34,9 +34,8 @@ export interface FootnoteMenuProps {
 
 export function FootnoteMenuUI(props: FootnoteMenuProps) {
     const { children, options, selectedIndex = -1, onChange } = props
-    const theme = useTheme()
 
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
     const onSelect = (option: FootnoteMenuOption) => {
         onChange?.(option)
     }
@@ -84,9 +83,7 @@ export function FootnoteMenuUI(props: FootnoteMenuProps) {
             <Link className={classes.link} color="inherit" underline="none" onClick={openMenu}>
                 <Typography className={classes.title} variant="subtitle2">
                     {options[selectedIndex]?.name}
-                    <ArrowDropDownIcon
-                        style={{ fontSize: 16, color: theme.palette.maskColor.dark, cursor: 'pointer' }}
-                    />
+                    <ArrowDropDownIcon style={{ fontSize: 16, cursor: 'pointer' }} />
                 </Typography>
                 {children}
             </Link>

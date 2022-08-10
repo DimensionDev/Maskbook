@@ -118,7 +118,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     const allPersonaSub = createSubscriptionFromAsync(
         () => {
-            console.log('DEBUG: currentPersonaIdentifier')
             return Services.Identity.queryOwnedPersonaInformation(true)
         },
         [],
@@ -153,6 +152,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                     },
                     getPersonaAvatar: Services.Identity.getPersonaAvatar,
                     ownProofChanged: MaskMessages.events.ownProofChanged,
+                    setMinimalMode: Services.Settings.setPluginMinimalModeEnabled,
                 }
             },
             Services.Settings.getPluginMinimalModeEnabled,

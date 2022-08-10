@@ -1,11 +1,5 @@
 import { unreachable } from '@dimensiondev/kit'
-import {
-    FilterTransactionType,
-    NetworkType,
-    FungibleAssetProvider,
-    getZerionConstants,
-    networkResolver,
-} from '@masknet/web3-shared-evm'
+import { FilterTransactionType, FungibleAssetProvider } from '@masknet/web3-shared-evm'
 
 export function resolvePortfolioDataProviderName(provider: FungibleAssetProvider) {
     switch (provider) {
@@ -27,12 +21,4 @@ export function resolveDebankTransactionType(category: string) {
         default:
             return FilterTransactionType.ALL
     }
-}
-
-export function resolveZerionAssetsScopeName(networkType: NetworkType) {
-    return getZerionConstants(networkResolver.networkChainId(networkType)).ASSETS_SCOPE_NAME ?? ''
-}
-
-export function resolveZerionTransactionsScopeName(networkType: NetworkType) {
-    return getZerionConstants(networkResolver.networkChainId(networkType)).TRANSACTIONS_SCOPE_NAME ?? ''
 }

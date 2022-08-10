@@ -234,7 +234,7 @@ export function useSingleContractMultipleData<T extends BaseContract, K extends 
     }, [contract?.options.address, names.join(), callDatas.flatMap((x) => x).join()])
     const [state, callback] = useMulticallCallback(chainId, blockNumber)
     const results = useMulticallStateDecoded(
-        Array.from({ length: calls.length }).fill(contract) as T[],
+        Array.from({ length: calls.length }, () => contract as T),
         names,
         state,
         chainId,

@@ -42,11 +42,3 @@ export function getTraderAllAPICachedFlag(): RequestCache {
     // cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
     return 'default'
 }
-
-export async function contentFetch(url: string, config?: RequestInit) {
-    const fetch =
-        process.env.engine === 'firefox' && process.env.manifest === '2' && typeof content === 'object'
-            ? content.fetch
-            : globalThis.fetch
-    return fetch(url, config)
-}
