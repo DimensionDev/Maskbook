@@ -5,7 +5,7 @@ import {
     PersonaInformation,
     ProfileIdentifier,
     ProfileInformation,
-} from '../../src'
+} from '../../src/index.js'
 import { describe, expect, test } from 'vitest'
 
 describe('Compare is same persons', () => {
