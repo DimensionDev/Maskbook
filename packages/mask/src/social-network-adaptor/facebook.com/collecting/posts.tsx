@@ -196,9 +196,7 @@ function getMetadataImages(node: DOMProxy): string[] {
               .replace(/["']/g, '')
               .split(',')
               .filter(Boolean)
-        : Array.from(imgNodes)
-              .map((node) => node.src)
-              .filter(Boolean)
+        : Array.from(imgNodes, (node) => node.src).filter(Boolean)
     if (!imgUrls.length) return []
     return imgUrls
 }

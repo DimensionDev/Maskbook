@@ -1,4 +1,5 @@
 import { Skeleton, Table, TableBody, TableCell, TableFooter, TableHead, TableRow } from '@mui/material'
+import { range } from 'lodash-unified'
 
 export function LoadingTable() {
     return (
@@ -11,15 +12,13 @@ export function LoadingTable() {
                 </TableRow>
             </TableHead>
             <TableBody>
-                {Array.from({ length: 5 })
-                    .fill(0)
-                    .map((_, i) => (
-                        <TableRow key={i}>
-                            <TableCell>
-                                <Skeleton animation="wave" variant="rectangular" width="100%" height={14} />
-                            </TableCell>
-                        </TableRow>
-                    ))}
+                {range(5).map((i) => (
+                    <TableRow key={i}>
+                        <TableCell>
+                            <Skeleton animation="wave" variant="rectangular" width="100%" height={14} />
+                        </TableCell>
+                    </TableRow>
+                ))}
             </TableBody>
             <TableFooter>
                 <TableRow>

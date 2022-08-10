@@ -58,7 +58,7 @@ export const postContentMessageParser = (node: HTMLElement) => {
             const points = matched[1].split('-').map((point) => Number.parseInt(point, 16))
             return makeTypedMessageText(String.fromCodePoint(...points))
         } else if (node.childNodes.length) {
-            const flattened = flattenDeep(Array.from(node.childNodes).map(make))
+            const flattened = flattenDeep(Array.from(node.childNodes, make))
             // conjunct text messages under same node
             if (flattened.every(isTypedMessageText))
                 return makeTypedMessageText((flattened as TypedMessageText[]).map((x) => x.content).join(''))
