@@ -1,8 +1,8 @@
-import { expect, test } from 'vitest'
-import { encodePayload, parsePayload, PayloadWellFormed, importAESFromJWK } from '../src/index.js'
+import { expect, test } from '@jest/globals'
+import { encodePayload, parsePayload, PayloadWellFormed, importAESFromJWK } from '@masknet/encryption'
 import { None, Some } from 'ts-results'
 import { ProfileIdentifier } from '@masknet/shared-base'
-import { queryTestPublicKey } from './keys.js'
+import { queryTestPublicKey } from './keys'
 
 test('Parse v38 encoded by old infra', async () => {
     const out = (await parsePayload(oldInfraOutput)).unwrap()

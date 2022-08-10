@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest'
+import { describe, test, expect } from '@jest/globals'
 import { formatMarketCap } from '../src/utils/marketCap'
 
 describe('Market Cap format util test', () => {
