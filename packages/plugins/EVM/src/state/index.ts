@@ -16,6 +16,7 @@ import type { EVM_Web3State } from './Connection/types'
 import { IdentityService } from './IdentityService'
 import { BalanceNotifier } from './BalanceNotifier'
 import { BlockNumberNotifier } from './BlockNumberNotifier'
+import { Storage } from './Storage'
 
 export function createWeb3State(context: Plugin.Shared.SharedUIContext): EVM_Web3State {
     const Provider_ = new Provider(context)
@@ -61,6 +62,7 @@ export function createWeb3State(context: Plugin.Shared.SharedUIContext): EVM_Web
         }),
         Wallet: new Wallet(context),
         Others: new Others(context),
+        Storage: new Storage(),
     }
 }
 

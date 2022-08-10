@@ -14,7 +14,7 @@ export class KVStorage extends Storage {
     }
 
     async get<T>(key: string) {
-        return this.getKV<T>().get(key)
+        return this.getKV<T>().get(key) as T
     }
 
     async set<T>(key: string, value: T) {

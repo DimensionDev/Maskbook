@@ -1,7 +1,13 @@
 import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Emitter } from '@servie/events'
-import type { EnhanceableSite, ExtensionSite, ProfileIdentifier, ECKeyIdentifier } from '@masknet/shared-base'
+import type {
+    EnhanceableSite,
+    ExtensionSite,
+    ProfileIdentifier,
+    ECKeyIdentifier,
+    NextIDStorageProofs,
+} from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type {
     ReturnChainResolver,
@@ -1070,8 +1076,8 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
 }
 
 export interface Storage {
-    has(key: string): Promise<boolean>
-    get<T>(key: string): Promise<T>
+    has?(key: string): Promise<boolean>
+    get<T>(key: string): Promise<T | Array<NextIDStorageProofs<T>> | undefined>
     set<T>(key: string, value: T): Promise<void>
     delete?(key: string): Promise<void>
     clearAll?(key: string): Promise<void>
@@ -1122,14 +1128,14 @@ export interface HubState<
 }
 
 export interface Web3StorageServiceState {
-    getStorage: (
+    createStorage: (
         providerType: StorageProviderType,
         options: {
             namespace: string
             personaIdentifier: ECKeyIdentifier
             address: string
         },
-    ) => Promise<Storage>
+    ) => Storage
 }
 
 export interface IdentityServiceState {

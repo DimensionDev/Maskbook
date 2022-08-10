@@ -1,17 +1,9 @@
 import type { Storage } from '@masknet/web3-shared-base'
-import { ECKeyIdentifier, fromHex, NextIDPlatform, toBase64 } from '@masknet/shared-base'
+import { ECKeyIdentifier, fromHex, NextIDPlatform, NextIDStorageInfo, toBase64 } from '@masknet/shared-base'
 import { NextIDStorage as NextIDStorageProvider } from '@masknet/web3-providers'
 import { SharedContextSettings } from '../../settings'
 
-type KV<T> = {
-    persona: string
-    proofs: {
-        platform: NextIDPlatform
-        identity: string
-        content?: Record<string, T>
-    }
-}
-class NextIDStorage extends Storage {
+export class NextIDStorage extends Storage {
     constructor(private namespace: string, private personaIdentifier: ECKeyIdentifier) {
         super()
     }
@@ -21,9 +13,9 @@ class NextIDStorage extends Storage {
     }
 
     async get<T>() {
-        const response = await NextIDStorageProvider.get<KV<T>>(this.publicKey)
+        const response = await NextIDStorageProvider.get<NextIDStorageInfo<T>>(this.publicKey)
         if (!response.ok) return
-        return response?.val
+        return response?.val.proofs
     }
 
     async set<T>(key: string, value: T) {
