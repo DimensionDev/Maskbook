@@ -6,8 +6,9 @@ import { RestoreFromLocal } from './RestoreFromLocal'
 import { RestoreFromMnemonic } from './RestoreFromMnemonic'
 import { RestoreFromCloud } from './RestoreFromCloud'
 import { RestoreFromPrivateKey } from './RestoreFromPrivateKey'
-import { PersonaLogoBox, RestoreBlueLogo, SignUpAccountLogo } from '../RegisterFrame/ColumnContentLayout'
+import { PersonaLogoBox } from '../RegisterFrame/ColumnContentLayout'
 import { TabContext, TabPanel } from '@mui/lab'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     tabs: {
@@ -33,7 +34,11 @@ export const Restore = memo(() => {
     return (
         <>
             <PersonaLogoBox>
-                {['mnemonic', 'privateKey'].includes(currentTab) ? <SignUpAccountLogo /> : <RestoreBlueLogo />}
+                {['mnemonic', 'privateKey'].includes(currentTab) ? (
+                    <Icons.SignUpAccount size={96} />
+                ) : (
+                    <Icons.LocalBackup size={96} />
+                )}
             </PersonaLogoBox>
             <TabContext value={currentTab}>
                 <ButtonGroupTabList
