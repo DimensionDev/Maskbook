@@ -1,4 +1,5 @@
 import { memo, useMemo } from 'react'
+import BigNumber from 'bignumber.js'
 import { Box, Button, TableCell, TableRow, Tooltip, Typography } from '@mui/material'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { FormattedCurrency, TokenIcon, WalletIcon } from '@masknet/shared'
@@ -21,7 +22,6 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { useDashboardI18N } from '../../../../locales'
 import { ChangeNetworkTip } from './ChangeNetworkTip'
 import { getTokenUSDValue } from '../../utils/getTokenUSDValue'
-import BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
