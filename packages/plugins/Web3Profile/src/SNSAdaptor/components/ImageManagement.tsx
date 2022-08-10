@@ -78,28 +78,18 @@ const getAddressesByStatus = (status: CURRENT_STATUS, accountList: AccountType) 
     if (status === CURRENT_STATUS.Donations_setting) addresses = accountList?.walletList?.donations
     if (status === CURRENT_STATUS.Footprints_setting) addresses = accountList?.walletList?.footprints
     addresses = accountList?.walletList?.NFTs
-    return (
-        addresses
-            // ?.sort((a, z) => {
-            //     if (!a?.updateTime || !z?.updateTime) return 0
-            //     if (Number(a.updateTime) > Number(z.updateTime)) return -1
-            //     return 0
-            // })
-            ?.sort((a, z) => {
-                const a_hasItems =
-                    a?.collections && a.collections.filter?.((collection) => !collection?.hidden)?.length > 0
-                const z_hasItems =
-                    z?.collections && z.collections.filter?.((collection) => !collection?.hidden)?.length > 0
-                if (a_hasItems && z_hasItems) {
-                    if (!a?.updateTime || !z?.updateTime) return 0
-                    if (Number(a.updateTime) > Number(z.updateTime)) return -1
-                }
-                if (z_hasItems) return 1
-                if (a_hasItems) return -1
+    return addresses?.sort((a, z) => {
+        const a_hasItems = a?.collections && a.collections.filter?.((collection) => !collection?.hidden)?.length > 0
+        const z_hasItems = z?.collections && z.collections.filter?.((collection) => !collection?.hidden)?.length > 0
+        if (a_hasItems && z_hasItems) {
+            if (!a?.updateTime || !z?.updateTime) return 0
+            if (Number(a.updateTime) > Number(z.updateTime)) return -1
+        }
+        if (z_hasItems) return 1
+        if (a_hasItems) return -1
 
-                return 0
-            })
-    )
+        return 0
+    })
 }
 export function ImageManagement(props: ImageManagementProps) {
     const t = useI18N()
