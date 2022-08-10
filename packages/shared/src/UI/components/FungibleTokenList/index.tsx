@@ -152,7 +152,13 @@ export const FungibleTokenList = forwardRef(
             return filteredFungibleTokens
                 .filter((x) => (mode === TokenListMode.List ? !isBlockedToken(x) : true))
                 .sort((a, z) => {
-                    if (mode === TokenListMode.Manage) return 0
+                    if (mode === TokenListMode.Manage) {
+                        // trusted token
+                        if (isTrustedToken(a.address)) return -1
+                        if (isTrustedToken(z.address)) return 1
+
+                        return 0
+                    }
                     const aBalance = toZero(formatBalance(fungibleTokensBalance[a.address] ?? '0', a.decimals))
                     const zBalance = toZero(formatBalance(fungibleTokensBalance[z.address] ?? '0', z.decimals))
 
