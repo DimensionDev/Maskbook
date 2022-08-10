@@ -81,13 +81,13 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-function handler(html: HTMLElement) {
+function handler(this: HTMLElement, ev: MouseEvent) {
     MaskMessages.events.profileTabUpdated.sendToLocal({ show: false })
     MaskMessages.events.profileTabActive.sendToLocal({ active: false })
 
     resetTwitterActivatedContent()
 
-    if (html.closest('#open-nft-button')) {
+    if (this.closest('#open-nft-button')) {
         const nameTag = searchNameTag().evaluate()
         if (nameTag) nameTag.style.display = ''
 
@@ -115,7 +115,7 @@ async function hideTwitterActivatedContent() {
         _v.style.color = style.color
         const line = v.querySelector('div > div') as HTMLDivElement
         line.style.display = 'none'
-        v.addEventListener('click', handler.bind(v, v))
+        v.addEventListener('click', handler)
     })
 
     if (loseConnectionEle) return
@@ -148,7 +148,7 @@ function resetTwitterActivatedContent() {
         _v.style.color = ''
         const line = v.querySelector('div > div') as HTMLDivElement
         line.style.display = ''
-        v.removeEventListener('click', handler.bind(v, v))
+        v.removeEventListener('click', handler)
     })
 
     if (loseConnectionEle) return
