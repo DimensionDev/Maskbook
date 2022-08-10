@@ -256,6 +256,16 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         })
     }, [currentVisitingUserId])
 
+    useEffect(() => {
+        const listener = () => setAnchorEl(null)
+
+        window.addEventListener('scroll', listener, false)
+
+        return () => {
+            window.removeEventListener('scroll', listener, false)
+        }
+    }, [])
+
     const onOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget)
     const onSelect = (option: SocialAddress<NetworkPluginID>) => {
         setSelectedAddress(option)
