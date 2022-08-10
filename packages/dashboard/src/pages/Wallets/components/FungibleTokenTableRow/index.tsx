@@ -8,11 +8,20 @@ import {
     useCurrentWeb3NetworkPluginID,
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
-import { CurrencyType, formatBalance, formatCurrency, FungibleAsset, NetworkPluginID } from '@masknet/web3-shared-base'
+import {
+    CurrencyType,
+    formatBalance,
+    formatCurrency,
+    FungibleAsset,
+    NetworkPluginID,
+    pow10,
+    toFixed,
+} from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useDashboardI18N } from '../../../../locales'
 import { ChangeNetworkTip } from './ChangeNetworkTip'
 import { getTokenUSDValue } from '../../utils/getTokenUSDValue'
+import BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -102,7 +111,11 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                 </Box>
             </TableCell>
             <TableCell className={classes.cell} align="center" variant="body">
-                <Typography>{formatBalance(asset.balance, asset.decimals)}</Typography>
+                <Typography>
+                    {new BigNumber(formatBalance(asset.balance, asset.decimals)).gt(pow10(-6))
+                        ? Number.parseFloat(toFixed(formatBalance(asset.balance, asset.decimals) ?? '', 6))
+                        : '<0.000001'}
+                </Typography>
             </TableCell>
             <TableCell className={classes.cell} align="center" variant="body">
                 <Typography>

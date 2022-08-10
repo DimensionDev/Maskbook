@@ -1,10 +1,9 @@
 import BigNumber from 'bignumber.js'
-import { pow10, toFixed } from './number'
+import { pow10 } from './number'
 
-export function formatBalance(rawValue: BigNumber.Value = '0', decimals = 0, significant = decimals, fixed = 6) {
+export function formatBalance(rawValue: BigNumber.Value = '0', decimals = 0, significant = decimals) {
     let balance = new BigNumber(rawValue)
     if (balance.isNaN()) return '0'
-    if (balance.isLessThan(pow10(-fixed))) return `<${pow10(-fixed)}`
 
     const negative = balance.isNegative() // balance < 0n
     const base = pow10(decimals) // 10n ** decimals
@@ -26,6 +25,5 @@ export function formatBalance(rawValue: BigNumber.Value = '0', decimals = 0, sig
     const value = `${whole}${fraction === '' ? '' : `.${fraction}`}`
 
     const raw = negative ? `-${value}` : value
-    const res = raw.includes('.') ? raw.replace(/0+$/, '').replace(/\.$/, '') : raw
-    return Number.parseFloat(toFixed(res, fixed))
+    return raw.includes('.') ? raw.replace(/0+$/, '').replace(/\.$/, '') : raw
 }
