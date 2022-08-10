@@ -44,8 +44,8 @@ const useStyles = makeStyles()((theme) => {
             background: theme.palette.maskColor.bottom,
         },
         items: {
-            height: 196,
-            maxHeight: 196,
+            height: 214,
+            maxHeight: 214,
             overflow: 'auto',
             scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
@@ -242,7 +242,7 @@ interface ActionContentProps {
 function ActionContent({ buttonText, hint, onClick }: ActionContentProps) {
     if (!buttonText || !hint) return null
     return (
-        <Stack gap={3} mt={1.5}>
+        <Stack gap={1.5} mt={1.5}>
             <Typography color={(t) => t.palette.maskColor.main} fontSize={14} lineHeight="18px" height={36}>
                 {hint}
             </Typography>
