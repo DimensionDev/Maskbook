@@ -1,6 +1,6 @@
 import { first, last } from 'lodash-unified'
-import type { TransactionContext } from '@masknet/web3-shared-base'
-import type { ChainId, TransactionParameter } from '@masknet/web3-shared-evm'
+import { TransactionContext, isSameAddress } from '@masknet/web3-shared-base'
+import { ChainId, TransactionParameter, getTraderConstants } from '@masknet/web3-shared-evm'
 import type { TransactionDescriptor } from '../types'
 import { Web3StateSettings } from '../../../settings'
 import { getTokenAmountDescription } from '../utils'
@@ -8,6 +8,7 @@ import { getTokenAmountDescription } from '../utils'
 export class SwapDescriptor implements TransactionDescriptor {
     async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
         const context = context_ as TransactionContext<ChainId, string | undefined>
+        const { DODO_ETH_ADDRESS } = getTraderConstants(context.chainId)
         if (!context.methods?.find((x) => x.name)) return
 
         const connection = await Web3StateSettings.value.Connection?.getConnection?.({
@@ -70,6 +71,25 @@ export class SwapDescriptor implements TransactionDescriptor {
                     }.`,
                     successfulDescription: `Swap ${getTokenAmountDescription(
                         parameters!.amountIn,
+                        tokenIn,
+                    )} for ${getTokenAmountDescription(parameters!.amountOut, tokenOut)} successfully.`,
+                    failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                }
+            }
+
+            if (method.name === 'mixSwap') {
+                const tokenIn = isSameAddress(parameters!.fromToken, DODO_ETH_ADDRESS)
+                    ? nativeToken
+                    : await connection?.getFungibleToken(parameters!.fromToken ?? '')
+                const tokenOut = await connection?.getFungibleToken(parameters!.toToken ?? '')
+                return {
+                    chainId: context.chainId,
+                    title: 'Swap Token',
+                    description: `Swap ${getTokenAmountDescription(parameters!.fromTokenAmount, tokenIn)} for ${
+                        tokenOut?.symbol ?? ''
+                    }.`,
+                    successfulDescription: `Swap ${getTokenAmountDescription(
+                        parameters!.minReturnAmount,
                         tokenIn,
                     )} for ${getTokenAmountDescription(parameters!.amountOut, tokenOut)} successfully.`,
                     failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,

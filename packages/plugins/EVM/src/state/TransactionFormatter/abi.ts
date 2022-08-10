@@ -13,6 +13,7 @@ import ERC721 from '@masknet/web3-contracts/abis/ERC721.json'
 import RouterV2ABI from '@masknet/web3-contracts/abis/RouterV2.json'
 import SwapRouter from '@masknet/web3-contracts/abis/SwapRouter.json'
 import MaskBox from '@masknet/web3-contracts/abis/MaskBox.json'
+import SwapDODORouter from '@masknet/web3-contracts/abis/DODORouteProxy.json'
 
 class ABI {
     private coder = ABICoder as unknown as ABICoder.AbiCoder
@@ -28,6 +29,7 @@ class ABI {
         this.construct(ERC20 as AbiItem[])
         this.construct(RouterV2ABI as AbiItem[]) // uniswap V2 like
         this.construct(SwapRouter as AbiItem[]) // uniswap V3 like
+        this.construct(SwapDODORouter as AbiItem[]) // dodo swap
     }
 
     read(signature?: string) {
