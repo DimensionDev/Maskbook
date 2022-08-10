@@ -276,7 +276,7 @@ export const FungibleTokenList = forwardRef(
                     disableSearch={!!props.disableSearch}
                     itemRender={getFungibleTokenItem<T>(
                         (address) => {
-                            if (isSameAddress(nativeToken?.address, address)) return 'official'
+                            if (isSameAddress(nativeToken?.address, address)) return 'official-native'
 
                             const inOfficialList = fungibleTokens.some((x) => isSameAddress(x.address, address))
                             if (inOfficialList) return 'official'

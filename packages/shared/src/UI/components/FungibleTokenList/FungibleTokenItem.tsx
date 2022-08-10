@@ -86,7 +86,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export const getFungibleTokenItem =
     <T extends NetworkPluginID>(
-        getSource: (address: string) => 'personal' | 'official' | 'external',
+        getSource: (address: string) => 'personal' | 'official' | 'external' | 'official-native',
         getBalance: (address: string) => string,
         isSelected: (address: string) => boolean,
         isLoading: (address: string) => boolean,
@@ -197,7 +197,10 @@ export const getFungibleTokenItem =
                 button
                 className={`${classes.list} dashboard token-list`}
                 onClick={handleTokenSelect}
-                disabled={selected && mode === TokenListMode.List}>
+                disabled={
+                    (selected && mode === TokenListMode.List) ||
+                    (source === 'official-native' && mode === TokenListMode.Manage)
+                }>
                 <ListItemIcon>
                     <TokenIcon
                         classes={{ icon: classes.icon }}
