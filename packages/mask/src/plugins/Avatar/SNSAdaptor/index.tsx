@@ -25,15 +25,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 RenderEntryComponent(EntryComponentProps) {
                     const [open, setOpen] = useState(false)
                     const clickHandler = () => setOpen(true)
-                    useEffect(
-                        () => () => {
-                            CrossIsolationMessages.events.requestOpenApplication.on(({ open, application }) => {
-                                if (application !== PluginId.Avatar) return
-                                setOpen(open)
-                            })
-                        },
-                        [],
-                    )
+                    useEffect(() => {
+                        return CrossIsolationMessages.events.requestOpenApplication.on(({ open, application }) => {
+                            if (application !== PluginId.Avatar) return
+                            setOpen(open)
+                        })
+                    }, [])
                     return (
                         <>
                             <ApplicationEntry

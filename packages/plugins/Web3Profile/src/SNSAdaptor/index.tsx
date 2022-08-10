@@ -27,15 +27,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
             return {
                 RenderEntryComponent(EntryComponentProps) {
-                    useEffect(
-                        () => () => {
-                            CrossIsolationMessages.events.requestOpenApplication.on(({ open, application }) => {
-                                if (application !== PluginId.Web3Profile) return
-                                CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToAll({ open })
-                            })
-                        },
-                        [],
-                    )
+                    useEffect(() => {
+                        return CrossIsolationMessages.events.requestOpenApplication.on(({ open, application }) => {
+                            if (application !== PluginId.Web3Profile) return
+                            CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToAll({ open })
+                        })
+                    }, [])
+
                     return (
                         <>
                             <ApplicationEntry
