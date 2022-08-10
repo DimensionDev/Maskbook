@@ -1,7 +1,7 @@
 import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Emitter } from '@servie/events'
-import type { EnhanceableSite, ExtensionSite, ProfileIdentifier } from '@masknet/shared-base'
+import type { EnhanceableSite, ExtensionSite, NextIDPersonaBindings, ProfileIdentifier } from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type {
     ReturnChainResolver,
@@ -134,6 +134,8 @@ export interface SocialIdentity {
     publicKey?: string
     /** Is own user account identity */
     isOwner?: boolean
+    /** persona of the social account **/
+    binding?: NextIDPersonaBindings
 }
 
 export interface SocialAddress<PluginID> {
