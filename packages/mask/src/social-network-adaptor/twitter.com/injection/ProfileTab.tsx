@@ -115,7 +115,7 @@ async function hideTwitterActivatedContent() {
         _v.style.color = style.color
         const line = v.querySelector('div > div') as HTMLDivElement
         line.style.display = 'none'
-        v.addEventListener('click', () => handler(v))
+        v.addEventListener('click', handler.bind(v, v))
     })
 
     if (loseConnectionEle) return
@@ -148,7 +148,7 @@ function resetTwitterActivatedContent() {
         _v.style.color = ''
         const line = v.querySelector('div > div') as HTMLDivElement
         line.style.display = ''
-        v.removeEventListener('click', () => handler(v))
+        v.removeEventListener('click', handler.bind(v, v))
     })
 
     if (loseConnectionEle) return
