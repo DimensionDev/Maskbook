@@ -5,7 +5,6 @@ import { useCallback, useState } from 'react'
 import { useSubscription } from 'use-subscription'
 import { CloseIcon } from '../assets/close'
 import { context } from '../context'
-import { usePersonas } from '../hooks/usePersonas'
 import { useI18N } from '../locales'
 import { PersonaItem } from './PersonaItem'
 import { InfoIcon } from '../assets/info'
@@ -13,6 +12,7 @@ import { usePersonasFromDB } from '../../../components/DataSource/usePersonasFro
 import type { AllChainsNonFungibleToken } from '../types'
 import { PersonaAction } from '@masknet/shared'
 import { useAsyncRetry } from 'react-use'
+import { useNextIDPersonaAndWalletsByUserId } from '../hooks/useNextIDPersonaAndWalletsByUserId'
 
 const useStyles = makeStyles()((theme) => ({
     messageBox: {
@@ -38,7 +38,7 @@ export function PersonaPage(props: PersonaPageProps) {
     const [visible, setVisible] = useState(true)
     const currentIdentity = useSubscription(context.lastRecognizedProfile)
     const { classes } = useStyles()
-    const { loading, value: persona } = usePersonas()
+    const { loading, value: persona } = useNextIDPersonaAndWalletsByUserId()
 
     const myPersonas = usePersonasFromDB()
     const _persona = useSubscription(context.currentPersona)

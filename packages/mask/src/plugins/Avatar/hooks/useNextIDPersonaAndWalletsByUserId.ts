@@ -1,13 +1,13 @@
-import { NextIDPlatform } from '@masknet/shared-base'
+import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useAsyncRetry } from 'react-use'
 import { useSubscription } from 'use-subscription'
-import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
+import { useCurrentPersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { context } from '../context'
 
-export function usePersonas(userId?: string) {
-    const personaConnectStatus = usePersonaConnectStatus()
+export function useNextIDPersonaAndWalletsByUserId(userId?: string) {
+    const personaConnectStatus = useCurrentPersonaConnectStatus()
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
     const identifier = useSubscription(context.lastRecognizedProfile)
     const currentIdentifier = useSubscription(context.currentVisitingProfile)
@@ -24,7 +24,8 @@ export function usePersonas(userId?: string) {
               identifier.identifier &&
               currentIdentifier?.identifier.toText() === identifier.identifier.toText()
 
-        const wallets = personaBindings?.proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum) ?? []
+        const wallets =
+            personaBindings?.proofs.filter((proof) => proof.platform === NextIDPlatform.Ethereum) ?? EMPTY_LIST
         return { wallets, isOwner, binds: personaBindings, status: personaConnectStatus }
     }, [currentIdentifier, identifier, personaConnectStatus.hasPersona, platform, userId])
 }

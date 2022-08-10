@@ -3,9 +3,9 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useWeb3Hub } from '@masknet/plugin-infra/web3'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { usePersonas } from './usePersonas'
 import { PluginNFTAvatarRPC } from '../messages'
 import type { EnhanceableSite } from '@masknet/shared-base'
+import { useNextIDPersonaAndWalletsByUserId } from './useNextIDPersonaAndWalletsByUserId'
 
 export function useTokenOwner(
     address: string,
@@ -31,7 +31,7 @@ export function useTokenOwner(
 }
 
 export function useCheckTokenOwner(pluginId: NetworkPluginID, userId: string, owner: string) {
-    const { value: persona, loading } = usePersonas(userId)
+    const { value: persona, loading } = useNextIDPersonaAndWalletsByUserId(userId)
     const { value: storage, loading: loadingAddress } = useAsyncRetry(
         async () =>
             PluginNFTAvatarRPC.getAddress(activatedSocialNetworkUI.networkIdentifier as EnhanceableSite, userId),
