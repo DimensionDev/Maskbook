@@ -4,7 +4,6 @@ import { Typography } from '@mui/material'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useCurrentWeb3NetworkPluginID, useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { formatPersonaPublicKey } from '@masknet/shared-base'
 import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { useI18N } from '../../utils'
@@ -12,12 +11,14 @@ import { Application, getUnlistedApp } from './ApplicationSettingPluginList'
 import { ApplicationRecommendArea } from './ApplicationRecommendArea'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useNextIDConnectStatus, verifyPersona } from '../DataSource/useNextIDConnectStatus'
-import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
+import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext'
 import { MaskMessages } from '../../../shared'
 import { useTimeout } from 'react-use'
+import { DashboardRoutes } from '@masknet/shared-base'
+import { PluginNextIDMessages } from '../../plugins/NextID/messages'
 
 const useStyles = makeStyles<{ shouldScroll: boolean; isCarouselReady: boolean }>()((theme, props) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -211,9 +212,11 @@ function RenderEntryComponent({ application }: { application: Application }) {
     const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
-    const { closeDialog: closeApplicationBoard } = useRemoteControlledDialog(
-        WalletMessages.events.ApplicationDialogUpdated,
-    )
+
+    const { setDialog: setPersonaListDialog } = useRemoteControlledDialog(PluginNextIDMessages.PersonaListDialogUpdated)
+
+    const { setDialog: setCreatePersonaConfirmDialog } = useRemoteControlledDialog(MaskMessages.events.openPageConfirm)
+
     const ApplicationEntryStatus = useContext(ApplicationEntryStatusContext)
 
     // #region entry disabled
@@ -221,11 +224,7 @@ function RenderEntryComponent({ application }: { application: Application }) {
         if (!application.enabled) return true
 
         if (application.entry.nextIdRequired) {
-            return Boolean(
-                ApplicationEntryStatus.isLoading ||
-                    ApplicationEntryStatus.isNextIDVerify === undefined ||
-                    (!ApplicationEntryStatus.isSNSConnectToCurrentPersona && ApplicationEntryStatus.isPersonaConnected),
-            )
+            return Boolean(ApplicationEntryStatus.isLoading || ApplicationEntryStatus.isNextIDVerify === undefined)
         } else {
             return false
         }
@@ -233,14 +232,19 @@ function RenderEntryComponent({ application }: { application: Application }) {
     // #endregion
 
     // #region entry click effect
-    const createOrConnectPersona = useCallback(() => {
-        closeApplicationBoard()
-        ApplicationEntryStatus.personaConnectAction?.()
+    const createPersona = useCallback(() => {
+        setCreatePersonaConfirmDialog({
+            open: true,
+            target: 'dashboard',
+            url: DashboardRoutes.Setup,
+            text: t('applications_create_persona_hint'),
+            title: t('applications_create_persona_title'),
+            actionHint: t('applications_create_persona_action'),
+        })
     }, [ApplicationEntryStatus])
 
     const verifyPersona = useCallback(() => {
-        closeApplicationBoard()
-        ApplicationEntryStatus.personaNextIDReset?.()
+        setPersonaListDialog({ open: true })
     }, [])
 
     const clickHandler = useMemo(() => {
@@ -249,11 +253,10 @@ function RenderEntryComponent({ application }: { application: Application }) {
                 setSelectProviderDialog({ open: true, walletConnectedCallback })
         }
         if (!application.entry.nextIdRequired) return
-        if (ApplicationEntryStatus.isPersonaConnected === false || ApplicationEntryStatus.isPersonaCreated === false)
-            return createOrConnectPersona
+        if (ApplicationEntryStatus.isPersonaCreated === false) return createPersona
         if (ApplicationEntryStatus.shouldVerifyNextId) return verifyPersona
         return
-    }, [setSelectProviderDialog, createOrConnectPersona, ApplicationEntryStatus, verifyPersona, application])
+    }, [setSelectProviderDialog, createPersona, ApplicationEntryStatus, verifyPersona, application])
 
     // #endregion
 
@@ -268,17 +271,6 @@ function RenderEntryComponent({ application }: { application: Application }) {
         if (ApplicationEntryStatus.isPersonaConnected === false && !disabled)
             return t('application_tooltip_hint_connect_persona')
         if (ApplicationEntryStatus.shouldVerifyNextId && !disabled) return t('application_tooltip_hint_verify')
-        if (ApplicationEntryStatus.shouldDisplayTooltipHint)
-            return t('application_tooltip_hint_sns_persona_unmatched', {
-                currentPersonaPublicKey: formatPersonaPublicKey(
-                    ApplicationEntryStatus.currentPersonaPublicKey ?? '',
-                    4,
-                ),
-                currentSNSConnectedPersonaPublicKey: formatPersonaPublicKey(
-                    ApplicationEntryStatus.currentSNSConnectedPersonaPublicKey ?? '',
-                    4,
-                ),
-            })
         return
     })()
     // #endregion
@@ -315,7 +307,7 @@ const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContex
 })
 
 function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
-    const personaConnectStatus = usePersonaConnectStatus()
+    const personaConnectStatus = useCurrentPersonaConnectStatus()
     const nextIDConnectStatus = useNextIDConnectStatus(true)
 
     const {

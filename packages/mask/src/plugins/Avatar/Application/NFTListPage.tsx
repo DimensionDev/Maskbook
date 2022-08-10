@@ -22,7 +22,7 @@ const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, pro
         color: '#1D9BF0',
     },
     list: {
-        gridGap: 13,
+        gridGap: '12px 17px',
         display: 'grid',
         gridTemplateColumns: 'repeat(5, 1fr)',
         padding: '8px 16px 50px',

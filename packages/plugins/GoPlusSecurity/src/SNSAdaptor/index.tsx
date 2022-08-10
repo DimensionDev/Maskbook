@@ -1,15 +1,29 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { base } from '../base'
-import { CheckSecurityDialog } from './CheckSecurityDialog'
-import { useState } from 'react'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { Trans } from 'react-i18next'
+import { setupContext } from './context'
+import CheckSecurityConfirmDialog from './components/CheckSecurityConfirmDialog'
+import { CrossIsolationMessages } from '@masknet/shared-base'
+import { CheckSecurityDialog } from './CheckSecurityDialog'
+import { RiskWarningDialog } from './components/RiskWarningDialog'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal) {},
+    init(signal, context) {
+        setupContext(context)
+    },
+    GlobalInjection: function Component() {
+        return (
+            <>
+                <CheckSecurityConfirmDialog />
+                <CheckSecurityDialog />
+                <RiskWarningDialog />
+            </>
+        )
+    },
     ApplicationEntries: [
         (() => {
             const icon = <Icons.SecurityChecker size={36} />
@@ -18,17 +32,18 @@ const sns: Plugin.SNSAdaptor.Definition = {
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent({ disabled }) {
-                    const [open, setOpen] = useState(false)
                     return (
-                        <>
-                            <ApplicationEntry
-                                title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
-                                disabled={disabled}
-                                icon={icon}
-                                onClick={() => setOpen(true)}
-                            />
-                            {open && <CheckSecurityDialog open={open} onClose={() => setOpen(false)} />}
-                        </>
+                        <ApplicationEntry
+                            title={<PluginI18NFieldRender field={name} pluginID={base.ID} />}
+                            disabled={disabled}
+                            icon={icon}
+                            onClick={() =>
+                                CrossIsolationMessages.events.requestCheckSecurityDialog.sendToAll({
+                                    open: true,
+                                    searchHidden: false,
+                                })
+                            }
+                        />
                     )
                 },
                 name,

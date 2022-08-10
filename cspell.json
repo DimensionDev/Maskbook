@@ -264,7 +264,6 @@
         "zubin"
     ],
     "ignoreWords": [
-        "multipass",
         "aicanft",
         "algr",
         "anft",
@@ -319,6 +318,7 @@
         "metadate",
         "metaplex",
         "metaswap",
+        "multipass",
         "nftred",
         "nftx",
         "nonfungiblefriends",
@@ -364,6 +364,7 @@
         "vitalik",
         "walletlink",
         "wnative",
+        "xdescribe",
         "xsushi",
         "xyumi",
         "yumi",

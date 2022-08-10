@@ -7,11 +7,16 @@ export function useSearchedKeyword() {
     useEffect(() => {
         const onLocationChange = () => {
             if (!activatedSocialNetworkUI?.collecting?.getSearchedKeyword) return
-            setKeyword(activatedSocialNetworkUI.collecting.getSearchedKeyword())
+            const kw = activatedSocialNetworkUI.collecting.getSearchedKeyword()
+            setKeyword(kw)
         }
         onLocationChange()
         window.addEventListener('locationchange', onLocationChange)
-        return () => window.removeEventListener('locationchange', onLocationChange)
+        window.addEventListener('replacestate', onLocationChange)
+        return () => {
+            window.removeEventListener('locationchange', onLocationChange)
+            window.removeEventListener('replacestate', onLocationChange)
+        }
     }, [])
     return keyword
 }

@@ -1,12 +1,14 @@
 import { Icons } from '@masknet/icons'
-import { InjectedDialog, TokenSecurity, useSnackbarCallback } from '@masknet/shared'
+import { InjectedDialog, useSnackbarCallback } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { explorerResolver, formatEthereumAddress, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-
+import { ChainId, explorerResolver, formatEthereumAddress, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Button, DialogActions, DialogContent, Link, Stack, Typography } from '@mui/material'
+import { useCallback, useState } from 'react'
 import { Copy, ExternalLink } from 'react-feather'
 import { useCopyToClipboard } from 'react-use'
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../locales'
+import { PluginGoPlusSecurityMessages } from '../../messages'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -54,29 +56,46 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface RiskWarningDialogProps {
-    open: boolean
-    onConfirm: () => void
-    onClose?: () => void
-    tokenInfo: TokenSecurity
+interface Token {
+    contract: string
+    name: string
+    chainId: ChainId
 }
 
-export function RiskWarningDialog(props: RiskWarningDialogProps) {
-    const { t } = useI18N()
-    const { open, onConfirm, onClose, tokenInfo } = props
+export function RiskWarningDialog() {
+    const t = useI18N()
     const { classes } = useStyles()
+    const [token, setToken] = useState<Token>()
+
+    const { open, setDialog: setRiskWarningDialog } = useRemoteControlledDialog(
+        PluginGoPlusSecurityMessages.tokenRiskWarningDialogEvent,
+        (env) => {
+            if (!env.open) return
+            setToken(env.token)
+        },
+    )
+
     const [, copyToClipboard] = useCopyToClipboard()
     const onCopy = useSnackbarCallback(
         async (ev: React.MouseEvent<HTMLAnchorElement>) => {
             ev.stopPropagation()
-            copyToClipboard(tokenInfo?.contract ?? '')
+            copyToClipboard(token?.contract ?? '')
         },
         [],
         undefined,
         undefined,
         undefined,
-        t('copy_success_of_token_addr'),
+        t.copy_success_of_token_addr(),
     )
+
+    const onClose = useCallback(async () => {
+        setRiskWarningDialog({ open: false, swap: false })
+    }, [setRiskWarningDialog])
+
+    const onConfirm = useCallback(async () => {
+        setRiskWarningDialog({ open: false, swap: true })
+    }, [setRiskWarningDialog])
+
     return (
         <InjectedDialog
             open={open}
@@ -84,31 +103,27 @@ export function RiskWarningDialog(props: RiskWarningDialogProps) {
             classes={{ dialogContent: classes.content }}
             maxWidth="xs"
             fullWidth
-            title={t('plugin_trader_swap_risk')}>
+            title={t.swap_risk()}>
             <DialogContent className={classes.content}>
                 <Stack alignItems="center">
                     <Icons.SecurityRisk size={68} />
-                    <Typography className={classes.warningTitle}>{t('plugin_trader_risk_warning_short')}</Typography>
+                    <Typography className={classes.warningTitle}>{t.risk_warning_short()}</Typography>
                 </Stack>
                 <Stack marginTop="51px">
-                    <Typography color={(theme) => theme.palette.maskColor.danger}>
-                        {t('plugin_trader_dear_user')}
-                    </Typography>
+                    <Typography color={(theme) => theme.palette.maskColor.danger}>{t.dear_user()}</Typography>
                     <Typography color={(theme) => theme.palette.maskColor.danger} marginTop="16px">
-                        {t('plugin_trader_user_warning')}
+                        {t.user_warning()}
                     </Typography>
                 </Stack>
                 <Stack className={classes.tokenInfo}>
-                    <Typography>{tokenInfo?.token_name ?? '--'}</Typography>
+                    <Typography>{token?.name ?? '--'}</Typography>
                     <Stack direction="row">
-                        <Typography>
-                            {tokenInfo.contract ? formatEthereumAddress(tokenInfo?.contract, 4) : '--'}
-                        </Typography>
+                        <Typography>{token?.contract ? formatEthereumAddress(token?.contract, 4) : '--'}</Typography>
                         <Link
                             className={classes.link}
                             underline="none"
                             component="button"
-                            title={t('wallet_status_button_copy_address')}
+                            title={t.wallet_status_button_copy_address()}
                             onClick={onCopy}>
                             <Copy size={14} />
                         </Link>
@@ -116,12 +131,12 @@ export function RiskWarningDialog(props: RiskWarningDialogProps) {
                             className={classes.link}
                             href={
                                 explorerResolver.fungibleTokenLink?.(
-                                    tokenInfo?.chainId ?? 1,
-                                    tokenInfo?.contract ?? ZERO_ADDRESS,
+                                    token?.chainId ?? ChainId.Mainnet,
+                                    token?.contract ?? ZERO_ADDRESS,
                                 ) ?? ''
                             }
                             target="_blank"
-                            title={t('plugin_wallet_view_on_explorer')}
+                            title={t.view_on_explorer()}
                             rel="noopener noreferrer">
                             <ExternalLink size={14} />
                         </Link>
@@ -130,10 +145,10 @@ export function RiskWarningDialog(props: RiskWarningDialogProps) {
             </DialogContent>
             <DialogActions className={classes.actions}>
                 <Button sx={{ width: '48%' }} onClick={onClose}>
-                    {t('cancel')}
+                    {t.cancel()}
                 </Button>
                 <Button className={classes.warningButton} onClick={onConfirm}>
-                    {t('plugin_trader_make_risk_trade')}
+                    {t.make_risk_trade()}
                 </Button>
             </DialogActions>
         </InjectedDialog>
