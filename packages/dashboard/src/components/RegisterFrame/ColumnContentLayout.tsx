@@ -32,6 +32,9 @@ export const Footer = styled('footer')(({ theme }) => ({
 
 export const LogoBoxStyled = styled(Box)(({ theme }) => ({
     marginBottom: theme.spacing(10),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
     [theme.breakpoints.down('md')]: {
         marginBottom: theme.spacing(2),
     },
@@ -41,11 +44,6 @@ export const SignUpAccountLogo = styled(Icons.SignUpAccount)(({ theme }) => ({
     width: '100%',
     height: '96px',
 })) as any as typeof Icons.SignUpAccount
-
-export const RestoreBlueLogo = styled(Icons.RestoreBlue)(({ theme }) => ({
-    width: '100%',
-    height: '96px',
-})) as any as typeof Icons.RestoreBlue
 
 interface PersonaLogoBoxProps {}
 

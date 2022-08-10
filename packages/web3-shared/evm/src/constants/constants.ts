@@ -3,7 +3,6 @@ import Ethereum from '@masknet/web3-constants/evm/ethereum.json'
 import DeBank from '@masknet/web3-constants/evm/debank.json'
 import CoinGecko from '@masknet/web3-constants/evm/coingecko.json'
 import CoinMarketCap from '@masknet/web3-constants/evm/coinmarketcap.json'
-import Zerion from '@masknet/web3-constants/evm/zerion.json'
 import Gitcoin from '@masknet/web3-constants/evm/gitcoin.json'
 import OpenOcean from '@masknet/web3-constants/evm/openocean.json'
 import ITO from '@masknet/web3-constants/evm/ito.json'
@@ -72,11 +71,6 @@ export const getCoinMarketCapConstant = transform(ChainId, CoinMarketCap)
 export const getCoinMarketCapConstants = transformAll(ChainId, CoinMarketCap)
 export const useCoinMarketCapConstant = transformHook(getCoinMarketCapConstants)
 export const useCoinMarketCapConstants = transformAllHook(getCoinMarketCapConstants)
-
-export const getZerionConstant = transform(ChainId, Zerion)
-export const getZerionConstants = transformAll(ChainId, Zerion)
-export const useZerionConstant = transformHook(getZerionConstants)
-export const useZerionConstants = transformAllHook(getZerionConstants)
 
 export const getGitcoinConstant = transform(ChainId, Gitcoin)
 export const getGitcoinConstants = transformAll(ChainId, Gitcoin)

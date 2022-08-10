@@ -10,7 +10,6 @@ import {
 import {
     CurrencyType,
     FungibleAsset,
-    isGreaterThanOrEqualTo,
     multipliedBy,
     rightShift,
     toFixed,
@@ -24,12 +23,7 @@ export function formatAssets(data: WalletTokenRecord[]): Array<FungibleAsset<Cha
     const supportedChains = Object.values({ ...DeBank.CHAIN_ID, BSC: 'bnb' }).filter(Boolean)
 
     return data
-        .filter(
-            (x) =>
-                x.is_verified &&
-                chainResolver.chainId(x.chain) &&
-                isGreaterThanOrEqualTo(multipliedBy(x.price ?? 0, x.amount), 1),
-        )
+        .filter((x) => chainResolver.chainId(x.chain))
         .map((x) => {
             const chainId = chainResolver.chainId(x.chain)!
             const address = supportedChains.includes(x.id) ? createNativeToken(chainId).address : x.id
