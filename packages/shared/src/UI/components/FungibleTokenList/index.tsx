@@ -219,7 +219,11 @@ export const FungibleTokenList = forwardRef(
             }
             if (mode === TokenListMode.Manage) return ''
 
-            if (keyword.startsWith('0x') && keyword.length > 3 && !Others?.isValidAddress(keyword)) {
+            if (
+                (keyword.startsWith('0x') || keyword.startsWith('0X')) &&
+                keyword.length > 3 &&
+                !Others?.isValidAddress(keyword)
+            ) {
                 setSearchError(t.erc20_search_wrong_address())
                 return
             }
