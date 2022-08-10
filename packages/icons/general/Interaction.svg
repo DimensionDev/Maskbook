@@ -6,7 +6,7 @@
     </g>
     <defs>
         <clipPath id="Interaction_svg__a">
-            <path fill="#fff" d="M0 0h20v20H0z" transform="translate(0 .5)"/>
+            <path fill="#fff" d="M0 .5h20v20H0z"/>
         </clipPath>
     </defs>
 </svg>

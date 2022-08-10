@@ -44,7 +44,7 @@
             <stop offset="1" stop-color="#fff"/>
         </linearGradient>
         <clipPath id="Airdrop_svg__c">
-            <path fill="#fff" d="M0 0h4.436v6.27H0z" transform="matrix(.90794 .41846 -.4237 .9061 19.137 56.68)"/>
+            <path fill="#fff" d="m19.137 56.68 4.028 1.856-2.657 5.682-4.028-1.857z"/>
         </clipPath>
     </defs>
 </svg>

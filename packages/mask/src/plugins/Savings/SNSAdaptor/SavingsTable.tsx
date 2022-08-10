@@ -79,7 +79,7 @@ const useStyles = makeStyles()((theme, props) => ({
         },
         animation: 'loadingAnimation 1s linear infinite',
     },
-    direct: {
+    empty: {
         color: theme.palette.secondaryDivider,
     },
 }))
@@ -204,7 +204,7 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
                 </div>
             ) : (
                 <div className={classes.placeholder}>
-                    <Icons.EmptySimple size={36} className={classes.direct} />
+                    <Icons.EmptySimple size={36} className={classes.empty} />
                 </div>
             )}
         </Box>
