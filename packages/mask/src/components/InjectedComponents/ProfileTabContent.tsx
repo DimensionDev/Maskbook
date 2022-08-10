@@ -151,20 +151,33 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const currentVisitingIdentity = useCurrentVisitingIdentity()
     const currentVisitingUserId = currentVisitingIdentity.identifier?.userId
 
-    const { value: currentVisitingSocialIdentity, loading: loadingCurrentVisitingSocialIdentity } =
-        useCurrentVisitingSocialIdentity()
+    const {
+        value: currentVisitingSocialIdentity,
+        loading: loadingCurrentVisitingSocialIdentity,
+        retry: retryIdentity,
+    } = useCurrentVisitingSocialIdentity()
 
     const {
         value: socialAddressList = EMPTY_LIST,
         loading: loadingSocialAddressList,
         retry: retrySocialAddress,
-    } = useSocialAddressListAll(currentVisitingSocialIdentity, undefined, sorter)
+    } = useSocialAddressListAll(
+        currentVisitingSocialIdentity,
+        isOwnerIdentity ? [SocialAddressType.NEXT_ID] : undefined,
+        sorter,
+    )
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
             retrySocialAddress()
         })
     }, [retrySocialAddress])
+
+    useEffect(() => {
+        return MaskMessages.events.ownPersonaChanged.on(() => {
+            retryIdentity()
+        })
+    }, [retryIdentity])
 
     useEffect(() => {
         setSelectedAddress(first(socialAddressList))
