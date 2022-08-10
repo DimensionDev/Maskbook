@@ -1,4 +1,4 @@
-import { describe, test, expect } from '@jest/globals'
+import { describe, expect, test } from 'vitest'
 import { fixOverPosition } from '../utils'
 
 describe('chart element position', () => {

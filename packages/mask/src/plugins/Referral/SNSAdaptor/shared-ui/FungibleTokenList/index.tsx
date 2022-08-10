@@ -178,7 +178,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                 async (
                     token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
                 ) => {
-                    await Token?.addToken?.(token)
+                    await Token?.addToken?.(account, token)
                     await Token?.trustToken?.(account, token)
                 },
                 referredTokensDefn,

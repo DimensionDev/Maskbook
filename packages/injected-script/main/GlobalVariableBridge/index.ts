@@ -43,8 +43,8 @@ export function execute(path: string, id: number, ...args: unknown[]) {
 }
 
 export function bindEvent(path: string, bridgeEvent: keyof InternalEvents, event: string) {
-    if (hasListened[event]) return
-    hasListened[event] = true
+    if (hasListened[`${path}_${event}`]) return
+    hasListened[`${path}_${event}`] = true
     try {
         ;(read(path) as any)?.on(
             event,

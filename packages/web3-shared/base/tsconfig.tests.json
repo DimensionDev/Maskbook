@@ -1,8 +1,7 @@
 {
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
-    "noEmit": true,
-    "types": ["node"]
+    "noEmit": true
   },
   "include": ["./tests"],
   "references": [{ "path": "./tsconfig.json" }]
