@@ -4,7 +4,7 @@ import { Icons } from '@masknet/icons'
 import { MiniNetworkSelector } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { MaskColorVar } from '@masknet/theme'
-import { formatBalance, NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-base'
+import type { NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-base'
 import { Box, Button, buttonClasses, styled, Typography } from '@mui/material'
 import { useDashboardI18N } from '../../../../locales'
 import { useIsMatched } from '../../hooks'
@@ -113,7 +113,14 @@ export const Balance = memo<BalanceCardProps>(
                         <BalanceTitle>
                             {t.wallets_balance()} {selectedNetwork?.name ?? t.wallets_balance_all_chain()}
                         </BalanceTitle>
-                        <BalanceContent sx={{ py: 1.5 }}>{formatBalance(balance, 0, 0, 2)}</BalanceContent>
+                        <BalanceContent sx={{ py: 1.5 }}>
+                            {Number.isNaN(balance)
+                                ? '$0'
+                                : Number.parseFloat(balance.toFixed(2)).toLocaleString('en', {
+                                      style: 'currency',
+                                      currency: 'USD',
+                                  })}
+                        </BalanceContent>
                         <MiniNetworkSelector
                             hideAllNetworkButton={isHiddenAllButton}
                             disabledNonCurrentNetwork={isDisabledNonCurrentChainSelect}
