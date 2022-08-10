@@ -80,6 +80,12 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
+function handler() {
+    MaskMessages.events.profileTabUpdated.sendToLocal({ show: false })
+    MaskMessages.events.profileTabActive.sendToLocal({ active: false })
+    resetTwitterActivatedContent()
+}
+
 async function hideTwitterActivatedContent() {
     const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
     const loseConnectionEle = searchProfileTabLoseConnectionPageSelector().evaluate()
@@ -93,6 +99,7 @@ async function hideTwitterActivatedContent() {
         _v.style.color = style.color
         const line = v.querySelector('div > div') as HTMLDivElement
         line.style.display = 'none'
+        v.addEventListener('click', handler)
     })
 
     if (loseConnectionEle) return
@@ -122,6 +129,7 @@ function resetTwitterActivatedContent() {
         _v.style.color = ''
         const line = v.querySelector('div > div') as HTMLDivElement
         line.style.display = ''
+        v.removeEventListener('click', handler)
     })
 
     if (loseConnectionEle) return
