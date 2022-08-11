@@ -25,6 +25,7 @@ const useStyles = makeStyles()((theme) => ({
         objectFit: 'cover',
         boxSizing: 'border-box',
         borderRadius: 8,
+        border: '1px solid transparent',
     },
     selected: {
         border: `1px solid ${theme.palette.primary.main}`,
