@@ -116,11 +116,7 @@ export function NFTBasicInfo(props: NFTBasicInfoProps) {
                 </div>
                 <NFTCardStyledAssetPlayer url={resourceUrl} classes={classes} isNative={false} />
             </div>
-            <Typography className={classes.nameSm}>
-                {_asset.metadata?.name.includes('#')
-                    ? _asset.metadata.name
-                    : _asset.metadata?.name + '#' + _asset.tokenId}
-            </Typography>
+            <Typography className={classes.nameSm}>{_asset.metadata?.name ?? '-'}</Typography>
             {!hideSubTitle && (
                 <div className={classes.nameLgBox}>
                     <Typography className={classes.nameLg}>{_asset.metadata?.name}</Typography>

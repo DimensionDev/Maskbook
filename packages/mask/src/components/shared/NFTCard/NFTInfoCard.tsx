@@ -4,6 +4,7 @@ import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { SchemaType, formatTokenId } from '@masknet/web3-shared-evm'
+import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -14,7 +15,7 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
         gap: 8,
         borderRadius: 12,
-        background: '#F9F9F9',
+        background: theme.palette.maskColor.bg,
     },
     listItem: {
         width: '100%',
@@ -43,13 +44,14 @@ export function NFTInfoCard(props: NFTInfoCardProps) {
     const { asset } = props
     const { classes } = useStyles()
     const { Others } = useWeb3State()
+    const { t } = useI18N()
     const infoConfigMapping = [
-        { title: 'Token ID', value: formatTokenId(asset.tokenId, 4) },
-        { title: 'Contract', value: Others?.formatAddress(asset.address, 4) ?? '-' },
-        { title: 'Blockchain', value: 'Ethereum' },
-        { title: 'Token Standard', value: asset.contract?.schema ?? SchemaType.ERC721 },
-        { title: 'Creator Royalties', value: asset.contract?.creatorEarning ?? '0' },
-        { title: 'OpenSea Platform costs', value: '2.5%' },
+        { title: t('plugin_collectible_token_id'), value: formatTokenId(asset.tokenId, 4) },
+        { title: t('contract'), value: Others?.formatAddress(asset.address, 4) ?? '-' },
+        { title: t('plugin_collectible_block_chain'), value: 'Ethereum' },
+        { title: t('plugin_collectible_token_standard'), value: asset.contract?.schema ?? SchemaType.ERC721 },
+        { title: t('plugin_collectible_creator_earning'), value: asset.contract?.creatorEarning ?? '0' },
+        { title: t('plugin_collectible_platform_costs', { platform: 'opensea' }), value: '2.5%' },
     ]
     return (
         <div className={classes.wrapper}>

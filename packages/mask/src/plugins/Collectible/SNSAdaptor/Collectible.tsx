@@ -71,7 +71,7 @@ const useStyles = makeStyles()((theme) => {
             maxHeight: '3.5rem',
             overflow: 'hidden',
             wordBreak: 'break-word',
-            color: theme.palette.maskColor.secondaryMain,
+            color: theme.palette.maskColor.publicSecond,
         },
         description: {
             fontSize: 12,
@@ -116,7 +116,7 @@ const useStyles = makeStyles()((theme) => {
             fontSize: 16,
             lineHeight: '20px',
             fontWeight: 700,
-            color: theme.palette.maskColor.primaryMain,
+            color: theme.palette.maskColor.publicMain,
         },
     }
 })
