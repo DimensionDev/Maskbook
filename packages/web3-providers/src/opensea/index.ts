@@ -108,7 +108,7 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaResponse): NonFungibleTo
             name: asset.name ?? asset.collection.name,
             symbol: asset.asset_contract.symbol,
             owner: asset.owner.address,
-            creatorEarning: asset.asset_contract.buyer_fee_basis_points ?? '0',
+            creatorEarning: asset.asset_contract.dev_seller_fee_basis_points.toString() ?? '0',
         },
         collection: {
             address: asset.token_address ?? asset.asset_contract.address,
@@ -334,6 +334,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             urlcat('/api/v1/asset/:address/:tokenId', { address, tokenId }),
             chainId,
         )
+        console.log(response, 'res')
         if (!response) return
         return createNFTAsset(chainId, response)
     }

@@ -1,5 +1,5 @@
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Skeleton, Typography } from '@mui/material'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
 import { SourceType } from '@masknet/web3-shared-base'
@@ -46,20 +46,20 @@ const useStyles = makeStyles()((theme) => ({
     iframe: {
         minWidth: 300,
         minHeight: 300,
+        width: '100%',
+        height: '100%',
     },
     imgWrapper: {
         minWidth: 300,
         minHeight: 300,
+        width: '100%',
+        height: '100%',
         background: 'black',
         borderRadius: 20,
-        boxShadow: `0px 28px 56px -28px ${theme.palette.maskColor.shadowBottom}`,
+        boxShadow: `0px 28px 56px -28px ${MaskColorVar.primary.alpha(0.5)}`,
         '& > img': {
             borderRadius: 20,
         },
-    },
-    wrapper: {
-        width: 'unset',
-        height: 'unset',
     },
     nameSm: {
         fontSize: 16,
