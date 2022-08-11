@@ -220,13 +220,14 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     const isWeb3ProfileDisable = useIsMinimalMode(PluginId.Web3Profile)
 
+    const isTwitterPlatform = isTwitter(activatedSocialNetworkUI)
+    const isOwnerNotHasBinding = isOwnerIdentity && !currentVisitingSocialIdentity?.hasBinding
+    const isOwnerNotHasAddress =
+        isOwnerIdentity && socialAddressList.findIndex((address) => address.type === SocialAddressType.NEXT_ID) === -1
+
     const showNextID = !!(
-        (isTwitter(activatedSocialNetworkUI) &&
-            (isWeb3ProfileDisable ||
-                (isOwnerIdentity && !currentVisitingSocialIdentity?.hasBinding) ||
-                (isOwnerIdentity &&
-                    socialAddressList.findIndex((address) => address.type === SocialAddressType.NEXT_ID)) === -1)) ||
-        socialAddressList.length === 0
+        isTwitterPlatform &&
+        (isWeb3ProfileDisable || isOwnerNotHasBinding || isOwnerNotHasAddress || socialAddressList.length === 0)
     )
 
     const componentTabId = showNextID ? `${PluginId.NextID}_tabContent` : currentTab
