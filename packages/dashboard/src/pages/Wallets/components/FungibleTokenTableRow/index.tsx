@@ -127,7 +127,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
             <TableCell className={classes.cell} align="center">
                 <Typography>
                     {getTokenUSDValue(asset.value) < 0.01 ? (
-                        '<0.01$'
+                        '<$0.01'
                     ) : (
                         <FormattedCurrency
                             value={getTokenUSDValue(asset.value).toFixed(2)}

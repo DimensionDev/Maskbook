@@ -116,7 +116,7 @@ export const Balance = memo<BalanceCardProps>(
                         <BalanceContent sx={{ py: 1.5 }}>
                             {Number.isNaN(balance)
                                 ? '$0'
-                                : Number.parseFloat(balance.toFixed(2)).toLocaleString('en', {
+                                : balance.toLocaleString('en', {
                                       style: 'currency',
                                       currency: 'USD',
                                   })}
