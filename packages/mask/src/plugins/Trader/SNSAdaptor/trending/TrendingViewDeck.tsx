@@ -110,6 +110,9 @@ const useStyles = makeStyles()((theme) => {
             marginLeft: 'auto',
             marginBottom: theme.spacing(2),
         },
+        icon: {
+            color: theme.palette.maskColor.dark,
+        },
     }
 })
 
@@ -248,7 +251,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             sx={{ padding: 0 }}
                                             size="small"
                                             onClick={() => setCoinMenuOpen((v) => !v)}>
-                                            <Icons.ArrowDrop size={24} />
+                                            <Icons.ArrowDrop size={24} className={classes.icon} />
                                         </IconButton>
                                         <CoinMenu
                                             open={coinMenuOpen}
