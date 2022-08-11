@@ -22,7 +22,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         display: 'flex',
         justifyContent: 'space-between',
-        alingItems: 'center',
+        alignItems: 'center',
     },
     textBase: {
         fontSize: 14,
