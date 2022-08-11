@@ -45,8 +45,6 @@ const useStyles = makeStyles()((theme) => {
             background: theme.palette.maskColor.bottom,
         },
         items: {
-            height: 214,
-            maxHeight: 214,
             overflow: 'auto',
             scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
@@ -175,7 +173,11 @@ export const PersonaListDialog = () => {
                             nickname: selectedPersona?.persona.nickname,
                         }),
                     }
-                return {}
+                return {
+                    hint: t('applications_persona_verify_hint', {
+                        nickname: selectedPersona?.persona.nickname,
+                    }),
+                }
             })(),
             onClick: handleClick,
         }
@@ -212,7 +214,7 @@ export const PersonaListDialog = () => {
                         <LoadingBase width={24} height={24} />
                     </Stack>
                 ) : (
-                    <>
+                    <Stack height="100%" justifyContent="space-between">
                         <Stack gap={1.5} className={classes.items}>
                             {personas.map((x) => {
                                 return (
@@ -229,7 +231,7 @@ export const PersonaListDialog = () => {
                             })}
                         </Stack>
                         <Stack>{actionButton}</Stack>
-                    </>
+                    </Stack>
                 )}
             </DialogContent>
         </InjectedDialog>
@@ -243,12 +245,14 @@ interface ActionContentProps {
 }
 
 function ActionContent({ buttonText, hint, onClick }: ActionContentProps) {
-    if (!buttonText || !hint) return null
+    if (!buttonText) return null
     return (
         <Stack gap={1.5} mt={1.5}>
-            <Typography color={(t) => t.palette.maskColor.main} fontSize={14} lineHeight="18px" height={36}>
-                {hint}
-            </Typography>
+            {hint && (
+                <Typography color={(t) => t.palette.maskColor.main} fontSize={14} lineHeight="18px" height={36}>
+                    {hint}
+                </Typography>
+            )}
             <Button color="primary" style={{ borderRadius: 20 }} onClick={onClick}>
                 {buttonText}
             </Button>
