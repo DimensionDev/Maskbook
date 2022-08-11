@@ -29,6 +29,7 @@ export interface MaskSNSEvents {
     // TODO: move to plugin message
     profileTabUpdated: ProfileNFTsPageEvent
     profileTabHidden: { hidden: boolean }
+    profileTabActive: { active: boolean }
     NFTAvatarUpdated: NFTAvatarEvent
     NFTAvatarTimelineUpdated: NFTAvatarEvent
     nftAvatarSettingDialogUpdated: NFTAvatarSettingDialogEvent
@@ -115,6 +116,10 @@ export interface Web3ProfileDialogRequest {
 
 export interface CheckSecurityCloseConfirmDialogRequest {
     open: boolean
+}
+export type OpenApplicationRequestEvent = {
+    open: boolean
+    application: string
 }
 
 export type CheckSecurityDialogRequest =

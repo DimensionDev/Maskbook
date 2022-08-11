@@ -1,11 +1,11 @@
 import { useAsyncRetry } from 'react-use'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, isValidAddress } from '@masknet/web3-shared-evm'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useWeb3Hub } from '@masknet/plugin-infra/web3'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { usePersonas } from './usePersonas'
 import { PluginNFTAvatarRPC } from '../messages'
-import type { EnhanceableSite } from '@masknet/shared-base'
+import { EMPTY_LIST, EnhanceableSite, NextIDPlatform } from '@masknet/shared-base'
+import { useCurrentVisitingSocialIdentity } from '../../../components/DataSource/useActivatedUI'
 
 export function useTokenOwner(
     address: string,
@@ -31,18 +31,21 @@ export function useTokenOwner(
 }
 
 export function useCheckTokenOwner(pluginId: NetworkPluginID, userId: string, owner: string) {
-    const { value: persona, loading } = usePersonas(userId)
+    const { loading, value: persona } = useCurrentVisitingSocialIdentity()
     const { value: storage, loading: loadingAddress } = useAsyncRetry(
         async () =>
             PluginNFTAvatarRPC.getAddress(activatedSocialNetworkUI.networkIdentifier as EnhanceableSite, userId),
         [userId],
     )
+    const wallets =
+        persona?.binding?.proofs.filter((x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity)) ??
+        EMPTY_LIST
 
     return {
         loading: loading || loadingAddress,
         isOwner: Boolean(
             (storage?.address && isSameAddress(storage.address, owner) && pluginId === storage.networkPluginID) ||
-                persona?.wallets.some((x) => isSameAddress(x.identity, owner)),
+                wallets.some((x) => isSameAddress(x.identity, owner)),
         ),
     }
 }

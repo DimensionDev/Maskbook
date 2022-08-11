@@ -70,16 +70,21 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     more: {
-        fontSize: 14,
         textAlign: 'center',
-        margin: theme.spacing(2, 0, 1),
     },
-    moreButton: {
+    moreBody: {
+        display: 'inline-flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: theme.spacing(1, 2),
+        gap: 2,
+        fontSize: 14,
+        fontWeight: 600,
+        margin: theme.spacing(2, 'auto', 1),
         cursor: 'pointer',
-        margin: theme.spacing(0, 0.5),
-    },
-    moreIcon: {
-        verticalAlign: 'middle',
+        borderRadius: 20,
+        backgroundColor: theme.palette.maskColor.bg,
     },
 }))
 
@@ -207,18 +212,25 @@ export const MoreBarUI = memo<MoreBarUIProps>(({ isExpand, isEmpty, isLoading, d
     if (isExpand)
         return (
             <Typography className={classes.more}>
-                <span>{t.wallets_assets_more_collapse()}</span>
-                <span className={classes.moreButton} onClick={onSwitch}>
-                    <Icons.ArrowUpRound className={classes.moreIcon} />
+                <span className={classes.moreBody} onClick={onSwitch}>
+                    <span>
+                        {t.wallets_assets_more_collapse({
+                            direction: '<',
+                        })}
+                    </span>
+                    <Icons.ArrowDrop style={{ transform: 'rotate(180deg)' }} />
                 </span>
             </Typography>
         )
     return (
         <Typography className={classes.more}>
-            <span>{t.wallets_assets_more_expand()}</span>
-            <span className={classes.moreButton} onClick={onSwitch}>
-                <span style={{ textDecoration: 'underline' }}>{t.wallets_assets_more_show_all()}</span>
-                <Icons.ArrowUpRound className={classes.moreIcon} style={{ transform: 'rotate(180deg)' }} />
+            <span className={classes.moreBody} onClick={onSwitch}>
+                <span>
+                    {t.wallets_assets_more_expand({
+                        direction: '<',
+                    })}
+                </span>
+                <Icons.ArrowDrop />
             </span>
         </Typography>
     )

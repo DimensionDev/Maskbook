@@ -4,7 +4,7 @@
     "attended": "attended",
     "no_data": "No {{collection}} found.",
     "no_NFT_found": "No NFTs found.",
-    "no_Feed_found": "No Feeds found.",
+    "no_Activities_found": "No Activities found.",
     "no_Donation_found": "No Donations found.",
     "no_Footprint_found": "No Footprints found.",
     "total_grants": "Total {{count}} Grants",

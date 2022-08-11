@@ -7,6 +7,7 @@ import type {
     ProfileIdentifier,
     ECKeyIdentifier,
     NextIDStorageProofs,
+    NextIDPersonaBindings
 } from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type {
@@ -148,6 +149,8 @@ export interface SocialIdentity {
     publicKey?: string
     /** Is own user account identity */
     isOwner?: boolean
+    /** All bindings of the persona  **/
+    binding?: NextIDPersonaBindings
 }
 
 export interface SocialAddress<PluginID> {

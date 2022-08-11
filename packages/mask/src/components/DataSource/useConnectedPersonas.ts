@@ -2,11 +2,12 @@ import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useAsync } from 'react-use'
 import Services from '../../extension/service'
+import { usePersonasFromDB } from './usePersonasFromDB'
 
 export function useConnectedPersonas() {
-    return useAsync(async () => {
-        const personasInDB = await Services.Identity.queryOwnedPersonaInformation(false)
+    const personasInDB = usePersonasFromDB()
 
+    return useAsync(async () => {
         const allPersonaPublicKeys = personasInDB.map((x) => x.identifier.publicKeyAsHex)
         const allPersonaIdentifiers = personasInDB.map((x) => x.identifier)
 
@@ -26,5 +27,5 @@ export function useConnectedPersonas() {
                 avatar: avatars.get(x.identifier),
             }
         })
-    }, [])
+    }, [personasInDB.length])
 }

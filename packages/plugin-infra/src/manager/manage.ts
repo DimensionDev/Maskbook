@@ -100,7 +100,7 @@ export function createManager<
             if (enabled === BooleanPreference.True) result = true
             else if (enabled === BooleanPreference.False) result = false
             // plugin default minimal mode is false
-            else result = !definition.inMinimalModeByDefault
+            else result = !!definition.inMinimalModeByDefault
 
             result ? minimalModePluginIDs.add(id) : minimalModePluginIDs.delete(id)
         }, noop)
