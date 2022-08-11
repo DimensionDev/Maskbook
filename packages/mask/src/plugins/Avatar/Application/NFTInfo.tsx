@@ -44,7 +44,7 @@ export function NFTInfo(props: NFTInfoProps) {
                 </Typography>
             ) : (
                 <Typography variant="body1" fontWeight={700} fontSize={12}>
-                    {t.persona_nft_setted()}
+                    {t.persona_nft_set()}
                 </Typography>
             )}
         </Box>
