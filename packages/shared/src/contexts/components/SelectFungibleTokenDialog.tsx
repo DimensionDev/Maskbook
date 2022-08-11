@@ -47,7 +47,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, isDashboard }) => 
     wrapper: {
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(6),
-        // overflow: 'visible !important',
     },
 }))
 
