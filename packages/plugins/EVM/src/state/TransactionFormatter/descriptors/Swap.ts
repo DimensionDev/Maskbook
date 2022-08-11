@@ -8,7 +8,7 @@ import { getTokenAmountDescription } from '../utils'
 export class SwapDescriptor implements TransactionDescriptor {
     async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
         const context = context_ as TransactionContext<ChainId, string | undefined>
-        const { DODO_ETH_ADDRESS, OPENOCEAN_ETH_ADDRESS } = getTraderConstants(context.chainId)
+        const { DODO_ETH_ADDRESS, OPENOCEAN_ETH_ADDRESS, ZERO_X_ETH_ADDRESS } = getTraderConstants(context.chainId)
         if (!context.methods?.find((x) => x.name)) return
 
         const connection = await Web3StateSettings.value.Connection?.getConnection?.({
@@ -139,6 +139,32 @@ export class SwapDescriptor implements TransactionDescriptor {
                 }
             }
 
+            if (
+                method.name === 'transformERC20' &&
+                parameters?.inputToken &&
+                parameters?.inputTokenAmount &&
+                parameters?.minOutputTokenAmount &&
+                parameters?.outputToken
+            ) {
+                const tokenIn = isSameAddress(parameters.inputToken, ZERO_X_ETH_ADDRESS)
+                    ? nativeToken
+                    : await connection?.getFungibleToken(parameters.inputToken ?? '')
+                const tokenOut = isSameAddress(parameters.outputToken, ZERO_X_ETH_ADDRESS)
+                    ? nativeToken
+                    : await connection?.getFungibleToken(parameters.outputToken ?? '')
+                return {
+                    chainId: context.chainId,
+                    title: 'Swap Token',
+                    description: `Swap ${getTokenAmountDescription(parameters.inputTokenAmount, tokenIn)} for ${
+                        tokenOut?.symbol ?? ''
+                    }.`,
+                    successfulDescription: `Swap ${getTokenAmountDescription(
+                        parameters.inputTokenAmount,
+                        tokenIn,
+                    )} for ${getTokenAmountDescription(parameters!.minOutputTokenAmount, tokenOut)} successfully.`,
+                    failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                }
+            }
             if (method.name === 'multicall') {
                 return {
                     chainId: context.chainId,
