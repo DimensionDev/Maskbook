@@ -65,6 +65,7 @@ export function SearchableList<T extends {}>({
     const { classes } = useStyles()
     const { height = 300, itemSize, ...rest } = FixedSizeListProps
     const { InputProps, ...textFieldPropsRest } = SearchFieldProps ?? {}
+    const [inputValue, setInputValue] = useState<string>('')
 
     // #region fuse
     const fuse = useMemo(
@@ -88,9 +89,9 @@ export function SearchableList<T extends {}>({
     }, [keyword, fuse, JSON.stringify(data)])
     // #endregion
 
-    const handleSearch = (word: string) => {
-        setKeyword(word)
-        onSearch?.(word)
+    const handleSearch = () => {
+        setKeyword(inputValue)
+        onSearch?.(inputValue)
     }
 
     const windowHeight = !!textFieldPropsRest.error && typeof height === 'number' ? height - 28 : height
@@ -100,7 +101,7 @@ export function SearchableList<T extends {}>({
             {!disableSearch && (
                 <Box>
                     <MaskTextField
-                        value={keyword}
+                        value={inputValue}
                         placeholder="Search"
                         autoFocus
                         fullWidth
@@ -111,17 +112,24 @@ export function SearchableList<T extends {}>({
                                     <Icons.Search />
                                 </InputAdornment>
                             ),
-                            endAdornment: keyword ? (
+                            endAdornment: inputValue ? (
                                 <InputAdornment
                                     position="end"
                                     className={classes.closeIcon}
-                                    onClick={() => handleSearch('')}>
+                                    onClick={() => {
+                                        setKeyword('')
+                                        setInputValue('')
+                                    }}>
                                     <Icons.Clear size={18} />
                                 </InputAdornment>
                             ) : null,
                             ...InputProps,
                         }}
-                        onChange={(e) => handleSearch(e.currentTarget.value)}
+                        onBlur={(e) => handleSearch()}
+                        onKeyDown={(ev) => {
+                            if (ev.key === 'Enter') handleSearch()
+                        }}
+                        onChange={(e) => setInputValue(e.currentTarget.value)}
                         {...textFieldPropsRest}
                     />
                 </Box>
