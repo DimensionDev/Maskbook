@@ -1,11 +1,15 @@
 import { List, ListItem, ListItemAvatar, Avatar, Typography, Box } from '@mui/material'
 import { openWindow } from '@masknet/shared-base-ui'
 import { Icons } from '@masknet/icons'
-import { useActivatedPluginsSNSAdaptor, PluginI18NFieldRender, PluginId } from '@masknet/plugin-infra/content-script'
+import {
+    useActivatedPluginsSNSAdaptor,
+    PluginI18NFieldRender,
+    PluginId,
+    useIsMinimalMode,
+} from '@masknet/plugin-infra/content-script'
 import { SettingSwitch } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Services } from '../../extension/service'
-import { useState } from 'react'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 
 interface Props {}
@@ -63,11 +67,19 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.mode === 'dark' ? theme.palette.text.secondary : theme.palette.text.primary,
     },
 }))
+
+const MarketTrendConfig = {
+    id: 'io.mask.market-trend',
+    displayName: 'Market Trend',
+    tutorialLink: '',
+    icon: <Icons.Trending />,
+    description: 'Latest crypto market analysis with more charts and indicators on social media.',
+}
 export function ApplicationSettingPluginSwitch(props: Props) {
     const { classes } = useStyles()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
-    const [open, setOpen] = useState(false)
+    const isMarketTrendingClose = useIsMinimalMode(MarketTrendConfig.id)
 
     async function onSwitch(id: string, checked: boolean) {
         if (id === PluginId.GoPlusSecurity && checked === false)
@@ -117,6 +129,43 @@ export function ApplicationSettingPluginSwitch(props: Props) {
                             />
                         </ListItem>
                     ))}
+                <ListItem key={MarketTrendConfig.id} className={classes.listItem}>
+                    <section className={classes.listContent}>
+                        <ListItemAvatar>
+                            <Avatar className={classes.avatar}>{MarketTrendConfig.icon}</Avatar>
+                        </ListItemAvatar>
+                        <div className={classes.info}>
+                            <div className={classes.headerWrapper}>
+                                <Typography className={classes.name}>
+                                    <PluginI18NFieldRender
+                                        field={MarketTrendConfig.displayName}
+                                        pluginID={MarketTrendConfig.id}
+                                    />
+                                </Typography>
+                                {MarketTrendConfig.tutorialLink ? (
+                                    <Box className={classes.settings}>
+                                        <Icons.Tutorial
+                                            size={22}
+                                            onClick={() => openWindow(MarketTrendConfig.tutorialLink)}
+                                        />
+                                    </Box>
+                                ) : null}
+                            </div>
+                            <Typography className={classes.desc}>
+                                <PluginI18NFieldRender
+                                    field={MarketTrendConfig.description}
+                                    pluginID={MarketTrendConfig.id}
+                                />
+                            </Typography>
+                        </div>
+                    </section>
+
+                    <SettingSwitch
+                        size="small"
+                        checked={!isMarketTrendingClose}
+                        onChange={(event) => onSwitch(MarketTrendConfig.id, event.target.checked)}
+                    />
+                </ListItem>
             </List>
         </>
     )
