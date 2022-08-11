@@ -1,10 +1,17 @@
 import type { Storage } from '@masknet/web3-shared-base'
 import { ECKeyIdentifier, fromHex, NextIDPlatform, NextIDStorageInfo, toBase64 } from '@masknet/shared-base'
 import { NextIDStorage as NextIDStorageProvider } from '@masknet/web3-providers'
-import { SharedContextSettings } from '../../settings'
+import type { Plugin } from '@masknet/plugin-infra/content-script'
 
 export class NextIDStorage extends Storage {
-    constructor(private namespace: string, private personaIdentifier: ECKeyIdentifier) {
+    constructor(
+        private namespace: string,
+        private personaIdentifier: ECKeyIdentifier,
+        private generateSignResult: (
+            signer: ECKeyIdentifier,
+            message: string,
+        ) => Promise<Plugin.SNSAdaptor.PersonaSignResult>,
+    ) {
         super()
     }
 
@@ -29,10 +36,7 @@ export class NextIDStorage extends Storage {
 
         if (!payload?.ok) throw new Error('Invalid payload Error')
 
-        const signResult = await SharedContextSettings.value.generateSignResult(
-            this.personaIdentifier,
-            payload.val.signPayload,
-        )
+        const signResult = await this.generateSignResult(this.personaIdentifier, payload.val.signPayload)
 
         if (!signResult) throw new Error('Failed to sign payload.')
 
