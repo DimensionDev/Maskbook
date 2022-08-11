@@ -1,5 +1,7 @@
 import { Button, DialogContent, Stack, Typography } from '@mui/material'
 import {
+    CrossIsolationMessages,
+    DashboardRoutes,
     EMPTY_LIST,
     isSamePersona,
     isSameProfile,
@@ -17,12 +19,13 @@ import { useNextIDVerify } from '../DataSource/useNextIDVerify'
 import { useI18N } from '../../utils'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { PluginNextIDMessages } from '../../plugins/NextID/messages'
 import type { PersonaNextIDMixture } from './PersonaListUI/PersonaItemUI'
 import { PersonaItemUI } from './PersonaListUI/PersonaItemUI'
 import { useCurrentPersona } from '../DataSource/usePersonaConnectStatus'
+import { delay } from '@dimensiondev/kit'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -42,15 +45,17 @@ const useStyles = makeStyles()((theme) => {
         header: {
             background: theme.palette.maskColor.bottom,
         },
+        items: {
+            overflow: 'auto',
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
+        },
     }
 })
 
-interface PersonaListProps {
-    open: boolean
-    onClose(): void
-}
-
-export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
+export const PersonaListDialog = () => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [, copyToClipboard] = useCopyToClipboard()
@@ -58,6 +63,15 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
     const currentPlatform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
     const currentPersona = useCurrentPersona()
     const currentPersonaIdentifier = currentPersona?.identifier
+    const [finishTarget, setFinishTarget] = useState<string>()
+
+    const { open, closeDialog } = useRemoteControlledDialog(PluginNextIDMessages.PersonaListDialogUpdated, (ev) => {
+        if (!ev.open) {
+            setFinishTarget(undefined)
+        } else {
+            setFinishTarget(ev.target)
+        }
+    })
 
     const [selectedPersona, setSelectedPersona] = useState<PersonaNextIDMixture>()
 
@@ -65,14 +79,15 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
     const currentProfileIdentify = useLastRecognizedIdentity()
     const { value: personas = EMPTY_LIST, loading } = useConnectedPersonas()
 
-    const { closeDialog } = useRemoteControlledDialog(PluginNextIDMessages.PersonaListDialogUpdated)
-
     const { closeDialog: closeApplicationBoard } = useRemoteControlledDialog(
         WalletMessages.events.ApplicationDialogUpdated,
     )
 
     useEffect(() => {
-        if (!currentPersonaIdentifier) return
+        if (!currentPersonaIdentifier) {
+            setSelectedPersona(personas[0])
+            return
+        }
         setSelectedPersona(personas.find((x) => isSamePersona(x.persona, currentPersonaIdentifier)))
     }, [currentPersonaIdentifier?.toText(), personas.length])
 
@@ -87,14 +102,25 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
         [],
     )
 
+    const gotoSetup = async () => {
+        await Services.Helper.openDashboard(DashboardRoutes.Setup)
+        closeDialog()
+    }
+
     const actionButton = useMemo(() => {
+        console.log(personas)
+        if (!personas.length)
+            return (
+                <ActionContent
+                    onClick={gotoSetup}
+                    buttonText={t('applications_create_persona_action')}
+                    hint={t('applications_create_persona_hint')}
+                />
+            )
         let isConnected = true
         let isVerified = true
 
         if (!currentProfileIdentify || !selectedPersona) return null
-        const currentPersonaWithNextID = personas.find((x) => isSamePersona(x.persona, selectedPersona.persona))
-
-        if (!currentPersonaWithNextID) return null
 
         // Selected Persona not link current SNS
         if (!selectedPersona.persona.linkedProfiles.find((x) => isSameProfile(x, currentProfileIdentify.identifier))) {
@@ -122,6 +148,14 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
                 await handleVerifyNextID(selectedPersona.persona, currentProfileIdentify.identifier?.userId)
             }
 
+            if (finishTarget) {
+                CrossIsolationMessages.events.requestOpenApplication.sendToLocal({
+                    open: true,
+                    application: finishTarget,
+                })
+            }
+
+            await delay(100)
             closeDialog()
         }
 
@@ -154,13 +188,17 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
                             nickname: selectedPersona?.persona.nickname,
                         }),
                     }
-                return {}
+                return {
+                    hint: t('applications_persona_verify_hint', {
+                        nickname: selectedPersona?.persona.nickname,
+                    }),
+                }
             })(),
             onClick: handleClick,
         }
 
         return <ActionContent {...actionProps} />
-    }, [currentPersonaIdentifier, currentProfileIdentify, selectedPersona, personas])
+    }, [currentPersonaIdentifier, currentProfileIdentify, selectedPersona, personas.length])
 
     const onSelectPersona = useCallback((x: PersonaNextIDMixture) => {
         setSelectedPersona(x)
@@ -182,26 +220,34 @@ export const PersonaListDialog = ({ open, onClose }: PersonaListProps) => {
                 dialogTitle: classes.header,
             }}
             maxWidth="sm"
-            onClose={onClose}
+            onClose={closeDialog}
             title={t('applications_persona_title')}
             titleBarIconStyle="close">
             <DialogContent classes={{ root: classes.content }}>
-                <Stack gap={1.5}>
-                    {personas.map((x) => {
-                        return (
-                            <PersonaItemUI
-                                key={x.persona.identifier.toText()}
-                                data={x}
-                                onCopy={(e) => onCopyPersons(e, x)}
-                                onClick={() => onSelectPersona(x)}
-                                currentPersona={selectedPersona}
-                                currentPersonaIdentifier={currentPersonaIdentifier}
-                                currentProfileIdentify={currentProfileIdentify}
-                            />
-                        )
-                    })}
-                </Stack>
-                <Stack>{actionButton}</Stack>
+                {loading ? (
+                    <Stack justifyContent="center" alignItems="center" height="100%">
+                        <LoadingBase width={24} height={24} />
+                    </Stack>
+                ) : (
+                    <Stack height="100%" justifyContent="space-between">
+                        <Stack gap={1.5} className={classes.items}>
+                            {personas.map((x) => {
+                                return (
+                                    <PersonaItemUI
+                                        key={x.persona.identifier.toText()}
+                                        data={x}
+                                        onCopy={(e) => onCopyPersons(e, x)}
+                                        onClick={() => onSelectPersona(x)}
+                                        currentPersona={selectedPersona}
+                                        currentPersonaIdentifier={currentPersonaIdentifier}
+                                        currentProfileIdentify={currentProfileIdentify}
+                                    />
+                                )
+                            })}
+                        </Stack>
+                        <Stack>{actionButton}</Stack>
+                    </Stack>
+                )}
             </DialogContent>
         </InjectedDialog>
     ) : null
@@ -214,12 +260,14 @@ interface ActionContentProps {
 }
 
 function ActionContent({ buttonText, hint, onClick }: ActionContentProps) {
-    if (!buttonText || !hint) return null
+    if (!buttonText) return null
     return (
-        <Stack gap={3} mt={1.5}>
-            <Typography color={(t) => t.palette.maskColor.main} fontSize={14} lineHeight="18px">
-                {hint}
-            </Typography>
+        <Stack gap={1.5} mt={1.5}>
+            {hint && (
+                <Typography color={(t) => t.palette.maskColor.main} fontSize={14} lineHeight="18px" height={36}>
+                    {hint}
+                </Typography>
+            )}
             <Button color="primary" style={{ borderRadius: 20 }} onClick={onClick}>
                 {buttonText}
             </Button>

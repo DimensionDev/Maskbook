@@ -6,10 +6,10 @@ import type { BindingProof } from '@masknet/shared-base'
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { AllChainsNonFungibleToken, PFP_TYPE, SelectTokenInfo } from '../types'
 import { PersonaPage } from './PersonaPage'
-import { DialogContent, Tab } from '@mui/material'
+import { DialogContent } from '@mui/material'
 import { useI18N } from '../locales/i18n_generated'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { makeStyles, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
 
 const useStyles = makeStyles()((theme) => ({
@@ -81,15 +81,6 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
                     step === CreateNFTAvatarStep.UploadAvatar
                         ? t.application_edit_profile_dialog_title()
                         : t.application_dialog_title()
-                }
-                titleTabs={
-                    step === CreateNFTAvatarStep.NFTList ? (
-                        <MaskTabList variant="base" onChange={onChange} aria-label="Avatar">
-                            <Tab label={t.pfp_title()} value={tabs.pfp} />
-                            {/* hidden background page */}
-                            {/* <Tab label={t.background_title()} value={tabs.background} />*/}
-                        </MaskTabList>
-                    ) : null
                 }
                 isOnBack={step !== CreateNFTAvatarStep.Persona}
                 open={props.open}

@@ -4,6 +4,7 @@ import type {
     CompositionRequest,
     Web3ProfileDialogRequest,
     CheckSecurityDialogRequest,
+    OpenApplicationRequestEvent,
 } from './Mask.js'
 
 /**
@@ -25,4 +26,5 @@ export interface CrossIsolationEvents {
     requestWeb3ProfileDialog: Web3ProfileDialogRequest
     requestCheckSecurityCloseConfirmDialog: CheckSecurityCloseConfirmDialogRequest
     requestCheckSecurityDialog: CheckSecurityDialogRequest
+    requestOpenApplication: OpenApplicationRequestEvent
 }

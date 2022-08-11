@@ -25,6 +25,7 @@ const useStyles = makeStyles()((theme) => {
         sourceName: {
             fontSize: 14,
             fontWeight: 700,
+            color: theme.palette.maskColor.publicMain,
         },
     }
 })

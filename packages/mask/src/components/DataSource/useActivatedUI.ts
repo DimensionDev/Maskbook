@@ -5,7 +5,7 @@ import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '@masknet/shared-base-ui'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { NextIDProof } from '@masknet/web3-providers'
-import type { ProfileInformation } from '@masknet/shared-base'
+import { EMPTY_LIST, ProfileInformation } from '@masknet/shared-base'
 import type { SocialIdentity } from '@masknet/web3-shared-base'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
 import Services from '../../extension/service'
@@ -139,11 +139,15 @@ export function useCurrentVisitingSocialIdentity() {
         const sortedBindings = bindings?.sort((a, b) =>
             sortPersonaBindings(a, b, identity.identifier?.userId.toLowerCase()),
         )
+        const personaBindings =
+            bindings?.filter((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()) ?? EMPTY_LIST
+
         return {
             ...identity,
             isOwner: isOwnerIdentity,
             publicKey: isOwnerIdentity ? persona?.identifier.publicKeyAsHex : first(sortedBindings)?.persona,
-            hasBinding: !!bindings?.find((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()),
+            hasBinding: personaBindings.length > 0,
+            binding: first(personaBindings),
         }
     }, [isOwnerIdentity, identity.identifier?.userId])
 }
