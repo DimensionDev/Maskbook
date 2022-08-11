@@ -1,6 +1,7 @@
 import { Button, DialogContent, Stack, Typography } from '@mui/material'
 import {
     CrossIsolationMessages,
+    DashboardRoutes,
     EMPTY_LIST,
     isSamePersona,
     isSameProfile,
@@ -98,14 +99,24 @@ export const PersonaListDialog = () => {
         [],
     )
 
+    const gotoSetup = async () => {
+        await Services.Helper.openDashboard(DashboardRoutes.Setup)
+        closeDialog()
+    }
+
     const actionButton = useMemo(() => {
+        if (!personas.length)
+            return (
+                <ActionContent
+                    onClick={gotoSetup}
+                    buttonText={t('applications_create_persona_action')}
+                    hint={t('applications_create_persona_hint')}
+                />
+            )
         let isConnected = true
         let isVerified = true
 
         if (!currentProfileIdentify || !selectedPersona) return null
-        const currentPersonaWithNextID = personas.find((x) => isSamePersona(x.persona, selectedPersona.persona))
-
-        if (!currentPersonaWithNextID) return null
 
         // Selected Persona not link current SNS
         if (!selectedPersona.persona.linkedProfiles.find((x) => isSameProfile(x, currentProfileIdentify.identifier))) {
@@ -183,7 +194,7 @@ export const PersonaListDialog = () => {
         }
 
         return <ActionContent {...actionProps} />
-    }, [currentPersonaIdentifier, currentProfileIdentify, selectedPersona, personas])
+    }, [currentPersonaIdentifier, currentProfileIdentify, selectedPersona, personas.length])
 
     const onSelectPersona = useCallback((x: PersonaNextIDMixture) => {
         setSelectedPersona(x)
