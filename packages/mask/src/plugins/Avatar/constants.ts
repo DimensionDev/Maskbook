@@ -16,11 +16,6 @@ export enum RSS3_KEY_SNS {
     INSTAGRAM = '_instagram_nfts',
 }
 
-export enum Application_NFT_LIST_PAGE {
-    Application_nft_tab_eth_page = 'ETH',
-    Application_nft_tab_polygon_page = 'Polygon',
-}
-
 export const SUPPORTED_CHAIN_IDS: ChainId[] = [ChainId.Mainnet, ChainId.Matic]
 
 export const mask_avatar_dark = new URL('./assets/mask.dark.svg', import.meta.url)

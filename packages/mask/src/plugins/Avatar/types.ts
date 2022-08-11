@@ -53,6 +53,7 @@ export interface NFTInfo {
 }
 
 export enum PFP_TYPE {
-    BACKGROUND = 'background',
+    /* hidden background page */
+    // BACKGROUND = 'background',
     PFP = 'pfp',
 }
