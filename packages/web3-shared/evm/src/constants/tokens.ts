@@ -2,7 +2,7 @@ import { getEnumAsArray } from '@dimensiondev/kit'
 import Token from '@masknet/web3-constants/evm/token.json'
 import { createFungibleTokensFromConstants, FungibleToken } from '@masknet/web3-shared-base'
 import { ChainId, ChainIdOptionalRecord, SchemaType } from '../types'
-import { chainResolver } from '../utils'
+import { chainResolver } from '../utils/resolver'
 
 export type ERC20AgainstToken = Readonly<ChainIdOptionalRecord<Array<FungibleToken<ChainId, SchemaType.ERC20>>>>
 
@@ -63,8 +63,8 @@ export const OP = createERC20Tokens('OP_ADDRESS', 'Optimism', 'OP', 18)
 
 export const WNATIVE = createERC20Tokens(
     'WNATIVE_ADDRESS',
-    (chainId) => `Wrapped ${chainResolver?.nativeCurrency(chainId)?.name ?? 'Ether'}`,
-    (chainId) => `W${chainResolver?.nativeCurrency(chainId)?.symbol ?? 'ETH'}`,
+    (chainId) => `Wrapped ${chainResolver.nativeCurrency(chainId)?.name ?? 'Ether'}`,
+    (chainId) => `W${chainResolver.nativeCurrency(chainId)?.symbol ?? 'ETH'}`,
     18,
 )
 

@@ -100,8 +100,6 @@ export const SelectGasSettingsDialog: FC<SelectGasSettingsDialogProps> = ({
             open={open}
             titleBarIconStyle={isDashboard ? 'close' : 'back'}
             onClose={() => {
-                console.log('DEBUG: settings')
-                console.log(settings)
                 onSubmit?.(settings)
                 onClose?.()
             }}

@@ -2,6 +2,5 @@
   "name": "@masknet/serializer",
   "version": "0.0.0",
   "private": true,
-  "main": "./index.js",
-  "type": "module"
+  "main": "./index.js"
 }

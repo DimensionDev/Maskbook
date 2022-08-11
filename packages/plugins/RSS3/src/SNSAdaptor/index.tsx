@@ -55,7 +55,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         },
         {
             ID: `${PLUGIN_ID}_feed`,
-            label: 'Feed',
+            label: 'Activity',
             priority: 3,
             UI: {
                 TabContent: ({ socialAddress, identity }) => {

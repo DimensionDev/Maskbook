@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 
 const boundaryValues = {
-    mid: 1000000,
+    mid: 10000000000,
 }
 
 /**

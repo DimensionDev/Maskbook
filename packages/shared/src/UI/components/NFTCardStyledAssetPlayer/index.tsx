@@ -2,12 +2,13 @@ import classNames from 'classnames'
 import { CircularProgress, useTheme } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { AssetPlayer } from '../AssetPlayer'
-import { useNonFungibleToken, Web3Helper } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useNetworkDescriptor, useNonFungibleToken, Web3Helper } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
 import { useImageChecker } from '../../../hooks'
 import { NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
 import { ImageIcon } from '../ImageIcon'
 import { Image } from '../Image'
+import { useMemo } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -53,6 +54,7 @@ interface Props extends withClasses<'loadingFailImage' | 'iframe' | 'wrapper' | 
     setERC721TokenName?: (name: string) => void
     setSourceType?: (type: string) => void
     showNetwork?: boolean
+    address?: SocialAddress<NetworkPluginID>
 }
 
 const assetPlayerFallbackImageDark = new URL('./nft_token_fallback_dark.png', import.meta.url)
@@ -67,6 +69,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
         fallbackImage,
         fallbackResourceLoader,
         url,
+        address,
         setERC721TokenName,
         renderOrder,
         setSourceType,
@@ -90,7 +93,14 @@ export function NFTCardStyledAssetPlayer(props: Props) {
     const fallbackImageURL =
         theme.palette.mode === 'dark' ? assetPlayerFallbackImageDark : assetPlayerFallbackImageLight
 
-    const networkIcon = NETWORK_DESCRIPTORS.find((network) => network?.chainId === chainId)?.icon
+    const networkDescriptor = useNetworkDescriptor(address?.networkSupporterPluginID)
+
+    const networkIcon = useMemo(() => {
+        if (address?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM) {
+            return NETWORK_DESCRIPTORS.find((network) => network?.chainId === chainId)?.icon
+        }
+        return networkDescriptor?.icon
+    }, [networkDescriptor])
 
     return isImageToken || isNative ? (
         <div className={classes.imgWrapper}>

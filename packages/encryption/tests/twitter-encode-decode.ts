@@ -1,5 +1,5 @@
-import { test, expect } from 'vitest'
-import { TwitterDecoder } from '../src/index.js'
+import { test, expect } from '@jest/globals'
+import { TwitterDecoder } from '@masknet/encryption'
 test('Can decode Twitter text payload', () => {
     const payload = `This tweet is encrypted with #mask_io (@realMaskNetwork). \u{1F4EA}\u{1F511}
 

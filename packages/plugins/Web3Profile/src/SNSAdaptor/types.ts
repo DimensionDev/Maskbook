@@ -79,6 +79,7 @@ export interface WalletsCollection {
 export interface WalletTypes {
     address: string
     platform?: NetworkPluginID
+    updateTime?: string
     collections?: CollectionTypes[]
 }
 

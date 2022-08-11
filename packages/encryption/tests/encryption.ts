@@ -1,4 +1,4 @@
-import { test, expect } from 'vitest'
+import { test, expect } from '@jest/globals'
 import {
     appendEncryptionTarget,
     decrypt,
@@ -10,7 +10,7 @@ import {
     EncryptOptions,
     parsePayload,
     importAESFromJWK,
-} from '../src/index.js'
+} from '@masknet/encryption'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { makeTypedMessageText, makeTypedMessageTupleSerializable } from '@masknet/typed-message'
 import {
@@ -21,7 +21,7 @@ import {
     getTestRandomAESKey,
     getTestRandomECKey,
     queryTestPublicKey,
-} from './keys.js'
+} from './keys'
 
 const publicTarget: EncryptOptions['target'] = {
     type: 'public',

@@ -72,7 +72,8 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
 
     useEffect(() => setSelectedAccount(account || wallets?.[0]?.identity || ''), [account, wallets?.[0]?.identity])
 
-    const [currentTab, onChange, tabs] = useTabs(PFP_TYPE.PFP, PFP_TYPE.BACKGROUND)
+    /** hidden background page **/
+    const [currentTab, onChange, tabs] = useTabs(PFP_TYPE.PFP /* , PFP_TYPE.BACKGROUND */)
     return (
         <TabContext value={currentTab}>
             <InjectedDialog
@@ -85,7 +86,8 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
                     step === CreateNFTAvatarStep.NFTList ? (
                         <MaskTabList variant="base" onChange={onChange} aria-label="Avatar">
                             <Tab label={t.pfp_title()} value={tabs.pfp} />
-                            <Tab label={t.background_title()} value={tabs.background} />
+                            {/* hidden background page */}
+                            {/* <Tab label={t.background_title()} value={tabs.background} />*/}
                         </MaskTabList>
                     ) : null
                 }
