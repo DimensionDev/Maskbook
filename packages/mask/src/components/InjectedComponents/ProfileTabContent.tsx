@@ -229,8 +229,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         socialAddressList.length === 0
     )
 
-    console.log({ isOwnerIdentity, currentVisitingSocialIdentity, socialAddressList, showNextID })
-
     const componentTabId = showNextID ? `${PluginId.NextID}_tabContent` : currentTab
 
     const component = useMemo(() => {
