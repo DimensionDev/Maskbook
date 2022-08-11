@@ -93,6 +93,7 @@ export function CollectibleCard(props: CollectibleCardProps) {
                     classes={{
                         loadingFailImage: classes.loadingFailImage,
                         wrapper: classes.wrapper,
+                        imgWrapper: classes.wrapper,
                     }}
                     showNetwork
                 />
