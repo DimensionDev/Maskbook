@@ -84,7 +84,10 @@ export const PersonaListDialog = () => {
     )
 
     useEffect(() => {
-        if (!currentPersonaIdentifier) return
+        if (!currentPersonaIdentifier) {
+            setSelectedPersona(personas[0])
+            return
+        }
         setSelectedPersona(personas.find((x) => isSamePersona(x.persona, currentPersonaIdentifier)))
     }, [currentPersonaIdentifier?.toText(), personas.length])
 
@@ -105,6 +108,7 @@ export const PersonaListDialog = () => {
     }
 
     const actionButton = useMemo(() => {
+        console.log(personas)
         if (!personas.length)
             return (
                 <ActionContent
