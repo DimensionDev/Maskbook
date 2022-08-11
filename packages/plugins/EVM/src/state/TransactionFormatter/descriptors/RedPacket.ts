@@ -1,5 +1,5 @@
 import { i18NextInstance } from '@masknet/shared-base'
-import { ChainId, getNftRedPacketConstant, getRedPacketConstant, TransactionParameter } from '@masknet/web3-shared-evm'
+import { ChainId, getNftRedPacketConstant, getRedPacketConstants, TransactionParameter } from '@masknet/web3-shared-evm'
 import HappyRedPacketV4ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import NftRedPacketABI from '@masknet/web3-contracts/abis/NftRedPacket.json'
 import { isSameAddress, TransactionContext } from '@masknet/web3-shared-base'
@@ -74,11 +74,24 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
     // TODO: 6002: avoid using i18n text in a service. delegate it to ui.
     async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
         const context = context_ as TransactionContext<ChainId, string | undefined>
-        const HAPPY_RED_PACKET_ADDRESS_V4 = getRedPacketConstant(context.chainId, 'HAPPY_RED_PACKET_ADDRESS_V4')
-        const RED_PACKET_NFT_ADDRESS = getNftRedPacketConstant(context.chainId, 'RED_PACKET_NFT_ADDRESS')
-        const method = context.methods?.find((x) => ['create_red_packet', 'claim'].includes(x.name ?? ''))
 
-        if (isSameAddress(context.to, HAPPY_RED_PACKET_ADDRESS_V4)) {
+        const {
+            HAPPY_RED_PACKET_ADDRESS_V1,
+            HAPPY_RED_PACKET_ADDRESS_V2,
+            HAPPY_RED_PACKET_ADDRESS_V3,
+            HAPPY_RED_PACKET_ADDRESS_V4,
+        } = getRedPacketConstants(context.chainId)
+        const RED_PACKET_NFT_ADDRESS = getNftRedPacketConstant(context.chainId, 'RED_PACKET_NFT_ADDRESS')
+        const method = context.methods?.find((x) => ['create_red_packet', 'claim', 'refund'].includes(x.name ?? ''))
+
+        if (
+            [
+                HAPPY_RED_PACKET_ADDRESS_V1,
+                HAPPY_RED_PACKET_ADDRESS_V2,
+                HAPPY_RED_PACKET_ADDRESS_V3,
+                HAPPY_RED_PACKET_ADDRESS_V4,
+            ].some((x) => isSameAddress(x, context.to))
+        ) {
             const connection = await Web3StateSettings.value.Connection?.getConnection?.({
                 chainId: context.chainId,
                 account: context.from,
@@ -101,11 +114,7 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                     failedDescription: i18NextInstance.t('plugin_red_packet_create_with_token_fail'),
                 }
             } else if (method?.name === 'claim') {
-                const tokenAmountDescription = await this.getClaimTokenInfo(
-                    context.chainId,
-                    HAPPY_RED_PACKET_ADDRESS_V4,
-                    context.hash,
-                )
+                const tokenAmountDescription = await this.getClaimTokenInfo(context.chainId, context.to, context.hash)
 
                 return {
                     chainId: context.chainId,
@@ -119,11 +128,7 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                     failedDescription: i18NextInstance.t('plugin_red_packet_claim_fail'),
                 }
             } else if (method?.name === 'refund') {
-                const tokenAmountDescription = await this.getRefundTokenInfo(
-                    context.chainId,
-                    HAPPY_RED_PACKET_ADDRESS_V4,
-                    context.hash,
-                )
+                const tokenAmountDescription = await this.getRefundTokenInfo(context.chainId, context.to, context.hash)
 
                 return {
                     chainId: context.chainId,
