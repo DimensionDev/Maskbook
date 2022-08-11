@@ -24,8 +24,8 @@ const useStyles = makeStyles()((theme) => ({
         width: 120,
     },
     loadingIcon: {
-        width: 36,
-        height: 52,
+        width: 30,
+        height: 30,
     },
     imgWrapper: {
         width: '100%',
@@ -130,7 +130,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
             setSourceType={setSourceType}
             // It would fail to render as loading too many(>200) iframe at once.
             renderTimeout={renderOrder ? 20000 * Math.floor(renderOrder / 100) : undefined}
-            fallbackImage={fallbackImage ?? fallbackImageURL}
+            fallbackImage={fallbackImage || fallbackImageURL}
             loadingIcon={<CircularProgress size={20} />}
             classes={{
                 iframe: classNames(classes.wrapper, classes.iframe),
@@ -138,6 +138,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
                 loadingPlaceholder: classes.wrapper,
                 loadingFailImage: classes.loadingFailImage,
                 loadingIcon: classes.loadingIcon,
+                errorIcon: classes.loadingFailImage,
             }}
             showNetwork={showNetwork}
             networkIcon={networkIcon}

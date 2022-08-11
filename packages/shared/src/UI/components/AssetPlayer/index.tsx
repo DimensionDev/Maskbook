@@ -213,7 +213,10 @@ export const AssetPlayer = memo<AssetPlayerProps>((props) => {
                       ) : (
                           <Icons.MaskPlaceholder className={classes.errorIcon} {...iconProps} />
                       ))
-                    : props.loadingIcon ?? <Icons.AssetLoading className={classes.loadingIcon} />}
+                    : props.loadingIcon ??
+                      (props.fallbackImage && (
+                          <img className={classes.loadingFailImage} src={props.fallbackImage.toString()} />
+                      )) ?? <Icons.AssetLoading className={classes.loadingIcon} />}
             </Box>
             {IframeResizerMemo}
             {showNetwork && <ImageIcon icon={networkIcon} size={20} classes={{ icon: classes.networkIcon }} />}
