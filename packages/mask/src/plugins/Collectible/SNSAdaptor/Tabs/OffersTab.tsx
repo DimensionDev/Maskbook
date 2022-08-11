@@ -47,7 +47,7 @@ export function OffersTab() {
             return (
                 <div className={classes.body}>
                     <Icons.EmptySimple className={classes.emptyIcon} />
-                    <Typography className={classes.emptyText}>{t('plugin_collectible_nft_activity_empty')}</Typography>
+                    <Typography className={classes.emptyText}>{t('plugin_collectible_nft_offers_empty')}</Typography>
                 </div>
             )
         return (
