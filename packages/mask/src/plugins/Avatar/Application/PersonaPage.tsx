@@ -65,6 +65,8 @@ export function PersonaPage(props: PersonaPageProps) {
     )
     const { value: avatar } = useAsyncRetry(async () => context.getPersonaAvatar(currentPersona?.identifier), [])
 
+    console.log('persona', persona)
+    console.log('aaa', currentIdentity)
     return (
         <>
             <DialogContent sx={{ flex: 1, height: 450, padding: 2 }}>
@@ -87,10 +89,8 @@ export function PersonaPage(props: PersonaPageProps) {
                             </Box>
                         ) : null}
                         {persona?.binding?.proofs
-                            .filter((proof) => proof.platform === NextIDPlatform.Twitter)
-                            .filter(
-                                (x) => x.identity.toLowerCase() === currentIdentity?.identifier?.userId.toLowerCase(),
-                            )
+                            .filter((proof) => proof.platform === persona.identifier?.network.replace('.com', ''))
+                            .filter((x) => x.identity.toLowerCase() === persona.identifier?.userId.toLowerCase())
                             .map((x, i) => (
                                 <PersonaItem
                                     key="avatar"
@@ -105,7 +105,9 @@ export function PersonaPage(props: PersonaPageProps) {
 
                         {myPersonas?.[0] &&
                             myPersonas[0].linkedProfiles
-                                .filter((x) => x.identifier.network === currentIdentity?.identifier?.network)
+                                .filter(
+                                    (x) => x.identifier.network === persona?.identifier?.network.replace('.com', ''),
+                                )
                                 .map((x, i) =>
                                     persona?.binding?.proofs.some(
                                         (y) => y.identity.toLowerCase() === x.identifier.userId.toLowerCase(),
@@ -119,10 +121,8 @@ export function PersonaPage(props: PersonaPageProps) {
                                     ),
                                 )}
                         {persona?.binding?.proofs
-                            .filter((proof) => proof.platform === currentIdentity?.identifier?.network)
-                            .filter(
-                                (x) => x.identity.toLowerCase() !== currentIdentity?.identifier?.userId.toLowerCase(),
-                            )
+                            .filter((proof) => proof.platform === persona?.identifier?.network.replace('.com', ''))
+                            .filter((x) => x.identity.toLowerCase() !== persona?.identifier?.userId.toLowerCase())
                             .map((x, i) => (
                                 <PersonaItem avatar="" key={i} owner={false} userId={x.identity} proof={x} />
                             ))}
