@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { Box, Button, CardContent, CardHeader, Paper, Tab, Typography } from '@mui/material'
-import { makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
+import { makeStyles, MaskColorVar, MaskTabList, useTabs, LoadingBase } from '@masknet/theme'
 import formatDateTime from 'date-fns/format'
 import isValidDate from 'date-fns/isValid'
 import isAfter from 'date-fns/isAfter'
@@ -121,7 +121,13 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-const supportedProvider = [SourceType.OpenSea, SourceType.Rarible, SourceType.NFTScan]
+const supportedProvider = [
+    SourceType.Rarible,
+    SourceType.Gem,
+    SourceType.X2Y2,
+    SourceType.LooksRare,
+    SourceType.OpenSea,
+]
 
 export interface CollectibleProps {}
 
@@ -143,7 +149,21 @@ export function Collectible(props: CollectibleProps) {
     const CollectibleProviderSwitcher = useSwitcher(provider, setProvider, supportedProvider, resolveSourceName, true)
     // #endregion
     const [currentTab, onChange, tabs, setTab] = useTabs('about', 'details', 'offers', 'activity')
-
+    if (asset.loading)
+        return (
+            <Box
+                flex={1}
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                gap={1}
+                padding={1}
+                minHeight={148}>
+                <LoadingBase />
+                <Typography>{t('loading')}</Typography>
+            </Box>
+        )
     if (!asset.value || !token)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
@@ -165,7 +185,9 @@ export function Collectible(props: CollectibleProps) {
     const endDate = _asset.auction?.endAt
     const renderTab = () => {
         const tabMap = {
-            [tabs.about]: <AboutTab onChangeProvider={onDataProviderChange} asset={asset} />,
+            [tabs.about]: (
+                <AboutTab providers={supportedProvider} onChangeProvider={onDataProviderChange} asset={asset} />
+            ),
             [tabs.details]: <DetailTab asset={asset} />,
             [tabs.offers]: <OffersTab />,
             [tabs.activity]: <ActivityTab />,

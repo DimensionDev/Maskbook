@@ -4,22 +4,15 @@ import { RaribleIcon } from '../../../resources/RaribleIcon'
 import { ZoraIcon } from '../../../resources/ZoraIcon'
 import { RSS3Icon } from '../../../resources/RSS3Icon'
 import { DebankIcon } from '../../../resources/DebankIcon'
+import { GemIcon } from '../../../resources/GemIcon'
+import { X2Y2Icon } from '../../../resources/X2Y2Icon'
+import { LooksRareIcon } from '../../../resources/LooksRareIcon'
 import { SourceType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()({
-    opensea: {
-        width: 16,
-        height: 16,
-        verticalAlign: 'bottom',
-    },
-    rarible: {
-        width: 16,
-        height: 16,
-        verticalAlign: 'bottom',
-    },
-    NFTScan: {
-        width: 16,
-        height: 16,
+    provider: {
+        width: 24,
+        height: 24,
         verticalAlign: 'bottom',
     },
 })
@@ -35,19 +28,25 @@ export function CollectibleProviderIcon(props: CollectibleProviderIconProps) {
     const { classes } = useStyles()
     switch (props.provider) {
         case SourceType.NFTScan:
-            return <img src={NftScan} className={classes.NFTScan} />
+            return <img src={NftScan} className={classes.provider} />
         case SourceType.Zerion:
-            return <img src={ZerionIcon} className={classes.NFTScan} />
+            return <img src={ZerionIcon} className={classes.provider} />
         case SourceType.OpenSea:
-            return <OpenSeaIcon classes={{ root: classes.opensea }} viewBox="0 0 16 16" />
+            return <OpenSeaIcon classes={{ root: classes.provider }} viewBox="0 0 16 16" />
         case SourceType.Rarible:
-            return <RaribleIcon classes={{ root: classes.rarible }} viewBox="0 0 16 16" />
+            return <RaribleIcon classes={{ root: classes.provider }} viewBox="0 0 16 16" />
         case SourceType.Zora:
-            return <ZoraIcon classes={{ root: classes.rarible }} viewBox="0 0 16 16" />
+            return <ZoraIcon classes={{ root: classes.provider }} viewBox="0 0 16 16" />
         case SourceType.RSS3:
-            return <RSS3Icon classes={{ root: classes.rarible }} viewBox="0 0 16 16" />
+            return <RSS3Icon classes={{ root: classes.provider }} viewBox="0 0 16 16" />
         case SourceType.DeBank:
-            return <DebankIcon classes={{ root: classes.rarible }} viewBox="0 0 16 16" />
+            return <DebankIcon classes={{ root: classes.provider }} viewBox="0 0 16 16" />
+        case SourceType.Gem:
+            return <GemIcon classes={{ root: classes.provider }} viewBox="0 0 24 25" />
+        case SourceType.LooksRare:
+            return <LooksRareIcon classes={{ root: classes.provider }} viewBox="0 0 24 25" />
+        case SourceType.X2Y2:
+            return <X2Y2Icon classes={{ root: classes.provider }} viewBox="0 0 24 25" />
         default:
             return <></>
     }

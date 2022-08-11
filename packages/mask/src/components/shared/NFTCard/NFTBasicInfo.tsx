@@ -1,6 +1,6 @@
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { Skeleton, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
 import { SourceType } from '@masknet/web3-shared-base'
 import { CollectibleProviderIcon } from '../../../plugins/Collectible/SNSAdaptor/CollectibleProviderIcon'
@@ -84,35 +84,32 @@ const useStyles = makeStyles()((theme) => ({
         gap: 8,
         zIndex: 99,
     },
+    providerIcon: {
+        cursor: 'pointer',
+    },
 }))
 
 interface NFTBasicInfoProps {
     hideSubTitle?: boolean
-    asset: {
-        loading?: boolean
-        value?: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
-    }
+    asset: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
     onChangeProvider: (v: SourceType) => void
+    providers: SourceType[]
 }
 
-const providersMap = [SourceType.Rarible, SourceType.Gem, SourceType.X2Y2, SourceType.LooksRare, SourceType.OpenSea]
-
 export function NFTBasicInfo(props: NFTBasicInfoProps) {
-    const { asset, hideSubTitle, onChangeProvider } = props
+    const { asset, hideSubTitle, onChangeProvider, providers } = props
     const { classes } = useStyles()
-    if (!asset.value || asset.loading) return <Skeleton width={300} height={300} />
 
-    const collectibleProviderOptions = getEnumAsArray(SourceType).filter((x) => providersMap.includes(x.value))
+    const collectibleProviderOptions = getEnumAsArray(SourceType).filter((x) => providers.includes(x.value))
 
-    const _asset = asset.value
-    const resourceUrl = _asset.metadata?.imageURL ?? _asset.metadata?.mediaURL
+    const resourceUrl = asset.metadata?.imageURL ?? asset.metadata?.mediaURL
     return (
         <div className={classes.layout}>
             <div className={classes.body}>
                 <div className={classes.absoluteProvider}>
                     {collectibleProviderOptions.map((x) => {
                         return (
-                            <div key={x.key} onClick={() => onChangeProvider(x.value)}>
+                            <div className={classes.providerIcon} key={x.key} onClick={() => onChangeProvider(x.value)}>
                                 <CollectibleProviderIcon provider={x.value} />
                             </div>
                         )
@@ -120,11 +117,11 @@ export function NFTBasicInfo(props: NFTBasicInfoProps) {
                 </div>
                 <NFTCardStyledAssetPlayer url={resourceUrl} classes={classes} isNative={false} />
             </div>
-            <Typography className={classes.nameSm}>{_asset.metadata?.name ?? '-'}</Typography>
+            <Typography className={classes.nameSm}>{asset.metadata?.name ?? '-'}</Typography>
             {!hideSubTitle && (
                 <div className={classes.nameLgBox}>
-                    <Typography className={classes.nameLg}>{_asset.metadata?.name}</Typography>
-                    {_asset.collection?.verified && <VerifiedUserIcon color="primary" fontSize="small" />}
+                    <Typography className={classes.nameLg}>{asset.metadata?.name}</Typography>
+                    {asset.collection?.verified && <VerifiedUserIcon color="primary" fontSize="small" />}
                 </div>
             )}
         </div>

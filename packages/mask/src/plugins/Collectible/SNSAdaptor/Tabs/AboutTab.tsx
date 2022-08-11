@@ -23,10 +23,11 @@ const useStyles = makeStyles()((theme) => ({
 export interface AboutTabProps {
     asset: AsyncState<Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>>
     onChangeProvider: (v: SourceType) => void
+    providers: SourceType[]
 }
 
 export function AboutTab(props: AboutTabProps) {
-    const { asset, onChangeProvider } = props
+    const { asset, providers, onChangeProvider } = props
     const { classes } = useStyles()
     return useMemo(() => {
         if (asset.loading || !asset.value)
@@ -41,7 +42,12 @@ export function AboutTab(props: AboutTabProps) {
             <CollectibleTab>
                 <div className={classes.body}>
                     <div className={classes.basic}>
-                        <NFTBasicInfo onChangeProvider={onChangeProvider} hideSubTitle asset={asset} />
+                        <NFTBasicInfo
+                            providers={providers}
+                            onChangeProvider={onChangeProvider}
+                            hideSubTitle
+                            asset={asset.value}
+                        />
                     </div>
                     <NFTPriceCard asset={asset.value} />
                 </div>
