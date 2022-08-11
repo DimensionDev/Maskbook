@@ -1,7 +1,9 @@
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID, isZero, NonFungibleTokenOrder } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
@@ -44,35 +46,46 @@ const useStyles = makeStyles()((theme) => ({
 
 interface NFTPriceCardProps {
     asset: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
+    topOrder?: NonFungibleTokenOrder<ChainId, SchemaType>
 }
 
 export function NFTPriceCard(props: NFTPriceCardProps) {
-    const { asset } = props
+    const { asset, topOrder } = props
     const { classes } = useStyles()
     const { t } = useI18N()
+
     const priceTokenImg = asset.priceInToken?.token.logoURL
 
     return (
         <div className={classes.wrapper}>
             <div className={classes.header}>
                 <Typography className={classes.textBase}>{t('price')}</Typography>
-                <Typography className={classes.textBase}>
-                    {t('plugin_collectible_time_left')} <strong>-</strong> h <strong>-</strong> m
-                </Typography>
+                {asset.auction?.endAt && !isZero(asset.auction.endAt) && (
+                    <Typography className={classes.textBase}>
+                        {t('plugin_collectible_time_left')}
+                        {formatDistanceToNow(new Date(asset.auction.endAt * 1000), {
+                            addSuffix: true,
+                        })}
+                    </Typography>
+                )}
             </div>
             <div className={classes.priceZone}>
                 <img width={48} height={48} src={priceTokenImg} />
                 <Typography className={classes.priceText}>{asset.priceInToken?.amount ?? '-'}</Typography>
             </div>
             <div className={classes.offerBox}>
-                <Typography className={classes.textBase}>{t('plugin_collectible_top_offer')}</Typography>
-                <img width={18} height={18} src={priceTokenImg} />
-                <Typography className={classes.textBase}>
-                    <strong>{asset.priceInToken?.amount ?? '-'}</strong>
-                </Typography>
-                <Typography className={classes.textBase}>
-                    <strong>(${asset.price?.usd ?? '-'})</strong>
-                </Typography>
+                {topOrder && (
+                    <>
+                        <Typography className={classes.textBase}>{t('plugin_collectible_top_offer')}</Typography>
+                        <img width={18} height={18} src={topOrder.priceInToken?.token.logoURL} />
+                        <Typography className={classes.textBase}>
+                            <strong>{topOrder.priceInToken?.amount ?? '-'}</strong>
+                        </Typography>
+                        <Typography className={classes.textBase}>
+                            <strong>{topOrder.price?.usd ?? '-'}</strong>
+                        </Typography>
+                    </>
+                )}
             </div>
         </div>
     )

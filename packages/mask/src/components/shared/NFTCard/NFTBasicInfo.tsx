@@ -52,10 +52,14 @@ const useStyles = makeStyles()((theme) => ({
         minHeight: 300,
         background: 'black',
         borderRadius: 20,
-        boxShadow: '0px 28px 56px -28px red',
+        boxShadow: `0px 28px 56px -28px ${theme.palette.maskColor.shadowBottom}`,
         '& > img': {
             borderRadius: 20,
         },
+    },
+    wrapper: {
+        width: 'unset',
+        height: 'unset',
     },
     nameSm: {
         fontSize: 16,
