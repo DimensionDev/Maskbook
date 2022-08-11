@@ -244,7 +244,7 @@ function RenderEntryComponent({ application }: { application: Application }) {
     }, [ApplicationEntryStatus])
 
     const verifyPersona = useCallback(() => {
-        setPersonaListDialog({ open: true })
+        setPersonaListDialog({ open: true, target: application.pluginId })
     }, [])
 
     const clickHandler = useMemo(() => {
