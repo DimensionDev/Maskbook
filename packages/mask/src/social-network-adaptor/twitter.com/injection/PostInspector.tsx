@@ -6,6 +6,7 @@ import { injectPostInspectorDefault } from '../../../social-network/defaults/inj
 export function injectPostInspectorAtTwitter(signal: AbortSignal, current: PostInfo) {
     return injectPostInspectorDefault({
         zipPost(node) {
+            if (node.destroyed) return
             const contentContainer = node.current.parentElement
             if (!contentContainer) return
 
