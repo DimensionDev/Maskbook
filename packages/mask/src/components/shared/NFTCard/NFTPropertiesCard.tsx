@@ -54,10 +54,11 @@ const useStyles = makeStyles()((theme) => ({
 }))
 interface NFTPropertiesCardProps {
     asset: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
+    rank?: number
 }
 
 export function NFTPropertiesCard(props: NFTPropertiesCardProps) {
-    const { asset } = props
+    const { asset, rank } = props
     const { classes } = useStyles()
     const { t } = useI18N()
 
@@ -67,7 +68,7 @@ export function NFTPropertiesCard(props: NFTPropertiesCardProps) {
                 <Typography className={classes.title}>{t('plugin_collectible_properties')}</Typography>
                 <div className={classes.rankBox}>
                     {/* gem rank */}
-                    <NFTRank rank={1} />
+                    <NFTRank rank={rank} />
                 </div>
             </div>
             <div className={classes.content}>

@@ -17,7 +17,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface NFTRankProps {
     providerType?: SourceType
-    rank: number
+    rank?: number
 }
 
 export function NFTRank(props: NFTRankProps) {

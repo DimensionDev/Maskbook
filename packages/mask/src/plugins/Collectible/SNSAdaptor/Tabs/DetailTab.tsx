@@ -27,11 +27,11 @@ export interface DetailTabProps {
 
 export function DetailTab(props: DetailTabProps) {
     const { asset } = props
-    const { provider } = CollectibleState.useContainer()
+    const { provider, rarity } = CollectibleState.useContainer()
     const { classes } = useStyles()
 
     return useMemo(() => {
-        if (asset.loading || !asset.value)
+        if (asset.loading || !asset.value || rarity.loading)
             return (
                 <CollectibleTab>
                     <div className={classes.body}>
@@ -45,7 +45,7 @@ export function DetailTab(props: DetailTabProps) {
                     <div className={classes.info}>
                         <NFTInfoCard sourceType={provider} asset={asset.value} />
                     </div>
-                    <NFTPropertiesCard asset={asset.value} />
+                    <NFTPropertiesCard rank={rarity.value?.rank} asset={asset.value} />
                 </div>
             </CollectibleTab>
         )
