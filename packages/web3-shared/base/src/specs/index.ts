@@ -134,7 +134,7 @@ export interface SocialIdentity {
     publicKey?: string
     /** Is own user account identity */
     isOwner?: boolean
-    /** persona of the social account **/
+    /** All bindings of the persona  **/
     binding?: NextIDPersonaBindings
 }
 
