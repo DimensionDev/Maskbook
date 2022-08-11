@@ -282,7 +282,7 @@ export function TraderView(props: TraderViewProps) {
         )
     // #endregion
 
-    const { coin, tickers } = trending
+    const { coin, tickers, market } = trending
 
     return (
         <TrendingViewDeck
@@ -320,6 +320,7 @@ export function TraderView(props: TraderViewProps) {
                         <PriceChart
                             classes={{ root: classes.priceChartRoot }}
                             coin={coin}
+                            amount={market?.price_change_percentage_1h ?? market?.price_change_percentage_24h ?? 0}
                             currency={currency}
                             stats={stats}
                             retry={retryStats}
