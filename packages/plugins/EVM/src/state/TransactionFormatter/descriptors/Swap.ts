@@ -8,7 +8,7 @@ import { getTokenAmountDescription } from '../utils'
 export class SwapDescriptor implements TransactionDescriptor {
     async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
         const context = context_ as TransactionContext<ChainId, string | undefined>
-        const { DODO_ETH_ADDRESS } = getTraderConstants(context.chainId)
+        const { DODO_ETH_ADDRESS, OPENOCEAN_ETH_ADDRESS } = getTraderConstants(context.chainId)
         if (!context.methods?.find((x) => x.name)) return
 
         const connection = await Web3StateSettings.value.Connection?.getConnection?.({
@@ -77,11 +77,20 @@ export class SwapDescriptor implements TransactionDescriptor {
                 }
             }
 
-            if (method.name === 'mixSwap') {
+            // DODO
+            if (
+                method.name === 'mixSwap' &&
+                parameters?.fromToken &&
+                parameters?.toToken &&
+                parameters?.fromTokenAmount &&
+                parameters?.minReturnAmount
+            ) {
                 const tokenIn = isSameAddress(parameters!.fromToken, DODO_ETH_ADDRESS)
                     ? nativeToken
                     : await connection?.getFungibleToken(parameters!.fromToken ?? '')
-                const tokenOut = await connection?.getFungibleToken(parameters!.toToken ?? '')
+                const tokenOut = isSameAddress(parameters!.toToken, DODO_ETH_ADDRESS)
+                    ? nativeToken
+                    : await connection?.getFungibleToken(parameters!.toToken ?? '')
                 return {
                     chainId: context.chainId,
                     title: 'Swap Token',
@@ -89,9 +98,43 @@ export class SwapDescriptor implements TransactionDescriptor {
                         tokenOut?.symbol ?? ''
                     }.`,
                     successfulDescription: `Swap ${getTokenAmountDescription(
-                        parameters!.minReturnAmount,
+                        parameters!.fromTokenAmount,
                         tokenIn,
-                    )} for ${getTokenAmountDescription(parameters!.amountOut, tokenOut)} successfully.`,
+                    )} for ${getTokenAmountDescription(parameters!.minReturnAmount, tokenOut)} successfully.`,
+                    failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                }
+            }
+
+            // Openocean
+            if (method.name === 'swap') {
+                const _parameters = parameters as
+                    | {
+                          [key: string]: { [key: string]: string } | undefined
+                      }
+                    | undefined
+                if (
+                    !_parameters?.[1]?.srcToken ||
+                    !_parameters?.[1]?.dstToken ||
+                    !_parameters?.[1]?.amount ||
+                    !_parameters?.[1]?.minReturnAmount
+                )
+                    return
+                const tokenIn = isSameAddress(_parameters[1].srcToken, OPENOCEAN_ETH_ADDRESS)
+                    ? nativeToken
+                    : await connection?.getFungibleToken(_parameters[1].srcToken ?? '')
+                const tokenOut = isSameAddress(_parameters[1].dstToken, OPENOCEAN_ETH_ADDRESS)
+                    ? nativeToken
+                    : await connection?.getFungibleToken(_parameters[1].dstToken ?? '')
+                return {
+                    chainId: context.chainId,
+                    title: 'Swap Token',
+                    description: `Swap ${getTokenAmountDescription(_parameters[1].amount, tokenIn)} for ${
+                        tokenOut?.symbol ?? ''
+                    }.`,
+                    successfulDescription: `Swap ${getTokenAmountDescription(
+                        _parameters[1].amount,
+                        tokenIn,
+                    )} for ${getTokenAmountDescription(parameters!.minReturnAmount, tokenOut)} successfully.`,
                     failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
                 }
             }
