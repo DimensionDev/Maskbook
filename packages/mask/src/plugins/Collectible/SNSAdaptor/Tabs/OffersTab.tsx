@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export function OffersTab() {
     const { classes } = useStyles()
-    const { orders } = CollectibleState.useContainer()
+    const { orders, provider } = CollectibleState.useContainer()
     const _orders = orders.value?.data ?? EMPTY_LIST
     const { t } = useI18N()
     return useMemo(() => {
@@ -54,7 +54,7 @@ export function OffersTab() {
             <CollectibleTab>
                 <div className={classes.body} style={{ justifyContent: 'unset' }}>
                     {_orders?.map((x, idx) => (
-                        <NFTOfferCard key={idx} offer={x} />
+                        <NFTOfferCard provider={provider} key={idx} offer={x} />
                     ))}
                 </div>
             </CollectibleTab>

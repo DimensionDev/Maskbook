@@ -1,9 +1,9 @@
 import { makeStyles } from '@masknet/theme'
-import { OpenSeaIcon } from '../../../resources/OpenSeaIcon'
 import { Typography } from '@mui/material'
-import type { NonFungibleTokenOrder } from '@masknet/web3-shared-base'
+import type { NonFungibleTokenOrder, SourceType } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
+import { CollectibleProviderIcon } from '../../../plugins/Collectible/SNSAdaptor/CollectibleProviderIcon'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -42,22 +42,23 @@ const useStyles = makeStyles()((theme) => ({
 
 interface NFTOfferCardProps {
     offer: NonFungibleTokenOrder<ChainId, SchemaType>
+    provider: SourceType
 }
 
 export function NFTOfferCard(props: NFTOfferCardProps) {
-    const { offer } = props
+    const { offer, provider } = props
     const { classes } = useStyles()
     const { t } = useI18N()
 
     return (
         <div className={classes.wrapper}>
-            <OpenSeaIcon width={24} height={24} />
+            <CollectibleProviderIcon provider={provider} />
             <div className={classes.offerDetail}>
                 <div className={classes.flex}>
                     <img className={classes.currencyIcon} src={offer.priceInToken?.token.logoURL} alt="" />
                     <Typography className={classes.textBase}>
                         <strong style={{ fontSize: 14 }}>{offer.priceInToken?.amount}</strong>{' '}
-                        <strong>{offer.price?.usd || '-'}</strong> - below
+                        <strong>{offer.price?.usd || '-'}</strong>
                     </Typography>
                 </div>
                 <div className={classes.flex} style={{ marginLeft: 40 }}>

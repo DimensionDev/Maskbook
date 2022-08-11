@@ -47,7 +47,6 @@ function useCollectibleState(token?: CollectibleToken) {
         },
     )
 
-    console.log(asset, orders, events, 'data', rarity)
     return {
         token,
         asset,

@@ -60,7 +60,7 @@ export function NFTInfoCard(props: NFTInfoCardProps) {
         { title: t('plugin_collectible_token_id'), value: formatTokenId(asset.tokenId, 4) },
         { title: t('contract'), value: Others?.formatAddress(asset.address, 4) ?? '-', link: true },
         { title: t('plugin_collectible_block_chain'), value: 'Ethereum' },
-        { title: t('plugin_collectible_token_schema'), value: asset.contract?.schema ?? SchemaType.ERC721 },
+        { title: t('token_standard'), value: asset.contract?.schema ?? SchemaType.ERC721 },
         {
             title: t('plugin_collectible_creator_earning'),
             value: `${Number.parseInt(asset.contract?.creatorEarning || '0', 10) / 100}%` ?? '0',

@@ -22,31 +22,33 @@ const ZerionIcon = new URL('../../../resources/zerion.png', import.meta.url).toS
 
 export interface CollectibleProviderIconProps {
     provider: SourceType
+    overrideClasses?: string
 }
 
 export function CollectibleProviderIcon(props: CollectibleProviderIconProps) {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
+    const className = cx(classes.provider, props.overrideClasses)
     switch (props.provider) {
         case SourceType.NFTScan:
-            return <img src={NftScan} className={classes.provider} />
+            return <img src={NftScan} className={className} />
         case SourceType.Zerion:
-            return <img src={ZerionIcon} className={classes.provider} />
+            return <img src={ZerionIcon} className={className} />
         case SourceType.OpenSea:
-            return <OpenSeaIcon classes={{ root: classes.provider }} viewBox="0 0 16 16" />
+            return <OpenSeaIcon classes={{ root: className }} viewBox="0 0 16 16" />
         case SourceType.Rarible:
-            return <RaribleIcon classes={{ root: classes.provider }} viewBox="0 0 16 16" />
+            return <RaribleIcon classes={{ root: className }} viewBox="0 0 16 16" />
         case SourceType.Zora:
-            return <ZoraIcon classes={{ root: classes.provider }} viewBox="0 0 16 16" />
+            return <ZoraIcon classes={{ root: className }} viewBox="0 0 16 16" />
         case SourceType.RSS3:
-            return <RSS3Icon classes={{ root: classes.provider }} viewBox="0 0 16 16" />
+            return <RSS3Icon classes={{ root: className }} viewBox="0 0 16 16" />
         case SourceType.DeBank:
-            return <DebankIcon classes={{ root: classes.provider }} viewBox="0 0 16 16" />
+            return <DebankIcon classes={{ root: className }} viewBox="0 0 16 16" />
         case SourceType.Gem:
-            return <GemIcon classes={{ root: classes.provider }} viewBox="0 0 24 25" />
+            return <GemIcon classes={{ root: className }} viewBox="0 0 24 25" />
         case SourceType.LooksRare:
-            return <LooksRareIcon classes={{ root: classes.provider }} viewBox="0 0 24 25" />
+            return <LooksRareIcon classes={{ root: className }} viewBox="0 0 24 25" />
         case SourceType.X2Y2:
-            return <X2Y2Icon classes={{ root: classes.provider }} viewBox="0 0 24 25" />
+            return <X2Y2Icon classes={{ root: className }} viewBox="0 0 24 25" />
         default:
             return <></>
     }
