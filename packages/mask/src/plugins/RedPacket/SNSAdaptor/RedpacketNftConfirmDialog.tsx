@@ -330,8 +330,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                                 className={classNames(classes.button, classes.sendButton)}
                                 fullWidth>
                                 {t.send_symbol({
-                                    amount: tokenList.length.toString(),
-                                    symbol: tokenList.length > 1 ? 'NFTs' : 'NFT',
+                                    count: tokenList.length,
                                 })}
                             </ActionButton>
                         </WalletConnectedBoundary>

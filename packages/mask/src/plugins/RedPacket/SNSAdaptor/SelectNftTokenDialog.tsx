@@ -4,7 +4,17 @@ import { NetworkPluginID, isSameAddress, NonFungibleToken, NonFungibleTokenContr
 import { SchemaType, formatTokenId, ChainId } from '@masknet/web3-shared-evm'
 import { useI18N as useBaseI18N } from '../../../utils'
 import { Translate, useI18N } from '../locales'
-import { DialogContent, Box, InputBase, Paper, Button, Typography, ListItem, CircularProgress } from '@mui/material'
+import {
+    DialogContent,
+    Box,
+    InputBase,
+    Paper,
+    Button,
+    Typography,
+    ListItem,
+    CircularProgress,
+    useTheme,
+} from '@mui/material'
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useCallback, useState, useEffect } from 'react'
@@ -315,6 +325,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         onClose,
         loadingOwnerList,
     } = props
+    const theme = useTheme()
     const { t: tr } = useBaseI18N()
     const t = useI18N()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
@@ -426,13 +437,15 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     useEffect(() => {
         const tokenIdOwnerList = tokenDetailedOwnerList.map((t) => t.tokenId)
         setNonExistedTokenIdList(
-            tokenIdFilterList
-                .filter((tokenId) => !tokenIdOwnerList.includes(tokenId))
-                .concat(
-                    tokenDetailedSelectedList
-                        .filter((token) => !isSameAddress(token.ownerId, account))
-                        .map((t) => t.tokenId),
-                ),
+            uniq(
+                tokenIdFilterList
+                    .filter((tokenId) => !tokenIdOwnerList.includes(tokenId))
+                    .concat(
+                        tokenDetailedSelectedList
+                            .filter((token) => !isSameAddress(token.ownerId, account))
+                            .map((t) => t.tokenId),
+                    ),
+            ),
         )
     }, [tokenDetailedSelectedList, tokenIdFilterList, tokenDetailedOwnerList])
     // #endregion
@@ -531,7 +544,10 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                         <QuestionMarkIcon className={classes.questionMarkIcon} />
                     </ShadowRootTooltip>
                     <Typography>
-                        <span className={classes.selectedTokenAmount}>{tokenDetailedSelectedList.length}</span> NFTs
+                        <Translate.nft_select_amount
+                            components={{ span: <span className={classes.selectedTokenAmount} /> }}
+                            values={{ count: tokenDetailedSelectedList.length }}
+                        />
                     </Typography>
                 </Box>
             </div>
@@ -549,7 +565,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                     <Icons.Search className={classes.iconButton} />
                     <InputBase
                         value={tokenDetailedOwnerList.length === 0 ? searchTokenListInput : tokenIdListInput}
-                        placeholder="Token ID separated by comma, e.g. 1224, 7873, 8948"
+                        placeholder={t.nft_search_placeholder()}
                         className={classes.textField}
                         onChange={(e) =>
                             tokenDetailedOwnerList.length === 0
@@ -590,7 +606,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                 <Typography>
                                     <Translate.nft_shift_select_tip
                                         components={{
-                                            text: <span style={{ color: '#1C68F3' }} />,
+                                            text: <span style={{ color: theme.palette.maskColor.primary }} />,
                                         }}
                                         values={{
                                             text: 'Shift',

@@ -297,135 +297,137 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
 
     setIsNFTRedPacketLoaded?.(balance > 0)
 
+    if (openSelectNFTDialog) {
+        return (
+            <SelectNftTokenDialog
+                onClose={() => setOpenSelectNFTDialog(false)}
+                contract={contract}
+                existTokenDetailedList={tokenDetailedList}
+                setExistTokenDetailedList={setExistTokenDetailedList}
+                tokenDetailedOwnerList={tokenDetailedOwnerList}
+                loadingOwnerList={loadingOwnerList}
+            />
+        )
+    }
+
+    if (openNFTConfirmDialog && contract) {
+        return (
+            <RedpacketNftConfirmDialog
+                message={message}
+                contract={contract}
+                tokenList={tokenDetailedList}
+                onBack={() => setOpenNFTConfirmDialog(false)}
+                onClose={onClose}
+            />
+        )
+    }
+
     return (
         <>
-            {openSelectNFTDialog ? (
-                <SelectNftTokenDialog
-                    onClose={() => setOpenSelectNFTDialog(false)}
-                    contract={contract}
-                    existTokenDetailedList={tokenDetailedList}
-                    setExistTokenDetailedList={setExistTokenDetailedList}
-                    tokenDetailedOwnerList={tokenDetailedOwnerList}
-                    loadingOwnerList={loadingOwnerList}
-                />
-            ) : openNFTConfirmDialog && contract ? (
-                <RedpacketNftConfirmDialog
-                    message={message}
-                    contract={contract}
-                    tokenList={tokenDetailedList}
-                    onBack={() => setOpenNFTConfirmDialog(false)}
-                    onClose={onClose}
-                />
-            ) : (
-                <>
-                    <Box className={classes.root}>
-                        <Box style={{ margin: '16px 0' }}>
-                            <ERC721ContractSelectPanel
-                                contract={contract}
-                                onContractChange={setContract}
-                                balance={balance}
-                                onBalanceChange={setBalance}
-                            />
-                        </Box>
-                        {contract && balance ? (
-                            loadingOwnerList ? (
-                                <CircularProgress size={24} className={classes.loadingOwnerList} />
-                            ) : (
-                                <Box className={classes.selectWrapper}>
-                                    <div
-                                        className={classNames(
-                                            classes.optionLeft,
-                                            classes.option,
-                                            tokenDetailedOwnerList.length === 0 ? classes.disabledSelector : null,
-                                        )}
-                                        onClick={() => {
-                                            setSelectOption(NFTSelectOption.All)
-                                            setAllTokenDetailedList(tokenDetailedOwnerList.slice(0, maxSelectShares))
-                                        }}>
-                                        <div
-                                            className={classNames(
-                                                classes.checkIconWrapper,
-                                                selectOption === NFTSelectOption.All ? classes.checked : '',
-                                            )}>
-                                            <CheckIcon className={classes.checkIcon} />
-                                        </div>
-                                        <Typography color="textPrimary">
-                                            {tokenDetailedOwnerList.length === 0
-                                                ? 'All'
-                                                : t.nft_select_all_option({
-                                                      total: Math.min(
-                                                          NFT_RED_PACKET_MAX_SHARES,
-                                                          tokenDetailedOwnerList.length,
-                                                      ).toString(),
-                                                  })}
-                                        </Typography>
-                                    </div>
-                                    <div
-                                        className={classes.option}
-                                        onClick={() => setSelectOption(NFTSelectOption.Partial)}>
-                                        <div
-                                            className={classNames(
-                                                classes.checkIconWrapper,
-                                                selectOption === NFTSelectOption.Partial ? classes.checked : '',
-                                            )}>
-                                            <CheckIcon className={classes.checkIcon} />
-                                        </div>
-                                        <Typography color="textPrimary">{t.nft_select_partially_option()}</Typography>
-                                    </div>
-                                </Box>
-                            )
-                        ) : null}
-                        {contract && balance && !loadingOwnerList ? (
-                            <div className={classes.tokenSelectorParent}>
-                                <List className={classes.tokenSelector}>
-                                    {tokenDetailedList.map((value, i) => (
-                                        <div key={i}>
-                                            <NFTCard token={value} removeToken={removeToken} renderOrder={i} />
-                                        </div>
-                                    ))}
-                                    <ListItem
-                                        onClick={() => setOpenSelectNFTDialog(true)}
-                                        className={classNames(classes.tokenSelectorWrapper, classes.addWrapper)}>
-                                        <AddCircleOutlineIcon className={classes.addIcon} onClick={() => void 0} />
-                                    </ListItem>
-                                </List>
+            <Box className={classes.root}>
+                <Box style={{ margin: '16px 0' }}>
+                    <ERC721ContractSelectPanel
+                        contract={contract}
+                        onContractChange={setContract}
+                        balance={balance}
+                        onBalanceChange={setBalance}
+                    />
+                </Box>
+                {contract && balance ? (
+                    loadingOwnerList ? (
+                        <CircularProgress size={24} className={classes.loadingOwnerList} />
+                    ) : (
+                        <Box className={classes.selectWrapper}>
+                            <div
+                                className={classNames(
+                                    classes.optionLeft,
+                                    classes.option,
+                                    tokenDetailedOwnerList.length === 0 ? classes.disabledSelector : null,
+                                )}
+                                onClick={() => {
+                                    setSelectOption(NFTSelectOption.All)
+                                    setAllTokenDetailedList(tokenDetailedOwnerList.slice(0, maxSelectShares))
+                                }}>
+                                <div
+                                    className={classNames(
+                                        classes.checkIconWrapper,
+                                        selectOption === NFTSelectOption.All ? classes.checked : '',
+                                    )}>
+                                    <CheckIcon className={classes.checkIcon} />
+                                </div>
+                                <Typography color="textPrimary">
+                                    {tokenDetailedOwnerList.length === 0
+                                        ? 'All'
+                                        : t.nft_select_all_option({
+                                              total: Math.min(
+                                                  NFT_RED_PACKET_MAX_SHARES,
+                                                  tokenDetailedOwnerList.length,
+                                              ).toString(),
+                                          })}
+                                </Typography>
                             </div>
-                        ) : null}
-                        <div className={classes.line}>
-                            <RedpacketMessagePanel onChange={(val: string) => setMessage(val)} message={message} />
-                        </div>
-                        {contract && balance && !loadingOwnerList ? (
-                            <>
-                                <Typography className={classes.unapprovedTip}>{t.nft_unapproved_tip()}</Typography>
-                                <Typography className={classes.approveAllTip}>{t.nft_approve_all_tip()}</Typography>
-                            </>
-                        ) : null}
-                    </Box>
-                    <Box style={{ position: 'absolute', bottom: 0, width: '100%' }}>
-                        <PluginWalletStatusBar>
-                            <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
-                                <WalletConnectedBoundary>
-                                    <EthereumERC721TokenApprovedBoundary
-                                        validationMessage={validationMessage}
-                                        owner={account}
-                                        contractDetailed={contract}
-                                        classes={{ approveButton: classes.approveButton }}
-                                        operator={RED_PACKET_NFT_ADDRESS}>
-                                        <ActionButton
-                                            style={{ height: 40, padding: 0, margin: 0 }}
-                                            size="large"
-                                            disabled={!!validationMessage}
-                                            fullWidth
-                                            onClick={() => setOpenNFTConfirmDialog(true)}>
-                                            {t.next()}
-                                        </ActionButton>
-                                    </EthereumERC721TokenApprovedBoundary>
-                                </WalletConnectedBoundary>
-                            </ChainBoundary>
-                        </PluginWalletStatusBar>
-                    </Box>
-                </>
-            )}
+                            <div className={classes.option} onClick={() => setSelectOption(NFTSelectOption.Partial)}>
+                                <div
+                                    className={classNames(
+                                        classes.checkIconWrapper,
+                                        selectOption === NFTSelectOption.Partial ? classes.checked : '',
+                                    )}>
+                                    <CheckIcon className={classes.checkIcon} />
+                                </div>
+                                <Typography color="textPrimary">{t.nft_select_partially_option()}</Typography>
+                            </div>
+                        </Box>
+                    )
+                ) : null}
+                {contract && balance && !loadingOwnerList ? (
+                    <div className={classes.tokenSelectorParent}>
+                        <List className={classes.tokenSelector}>
+                            {tokenDetailedList.map((value, i) => (
+                                <div key={i}>
+                                    <NFTCard token={value} removeToken={removeToken} renderOrder={i} />
+                                </div>
+                            ))}
+                            <ListItem
+                                onClick={() => setOpenSelectNFTDialog(true)}
+                                className={classNames(classes.tokenSelectorWrapper, classes.addWrapper)}>
+                                <AddCircleOutlineIcon className={classes.addIcon} onClick={() => void 0} />
+                            </ListItem>
+                        </List>
+                    </div>
+                ) : null}
+                <div className={classes.line}>
+                    <RedpacketMessagePanel onChange={(val: string) => setMessage(val)} message={message} />
+                </div>
+                {contract && balance && !loadingOwnerList ? (
+                    <>
+                        <Typography className={classes.unapprovedTip}>{t.nft_unapproved_tip()}</Typography>
+                        <Typography className={classes.approveAllTip}>{t.nft_approve_all_tip()}</Typography>
+                    </>
+                ) : null}
+            </Box>
+            <Box style={{ position: 'absolute', bottom: 0, width: '100%' }}>
+                <PluginWalletStatusBar>
+                    <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                        <WalletConnectedBoundary>
+                            <EthereumERC721TokenApprovedBoundary
+                                validationMessage={validationMessage}
+                                owner={account}
+                                contractDetailed={contract}
+                                classes={{ approveButton: classes.approveButton }}
+                                operator={RED_PACKET_NFT_ADDRESS}>
+                                <ActionButton
+                                    style={{ height: 40, padding: 0, margin: 0 }}
+                                    size="large"
+                                    disabled={!!validationMessage}
+                                    fullWidth
+                                    onClick={() => setOpenNFTConfirmDialog(true)}>
+                                    {t.next()}
+                                </ActionButton>
+                            </EthereumERC721TokenApprovedBoundary>
+                        </WalletConnectedBoundary>
+                    </ChainBoundary>
+                </PluginWalletStatusBar>
+            </Box>
         </>
     )
 }
