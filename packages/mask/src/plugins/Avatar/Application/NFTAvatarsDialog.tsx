@@ -75,15 +75,6 @@ export function NFTAvatarDialog(props: NFTAvatarsDialogProps) {
                         ? t.application_edit_profile_dialog_title()
                         : t.application_dialog_title()
                 }
-                /* hidden tab
-                titleTabs={
-                    step === CreateNFTAvatarStep.NFTList ? (
-                        <MaskTabList variant="base" onChange={onChange} aria-label="Avatar">
-                            <Tab label={t.pfp_title()} value={tabs.pfp} />
-                            <Tab label={t.background_title()} value={tabs.background} />
-                        </MaskTabList>
-                    ) : null
-                } */
                 isOnBack={step !== CreateNFTAvatarStep.Persona}
                 open={props.open}
                 onClose={onBack}>
