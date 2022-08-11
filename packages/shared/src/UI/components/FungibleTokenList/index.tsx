@@ -152,7 +152,13 @@ export const FungibleTokenList = forwardRef(
             return filteredFungibleTokens
                 .filter((x) => (mode === TokenListMode.List ? !isBlockedToken(x) : true))
                 .sort((a, z) => {
-                    if (mode === TokenListMode.Manage) return 0
+                    if (mode === TokenListMode.Manage) {
+                        // trusted token
+                        if (isTrustedToken(a.address)) return -1
+                        if (isTrustedToken(z.address)) return 1
+
+                        return 0
+                    }
                     const aBalance = toZero(formatBalance(fungibleTokensBalance[a.address] ?? '0', a.decimals))
                     const zBalance = toZero(formatBalance(fungibleTokensBalance[z.address] ?? '0', z.decimals))
 
@@ -219,7 +225,11 @@ export const FungibleTokenList = forwardRef(
             }
             if (mode === TokenListMode.Manage) return ''
 
-            if (keyword.startsWith('0x') && keyword.length > 3 && !Others?.isValidAddress(keyword)) {
+            if (
+                (keyword.startsWith('0x') || keyword.startsWith('0X')) &&
+                keyword.length > 3 &&
+                !Others?.isValidAddress(keyword)
+            ) {
                 setSearchError(t.erc20_search_wrong_address())
                 return
             }
@@ -272,7 +282,7 @@ export const FungibleTokenList = forwardRef(
                     disableSearch={!!props.disableSearch}
                     itemRender={getFungibleTokenItem<T>(
                         (address) => {
-                            if (isSameAddress(nativeToken?.address, address)) return 'official'
+                            if (isSameAddress(nativeToken?.address, address)) return 'official-native'
 
                             const inOfficialList = fungibleTokens.some((x) => isSameAddress(x.address, address))
                             if (inOfficialList) return 'official'

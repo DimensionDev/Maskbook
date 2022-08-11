@@ -1,5 +1,4 @@
-import type { FC } from 'react'
-import { useRef } from 'react'
+import { useCallback, FC, useState } from 'react'
 import { useCurrentWeb3NetworkPluginID, useNativeTokenAddress, Web3Helper } from '@masknet/plugin-infra/web3'
 import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
 import { EMPTY_LIST, EnhanceableSite, isDashboardPage } from '@masknet/shared-base'
@@ -48,7 +47,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, isDashboard }) => 
     wrapper: {
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(6),
-        overflow: 'visible !important',
     },
 }))
 
@@ -91,32 +89,44 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
 
     const rowSize = useRowSize()
+    const [currentModeRef, setCurrentModeRef] = useState<{
+        updateMode(mode: TokenListMode): void
+        getCurrentMode(): TokenListMode
+    }>()
 
     const nativeTokenAddress = useNativeTokenAddress(pluginId)
 
-    const modeRef = useRef<{
-        updateMode(mode: TokenListMode): void
-        getCurrentMode(): TokenListMode
-    }>(null)
+    const onRefChange = useCallback(
+        (node: { updateMode(mode: TokenListMode): void; getCurrentMode(): TokenListMode }) => {
+            if (!node) return
+            setCurrentModeRef(node)
+        },
+        [],
+    )
 
     return (
         <InjectedDialog
             titleBarIconStyle={isDashboard ? 'close' : 'back'}
             open={open}
             onClose={() => {
-                modeRef?.current?.getCurrentMode() === TokenListMode.List
+                currentModeRef?.getCurrentMode() === TokenListMode.List
                     ? onClose?.()
-                    : modeRef?.current?.updateMode(TokenListMode.List)
+                    : currentModeRef?.updateMode(TokenListMode.List)
             }}
-            title={title ?? t.select_token()}>
+            title={
+                currentModeRef?.getCurrentMode() === TokenListMode.List
+                    ? title ?? t.select_token()
+                    : t.manage_token_list()
+            }>
             <DialogContent classes={{ root: classes.content }}>
                 <FungibleTokenList
-                    ref={modeRef}
+                    ref={onRefChange}
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
                     pluginID={pluginId}
                     chainId={chainId}
                     tokens={tokens ?? []}
                     whitelist={whitelist}
+                    enableManage
                     blacklist={
                         disableNativeToken && nativeTokenAddress ? [nativeTokenAddress, ...blacklist] : blacklist
                     }
@@ -124,8 +134,8 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
                     selectedTokens={selectedTokens}
                     onSelect={onSubmit}
                     FixedSizeListProps={{
-                        itemSize: rowSize + 16,
-                        height: isMdScreen ? 300 : 422,
+                        itemSize: rowSize + 22,
+                        height: isMdScreen ? 300 : 428,
                         className: classes.wrapper,
                     }}
                     SearchTextFieldProps={{
