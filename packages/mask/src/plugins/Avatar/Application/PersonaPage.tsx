@@ -12,8 +12,9 @@ import { usePersonasFromDB } from '../../../components/DataSource/usePersonasFro
 import type { AllChainsNonFungibleToken } from '../types'
 import { PersonaAction } from '@masknet/shared'
 import { useAsyncRetry } from 'react-use'
-import { useCurrentVisitingSocialIdentity } from '../../../components/DataSource/useActivatedUI'
 import { isValidAddress } from '@masknet/web3-shared-evm'
+import { useLastRecognizedSocialIdentity } from '../../../components/DataSource/useActivatedUI'
+import type { IdentityResolved } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     messageBox: {
@@ -37,9 +38,8 @@ interface PersonaPageProps {
 export function PersonaPage(props: PersonaPageProps) {
     const { onNext, onChange, onClose } = props
     const [visible, setVisible] = useState(true)
-    const currentIdentity = useSubscription(context.lastRecognizedProfile)
     const { classes } = useStyles()
-    const { loading, value: persona } = useCurrentVisitingSocialIdentity()
+    const { loading, value: persona } = useLastRecognizedSocialIdentity()
 
     const myPersonas = usePersonasFromDB()
     const _persona = useSubscription(context.currentPersona)
@@ -65,8 +65,6 @@ export function PersonaPage(props: PersonaPageProps) {
     )
     const { value: avatar } = useAsyncRetry(async () => context.getPersonaAvatar(currentPersona?.identifier), [])
 
-    console.log('persona', persona)
-    console.log('aaa', currentIdentity)
     return (
         <>
             <DialogContent sx={{ flex: 1, height: 450, padding: 2 }}>
@@ -94,11 +92,11 @@ export function PersonaPage(props: PersonaPageProps) {
                             .map((x, i) => (
                                 <PersonaItem
                                     key="avatar"
-                                    avatar={currentIdentity?.avatar ?? ''}
+                                    avatar={persona?.avatar ?? ''}
                                     owner
-                                    nickname={currentIdentity?.nickname}
+                                    nickname={persona?.nickname}
                                     proof={x}
-                                    userId={currentIdentity?.identifier?.userId ?? x.identity}
+                                    userId={persona?.identifier?.userId ?? x.identity}
                                     onSelect={onSelect}
                                 />
                             ))}
@@ -133,7 +131,7 @@ export function PersonaPage(props: PersonaPageProps) {
                 <PersonaAction
                     avatar={avatar === null ? undefined : avatar}
                     currentPersona={currentPersona}
-                    currentVisitingProfile={currentIdentity}
+                    currentVisitingProfile={persona as IdentityResolved}
                 />
             </DialogActions>
         </>

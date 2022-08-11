@@ -115,13 +115,17 @@ export function useCurrentVisitingPersonas() {
  */
 export function useLastRecognizedSocialIdentity() {
     const identity = useLastRecognizedIdentity()
+
     return useAsyncRetry<SocialIdentity>(async () => {
         const bindings = await queryPersonasFromNextID(identity)
         const persona = await queryPersonaFromDB(identity)
+        const personaBindings =
+            bindings?.filter((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()) ?? EMPTY_LIST
         return {
             ...identity,
             publicKey: persona?.identifier.publicKeyAsHex,
-            hasBinding: !!bindings?.find((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()),
+            hasBinding: personaBindings.length > 0,
+            binding: first(personaBindings),
         }
     }, [identity.identifier?.toText()])
 }
