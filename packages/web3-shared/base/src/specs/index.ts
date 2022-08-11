@@ -6,8 +6,8 @@ import type {
     ExtensionSite,
     ProfileIdentifier,
     ECKeyIdentifier,
-    NextIDStorageProofs,
-    NextIDPersonaBindings
+    NextIDPersonaBindings,
+    NextIDStorageInfo,
 } from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type {
@@ -1080,7 +1080,7 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
 
 export interface Storage {
     has?(key: string): Promise<boolean>
-    get<T>(key: string): Promise<T | Array<NextIDStorageProofs<T>> | undefined>
+    get<T>(key: string): Promise<T | NextIDStorageInfo<T> | undefined>
     set<T>(key: string, value: T): Promise<void>
     delete?(key: string): Promise<void>
     clearAll?(key: string): Promise<void>
@@ -1135,10 +1135,13 @@ export interface Web3StorageServiceState {
         providerType: StorageProviderType,
         options: {
             namespace: string
-            personaIdentifier: ECKeyIdentifier
-            address: string
+            personaIdentifier?: ECKeyIdentifier
+            address?: string
         },
     ) => Storage
+    createKVStorage: (namespace: string) => Storage
+    createRSS3Storage: (namespace: string, address: string) => Storage
+    createNextIDStorage: (namespace: string, personaIdentifier: ECKeyIdentifier) => Storage
 }
 
 export interface IdentityServiceState {

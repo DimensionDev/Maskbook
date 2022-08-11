@@ -19,8 +19,6 @@ function createStorage(
         case StorageProviderType.RSS3:
             throw new Error('RSS3 storage is not support flow')
         case StorageProviderType.NextID:
-            if (!options?.personaIdentifier)
-                throw new Error('personaIdentifier is required when providerType is NextID')
             return new NextIDStorage(
                 options.namespace,
                 options.personaIdentifier,

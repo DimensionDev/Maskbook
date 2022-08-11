@@ -20,8 +20,6 @@ function createStorage(
             if (!options?.address) throw new Error('address is required when providerType is RSS3')
             return new RSS3Storage(options.address, Web3StateSettings.value.Connection?.getConnection)
         case StorageProviderType.NextID:
-            if (!options?.personaIdentifier)
-                throw new Error('personaIdentifier is required when providerType is NextID')
             return new NextIDStorage(
                 options.namespace,
                 options.personaIdentifier,
