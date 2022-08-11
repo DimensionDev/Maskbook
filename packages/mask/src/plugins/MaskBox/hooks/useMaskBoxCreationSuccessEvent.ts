@@ -1,4 +1,4 @@
-import { first } from 'lodash-unified'
+import { first, range as rangeNum } from 'lodash-unified'
 import { useAsyncRetry } from 'react-use'
 import type { CreationSuccess } from '@masknet/web3-contracts/types/MaskBox'
 import { useMaskBoxConstants } from '@masknet/web3-shared-evm'
@@ -35,7 +35,7 @@ export function useMaskBoxCreationSuccessEvent(creatorAddress: string, tokenAddr
         const range = blockNumber - (MASK_BOX_CONTRACT_FROM_BLOCK ?? Math.max(0, blockNumber - FRAGMENT_SIZE))
         const size = Math.min(MAX_PAGE_SIZE, Math.ceil(range / FRAGMENT_SIZE))
         const allSettled = await Promise.allSettled(
-            Array.from({ length: size }).map((_, index) =>
+            rangeNum(size).map((index) =>
                 getPastEvents(blockNumber - FRAGMENT_SIZE * (index + 1), blockNumber - FRAGMENT_SIZE * index - 1),
             ),
         )

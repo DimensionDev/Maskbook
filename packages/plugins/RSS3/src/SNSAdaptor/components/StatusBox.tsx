@@ -36,7 +36,11 @@ export const StatusBox: FC<Props> = ({ loading, empty, description }) => {
         return (
             <Box className={classes.statusBox}>
                 <Icons.EmptySimple size={32} />
-                <Typography marginTop="12px" color="textPrimary">
+                <Typography
+                    marginTop="10px"
+                    color={(theme) => theme.palette.maskColor.second}
+                    fontSize="14px"
+                    fontWeight={400}>
                     {description}
                 </Typography>
             </Box>

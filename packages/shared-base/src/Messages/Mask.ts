@@ -29,6 +29,7 @@ export interface MaskSNSEvents {
     // TODO: move to plugin message
     profileTabUpdated: ProfileNFTsPageEvent
     profileTabHidden: { hidden: boolean }
+    profileTabActive: { active: boolean }
     NFTAvatarUpdated: NFTAvatarEvent
     NFTAvatarTimelineUpdated: NFTAvatarEvent
     nftAvatarSettingDialogUpdated: NFTAvatarSettingDialogEvent

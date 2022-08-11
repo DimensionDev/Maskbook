@@ -17,7 +17,7 @@ import { Icons } from '@masknet/icons'
 import { isSameAddress, NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
-import { MaskMessages, useI18N } from '../../utils'
+import { MaskMessages, useI18N, sorter } from '../../utils'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 import {
     useCurrentVisitingIdentity,
@@ -151,14 +151,21 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const currentVisitingIdentity = useCurrentVisitingIdentity()
     const currentVisitingUserId = currentVisitingIdentity.identifier?.userId
 
-    const { value: currentVisitingSocialIdentity, loading: loadingCurrentVisitingSocialIdentity } =
-        useCurrentVisitingSocialIdentity()
+    const {
+        value: currentVisitingSocialIdentity,
+        loading: loadingCurrentVisitingSocialIdentity,
+        retry: retryIdentity,
+    } = useCurrentVisitingSocialIdentity()
 
     const {
         value: socialAddressList = EMPTY_LIST,
         loading: loadingSocialAddressList,
         retry: retrySocialAddress,
-    } = useSocialAddressListAll(currentVisitingSocialIdentity)
+    } = useSocialAddressListAll(
+        currentVisitingSocialIdentity,
+        isOwnerIdentity ? [SocialAddressType.NEXT_ID] : undefined,
+        sorter,
+    )
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
@@ -167,12 +174,13 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }, [retrySocialAddress])
 
     useEffect(() => {
-        const sortedList = socialAddressList.slice(0).sort((a, z) => {
-            if (a.type === SocialAddressType.NEXT_ID) return -1
-            if (z.type === SocialAddressType.NEXT_ID) return 1
-            return 0
+        return MaskMessages.events.ownPersonaChanged.on(() => {
+            retryIdentity()
         })
-        setSelectedAddress(first(sortedList))
+    }, [retryIdentity])
+
+    useEffect(() => {
+        setSelectedAddress(first(socialAddressList))
     }, [socialAddressList])
 
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
@@ -247,6 +255,16 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             setHidden(!data.show)
         })
     }, [currentVisitingUserId])
+
+    useEffect(() => {
+        const listener = () => setAnchorEl(null)
+
+        window.addEventListener('scroll', listener, false)
+
+        return () => {
+            window.removeEventListener('scroll', listener, false)
+        }
+    }, [])
 
     const onOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget)
     const onSelect = (option: SocialAddress<NetworkPluginID>) => {

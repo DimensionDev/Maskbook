@@ -51,10 +51,12 @@ export interface ZerionPrice {
 }
 
 export interface ZerionAsset {
+    id: string
     asset_code: string
     name: string
     symbol: string
     decimals: number
+    implementations: Record<string, { address: string; decimals: number }>
     type: string
     is_displayable: boolean
     is_verified: boolean
@@ -71,13 +73,10 @@ export interface ZerionCovalentAsset {
     value: number
 }
 
-export interface ZerionAddressAsset {
+export interface ZerionAddressPosition {
+    type: string
     asset: ZerionAsset
-    quantity: string
-}
-
-export interface ZerionAddressCovalentAsset {
-    asset: ZerionCovalentAsset
+    chain: string
     quantity: string
 }
 
@@ -129,9 +128,10 @@ export interface ZerionTransactionResponseBody extends SocketResponseBody {
 }
 
 type ZerionAssetResponseBodyPayload = {
-    assets: Record<string, ZerionAddressAsset>
-    'bsc-assets': Record<string, ZerionAddressCovalentAsset>
-    'polygon-assets': Record<string, ZerionAddressCovalentAsset>
+    positions: {
+        aggregation_in_progress: boolean
+        positions: ZerionAddressPosition[]
+    }
 }
 
 export interface ZerionAssetResponseBody extends SocketResponseBody {

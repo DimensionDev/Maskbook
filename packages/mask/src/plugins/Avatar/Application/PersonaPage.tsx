@@ -1,11 +1,10 @@
-import { BindingProof, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
+import { BindingProof, EMPTY_LIST, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, CircularProgress, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { useSubscription } from 'use-subscription'
 import { CloseIcon } from '../assets/close'
 import { context } from '../context'
-import { usePersonas } from '../hooks/usePersonas'
 import { useI18N } from '../locales'
 import { PersonaItem } from './PersonaItem'
 import { InfoIcon } from '../assets/info'
@@ -13,6 +12,8 @@ import { usePersonasFromDB } from '../../../components/DataSource/usePersonasFro
 import type { AllChainsNonFungibleToken } from '../types'
 import { PersonaAction } from '@masknet/shared'
 import { useAsyncRetry } from 'react-use'
+import { useCurrentVisitingSocialIdentity } from '../../../components/DataSource/useActivatedUI'
+import { isValidAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     messageBox: {
@@ -38,7 +39,7 @@ export function PersonaPage(props: PersonaPageProps) {
     const [visible, setVisible] = useState(true)
     const currentIdentity = useSubscription(context.lastRecognizedProfile)
     const { classes } = useStyles()
-    const { loading, value: persona } = usePersonas()
+    const { loading, value: persona } = useCurrentVisitingSocialIdentity()
 
     const myPersonas = usePersonasFromDB()
     const _persona = useSubscription(context.currentPersona)
@@ -51,10 +52,16 @@ export function PersonaPage(props: PersonaPageProps) {
 
     const onSelect = useCallback(
         (proof: BindingProof, tokenInfo?: AllChainsNonFungibleToken) => {
-            onChange(proof, persona?.wallets, tokenInfo)
+            onChange(
+                proof,
+                persona?.binding?.proofs.filter(
+                    (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),
+                ) ?? EMPTY_LIST,
+                tokenInfo,
+            )
             onNext()
         },
-        [persona?.wallets],
+        [persona?.binding],
     )
     const { value: avatar } = useAsyncRetry(async () => context.getPersonaAvatar(currentPersona?.identifier), [])
 
@@ -79,7 +86,7 @@ export function PersonaPage(props: PersonaPageProps) {
                                 />
                             </Box>
                         ) : null}
-                        {persona?.binds?.proofs
+                        {persona?.binding?.proofs
                             .filter((proof) => proof.platform === NextIDPlatform.Twitter)
                             .filter(
                                 (x) => x.identity.toLowerCase() === currentIdentity?.identifier?.userId.toLowerCase(),
@@ -100,7 +107,7 @@ export function PersonaPage(props: PersonaPageProps) {
                             myPersonas[0].linkedProfiles
                                 .filter((x) => x.identifier.network === currentIdentity?.identifier?.network)
                                 .map((x, i) =>
-                                    persona?.binds.proofs.some(
+                                    persona?.binding?.proofs.some(
                                         (y) => y.identity.toLowerCase() === x.identifier.userId.toLowerCase(),
                                     ) ? null : (
                                         <PersonaItem
@@ -111,7 +118,7 @@ export function PersonaPage(props: PersonaPageProps) {
                                         />
                                     ),
                                 )}
-                        {persona?.binds?.proofs
+                        {persona?.binding?.proofs
                             .filter((proof) => proof.platform === currentIdentity?.identifier?.network)
                             .filter(
                                 (x) => x.identity.toLowerCase() !== currentIdentity?.identifier?.userId.toLowerCase(),

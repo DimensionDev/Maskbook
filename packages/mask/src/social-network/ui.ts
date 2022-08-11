@@ -118,7 +118,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     const allPersonaSub = createSubscriptionFromAsync(
         () => {
-            console.log('DEBUG: currentPersonaIdentifier')
             return Services.Identity.queryOwnedPersonaInformation(true)
         },
         [],
