@@ -75,7 +75,7 @@ const WalletSettings = memo(() => {
                     </ListItem>
                     {wallet?.configurable ? (
                         <ListItem className={classes.item} onClick={() => navigate(PopupRoutes.DeleteWallet)}>
-                            <Icons.Trash size={20} />
+                            <Icons.PopupTrash size={20} />
                             <ListItemText className={classes.text}>{t('delete_wallet')}</ListItemText>
                         </ListItem>
                     ) : null}
