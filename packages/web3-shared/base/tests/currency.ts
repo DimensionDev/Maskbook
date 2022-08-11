@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest'
+import { describe, test, expect } from '@jest/globals'
 import { formatCurrency } from '../src'
 
 describe('USD Currency format util test', () => {

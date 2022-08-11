@@ -37,16 +37,15 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
     },
     more: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gas: 6,
         fontSize: 14,
         textAlign: 'center',
-        margin: theme.spacing(2, 0, 1),
-    },
-    moreButton: {
+        padding: 12,
         cursor: 'pointer',
-        margin: theme.spacing(0, 0.5),
-    },
-    moreIcon: {
-        verticalAlign: 'middle',
+        backgroundColor: theme.palette.maskColor.white,
     },
 }))
 
@@ -84,20 +83,15 @@ export const MoreBarUI = memo<MoreBarUIProps>(({ isExpand, dataSource, onClick }
     if (!hasLowValueToken) return null
     if (isExpand)
         return (
-            <Typography className={classes.more}>
+            <Typography className={classes.more} onClick={onClick}>
                 <span>{t('popups_wallet_more_collapse')}</span>
-                <span className={classes.moreButton} onClick={onClick}>
-                    <Icons.ArrowUpRound className={classes.moreIcon} />
-                </span>
+                <Icons.ArrowDrop style={{ transform: 'rotate(180deg)' }} />
             </Typography>
         )
     return (
-        <Typography className={classes.more}>
+        <Typography className={classes.more} onClick={onClick}>
             <span>{t('popups_wallet_more_expand')}</span>
-            <span className={classes.moreButton} onClick={onClick}>
-                <span style={{ textDecoration: 'underline' }}>{t('popups_wallet_more_show_all')}</span>
-                <Icons.ArrowUpRound className={classes.moreIcon} style={{ transform: 'rotate(180deg)' }} />
-            </span>
+            <Icons.ArrowDrop />
         </Typography>
     )
 })

@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest'
+import { describe, test, expect } from '@jest/globals'
 import { formatSupply } from '../src'
 
 describe('Supply format util test', () => {

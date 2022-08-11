@@ -1,8 +1,8 @@
-import { test, expect } from 'vitest'
+import { test, expect } from '@jest/globals'
 import { None, Some } from 'ts-results'
-import { encodePayload, parsePayload, PayloadWellFormed, importAESFromJWK } from '../src/index.js'
+import { encodePayload, parsePayload, PayloadWellFormed, importAESFromJWK } from '@masknet/encryption'
 import { ProfileIdentifier } from '@masknet/shared-base'
-import { queryTestPublicKey } from './keys.js'
+import { queryTestPublicKey } from './keys'
 
 test('Encode v37 payload', async () => {
     const payload: PayloadWellFormed.Payload = {

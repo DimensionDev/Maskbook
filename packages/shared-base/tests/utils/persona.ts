@@ -1,12 +1,8 @@
-import {
-    ECKeyIdentifier,
-    isSamePersona,
-    isSameProfile,
-    PersonaInformation,
-    ProfileIdentifier,
-    ProfileInformation,
-} from '../../src/index.js'
-import { describe, expect, test } from 'vitest'
+import { test, expect, describe } from '@jest/globals'
+import { isSamePersona, isSameProfile } from '../../dist/utils/personas.js'
+import { ECKeyIdentifier } from '../../dist/Identifier/ec-key.js'
+import { PersonaInformation, ProfileInformation } from '../../dist/Persona/type.js'
+import { ProfileIdentifier } from '../../dist/Identifier/profile.js'
 
 describe('Compare is same persons', () => {
     /* cspell:disable-next-line */

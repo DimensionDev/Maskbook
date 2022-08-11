@@ -63,8 +63,8 @@ export const OP = createERC20Tokens('OP_ADDRESS', 'Optimism', 'OP', 18)
 
 export const WNATIVE = createERC20Tokens(
     'WNATIVE_ADDRESS',
-    (chainId) => `Wrapped ${chainResolver?.nativeCurrency(chainId)?.name ?? 'Ether'}`,
-    (chainId) => `W${chainResolver?.nativeCurrency(chainId)?.symbol ?? 'ETH'}`,
+    (chainId) => `Wrapped ${chainResolver.nativeCurrency(chainId)?.name ?? 'Ether'}`,
+    (chainId) => `W${chainResolver.nativeCurrency(chainId)?.symbol ?? 'ETH'}`,
     18,
 )
 
