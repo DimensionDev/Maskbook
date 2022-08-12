@@ -88,7 +88,9 @@ export const PersonaListDialog = () => {
             setSelectedPersona(personas[0])
             return
         }
-        setSelectedPersona(personas.find((x) => isSamePersona(x.persona, currentPersonaIdentifier)))
+
+        const persona = personas.find((x) => isSamePersona(x.persona, currentPersonaIdentifier))
+        setSelectedPersona(persona ?? personas[0])
     }, [currentPersonaIdentifier?.toText(), personas.length])
 
     const [, connect] = useAsyncFn(
@@ -200,7 +202,7 @@ export const PersonaListDialog = () => {
         }
 
         return <ActionContent {...actionProps} />
-    }, [currentPersonaIdentifier, currentProfileIdentify, selectedPersona, personas.length])
+    }, [currentPersonaIdentifier, currentProfileIdentify, selectedPersona])
 
     const onSelectPersona = useCallback((x: PersonaNextIDMixture) => {
         setSelectedPersona(x)
