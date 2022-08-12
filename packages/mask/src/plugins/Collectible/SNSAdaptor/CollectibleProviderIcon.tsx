@@ -20,6 +20,7 @@ export interface CollectibleProviderIconProps {
 }
 
 export function CollectibleProviderIcon(props: CollectibleProviderIconProps) {
+    // todo: move lack icons into icons.brands
     const { classes, cx } = useStyles()
     const className = cx(classes.provider, props.overrideClasses)
     switch (props.provider) {
