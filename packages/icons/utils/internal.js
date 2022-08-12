@@ -3,7 +3,7 @@ import * as React from 'react'
 import { MaskIconPaletteContext } from './MaskIconPaletteContext.js'
 
 /**
- * @typedef {[currentVariant: null | string[], url: string, jsx: object | null, supportColor?: boolean]} RawIcon
+ * @typedef {[currentVariant: null | string[], url: URL, jsx: object | null, supportColor?: boolean]} RawIcon
  */
 
 /**

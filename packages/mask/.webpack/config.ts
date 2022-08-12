@@ -220,26 +220,6 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         optimization: {
             minimize: false,
             runtimeChunk: false,
-            splitChunks: {
-                maxInitialRequests: Infinity,
-                chunks: 'all',
-                cacheGroups: {
-                    // split each npm package into a chunk.
-                    defaultVendors: {
-                        test: /[/\\]node_modules[/\\]/,
-                        name(module) {
-                            const path = (module.context as string)
-                                .replace(/\\/g, '/')
-                                .match(/node_modules\/\.pnpm\/(.+)/)![1]
-                                .split('/')
-                            // [@org+pkgname@version, node_modules, @org, pkgname, ...inner path]
-                            if (path[0].startsWith('@')) return `npm-ns.${path[2].replace('@', '')}.${path[3]}`
-                            // [pkgname@version, node_modules, pkgname, ...inner path]
-                            return `npm.${path[2]}`
-                        },
-                    },
-                },
-            },
         },
         output: {
             environment: {
