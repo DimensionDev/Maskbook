@@ -7,7 +7,7 @@
     "erc20_token_list_placeholder": "Name or Contract address e.g., USDC or 0x234...",
     "erc20_token_list_loading": "Loading token lists...",
     "erc20_search_token_loading": "Loading token...",
-    "erc20_token_add_by_user": "Added By user",
+    "erc20_token_add_by_user": "Added by user",
     "erc20_search_not_token_found": "No results or contract address does not meet the query criteria.",
     "erc20_search_empty_result": "No results",
     "erc20_search_wrong_address": "Enter valid token address",
