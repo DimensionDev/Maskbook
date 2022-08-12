@@ -131,7 +131,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     secondLinkIcon: {
         margin: '4px 2px 0 2px',
-        color: theme.palette.maskColor.secondaryDark,
+        color: theme.palette.maskColor.second,
     },
 }))
 
@@ -169,9 +169,10 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
+            retryIdentity()
             retrySocialAddress()
         })
-    }, [retrySocialAddress])
+    }, [retrySocialAddress, retryIdentity])
 
     useEffect(() => {
         return MaskMessages.events.ownPersonaChanged.on(() => {
