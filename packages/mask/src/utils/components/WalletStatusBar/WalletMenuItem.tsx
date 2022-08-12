@@ -1,4 +1,5 @@
-import { Button, ListItemIcon, MenuItem, Radio } from '@mui/material'
+import { Button, ListItemIcon, MenuItem } from '@mui/material'
+import { Icons } from '@masknet/icons'
 import { memo } from 'react'
 import { useI18N } from '../../i18n-next-ui'
 import { resolveNextIdPlatformPluginId, NetworkPluginID } from '@masknet/web3-shared-base'
@@ -55,8 +56,16 @@ export const WalletMenuItem = memo<WalletMenuItemProps>(
 
         return (
             <MenuItem value={address} onClick={() => onSelect?.(descriptionProps, chainId, pluginId)}>
+                {/* TODO: replace to radio */}
                 <ListItemIcon>
-                    <Radio checked={selected} />
+                    {selected ? (
+                        <Icons.RadioButtonChecked
+                            size={24}
+                            style={{ filter: 'drop-shadow(0px 0px 6px rgba(28, 104, 243, 0.6))' }}
+                        />
+                    ) : (
+                        <Icons.RadioButtonUnChecked size={24} />
+                    )}
                 </ListItemIcon>
                 <WalletDescription {...descriptionProps} />
                 {onChangeWallet ? (

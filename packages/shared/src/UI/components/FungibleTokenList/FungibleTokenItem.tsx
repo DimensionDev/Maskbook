@@ -47,12 +47,16 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         lineHeight: '20px',
         fontSize: 14,
-        // TODO: Should align dashboard and twitter theme in common component, depend twitter theme
-        color: theme.palette.mode === 'dark' ? '#6E767D' : '#536471',
+        color: theme.palette.maskColor.second,
     },
     symbol: {
         lineHeight: '20px',
         fontSize: 16,
+    },
+    balance: {
+        fontSize: 16,
+        fontWeight: 700,
+        color: theme.palette.maskColor.main,
     },
     import: {
         '&:before': {
@@ -82,11 +86,21 @@ const useStyles = makeStyles()((theme) => ({
         position: 'relative',
         left: theme.spacing(1),
     },
+    byUser: {
+        position: 'relative',
+        left: theme.spacing(-0.5),
+    },
+    bull: {
+        display: 'inline-block',
+        width: 21,
+        lineHeight: '18px',
+        textAlign: 'center',
+    },
 }))
 
 export const getFungibleTokenItem =
     <T extends NetworkPluginID>(
-        getSource: (address: string) => 'personal' | 'official' | 'external',
+        getSource: (address: string) => 'personal' | 'official' | 'external' | 'official-native',
         getBalance: (address: string) => string,
         isSelected: (address: string) => boolean,
         isLoading: (address: string) => boolean,
@@ -169,7 +183,7 @@ export const getFungibleTokenItem =
                 )
             }
             return source !== 'external' ? (
-                <Typography fontSize="16" fontWeight={700} color={(t) => t.palette.maskColor.main}>
+                <Typography className={classes.balance}>
                     {loading ? (
                         <LoadingBase size={24} />
                     ) : (
@@ -197,7 +211,10 @@ export const getFungibleTokenItem =
                 button
                 className={`${classes.list} dashboard token-list`}
                 onClick={handleTokenSelect}
-                disabled={selected && mode === TokenListMode.List}>
+                disabled={
+                    (selected && mode === TokenListMode.List) ||
+                    (source === 'official-native' && mode === TokenListMode.Manage)
+                }>
                 <ListItemIcon>
                     <TokenIcon
                         classes={{ icon: classes.icon }}
@@ -223,7 +240,12 @@ export const getFungibleTokenItem =
                                 rel="noopener noreferrer">
                                 <Icons.PopupLink size={18} />
                             </Link>
-                            {source === 'personal' && <span> &bull; Added By User</span>}
+                            {source === 'personal' && (
+                                <span className={classes.byUser}>
+                                    <span className={classes.bull}>&bull;</span>
+                                    {t.erc20_token_add_by_user()}
+                                </span>
+                            )}
                         </span>
                     </Typography>
                     <Typography className={classes.action} sx={{ fontSize: 16 }} color="textSecondary" component="span">

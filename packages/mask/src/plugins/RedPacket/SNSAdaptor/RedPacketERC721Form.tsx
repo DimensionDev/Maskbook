@@ -213,16 +213,25 @@ const useStyles = makeStyles()((theme) => {
 })
 interface RedPacketERC721FormProps {
     onClose: () => void
+    openNFTConfirmDialog: boolean
+    openSelectNFTDialog: boolean
+    setOpenSelectNFTDialog: (x: boolean) => void
+    setOpenNFTConfirmDialog: (x: boolean) => void
     setIsNFTRedPacketLoaded?: (x: boolean) => void
 }
 export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const t = useI18N()
-    const { onClose, setIsNFTRedPacketLoaded } = props
+    const {
+        onClose,
+        setIsNFTRedPacketLoaded,
+        openNFTConfirmDialog,
+        setOpenNFTConfirmDialog,
+        openSelectNFTDialog,
+        setOpenSelectNFTDialog,
+    } = props
     const { classes } = useStyles()
-    const [open, setOpen] = useState(false)
     const [balance, setBalance] = useState(0)
     const [selectOption, setSelectOption] = useState<NFTSelectOption | undefined>(undefined)
-    const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [contract, setContract] = useState<NonFungibleTokenContract<ChainId, SchemaType.ERC721>>()
@@ -253,7 +262,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const clearToken = useCallback(() => {
         setExistTokenDetailedList([])
         clearTokenDetailedOwnerList()
-        setOpenConfirmDialog(false)
+        setOpenNFTConfirmDialog(false)
     }, [clearTokenDetailedOwnerList])
 
     const clearContract = useCallback(() => {
@@ -270,11 +279,11 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
 
     useEffect(() => {
         clearToken()
-        setOpen(false)
+        setOpenSelectNFTDialog(false)
     }, [contract, account])
 
     useEffect(() => {
-        setOpen(false)
+        setOpenSelectNFTDialog(false)
         clearContract()
     }, [chainId])
 
@@ -287,6 +296,31 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     }, [tokenDetailedList.length, balance, t])
 
     setIsNFTRedPacketLoaded?.(balance > 0)
+
+    if (openSelectNFTDialog) {
+        return (
+            <SelectNftTokenDialog
+                onClose={() => setOpenSelectNFTDialog(false)}
+                contract={contract}
+                existTokenDetailedList={tokenDetailedList}
+                setExistTokenDetailedList={setExistTokenDetailedList}
+                tokenDetailedOwnerList={tokenDetailedOwnerList}
+                loadingOwnerList={loadingOwnerList}
+            />
+        )
+    }
+
+    if (openNFTConfirmDialog && contract) {
+        return (
+            <RedpacketNftConfirmDialog
+                message={message}
+                contract={contract}
+                tokenList={tokenDetailedList}
+                onBack={() => setOpenNFTConfirmDialog(false)}
+                onClose={onClose}
+            />
+        )
+    }
 
     return (
         <>
@@ -354,7 +388,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                 </div>
                             ))}
                             <ListItem
-                                onClick={() => setOpen(true)}
+                                onClick={() => setOpenSelectNFTDialog(true)}
                                 className={classNames(classes.tokenSelectorWrapper, classes.addWrapper)}>
                                 <AddCircleOutlineIcon className={classes.addIcon} onClick={() => void 0} />
                             </ListItem>
@@ -386,7 +420,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                     size="large"
                                     disabled={!!validationMessage}
                                     fullWidth
-                                    onClick={() => setOpenConfirmDialog(true)}>
+                                    onClick={() => setOpenNFTConfirmDialog(true)}>
                                     {t.next()}
                                 </ActionButton>
                             </EthereumERC721TokenApprovedBoundary>
@@ -394,27 +428,6 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     </ChainBoundary>
                 </PluginWalletStatusBar>
             </Box>
-            {open ? (
-                <SelectNftTokenDialog
-                    open={open}
-                    onClose={() => setOpen(false)}
-                    contract={contract}
-                    existTokenDetailedList={tokenDetailedList}
-                    setExistTokenDetailedList={setExistTokenDetailedList}
-                    tokenDetailedOwnerList={tokenDetailedOwnerList}
-                    loadingOwnerList={loadingOwnerList}
-                />
-            ) : null}
-            {openConfirmDialog && contract ? (
-                <RedpacketNftConfirmDialog
-                    message={message}
-                    contract={contract}
-                    open={openConfirmDialog}
-                    tokenList={tokenDetailedList}
-                    onBack={() => setOpenConfirmDialog(false)}
-                    onClose={onClose}
-                />
-            ) : null}
         </>
     )
 }

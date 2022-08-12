@@ -37,10 +37,11 @@ interface PluginVerifiedWalletStatusBarProps extends PropsWithChildren<{}> {
     verifiedWallets: BindingProof[]
     className?: string
     onChange?: (address: string, pluginId: NetworkPluginID, chainId: Web3Helper.ChainIdAll) => void
+    expectedAddress: string
 }
 
 export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarProps>(
-    ({ className, children, verifiedWallets, onChange }) => {
+    ({ className, children, verifiedWallets, onChange, expectedAddress }) => {
         const { t } = useI18N()
 
         const account = useAccount()
@@ -66,7 +67,9 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
 
         const currentPluginId = useCurrentWeb3NetworkPluginID()
 
-        const defaultVerifiedWallet = first(wallets)
+        const selectedWallet = wallets.find((x) => isSameAddress(x.identity, expectedAddress))
+
+        const defaultVerifiedWallet = selectedWallet ?? first(wallets)
 
         // Whether the current account is verified
         const isVerifiedAccount = verifiedWallets.some((x) => isSameAddress(x.identity, account))
@@ -75,11 +78,14 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
             ? resolveNextIdPlatformPluginId(defaultVerifiedWallet?.platform)
             : undefined
 
-        const defaultPluginId = account ? currentPluginId : pluginIdByDefaultVerifiedWallet
+        const isNextIdWallet = !account || !isSameAddress(account, expectedAddress)
+
+        const defaultPluginId = isNextIdWallet ? pluginIdByDefaultVerifiedWallet : currentPluginId
+
         const defaultWalletName = useWalletName(
-            account ? account : defaultVerifiedWallet?.identity,
+            isNextIdWallet ? defaultVerifiedWallet?.identity : account,
             defaultPluginId,
-            !account,
+            isNextIdWallet,
         )
 
         const { Others } = useWeb3State(defaultPluginId)
@@ -95,15 +101,18 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
             () => ({
                 name: defaultWalletName,
                 networkIcon: networkDescriptor?.icon,
-                providerIcon: account ? providerDescriptor?.icon : undefined,
-                iconFilterColor: account ? providerDescriptor?.iconFilterColor : '',
-                formattedAddress: Others?.formatAddress(account || (defaultVerifiedWallet?.identity ?? ''), 4),
-                addressLink: Others?.explorerResolver.addressLink?.(
-                    account ? chainId : defaultChainId,
-                    account || (defaultVerifiedWallet?.identity ?? ''),
+                providerIcon: !isNextIdWallet ? providerDescriptor?.icon : undefined,
+                iconFilterColor: !isNextIdWallet ? providerDescriptor?.iconFilterColor : '',
+                formattedAddress: Others?.formatAddress(
+                    !isNextIdWallet ? account : defaultVerifiedWallet?.identity ?? '',
+                    4,
                 ),
-                address: account || defaultVerifiedWallet?.identity,
-                verified: account ? isVerifiedAccount : true,
+                addressLink: Others?.explorerResolver.addressLink?.(
+                    !isNextIdWallet ? chainId : defaultChainId,
+                    !isNextIdWallet ? account : defaultVerifiedWallet?.identity ?? '',
+                ),
+                address: !isNextIdWallet ? account : defaultVerifiedWallet?.identity,
+                verified: !isNextIdWallet ? isVerifiedAccount : true,
             }),
             [
                 account,

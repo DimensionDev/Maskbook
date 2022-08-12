@@ -2,7 +2,7 @@ import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { ChainId, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
-import { useCallback, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react'
 import { AddNFT } from '../SNSAdaptor/AddNFT'
 import { BindingProof, EMPTY_LIST } from '@masknet/shared-base'
 import { AllChainsNonFungibleToken, PFP_TYPE, SelectTokenInfo } from '../types'
@@ -13,9 +13,6 @@ import {
     useChainId,
     useCurrentWeb3NetworkPluginID,
     useNonFungibleAssets,
-    useProviderDescriptor,
-    useProviderType,
-    useWallet,
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
 import { toPNG } from '../utils'
@@ -154,27 +151,29 @@ interface NFTListDialogProps {
     wallets?: BindingProof[]
     onSelected: (info: SelectTokenInfo) => void
     pfpType: PFP_TYPE
+    selectedAccount: string
+    setSelectedAccount: Dispatch<SetStateAction<string>>
 }
 
 const supportedChains = [NetworkType.Ethereum, NetworkType.Polygon]
 
 export function NFTListDialog(props: NFTListDialogProps) {
-    const { onNext, wallets = EMPTY_LIST, onSelected, tokenInfo, pfpType } = props
+    const { onNext, wallets = EMPTY_LIST, onSelected, tokenInfo, pfpType, selectedAccount, setSelectedAccount } = props
     const { classes } = useStyles()
+
     const currentPluginId = useCurrentWeb3NetworkPluginID()
     const account = useAccount(currentPluginId)
-    const wallet = useWallet(currentPluginId)
     const currentChainId = useChainId(currentPluginId)
+
     const [chainId, setChainId] = useState<ChainId>((currentChainId ?? ChainId.Mainnet) as ChainId)
-    const [open_, setOpen_] = useState(false)
-    const [selectedAccount, setSelectedAccount] = useState((account || wallets?.[0]?.identity) ?? '')
     const [selectedPluginId, setSelectedPluginId] = useState(currentPluginId ?? NetworkPluginID.PLUGIN_EVM)
+
+    const [open_, setOpen_] = useState(false)
+
     const [selectedToken, setSelectedToken] = useState<AllChainsNonFungibleToken | undefined>(tokenInfo)
     const [disabled, setDisabled] = useState(false)
     const t = useI18N()
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
-    const providerType = useProviderType()
-    const providerDescriptor = useProviderDescriptor(currentPluginId, providerType)
     const chains = supportedChains.map((network: NetworkType) => networkResolver.networkChainId(network))
 
     const {
@@ -249,8 +248,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
     useEffect(() => {
         setChainId(currentChainId as ChainId)
     }, [currentChainId])
-
-    useEffect(() => setSelectedAccount(account || wallets?.[0]?.identity || ''), [account, wallets])
 
     const onAddClick = (token: AllChainsNonFungibleToken) => {
         setTokens((_tokens) => uniqBy([..._tokens, token], (x) => x.contract?.address.toLowerCase() + x.tokenId))
@@ -400,7 +397,10 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     </Stack>
                 </Stack>
 
-                <PluginVerifiedWalletStatusBar verifiedWallets={walletItems} onChange={onChangeWallet}>
+                <PluginVerifiedWalletStatusBar
+                    verifiedWallets={walletItems}
+                    onChange={onChangeWallet}
+                    expectedAddress={selectedAccount}>
                     <Button onClick={onSave} disabled={disabled} fullWidth>
                         {pfpType === PFP_TYPE.PFP ? t.set_PFP_title() : t.set_pfp_background_title()}
                     </Button>
