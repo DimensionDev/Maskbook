@@ -73,9 +73,8 @@ export function NFTPriceCard(props: NFTPriceCardProps) {
                 <img width={48} height={48} src={priceTokenImg} />
                 <Typography className={classes.priceText}>{asset.priceInToken?.amount ?? '-'}</Typography>
             </div>
-            <div className={classes.offerBox}>
-                {topOrder && (
-                    <>
+            {topOrder && (
+                <div className={classes.offerBox}>
                         <Typography className={classes.textBase}>{t('plugin_collectible_top_offer')}</Typography>
                         <img width={18} height={18} src={topOrder.priceInToken?.token.logoURL} />
                         <Typography className={classes.textBase}>
@@ -84,9 +83,8 @@ export function NFTPriceCard(props: NFTPriceCardProps) {
                         <Typography className={classes.textBase}>
                             <strong>{topOrder.price?.usd ?? '-'}</strong>
                         </Typography>
-                    </>
-                )}
-            </div>
+                </div>
+            )}
         </div>
     )
 }
