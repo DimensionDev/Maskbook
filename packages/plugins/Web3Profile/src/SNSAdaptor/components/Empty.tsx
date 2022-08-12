@@ -1,7 +1,6 @@
 import { ImageIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { useI18N } from '../../locales'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -27,7 +26,6 @@ interface EmptyProps {
 
 export function Empty({ content, showIcon = true }: EmptyProps) {
     const { classes } = useStyles()
-    const t = useI18N()
     return (
         <div className={classes.wrapper}>
             <div>

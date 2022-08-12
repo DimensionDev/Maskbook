@@ -16,9 +16,17 @@ export interface MainProps {
 export function Main(props: MainProps) {
     const t = useI18N()
     const { openImageSetting, currentVisitingProfile, accountList } = props
+    if (!accountList)
+        return (
+            <div>
+                <Box marginTop="calc(45% - 47px)">
+                    <Empty content={t.account_empty()} />
+                </Box>
+            </div>
+        )
     return (
         <div>
-            {accountList?.map((account, index) => (
+            {accountList.map((account) => (
                 <PlatformCard
                     openImageSetting={(status: CURRENT_STATUS) => {
                         openImageSetting(status, account?.identity)
@@ -28,11 +36,7 @@ export function Main(props: MainProps) {
                     currentPersona={currentVisitingProfile}
                     isCurrent={account?.identity === currentVisitingProfile?.identifier?.userId?.toLowerCase()}
                 />
-            )) ?? (
-                <Box marginTop="calc(45% - 47px)">
-                    <Empty content={t.account_empty()} />
-                </Box>
-            )}
+            ))}
         </div>
     )
 }
