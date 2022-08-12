@@ -107,7 +107,7 @@ export const PersonaListDialog = () => {
     const { setDialog: setCreatePersonaConfirmDialog } = useRemoteControlledDialog(MaskMessages.events.openPageConfirm)
 
     useEffect(() => {
-        if (personas.length) return
+        if (personas.length || !finishTarget) return
 
         closeDialog()
         setCreatePersonaConfirmDialog({
@@ -118,7 +118,7 @@ export const PersonaListDialog = () => {
             title: t('applications_create_persona_title'),
             actionHint: t('applications_create_persona_action'),
         })
-    }, [personas.length])
+    }, [personas.length, finishTarget])
 
     const actionButton = useMemo(() => {
         let isConnected = true
