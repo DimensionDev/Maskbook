@@ -14,7 +14,6 @@ import { PersonaAction } from '@masknet/shared'
 import { useAsyncRetry } from 'react-use'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { useLastRecognizedSocialIdentity } from '../../../components/DataSource/useActivatedUI'
-import type { IdentityResolved } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     messageBox: {
@@ -39,7 +38,7 @@ export function PersonaPage(props: PersonaPageProps) {
     const { onNext, onChange, onClose } = props
     const [visible, setVisible] = useState(true)
     const { classes } = useStyles()
-    const { loading, value: persona } = useLastRecognizedSocialIdentity()
+    const { loading, value: socialIdentity } = useLastRecognizedSocialIdentity()
 
     const myPersonas = usePersonasFromDB()
     const _persona = useSubscription(context.currentPersona)
@@ -54,14 +53,14 @@ export function PersonaPage(props: PersonaPageProps) {
         (proof: BindingProof, tokenInfo?: AllChainsNonFungibleToken) => {
             onChange(
                 proof,
-                persona?.binding?.proofs.filter(
+                socialIdentity?.binding?.proofs.filter(
                     (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),
                 ) ?? EMPTY_LIST,
                 tokenInfo,
             )
             onNext()
         },
-        [persona?.binding],
+        [socialIdentity?.binding],
     )
     const { value: avatar } = useAsyncRetry(async () => context.getPersonaAvatar(currentPersona?.identifier), [])
 
@@ -86,17 +85,19 @@ export function PersonaPage(props: PersonaPageProps) {
                                 />
                             </Box>
                         ) : null}
-                        {persona?.binding?.proofs
-                            .filter((proof) => proof.platform === persona.identifier?.network.replace('.com', ''))
-                            .filter((x) => x.identity.toLowerCase() === persona.identifier?.userId.toLowerCase())
+                        {socialIdentity?.binding?.proofs
+                            .filter(
+                                (proof) => proof.platform === socialIdentity.identifier?.network.replace('.com', ''),
+                            )
+                            .filter((x) => x.identity.toLowerCase() === socialIdentity.identifier?.userId.toLowerCase())
                             .map((x, i) => (
                                 <PersonaItem
                                     key="avatar"
-                                    avatar={persona?.avatar ?? ''}
+                                    avatar={socialIdentity?.avatar ?? ''}
                                     owner
-                                    nickname={persona?.nickname}
+                                    nickname={socialIdentity?.nickname}
                                     proof={x}
-                                    userId={persona?.identifier?.userId ?? x.identity}
+                                    userId={socialIdentity?.identifier?.userId ?? x.identity}
                                     onSelect={onSelect}
                                 />
                             ))}
@@ -104,10 +105,12 @@ export function PersonaPage(props: PersonaPageProps) {
                         {myPersonas?.[0] &&
                             myPersonas[0].linkedProfiles
                                 .filter(
-                                    (x) => x.identifier.network === persona?.identifier?.network.replace('.com', ''),
+                                    (x) =>
+                                        x.identifier.network ===
+                                        socialIdentity?.identifier?.network.replace('.com', ''),
                                 )
                                 .map((x, i) =>
-                                    persona?.binding?.proofs.some(
+                                    socialIdentity?.binding?.proofs.some(
                                         (y) => y.identity.toLowerCase() === x.identifier.userId.toLowerCase(),
                                     ) ? null : (
                                         <PersonaItem
@@ -118,9 +121,13 @@ export function PersonaPage(props: PersonaPageProps) {
                                         />
                                     ),
                                 )}
-                        {persona?.binding?.proofs
-                            .filter((proof) => proof.platform === persona?.identifier?.network.replace('.com', ''))
-                            .filter((x) => x.identity.toLowerCase() !== persona?.identifier?.userId.toLowerCase())
+                        {socialIdentity?.binding?.proofs
+                            .filter(
+                                (proof) => proof.platform === socialIdentity?.identifier?.network.replace('.com', ''),
+                            )
+                            .filter(
+                                (x) => x.identity.toLowerCase() !== socialIdentity?.identifier?.userId.toLowerCase(),
+                            )
                             .map((x, i) => (
                                 <PersonaItem avatar="" key={i} owner={false} userId={x.identity} proof={x} />
                             ))}
@@ -131,7 +138,7 @@ export function PersonaPage(props: PersonaPageProps) {
                 <PersonaAction
                     avatar={avatar === null ? undefined : avatar}
                     currentPersona={currentPersona}
-                    currentVisitingProfile={persona as IdentityResolved}
+                    currentVisitingProfile={socialIdentity}
                 />
             </DialogActions>
         </>
