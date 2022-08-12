@@ -407,7 +407,7 @@
     "plugin_red_packet_refund_with_token_success_without_detail": "Refund Lucky Drop successfully.",
     "plugin_red_packet_refund_with_token_fail": "Failed to refund Lucky Drop.",
     "plugin_nft_red_packet_create_title": "Create NFT Lucky Drop",
-    "plugin_nft_red_packet_create": "Create an NFT Lucky Drop",
+    "plugin_nft_red_packet_create": "Create your NFT Lucky Drop.",
     "plugin_nft_red_packet_create_success": "Create {{symbol}} NFT Lucky Drop successfully.",
     "plugin_nft_red_packet_create_success_without_detail": "Create NFT Lucky Drop successfully.",
     "plugin_nft_red_packet_claim": "Claim your NFT Lucky Drop",
