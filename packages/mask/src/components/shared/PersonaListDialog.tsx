@@ -193,7 +193,7 @@ export const PersonaListDialog = () => {
                         }),
                     }
                 return {
-                    hint: t('applications_persona_verify_hint', {
+                    buttonText: t('applications_persona_connect', {
                         nickname: selectedPersona?.persona.nickname,
                     }),
                 }
