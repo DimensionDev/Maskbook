@@ -231,8 +231,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         (isWeb3ProfileDisable || isOwnerNotHasBinding || isOwnerNotHasAddress || socialAddressList.length === 0)
     )
 
-    console.log({ socialAddressList, currentVisitingSocialIdentity, showNextID })
-
     const componentTabId = showNextID ? `${PluginId.NextID}_tabContent` : currentTab
 
     const component = useMemo(() => {
