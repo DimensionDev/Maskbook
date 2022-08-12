@@ -7,6 +7,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fill, minmax(172px, 1fr))',
         gridGap: theme.spacing(1),
+        marginLeft: '16px',
     },
     card: {
         width: 172,

@@ -271,6 +271,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const onOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget)
     const onSelect = (option: SocialAddress<NetworkPluginID>) => {
         setSelectedAddress(option)
+        setAnchorEl(null)
     }
     const handleOpenDialog = () => {
         CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToAll({
@@ -346,7 +347,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                                         {x?.type === SocialAddressType.NEXT_ID && <Icons.Verified />}
                                                     </div>
                                                     {isSameAddress(selectedAddress?.address, x.address) && (
-                                                        <Icons.Selected className={classes.selectedIcon} />
+                                                        <Icons.CheckCircle className={classes.selectedIcon} />
                                                     )}
                                                 </div>
                                             </MenuItem>
