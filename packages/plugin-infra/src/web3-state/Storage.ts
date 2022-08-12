@@ -1,4 +1,4 @@
-import type { ECKeyIdentifier } from '@masknet/shared-base'
+import type { ECKeyIdentifier, NextIDPlatform } from '@masknet/shared-base'
 import { Web3StorageServiceState, StorageProviderType, Storage } from '@masknet/web3-shared-base'
 
 export class StorageState implements Web3StorageServiceState {
@@ -9,6 +9,7 @@ export class StorageState implements Web3StorageServiceState {
                 namespace: string
                 personaIdentifier?: ECKeyIdentifier
                 address?: string
+                platform?: NextIDPlatform
             },
         ) => Storage,
     ) {}
@@ -21,7 +22,7 @@ export class StorageState implements Web3StorageServiceState {
         return this.createStorage(StorageProviderType.RSS3, { namespace, address })
     }
 
-    createNextIDStorage(namespace: string, personaIdentifier: ECKeyIdentifier) {
-        return this.createStorage(StorageProviderType.NextID, { namespace, personaIdentifier })
+    createNextIDStorage(namespace: string, platform: NextIDPlatform, personaIdentifier: ECKeyIdentifier) {
+        return this.createStorage(StorageProviderType.NextID, { namespace, personaIdentifier, platform })
     }
 }

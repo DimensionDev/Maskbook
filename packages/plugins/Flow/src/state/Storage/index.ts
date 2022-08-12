@@ -1,5 +1,5 @@
 import { StorageProviderType } from '@masknet/web3-shared-base'
-import type { ECKeyIdentifier } from '@masknet/shared-base'
+import type { ECKeyIdentifier, NextIDPlatform } from '@masknet/shared-base'
 import { StorageState } from '@masknet/plugin-infra/web3'
 import { unreachable } from '@dimensiondev/kit'
 import { KVStorage, NextIDStorage } from '@masknet/shared'
@@ -11,6 +11,7 @@ function createStorage(
         namespace: string
         personaIdentifier?: ECKeyIdentifier
         address?: string
+        platform?: NextIDPlatform
     },
 ) {
     switch (providerType) {
@@ -19,8 +20,11 @@ function createStorage(
         case StorageProviderType.RSS3:
             throw new Error('RSS3 storage is not support flow')
         case StorageProviderType.NextID:
+            if (!options?.platform || !options.personaIdentifier)
+                throw new Error('platform and personaIdentifier is required When providerType is NextID')
             return new NextIDStorage(
                 options.namespace,
+                options.platform,
                 options.personaIdentifier,
                 SharedContextSettings.value.generateSignResult,
             )

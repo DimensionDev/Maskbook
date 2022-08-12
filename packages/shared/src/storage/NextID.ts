@@ -5,28 +5,40 @@ import type { Plugin } from '@masknet/plugin-infra/content-script'
 
 export class NextIDStorage implements Storage {
     constructor(
-        private namespace: string,
-        private personaIdentifier?: ECKeyIdentifier,
+        private namespace: string, // identity key
+        private platform: NextIDPlatform,
+        private personaIdentifier: ECKeyIdentifier,
         private generateSignResult?: (
             signer: ECKeyIdentifier,
             message: string,
         ) => Promise<Plugin.SNSAdaptor.PersonaSignResult>,
     ) {}
 
-    async get<T>(publicKey: string) {
-        const response = await NextIDStorageProvider.get<NextIDStorageInfo<T>>(publicKey)
+    get publicKey() {
+        return this.personaIdentifier.publicKeyAsHex
+    }
+
+    async get<T>(key: string) {
+        const response = await NextIDStorageProvider.get<NextIDStorageInfo<T>>(this.publicKey)
         if (!response.ok) return
-        return response?.val
+        const { proofs } = response.val
+        if (!proofs.length) return
+        return proofs.find(
+            (x) =>
+                x.platform === this.platform &&
+                x.identity === this.namespace &&
+                Object.hasOwnProperty.call(x.content, key),
+        )?.content[key]
     }
 
     async set<T>(key: string, value: T) {
         if (!this.personaIdentifier) throw new Error('')
         const payload = await NextIDStorageProvider.getPayload(
-            this.personaIdentifier.publicKeyAsHex,
+            this.publicKey,
             NextIDPlatform.NextID,
-            key,
+            this.namespace, // identity
             value,
-            this.namespace,
+            key,
         )
 
         if (!payload?.ok) throw new Error('Invalid payload Error')
@@ -37,13 +49,13 @@ export class NextIDStorage implements Storage {
 
         await NextIDStorageProvider.set(
             payload.val.uuid,
-            this.personaIdentifier.publicKeyAsHex,
+            this.publicKey,
             toBase64(fromHex(signResult.signature.signature)),
             NextIDPlatform.NextID,
-            key,
+            this.namespace,
             payload.val.createdAt,
             value,
-            this.namespace,
+            key,
         )
     }
 }
