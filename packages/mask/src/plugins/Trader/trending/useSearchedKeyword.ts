@@ -12,10 +12,8 @@ export function useSearchedKeyword() {
         }
         onLocationChange()
         window.addEventListener('locationchange', onLocationChange)
-        window.addEventListener('replacestate', onLocationChange)
         return () => {
             window.removeEventListener('locationchange', onLocationChange)
-            window.removeEventListener('replacestate', onLocationChange)
         }
     }, [])
     return keyword

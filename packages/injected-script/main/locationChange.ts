@@ -21,6 +21,7 @@ function setupChromium() {
             if (currentLocationHref !== window.location.href) {
                 currentLocationHref = window.location.href
                 $Content.dispatchEvent(window, new $Content.Event('replacestate'))
+                $Content.dispatchEvent(window, new $Content.Event('locationchange'))
             }
             return val
         },

@@ -103,11 +103,12 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaResponse): NonFungibleTo
         },
         contract: {
             chainId,
-            schema: SchemaType.ERC721,
+            schema: (asset.asset_contract.schema_name as unknown as SchemaType) ?? SchemaType.ERC721,
             address: asset.token_address ?? asset.asset_contract.address,
             name: asset.name ?? asset.collection.name,
             symbol: asset.asset_contract.symbol,
             owner: asset.owner.address,
+            creatorEarning: asset.asset_contract.dev_seller_fee_basis_points.toString() ?? '0',
         },
         collection: {
             address: asset.token_address ?? asset.asset_contract.address,

@@ -71,8 +71,8 @@ export interface OpenSeaAssetContract extends OpenSeaFees {
     address: string
     asset_contract_type: string
     schema_name: string
-    seller_fee_basis_points: number
-    buyer_fee_basis_points: number
+    seller_fee_basis_points: string
+    buyer_fee_basis_points: string
     description: string
     symbol: string
     image_url: string
