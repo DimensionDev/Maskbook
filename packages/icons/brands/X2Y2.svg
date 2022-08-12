@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 25">
+    <g clip-path="url(#X2Y2_svg__a)">
+        <path fill="#fff" d="M24 12.5c0-6.627-5.373-12-12-12S0 5.873 0 12.5c0 6.628 5.373 12 12 12s12-5.372 12-12Z"/>
+        <path fill="url(#X2Y2_svg__b)" d="M19.623 6.664a8.16 8.16 0 1 0 0 11.673A9.6 9.6 0 0 1 2.4 12.5a9.6 9.6 0 0 1 17.223-5.836Z"/>
+        <path fill="url(#X2Y2_svg__c)" d="M7.822 17.17a6.528 6.528 0 1 0 0-9.339 7.68 7.68 0 1 1 0 9.339Z"/>
+        <path fill="url(#X2Y2_svg__d)" fill-rule="evenodd" d="M17.76 12.5a5.76 5.76 0 1 1-11.52 0 5.76 5.76 0 0 1 11.52 0Zm-1.92 0a3.84 3.84 0 1 1-7.68 0 3.84 3.84 0 0 1 7.68 0Z" clip-rule="evenodd"/>
+    </g>
+    <defs>
+        <linearGradient id="X2Y2_svg__b" x1="2.4" x2="21.6" y1="12.169" y2="12.169" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#00E0FF"/>
+            <stop offset="1" stop-color="#562EC8"/>
+        </linearGradient>
+        <linearGradient id="X2Y2_svg__c" x1="2.4" x2="21.6" y1="12.169" y2="12.169" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#00E0FF"/>
+            <stop offset="1" stop-color="#562EC8"/>
+        </linearGradient>
+        <linearGradient id="X2Y2_svg__d" x1="2.4" x2="21.6" y1="12.17" y2="12.17" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#00E0FF"/>
+            <stop offset="1" stop-color="#562EC8"/>
+        </linearGradient>
+        <clipPath id="X2Y2_svg__a">
+            <path fill="#fff" d="M0 0h24v24H0z" transform="translate(0 .5)"/>
+        </clipPath>
+    </defs>
+</svg>

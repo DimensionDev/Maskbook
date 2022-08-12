@@ -1,13 +1,8 @@
 import { makeStyles } from '@masknet/theme'
-import { OpenSeaIcon } from '../../../resources/OpenSeaIcon'
-import { RaribleIcon } from '../../../resources/RaribleIcon'
 import { ZoraIcon } from '../../../resources/ZoraIcon'
-import { RSS3Icon } from '../../../resources/RSS3Icon'
 import { DebankIcon } from '../../../resources/DebankIcon'
-import { GemIcon } from '../../../resources/GemIcon'
-import { X2Y2Icon } from '../../../resources/X2Y2Icon'
-import { LooksRareIcon } from '../../../resources/LooksRareIcon'
 import { SourceType } from '@masknet/web3-shared-base'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()({
     provider: {
@@ -17,7 +12,6 @@ const useStyles = makeStyles()({
     },
 })
 
-const NftScan = new URL('../../../resources/NFTScanIcon.png', import.meta.url).toString()
 const ZerionIcon = new URL('../../../resources/zerion.png', import.meta.url).toString()
 
 export interface CollectibleProviderIconProps {
@@ -30,25 +24,25 @@ export function CollectibleProviderIcon(props: CollectibleProviderIconProps) {
     const className = cx(classes.provider, props.overrideClasses)
     switch (props.provider) {
         case SourceType.NFTScan:
-            return <img src={NftScan} className={className} />
+            return <Icons.NFTScan className={className} />
         case SourceType.Zerion:
             return <img src={ZerionIcon} className={className} />
         case SourceType.OpenSea:
-            return <OpenSeaIcon classes={{ root: className }} viewBox="0 0 16 16" />
+            return <Icons.OpenSea className={className} />
         case SourceType.Rarible:
-            return <RaribleIcon classes={{ root: className }} viewBox="0 0 16 16" />
+            return <Icons.Rarible className={className} />
         case SourceType.Zora:
             return <ZoraIcon classes={{ root: className }} viewBox="0 0 16 16" />
         case SourceType.RSS3:
-            return <RSS3Icon classes={{ root: className }} viewBox="0 0 16 16" />
+            return <Icons.RSS3 className={className} />
         case SourceType.DeBank:
             return <DebankIcon classes={{ root: className }} viewBox="0 0 16 16" />
         case SourceType.Gem:
-            return <GemIcon classes={{ root: className }} viewBox="0 0 24 25" />
+            return <Icons.Gem className={className} />
         case SourceType.LooksRare:
-            return <LooksRareIcon classes={{ root: className }} viewBox="0 0 24 25" />
+            return <Icons.LooksRare className={className} />
         case SourceType.X2Y2:
-            return <X2Y2Icon classes={{ root: className }} viewBox="0 0 24 25" />
+            return <Icons.X2Y2 className={className} />
         default:
             return <></>
     }

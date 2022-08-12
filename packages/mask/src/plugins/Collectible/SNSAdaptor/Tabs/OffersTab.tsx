@@ -1,5 +1,5 @@
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import { useMemo } from 'react'
+import { memo } from 'react'
 import { CollectibleTab } from '../CollectibleTab'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { Typography, Button } from '@mui/material'
@@ -27,37 +27,35 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function OffersTab() {
+export const OffersTab = memo(() => {
     const { classes } = useStyles()
     const { orders, provider } = CollectibleState.useContainer()
     const _orders = orders.value?.data ?? EMPTY_LIST
     const { t } = useI18N()
-    return useMemo(() => {
-        if (orders.loading) return <LoadingBase />
-        if (orders.error || !orders.value)
-            return (
-                <div className={classes.body}>
-                    <Typography className={classes.emptyText}>{t('plugin_furucombo_load_failed')}</Typography>
-                    <Button variant="text" onClick={() => orders.retry()}>
-                        {t('retry')}
-                    </Button>
-                </div>
-            )
-        if (!_orders.length)
-            return (
-                <div className={classes.body}>
-                    <Icons.EmptySimple className={classes.emptyIcon} />
-                    <Typography className={classes.emptyText}>{t('plugin_collectible_nft_offers_empty')}</Typography>
-                </div>
-            )
+    if (orders.loading) return <LoadingBase />
+    if (orders.error || !orders.value)
         return (
-            <CollectibleTab>
-                <div className={classes.body} style={{ justifyContent: 'unset' }}>
-                    {_orders?.map((x, idx) => (
-                        <NFTOfferCard provider={provider} key={idx} offer={x} />
-                    ))}
-                </div>
-            </CollectibleTab>
+            <div className={classes.body}>
+                <Typography className={classes.emptyText}>{t('plugin_furucombo_load_failed')}</Typography>
+                <Button variant="text" onClick={() => orders.retry()}>
+                    {t('retry')}
+                </Button>
+            </div>
         )
-    }, [orders, classes])
-}
+    if (!_orders.length)
+        return (
+            <div className={classes.body}>
+                <Icons.EmptySimple className={classes.emptyIcon} />
+                <Typography className={classes.emptyText}>{t('plugin_collectible_nft_offers_empty')}</Typography>
+            </div>
+        )
+    return (
+        <CollectibleTab>
+            <div className={classes.body} style={{ justifyContent: 'unset' }}>
+                {_orders?.map((x, idx) => (
+                    <NFTOfferCard provider={provider} key={idx} offer={x} />
+                ))}
+            </div>
+        </CollectibleTab>
+    )
+})
