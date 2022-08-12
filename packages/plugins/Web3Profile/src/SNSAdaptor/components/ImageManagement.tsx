@@ -77,7 +77,7 @@ const getAddressesByStatus = (status: CURRENT_STATUS, accountList: AccountType) 
     let addresses
     if (status === CURRENT_STATUS.Donations_setting) addresses = accountList?.walletList?.donations
     if (status === CURRENT_STATUS.Footprints_setting) addresses = accountList?.walletList?.footprints
-    if (status === CURRENT_STATUS.NFT_Setting) addresses = accountList?.walletList?.footprints
+    if (status === CURRENT_STATUS.NFT_Setting) addresses = accountList?.walletList?.NFTs
     return addresses?.sort((a, z) => {
         const a_hasItems = a?.collections && a.collections.filter?.((collection) => !collection?.hidden)?.length > 0
         const z_hasItems = z?.collections && z.collections.filter?.((collection) => !collection?.hidden)?.length > 0
