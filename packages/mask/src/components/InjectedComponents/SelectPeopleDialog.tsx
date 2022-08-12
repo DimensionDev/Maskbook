@@ -5,6 +5,7 @@ import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../utils'
 import { SelectProfileUI } from '../shared/SelectProfileUI'
 import type { ProfileInformation as Profile } from '@masknet/shared-base'
+import { uniqBy } from 'lodash-unified'
 
 export interface SelectProfileDialogProps {
     open: boolean
@@ -32,7 +33,9 @@ export function SelectProfileDialog(props: SelectProfileDialogProps) {
     const [rejection, onReject] = useState<Error>()
     const share = useCallback(() => {
         setCommitted(true)
-        props.onSelect([...people, ...props.alreadySelectedPreviously]).then(onClose, onReject)
+        props
+            .onSelect(uniqBy([...people, ...props.alreadySelectedPreviously], (x) => x.identifier))
+            .then(onClose, onReject)
     }, [onClose, people, props])
 
     const canCommit = committed || people.length === 0
