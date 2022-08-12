@@ -15,6 +15,7 @@ import {
     NonFungibleTokenAPI,
     FungibleTokenAPI,
     LooksRare,
+    Gem,
 } from '@masknet/web3-providers'
 import {
     FungibleToken,
@@ -40,6 +41,7 @@ import {
     NonFungibleTokenOrder,
     OrderSide,
     NonFungibleTokenContract,
+    NonFungibleTokenRarity,
 } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -312,6 +314,24 @@ class Hub implements EVM_Hub {
         return attemptUntil(
             providers.map((x) => () => x.getAssets(options.account, options)),
             createPageable(EMPTY_LIST, createIndicator(options.indicator)),
+        )
+    }
+    async getNonFungibleRarity(
+        address: string,
+        tokenId: string,
+        initial?: HubOptions<ChainId>,
+    ): Promise<NonFungibleTokenRarity | undefined> {
+        const options = this.getOptions(initial)
+        const providers = this.getProviders<NonFungibleTokenAPI.Provider<ChainId, SchemaType>>(
+            {
+                [SourceType.Gem]: Gem,
+            },
+            [Gem],
+            initial,
+        )
+        return attemptUntil(
+            providers.map((x) => () => x.getRarity?.(address, tokenId, options)),
+            undefined,
         )
     }
     async getNonFungibleAssets(
