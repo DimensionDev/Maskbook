@@ -75,7 +75,13 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
                     stroke={stroke}
                     strokeWidth={strokeWidth}
                 />
-                <pattern id={`${id}-pattern`} x="0" y="0" width="300%" height="100%">
+                <pattern
+                    id={`${id}-pattern`}
+                    x="0"
+                    y="0"
+                    width="300%"
+                    height="100%"
+                    patternUnits={process.env.engine === 'firefox' ? '' : 'userSpaceOnUse'}>
                     <circle cx={R} cy={R} r={R} fill={`url(#${id}-gradient)`}>
                         <animateTransform
                             attributeName="transform"
