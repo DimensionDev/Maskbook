@@ -17,7 +17,6 @@ import { InjectedDialog } from '@masknet/shared'
 import { AllProviderTradeContext } from '../../Trader/trader/useAllProviderTradeContext'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
-import { WalletRPC } from '../../Wallet/messages'
 import { SavingsProtocol, TabType } from '../types'
 import { useStyles } from './SavingsDialogStyles'
 import { SavingsTable } from './SavingsTable'
@@ -50,9 +49,10 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const [tab, setTab] = useState<TabType>(TabType.Deposit)
     const [selectedProtocol, setSelectedProtocol] = useState<SavingsProtocol | null>(null)
 
-    const { value: chains = EMPTY_LIST } = useAsync(async () => {
-        const networks = await WalletRPC.getSupportedNetworks()
-        return networks.map((network: NetworkType) => networkResolver.networkChainId(network))
+    const chains = useMemo(() => {
+        return [NetworkType.Ethereum, NetworkType.Polygon].map((network: NetworkType) =>
+            networkResolver.networkChainId(network),
+        )
     }, [])
 
     const { value: aaveTokens } = useAsync(async () => {
