@@ -87,6 +87,7 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
+            fontFamily: 'Helvetica',
             backgroundColor: theme.palette.maskColor.thirdMain,
             fontSize: 12,
             fontWeight: 700,

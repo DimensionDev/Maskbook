@@ -88,6 +88,7 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         '-webkit-box-orient': 'vertical',
+        fontFamily: 'Helvetica',
     },
     themeColor: {
         color: theme.palette.maskColor.highlight,
