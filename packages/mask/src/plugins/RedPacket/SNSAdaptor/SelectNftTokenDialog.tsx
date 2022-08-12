@@ -47,7 +47,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     ownerTokenBox: {
         background: theme.palette.background.default,
         width: '96%',
-        height: 320,
+        height: 335,
         borderRadius: 12,
         margin: '14px auto',
         padding: 10,

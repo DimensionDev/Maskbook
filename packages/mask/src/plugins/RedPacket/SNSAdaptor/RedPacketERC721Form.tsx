@@ -70,6 +70,7 @@ const useStyles = makeStyles()((theme) => {
             gap: 16,
             width: '100%',
             overflowY: 'auto',
+            overflowX: 'hidden',
             height: 200,
             background: theme.palette.background.default,
             borderRadius: 12,
