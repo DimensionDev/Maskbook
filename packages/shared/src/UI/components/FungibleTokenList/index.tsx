@@ -223,7 +223,6 @@ export const FungibleTokenList = forwardRef(
                 setSearchError(undefined)
                 return
             }
-            if (mode === TokenListMode.Manage) return ''
 
             if (
                 (keyword.startsWith('0x') || keyword.startsWith('0X')) &&
@@ -233,6 +232,8 @@ export const FungibleTokenList = forwardRef(
                 setSearchError(t.erc20_search_wrong_address())
                 return
             }
+
+            if (mode === TokenListMode.Manage) return ''
 
             return Others?.isValidAddress(keyword) &&
                 !sortedFungibleTokens.some((x) => isSameAddress(x.address, keyword))

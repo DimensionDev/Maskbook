@@ -94,6 +94,18 @@ export function SearchableList<T extends {}>({
         onSearch?.(inputValue)
     }
 
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.currentTarget.value
+        setInputValue(value)
+        if (!value) handleClear()
+    }
+
+    const handleClear = () => {
+        setKeyword('')
+        setInputValue('')
+        onSearch?.('')
+    }
+
     const windowHeight = !!textFieldPropsRest.error && typeof height === 'number' ? height - 28 : height
 
     return (
@@ -113,13 +125,7 @@ export function SearchableList<T extends {}>({
                                 </InputAdornment>
                             ),
                             endAdornment: inputValue ? (
-                                <InputAdornment
-                                    position="end"
-                                    className={classes.closeIcon}
-                                    onClick={() => {
-                                        setKeyword('')
-                                        setInputValue('')
-                                    }}>
+                                <InputAdornment position="end" className={classes.closeIcon} onClick={handleClear}>
                                     <Icons.Clear size={18} />
                                 </InputAdornment>
                             ) : null,
@@ -129,7 +135,7 @@ export function SearchableList<T extends {}>({
                         onKeyDown={(ev) => {
                             if (ev.key === 'Enter') handleSearch()
                         }}
-                        onChange={(e) => setInputValue(e.currentTarget.value)}
+                        onChange={handleChange}
                         {...textFieldPropsRest}
                     />
                 </Box>
