@@ -16,7 +16,7 @@ import Services from '../../extension/service'
 import { InjectedDialog } from '@masknet/shared'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNextIDVerify } from '../DataSource/useNextIDVerify'
-import { useI18N } from '../../utils'
+import { MaskMessages, useI18N } from '../../utils'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
@@ -102,21 +102,23 @@ export const PersonaListDialog = () => {
         [],
     )
 
-    const gotoSetup = async () => {
-        await Services.Helper.openDashboard(DashboardRoutes.Setup)
+    const { setDialog: setCreatePersonaConfirmDialog } = useRemoteControlledDialog(MaskMessages.events.openPageConfirm)
+
+    useEffect(() => {
+        if (personas.length) return
+
         closeDialog()
-    }
+        setCreatePersonaConfirmDialog({
+            open: true,
+            target: 'dashboard',
+            url: DashboardRoutes.Setup,
+            text: t('applications_create_persona_hint'),
+            title: t('applications_create_persona_title'),
+            actionHint: t('applications_create_persona_action'),
+        })
+    }, [personas.length])
 
     const actionButton = useMemo(() => {
-        console.log(personas)
-        if (!personas.length)
-            return (
-                <ActionContent
-                    onClick={gotoSetup}
-                    buttonText={t('applications_create_persona_action')}
-                    hint={t('applications_create_persona_hint')}
-                />
-            )
         let isConnected = true
         let isVerified = true
 
