@@ -282,6 +282,7 @@ export interface NonFungibleTokenContract<ChainId, SchemaType> {
     owner?: string
     logoURL?: string
     iconURL?: string
+    creatorEarning?: string
 }
 
 export interface NonFungibleTokenMetadata<ChainId> {
@@ -1067,7 +1068,11 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         keyword: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>>>
-
+    getNonFungibleRarity?:(
+        address: string,
+        tokenId: string,
+        initial?: Web3HubOptions,
+    )=>Promise<NonFungibleTokenRarity | undefined>
     /** Place a bid on a token. */
     createBuyOrder?: (/** TODO: add parameters */) => Promise<void>
     /** List a token for public sell. */

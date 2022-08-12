@@ -1,5 +1,5 @@
 import { memo, useEffect, useMemo, useState } from 'react'
-import { Alert, Box, Button, formHelperTextClasses, Typography } from '@mui/material'
+import { Box, Button, formHelperTextClasses, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, MaskTextField } from '@masknet/theme'
 import { z as zod } from 'zod'
 import { useForm, Controller } from 'react-hook-form'
@@ -12,7 +12,6 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { PluginServices } from '../../../../API'
 import urlcat from 'urlcat'
 import PasswordField from '../../../../components/PasswordField'
-import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -214,15 +213,6 @@ const CreateWalletForm = memo(() => {
                         {t.next()}
                     </Button>
                 </Box>
-                {open ? (
-                    <Alert
-                        icon={<Icons.Info />}
-                        severity="error"
-                        onClose={() => setOpen(false)}
-                        className={classes.alert}>
-                        {t.create_wallet_mnemonic_tip()}
-                    </Alert>
-                ) : null}
             </form>
         </div>
     )

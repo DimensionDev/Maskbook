@@ -8,13 +8,13 @@ import {
     isNativeTokenAddress,
     formatTokenId,
 } from '@masknet/web3-shared-evm'
-import { InjectedDialog, NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import classNames from 'classnames'
-import { Grid, Link, Typography, DialogContent, List, ListItem, Box } from '@mui/material'
+import { Grid, Link, Typography, List, DialogContent, ListItem, Box } from '@mui/material'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import LaunchIcon from '@mui/icons-material/Launch'
-import { PluginWalletStatusBar, useI18N as useBaseI18N } from '../../../utils'
+import { PluginWalletStatusBar } from '../../../utils'
 import { useI18N } from '../locales'
 import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCallback'
 import { useCurrentIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
@@ -150,7 +150,6 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 export interface RedpacketNftConfirmDialogProps {
-    open: boolean
     onBack: () => void
     onClose: () => void
     contract: NonFungibleTokenContract<ChainId, SchemaType.ERC721>
@@ -159,14 +158,13 @@ export interface RedpacketNftConfirmDialogProps {
 }
 export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps) {
     const { classes } = useStyles()
-    const { open, onBack, onClose, message, contract, tokenList } = props
+    const { onClose, message, contract, tokenList } = props
     const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const { attachMetadata } = useCompositionContext()
 
-    const { t: i18n } = useBaseI18N()
     const t = useI18N()
     const { address: publicKey, privateKey } = useMemo(
         () => web3?.eth.accounts.create() ?? { address: '', privateKey: '' },
@@ -237,115 +235,109 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
     )
 
     return (
-        <InjectedDialog open={open} onClose={onBack} title={i18n('confirm')} maxWidth="xs">
-            <DialogContent className={classes.root}>
-                <Grid container spacing={2}>
-                    <Grid item xs={6}>
-                        <Typography color="textPrimary" variant="body1" className={classes.text}>
-                            {t.nft_account_name()}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Typography
-                            color="textPrimary"
-                            variant="body1"
-                            align="right"
-                            className={classNames(classes.account, classes.bold, classes.text)}>
-                            {formatEthereumAddress(account, 4)}
-                            {isNativeTokenAddress(wallet?.address) ? null : (
-                                <Link
-                                    color="textPrimary"
-                                    className={classes.link}
-                                    href={explorerResolver.addressLink(chainId, account)}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    onClick={stop}>
-                                    <LaunchIcon fontSize="small" />
-                                </Link>
-                            )}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Typography variant="body1" color="textPrimary" className={classNames(classes.text)}>
-                            {t.nft_attached_message()}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Typography
-                            variant="body1"
-                            color="textPrimary"
-                            align="right"
-                            className={classNames(classes.text, classes.bold, classes.ellipsis)}>
-                            {message}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Typography variant="body1" color="textPrimary" className={classNames(classes.text)}>
-                            {t.collections()}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <div className={classes.tokenWrapper}>
-                            {contract.iconURL ? <img className={classes.icon} src={contract.iconURL} /> : null}
-                            <Typography
-                                variant="body1"
+        <DialogContent className={classes.root}>
+            <Grid container spacing={2}>
+                <Grid item xs={6}>
+                    <Typography color="textPrimary" variant="body1" className={classes.text}>
+                        {t.nft_account_name()}
+                    </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography
+                        color="textPrimary"
+                        variant="body1"
+                        align="right"
+                        className={classNames(classes.account, classes.bold, classes.text)}>
+                        {formatEthereumAddress(account, 4)}
+                        {isNativeTokenAddress(wallet?.address) ? null : (
+                            <Link
                                 color="textPrimary"
-                                align="right"
-                                className={classNames(classes.text, classes.bold)}>
-                                {contract.name}
-                            </Typography>
-                        </div>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <List className={classes.tokenSelector}>
-                            {tokenList.map((value, i) => (
-                                <div key={i}>
-                                    <NFTCard token={value} renderOrder={i} />
-                                </div>
-                            ))}
-                        </List>
-                    </Grid>
-
-                    <Grid item xs={6}>
-                        <Typography color="textPrimary" variant="body1" className={classNames(classes.text)}>
-                            {t.nft_total_amount()}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
+                                className={classes.link}
+                                href={explorerResolver.addressLink(chainId, account)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={stop}>
+                                <LaunchIcon fontSize="small" />
+                            </Link>
+                        )}
+                    </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography variant="body1" color="textPrimary" className={classNames(classes.text)}>
+                        {t.nft_attached_message()}
+                    </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography
+                        variant="body1"
+                        color="textPrimary"
+                        align="right"
+                        className={classNames(classes.text, classes.bold, classes.ellipsis)}>
+                        {message}
+                    </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography variant="body1" color="textPrimary" className={classNames(classes.text)}>
+                        {t.collections()}
+                    </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                    <div className={classes.tokenWrapper}>
+                        {contract.iconURL ? <img className={classes.icon} src={contract.iconURL} /> : null}
                         <Typography
+                            variant="body1"
                             color="textPrimary"
                             align="right"
                             className={classNames(classes.text, classes.bold)}>
-                            {tokenList.length}
+                            {contract.name}
                         </Typography>
-                    </Grid>
+                    </div>
                 </Grid>
-                <Box style={{ position: 'absolute', bottom: 0, left: 0, width: '100%' }}>
-                    <PluginWalletStatusBar>
-                        <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
-                            <WalletConnectedBoundary
-                                classes={{
-                                    connectWallet: classNames(classes.button, classes.sendButton),
-                                    unlockMetaMask: classNames(classes.button, classes.sendButton),
-                                }}>
-                                <ActionButton
-                                    size="medium"
-                                    loading={isSending}
-                                    disabled={isSending}
-                                    onClick={onSendTx}
-                                    className={classNames(classes.button, classes.sendButton)}
-                                    fullWidth>
-                                    {t.send_symbol({
-                                        amount: tokenList.length.toString(),
-                                        symbol: tokenList.length > 1 ? 'NFTs' : 'NFT',
-                                    })}
-                                </ActionButton>
-                            </WalletConnectedBoundary>
-                        </ChainBoundary>
-                    </PluginWalletStatusBar>
-                </Box>
-            </DialogContent>
-        </InjectedDialog>
+                <Grid item xs={12}>
+                    <List className={classes.tokenSelector}>
+                        {tokenList.map((value, i) => (
+                            <div key={i}>
+                                <NFTCard token={value} renderOrder={i} />
+                            </div>
+                        ))}
+                    </List>
+                </Grid>
+
+                <Grid item xs={6}>
+                    <Typography color="textPrimary" variant="body1" className={classNames(classes.text)}>
+                        {t.nft_total_amount()}
+                    </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                    <Typography color="textPrimary" align="right" className={classNames(classes.text, classes.bold)}>
+                        {tokenList.length}
+                    </Typography>
+                </Grid>
+            </Grid>
+            <Box style={{ position: 'absolute', bottom: 0, left: 0, width: '100%' }}>
+                <PluginWalletStatusBar>
+                    <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                        <WalletConnectedBoundary
+                            classes={{
+                                connectWallet: classNames(classes.button, classes.sendButton),
+                                unlockMetaMask: classNames(classes.button, classes.sendButton),
+                            }}>
+                            <ActionButton
+                                size="medium"
+                                loading={isSending}
+                                disabled={isSending}
+                                onClick={onSendTx}
+                                className={classNames(classes.button, classes.sendButton)}
+                                fullWidth>
+                                {t.send_symbol({
+                                    count: tokenList.length,
+                                })}
+                            </ActionButton>
+                        </WalletConnectedBoundary>
+                    </ChainBoundary>
+                </PluginWalletStatusBar>
+            </Box>
+        </DialogContent>
     )
 }
 
