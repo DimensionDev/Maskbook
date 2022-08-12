@@ -32,7 +32,7 @@ export function SelectProfileDialog(props: SelectProfileDialogProps) {
     const [rejection, onReject] = useState<Error>()
     const share = useCallback(() => {
         setCommitted(true)
-        props.onSelect(people).then(onClose, onReject)
+        props.onSelect([...people, ...props.alreadySelectedPreviously]).then(onClose, onReject)
     }, [onClose, people, props])
 
     const canCommit = committed || people.length === 0
