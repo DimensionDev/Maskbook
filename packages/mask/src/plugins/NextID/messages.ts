@@ -1,7 +1,7 @@
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
 import { PLUGIN_ID } from './constants'
 
-type PersonaListDialogEvent = { open: boolean }
+type PersonaListDialogEvent = { open: boolean; target?: string }
 
 interface PluginNextIDMessage {
     /**

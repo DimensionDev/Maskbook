@@ -4,13 +4,14 @@ import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
 import { MaskColorVar } from '@masknet/theme'
 import { Link } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { base } from '../base'
 import { PostTipButton, TipTaskManager } from '../components'
 import { RootContext } from '../contexts'
 import { setupStorage, storageDefaultValue } from '../storage'
 import { TipsEntranceDialog } from './TipsEntranceDialog'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -43,6 +44,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 RenderEntryComponent(EntryComponentProps) {
                     const [open, setOpen] = useState(false)
                     const clickHandler = () => setOpen(true)
+
+                    useEffect(() => {
+                        return CrossIsolationMessages.events.requestOpenApplication.on(({ open, application }) => {
+                            if (application !== PluginId.Tips) return
+                            setOpen(open)
+                        })
+                    }, [])
+
                     return (
                         <>
                             <ApplicationEntry

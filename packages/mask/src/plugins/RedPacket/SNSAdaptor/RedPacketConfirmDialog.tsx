@@ -310,7 +310,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                         onClick={createRedpacket}
                         disabled={isBalanceInsufficient || isWaitGasBeMinus || isCreating}>
                         {!isBalanceInsufficient
-                            ? t.send_symbol({
+                            ? t.token_send_symbol({
                                   amount: formatTotal,
                                   symbol: settings?.token?.symbol ?? '-',
                               })
