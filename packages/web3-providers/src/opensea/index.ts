@@ -107,7 +107,7 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaResponse): NonFungibleTo
             address: asset.token_address ?? asset.asset_contract.address,
             name: asset.name ?? asset.collection.name,
             symbol: asset.asset_contract.symbol,
-            owner: asset.owner.address,
+            owner: asset.top_ownerships[0].owner.address || asset.owner.address,
             creatorEarning: asset.asset_contract.dev_seller_fee_basis_points.toString() ?? '0',
         },
         collection: {
@@ -160,10 +160,10 @@ function createNFTAsset(chainId: ChainId, asset: OpenSeaResponse): NonFungibleAs
             link: createAssetLink(asset.creator),
         },
         owner: {
-            address: asset.owner.address,
-            nickname: asset.owner.user?.username ?? 'Unknown',
-            avatarURL: asset.owner.profile_img_url,
-            link: createAssetLink(asset.owner),
+            address: asset.top_ownerships[0].owner.address || asset.owner.address,
+            nickname: asset.top_ownerships[0].owner.user?.username ?? asset.owner.user?.username ?? 'Unknown',
+            avatarURL: asset.top_ownerships[0].owner.profile_img_url || asset.owner.profile_img_url,
+            link: createAssetLink(asset.top_ownerships[0].owner ?? asset.owner),
         },
         traits: asset.traits.map((x) => ({
             type: x.trait_type,
@@ -335,6 +335,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             chainId,
         )
         if (!response) return
+
         return createNFTAsset(chainId, response)
     }
 
