@@ -47,7 +47,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     ownerTokenBox: {
         background: theme.palette.background.default,
         width: '96%',
-        height: 335,
+        height: 320,
         borderRadius: 12,
         margin: '14px auto',
         padding: 10,
@@ -147,7 +147,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         gridTemplateColumns: 'repeat(4, 1fr)',
         gap: 16,
         width: '100%',
-        height: 320,
+        height: 305,
         overflowY: 'auto',
         borderRadius: 12,
         marginBottom: theme.spacing(1.5),
