@@ -50,9 +50,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const [selectedProtocol, setSelectedProtocol] = useState<SavingsProtocol | null>(null)
 
     const chains = useMemo(() => {
-        return [NetworkType.Ethereum, NetworkType.Polygon].map((network: NetworkType) =>
-            networkResolver.networkChainId(network),
-        )
+        return [NetworkType.Ethereum].map((network: NetworkType) => networkResolver.networkChainId(network))
     }, [])
 
     const { value: aaveTokens } = useAsync(async () => {

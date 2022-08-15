@@ -250,7 +250,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     }, [currentChainId])
 
     const onAddClick = (token: AllChainsNonFungibleToken) => {
-        setTokens((_tokens) => uniqBy([..._tokens, token], (x) => x.contract?.address.toLowerCase() + x.tokenId))
+        setTokens((_tokens) => uniqBy([..._tokens, token], (x) => x.contract?.address?.toLowerCase() + x.tokenId))
     }
 
     const AddCollectible = (
@@ -283,7 +283,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
         [...tokens.filter((x) => x.chainId === chainId), ...collectibles],
         selectedPluginId === NetworkPluginID.PLUGIN_SOLANA
             ? (x) => x.tokenId
-            : (x) => x.contract?.address.toLowerCase() + x.tokenId,
+            : (x) => x.contract?.address?.toLowerCase() + x.tokenId,
     ).filter((x) => x.chainId === chainId)
 
     const NoNFTList = () => {

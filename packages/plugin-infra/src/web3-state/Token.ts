@@ -1,6 +1,6 @@
 import { uniqBy } from 'lodash-unified'
 import type { Subscription } from 'use-subscription'
-import { mapSubscription, mergeSubscription, StorageObject } from '@masknet/shared-base'
+import { mapSubscription, mergeSubscription, safeEmptyList, StorageObject } from '@masknet/shared-base'
 import {
     FungibleToken,
     NonFungibleToken,
@@ -48,9 +48,11 @@ export class TokenState<ChainId, SchemaType> implements Web3TokenState<ChainId, 
                     this.storage.fungibleTokenBlockedBy.subscription,
                 ),
                 ([account, tokens, blockedBy]) =>
-                    tokens[account.toLowerCase()]?.filter(
-                        (x) => !blockedBy[account.toLowerCase()]?.includes(x.address),
-                    ) ?? [],
+                    safeEmptyList(
+                        tokens[account.toLowerCase()]?.filter(
+                            (x) => !blockedBy[account.toLowerCase()]?.includes(x.address),
+                        ),
+                    ),
             )
             this.trustedNonFungibleTokens = mapSubscription(
                 mergeSubscription(
@@ -59,9 +61,11 @@ export class TokenState<ChainId, SchemaType> implements Web3TokenState<ChainId, 
                     this.storage.nonFungibleTokenBlockedBy.subscription,
                 ),
                 ([account, tokens, blockedBy]) =>
-                    tokens[account.toLowerCase()]?.filter(
-                        (x) => !blockedBy[account.toLowerCase()]?.includes(x.address),
-                    ) ?? [],
+                    safeEmptyList(
+                        tokens[account.toLowerCase()]?.filter(
+                            (x) => !blockedBy[account.toLowerCase()]?.includes(x.address),
+                        ),
+                    ),
             )
             this.blockedFungibleTokens = mapSubscription(
                 mergeSubscription(
@@ -70,9 +74,11 @@ export class TokenState<ChainId, SchemaType> implements Web3TokenState<ChainId, 
                     this.storage.fungibleTokenBlockedBy.subscription,
                 ),
                 ([account, tokens, blockedBy]) =>
-                    tokens[account.toLowerCase()]?.filter((x) =>
-                        blockedBy[account.toLowerCase()]?.includes(x.address),
-                    ) ?? [],
+                    safeEmptyList(
+                        tokens[account.toLowerCase()]?.filter((x) =>
+                            blockedBy[account.toLowerCase()]?.includes(x.address),
+                        ),
+                    ),
             )
             this.blockedNonFungibleTokens = mapSubscription(
                 mergeSubscription(
@@ -81,9 +87,11 @@ export class TokenState<ChainId, SchemaType> implements Web3TokenState<ChainId, 
                     this.storage.nonFungibleTokenBlockedBy.subscription,
                 ),
                 ([account, tokens, blockedBy]) =>
-                    tokens[account.toLowerCase()]?.filter((x) =>
-                        blockedBy[account.toLowerCase()]?.includes(x.address),
-                    ) ?? [],
+                    safeEmptyList(
+                        tokens[account.toLowerCase()]?.filter((x) =>
+                            blockedBy[account.toLowerCase()]?.includes(x.address),
+                        ),
+                    ),
             )
         }
     }

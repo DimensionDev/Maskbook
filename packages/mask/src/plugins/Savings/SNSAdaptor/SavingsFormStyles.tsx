@@ -20,7 +20,7 @@ export const useStyles = makeStyles()((theme, props) => ({
         margin: '0 5px 10px 0',
     },
     selectTokenChip: {
-        margin: '0 0 10px 0',
+        margin: '0',
     },
     tokenValueUSD: {
         padding: '0 0 10px 0',
