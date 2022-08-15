@@ -17,10 +17,10 @@ import {
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Close as CloseIcon, Menu as MenuIcon } from '@mui/icons-material'
 import Color from 'color'
+import { FollowUs } from '../FollowUs'
 import { DashboardContext } from '../DashboardFrame/context'
 import { Navigation } from '../DashboardFrame/Navigation'
 import { Icons } from '@masknet/icons'
-import { FeaturePromotions } from './FeaturePromotions'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { NavigationVersionFooter } from '../NavigationVersionFooter'
@@ -173,7 +173,10 @@ export const PageFrame = memo((props: PageFrameProps) => {
                         variant="temporary"
                         elevation={0}>
                         <Navigation onClose={toggleDrawer} />
-                        <NavigationVersionFooter />
+                        <div>
+                            <FollowUs />
+                            <NavigationVersionFooter />
+                        </div>
                     </NavigationDrawer>
                 )}
                 <ShapeHelper>
@@ -181,7 +184,7 @@ export const PageFrame = memo((props: PageFrameProps) => {
                         <ErrorBoundary>{props.children}</ErrorBoundary>
                     </ContentContainer>
                 </ShapeHelper>
-                {showFeaturePromotions ? <FeaturePromotions /> : null}
+                {/* {showFeaturePromotions ? <FeaturePromotions /> : null} */}
             </Containment>
         </>
     )
