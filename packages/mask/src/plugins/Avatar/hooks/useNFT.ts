@@ -1,6 +1,6 @@
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
-import { useWeb3Connection, useWeb3Hub, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3Hub, useWeb3State } from '@masknet/plugin-infra/web3'
 import { CurrencyType, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { NFTInfo } from '../types'
 
@@ -16,18 +16,16 @@ export function useNFT(
         chainId,
         account,
     })
-    const connection = useWeb3Connection(pluginId ?? NetworkPluginID.PLUGIN_EVM)
     return useAsyncRetry(async () => {
         const asset = await hub?.getNonFungibleAsset?.(address, tokenId, {
             chainId,
         })
 
-        const metaData = await connection?.getNonFungibleTokenMetadata(address, tokenId)
         return {
             amount: asset?.priceInToken?.amount ?? asset?.price?.[CurrencyType.USD] ?? '0',
-            name: asset?.contract?.name ?? metaData?.name ?? '',
+            name: asset?.contract?.name ?? asset?.metadata?.name ?? '',
             symbol: asset?.priceInToken?.token.symbol ?? asset?.paymentTokens?.[0].symbol ?? 'ETH',
-            image: asset?.metadata?.imageURL ?? metaData?.imageURL ?? '',
+            image: asset?.metadata?.imageURL ?? asset?.metadata?.imageURL ?? '',
             owner: asset?.owner?.address ?? asset?.ownerId ?? '',
             slug: asset?.collection?.slug ?? '',
             permalink:
@@ -35,5 +33,5 @@ export function useNFT(
                 Others?.explorerResolver.nonFungibleTokenLink(chainId ?? ChainId.Mainnet, address, tokenId) ??
                 '',
         } as NFTInfo
-    }, [hub?.getNonFungibleAsset, address, tokenId, Others, chainId, connection])
+    }, [hub?.getNonFungibleAsset, address, tokenId, Others, chainId])
 }
