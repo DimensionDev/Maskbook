@@ -95,7 +95,7 @@ async function generateIcons() {
             const importPath = './' + new URL(path, ROOT_PATH).toString().slice(relativePrefix)
             const identifier = snakeCase(parsedPath.name)
 
-            const url = ` /*#__PURE__*/ (new URL(${JSON.stringify(importPath)}, import.meta.url).href)`
+            const url = ` /*#__PURE__*/ new URL(${JSON.stringify(importPath)}, import.meta.url)`
             asURL.js.push(`export const ${identifier}_url = ${url}`)
 
             let currentLine = `/** ${createImage(importPath)} */ export const `
