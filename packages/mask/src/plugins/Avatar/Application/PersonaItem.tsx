@@ -4,7 +4,7 @@ import { NFTAvatar } from './NFTAvatar'
 import { NFTInfo } from './NFTInfo'
 import { MoreIcon } from '../assets/more'
 import { RSS3_KEY_SNS } from '../constants'
-import { useCheckTokenOwner, useTokenOwner } from '../hooks/useTokenOwner'
+import { useCheckTokenOwner } from '../hooks/useTokenOwner'
 import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
 import { useCallback, useMemo } from 'react'
 import type { BindingProof } from '@masknet/shared-base'
@@ -51,18 +51,19 @@ export function PersonaItem(props: PersonaItemProps) {
     const { classes } = useStyles({ disabled: !owner })
     const { value: _avatar, loading } = usePersonaNFTAvatar(userId, getAvatarId(avatar) ?? '', RSS3_KEY_SNS.TWITTER)
     const { loading: loadingWallet, value: storage } = useWallet(userId)
-    const { value: token, loading: loadingToken } = useTokenOwner(
+
+    const {
+        loading: loadingCheckOwner,
+        isOwner,
+        name,
+        symbol,
+        schema,
+    } = useCheckTokenOwner(
+        _avatar?.pluginId ?? storage?.networkPluginID ?? NetworkPluginID.PLUGIN_EVM,
+        userId,
         _avatar?.address ?? '',
         _avatar?.tokenId ?? '',
-        _avatar?.pluginId ?? storage?.networkPluginID ?? NetworkPluginID.PLUGIN_EVM,
-        _avatar?.chainId,
-        storage?.address,
-    )
-
-    const { loading: loadingCheckOwner, isOwner } = useCheckTokenOwner(
-        _avatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM,
-        userId,
-        token?.owner ?? '',
+        _avatar?.schema ?? SchemaType.ERC721,
     )
 
     const tokenDetailed: AllChainsNonFungibleToken = useMemo(
@@ -70,24 +71,24 @@ export function PersonaItem(props: PersonaItemProps) {
             tokenId: _avatar?.tokenId ?? '',
             contract: {
                 chainId: _avatar?.chainId ?? ChainId.Mainnet,
-                name: token?.name ?? '',
-                symbol: token?.symbol ?? 'ETH',
+                name: name ?? '',
+                symbol: symbol ?? 'ETH',
                 address: _avatar?.address ?? '',
-                schema: SchemaType.ERC721,
-                owner: token?.owner,
+                schema: schema ?? SchemaType.ERC721,
+                owner: '',
             },
             metadata: {
                 chainId: _avatar?.chainId ?? ChainId.Mainnet,
-                name: token?.name ?? '',
-                symbol: token?.symbol ?? 'ETH',
+                name: name ?? '',
+                symbol: symbol ?? 'ETH',
             },
             id: _avatar?.address ?? '',
             chainId: _avatar?.chainId ?? ChainId.Mainnet,
             type: TokenType.NonFungible,
-            schema: SchemaType.ERC721,
+            schema: schema ?? SchemaType.ERC721,
             address: _avatar?.address ?? '',
         }),
-        [_avatar, token],
+        [_avatar, name, symbol, schema],
     )
 
     const onClick = useCallback(() => {
@@ -113,14 +114,14 @@ export function PersonaItem(props: PersonaItemProps) {
             </Box>
 
             <NFTInfo
-                loading={loading || loadingToken || loadingCheckOwner || loadingWallet}
-                owner={owner ? isOwner && _avatar?.avatarId === getAvatarId(avatar) : true}
+                loading={loading || loadingCheckOwner || loadingWallet}
+                owner={Boolean(isOwner && _avatar?.avatarId && _avatar?.avatarId === getAvatarId(avatar))}
                 tooltip={!owner || !proof ? t.persona_tooltips() : ''}
                 nft={
                     _avatar
                         ? {
-                              name: token?.name ?? '',
-                              symbol: token?.symbol ?? '',
+                              name: name ?? '',
+                              symbol: symbol ?? '',
                               tokenId: _avatar?.tokenId ?? '',
                               address: _avatar?.address ?? '',
                               chainId: _avatar.chainId ?? ChainId.Mainnet,

@@ -1,51 +1,63 @@
 import { useAsyncRetry } from 'react-use'
-import { ChainId, isValidAddress } from '@masknet/web3-shared-evm'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useWeb3Hub } from '@masknet/plugin-infra/web3'
+import { isValidAddress, SchemaType } from '@masknet/web3-shared-evm'
+import { useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { PluginNFTAvatarRPC } from '../messages'
 import { EMPTY_LIST, EnhanceableSite, NextIDPlatform } from '@masknet/shared-base'
 import { useCurrentVisitingSocialIdentity } from '../../../components/DataSource/useActivatedUI'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 
-export function useTokenOwner(
+export function useCheckTokenOwner(
+    pluginId: NetworkPluginID,
+    userId: string,
     address: string,
     tokenId: string,
-    pluginId: NetworkPluginID,
-    chainId?: ChainId,
-    account?: string,
+    schemaType: SchemaType,
 ) {
-    const hub = useWeb3Hub<'all'>(pluginId, {
-        chainId,
-        account,
-    })
-
-    return useAsyncRetry(async () => {
-        if (!address || !tokenId || !hub?.getNonFungibleAsset) return
-        const token = await hub.getNonFungibleAsset(address, tokenId, { chainId })
-        return {
-            owner: token?.owner?.address ?? token?.ownerId,
-            name: token?.contract?.name,
-            symbol: token?.contract?.symbol,
-        }
-    }, [hub, tokenId, address, account, chainId])
-}
-
-export function useCheckTokenOwner(pluginId: NetworkPluginID, userId: string, owner: string) {
     const { loading, value: persona } = useCurrentVisitingSocialIdentity()
-    const { value: storage, loading: loadingAddress } = useAsyncRetry(
-        async () =>
-            PluginNFTAvatarRPC.getAddress(activatedSocialNetworkUI.networkIdentifier as EnhanceableSite, userId),
-        [userId],
-    )
+
+    const connection = useWeb3Connection(pluginId)
     const wallets =
         persona?.binding?.proofs.filter((x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity)) ??
         EMPTY_LIST
 
+    const { value, loading: loadingOwner } = useAsyncRetry(async () => {
+        const token = await connection?.getNonFungibleToken(address, tokenId)
+        const storage = await PluginNFTAvatarRPC.getAddress(
+            activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
+            userId,
+        )
+        if (storage?.address) {
+            const isOwner = await connection?.getNonFungibleTokenOwnership(
+                address,
+                tokenId,
+                storage.address,
+                schemaType,
+            )
+            if (isOwner)
+                return {
+                    isOwner,
+                    token,
+                }
+        }
+
+        for (const wallet of wallets) {
+            const isOwner = await connection?.getNonFungibleTokenOwnership(
+                address,
+                tokenId,
+                wallet.identity,
+                schemaType,
+            )
+            if (isOwner) return { isOwner, token }
+        }
+        return { isOwner: false, token }
+    }, [address, tokenId, schemaType, connection, wallets])
+
     return {
-        loading: loading || loadingAddress,
-        isOwner: Boolean(
-            (storage?.address && isSameAddress(storage.address, owner) && pluginId === storage.networkPluginID) ||
-                wallets.some((x) => isSameAddress(x.identity, owner)),
-        ),
+        loading: loading || loadingOwner,
+        isOwner: value?.isOwner,
+        name: value?.token?.contract?.name ?? value?.token?.metadata?.name ?? '',
+        symbol: value?.token?.contract?.symbol ?? 'ETH',
+        schema: value?.token?.schema,
     }
 }
