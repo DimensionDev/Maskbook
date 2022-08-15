@@ -1,40 +1,67 @@
-import { fileURLToPath } from 'url'
-import { readFile } from 'fs/promises'
+import { Transform, TransformCallback } from 'node:stream'
+import { fileURLToPath } from 'node:url'
+import { readFile } from 'node:fs/promises'
+import { join, relative } from 'node:path'
+import { createRequire } from 'node:module'
 import { ensureDir } from 'fs-extra'
-import { createRequire } from 'module'
-import { join, relative } from 'path'
 import { watchTask } from '../utils/task.js'
 import { PKG_PATH, ROOT_PATH } from '../utils/paths.js'
 import { parseJSONc } from '../utils/jsonc.js'
+import { transform } from '@swc/core'
+import { dest, lastRun, series, src, TaskFunction } from 'gulp'
 
-const SANDBOXED_PLUGINS = new URL('./sandboxed-plugins/', PKG_PATH)
+const require = createRequire(new URL(import.meta.url))
+const sandboxedPlugins = new URL('./sandboxed-plugins/', PKG_PATH)
+const sandboxedPluginsDist = fileURLToPath(new URL('./dist', sandboxedPlugins))
+
 export function watchSandboxedPlugin() {}
 export async function buildSandboxedPlugin() {
     await ensureDistFolder()
     const { dev, prod } = await readCombinedPluginList()
 
-    const seen = new Set<string>()
+    const builders = new Map<string, TaskFunction>()
     for (const spec of prod.concat(dev)) {
         const manifestPath = resolveManifestPath(spec)
-        if (seen.has(manifestPath)) {
+        if (builders.has(manifestPath)) {
             throw new TypeError(`Multiple specifier points to the same manifest file. ${manifestPath}`)
         }
         if (prod.includes(spec) && relative(fileURLToPath(ROOT_PATH), manifestPath).startsWith('..')) {
             throw new TypeError(`${manifestPath} is not in the repo. Use plugins-local.json instead.`)
         }
-        seen.add(manifestPath)
-
-        // next: copy all files and transpile js files.
+        const json = await readFile(manifestPath, 'utf8').then(parseJSONc)
+        if (!json.id) throw new TypeError(`${manifestPath} does not contain an id.`)
+        builders.set(
+            manifestPath,
+            createBuilder(
+                json.id,
+                manifestPath.slice(0, -'/mask-manifest.json'.length),
+                prod.includes(spec) ? 'prod-' : 'dev-',
+            ),
+        )
     }
+    await new Promise((resolve) => series(...builders.values())(resolve))
 }
 watchTask(buildSandboxedPlugin, watchSandboxedPlugin, 'sbp', 'Build sandboxed plugins')
+
+function createBuilder(id: string, manifestRoot: string, prefix: 'prod-' | 'dev-') {
+    if (id.includes('..') || id.includes('/')) throw new TypeError(`Invalid plugin: ${id}`)
+    function compile() {
+        return src(['./**/*'], {
+            since: lastRun(compile),
+            cwd: manifestRoot,
+        })
+            .pipe(new TransformStream(id))
+            .pipe(dest(prefix + id, { cwd: sandboxedPluginsDist }))
+    }
+    return compile
+}
 function ensureDistFolder() {
-    return ensureDir(fileURLToPath(new URL('./dist', SANDBOXED_PLUGINS)))
+    return ensureDir(sandboxedPluginsDist)
 }
 
 async function readCombinedPluginList() {
-    const prodURL = new URL('./plugins.json', SANDBOXED_PLUGINS)
-    const localURL = new URL('./plugins-local.json', SANDBOXED_PLUGINS)
+    const prodURL = new URL('./plugins.json', sandboxedPlugins)
+    const localURL = new URL('./plugins-local.json', sandboxedPlugins)
 
     const prod = await readFile(prodURL, 'utf8').then(parseJSONc)
     const dev = await readFile(localURL, 'utf8')
@@ -58,12 +85,50 @@ function assertShape(data: unknown, file: URL): asserts data is string[] {
 
 function resolveManifestPath(spec: string) {
     if (spec.startsWith('npm:')) {
-        const require = createRequire(SANDBOXED_PLUGINS)
+        const require = createRequire(sandboxedPlugins)
         return require.resolve(spec.slice(4) + '/mask-manifest.json')
     } else if (spec.startsWith('file:')) {
-        const abs = join(fileURLToPath(SANDBOXED_PLUGINS), spec.slice(5), './mask-manifest.json')
+        const abs = join(fileURLToPath(sandboxedPlugins), spec.slice(5), './mask-manifest.json')
         return abs
     } else {
         throw new TypeError('Unknown specifier')
+    }
+}
+class TransformStream extends Transform {
+    constructor(public id: string) {
+        super({ objectMode: true, defaultEncoding: 'utf-8' })
+    }
+    wasm = require.resolve('@masknet/static-module-record-swc')
+    override _transform(
+        file: { relative: string; contents: any; path: string },
+        encoding: BufferEncoding,
+        callback: TransformCallback,
+    ): void {
+        if (!(file.path.endsWith('.js') || file.path.endsWith('.mjs'))) {
+            return callback(null, file)
+        }
+        const sandboxedPath = 'mask-plugin://' + this.id + '/' + file.relative.replace(/\\/g, '/')
+        const options = {
+            template: {
+                type: 'callback',
+                callback: '__mask__module__define__',
+                firstArg: sandboxedPath,
+            },
+        }
+        transform(file.contents.utf8Slice(), {
+            jsc: {
+                target: 'es2022',
+                experimental: {
+                    plugins: [[this.wasm, options]],
+                },
+            },
+        }).then(
+            (output) => {
+                file.contents = Buffer.from(output.code, 'utf-8')
+                if (file.path.endsWith('.mjs')) file.path = file.path.replace(/\.mjs$/, '.js')
+                callback(null, file)
+            },
+            (err) => callback(err),
+        )
     }
 }
