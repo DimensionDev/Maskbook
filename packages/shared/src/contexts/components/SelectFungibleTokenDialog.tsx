@@ -1,4 +1,4 @@
-import { useCallback, FC, useState } from 'react'
+import { useCallback, FC, useState, useMemo } from 'react'
 import { useCurrentWeb3NetworkPluginID, useNativeTokenAddress, Web3Helper } from '@masknet/plugin-infra/web3'
 import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
 import { EMPTY_LIST, EnhanceableSite, isDashboardPage } from '@masknet/shared-base'
@@ -104,6 +104,11 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
         [],
     )
 
+    const FixedSizeListProps = useMemo(
+        () => ({ itemSize: rowSize + 22, height: isMdScreen ? 300 : 428, className: classes.wrapper }),
+        [rowSize, isMdScreen],
+    )
+
     return (
         <InjectedDialog
             titleBarIconStyle={isDashboard ? 'close' : 'back'}
@@ -133,11 +138,7 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
                     disableSearch={disableSearchBar}
                     selectedTokens={selectedTokens}
                     onSelect={onSubmit}
-                    FixedSizeListProps={{
-                        itemSize: rowSize + 22,
-                        height: isMdScreen ? 300 : 428,
-                        className: classes.wrapper,
-                    }}
+                    FixedSizeListProps={FixedSizeListProps}
                     SearchTextFieldProps={{
                         InputProps: { classes: { root: classes.search } },
                     }}
