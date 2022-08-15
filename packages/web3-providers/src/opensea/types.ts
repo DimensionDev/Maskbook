@@ -204,7 +204,7 @@ export interface OpenSeaAssetEvent {
         }
         permalink: string
     }
-    payment_token: OpenSeaFungibleToken
+    payment_token?: OpenSeaFungibleToken
     quantity: string
     ending_price: string
     bid_amount?: string

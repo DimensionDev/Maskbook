@@ -266,7 +266,7 @@ function createNFTHistory(chainId: ChainId, event: OpenSeaAssetEvent): NonFungib
         timestamp: new Date(`${event.created_date}Z`).getTime(),
         price: {
             [CurrencyType.USD]: new BigNumber(event.bid_amount ?? event.total_price ?? 0)
-                .dividedBy(scale10(1, event.payment_token.decimals))
+                .dividedBy(scale10(1, event.payment_token?.decimals))
                 .dividedBy(event.quantity)
                 .multipliedBy(event.payment_token?.usd_price ?? 1)
                 .toFixed(2),
