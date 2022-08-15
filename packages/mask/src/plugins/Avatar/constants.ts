@@ -17,7 +17,7 @@ export enum RSS3_KEY_SNS {
     INSTAGRAM = '_instagram_nfts',
 }
 
-export const SNS_KEY_MAP: Partial<Record<EnhanceableSite, RSS3_KEY_SNS>> = {
+export const SNS_RSS3_FIELD_KEY_MAP: Partial<Record<EnhanceableSite, RSS3_KEY_SNS>> = {
     [EnhanceableSite.Facebook]: RSS3_KEY_SNS.FACEBOOK,
     [EnhanceableSite.Twitter]: RSS3_KEY_SNS.TWITTER,
     [EnhanceableSite.Instagram]: RSS3_KEY_SNS.INSTAGRAM,

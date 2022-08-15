@@ -3,13 +3,14 @@ import { Plugin, PluginI18NFieldRender, PluginId } from '@masknet/plugin-infra/c
 import { ApplicationEntry } from '@masknet/shared'
 import type { EnhanceableSite } from '@masknet/shared-base'
 import { CrossIsolationMessages } from '@masknet/shared-base'
+import { Box } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { NFTAvatarDialog } from '../Application/NFTAvatarsDialog'
 import { base } from '../base'
-import { PLUGIN_ID, SNS_KEY_MAP } from '../constants'
+import { PLUGIN_ID, SNS_RSS3_FIELD_KEY_MAP } from '../constants'
 import { setupContext } from '../context'
-import { NFTBadgeTimeline } from './NFTBadgeTimeline'
+import { ProfileAvatarBadge } from './ProfileAvatarBadge'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -71,17 +72,16 @@ const sns: Plugin.SNSAdaptor.Definition = {
         priority: 99999,
         UI: {
             Decorator({ identity }) {
+                console.log('avatar identify', identity)
                 if (!identity?.identifier?.userId) return null
-                const snsKey = SNS_KEY_MAP[identity.identifier.network as EnhanceableSite]
-                if (!snsKey) return null
+                const rss3Key = SNS_RSS3_FIELD_KEY_MAP[identity.identifier.network as EnhanceableSite]
+                if (!rss3Key) return null
                 return (
-                    <NFTBadgeTimeline
-                        avatarId=""
-                        width="100%"
-                        height="100%"
-                        snsKey={snsKey}
-                        userId={identity.identifier.userId}
-                    />
+                    <Box display="flex" alignItems="top" justifyContent="center">
+                        <div style={{ display: 'flex', alignItems: 'top', justifyContent: 'center' }}>
+                            <ProfileAvatarBadge userId={identity.identifier.userId} />
+                        </div>
+                    </Box>
                 )
             },
         },

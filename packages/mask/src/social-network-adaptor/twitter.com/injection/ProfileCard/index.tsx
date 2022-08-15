@@ -1,6 +1,5 @@
-import { ProfileIdentifier } from '@masknet/shared-base'
+import { CrossIsolationMessages, ProfileIdentifier } from '@masknet/shared-base'
 import { Twitter } from '@masknet/web3-providers'
-import { throttle } from 'lodash-unified'
 import { CSSProperties, useEffect, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
 import { ProfileCard } from '../../../../components/InjectedComponents/ProfileCard'
@@ -17,7 +16,6 @@ export function injectProfileCardHolder(signal: AbortSignal) {
     createReactRootShadowed(root.shadowRoot, { signal }).render(<ProfileCardHolder />)
 }
 
-const TESTID_PREFIX = 'UserAvatar-Container-'
 function ProfileCardHolder() {
     const [style, setStyle] = useState<CSSProperties>({
         visibility: 'hidden',
@@ -33,43 +31,42 @@ function ProfileCardHolder() {
     const { activeRef, targetRef: holderRef } = useTargetActiveRef()
     const [twitterId, setTwitterId] = useState('')
 
-    console.log('ProfileCard holder', holderRef.current)
     useEffect(() => {
-        const hide = () => {
+        return CrossIsolationMessages.events.requestOpenProfileCard.on(({ userId, x, y }) => {
+            setTwitterId(userId)
             setStyle((old) => {
-                if (old.visibility === 'hidden' || activeRef.current) return old
-                console.log('ProfileCard activeRef', activeRef.current)
-                setTwitterId('')
-                return { ...old, visibility: 'hidden' }
-            })
-        }
-        const mousemoveHandler = throttle((evt: DocumentEventMap['mousemove']) => {
-            if (!(evt.target instanceof HTMLElement)) return hide()
-            const avatarContainer = evt.target.closest<HTMLDivElement>(`[data-testid^="${TESTID_PREFIX}"]`)
-            if (!avatarContainer) return hide()
-            const testid = avatarContainer.dataset.testid ?? ''
-            // if `testid` is empty, we are resetting it.
-            setTwitterId(testid.slice(TESTID_PREFIX.length))
-
-            const boundingRect = avatarContainer.getBoundingClientRect()
-            const left = holderRef.current?.clientWidth ? boundingRect.left + 180 : boundingRect.left
-            const top = boundingRect.top + boundingRect.height + 10 + (document.scrollingElement?.scrollTop || 0)
-            setStyle((old) => {
-                if (old.visibility === 'visible' && old.left === left && old.top === top) return old
+                const { visibility, left, top } = old
+                if (visibility === 'visible' && left === x && top === y) return old
                 return {
                     ...old,
                     visibility: 'visible',
-                    left,
-                    top,
+                    left: x,
+                    top: y,
                 }
             })
-            console.log(evt)
-        }, 200)
-        document.addEventListener('mousemove', mousemoveHandler)
-        return () => {
-            document.removeEventListener('mousemove', mousemoveHandler)
-        }
+        })
     }, [])
+
+    useEffect(() => {
+        document.body.addEventListener('click', (event) => {
+            // @ts-ignore
+            // event.target doesn't work for Shadow DOM
+            const element = event.path[0]
+            if (!(element instanceof HTMLElement) || !holderRef.current) return
+            if (!holderRef.current.contains(element)) {
+                setStyle((old) => {
+                    if (old.visibility === 'hidden') return old
+                    return {
+                        ...old,
+                        visibility: 'hidden',
+                    }
+                })
+            }
+            console.log('avatar click', event)
+        })
+    }, [])
+
+    console.log('ProfileCard holder', holderRef.current)
 
     console.log('twitterId', twitterId)
     const { value: identity, loading } = useAsync(async () => {

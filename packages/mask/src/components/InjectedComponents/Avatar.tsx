@@ -33,5 +33,5 @@ export function Avatar(props: AvatarProps) {
     }, [identity, socialAddressList, sourceType])
 
     if (loadingSocialAddressList || !component) return null
-    return <div className={classes?.root}>{component}</div>
+    return <div className={classes.root}>{component}</div>
 }
