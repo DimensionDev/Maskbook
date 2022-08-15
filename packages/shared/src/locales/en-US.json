@@ -4,6 +4,7 @@
     "balance": "Balance",
     "select_token": "Select",
     "manage_token_list": "Manage Token List",
+    "token_list_loading": "Loading",
     "erc20_token_list_placeholder": "Name or Contract address e.g., USDC or 0x234...",
     "erc20_token_list_loading": "Loading token lists...",
     "erc20_search_token_loading": "Loading token...",
