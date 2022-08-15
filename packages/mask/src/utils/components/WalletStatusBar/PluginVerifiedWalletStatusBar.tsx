@@ -121,6 +121,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                 defaultVerifiedWallet,
                 defaultChainId,
                 chainId,
+                walletIdentity,
             ],
         )
 
