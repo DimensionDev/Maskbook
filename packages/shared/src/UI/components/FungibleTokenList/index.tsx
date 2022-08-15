@@ -120,7 +120,7 @@ export const FungibleTokenList = forwardRef(
             setModeTransition(true)
             setTimeout(() => {
                 setModeTransition(false)
-            }, 100000)
+            }, 1000)
         }, [mode])
 
         useImperativeHandle(
@@ -176,6 +176,7 @@ export const FungibleTokenList = forwardRef(
             },
         )
 
+        // To avoid SearchableList re-render, reduce the dep
         const sortedFungibleTokensForManage = useMemo(() => {
             if (mode === TokenListMode.List) return []
             const isTrustedToken = currySameAddress(trustedFungibleTokens.map((x) => x.address))
@@ -270,6 +271,7 @@ export const FungibleTokenList = forwardRef(
                 })
                 .map((x) => ({
                     ...x,
+                    // To avoid reduce re-render, merge balance into token, when value is `undefined` to represent loading
                     balance: fungibleTokensBalance[x.address],
                 }))
         }, [
@@ -316,6 +318,7 @@ export const FungibleTokenList = forwardRef(
 
         const getPlaceholder = () => {
             if (modeTransition) return <Content height={FixedSizeListProps?.height} message={t.token_list_loading()} />
+
             // Add token in dashboard, includeTokens is empty
             if (Object.keys(fungibleTokensBalance).length === 0 && includeTokens?.length === 0 && !searchedToken)
                 return null
