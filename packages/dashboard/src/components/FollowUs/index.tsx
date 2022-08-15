@@ -30,7 +30,7 @@ export function FollowUs() {
     return (
         <div style={{ padding: '0 16px', height: 80, marginBottom: 16 }} onClick={() => openMaskNetwork()}>
             <FollowUsContainer>
-                <Typography>Follow us on Twitter</Typography>
+                <Typography>Follow us</Typography>
                 <TwitterColoredContainer>
                     <Icons.TwitterColored size={24} />
                 </TwitterColoredContainer>
