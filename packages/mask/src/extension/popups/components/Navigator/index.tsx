@@ -44,7 +44,7 @@ export const Navigator = memo(() => {
                 showLabels
                 value={matchPersona ? NavRouter.Personas : matchWallet ? NavRouter.Wallet : null}>
                 <BottomNavigationAction
-                    label={t('personas')}
+                    label={t('persona')}
                     icon={<Icons.Personas />}
                     value={NavRouter.Personas}
                     onClick={() => navigate(PopupRoutes.Personas, { replace: true })}
