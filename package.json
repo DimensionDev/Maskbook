@@ -88,8 +88,8 @@
   },
   "pnpm": {
     "overrides": {
-      "@types/node": "^18.7.4",
-      "@types/react": "18.7.4",
+      "@types/node": "18.7.4",
+      "@types/react": "18.0.17",
       "cross-fetch": "3.1.5",
       "cross-blob": "3.0.1"
     },
