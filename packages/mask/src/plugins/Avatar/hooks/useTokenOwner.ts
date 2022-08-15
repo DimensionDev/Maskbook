@@ -15,17 +15,18 @@ export function useCheckTokenOwner(
     schemaType: SchemaType,
 ) {
     const { loading, value: persona } = useCurrentVisitingSocialIdentity()
-    const { value: storage, loading: loadingAddress } = useAsyncRetry(
-        async () =>
-            PluginNFTAvatarRPC.getAddress(activatedSocialNetworkUI.networkIdentifier as EnhanceableSite, userId),
-        [userId],
-    )
+
     const connection = useWeb3Connection(pluginId)
     const wallets =
         persona?.binding?.proofs.filter((x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity)) ??
         EMPTY_LIST
 
-    const { value: isOwner, loading: loadingOwner } = useAsyncRetry(async () => {
+    const { value, loading: loadingOwner } = useAsyncRetry(async () => {
+        const token = await connection?.getNonFungibleToken(address, tokenId)
+        const storage = await PluginNFTAvatarRPC.getAddress(
+            activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
+            userId,
+        )
         if (storage?.address) {
             const isOwner = await connection?.getNonFungibleTokenOwnership(
                 address,
@@ -33,7 +34,11 @@ export function useCheckTokenOwner(
                 storage.address,
                 schemaType,
             )
-            if (isOwner) return true
+            if (isOwner)
+                return {
+                    isOwner,
+                    token,
+                }
         }
 
         for (const wallet of wallets) {
@@ -43,21 +48,16 @@ export function useCheckTokenOwner(
                 wallet.identity,
                 schemaType,
             )
-            if (isOwner) return true
+            if (isOwner) return { isOwner, token }
         }
-        return false
-    }, [address, tokenId, schemaType, connection])
-
-    const { value: token, loading: loadingToken } = useAsyncRetry(
-        async () => connection?.getNonFungibleToken(address, tokenId),
-        [address, tokenId, connection],
-    )
+        return { isOwner: false, token }
+    }, [address, tokenId, schemaType, connection, wallets])
 
     return {
-        loading: loading || loadingAddress || loadingOwner || loadingToken,
-        isOwner,
-        name: token?.contract?.name ?? token?.metadata?.name ?? '',
-        symbol: token?.contract?.symbol ?? 'ETH',
-        schema: token?.schema,
+        loading: loading || loadingOwner,
+        isOwner: value?.isOwner,
+        name: value?.token?.contract?.name ?? value?.token?.metadata?.name ?? '',
+        symbol: value?.token?.contract?.symbol ?? 'ETH',
+        schema: value?.token?.schema,
     }
 }
