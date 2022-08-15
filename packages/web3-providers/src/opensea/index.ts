@@ -334,8 +334,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             urlcat('/api/v1/asset/:address/:tokenId', { address, tokenId }),
             chainId,
         )
-        console.log('aaaaaaaaaaaaaa')
-        console.log(response)
+
         if (!response) return
         return createNFTAsset(chainId, response)
     }
