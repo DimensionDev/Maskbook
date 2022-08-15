@@ -201,6 +201,14 @@ class Connection implements BaseConnection {
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
+    getNonFungibleTokenOwner(
+        address: string,
+        tokenId: string,
+        schema?: SchemaType,
+        initial?: FlowConnectionOptions,
+    ): Promise<string> {
+        throw new Error('Method not implemented.')
+    }
     getNonFungibleTokenOwnership(
         address: string,
         tokenId: string,

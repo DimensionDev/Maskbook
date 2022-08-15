@@ -381,6 +381,23 @@ class Connection implements EVM_Connection {
         )
     }
 
+    async getNonFungibleTokenOwner(
+        address: string,
+        tokenId: string,
+        schema?: SchemaType,
+        initial?: EVM_Web3ConnectionOptions,
+    ) {
+        const options = this.getOptions(initial)
+        const actualSchema = schema ?? (await this.getTokenSchema(address, options))
+
+        // ERC1155
+        if (actualSchema === SchemaType.ERC1155) return ''
+
+        // ERC721
+        const contract = await this.getERC721Contract(address, options)
+        return (await contract?.methods.ownerOf(tokenId).call()) ?? ''
+    }
+
     async getNonFungibleTokenOwnership(
         address: string,
         tokenId: string,

@@ -718,6 +718,8 @@ export interface Connection<
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>>
+    getNonFungibleTokenOwner(address: string, tokenId: string, schema?: SchemaType,
+        initial?: Web3ConnectionOptions,): Promise<string>
     getNonFungibleTokenOwnership(
         address: string,
         tokenId: string,
