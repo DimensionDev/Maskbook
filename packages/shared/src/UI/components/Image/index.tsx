@@ -21,8 +21,8 @@ interface ImageProps
     fallbackImage?: URL
 }
 
-export function Image(props: ImageProps) {
-    const classes = useStylesExtends(useStyles(), props)
+export function Image({ fallbackImage, ...rest }: ImageProps) {
+    const classes = useStylesExtends(useStyles(), rest)
     const theme = useTheme()
     const maskImageURL =
         theme.palette.mode === 'dark'
@@ -30,12 +30,12 @@ export function Image(props: ImageProps) {
             : new URL('./mask_light.png', import.meta.url)
 
     const { loading: loadingImage, value: image } = useAsync(async () => {
-        if (!props.src) return
-        const data = await globalThis.r2d2Fetch(`https://cors.r2d2.to?${props.src}`)
+        if (!rest.src) return
+        const data = await globalThis.r2d2Fetch(`https://cors.r2d2.to?${rest.src}`)
         return URL.createObjectURL(await data.blob())
-    }, [props.src])
+    }, [rest.src])
 
-    const { value: isImageToken, loading: checkImageTokenLoading } = useImageChecker(props.src)
+    const { value: isImageToken, loading: checkImageTokenLoading } = useImageChecker(rest.src)
 
     return (
         <>
@@ -59,19 +59,19 @@ export function Image(props: ImageProps) {
             ) : isImageToken ? (
                 <img
                     crossOrigin="anonymous"
-                    {...props}
-                    src={image ?? props.src}
+                    {...rest}
+                    src={image ?? rest.src}
                     onError={(event) => {
                         const target = event.currentTarget as HTMLImageElement
-                        target.src = (props.fallbackImage ?? maskImageURL).toString()
+                        target.src = (fallbackImage ?? maskImageURL).toString()
                         target.classList.add(classes.loadingFailImage ?? '')
                     }}
                 />
             ) : (
                 <Box className={classes.imageLoadingBox}>
                     <img
-                        {...props}
-                        src={(props.fallbackImage ?? maskImageURL).toString()}
+                        {...rest}
+                        src={(fallbackImage ?? maskImageURL).toString()}
                         className={classNames(classes.failImage, classes.loadingFailImage)}
                     />
                 </Box>

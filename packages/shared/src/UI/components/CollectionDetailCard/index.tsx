@@ -81,7 +81,7 @@ const useStyles = makeStyles()((theme) => ({
     threeLine: {
         display: '-webkit-box',
         '-webkit-line-clamp': '3',
-        height: 60,
+        height: 50,
         fontSize: 14,
         fontWeight: 400,
         width: '100%',

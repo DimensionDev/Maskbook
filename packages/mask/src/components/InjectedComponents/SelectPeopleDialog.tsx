@@ -36,7 +36,7 @@ export function SelectProfileDialog(props: SelectProfileDialogProps) {
         props
             .onSelect(uniqBy([...people, ...props.alreadySelectedPreviously], (x) => x.identifier))
             .then(onClose, onReject)
-    }, [onClose, people, props])
+    }, [onClose, people, props.onSelect])
 
     const canCommit = committed || people.length === 0
     return (

@@ -13,6 +13,7 @@ import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
 import type { AllChainsNonFungibleToken } from '../types'
 import { useWallet } from '../hooks/useWallet'
+import { useI18N } from '../locales'
 
 const useStyles = makeStyles<{ disabled: boolean }>()((theme, props) => ({
     root: {
@@ -23,6 +24,9 @@ const useStyles = makeStyles<{ disabled: boolean }>()((theme, props) => ({
         display: 'flex',
         alignItems: 'center',
         cursor: 'pointer',
+        '&.Mui-disabled': {
+            pointerEvents: 'auto',
+        },
     },
 
     userInfo: {
@@ -43,6 +47,7 @@ interface PersonaItemProps {
 
 export function PersonaItem(props: PersonaItemProps) {
     const { userId, onSelect, owner = false, proof, avatar, nickname = '' } = props
+    const t = useI18N()
     const { classes } = useStyles({ disabled: !owner })
     const { value: _avatar, loading } = usePersonaNFTAvatar(userId, getAvatarId(avatar) ?? '', RSS3_KEY_SNS.TWITTER)
     const { loading: loadingWallet, value: storage } = useWallet(userId)
@@ -111,6 +116,7 @@ export function PersonaItem(props: PersonaItemProps) {
             <NFTInfo
                 loading={loading || loadingCheckOwner || loadingWallet}
                 owner={Boolean(isOwner && _avatar?.avatarId && _avatar?.avatarId === getAvatarId(avatar))}
+                tooltip={!owner || !proof ? t.persona_tooltips() : ''}
                 nft={
                     _avatar
                         ? {
