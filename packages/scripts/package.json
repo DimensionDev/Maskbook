@@ -23,9 +23,9 @@
     "@types/fs-extra": "^9.0.13",
     "@types/gulp": "^4.0.9",
     "@types/lodash": "^4.14.182",
-    "@types/node": "^18.6.2",
+    "@types/node": "^18.7.4",
     "@types/proper-lockfile": "^4.1.2",
-    "@types/yargs": "^17.0.10",
+    "@types/yargs": "^17.0.11",
     "gulp-cli": "^2.3.0",
     "ts-node": "^10.9.1",
     "web-ext": "^7.1.1"
