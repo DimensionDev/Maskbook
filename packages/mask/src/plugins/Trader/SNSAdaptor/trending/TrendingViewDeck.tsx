@@ -5,7 +5,7 @@ import { DataProvider } from '@masknet/public-api'
 import { FormattedCurrency, Linking, TokenSecurityBar, useTokenSecurity } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles, MaskColors, useStylesExtends } from '@masknet/theme'
 import type { TrendingAPI } from '@masknet/web3-providers'
 import { formatCurrency, NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -111,7 +111,7 @@ const useStyles = makeStyles()((theme) => {
             marginBottom: theme.spacing(2),
         },
         icon: {
-            color: theme.palette.maskColor.dark,
+            color: MaskColors.dark.maskColor.dark,
         },
     }
 })
