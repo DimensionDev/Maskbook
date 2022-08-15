@@ -1,6 +1,6 @@
 import { Transform, TransformCallback } from 'node:stream'
 import { fileURLToPath } from 'node:url'
-import { readFile } from 'node:fs/promises'
+import { readFile, writeFile } from 'node:fs/promises'
 import { join, relative } from 'node:path'
 import { createRequire } from 'node:module'
 import { ensureDir } from 'fs-extra'
@@ -8,42 +8,74 @@ import { watchTask } from '../utils/task.js'
 import { PKG_PATH, ROOT_PATH } from '../utils/paths.js'
 import { parseJSONc } from '../utils/jsonc.js'
 import { transform } from '@swc/core'
-import { dest, lastRun, series, src, TaskFunction } from 'gulp'
+import { dest, lastRun, parallel, src, TaskFunction } from 'gulp'
 
 const require = createRequire(new URL(import.meta.url))
 const sandboxedPlugins = new URL('./sandboxed-plugins/', PKG_PATH)
-const sandboxedPluginsDist = fileURLToPath(new URL('./dist', sandboxedPlugins))
+const sandboxedPluginsDistURL = new URL('./dist/', sandboxedPlugins)
+const sandboxedPluginsDistPath = fileURLToPath(sandboxedPluginsDistURL)
 
-export function watchSandboxedPlugin() {}
+export function watchSandboxedPlugin() {
+    throw new Error('TODO')
+}
 export async function buildSandboxedPlugin() {
     await ensureDistFolder()
-    const { dev, prod } = await readCombinedPluginList()
+    const { local, formal } = await readCombinedPluginList()
 
     const builders = new Map<string, TaskFunction>()
-    for (const spec of prod.concat(dev)) {
+    const id = new Set<string>()
+    const localID = new Set<string>()
+
+    for (const spec of formal) {
         const manifestPath = resolveManifestPath(spec)
         if (builders.has(manifestPath)) {
             throw new TypeError(`Multiple specifier points to the same manifest file. ${manifestPath}`)
         }
-        if (prod.includes(spec) && relative(fileURLToPath(ROOT_PATH), manifestPath).startsWith('..')) {
-            throw new TypeError(`${manifestPath} is not in the repo. Use plugins-local.json instead.`)
+        if (relative(fileURLToPath(ROOT_PATH), manifestPath).startsWith('..')) {
+            throw new TypeError(`${manifestPath} is not in the repo. Please define it in the plugins-local.json.`)
         }
         const json = await readFile(manifestPath, 'utf8').then(parseJSONc)
         if (!json.id) throw new TypeError(`${manifestPath} does not contain an id.`)
+        if (id.has(json.id)) throw new TypeError(`Plugin ${json.id} appear twice in the plugins.json.`)
+        id.add(json.id)
+        builders.set(manifestPath, createBuilder(json.id, manifestPath.slice(0, -'/mask-manifest.json'.length), ''))
+    }
+
+    for (const spec of local) {
+        const manifestPath = resolveManifestPath(spec)
+        if (builders.has(manifestPath)) {
+            throw new TypeError(`Multiple specifier points to the same manifest file. ${manifestPath}`)
+        }
+        const json = await readFile(manifestPath, 'utf8').then(parseJSONc)
+        if (!json.id) throw new TypeError(`${manifestPath} does not contain an id.`)
+        if (localID.has(json.id)) throw new TypeError(`Plugin ${json.id} appear twice in the plugins-local.json.`)
+        localID.add(json.id)
         builders.set(
             manifestPath,
-            createBuilder(
-                json.id,
-                manifestPath.slice(0, -'/mask-manifest.json'.length),
-                prod.includes(spec) ? 'prod-' : 'dev-',
-            ),
+            createBuilder(json.id, manifestPath.slice(0, -'/mask-manifest.json'.length), 'local-'),
         )
     }
-    await new Promise((resolve) => series(...builders.values())(resolve))
+
+    const internalList: Record<string, { formal?: boolean; local?: boolean }> = {}
+    for (const _ of id) {
+        internalList[_] ||= {}
+        internalList[_].formal = true
+    }
+    for (const _ of localID) {
+        internalList[_] ||= {}
+        internalList[_].local = true
+    }
+
+    const tasks = new Promise((resolve) => parallel(...builders.values())(resolve))
+    const writeInternal = writeFile(
+        new URL('./plugins.json', sandboxedPluginsDistURL),
+        JSON.stringify(internalList, null, 4),
+    )
+    await Promise.all([tasks, writeInternal])
 }
 watchTask(buildSandboxedPlugin, watchSandboxedPlugin, 'sbp', 'Build sandboxed plugins')
 
-function createBuilder(id: string, manifestRoot: string, prefix: 'prod-' | 'dev-') {
+function createBuilder(id: string, manifestRoot: string, prefix: string) {
     if (id.includes('..') || id.includes('/')) throw new TypeError(`Invalid plugin: ${id}`)
     function compile() {
         return src(['./**/*'], {
@@ -51,26 +83,26 @@ function createBuilder(id: string, manifestRoot: string, prefix: 'prod-' | 'dev-
             cwd: manifestRoot,
         })
             .pipe(new TransformStream(id))
-            .pipe(dest(prefix + id, { cwd: sandboxedPluginsDist }))
+            .pipe(dest(prefix + id, { cwd: sandboxedPluginsDistPath }))
     }
     return compile
 }
 function ensureDistFolder() {
-    return ensureDir(sandboxedPluginsDist)
+    return ensureDir(sandboxedPluginsDistPath)
 }
 
 async function readCombinedPluginList() {
     const prodURL = new URL('./plugins.json', sandboxedPlugins)
     const localURL = new URL('./plugins-local.json', sandboxedPlugins)
 
-    const prod = await readFile(prodURL, 'utf8').then(parseJSONc)
-    const dev = await readFile(localURL, 'utf8')
+    const formal = await readFile(prodURL, 'utf8').then(parseJSONc)
+    const local = await readFile(localURL, 'utf8')
         .then(parseJSONc)
         .catch(() => [])
 
-    assertShape(prod, prodURL)
-    assertShape(dev, localURL)
-    return { prod, dev }
+    assertShape(formal, prodURL)
+    assertShape(local, localURL)
+    return { formal, local }
 }
 
 function assertShape(data: unknown, file: URL): asserts data is string[] {
