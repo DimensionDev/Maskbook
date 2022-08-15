@@ -57,6 +57,7 @@ function collectPostsInstagramInner(
 }
 
 function getPostBy(node: DOMProxy): ProfileIdentifier | null {
+    if (node.destroyed) return null
     // the first a
     const author = node.current.querySelector('a')
     if (!author) return null
@@ -67,5 +68,6 @@ function getPostBy(node: DOMProxy): ProfileIdentifier | null {
     return null
 }
 function getPostID(node: DOMProxy): null | string {
+    if (node.destroyed) return null
     return node.current?.querySelector<HTMLAnchorElement>('span a[href^="/"]')?.text || null
 }
