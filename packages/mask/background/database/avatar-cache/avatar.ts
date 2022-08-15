@@ -35,7 +35,7 @@ const indexedDBImpl = memoizePromise(
         await Promise.allSettled(promises)
         return map
     },
-    (id) => id.flatMap((x) => x.toText()).join(';'),
+    (id: IdentifierWithAvatar[]) => id.flatMap((x) => x.toText()).join(';'),
 )
 export const queryAvatarsDataURL: (identifiers: IdentifierWithAvatar[]) => Promise<Map<IdentifierWithAvatar, string>> =
     hasNativeAPI ? nativeImpl : indexedDBImpl
