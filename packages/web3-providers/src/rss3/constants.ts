@@ -11,10 +11,10 @@ export const NETWORK_PLUGIN = {
     [NetworkPluginID.PLUGIN_SOLANA]: 'solana',
 }
 
-export const CollectionType = {
-    NFT: /Polygon.NFT|Ethereum.NFT|BSC.NFT/,
-    donation: /Gitcoin.Donation/,
-    footprint: /Mirror.XYZ|xDai.POAP/,
+export enum CollectionType {
+    Donations = 'Donations',
+    Footprints = 'Footprints',
+    Feeds = 'Feeds',
 }
 
 export enum TAG {
