@@ -24,7 +24,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         width: CARD_WIDTH,
         height: CARD_HEIGHT,
-        backgroundColor: theme.palette.background.default,
+        backgroundColor: theme.palette.background.paper,
         boxShadow: theme.palette.mode === 'light' ? '0px 4px 30px rgba(0, 0, 0, 0.1)' : undefined,
     },
 }))
@@ -58,10 +58,8 @@ function ProfileCardHolder() {
     useEffect(() => {
         document.body.addEventListener('click', (event) => {
             // @ts-ignore
-            // event.target doesn't work for Shadow DOM
-            const element = event.path[0]
-            if (!(element instanceof HTMLElement) || !holderRef.current) return
-            if (!holderRef.current.contains(element)) {
+            // `NODE.contains(other)` doesn't work for cross multiple layer of Shadow DOM
+            if (!event.path.includes(holderRef.current)) {
                 setStyle((old) => {
                     if (old.visibility === 'hidden') return old
                     return {
