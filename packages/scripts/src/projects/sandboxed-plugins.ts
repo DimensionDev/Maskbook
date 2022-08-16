@@ -31,6 +31,7 @@ export async function buildSandboxedPluginConfigurable(distPath: string, isProdu
 
     if (isProduction) local.length = 0
 
+    const mv3PreloadList = new Set<string>()
     const builders = new Map<string, TaskFunction>()
     const id = new Set<string>()
     const localID = new Set<string>()
@@ -54,6 +55,7 @@ export async function buildSandboxedPluginConfigurable(distPath: string, isProdu
                 manifestRoot: manifestPath.slice(0, -'/mask-manifest.json'.length),
                 distPath,
                 prefix: '',
+                onJS: (id, relative) => mv3PreloadList.add(removeMJSSuffix(`${id}/${relative}`)),
             }),
         )
     }
@@ -74,6 +76,7 @@ export async function buildSandboxedPluginConfigurable(distPath: string, isProdu
                 manifestRoot: manifestPath.slice(0, -'/mask-manifest.json'.length),
                 prefix: 'local-',
                 distPath,
+                onJS: (id, relative) => mv3PreloadList.add(removeMJSSuffix(`local-${id}/${relative}`)),
             }),
         )
     }
@@ -89,8 +92,24 @@ export async function buildSandboxedPluginConfigurable(distPath: string, isProdu
     }
 
     const tasks = builders.size && awaitTask(parallel(...builders.values()))
-    const writeInternal = writeFile(join(distPath, './plugins.json'), JSON.stringify(internalList, null, 4))
-    await Promise.all([tasks, writeInternal])
+    const writeInternalList = writeFile(join(distPath, './plugins.json'), JSON.stringify(internalList, null, 4))
+    await Promise.all([tasks, writeInternalList])
+    await writeFile(
+        join(distPath, './mv3-preload.js'),
+        mv3PreloadList.size
+            ? (function* () {
+                  yield `importScripts(\n`
+                  for (const file of mv3PreloadList) {
+                      if (file.includes('\\') || file.includes('"')) throw new TypeError('Invalid path')
+                      yield '    "/sandboxed-modules/'
+                      yield file
+                      yield '", \n'
+                  }
+                  yield `)\nnull`
+              })()
+            : 'null',
+        { encoding: 'utf-8' },
+    )
 }
 export async function buildSandboxedPlugin() {
     const { out = fileURLToPath(new URL('./build', ROOT_PATH)) } = parseArgs({
@@ -104,22 +123,28 @@ watchTask(buildSandboxedPlugin, watchSandboxedPlugin, 'sbp', 'Build sandboxed pl
     out: 'Target folder to emit output',
 })
 
-function createBuilder({
-    id,
-    manifestRoot,
-    prefix,
-    distPath,
-}: Record<'id' | 'manifestRoot' | 'distPath' | 'prefix', string>) {
+interface BuilderOptions {
+    id: string
+    manifestRoot: string
+    prefix: string
+    distPath: string
+    onJS(id: string, relative: string): void
+}
+function createBuilder({ id, manifestRoot, prefix, distPath, onJS }: BuilderOptions) {
     if (id.includes('..') || id.includes('/')) throw new TypeError(`Invalid plugin: ${id}`)
     function compile() {
         return src(['./**/*'], {
             since: lastRun(compile),
             cwd: manifestRoot,
         })
-            .pipe(new TransformStream(id))
+            .pipe(new TransformStream(id, onJS))
             .pipe(dest(prefix + id, { cwd: distPath }))
     }
     return compile
+}
+function removeMJSSuffix(name: string) {
+    if (name.endsWith('.mjs')) return name.slice(0, -4) + '.js'
+    return name
 }
 
 async function readCombinedPluginList() {
@@ -158,7 +183,7 @@ function resolveManifestPath(spec: string) {
     }
 }
 class TransformStream extends Transform {
-    constructor(public id: string) {
+    constructor(public id: string, public onJS: (id: string, relative: string) => void) {
         super({ objectMode: true, defaultEncoding: 'utf-8' })
     }
     wasm = require.resolve('@masknet/static-module-record-swc')
@@ -170,7 +195,9 @@ class TransformStream extends Transform {
         if (!(file.path.endsWith('.js') || file.path.endsWith('.mjs'))) {
             return callback(null, file)
         }
-        const sandboxedPath = 'mask-plugin://' + this.id + '/' + file.relative.replace(/\\/g, '/')
+        const relative = file.relative.replace(/\\/g, '/')
+        this.onJS(this.id, file.relative)
+        const sandboxedPath = 'mask-plugin://' + this.id + '/' + relative
         const options = {
             template: {
                 type: 'callback',
@@ -188,7 +215,7 @@ class TransformStream extends Transform {
         }).then(
             (output) => {
                 file.contents = Buffer.from(output.code, 'utf-8')
-                if (file.path.endsWith('.mjs')) file.path = file.path.replace(/\.mjs$/, '.js')
+                file.path = removeMJSSuffix(file.path)
                 callback(null, file)
             },
             (err) => callback(err),
