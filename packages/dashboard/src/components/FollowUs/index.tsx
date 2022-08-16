@@ -1,6 +1,7 @@
 import { styled, Typography } from '@mui/material'
 import { openWindow } from '@masknet/shared-base-ui'
 import { Icons } from '@masknet/icons'
+import { useDashboardI18N } from '../../locales'
 
 const FollowUsContainer = styled('div')(() => ({
     background: 'linear-gradient(90deg, #ACCBEE 0%, #E7F0FD 100%)',
@@ -26,11 +27,12 @@ const TwitterColoredContainer = styled('div')(() => ({
 }))
 
 export function FollowUs() {
+    const t = useDashboardI18N()
     const openMaskNetwork = () => openWindow('https://twitter.com/realMaskNetwork')
     return (
         <div style={{ padding: '0 16px', height: 80, marginBottom: 16 }} onClick={() => openMaskNetwork()}>
             <FollowUsContainer>
-                <Typography>Follow us</Typography>
+                <Typography>{t.follow_us()}</Typography>
                 <TwitterColoredContainer>
                     <Icons.TwitterColored size={24} />
                 </TwitterColoredContainer>
