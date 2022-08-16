@@ -4,4 +4,5 @@ importScripts(
     './polyfill/intl.js',
     './polyfill/lockdown.js',
     './lockdown.js',
+    './trusted-types.js',
 )
