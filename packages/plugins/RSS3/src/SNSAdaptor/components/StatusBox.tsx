@@ -2,7 +2,6 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Box, CircularProgress, Typography } from '@mui/material'
 import type { FC } from 'react'
-import { useI18N } from '../../locales'
 
 interface Props {
     loading?: boolean
@@ -23,7 +22,6 @@ const useStyles = makeStyles()((theme) => ({
 
 export const StatusBox: FC<Props> = ({ loading, empty, description }) => {
     const { classes } = useStyles()
-    const t = useI18N()
     if (loading) {
         return (
             <Box className={classes.statusBox}>
