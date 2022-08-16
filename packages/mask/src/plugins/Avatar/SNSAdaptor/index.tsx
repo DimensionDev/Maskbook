@@ -72,7 +72,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
         priority: 99999,
         UI: {
             Decorator({ identity }) {
-                console.log('avatar identify', identity)
                 if (!identity?.identifier?.userId) return null
                 const rss3Key = SNS_RSS3_FIELD_KEY_MAP[identity.identifier.network as EnhanceableSite]
                 if (!rss3Key) return null

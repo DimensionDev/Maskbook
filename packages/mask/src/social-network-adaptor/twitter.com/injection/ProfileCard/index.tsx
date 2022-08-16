@@ -1,4 +1,5 @@
 import { CrossIsolationMessages, ProfileIdentifier } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
 import { Twitter } from '@masknet/web3-providers'
 import { CSSProperties, useEffect, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
@@ -16,19 +17,24 @@ export function injectProfileCardHolder(signal: AbortSignal) {
     createReactRootShadowed(root.shadowRoot, { signal }).render(<ProfileCardHolder />)
 }
 
+const useStyles = makeStyles()((theme) => ({
+    root: {
+        position: 'absolute',
+        width: 450,
+        height: 500,
+        backgroundColor: theme.palette.background.default,
+        boxShadow: theme.palette.mode === 'light' ? '0px 4px 30px rgba(0, 0, 0, 0.1)' : undefined,
+    },
+}))
+
 function ProfileCardHolder() {
+    const { classes } = useStyles()
     const [style, setStyle] = useState<CSSProperties>({
         visibility: 'hidden',
-        position: 'absolute',
-        height: 300,
-        width: 450,
-        boxShadow: '0 0 10px rgba(100,100,100,0.1)',
         border: '1px solid #eee',
-        padding: 10,
         borderRadius: 10,
-        backgroundColor: '#fff',
     })
-    const { activeRef, targetRef: holderRef } = useTargetActiveRef()
+    const holderRef = useRef<HTMLDivElement>(null)
     const [twitterId, setTwitterId] = useState('')
 
     useEffect(() => {
@@ -66,8 +72,6 @@ function ProfileCardHolder() {
         })
     }, [])
 
-    console.log('ProfileCard holder', holderRef.current)
-
     console.log('twitterId', twitterId)
     const { value: identity, loading } = useAsync(async () => {
         if (!twitterId) return null
@@ -90,37 +94,12 @@ function ProfileCardHolder() {
     }, [twitterId])
 
     return (
-        <div style={style} ref={holderRef}>
+        <div className={classes.root} style={style} ref={holderRef}>
             profile card holder
             <div>{identity?.nickname}</div>
             <div>{identity?.homepage}</div>
+            <div>{identity?.identifier?.userId}</div>
             {loading ? <span>loading</span> : identity ? <ProfileCard identity={identity} /> : null}
         </div>
     )
-}
-
-function useTargetActiveRef() {
-    const activeRef = useRef(false)
-    const targetRef = useRef<HTMLDivElement>(null)
-    useEffect(() => {
-        if (!targetRef.current) return
-        const enter = () => {
-            activeRef.current = true
-            console.log('ProfileCard enter')
-        }
-        const leave = () => {
-            activeRef.current = false
-        }
-        targetRef.current.addEventListener('mouseenter', enter)
-        targetRef.current.addEventListener('mouseleave', leave)
-        return () => {
-            targetRef.current?.removeEventListener('mouseenter', enter)
-            targetRef.current?.removeEventListener('mouseleave', leave)
-        }
-    }, [])
-
-    return {
-        targetRef,
-        activeRef,
-    }
 }
