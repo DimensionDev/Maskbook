@@ -10,7 +10,8 @@ export function useSaveAddress(pluginId?: NetworkPluginID) {
 
     return useCallback(
         async (userId: string, pluginId: NetworkPluginID, account: string, network: EnhanceableSite) => {
-            const addressStorage = Storage?.createKVStorage(`${NFT_AVATAR_DB_NAME}_${network}`)
+            if (!Storage) return
+            const addressStorage = Storage.createKVStorage(`${NFT_AVATAR_DB_NAME}_${network}`)
             if (!addressStorage) return
 
             const prevData = (await addressStorage.get<AddressStorageV2>(userId).catch(() => ({}))) as

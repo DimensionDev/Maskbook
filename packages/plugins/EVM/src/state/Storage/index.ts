@@ -17,7 +17,7 @@ function createStorage(
         case StorageProviderType.KV:
             return new KVStorage(options.namespace)
         case StorageProviderType.RSS3:
-            return new RSS3Storage(options.namespace, Web3StateSettings.value.Connection?.getConnection)
+            return new RSS3Storage(options.namespace, () => Web3StateSettings.value.Connection?.getConnection?.())
         case StorageProviderType.NextID:
             if (!options?.platform || !options.personaIdentifier)
                 throw new Error('platform and personaIdentifier is required When providerType is NextID')

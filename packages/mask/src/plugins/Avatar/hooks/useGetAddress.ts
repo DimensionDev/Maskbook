@@ -2,6 +2,7 @@ import { useWeb3State } from '@masknet/plugin-infra/web3'
 import type { EnhanceableSite } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useCallback } from 'react'
+import { NFT_AVATAR_DB_NAME } from '../constants'
 import type { AddressStorageV1, AddressStorageV2 } from '../types'
 
 export function useGetAddress() {
@@ -12,7 +13,7 @@ export function useGetAddress() {
 
             let storageV1, storageV2
             try {
-                const storage = await Storage.createKVStorage(site).get(userId)
+                const storage = await Storage.createKVStorage(`${NFT_AVATAR_DB_NAME}_${site}`).get(userId)
                 storageV1 = (storage ?? {}) as AddressStorageV1
                 storageV2 = (storage ?? {}) as AddressStorageV2
             } catch {

@@ -8,7 +8,7 @@ export class RSS3Storage implements Storage {
     private cache: LRU<string, unknown> | undefined
     constructor(
         private address: string,
-        private getConnection?: () => Promise<Web3Helper.Web3Connection<NetworkPluginID>>,
+        private getConnection?: () => Promise<Web3Helper.Web3Connection<NetworkPluginID>> | undefined,
     ) {
         const cache = caches.get(address)
         if (cache) {
