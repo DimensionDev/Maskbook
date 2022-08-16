@@ -9,7 +9,6 @@ import type {
     ReturnNetworkResolver,
     ReturnProviderResolver,
 } from '../utils'
-export type SourceTypeOptionalRecord<T> =  { [k in SourceType]?: T }
 
 
 export interface Pageable<Item, Indicator = unknown> {

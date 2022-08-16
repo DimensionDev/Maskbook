@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { Link, Typography } from '@mui/material'
 import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
-import { NetworkPluginID, SourceType, SourceTypeOptionalRecord } from '@masknet/web3-shared-base'
+import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { SchemaType, formatTokenId, ChainId } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
@@ -52,7 +52,7 @@ interface NFTInfoCardProps {
     sourceType?: SourceType
 }
 
-const platformCosts: SourceTypeOptionalRecord<number> = {
+const platformCosts: { [k in SourceType]?: number } = {
     [SourceType.OpenSea]: 2.5,
     [SourceType.X2Y2]: 0.5,
     [SourceType.LooksRare]: 2,
