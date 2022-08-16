@@ -4,15 +4,13 @@ import { NFTAvatar } from './NFTAvatar'
 import { NFTInfo } from './NFTInfo'
 import { MoreIcon } from '../assets/more'
 import { RSS3_KEY_SNS } from '../constants'
-import { useCheckTokenOwner } from '../hooks/useTokenOwner'
 import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
 import { useCallback, useMemo } from 'react'
 import type { BindingProof } from '@masknet/shared-base'
 import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
+import { TokenType } from '@masknet/web3-shared-base'
 import type { AllChainsNonFungibleToken } from '../types'
-import { useWallet } from '../hooks/useWallet'
 import { useI18N } from '../locales'
 
 const useStyles = makeStyles<{ disabled: boolean }>()((theme, props) => ({
@@ -42,28 +40,20 @@ interface PersonaItemProps {
     userId: string
     nickname?: string
     proof?: BindingProof
+    persona?: string
     onSelect?: (proof: BindingProof, tokenInfo?: AllChainsNonFungibleToken) => void
 }
 
 export function PersonaItem(props: PersonaItemProps) {
-    const { userId, onSelect, owner = false, proof, avatar, nickname = '' } = props
+    const { userId, onSelect, owner = false, proof, avatar, nickname = '', persona = '' } = props
     const t = useI18N()
     const { classes } = useStyles({ disabled: !owner })
-    const { value: _avatar, loading } = usePersonaNFTAvatar(userId, getAvatarId(avatar) ?? '', RSS3_KEY_SNS.TWITTER)
-    const { loading: loadingWallet, value: storage } = useWallet(userId)
 
-    const {
-        loading: loadingCheckOwner,
-        isOwner,
-        name,
-        symbol,
-        schema,
-    } = useCheckTokenOwner(
-        _avatar?.pluginId ?? storage?.networkPluginID ?? NetworkPluginID.PLUGIN_EVM,
+    const { value: _avatar, loading } = usePersonaNFTAvatar(
         userId,
-        _avatar?.address ?? '',
-        _avatar?.tokenId ?? '',
-        _avatar?.schema ?? SchemaType.ERC721,
+        getAvatarId(avatar) ?? '',
+        persona,
+        RSS3_KEY_SNS.TWITTER,
     )
 
     const tokenDetailed: AllChainsNonFungibleToken = useMemo(
@@ -71,29 +61,29 @@ export function PersonaItem(props: PersonaItemProps) {
             tokenId: _avatar?.tokenId ?? '',
             contract: {
                 chainId: _avatar?.chainId ?? ChainId.Mainnet,
-                name: name ?? '',
-                symbol: symbol ?? 'ETH',
+                name: '',
+                symbol: '',
                 address: _avatar?.address ?? '',
-                schema: schema ?? SchemaType.ERC721,
+                schema: SchemaType.ERC721,
                 owner: '',
             },
             metadata: {
                 chainId: _avatar?.chainId ?? ChainId.Mainnet,
-                name: name ?? '',
-                symbol: symbol ?? 'ETH',
+                name: '',
+                symbol: '',
             },
             id: _avatar?.address ?? '',
             chainId: _avatar?.chainId ?? ChainId.Mainnet,
             type: TokenType.NonFungible,
-            schema: schema ?? SchemaType.ERC721,
+            schema: SchemaType.ERC721,
             address: _avatar?.address ?? '',
         }),
-        [_avatar, name, symbol, schema],
+        [_avatar],
     )
 
     const onClick = useCallback(() => {
         if (!proof) return
-        onSelect?.(proof, _avatar && isOwner ? tokenDetailed : undefined)
+        onSelect?.(proof, _avatar ? tokenDetailed : undefined)
     }, [_avatar, proof])
 
     return (
@@ -114,21 +104,9 @@ export function PersonaItem(props: PersonaItemProps) {
             </Box>
 
             <NFTInfo
-                loading={loading || loadingCheckOwner || loadingWallet}
-                owner={Boolean(isOwner && _avatar?.avatarId && _avatar?.avatarId === getAvatarId(avatar))}
+                loading={loading}
                 tooltip={!owner || !proof ? t.persona_tooltips() : ''}
-                nft={
-                    _avatar
-                        ? {
-                              name: name ?? '',
-                              symbol: symbol ?? '',
-                              tokenId: _avatar?.tokenId ?? '',
-                              address: _avatar?.address ?? '',
-                              chainId: _avatar.chainId ?? ChainId.Mainnet,
-                              networkPluginID: _avatar.pluginId ?? NetworkPluginID.PLUGIN_EVM,
-                          }
-                        : undefined
-                }
+                isNFT={Boolean(_avatar)}
             />
 
             <MoreIcon style={{ marginLeft: 8 }} />

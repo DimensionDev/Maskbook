@@ -92,7 +92,8 @@ export function PersonaPage(props: PersonaPageProps) {
                             .filter((x) => x.identity.toLowerCase() === socialIdentity.identifier?.userId.toLowerCase())
                             .map((x, i) => (
                                 <PersonaItem
-                                    key="avatar"
+                                    persona={socialIdentity.binding?.persona}
+                                    key={`avatar${i}`}
                                     avatar={socialIdentity?.avatar ?? ''}
                                     owner
                                     nickname={socialIdentity?.nickname}
@@ -129,7 +130,14 @@ export function PersonaPage(props: PersonaPageProps) {
                                 (x) => x.identity.toLowerCase() !== socialIdentity?.identifier?.userId.toLowerCase(),
                             )
                             .map((x, i) => (
-                                <PersonaItem avatar="" key={i} owner={false} userId={x.identity} proof={x} />
+                                <PersonaItem
+                                    persona={socialIdentity.binding?.persona}
+                                    avatar=""
+                                    key={i}
+                                    owner={false}
+                                    userId={x.identity}
+                                    proof={x}
+                                />
                             ))}
                     </>
                 )}

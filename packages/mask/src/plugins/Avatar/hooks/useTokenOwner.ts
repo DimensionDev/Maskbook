@@ -4,28 +4,41 @@ import { useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { PluginNFTAvatarRPC } from '../messages'
 import { EMPTY_LIST, EnhanceableSite, NextIDPlatform } from '@masknet/shared-base'
-import { useCurrentVisitingSocialIdentity } from '../../../components/DataSource/useActivatedUI'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { NetworkPluginID, SocialIdentity } from '@masknet/web3-shared-base'
+import { NextIDProof } from '@masknet/web3-providers'
+import type { IdentityResolved } from '@masknet/plugin-infra'
+import Services from '../../../extension/service'
+
+async function queryCurrentPersona(identityResolved: IdentityResolved) {
+    if (!identityResolved.identifier) return
+    const personaInformation = await Services.Identity.queryPersonaByProfile(identityResolved.identifier)
+    if (!personaInformation?.identifier.publicKeyAsHex) return
+    return NextIDProof.queryExistedBindingByPersona(personaInformation?.identifier.publicKeyAsHex)
+}
 
 export function useCheckTokenOwner(
     pluginId: NetworkPluginID,
-    userId: string,
     address: string,
     tokenId: string,
     schemaType: SchemaType,
+    socialIdentity?: SocialIdentity,
 ) {
-    const { loading, value: persona } = useCurrentVisitingSocialIdentity()
-
     const connection = useWeb3Connection(pluginId)
-    const wallets =
-        persona?.binding?.proofs.filter((x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity)) ??
-        EMPTY_LIST
 
-    const { value, loading: loadingOwner } = useAsyncRetry(async () => {
+    return useAsyncRetry(async () => {
+        if (!socialIdentity?.identifier?.userId || socialIdentity?.identifier.userId === '$unknown') return
+        if (!address || !tokenId) return
+
         const token = await connection?.getNonFungibleToken(address, tokenId)
+
+        const wallets =
+            socialIdentity.binding?.proofs.filter(
+                (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),
+            ) ?? EMPTY_LIST
+
         const storage = await PluginNFTAvatarRPC.getAddress(
             activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
-            userId,
+            socialIdentity.identifier?.userId ?? '',
         )
         if (storage?.address) {
             const isOwner = await connection?.getNonFungibleTokenOwnership(
@@ -37,7 +50,9 @@ export function useCheckTokenOwner(
             if (isOwner)
                 return {
                     isOwner,
-                    token,
+                    name: token?.contract?.name ?? token?.metadata?.name ?? '',
+                    symbol: token?.contract?.symbol ?? 'ETH',
+                    schema: token?.schema,
                 }
         }
 
@@ -48,16 +63,19 @@ export function useCheckTokenOwner(
                 wallet.identity,
                 schemaType,
             )
-            if (isOwner) return { isOwner, token }
+            if (isOwner)
+                return {
+                    isOwner,
+                    name: token?.contract?.name ?? token?.metadata?.name ?? '',
+                    symbol: token?.contract?.symbol ?? 'ETH',
+                    schema: token?.schema,
+                }
         }
-        return { isOwner: false, token }
-    }, [address, tokenId, schemaType, connection, wallets])
-
-    return {
-        loading: loading || loadingOwner,
-        isOwner: value?.isOwner,
-        name: value?.token?.contract?.name ?? value?.token?.metadata?.name ?? '',
-        symbol: value?.token?.contract?.symbol ?? 'ETH',
-        schema: value?.token?.schema,
-    }
+        return {
+            isOwner: false,
+            name: token?.contract?.name ?? token?.metadata?.name ?? '',
+            symbol: token?.contract?.symbol ?? 'ETH',
+            schema: token?.schema,
+        }
+    }, [address, tokenId, schemaType, connection, socialIdentity])
 }
