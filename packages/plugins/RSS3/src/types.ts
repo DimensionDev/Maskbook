@@ -8,12 +8,6 @@ export enum PageTags {
     DAOTag = 'DAO',
 }
 
-export enum CollectionType {
-    NFTs = 'NFTs',
-    Donations = 'Donations',
-    Footprints = 'Footprints',
-}
-
 export interface Asset {
     chain: string
 }
@@ -61,6 +55,7 @@ export interface CollectionKeys {
     NFTs: string[]
     Donations: string[]
     Footprints: string[]
+    Feeds: string[]
 }
 
 export interface Patch {

@@ -1,13 +1,15 @@
 import { CollectionDetailCard } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import type { RSS3BaseAPI } from '@masknet/web3-providers'
+import { CollectionType, RSS3BaseAPI } from '@masknet/web3-providers'
 import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
+import { formatEthereumAddress, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Box, List, ListItem } from '@mui/material'
 import { useState } from 'react'
-import { CollectionType } from '../../constants'
 import { useI18N } from '../../locales'
 import { DonationCard, StatusBox } from '../components'
+import { useAvailableCollections, useDonations } from '../hooks'
+import { useKV } from '../hooks/useKV'
 
 const useStyles = makeStyles()((theme) => ({
     statusBox: {
@@ -41,14 +43,25 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface DonationPageProps {
-    donations?: RSS3BaseAPI.Collection[]
-    loading?: boolean
-    address: SocialAddress<NetworkPluginID>
+    socialAddress: SocialAddress<NetworkPluginID>
+    publicKey: string
+    userId: string
 }
 
-export function DonationPage({ donations = EMPTY_LIST, loading, address }: DonationPageProps) {
+export function DonationPage({ socialAddress, publicKey, userId }: DonationPageProps) {
     const { classes } = useStyles()
     const t = useI18N()
+    const { value: kvValue } = useKV(publicKey)
+    const { value: allDonations = EMPTY_LIST, loading } = useDonations(
+        formatEthereumAddress(socialAddress?.address ?? ZERO_ADDRESS),
+    )
+    const donations = useAvailableCollections(
+        kvValue?.proofs ?? EMPTY_LIST,
+        CollectionType.Donations,
+        allDonations,
+        userId,
+        socialAddress.address,
+    )
 
     const [selectedDonation, setSelectedDonation] = useState<RSS3BaseAPI.Collection | undefined>()
 
@@ -64,7 +77,7 @@ export function DonationPage({ donations = EMPTY_LIST, loading, address }: Donat
                             onSelect={() => setSelectedDonation(donation)}
                             className={classes.donationCard}
                             donation={donation}
-                            address={address}
+                            socialAddress={socialAddress}
                         />
                     </ListItem>
                 ))}
@@ -76,7 +89,7 @@ export function DonationPage({ donations = EMPTY_LIST, loading, address }: Donat
                 title={selectedDonation?.title}
                 referenceURL={selectedDonation?.actions?.[0]?.related_urls?.[0]}
                 description={selectedDonation?.description}
-                type={CollectionType.donations}
+                type={CollectionType.Donations}
                 time={selectedDonation?.timestamp}
                 tokenSymbol={selectedDonation?.tokenSymbol}
                 tokenAmount={selectedDonation?.tokenAmount?.toString()}
