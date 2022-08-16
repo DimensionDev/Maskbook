@@ -54,7 +54,7 @@ export async function buildSandboxedPluginConfigurable(distPath: string, isProdu
                 id: json.id,
                 manifestRoot: manifestPath.slice(0, -'/mask-manifest.json'.length),
                 distPath,
-                prefix: '',
+                prefix: 'plugin-',
                 onJS: (id, relative) => mv3PreloadList.add(removeMJSSuffix(`${id}/${relative}`)),
             }),
         )
@@ -74,7 +74,7 @@ export async function buildSandboxedPluginConfigurable(distPath: string, isProdu
             createBuilder({
                 id: json.id,
                 manifestRoot: manifestPath.slice(0, -'/mask-manifest.json'.length),
-                prefix: 'local-',
+                prefix: 'local-plugin-',
                 distPath,
                 onJS: (id, relative) => mv3PreloadList.add(removeMJSSuffix(`local-${id}/${relative}`)),
             }),
@@ -197,7 +197,7 @@ class TransformStream extends Transform {
         }
         const relative = file.relative.replace(/\\/g, '/')
         this.onJS(this.id, file.relative)
-        const sandboxedPath = 'mask-plugin://' + this.id + '/' + relative
+        const sandboxedPath = 'mask-modules://' + this.id + '/' + relative
         const options = {
             template: {
                 type: 'callback',
