@@ -1,0 +1,6 @@
+{
+  "private": true,
+  "name": "@masknet/sandboxed-plugins-root",
+  "dependencies": {},
+  "devDependencies": {}
+}
