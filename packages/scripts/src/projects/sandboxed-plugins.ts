@@ -1,26 +1,35 @@
 import { Transform, TransformCallback } from 'node:stream'
 import { fileURLToPath } from 'node:url'
 import { readFile, writeFile } from 'node:fs/promises'
-import { join, relative } from 'node:path'
+import { isAbsolute, join, relative } from 'node:path'
 import { createRequire } from 'node:module'
 import { ensureDir } from 'fs-extra'
-import { watchTask } from '../utils/task.js'
+import { awaitTask, watchTask } from '../utils/task.js'
 import { PKG_PATH, ROOT_PATH } from '../utils/paths.js'
 import { parseJSONc } from '../utils/jsonc.js'
 import { transform } from '@swc/core'
 import { dest, lastRun, parallel, src, TaskFunction } from 'gulp'
+import { parseArgs } from 'node:util'
 
 const require = createRequire(new URL(import.meta.url))
 const sandboxedPlugins = new URL('./sandboxed-plugins/', PKG_PATH)
-const sandboxedPluginsDistURL = new URL('./dist/', sandboxedPlugins)
-const sandboxedPluginsDistPath = fileURLToPath(sandboxedPluginsDistURL)
 
-export function watchSandboxedPlugin() {
-    throw new Error('TODO')
+export async function watchSandboxedPlugin() {
+    // TODO: watch mode
+    const { out = fileURLToPath(new URL('./dist', ROOT_PATH)) } = parseArgs({
+        options: { out: { type: 'string', short: 'o' } },
+        allowPositionals: true,
+    }).values
+    const path = isAbsolute(out) ? out : join(process.cwd(), out)
+    await buildSandboxedPluginConfigurable(path, false)
 }
-export async function buildSandboxedPlugin() {
-    await ensureDistFolder()
+
+export async function buildSandboxedPluginConfigurable(distPath: string, isProduction: boolean) {
+    distPath = join(distPath, 'sandboxed-modules/')
+    await ensureDir(distPath)
     const { local, formal } = await readCombinedPluginList()
+
+    if (isProduction) local.length = 0
 
     const builders = new Map<string, TaskFunction>()
     const id = new Set<string>()
@@ -38,7 +47,15 @@ export async function buildSandboxedPlugin() {
         if (!json.id) throw new TypeError(`${manifestPath} does not contain an id.`)
         if (id.has(json.id)) throw new TypeError(`Plugin ${json.id} appear twice in the plugins.json.`)
         id.add(json.id)
-        builders.set(manifestPath, createBuilder(json.id, manifestPath.slice(0, -'/mask-manifest.json'.length), ''))
+        builders.set(
+            manifestPath,
+            createBuilder({
+                id: json.id,
+                manifestRoot: manifestPath.slice(0, -'/mask-manifest.json'.length),
+                distPath,
+                prefix: '',
+            }),
+        )
     }
 
     for (const spec of local) {
@@ -52,7 +69,12 @@ export async function buildSandboxedPlugin() {
         localID.add(json.id)
         builders.set(
             manifestPath,
-            createBuilder(json.id, manifestPath.slice(0, -'/mask-manifest.json'.length), 'local-'),
+            createBuilder({
+                id: json.id,
+                manifestRoot: manifestPath.slice(0, -'/mask-manifest.json'.length),
+                prefix: 'local-',
+                distPath,
+            }),
         )
     }
 
@@ -66,16 +88,28 @@ export async function buildSandboxedPlugin() {
         internalList[_].local = true
     }
 
-    const tasks = new Promise((resolve) => parallel(...builders.values())(resolve))
-    const writeInternal = writeFile(
-        new URL('./plugins.json', sandboxedPluginsDistURL),
-        JSON.stringify(internalList, null, 4),
-    )
+    const tasks = builders.size && awaitTask(parallel(...builders.values()))
+    const writeInternal = writeFile(join(distPath, './plugins.json'), JSON.stringify(internalList, null, 4))
     await Promise.all([tasks, writeInternal])
 }
-watchTask(buildSandboxedPlugin, watchSandboxedPlugin, 'sbp', 'Build sandboxed plugins')
+export async function buildSandboxedPlugin() {
+    const { out = fileURLToPath(new URL('./build', ROOT_PATH)) } = parseArgs({
+        options: { out: { type: 'string', short: 'o' } },
+        allowPositionals: true,
+    }).values
+    const path = isAbsolute(out) ? out : join(process.cwd(), out)
+    await buildSandboxedPluginConfigurable(path, true)
+}
+watchTask(buildSandboxedPlugin, watchSandboxedPlugin, 'sbp', 'Build sandboxed plugins', {
+    out: 'Target folder to emit output',
+})
 
-function createBuilder(id: string, manifestRoot: string, prefix: string) {
+function createBuilder({
+    id,
+    manifestRoot,
+    prefix,
+    distPath,
+}: Record<'id' | 'manifestRoot' | 'distPath' | 'prefix', string>) {
     if (id.includes('..') || id.includes('/')) throw new TypeError(`Invalid plugin: ${id}`)
     function compile() {
         return src(['./**/*'], {
@@ -83,12 +117,9 @@ function createBuilder(id: string, manifestRoot: string, prefix: string) {
             cwd: manifestRoot,
         })
             .pipe(new TransformStream(id))
-            .pipe(dest(prefix + id, { cwd: sandboxedPluginsDistPath }))
+            .pipe(dest(prefix + id, { cwd: distPath }))
     }
     return compile
-}
-function ensureDistFolder() {
-    return ensureDir(sandboxedPluginsDistPath)
 }
 
 async function readCombinedPluginList() {
