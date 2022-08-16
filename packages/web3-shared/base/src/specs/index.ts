@@ -1084,11 +1084,11 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
 }
 
 export interface Storage {
-    has?(key: string): Promise<boolean>
+    has(key: string): Promise<boolean>
     get<T>(key: string): Promise<T | undefined>
     set<T>(key: string, value: T): Promise<void>
     delete?(key: string): Promise<void>
-    clearAll?(key: string): Promise<void>
+    clearAll?(): Promise<void>
 }
 
 export interface SettingsState {
@@ -1141,11 +1141,11 @@ export interface Web3StorageServiceState {
         options: {
             namespace: string
             personaIdentifier?: ECKeyIdentifier
-            address?: string
+            platform?: NextIDPlatform
         },
     ) => Storage
     createKVStorage: (namespace: string) => Storage
-    createRSS3Storage: (namespace: string, address: string) => Storage
+    createRSS3Storage: (namespace: string) => Storage
     createNextIDStorage: (namespace: string, platform: NextIDPlatform,personaIdentifier: ECKeyIdentifier,) => Storage
 }
 

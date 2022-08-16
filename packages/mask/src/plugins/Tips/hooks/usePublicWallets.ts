@@ -24,7 +24,7 @@ export function usePublicWallets(personaPubkey: string | undefined): TipAccount[
     useAsync(queryWallets, [queryWallets])
 
     const { value: kv } = useKvGet<NextIDStorageInfo<BindingProof[]>>(personaPubkey)
-    console.log(kv)
+
     const walletsFromCloud = useMemo((): TipAccount[] | null => {
         if (!kv?.ok) return null
         const { proofs } = kv.val

@@ -99,7 +99,7 @@ function NFTAvatarInTwitter() {
         setNFTEvent(data)
     }
     const openConfirmDialog = useShowConfirm()
-    const [, saveNFTAvatar] = useSaveNFTAvatar()
+    const saveNFTAvatar = useSaveNFTAvatar()
 
     // After the avatar is set, it cannot be saved immediately, and must wait until the avatar of twitter is updated
     useAsync(async () => {

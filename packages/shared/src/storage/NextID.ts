@@ -1,12 +1,12 @@
 import type { Storage } from '@masknet/web3-shared-base'
-import { ECKeyIdentifier, fromHex, NextIDPlatform, NextIDStorageInfo, toBase64 } from '@masknet/shared-base'
+import { ECKeyIdentifier, fromHex, NextIDPlatform, toBase64 } from '@masknet/shared-base'
 import { NextIDStorage as NextIDStorageProvider } from '@masknet/web3-providers'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
 
 export class NextIDStorage implements Storage {
     constructor(
-        private namespace: string, // identity key
-        private platform: NextIDPlatform,
+        private proofIdentity: string, // proof identity as key
+        private platform: NextIDPlatform, // proof platform
         private personaIdentifier: ECKeyIdentifier,
         private generateSignResult?: (
             signer: ECKeyIdentifier,
@@ -18,25 +18,29 @@ export class NextIDStorage implements Storage {
         return this.personaIdentifier.publicKeyAsHex
     }
 
+    async has(key: string) {
+        return !!this.get(key)
+    }
+
     async get<T>(key: string) {
-        const response = await NextIDStorageProvider.get<NextIDStorageInfo<T>>(this.publicKey)
+        const response = await NextIDStorageProvider.getByIdentity<T>(
+            this.publicKey,
+            this.platform,
+            this.proofIdentity,
+            key,
+        )
+
         if (!response.ok) return
-        const { proofs } = response.val
-        if (!proofs.length) return
-        return proofs.find(
-            (x) =>
-                x.platform === this.platform &&
-                x.identity === this.namespace &&
-                Object.hasOwnProperty.call(x.content, key),
-        )?.content[key]
+
+        return response.val
     }
 
     async set<T>(key: string, value: T) {
         if (!this.personaIdentifier) throw new Error('')
         const payload = await NextIDStorageProvider.getPayload(
             this.publicKey,
-            NextIDPlatform.NextID,
-            this.namespace, // identity
+            this.platform,
+            this.proofIdentity, // identity
             value,
             key,
         )
@@ -47,15 +51,17 @@ export class NextIDStorage implements Storage {
 
         if (!signResult) throw new Error('Failed to sign payload.')
 
-        await NextIDStorageProvider.set(
+        const response = await NextIDStorageProvider.set(
             payload.val.uuid,
             this.publicKey,
             toBase64(fromHex(signResult.signature.signature)),
-            NextIDPlatform.NextID,
-            this.namespace,
+            this.platform,
+            this.proofIdentity,
             payload.val.createdAt,
             value,
             key,
         )
+
+        return
     }
 }

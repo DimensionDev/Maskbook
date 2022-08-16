@@ -3,9 +3,9 @@ import { ChainId, isValidAddress } from '@masknet/web3-shared-evm'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useWeb3Hub } from '@masknet/plugin-infra/web3'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { PluginNFTAvatarRPC } from '../messages'
 import { EMPTY_LIST, EnhanceableSite, NextIDPlatform } from '@masknet/shared-base'
 import { useCurrentVisitingSocialIdentity } from '../../../components/DataSource/useActivatedUI'
+import { useGetAddress } from './useGetAddress'
 
 export function useTokenOwner(
     address: string,
@@ -32,10 +32,10 @@ export function useTokenOwner(
 
 export function useCheckTokenOwner(pluginId: NetworkPluginID, userId: string, owner: string) {
     const { loading, value: persona } = useCurrentVisitingSocialIdentity()
+    const getAddress = useGetAddress()
     const { value: storage, loading: loadingAddress } = useAsyncRetry(
-        async () =>
-            PluginNFTAvatarRPC.getAddress(activatedSocialNetworkUI.networkIdentifier as EnhanceableSite, userId),
-        [userId],
+        async () => getAddress(activatedSocialNetworkUI.networkIdentifier as EnhanceableSite, userId),
+        [userId, getAddress],
     )
     const wallets =
         persona?.binding?.proofs.filter((x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity)) ??

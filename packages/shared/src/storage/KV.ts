@@ -1,21 +1,58 @@
-import { KeyValue, StorageAPI } from '@masknet/web3-providers'
+import { KeyValue } from '@masknet/web3-providers'
 import type { Storage } from '@masknet/web3-shared-base'
+import LRU from 'lru-cache'
+
+const caches = new Map<string, LRU<string, unknown>>()
 
 export class KVStorage implements Storage {
-    private kv: StorageAPI.Storage<unknown> | null = null
-    constructor(private namespace: string) {}
+    private cache: LRU<string, unknown> | undefined
+
+    constructor(private namespace: string) {
+        const cache = caches.get(namespace)
+        if (cache) {
+            this.cache = cache
+            return
+        } else {
+            const lru = new LRU<string, unknown>({
+                max: 500,
+                ttl: 60_000,
+            })
+
+            caches.set(namespace, lru)
+            this.cache = lru
+        }
+    }
 
     private getKV<T>() {
-        if (this.kv) return this.kv
-        this.kv = KeyValue.createJSON_Storage<T>(this.namespace)
-        return this.kv
+        return KeyValue.createJSON_Storage<T>(this.namespace)
+    }
+
+    async has(key: string) {
+        return !!this.get(key)
     }
 
     async get<T>(key: string) {
-        return this.getKV<T>().get(key) as T | undefined
+        const cacheKey = `${this.namespace}_${key}`
+        const cache = this.cache?.get<T>(cacheKey)
+
+        return cache ?? this.getKV<T>().get(key)
     }
 
     async set<T>(key: string, value: T) {
-        return this.getKV<T>().set(key, value)
+        await this.getKV<T>().set(key, value)
+
+        // clear cache when set
+        this.delete(key)
+
+        return
+    }
+
+    async delete(key: string) {
+        const cacheKey = `${this.namespace}_${key}`
+        this.cache?.delete(cacheKey)
+    }
+
+    async clearAll() {
+        this.cache?.clear()
     }
 }

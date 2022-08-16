@@ -80,6 +80,7 @@ export async function getNFTAvatarByUserId(userId: string, avatarId: string): Pr
     const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(platform, userId)
 
     for (const binding of bindings.sort((a, b) => sortPersonaBindings(a, b, userId))) {
+        // TODO: replace to Storage
         const response = await NextIDStorage.getByIdentity<NextIDAvatarMeta>(
             binding.persona,
             platform,
