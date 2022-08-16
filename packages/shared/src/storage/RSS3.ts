@@ -29,7 +29,9 @@ export class RSS3Storage implements Storage {
         const connection = await this.getConnection?.()
         return RSS3.createRSS3(
             this.address,
-            connection ? (message: string) => connection.signMessage(message, 'personaSign') : undefined,
+            connection
+                ? (message: string) => connection.signMessage(message, 'personalSign', { account: this.address })
+                : undefined,
         )
     }
 

@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { InjectedDialog } from '../../../contexts'
 import { useSharedI18N } from '../../../locales'
 import { Box, Card, DialogContent, Link, Typography } from '@mui/material'
-import type { RSS3BaseAPI } from '@masknet/web3-providers'
+import { CollectionType, RSS3BaseAPI } from '@masknet/web3-providers'
 import { Icons } from '@masknet/icons'
 import { ChainId, explorerResolver, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
@@ -140,12 +140,6 @@ const ChainID = {
     bnb: ChainId.BSC,
 }
 
-export enum CollectionType {
-    donations = 'Donations',
-    footprints = 'Footprints',
-    feeds = 'Feeds',
-}
-
 export const CollectionDetailCard = memo<CollectionDetailCardProps>(
     ({
         img,
@@ -233,7 +227,7 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                     </Typography>
                     <div className={classes.threeLine}>{description}</div>
 
-                    {type === CollectionType.donations ? (
+                    {type === CollectionType.Donations ? (
                         <>
                             <Typography fontSize="16px" fontWeight={700} marginTop="16px">
                                 {t.contributions()}
@@ -243,7 +237,7 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                             </Typography>
                         </>
                     ) : null}
-                    {type === CollectionType.donations && (
+                    {type === CollectionType.Donations && (
                         <div className={classes.txItem}>
                             <Typography className={classes.donationAmount}>
                                 {tokenAmount} {tokenSymbol}

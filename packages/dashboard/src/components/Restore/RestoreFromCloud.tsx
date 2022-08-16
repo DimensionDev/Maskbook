@@ -34,7 +34,7 @@ export const RestoreFromCloud = memo(() => {
     const [step, setStep] = useState<{ name: string; params: any }>({ name: 'validate', params: null })
 
     const [{ loading: fetchingBackupValue, error: fetchBackupValueError }, fetchBackupValueFn] = useAsyncFn(
-        async (downloadLink) => fetchBackupValue(downloadLink),
+        async (downloadLink: string) => fetchBackupValue(downloadLink),
         [],
     )
 

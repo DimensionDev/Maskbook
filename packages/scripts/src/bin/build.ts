@@ -8,13 +8,17 @@ import { extensionArgsParser } from './args.js'
 
 await promisify(codegen)()
 // \\-- is used for debug
-let child
 if (process.argv[2] === '--' || process.argv[2] === '\\--') {
-    child = spawn(process.argv[3], process.argv.slice(4), {
+    const child = spawn(process.argv[3], process.argv.slice(4), {
         stdio: 'inherit',
         shell: true,
     })
-} else child = await buildExtensionFlag('build', extensionArgsParser())(() => {})
-
-if (typeof child === 'number') process.exit(child)
-else process.exit(await awaitChildProcess(child))
+    process.exit(await awaitChildProcess(child))
+} else {
+    const builder = buildExtensionFlag('build', extensionArgsParser())
+    builder((error) => {
+        if (error) {
+            throw error
+        }
+    })
+}
