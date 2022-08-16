@@ -11,35 +11,33 @@ export const ciBuild: TaskFunction = series(
     // The base version need to be build in serial in order to prepare webpack cache.
     buildBaseExtension,
     parallel(
-        parallel(
-            // zip base version to zip
-            zipTo(BUILD_PATH, 'MaskNetwork.base.zip'),
-            // Chrome version is the same with base version
-            zipTo(BUILD_PATH, 'MaskNetwork.chromium.zip'),
-        ),
-        buildTarget('Firefox', { firefox: true, 'output-path': 'build-firefox' }, 'MaskNetwork.firefox.zip'),
-        buildTarget('Android', { android: true, 'output-path': 'build-android' }, 'MaskNetwork.gecko.zip'),
-        buildTarget('iOS', { iOS: true, 'output-path': 'build-iOS' }, 'MaskNetwork.iOS.zip'),
-        buildTarget(
-            'Chromium-beta',
-            { chromium: true, beta: true, 'output-path': 'build-chromium-beta' },
-            'MaskNetwork.chromium-beta.zip',
-        ),
-        buildTarget(
-            'Chromium-MV3',
-            { chromium: true, mv3: true, 'output-path': 'build-mv3' },
-            'MaskNetwork.chromium-mv3.zip',
-        ),
-        buildTarget(
-            'Firefox-e2e',
-            { firefox: true, e2e: true, 'output-path': 'build-firefox-e2e' },
-            'MaskNetwork.firefox-e2e.zip',
-        ),
-        buildTarget(
-            'Chromium-e2e',
-            { chromium: true, e2e: true, 'output-path': 'build-chromium-e2e' },
-            'MaskNetwork.chromium-e2e.zip',
-        ),
+        // zip base version to zip
+        zipTo(BUILD_PATH, 'MaskNetwork.base.zip'),
+        // Chrome version is the same with base version
+        zipTo(BUILD_PATH, 'MaskNetwork.chromium.zip'),
+    ),
+    buildTarget('Firefox', { firefox: true, 'output-path': 'build-firefox' }, 'MaskNetwork.firefox.zip'),
+    buildTarget('Android', { android: true, 'output-path': 'build-android' }, 'MaskNetwork.gecko.zip'),
+    buildTarget('iOS', { iOS: true, 'output-path': 'build-iOS' }, 'MaskNetwork.iOS.zip'),
+    buildTarget(
+        'Chromium-beta',
+        { chromium: true, beta: true, 'output-path': 'build-chromium-beta' },
+        'MaskNetwork.chromium-beta.zip',
+    ),
+    buildTarget(
+        'Chromium-MV3',
+        { chromium: true, mv3: true, 'output-path': 'build-mv3' },
+        'MaskNetwork.chromium-mv3.zip',
+    ),
+    buildTarget(
+        'Firefox-e2e',
+        { firefox: true, e2e: true, 'output-path': 'build-firefox-e2e' },
+        'MaskNetwork.firefox-e2e.zip',
+    ),
+    buildTarget(
+        'Chromium-e2e',
+        { chromium: true, e2e: true, 'output-path': 'build-chromium-e2e' },
+        'MaskNetwork.chromium-e2e.zip',
     ),
 )
 task(ciBuild, 'build-ci', 'Build the extension on CI')
