@@ -3,6 +3,7 @@ import urlcat from 'urlcat'
 import { first } from 'lodash-unified'
 import {
     BindingProof,
+    EMPTY_LIST,
     fromHex,
     NextIDAction,
     NextIDBindings,
@@ -91,15 +92,15 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         return result
     }
 
-    async queryExistedBindingByPersona(personaPublicKey: string, enableCache?: boolean) {
+    async queryExistedBindingsByPersona(personaPublicKey: string, enableCache?: boolean) {
         const url = getPersonaQueryURL(NextIDPlatform.NextID, personaPublicKey)
         const response = await fetchJSON<NextIDBindings>(url, {}, enableCache)
         // Will have only one item when query by personaPublicKey
         return first(response.unwrap().ids)
     }
 
-    async queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page?: number) {
-        if (!platform && !identity) return []
+    async queryExistedBindingsByPlatform(platform: NextIDPlatform, identity: string, page?: number) {
+        if (!platform && !identity) return EMPTY_LIST
 
         const response = await fetchJSON<NextIDBindings>(
             urlcat(BASE_URL, '/v1/proof', { platform, identity, page }),
@@ -114,21 +115,20 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         const nextIDPersonaBindings: NextIDPersonaBindings[] = []
         let page = 0
         do {
-            const personaBindings = await this.queryExistedBindingByPlatform(platform, identity, page)
+            const personaBindings = await this.queryExistedBindingsByPlatform(platform, identity, page)
             if (personaBindings.length === 0) return nextIDPersonaBindings
             nextIDPersonaBindings.push(...personaBindings)
             page += 1
         } while (page > 0)
-        return []
+        return EMPTY_LIST
     }
 
     async queryIsBound(personaPublicKey: string, platform: NextIDPlatform, identity: string, enableCache?: boolean) {
         if (!platform && !identity) return false
 
         const url = getExistedBindingQueryURL(platform, identity, personaPublicKey)
-        const result = await fetchJSON<BindingProof>(url, {}, enableCache)
-
-        return result.map(() => true).unwrapOr(false)
+        const response = await fetchJSON<BindingProof>(url, {}, enableCache)
+        return response.map(() => true).unwrapOr(false)
     }
 
     async createPersonaPayload(
@@ -146,7 +146,6 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
         }
 
         const nextIDLanguageFormat = language?.replace('-', '_') as PostContentLanguages
-
         const response = await fetchJSON<CreatePayloadResponse>(urlcat(BASE_URL, '/v1/proof/payload'), {
             body: JSON.stringify(requestBody),
             method: 'POST',

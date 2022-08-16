@@ -78,11 +78,11 @@ export function Web3ProfileDialog() {
         (x: PersonaInformation) => x.identifier.rawPublicKey === persona?.rawPublicKey,
     )
 
-    const { value: bindings, retry: retryQueryBinding } = useAsyncRetry(async () => {
+    const { value: bindings, retry: retryBindings } = useAsyncRetry(async () => {
         if (!currentPersona) return
-        return NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex!)
+        return NextIDProof.queryExistedBindingsByPersona(currentPersona.identifier.publicKeyAsHex!)
     }, [currentPersona])
-    useEffect(() => context?.ownProofChanged.on(retryQueryBinding), [retryQueryBinding])
+    useEffect(() => context?.ownProofChanged.on(retryBindings), [retryBindings])
 
     const { value: avatar } = useAsyncRetry(async () => context.getPersonaAvatar(currentPersona?.identifier), [])
 

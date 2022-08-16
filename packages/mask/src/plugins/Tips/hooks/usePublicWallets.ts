@@ -13,7 +13,7 @@ export function usePublicWallets(personaPubkey: string | undefined): TipAccount[
     const [{ value: nextIdWallets }, queryWallets] = useAsyncFn(async (): Promise<TipAccount[]> => {
         if (!personaPubkey) return EMPTY_LIST
 
-        const bindings = await NextIDProof.queryExistedBindingByPersona(personaPubkey, true)
+        const bindings = await NextIDProof.queryExistedBindingsByPersona(personaPubkey, true)
         if (!bindings) return EMPTY_LIST
 
         const wallets = bindings.proofs

@@ -12,7 +12,7 @@ import {
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import type { SocialNetwork } from '../../api'
 import classNames from 'classnames'
-import { usePersonaProof } from '../../hooks/usePersonaProof'
+import { useExistedBingdingByPersona } from '../../hooks/useExistedBingdingByPersona'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -93,7 +93,7 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
     const { nickname, active = false, definedSocialNetworks, identifier, profiles, publicKey } = props
     const { onConnect, onDisconnect, onClick } = props
     const { classes } = useStyles()
-    const proof = usePersonaProof(publicKey)
+    const proof = useExistedBingdingByPersona(publicKey)
     return (
         <div className={classes.card}>
             <div className={classNames(classes.status, active ? classes.statusActivated : classes.statusInactivated)} />

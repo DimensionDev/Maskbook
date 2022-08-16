@@ -49,9 +49,9 @@ export namespace NextIDBaseAPI {
             },
         ): Promise<Result<unknown, string>>
 
-        queryExistedBindingByPersona(personaPublicKey: string, enableCache?: boolean): Promise<any>
+        queryExistedBindingsByPersona(personaPublicKey: string, enableCache?: boolean): Promise<any>
 
-        queryExistedBindingByPlatform(platform: NextIDPlatform, identity: string, page?: number): Promise<any>
+        queryExistedBindingsByPlatform(platform: NextIDPlatform, identity: string, page?: number): Promise<any>
 
         queryAllExistedBindingsByPlatform(platform: NextIDPlatform, identity: string): Promise<NextIDPersonaBindings[]>
 

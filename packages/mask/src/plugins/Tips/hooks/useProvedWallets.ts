@@ -23,8 +23,9 @@ export function useProvedWallets() {
             (x) => x.identifier === ECKeyIdentifier.from(currentIdentifier).unwrapOr(head(personas)?.identifier),
         )
         if (!currentPersona?.identifier.publicKeyAsHex) return EMPTY_LIST
-        const { proofs } = (await NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex))!
-        return proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
+        const bindings = await NextIDProof.queryExistedBindingsByPersona(currentPersona.identifier.publicKeyAsHex)
+        if (!bindings) return EMPTY_LIST
+        return bindings.proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
     }, [currentPersonaIdentifier, personas])
 
     return res

@@ -200,10 +200,10 @@ export function NextIdPage() {
     const {
         value: bindings,
         loading: loadingBindings,
-        retry: retryQueryBinding,
+        retry: retryBindings,
     } = useAsyncRetry(async () => {
         if (!publicKeyAsHex) return
-        return NextIDProof.queryExistedBindingByPersona(publicKeyAsHex)
+        return NextIDProof.queryExistedBindingsByPersona(publicKeyAsHex)
     }, [publicKeyAsHex])
 
     const onVerify = async () => {
@@ -223,7 +223,7 @@ export function NextIdPage() {
         })
     }
 
-    const getButton = useMemo(() => {
+    const ActionButton = useMemo(() => {
         if (!isOwn) {
             return
         }
@@ -290,7 +290,7 @@ export function NextIdPage() {
                 </Box>
                 <Typography className={classes.content}>{description}</Typography>
                 <Stack justifyContent="center" direction="row">
-                    {getButton}
+                    {ActionButton}
                 </Stack>
             </Box>
             {openBindDialog && currentPersona && isOwn && (
@@ -299,7 +299,7 @@ export function NextIdPage() {
                     onClose={() => toggleBindDialog(false)}
                     persona={currentPersona}
                     bounds={bindings?.proofs ?? EMPTY_LIST}
-                    onBound={retryQueryBinding}
+                    onBound={retryBindings}
                 />
             )}
         </>

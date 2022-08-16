@@ -39,7 +39,6 @@ function getNextIDPlatform() {
 async function getWalletAddressesFromNextID(userId?: string, publicKey?: string) {
     if (!userId || !publicKey) return EMPTY_LIST
     const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(getNextIDPlatform(), userId)
-
     const binding = bindings.find((binding) => binding.persona.toLowerCase() === publicKey.toLowerCase())
     return (
         binding?.proofs.filter((x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity)) ??

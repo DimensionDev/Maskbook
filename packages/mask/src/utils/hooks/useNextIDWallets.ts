@@ -7,7 +7,7 @@ import { sortPersonaBindings } from '../utils'
 export function useNextIDWallets(userId?: string, platform?: NextIDPlatform) {
     return useAsyncRetry(async () => {
         if (!userId) return
-        const personaBindings = await NextIDProof.queryExistedBindingByPlatform(
+        const personaBindings = await NextIDProof.queryExistedBindingsByPlatform(
             platform ?? NextIDPlatform.Twitter,
             userId.toLowerCase(),
         )

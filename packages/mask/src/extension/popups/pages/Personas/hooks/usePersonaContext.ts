@@ -25,6 +25,7 @@ function useSSRPersonaInformation() {
 }
 
 const compareIdentity = (a?: string, b?: string) => isEqual(a?.toLowerCase(), b?.toLowerCase())
+
 function usePersonaContext() {
     const [selectedAccount, setSelectedAccount] = useState<Account>()
     const [selectedPersona, setSelectedPersona] = useState<PersonaInformation>()
@@ -44,10 +45,8 @@ function usePersonaContext() {
     } = useAsyncRetry(async () => {
         try {
             if (!currentPersona?.identifier.publicKeyAsHex) return EMPTY_LIST
-
-            const binding = await NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex)
-
-            return binding?.proofs ?? EMPTY_LIST
+            const bindings = await NextIDProof.queryExistedBindingsByPersona(currentPersona.identifier.publicKeyAsHex)
+            return bindings?.proofs ?? EMPTY_LIST
         } catch {
             return EMPTY_LIST
         }

@@ -15,6 +15,7 @@ export function useConnectedPersonas() {
         const allNextIDBindings = await NextIDProof.queryExistedBindingByPlatform(
             NextIDPlatform.NextID,
             allPersonaPublicKeys.join(','),
+            queryExistedBindingsByPlatform,
         )
 
         return personasInDB.map((x) => {

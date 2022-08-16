@@ -9,6 +9,7 @@ import {
     NextIDAction,
     NextIDPlatform,
     PopupRoutes,
+    EMPTY_LIST,
 } from '@masknet/shared-base'
 import { compact } from 'lodash-unified'
 import { makeStyles } from '@masknet/theme'
@@ -143,10 +144,10 @@ export const ProfileList = memo(() => {
         [],
     )
 
-    const { value: mergedProfiles, retry: refreshProfileList } = useAsyncRetry(async () => {
-        if (!currentPersona) return []
+    const { value: mergedProfiles = EMPTY_LIST, retry: refreshProfiles } = useAsyncRetry(async () => {
+        if (!currentPersona) return EMPTY_LIST
         if (!currentPersona.identifier.publicKeyAsHex) return currentPersona.linkedProfiles
-        const response = await NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex)
+        const response = await NextIDProof.queryExistedBindingsByPersona(currentPersona.identifier.publicKeyAsHex)
         if (!response) return currentPersona.linkedProfiles
 
         return currentPersona.linkedProfiles.map((profile) => {
@@ -158,8 +159,8 @@ export const ProfileList = memo(() => {
 
             return {
                 ...profile,
-                platform: target?.platform,
                 identity: target?.identity,
+                platform: target?.platform,
                 is_valid: target?.is_valid,
             }
         })
@@ -195,13 +196,13 @@ export const ProfileList = memo(() => {
         } catch {
             console.log('Disconnect failed')
         }
-    }, [unbind, currentPersona?.identifier, refreshProfileList])
+    }, [unbind, currentPersona?.identifier, refreshProfiles])
 
     return (
         <>
             <ProfileListUI
                 networks={definedSocialNetworks}
-                profiles={mergedProfiles ?? []}
+                profiles={mergedProfiles}
                 onConnect={onConnect}
                 onDisconnect={onDisconnect}
                 openProfilePage={openProfilePage}
