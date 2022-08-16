@@ -53,7 +53,7 @@ const FootprintsTabConfig: Plugin.SNSAdaptor.ProfileTab = {
     },
 }
 const ActivitiesTabConfig: Plugin.SNSAdaptor.ProfileTab = {
-    ID: `${PLUGIN_ID}_feed`,
+    ID: `${PLUGIN_ID}_feeds`,
     label: 'Activities',
     priority: 3,
     UI: {

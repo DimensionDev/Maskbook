@@ -96,7 +96,7 @@ export function DonationPage({ socialAddress, publicKey, userId }: DonationPageP
                 {donations.map((donation) => (
                     <ListItem key={donation.id} className={classes.listItem}>
                         <DonationCard
-                            onSelect={() => setSelectedDonation(donation)}
+                            onSelect={setSelectedDonation}
                             className={classes.donationCard}
                             donation={donation}
                             socialAddress={socialAddress}
@@ -104,19 +104,21 @@ export function DonationPage({ socialAddress, publicKey, userId }: DonationPageP
                     </ListItem>
                 ))}
             </List>
-            <CollectionDetailCard
-                open={Boolean(selectedDonation)}
-                onClose={() => setSelectedDonation(undefined)}
-                img={selectedDonation?.imageURL}
-                title={selectedDonation?.title}
-                referenceURL={selectedDonation?.actions?.[0]?.related_urls?.[0]}
-                description={selectedDonation?.description}
-                type={CollectionType.Donations}
-                time={selectedDonation?.timestamp}
-                tokenSymbol={selectedDonation?.tokenSymbol}
-                tokenAmount={selectedDonation?.tokenAmount?.toString()}
-                hash={selectedDonation?.hash}
-            />
+            {selectedDonation ? (
+                <CollectionDetailCard
+                    open
+                    onClose={() => setSelectedDonation(undefined)}
+                    img={selectedDonation?.imageURL}
+                    title={selectedDonation?.title}
+                    referenceURL={selectedDonation?.actions?.[0]?.related_urls?.[0]}
+                    description={selectedDonation?.description}
+                    type={CollectionType.Donations}
+                    time={selectedDonation?.timestamp}
+                    tokenSymbol={selectedDonation?.tokenSymbol}
+                    tokenAmount={selectedDonation?.tokenAmount?.toString()}
+                    hash={selectedDonation?.hash}
+                />
+            ) : null}
         </Box>
     )
 }

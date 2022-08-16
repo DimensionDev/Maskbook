@@ -27,26 +27,21 @@ export const FeedsPage = memo(function FeedsPage({ address }: FeedPageProps) {
     return (
         <div style={{ margin: '16px 16px 0 16px' }}>
             {feeds.map((feed) => {
-                return (
-                    <FeedCard
-                        key={feed.links}
-                        onSelect={(feed) => setSelectedFeed(feed)}
-                        feed={feed}
-                        address={address}
-                    />
-                )
+                return <FeedCard key={feed.links} onSelect={setSelectedFeed} feed={feed} address={address} />
             })}
-            <CollectionDetailCard
-                open={Boolean(selectedFeed)}
-                onClose={() => setSelectedFeed(undefined)}
-                img={selectedFeed?.imageURL}
-                title={selectedFeed?.title}
-                relatedURLs={selectedFeed?.related_urls}
-                description={selectedFeed?.summary}
-                metadata={selectedFeed?.metadata}
-                traits={selectedFeed?.traits}
-                type={CollectionType.Feeds}
-            />
+            {selectedFeed ? (
+                <CollectionDetailCard
+                    open
+                    onClose={() => setSelectedFeed(undefined)}
+                    img={selectedFeed.imageURL}
+                    title={selectedFeed.title}
+                    relatedURLs={selectedFeed.related_urls}
+                    description={selectedFeed.summary}
+                    metadata={selectedFeed.metadata}
+                    traits={selectedFeed.traits}
+                    type={CollectionType.Feeds}
+                />
+            ) : null}
         </div>
     )
 })

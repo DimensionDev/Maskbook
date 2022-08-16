@@ -6,14 +6,14 @@ import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
 import { Card, Typography } from '@mui/material'
 import classnames from 'classnames'
 import formatDateTime from 'date-fns/format'
-import type { HTMLProps } from 'react'
+import { HTMLProps, memo } from 'react'
 import { RSS3_DEFAULT_IMAGE } from '../../constants'
 import { useI18N } from '../../locales'
 
-export interface DonationCardProps extends HTMLProps<HTMLDivElement> {
+export interface DonationCardProps extends Omit<HTMLProps<HTMLDivElement>, 'onSelect'> {
     donation: RSS3BaseAPI.Collection
     socialAddress: SocialAddress<NetworkPluginID>
-    onSelect: () => void
+    onSelect: (donation: RSS3BaseAPI.Collection) => void
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -76,7 +76,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const DonationCard = ({ donation, socialAddress, onSelect, className, ...rest }: DonationCardProps) => {
+export const DonationCard = memo(({ donation, socialAddress, onSelect, className, ...rest }: DonationCardProps) => {
     const { classes } = useStyles()
     const t = useI18N()
     const { value: domain } = useReverseAddress(socialAddress.networkSupporterPluginID, socialAddress.address)
@@ -89,7 +89,7 @@ export const DonationCard = ({ donation, socialAddress, onSelect, className, ...
     const date = donation.timestamp ? formatDateTime(new Date(donation.timestamp), 'MMM dd, yyyy') : '--'
 
     return (
-        <div onClick={onSelect} className={classnames(classes.card, className)} {...rest}>
+        <div onClick={() => onSelect(donation)} className={classnames(classes.card, className)} {...rest}>
             <section className="flex flex-row flex-shrink-0 w-max h-max">
                 <Card className={classes.img}>
                     <NFTCardStyledAssetPlayer
@@ -122,4 +122,4 @@ export const DonationCard = ({ donation, socialAddress, onSelect, className, ...
             </div>
         </div>
     )
-}
+})
