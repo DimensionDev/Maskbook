@@ -7,6 +7,6 @@ export const useKV = (publicHexKey?: string) => {
         if (!publicHexKey) return
         const res = await NextIDStorage.get<KVType>(publicHexKey)
         if (!res.ok) return
-        return res?.val
+        return res.val
     }, [publicHexKey])
 }

@@ -1,22 +1,22 @@
-import { useCallback } from 'react'
-import { Box, Button, CardContent, CardHeader, Paper, Tab, Typography } from '@mui/material'
-import { makeStyles, MaskColorVar, MaskTabList, useTabs, LoadingBase } from '@masknet/theme'
-import formatDateTime from 'date-fns/format'
-import isValidDate from 'date-fns/isValid'
-import isAfter from 'date-fns/isAfter'
-import { useI18N, useSwitcher } from '../../../utils'
-import { LinkingAvatar } from './LinkingAvatar'
-import { CollectibleState } from '../hooks/useCollectibleState'
-import { CollectiblePaper } from './CollectiblePaper'
-import { ActionBar } from './OpenSea/ActionBar'
-import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
+import { Icons } from '@masknet/icons'
+import { LoadingBase, makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
 import { resolveSourceName, SourceType } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
+import { Box, Button, CardContent, CardHeader, Paper, Tab, Typography } from '@mui/material'
+import formatDateTime from 'date-fns/format'
+import isAfter from 'date-fns/isAfter'
+import isValidDate from 'date-fns/isValid'
+import { useCallback } from 'react'
+import { useI18N, useSwitcher } from '../../../utils'
+import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
+import { CollectibleState } from '../hooks/useCollectibleState'
+import { CollectiblePaper } from './CollectiblePaper'
+import { LinkingAvatar } from './LinkingAvatar'
+import { ActionBar } from './OpenSea/ActionBar'
 import { AboutTab } from './Tabs/AboutTab'
-import { DetailTab } from './Tabs/DetailTab'
-import { Icons } from '@masknet/icons'
-import { OffersTab } from './Tabs/OffersTab'
 import { ActivityTab } from './Tabs/ActivityTab'
+import { DetailTab } from './Tabs/DetailTab'
+import { OffersTab } from './Tabs/OffersTab'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -154,6 +154,7 @@ export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { asset, provider, setProvider } = CollectibleState.useContainer()
+
     const onDataProviderChange = useCallback((v: SourceType) => {
         setProvider(v)
     }, [])

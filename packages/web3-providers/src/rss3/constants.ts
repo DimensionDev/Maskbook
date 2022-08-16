@@ -12,6 +12,7 @@ export const NETWORK_PLUGIN = {
 }
 
 export enum CollectionType {
+    NFTs = 'NFTs',
     Donations = 'Donations',
     Footprints = 'Footprints',
     Feeds = 'Feeds',

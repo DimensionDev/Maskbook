@@ -1,4 +1,4 @@
-import { Card, Link } from '@mui/material'
+import { Card, Link, LinkProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { ActionsBarNFT } from '../ActionsBarNFT'
@@ -15,8 +15,8 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         zIndex: 1,
         backgroundColor: theme.palette.mode === 'light' ? '#F7F9FA' : '#2F3336',
-        width: 172,
-        height: 172,
+        width: '100%',
+        height: '100%',
     },
     icon: {
         top: theme.spacing(1),
@@ -38,8 +38,8 @@ const useStyles = makeStyles()((theme) => ({
         height: 30,
     },
     wrapper: {
-        width: '172px !important',
-        height: '172px !important',
+        width: '100% !important',
+        height: '100% !important',
         background:
             theme.palette.mode === 'light'
                 ? 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)'
@@ -48,29 +48,35 @@ const useStyles = makeStyles()((theme) => ({
     blocker: {
         position: 'absolute',
         zIndex: 2,
-        width: 172,
-        height: 172,
+        width: '100%',
+        height: '100%',
     },
     linkWrapper: {
         position: 'relative',
         display: 'block',
-        width: 172,
-        height: 172,
     },
 }))
 
-export interface CollectibleCardProps {
+export interface CollectibleCardProps extends LinkProps {
     provider: SourceType
     wallet?: Wallet
     asset: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    link?: string
     readonly?: boolean
     renderOrder: number
     address?: SocialAddress<NetworkPluginID>
 }
 
-export function CollectibleCard(props: CollectibleCardProps) {
-    const { wallet, asset, readonly, renderOrder, address } = props
-    const { classes } = useStyles()
+export function CollectibleCard({
+    className,
+    wallet,
+    asset,
+    readonly,
+    renderOrder,
+    address,
+    ...rest
+}: CollectibleCardProps) {
+    const { classes, cx } = useStyles()
 
     return (
         <Link
@@ -79,7 +85,8 @@ export function CollectibleCard(props: CollectibleCardProps) {
             // TODO:
             // add useNonFungibleTokenLink()
             href={asset.link ?? resolveOpenSeaLink(asset.address, asset.tokenId)}
-            className={classes.linkWrapper}>
+            className={cx(classes.linkWrapper, className)}
+            {...rest}>
             <div className={classes.blocker} />
             <Card className={classes.root}>
                 {readonly || !wallet ? null : (
