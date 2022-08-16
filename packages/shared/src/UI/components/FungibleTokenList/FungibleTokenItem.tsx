@@ -1,6 +1,5 @@
 import { memo, useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import classNames from 'classnames'
 import { Link, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import { formatBalance, FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { TokenIcon } from '../TokenIcon'
@@ -58,18 +57,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 16,
         fontWeight: 700,
         color: theme.palette.maskColor.main,
-    },
-    import: {
-        '&:before': {
-            content: '""',
-            display: 'inline-block',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            background: 'transparent',
-        },
     },
     importButton: {
         padding: '3px 0',
@@ -160,6 +147,8 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
             return Others?.explorerResolver.fungibleTokenLink(token.chainId, token.address)
         }, [token.address, token.chainId, Others?.explorerResolver.fungibleTokenLink])
 
+        console.log(explorerLink)
+
         const action = useMemo(() => {
             if (mode === TokenListMode.Manage) {
                 if (source === 'personal')
@@ -222,10 +211,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                         />
                     </ListItemIcon>
                     <ListItemText classes={{ primary: classes.text }}>
-                        <Typography
-                            className={classNames(classes.primary, source === 'external' ? classes.import : '')}
-                            color="textPrimary"
-                            component="span">
+                        <Typography className={classes.primary} color="textPrimary" component="span">
                             <span className={classes.symbol}>{symbol}</span>
                             <span className={`${classes.name} dashboard token-list-symbol`}>
                                 {name}
