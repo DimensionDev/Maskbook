@@ -26,7 +26,7 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '24px',
         fontWeight: 700,
         marginBottom: 12,
-        color: theme.palette.maskColor.main,
+        color: theme.palette.maskColor.publicMain,
     },
     content: {
         width: '100%',
@@ -42,14 +42,15 @@ const useStyles = makeStyles()((theme) => ({
         gap: 8,
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.palette.maskColor.publicMain,
         fontWeight: 700,
-        background: theme.palette.maskColor.bg,
+        // there is no public bg, have to hardcode
+        background: '#F9F9F9',
         borderRadius: 8,
     },
     traitsTitle: {
         fontWeight: 400,
-        color: theme.palette.maskColor.second,
+        color: theme.palette.maskColor.publicMain,
     },
 }))
 interface NFTPropertiesCardProps {

@@ -5,7 +5,7 @@ import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plug
 import { PostInspector } from './PostInspector'
 import { base } from '../base'
 import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils'
-import { PLUGIN_ID } from '../constants'
+import { PLUGIN_ID, PLUGIN_WRAPPER_TITLE } from '../constants'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { NFTPage } from './NFTPage'
 import { SocialAddressType } from '@masknet/web3-shared-base'
@@ -78,6 +78,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
             tutorialLink: 'https://realmasknetwork.notion.site/c388746f11774ecfa17914c900d3ed97',
         },
     ],
+    wrapperProps: {
+        title: PLUGIN_WRAPPER_TITLE,
+        icon: <Icons.ApplicationNFT size={24} />,
+    },
 }
 
 export default sns

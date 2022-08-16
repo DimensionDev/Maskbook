@@ -22,9 +22,9 @@ const useStyles = makeStyles()((theme) => ({
     },
     textBase: {
         fontSize: 14,
-        color: theme.palette.text.secondary,
+        color: theme.palette.maskColor.publicSecond,
         '& > strong': {
-            color: theme.palette.text.primary,
+            color: theme.palette.maskColor.publicSecond,
             margin: '0 8px',
         },
     },
@@ -36,11 +36,19 @@ const useStyles = makeStyles()((theme) => ({
     priceText: {
         fontSize: 36,
         fontWeight: 700,
-        color: theme.palette.maskColor.dark,
+        color: theme.palette.maskColor.publicMain,
     },
     offerBox: {
         display: 'flex',
         gap: 4,
+    },
+    fallbackSymbol: {
+        color: theme.palette.maskColor.publicMain,
+        fontWeight: 700,
+        fontSize: 16,
+        lineHeight: '20px',
+        display: 'flex',
+        alignItems: 'flex-end',
     },
 }))
 
@@ -70,7 +78,9 @@ export function NFTPriceCard(props: NFTPriceCardProps) {
                 )}
             </div>
             <div className={classes.priceZone}>
-                <img width={48} height={48} src={priceTokenImg} />
+                {(priceTokenImg && <img width={48} height={48} src={priceTokenImg} />) || (
+                    <Typography className={classes.fallbackSymbol}>{asset.priceInToken?.token.symbol}</Typography>
+                )}
                 <Typography className={classes.priceText}>{asset.priceInToken?.amount ?? '-'}</Typography>
             </div>
             {topOrder && (

@@ -1,11 +1,10 @@
 import { makeStyles } from '@masknet/theme'
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { Typography } from '@mui/material'
-import { ExternalLink } from 'react-feather'
+import { ExternalLink, Link } from 'react-feather'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
-import formatDateTime from 'date-fns/format'
-import fromUnixTime from 'date-fns/fromUnixTime'
 import type { NonFungibleTokenEvent } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
@@ -57,6 +56,12 @@ const useStyles = makeStyles()((theme) => ({
             margin: '0 4px',
         },
     },
+    link: {
+        color: theme.palette.text.primary,
+        fontSize: 14,
+        display: 'flex',
+        alignItems: 'center',
+    },
 }))
 
 export enum ActivityType {
@@ -99,8 +104,15 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
                         {activity.to.nickname ||
                             (activity.to.address ? Others?.formatAddress(activity.to.address, 4) : '-')}
                     </strong>
-                    {formatDateTime(fromUnixTime(activity.timestamp / 1000), 'yyyy-MM-dd HH:mm')}
-                    <ExternalLink size={14} style={{ marginLeft: 4 }} />
+                    {formatDistanceToNow(activity.timestamp / 1000, {
+                        addSuffix: true,
+                    })}
+                    <Link
+                        className={classes.link}
+                        href={Others?.explorerResolver.transactionLink(ChainId.Mainnet, activity.hash ?? '') ?? ''}
+                        target="_blank">
+                        <ExternalLink style={{ marginLeft: 4 }} size={14} />
+                    </Link>
                 </Typography>
             </div>
         </div>

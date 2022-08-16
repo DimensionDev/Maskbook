@@ -35,6 +35,15 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         padding: '74px 0',
     },
+    wrapper: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+        width: '100% !important',
+        overflow: 'hidden',
+    },
+
     loadingIcon: {
         width: 36,
         height: 52,
@@ -64,6 +73,7 @@ const useStyles = makeStyles()((theme) => ({
     nameSm: {
         fontSize: 16,
         fontWeight: 700,
+        color: theme.palette.maskColor.publicMain,
     },
     nameLg: {
         fontSize: 20,
@@ -115,7 +125,15 @@ export function NFTBasicInfo(props: NFTBasicInfoProps) {
                         )
                     })}
                 </div>
-                <NFTCardStyledAssetPlayer url={resourceUrl} classes={classes} isNative={false} />
+                <NFTCardStyledAssetPlayer
+                    url={resourceUrl}
+                    classes={{
+                        iframe: classes.iframe,
+                        wrapper: classes.wrapper,
+                        loadingPlaceholder: classes.loadingPlaceholder,
+                    }}
+                    isNative={false}
+                />
             </div>
             <Typography className={classes.nameSm}>{asset.metadata?.name ?? '-'}</Typography>
             {!hideSubTitle && (

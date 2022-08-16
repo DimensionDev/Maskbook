@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { Link, Typography } from '@mui/material'
 import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
-import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
+import { NetworkPluginID, SourceType, SourceTypeOptionalRecord } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { SchemaType, formatTokenId, ChainId } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
@@ -16,7 +16,8 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
         gap: 8,
         borderRadius: 12,
-        background: theme.palette.maskColor.bg,
+        // there is no public bg, have to hardcode
+        background: '#F9F9F9',
     },
     listItem: {
         width: '100%',
@@ -26,7 +27,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     textBase: {
         fontSize: 14,
-        color: theme.palette.text.secondary,
+        color: theme.palette.maskColor.publicSecond,
     },
     listItemContent: {
         maxWidth: '30%',
@@ -35,9 +36,10 @@ const useStyles = makeStyles()((theme) => ({
         whiteSpace: 'nowrap',
         display: 'flex',
         gap: 6,
+        color: theme.palette.maskColor.publicMain,
     },
     link: {
-        color: theme.palette.text.secondary,
+        color: theme.palette.maskColor.publicSecond,
         fontSize: 14,
         display: 'flex',
         alignItems: 'center',
@@ -48,6 +50,12 @@ const useStyles = makeStyles()((theme) => ({
 interface NFTInfoCardProps {
     asset: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
     sourceType?: SourceType
+}
+
+const platformCosts: SourceTypeOptionalRecord<number> = {
+    [SourceType.OpenSea]: 2.5,
+    [SourceType.X2Y2]: 0.5,
+    [SourceType.LooksRare]: 2,
 }
 
 export function NFTInfoCard(props: NFTInfoCardProps) {
@@ -67,7 +75,7 @@ export function NFTInfoCard(props: NFTInfoCardProps) {
         },
         {
             title: t('plugin_collectible_platform_costs', { platform: sourceType ?? SourceType.OpenSea }),
-            value: '-',
+            value: sourceType ? `${platformCosts[sourceType]}%` ?? '-' : '-',
         },
     ]
     return (
