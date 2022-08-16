@@ -51,7 +51,7 @@ export const Flags = {
     // #endregion
     using_emoji_flag: true,
 
-    // we still need to handle image encoding
+    /** we still need to handle image encoding */
     v37PayloadDefaultEnabled: false, // new Date() > new Date('2022-07-01'),
     i18nTranslationHotUpdate: true,
 
