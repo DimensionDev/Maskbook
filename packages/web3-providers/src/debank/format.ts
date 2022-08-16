@@ -4,13 +4,12 @@ import {
     chainResolver,
     createNativeToken,
     formatEthereumAddress,
-    getTokenConstants,
+    isNativeTokenAddress,
     SchemaType,
 } from '@masknet/web3-shared-evm'
 import {
     CurrencyType,
     FungibleAsset,
-    isSameAddress,
     multipliedBy,
     rightShift,
     toFixed,
@@ -20,12 +19,11 @@ import {
 import DeBank from '@masknet/web3-constants/evm/debank.json'
 import { DebankTransactionDirection, HistoryResponse, WalletTokenRecord } from './type'
 
-export function formatAssets(data: WalletTokenRecord[], chainId?: ChainId): Array<FungibleAsset<ChainId, SchemaType>> {
-    const { NATIVE_TOKEN_ADDRESS } = getTokenConstants(chainId)
+export function formatAssets(data: WalletTokenRecord[]): Array<FungibleAsset<ChainId, SchemaType>> {
     const supportedChains = Object.values({ ...DeBank.CHAIN_ID, BSC: 'bnb' }).filter(Boolean)
 
     return data
-        .filter((x) => x.is_verified && chainResolver.chainId(x.chain))
+        .filter((x) => chainResolver.chainId(x.chain))
         .map((x) => {
             const chainId = chainResolver.chainId(x.chain)!
             const address = supportedChains.includes(x.id) ? createNativeToken(chainId).address : x.id
@@ -35,7 +33,7 @@ export function formatAssets(data: WalletTokenRecord[], chainId?: ChainId): Arra
                 address: formatEthereumAddress(address),
                 chainId,
                 type: TokenType.Fungible,
-                schema: isSameAddress(address, NATIVE_TOKEN_ADDRESS) ? SchemaType.Native : SchemaType.ERC20,
+                schema: isNativeTokenAddress(address) ? SchemaType.Native : SchemaType.ERC20,
                 decimals: x.decimals,
                 name: x.name,
                 symbol: x.symbol,
@@ -73,7 +71,7 @@ export function formatTransactions(
                 timestamp: transaction.time_at,
                 from: transaction.tx?.from_addr ?? '',
                 to: transaction.other_addr,
-                status: transaction.tx?.status ?? 0,
+                status: transaction.tx?.status,
                 tokens: [
                     ...transaction.sends.map(({ amount, token_id }) => ({
                         id: token_id,

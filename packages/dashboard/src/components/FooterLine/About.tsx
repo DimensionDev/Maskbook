@@ -1,12 +1,11 @@
-import { DiscordIcon, MaskBlueIcon, MaskGreyIcon, MaskTextIcon, MaskTextNightlyIcon } from '@masknet/icons'
-import { Avatar, IconButton, Link, Typography } from '@mui/material'
+import { Icons } from '@masknet/icons'
+import { Box, IconButton, Link, Typography } from '@mui/material'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import FacebookIcon from '@mui/icons-material/Facebook'
 import GitHubIcon from '@mui/icons-material/GitHub'
 import TelegramIcon from '@mui/icons-material/Telegram'
 import TwitterIcon from '@mui/icons-material/Twitter'
 import { useDashboardI18N } from '../../locales'
-import { styled } from '@mui/material/styles'
 import { Version } from './Version'
 import links from './links.json'
 import { ABOUT_DIALOG_BACKGROUND } from '../../assets'
@@ -23,21 +22,17 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
         background: `url(${ABOUT_DIALOG_BACKGROUND}) no-repeat center / cover`,
-    },
-    maskface: {
-        width: 120,
-        height: 120,
-        marginTop: 75,
+        paddingTop: 75,
     },
     version: {
         color: '#FFF',
         fontSize: 12,
-        marginBottom: 20,
+        marginTop: 12,
     },
     main: {
         fontSize: 16,
         textAlign: 'center',
-        margin: '24px 68px',
+        margin: '24px 68px 20px',
 
         '& > p': {
             marginBottom: '36px',
@@ -47,7 +42,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 16,
         fontWeight: 'bold',
         marginTop: 20,
-        marginBottom: 28,
     },
     icon: {
         color: theme.palette.text.primary,
@@ -74,38 +68,22 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const IconContainer = styled('div')(`
-    width: 100%;
-    height: 100%;
-
-    & > svg {
-        width: 100%;
-        height: 100%;
-    }
-`)
-
-const TextIconContainer = styled('div')(
-    ({ theme }) => `
-    padding: ${theme.spacing(1)} 0;
-    width: 100px;
-
-    & > svg {
-        width: 100%;
-        height: 100%;
-    }
-`,
-)
-
 const brands: Record<string, React.ReactNode> = {
     'https://www.facebook.com/masknetwork': <FacebookIcon />,
     'https://twitter.com/realMaskNetwork': <TwitterIcon />,
-    'https://github.com/DimensionDev/Maskbook': <GitHubIcon />,
     'https://t.me/maskbook_group': <TelegramIcon />,
-    'https://discord.gg/4SVXvj7': <DiscordIcon />,
+    'https://discord.gg/4SVXvj7': <Icons.Discord />,
+    'https://github.com/DimensionDev/Maskbook': <GitHubIcon />,
 }
 
-const MaskIcon = () => (process.env.NODE_ENV === 'production' ? <MaskBlueIcon /> : <MaskGreyIcon />)
-const MaskTitleIcon = () => (process.env.NODE_ENV === 'production' ? <MaskTextIcon /> : <MaskTextNightlyIcon />)
+const MaskIcon = () =>
+    process.env.NODE_ENV === 'production' ? <Icons.MaskBlue size={120} /> : <Icons.MaskGrey size={120} />
+const MaskTitleIcon = () =>
+    process.env.NODE_ENV === 'production' ? (
+        <Icons.MaskText width={190} height={28} />
+    ) : (
+        <Icons.MaskTextNightly width={190} height={28} />
+    )
 
 export function About() {
     const { classes } = useStyles()
@@ -114,14 +92,10 @@ export function About() {
         <>
             <section className={classes.wrapper}>
                 <header className={classes.header}>
-                    <Avatar className={classes.maskface}>
-                        <IconContainer>
-                            <MaskIcon />
-                        </IconContainer>
-                    </Avatar>
-                    <TextIconContainer>
+                    <MaskIcon />
+                    <Box pt="12px">
                         <MaskTitleIcon />
-                    </TextIconContainer>
+                    </Box>
                     <Version className={classes.version} />
                 </header>
                 <main className={classes.main}>

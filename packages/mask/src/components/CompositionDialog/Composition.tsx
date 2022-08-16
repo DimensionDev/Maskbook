@@ -26,6 +26,9 @@ const useStyles = makeStyles()({
     hideDialogRoot: {
         visibility: 'hidden',
     },
+    dialogContent: {
+        padding: '20px 24px',
+    },
 })
 export interface PostDialogProps {
     type?: 'popup' | 'timeline'
@@ -100,7 +103,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const networkSupport = activatedSocialNetworkUI.injection.newPostComposition?.supportedOutputTypes
     const recipients = useRecipientsList()
     const isE2E_Disabled = (() => {
-        if (!connectStatus.currentConnectedPersona && !connectStatus.hasPersona) return E2EUnavailableReason.NoPersona
+        if (!connectStatus.currentPersona && !connectStatus.hasPersona) return E2EUnavailableReason.NoPersona
         if (!connectStatus.connected && connectStatus.hasPersona) return E2EUnavailableReason.NoConnection
         if (!hasLocalKey && version === -38) return E2EUnavailableReason.NoLocalKey
         return
@@ -114,7 +117,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                 open={open}
                 onClose={onClose}
                 title={t('post_dialog__title')}>
-                <DialogContent>
+                <DialogContent classes={{ root: classes.dialogContent }}>
                     <CompositionDialogUI
                         version={version}
                         setVersion={setVersion}

@@ -1,5 +1,6 @@
 import type { BindingProof } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
+import { Icons } from '@masknet/icons'
 import { Typography } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
 import { useI18N } from '../../locales'
@@ -18,9 +19,6 @@ const useStyles = makeStyles()((theme) => ({
         gap: 12,
         fontSize: 14,
         color: theme.palette.text.secondary,
-    },
-    emptyIcon: {
-        width: 36,
     },
 }))
 interface WalletsPageProp {
@@ -57,10 +55,7 @@ const WalletsPage = memo(({ wallets, releaseLoading, onRelease, personaName }: W
             })}
             {!wallets.length && (
                 <div className={classes.emptyBox}>
-                    <img
-                        className={classes.emptyIcon}
-                        src={new URL('../../assets/empty.png', import.meta.url).toString()}
-                    />
+                    <Icons.EmptySimple size={36} />
                     <Typography>{t.tip_wallet_add()}</Typography>
                 </div>
             )}

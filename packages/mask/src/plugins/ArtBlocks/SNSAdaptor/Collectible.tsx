@@ -134,7 +134,10 @@ export function Collectible(props: CollectibleProps) {
                 </CardContent>
             </Card>
             <Box sx={{ flex: 1, display: 'flex', padding: 1.5 }}>
-                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                <ChainBoundary
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    expectedChainId={chainId}
+                    ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                     <ActionBar chainId={chainId} project={project} />
                 </ChainBoundary>
             </Box>

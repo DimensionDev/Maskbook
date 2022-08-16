@@ -1,6 +1,6 @@
-import { EnhanceableSite, ExtensionSite } from './type'
+import { EnhanceableSite, ExtensionSite } from './type.js'
 
-export * from './type'
+export * from './type.js'
 
 const matchEnhanceableSiteHost: Record<EnhanceableSite, RegExp> = {
     [EnhanceableSite.Localhost]: /localhost/i,
@@ -16,26 +16,28 @@ const matchExtensionSitePathname: Record<ExtensionSite, RegExp> = {
     [ExtensionSite.Popup]: /popups\.html/i,
 }
 
-function getEnhanceableSiteType() {
+function getEnhanceableSiteType(url?: string) {
     const { host } = location
+    const target = url ?? host
     for (const [type, regexp] of Object.entries(matchEnhanceableSiteHost)) {
-        if (host.match(regexp)) return type as EnhanceableSite
+        if (target.match(regexp)) return type as EnhanceableSite
         continue
     }
     return
 }
 
-function getExtensionSiteType() {
+function getExtensionSiteType(url?: string) {
     const { pathname } = location
+    const target = url ?? pathname
     for (const [type, regexp] of Object.entries(matchExtensionSitePathname)) {
-        if (pathname.match(regexp)) return type as ExtensionSite
+        if (target.match(regexp)) return type as ExtensionSite
         continue
     }
     return
 }
 
-export function getSiteType() {
-    return getEnhanceableSiteType() ?? getExtensionSiteType()
+export function getSiteType(url?: string) {
+    return getEnhanceableSiteType(url) ?? getExtensionSiteType(url)
 }
 
 export function isEnhanceableSiteType() {
@@ -44,4 +46,12 @@ export function isEnhanceableSiteType() {
 
 export function isExtensionSiteType() {
     return !!getExtensionSiteType()
+}
+
+export function isFirefox() {
+    return process.env.engine === 'firefox'
+}
+
+export function isEthereumInjected() {
+    return !isExtensionSiteType() && !isFirefox()
 }

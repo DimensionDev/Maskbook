@@ -12,7 +12,7 @@ export function usePurchaseCallback(chainId: ChainId, projectId: string, amount:
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     return useAsyncFn(async () => {
-        if (!genArt721MinterContract) return
+        if (!connection || !genArt721MinterContract) return
 
         const tx = await encodeContractTransaction(
             genArt721MinterContract,

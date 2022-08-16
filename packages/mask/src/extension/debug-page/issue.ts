@@ -5,7 +5,6 @@ const body = `\
 
 User Agent: ${navigator.userAgent}
 Version: ${process.env.VERSION}
-Tag Name: ${process.env.TAG_NAME}
 Build Date: ${process.env.BUILD_DATE}
 Commit Hash: ${process.env.COMMIT_HASH}
 Commit Date: ${process.env.COMMIT_DATE}

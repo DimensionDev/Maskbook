@@ -2,7 +2,7 @@ import { first } from 'lodash-unified'
 import type { Pool } from '../types'
 import { Typography, Grid, CircularProgress, Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { RefreshIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { usePoolURL } from '../hooks/usePoolURL'
 import { CountdownView } from './CountdownView'
 import { PluginPoolTogetherMessages } from '../messages'
@@ -217,7 +217,12 @@ export function PoolView(props: PoolProps) {
     if (errorToken) {
         return (
             <div className={classes.root}>
-                <RefreshIcon className={classes.refresh} color="primary" onClick={retryToken} />
+                <Icons.Refresh
+                    className={classes.refresh}
+                    color="primary"
+                    style={{ fill: '#1C68F3' }}
+                    onClick={retryToken}
+                />
             </div>
         )
     }

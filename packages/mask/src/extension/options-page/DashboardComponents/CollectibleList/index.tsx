@@ -1,25 +1,28 @@
 import { createContext, useEffect, useMemo, useState } from 'react'
+import { uniqBy } from 'lodash-unified'
 import {
     isSameAddress,
     NetworkPluginID,
     NonFungibleAsset,
     NonFungibleTokenCollection,
     SocialAddress,
-    SocialAddressType,
     SourceType,
     Wallet,
 } from '@masknet/web3-shared-base'
 import { Box, Button, Stack, styled, Typography } from '@mui/material'
 import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
+import { ElementAnchor, RetryHint } from '@masknet/shared'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import type { IdentityResolved } from '@masknet/plugin-infra'
+import { useNonFungibleAssets, useTrustedNonFungibleTokens, Web3Helper } from '@masknet/plugin-infra/web3'
 import { CollectibleCard } from './CollectibleCard'
 import { useI18N } from '../../../../utils'
 import { CollectionIcon } from './CollectionIcon'
-import { uniqBy } from 'lodash-unified'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import { ElementAnchor, RetryHint, ReversedAddress } from '@masknet/shared'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingSkeleton } from './LoadingSkeleton'
-import { useNonFungibleAssets, useTrustedNonFungibleTokens, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useCollectionFilter } from '../../hooks/useCollectionFilter'
+import { useKV } from '../../hooks/useKV'
+import { COLLECTION_TYPE } from '../../types'
+import { Icons } from '@masknet/icons'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -70,6 +73,7 @@ const useStyles = makeStyles()((theme) => ({
     description: {
         background: theme.palette.mode === 'light' ? '#F7F9FA' : '#2F3336',
         alignSelf: 'stretch',
+        borderRadius: '0 0 8px 8px',
     },
     name: {
         whiteSpace: 'nowrap',
@@ -120,10 +124,11 @@ interface CollectibleItemProps {
     token: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     readonly?: boolean
     renderOrder: number
+    address?: SocialAddress<NetworkPluginID>
 }
 
 function CollectibleItem(props: CollectibleItemProps) {
-    const { provider, wallet, token, readonly, renderOrder } = props
+    const { provider, wallet, token, readonly, renderOrder, address } = props
     const { classes } = useStyles()
     return (
         <div className={classes.card}>
@@ -133,6 +138,7 @@ function CollectibleItem(props: CollectibleItemProps) {
                 wallet={wallet}
                 readonly={readonly}
                 renderOrder={renderOrder}
+                address={address}
             />
             <div className={classes.description}>
                 <Typography className={classes.name} color="textPrimary" variant="body2">
@@ -152,9 +158,20 @@ interface CollectibleListUIProps extends withClasses<'empty' | 'button' | 'text'
     error: string | undefined
     readonly?: boolean
     hasRetry?: boolean
+    address?: SocialAddress<NetworkPluginID>
 }
 function CollectibleListUI(props: CollectibleListUIProps) {
-    const { provider, wallet, collectibles, loading, collectiblesRetry, error, readonly, hasRetry = true } = props
+    const {
+        provider,
+        wallet,
+        collectibles,
+        loading,
+        collectiblesRetry,
+        error,
+        readonly,
+        hasRetry = true,
+        address,
+    } = props
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
@@ -181,6 +198,7 @@ function CollectibleListUI(props: CollectibleListUIProps) {
                                 wallet={wallet}
                                 readonly={readonly}
                                 key={index}
+                                address={address}
                             />
                         ))}
                     </Box>
@@ -191,7 +209,7 @@ function CollectibleListUI(props: CollectibleListUIProps) {
 }
 
 export interface CollectibleListProps extends withClasses<'empty' | 'button'> {
-    address: string
+    address: SocialAddress<NetworkPluginID>
     collectibles: Array<NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     error?: string
     loading: boolean
@@ -211,6 +229,7 @@ export function CollectibleList(props: CollectibleListProps) {
             collectiblesRetry={retry}
             error={error}
             readonly
+            address={address}
             hasRetry={!!address}
         />
     )
@@ -218,15 +237,17 @@ export function CollectibleList(props: CollectibleListProps) {
 
 export function CollectionList({
     addressName,
-    onSelectAddress,
+    persona,
+    visitingProfile,
 }: {
     addressName: SocialAddress<NetworkPluginID>
-    onSelectAddress: (event: React.MouseEvent<HTMLButtonElement>) => void
+    persona?: string
+    visitingProfile?: IdentityResolved
 }) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [selectedCollection, setSelectedCollection] = useState<
-        NonFungibleTokenCollection<Web3Helper.ChainIdAll> | 'all' | undefined
+        NonFungibleTokenCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | 'all' | undefined
     >('all')
     const { address: account } = addressName
 
@@ -247,9 +268,18 @@ export function CollectionList({
         retry: retryFetchCollectible,
     } = useNonFungibleAssets(addressName.networkSupporterPluginID, undefined, { account })
 
+    const { value: kvValue } = useKV(persona)
+    const unHiddenCollectibles = useCollectionFilter(
+        kvValue?.proofs ?? EMPTY_LIST,
+        collectibles,
+        COLLECTION_TYPE.NFTs,
+        visitingProfile,
+        account?.toLowerCase(),
+    )
+
     const allCollectibles = [
         ...trustedNonFungibleTokens.filter((x) => isSameAddress(x.contract?.owner, account)),
-        ...collectibles,
+        ...unHiddenCollectibles,
     ]
 
     const renderCollectibles = useMemo(() => {
@@ -263,7 +293,7 @@ export function CollectionList({
     const collections = useMemo(() => {
         return uniqBy(allCollectibles, (x) => x?.contract?.address.toLowerCase())
             .map((x) => x?.collection)
-            .filter(Boolean) as Array<NonFungibleTokenCollection<Web3Helper.ChainIdAll>>
+            .filter(Boolean) as Array<NonFungibleTokenCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     }, [allCollectibles.length])
 
     const isFromAlchemy = collections?.findIndex((collection) => collection?.name?.length > 0) === -1
@@ -274,54 +304,16 @@ export function CollectionList({
 
     if ((done && !allCollectibles.length) || !account)
         return (
-            <>
-                {addressName && (
-                    <Stack direction="row" height={42} justifyContent="flex-end" alignItems="center" px={2}>
-                        <Box display="flex" alignItems="center" justifyContent="flex-end" flexWrap="wrap">
-                            <Button
-                                onClick={onSelectAddress}
-                                className={classes.button}
-                                variant="outlined"
-                                size="small">
-                                {addressName.type === SocialAddressType.ADDRESS ? (
-                                    <ReversedAddress
-                                        address={addressName.address}
-                                        pluginId={addressName.networkSupporterPluginID}
-                                    />
-                                ) : (
-                                    addressName.label
-                                )}
-                                <KeyboardArrowDownIcon />
-                            </Button>
-                        </Box>
-                    </Stack>
-                )}
-                <Box display="flex" alignItems="center" justifyContent="center">
-                    <Typography color="textPrimary" sx={{ paddingTop: 4, paddingBottom: 4 }}>
-                        {t('dashboard_no_collectible_found')}
-                    </Typography>
-                </Box>
-            </>
+            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height={400}>
+                <Icons.EmptySimple size={32} />
+                <Typography color={(theme) => theme.palette.maskColor.second} fontSize="14px" marginTop="12px">
+                    {t('no_NFTs_found')}
+                </Typography>
+            </Box>
         )
 
     return (
-        <Box>
-            <Stack direction="row" justifyContent="space-between" alignItems="center" px={2}>
-                <Stack display="inline-flex" />
-                <Box display="flex" alignItems="center" justifyContent="flex-end" flexWrap="wrap">
-                    <Button onClick={onSelectAddress} className={classes.button} variant="outlined" size="small">
-                        {addressName.type === SocialAddressType.ADDRESS ? (
-                            <ReversedAddress
-                                address={addressName.address}
-                                pluginId={addressName.networkSupporterPluginID}
-                            />
-                        ) : (
-                            addressName.label
-                        )}
-                        <KeyboardArrowDownIcon />
-                    </Button>
-                </Box>
-            </Stack>
+        <Box marginLeft="16px">
             <Stack spacing={1} direction="row" mt={1.5}>
                 <Box sx={{ flexGrow: 1 }}>
                     <Box>
@@ -351,7 +343,7 @@ export function CollectionList({
                             </Box>
                         )}
                         <CollectibleList
-                            address={account}
+                            address={addressName}
                             retry={retryFetchCollectible}
                             collectibles={renderCollectibles}
                             loading={renderCollectibles.length === 0}
@@ -386,7 +378,12 @@ export function CollectionList({
                                         key={i}
                                         alignItems="center"
                                         justifyContent="center"
-                                        sx={{ marginTop: '8px', marginBottom: '12px', minWidth: 30, maxHeight: 24 }}>
+                                        sx={{
+                                            marginTop: '8px',
+                                            marginBottom: '12px',
+                                            minWidth: 30,
+                                            maxHeight: 24,
+                                        }}>
                                         <CollectionIcon
                                             selectedCollection={
                                                 selectedCollection === 'all' ? undefined : selectedCollection?.address

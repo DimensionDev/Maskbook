@@ -1,14 +1,11 @@
-import { useCallback } from 'react'
-import type { TransactionReceipt } from 'web3-core'
+import { useAsyncFn } from 'react-use'
 import Web3Utils from 'web3-utils'
 import { EthereumAddress } from 'wallet.ts'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useTransactionState } from '@masknet/plugin-infra/web3-evm'
-import { TransactionStateType, TransactionEventType } from '@masknet/web3-shared-evm'
-import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
+import { encodeContractTransaction, decodeEvents } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId, useWeb3Connection, useWeb3 } from '@masknet/plugin-infra/web3'
 import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket'
 import { useNftRedPacketContract } from './useNftRedPacketContract'
-import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 
 export function useCreateNftRedpacketCallback(
     duration: number,
@@ -19,36 +16,21 @@ export function useCreateNftRedpacketCallback(
 ) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const [createState, setCreateState] = useTransactionState()
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
     const nftRedPacketContract = useNftRedPacketContract(chainId)
-    const createCallback = useCallback(
+    const createCallback = useAsyncFn(
         async (publicKey: string) => {
-            if (!nftRedPacketContract) {
-                setCreateState({
-                    type: TransactionStateType.UNKNOWN,
-                })
+            if (
+                !web3 ||
+                !connection ||
+                !nftRedPacketContract ||
+                !contractAddress ||
+                !EthereumAddress.isValid(contractAddress) ||
+                tokenIdList.length === 0
+            ) {
                 return
             }
-
-            if (!contractAddress || !EthereumAddress.isValid(contractAddress)) {
-                setCreateState?.({
-                    type: TransactionStateType.FAILED,
-                    error: new Error('NFT contract is invalid'),
-                })
-                return
-            }
-
-            if (tokenIdList.length === 0) {
-                setCreateState?.({
-                    type: TransactionStateType.FAILED,
-                    error: new Error('Require to send one nft token at least'),
-                })
-                return
-            }
-
-            setCreateState({
-                type: TransactionStateType.WAIT_FOR_CONFIRMING,
-            })
 
             // #region check ownership
             type CheckMethodParameters = Parameters<NftRedPacket['methods']['check_ownership']>
@@ -58,10 +40,6 @@ export function useCreateNftRedpacketCallback(
             const isOwner = await nftRedPacketContract.methods.check_ownership(...checkParams).call({ from: account })
 
             if (!isOwner) {
-                setCreateState?.({
-                    type: TransactionStateType.FAILED,
-                    error: new Error('Invalid ownership'),
-                })
                 return
             }
 
@@ -85,55 +63,31 @@ export function useCreateNftRedpacketCallback(
                     .create_red_packet(...params)
                     .estimateGas({ from: account })
                     .catch((error) => {
-                        setCreateState({ type: TransactionStateType.FAILED, error })
                         throw error
                     }),
                 chainId,
             }
 
-            return new Promise<void>(async (resolve, reject) => {
-                nftRedPacketContract.methods
-                    .create_red_packet(...params)
-                    .send(config as NonPayableTx)
-                    // Note: DO NOT remove this event listener since it relates to password saving.
-                    .on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
-                        setCreateState({
-                            type: TransactionStateType.HASH,
-                            hash,
-                        })
-                    })
-                    .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
-                        setCreateState({
-                            type: TransactionStateType.CONFIRMED,
-                            no: 0,
-                            receipt,
-                        })
-                        resolve()
-                    })
-                    .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
-                        setCreateState({
-                            type: TransactionStateType.CONFIRMED,
-                            no,
-                            receipt,
-                        })
-                        resolve()
-                    })
-                    .on(TransactionEventType.ERROR, (error: Error) => {
-                        setCreateState({
-                            type: TransactionStateType.FAILED,
-                            error,
-                        })
-                        reject(error)
-                    })
-            })
-        },
-        [duration, message, name, contractAddress, tokenIdList, nftRedPacketContract, setCreateState, account, chainId],
-    )
-    const resetCallback = useCallback(() => {
-        setCreateState({
-            type: TransactionStateType.UNKNOWN,
-        })
-    }, [])
+            const tx = await encodeContractTransaction(
+                nftRedPacketContract,
+                nftRedPacketContract.methods.create_red_packet(...params),
+                config,
+            )
 
-    return [createState, createCallback, resetCallback] as const
+            const hash = await connection.sendTransaction(tx)
+            const receipt = await connection.getTransactionReceipt(hash)
+            if (receipt) {
+                const events = decodeEvents(web3, nftRedPacketContract.options.jsonInterface, receipt)
+                return {
+                    hash,
+                    receipt,
+                    events,
+                }
+            }
+            return { hash, receipt }
+        },
+        [duration, message, name, contractAddress, connection, tokenIdList, nftRedPacketContract, account, chainId],
+    )
+
+    return createCallback
 }

@@ -7,11 +7,11 @@ import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
-import { useWallet, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useWeb3Connection, useWallets } from '@masknet/plugin-infra/web3'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useTitle } from '../../../hook/useTitle'
 import { EthereumMethodType } from '@masknet/web3-shared-evm'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 
 const useStyles = makeStyles()(() => ({
@@ -90,7 +90,8 @@ const SignRequest = memo(() => {
     const { classes } = useStyles()
     const { value } = useUnconfirmedRequest()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
-    const wallet = useWallet()
+
+    const wallets = useWallets()
     const [transferError, setTransferError] = useState(false)
 
     const { data, address } = useMemo(() => {
@@ -126,6 +127,7 @@ const SignRequest = memo(() => {
         }
     }, [value])
 
+    const wallet = wallets.find((x) => isSameAddress(x.address, address))
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
         const goBack = new URLSearchParams(routeLocation.search).get('goBack')
 
@@ -155,7 +157,7 @@ const SignRequest = memo(() => {
                 <Typography className={classes.title}>{t('popups_wallet_signature_request')}</Typography>
                 <Typography className={classes.walletName}>{wallet?.name ?? ''}</Typography>
                 <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
-                    {address}
+                    {typeof address === 'string' ? address : undefined}
                 </Typography>
             </div>
             <Typography className={classes.secondary} style={{ marginTop: 20 }}>

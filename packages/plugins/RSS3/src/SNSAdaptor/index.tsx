@@ -1,38 +1,36 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { NetworkPluginID, SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
+import { NetworkPluginID, SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
 import { base } from '../base'
 import { PLUGIN_ID } from '../constants'
+import { setupContext } from './context'
 import { TabCard, TabCardType } from './TabCard'
 
-function sorter(a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>) {
-    if (a.type === SocialAddressType.RSS3) return -1
-    if (z.type === SocialAddressType.RSS3) return 1
-    return 0
-}
-
-function shouldDisplay(identity?: SocialIdentity, addressNames?: Array<SocialAddress<NetworkPluginID>>) {
-    return (
-        addressNames?.some(
-            (x) => x.type === SocialAddressType.RSS3 && x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM,
-        ) ?? false
-    )
+function shouldDisplay(identity?: SocialIdentity, addressName?: SocialAddress<NetworkPluginID>) {
+    return addressName?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM
 }
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal) {},
+    init(signal, context) {
+        setupContext(context)
+    },
     ProfileTabs: [
         {
             ID: `${PLUGIN_ID}_donations`,
             label: 'Donations',
             priority: 1,
             UI: {
-                TabContent: ({ socialAddressList = [] }) => {
-                    return <TabCard socialAddressList={socialAddressList} type={TabCardType.Donation} />
+                TabContent: ({ socialAddress, identity }) => {
+                    return (
+                        <TabCard
+                            socialAddress={socialAddress}
+                            type={TabCardType.Donation}
+                            publicKey={identity?.publicKey}
+                        />
+                    )
                 },
             },
             Utils: {
-                sorter,
                 shouldDisplay,
             },
         },
@@ -41,12 +39,36 @@ const sns: Plugin.SNSAdaptor.Definition = {
             label: 'Footprints',
             priority: 2,
             UI: {
-                TabContent: ({ socialAddressList = [] }) => {
-                    return <TabCard socialAddressList={socialAddressList} type={TabCardType.Footprint} />
+                TabContent: ({ socialAddress, identity }) => {
+                    return (
+                        <TabCard
+                            socialAddress={socialAddress}
+                            type={TabCardType.Footprint}
+                            publicKey={identity?.publicKey}
+                        />
+                    )
                 },
             },
             Utils: {
-                sorter,
+                shouldDisplay,
+            },
+        },
+        {
+            ID: `${PLUGIN_ID}_feed`,
+            label: 'Activity',
+            priority: 3,
+            UI: {
+                TabContent: ({ socialAddress, identity }) => {
+                    return (
+                        <TabCard
+                            socialAddress={socialAddress}
+                            type={TabCardType.Feed}
+                            publicKey={identity?.publicKey}
+                        />
+                    )
+                },
+            },
+            Utils: {
                 shouldDisplay,
             },
         },

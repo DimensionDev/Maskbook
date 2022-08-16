@@ -3,7 +3,6 @@ import { base } from '@masknet/plugin-wallet'
 import { SelectNftContractDialog } from './SelectNftContractDialog'
 import { SelectProviderDialog } from './SelectProviderDialog'
 import { WalletStatusDialog } from './WalletStatusDialog'
-import { TransactionDialog } from './TransactionDialog'
 import { ConnectWalletDialog } from './ConnectWalletDialog'
 import { WalletRiskWarningDialog } from './RiskWarningDialog'
 import { GasSettingDialog } from './GasSettingDialog'
@@ -12,6 +11,7 @@ import { ApplicationBoardDialog } from '../../../components/shared/ApplicationBo
 import { WalletConnectQRCodeDialog } from './WalletConnectQRCodeDialog'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { LeavePageConfirmDialog } from '../../../components/shared/LeavePageConfirmDialog'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -19,7 +19,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
     GlobalInjection: function Component() {
         return (
             <>
-                <TransactionDialog />
                 <SelectProviderDialog />
                 <SelectNftContractDialog />
                 <WalletStatusDialog />
@@ -31,6 +30,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     <TransactionSnackbar key={key} pluginID={pluginID} />
                 ))}
                 <WalletConnectQRCodeDialog />
+                <LeavePageConfirmDialog />
             </>
         )
     },

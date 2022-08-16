@@ -1,64 +1,23 @@
 import { useNetworkDescriptors, Web3Helper } from '@masknet/plugin-infra/web3'
-import { makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
-import { isDashboardPage } from '@masknet/shared-base'
+import { MaskTabList, useTabs } from '@masknet/theme'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import TabContext from '@mui/lab/TabContext'
 import { Stack, Tab, Typography } from '@mui/material'
 import { WalletIcon } from '@masknet/shared'
 import { useUpdateEffect } from 'react-use'
 
-interface StyleProps {
-    chainLength: number
-    isDashboard: boolean
-}
-const useStyles = makeStyles<StyleProps>()((theme, props) => ({
-    tab: {
-        backgroundColor: !props.isDashboard
-            ? `${theme.palette.background.default}!important`
-            : `${MaskColorVar.primaryBackground2}!important`,
-        marginRight: 1,
-        '&:last-child': {
-            marginRight: 0,
-        },
-    },
-    tabs: {
-        '& .MuiTabs-flexContainer': {
-            backgroundColor: theme.palette.background.paper,
-        },
-        '& .Mui-selected': {
-            color: '#ffffff',
-            backgroundColor: `${theme.palette.primary.main}!important`,
-        },
-        '& .MuiTabs-scroller': {
-            margin: '0 1px',
-        },
-        '& .MuiTabs-scrollButtons': {
-            width: 'unset',
-            backgroundColor: !props.isDashboard
-                ? `${theme.palette.background.default}!important`
-                : `${MaskColorVar.primaryBackground2}!important`,
-            '&.Mui-disabled': {
-                opacity: 1,
-                '& svg': {
-                    opacity: 0.3,
-                },
-            },
-        },
-    },
-}))
-
 interface NetworkTabProps<T extends NetworkPluginID>
     extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {
     chains: Array<Web3Helper.Definition[T]['ChainId']>
     setChainId: (chainId: Web3Helper.Definition[T]['ChainId']) => void
     chainId: Web3Helper.Definition[T]['ChainId']
+    networkId?: NetworkPluginID
 }
 
 export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EVM>(props: NetworkTabProps<T>) {
-    const isDashboard = isDashboardPage()
-    const { chainId, setChainId, chains } = props
+    const { chainId, setChainId, chains, networkId } = props
 
-    const networks = useNetworkDescriptors()
+    const networks = useNetworkDescriptors(networkId)
     const usedNetworks = networks.filter((x) => chains.find((c) => c === x.chainId))
     const networkIds = usedNetworks.map((x) => x.chainId.toString())
     const [currentTab, , , setTab] = useTabs(chainId.toString() ?? networkIds[0], ...networkIds)
@@ -92,7 +51,7 @@ export function NetworkTab<T extends NetworkPluginID = NetworkPluginID.PLUGIN_EV
                                         variant="body2"
                                         fontSize={14}
                                         fontWeight={currentTab === x.chainId.toString() ? 700 : 400}>
-                                        {x.name}
+                                        {x.shortName ?? x.name}
                                     </Typography>
                                 </Stack>
                             }

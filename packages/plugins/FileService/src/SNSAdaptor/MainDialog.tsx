@@ -22,12 +22,7 @@ const useStyles = makeStyles()((theme) => ({
         alignSelf: 'center',
     },
     button: {
-        borderRadius: 26,
         marginTop: 24,
-        fontSize: 16,
-        lineHeight: 2.5,
-        paddingLeft: 35,
-        paddingRight: 35,
     },
     paper: {
         width: '600px !important',

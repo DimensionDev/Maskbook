@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
-import { Box, Button, CircularProgress } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { Button, CircularProgress } from '@mui/material'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import type { ButtonProps } from '@mui/material/Button'
 import CheckIcon from '@mui/icons-material/Check'
 import ErrorIcon from '@mui/icons-material/Error'
@@ -8,8 +8,6 @@ import { red, green } from '@mui/material/colors'
 import classNames from 'classnames'
 import { useDebounce, useAsyncFn, useUpdateEffect } from 'react-use'
 import { useErrorStyles } from '../../../utils/theme'
-import { CircleLoadingAnimation } from '@masknet/shared'
-
 const circle = <CircularProgress color="inherit" size={18} />
 
 interface DebounceButtonProps extends Omit<ButtonProps, 'color' | 'onClick'> {
@@ -58,49 +56,6 @@ export function DebounceButton(_props: DebounceButtonProps) {
     )
 }
 
-export interface ActionButtonProps extends ButtonProps {
-    width?: number | string
-    loading?: boolean
-    component?: keyof JSX.IntrinsicElements | React.ComponentType<any>
-}
-
-const useActionButtonStyles = makeStyles()((theme) => ({
-    loading: {
-        ['& > *']: {
-            opacity: 0.3,
-        },
-    },
-}))
-
-export default function ActionButton<T extends React.ComponentType<any> = React.ComponentType<{}>>(
-    props: ActionButtonProps & PropsOf<T>,
-) {
-    const { width, loading, children, className, style, ...rest } = props
-    const { classes, cx } = useActionButtonStyles()
-    return (
-        <Button
-            disableElevation
-            className={cx('actionButton', className, loading ? classes.loading : undefined)}
-            style={{ width, ...style, pointerEvents: loading ? 'none' : undefined }}
-            {...rest}
-            disabled={rest.disabled && !loading}>
-            {loading ? (
-                <Box
-                    position="absolute"
-                    width="100%"
-                    height="100%"
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    style={{ opacity: 1 }}>
-                    <CircleLoadingAnimation />
-                </Box>
-            ) : null}
-            <span>{children}</span>
-        </Button>
-    )
-}
-
 export interface ActionButtonPromiseProps extends ButtonProps {
     executor: () => Promise<ActionButtonPromiseState | undefined | void>
     init: React.ReactChild
@@ -109,9 +64,11 @@ export interface ActionButtonPromiseProps extends ButtonProps {
     waiting: React.ReactChild
     waitingOnClick?: () => ActionButtonPromiseState
     failed?: React.ReactChild
+    failedButtonStyle?: string
     failedOnClick?: 'use executor' | (() => void)
     completeIcon?: React.ReactNode
     failIcon?: React.ReactNode
+    waitingIcon?: React.ReactNode
     onComplete?: () => void
     noUpdateEffect?: boolean
 }
@@ -131,6 +88,8 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
         noUpdateEffect,
         completeIcon = <CheckIcon />,
         failIcon = <ErrorIcon />,
+        waitingIcon = circle,
+        failedButtonStyle,
         ...b
     } = props
 
@@ -184,7 +143,7 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
                 disabled={!failClick}
                 startIcon={failIcon}
                 children={failed}
-                className={failClass}
+                className={failedButtonStyle || failClass}
                 onClick={failClick}
             />
         )

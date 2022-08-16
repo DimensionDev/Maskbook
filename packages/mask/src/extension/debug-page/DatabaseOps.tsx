@@ -160,7 +160,6 @@ async function backupAll() {
             'user-agent': navigator.userAgent,
             version: process.env.VERSION,
             'build-date': process.env.BUILD_DATE,
-            'tag-name': process.env.TAG_NAME,
             'commit-hash': process.env.COMMIT_HASH,
             'commit-date': process.env.COMMIT_DATE,
             'remote-url': process.env.REMOTE_URL,

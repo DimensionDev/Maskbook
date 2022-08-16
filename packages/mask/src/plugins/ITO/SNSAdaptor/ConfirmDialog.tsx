@@ -9,7 +9,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { formatBalance, FungibleToken, NetworkPluginID, ONE } from '@masknet/web3-shared-base'
 import { Card, Grid, IconButton, Link, Paper, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import LaunchIcon from '@mui/icons-material/Launch'
 import RepeatIcon from '@mui/icons-material/Repeat'
 import formatDateTime from 'date-fns/format'
@@ -18,7 +18,6 @@ import { PluginWalletStatusBar, useI18N } from '../../../utils'
 import type { PoolSettings } from './hooks/useFill'
 import { decodeRegionCode, regionCodes } from './hooks/useRegion'
 import { useChainId } from '@masknet/plugin-infra/web3'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useSwapItemStyles = makeStyles()({
     root: {

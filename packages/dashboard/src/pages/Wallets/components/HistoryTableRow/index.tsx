@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import classNames from 'classnames'
 import formatDateTime from 'date-fns/format'
-import { LinkOutIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { useReverseAddress, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { ChainId, DebankTransactionDirection, SchemaType, ZerionTransactionDirection } from '@masknet/web3-shared-evm'
@@ -33,8 +33,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     linkIcon: {
         // TODO: replace with theme color
-        fill: theme.palette.mode === 'dark' ? '#F5F5F5' : '#07101B',
-        fontSize: 16,
+        color: theme.palette.mode === 'dark' ? '#F5F5F5' : '#07101B',
         marginLeft: 10,
     },
     pair: {
@@ -157,7 +156,7 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
                             href={Others?.explorerResolver.transactionLink(selectedChainId, transaction.id)}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <LinkOutIcon className={classes.linkIcon} />
+                            <Icons.LinkOut size={16} className={classes.linkIcon} />
                         </Link>
                     </Box>
                 </TableCell>

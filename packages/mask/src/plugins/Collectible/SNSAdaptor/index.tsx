@@ -1,6 +1,6 @@
 import { uniq } from 'lodash-unified'
 import { Trans } from 'react-i18next'
-import { CollectiblesIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { PostInspector } from './PostInspector'
 import { base } from '../base'
@@ -9,10 +9,13 @@ import { PLUGIN_ID } from '../constants'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { NFTPage } from './NFTPage'
 import { SocialAddressType } from '@masknet/web3-shared-base'
+import { setupContext } from '../context'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal) {},
+    init(signal, context) {
+        setupContext(context)
+    },
     PostInspector: function Component() {
         const links = usePostInfoDetails.mentionedLinks()
         const link = uniq(links).find(checkUrl)
@@ -37,9 +40,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 TabContent: NFTPage,
             },
             Utils: {
-                shouldDisplay: (identity, socialAddressList) => {
-                    return !!socialAddressList?.length
-                },
                 sorter: (a, z) => {
                     if (a.type === SocialAddressType.ENS) return -1
                     if (z.type === SocialAddressType.ENS) return 1
@@ -73,7 +73,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             category: 'dapp',
             description: <Trans i18nKey="plugin_collectibles_description" />,
             name: <Trans i18nKey="plugin_collectibles_name" />,
-            icon: <CollectiblesIcon />,
+            icon: <Icons.Collectibles size={36} />,
             marketListSortingPriority: 7,
             tutorialLink: 'https://realmasknetwork.notion.site/c388746f11774ecfa17914c900d3ed97',
         },

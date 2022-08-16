@@ -85,7 +85,7 @@ function decorateEncryptedText(
 
     if (RedPacketMetadataReader(meta).ok || RedPacketNftMetadataReader(meta).ok) {
         return [
-            'eth',
+            'v2',
             hasOfficialAccount
                 ? t('additional_post_box__encrypted_post_pre_red_packet_twitter_official_account', {
                       encrypted,

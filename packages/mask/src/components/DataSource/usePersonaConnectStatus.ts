@@ -1,12 +1,14 @@
-import { DashboardRoutes, PersonaInformation } from '@masknet/shared-base'
-import stringify from 'json-stable-stringify'
 import { useMemo } from 'react'
+import stringify from 'json-stable-stringify'
+import { DashboardRoutes, isSamePersona, isSameProfile } from '@masknet/shared-base'
 import Services from '../../extension/service'
-import { currentSetupGuideStatus } from '../../settings/settings'
+import { currentPersonaIdentifier, currentSetupGuideStatus } from '../../../shared/legacy-settings/settings'
 import { activatedSocialNetworkUI } from '../../social-network'
-import { SetupGuideStep } from '../InjectedComponents/SetupGuide/types'
+import { SetupGuideStep } from '../../../shared/legacy-settings/types'
 import { useLastRecognizedIdentity } from './useActivatedUI'
-import { useMyPersonas } from './useMyPersonas'
+import { usePersonasFromDB } from './usePersonasFromDB'
+import { useValueRef } from '@masknet/shared-base-ui'
+import { useAsync } from 'react-use'
 
 const createPersona = () => {
     Services.Helper.openDashboard(DashboardRoutes.Setup)
@@ -20,21 +22,58 @@ const connectPersona = async () => {
     })
 }
 
+/**
+ * @deprecated Should use useCurrentPersonaConnectStatus
+ * We are fixing the current persona logic on SNS
+ */
 export function usePersonaConnectStatus() {
-    const personas = useMyPersonas()
+    const personas = usePersonasFromDB()
     const lastRecognized = useLastRecognizedIdentity()
 
     return useMemo(() => {
         const id = lastRecognized.identifier
-        let connected = false
-        let currentConnectedPersona: PersonaInformation | undefined
-        personas.forEach((p) => {
-            if (!id) return
-            if (!p.linkedProfiles.some((x) => x.identifier === id)) return
-            connected = true
-            currentConnectedPersona = p
-        })
-        const action = !personas.length ? createPersona : !connected ? connectPersona : null
-        return { connected, action, hasPersona: !!personas.length, currentConnectedPersona }
-    }, [personas, lastRecognized, activatedSocialNetworkUI])
+        const currentPersona = personas.find((x) => id && x.linkedProfiles.some((x) => x.identifier === id))
+        return {
+            action: !personas.length ? createPersona : !currentPersona ? connectPersona : undefined,
+            currentPersona,
+            connected: !!currentPersona,
+            hasPersona: !!personas.length,
+        }
+    }, [personas, lastRecognized.identifier?.toText(), activatedSocialNetworkUI])
+}
+
+/**
+ * Get current setting persona
+ */
+export function useCurrentPersona() {
+    const currentIdentifier = useValueRef(currentPersonaIdentifier)
+
+    const { value } = useAsync(async () => {
+        const identifier = await Services.Settings.getCurrentPersonaIdentifier()
+
+        if (!identifier) return
+        return Services.Identity.queryPersona(identifier)
+    }, [currentIdentifier])
+
+    return value
+}
+
+export function useCurrentPersonaConnectStatus() {
+    const personas = usePersonasFromDB()
+    const lastRecognized = useLastRecognizedIdentity()
+    const currentIdentifier = useValueRef(currentPersonaIdentifier)
+
+    return useMemo(() => {
+        const currentPersona = personas.find((x) => isSamePersona(x, currentIdentifier))
+        const currentProfile = currentPersona?.linkedProfiles.find((x) =>
+            isSameProfile(x.identifier, lastRecognized.identifier),
+        )
+
+        return {
+            action: !personas.length ? createPersona : !currentProfile ? connectPersona : undefined,
+            currentPersona,
+            connected: !!currentProfile,
+            hasPersona: !!personas.length,
+        }
+    }, [currentIdentifier, personas, lastRecognized.identifier?.toText(), activatedSocialNetworkUI])
 }

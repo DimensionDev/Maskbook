@@ -1,6 +1,5 @@
+import { useEffect } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { Button } from '@mui/material'
-import { useSharedI18N } from '@masknet/shared'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { SettingsContext } from './Context'
 import { GasSection } from './GasSection'
@@ -17,36 +16,39 @@ const useStyles = makeStyles()((theme) => {
 
 export interface SettingsBoardProps {
     disableGasPrice?: boolean
+    disableGasLimit?: boolean
     disableSlippageTolerance?: boolean
-    onSubmit?(settings: { slippageTolerance?: number; transaction?: Web3Helper.TransactionAll }): void
+    onChange?(settings: { slippageTolerance?: number; transaction?: Web3Helper.TransactionAll }): void
 }
 
 export function SettingsBoard(props: SettingsBoardProps) {
-    const { disableGasPrice = false, disableSlippageTolerance = false, onSubmit } = props
+    const { disableGasPrice = false, disableSlippageTolerance = false, onChange, disableGasLimit } = props
     const { classes } = useStyles()
-    const t = useSharedI18N()
-    const { transaction, transactionOptions, slippageTolerance } = SettingsContext.useContainer()
+    const { transaction, transactionOptions, slippageTolerance, gasSettingsType, setGasSettingsType } =
+        SettingsContext.useContainer()
+
+    useEffect(() => {
+        onChange?.({
+            transaction: (transaction
+                ? {
+                      ...transaction,
+                      ...transactionOptions,
+                  }
+                : undefined) as Web3Helper.TransactionAll | undefined,
+            slippageTolerance: slippageTolerance * 100, // convert to bips
+        })
+    }, [JSON.stringify(transaction), JSON.stringify(transactionOptions), slippageTolerance, onChange])
 
     return (
         <div className={classes.root}>
-            {disableGasPrice ? null : <GasSection />}
+            {disableGasPrice ? null : (
+                <GasSection
+                    activeTab={gasSettingsType}
+                    setActiveTab={setGasSettingsType}
+                    disableGasLimit={disableGasLimit}
+                />
+            )}
             {disableSlippageTolerance ? null : <SlippageToleranceSection />}
-            <Button
-                className={classes.button}
-                fullWidth
-                variant="contained"
-                color="primary"
-                disabled={
-                    (!disableGasPrice && !transactionOptions) || (!disableSlippageTolerance && slippageTolerance === 0)
-                }
-                onClick={() =>
-                    onSubmit?.({
-                        slippageTolerance,
-                        transaction,
-                    })
-                }>
-                {t.dialog_confirm()}
-            </Button>
         </div>
     )
 }

@@ -3,11 +3,14 @@ import { InjectedDialog } from '@masknet/shared'
 import { Button, DialogActions, DialogContent, InputAdornment, InputBase, Typography } from '@mui/material'
 import Fuse from 'fuse.js'
 import { useEffect, useMemo, useState } from 'react'
-import type { ProfileInformation as Profile, ProfileInformationFromNextID } from '@masknet/shared-base'
+import type {
+    ProfileInformation as Profile,
+    ProfileInformation,
+    ProfileInformationFromNextID,
+} from '@masknet/shared-base'
 import { useI18N } from '../../../utils'
 import { ProfileInList } from './ProfileInList'
-import { SearchEmptyIcon, SearchIcon } from '@masknet/icons'
-import { uniqBy } from 'lodash-unified'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -85,7 +88,7 @@ export interface SelectRecipientsDialogUIProps extends withClasses<never> {
     searchEmptyText?: string
     onSubmit: () => void
     onClose: () => void
-    onSelect: (item: Profile) => void
+    onSelect: (item: ProfileInformationFromNextID | ProfileInformation) => void
     onDeselect: (item: Profile) => void
     onSearch(v: string): void
 }
@@ -99,7 +102,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
         setSearch('')
         onSearch('')
     }, [props.open])
-    const itemsAfterSearch = useMemo(() => {
+    const searchedItems = useMemo(() => {
         const fuse = new Fuse(items, {
             keys: [
                 'identifier.userId',
@@ -107,15 +110,13 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                 'walletAddress',
                 'linkedPersona.rawPublicKey',
                 'linkedPersona.publicKeyAsHex',
+                'linkedTwitterNames',
             ],
             isCaseSensitive: false,
             ignoreLocation: true,
             threshold: 0,
         })
-        return uniqBy(
-            (search === '' ? items : fuse.search(search).map((item) => item.item)).concat(props.selected),
-            (x) => x.linkedPersona?.rawPublicKey.toLowerCase(),
-        )
+        return search === '' ? items : fuse.search(search).map((item) => item.item)
     }, [search, items])
     return (
         <InjectedDialog
@@ -138,7 +139,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                     onBlur={() => onSearch(search)}
                     startAdornment={
                         <InputAdornment position="start">
-                            <SearchIcon />
+                            <Icons.Search />
                         </InputAdornment>
                     }
                     placeholder={t('post_dialog_share_with_input_placeholder')}
@@ -150,15 +151,15 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                     </div>
                 ) : (
                     <div className={classes.list}>
-                        {itemsAfterSearch.length === 0 ? (
+                        {searchedItems.length === 0 ? (
                             <div className={classes.empty}>
-                                <SearchEmptyIcon style={{ width: 36, height: 36 }} />
+                                <Icons.SearchEmpty size={36} />
                                 <Typography>
                                     {props.searchEmptyText ?? t('compose_encrypt_share_dialog_empty')}
                                 </Typography>
                             </div>
                         ) : (
-                            itemsAfterSearch.map((item, idx) => (
+                            searchedItems.map((item, idx) => (
                                 <ProfileInList
                                     key={idx}
                                     item={item as ProfileInformationFromNextID}

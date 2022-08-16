@@ -91,7 +91,7 @@ class Hub implements SolanaHub {
     getNonFungibleCollections(
         account: string,
         initial?: HubOptions<ChainId>,
-    ): Promise<Pageable<NonFungibleTokenCollection<ChainId>>> {
+    ): Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>>> {
         const options = this.getOptions(initial, {
             account,
         })
@@ -135,7 +135,7 @@ class Hub implements SolanaHub {
         chainId: ChainId,
         account: string,
         initial?: HubOptions<ChainId>,
-    ): Promise<Array<Transaction<ChainId, SchemaType>>> {
+    ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
         throw new Error('Method not implemented.')
     }
 }

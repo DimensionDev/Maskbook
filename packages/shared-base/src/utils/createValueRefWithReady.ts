@@ -11,7 +11,7 @@ export type ValueComparer<T> = (a: T, b: T) => boolean
 export function createValueRefWithReady<T extends unknown>(
     value: T,
     comparer: ValueComparer<T> = (a: any, b: any) => a === b,
-) {
+): ValueRefWithReady<T> {
     const settings = new ValueRef(value, comparer) as ValueRefWithReady<T>
     const [readyPromise, resolve] = defer<T>()
 

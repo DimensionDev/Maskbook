@@ -1,6 +1,6 @@
 import { memo, useContext, useState } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { PublicKeyIcon, SettingsIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { Box, IconButton, MenuItem, Stack, Typography } from '@mui/material'
 import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine'
 import {
@@ -43,11 +43,6 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
         '&>svg': {
             fontSize: '96px',
-        },
-    },
-    accountIcon: {
-        '&>svg': {
-            fontSize: '18px',
         },
     },
     avatar: {
@@ -159,7 +154,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                     openMenu(e)
                 }}
                 className={classes.setting}>
-                <SettingsIcon fontSize="inherit" style={{ fill: MaskColorVar.textPrimary }} />
+                <Icons.Settings color={MaskColorVar.textPrimary} />
             </IconButton>
             <Stack direction="row" alignItems="center" justifyContent="center" width="240px" className={classes.avatar}>
                 <Box textAlign="center" className={classes.icon} onClick={() => toggleAvatar(true)}>
@@ -176,8 +171,8 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                         display: 'inline-flex',
                         alignItems: 'center',
                     }}>
-                    <Box sx={{ mr: 1.5, py: '2px', height: '100%' }} className={classes.accountIcon}>
-                        <PublicKeyIcon />
+                    <Box sx={{ mr: 1.5, py: '2px', height: '100%' }}>
+                        <Icons.PublicKey size={18} />
                     </Box>
                     <Typography variant="body1" sx={{ fontSize: 13 }} component="span">
                         {identifier.rawPublicKey}

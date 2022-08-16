@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { first } from 'lodash-unified'
-import { SelectedIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
 import { getSiteType } from '@masknet/shared-base'
 import { Web3Helper, Web3Plugin, useWeb3State } from '@masknet/plugin-infra/web3'
@@ -66,12 +66,11 @@ const useStyles = makeStyles()((theme) => {
         },
         checkedBadge: {
             position: 'absolute',
-            right: '-5px',
+            right: -5,
             bottom: 0,
-            width: 12,
-            height: 12,
-            background: theme.palette.background.paper,
+            backgroundColor: theme.palette.background.paper,
             borderRadius: '50%',
+            color: theme.palette.maskColor.success,
         },
         alert: {
             fontSize: 12,
@@ -115,6 +114,11 @@ const useStyles = makeStyles()((theme) => {
             color: theme.palette.text.primary,
             fontWeight: 700,
         },
+        disabled: {
+            opacity: 0.5,
+            pointerEvents: 'none',
+            cursor: 'default',
+        },
     }
 })
 
@@ -142,6 +146,7 @@ export interface PluginProviderRenderProps {
             Web3Helper.Definition[NetworkPluginID]['NetworkType']
         >
     >
+    supportedNetworkList?: Array<Web3Helper.NetworkDescriptorAll['type']>
 }
 
 export function PluginProviderRender({
@@ -151,6 +156,7 @@ export function PluginProviderRender({
     undeterminedNetworkID,
     NetworkIconClickBait,
     ProviderIconClickBait,
+    supportedNetworkList,
     onNetworkIconClicked,
     onProviderIconClicked,
 }: PluginProviderRenderProps) {
@@ -174,6 +180,9 @@ export function PluginProviderRender({
                             .map((network, i) => (
                                 <NetworkItem
                                     key={i}
+                                    disabled={Boolean(
+                                        supportedNetworkList && !supportedNetworkList?.includes(network.type),
+                                    )}
                                     onNetworkIconClicked={onNetworkIconClicked}
                                     NetworkIconClickBait={NetworkIconClickBait}
                                     network={network}
@@ -238,20 +247,27 @@ interface NetworkItemProps {
     onNetworkIconClicked: PluginProviderRenderProps['onNetworkIconClicked']
     NetworkIconClickBait?: PluginProviderRenderProps['NetworkIconClickBait']
     network: Web3Helper.NetworkDescriptorAll
+    disabled: boolean
     selected: boolean
 }
 
-function NetworkItem({ onNetworkIconClicked, NetworkIconClickBait, network, selected }: NetworkItemProps) {
+function NetworkItem({
+    onNetworkIconClicked,
+    NetworkIconClickBait,
+    network,
+    selected,
+    disabled = false,
+}: NetworkItemProps) {
     const { classes, cx } = useStyles()
     const { Others } = useWeb3State<'all'>(network.networkSupporterPluginID)
     return (
         <ListItem
-            className={classes.networkItem}
+            className={cx(classes.networkItem, disabled ? classes.disabled : '')}
             key={network.ID}
             onClick={() => {
                 onNetworkIconClicked(network)
             }}>
-            <div className={classes.iconWrapper} style={{ boxShadow: `3px 10px 15px -8px ${network.iconColor}` }}>
+            <div className={classes.iconWrapper} style={{ boxShadow: `0px 3px 20px -4px ${network.iconColor}` }}>
                 {NetworkIconClickBait ? (
                     <NetworkIconClickBait network={network}>
                         <ImageIcon size={30} icon={network.icon} />
@@ -259,7 +275,7 @@ function NetworkItem({ onNetworkIconClicked, NetworkIconClickBait, network, sele
                 ) : (
                     <ImageIcon size={30} icon={network.icon} />
                 )}
-                {selected && <SelectedIcon className={classes.checkedBadge} />}
+                {selected && <Icons.Selected size={12} className={classes.checkedBadge} />}
             </div>
             <Typography className={cx(classes.networkName, selected ? classes.selected : '')}>
                 {Others?.chainResolver.chainName(network.chainId)}

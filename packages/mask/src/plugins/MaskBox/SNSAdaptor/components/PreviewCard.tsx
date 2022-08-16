@@ -1,9 +1,8 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useContainer } from 'unstated-next'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import { Box, Button, CircularProgress, Typography, useTheme } from '@mui/material'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
-import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { Context } from '../../hooks/useContext'
 import { BoxState, CardTab } from '../../type'
 import { ArticlesTab } from './ArticlesTab'
@@ -215,13 +214,17 @@ export function PreviewCard(props: PreviewCardProps) {
                 />
             </Box>
             <Box style={{ padding: 12 }}>
-                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={targetChainId}>
+                <ChainBoundary
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    expectedChainId={targetChainId}
+                    ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                     <WalletConnectedBoundary
-                        ActionButtonProps={{ size: 'medium' }}
+                        ActionButtonProps={{ size: 'medium', variant: 'roundedDark' }}
                         classes={{ button: tabClasses.button }}>
                         <ActionButton
                             loading={isOpening}
                             size="medium"
+                            variant="roundedDark"
                             fullWidth
                             disabled={boxState !== BoxState.READY || isOpening}
                             onClick={() => setOpenDrawDialog(true)}>

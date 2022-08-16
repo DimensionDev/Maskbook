@@ -7,7 +7,6 @@
   },
   "include": ["src", "src/**/*.json"],
   "references": [
-    { "path": "../../icons" },
     { "path": "../../plugin-infra" },
     { "path": "../../shared" },
     { "path": "../../shared-base" },

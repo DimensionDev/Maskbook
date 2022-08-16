@@ -18,7 +18,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     input: {
         fontSize: 15,
-        minHeight: '8em',
+        minHeight: 300,
     },
     badge: {
         marginBottom: 12,

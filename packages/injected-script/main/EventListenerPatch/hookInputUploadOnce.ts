@@ -1,12 +1,9 @@
-import type { InternalEvents } from '../../shared'
-import { no_xray_Event } from '../intrinsic'
-import { clone_into, constructXrayUnwrappedFilesFromUintLike } from '../utils'
-import { dispatchEventRaw } from './capture'
+import type { InternalEvents } from '../../shared/index.js'
+import { $, $Content } from '../intrinsic.js'
+import { cloneIntoContent, contentFileFromBufferSource } from '../utils.js'
+import { dispatchEventRaw } from './capture.js'
 
 const proto = HTMLInputElement.prototype
-const { defineProperty, deleteProperty } = Reflect
-const setTimeoutCaptured = setTimeout.bind(window)
-const clearTimeoutCaptured = clearTimeout.bind(window)
 
 /**
  * This API can mock a file upload in React applications when injected script has been injected into the page.
@@ -27,31 +24,31 @@ export function hookInputUploadOnce(
     ...[format, fileName, fileArray, triggerOnActiveElementNow]: InternalEvents['hookInputUploadOnce']
 ) {
     let timer: ReturnType<typeof setTimeout> | null = null
-    const e = new no_xray_Event('change', {
+    const e = new $Content.Event('change', {
         bubbles: true,
         cancelable: true,
     })
-    const file = constructXrayUnwrappedFilesFromUintLike(format, fileName, fileArray)
+    const file = contentFileFromBufferSource(format, fileName, fileArray)
 
     const old = proto.click
     proto.click = function (this: HTMLInputElement) {
-        const fileList: Partial<FileList> = clone_into({
-            item: clone_into((i) => {
+        const fileList: Partial<FileList> = cloneIntoContent({
+            item: cloneIntoContent((i) => {
                 if (i === 0) return file
                 return null
             }),
             length: 1,
             [0]: file,
         })
-        defineProperty(this, 'files', {
+        $.Reflect.defineProperty(this, 'files', {
             configurable: true,
             value: fileList,
         })
-        if (timer !== null) clearTimeoutCaptured(timer)
-        timer = setTimeoutCaptured(() => {
+        if (timer !== null) $Content.clearTimeout(timer)
+        timer = $Content.setTimeout(() => {
             dispatchEventRaw(this, e, {})
             proto.click = old
-            deleteProperty(this, 'files')
+            $.Reflect.deleteProperty(this, 'files')
         }, 200)
     }
 

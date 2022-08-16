@@ -1,5 +1,6 @@
 import { omit } from 'lodash-unified'
 import type { Subscription } from 'use-subscription'
+import type { JsonRpcPayload } from 'web3-core-helpers'
 import { Emitter } from '@servie/events'
 import { getSubscriptionCurrentValue, StorageItem } from '@masknet/shared-base'
 import {
@@ -245,8 +246,8 @@ export class TransactionWatcherState<ChainId, Transaction>
         await this.getWatcher(chainId).unwatchTransaction(chainId, id)
     }
 
-    async notifyError(error: Error) {
-        this.emitter.emit('error', error)
+    async notifyError(error: Error, request: JsonRpcPayload) {
+        this.emitter.emit('error', error, request)
     }
 
     async notifyTransaction(chainId: ChainId, id: string, transaction: Transaction, status: TransactionStatusType) {

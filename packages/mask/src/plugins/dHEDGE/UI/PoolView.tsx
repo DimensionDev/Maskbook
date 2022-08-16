@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { RefreshIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { Box, Card, CardContent, CardHeader, CircularProgress, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils/i18n-next-ui'
@@ -24,7 +24,6 @@ const useStyles = makeStyles()((theme) => ({
     refresh: {
         bottom: theme.spacing(1),
         right: theme.spacing(1),
-        fontSize: 'inherit',
     },
     content: {
         width: '100%',
@@ -104,7 +103,11 @@ export function PoolView(props: PoolViewProps) {
                 <br />
                 {(error as any)?.message || errorAllowedTokens?.message}
                 <br />
-                <RefreshIcon className={classes.refresh} color="primary" onClick={error ? retry : retryAllowedTokens} />
+                <Icons.Refresh
+                    className={classes.refresh}
+                    color="#1C68F3"
+                    onClick={error ? retry : retryAllowedTokens}
+                />
             </Typography>
         )
 
@@ -137,6 +140,7 @@ export function PoolView(props: PoolViewProps) {
                 <ChainBoundary
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                     expectedChainId={pool?.chainId ?? ChainId.Mainnet}
+                    ActionButtonPromiseProps={{ variant: 'roundedDark' }}
                 />
             </Box>
         </>

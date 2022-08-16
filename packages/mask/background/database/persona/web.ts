@@ -291,7 +291,7 @@ export async function updatePersonaDB(
     t: PersonasTransaction<'readwrite'>,
 ): Promise<void> {
     const _old = await t.objectStore('personas').get(nextRecord.identifier.toText())
-    if (!_old) throw new TypeError('Update an non-exist data')
+    if (!_old) throw new TypeError('Update a non-exist data')
     const old = personaRecordOutDB(_old)
     let nextLinkedProfiles = old.linkedProfiles
     if (nextRecord.linkedProfiles) {

@@ -1,44 +1,33 @@
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import type { AbiItem } from 'web3-utils'
 import BigNumber from 'bignumber.js'
-import { unreachable } from '@dimensiondev/kit'
 import {
     isLessThan,
     rightShift,
     createLookupTableResolver,
     NetworkPluginID,
     ZERO,
-    isSameAddress,
     formatBalance,
     formatCurrency,
 } from '@masknet/web3-shared-base'
+import { LoadingBase } from '@masknet/theme'
 import {
     createContract,
     createERC20Token,
     SchemaType,
     getAaveConstants,
-    useTokenConstants,
     ZERO_ADDRESS,
     chainResolver,
+    isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import { useAccount, useFungibleTokenBalance, useFungibleTokenPrice, useWeb3 } from '@masknet/plugin-infra/web3'
-import {
-    FormattedCurrency,
-    InjectedDialog,
-    LoadingAnimation,
-    TokenAmountPanel,
-    TokenIcon,
-    useOpenShareTxDialog,
-} from '@masknet/shared'
+import { FormattedCurrency, InjectedDialog, TokenAmountPanel, TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
 import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider'
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginWalletStatusBar, useI18N } from '../../../utils'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import { PluginTraderMessages } from '../../Trader/messages'
-import type { Coin } from '../../Trader/types'
 import { ProtocolType, SavingsProtocol, TabType } from '../types'
 import { useStyles } from './SavingsFormStyles'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
@@ -68,29 +57,10 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
 
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const [inputAmount, setInputAmount] = useState('')
     const [estimatedGas, setEstimatedGas] = useState<BigNumber.Value>(ZERO)
 
     const { value: nativeTokenBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, '', { chainId })
-
-    const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
-
-    const onConvertClick = useCallback(() => {
-        const token = protocol.stakeToken
-        openSwapDialog({
-            open: true,
-            traderProps: {
-                defaultInputCoin: {
-                    id: token.address,
-                    name: token.name ?? '',
-                    symbol: token.symbol ?? '',
-                    contract_address: token.address,
-                    decimals: token.decimals,
-                } as Coin,
-            },
-        })
-    }, [protocol, openSwapDialog])
 
     // #region form variables
     const { value: inputTokenBalance } = useFungibleTokenBalance(
@@ -140,7 +110,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
 
     const { value: tokenPrice = 0 } = useFungibleTokenPrice(
         NetworkPluginID.PLUGIN_EVM,
-        !isSameAddress(protocol.bareToken.address, NATIVE_TOKEN_ADDRESS) ? protocol.bareToken.address : undefined,
+        !isNativeTokenAddress(protocol.bareToken.address) ? protocol.bareToken.address : undefined,
         { chainId },
     )
 
@@ -182,38 +152,19 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
     })
     const [, executor] = useAsyncFn(async () => {
         if (!web3) return
-        switch (tab) {
-            case TabType.Deposit:
-                const hash = await protocol.deposit(account, chainId, web3, tokenAmount)
-                if (typeof hash !== 'string') {
-                    throw new Error('Failed to deposit token.')
-                } else {
-                    await protocol.updateBalance(chainId, web3, account)
-                }
-                openShareTxDialog({
-                    hash,
-                    onShare() {
-                        activatedSocialNetworkUI.utils.share?.(shareText)
-                    },
-                })
-                break
-            case TabType.Withdraw:
-                switch (protocol.type) {
-                    case ProtocolType.Lido:
-                        onClose?.()
-                        onConvertClick()
-                        return
-                    default:
-                        if (!(await protocol.withdraw(account, chainId, web3, tokenAmount))) {
-                            throw new Error('Failed to withdraw token.')
-                        } else {
-                            await protocol.updateBalance(chainId, web3, account)
-                        }
-                        return
-                }
-            default:
-                unreachable(tab)
+        const methodName = tab === TabType.Deposit ? 'deposit' : 'withdraw'
+        const hash = await protocol[methodName](account, chainId, web3, tokenAmount)
+        if (typeof hash !== 'string') {
+            throw new Error('Failed to deposit token.')
+        } else {
+            await protocol.updateBalance(chainId, web3, account)
         }
+        openShareTxDialog({
+            hash,
+            onShare() {
+                activatedSocialNetworkUI.utils.share?.(shareText)
+            },
+        })
     }, [tab, protocol, account, chainId, web3, tokenAmount, openShareTxDialog])
 
     const buttonDom = useMemo(() => {
@@ -307,7 +258,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
 
                             {loading ? (
                                 <Typography variant="body2" textAlign="right" className={classes.tokenValueUSD}>
-                                    <LoadingAnimation width={16} height={16} />
+                                    <LoadingBase width={16} height={16} />
                                 </Typography>
                             ) : (
                                 <Typography variant="body2" textAlign="right" className={classes.tokenValueUSD}>

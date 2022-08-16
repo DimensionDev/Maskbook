@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { useAsync } from 'react-use'
 import { Chip, Grid, InputAdornment, TextField, Typography } from '@mui/material'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
 import { Box } from '@mui/system'
 import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useAccount, useChainId, useWeb3, useFungibleTokenBalance, useWeb3Connection } from '@masknet/plugin-infra/web3'
@@ -10,7 +10,6 @@ import { AdjustFarmRewardsInterface, TransactionStatus, PagesType, FungibleToken
 import { useI18N } from '../locales'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { roundValue, getRequiredChainId } from '../helpers'
 import { ATTRACE_FEE_PERCENT } from '../constants'
 import { adjustFarmRewards } from './utils/referralFarm'
@@ -145,9 +144,8 @@ export function AdjustFarmRewards(props: AdjustFarmRewardsInterface) {
 
     const connection = useWeb3Connection<void, NetworkPluginID.PLUGIN_EVM>()
     const onAdjustFarmReward = useCallback(async () => {
-        if (!referredToken || !rewardToken) {
-            return onErrorDeposit(t.go_wrong())
-        }
+        if (!web3 || !connection) return
+        if (!referredToken || !rewardToken) return onErrorDeposit(t.go_wrong())
 
         const depositValue = Number.parseFloat(totalFarmReward) + attraceFee
 

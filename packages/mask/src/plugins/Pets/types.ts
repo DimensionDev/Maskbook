@@ -32,6 +32,9 @@ export interface ShowMeta {
     image: string
     word: string
     type: ImageType
+    contract: string
+    tokenId: string
+    chainId: ChainId | undefined
 }
 
 export interface User {
@@ -40,12 +43,26 @@ export interface User {
 }
 
 export interface OwnerERC721TokenInfo extends NonFungibleAsset<ChainId, SchemaType> {
-    tokenId: string
     glbSupport: boolean
 }
 
 export interface FilterContract {
     name: string
     contract: string
+    icon: string
     tokens: OwnerERC721TokenInfo[]
+    chainId: ChainId | undefined
+}
+export interface NonFungibleContract {
+    name: string
+    contract: string
+    icon: string
+    chainId: ChainId | undefined
+    tokens: Record<string, OwnerERC721TokenInfo>
+}
+
+export enum MenuType {
+    Setting = 0,
+    Game = 1,
+    About = 2,
 }

@@ -29,9 +29,11 @@ export class NameService extends NameServiceState<ChainId> {
 
     private async createENS() {
         if (this.ens) return this.ens
+        const provider = await Providers[ProviderType.MaskWallet].createWeb3Provider({
+            chainId: ChainId.Mainnet,
+        })
         this.ens = new ENS({
-            // @ts-ignore
-            provider: await Providers[ProviderType.MaskWallet].createWeb3Provider(ChainId.Mainnet),
+            provider,
             network: ChainId.Mainnet,
         })
         return this.ens

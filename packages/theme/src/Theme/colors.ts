@@ -23,9 +23,10 @@ export const MaskColors = {
             thirdMain: '#F3F3F4',
             bg: '#F9F9F9',
             bottom: '#FFFFFF',
+            shadowBottom: '#000000',
             secondaryBottom: 'rgba(255, 255, 255, 0.8)',
             input: '#F2F6FA',
-            modelTitleBg:
+            modalTitleBg:
                 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)',
             highlight: '#1C68F3',
             line: '#F2F5F6',
@@ -36,7 +37,12 @@ export const MaskColors = {
             warn: '#FFB100',
             danger: '#FF3545',
             white: '#ffffff',
+            secondaryDark: '#767F8D',
             dark: '#07101B',
+            publicMain: '#07101B',
+            publicSecond: '#767F8D',
+            publicThird: '#ACB4C1',
+            publicLine: '#F2F5F6',
         },
         background: {
             default: '#F9F9F9',
@@ -68,13 +74,14 @@ export const MaskColors = {
             second: '#C4C7CD',
             third: '#666C75',
             primaryMain: '#494949',
-            secondaryMain: '#181818',
-            thirdMain: '#151515',
+            secondaryMain: '#232323',
+            thirdMain: '#1e1e1e',
             bg: '#1C1C1C',
-            bottom: '#101010',
+            bottom: '#030303',
             secondaryBottom: 'rgba(0, 0, 0, 0.8)',
             input: '#26292C',
-            modelTitleBg: 'linear-gradient(180deg, #202020 0%, #181818 100%)',
+            shadowBottom: '#ffffff',
+            modalTitleBg: 'linear-gradient(180deg, #202020 0%, #181818 100%)',
             highlight: '#FFFFFF',
             line: '#2F2F2F',
             secondaryLine: '#6F6F6F',
@@ -84,7 +91,12 @@ export const MaskColors = {
             warn: '#FFB100',
             danger: '#FF3545',
             white: '#ffffff',
+            secondaryDark: '#767F8D',
             dark: '#07101B',
+            publicMain: '#07101B',
+            publicSecond: '#767F8D',
+            publicThird: '#ACB4C1',
+            publicLine: '#F2F5F6',
         },
         text: {
             primary: '#F5F5F5',
@@ -112,3 +124,5 @@ export const MaskColors = {
         },
     },
 }
+
+export type MaskColor = typeof MaskColors.light

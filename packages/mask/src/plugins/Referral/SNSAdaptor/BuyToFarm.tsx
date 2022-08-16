@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { useAsync } from 'react-use'
 import { useAccount, useChainId, useWeb3 } from '@masknet/plugin-infra/web3'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Typography, Box, Tab, Tabs, Grid, Divider } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
@@ -19,7 +19,6 @@ import { MASK_REFERRER, SWAP_CHAIN_ID } from '../constants'
 import { TabsReferAndBuy, TransactionStatus, PageInterface, PagesType, FungibleTokenDetailed } from '../types'
 import type { Coin } from '../../Trader/types'
 
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { MyRewards } from './MyRewards'
@@ -137,17 +136,16 @@ export function BuyToFarm(props: PageInterface) {
     )
 
     const onClickBuyToFarm = useCallback(async () => {
-        if (!token?.address) {
-            return onError(t.error_token_not_select())
-        }
+        if (!web3) return
+        if (!token?.address) return onError(t.error_token_not_select())
 
         try {
             onConfirmReferFarm()
             await singAndPostProofOfRecommendationWithReferrer(web3, account, token.address, MASK_REFERRER)
             props?.onChangePage?.(PagesType.BUY_TO_FARM, PagesType.BUY_TO_FARM)
             swapToken()
-        } catch (error: any) {
-            onError(error?.message)
+        } catch (error: unknown) {
+            if (error instanceof Error) onError(error?.message)
         }
     }, [props?.onChangePage, web3, account, token])
 

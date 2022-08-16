@@ -12,18 +12,18 @@ const DEFAULT_PAGE_SIZE = 20
 
 export const PostHistory = memo(({ network }: PostHistoryProps) => {
     const [page, setPage] = useState(0)
-    const { value, error, loading } = usePostHistory(network, page, DEFAULT_PAGE_SIZE)
+    const { value: posts, error, loading } = usePostHistory(network, page, DEFAULT_PAGE_SIZE)
 
-    if (!value?.length && !loading) return <Placeholder network={network} />
+    if (!posts?.length && !loading) return <Placeholder network={network} />
 
     return (
         <Stack justifyContent="space-between" height="100%">
             <Box flex={1} mt={1}>
-                {value?.map((x) => (
+                {posts?.map((x) => (
                     <PostHistoryRow network={network} post={x} key={x.url} />
                 ))}
             </Box>
-            {!loading && !error && !!value?.length ? (
+            {!loading && !error && !!posts?.length ? (
                 <Stack justifyContent="center" direction="row">
                     <TablePagination
                         sx={{ display: 'inline-block' }}
@@ -41,7 +41,7 @@ export const PostHistory = memo(({ network }: PostHistoryProps) => {
                         }}
                         nextIconButtonProps={{
                             onClick: () => setPage((prev) => prev + 1),
-                            disabled: value.length < DEFAULT_PAGE_SIZE,
+                            disabled: posts.length < DEFAULT_PAGE_SIZE,
                             size: 'small',
                         }}
                     />

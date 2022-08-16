@@ -13,7 +13,7 @@ export function useClaimNftRedpacketCallback(id: string, totalAmount: number | u
     const nftRedPacketContract = useNftRedPacketContract(chainId)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     return useAsyncFn(async () => {
-        if (!nftRedPacketContract || !id || !signedMsg || !account || !totalAmount) {
+        if (!connection || !nftRedPacketContract || !id || !signedMsg || !account || !totalAmount) {
             return
         }
 

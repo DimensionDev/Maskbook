@@ -1,11 +1,10 @@
 import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy'
-import type { PayableTx } from '@masknet/web3-contracts/types/types'
-import { SchemaType, GasOptionConfig, TransactionEventType, useTraderConstants } from '@masknet/web3-shared-evm'
+import { SchemaType, GasOptionConfig, useTraderConstants, encodeContractTransaction } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
 import { SLIPPAGE_DEFAULT } from '../../constants'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useTradeAmount } from './useTradeAmount'
 
@@ -18,11 +17,18 @@ export function useTradeCallback(
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const { BALANCER_ETH_ADDRESS } = useTraderConstants(chainId)
-
+    const connection = useWeb3Connection()
     const tradeAmount = useTradeAmount(trade, allowedSlippage)
 
     return useAsyncFn(async () => {
-        if (!trade || !trade.inputToken || !trade.outputToken || !exchangeProxyContract || !BALANCER_ETH_ADDRESS) {
+        if (
+            !connection ||
+            !trade ||
+            !trade.inputToken ||
+            !trade.outputToken ||
+            !exchangeProxyContract ||
+            !BALANCER_ETH_ADDRESS
+        ) {
             return
         }
 
@@ -51,7 +57,22 @@ export function useTradeCallback(
         const outputTokenAddress =
             trade.outputToken.schema === SchemaType.Native ? BALANCER_ETH_ADDRESS : trade.outputToken.address
 
-        const tx =
+        // trade with the native token
+        let transactionValue = '0'
+        if (trade.strategy === TradeStrategy.ExactIn && trade.inputToken.schema === SchemaType.Native)
+            transactionValue = trade.inputAmount.toFixed()
+        else if (trade.strategy === TradeStrategy.ExactOut && trade.outputToken.schema === SchemaType.Native)
+            transactionValue = trade.outputAmount.toFixed()
+
+        // send transaction and wait for hash
+        const config = {
+            from: account,
+            value: transactionValue,
+            ...gasConfig,
+        }
+
+        const tx = await encodeContractTransaction(
+            exchangeProxyContract,
             trade.strategy === TradeStrategy.ExactIn
                 ? exchangeProxyContract.methods.multihopBatchSwapExactIn(
                       swap_,
@@ -65,39 +86,14 @@ export function useTradeCallback(
                       inputTokenAddress,
                       outputTokenAddress,
                       tradeAmount.toFixed(),
-                  )
-
-        // trade with the native token
-        let transactionValue = '0'
-        if (trade.strategy === TradeStrategy.ExactIn && trade.inputToken.schema === SchemaType.Native)
-            transactionValue = trade.inputAmount.toFixed()
-        else if (trade.strategy === TradeStrategy.ExactOut && trade.outputToken.schema === SchemaType.Native)
-            transactionValue = trade.outputAmount.toFixed()
+                  ),
+            config,
+        )
 
         // send transaction and wait for hash
-        const config = {
-            from: account,
-            gas: await tx
-                .estimateGas({
-                    from: account,
-                    value: transactionValue,
-                })
-                .catch((error: Error) => {
-                    throw error
-                }),
-            value: transactionValue,
-            ...gasConfig,
-        }
+        const hash = await connection.sendTransaction(tx)
+        const receipt = await connection.getTransactionReceipt(hash)
 
-        // send transaction and wait for hash
-        return new Promise<string>((resolve, reject) => {
-            tx.send(config as PayableTx)
-                .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
-                    resolve(receipt.transactionHash)
-                })
-                .on(TransactionEventType.ERROR, (error) => {
-                    reject(error)
-                })
-        })
-    }, [chainId, trade, tradeAmount, exchangeProxyContract, BALANCER_ETH_ADDRESS])
+        return receipt?.transactionHash
+    }, [chainId, trade, tradeAmount, exchangeProxyContract, BALANCER_ETH_ADDRESS, connection])
 }

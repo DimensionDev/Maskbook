@@ -1,10 +1,10 @@
-import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
+import { makeStyles } from '@masknet/theme'
+import { LoadingButton } from '@mui/lab'
+import { Button, Typography } from '@mui/material'
 import type { Account } from '../type'
 import { AccountAvatar } from '../components/AccountAvatar'
-import { Button, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
-import { LoadingButton } from '@mui/lab'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -58,10 +58,11 @@ interface AccountDetailUIProps {
     onVerify: () => void
     onDisconnect: () => void
     disconnectLoading: boolean
+    isSupportNextDotID: boolean
 }
 
 export const AccountDetailUI = memo<AccountDetailUIProps>(
-    ({ account, personaName, onVerify, onDisconnect, disconnectLoading }) => {
+    ({ account, personaName, onVerify, onDisconnect, disconnectLoading, isSupportNextDotID }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
 
@@ -101,12 +102,14 @@ export const AccountDetailUI = memo<AccountDetailUIProps>(
                                 onClick={onDisconnect}>
                                 {t('popups_persona_disconnect')}
                             </LoadingButton>
-                            <Button
-                                className={classes.button}
-                                style={{ background: '#1C68F3' }}
-                                onClick={() => onVerify()}>
-                                {t('popups_verify_account')}
-                            </Button>
+                            {isSupportNextDotID ? (
+                                <Button
+                                    className={classes.button}
+                                    style={{ background: '#1C68F3' }}
+                                    onClick={() => onVerify()}>
+                                    {t('popups_verify_account')}
+                                </Button>
+                            ) : null}
                         </>
                     )}
                 </div>

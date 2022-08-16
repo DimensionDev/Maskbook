@@ -11,7 +11,7 @@ export function useMaskClaimCallback() {
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     return useAsyncFn(async () => {
-        if (!MaskITO_Contract) return
+        if (!connection || !MaskITO_Contract) return
 
         const config = {
             from: account,

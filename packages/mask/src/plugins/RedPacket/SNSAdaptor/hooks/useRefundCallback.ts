@@ -12,7 +12,7 @@ export function useRefundCallback(version: number, from: string, id?: string) {
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
     const [state, refundCallback] = useAsyncFn(async () => {
-        if (!redPacketContract || !id) return
+        if (!connection || !redPacketContract || !id) return
 
         setIsRefunded(false)
         const config = {

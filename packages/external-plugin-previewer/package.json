@@ -4,11 +4,12 @@
   "private": true,
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "webpack": "./src/index.tsx",
       "default": "./dist/index.js"
     }
   },
-  "types": "./dist",
+  "types": "./dist/index.d.ts",
   "dependencies": {
     "@masknet/theme": "workspace:*",
     "ef.js": "^0.14.2"

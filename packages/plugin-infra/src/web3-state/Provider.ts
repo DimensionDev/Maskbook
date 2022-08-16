@@ -1,14 +1,7 @@
 import { clone, first } from 'lodash-unified'
 import type { Subscription } from 'use-subscription'
 import { delay } from '@dimensiondev/kit'
-import {
-    EnhanceableSite,
-    ExtensionSite,
-    getSiteType,
-    mapSubscription,
-    mergeSubscription,
-    StorageObject,
-} from '@masknet/shared-base'
+import { getSiteType, mapSubscription, mergeSubscription, StorageObject } from '@masknet/shared-base'
 import type { Account, WalletProvider, ProviderState as Web3ProviderState } from '@masknet/web3-shared-base'
 import type { Plugin } from '../types'
 
@@ -34,7 +27,7 @@ export class ProviderState<
     public providerType?: Subscription<ProviderType>
 
     constructor(
-        protected context: Plugin.Shared.SharedContext,
+        protected context: Plugin.Shared.SharedUIContext,
         protected providers: Record<ProviderType, WalletProvider<ChainId, ProviderType, Web3Provider, Web3>>,
         protected options: {
             isValidAddress(a?: string): boolean
@@ -42,7 +35,7 @@ export class ProviderState<
             isSameAddress(a?: string, b?: string): boolean
             getDefaultChainId(): ChainId
             getDefaultNetworkType(): NetworkType
-            getDefaultProviderType(site?: EnhanceableSite | ExtensionSite): ProviderType
+            getDefaultProviderType(): ProviderType
             getNetworkTypeFromChainId(chainId: ChainId): NetworkType
         },
     ) {
@@ -52,7 +45,7 @@ export class ProviderState<
                 account: '',
                 chainId: options.getDefaultChainId(),
             },
-            providerType: options.getDefaultProviderType(site),
+            providerType: options.getDefaultProviderType(),
         }
 
         const { storage } = this.context.createKVStorage('memory', {}).createSubScope(site ?? 'Provider', defaultValue)
@@ -92,6 +85,13 @@ export class ProviderState<
                 await this.setAccount(providerType, {
                     chainId: Number.parseInt(chainId, 16) as ChainId,
                 })
+            })
+            provider.emitter.on('connect', ({ account }) => {
+                if (account && this.options.isValidAddress(account)) {
+                    this.setAccount(providerType, {
+                        account,
+                    })
+                }
             })
             provider.emitter.on('accounts', async (accounts) => {
                 const account = first(accounts)
@@ -161,13 +161,13 @@ export class ProviderState<
         const provider = this.providers[providerType]
 
         // compose the connection result
-        const account = await provider.connect(chainId)
+        const result = await provider.connect(chainId)
 
         // failed to connect provider
-        if (!account.account) throw new Error('Failed to connect provider.')
+        if (!result.account) throw new Error('Failed to connect provider.')
 
         // switch the sub-network to the expected one
-        if (chainId !== account.chainId) {
+        if (chainId !== result.chainId) {
             await Promise.race([
                 (async () => {
                     await delay(30 /* seconds */ * 1000 /* milliseconds */)
@@ -175,15 +175,15 @@ export class ProviderState<
                 })(),
                 provider.switchChain(chainId),
             ])
-            account.chainId = chainId
+            result.chainId = chainId
         }
 
         // update local storage
         await this.setProvider(providerType)
-        await this.setAccount(providerType, account)
+        await this.setAccount(providerType, result)
 
-        provider.emitter.emit('connect', account)
-        return account
+        provider.emitter.emit('connect', result)
+        return result
     }
 
     async disconnect(providerType: ProviderType) {

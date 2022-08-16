@@ -1,5 +1,12 @@
 import urlcat from 'urlcat'
-import { GasOptionType, Transaction, createPageable, HubOptions, createIndicator } from '@masknet/web3-shared-base'
+import {
+    GasOptionType,
+    Transaction,
+    createPageable,
+    HubOptions,
+    createIndicator,
+    Pageable,
+} from '@masknet/web3-shared-base'
 import {
     ChainId,
     formatGweiToWei,
@@ -13,6 +20,7 @@ import type { WalletTokenRecord, HistoryResponse, GasPriceDictResponse } from '.
 import type { FungibleTokenAPI, HistoryAPI, GasOptionAPI } from '../types'
 import { getAllEVMNativeAssets } from '../helpers'
 import { unionWith } from 'lodash-unified'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 const DEBANK_API = 'https://api.debank.com'
 const DEBANK_OPEN_API = 'https://openapi.debank.com'
@@ -42,24 +50,24 @@ export class DeBankAPI
         const { CHAIN_ID = '' } = getDeBankConstants(chainId)
         if (!CHAIN_ID) throw new Error('Failed to get gas price.')
 
-        const response = await fetch(urlcat(DEBANK_API, '/chain/gas_price_dict_v2', { chain: CHAIN_ID }))
+        const response = await global.r2d2Fetch(urlcat(DEBANK_API, '/chain/gas_price_dict_v2', { chain: CHAIN_ID }))
         const result = (await response.json()) as GasPriceDictResponse
         if (result.error_code !== 0) throw new Error('Failed to get gas price.')
 
         const responseModified = gasModifier(result, CHAIN_ID)
         return {
             [GasOptionType.FAST]: {
-                estimatedSeconds: responseModified.data.fast.estimated_seconds,
+                estimatedSeconds: responseModified.data.fast.estimated_seconds || 15,
                 suggestedMaxFeePerGas: formatWeiToGwei(responseModified.data.fast.price).toString(),
                 suggestedMaxPriorityFeePerGas: '0',
             },
             [GasOptionType.NORMAL]: {
-                estimatedSeconds: responseModified.data.normal.estimated_seconds,
+                estimatedSeconds: responseModified.data.normal.estimated_seconds || 30,
                 suggestedMaxFeePerGas: formatWeiToGwei(responseModified.data.normal.price).toString(),
                 suggestedMaxPriorityFeePerGas: '0',
             },
             [GasOptionType.SLOW]: {
-                estimatedSeconds: responseModified.data.slow.estimated_seconds,
+                estimatedSeconds: responseModified.data.slow.estimated_seconds || 60,
                 suggestedMaxFeePerGas: formatWeiToGwei(responseModified.data.slow.price).toString(),
                 suggestedMaxPriorityFeePerGas: '0',
             },
@@ -67,10 +75,10 @@ export class DeBankAPI
     }
 
     async getAssets(address: string, options?: HubOptions<ChainId>) {
-        const response = await fetch(
+        const response = await global.r2d2Fetch(
             urlcat(DEBANK_OPEN_API, '/v1/user/token_list', {
                 id: address.toLowerCase(),
-                is_all: true,
+                is_all: false,
                 has_balance: true,
             }),
         )
@@ -85,11 +93,16 @@ export class DeBankAPI
                             // rename bsc to bnb
                             id: x.id === 'bsc' ? 'bnb' : x.id,
                             chain: x.chain === 'bsc' ? 'bnb' : x.chain,
+                            // prefix ARETH
+                            symbol: x.chain === 'arb' && x.symbol === 'ETH' ? 'ARETH' : x.symbol,
+                            logo_url:
+                                x.chain === 'arb' && x.symbol === 'ETH'
+                                    ? 'https://assets.debank.com/static/media/arbitrum.8e326f58.svg'
+                                    : x.logo_url,
                         })),
-                        options?.chainId,
                     ),
                     getAllEVMNativeAssets(),
-                    (a, z) => a.symbol === z.symbol,
+                    (a, z) => a.symbol === z.symbol && a.chainId === z.chainId,
                 ),
                 createIndicator(options?.indicator),
             )
@@ -100,15 +113,18 @@ export class DeBankAPI
 
     async getTransactions(
         address: string,
-        { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
-    ): Promise<Array<Transaction<ChainId, SchemaType>>> {
+        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {},
+    ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
         const { CHAIN_ID = '' } = getDeBankConstants(chainId)
-        if (!CHAIN_ID) return []
+        if (!CHAIN_ID) return createPageable(EMPTY_LIST, createIndicator(indicator))
 
-        const response = await fetch(`${DEBANK_API}/history/list?user_addr=${address.toLowerCase()}&chain=${CHAIN_ID}`)
+        const response = await global.r2d2Fetch(
+            `${DEBANK_API}/history/list?user_addr=${address.toLowerCase()}&chain=${CHAIN_ID}`,
+        )
         const { data, error_code } = (await response.json()) as HistoryResponse
         if (error_code !== 0) throw new Error('Fail to load transactions.')
 
-        return formatTransactions(chainId, data)
+        const transactions = formatTransactions(chainId, data)
+        return createPageable(transactions, createIndicator(indicator))
     }
 }

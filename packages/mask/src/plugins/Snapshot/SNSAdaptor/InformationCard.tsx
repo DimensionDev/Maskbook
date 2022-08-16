@@ -1,10 +1,14 @@
-import { formatEthereumAddress, explorerResolver, resolveIPFSLink } from '@masknet/web3-shared-evm'
+import {
+    formatEthereumAddress,
+    explorerResolver,
+    resolveIPFSLink,
+    resolveIPFSLinkFromURL,
+} from '@masknet/web3-shared-evm'
 import { Avatar, Box, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import OpenInNew from '@mui/icons-material/OpenInNew'
 import formatDateTime from 'date-fns/format'
 import { useContext } from 'react'
-import { TokenIcon } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie'
 import { SnapshotContext } from '../context'
@@ -80,7 +84,10 @@ export function InformationCard(props: InformationCardProps) {
                                     target="_blank"
                                     rel="noopener"
                                     href={explorerResolver.addressLink(chainId, strategy.params.address)}>
-                                    <TokenIcon address={strategy.params.address} />
+                                    <Avatar
+                                        src={resolveIPFSLinkFromURL(proposal.space.avatar)}
+                                        className={classes.avatar}
+                                    />
                                 </Link>
                             ))}
                     </Box>

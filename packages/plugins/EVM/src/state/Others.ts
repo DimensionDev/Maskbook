@@ -4,25 +4,31 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import {
     isValidDomain,
     isValidAddress,
+    isZeroAddress,
+    isNativeTokenAddress,
     ChainId,
     formatEthereumAddress,
     formatDomainName,
+    formatTokenId,
+    getTransactionSignature,
     ProviderType,
     NetworkType,
+    Transaction,
     SchemaType,
-    ZERO_ADDRESS,
-    formatTokenId,
     CHAIN_DESCRIPTORS,
     NETWORK_DESCRIPTORS,
     PROVIDER_DESCRIPTORS,
+    getDefaultChainId,
+    getDefaultNetworkType,
+    getDefaultProviderType,
+    getZeroAddress,
     getMaskTokenAddress,
+    getNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 
-export class Others extends OthersState<ChainId, SchemaType, ProviderType, NetworkType> {
+export class Others extends OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
     constructor(context: Plugin.Shared.SharedContext) {
         super(context, {
-            defaultAddress: ZERO_ADDRESS,
-            defaultBlockDelay: 15,
             chainDescriptors: CHAIN_DESCRIPTORS,
             networkDescriptors: NETWORK_DESCRIPTORS,
             providerDescriptors: PROVIDER_DESCRIPTORS,
@@ -32,8 +38,16 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
     override isValidDomain = isValidDomain
     override isValidAddress = isValidAddress
     override isSameAddress = isSameAddress
+    override isZeroAddress = isZeroAddress
+    override isNativeTokenAddress = isNativeTokenAddress
 
+    override getDefaultChainId = getDefaultChainId
+    override getDefaultNetworkType = getDefaultNetworkType
+    override getDefaultProviderType = getDefaultProviderType
+    override getZeroAddress = getZeroAddress
     override getMaskTokenAddress = getMaskTokenAddress
+    override getNativeTokenAddress = getNativeTokenAddress
+    override getTransactionSignature = getTransactionSignature
 
     override formatAddress = formatEthereumAddress
     override formatTokenId = formatTokenId

@@ -2,9 +2,9 @@ import { HashRouter } from 'react-router-dom'
 import { CssBaseline, ThemeProvider, StyledEngineProvider, Theme } from '@mui/material'
 import {
     CustomSnackbarProvider,
-    MaskLightTheme,
     applyMaskColorVars,
-    MaskDarkTheme,
+    DashboardDarkTheme,
+    DashboardLightTheme,
     useSystemPreferencePalette,
 } from '@masknet/theme'
 import { I18NextProviderHMR, SharedContextProvider } from '@masknet/shared'
@@ -15,7 +15,7 @@ import {
     useAllPluginsWeb3State,
     useCurrentWeb3NetworkPluginID,
 } from '@masknet/plugin-infra/web3'
-import { i18NextInstance } from '@masknet/shared-base'
+import { i18NextInstance, queryRemoteI18NBundle } from '@masknet/shared-base'
 
 import '../utils/kv-storage'
 
@@ -23,6 +23,8 @@ import './PluginHost'
 import { Pages } from '../pages/routes'
 import { useAppearance } from '../pages/Personas/api'
 import { PersonaContext } from '../pages/Personas/hooks/usePersonaContext'
+import { useEffect } from 'react'
+import { Services } from '../API'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
@@ -30,13 +32,15 @@ export default function DashboardRoot() {
     const pluginID = useCurrentWeb3NetworkPluginID()
     const PluginsWeb3State = useAllPluginsWeb3State()
 
+    useEffect(queryRemoteI18NBundle(Services.Helper.queryRemoteI18NBundle), [])
+
     // #region theme
     const appearance = useAppearance()
     const mode = useSystemPreferencePalette()
     const themes: Record<typeof appearance, Theme> = {
-        dark: MaskDarkTheme,
-        light: MaskLightTheme,
-        default: mode === 'dark' ? MaskDarkTheme : MaskLightTheme,
+        dark: DashboardDarkTheme,
+        light: DashboardLightTheme,
+        default: mode === 'dark' ? DashboardDarkTheme : DashboardLightTheme,
     }
     const theme = themes[appearance]
 

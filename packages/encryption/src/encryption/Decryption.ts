@@ -2,8 +2,8 @@ import { unreachable } from '@dimensiondev/kit'
 import { decodeTypedMessageFromDocument, decodeTypedMessageV38ToV40Format, TypedMessage } from '@masknet/typed-message'
 import { AESCryptoKey, EC_Public_CryptoKey, andThenAsync } from '@masknet/shared-base'
 import { None, Result } from 'ts-results'
-import type { PayloadParseResult } from '../payload'
-import { decryptWithAES, importAES } from '../utils'
+import type { PayloadParseResult } from '../payload/index.js'
+import { decryptWithAES, importAES } from '../utils/index.js'
 import {
     DecryptOptions,
     DecryptIO,
@@ -15,9 +15,9 @@ import {
     DecryptIntermediateProgress,
     DecryptIntermediateProgressKind,
     DecryptStaticECDH_PostKey,
-} from './DecryptionTypes'
-import { deriveAESByECDH_version38OrOlderExtraSteps } from './v38-ecdh'
-export * from './DecryptionTypes'
+} from './DecryptionTypes.js'
+import { deriveAESByECDH_version38OrOlderExtraSteps } from './v38-ecdh.js'
+export * from './DecryptionTypes.js'
 const ErrorReasons = DecryptError.Reasons
 type Version = PayloadParseResult.Payload['version']
 export async function* decrypt(options: DecryptOptions, io: DecryptIO): AsyncIterableIterator<DecryptProgress> {
@@ -55,7 +55,9 @@ export async function* decrypt(options: DecryptOptions, io: DecryptIO): AsyncIte
                 : Promise.resolve(false)
             if (ownersAESKeyEncrypted.ok) {
                 try {
-                    const aes_raw = await io.decryptByLocalKey(author.unwrapOr(null), ownersAESKeyEncrypted.val, iv)
+                    const aes_raw = new Uint8Array(
+                        await io.decryptByLocalKey(author.unwrapOr(null), ownersAESKeyEncrypted.val, iv),
+                    )
                     const aes = await importAESKeyFromJWKFromTextEncoder(aes_raw)
                     io.setPostKeyCache(aes.unwrap()).catch(() => {})
                     return yield* decryptWithPostAESKey(version, aes.unwrap(), iv, encrypted, options.onDecrypted)

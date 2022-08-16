@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
-import { DialogActions, DialogContent, Tab, Typography } from '@mui/material'
+import { DialogActions, DialogContent, Tab } from '@mui/material'
 import { isDashboardPage, EMPTY_LIST } from '@masknet/shared-base'
 import { MaskTabList, useTabs } from '@masknet/theme'
 import {
@@ -115,8 +115,8 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                         }}
                         titleTabs={
                             <MaskTabList variant="base" onChange={onChange} aria-label="Savings">
-                                <Tab label={<Typography>{tabs.Deposit}</Typography>} value={tabs.Deposit} />
-                                <Tab label={<Typography>{tabs.Withdraw}</Typography>} value={tabs.Withdraw} />
+                                <Tab label={tabs.Deposit} value={tabs.Deposit} />
+                                <Tab label={tabs.Withdraw} value={tabs.Withdraw} />
                             </MaskTabList>
                         }>
                         <DialogContent style={{ padding: 0, overflowX: 'hidden' }}>

@@ -65,7 +65,7 @@ export declare namespace Web3Plugin {
             >
             Provider?: ProviderState<ChainId, ProviderType, NetworkType>
             Wallet?: WalletState
-            Others?: OthersState<ChainId, SchemaType, ProviderType, NetworkType>
+            Others?: OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
         }
     }
     export namespace UI {

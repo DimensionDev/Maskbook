@@ -1,3 +1,3 @@
-export * from './CryptoType'
-export * from './JWKType'
-export * from './secp256k1'
+export * from './CryptoType.js'
+export * from './JWKType.js'
+export * from './secp256k1.js'

@@ -1,25 +1,29 @@
 import yargs, { Argv } from 'yargs'
-const { hideBin } = require('yargs/helpers')
-import { spawn } from 'child_process'
+import { hideBin } from 'yargs/helpers'
 import { compact } from 'lodash-unified'
-import { resolve } from 'path'
-import { awaitChildProcess, PKG_PATH, watchTask } from '../utils'
-import { buildInjectedScript, watchInjectedScript } from '../projects/injected-scripts'
-import { buildMaskSDK, watchMaskSDK } from '../projects/mask-sdk'
-import { buildPolyfill } from '../projects/polyfill'
-import { buildGun } from '../projects/gun'
+import { awaitChildProcess, PKG_PATH, shell, task, watchTask } from '../utils/index.js'
+import { buildInjectedScript, watchInjectedScript } from '../projects/injected-scripts.js'
+import { buildMaskSDK, watchMaskSDK } from '../projects/mask-sdk.js'
+import { buildPolyfill } from '../projects/polyfill.js'
+import { buildGun } from '../projects/gun.js'
+import { parallel, series, TaskFunction } from 'gulp'
 
 const presets = ['chromium', 'firefox', 'android', 'iOS', 'base'] as const
 const otherFlags = ['beta', 'insider', 'reproducible', 'profile', 'mv3', 'readonlyCache', 'progress'] as const
 
-export async function extension(f?: Function | ExtensionBuildArgs) {
-    await buildPolyfill()
-    await buildInjectedScript()
-    await buildGun()
-    await buildMaskSDK()
-    if (typeof f === 'function') return awaitChildProcess(webpack('build'))
-    return awaitChildProcess(webpack('build', f))
+export function buildWebpackFlag(name: string, args: ExtensionBuildArgs | undefined) {
+    const f = () => awaitChildProcess(webpack('build', args))
+    const desc = 'Build webpack for ' + name
+    task(f, desc, desc)
+    return f
 }
+export function buildExtensionFlag(name: string, args: ExtensionBuildArgs | undefined): TaskFunction {
+    const f = series(parallel(buildPolyfill, buildInjectedScript, buildGun, buildMaskSDK), buildWebpackFlag(name, args))
+    const desc = 'Build extension for ' + name
+    task(f, desc, desc)
+    return f
+}
+export const buildBaseExtension: TaskFunction = buildExtensionFlag('default', undefined)
 export async function extensionWatch(f?: Function | ExtensionBuildArgs) {
     buildPolyfill()
     buildGun()
@@ -28,7 +32,7 @@ export async function extensionWatch(f?: Function | ExtensionBuildArgs) {
     if (typeof f === 'function') return awaitChildProcess(webpack('dev'))
     return awaitChildProcess(webpack('dev', f))
 }
-watchTask(extension, extensionWatch, 'webpack', 'Build Mask Network extension', {
+watchTask(buildBaseExtension, extensionWatch, 'webpack', 'Build Mask Network extension', {
     '[Warning]': 'For normal development, use task "dev" or "build"',
 })
 
@@ -39,8 +43,22 @@ function parseArgs() {
     const b = a as Argv<Record<typeof presets[number] | typeof otherFlags[number], boolean>>
     return b.string('output-path')
 }
-export type ExtensionBuildArgs = Partial<ReturnType<typeof parseArgs>['argv']>
-function webpack(mode: 'dev' | 'build', args: ExtensionBuildArgs = parseArgs().argv) {
+export type ExtensionBuildArgs = {
+    mv3?: boolean
+    android?: boolean
+    iOS?: boolean
+    firefox?: boolean
+    insider?: boolean
+    beta?: boolean
+    chromium?: boolean
+    base?: boolean
+    readonlyCache?: boolean
+    reproducible?: boolean
+    profile?: boolean
+    progress?: boolean
+    ['output-path']?: string
+}
+function webpack(mode: 'dev' | 'build', args: ExtensionBuildArgs = parseArgs().argv as any) {
     const command = [
         'webpack',
         mode === 'dev' ? 'serve' : undefined,
@@ -84,11 +102,7 @@ function webpack(mode: 'dev' | 'build', args: ExtensionBuildArgs = parseArgs().a
     }
 
     command.push('--env', 'flags=' + Buffer.from(JSON.stringify(flags), 'utf-8').toString('hex'))
-    return spawn('npx', compact(command), {
-        cwd: resolve(PKG_PATH, 'mask'),
-        stdio: 'inherit',
-        shell: true,
-    })
+    return shell.cwd(new URL('mask', PKG_PATH))(['npx ' + compact(command).join(' ')])
 }
 export interface Runtime {
     engine: 'chromium' | 'firefox' | 'safari'

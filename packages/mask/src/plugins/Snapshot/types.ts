@@ -30,6 +30,7 @@ export interface Proposal {
         id: string
         name: string
         symbol: string
+        avatar: string
     }
     start: number
     snapshot: string
@@ -128,7 +129,7 @@ export interface ProposalResult {
  * https://3boxlabs.com/
  */
 export interface Profile3Box {
-    contract_address: string
+    eth_address: string
     image: string | null
     name: string | null
 }

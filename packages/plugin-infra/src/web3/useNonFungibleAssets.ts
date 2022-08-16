@@ -31,8 +31,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
                 .filter((x) => (options?.chainId ? x.chainId === options?.chainId : true))
                 .map((x) => {
                     return pageableToIterator(async (indicator) => {
-                        if (!hub?.getNonFungibleTokens) return
-                        return hub?.getNonFungibleTokens(options?.account ?? account, {
+                        return hub.getNonFungibleTokens!(options?.account ?? account, {
                             indicator,
                             size: 50,
                             ...options,

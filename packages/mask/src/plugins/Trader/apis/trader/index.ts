@@ -11,7 +11,6 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
                 TradeProvider.UNISWAP_V2,
                 TradeProvider.UNISWAP_V3,
                 TradeProvider.SUSHISWAP,
-                TradeProvider.SASHIMISWAP,
                 TradeProvider.ZRX,
                 TradeProvider.BALANCER,
                 TradeProvider.DODO,
@@ -44,14 +43,16 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
             return [TradeProvider.SUSHISWAP, TradeProvider.OPENOCEAN]
         case NetworkType.Avalanche:
             return [TradeProvider.SUSHISWAP, TradeProvider.OPENOCEAN, TradeProvider.TRADERJOE, TradeProvider.PANGOLIN]
-        case NetworkType.xDai:
-            return [TradeProvider.SUSHISWAP, TradeProvider.OPENOCEAN]
         case NetworkType.Celo:
             return [TradeProvider.SUSHISWAP]
         case NetworkType.Fantom:
             return [TradeProvider.SUSHISWAP]
+        case NetworkType.Optimism:
+            return [TradeProvider.UNISWAP_V3]
         case NetworkType.Aurora:
             return [TradeProvider.DODO, TradeProvider.WANNASWAP, TradeProvider.TRISOLARIS]
+        case NetworkType.Astar:
+            return [TradeProvider.ARTHSWAP, TradeProvider.VERSA, TradeProvider.ASTAREXCHANGE, TradeProvider.YUMISWAP]
         case NetworkType.Harmony:
             return [
                 TradeProvider.SUSHISWAP,
@@ -62,7 +63,6 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
         case NetworkType.Boba:
         case NetworkType.Fuse:
         case NetworkType.Metis:
-        case NetworkType.Optimistic:
         case NetworkType.Conflux:
             console.error('To be implement network: ', networkType)
             return []

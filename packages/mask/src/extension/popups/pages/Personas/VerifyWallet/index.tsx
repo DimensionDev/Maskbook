@@ -15,6 +15,7 @@ import { useUnconfirmedRequest } from '../../Wallet/hooks/useUnConfirmedRequest'
 import { PopupContext } from '../../../hook/usePopupContext'
 import { Account, isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useReverseAddress, useWallets, useWeb3Connection, useWeb3State } from '@masknet/plugin-infra/web3'
+import { MaskMessages } from '../../../../../../shared/messages'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -122,6 +123,9 @@ const VerifyWallet = memo(() => {
                     signature,
                 },
             )
+
+            // Broadcast updates
+            MaskMessages.events.ownProofChanged.sendToAll()
             showSnackbar(t('popups_verify_wallet_sign_success'), { variant: 'success' })
             setSigned(true)
             refreshProofs()

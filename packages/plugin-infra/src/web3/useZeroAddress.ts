@@ -7,5 +7,5 @@ export function useZeroAddress<S extends 'all' | void = void, T extends NetworkP
     options?: Web3Helper.Web3ConnectionOptionsScope<S, T>,
 ) {
     const { Others } = useWeb3State(pluginID)
-    return Others?.getZeroAddress?.(options?.chainId) ?? ''
+    return Others?.getZeroAddress?.() ?? ''
 }

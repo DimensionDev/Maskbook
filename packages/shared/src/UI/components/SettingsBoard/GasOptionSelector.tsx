@@ -18,7 +18,7 @@ const useStyles = makeStyles()((theme) => {
             marginTop: theme.spacing(2),
         },
         content: {
-            padding: theme.spacing(0, 2),
+            padding: theme.spacing(0.5, 2),
         },
         skeleton: {
             height: 201.5,
@@ -27,7 +27,7 @@ const useStyles = makeStyles()((theme) => {
             flexDirection: 'column',
         },
         rectangle: {
-            borderRadius: 8,
+            borderRadius: 16,
         },
     }
 })
@@ -64,8 +64,8 @@ export function GasOptionSelector(props: GasOptionSelectorProps) {
     )
 
     useEffect(() => {
-        if (!options || gasOptionType) return
-        onClick(GasOptionType.NORMAL, options[GasOptionType.NORMAL])
+        if (!options) return
+        onClick(gasOptionType, options[gasOptionType])
     }, [gasOptionType, options])
 
     if (!options)

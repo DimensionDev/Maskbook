@@ -9,7 +9,7 @@ export {
     type PayloadParseResult,
     type PayloadWellFormed,
     type SupportedPayloadVersions,
-} from './payload'
+} from './payload/index.js'
 
 export {
     encrypt,
@@ -22,7 +22,7 @@ export {
     type EncryptionResultE2EMap,
     type EncryptTargetPublic,
     type EncryptionResultE2E,
-} from './encryption'
+} from './encryption/index.js'
 
 export {
     decrypt,
@@ -38,16 +38,16 @@ export {
     type DecryptIntermediateProgress,
     type DecryptReportedInfo,
     type DecryptSuccess,
-} from './encryption'
+} from './encryption/index.js'
 
 export {
     //
     type AppendEncryptionIO,
     type AppendEncryptionOptions,
     appendEncryptionTarget,
-} from './encryption'
+} from './encryption/index.js'
 
-export { socialNetworkEncoder, socialNetworkDecoder, TwitterDecoder } from './social-network-encode-decode'
+export { socialNetworkEncoder, socialNetworkDecoder, TwitterDecoder } from './social-network-encode-decode/index.js'
 
 export {
     type DecodeImageOptions,
@@ -57,7 +57,7 @@ export {
     steganographyDecodeImage,
     steganographyEncodeImage,
     GrayscaleAlgorithm,
-} from './image-steganography'
+} from './image-steganography/index.js'
 
 // TODO: remove them in the future
-export { importEC_Key, getEcKeyCurve, importAES as importAESFromJWK } from './utils'
+export { importEC_Key, getEcKeyCurve, importAES as importAESFromJWK } from './utils/index.js'

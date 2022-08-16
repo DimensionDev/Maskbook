@@ -1,9 +1,9 @@
+import { useMemo } from 'react'
 import type { Currency, Token } from '@uniswap/sdk-core'
 import { FeeAmount, Pool } from '@uniswap/v3-sdk'
-import { useMemo } from 'react'
+import { TradeProvider } from '@masknet/public-api'
 import { useAllCurrencyCombinations } from './useAllCommonPairs'
 import { PoolState, usePools } from './usePools'
-import { TradeProvider } from '@masknet/public-api'
 
 /**
  * Returns all the existing pools that should be considered for swapping between an input currency and an output currency

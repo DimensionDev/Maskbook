@@ -25,6 +25,7 @@ const BLACKLIST_MAP: {
     [DataProvider.UNISWAP_INFO]: {
         [ChainId.Mainnet]: [],
     },
+    [DataProvider.NFTSCAN]: {},
 }
 
 const KEYWORD_ALIAS_MAP: {
@@ -43,6 +44,7 @@ const KEYWORD_ALIAS_MAP: {
         },
     },
     [DataProvider.UNISWAP_INFO]: {},
+    [DataProvider.NFTSCAN]: {},
 }
 
 const KEYWORD_ID_MAP: {
@@ -62,6 +64,7 @@ const KEYWORD_ID_MAP: {
         },
     },
     [DataProvider.UNISWAP_INFO]: {},
+    [DataProvider.NFTSCAN]: {},
 }
 
 const ID_ADDRESS_MAP: {
@@ -87,6 +90,7 @@ const ID_ADDRESS_MAP: {
         },
     },
     [DataProvider.UNISWAP_INFO]: {},
+    [DataProvider.NFTSCAN]: {},
 }
 
 const NETWORK_ID_MAP: {
@@ -97,6 +101,7 @@ const NETWORK_ID_MAP: {
     [DataProvider.COIN_GECKO]: {},
     [DataProvider.COIN_MARKET_CAP]: {},
     [DataProvider.UNISWAP_INFO]: {},
+    [DataProvider.NFTSCAN]: {},
 }
 
 export const SCAM_ADDRESS_MAP: { [key in ChainId]?: string[] } = {
@@ -109,7 +114,7 @@ getEnumAsArray(ChainId).map(({ value: chainId }) => {
 })
 
 export function resolveAlias(chainId: ChainId, keyword: string, dataProvider: DataProvider) {
-    if (dataProvider === DataProvider.UNISWAP_INFO) return keyword
+    if (dataProvider === DataProvider.UNISWAP_INFO || dataProvider === DataProvider.NFTSCAN) return keyword
     return KEYWORD_ALIAS_MAP[dataProvider][chainId]?.[keyword.toUpperCase()] ?? keyword
 }
 

@@ -1,60 +1,66 @@
-import { AddressViewer } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { SocialAddressType, NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
-import { Box, Typography } from '@mui/material'
-import { useI18N } from '../locales'
-import { useDonations, useFootprints } from './hooks'
+import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
+import { formatEthereumAddress, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { useCollectionFilter, useDonations, useFootprints } from './hooks'
 import { DonationPage, FootprintPage } from './pages'
+import { useCurrentVisitingProfile } from './hooks/useContext'
+import { CollectionType, KVType } from '../types'
+import { useKV } from './hooks/useKV'
+import { FeedPage } from './pages/FeedPage'
+import { useMemo } from 'react'
 
 export enum TabCardType {
     Donation = 1,
     Footprint = 2,
+    Feed = 3,
 }
 
 export interface TabCardProps {
     type: TabCardType
-    socialAddressList?: Array<SocialAddress<NetworkPluginID>>
+    socialAddress?: SocialAddress<NetworkPluginID>
+    publicKey?: string
 }
 
-export function TabCard({ type, socialAddressList }: TabCardProps) {
-    const t = useI18N()
-    const addressName = socialAddressList?.find(
-        (x) => x.type === SocialAddressType.RSS3 && x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM,
+export function TabCard({ type, socialAddress, publicKey }: TabCardProps) {
+    const { value: donations = EMPTY_LIST, loading: loadingDonations } = useDonations(
+        formatEthereumAddress(socialAddress?.address ?? ZERO_ADDRESS),
     )
-    const userAddress = addressName?.address || ''
-    const { value: donations = EMPTY_LIST, loading: loadingDonations } = useDonations(userAddress)
-    const { value: footprints = EMPTY_LIST, loading: loadingFootprints } = useFootprints(userAddress)
-
-    if (!addressName) return null
-
-    const isDonation = type === TabCardType.Donation
-
-    const summary =
-        isDonation && !loadingDonations ? (
-            <Typography color="textPrimary" component="span">
-                {t.total_grants({
-                    count: donations.length.toString(),
-                })}
-            </Typography>
-        ) : null
-
-    return (
-        <>
-            <link rel="stylesheet" href={new URL('./styles/tailwind.css', import.meta.url).toString()} />
-            <Box display="flex" alignItems="center" justifyContent="space-between">
-                <div>{summary}</div>
-                <AddressViewer identityAddress={addressName} />
-            </Box>
-            {isDonation ? (
-                <DonationPage donations={donations} loading={loadingDonations} addressLabel={addressName.label} />
-            ) : (
-                <FootprintPage
-                    address={userAddress}
-                    loading={loadingFootprints}
-                    footprints={footprints}
-                    addressLabel={addressName.label}
-                />
-            )}
-        </>
+    const { value: footprints = EMPTY_LIST, loading: loadingFootprints } = useFootprints(
+        formatEthereumAddress(socialAddress?.address ?? ZERO_ADDRESS),
     )
+    const currentVisitingProfile = useCurrentVisitingProfile()
+
+    const { value: kvValue } = useKV(publicKey)
+    const unHiddenDonations = useCollectionFilter(
+        kvValue?.proofs ?? EMPTY_LIST,
+        CollectionType.Donations,
+        donations,
+        currentVisitingProfile,
+        socialAddress,
+    )
+    const unHiddenFootprints = useCollectionFilter(
+        (kvValue as KVType)?.proofs,
+        CollectionType.Footprints,
+        footprints,
+        currentVisitingProfile,
+        socialAddress,
+    )
+
+    const page = useMemo(() => {
+        if (!socialAddress) return null
+        if (type === TabCardType.Donation) {
+            return <DonationPage donations={unHiddenDonations} loading={loadingDonations} address={socialAddress} />
+        }
+        if (type === TabCardType.Footprint) {
+            return <FootprintPage address={socialAddress} loading={loadingFootprints} footprints={unHiddenFootprints} />
+        }
+        if (type === TabCardType.Feed) {
+            return <FeedPage socialAddress={socialAddress} />
+        }
+        return null
+    }, [type, socialAddress, publicKey, unHiddenDonations, unHiddenFootprints, loadingDonations, loadingFootprints])
+
+    if (!socialAddress) return null
+
+    return page
 }

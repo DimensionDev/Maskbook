@@ -51,6 +51,7 @@ export function SlippageToleranceSection(props: SlippageToleranceSectionProps) {
                     </Typography>
                 }>
                 <SlippageToleranceForm
+                    slippageTolerance={slippageTolerance}
                     slippageTolerances={DEFAULT_SLIPPAGE_TOLERANCES}
                     onChange={(data) => {
                         setSlippageTolerance(data ? Number.parseFloat(data.customSlippageTolerance) : 0)

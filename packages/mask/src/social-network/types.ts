@@ -3,6 +3,7 @@ import type { GrayscaleAlgorithm, SocialNetworkEnum } from '@masknet/encryption'
 import type { IdentityResolved, PostInfo } from '@masknet/plugin-infra/content-script'
 import type {
     EncryptionTargetType,
+    NextIDPlatform,
     ObservableWeakMap,
     PersonaIdentifier,
     PostIdentifier,
@@ -101,6 +102,8 @@ export namespace SocialNetworkUI {
             searchResult?(signal: AbortSignal): void
             /** Inject UI to the profile tab */
             profileTab?(signal: AbortSignal): void
+            /** Inject UI to the profile cover */
+            profileCover?(signal: AbortSignal): void
             /** Inject UI to the profile page */
             profileTabContent?(signal: AbortSignal): void
             setupWizard?(signal: AbortSignal, for_: PersonaIdentifier): void
@@ -126,6 +129,7 @@ export namespace SocialNetworkUI {
             postAndReplyNFTAvatar?(signal: AbortSignal): void
             /** @deprecated same reason as useAvatar */
             avatarClipNFT?(signal: AbortSignal): void
+            avatar?(signal: AbortSignal): void
         }
         export interface NewPostComposition {
             start(signal: AbortSignal): void
@@ -268,7 +272,7 @@ export namespace SocialNetworkUI {
         }
         export interface NextIDConfig {
             enable?: boolean
-            platform: string
+            platform: NextIDPlatform
             collectVerificationPost: (keyword: string) => PostIdentifier | null
         }
     }

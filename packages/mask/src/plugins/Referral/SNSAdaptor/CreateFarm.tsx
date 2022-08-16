@@ -6,7 +6,7 @@ import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 import { useAccount, useChainId, useWeb3, useFungibleTokenBalance, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { makeTypedMessageText } from '@masknet/typed-message'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { Typography, Box, Tab, Tabs, Grid, TextField, Chip, InputAdornment, Divider } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
@@ -29,7 +29,6 @@ import { runCreateERC20PairFarm } from './utils/referralFarm'
 
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { CreatedFarms } from './CreatedFarms'
 import { TokenSelectField } from './shared-ui/TokenSelectField'
 
@@ -227,6 +226,7 @@ export function CreateFarm(props: PageInterface) {
 
     const connection = useWeb3Connection<void, NetworkPluginID.PLUGIN_EVM>()
     const onDeposit = useCallback(async () => {
+        if (!web3 || !connection) return
         if (!tokenRefer?.address || !tokenReward?.address) {
             showSnackbar(t.error_token_not_select(), { variant: 'error' })
             return

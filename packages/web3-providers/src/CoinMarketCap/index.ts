@@ -1,5 +1,6 @@
 import getUnixTime from 'date-fns/getUnixTime'
 import type { TrendingAPI } from '../types'
+import { TokenType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { BTC_FIRST_LEGER_DATE, CMC_STATIC_BASE_URL, CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from './constants'
 import { getCommunityLink, isMirroredKeyword, resolveChainIdByName } from './helper'
@@ -222,17 +223,16 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
             `${CMC_V1_BASE_URL}/cryptocurrency/map?aux=status,platform&listing_status=active,untracked&sort=cmc_rank`,
             { cache: 'force-cache' },
         )
-        return (response.data ?? [])
+        if (!response.data) return []
+        return response.data
             .filter((x) => x.status === 'active')
-            .map(
-                (x) =>
-                    ({
-                        id: String(x.id),
-                        name: x.name,
-                        symbol: x.symbol,
-                        contract_address: x.platform?.name === 'Ethereum' ? x.platform.token_address : undefined,
-                    } as TrendingAPI.Coin),
-            )
+            .map((x) => ({
+                id: String(x.id),
+                name: x.name,
+                symbol: x.symbol,
+                type: TokenType.Fungible,
+                contract_address: x.platform?.name === 'Ethereum' ? x.platform.token_address : undefined,
+            }))
     }
     async getHistorical(
         id: string,
@@ -284,6 +284,7 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
                 id,
                 name: coinInfo.name,
                 symbol: coinInfo.symbol,
+                type: TokenType.Fungible,
                 is_mirrored: isMirroredKeyword(coinInfo.symbol),
                 announcement_urls: coinInfo.urls.announcement?.filter(Boolean),
                 tech_docs_urls: coinInfo.urls.technical_doc?.filter(Boolean),

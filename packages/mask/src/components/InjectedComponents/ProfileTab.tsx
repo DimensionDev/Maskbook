@@ -1,4 +1,4 @@
-import { ReactElement, useCallback, useState } from 'react'
+import { ReactElement, useCallback, useEffect, useState } from 'react'
 import classnames from 'classnames'
 import { Typography } from '@mui/material'
 import { MaskMessages, useMatchXS, useLocationChange } from '../../utils'
@@ -33,6 +33,12 @@ export function ProfileTab(props: ProfileTabProps) {
         setActive(false)
         reset()
     })
+
+    useEffect(() => {
+        return MaskMessages.events.profileTabActive.on((data) => {
+            setActive(data.active)
+        })
+    }, [])
 
     return (
         <div key="nfts" className={classes.root}>

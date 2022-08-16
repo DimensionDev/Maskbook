@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { NetworkPluginID, Wallet } from '@masknet/web3-shared-base'
 import { makeStyles } from '@masknet/theme'
-import { MaskWalletIcon, SuccessIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { ListItem, ListItemText, Typography } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
 import { CopyIconButton } from '../../../components/CopyIconButton'
@@ -21,8 +21,9 @@ const useStyles = makeStyles()({
         alignItems: 'center',
     },
     copy: {
-        fontSize: 12,
-        fill: '#1C68F3',
+        width: 12,
+        height: 12,
+        color: '#1C68F3',
         marginLeft: 4,
         cursor: 'pointer',
     },
@@ -57,7 +58,7 @@ export const WalletItem = memo<WalletItemProps>(({ wallet, onClick, isSelected }
 
     return (
         <ListItem className={classes.item} onClick={onClick}>
-            <MaskWalletIcon />
+            <Icons.MaskWallet />
             <ListItemText className={classes.text}>
                 <div className={classes.listItem}>
                     <div>
@@ -72,7 +73,7 @@ export const WalletItem = memo<WalletItemProps>(({ wallet, onClick, isSelected }
                             <CopyIconButton className={classes.copy} text={wallet.address} />
                         </Typography>
                     </div>
-                    {isSelected ? <SuccessIcon /> : null}
+                    {isSelected ? <Icons.Success /> : null}
                 </div>
             </ListItemText>
         </ListItem>

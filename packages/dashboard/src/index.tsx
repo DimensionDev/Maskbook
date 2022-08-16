@@ -1,8 +1,5 @@
 // This entry is for developing dashboard as an isolated website.
 
-import type {} from 'react/next'
-import type {} from 'react-dom/next'
-
 import './initialization/isolated_bridge'
 import './initialization/i18n'
 import { StrictMode } from 'react'

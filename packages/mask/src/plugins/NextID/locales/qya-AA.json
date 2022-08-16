@@ -13,6 +13,7 @@
     "verify_Twitter_ID": "crwdns14738:0crwdne14738:0",
     "verify_other_Twitter_ID_intro": "crwdns14740:0crwdne14740:0",
     "verify_Twitter_ID_button": "crwdns14742:0crwdne14742:0",
+    "enable_plugin": "crwdns18118:0crwdne18118:0",
     "verify_wallet_button": "crwdns13083:0crwdne13083:0",
     "add_wallet_button": "crwdns13085:0crwdne13085:0",
     "verify_wallet_dialog_title": "crwdns13087:0crwdne13087:0",
@@ -22,6 +23,7 @@
     "persona_sign": "crwdns13095:0crwdne13095:0",
     "wallet_sign": "crwdns13097:0crwdne13097:0",
     "copied": "crwdns13099:0crwdne13099:0",
+    "provided_by": "crwdns18120:0crwdne18120:0",
     "view_on_explorer": "crwdns13101:0crwdne13101:0",
     "notify_persona_sign": "crwdns13103:0crwdne13103:0",
     "notify_persona_sign_confirm": "crwdns13105:0crwdne13105:0",
@@ -50,5 +52,7 @@
     "nft_not_belong_to_you": "crwdns14768:0crwdne14768:0",
     "send_tip_successfully": "crwdns14770:0crwdne14770:0",
     "send_specific_tip_successfully": "crwdns14772:0{{amount}}crwdnd14772:0{{name}}crwdne14772:0",
-    "search": "crwdns14780:0crwdne14780:0"
+    "search": "crwdns14780:0crwdne14780:0",
+    "web3_profile": "crwdns18122:0crwdne18122:0",
+    "mask_network": "crwdns18124:0crwdne18124:0"
 }

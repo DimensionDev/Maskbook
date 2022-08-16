@@ -1,5 +1,11 @@
 import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import type { CompositionRequest } from './Mask'
+import type {
+    CheckSecurityCloseConfirmDialogRequest,
+    CompositionRequest,
+    Web3ProfileDialogRequest,
+    CheckSecurityDialogRequest,
+    OpenApplicationRequestEvent,
+} from './Mask.js'
 
 /**
  * @deprecated
@@ -13,9 +19,12 @@ import type { CompositionRequest } from './Mask'
  *       e.g. packages/plugins/Example to the main Mask extension.
  */
 // TODO: find a way to use a good API for cross isolation communication.
-export const CrossIsolationMessages = new WebExtensionMessage<CrossIsolationEvents>({ domain: '_' })
+export const CrossIsolationMessages = new WebExtensionMessage<CrossIsolationEvents>({ domain: 'cross-isolation' })
 
 export interface CrossIsolationEvents {
     requestComposition: CompositionRequest
-    verifyNextID: void
+    requestWeb3ProfileDialog: Web3ProfileDialogRequest
+    requestCheckSecurityCloseConfirmDialog: CheckSecurityCloseConfirmDialogRequest
+    requestCheckSecurityDialog: CheckSecurityDialogRequest
+    requestOpenApplication: OpenApplicationRequestEvent
 }
