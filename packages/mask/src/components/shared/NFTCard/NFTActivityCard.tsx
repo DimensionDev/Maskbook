@@ -104,9 +104,10 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
                         {activity.to.nickname ||
                             (activity.to.address ? Others?.formatAddress(activity.to.address, 4) : '-')}
                     </strong>
-                    {formatDistanceToNow(new Date(activity.timestamp ?? 0), {
-                        addSuffix: true,
-                    })}
+                    {activity.timestamp &&
+                        formatDistanceToNow(new Date(activity.timestamp), {
+                            addSuffix: true,
+                        })}
                     <Link
                         className={classes.link}
                         href={Others?.explorerResolver.transactionLink(ChainId.Mainnet, activity.hash ?? '') ?? ''}
