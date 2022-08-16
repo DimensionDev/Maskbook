@@ -61,6 +61,7 @@ function NFTAvatarInTwitter() {
     const { value: _avatar } = usePersonaNFTAvatar(
         identity.identifier?.userId ?? '',
         getAvatarId(identity.avatar ?? ''),
+        '',
         RSS3_KEY_SNS.TWITTER,
     )
     const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
