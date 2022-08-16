@@ -30,12 +30,12 @@ export const ciBuild: TaskFunction = series(
         'MaskNetwork.chromium-mv3.zip',
     ),
     buildTarget(
-        'Firefox-e2e',
+        'Firefox-E2E',
         { firefox: true, e2e: true, 'output-path': 'build-firefox-e2e' },
         'MaskNetwork.firefox-e2e.zip',
     ),
     buildTarget(
-        'Chromium-e2e',
+        'Chromium-E2E',
         { chromium: true, e2e: true, 'output-path': 'build-chromium-e2e' },
         'MaskNetwork.chromium-e2e.zip',
     ),

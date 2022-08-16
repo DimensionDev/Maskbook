@@ -78,7 +78,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: MaskNetwork.chromium-e2e.zip
-          path: MaskNetwork.chromium-e2e.zip
+          path: masknetwork.chromium-e2e.zip
       - name: Upload `MaskNetwork.firefox.zip`
         uses: actions/upload-artifact@v3
         with:
@@ -89,7 +89,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: MaskNetwork.firefox-e2e.zip
-          path: MaskNetwork.firefox-e2e.zip
+          path: masknetwork.firefox-e2e.zip
       - name: Upload `MaskNetwork.gecko.zip`
         uses: actions/upload-artifact@v3
         with:
