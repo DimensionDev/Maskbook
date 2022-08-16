@@ -447,6 +447,8 @@ export namespace Plugin.SNSAdaptor {
         ApplicationEntries?: ApplicationEntry[]
         /** This UI will be rendered as tabs on the profile page */
         ProfileTabs?: ProfileTab[]
+        /** This UI will be rendered as tabs on the profile card */
+        ProfileCardTabs?: ProfileTab[]
         /** This UI will be rendered as cover on the profile page */
         ProfileCover?: ProfileCover[]
         /** This UI will be rendered as tabs on the profile card */

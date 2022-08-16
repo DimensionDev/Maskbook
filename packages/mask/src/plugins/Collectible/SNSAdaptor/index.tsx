@@ -11,6 +11,41 @@ import { NFTPage } from './NFTPage'
 import { SocialAddressType } from '@masknet/web3-shared-base'
 import { setupContext } from '../context'
 
+const NFTTab: Plugin.SNSAdaptor.ProfileTab = {
+    ID: `${PLUGIN_ID}_nfts`,
+    label: 'NFTs',
+    priority: 1,
+    UI: {
+        TabContent: NFTPage,
+    },
+    Utils: {
+        sorter: (a, z) => {
+            if (a.type === SocialAddressType.ENS) return -1
+            if (z.type === SocialAddressType.ENS) return 1
+
+            if (a.type === SocialAddressType.UNS) return -1
+            if (z.type === SocialAddressType.UNS) return 1
+
+            if (a.type === SocialAddressType.DNS) return -1
+            if (z.type === SocialAddressType.DNS) return 1
+
+            if (a.type === SocialAddressType.RSS3) return -1
+            if (z.type === SocialAddressType.RSS3) return 1
+
+            if (a.type === SocialAddressType.ADDRESS) return -1
+            if (z.type === SocialAddressType.ADDRESS) return 1
+
+            if (a.type === SocialAddressType.GUN) return -1
+            if (z.type === SocialAddressType.GUN) return 1
+
+            if (a.type === SocialAddressType.THE_GRAPH) return -1
+            if (z.type === SocialAddressType.THE_GRAPH) return 1
+
+            return 0
+        },
+    },
+}
+
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal, context) {
@@ -31,40 +66,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
         usePluginWrapper(!!asset)
         return asset ? <PostInspector payload={asset} /> : null
     },
-    ProfileTabs: [
+    ProfileTabs: [NFTTab],
+    ProfileCardTabs: [
         {
-            ID: `${PLUGIN_ID}_nfts`,
-            label: 'NFTs',
-            priority: 1,
-            UI: {
-                TabContent: NFTPage,
-            },
-            Utils: {
-                sorter: (a, z) => {
-                    if (a.type === SocialAddressType.ENS) return -1
-                    if (z.type === SocialAddressType.ENS) return 1
-
-                    if (a.type === SocialAddressType.UNS) return -1
-                    if (z.type === SocialAddressType.UNS) return 1
-
-                    if (a.type === SocialAddressType.DNS) return -1
-                    if (z.type === SocialAddressType.DNS) return 1
-
-                    if (a.type === SocialAddressType.RSS3) return -1
-                    if (z.type === SocialAddressType.RSS3) return 1
-
-                    if (a.type === SocialAddressType.ADDRESS) return -1
-                    if (z.type === SocialAddressType.ADDRESS) return 1
-
-                    if (a.type === SocialAddressType.GUN) return -1
-                    if (z.type === SocialAddressType.GUN) return 1
-
-                    if (a.type === SocialAddressType.THE_GRAPH) return -1
-                    if (z.type === SocialAddressType.THE_GRAPH) return 1
-
-                    return 0
-                },
-            },
+            ...NFTTab,
+            priority: 2,
         },
     ],
     ApplicationEntries: [

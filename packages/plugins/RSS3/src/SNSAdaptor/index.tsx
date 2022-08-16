@@ -76,6 +76,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
         setupContext(context)
     },
     ProfileTabs: [DonationsTabConfig, FootprintsTabConfig, ActivitiesTabConfig],
+    ProfileCardTabs: [
+        { ...ActivitiesTabConfig, priority: 1 },
+        { ...FootprintsTabConfig, label: 'POAPs', priority: 3 },
+    ],
 }
 
 export default sns

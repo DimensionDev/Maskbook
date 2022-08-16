@@ -25,7 +25,7 @@ interface Props extends withClasses<'text' | 'button' | 'root'> {
 
 function getTabContent(tabId?: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
-        const tab = x.ProfileTabs?.find((x) => x.ID === tabId)
+        const tab = x.ProfileCardTabs?.find((x) => x.ID === tabId)
         return tab?.UI?.TabContent
     })
 }
@@ -164,11 +164,11 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
     const displayPlugins = useAvailablePlugins(activatedPlugins, (plugins) => {
         return plugins
-            .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
+            .flatMap((x) => x.ProfileCardTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
             .filter((x) => {
-                const isRSS3 = x.pluginID === PluginId.RSS3
+                const isAllowed = x.pluginID === PluginId.RSS3 || x.pluginID === PluginId.Collectible
                 const shouldDisplay = x.Utils?.shouldDisplay?.(identity, selectedAddress) ?? true
-                return isRSS3 && shouldDisplay
+                return isAllowed && shouldDisplay
             })
             .sort((a, z) => a.priority - z.priority)
     })

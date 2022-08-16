@@ -17,11 +17,13 @@ export function injectProfileCardHolder(signal: AbortSignal) {
     createReactRootShadowed(root.shadowRoot, { signal }).render(<ProfileCardHolder />)
 }
 
+const CARD_WIDTH = 450
+const CARD_HEIGHT = 500
 const useStyles = makeStyles()((theme) => ({
     root: {
         position: 'absolute',
-        width: 450,
-        height: 500,
+        width: CARD_WIDTH,
+        height: CARD_HEIGHT,
         backgroundColor: theme.palette.background.default,
         boxShadow: theme.palette.mode === 'light' ? '0px 4px 30px rgba(0, 0, 0, 0.1)' : undefined,
     },
@@ -46,7 +48,7 @@ function ProfileCardHolder() {
                 return {
                     ...old,
                     visibility: 'visible',
-                    left: x,
+                    left: x - CARD_WIDTH / 2,
                     top: y,
                 }
             })
