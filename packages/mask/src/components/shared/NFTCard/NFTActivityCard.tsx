@@ -104,7 +104,7 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
                         {activity.to.nickname ||
                             (activity.to.address ? Others?.formatAddress(activity.to.address, 4) : '-')}
                     </strong>
-                    {formatDistanceToNow(Math.round(activity.timestamp / 1000), {
+                    {formatDistanceToNow(new Date(activity.timestamp ?? 0), {
                         addSuffix: true,
                     })}
                     <Link
