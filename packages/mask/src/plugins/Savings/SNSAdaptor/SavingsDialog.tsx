@@ -9,8 +9,6 @@ import {
     SchemaType,
     getAaveConstants,
     ZERO_ADDRESS,
-    networkResolver,
-    NetworkType,
 } from '@masknet/web3-shared-evm'
 import { PluginWalletStatusBar, useI18N } from '../../../utils'
 import { InjectedDialog } from '@masknet/shared'
@@ -37,6 +35,8 @@ export interface SavingsDialogProps {
     onClose?: () => void
 }
 
+const chains = [ChainId.Mainnet]
+
 export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const { t } = useI18N()
     const isDashboard = isDashboardPage()
@@ -48,10 +48,6 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
 
     const [tab, setTab] = useState<TabType>(TabType.Deposit)
     const [selectedProtocol, setSelectedProtocol] = useState<SavingsProtocol | null>(null)
-
-    const chains = useMemo(() => {
-        return [NetworkType.Ethereum].map((network: NetworkType) => networkResolver.networkChainId(network))
-    }, [])
 
     const { value: aaveTokens } = useAsync(async () => {
         if (!open || chainId !== ChainId.Mainnet) {
@@ -95,7 +91,11 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     )
 
     useUpdateEffect(() => {
-        setChainId(currentChainId)
+        if (chains.includes(currentChainId)) {
+            setChainId(currentChainId)
+        } else {
+            setChainId(ChainId.Mainnet)
+        }
     }, [currentChainId])
 
     const [currentTab, onChange, tabs] = useTabs('Deposit', 'Withdraw')
