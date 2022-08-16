@@ -23,7 +23,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     emptyText: {
         fontSize: 14,
-        color: theme.palette.maskColor.second,
+        color: theme.palette.maskColor.publicSecond,
     },
 }))
 

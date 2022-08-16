@@ -10,6 +10,7 @@ import type {
     ReturnProviderResolver,
 } from '../utils'
 
+
 export interface Pageable<Item, Indicator = unknown> {
     /** the indicator of the current page */
     indicator: Indicator

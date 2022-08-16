@@ -41,12 +41,13 @@ const useStyles = makeStyles()((theme) => {
             flex: 1,
             backgroundColor: theme.palette.maskColor.white,
             overflow: 'auto',
-            maxHeight: 350,
+            maxHeight: 800,
             borderRadius: '0 0 12px 12px',
             scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
+            background: '#fff !important',
         },
         footer: {
             marginTop: -1, // merge duplicate borders
@@ -64,6 +65,18 @@ const useStyles = makeStyles()((theme) => {
         },
         tab: {
             whiteSpace: 'nowrap',
+            background: 'transparent',
+            color: theme.palette.maskColor.publicMain,
+            '&:hover': {
+                background: 'transparent',
+            },
+        },
+        tabActive: {
+            background: '#fff',
+            color: theme.palette.maskColor.publicMain,
+            '&:hover': {
+                background: '#fff',
+            },
         },
         subtitle: {
             fontSize: 14,
@@ -111,6 +124,9 @@ const useStyles = makeStyles()((theme) => {
             display: '-webkit-box',
             webkitBoxOrient: 'vertical',
             webkitLineClamp: '3',
+            '& > p': {
+                color: `${theme.palette.maskColor.publicSecond} !important`,
+            },
         },
         cardTitle: {
             fontSize: 16,
@@ -195,6 +211,12 @@ export function Collectible(props: CollectibleProps) {
 
         return tabMap[currentTab] || null
     }
+    const Tabs = [
+        { value: tabs.about, label: t('plugin_collectible_about') },
+        { value: tabs.details, label: t('plugin_collectible_details') },
+        { value: tabs.offers, label: t('plugin_collectible_offers') },
+        { value: tabs.activity, label: t('plugin_collectible_activity') },
+    ]
     return (
         <>
             <CollectibleCard classes={{ root: classes.root }}>
@@ -211,7 +233,7 @@ export function Collectible(props: CollectibleProps) {
                     }
                     title={
                         <Typography style={{ display: 'flex', alignItems: 'center' }}>
-                            <Typography className={classes.cardTitle}>{_asset.metadata?.name ?? ''}</Typography>
+                            <Typography className={classes.cardTitle}>{_asset.metadata?.name ?? '-'}</Typography>
                             {_asset.collection?.verified ? <Icons.VerifiedCollection sx={{ marginLeft: 0.5 }} /> : null}
                         </Typography>
                     }
@@ -222,7 +244,7 @@ export function Collectible(props: CollectibleProps) {
                                     <Typography className={classes.subtitle} component="div" variant="body2">
                                         <Markdown
                                             classes={{ root: classes.markdown }}
-                                            content={_asset.metadata.description}
+                                            content={_asset.metadata.description ?? '-'}
                                         />
                                     </Typography>
                                 </Box>
@@ -233,14 +255,14 @@ export function Collectible(props: CollectibleProps) {
                 <CardContent className={classes.content}>
                     <TabContext value={currentTab}>
                         <MaskTabList variant="base" aria-label="collectible" onChange={onChange}>
-                            <Tab className={classes.tab} value={tabs.about} label={t('plugin_collectible_about')} />
-                            <Tab className={classes.tab} value={tabs.details} label={t('plugin_collectible_details')} />
-                            <Tab className={classes.tab} value={tabs.offers} label={t('plugin_collectible_offers')} />
-                            <Tab
-                                className={classes.tab}
-                                value={tabs.activity}
-                                label={t('plugin_collectible_activity')}
-                            />
+                            {Tabs.map((x) => (
+                                <Tab
+                                    key={x.value}
+                                    className={x.value === currentTab ? classes.tabActive : classes.tab}
+                                    value={x.value}
+                                    label={x.label}
+                                />
+                            ))}
                         </MaskTabList>
                     </TabContext>
                     <Paper className={classes.body}>{renderTab()}</Paper>
