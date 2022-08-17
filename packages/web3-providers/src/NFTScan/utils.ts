@@ -1,8 +1,8 @@
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
-import { CurrencyType, NonFungibleAsset, TokenType } from '@masknet/web3-shared-base'
-import { ChainId, createContract, getRPCConstants, SchemaType } from '@masknet/web3-shared-evm'
-import { first } from 'lodash-unified'
+import { CurrencyType, NonFungibleAsset, scale10, TokenType } from '@masknet/web3-shared-base'
+import { ChainId, createContract, getRPCConstants, SchemaType, WNATIVE } from '@masknet/web3-shared-evm'
+import { chain, first } from 'lodash-unified'
 import LRUCache from 'lru-cache'
 import type { ParamMap } from 'urlcat'
 import urlcat from 'urlcat'
@@ -96,9 +96,12 @@ export function createERC721TokenAsset(asset: NFTScanAsset): NonFungibleAsset<Ch
             link: urlcat(NFTSCAN_BASE + '/:id', { id: owner }),
         },
         traits: [],
-        price: {
-            [CurrencyType.USD]: asset.latest_trade_price ?? '0',
-        },
+        priceInToken: asset.latest_trade_price
+            ? {
+                  amount: asset.latest_trade_price,
+                  token: WNATIVE[chainId],
+              }
+            : undefined,
         metadata: {
             chainId,
             name,
