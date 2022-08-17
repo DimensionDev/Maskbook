@@ -86,8 +86,10 @@ export function PersonaItem(props: PersonaItemProps) {
         onSelect?.(proof, _avatar ? tokenDetailed : undefined)
     }, [_avatar, proof])
 
+    const inactive = !owner || !proof
+
     return (
-        <ListItemButton className={classes.root} onClick={onClick} disabled={!owner || !proof}>
+        <ListItemButton className={classes.root} onClick={onClick} disabled={inactive}>
             <NFTAvatar
                 owner={owner}
                 avatar={avatar || _avatar?.imageUrl}
@@ -105,7 +107,7 @@ export function PersonaItem(props: PersonaItemProps) {
 
             <NFTInfo
                 loading={loading}
-                tooltip={!owner || !proof ? t.persona_tooltips() : ''}
+                tooltip={inactive ? t.inactive_persona_tooltip() : ''}
                 isNFT={Boolean(_avatar)}
             />
 
