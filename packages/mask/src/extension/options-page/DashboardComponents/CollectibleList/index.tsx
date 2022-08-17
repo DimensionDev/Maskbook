@@ -45,13 +45,15 @@ const useStyles = makeStyles<{ columns?: number }>()((theme, { columns = 3 }) =>
         display: 'grid',
         gridTemplateColumns: `repeat(${columns}, 1fr)`,
         gridGap: theme.spacing(2),
+        padding: theme.spacing(0, 2, 0),
+        boxSizing: 'border-box',
     },
     collectibleItem: {
         overflowX: 'hidden',
     },
     container: {
-        paddingLeft: theme.spacing(1),
         boxSizing: 'border-box',
+        paddingTop: theme.spacing(2),
     },
     text: {
         display: 'flex',
@@ -114,7 +116,6 @@ const useStyles = makeStyles<{ columns?: number }>()((theme, { columns = 3 }) =>
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: '8px',
         marginBottom: '12px',
         minWidth: 30,
         maxHeight: 24,
@@ -174,10 +175,12 @@ export function CollectionList({
     addressName,
     persona,
     profile,
+    disableSidebar = false,
 }: {
     addressName: SocialAddress<NetworkPluginID>
     persona?: string
     profile?: SocialIdentity
+    disableSidebar?: boolean
 }) {
     const { t } = useI18N()
     const { classes } = useStyles({})
@@ -250,7 +253,7 @@ export function CollectionList({
             <Box className={classes.container}>
                 <Stack spacing={1} direction="row" mt={1.5}>
                     <LoadingSkeleton className={classes.root} />
-                    <Box width="30px" />
+                    {disableSidebar ? null : <Box width="30px" />}
                 </Stack>
             </Box>
         )
@@ -269,7 +272,7 @@ export function CollectionList({
 
     return (
         <Box className={classes.container}>
-            <Stack spacing={1} direction="row" mt={1.5}>
+            <Stack direction="row">
                 <Box sx={{ flexGrow: 1 }}>
                     <Box>
                         {selectedCollection && (
@@ -300,30 +303,32 @@ export function CollectionList({
                         {!done && <LoadingBase />}
                     </ElementAnchor>
                 </Box>
-                <Box width="30px">
-                    {collectionsWithName.length ? (
-                        <Box>
-                            <Box className={classes.collectionButton}>
-                                <AllButton
-                                    className={classes.networkSelected}
-                                    onClick={() => setSelectedCollection(undefined)}>
-                                    ALL
-                                </AllButton>
-                            </Box>
-                            {collectionsWithName.map((x, i) => (
-                                <Box key={i} className={classes.collectionButton}>
-                                    <CollectionIcon
-                                        selectedCollection={selectedCollection?.address}
-                                        collection={x}
-                                        onClick={() => {
-                                            setSelectedCollection(x)
-                                        }}
-                                    />
+                {disableSidebar ? null : (
+                    <Box width="30px">
+                        {collectionsWithName.length ? (
+                            <Box>
+                                <Box className={classes.collectionButton}>
+                                    <AllButton
+                                        className={classes.networkSelected}
+                                        onClick={() => setSelectedCollection(undefined)}>
+                                        ALL
+                                    </AllButton>
                                 </Box>
-                            ))}
-                        </Box>
-                    ) : null}
-                </Box>
+                                {collectionsWithName.map((x, i) => (
+                                    <Box key={i} className={classes.collectionButton}>
+                                        <CollectionIcon
+                                            selectedCollection={selectedCollection?.address}
+                                            collection={x}
+                                            onClick={() => {
+                                                setSelectedCollection(x)
+                                            }}
+                                        />
+                                    </Box>
+                                ))}
+                            </Box>
+                        ) : null}
+                    </Box>
+                )}
             </Stack>
         </Box>
     )

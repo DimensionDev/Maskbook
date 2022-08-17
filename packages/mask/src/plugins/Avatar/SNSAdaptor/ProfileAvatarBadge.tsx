@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { IconButton, IconButtonProps } from '@mui/material'
-import { FC, MouseEventHandler, useCallback, useRef } from 'react'
+import { FC, useEffect, useRef } from 'react'
 
 interface Props extends IconButtonProps {
     userId: string
@@ -9,9 +9,9 @@ interface Props extends IconButtonProps {
 
 export const ProfileAvatarBadge: FC<Props> = ({ userId, ...rest }) => {
     const buttonRef = useRef<HTMLButtonElement>(null)
-    const openProfileCard: MouseEventHandler<HTMLButtonElement> = useCallback(
-        (event) => {
-            event.stopPropagation()
+
+    useEffect(() => {
+        const enter = () => {
             const button = buttonRef.current
             if (!button) return
             const boundingRect = button.getBoundingClientRect()
@@ -22,13 +22,16 @@ export const ProfileAvatarBadge: FC<Props> = ({ userId, ...rest }) => {
                 x,
                 y,
             })
-        },
-        [userId],
-    )
+        }
+        buttonRef.current?.addEventListener('mouseenter', enter)
+        return () => {
+            buttonRef.current?.removeEventListener('mouseenter', enter)
+        }
+    }, [])
 
     return (
-        <IconButton disableRipple sx={{ padding: 0 }} {...rest} onClick={openProfileCard} ref={buttonRef}>
-            <Icons.MaskBlue size={12} />
+        <IconButton disableRipple sx={{ padding: 0 }} {...rest} ref={buttonRef}>
+            <Icons.MaskBlue size={16} />
         </IconButton>
     )
 }

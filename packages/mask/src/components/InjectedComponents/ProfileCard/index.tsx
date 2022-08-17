@@ -86,7 +86,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     content: {
         position: 'relative',
-        height: 300,
+        height: 400,
         overflow: 'auto',
     },
     walletButton: {
@@ -149,7 +149,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         value: socialAddressList = EMPTY_LIST,
         loading: loadingSocialAddressList,
         retry: retrySocialAddress,
-    } = useSocialAddressListAll(identity, isMyIdentity ? [SocialAddressType.NEXT_ID] : undefined, sorter)
+    } = useSocialAddressListAll(identity, undefined, sorter)
 
     console.log('avatar address list', { isMyIdentity }, identity.identifier?.userId, socialAddressList)
 
@@ -232,111 +232,109 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
 
     return (
         <div className={classes.root}>
-            <div>
-                {tabs.length > 0 && (
-                    <div className={classes.container}>
-                        <div className={classes.title}>
-                            <div className={classes.walletItem}>
-                                <Button
-                                    id="demo-positioned-button"
-                                    variant="text"
-                                    size="small"
-                                    onClick={onOpen}
-                                    className={classes.walletButton}>
-                                    <AddressItem
-                                        reverse={
-                                            selectedAddress?.type === SocialAddressType.KV ||
-                                            selectedAddress?.type === SocialAddressType.ADDRESS ||
-                                            selectedAddress?.type === SocialAddressType.NEXT_ID
-                                        }
-                                        iconProps={classes.mainLinkIcon}
-                                        TypographyProps={{
-                                            fontSize: '18px',
-                                            fontWeight: 700,
-                                            color: (theme) => theme.palette.maskColor.dark,
-                                        }}
-                                        identityAddress={selectedAddress}
-                                    />
-                                    <Icons.ArrowDrop className={classes.arrowDropIcon} />
-                                </Button>
-                                <ShadowRootMenu
-                                    anchorEl={anchorEl}
-                                    open={Boolean(anchorEl)}
-                                    PaperProps={{
-                                        className: classes.addressMenu,
+            {tabs.length > 0 && (
+                <div className={classes.container}>
+                    <div className={classes.title}>
+                        <div className={classes.walletItem}>
+                            <Button
+                                id="demo-positioned-button"
+                                variant="text"
+                                size="small"
+                                onClick={onOpen}
+                                className={classes.walletButton}>
+                                <AddressItem
+                                    reverse={
+                                        selectedAddress?.type === SocialAddressType.KV ||
+                                        selectedAddress?.type === SocialAddressType.ADDRESS ||
+                                        selectedAddress?.type === SocialAddressType.NEXT_ID
+                                    }
+                                    iconProps={classes.mainLinkIcon}
+                                    TypographyProps={{
+                                        fontSize: '18px',
+                                        fontWeight: 700,
+                                        color: (theme) => theme.palette.maskColor.dark,
                                     }}
-                                    aria-labelledby="demo-positioned-button"
-                                    onClose={() => setAnchorEl(null)}>
-                                    {uniqBy(socialAddressList ?? [], (x) => x.address.toLowerCase()).map((x) => {
-                                        return (
-                                            <MenuItem key={x.address} value={x.address} onClick={() => onSelect(x)}>
-                                                <div className={classes.menuItem}>
-                                                    <div className={classes.addressItem}>
-                                                        <AddressItem
-                                                            reverse={
-                                                                x.type === SocialAddressType.KV ||
-                                                                x.type === SocialAddressType.ADDRESS ||
-                                                                x.type === SocialAddressType.NEXT_ID
-                                                            }
-                                                            identityAddress={x}
-                                                            iconProps={classes.secondLinkIcon}
-                                                        />
-                                                        {x?.type === SocialAddressType.NEXT_ID && <Icons.Verified />}
-                                                    </div>
-                                                    {isSameAddress(selectedAddress?.address, x.address) && (
-                                                        <Icons.Selected className={classes.selectedIcon} />
-                                                    )}
+                                    identityAddress={selectedAddress}
+                                />
+                                <Icons.ArrowDrop className={classes.arrowDropIcon} />
+                            </Button>
+                            <ShadowRootMenu
+                                anchorEl={anchorEl}
+                                open={Boolean(anchorEl)}
+                                PaperProps={{
+                                    className: classes.addressMenu,
+                                }}
+                                aria-labelledby="demo-positioned-button"
+                                onClose={() => setAnchorEl(null)}>
+                                {uniqBy(socialAddressList ?? [], (x) => x.address.toLowerCase()).map((x) => {
+                                    return (
+                                        <MenuItem key={x.address} value={x.address} onClick={() => onSelect(x)}>
+                                            <div className={classes.menuItem}>
+                                                <div className={classes.addressItem}>
+                                                    <AddressItem
+                                                        reverse={
+                                                            x.type === SocialAddressType.KV ||
+                                                            x.type === SocialAddressType.ADDRESS ||
+                                                            x.type === SocialAddressType.NEXT_ID
+                                                        }
+                                                        identityAddress={x}
+                                                        iconProps={classes.secondLinkIcon}
+                                                    />
+                                                    {x?.type === SocialAddressType.NEXT_ID && <Icons.Verified />}
                                                 </div>
-                                            </MenuItem>
-                                        )
-                                    })}
-                                </ShadowRootMenu>
-                            </div>
-                            <div className={classes.settingItem}>
-                                <Typography
-                                    fontSize="14px"
-                                    fontWeight={700}
-                                    marginRight="5px"
-                                    color={(theme) => theme.palette.maskColor.secondaryDark}>
-                                    {t('powered_by')}
-                                </Typography>
-                                <Typography
-                                    fontSize="14px"
-                                    fontWeight={700}
-                                    marginRight="4px"
-                                    color={(theme) => theme.palette.maskColor.dark}>
-                                    {t('mask_network')}
-                                </Typography>
-                                {isMyIdentity ? (
-                                    <Icons.Gear
-                                        variant="light"
-                                        onClick={handleOpenDialog}
-                                        className={classes.gearIcon}
-                                        sx={{ cursor: 'pointer' }}
-                                    />
-                                ) : (
-                                    <Link
-                                        className={classes.settingLink}
-                                        href="https://mask.io"
-                                        target="_blank"
-                                        rel="noopener noreferrer">
-                                        <Icons.LinkOut className={classes.linkOutIcon} size={20} />
-                                    </Link>
-                                )}
-                            </div>
+                                                {isSameAddress(selectedAddress?.address, x.address) && (
+                                                    <Icons.Selected className={classes.selectedIcon} />
+                                                )}
+                                            </div>
+                                        </MenuItem>
+                                    )
+                                })}
+                            </ShadowRootMenu>
                         </div>
-                        <div className={classes.tabs}>
-                            <TabContext value={currentTab}>
-                                <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
-                                    {tabs.map((tab) => (
-                                        <Tab key={tab.id} label={tab.label} value={tab.id} />
-                                    ))}
-                                </MaskTabList>
-                            </TabContext>
+                        <div className={classes.settingItem}>
+                            <Typography
+                                fontSize="14px"
+                                fontWeight={700}
+                                marginRight="5px"
+                                color={(theme) => theme.palette.maskColor.secondaryDark}>
+                                {t('powered_by')}
+                            </Typography>
+                            <Typography
+                                fontSize="14px"
+                                fontWeight={700}
+                                marginRight="4px"
+                                color={(theme) => theme.palette.maskColor.dark}>
+                                {t('mask_network')}
+                            </Typography>
+                            {isMyIdentity ? (
+                                <Icons.Gear
+                                    variant="light"
+                                    onClick={handleOpenDialog}
+                                    className={classes.gearIcon}
+                                    sx={{ cursor: 'pointer' }}
+                                />
+                            ) : (
+                                <Link
+                                    className={classes.settingLink}
+                                    href="https://mask.io"
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    <Icons.LinkOut className={classes.linkOutIcon} size={20} />
+                                </Link>
+                            )}
                         </div>
                     </div>
-                )}
-            </div>
+                    <div className={classes.tabs}>
+                        <TabContext value={currentTab}>
+                            <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
+                                {tabs.map((tab) => (
+                                    <Tab key={tab.id} label={tab.label} value={tab.id} />
+                                ))}
+                            </MaskTabList>
+                        </TabContext>
+                    </div>
+                </div>
+            )}
             <div className={classes.content}>{component}</div>
         </div>
     )

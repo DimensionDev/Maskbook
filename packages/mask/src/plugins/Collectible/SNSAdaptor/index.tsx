@@ -16,7 +16,9 @@ const NFTTab: Plugin.SNSAdaptor.ProfileTab = {
     label: 'NFTs',
     priority: 1,
     UI: {
-        TabContent: NFTPage,
+        TabContent({ socialAddress, identity }) {
+            return <NFTPage socialAddress={socialAddress} identity={identity} />
+        },
     },
     Utils: {
         sorter: (a, z) => {
@@ -71,6 +73,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
         {
             ...NFTTab,
             priority: 2,
+            UI: {
+                TabContent({ socialAddress, identity }) {
+                    return <NFTPage socialAddress={socialAddress} identity={identity} disableSidebar />
+                },
+            },
             Utils: {
                 ...NFTTab.Utils,
                 shouldDisplay(identity, socialAddress) {

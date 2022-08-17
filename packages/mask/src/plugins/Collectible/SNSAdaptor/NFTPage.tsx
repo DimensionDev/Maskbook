@@ -4,10 +4,17 @@ import { CollectionList } from '../../../extension/options-page/DashboardCompone
 export interface NFTPageProps {
     identity?: SocialIdentity
     socialAddress?: SocialAddress<NetworkPluginID>
+    disableSidebar?: boolean
 }
 
-export function NFTPage({ socialAddress, identity }: NFTPageProps) {
+export function NFTPage({ socialAddress, identity, disableSidebar }: NFTPageProps) {
     if (!socialAddress) return null
-
-    return <CollectionList addressName={socialAddress} persona={identity?.publicKey} profile={identity} />
+    return (
+        <CollectionList
+            addressName={socialAddress}
+            persona={identity?.publicKey}
+            disableSidebar={disableSidebar}
+            profile={identity}
+        />
+    )
 }

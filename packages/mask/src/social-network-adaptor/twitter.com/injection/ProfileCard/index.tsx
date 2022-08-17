@@ -1,6 +1,7 @@
 import { CrossIsolationMessages, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Twitter } from '@masknet/web3-providers'
+import { CircularProgress } from '@mui/material'
 import { CSSProperties, useEffect, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
 import { ProfileCard } from '../../../../components/InjectedComponents/ProfileCard'
@@ -26,6 +27,15 @@ const useStyles = makeStyles()((theme) => ({
         height: CARD_HEIGHT,
         backgroundColor: theme.palette.background.paper,
         boxShadow: theme.palette.mode === 'light' ? '0px 4px 30px rgba(0, 0, 0, 0.1)' : undefined,
+        borderRadius: theme.spacing(1.5),
+        overflow: 'hidden',
+    },
+    loading: {
+        height: '100%',
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 }))
 
@@ -33,7 +43,6 @@ function ProfileCardHolder() {
     const { classes } = useStyles()
     const [style, setStyle] = useState<CSSProperties>({
         visibility: 'hidden',
-        border: '1px solid #eee',
         borderRadius: 10,
     })
     const holderRef = useRef<HTMLDivElement>(null)
@@ -43,13 +52,15 @@ function ProfileCardHolder() {
         return CrossIsolationMessages.events.requestOpenProfileCard.on(({ userId, x, y }) => {
             setTwitterId(userId)
             setStyle((old) => {
+                const newLeft = x - CARD_WIDTH / 2
+                const newTop = y
                 const { visibility, left, top } = old
-                if (visibility === 'visible' && left === x && top === y) return old
+                if (visibility === 'visible' && left === newLeft && top === newTop) return old
                 return {
                     ...old,
                     visibility: 'visible',
-                    left: x - CARD_WIDTH / 2,
-                    top: y,
+                    left: newLeft,
+                    top: newTop,
                 }
             })
         })
@@ -72,7 +83,6 @@ function ProfileCardHolder() {
         })
     }, [])
 
-    console.log('twitterId', twitterId)
     const { value: identity, loading } = useAsync(async () => {
         if (!twitterId) return null
         const user = await Twitter.getUserByScreenName(twitterId)
@@ -95,11 +105,13 @@ function ProfileCardHolder() {
 
     return (
         <div className={classes.root} style={style} ref={holderRef}>
-            profile card holder
-            <div>{identity?.nickname}</div>
-            <div>{identity?.homepage}</div>
-            <div>{identity?.identifier?.userId}</div>
-            {loading ? <span>loading</span> : identity ? <ProfileCard identity={identity} /> : null}
+            {loading ? (
+                <div className={classes.loading}>
+                    <CircularProgress size={36} />
+                </div>
+            ) : identity ? (
+                <ProfileCard identity={identity} />
+            ) : null}
         </div>
     )
 }
