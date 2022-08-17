@@ -1,7 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
-import { Typography } from '@mui/material'
-import { Link } from 'react-feather'
+import { Typography, Link } from '@mui/material'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import type { NonFungibleTokenEvent } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -104,7 +103,9 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
                         {(activity.paymentToken?.logoURL && (
                             <img width={24} height={24} src={activity.paymentToken?.logoURL} alt="" />
                         )) || (
-                            <Typography className={classes.fallbackSymbol}>{activity.paymentToken?.symbol}</Typography>
+                            <Typography className={classes.fallbackSymbol}>
+                                {activity.paymentToken?.symbol || activity.paymentToken?.name}
+                            </Typography>
                         )}
                         <Typography className={classes.salePriceText}>{activity.price?.usd ?? '-'}</Typography>
                     </div>

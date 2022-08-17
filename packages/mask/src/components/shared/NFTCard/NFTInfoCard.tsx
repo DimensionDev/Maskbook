@@ -75,7 +75,7 @@ export function NFTInfoCard(props: NFTInfoCardProps) {
         },
         {
             title: t('plugin_collectible_platform_costs', { platform: sourceType ?? SourceType.OpenSea }),
-            value: sourceType ? `${platformCosts[sourceType]}%` ?? '-' : '-',
+            value: sourceType && platformCosts[sourceType] ? `${platformCosts[sourceType]}%` : '-',
         },
     ]
     return (
