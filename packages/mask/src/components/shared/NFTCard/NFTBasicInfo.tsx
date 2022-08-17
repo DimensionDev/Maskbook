@@ -99,6 +99,9 @@ const useStyles = makeStyles()((theme) => ({
     providerIcon: {
         cursor: 'pointer',
     },
+    loadingFailImage: {
+        width: '100%',
+    },
 }))
 
 interface NFTBasicInfoProps {
@@ -114,7 +117,7 @@ export function NFTBasicInfo(props: NFTBasicInfoProps) {
     const { classes } = useStyles()
 
     const collectibleProviderOptions = getEnumAsArray(SourceType).filter((x) => providers.includes(x.value))
-
+    const fallbackImgURL = new URL('../assets/fallbackImg.svg', import.meta.url)
     const resourceUrl = asset.metadata?.imageURL ?? asset.metadata?.mediaURL
     return (
         <div className={classes.layout}>
@@ -129,11 +132,13 @@ export function NFTBasicInfo(props: NFTBasicInfoProps) {
                     })}
                 </div>
                 <NFTCardStyledAssetPlayer
+                    fallbackImage={fallbackImgURL}
                     url={resourceUrl}
                     classes={{
                         iframe: classes.iframe,
                         wrapper: classes.wrapper,
                         loadingPlaceholder: classes.loadingPlaceholder,
+                        loadingFailImage: classes.loadingFailImage,
                     }}
                     isNative={false}
                 />
