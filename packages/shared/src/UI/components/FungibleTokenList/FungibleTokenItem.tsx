@@ -147,8 +147,6 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
             return Others?.explorerResolver.fungibleTokenLink(token.chainId, token.address)
         }, [token.address, token.chainId, Others?.explorerResolver.fungibleTokenLink])
 
-        console.log(explorerLink)
-
         const action = useMemo(() => {
             if (mode === TokenListMode.Manage) {
                 if (source === 'personal')
