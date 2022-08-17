@@ -215,7 +215,6 @@ export function Collectible(props: CollectibleProps) {
         { value: tabs.offers, label: t('plugin_collectible_offers') },
         { value: tabs.activity, label: t('plugin_collectible_activity') },
     ]
-    console.log(asset.value, 'value')
     return (
         <>
             <CollectibleCard classes={{ root: classes.root }}>
