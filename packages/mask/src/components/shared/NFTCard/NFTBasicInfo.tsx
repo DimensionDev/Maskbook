@@ -100,7 +100,7 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
     },
     loadingFailImage: {
-        width: '100%',
+        height: 300,
     },
 }))
 
