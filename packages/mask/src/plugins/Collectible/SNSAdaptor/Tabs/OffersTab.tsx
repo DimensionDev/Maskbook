@@ -58,7 +58,7 @@ export const OffersTab = memo(() => {
         <CollectibleTab>
             <div className={classes.body} style={{ justifyContent: 'unset' }}>
                 {_orders?.map((x, idx) => (
-                    <NFTOfferCard provider={x.sourceType ?? provider} key={idx} offer={x} />
+                    <NFTOfferCard provider={provider} key={idx} offer={x} />
                 ))}
             </div>
         </CollectibleTab>

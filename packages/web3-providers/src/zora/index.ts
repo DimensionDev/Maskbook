@@ -15,7 +15,6 @@ import {
     NonFungibleTokenEvent,
     NonFungibleTokenOrder,
     OrderSide,
-    SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, createNativeToken, SchemaType } from '@masknet/web3-shared-evm'
@@ -162,7 +161,6 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
     private createNonFungibleOrderFromEvent(
         chainId: ChainId,
         event: Event<SaleEventProperty | V3AskEventProperty>,
-        sourceType?: SourceType,
     ): NonFungibleTokenOrder<ChainId, SchemaType> {
         const shared = {
             id: event.transactionInfo.transactionHash ?? `${event.transactionInfo.blockNumber}_${event.tokenId}`,
@@ -173,7 +171,6 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
                     : '',
             quantity: '1',
             hash: event.transactionInfo.transactionHash,
-            sourceType,
         }
 
         switch (event.eventType) {
@@ -263,9 +260,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             [EventType.SALE_EVENT, EventType.V1_MARKET_EVENT].includes(x.eventType),
         )
         const orders = events.length
-            ? events
-                  .map((x) => this.createNonFungibleOrderFromEvent(chainId, x, sourceType))
-                  .filter((x) => x.side === side)
+            ? events.map((x) => this.createNonFungibleOrderFromEvent(chainId, x)).filter((x) => x.side === side)
             : EMPTY_LIST
         return this.createPageable(orders, indicator)
     }

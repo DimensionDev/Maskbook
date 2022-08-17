@@ -11,7 +11,6 @@ import {
     NonFungibleTokenOrder,
     NonFungibleTokenStats,
     OrderSide,
-    SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, createERC20Token, formatWeiToEther, SchemaType } from '@masknet/web3-shared-evm'
@@ -122,7 +121,6 @@ function createNonFungibleEventFromEvent(chainId: ChainId, event: Event): NonFun
 function createNonFungibleTokenOrderFromOrder(
     chainId: ChainId,
     order: Order,
-    sourceType?: SourceType,
 ): NonFungibleTokenOrder<ChainId, SchemaType> {
     return {
         id: order.hash,
@@ -143,7 +141,6 @@ function createNonFungibleTokenOrderFromOrder(
             amount: order.price,
             token: createERC20Token(chainId, order.currencyAddress),
         },
-        sourceType,
     }
 }
 
@@ -242,7 +239,7 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         )
 
         if (!response?.data.length) return createPageable([], createIndicator(indicator))
-        const orders = response.data.map((x) => createNonFungibleTokenOrderFromOrder(chainId, x, sourceType))
+        const orders = response.data.map((x) => createNonFungibleTokenOrderFromOrder(chainId, x))
         return createPageable(
             orders,
             createIndicator(indicator),

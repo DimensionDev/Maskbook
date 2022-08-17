@@ -9,7 +9,6 @@ import {
     createNextIndicator,
     NonFungibleTokenEvent,
     NonFungibleTokenContract,
-    SourceType,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, createERC20Token, createNativeToken, isZeroAddress, SchemaType } from '@masknet/web3-shared-evm'
@@ -37,12 +36,7 @@ export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             tokenId,
         })
     }
-    createOrder(
-        address: string,
-        tokenId: string,
-        order: Order,
-        sourceType?: SourceType,
-    ): NonFungibleTokenOrder<ChainId, SchemaType> {
+    createOrder(address: string, tokenId: string, order: Order): NonFungibleTokenOrder<ChainId, SchemaType> {
         return {
             id: order.item_hash,
             chainId: ChainId.Mainnet,
@@ -68,7 +62,6 @@ export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
                     ? createNativeToken(ChainId.Mainnet)
                     : createERC20Token(ChainId.Mainnet, order.currency),
             },
-            sourceType,
         }
     }
 
@@ -139,9 +132,7 @@ export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             }),
         )
 
-        const offers = data
-            .filter((x) => x.type === 'buy')
-            .map((x) => this.createOrder(address, tokenId, x, options?.sourceType))
+        const offers = data.filter((x) => x.type === 'buy').map((x) => this.createOrder(address, tokenId, x))
 
         return createPageable(
             offers,
