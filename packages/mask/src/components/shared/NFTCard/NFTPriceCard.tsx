@@ -98,7 +98,7 @@ export function NFTPriceCard(props: NFTPriceCardProps) {
                         <img width={18} height={18} src={topOffer.priceInToken?.token.logoURL} alt="" />
                     )) || (
                         <Typography className={classes.fallbackSymbol}>
-                            {topOffer.priceInToken?.token.symbol || offer.priceInToken?.token.name}
+                            {topOffer.priceInToken?.token.symbol || topOffer.priceInToken?.token.name}
                         </Typography>
                     )}
                     <Typography className={classes.textBase}>
