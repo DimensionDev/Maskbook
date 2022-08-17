@@ -23,7 +23,6 @@ import {
     formatBalance,
     NonFungibleTokenStats,
     HubIndicator,
-    Pageable,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, createNativeToken, createERC20Token } from '@masknet/web3-shared-evm'
 import type { NonFungibleTokenAPI, TrendingAPI } from '../types'
