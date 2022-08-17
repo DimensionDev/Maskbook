@@ -3,7 +3,6 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Skeleton, Typography } from '@mui/material'
 import { range } from 'lodash-unified'
 import type { FC } from 'react'
-import { useI18N } from '../../locales'
 
 interface Props {
     loading?: boolean
@@ -27,7 +26,6 @@ const useStyles = makeStyles()((theme) => ({
 
 export const StatusBox: FC<Props> = ({ loading, empty, description }) => {
     const { classes } = useStyles()
-    const t = useI18N()
     if (loading) {
         return (
             <Box margin="16px 0 0 16px">

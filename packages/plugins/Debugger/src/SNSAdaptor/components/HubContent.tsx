@@ -4,6 +4,7 @@ import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { Hub, OrderSide, resolveSourceName, SourceType } from '@masknet/web3-shared-base'
 import { Button, MenuItem, Table, TableBody, TableCell, TableRow, TextField, Typography } from '@mui/material'
 import { getEnumAsArray } from '@dimensiondev/kit'
+import { Icons } from '@masknet/icons'
 
 export interface HubContentProps {
     onClose?: () => void
@@ -136,7 +137,10 @@ export function HubContent(props: HubContentProps) {
                             </Typography>
                         </TableCell>
                         <TableCell>
-                            <Button size="small" onClick={(e) => setAnchorEl(e.currentTarget)}>
+                            <Button
+                                size="small"
+                                onClick={(e) => setAnchorEl(e.currentTarget)}
+                                endIcon={<Icons.ArrowDownRound size={14} />}>
                                 {resolveSourceName(sourceType)}
                             </Button>
                             <ShadowRootMenu

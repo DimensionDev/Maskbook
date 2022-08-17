@@ -235,6 +235,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     const component = useMemo(() => {
         const Component = getTabContent(componentTabId)
+        if (!Component) return null
 
         return <Component identity={currentVisitingSocialIdentity} socialAddress={selectedAddress} />
     }, [componentTabId, currentVisitingSocialIdentity?.publicKey, selectedAddress])

@@ -12,7 +12,7 @@ import { useI18N } from '../../locales'
 
 export interface DonationCardProps extends HTMLProps<HTMLDivElement> {
     donation: RSS3BaseAPI.Collection
-    address: SocialAddress<NetworkPluginID>
+    socialAddress: SocialAddress<NetworkPluginID>
     onSelect: () => void
 }
 
@@ -76,14 +76,14 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const DonationCard = ({ donation, address, onSelect, className, ...rest }: DonationCardProps) => {
+export const DonationCard = ({ donation, socialAddress, onSelect, className, ...rest }: DonationCardProps) => {
     const { classes } = useStyles()
     const t = useI18N()
-    const { value: domain } = useReverseAddress(address.networkSupporterPluginID, address.address)
-    const { Others } = useWeb3State(address.networkSupporterPluginID)
+    const { value: domain } = useReverseAddress(socialAddress.networkSupporterPluginID, socialAddress.address)
+    const { Others } = useWeb3State(socialAddress.networkSupporterPluginID)
     const reversedAddress =
         !domain || !Others?.formatDomainName
-            ? Others?.formatAddress?.(address.address, 5) ?? address.address
+            ? Others?.formatAddress?.(socialAddress.address, 5) ?? socialAddress.address
             : Others.formatDomainName(domain)
 
     const date = donation.timestamp ? formatDateTime(new Date(donation.timestamp), 'MMM dd, yyyy') : '--'
