@@ -4,42 +4,61 @@ import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()({
     provider: {
+        position: 'relative',
         width: 24,
         height: 24,
         verticalAlign: 'bottom',
     },
+    activeIcon: {
+        position: 'absolute',
+        width: 12,
+        height: 12,
+        right: 0,
+        bottom: 0,
+    },
 })
 
 export interface CollectibleProviderIconProps {
+    active: boolean
     provider: SourceType
     overrideClasses?: string
 }
 
-export function CollectibleProviderIcon(props: CollectibleProviderIconProps) {
-    const { classes, cx } = useStyles()
-    const className = cx(classes.provider, props.overrideClasses)
-    switch (props.provider) {
+const renderProviderIcon = (provider: SourceType) => {
+    switch (provider) {
         case SourceType.NFTScan:
-            return <Icons.NFTScan className={className} />
+            return <Icons.NFTScan />
         case SourceType.Zerion:
-            return <Icons.Zerion className={className} />
+            return <Icons.Zerion />
         case SourceType.OpenSea:
-            return <Icons.OpenSea className={className} />
+            return <Icons.OpenSea />
         case SourceType.Rarible:
-            return <Icons.Rarible className={className} />
+            return <Icons.Rarible />
         case SourceType.Zora:
-            return <Icons.Zora className={className} />
+            return <Icons.Zora />
         case SourceType.RSS3:
-            return <Icons.RSS3 className={className} />
+            return <Icons.RSS3 />
         case SourceType.DeBank:
-            return <Icons.Debank className={className} />
+            return <Icons.Debank />
         case SourceType.Gem:
-            return <Icons.Gem className={className} />
+            return <Icons.Gem />
         case SourceType.LooksRare:
-            return <Icons.LooksRare className={className} />
+            return <Icons.LooksRare />
         case SourceType.X2Y2:
-            return <Icons.X2Y2 className={className} />
+            return <Icons.X2Y2 />
         default:
             return <></>
     }
+}
+
+export function CollectibleProviderIcon(props: CollectibleProviderIconProps) {
+    const { provider, overrideClasses, active } = props
+    const { classes, cx } = useStyles()
+    const className = cx(classes.provider, overrideClasses)
+    return (
+        <div className={className}>
+            {renderProviderIcon(provider)}
+            {active && <Icons.FillSuccess className={classes.activeIcon} />}
+        </div>
+    )
 }

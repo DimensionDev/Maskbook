@@ -32,7 +32,12 @@ export const OffersTab = memo(() => {
     const { orders, provider } = CollectibleState.useContainer()
     const _orders = orders.value?.data ?? EMPTY_LIST
     const { t } = useI18N()
-    if (orders.loading) return <LoadingBase />
+    if (orders.loading)
+        return (
+            <div className={classes.body}>
+                <LoadingBase />
+            </div>
+        )
     if (orders.error || !orders.value)
         return (
             <div className={classes.body}>

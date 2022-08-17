@@ -1,10 +1,10 @@
 import { makeStyles } from '@masknet/theme'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
-import { Typography } from '@mui/material'
-import { ExternalLink, Link } from 'react-feather'
+import { Typography, Link } from '@mui/material'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import type { NonFungibleTokenEvent } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { Icons } from '@masknet/icons'
 import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
@@ -16,7 +16,8 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
         gap: 12,
         borderRadius: 8,
-        background: theme.palette.maskColor.bottom,
+        // there is no public bg have to hardcode
+        background: '#fff',
         boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
     },
     flex: {
@@ -29,7 +30,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 20,
         lineHeight: '24px',
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.palette.maskColor.publicMain,
     },
     highlight: {
         color: theme.palette.maskColor.highlight,
@@ -43,24 +44,34 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 18,
         lineHeight: '22px',
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.palette.maskColor.publicMain,
     },
     textBase: {
         display: 'flex',
         alignItems: 'center',
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.text.secondary,
+        color: theme.palette.maskColor.publicSecond,
         '& > strong': {
-            color: theme.palette.text.primary,
+            color: theme.palette.maskColor.publicMain,
             margin: '0 4px',
         },
     },
     link: {
-        color: theme.palette.text.primary,
+        color: theme.palette.maskColor.publicMain,
         fontSize: 14,
         display: 'flex',
         alignItems: 'center',
+        cursor: 'pointer',
+        marginLeft: 4,
+    },
+    fallbackSymbol: {
+        color: theme.palette.maskColor.publicMain,
+        fontWeight: 700,
+        fontSize: 12,
+        lineHeight: '14px',
+        display: 'flex',
+        alignItems: 'flex-end',
     },
 }))
 
@@ -88,8 +99,14 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
                 </Typography>
                 {type === ActivityType.Sale && (
                     <div className={classes.salePrice}>
-                        <img src={activity.paymentToken?.logoURL} width={24} height={24} />
-                        <Typography className={classes.salePriceText}>{activity.price?.usd ?? '-'}</Typography>
+                        {(activity.paymentToken?.logoURL && (
+                            <img width={24} height={24} src={activity.paymentToken?.logoURL} alt="" />
+                        )) || (
+                            <Typography className={classes.fallbackSymbol}>
+                                {activity.paymentToken?.symbol || activity.paymentToken?.name}
+                            </Typography>
+                        )}
+                        <Typography className={classes.salePriceText}>${activity.price?.usd || 0}</Typography>
                     </div>
                 )}
             </div>
@@ -108,12 +125,14 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
                         formatDistanceToNow(new Date(activity.timestamp), {
                             addSuffix: true,
                         })}
-                    <Link
-                        className={classes.link}
-                        href={Others?.explorerResolver.transactionLink(ChainId.Mainnet, activity.hash ?? '') ?? ''}
-                        target="_blank">
-                        <ExternalLink style={{ marginLeft: 4 }} size={14} />
-                    </Link>
+                    {activity.hash && (
+                        <Link
+                            className={classes.link}
+                            href={Others?.explorerResolver.transactionLink?.(ChainId.Mainnet, activity.hash) ?? ''}
+                            target="_blank">
+                            <Icons.LinkOut size={16} />
+                        </Link>
+                    )}
                 </Typography>
             </div>
         </div>

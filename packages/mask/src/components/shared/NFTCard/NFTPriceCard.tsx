@@ -30,6 +30,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     priceZone: {
         display: 'flex',
+        alignItems: 'center',
         gap: 24,
         margin: '20px 0',
     },
@@ -50,16 +51,19 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'flex-end',
     },
+    textSm: {
+        fontSize: 24,
+    },
 }))
 
 interface NFTPriceCardProps {
     asset: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
-    topOrder?: NonFungibleTokenOrder<ChainId, SchemaType>
+    topOffer?: NonFungibleTokenOrder<ChainId, SchemaType>
 }
 
 export function NFTPriceCard(props: NFTPriceCardProps) {
-    const { asset, topOrder } = props
-    const { classes } = useStyles()
+    const { asset, topOffer } = props
+    const { classes, cx } = useStyles()
     const { t } = useI18N()
 
     const priceTokenImg = asset.priceInToken?.token.logoURL
@@ -82,16 +86,26 @@ export function NFTPriceCard(props: NFTPriceCardProps) {
                     <Typography className={classes.fallbackSymbol}>{asset.priceInToken?.token.symbol}</Typography>
                 )}
                 <Typography className={classes.priceText}>{asset.priceInToken?.amount ?? '-'}</Typography>
+
+                {asset.price?.usd && (
+                    <Typography className={cx(classes.priceText, classes.textSm)}>(${asset.price.usd})</Typography>
+                )}
             </div>
-            {topOrder && (
+            {topOffer && (
                 <div className={classes.offerBox}>
                     <Typography className={classes.textBase}>{t('plugin_collectible_top_offer')}</Typography>
-                    <img width={18} height={18} src={topOrder.priceInToken?.token.logoURL} />
+                    {(topOffer.priceInToken?.token.logoURL && (
+                        <img width={18} height={18} src={topOffer.priceInToken?.token.logoURL} alt="" />
+                    )) || (
+                        <Typography className={classes.fallbackSymbol}>
+                            {topOffer.priceInToken?.token.symbol || topOffer.priceInToken?.token.name}
+                        </Typography>
+                    )}
                     <Typography className={classes.textBase}>
-                        <strong>{topOrder.priceInToken?.amount ?? '-'}</strong>
+                        <strong>{topOffer.priceInToken?.amount || '-'}</strong>
                     </Typography>
                     <Typography className={classes.textBase}>
-                        <strong>{topOrder.price?.usd ?? '-'}</strong>
+                        <strong>${topOffer.price?.usd || '-'}</strong>
                     </Typography>
                 </div>
             )}

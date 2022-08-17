@@ -1,7 +1,9 @@
 import { makeStyles } from '@masknet/theme'
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { Typography } from '@mui/material'
 import type { NonFungibleTokenOrder, SourceType } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../../../utils'
 import { CollectibleProviderIcon } from '../../../plugins/Collectible/SNSAdaptor/CollectibleProviderIcon'
 
@@ -14,7 +16,8 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
         gap: 12,
         borderRadius: 8,
-        background: theme.palette.maskColor.bottom,
+        // there is no public bg have to hardcode
+        background: '#fff',
         boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
     },
     offerDetail: {
@@ -29,14 +32,22 @@ const useStyles = makeStyles()((theme) => ({
     },
     textBase: {
         fontSize: 12,
-        color: theme.palette.text.secondary,
+        color: theme.palette.maskColor.publicSecond,
         '& > strong': {
-            color: theme.palette.text.primary,
+            color: theme.palette.maskColor.publicMain,
         },
     },
     currencyIcon: {
         width: 24,
         height: 24,
+    },
+    fallbackSymbol: {
+        color: theme.palette.maskColor.publicMain,
+        fontWeight: 700,
+        fontSize: 14,
+        lineHeight: '18px',
+        display: 'flex',
+        alignItems: 'flex-end',
     },
 }))
 
@@ -48,23 +59,48 @@ interface NFTOfferCardProps {
 export function NFTOfferCard(props: NFTOfferCardProps) {
     const { offer, provider } = props
     const { classes } = useStyles()
+    const { Others } = useWeb3State()
     const { t } = useI18N()
 
     return (
         <div className={classes.wrapper}>
-            <CollectibleProviderIcon provider={provider} />
+            <CollectibleProviderIcon active={false} provider={provider} />
             <div className={classes.offerDetail}>
                 <div className={classes.flex}>
-                    <img className={classes.currencyIcon} src={offer.priceInToken?.token.logoURL} alt="" />
+                    {(offer.priceInToken?.token.logoURL && (
+                        <img className={classes.currencyIcon} src={offer.priceInToken?.token.logoURL} alt="" />
+                    )) || (
+                        <Typography className={classes.fallbackSymbol}>
+                            {offer.priceInToken?.token.symbol || offer.priceInToken?.token.name}
+                        </Typography>
+                    )}
                     <Typography className={classes.textBase}>
                         <strong style={{ fontSize: 14 }}>{offer.priceInToken?.amount}</strong>{' '}
-                        <strong>{offer.price?.usd || '-'}</strong>
+                        {offer.price?.usd && <Typography fontSize={12}>(${offer.price.usd})</Typography>}
                     </Typography>
                 </div>
                 <div className={classes.flex} style={{ marginLeft: 40 }}>
+                    <Typography className={classes.textBase}>{t('plugin_collectible_from')}</Typography>
+
+                    <Typography className={classes.textBase} style={{ marginRight: 6 }}>
+                        {(offer.maker?.address && (
+                            <strong style={{ fontSize: 14, margin: '0px 4px' }}>
+                                {Others?.formatAddress(offer.maker.address, 4)}
+                            </strong>
+                        )) ||
+                            '-'}
+                    </Typography>
+
                     <Typography className={classes.textBase}>
-                        {t('plugin_collectible_from')} <strong style={{ fontSize: 14 }}>{offer.maker?.address}</strong>{' '}
-                        {offer.createdAt} {t('plugin_collectible_expires_in')} {offer.expiredAt}
+                        {offer.createdAt &&
+                            formatDistanceToNow(new Date(offer.createdAt * 1000), {
+                                addSuffix: true,
+                            })}
+                        <span style={{ margin: '0 4px' }}>{t('plugin_collectible_expires_in')}</span>
+                        {offer.expiredAt &&
+                            formatDistanceToNow(new Date(offer.expiredAt * 1000), {
+                                addSuffix: true,
+                            })}
                     </Typography>
                 </div>
             </div>

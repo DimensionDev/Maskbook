@@ -211,7 +211,6 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 },
                 side: OrderSide.Buy,
                 quantity: order.value.toString(),
-                expiredAt: 0,
             }
         })
         return createPageable(
