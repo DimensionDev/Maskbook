@@ -102,12 +102,13 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
                         className={classes.option}
                         display="inline-flex"
                         direction="row"
-                        gap={0.5}
                         justifyContent="space-between"
                         alignItems="center"
                         width="100%">
-                        <WalletIcon mainIcon={selectedChain?.icon} size={18} />
-                        <Typography fontSize={14}>{getChainName(selectedChain)}</Typography>
+                        <Stack gap={0.5} display="inline-flex" direction="row" alignItems="center">
+                            <WalletIcon mainIcon={selectedChain?.icon} size={18} />
+                            <Typography fontSize={14}>{getChainName(selectedChain)}</Typography>
+                        </Stack>
                         <KeyboardArrowDownIcon />
                     </Stack>
                 </Button>
