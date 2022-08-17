@@ -358,6 +358,8 @@ export interface NonFungibleTokenOrder<ChainId, SchemaType> {
     price?: Price
     /** the payment token and corresponding price */
     priceInToken?: PriceInToken<ChainId, SchemaType>
+    /** the source provider of this offer **/
+    sourceType?: SourceType
 }
 
 export interface NonFungibleTokenEvent<ChainId, SchemaType> {

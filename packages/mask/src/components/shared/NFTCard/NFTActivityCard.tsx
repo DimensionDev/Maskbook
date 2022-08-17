@@ -62,6 +62,14 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
+    fallbackSymbol: {
+        color: theme.palette.maskColor.publicMain,
+        fontWeight: 700,
+        fontSize: 12,
+        lineHeight: '14px',
+        display: 'flex',
+        alignItems: 'flex-end',
+    },
 }))
 
 export enum ActivityType {
@@ -79,6 +87,7 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
     const { classes, cx } = useStyles()
     const { Others } = useWeb3State()
     const { t } = useI18N()
+    console.log(activity, 'event')
     return (
         <div className={classes.wrapper}>
             <div className={classes.flex}>
@@ -88,7 +97,11 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
                 </Typography>
                 {type === ActivityType.Sale && (
                     <div className={classes.salePrice}>
-                        <img src={activity.paymentToken?.logoURL} width={24} height={24} />
+                        {(activity.paymentToken?.logoURL && (
+                            <img width={24} height={24} src={activity.paymentToken?.logoURL} alt="" />
+                        )) || (
+                            <Typography className={classes.fallbackSymbol}>{activity.paymentToken?.symbol}</Typography>
+                        )}
                         <Typography className={classes.salePriceText}>{activity.price?.usd ?? '-'}</Typography>
                     </div>
                 )}
@@ -108,12 +121,14 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
                         formatDistanceToNow(new Date(activity.timestamp), {
                             addSuffix: true,
                         })}
-                    <Link
-                        className={classes.link}
-                        href={Others?.explorerResolver.transactionLink(ChainId.Mainnet, activity.hash ?? '') ?? ''}
-                        target="_blank">
-                        <ExternalLink style={{ marginLeft: 4 }} size={14} />
-                    </Link>
+                    {activity.hash && (
+                        <Link
+                            className={classes.link}
+                            href={Others?.explorerResolver.transactionLink(ChainId.Mainnet, activity.hash) ?? ''}
+                            target="_blank">
+                            <ExternalLink style={{ marginLeft: 4 }} size={14} />
+                        </Link>
+                    )}
                 </Typography>
             </div>
         </div>

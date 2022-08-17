@@ -18,6 +18,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'relative',
         width: '100%',
         marginBottom: 36,
+        minHeight: 300,
     },
     errorPlaceholder: {
         padding: '82px 0',

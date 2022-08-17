@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { NetworkPluginID, OrderSide } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '../web3-helpers'
 import { useAccount } from '../entry-web3'
 import { useWeb3Hub } from './useWeb3Hub'
@@ -18,6 +18,6 @@ export function useNonFungibleOrders<S extends 'all' | void = void, T extends Ne
 
     return useAsyncRetry(async () => {
         if (!address || !id || !hub) return
-        return hub.getNonFungibleTokenOrders?.(address, id, OrderSide.Sell, options)
+        return hub.getNonFungibleTokenOffers?.(address, id, options)
     }, [address, id, hub])
 }

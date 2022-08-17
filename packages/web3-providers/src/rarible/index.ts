@@ -188,7 +188,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     async getOffers(
         tokenAddress: string,
         tokenId: string,
-        { chainId = ChainId.Mainnet, indicator, size }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator, size, sourceType }: HubOptions<ChainId> = {},
     ) {
         const requestPath = urlcat('/items/:tokenAddress::tokenId/offers', { tokenAddress, tokenId })
         const orders = await fetchFromRarible<RaribleOfferResponse[]>(RaribleMainnetURL, requestPath, {
@@ -211,7 +211,8 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 },
                 side: OrderSide.Buy,
                 quantity: order.value.toString(),
-                expiredAt: 0,
+                expiredAt: undefined,
+                sourceType,
             }
         })
         return createPageable(

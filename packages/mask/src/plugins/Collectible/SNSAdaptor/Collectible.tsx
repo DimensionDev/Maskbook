@@ -10,9 +10,7 @@ import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleCard } from './CollectibleCard'
 import { ActionBar } from './OpenSea/ActionBar'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, resolveSourceName, SourceType } from '@masknet/web3-shared-base'
-import { getEnumAsArray } from '@dimensiondev/kit'
+import { resolveSourceName, SourceType } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { AboutTab } from './Tabs/AboutTab'
 import { DetailTab } from './Tabs/DetailTab'
@@ -138,6 +136,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 const supportedProvider = [
+    // to add providers
     SourceType.Rarible,
     SourceType.Gem,
     SourceType.X2Y2,
@@ -150,21 +149,15 @@ export interface CollectibleProps {}
 export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const { token, asset, provider, setProvider } = CollectibleState.useContainer()
-
-    // #region sync with settings
-    const collectibleProviderOptions = getEnumAsArray(SourceType).filter((x) => supportedProvider.includes(x.value))
-
+    const { asset, provider, setProvider } = CollectibleState.useContainer()
     const onDataProviderChange = useCallback((v: SourceType) => {
         setProvider(v)
     }, [])
-    // #endregion
 
     // #region provider switcher
     const CollectibleProviderSwitcher = useSwitcher(provider, setProvider, supportedProvider, resolveSourceName, true)
     // #endregion
-    const [currentTab, onChange, tabs, setTab] = useTabs('about', 'details', 'offers', 'activity')
+    const [currentTab, onChange, tabs] = useTabs('about', 'details', 'offers', 'activity')
     if (asset.loading)
         return (
             <Box
@@ -180,7 +173,7 @@ export function Collectible(props: CollectibleProps) {
                 <Typography>{t('loading')}</Typography>
             </Box>
         )
-    if (!asset.value || !token)
+    if (!asset.value)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
                 <Typography color={MaskColorVar.textPluginColor} sx={{ marginTop: 8, marginBottom: 8 }}>
