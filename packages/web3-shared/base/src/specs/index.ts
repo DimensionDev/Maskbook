@@ -262,7 +262,7 @@ export interface NonFungibleTokenRarity {
 export interface NonFungibleTokenContract<ChainId, SchemaType> {
     chainId: ChainId
     name: string
-    symbol: string
+    symbol?: string
     address: string
     schema: SchemaType
     owner?: string
@@ -275,7 +275,7 @@ export interface NonFungibleTokenMetadata<ChainId> {
     chainId: ChainId
     /** Might be the format `TheName #42` */
     name: string
-    symbol: string
+    symbol?: string
     description?: string
     /** preview image url */
     imageURL?: string

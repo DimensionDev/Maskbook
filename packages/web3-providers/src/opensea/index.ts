@@ -187,12 +187,9 @@ function createAccount(account?: OpenSeaCustomAccount) {
 }
 
 function createEvent(chainId: ChainId, event: OpenSeaAssetEvent): NonFungibleTokenEvent<ChainId, SchemaType> {
-    const accountPair = {
+    return {
         from: createAccount(event.from_account ?? event.seller),
         to: createAccount(event.to_account ?? event.winner_account),
-    }
-    return {
-        ...accountPair,
         id: event.id,
         chainId,
         type: event.event_type,
@@ -268,11 +265,12 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     async getAssets(account: string, { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {}) {
         if (chainId !== ChainId.Mainnet) return createPageable(EMPTY_LIST, createIndicator(indicator))
 
-        const response = await fetchFromOpenSea<{ assets?: OpenSeaAssetResponse[] }>(
+        const response = await fetchFromOpenSea<{ assets?: OpenSeaAssetResponse[]; next: string; previous?: string }>(
             urlcat('/api/v1/assets', {
                 owner: account,
                 offset: (indicator?.index ?? 0) * size,
                 limit: size,
+                cursor: indicator?.id,
             }),
             chainId,
         )
@@ -288,7 +286,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         return createPageable(
             tokens,
             createIndicator(indicator),
-            tokens.length === size ? createNextIndicator(indicator) : undefined,
+            tokens.length === size ? createNextIndicator(indicator, response?.next) : undefined,
         )
     }
 
@@ -323,11 +321,13 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     ) {
         const response = await fetchFromOpenSea<{
             asset_events: OpenSeaAssetEvent[]
+            next: string
+            previous?: string
         }>(
             urlcat('/api/v1/events', {
                 asset_contract_address: address,
                 token_id: tokenId,
-                cursor: indicator,
+                cursor: indicator?.id,
                 limit: size,
             }),
             chainId,
@@ -336,7 +336,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         return createPageable(
             events,
             createIndicator(indicator),
-            events.length === size ? createNextIndicator(indicator) : undefined,
+            events.length === size ? createNextIndicator(indicator, response?.next) : undefined,
         )
     }
 
@@ -356,11 +356,13 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     ) {
         const response = await fetchFromOpenSea<{
             asset_events: OpenSeaAssetEvent[]
+            next: string
+            previous?: string
         }>(
             urlcat('/api/v1/events', {
                 asset_contract_address: address,
                 token_id: tokenId,
-                cursor: indicator,
+                cursor: indicator?.id,
                 limit: size,
                 event_type: side === OrderSide.Buy ? 'offer_entered' : undefined,
             }),
@@ -375,7 +377,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         return createPageable(
             offers,
             createIndicator(indicator),
-            offers.length === size ? createNextIndicator(indicator) : undefined,
+            offers.length === size ? createNextIndicator(indicator, response?.next) : undefined,
         )
     }
 

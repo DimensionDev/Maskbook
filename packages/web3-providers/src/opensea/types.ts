@@ -233,7 +233,7 @@ export interface OrderAccount {
 }
 
 export interface OrderFee {
-    accoint: OrderAccount
+    account: OrderAccount
     basis_points: string
 }
 
