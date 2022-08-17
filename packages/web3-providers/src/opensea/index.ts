@@ -23,6 +23,8 @@ import {
     formatBalance,
     NonFungibleTokenStats,
     HubIndicator,
+    formatPercentage,
+    dividedBy,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, createNativeToken, createERC20Token } from '@masknet/web3-shared-evm'
 import type { NonFungibleTokenAPI, TrendingAPI } from '../types'
@@ -169,6 +171,7 @@ function createNFTAsset(chainId: ChainId, asset: OpenSeaResponse): NonFungibleAs
         traits: asset.traits.map((x) => ({
             type: x.trait_type,
             value: x.value,
+            rarity: formatPercentage(dividedBy(x.trait_count, asset.collection.stats.count)),
         })),
         price: asset.last_sale
             ? {
