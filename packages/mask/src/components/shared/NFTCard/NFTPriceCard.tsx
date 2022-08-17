@@ -67,7 +67,7 @@ export function NFTPriceCard(props: NFTPriceCardProps) {
     const { t } = useI18N()
 
     const priceTokenImg = asset.priceInToken?.token.logoURL
-    console.log(topOffer, 'offer')
+
     return (
         <div className={classes.wrapper}>
             <div className={classes.header}>
@@ -102,10 +102,10 @@ export function NFTPriceCard(props: NFTPriceCardProps) {
                         </Typography>
                     )}
                     <Typography className={classes.textBase}>
-                        <strong>{topOffer.priceInToken?.amount ?? '-'}</strong>
+                        <strong>{topOffer.priceInToken?.amount || '-'}</strong>
                     </Typography>
                     <Typography className={classes.textBase}>
-                        <strong>${topOffer.price?.usd ?? '-'}</strong>
+                        <strong>${topOffer.price?.usd || '-'}</strong>
                     </Typography>
                 </div>
             )}
