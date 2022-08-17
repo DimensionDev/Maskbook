@@ -35,6 +35,14 @@ export class NextIDStorage implements Storage {
         return response.val
     }
 
+    async getAll<T>(key: string) {
+        const response = await NextIDStorageProvider.getAllByIdentity<T>(this.platform, this.proofIdentity, key)
+
+        if (!response.ok) return
+
+        return response.val
+    }
+
     async set<T>(key: string, value: T) {
         const payload = await NextIDStorageProvider.getPayload(
             this.publicKey,
