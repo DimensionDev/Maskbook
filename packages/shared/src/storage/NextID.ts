@@ -36,7 +36,6 @@ export class NextIDStorage implements Storage {
     }
 
     async set<T>(key: string, value: T) {
-        if (!this.personaIdentifier) throw new Error('')
         const payload = await NextIDStorageProvider.getPayload(
             this.publicKey,
             this.platform,
@@ -51,7 +50,7 @@ export class NextIDStorage implements Storage {
 
         if (!signResult) throw new Error('Failed to sign payload.')
 
-        const response = await NextIDStorageProvider.set(
+        await NextIDStorageProvider.set(
             payload.val.uuid,
             this.publicKey,
             toBase64(fromHex(signResult.signature.signature)),

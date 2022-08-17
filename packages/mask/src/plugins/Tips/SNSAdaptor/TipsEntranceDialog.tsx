@@ -1,12 +1,7 @@
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { InjectedDialog } from '@masknet/shared'
-import {
-    BindingProof,
-    ECKeyIdentifier,
-    NextIDAction,
-    NextIDStorageInfo,
-    NextIDStoragePayload,
-} from '@masknet/shared-base'
+import { PluginId } from '@masknet/plugin-infra'
+import { BindingProof, NextIDAction, NextIDPlatform } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useCustomSnackbar, LoadingBase, ActionButton } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
@@ -17,7 +12,6 @@ import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import Services from '../../../extension/service'
 import { useI18N } from '../locales'
-import { getKvPayload, setKvPatchData, useKvGet } from '../hooks/useKv'
 import { useTipsWalletsList } from '../hooks/useTipsWalletsList'
 import { useProvedWallets } from '../hooks/useProvedWallets'
 import AddWalletView from './bodyViews/AddWallet'
@@ -26,7 +20,7 @@ import WalletsView from './bodyViews/Wallets'
 import { EmptyStatus } from './components/EmptyStatus'
 import { VerifyAlertLine } from './components/VerifyAlertLine'
 import { WalletsByNetwork } from './components/WalletsByNetwork'
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { useAccount, useWeb3State } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export interface TipsEntranceDialogProps {
@@ -93,6 +87,7 @@ const WalletButton: FC<WalletButtonProps> = ({ step, onClick }) => {
 export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const t = useI18N()
     const { classes } = useStyles()
+    const { Storage } = useWeb3State()
     const [showAlert, setShowAlert] = useState(true)
     const [bodyViewStep, setBodyViewStep] = useState<BodyViewStep>(BodyViewStep.Main)
     const [hasChanged, setHasChanged] = useState(false)
@@ -117,11 +112,20 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             setBodyViewStep(BodyViewStep.Main)
         }
     }
-    const { value: kv, retry: retryKv } = useKvGet<NextIDStorageInfo<BindingProof[]>>(
-        currentPersonaIdentifier?.publicKeyAsHex,
-    )
+
+    const { value: kv, retry: retryKv } = useAsyncRetry(async () => {
+        if (!Storage || !currentPersonaIdentifier) return
+        const storage = Storage.createNextIDStorage(
+            currentPersonaIdentifier.publicKeyAsHex,
+            NextIDPlatform.NextID,
+            currentPersonaIdentifier,
+        )
+
+        return storage.get<BindingProof[]>(PluginId.Tips)
+    }, [currentPersonaIdentifier, Storage])
+
     const { loading, value: proofRes, retry: retryProof } = useProvedWallets()
-    const list = useTipsWalletsList(proofRes, currentPersona?.identifier.publicKeyAsHex, kv?.ok ? kv.val : undefined)
+    const list = useTipsWalletsList(proofRes, currentPersona?.identifier.publicKeyAsHex, kv)
     useMemo(() => {
         setHasChanged(false)
         setRawPatchData(list)
@@ -155,15 +159,15 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     }
 
     const [kvFetchState, onConfirm] = useAsyncFn(async () => {
+        if (!Storage || !currentPersonaIdentifier) return
         try {
-            const payload = await getKvPayload(rawPatchData)
-            if (!payload || !payload.val) throw new Error('payload error')
-            const signResult = await Services.Identity.generateSignResult(
-                currentPersonaIdentifier as ECKeyIdentifier,
-                (payload.val as NextIDStoragePayload).signPayload,
+            const storage = Storage.createNextIDStorage(
+                currentPersonaIdentifier.publicKeyAsHex,
+                NextIDPlatform.NextID,
+                currentPersonaIdentifier,
             )
-            if (!signResult) throw new Error('sign error')
-            await setKvPatchData(payload.val, signResult.signature.signature, rawPatchData)
+            await storage.set<BindingProof[]>(PluginId.Tips, rawPatchData)
+
             showSnackbar(t.tip_persona_sign_success(), {
                 variant: 'success',
                 message: nowTime,
@@ -177,7 +181,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             })
             return false
         }
-    }, [hasChanged, rawPatchData])
+    }, [hasChanged, rawPatchData, Storage, currentPersonaIdentifier])
     const { setDialog, open: providerDialogOpen } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
