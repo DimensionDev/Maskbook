@@ -3,13 +3,7 @@ import { useAsync, useUpdateEffect } from 'react-use'
 import { DialogActions, DialogContent, Tab } from '@mui/material'
 import { isDashboardPage, EMPTY_LIST } from '@masknet/shared-base'
 import { MaskTabList, useTabs } from '@masknet/theme'
-import {
-    createContract,
-    ChainId,
-    SchemaType,
-    getAaveConstants,
-    ZERO_ADDRESS,
-} from '@masknet/web3-shared-evm'
+import { createContract, ChainId, SchemaType, getAaveConstants, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { PluginWalletStatusBar, useI18N } from '../../../utils'
 import { InjectedDialog } from '@masknet/shared'
 import { AllProviderTradeContext } from '../../Trader/trader/useAllProviderTradeContext'
