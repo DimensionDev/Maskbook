@@ -111,16 +111,23 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
                 )}
             </div>
             <div className={classes.flex}>
-                <Typography className={classes.textBase}>
-                    {t('plugin_collectible_from')}
-                    <strong> {activity.from.address ? Others?.formatAddress(activity.from.address, 4) : '-'}</strong>
-                </Typography>
+                {activity.from ? (
+                    <Typography className={classes.textBase}>
+                        {t('plugin_collectible_from')}
+                        <strong>
+                            {' '}
+                            {activity.from.address ? Others?.formatAddress(activity.from.address, 4) : '-'}
+                        </strong>
+                    </Typography>
+                ) : null}
                 <Typography className={classes.textBase}>
                     {t('plugin_collectible_to')}
-                    <strong>
-                        {activity.to.nickname ||
-                            (activity.to.address ? Others?.formatAddress(activity.to.address, 4) : '-')}
-                    </strong>
+                    {activity.to ? (
+                        <strong>
+                            {activity.to.nickname ||
+                                (activity.to.address ? Others?.formatAddress(activity.to.address, 4) : '-')}
+                        </strong>
+                    ) : null}
                     {activity.timestamp &&
                         formatDistanceToNow(new Date(activity.timestamp), {
                             addSuffix: true,
