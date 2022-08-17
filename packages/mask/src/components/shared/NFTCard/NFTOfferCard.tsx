@@ -74,12 +74,18 @@ export function NFTOfferCard(props: NFTOfferCardProps) {
                             {offer.priceInToken?.token.symbol || offer.priceInToken?.token.name}
                         </Typography>
                     )}
-                    <Typography className={classes.textBase}>
-                        <strong style={{ fontSize: 14 }}>
-                            {formatBalance(offer.priceInToken?.amount, offer.priceInToken?.token.decimals ?? 18)}
-                        </strong>{' '}
-                        {offer.price?.usd && <Typography fontSize={12}>(${offer.price.usd})</Typography>}
-                    </Typography>
+                    <div className={classes.flex}>
+                        <Typography className={classes.textBase}>
+                            <strong style={{ fontSize: 14 }}>
+                                {formatBalance(offer.priceInToken?.amount, offer.priceInToken?.token.decimals ?? 18)}
+                            </strong>
+                        </Typography>
+                        {offer.price?.usd && (
+                            <Typography className={classes.textBase} fontSize={12}>
+                                <strong>${offer.price.usd}</strong>
+                            </Typography>
+                        )}
+                    </div>
                 </div>
                 <div className={classes.flex} style={{ marginLeft: 40 }}>
                     <Typography className={classes.textBase}>{t('plugin_collectible_from')}</Typography>

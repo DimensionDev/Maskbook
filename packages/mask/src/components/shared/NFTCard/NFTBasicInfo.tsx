@@ -89,7 +89,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     absoluteProvider: {
         top: 16,
-        right: '1%',
+        right: '5%',
         position: 'absolute',
         display: 'flex',
         alignItems: 'center',

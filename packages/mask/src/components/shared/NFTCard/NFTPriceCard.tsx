@@ -24,7 +24,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         color: theme.palette.maskColor.publicSecond,
         '& > strong': {
-            color: theme.palette.maskColor.publicSecond,
+            color: theme.palette.maskColor.publicMain,
             margin: '0 8px',
         },
     },
