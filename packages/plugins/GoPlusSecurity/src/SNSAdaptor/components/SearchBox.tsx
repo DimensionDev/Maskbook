@@ -7,7 +7,7 @@ import { useI18N } from '../../locales'
 import type { SecurityAPI } from '@masknet/web3-providers'
 import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
 import { WalletIcon } from '@masknet/shared'
-import { useSupportedChain } from '../hooks/useSupportedChain'
+import { useSupportedChains } from '../hooks/useSupportedChains'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -64,7 +64,7 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
     const onClose = () => setAnchorEl(null)
     const onOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget)
 
-    const { value: supportedChains = [] } = useSupportedChain()
+    const { value: supportedChains = [] } = useSupportedChains()
 
     const menuElements = useMemo(() => {
         if (!supportedChains.length) return

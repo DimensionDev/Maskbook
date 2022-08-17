@@ -9,7 +9,7 @@ const unIntegrationChainLogos: Record<number, URL> = {
     25: new URL('../../assets/chain-harmony.png', import.meta.url),
 }
 
-export const useSupportedChain = () => {
+export const useSupportedChains = () => {
     const networks = useNetworkDescriptors(NetworkPluginID.PLUGIN_EVM)
 
     return useAsync(async () => {
