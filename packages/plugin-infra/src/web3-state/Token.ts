@@ -172,7 +172,7 @@ export class TokenState<ChainId, SchemaType> implements Web3TokenState<ChainId, 
         this.blockOrUnblockToken(address, token, 'trust')
     }
     async blockToken(address: string, token: Token<ChainId, SchemaType>) {
-        this.addOrRemoveToken(address, token, 'add')
         this.blockOrUnblockToken(address, token, 'block')
+        this.addOrRemoveToken(address, token, 'add')
     }
 }

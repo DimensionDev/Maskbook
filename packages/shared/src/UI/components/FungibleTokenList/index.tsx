@@ -40,7 +40,6 @@ import {
 import { getFungibleTokenItem } from './FungibleTokenItem'
 import { ManageTokenListBar } from './ManageTokenListBar'
 import { TokenListMode } from './type'
-import { useThrottle } from 'react-use'
 import { Icons } from '@masknet/icons'
 
 const DEFAULT_LIST_HEIGHT = 300
@@ -78,7 +77,7 @@ const Content = memo(({ message, height }: { message: ReactNode; height?: number
     const h = height ?? DEFAULT_LIST_HEIGHT
     return (
         <Stack
-            minHeight={typeof h === 'number' ? h - 16 : h}
+            minHeight={typeof h === 'number' ? h + 52 : h}
             justifyContent="center"
             alignContent="center"
             marginTop="12px">
@@ -120,7 +119,7 @@ export const FungibleTokenList = forwardRef(
             setModeTransition(true)
             setTimeout(() => {
                 setModeTransition(false)
-            }, 1000)
+            }, 800)
         }, [mode])
 
         useImperativeHandle(
@@ -143,8 +142,7 @@ export const FungibleTokenList = forwardRef(
             pluginID,
             { chainId },
         )
-        const trustedOriginFungibleTokens = useTrustedFungibleTokens(pluginID, undefined, chainId)
-        const trustedFungibleTokens = useThrottle(trustedOriginFungibleTokens, 200)
+        const trustedFungibleTokens = useTrustedFungibleTokens(pluginID, undefined, chainId)
         const blockedFungibleTokens = useBlockedFungibleTokens(pluginID)
         const nativeToken = useMemo(() => Others?.chainResolver.nativeCurrency(chainId), [chainId])
 

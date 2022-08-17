@@ -1,6 +1,5 @@
 import { memo, useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import classNames from 'classnames'
 import { Link, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import { formatBalance, FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { TokenIcon } from '../TokenIcon'
@@ -10,7 +9,7 @@ import { useSharedI18N } from '../../../locales'
 import { useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { TokenListMode } from './type'
 import { SettingSwitch } from '../SettingSwitch'
-import { useTokenBlocked } from './useTokenBlocked'
+import { useTokenBlocked, useTokenTrusted } from './useTokenBlocked'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -58,18 +57,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 16,
         fontWeight: 700,
         color: theme.palette.maskColor.main,
-    },
-    import: {
-        '&:before': {
-            content: '""',
-            display: 'inline-block',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            background: 'transparent',
-        },
     },
     importButton: {
         padding: '3px 0',
@@ -121,7 +108,9 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
         const onSelect = data.onSelect
 
         const { chainId, address, name, symbol, decimals, logoURL, balance } = token!
+
         const isBlocked = useTokenBlocked(address)
+        const isTrust = useTokenTrusted(address, token.chainId)
 
         const { source, selected } = useMemo(() => {
             return {
@@ -176,7 +165,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                     />
                 )
             }
-            return source !== 'external' ? (
+            return source !== 'external' || isTrust ? (
                 <Typography className={classes.balance}>
                     {balance === undefined ? (
                         <LoadingBase size={24} />
@@ -196,7 +185,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                     {t.import()}
                 </MaskLoadingButton>
             )
-        }, [balance, decimals, isBlocked, source, mode])
+        }, [balance, decimals, isBlocked, source, mode, isTrust])
 
         return (
             <div style={style}>
@@ -220,10 +209,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                         />
                     </ListItemIcon>
                     <ListItemText classes={{ primary: classes.text }}>
-                        <Typography
-                            className={classNames(classes.primary, source === 'external' ? classes.import : '')}
-                            color="textPrimary"
-                            component="span">
+                        <Typography className={classes.primary} color="textPrimary" component="span">
                             <span className={classes.symbol}>{symbol}</span>
                             <span className={`${classes.name} dashboard token-list-symbol`}>
                                 {name}
@@ -235,7 +221,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                                     rel="noopener noreferrer">
                                     <Icons.PopupLink size={18} />
                                 </Link>
-                                {source === 'personal' && (
+                                {isTrust && (
                                     <span className={classes.byUser}>
                                         <span className={classes.bull}>&bull;</span>
                                         {t.erc20_token_add_by_user()}
