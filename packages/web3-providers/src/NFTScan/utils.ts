@@ -1,8 +1,9 @@
+import { EMPTY_LIST } from '@masknet/shared-base'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
-import { CurrencyType, NonFungibleAsset, scale10, TokenType } from '@masknet/web3-shared-base'
+import { NonFungibleAsset, scale10, TokenType } from '@masknet/web3-shared-base'
 import { ChainId, createContract, getRPCConstants, SchemaType, WNATIVE } from '@masknet/web3-shared-evm'
-import { chain, first } from 'lodash-unified'
+import { first } from 'lodash-unified'
 import LRUCache from 'lru-cache'
 import type { ParamMap } from 'urlcat'
 import urlcat from 'urlcat'
@@ -70,10 +71,19 @@ export function createERC721TokenAsset(asset: NFTScanAsset): NonFungibleAsset<Ch
         name?: string
         description?: string
         image?: string
+        attributes?: Array<{
+            trait_type: string
+            value: string
+        }>
     } = JSON.parse(asset.metadata_json ?? '{}')
     const name = payload?.name || asset.name || asset.contract_name || ''
     const description = payload?.description
-    const mediaURL = asset.nftscan_uri ?? asset.image_uri
+    const mediaURL =
+        asset.nftscan_uri ?? asset.image_uri?.startsWith('http')
+            ? asset.image_uri
+            : asset.image_uri
+            ? `ipfs://${asset.image_uri}`
+            : undefined
     const chainId = ChainId.Mainnet
     const creator = asset.minter
     const owner = asset.owner
@@ -95,10 +105,14 @@ export function createERC721TokenAsset(asset: NFTScanAsset): NonFungibleAsset<Ch
             address: owner,
             link: urlcat(NFTSCAN_BASE + '/:id', { id: owner }),
         },
-        traits: [],
+        traits:
+            payload.attributes?.map((x) => ({
+                type: x.trait_type,
+                value: x.value,
+            })) ?? EMPTY_LIST,
         priceInToken: asset.latest_trade_price
             ? {
-                  amount: asset.latest_trade_price,
+                  amount: scale10(asset.latest_trade_price, WNATIVE[chainId].decimals).toFixed(),
                   token: WNATIVE[chainId],
               }
             : undefined,
