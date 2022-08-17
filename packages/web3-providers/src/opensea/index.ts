@@ -22,6 +22,8 @@ import {
     NonFungibleAsset,
     formatBalance,
     NonFungibleTokenStats,
+    HubIndicator,
+    Pageable,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, createNativeToken, createERC20Token } from '@masknet/web3-shared-evm'
 import type { NonFungibleTokenAPI, TrendingAPI } from '../types'
@@ -412,6 +414,14 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             createIndicator(indicator),
             events.length === size ? createNextIndicator(indicator) : undefined,
         )
+    }
+
+    async getOffers(address: string, tokenId: string, options?: HubOptions<ChainId, HubIndicator> | undefined) {
+        return this.getOrders(address, tokenId, OrderSide.Buy, options)
+    }
+
+    async getListings(address: string, tokenId: string, options?: HubOptions<ChainId, HubIndicator> | undefined) {
+        return this.getOrders(address, tokenId, OrderSide.Sell, options)
     }
 
     async getOrders(
