@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { Typography } from '@mui/material'
-import type { NonFungibleTokenOrder, SourceType } from '@masknet/web3-shared-base'
+import { NonFungibleTokenOrder, SourceType, formatBalance } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../../../utils'
@@ -75,7 +75,9 @@ export function NFTOfferCard(props: NFTOfferCardProps) {
                         </Typography>
                     )}
                     <Typography className={classes.textBase}>
-                        <strong style={{ fontSize: 14 }}>{offer.priceInToken?.amount}</strong>{' '}
+                        <strong style={{ fontSize: 14 }}>
+                            {formatBalance(offer.priceInToken?.amount, offer.priceInToken?.token.decimals ?? 18)}
+                        </strong>{' '}
                         {offer.price?.usd && <Typography fontSize={12}>(${offer.price.usd})</Typography>}
                     </Typography>
                 </div>
@@ -92,15 +94,17 @@ export function NFTOfferCard(props: NFTOfferCardProps) {
                     </Typography>
 
                     <Typography className={classes.textBase}>
-                        {offer.createdAt &&
+                        {(offer.createdAt &&
                             formatDistanceToNow(new Date(offer.createdAt * 1000), {
                                 addSuffix: true,
-                            })}
+                            })) ||
+                            '-'}
                         <span style={{ margin: '0 4px' }}>{t('plugin_collectible_expires_in')}</span>
-                        {offer.expiredAt &&
+                        {(offer.expiredAt &&
                             formatDistanceToNow(new Date(offer.expiredAt * 1000), {
                                 addSuffix: true,
-                            })}
+                            })) ||
+                            '-'}
                     </Typography>
                 </div>
             </div>

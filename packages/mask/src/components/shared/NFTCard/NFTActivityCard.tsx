@@ -54,7 +54,7 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.publicSecond,
         '& > strong': {
             color: theme.palette.maskColor.publicMain,
-            margin: '0 4px',
+            margin: '0px 8px',
         },
     },
     link: {
@@ -114,12 +114,11 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
                 {activity.from ? (
                     <Typography className={classes.textBase}>
                         {t('plugin_collectible_from')}
-                        <strong>
-                            {' '}
-                            {activity.from.address ? Others?.formatAddress(activity.from.address, 4) : '-'}
-                        </strong>
+                        <strong>{activity.from.address ? Others?.formatAddress(activity.from.address, 4) : '-'}</strong>
                     </Typography>
-                ) : null}
+                ) : (
+                    <strong>-</strong>
+                )}
                 <Typography className={classes.textBase}>
                     {t('plugin_collectible_to')}
                     {activity.to ? (
@@ -127,7 +126,9 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
                             {activity.to.nickname ||
                                 (activity.to.address ? Others?.formatAddress(activity.to.address, 4) : '-')}
                         </strong>
-                    ) : null}
+                    ) : (
+                        <strong>-</strong>
+                    )}
                     {activity.timestamp &&
                         formatDistanceToNow(new Date(activity.timestamp), {
                             addSuffix: true,
