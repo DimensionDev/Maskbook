@@ -122,7 +122,29 @@ export interface OpenSeaCollection extends OpenSeaFees {
     image_url: string
     largeImage_url: string
     featured_image_url: string
-    stats: object
+    stats: {
+        average_price: number
+        count: number
+        floor_price: number
+        market_cap: number
+        num_owners: number
+        num_reports: number
+        one_day_average_price: number
+        one_day_change: number
+        one_day_sales: number
+        one_day_volume: number
+        seven_day_average_price: number
+        seven_day_change: number
+        seven_day_sales: number
+        seven_day_volume: number
+        thirty_day_average_price: number
+        thirty_day_change: number
+        thirty_day_sales: number
+        thirty_day_volume: number
+        total_sales: number
+        total_supply: number
+        total_volume: number
+    }
     display_data: object
     payment_tokens: OpenSeaFungibleToken[]
     payout_address?: string
@@ -157,8 +179,9 @@ export interface OpenSeaResponse extends Asset {
     opensea_link: string
     external_link: string
     traits: Array<{
-        trait_type: string
         value: string
+        trait_type: string
+        trait_count: number
     }>
     num_sales: number
     last_sale: AssetEvent | null
