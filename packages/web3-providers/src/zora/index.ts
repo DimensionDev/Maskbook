@@ -254,7 +254,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         address: string,
         tokenId: string,
         side: OrderSide,
-        { chainId = ChainId.Mainnet, indicator, sourceType }: HubOptions<ChainId, HubIndicator> = {},
+        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
     ) {
         const events = await this.getEventsFiltered<SaleEventProperty | V3AskEventProperty>(address, tokenId, (x) =>
             [EventType.SALE_EVENT, EventType.V1_MARKET_EVENT].includes(x.eventType),
