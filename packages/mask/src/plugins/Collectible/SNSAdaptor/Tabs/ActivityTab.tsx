@@ -35,7 +35,12 @@ export function ActivityTab(props: ActivityTabProps) {
     const { t } = useI18N()
     const _events = events.value?.data ?? EMPTY_LIST
     return useMemo(() => {
-        if (events.loading) return <LoadingBase />
+        if (events.loading)
+            return (
+                <div className={classes.body}>
+                    <LoadingBase />
+                </div>
+            )
         if (events.error || !events.value)
             return (
                 <div className={classes.body}>

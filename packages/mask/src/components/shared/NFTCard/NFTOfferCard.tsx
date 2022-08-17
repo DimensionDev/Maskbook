@@ -1,4 +1,5 @@
 import { makeStyles } from '@masknet/theme'
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { Typography } from '@mui/material'
 import type { NonFungibleTokenOrder, SourceType } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -70,22 +71,37 @@ export function NFTOfferCard(props: NFTOfferCardProps) {
                         <img className={classes.currencyIcon} src={offer.priceInToken?.token.logoURL} alt="" />
                     )) || (
                         <Typography className={classes.fallbackSymbol}>
-                            {offer.priceInToken?.token.symbol ?? offer.priceInToken?.token.name}
+                            {offer.priceInToken?.token.symbol || offer.priceInToken?.token.name}
                         </Typography>
                     )}
                     <Typography className={classes.textBase}>
                         <strong style={{ fontSize: 14 }}>{offer.priceInToken?.amount}</strong>{' '}
-                        <strong>{offer.price?.usd || '-'}</strong>
+                        {offer.price?.usd && <Typography fontSize={12}>(${offer.price.usd})</Typography>}
                     </Typography>
                 </div>
                 <div className={classes.flex} style={{ marginLeft: 40 }}>
-                    <Typography className={classes.textBase}>
-                        {t('plugin_collectible_from')}
+                    <Typography className={classes.textBase}>{t('plugin_collectible_from')}</Typography>
+
+                    <Typography className={classes.textBase} style={{ marginRight: 6 }}>
                         {(offer.maker?.address && (
-                            <strong style={{ fontSize: 14 }}> {Others?.formatAddress(offer.maker.address, 4)}</strong>
+                            <strong style={{ fontSize: 14, margin: '0px 4px' }}>
+                                {' '}
+                                {Others?.formatAddress(offer.maker.address, 4)}
+                            </strong>
                         )) ||
                             '-'}
-                        {offer.createdAt} {t('plugin_collectible_expires_in')} {offer.expiredAt}
+                    </Typography>
+
+                    <Typography className={classes.textBase}>
+                        {offer.createdAt &&
+                            formatDistanceToNow(new Date(offer.createdAt * 1000), {
+                                addSuffix: true,
+                            })}
+                        <span style={{ margin: '0 4px' }}>{t('plugin_collectible_expires_in')}</span>
+                        {offer.expiredAt &&
+                            formatDistanceToNow(new Date(offer.expiredAt * 1000), {
+                                addSuffix: true,
+                            })}
                     </Typography>
                 </div>
             </div>
