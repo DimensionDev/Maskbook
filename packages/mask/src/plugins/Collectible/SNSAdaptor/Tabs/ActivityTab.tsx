@@ -27,6 +27,13 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+const resolveActivityType = (type?: string) => {
+    if (!type) return ActivityType.Transfer
+    if (['created', 'MINT'].includes(type)) return ActivityType.Mint
+    if (['bid_entered'].includes(type)) return ActivityType.Sale
+    return ActivityType.Transfer
+}
+
 export interface ActivityTabProps {}
 
 export function ActivityTab(props: ActivityTabProps) {
@@ -61,7 +68,7 @@ export function ActivityTab(props: ActivityTabProps) {
             <CollectibleTab>
                 <div className={classes.body} style={{ justifyContent: 'unset' }}>
                     {_events.map((x, idx) => (
-                        <NFTActivityCard type={ActivityType.Transfer} key={idx} activity={x} />
+                        <NFTActivityCard type={resolveActivityType(x.type)} key={idx} activity={x} />
                     ))}
                 </div>
             </CollectibleTab>
