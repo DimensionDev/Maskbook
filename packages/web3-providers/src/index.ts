@@ -31,6 +31,7 @@ import { ChainbaseHistoryAPI, ChainbaseFungibleTokenAPI, ChainbaseNonFungibleTok
 export * from './helpers'
 export * from './types'
 export * from './opensea/utils'
+export { CollectionType } from './rss3/constants'
 
 export const OpenSea = new OpenSeaAPI()
 export const LooksRare = new LooksRareAPI()
