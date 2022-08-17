@@ -84,6 +84,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 )
             },
         },
+        Utils: {
+            shouldDisplay(_, socialAddressList) {
+                return !!socialAddressList?.length
+            },
+        },
     },
 }
 

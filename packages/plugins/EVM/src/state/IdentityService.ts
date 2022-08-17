@@ -69,7 +69,8 @@ export class IdentityService extends IdentityServiceState {
 
     /** Read a social address from bio. */
     private async getSocialAddressFromBio({ bio = '' }: SocialIdentity) {
-        return this.createSocialAddress(SocialAddressType.ADDRESS, getAddress(bio ?? ''))
+        if (!bio) return
+        return this.createSocialAddress(SocialAddressType.ADDRESS, getAddress(bio))
     }
 
     /** Read a social address from NextID. */

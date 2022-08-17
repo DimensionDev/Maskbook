@@ -29,7 +29,7 @@ export function Avatar(props: AvatarProps) {
             return shouldDisplay ? plugin.AvatarRealm?.UI?.Decorator : undefined
         })
 
-        return <Component identity={identity} />
+        return <Component identity={identity} socialAddressList={socialAddressList} />
     }, [identity, socialAddressList, sourceType])
 
     if (loadingSocialAddressList || !component) return null

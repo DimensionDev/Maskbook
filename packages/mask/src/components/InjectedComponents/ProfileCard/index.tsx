@@ -17,7 +17,7 @@ import { first, uniqBy } from 'lodash-unified'
 import { FC, useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { MaskMessages, sorter, useI18N, useLocationChange } from '../../../utils'
-import { useIsCurrentVisitingOwnerIdentity } from '../../DataSource/useActivatedUI'
+import { useIsMyIdentity } from '../../DataSource/useActivatedUI'
 
 interface Props extends withClasses<'text' | 'button' | 'root'> {
     identity: SocialIdentity
@@ -142,14 +142,16 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
     const [selectedAddress, setSelectedAddress] = useState<SocialAddress<NetworkPluginID> | undefined>()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
-    const isOwnerIdentity = useIsCurrentVisitingOwnerIdentity()
-    const currentVisitingUserId = identity.identifier?.userId
+    const isMyIdentity = useIsMyIdentity(identity)
+    const userId = identity.identifier?.userId
 
     const {
         value: socialAddressList = EMPTY_LIST,
         loading: loadingSocialAddressList,
         retry: retrySocialAddress,
-    } = useSocialAddressListAll(identity, isOwnerIdentity ? [SocialAddressType.NEXT_ID] : undefined, sorter)
+    } = useSocialAddressListAll(identity, isMyIdentity ? [SocialAddressType.NEXT_ID] : undefined, sorter)
+
+    console.log('avatar address list', { isMyIdentity }, identity.identifier?.userId, socialAddressList)
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
@@ -191,7 +193,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
 
     useUpdateEffect(() => {
         onChange(undefined, first(tabs)?.id)
-    }, [currentVisitingUserId])
+    }, [userId])
 
     useEffect(() => {
         const listener = () => setAnchorEl(null)
@@ -215,7 +217,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
 
     console.log('avatar tabs', tabs)
 
-    if (!currentVisitingUserId || loadingSocialAddressList)
+    if (!userId || loadingSocialAddressList)
         return (
             <div className={classes.root}>
                 <Box
@@ -305,7 +307,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
                                     color={(theme) => theme.palette.maskColor.dark}>
                                     {t('mask_network')}
                                 </Typography>
-                                {isOwnerIdentity ? (
+                                {isMyIdentity ? (
                                     <Icons.Gear
                                         variant="light"
                                         onClick={handleOpenDialog}

@@ -63,6 +63,14 @@ export function useIsOwnerIdentity(identity: IdentityResolved) {
     )
 }
 
+export function useIsMyIdentity(identity: IdentityResolved) {
+    const myIdentity = useLastRecognizedIdentity()
+    const myUserId = myIdentity.identifier?.userId
+    const userId = identity.identifier?.userId
+    if (!myUserId || !userId) return false
+    return myUserId.toLowerCase() === userId.toLowerCase()
+}
+
 export function useCurrentLinkedPersona() {
     const currentIdentity = useSubscription(CurrentIdentitySubscription)
     return useAsync(async () => {

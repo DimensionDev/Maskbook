@@ -8,7 +8,7 @@ import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils'
 import { PLUGIN_ID, PLUGIN_WRAPPER_TITLE } from '../constants'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { NFTPage } from './NFTPage'
-import { SocialAddressType } from '@masknet/web3-shared-base'
+import { NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
 import { setupContext } from '../context'
 
 const NFTTab: Plugin.SNSAdaptor.ProfileTab = {
@@ -71,6 +71,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
         {
             ...NFTTab,
             priority: 2,
+            Utils: {
+                ...NFTTab.Utils,
+                shouldDisplay(identity, socialAddress) {
+                    return socialAddress?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM
+                },
+            },
         },
     ],
     ApplicationEntries: [
