@@ -22,6 +22,8 @@ import {
     NonFungibleAsset,
     formatBalance,
     NonFungibleTokenStats,
+    HubIndicator,
+    Pageable,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, createNativeToken, createERC20Token } from '@masknet/web3-shared-evm'
 import type { NonFungibleTokenAPI, TrendingAPI } from '../types'
@@ -266,7 +268,7 @@ function createNFTHistory(chainId: ChainId, event: OpenSeaAssetEvent): NonFungib
         timestamp: new Date(`${event.created_date}Z`).getTime(),
         price: {
             [CurrencyType.USD]: new BigNumber(event.bid_amount ?? event.total_price ?? 0)
-                .dividedBy(scale10(event.payment_token.decimals))
+                .dividedBy(scale10(1, event.payment_token?.decimals))
                 .dividedBy(event.quantity)
                 .multipliedBy(event.payment_token?.usd_price ?? 1)
                 .toFixed(2),
@@ -412,6 +414,14 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             createIndicator(indicator),
             events.length === size ? createNextIndicator(indicator) : undefined,
         )
+    }
+
+    async getOffers(address: string, tokenId: string, options?: HubOptions<ChainId, HubIndicator> | undefined) {
+        return this.getOrders(address, tokenId, OrderSide.Buy, options)
+    }
+
+    async getListings(address: string, tokenId: string, options?: HubOptions<ChainId, HubIndicator> | undefined) {
+        return this.getOrders(address, tokenId, OrderSide.Sell, options)
     }
 
     async getOrders(
