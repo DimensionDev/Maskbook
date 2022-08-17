@@ -61,7 +61,7 @@ export function NFTOfferCard(props: NFTOfferCardProps) {
     const { classes } = useStyles()
     const { Others } = useWeb3State()
     const { t } = useI18N()
-
+    console.log(offer, 'offer')
     return (
         <div className={classes.wrapper}>
             <CollectibleProviderIcon active={false} provider={provider} />

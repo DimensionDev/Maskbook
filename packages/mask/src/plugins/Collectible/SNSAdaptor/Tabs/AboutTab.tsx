@@ -1,11 +1,15 @@
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useMemo } from 'react'
+import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
+import type { NetworkPluginID, SourceType, NonFungibleTokenOrder } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { AsyncState } from 'react-use/lib/useAsyncFn'
+import BigNumber from 'bignumber.js'
+import { first } from 'lodash-unified'
+import { CollectibleState } from '../../hooks/useCollectibleState'
 import { CollectibleTab } from '../CollectibleTab'
 import { NFTBasicInfo } from '../../../../components/shared/NFTCard/NFTBasicInfo'
 import { NFTPriceCard } from '../../../../components/shared/NFTCard/NFTPriceCard'
-import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
-import type { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
-import type { AsyncState } from 'react-use/lib/useAsyncFn'
 
 const useStyles = makeStyles()((theme) => ({
     body: {
@@ -27,9 +31,23 @@ export interface AboutTabProps {
     currentProvider: SourceType
 }
 
+const resolveTopOffer = (orders?: Array<NonFungibleTokenOrder<ChainId, SchemaType>>) => {
+    if (!orders || !orders.length) return
+    return first(
+        orders.sort((a, b) => {
+            const value_a = new BigNumber(a.priceInToken?.amount ?? 0)
+            const value_b = new BigNumber(b.priceInToken?.amount ?? 0)
+            return Number(value_a.lt(value_b))
+        }),
+    )
+}
+
 export function AboutTab(props: AboutTabProps) {
     const { asset, providers, currentProvider, onChangeProvider } = props
+    const { orders } = CollectibleState.useContainer()
     const { classes } = useStyles()
+
+    const topOffer = resolveTopOffer(orders.value?.data)
     return useMemo(() => {
         if (asset.loading || !asset.value)
             return (
@@ -51,7 +69,7 @@ export function AboutTab(props: AboutTabProps) {
                             asset={asset.value}
                         />
                     </div>
-                    <NFTPriceCard asset={asset.value} />
+                    <NFTPriceCard topOffer={topOffer} asset={asset.value} />
                 </div>
             </CollectibleTab>
         )

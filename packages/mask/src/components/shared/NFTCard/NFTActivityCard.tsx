@@ -106,7 +106,7 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
                                 {activity.paymentToken?.symbol || activity.paymentToken?.name}
                             </Typography>
                         )}
-                        <Typography className={classes.salePriceText}>(${activity.price?.usd || 0})</Typography>
+                        <Typography className={classes.salePriceText}>${activity.price?.usd || 0}</Typography>
                     </div>
                 )}
             </div>
