@@ -14,8 +14,21 @@ import {
     createNextIndicator,
     createLookupTableResolver,
     CurrencyType,
+    isSameAddress,
+    scale10,
 } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, createERC20Token } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    SchemaType,
+    createERC20Token,
+    USDC,
+    USDT,
+    HUSD,
+    BUSD,
+    DAI,
+    WBTC,
+    WNATIVE,
+} from '@masknet/web3-shared-evm'
 import { Token, RaribleEventType, RaribleOrder, RaribleHistory, RaribleNFTItemMapResponse } from './types'
 import { RaribleURL } from './constants'
 import type { NonFungibleTokenAPI } from '../types'
@@ -46,7 +59,12 @@ function createAccount(address?: string) {
 
 function createPaymentToken(chainId: ChainId, token?: Token) {
     if (token?.['@type'] !== 'ERC20' || !token?.contract) return
-    return createERC20Token(chainId, token.contract)
+    const address = token.contract.split(':')[1]
+    return (
+        [USDC, USDT, HUSD, BUSD, DAI, WBTC, WNATIVE].find((x) => isSameAddress(address, x[chainId].address))?.[
+            chainId
+        ] ?? createERC20Token(chainId, address)
+    )
 }
 
 function createRaribleLink(address: string, tokenId: string) {
@@ -76,7 +94,7 @@ function createAsset(chainId: ChainId, asset: RaribleNFTItemMapResponse): NonFun
         contract: {
             chainId,
             schema: SchemaType.ERC721,
-            address: asset.contract ?? asset.id,
+            address: asset.contract.split(':')[1],
             name: asset.meta?.name ?? '',
         },
         collection: {
@@ -92,6 +110,7 @@ function createAsset(chainId: ChainId, asset: RaribleNFTItemMapResponse): NonFun
 }
 
 function createOrder(chainId: ChainId, order: RaribleOrder): NonFungibleTokenOrder<ChainId, SchemaType> {
+    const paymentToken = createPaymentToken(chainId, order.make.type)
     return {
         id: order.id,
         chainId,
@@ -101,10 +120,10 @@ function createOrder(chainId: ChainId, order: RaribleOrder): NonFungibleTokenOrd
             [CurrencyType.USD]: order.takePriceUsd ?? order.makePriceUsd,
         },
         priceInToken:
-            (order.takePrice || order.makePrice) && order.make.type
+            (order.takePrice || order.makePrice) && paymentToken
                 ? {
-                      amount: order.takePrice ?? order.makePrice ?? '0',
-                      token: createPaymentToken(chainId, order.make.type)!,
+                      amount: scale10(order.takePrice ?? order.makePrice ?? '0', paymentToken?.decimals).toFixed(),
+                      token: paymentToken,
                   }
                 : undefined,
         side: OrderSide.Buy,
@@ -161,7 +180,10 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             orders: RaribleOrder[]
         }>(RaribleURL, requestPath)
         const orders = response.orders.map(
-            (order): NonFungibleTokenOrder<ChainId, SchemaType> => createOrder(chainId, order),
+            (order): NonFungibleTokenOrder<ChainId, SchemaType> => ({
+                ...createOrder(chainId, order),
+                assetPermalink: createRaribleLink(tokenAddress, tokenId),
+            }),
         )
         return createPageable(
             orders,
@@ -185,7 +207,10 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             orders: RaribleOrder[]
         }>(RaribleURL, requestPath)
         const orders = response.orders.map(
-            (order): NonFungibleTokenOrder<ChainId, SchemaType> => createOrder(chainId, order),
+            (order): NonFungibleTokenOrder<ChainId, SchemaType> => ({
+                ...createOrder(chainId, order),
+                assetPermalink: createRaribleLink(tokenAddress, tokenId),
+            }),
         )
         return createPageable(
             orders,
