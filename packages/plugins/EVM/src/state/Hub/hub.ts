@@ -195,18 +195,19 @@ class Hub implements EVM_Hub {
         const options = this.getOptions(initial, {
             chainId,
         })
-        const { TOKEN_ASSET_BASE_URI = EMPTY_LIST } = getTokenAssetBaseURLConstants(options.chainId)
+        const { NATIVE_TOKEN_ASSET_BASE_URI = EMPTY_LIST, ERC20_TOKEN_ASSET_BASE_URI = EMPTY_LIST } =
+            getTokenAssetBaseURLConstants(options.chainId)
         const formattedAddress = formatEthereumAddress(address)
 
         if (isNativeTokenAddress(formattedAddress)) {
-            return TOKEN_ASSET_BASE_URI.map((x) => `${x}/info/logo.png`)
+            return NATIVE_TOKEN_ASSET_BASE_URI?.map((x) => `${x}/info/logo.png`)
         }
 
         const specialIcon = SPECIAL_ICON_LIST.find(currySameAddress(address))
         if (specialIcon) return [specialIcon.logo_url]
 
         // load from remote
-        return TOKEN_ASSET_BASE_URI.map((x) => `${x}/assets/${formattedAddress}/logo.png`)
+        return ERC20_TOKEN_ASSET_BASE_URI.map((x) => `${x}/${formattedAddress}/logo.png/quality=85`)
     }
     async getNonFungibleTokenIconURLs(
         chainId: ChainId,
