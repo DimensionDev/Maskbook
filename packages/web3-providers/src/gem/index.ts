@@ -24,8 +24,10 @@ const resolveRarityId = createLookupTableResolver<
 
 async function fetchFromGem<T>(pathname: string) {
     const response = await globalThis.fetch(urlcat(GEM_API_URL, pathname))
-    const data = await response.json()
-    return data as T
+    const data = (await response.json()) as {
+        data: T
+    }
+    return data.data
 }
 
 export class GemAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {

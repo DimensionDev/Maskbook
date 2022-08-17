@@ -375,9 +375,9 @@ export interface NonFungibleTokenEvent<ChainId, SchemaType> {
     /** transaction hash */
     hash?: string
     /** the account make the order */
-    from: Identity
+    from?: Identity
     /** the account fullfil the order */
-    to: Identity
+    to?: Identity
     /** unix timestamp */
     timestamp: number
     /** relate token price */
