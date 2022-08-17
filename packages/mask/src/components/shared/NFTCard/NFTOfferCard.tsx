@@ -61,7 +61,7 @@ export function NFTOfferCard(props: NFTOfferCardProps) {
     const { classes } = useStyles()
     const { Others } = useWeb3State()
     const { t } = useI18N()
-
+    console.log(offer, 'offer')
     return (
         <div className={classes.wrapper}>
             <CollectibleProviderIcon active={false} provider={provider} />
@@ -77,7 +77,7 @@ export function NFTOfferCard(props: NFTOfferCardProps) {
                     <div className={classes.flex}>
                         <Typography className={classes.textBase}>
                             <strong style={{ fontSize: 14 }}>
-                                {formatBalance(offer.priceInToken?.amount, offer.priceInToken?.token.decimals ?? 18)}
+                                {formatBalance(offer.priceInToken?.amount, offer.priceInToken?.token.decimals || 18)}
                             </strong>
                         </Typography>
                         {offer.price?.usd && (

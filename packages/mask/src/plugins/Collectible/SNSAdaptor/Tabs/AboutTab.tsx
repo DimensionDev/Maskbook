@@ -46,6 +46,7 @@ export function AboutTab(props: AboutTabProps) {
     const { asset, providers, currentProvider, onChangeProvider } = props
     const { orders } = CollectibleState.useContainer()
     const { classes } = useStyles()
+    console.log(asset, 'asset')
 
     const topOffer = resolveTopOffer(orders.value?.data)
     return useMemo(() => {

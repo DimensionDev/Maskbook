@@ -66,7 +66,8 @@ export function NFTPriceCard(props: NFTPriceCardProps) {
     const { classes, cx } = useStyles()
     const { t } = useI18N()
 
-    const priceTokenImg = asset.priceInToken?.token.logoURL
+    if (!asset.priceInToken) return null
+    const priceTokenImg = asset.priceInToken.token.logoURL
 
     return (
         <div className={classes.wrapper}>
@@ -86,10 +87,6 @@ export function NFTPriceCard(props: NFTPriceCardProps) {
                     <Typography className={classes.fallbackSymbol}>{asset.priceInToken?.token.symbol}</Typography>
                 )}
                 <Typography className={classes.priceText}>{asset.priceInToken?.amount ?? '-'}</Typography>
-
-                {asset.price?.usd && (
-                    <Typography className={cx(classes.priceText, classes.textSm)}>(${asset.price.usd})</Typography>
-                )}
             </div>
             {topOffer && (
                 <div className={classes.offerBox}>
