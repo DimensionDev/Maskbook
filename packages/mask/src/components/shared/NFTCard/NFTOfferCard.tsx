@@ -61,7 +61,7 @@ export function NFTOfferCard(props: NFTOfferCardProps) {
     const { classes } = useStyles()
     const { Others } = useWeb3State()
     const { t } = useI18N()
-    console.log(offer, 'offer')
+
     return (
         <div className={classes.wrapper}>
             <CollectibleProviderIcon active={false} provider={provider} />
@@ -85,7 +85,6 @@ export function NFTOfferCard(props: NFTOfferCardProps) {
                     <Typography className={classes.textBase} style={{ marginRight: 6 }}>
                         {(offer.maker?.address && (
                             <strong style={{ fontSize: 14, margin: '0px 4px' }}>
-                                {' '}
                                 {Others?.formatAddress(offer.maker.address, 4)}
                             </strong>
                         )) ||
