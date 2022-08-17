@@ -44,13 +44,13 @@ export function TokenIcon(props: TokenIconProps) {
         }
     }, [chainId, address, isNFT, logoURL, hub])
     const { urls = EMPTY_LIST, key } = value ?? {}
-    const accessibleUrl = useAccessibleUrl(key, first(urls))
 
+    const accessibleUrl = useAccessibleUrl(key, first(urls))
     if (!accessibleUrl && disableDefaultIcon) return null
 
     return (
         <TokenIconUI
-            logoURL={isNFT ? logoURL : accessibleUrl}
+            logoURL={isNFT ? logoURL : accessibleUrl || first(urls)}
             AvatarProps={AvatarProps}
             classes={classes}
             name={name}
