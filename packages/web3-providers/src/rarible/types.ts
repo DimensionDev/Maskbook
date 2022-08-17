@@ -26,31 +26,6 @@ export enum RARIBLE_FEATURES {
     SECONDARY_SALE_FEES = 'SECONDARY_SALE_FEES',
 }
 
-export interface Ownership {
-    id: string
-    token: string
-    tokenId: string
-    owner: string
-    value: number
-    date: string
-    price: string
-    priceEth: string
-    buyValue: number
-    buyToken: string
-    buyTokenId: string
-    status: string
-    selling: number
-    sold: number
-    stock: number
-    signature: string
-    pending: RaribleTransferItem[]
-    blacklisted: boolean
-    creator: string
-    verified: boolean
-    categories: string[]
-    likes: number
-}
-
 export interface Creator {
     account: string
     value: number
@@ -63,56 +38,48 @@ export interface Meta {
         key: string
         value: string
     }>
-    image?: {
-        meta: {
-            PREVIEW: {
-                type: string
-                width: number
-                height: number
-            }
-        }
-        url: {
-            BIG: string
-            ORIGINAL: string
-            PREVIEW: string
-        }
-        name: string
-    }
-    animation?: {
-        meta: {
-            PREVIEW: {
-                type: string
-                width: number
-                height: number
-            }
-        }
-        url: {
-            BIG: string
-            ORIGINAL: string
-            PREVIEW: string
-        }
-    }
+    content?: Array<{
+        '@type': string
+        width: number
+        height: number
+        mimeType: string
+        representation: string
+        size: number
+        url: string
+    }>
+}
+
+export interface Token {
+    '@type': string
+    contract?: string
+    tokenId?: string
+}
+
+export interface LastSell {
+    buyer: string
+    currency: Token
+    date: string
+    price: string
+    seller: string
+    value: string
 }
 
 export interface RaribleNFTItemMapResponse {
+    id: string
+    blockchain: string
+    collection: string
+    contract: string
+    tokenId: string
+    creators: Creator[]
+    lazySupply: string
+    pending: RaribleTransferItem[]
     mintedAt: string
     lastUpdatedAt: string
-    contract: string
-    creators: Creator[]
-    date: string
-    deleted: boolean
-    id: string
-    lazySupply: string
-    meta?: Meta
-    owners: string[]
-    royalties: Royalty[]
-    pending: RaribleTransferItem[]
     supply: string
-    tokenId: string
-}
-
-export interface RaribleNFTOwnershipResponse extends RaribleNFTItemMapResponse {
-    ownership: Ownership
+    meta?: Meta
+    deleted: boolean
+    royalties: Royalty[]
+    lastSale?: LastSell
 }
 
 export interface Tag {
@@ -145,69 +112,87 @@ export enum RaribleProfileType {
     COLLECTION = 'COLLECTION',
 }
 
-export interface RaribleProfileResponse {
-    blacklisted: boolean
-    cover: string
-    followers: number
-    followings: number
-    has3Box: boolean
+export interface RaribleOrder {
     id: string
-    image: string
-    name?: string
-    description?: string
-    type: RaribleProfileType
-}
-
-export interface RaribleOfferResponse {
-    token: string
-    tokenId: string
-    assetType: string
+    fill: string
+    platform: string
+    status: string
+    startedAt?: string
+    endedAt?: string
+    makeStock: string
+    cancelled: boolean
+    createdAt: string
+    lastUpdatedAt: string
+    dbUpdatedAt?: string
+    makePrice?: string
+    takePrice?: string
+    makePriceUsd?: string
+    takePriceUsd?: string
     maker: string
-    salt: Salt
-    buyValue: number
-    buyToken: string
-    buyTokenId: string
-    buyAssetType: string
-    value: number
-    signature: string
-    updateDate: string
-    importantUpdateDate: Date
-    updateStateDate: Date
-    contractVersion: number
-    fee: string
-    sold: number
-    canceled: boolean
+    taker?: string
+    make: {
+        type: Token
+        value: string
+    }
+    take: {
+        type: Token
+        value: string
+    }
+    salt: string
+    signature?: string
     pending: RaribleTransferItem[]
-    buyPriceEth: string
-    version: number
-    id: string
-    active: boolean
-    buyPrice: number
-    sellPrice: number
-    buyStock: number
-}
-
-export interface RaribleOrder extends RaribleOfferResponse {
-    ownerInfo: RaribleProfileResponse
+    data: unknown
 }
 
 export enum RaribleEventType {
-    ORDER = 'order',
-    BUY = 'buy',
-    TRANSFER = 'transfer',
-    OFFER = 'offer',
+    TRANSFER = 'TRANSFER',
+    MINT = 'MINT',
+    BURN = 'BURN',
+    BID = 'BID',
+    LIST = 'LIST',
+    SELL = 'SELL',
+    CANCEL_LIST = 'CANCEL_LIST',
+    CANCEL_BID = 'CANCEL_BID',
+    AUCTION_BID = 'AUCTION_BID',
+    AUCTION_CREATED = 'AUCTION_CREATED',
+    AUCTION_CANCEL = 'AUCTION_CANCEL',
+    AUCTION_FINISHED = 'AUCTION_FINISHED',
+    AUCTION_STARTED = 'AUCTION_STARTED',
+    AUCTION_ENDED = 'AUCTION_ENDED',
 }
 
 export interface RaribleHistory {
     '@type': RaribleEventType
-    id: string
-    owner: string
-    value: string
-    price: string
-    buyToken: string
-    buyTokenId: string
-    buyer?: string
+    amountUsd: string
     from?: string
-    date: Date
-    transactionHash: string
+    buyer?: string
+    buyerOrderHash?: string
+    cursor: string
+    date: string
+    id: string
+    contract?: string
+    tokenId?: string
+    lastUpdatedAt: string
+    nft?: {
+        type: Token
+        value: string
+    }
+    payment?: {
+        type: Token
+        value: string
+    }
+    maker?: string
+    make?: Token
+    take?: Token
+    price: string
+    priceUsd: string
+    reverted: boolean
+    owner?: string
+    seller?: string
+    sellerOrderHash?: string
+    source: string
+    hash?: string
+    transactionHash?: string
+    value?: string
+    type: string
 }

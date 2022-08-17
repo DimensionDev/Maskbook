@@ -9,8 +9,8 @@ import {
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { compact } from 'lodash-unified'
 import urlcat from 'urlcat'
+import { compact } from 'lodash-unified'
 import { LooksRare, OpenSea } from '../index'
 import { LooksRareLogo, OpenSeaLogo } from '../resources'
 import { NonFungibleMarketplace, NonFungibleTokenAPI, TrendingAPI } from '../types'
@@ -50,9 +50,10 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         return token
     }
 
-    async getAssets(from: string, { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {}) {
+    async getAssets(from: string, { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {}) {
         const path = urlcat('/account/own/all/:from', {
             from,
+            size,
         })
         const assetGroup = await fetchV2<UserAssetsGroup[]>(path, { erc_type: ErcType.ERC721 })
         const assets = assetGroup?.flatMap((x) => x.assets.map(createERC721TokenAsset)) ?? []
@@ -61,7 +62,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
 
     async getAssetsByCollection(
         address: string,
-        { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {},
+        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
     ) {
         const index = indicator?.index ?? 0
         const url = urlcat(NFTSCAN_API, '/nftscan/nftSearch', {

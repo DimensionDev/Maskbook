@@ -5,14 +5,6 @@ import urlcat from 'urlcat'
 import { ChainId, createNativeToken, NETWORK_DESCRIPTORS, SchemaType } from '@masknet/web3-shared-evm'
 import type { FungibleAsset } from '@masknet/web3-shared-base'
 
-export function isProxyENV() {
-    try {
-        return process.env.PROVIDER_API_ENV === 'proxy'
-    } catch {
-        return false
-    }
-}
-
 export async function fetchJSON<T = unknown>(
     requestInfo: string,
     requestInit?: RequestInit,
