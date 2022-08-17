@@ -13,7 +13,6 @@ import {
     SocialAddress,
     SocialIdentity,
     SourceType,
-    Wallet,
 } from '@masknet/web3-shared-base'
 import { Box, Button, Stack, styled, Typography } from '@mui/material'
 import { uniqBy } from 'lodash-unified'
@@ -40,11 +39,11 @@ const AllButton = styled(Button)(({ theme }) => ({
     opacity: 0.5,
 }))
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ columns?: number }>()((theme, { columns = 3 }) => ({
     root: {
         width: '100%',
         display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
+        gridTemplateColumns: `repeat(${columns}, 1fr)`,
         gridGap: theme.spacing(2),
     },
     collectibleItem: {
@@ -122,41 +121,31 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface CollectibleListUIProps extends withClasses<'empty' | 'button' | 'text'> {
-    provider: SourceType
-    wallet?: Wallet
+export interface CollectibleListProps extends withClasses<'empty' | 'button'> {
+    address: SocialAddress<NetworkPluginID>
     collectibles: Array<NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+    columns?: number
+    error?: string
     loading: boolean
-    collectiblesRetry: () => void
-    error: string | undefined
+    retry(): void
     readonly?: boolean
     hasRetry?: boolean
-    address?: SocialAddress<NetworkPluginID>
 }
-function CollectibleListUI(props: CollectibleListUIProps) {
-    const {
-        provider,
-        wallet,
-        collectibles,
-        loading,
-        collectiblesRetry,
-        error,
-        readonly,
-        hasRetry = true,
-        address,
-    } = props
+
+export function CollectibleList(props: CollectibleListProps) {
+    const { address, collectibles, columns, loading, retry, error, readonly, hasRetry = true } = props
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const classes = useStylesExtends(useStyles({ columns }), props)
 
     return (
-        <CollectibleContext.Provider value={{ collectiblesRetry }}>
+        <CollectibleContext.Provider value={{ collectiblesRetry: retry }}>
             <Box className={classes.list}>
                 {loading && <LoadingSkeleton className={classes.root} />}
                 {error || (collectibles.length === 0 && !loading) ? (
                     <Box className={classes.text}>
                         <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
                         {hasRetry ? (
-                            <Button className={classes.button} variant="text" onClick={() => collectiblesRetry()}>
+                            <Button className={classes.button} variant="text" onClick={retry}>
                                 {t('plugin_collectible_retry')}
                             </Button>
                         ) : null}
@@ -168,8 +157,7 @@ function CollectibleListUI(props: CollectibleListUIProps) {
                                 className={classes.collectibleItem}
                                 renderOrder={index}
                                 asset={token}
-                                provider={provider}
-                                wallet={wallet}
+                                provider={SourceType.OpenSea}
                                 readonly={readonly}
                                 key={index}
                                 address={address}
@@ -179,33 +167,6 @@ function CollectibleListUI(props: CollectibleListUIProps) {
                 )}
             </Box>
         </CollectibleContext.Provider>
-    )
-}
-
-export interface CollectibleListProps extends withClasses<'empty' | 'button'> {
-    address: SocialAddress<NetworkPluginID>
-    collectibles: Array<NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
-    error?: string
-    loading: boolean
-    retry(): void
-}
-
-export function CollectibleList(props: CollectibleListProps) {
-    const { address, collectibles, error, loading, retry } = props
-    const classes = props.classes ?? {}
-
-    return (
-        <CollectibleListUI
-            provider={SourceType.OpenSea}
-            classes={classes}
-            collectibles={collectibles}
-            loading={loading}
-            collectiblesRetry={retry}
-            error={error}
-            readonly
-            address={address}
-            hasRetry={!!address}
-        />
     )
 }
 
@@ -219,7 +180,7 @@ export function CollectionList({
     profile?: SocialIdentity
 }) {
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const { classes } = useStyles({})
     const [selectedCollection, setSelectedCollection] = useState<
         NonFungibleTokenCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | undefined
     >()
