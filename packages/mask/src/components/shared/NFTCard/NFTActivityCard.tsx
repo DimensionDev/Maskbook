@@ -90,7 +90,6 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
     const { classes, cx } = useStyles()
     const { Others } = useWeb3State()
     const { t } = useI18N()
-    console.log(activity, 'event')
     return (
         <div className={classes.wrapper}>
             <div className={classes.flex}>
