@@ -17,22 +17,14 @@ const useStyles = makeStyles()((theme) => ({
     body: {
         position: 'relative',
         width: '100%',
+        height: 0,
+        paddingBottom: '100%',
         marginBottom: 36,
-        minHeight: 300,
-    },
-    errorPlaceholder: {
-        padding: '82px 0',
-        backgroundColor: theme.palette.background.default,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 12,
-        width: '100%',
+        boxShadow: `0px 28px 56px -28px ${MaskColorVar.primary.alpha(0.5)}`,
+        borderRadius: 20,
     },
     loadingPlaceholder: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
+        position: 'absolute',
         width: '100%',
         height: '100%',
         padding: '74px 0',
@@ -41,9 +33,10 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100% !important',
+        height: 'unset !important',
         width: '100% !important',
         overflow: 'hidden',
+        position: 'absolute',
     },
 
     loadingIcon: {
@@ -61,13 +54,10 @@ const useStyles = makeStyles()((theme) => ({
         height: '100%',
     },
     imgWrapper: {
-        minWidth: 300,
-        minHeight: 300,
+        position: 'absolute',
         width: '100%',
         height: '100%',
-        background: 'black',
         borderRadius: 20,
-        boxShadow: `0px 28px 56px -28px ${MaskColorVar.primary.alpha(0.5)}`,
         '& > img': {
             borderRadius: 20,
         },
@@ -89,7 +79,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     absoluteProvider: {
         top: 16,
-        right: '1%',
+        right: '5%',
         position: 'absolute',
         display: 'flex',
         alignItems: 'center',
@@ -100,7 +90,7 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
     },
     loadingFailImage: {
-        height: 300,
+        positon: 'absolute',
     },
 }))
 
@@ -137,6 +127,7 @@ export function NFTBasicInfo(props: NFTBasicInfoProps) {
                     classes={{
                         iframe: classes.iframe,
                         wrapper: classes.wrapper,
+                        imgWrapper: classes.imgWrapper,
                         loadingPlaceholder: classes.loadingPlaceholder,
                         loadingFailImage: classes.loadingFailImage,
                     }}

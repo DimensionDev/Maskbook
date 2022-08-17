@@ -2,7 +2,7 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
-import { NetworkPluginID, isZero, NonFungibleTokenOrder } from '@masknet/web3-shared-base'
+import { NetworkPluginID, isZero, NonFungibleTokenOrder, formatBalance } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 
@@ -24,7 +24,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         color: theme.palette.maskColor.publicSecond,
         '& > strong': {
-            color: theme.palette.maskColor.publicSecond,
+            color: theme.palette.maskColor.publicMain,
             margin: '0 8px',
         },
     },
@@ -66,7 +66,8 @@ export function NFTPriceCard(props: NFTPriceCardProps) {
     const { classes, cx } = useStyles()
     const { t } = useI18N()
 
-    const priceTokenImg = asset.priceInToken?.token.logoURL
+    if (!asset.priceInToken) return null
+    const priceTokenImg = asset.priceInToken.token.logoURL
 
     return (
         <div className={classes.wrapper}>
@@ -86,10 +87,6 @@ export function NFTPriceCard(props: NFTPriceCardProps) {
                     <Typography className={classes.fallbackSymbol}>{asset.priceInToken?.token.symbol}</Typography>
                 )}
                 <Typography className={classes.priceText}>{asset.priceInToken?.amount ?? '-'}</Typography>
-
-                {asset.price?.usd && (
-                    <Typography className={cx(classes.priceText, classes.textSm)}>(${asset.price.usd})</Typography>
-                )}
             </div>
             {topOffer && (
                 <div className={classes.offerBox}>
@@ -102,7 +99,12 @@ export function NFTPriceCard(props: NFTPriceCardProps) {
                         </Typography>
                     )}
                     <Typography className={classes.textBase}>
-                        <strong>{topOffer.priceInToken?.amount || '-'}</strong>
+                        <strong>
+                            {formatBalance(
+                                topOffer?.priceInToken?.amount,
+                                topOffer?.priceInToken?.token.decimals ?? 18,
+                            )}
+                        </strong>
                     </Typography>
                     <Typography className={classes.textBase}>
                         <strong>${topOffer.price?.usd || '-'}</strong>

@@ -33,7 +33,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        position: 'relative',
     },
     networkIcon: {
         position: 'absolute',

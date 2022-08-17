@@ -78,7 +78,7 @@ function createAsset(chainId: ChainId, asset: RaribleNFTItemMapResponse): NonFun
     return {
         id: asset.id || asset.contract,
         chainId,
-        tokenId: asset.tokenId.toString(),
+        tokenId: asset.tokenId,
         type: TokenType.NonFungible,
         address: asset.contract.split(':')[1],
         schema: SchemaType.ERC721,

@@ -54,7 +54,7 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.publicSecond,
         '& > strong': {
             color: theme.palette.maskColor.publicMain,
-            margin: '0 4px',
+            margin: '0px 8px',
         },
     },
     link: {
@@ -79,6 +79,9 @@ export enum ActivityType {
     Transfer = 'Transfer',
     Mint = 'Mint',
     Sale = 'Sale',
+    Offer = 'Offer',
+    List = 'List',
+    CancelOffer = 'Cancel Offer',
 }
 interface NFTActivityCardProps {
     type: ActivityType
@@ -90,6 +93,7 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
     const { classes, cx } = useStyles()
     const { Others } = useWeb3State()
     const { t } = useI18N()
+
     return (
         <div className={classes.wrapper}>
             <div className={classes.flex}>
@@ -97,7 +101,7 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
                     className={type === ActivityType.Sale ? cx(classes.title, classes.highlight) : classes.title}>
                     {type}
                 </Typography>
-                {type === ActivityType.Sale && (
+                {activity.paymentToken && (
                     <div className={classes.salePrice}>
                         {(activity.paymentToken?.logoURL && (
                             <img width={24} height={24} src={activity.paymentToken?.logoURL} alt="" />
@@ -114,20 +118,22 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
                 {activity.from ? (
                     <Typography className={classes.textBase}>
                         {t('plugin_collectible_from')}
-                        <strong>
-                            {' '}
-                            {activity.from.address ? Others?.formatAddress(activity.from.address, 4) : '-'}
-                        </strong>
+                        <strong>{activity.from.address ? Others?.formatAddress(activity.from.address, 4) : '-'}</strong>
                     </Typography>
-                ) : null}
+                ) : (
+                    <strong>-</strong>
+                )}
                 <Typography className={classes.textBase}>
-                    {t('plugin_collectible_to')}
-                    {activity.to ? (
-                        <strong>
-                            {activity.to.nickname ||
-                                (activity.to.address ? Others?.formatAddress(activity.to.address, 4) : '-')}
-                        </strong>
-                    ) : null}
+                    {activity.to && (
+                        <>
+                            {t('plugin_collectible_to')}
+                            <strong>
+                                {activity.to.nickname ||
+                                    (activity.to.address ? Others?.formatAddress(activity.to.address, 4) : '-')}
+                            </strong>
+                        </>
+                    )}
+
                     {activity.timestamp &&
                         formatDistanceToNow(new Date(activity.timestamp), {
                             addSuffix: true,

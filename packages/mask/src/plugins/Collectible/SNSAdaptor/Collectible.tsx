@@ -136,12 +136,12 @@ const useStyles = makeStyles()((theme) => {
 })
 
 const supportedProvider = [
-    // to add providers
-    SourceType.Rarible,
-    SourceType.Gem,
-    SourceType.X2Y2,
-    SourceType.LooksRare,
+    // to add providers, temp hide some providers
     SourceType.OpenSea,
+    SourceType.Gem,
+    SourceType.Rarible,
+    // SourceType.X2Y2,
+    // SourceType.LooksRare,
 ]
 
 export interface CollectibleProps {}
