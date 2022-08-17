@@ -36,6 +36,6 @@
     "powered_by": "Powered by",
     "loading": "Loading...",
     "no_wallet_message": "No valid wallet detected. Please connect wallet or verify wallet firstly.",
-    "persona_tooltips": "Please switch to the current account to set up NFTs Profile.",
+    "inactive_persona_tooltip": "Not current account. Please switch to this account to set up NFTs Profile.",
     "wallet_non_evm_warning": "The NFT PFP feature currently supports only EVM chains. Support for other<br>chains will be added in the future."
 }

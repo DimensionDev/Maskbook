@@ -22,8 +22,8 @@ export function HubContent(props: HubContentProps) {
     const chainId = useChainId()
     const account = useAccount()
     const [keyword, setKeyword] = useState<string>('PUNK')
-    const [address, setAddress] = useState<string>('0x7c3e8096b70a4ddc04c4344b8f33b97c9d12bc4e')
-    const [tokenId, setTokenId] = useState<string>('1')
+    const [address, setAddress] = useState<string>('0x60e4d786628fea6478f785a6d7e704777c86a7c6')
+    const [tokenId, setTokenId] = useState<string>('28850')
     const [sourceType, setSourceType] = useState(SourceType.OpenSea)
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
