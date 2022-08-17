@@ -195,10 +195,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                     button
                     className={`${classes.list} dashboard token-list`}
                     onClick={handleTokenSelect}
-                    disabled={
-                        (selected && mode === TokenListMode.List) ||
-                        (source === 'official-native' && mode === TokenListMode.Manage)
-                    }>
+                    disabled={selected && mode === TokenListMode.List}>
                     <ListItemIcon>
                         <TokenIcon
                             classes={{ icon: classes.icon }}
