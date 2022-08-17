@@ -24,10 +24,11 @@ export interface AboutTabProps {
     asset: AsyncState<Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>>
     onChangeProvider: (v: SourceType) => void
     providers: SourceType[]
+    currentProvider: SourceType
 }
 
 export function AboutTab(props: AboutTabProps) {
-    const { asset, providers, onChangeProvider } = props
+    const { asset, providers, currentProvider, onChangeProvider } = props
     const { classes } = useStyles()
     return useMemo(() => {
         if (asset.loading || !asset.value)
@@ -43,6 +44,7 @@ export function AboutTab(props: AboutTabProps) {
                 <div className={classes.body}>
                     <div className={classes.basic}>
                         <NFTBasicInfo
+                            currentProvider={currentProvider}
                             providers={providers}
                             onChangeProvider={onChangeProvider}
                             hideSubTitle

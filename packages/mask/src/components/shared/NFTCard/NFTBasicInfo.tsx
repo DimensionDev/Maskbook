@@ -33,13 +33,14 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
+        height: '100%',
         padding: '74px 0',
     },
     wrapper: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100%',
+        height: '100% !important',
         width: '100% !important',
         overflow: 'hidden',
     },
@@ -104,10 +105,11 @@ interface NFTBasicInfoProps {
     asset: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
     onChangeProvider: (v: SourceType) => void
     providers: SourceType[]
+    currentProvider: SourceType
 }
 
 export function NFTBasicInfo(props: NFTBasicInfoProps) {
-    const { asset, hideSubTitle, onChangeProvider, providers } = props
+    const { asset, hideSubTitle, onChangeProvider, providers, currentProvider } = props
     const { classes } = useStyles()
 
     const collectibleProviderOptions = getEnumAsArray(SourceType).filter((x) => providers.includes(x.value))
@@ -120,7 +122,7 @@ export function NFTBasicInfo(props: NFTBasicInfoProps) {
                     {collectibleProviderOptions.map((x) => {
                         return (
                             <div className={classes.providerIcon} key={x.key} onClick={() => onChangeProvider(x.value)}>
-                                <CollectibleProviderIcon provider={x.value} />
+                                <CollectibleProviderIcon active={currentProvider === x.value} provider={x.value} />
                             </div>
                         )
                     })}

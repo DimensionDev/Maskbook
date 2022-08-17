@@ -202,7 +202,12 @@ export function Collectible(props: CollectibleProps) {
     const renderTab = () => {
         const tabMap = {
             [tabs.about]: (
-                <AboutTab providers={supportedProvider} onChangeProvider={onDataProviderChange} asset={asset} />
+                <AboutTab
+                    currentProvider={provider}
+                    providers={supportedProvider}
+                    onChangeProvider={onDataProviderChange}
+                    asset={asset}
+                />
             ),
             [tabs.details]: <DetailTab asset={asset} />,
             [tabs.offers]: <OffersTab />,
@@ -217,6 +222,7 @@ export function Collectible(props: CollectibleProps) {
         { value: tabs.offers, label: t('plugin_collectible_offers') },
         { value: tabs.activity, label: t('plugin_collectible_activity') },
     ]
+    console.log(asset.value, 'value')
     return (
         <>
             <CollectibleCard classes={{ root: classes.root }}>
@@ -225,7 +231,7 @@ export function Collectible(props: CollectibleProps) {
                     avatar={
                         <LinkingAvatar
                             href={_asset.link ?? ''}
-                            title={_asset.owner?.nickname ?? _asset.owner?.address ?? ''}
+                            title={_asset.owner?.nickname ?? _asset.owner?.address ?? '-'}
                             src={
                                 _asset.collection?.iconURL ?? _asset.creator?.avatarURL ?? _asset.owner?.avatarURL ?? ''
                             }
@@ -233,7 +239,7 @@ export function Collectible(props: CollectibleProps) {
                     }
                     title={
                         <Typography style={{ display: 'flex', alignItems: 'center' }}>
-                            <Typography className={classes.cardTitle}>{_asset.metadata?.name ?? '-'}</Typography>
+                            <Typography className={classes.cardTitle}>{_asset.metadata?.name ?? '123'}</Typography>
                             {_asset.collection?.verified ? <Icons.VerifiedCollection sx={{ marginLeft: 0.5 }} /> : null}
                         </Typography>
                     }
@@ -244,7 +250,7 @@ export function Collectible(props: CollectibleProps) {
                                     <Typography className={classes.subtitle} component="div" variant="body2">
                                         <Markdown
                                             classes={{ root: classes.markdown }}
-                                            content={_asset.metadata.description ?? '-'}
+                                            content={_asset.metadata.description ?? '123'}
                                         />
                                     </Typography>
                                 </Box>

@@ -30,6 +30,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     priceZone: {
         display: 'flex',
+        alignItems: 'center',
         gap: 24,
         margin: '20px 0',
     },
@@ -50,6 +51,9 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'flex-end',
     },
+    textSm: {
+        fontSize: 24,
+    },
 }))
 
 interface NFTPriceCardProps {
@@ -59,7 +63,7 @@ interface NFTPriceCardProps {
 
 export function NFTPriceCard(props: NFTPriceCardProps) {
     const { asset, topOrder } = props
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { t } = useI18N()
 
     const priceTokenImg = asset.priceInToken?.token.logoURL
@@ -82,6 +86,10 @@ export function NFTPriceCard(props: NFTPriceCardProps) {
                     <Typography className={classes.fallbackSymbol}>{asset.priceInToken?.token.symbol}</Typography>
                 )}
                 <Typography className={classes.priceText}>{asset.priceInToken?.amount ?? '-'}</Typography>
+
+                {asset.price?.usd && (
+                    <Typography className={cx(classes.priceText, classes.textSm)}>(${asset.price.usd})</Typography>
+                )}
             </div>
             {topOrder && (
                 <div className={classes.offerBox}>
