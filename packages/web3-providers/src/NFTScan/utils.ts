@@ -71,9 +71,9 @@ export function createERC721TokenAsset(asset: NFTScanAsset): NonFungibleAsset<Ch
         description?: string
         image?: string
     } = JSON.parse(asset.metadata_json ?? '{}')
-    const name = payload?.name ?? asset.name ?? asset.contract_name ?? ''
+    const name = payload?.name || asset.name || asset.contract_name || ''
     const description = payload?.description
-    const mediaURL = asset.image_uri
+    const mediaURL = asset.nftscan_uri ?? asset.image_uri
     const chainId = ChainId.Mainnet
     const creator = asset.minter
     const owner = asset.owner
@@ -89,14 +89,10 @@ export function createERC721TokenAsset(asset: NFTScanAsset): NonFungibleAsset<Ch
         schema,
         creator: {
             address: creator,
-            avatarURL: '',
-            nickname: creator,
             link: urlcat(NFTSCAN_BASE + '/:id', { id: creator }),
         },
         owner: {
             address: owner,
-            avatarURL: '',
-            nickname: owner,
             link: urlcat(NFTSCAN_BASE + '/:id', { id: owner }),
         },
         traits: [],
