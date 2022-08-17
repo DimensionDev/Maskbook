@@ -78,7 +78,7 @@ export function NFTPropertiesCard(props: NFTPropertiesCardProps) {
                         <div key={x.type} className={classes.traitsItem}>
                             <Typography className={classes.traitsTitle}>{x.type}</Typography>
                             <Typography>{x.value}</Typography>
-                            <Typography>{x.rarity ?? '(-)%'}</Typography>
+                            <Typography>({x.rarity ?? '-%'})</Typography>
                         </div>
                     )
                 })}
