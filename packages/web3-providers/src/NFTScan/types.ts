@@ -54,7 +54,7 @@ export interface NFTScanAsset {
     /** mime type */
     content_type: string
     content_uri: string
-    image_uri: string
+    image_uri?: string
     external_uri: string
     latest_trade_price: string | null
     latest_trade_timestamp: number | null

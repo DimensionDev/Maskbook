@@ -131,6 +131,29 @@ function createOrder(chainId: ChainId, order: RaribleOrder): NonFungibleTokenOrd
     }
 }
 
+function createEvent(chainId: ChainId, history: RaribleHistory): NonFungibleTokenEvent<ChainId, SchemaType> {
+    return {
+        id: history.id,
+        chainId: ChainId.Mainnet,
+        from: createAccount(history.from ?? history.seller ?? history.owner ?? history.maker),
+        to: createAccount(history.buyer),
+        type: history['@type'],
+        assetPermalink:
+            history.nft?.type.contract && history.nft?.type.tokenId
+                ? createRaribleLink(history.nft.type.contract, history.nft.type.tokenId)
+                : undefined,
+        quantity: history.nft?.value ?? history.value ?? '0',
+        timestamp: getUnixTime(new Date(history.date)),
+        hash: history.transactionHash ?? history.hash,
+        price: history.priceUsd
+            ? {
+                  [CurrencyType.USD]: history.priceUsd,
+              }
+            : undefined,
+        paymentToken: createPaymentToken(chainId, history.payment?.type),
+    }
+}
+
 export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: { chainId?: ChainId } = {}) {
         const requestPath = `/v0.1/items/${resolveRaribleBlockchain(chainId)}:${address}:${tokenId}`
@@ -249,28 +272,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             activities: RaribleHistory[]
         }>(RaribleURL, requestPath)
 
-        const events = response.activities.map((history) => {
-            return {
-                id: history.id,
-                chainId: ChainId.Mainnet,
-                form: createAccount(history.from ?? history.seller ?? history.owner ?? history.maker),
-                to: createAccount(history.buyer),
-                type: history['@type'],
-                assetPermalink:
-                    history.nft?.type.contract && history.nft?.type.tokenId
-                        ? createRaribleLink(history.nft.type.contract, history.nft.type.tokenId)
-                        : undefined,
-                quantity: history.nft?.value ?? history.value,
-                timestamp: getUnixTime(new Date(history.date)),
-                hash: history.transactionHash ?? history.hash,
-                price: history.priceUsd
-                    ? {
-                          [CurrencyType.USD]: history.priceUsd,
-                      }
-                    : undefined,
-                paymentToken: createPaymentToken(chainId, history.payment?.type),
-            } as NonFungibleTokenEvent<ChainId, SchemaType>
-        })
+        const events = response.activities.map((history) => createEvent(chainId, history))
 
         return createPageable(
             events,
