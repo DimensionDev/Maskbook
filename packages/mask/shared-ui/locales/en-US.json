@@ -988,7 +988,7 @@
     "plugin_game_name": "GAME",
     "plugin_game_description": "Play game with your NFT.",
     "wallet_verify_persona_sign": "Persona Sign",
-    "wallet_verify_has_bound": "The wallet has already been bound to {currentPersona} Please switch to another wallet.",
+    "wallet_verify_has_bound": "The wallet has already been bound to {currentPersona}. Please switch to another wallet.",
     "wallet_verify_persona_name": "{{personaName}} Sign",
     "wallet_verify_empty_alert": "Please connect your wallet first.",
     "wallet_verify_persona_sign_intro": "Sign in seamlessly with your persona to ensure data validity.",
