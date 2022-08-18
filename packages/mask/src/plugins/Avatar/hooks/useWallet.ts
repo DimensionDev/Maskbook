@@ -7,5 +7,5 @@ export function useWallet(userId: string) {
     const getAddress = useGetAddress()
     return useAsyncRetry(async () => {
         return getAddress(activatedSocialNetworkUI.networkIdentifier as EnhanceableSite, userId)
-    }, [userId])
+    }, [userId, getAddress])
 }
