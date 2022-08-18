@@ -90,7 +90,7 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
     },
     loadingFailImage: {
-        positon: 'absolute',
+        position: 'absolute',
     },
 }))
 

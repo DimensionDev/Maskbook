@@ -79,20 +79,20 @@ export class Alchemy_EVM_API implements NonFungibleTokenAPI.Provider<ChainId_EVM
         const chainInfo = Alchemy_EVM_NetworkMap?.chains?.find((chain) => chain.chainId === chainId)
         if (!chainInfo) return createPageable([], createIndicator(indicator, ''))
 
-        const res = await fetchJSON<AlchemyResponse_EVM>(
+        const response = await fetchJSON<AlchemyResponse_EVM>(
             urlcat(`${chainInfo?.baseURL}/getNFTs/`, {
                 owner: from,
                 pageKey: typeof indicator?.index !== 'undefined' && indicator.index !== 0 ? indicator.id : undefined,
             }),
         )
 
-        const assets = res?.ownedNfts?.map((nft) =>
+        const assets = response?.ownedNfts?.map((nft) =>
             createNftToken_EVM((chainId as ChainId_EVM | undefined) ?? ChainId_EVM.Mainnet, nft),
         )
         return createPageable(
             assets,
             createIndicator(indicator),
-            res?.pageKey ? createNextIndicator(indicator, res.pageKey) : undefined,
+            response?.pageKey ? createNextIndicator(indicator, response.pageKey) : undefined,
         )
     }
 }
@@ -140,48 +140,44 @@ function createNftToken_EVM(
     chainId: ChainId_EVM,
     asset: AlchemyNFT_EVM,
 ): NonFungibleAsset<ChainId_EVM, SchemaType_EVM> {
-    const contractAddress = asset.contract?.address
+    const contractAddress = asset.contract.address
     const tokenId = formatAlchemyTokenId(asset.id.tokenId)
     return {
         id: `${contractAddress}_${tokenId}`,
         chainId,
         type: TokenType.NonFungible,
-        schema: asset?.id?.tokenMetadata?.tokenType === 'ERC721' ? SchemaType_EVM.ERC721 : SchemaType_EVM.ERC1155,
+        schema: asset.id?.tokenMetadata?.tokenType === 'ERC721' ? SchemaType_EVM.ERC721 : SchemaType_EVM.ERC1155,
         tokenId,
         address: contractAddress,
         link: resolveOpenSeaLink(contractAddress, tokenId, chainId),
         metadata: {
             chainId,
-            name: asset?.metadata?.name ?? asset?.title,
-            symbol: '',
-            description: asset.description,
+            name: asset.metadata.name ?? asset.title,
+            description: asset.metadata.description || asset.description,
             imageURL: resolveIPFSLinkFromURL(
-                asset?.metadata?.image ||
-                    asset?.metadata?.image_url ||
-                    asset?.media?.[0]?.gateway ||
-                    asset?.metadata?.animation_url ||
+                asset.metadata.image ||
+                    asset.metadata.image_url ||
+                    asset.media?.[0]?.gateway ||
+                    asset.metadata.animation_url ||
                     '',
             ),
             mediaURL: resolveIPFSLinkFromURL(
-                asset?.media?.[0]?.gateway ??
-                    asset?.media?.[0]?.raw ??
-                    asset?.metadata?.image_url ??
-                    asset?.metadata?.image,
+                asset.media?.[0]?.gateway ?? asset.media?.[0]?.raw ?? asset.metadata.image_url ?? asset.metadata.image,
             ),
         },
         contract: {
             chainId,
-            schema: asset?.id?.tokenMetadata?.tokenType === 'ERC721' ? SchemaType_EVM.ERC721 : SchemaType_EVM.ERC1155,
+            schema: asset.id?.tokenMetadata.tokenType === 'ERC721' ? SchemaType_EVM.ERC721 : SchemaType_EVM.ERC1155,
             address: contractAddress,
-            name: asset?.metadata?.name ?? asset?.title,
+            name: asset.metadata.name ?? asset.title,
             symbol: '',
         },
         collection: {
             address: contractAddress,
             chainId,
-            name: '',
+            name: asset.metadata.name || asset.title,
             slug: '',
-            description: asset.description,
+            description: asset.metadata.description || asset.description,
         },
     }
 }
@@ -194,45 +190,52 @@ function createNFTAsset_EVM(
 ): NonFungibleAsset<ChainId_EVM, SchemaType_EVM> {
     const tokenId = formatAlchemyTokenId(metaDataResponse.id.tokenId)
     return {
-        id: metaDataResponse.contract?.address,
+        id: `${metaDataResponse.contract.address}_${tokenId}`,
         chainId,
         type: TokenType.NonFungible,
         schema:
-            metaDataResponse?.id?.tokenMetadata?.tokenType === 'ERC721'
-                ? SchemaType_EVM.ERC721
-                : SchemaType_EVM.ERC1155,
+            metaDataResponse.id?.tokenMetadata?.tokenType === 'ERC721' ? SchemaType_EVM.ERC721 : SchemaType_EVM.ERC1155,
         tokenId,
         address: metaDataResponse.contract?.address,
         metadata: {
             chainId,
-            name: metaDataResponse?.metadata?.name ?? metaDataResponse?.title,
-            symbol: '',
+            name:
+                contractMetadataResponse?.contractMetadata.name ??
+                metaDataResponse.metadata?.name ??
+                metaDataResponse.title,
+            symbol: contractMetadataResponse?.contractMetadata?.symbol ?? '',
             description: metaDataResponse.description,
             imageURL: resolveIPFSLinkFromURL(
-                metaDataResponse?.metadata?.image ||
-                    metaDataResponse?.media?.[0]?.gateway ||
-                    metaDataResponse?.media?.[0]?.raw ||
+                metaDataResponse.metadata?.image ||
+                    metaDataResponse.media?.[0]?.gateway ||
+                    metaDataResponse.media?.[0]?.raw ||
                     '',
             ),
-            mediaURL: resolveIPFSLinkFromURL(metaDataResponse?.media?.[0]?.gateway),
+            mediaURL: resolveIPFSLinkFromURL(metaDataResponse.media?.[0]?.gateway),
         },
         contract: {
             chainId,
             schema:
-                metaDataResponse?.id?.tokenMetadata?.tokenType === 'ERC721'
+                metaDataResponse.id?.tokenMetadata?.tokenType === 'ERC721'
                     ? SchemaType_EVM.ERC721
                     : SchemaType_EVM.ERC1155,
-            address: metaDataResponse?.contract?.address,
-            name: metaDataResponse?.metadata?.name ?? metaDataResponse?.title,
+            address: metaDataResponse.contract?.address,
+            name:
+                contractMetadataResponse?.contractMetadata.name ??
+                metaDataResponse.metadata?.name ??
+                metaDataResponse.title,
             symbol: contractMetadataResponse?.contractMetadata?.symbol ?? '',
         },
         collection: {
             chainId,
-            name: '',
-            slug: '',
+            name:
+                contractMetadataResponse?.contractMetadata.name ??
+                metaDataResponse.metadata?.name ??
+                metaDataResponse.title,
+            slug: contractMetadataResponse?.contractMetadata?.symbol ?? '',
             description: metaDataResponse.description,
         },
-        link: resolveOpenSeaLink(metaDataResponse?.contract?.address, metaDataResponse.id?.tokenId, chainId),
+        link: resolveOpenSeaLink(metaDataResponse.contract?.address, metaDataResponse.id?.tokenId, chainId),
         owner: {
             address: first(ownersResponse?.owners),
         },
@@ -249,12 +252,12 @@ function createNftToken_FLOW(
 ): NonFungibleAsset<ChainId_FLOW, SchemaType_FLOW> {
     const tokenId = formatAlchemyTokenId(asset.id.tokenId)
     return {
-        id: asset.contract?.address,
+        id: `${asset.contract.address}_${tokenId}`,
         chainId,
         type: TokenType.NonFungible,
         schema: SchemaType_FLOW.NonFungible,
         tokenId,
-        address: asset.contract?.address,
+        address: asset.contract.address,
         metadata: {
             chainId,
             name: asset?.contract?.name ?? '',
@@ -293,35 +296,35 @@ function createNFTAsset_FLOW(
 ): NonFungibleAsset<ChainId_FLOW, SchemaType_FLOW> {
     const tokenId = formatAlchemyTokenId(metaDataResponse.id.tokenId)
     return {
-        id: metaDataResponse.contract?.address,
+        id: `${metaDataResponse.contract.address}_${tokenId}`,
         chainId,
         type: TokenType.NonFungible,
         schema: SchemaType_FLOW.NonFungible,
         tokenId,
-        address: metaDataResponse.contract?.address,
+        address: metaDataResponse.contract.address,
         metadata: {
             chainId,
-            name: metaDataResponse?.contract?.name,
+            name: metaDataResponse.contract?.name,
             symbol: '',
             description: metaDataResponse.description,
             imageURL:
                 resolveIPFS(
-                    metaDataResponse?.metadata?.metadata?.find((data) => data?.name === 'img')?.value ||
-                        metaDataResponse?.metadata?.metadata?.find((data) => data?.name === 'eventImage')?.value ||
-                        metaDataResponse?.metadata?.metadata?.find((data) => data?.name === 'ipfsLink')?.value ||
-                        metaDataResponse?.media?.find((data) => data?.mimeType === 'image/png | image')?.uri ||
+                    metaDataResponse.metadata?.metadata?.find((data) => data?.name === 'img')?.value ||
+                        metaDataResponse.metadata?.metadata?.find((data) => data?.name === 'eventImage')?.value ||
+                        metaDataResponse.metadata?.metadata?.find((data) => data?.name === 'ipfsLink')?.value ||
+                        metaDataResponse.media?.find((data) => data?.mimeType === 'image/png | image')?.uri ||
                         '',
                 ) ||
-                resolveAR(metaDataResponse?.metadata?.metadata?.find((data) => data?.name === 'arLink')?.value || ''),
+                resolveAR(metaDataResponse.metadata?.metadata?.find((data) => data?.name === 'arLink')?.value || ''),
             mediaURL: resolveIPFS(
-                metaDataResponse?.media?.find((data) => data?.mimeType === 'image/png | image')?.uri || '',
+                metaDataResponse.media?.find((data) => data?.mimeType === 'image/png | image')?.uri || '',
             ),
         },
         contract: {
             chainId,
             schema: SchemaType_FLOW.NonFungible,
-            address: metaDataResponse?.contract?.address,
-            name: metaDataResponse?.contract?.name,
+            address: metaDataResponse.contract?.address,
+            name: metaDataResponse.contract?.name,
             symbol: '',
         },
         collection: {
