@@ -122,10 +122,12 @@ export function createNonFungibleTokenAsset(chainId: ChainId, asset: Asset): Non
             address: creator,
             link: urlcat(NFTSCAN_BASE + '/:id', { id: creator }),
         },
-        owner: {
-            address: owner,
-            link: urlcat(NFTSCAN_BASE + '/:id', { id: owner }),
-        },
+        owner: owner
+            ? {
+                  address: owner,
+                  link: urlcat(NFTSCAN_BASE + '/:id', { id: owner }),
+              }
+            : undefined,
         traits:
             asset.attributes?.map((x) => ({
                 type: x.attribute_name,

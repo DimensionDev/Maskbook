@@ -46,7 +46,6 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             address,
             contract_address: address,
             token_id: tokenId,
-            erc_type: ErcType.ERC721,
             show_attribute: true,
         })
         const response = await fetchFromNFTScanV2<{ data: Asset }>(chainId, path)
