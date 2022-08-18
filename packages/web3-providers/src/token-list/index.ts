@@ -4,9 +4,21 @@ import { FungibleToken, TokenType } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, formatEthereumAddress, chainResolver } from '@masknet/web3-shared-evm'
 import type { TokenListBaseAPI } from '../types'
 
+const TOKEN_LIST_PACKAGE_URL = 'https://raw.githubusercontent.com/DimensionDev/Mask-Token-Lists/master/package.json'
+
+async function fetchTokenListVersion() {
+    const response = await globalThis.r2d2Fetch(TOKEN_LIST_PACKAGE_URL)
+    try {
+        const data = (await response.json()) as { version: string }
+        return data.version ?? ''
+    } catch {
+        return ''
+    }
+}
+
 const fetchTokenList = memoizePromise(
     async (url: string) => {
-        const response = await globalThis.r2d2Fetch(url, { cache: 'force-cache' })
+        const response = await globalThis.r2d2Fetch(url, { cache: 'default' })
         return response.json() as Promise<TokenListBaseAPI.TokenList<ChainId> | TokenListBaseAPI.TokenObject<ChainId>>
     },
     (url) => url,
@@ -60,6 +72,7 @@ async function fetchERC20TokensFromTokenList(urls: string[], chainId = ChainId.M
  */
 export class TokenListAPI implements TokenListBaseAPI.Provider<ChainId, SchemaType> {
     async fetchFungibleTokensFromTokenLists(chainId: ChainId, url: string[]) {
+        const tokenListVersion = await fetchTokenListVersion()
         const result = memoizePromise(
             async (urls: string[], chainId = ChainId.Mainnet): Promise<Array<FungibleToken<ChainId, SchemaType>>> => {
                 const tokens = (await fetchERC20TokensFromTokenList(urls, chainId))
@@ -73,7 +86,7 @@ export class TokenListAPI implements TokenListBaseAPI.Provider<ChainId, SchemaTy
                     }
                 })
             },
-            (urls, chainId) => `${chainId}-${urls.join()}`,
+            (urls, chainId) => `${chainId}-${urls.join()}-${tokenListVersion}`,
         )
 
         return result(url, chainId)
