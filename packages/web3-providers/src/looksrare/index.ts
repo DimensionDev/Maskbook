@@ -115,7 +115,7 @@ function createNonFungibleEventFromEvent(chainId: ChainId, event: Event): NonFun
         to: {
             address: event.to,
         },
-        timestamp: Number.parseInt(event.createdAt, 10),
+        timestamp: Number.parseInt(event.createdAt, 10) * 1000,
     }
 }
 

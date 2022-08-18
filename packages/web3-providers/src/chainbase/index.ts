@@ -1,5 +1,4 @@
 import urlcat from 'urlcat'
-import getUnixTime from 'date-fns/getUnixTime'
 import {
     createIndicator,
     createNextIndicator,
@@ -41,7 +40,7 @@ export class ChainbaseHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaT
             id: tx.transaction_hash,
             chainId,
             status: tx.status,
-            timestamp: getUnixTime(new Date(tx.block_timestamp)),
+            timestamp: new Date(tx.block_timestamp).getTime(),
             from: tx.from_address,
             to: tx.to_address,
             tokens: EMPTY_LIST,
@@ -212,7 +211,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
             type: 'transfer',
             assetPermalink: this.createNonFungibleTokenPermalink(chainId, address, event.token_id),
             hash: event.transaction_hash,
-            timestamp: getUnixTime(new Date(event.block_timestamp)),
+            timestamp: new Date(event.block_timestamp).getTime(),
             from: {
                 address: event.from_address,
             },

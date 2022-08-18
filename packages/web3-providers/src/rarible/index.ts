@@ -1,6 +1,5 @@
 import urlcat from 'urlcat'
 import { first } from 'lodash-unified'
-import getUnixTime from 'date-fns/getUnixTime'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     HubOptions,
@@ -17,7 +16,7 @@ import {
     scale10,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { Token, RaribleEventType, RaribleOrder, RaribleHistory, RaribleNFTItemMapResponse } from './types'
+import { RaribleEventType, RaribleOrder, RaribleHistory, RaribleNFTItemMapResponse } from './types'
 import { RaribleURL } from './constants'
 import type { NonFungibleTokenAPI } from '../types'
 import { getPaymentToken } from '../helpers'
@@ -83,7 +82,7 @@ function createAsset(chainId: ChainId, asset: RaribleNFTItemMapResponse): NonFun
             description: asset.meta?.description,
             iconURL: asset.meta?.content?.find((x) => x['@type'] === 'IMAGE' && x.representation === 'PREVIEW')?.url,
             verified: !asset.deleted,
-            createdAt: getUnixTime(new Date(asset.mintedAt)),
+            createdAt: new Date(asset.mintedAt).getTime(),
         },
     }
 }
@@ -98,7 +97,7 @@ function createOrder(chainId: ChainId, order: RaribleOrder): NonFungibleTokenOrd
         id: order.id,
         chainId,
         assetPermalink: '',
-        createdAt: getUnixTime(new Date(order.createdAt)),
+        createdAt: new Date(order.createdAt).getTime(),
         price: {
             [CurrencyType.USD]: order.takePriceUsd ?? order.makePriceUsd,
         },
@@ -130,7 +129,7 @@ function createEvent(chainId: ChainId, history: RaribleHistory): NonFungibleToke
                 ? createRaribleLink(history.nft.type.contract, history.nft.type.tokenId)
                 : undefined,
         quantity: history.nft?.value ?? history.value ?? '0',
-        timestamp: getUnixTime(new Date(history.date)),
+        timestamp: new Date(history.date).getTime(),
         hash: history.transactionHash ?? history.hash,
         price: history.priceUsd
             ? {
