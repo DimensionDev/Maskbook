@@ -4,8 +4,12 @@ import {
     createIndicator,
     createNextIndicator,
     createPageable,
+    HubIndicator,
     HubOptions,
-    NonFungibleAsset,
+    NonFungibleTokenCollection,
+    NonFungibleTokenContract,
+    NonFungibleTokenEvent,
+    Pageable,
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -14,49 +18,51 @@ import { compact } from 'lodash-unified'
 import { LooksRare, OpenSea } from '../index'
 import { LooksRareLogo, OpenSeaLogo } from '../resources'
 import { NonFungibleMarketplace, NonFungibleTokenAPI, TrendingAPI } from '../types'
-import { NFTSCAN_API, NFTSCAN_BASE } from './constants'
+import { NFTSCAN_API } from './constants'
 import {
-    Collection,
     ErcType,
     NFTPlatformInfo,
-    NFTScanAsset,
-    NFTSearchData,
+    Asset,
+    Collection,
     SearchNFTPlatformNameResult,
-    UserAssetsGroup,
+    AssetsGroup,
     VolumeAndFloorRecord,
+    Transaction,
 } from './types'
-import { createERC721TokenAsset, fetchFromNFTScan, fetchV2, getContractSymbol, prependIpfs } from './utils'
-
-type Result<T> = { data?: T; code: number }
+import {
+    createNonFungibleTokenAsset,
+    createNonFungibleTokenContract,
+    fetchFromNFTScan,
+    fetchFromNFTScanV2,
+    getContractSymbol,
+    createNonFungibleTokenEvent,
+    createNonFungibleTokenCollectionFromGroup,
+    createNonFungibleTokenCollectionFromCollection,
+} from './utils'
 
 export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType>, TrendingAPI.Provider<ChainId> {
-    async getAsset(address: string, tokenId: string) {
-        const path = urlcat('/assets/:address/:token_id', {
+    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
+        const path = urlcat('/api/v2/assets/:address/:token_id', {
             address,
+            contract_address: address,
             token_id: tokenId,
+            erc_type: ErcType.ERC721,
+            show_attribute: true,
         })
-        const [data, verifiedStatus] = await Promise.all([
-            fetchV2<NFTScanAsset>(path),
-            this.getCollectionVerifiedStatus(address),
-        ])
-        if (!data) return
-        const token = createERC721TokenAsset(data)
-        if (token.collection) {
-            token.collection = {
-                ...token.collection,
-                verified: verifiedStatus,
-            }
-        }
-        return token
+        const response = await fetchFromNFTScanV2<{ data: Asset }>(chainId, path)
+        if (!response?.data) return
+        return createNonFungibleTokenAsset(chainId, response.data)
     }
 
-    async getAssets(from: string, { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {}) {
-        const path = urlcat('/account/own/all/:from', {
-            from,
-            size,
+    async getAssets(account: string, { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {}) {
+        const path = urlcat('/api/v2/account/own/all/:from', {
+            from: account,
+            erc_type: ErcType.ERC721,
+            show_attribute: true,
         })
-        const assetGroup = await fetchV2<UserAssetsGroup[]>(path, { erc_type: ErcType.ERC721 })
-        const assets = assetGroup?.flatMap((x) => x.assets.map(createERC721TokenAsset)) ?? []
+        const response = await fetchFromNFTScanV2<{ data: AssetsGroup[] }>(chainId, path)
+        const assets =
+            response?.data?.flatMap((x) => x.assets.map((x) => createNonFungibleTokenAsset(chainId, x))) ?? EMPTY_LIST
         return createPageable(assets, createIndicator(indicator))
     }
 
@@ -64,74 +70,112 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         address: string,
         { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
     ) {
-        const index = indicator?.index ?? 0
-        const url = urlcat(NFTSCAN_API, '/nftscan/nftSearch', {
-            searchValue: address,
-            pageIndex: index,
-            pageSize: size,
+        const path = urlcat('/api/v2/assets/:address', {
+            address: address,
+            contract_address: address,
+            show_attribute: true,
+            limit: size,
+            cursor: indicator?.id,
         })
-        const response = await fetchFromNFTScan(url)
-        if (!response.ok) return createPageable([], createIndicator(indicator))
-        const result: Result<NFTSearchData> = await response.json()
-        if (!result.data) return createPageable([], createIndicator(indicator))
-        const [platformInfo, symbol] = await Promise.all([
-            this.getNftPlatformInfo(address),
-            getContractSymbol(address, chainId),
-        ])
-        const total = result.data.total
-        const rest = total - (index + 1) * size
+        const response = await fetchFromNFTScanV2<{
+            data: {
+                content: Asset[]
+                next?: string
+                total?: number
+            }
+        }>(chainId, path)
+        const assets = response?.data?.content.map((x) => createNonFungibleTokenAsset(chainId, x)) ?? EMPTY_LIST
         return createPageable(
-            result.data.nftList.map((x): NonFungibleAsset<ChainId, SchemaType> => {
-                return {
-                    contract: {
-                        chainId,
-                        name: platformInfo.name,
-                        symbol,
-                        address,
-                        schema: SchemaType.ERC721,
-                    },
-                    id: x.nft_asset_number,
-                    chainId,
-                    tokenId: x.nft_asset_number,
-                    type: TokenType.NonFungible,
-                    address,
-                    schema: SchemaType.ERC721,
-                    metadata: {
-                        chainId,
-                        name: x.nft_name,
-                        symbol,
-                        description: platformInfo.description,
-                        imageURL: prependIpfs(x.cover),
-                        mediaURL: prependIpfs(x.link),
-                    },
-                    link: urlcat(NFTSCAN_BASE, '/:address/:id', { address, id: x.nft_asset_number }),
-                }
-            }),
+            assets,
             createIndicator(indicator),
-            rest > 0 ? createNextIndicator(indicator) : undefined,
+            response?.data.next ? createNextIndicator(indicator, response?.data.next) : undefined,
         )
     }
 
-    private async getCollectionVerifiedStatus(address: string) {
-        const collection = await fetchV2<Collection>(urlcat('collections/:address', { address }))
-        return collection?.verified ?? false
+    async getCollectionsByOwner(
+        account: string,
+        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
+    ): Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>, HubIndicator>> {
+        const path = urlcat('/api/v2/account/own/all/:from', {
+            from: account,
+            erc_type: ErcType.ERC721,
+            show_attribute: true,
+        })
+        const response = await fetchFromNFTScanV2<{ data: AssetsGroup[] }>(chainId, path)
+        const collections =
+            response?.data.map((x) => createNonFungibleTokenCollectionFromGroup(chainId, x)) ?? EMPTY_LIST
+        return createPageable(collections, createIndicator(indicator))
+    }
+
+    async getCollectionsByKeyword(
+        keyword: string,
+        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId, HubIndicator> = {},
+    ): Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>, HubIndicator>> {
+        const path = '/api/v2/collections/filters'
+        const response = await fetchFromNFTScanV2<{ data: Collection[] }>(chainId, path, {
+            method: 'POST',
+            body: JSON.stringify({
+                name: keyword,
+                symbol: '',
+                limit: size.toString(),
+                offset: indicator?.index ?? '',
+                contract_address_list: [],
+            }),
+        })
+        const collections =
+            response?.data.map((x) => createNonFungibleTokenCollectionFromCollection(chainId, x)) ?? EMPTY_LIST
+        return createPageable(collections, createIndicator(indicator))
+    }
+
+    async getContract(
+        address: string,
+        { chainId = ChainId.Mainnet }: HubOptions<ChainId, HubIndicator> = {},
+    ): Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined> {
+        const path = urlcat('/api/v2/collections/:address', {
+            address,
+        })
+        const response = await fetchFromNFTScanV2<{ data: Collection }>(chainId, path)
+        if (!response?.data) return
+        return createNonFungibleTokenContract(chainId, response.data)
+    }
+
+    async getEvents(
+        address: string,
+        tokenId: string,
+        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId, HubIndicator> = {},
+    ): Promise<Pageable<NonFungibleTokenEvent<ChainId, SchemaType>>> {
+        const path = urlcat('/api/v2/transactions/:address/:tokenId', {
+            address,
+            tokenId,
+            limit: size,
+            cursor: indicator?.id,
+        })
+        const response = await fetchFromNFTScanV2<{ data: { content: Transaction[]; next?: string; total?: number } }>(
+            chainId,
+            path,
+        )
+        const events = response?.data.content.map((x) => createNonFungibleTokenEvent(chainId, x)) ?? EMPTY_LIST
+        return createPageable(
+            events,
+            createIndicator(indicator),
+            response?.data.next ? createNextIndicator(indicator, response?.data.next) : undefined,
+        )
     }
 
     private async getNftPlatformInfo(address: string): Promise<NFTPlatformInfo> {
         const url = urlcat(NFTSCAN_API, '/nftscan/getNftPlatformInfo', {
             keyword: address,
         })
-        const response = await fetchFromNFTScan(url)
-        const result: { data: NFTPlatformInfo } = await response.json()
-        return result.data
+        const response = await fetchFromNFTScan<{ data: NFTPlatformInfo }>(url)
+        return response.data
     }
+
     private async searchNftPlatformName(keyword: string): Promise<SearchNFTPlatformNameResult[]> {
         const url = urlcat(NFTSCAN_API, '/nftscan/searchNftPlatformName', {
             keyword,
         })
-        const response = await fetchFromNFTScan(url)
-        const result: { data: SearchNFTPlatformNameResult[] } = await response.json()
-        return result.data ?? EMPTY_LIST
+        const response = await fetchFromNFTScan<{ data: SearchNFTPlatformNameResult[] }>(url)
+        return response.data ?? EMPTY_LIST
     }
 
     private async getContractVolumeAndFloorByRange(contract: string, range: string): Promise<VolumeAndFloorRecord[]> {
@@ -139,9 +183,8 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             contract,
             range,
         })
-        const response = await fetchFromNFTScan(url)
-        const result: { data: VolumeAndFloorRecord[] } = await response.json()
-        return result.data ?? EMPTY_LIST
+        const response = await fetchFromNFTScan<{ data: VolumeAndFloorRecord[] }>(url)
+        return response.data ?? EMPTY_LIST
     }
 
     async getCoins(keyword: string, chainId = ChainId.Mainnet): Promise<TrendingAPI.Coin[]> {
@@ -164,9 +207,11 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         )
         return coins.filter((x) => x.symbol)
     }
+
     async getCurrencies(): Promise<TrendingAPI.Currency[]> {
         throw new Error('Not implemented yet.')
     }
+
     async getPriceStats(
         chainId: ChainId,
         coinId: string,
@@ -177,6 +222,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         const records = await this.getContractVolumeAndFloorByRange(coinId, range)
         return records.map((x) => [x.time, x.floor])
     }
+
     async getCoinTrending(
         chainId: ChainId,
         /** address as id */ id: string,

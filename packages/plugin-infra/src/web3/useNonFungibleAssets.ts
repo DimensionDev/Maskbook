@@ -22,7 +22,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
 
     // create iterator
     const iterator = useMemo(() => {
-        if ((!account && !options?.account) || !hub?.getNonFungibleTokens || !networks) return
+        if ((!account && !options?.account) || !hub?.getNonFungibleAssets || !networks) return
         setAssets(EMPTY_LIST)
         setDone(false)
         return flattenAsyncIterator(
@@ -31,7 +31,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
                 .filter((x) => (options?.chainId ? x.chainId === options?.chainId : true))
                 .map((x) => {
                     return pageableToIterator(async (indicator) => {
-                        return hub.getNonFungibleTokens!(options?.account ?? account, {
+                        return hub.getNonFungibleAssets!(options?.account ?? account, {
                             indicator,
                             size: 50,
                             ...options,
@@ -40,7 +40,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
                     })
                 }),
         )
-    }, [hub?.getNonFungibleTokens, account, JSON.stringify(options), networks.length])
+    }, [hub?.getNonFungibleAssets, account, JSON.stringify(options), networks.length])
 
     const next = useCallback(async () => {
         if (!iterator || done) return

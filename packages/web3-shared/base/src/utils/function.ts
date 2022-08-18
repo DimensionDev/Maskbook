@@ -8,7 +8,8 @@ export async function attemptUntil<T>(funcs: Array<() => Promise<T> | undefined>
             const result = await func()
             if (typeof result === 'undefined') continue
             return result
-        } catch {
+        } catch (e) {
+            console.error(e)
             continue
         }
     }

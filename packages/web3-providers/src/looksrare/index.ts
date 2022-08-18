@@ -11,6 +11,7 @@ import {
     NonFungibleTokenOrder,
     NonFungibleTokenStats,
     OrderSide,
+    Pageable,
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, createERC20Token, formatWeiToEther, SchemaType } from '@masknet/web3-shared-evm'
@@ -154,6 +155,13 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
             }),
         )
         return createNonFungibleAssetFromToken(chainId, response?.data)
+    }
+
+    async getAssets(
+        account: string,
+        options?: HubOptions<ChainId, HubIndicator>,
+    ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
+        throw new Error('Method not implemented.')
     }
 
     async getToken(address: string, tokenId: string, options: HubOptions<ChainId> = {}) {

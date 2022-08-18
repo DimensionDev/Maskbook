@@ -100,7 +100,7 @@ export namespace NonFungibleTokenAPI {
             options?: HubOptions<ChainId>,
         ) => Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
         /** Get non-fungible collections owned by the given account. */
-        getCollections?: (
+        getCollectionsByOwner?: (
             account: string,
             options?: HubOptions<ChainId, Indicator>,
         ) => Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>, Indicator>>

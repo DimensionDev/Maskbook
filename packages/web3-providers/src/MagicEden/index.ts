@@ -279,7 +279,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         )
     }
 
-    async getCollections(symbol: string, { indicator, size }: HubOptions<ChainId> = {}) {
+    async getCollectionsByOwner(symbol: string, { indicator, size }: HubOptions<ChainId> = {}) {
         const limit = size || 20
         const offset = (indicator?.index ?? 0) * limit
         const collections = await fetchFromMagicEden<Collection[]>(

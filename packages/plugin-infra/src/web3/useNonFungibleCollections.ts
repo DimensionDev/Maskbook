@@ -23,8 +23,8 @@ export function useNonFungibleCollections<S extends 'all' | void = void, T exten
         if (!account || !hub) return []
 
         const iterator = pageableToIterator(async (indicator?: HubIndicator) => {
-            if (!hub.getNonFungibleCollections) return
-            return hub.getNonFungibleCollections(account, {
+            if (!hub.getNonFungibleCollectionsByOwner) return
+            return hub.getNonFungibleCollectionsByOwner(account, {
                 indicator,
                 size: 50,
                 ...options,

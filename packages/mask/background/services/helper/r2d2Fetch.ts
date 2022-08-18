@@ -5,7 +5,6 @@ const R2D2_ROOT_URL = 'r2d2.to'
 enum R2d2Workers {
     alchemy = 'alchemy-proxy',
     opensea = 'opensea-proxy',
-    nftscan = 'nftscan-proxy',
     gitcoin = 'gitcoin-agent',
     coinMarketCap = 'coinmarketcap-agent',
     goPlusLabs = 'gopluslabs',
@@ -28,7 +27,6 @@ const AlchemyMatchers: Array<[string, AlchemyProxies]> = [
 
 const WorkerMatchers: Array<[string, R2d2Workers]> = [
     ['https://api.opensea.io', R2d2Workers.opensea],
-    ['https://restapi.nftscan.com', R2d2Workers.nftscan],
     ['https://gitcoin.co', R2d2Workers.gitcoin],
     ['https://web-api.coinmarketcap.com', R2d2Workers.coinMarketCap],
     ['https://api.gopluslabs.io', R2d2Workers.goPlusLabs],

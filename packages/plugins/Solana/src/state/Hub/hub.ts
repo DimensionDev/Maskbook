@@ -88,14 +88,14 @@ class Hub implements SolanaHub {
             return SolanaRPC.getNonFungibleAssets(options.account, options)
         }
     }
-    getNonFungibleCollections(
+    getNonFungibleCollectionsByOwner(
         account: string,
         initial?: HubOptions<ChainId>,
     ): Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>>> {
         const options = this.getOptions(initial, {
             account,
         })
-        return MagicEden.getCollections(options.account, options)
+        return MagicEden.getCollectionsByOwner(options.account, options)
     }
     getFungibleTokenPrice(chainId: ChainId, address: string, initial?: HubOptions<ChainId>): Promise<number> {
         const options = this.getOptions(initial)
