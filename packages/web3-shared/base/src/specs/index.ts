@@ -922,7 +922,7 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
     getNonFungibleTokenContract?: (
         address: string,
         initial?: Web3HubOptions,
-    ) => Promise<NonFungibleTokenContract<ChainId, SchemaType>>
+    ) => Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined>
     /** Get balance of a fungible token owned by the given account. */
     getFungibleTokenBalance?: (address: string, initial?: Web3HubOptions) => Promise<number>
     /** Get balance of non-fungible tokens in a collection owned by the given account. */
