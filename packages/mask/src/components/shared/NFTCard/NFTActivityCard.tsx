@@ -33,7 +33,8 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.publicMain,
     },
     highlight: {
-        color: theme.palette.maskColor.highlight,
+        // there is no public highlight color, temp hardcode
+        color: '#1C68F3',
     },
     salePrice: {
         display: 'flex',
@@ -101,7 +102,7 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
                     className={type === ActivityType.Sale ? cx(classes.title, classes.highlight) : classes.title}>
                     {type}
                 </Typography>
-                {activity.paymentToken && (
+                {![ActivityType.Mint, ActivityType.CancelOffer].includes(type) && activity.paymentToken && (
                     <div className={classes.salePrice}>
                         {(activity.paymentToken?.logoURL && (
                             <img width={24} height={24} src={activity.paymentToken?.logoURL} alt="" />
@@ -115,14 +116,18 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
                 )}
             </div>
             <div className={classes.flex}>
-                {activity.from ? (
-                    <Typography className={classes.textBase}>
-                        {t('plugin_collectible_from')}
-                        <strong>{activity.from.address ? Others?.formatAddress(activity.from.address, 4) : '-'}</strong>
-                    </Typography>
-                ) : (
-                    <strong>-</strong>
-                )}
+                <Typography className={classes.textBase}>
+                    {activity.from && (
+                        <>
+                            {t('plugin_collectible_from')}
+                            <strong>
+                                {activity.from.nickname ||
+                                    (activity.from.address ? Others?.formatAddress(activity.from.address, 4) : '-')}
+                            </strong>
+                        </>
+                    )}
+                </Typography>
+
                 <Typography className={classes.textBase}>
                     {activity.to && (
                         <>

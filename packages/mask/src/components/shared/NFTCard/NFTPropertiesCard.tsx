@@ -32,11 +32,11 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         display: 'flex',
         flexWrap: 'wrap',
-        gap: 16,
+        gap: 12,
     },
     traitsItem: {
         padding: 12,
-        width: 'calc(100%/3 - 48px)',
+        width: 'calc(100%/3 - 8px)',
         display: 'flex',
         flexDirection: 'column',
         gap: 8,
@@ -44,9 +44,11 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         color: theme.palette.maskColor.publicMain,
         fontWeight: 700,
+        marginBottom: 12,
         // there is no public bg, have to hardcode
         background: '#F9F9F9',
         borderRadius: 8,
+        boxSizing: 'border-box',
     },
     traitsTitle: {
         fontWeight: 400,

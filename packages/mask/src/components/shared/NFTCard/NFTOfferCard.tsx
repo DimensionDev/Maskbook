@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { Typography } from '@mui/material'
-import { NonFungibleTokenOrder, SourceType, formatBalance } from '@masknet/web3-shared-base'
+import { NonFungibleTokenOrder, SourceType, formatBalance, toFixed, formatCurrency } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../../../utils'
@@ -77,17 +77,25 @@ export function NFTOfferCard(props: NFTOfferCardProps) {
                     <div className={classes.flex}>
                         <Typography className={classes.textBase}>
                             <strong style={{ fontSize: 14 }}>
-                                {formatBalance(offer.priceInToken?.amount, offer.priceInToken?.token.decimals || 18)}
+                                {Number.parseFloat(
+                                    toFixed(
+                                        formatBalance(
+                                            offer.priceInToken?.amount,
+                                            offer.priceInToken?.token.decimals || 18,
+                                        ),
+                                        6,
+                                    ),
+                                )}
                             </strong>
                         </Typography>
                         {offer.price?.usd && (
                             <Typography className={classes.textBase} fontSize={12}>
-                                <strong>${offer.price.usd}</strong>
+                                <strong>{formatCurrency(offer.price.usd)}</strong>
                             </Typography>
                         )}
                     </div>
                 </div>
-                <div className={classes.flex} style={{ marginLeft: 40 }}>
+                <div className={classes.flex}>
                     <Typography className={classes.textBase}>{t('plugin_collectible_from')}</Typography>
 
                     <Typography className={classes.textBase} style={{ marginRight: 6 }}>
@@ -105,12 +113,14 @@ export function NFTOfferCard(props: NFTOfferCardProps) {
                                 addSuffix: true,
                             })) ||
                             '-'}
-                        <span style={{ margin: '0 4px' }}>{t('plugin_collectible_expires_in')}</span>
-                        {(offer.expiredAt &&
-                            formatDistanceToNow(new Date(offer.expiredAt * 1000), {
-                                addSuffix: true,
-                            })) ||
-                            '-'}
+                        {offer.expiredAt && (
+                            <>
+                                <span style={{ margin: '0 4px' }}>{t('plugin_collectible_expires_in')}</span>
+                                {formatDistanceToNow(new Date(offer.expiredAt * 1000), {
+                                    addSuffix: true,
+                                })}
+                            </>
+                        )}
                     </Typography>
                 </div>
             </div>

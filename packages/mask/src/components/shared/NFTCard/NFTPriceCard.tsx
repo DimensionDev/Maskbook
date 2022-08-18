@@ -2,7 +2,13 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
-import { NetworkPluginID, isZero, NonFungibleTokenOrder, formatBalance } from '@masknet/web3-shared-base'
+import {
+    NetworkPluginID,
+    isZero,
+    NonFungibleTokenOrder,
+    formatBalance,
+    formatCurrency,
+} from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 
@@ -106,9 +112,11 @@ export function NFTPriceCard(props: NFTPriceCardProps) {
                             )}
                         </strong>
                     </Typography>
-                    <Typography className={classes.textBase}>
-                        <strong>${topOffer.price?.usd || '-'}</strong>
-                    </Typography>
+                    {topOffer.price?.usd && (
+                        <Typography className={classes.textBase}>
+                            <strong>({formatCurrency(topOffer.price?.usd) || '-'})</strong>
+                        </Typography>
+                    )}
                 </div>
             )}
         </div>
