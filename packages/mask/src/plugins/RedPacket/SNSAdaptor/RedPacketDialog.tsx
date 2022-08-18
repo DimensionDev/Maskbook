@@ -157,7 +157,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             : showHistory
             ? setShowHistory(false)
             : onBack()
-    }, [showHistory, openNFTConfirmDialog, openSelectNFTDialog])
+    }, [showHistory, openNFTConfirmDialog, openSelectNFTDialog, onBack])
 
     const _onChange = useCallback((val: Omit<RedPacketSettings, 'password'>) => {
         setSettings(val)

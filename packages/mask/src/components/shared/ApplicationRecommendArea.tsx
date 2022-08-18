@@ -18,6 +18,7 @@ const useStyles = makeStyles()(() => {
         },
         carousel: {
             position: 'relative',
+            height: 138,
             zIndex: 100,
             overflowX: 'scroll',
             scrollbarColor: 'transparent transparent',
