@@ -170,7 +170,7 @@ export function Steps(props: StepsProps) {
             {notEvm && wallet.account && (
                 <Typography className={classes.hasBound}>{t('plugin_tips_not_evm_alert')}</Typography>
             )}
-            {isBound && (
+            {isBound && step !== 2 && (
                 <Typography className={classes.hasBound}>
                     {t('wallet_verify_has_bound', {
                         currentPersona: nickname ?? 'Persona Name',
