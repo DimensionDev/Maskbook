@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { Typography } from '@mui/material'
-import { NonFungibleTokenOrder, SourceType, formatBalance } from '@masknet/web3-shared-base'
+import { NonFungibleTokenOrder, SourceType, formatBalance, toFixed, formatCurrency } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../../../utils'
@@ -77,12 +77,20 @@ export function NFTOfferCard(props: NFTOfferCardProps) {
                     <div className={classes.flex}>
                         <Typography className={classes.textBase}>
                             <strong style={{ fontSize: 14 }}>
-                                {formatBalance(offer.priceInToken?.amount, offer.priceInToken?.token.decimals || 18)}
+                                {Number.parseFloat(
+                                    toFixed(
+                                        formatBalance(
+                                            offer.priceInToken?.amount,
+                                            offer.priceInToken?.token.decimals || 18,
+                                        ),
+                                        6,
+                                    ),
+                                )}
                             </strong>
                         </Typography>
                         {offer.price?.usd && (
                             <Typography className={classes.textBase} fontSize={12}>
-                                <strong>${offer.price.usd}</strong>
+                                <strong>{formatCurrency(offer.price.usd)}</strong>
                             </Typography>
                         )}
                     </div>

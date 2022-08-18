@@ -275,7 +275,7 @@ export function Collectible(props: CollectibleProps) {
                     </Typography>
                 </Box>
             )}
-            {provider === SourceType.OpenSea ? <ActionBar /> : null}
+            <ActionBar />
         </>
     )
 }
