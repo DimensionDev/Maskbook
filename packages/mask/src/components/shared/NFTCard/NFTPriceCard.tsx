@@ -9,6 +9,7 @@ import {
     formatBalance,
     formatCurrency,
 } from '@masknet/web3-shared-base'
+import { Icons } from '@masknet/icons'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 
@@ -31,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.publicSecond,
         '& > strong': {
             color: theme.palette.maskColor.publicMain,
-            margin: '0 8px',
+            margin: '0 2px',
         },
     },
     priceZone: {
@@ -73,7 +74,14 @@ export function NFTPriceCard(props: NFTPriceCardProps) {
     const { t } = useI18N()
 
     if (!asset.priceInToken) return null
-    const priceTokenImg = asset.priceInToken.token.logoURL
+    const priceTokenImg = (() => {
+        const url = asset.priceInToken.token.logoURL
+        if (url) {
+            return <img width={48} height={48} src={url} />
+        }
+        if (asset.priceInToken.token.symbol.toUpperCase() === 'WETH') return <Icons.WETH size={48} />
+        return <Typography className={classes.fallbackSymbol}>{asset.priceInToken?.token.symbol}</Typography>
+    })()
 
     return (
         <div className={classes.wrapper}>
@@ -89,9 +97,7 @@ export function NFTPriceCard(props: NFTPriceCardProps) {
                 )}
             </div>
             <div className={classes.priceZone}>
-                {(priceTokenImg && <img width={48} height={48} src={priceTokenImg} />) || (
-                    <Typography className={classes.fallbackSymbol}>{asset.priceInToken?.token.symbol}</Typography>
-                )}
+                {priceTokenImg}
                 <Typography className={classes.priceText}>{asset.priceInToken?.amount ?? '-'}</Typography>
             </div>
             {topOffer && (
@@ -99,11 +105,14 @@ export function NFTPriceCard(props: NFTPriceCardProps) {
                     <Typography className={classes.textBase}>{t('plugin_collectible_top_offer')}</Typography>
                     {(topOffer.priceInToken?.token.logoURL && (
                         <img width={18} height={18} src={topOffer.priceInToken?.token.logoURL} alt="" />
-                    )) || (
-                        <Typography className={classes.fallbackSymbol}>
-                            {topOffer.priceInToken?.token.symbol || topOffer.priceInToken?.token.name}
-                        </Typography>
-                    )}
+                    )) ||
+                        (topOffer.priceInToken?.token.symbol.toUpperCase() === 'WETH' ? (
+                            <Icons.WETH size={18} />
+                        ) : (
+                            <Typography className={classes.fallbackSymbol}>
+                                {topOffer.priceInToken?.token.symbol || topOffer.priceInToken?.token.name}
+                            </Typography>
+                        ))}
                     <Typography className={classes.textBase}>
                         <strong>
                             {formatBalance(

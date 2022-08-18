@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: 'unset !important',
+        height: '100% !important',
         width: '100% !important',
         overflow: 'hidden',
         position: 'absolute',

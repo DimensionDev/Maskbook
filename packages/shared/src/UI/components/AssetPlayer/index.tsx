@@ -196,7 +196,7 @@ export const AssetPlayer = memo<AssetPlayerProps>((props) => {
     )
 
     return (
-        <Box position="relative" width="100%" height="100%">
+        <Box width="100%" height="100%">
             <Box
                 className={
                     playerState === AssetPlayerState.ERROR ? classes.errorPlaceholder : classes.loadingPlaceholder

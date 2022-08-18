@@ -30,8 +30,8 @@ const useStyles = makeStyles()((theme) => ({
 const resolveActivityType = (type?: string) => {
     if (!type) return ActivityType.Transfer
     if (['created', 'MINT'].includes(type)) return ActivityType.Mint
-    if (['bid_entered', 'successful'].includes(type)) return ActivityType.Sale
-    if (['OFFER', 'offer_entered', 'bid_withdrawn'].includes(type)) return ActivityType.Offer
+    if (['successful'].includes(type)) return ActivityType.Sale
+    if (['OFFER', 'offer_entered', 'bid_withdrawn', 'bid_entered'].includes(type)) return ActivityType.Offer
     if (['LIST'].includes(type)) return ActivityType.List
     if (['CANCEL_OFFER'].includes(type)) return ActivityType.CancelOffer
     return ActivityType.Transfer
