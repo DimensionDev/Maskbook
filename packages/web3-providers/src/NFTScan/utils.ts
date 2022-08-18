@@ -15,7 +15,14 @@ import {
     scale10,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { ChainId, createContract, getRPCConstants, SchemaType, WNATIVE } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    createContract,
+    getRPCConstants,
+    resolveIPFSLinkFromURL,
+    SchemaType,
+    WNATIVE,
+} from '@masknet/web3-shared-evm'
 import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from './constants'
 import type { Asset, Collection, Payload, AssetsGroup, Transaction } from './types'
 import { courier, getPaymentToken } from '../helpers'
@@ -92,12 +99,14 @@ export function createNonFungibleTokenAsset(chainId: ChainId, asset: Asset): Non
     const payload = getPayload(asset.metadata_json)
     const name = payload?.name || asset.name || asset.contract_name || ''
     const description = payload?.description
-    const mediaURL =
+    const mediaURL = resolveIPFSLinkFromURL(
         asset.nftscan_uri ?? asset.image_uri?.startsWith('http')
             ? asset.image_uri
             : asset.image_uri
             ? `ipfs://${asset.image_uri}`
-            : undefined
+            : undefined,
+    )
+
     const creator = asset.minter
     const owner = asset.owner
     const schema = asset.erc_type === 'erc1155' ? SchemaType.ERC1155 : SchemaType.ERC721
@@ -236,9 +245,4 @@ export function createNonFungibleTokenEvent(
             : undefined,
         paymentToken,
     }
-}
-
-export const prependIpfs = (url: string) => {
-    if (!url || url.match(/^\w+:/)) return url
-    return `https://nftscan.mypinata.cloud/ipfs/${url}`
 }
