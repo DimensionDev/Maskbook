@@ -92,10 +92,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
                 : undefined,
             priceInToken: token.mintInfo?.price.nativePrice.raw
                 ? {
-                      amount: scale10(
-                          token.mintInfo?.price.nativePrice.raw,
-                          createNativeToken(chainId).decimals,
-                      ).toFixed(),
+                      amount: token.mintInfo?.price.nativePrice.raw,
                       token: createNativeToken(chainId),
                   }
                 : undefined,
@@ -165,7 +162,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
                         : undefined,
                     priceInToken: price.nativePrice.raw
                         ? {
-                              amount: scale10(price.nativePrice.raw, createNativeToken(chainId).decimals).toFixed(),
+                              amount: price.nativePrice.raw,
                               token: createNativeToken(chainId),
                           }
                         : undefined,
