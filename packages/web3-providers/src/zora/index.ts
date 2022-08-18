@@ -14,6 +14,7 @@ import {
     NonFungibleTokenEvent,
     NonFungibleTokenOrder,
     OrderSide,
+    Pageable,
     scale10,
     TokenType,
 } from '@masknet/web3-shared-base'
@@ -252,6 +253,13 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
         })
         if (!token) return
         return this.createNonFungibleAssetFromToken(ChainId.Mainnet, token.token.token)
+    }
+
+    async getAssets(
+        account: string,
+        options?: HubOptions<ChainId, HubIndicator>,
+    ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
+        throw new Error('Method not implemented.')
     }
 
     private async getEventsFiltered<T extends unknown>(

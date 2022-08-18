@@ -1,3 +1,13 @@
+export enum EventType {
+    Successful = 'successful',
+    Cancelled = 'cancelled',
+    BidEntered = 'bid_entered',
+    BidWithdrawn = 'bid_withdrawn',
+    Transfer = 'transfer',
+    OfferEntered = 'offer_entered',
+    Approve = 'approve',
+}
+
 export interface OpenSeaFees {
     opensea_seller_fee_basis_points: number
     opensea_buyer_fee_basis_points: number

@@ -24,7 +24,7 @@ export function HubContent(props: HubContentProps) {
     const [keyword, setKeyword] = useState<string>('PUNK')
     const [address, setAddress] = useState<string>('0x60e4d786628fea6478f785a6d7e704777c86a7c6')
     const [tokenId, setTokenId] = useState<string>('28850')
-    const [sourceType, setSourceType] = useState(SourceType.Zora)
+    const [sourceType, setSourceType] = useState(SourceType.NFTScan)
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
     type HubAll = Required<Hub<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll, Web3Helper.GasOptionAll>>
@@ -62,7 +62,7 @@ export function HubContent(props: HubContentProps) {
         ['getNonFungibleTokenStats', [address]],
         ['getNonFungibleTokenSecurity', [chainId, address]],
         ['getNonFungibleTokenContract', [address]],
-        ['getNonFungibleCollections', [account]],
+        ['getNonFungibleCollectionsByOwner', [account]],
         ['getNonFungibleCollectionsByKeyword', [keyword]],
         ['getNonFungibleTokenEvents', [address, tokenId]],
         ['getNonFungibleTokenOffers', [address, tokenId]],

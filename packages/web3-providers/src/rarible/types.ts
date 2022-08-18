@@ -182,8 +182,14 @@ export interface RaribleHistory {
         value: string
     }
     maker?: string
-    make?: Token
-    take?: Token
+    make?: {
+        type: Token
+        value: string
+    }
+    take?: {
+        type: Token
+        value: string
+    }
     price: string
     priceUsd: string
     reverted: boolean

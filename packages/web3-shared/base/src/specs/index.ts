@@ -289,11 +289,11 @@ export interface NonFungibleTokenCollection<ChainId, SchemaType> {
     chainId: ChainId
     name: string
     slug: string
-    address?: string
     symbol?: string
+    description?: string
+    address?: string
     schema?: SchemaType
     balance?: number
-    description?: string
     iconURL?: string
     /** verified by provider */
     verified?: boolean
@@ -368,6 +368,8 @@ export interface NonFungibleTokenEvent<ChainId, SchemaType> {
     type: string
     /** permalink of asset */
     assetPermalink?: string
+    /** name of asset */
+    assetName?: string
     /** symbol of asset */
     assetSymbol?: string
     /** token amount */
@@ -382,6 +384,9 @@ export interface NonFungibleTokenEvent<ChainId, SchemaType> {
     timestamp: number
     /** relate token price */
     price?: Price
+    /** the payment token and corresponding price */
+    priceInToken?: PriceInToken<ChainId, SchemaType>
+    /** the payment token */
     paymentToken?: FungibleToken<ChainId, SchemaType>
 }
 
@@ -1051,7 +1056,7 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
     /** Get non-fungible collections owned by the given account. */
-    getNonFungibleCollections?: (
+    getNonFungibleCollectionsByOwner?: (
         account: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>>>

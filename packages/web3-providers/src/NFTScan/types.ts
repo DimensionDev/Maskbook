@@ -1,12 +1,30 @@
-interface AttributeValue {
+export interface AttributesValue {
     attributes_value: string
     total: number
 }
-interface Attribute {
+export interface Attributes {
     attributes_name: string
-    attributes_values: AttributeValue[]
+    attributes_values: AttributesValue[]
     total: number
 }
+
+export interface Attribute {
+    attribute_name: string
+    attribute_value: string
+    percentage: string
+}
+
+export interface Payload {
+    name?: string
+    description?: string
+    image?: string
+    attributes?: Array<{
+        trait_type: string
+        value: string
+        percentage?: string
+    }>
+}
+
 export interface Collection {
     contract_address: string
     name: string
@@ -24,7 +42,7 @@ export interface Collection {
     banner_url: string
     featured_url: string
     large_image_url: string
-    attributes: Attribute[]
+    attributes: Attributes[]
     erc_type: ErcType | string
     deploy_block_number: number
     owner: string
@@ -37,7 +55,8 @@ export interface Collection {
     collections_with_same_name: []
 }
 
-export interface NFTScanAsset {
+export interface Asset {
+    attributes: Attribute[]
     contract_address: string
     contract_name: string
     contract_token_id: string
@@ -67,27 +86,40 @@ export enum ErcType {
     ERC1155 = 'erc1155',
 }
 
-/**
- * User assets group by contract address
- */
-export interface UserAssetsGroup {
+export interface AssetsGroup {
     contract_address: string
     contract_name: string
     logo_url: string
     owns_total: number
     items_total: number
     description: string
-    assets: NFTScanAsset[]
+    assets: Asset[]
 }
 
-export type NFT_Assets = {
-    nft_asset: NFTScanAsset[]
-    nft_asset_count: number
-    nft_contract_address: string
-    nft_platform_count: number
-    nft_platform_describe: string
-    nft_platform_image: string
-    nft_platform_name: string
+export interface Transaction {
+    amount: string
+    block_hash: string
+    block_number: number
+    contract_address: string
+    contract_name: string
+    contract_token_id: string
+    erc_type: string
+    event_type: string
+    exchange_name: string
+    from: string
+    gas_fee: number
+    gas_price: string
+    gas_used: string
+    hash: string
+    nftscan_tx_id: string
+    receive: string
+    send: string
+    timestamp: number
+    to: string
+    token_id: string
+    trade_price: number
+    trade_symbol: string
+    trade_value: string
 }
 
 export interface NFTPlatformInfo {
@@ -154,9 +186,4 @@ export interface NFTItem {
     ercType: number
     /** url */
     logo: string
-}
-
-export interface NFTSearchData {
-    nftList: NFTItem[]
-    total: number
 }

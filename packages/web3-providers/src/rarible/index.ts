@@ -14,24 +14,13 @@ import {
     createNextIndicator,
     createLookupTableResolver,
     CurrencyType,
-    isSameAddress,
     scale10,
 } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    SchemaType,
-    createERC20Token,
-    USDC,
-    USDT,
-    HUSD,
-    BUSD,
-    DAI,
-    WBTC,
-    WNATIVE,
-} from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Token, RaribleEventType, RaribleOrder, RaribleHistory, RaribleNFTItemMapResponse } from './types'
 import { RaribleURL } from './constants'
 import type { NonFungibleTokenAPI } from '../types'
+import { getPaymentToken } from '../helpers'
 
 const resolveRaribleBlockchain = createLookupTableResolver<number, string>(
     {
@@ -55,16 +44,6 @@ function createAccount(address?: string) {
     return {
         address: address.split(':')[1],
     }
-}
-
-function createPaymentToken(chainId: ChainId, token?: Token) {
-    if (token?.['@type'] !== 'ERC20' || !token?.contract) return
-    const address = token.contract.split(':')[1]
-    return (
-        [USDC, USDT, HUSD, BUSD, DAI, WBTC, WNATIVE].find((x) => isSameAddress(address, x[chainId].address))?.[
-            chainId
-        ] ?? createERC20Token(chainId, address)
-    )
 }
 
 function createRaribleLink(address: string, tokenId: string) {
@@ -110,7 +89,11 @@ function createAsset(chainId: ChainId, asset: RaribleNFTItemMapResponse): NonFun
 }
 
 function createOrder(chainId: ChainId, order: RaribleOrder): NonFungibleTokenOrder<ChainId, SchemaType> {
-    const paymentToken = createPaymentToken(chainId, order.make.type)
+    const paymentToken = getPaymentToken(chainId, {
+        name: order.make.type['@type'],
+        symbol: order.make.type['@type'],
+        address: order.make.type.contract?.split(':')[1],
+    })
     return {
         id: order.id,
         chainId,
@@ -119,19 +102,23 @@ function createOrder(chainId: ChainId, order: RaribleOrder): NonFungibleTokenOrd
         price: {
             [CurrencyType.USD]: order.takePriceUsd ?? order.makePriceUsd,
         },
-        priceInToken:
-            (order.takePrice || order.makePrice) && paymentToken
-                ? {
-                      amount: scale10(order.takePrice ?? order.makePrice ?? '0', paymentToken?.decimals).toFixed(),
-                      token: paymentToken,
-                  }
-                : undefined,
+        priceInToken: paymentToken
+            ? {
+                  amount: scale10(order.takePrice ?? order.makePrice ?? '0', paymentToken?.decimals).toFixed(),
+                  token: paymentToken,
+              }
+            : undefined,
         side: OrderSide.Buy,
         quantity: order.fill,
     }
 }
 
 function createEvent(chainId: ChainId, history: RaribleHistory): NonFungibleTokenEvent<ChainId, SchemaType> {
+    const paymentToken = getPaymentToken(chainId, {
+        name: history.payment?.type['@type'] ?? history.take?.type['@type'],
+        symbol: history.payment?.type['@type'] ?? history.take?.type['@type'],
+        address: history.make?.type.contract?.split(':')[1] ?? history.take?.type.contract?.split(':')[1],
+    })
     return {
         id: history.id,
         chainId: ChainId.Mainnet,
@@ -150,7 +137,13 @@ function createEvent(chainId: ChainId, history: RaribleHistory): NonFungibleToke
                   [CurrencyType.USD]: history.priceUsd,
               }
             : undefined,
-        paymentToken: createPaymentToken(chainId, history.payment?.type),
+        priceInToken: paymentToken
+            ? {
+                  amount: scale10(history.price, paymentToken.decimals).toFixed(),
+                  token: paymentToken,
+              }
+            : undefined,
+        paymentToken,
     }
 }
 
