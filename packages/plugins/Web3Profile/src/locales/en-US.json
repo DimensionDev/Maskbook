@@ -13,7 +13,7 @@
     "Flow_wallet": "Flow Wallet",
     "wallet_status_button_change": "Change",
     "plugin_wallet_on_connect": "Connect Wallet",
-    "wallet_verify_has_bound": "The wallet has already been bound to {currentPersona}. Please switch to another wallet.",
+    "wallet_verify_has_bound": "The wallet has already been bound to {{currentPersona}}. Please switch to another wallet.",
     "wallet_verify_empty_alert": "Please connect your wallet first.",
     "wallet_verify_persona_name": "{{personaName}} Sign",
     "wallet_verify_persona_sign_intro": "Sign seamlessly with Persona, ensure the validity of data.",
