@@ -14,8 +14,6 @@ import { max } from 'lodash-unified'
 import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/RainbowBox'
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
 
 export function injectNFTAvatarInInstagram(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchInstagramAvatarSelector())
@@ -52,13 +50,13 @@ function NFTAvatarInInstagram() {
     const { value: _avatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SNS.INSTAGRAM)
 
     const account = useAccount()
-    const { loading: loadingWallet, value: storage } = useWallet(_avatar?.userId ?? '')
+    const { loading: loadingWallet, value: storage } = useWallet(_avatar?.userId)
     const { value: nftInfo, loading: loadingNFTInfo } = useNFT(
         storage?.address ?? account,
-        _avatar?.address ?? '',
-        _avatar?.tokenId ?? '',
-        _avatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM,
-        _avatar?.chainId ?? ChainId.Mainnet,
+        _avatar?.address,
+        _avatar?.tokenId,
+        _avatar?.pluginId,
+        _avatar?.chainId,
     )
 
     const windowSize = useWindowSize()

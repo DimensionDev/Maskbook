@@ -17,7 +17,6 @@ import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
 
 export function injectNFTAvatarInFacebook(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchFacebookAvatarSelector())
@@ -65,15 +64,15 @@ function NFTAvatarInFacebook() {
     const [avatar, setAvatar] = useState<AvatarMetaDB>()
     const identity = useCurrentVisitingIdentity()
     const location = useLocation()
-    const { value: _avatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SNS.FACEBOOK)
+    const { value: nftAvatar } = useNFTAvatar(identity.identifier?.userId, RSS3_KEY_SNS.FACEBOOK)
     const account = useAccount()
-    const { loading: loadingWallet, value: storage } = useWallet(_avatar?.userId ?? '')
+    const { loading: loadingWallet, value: storage } = useWallet(nftAvatar?.userId)
     const { value: nftInfo, loading: loadingNFTInfo } = useNFT(
         storage?.address ?? account,
-        _avatar?.address ?? '',
-        _avatar?.tokenId ?? '',
-        _avatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM,
-        _avatar?.chainId ?? ChainId.Mainnet,
+        nftAvatar?.address,
+        nftAvatar?.tokenId,
+        nftAvatar?.pluginId ?? NetworkPluginID.PLUGIN_EVM,
+        nftAvatar?.chainId,
     )
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
@@ -174,7 +173,7 @@ function NFTAvatarInFacebook() {
         }
     }, [identity.avatar])
 
-    useEffect(() => setAvatar(_avatar), [_avatar, location])
+    useEffect(() => setAvatar(nftAvatar), [nftAvatar, location])
 
     // #region clear white border
     useLayoutEffect(() => {
