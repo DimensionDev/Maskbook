@@ -105,12 +105,14 @@ export function NFTOfferCard(props: NFTOfferCardProps) {
                                 addSuffix: true,
                             })) ||
                             '-'}
-                        <span style={{ margin: '0 4px' }}>{t('plugin_collectible_expires_in')}</span>
-                        {(offer.expiredAt &&
-                            formatDistanceToNow(new Date(offer.expiredAt * 1000), {
-                                addSuffix: true,
-                            })) ||
-                            '-'}
+                        {offer.expiredAt && (
+                            <>
+                                <span style={{ margin: '0 4px' }}>{t('plugin_collectible_expires_in')}</span>
+                                {formatDistanceToNow(new Date(offer.expiredAt * 1000), {
+                                    addSuffix: true,
+                                })}
+                            </>
+                        )}
                     </Typography>
                 </div>
             </div>

@@ -31,8 +31,8 @@ const useStyles = makeStyles()((theme) => ({
     content: {
         width: '100%',
         display: 'flex',
+        justifyContent: 'space-between',
         flexWrap: 'wrap',
-        gap: 16,
     },
     traitsItem: {
         padding: 12,
@@ -44,6 +44,7 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         color: theme.palette.maskColor.publicMain,
         fontWeight: 700,
+        marginBottom: 12,
         // there is no public bg, have to hardcode
         background: '#F9F9F9',
         borderRadius: 8,

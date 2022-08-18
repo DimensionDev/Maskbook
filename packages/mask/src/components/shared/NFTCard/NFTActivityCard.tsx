@@ -33,7 +33,8 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.publicMain,
     },
     highlight: {
-        color: theme.palette.maskColor.highlight,
+        // there is no public highlight color, temp hardcode
+        color: '#1C68F3',
     },
     salePrice: {
         display: 'flex',
@@ -93,7 +94,7 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
     const { classes, cx } = useStyles()
     const { Others } = useWeb3State()
     const { t } = useI18N()
-
+    console.log(activity)
     return (
         <div className={classes.wrapper}>
             <div className={classes.flex}>
@@ -115,14 +116,18 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
                 )}
             </div>
             <div className={classes.flex}>
-                {activity.from ? (
-                    <Typography className={classes.textBase}>
-                        {t('plugin_collectible_from')}
-                        <strong>{activity.from.address ? Others?.formatAddress(activity.from.address, 4) : '-'}</strong>
-                    </Typography>
-                ) : (
-                    <strong>-</strong>
-                )}
+                <Typography className={classes.textBase}>
+                    {activity.from && (
+                        <>
+                            {t('plugin_collectible_from')}
+                            <strong>
+                                {activity.from.nickname ||
+                                    (activity.from.address ? Others?.formatAddress(activity.from.address, 4) : '-')}
+                            </strong>
+                        </>
+                    )}
+                </Typography>
+
                 <Typography className={classes.textBase}>
                     {activity.to && (
                         <>
