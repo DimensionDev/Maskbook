@@ -123,6 +123,6 @@ export const WalletHeader = memo(() => {
             {menu}
         </>
     ) : (
-        <NormalHeader onClose={Services.Helper.removePopupWindow} />
+        <NormalHeader onClose={() => Services.Helper.removePopupWindow()} />
     )
 })
