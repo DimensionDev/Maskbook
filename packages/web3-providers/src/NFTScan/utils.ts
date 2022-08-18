@@ -136,6 +136,7 @@ export function createNonFungibleTokenAsset(chainId: ChainId, asset: Asset): Non
         priceInToken: asset.latest_trade_price
             ? {
                   amount: scale10(asset.latest_trade_price, WNATIVE[chainId].decimals).toFixed(),
+                  // FIXME: cannot get payment token
                   token: WNATIVE[chainId],
               }
             : undefined,

@@ -27,13 +27,14 @@ import {
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, createNativeToken, createERC20Token } from '@masknet/web3-shared-evm'
 import type { NonFungibleTokenAPI, TrendingAPI } from '../types'
-import type {
+import {
     OpenSeaAssetContract,
     OpenSeaAssetEvent,
     OpenSeaCollection,
     OpenSeaCollectionStats,
     OpenSeaCustomAccount,
     OpenSeaAssetResponse,
+    EventType,
 } from './types'
 import { getOrderUSDPrice, toImage } from './utils'
 import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants'
@@ -167,10 +168,7 @@ function createNFTAsset(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungi
                       name: '',
                       symbol: asset.last_sale.payment_token.symbol ?? '',
                   }),
-                  amount: formatBalance(
-                      new BigNumber(asset.last_sale.total_price ?? '0'),
-                      asset.last_sale.payment_token.decimals,
-                  ),
+                  amount: asset.last_sale.total_price ?? '0',
               }
             : undefined,
     }
@@ -187,6 +185,16 @@ function createAccount(account?: OpenSeaCustomAccount) {
 }
 
 function createEvent(chainId: ChainId, event: OpenSeaAssetEvent): NonFungibleTokenEvent<ChainId, SchemaType> {
+    const paymentToken = event.payment_token
+        ? createERC20Token(
+              ChainId.Mainnet,
+              event.payment_token.address,
+              event.payment_token.name,
+              event.payment_token.symbol,
+              event.payment_token.decimals,
+              event.payment_token.image_url,
+          )
+        : undefined
     return {
         from: createAccount(event.from_account ?? event.seller),
         to: createAccount(event.to_account ?? event.winner_account),
@@ -197,23 +205,22 @@ function createEvent(chainId: ChainId, event: OpenSeaAssetEvent): NonFungibleTok
         quantity: event.quantity,
         hash: event.transaction?.transaction_hash,
         timestamp: new Date(`${event.created_date}Z`).getTime(),
-        price: {
-            [CurrencyType.USD]: new BigNumber(event.bid_amount ?? event.total_price ?? 0)
-                .dividedBy(scale10(1, event.payment_token?.decimals))
-                .dividedBy(event.quantity)
-                .multipliedBy(event.payment_token?.usd_price ?? 1)
-                .toFixed(2),
-        },
-        paymentToken: event.payment_token
-            ? createERC20Token(
-                  ChainId.Mainnet,
-                  event.payment_token.address,
-                  event.payment_token.name,
-                  event.payment_token.symbol,
-                  event.payment_token.decimals,
-                  event.payment_token.image_url,
-              )
+        price: event.payment_token
+            ? {
+                  [CurrencyType.USD]: new BigNumber(event.bid_amount ?? event.total_price ?? 0)
+                      .dividedBy(scale10(1, event.payment_token?.decimals))
+                      .dividedBy(event.quantity)
+                      .multipliedBy(event.payment_token?.usd_price ?? 1)
+                      .toFixed(2),
+              }
             : undefined,
+        priceInToken: paymentToken
+            ? {
+                  amount: event.bid_amount ?? event.total_price ?? '0',
+                  token: paymentToken,
+              }
+            : undefined,
+        paymentToken,
     }
 }
 
@@ -329,6 +336,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 token_id: tokenId,
                 cursor: indicator?.id,
                 limit: size,
+                event_type: [EventType.Successful, EventType.OfferEntered, EventType.Transfer],
             }),
             chainId,
         )

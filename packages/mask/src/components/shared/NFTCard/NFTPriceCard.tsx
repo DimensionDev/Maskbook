@@ -98,7 +98,11 @@ export function NFTPriceCard(props: NFTPriceCardProps) {
             </div>
             <div className={classes.priceZone}>
                 {priceTokenImg}
-                <Typography className={classes.priceText}>{asset.priceInToken?.amount ?? '-'}</Typography>
+                <Typography className={classes.priceText}>
+                    {asset.priceInToken
+                        ? formatBalance(asset.priceInToken.amount, asset.priceInToken.token.decimals)
+                        : '-'}
+                </Typography>
             </div>
             {topOffer && (
                 <div className={classes.offerBox}>
