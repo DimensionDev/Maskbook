@@ -11,8 +11,9 @@ declare module '@mui/material/styles/createPalette.d' {
             bg: string
             bottom: string
             secondaryBottom: string
+            shadowBottom: string
             input: string
-            modelTitleBg: string
+            modalTitleBg: string
             highlight: string
             line: string
             secondaryLine: string
@@ -24,6 +25,10 @@ declare module '@mui/material/styles/createPalette.d' {
             white: string
             dark: string
             secondaryDark: string
+            publicMain: string
+            publicSecond: string
+            publicThird: string
+            publicLine: string
         }
     }
     export interface TypeText {

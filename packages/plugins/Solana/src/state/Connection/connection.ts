@@ -10,7 +10,15 @@ import {
     NonFungibleTokenMetadata,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
-import { ChainId, createNativeToken, decodeAddress, ProviderType, SchemaType } from '@masknet/web3-shared-solana'
+import {
+    ChainId,
+    createNativeToken,
+    decodeAddress,
+    getNativeTokenAddress,
+    isNativeTokenAddress,
+    ProviderType,
+    SchemaType,
+} from '@masknet/web3-shared-solana'
 import {
     BlockResponse,
     Connection as SolConnection,
@@ -19,11 +27,10 @@ import {
     SystemProgram,
     Transaction,
 } from '@solana/web3.js'
-import { NETWORK_ENDPOINTS, SOL_ADDRESS } from '../../constants'
+import { NETWORK_ENDPOINTS } from '../../constants'
 import { SolanaRPC } from '../../messages'
 import { Web3StateSettings } from '../../settings'
 import type { Plugin } from '@masknet/plugin-infra'
-import { isNativeTokenAddress } from '../../utils'
 import { Providers } from './provider'
 import { createTransferInstruction, getOrCreateAssociatedTokenAccount } from './spl-token'
 import type { SolanaConnection as BaseConnection, SolanaWeb3ConnectionOptions } from './types'
@@ -149,6 +156,32 @@ class Connection implements BaseConnection {
         const signature = await this.sendTransaction(transaction)
         return signature
     }
+    approveFungibleToken(
+        address: string,
+        recipient: string,
+        amount: string,
+        initial?: SolanaWeb3ConnectionOptions,
+    ): Promise<string> {
+        throw new Error('Method not implemented.')
+    }
+    approveNonFungibleToken(
+        address: string,
+        recipient: string,
+        tokenId: string,
+        schema?: SchemaType,
+        initial?: SolanaWeb3ConnectionOptions,
+    ): Promise<string> {
+        throw new Error('Method not implemented.')
+    }
+    approveAllNonFungibleTokens(
+        address: string,
+        recipient: string,
+        approved: boolean,
+        schema?: SchemaType,
+        initial?: SolanaWeb3ConnectionOptions,
+    ): Promise<string> {
+        throw new Error('Method not implemented.')
+    }
     async transferFungibleToken(
         address: string,
         recipient: string,
@@ -190,7 +223,7 @@ class Connection implements BaseConnection {
         address: string,
         schemaType?: SchemaType,
         initial?: SolanaWeb3ConnectionOptions,
-    ): Promise<NonFungibleTokenCollection<ChainId>> {
+    ): Promise<NonFungibleTokenCollection<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
     async switchChain(chainId: ChainId, initial?: SolanaWeb3ConnectionOptions) {
@@ -236,8 +269,9 @@ class Connection implements BaseConnection {
             (map: Record<string, string>, asset) => ({ ...map, [asset.address]: asset.balance }),
             {},
         )
-        if (listOfAddress.includes(SOL_ADDRESS)) {
-            records[SOL_ADDRESS] = await this.getNativeTokenBalance(options)
+        const nativeTokenAddress = getNativeTokenAddress(options.chainId)
+        if (listOfAddress.includes(nativeTokenAddress)) {
+            records[nativeTokenAddress] = await this.getNativeTokenBalance(options)
         }
         return records
     }

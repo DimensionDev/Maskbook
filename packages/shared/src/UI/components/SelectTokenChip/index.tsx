@@ -8,7 +8,6 @@ import { useSharedI18N } from '../../../locales'
 import { TokenIcon } from '../TokenIcon'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import type { FungibleToken } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -35,7 +34,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface SelectTokenChipProps extends withClasses<'chip' | 'tokenIcon' | 'noToken'> {
-    token?: FungibleToken<ChainId, SchemaType> | null
+    token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
     error?: Error
     loading?: boolean
     readonly?: boolean

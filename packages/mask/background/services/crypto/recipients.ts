@@ -12,8 +12,8 @@ export async function hasRecipientAvailable(whoAmI: ProfileIdentifier): Promise<
 }
 
 export async function getRecipients(whoAmI: ProfileIdentifier): Promise<ProfileInformation[]> {
-    const profiles = (await queryProfilesDB({ hasLinkedPersona: true, network: whoAmI.network })).filter(
-        (x) => x.identifier !== whoAmI && x.linkedPersona,
+    const profiles = (await queryProfilesDB({ network: whoAmI.network, hasLinkedPersona: true })).filter(
+        (x) => x.identifier !== whoAmI,
     )
     return toProfileInformation(profiles).mustNotAwaitThisWithInATransaction
 }

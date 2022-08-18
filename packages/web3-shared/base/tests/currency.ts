@@ -1,4 +1,4 @@
-import { describe, test, expect } from '@jest/globals'
+import { describe, test, expect } from 'vitest'
 import { formatCurrency } from '../src'
 
 describe('USD Currency format util test', () => {
@@ -54,5 +54,17 @@ describe('EUR Currency format util test', () => {
         { give: 0.000000000000001, expected: '< \u20AC0.000001' },
     ])('.format($give)', ({ give, expected }) => {
         expect(formatCurrency(give, 'EUR')).toBe(expected)
+    })
+})
+
+describe('Digital currency format util test', () => {
+    test.each([
+        { give: 0, currency: 'ETH', expected: '0.00 \u039E' },
+        { give: 1.55, currency: 'ETH', expected: '1.55\u00a0\u039E' },
+        { give: 1.55, currency: 'BTC', expected: '1.55\u00a0\u20BF' },
+    ])('.format($give)', ({ give, currency, expected }) => {
+        const result = formatCurrency(give, currency)
+
+        expect(result).toBe(expected)
     })
 })

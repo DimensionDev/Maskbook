@@ -1,56 +1,67 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { NetworkPluginID, SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
+import { NetworkPluginID, SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
 import { base } from '../base'
 import { PLUGIN_ID } from '../constants'
-import { TabCard, TabCardType } from './TabCard'
+import { setupContext } from './context'
+import { DonationPage, FeedsPage, FootprintsPage } from './pages'
 
-function sorter(a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>) {
-    if (a.type === SocialAddressType.RSS3) return -1
-    if (z.type === SocialAddressType.RSS3) return 1
-    return 0
+function shouldDisplay(identity?: SocialIdentity, addressName?: SocialAddress<NetworkPluginID>) {
+    return addressName?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM
 }
 
-function shouldDisplay(identity?: SocialIdentity, addressNames?: Array<SocialAddress<NetworkPluginID>>) {
-    return (
-        addressNames?.some(
-            (x) => x.type === SocialAddressType.RSS3 && x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM,
-        ) ?? false
-    )
+const DonationsTabConfig: Plugin.SNSAdaptor.ProfileTab = {
+    ID: `${PLUGIN_ID}_donations`,
+    label: 'Donations',
+    priority: 1,
+    UI: {
+        TabContent: ({ socialAddress, identity }) => {
+            if (!socialAddress?.address || !identity?.identifier?.userId || !identity.publicKey) return null
+            return (
+                <DonationPage
+                    socialAddress={socialAddress}
+                    userId={identity?.identifier?.userId}
+                    publicKey={identity.publicKey}
+                />
+            )
+        },
+    },
+    Utils: {
+        shouldDisplay,
+    },
+}
+const FootprintsTabConfig: Plugin.SNSAdaptor.ProfileTab = {
+    ID: `${PLUGIN_ID}_footprints`,
+    label: 'Footprints',
+    priority: 2,
+    UI: {
+        TabContent: ({ socialAddress }) => {
+            return socialAddress?.address ? <FootprintsPage address={socialAddress.address} /> : null
+        },
+    },
+    Utils: {
+        shouldDisplay,
+    },
+}
+const ActivitiesTabConfig: Plugin.SNSAdaptor.ProfileTab = {
+    ID: `${PLUGIN_ID}_feed`,
+    label: 'Activities',
+    priority: 3,
+    UI: {
+        TabContent: ({ socialAddress }) => {
+            return socialAddress?.address ? <FeedsPage address={socialAddress.address} /> : null
+        },
+    },
+    Utils: {
+        shouldDisplay,
+    },
 }
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal) {},
-    ProfileTabs: [
-        {
-            ID: `${PLUGIN_ID}_donations`,
-            label: 'Donations',
-            priority: 1,
-            UI: {
-                TabContent: ({ socialAddressList = [] }) => {
-                    return <TabCard socialAddressList={socialAddressList} type={TabCardType.Donation} />
-                },
-            },
-            Utils: {
-                sorter,
-                shouldDisplay,
-            },
-        },
-        {
-            ID: `${PLUGIN_ID}_footprints`,
-            label: 'Footprints',
-            priority: 2,
-            UI: {
-                TabContent: ({ socialAddressList = [] }) => {
-                    return <TabCard socialAddressList={socialAddressList} type={TabCardType.Footprint} />
-                },
-            },
-            Utils: {
-                sorter,
-                shouldDisplay,
-            },
-        },
-    ],
+    init(signal, context) {
+        setupContext(context)
+    },
+    ProfileTabs: [DonationsTabConfig, FootprintsTabConfig, ActivitiesTabConfig],
 }
 
 export default sns

@@ -30,7 +30,10 @@
                 "Matic",
                 "Mumbai",
                 "Arbitrum",
-                "Arbitrum_Rinkeby"
+                "Arbitrum_Rinkeby",
+                "Optimism",
+                "Optimism_Kovan",
+                "Optimism_Goerli"
             ]
         },
         "primitive": {

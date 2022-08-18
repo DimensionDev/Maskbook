@@ -1,4 +1,4 @@
-import type { KVStorageBackend } from './types'
+import type { KVStorageBackend } from './types.js'
 import { Some, None } from 'ts-results'
 export function createInMemoryKVStorageBackend(
     onChange: (key: string, value: unknown) => void,

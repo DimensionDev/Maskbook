@@ -41,7 +41,6 @@ export function ToolboxHintAtTwitter(props: { category: 'wallet' | 'application'
     return (
         <ToolboxHintUnstyled
             iconSize={Number(iconSize.replace('px', '')) - 1}
-            iconFontSize="1.75rem"
             mini={mini}
             ListItemIcon={Icon}
             Typography={({ children }) => <Text marginLeft={textMarginLeft ?? '20px'}>{children}</Text>}

@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import { Grid, Typography } from '@mui/material'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
@@ -7,7 +7,6 @@ import { useI18N } from '../locales'
 import type { DepositDialogInterface } from '../types'
 import { roundValue } from '../helpers'
 
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 

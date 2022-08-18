@@ -6,7 +6,8 @@ globalThis.regeneratorRuntime = undefined
     const fix = () => {
         // Do not apply fix for iOS
         if (typeof webkit === 'object' && webkit.messageHandlers) return
-
+        // MV3 service worker
+        if (typeof window === 'undefined') return
         // In the content script, globalThis !== window.
         if (globalThis === window || typeof browser !== 'object') return
 
@@ -82,20 +83,4 @@ globalThis.regeneratorRuntime = undefined
     }
 }
 
-{
-    if (typeof trustedTypes === 'object' && location.protocol.includes('extension')) {
-        trustedTypes.createPolicy('default', {
-            // do not add createHTML or createScript.
-            // createScriptURL is safe because according to the CSP we have, it is impossible to
-            // include/create a script from cross-origin.
-            createScriptURL: (string) => string,
-        })
-
-        if (location.pathname !== '/popups.html') {
-            trustedTypes.createPolicy('ssr', {})
-        }
-    }
-}
-
-// As the return value of the executeScript
-undefined
+null

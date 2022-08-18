@@ -12,7 +12,7 @@ export function useClaimCallback(version: number, from: string, id: string, pass
     const redPacketContract = useRedPacketContract(chainId, version)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     return useAsyncFn(async () => {
-        if (!redPacketContract || !id || !password) return
+        if (!connection || !redPacketContract || !id || !password) return
 
         const config = {
             from,

@@ -19,7 +19,7 @@ import {
     Transaction,
     TransactionParameter,
 } from '@masknet/web3-shared-evm'
-import { readABI } from './TransactionFormatter/abi'
+import { readABIs } from './TransactionFormatter/abi'
 import { createConnection } from './Connection/connection'
 import type { TransactionDescriptor } from './TransactionFormatter/types'
 
@@ -29,8 +29,10 @@ import { ContractDeploymentDescriptor } from './TransactionFormatter/descriptors
 import { CancelDescriptor } from './TransactionFormatter/descriptors/Cancel'
 import { BaseTransactionDescriptor } from './TransactionFormatter/descriptors/Base'
 import { ITODescriptor } from './TransactionFormatter/descriptors/ITO'
+import { MaskBoxDescriptor } from './TransactionFormatter/descriptors/MaskBox'
 import { RedPacketDescriptor } from './TransactionFormatter/descriptors/RedPacket'
 import { ERC20Descriptor } from './TransactionFormatter/descriptors/ERC20'
+import { ERC721Descriptor } from './TransactionFormatter/descriptors/ERC721'
 import { SwapDescriptor } from './TransactionFormatter/descriptors/Swap'
 
 export class TransactionFormatter extends TransactionFormatterState<ChainId, TransactionParameter, Transaction> {
@@ -40,8 +42,10 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
         [TransactionDescriptorType.TRANSFER]: [new TransferTokenDescriptor()],
         [TransactionDescriptorType.INTERACTION]: [
             new ITODescriptor(),
+            new MaskBoxDescriptor(),
             new RedPacketDescriptor(),
             new ERC20Descriptor(),
+            new ERC721Descriptor(),
             new SwapDescriptor(),
             new BaseTransactionDescriptor(),
         ],
@@ -57,6 +61,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
     override async createContext(
         chainId: ChainId,
         transaction: Transaction,
+        hash?: string,
     ): Promise<TransactionContext<ChainId, string | undefined>> {
         const from = (transaction.from as string | undefined) ?? ''
         const value = (transaction.value as string | undefined) ?? '0x0'
@@ -70,19 +75,22 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
             from,
             to,
             value,
+            hash,
         }
 
         if (data) {
             // contract interaction
-            const abi = readABI(signature)
+            const abis = readABIs(signature)
 
-            if (abi) {
+            if (abis?.length) {
                 try {
                     return {
                         ...context,
                         type: TransactionDescriptorType.INTERACTION,
-                        name: abi.name,
-                        parameters: this.coder.decodeParameters(abi.parameters, parameters ?? ''),
+                        methods: abis.map((x) => ({
+                            name: x.name,
+                            parameters: this.coder.decodeParameters(x.parameters, parameters ?? ''),
+                        })),
                     }
                 } catch {
                     // do nothing
@@ -102,7 +110,7 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
         if (to) {
             let code = ''
             try {
-                code = await this.connection.getCode(to)
+                code = await this.connection.getCode(to, { chainId })
             } catch {
                 code = ''
             }

@@ -1,16 +1,17 @@
-import { mediaViewerUrl } from '@masknet/shared'
+import { MEDIA_VIEWER_URL } from '@masknet/shared'
 import urlcat from 'urlcat'
 import { ImageType } from './types'
 import { resolveIPFSLink } from '@masknet/web3-shared-evm'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 export const PetsPluginID = 'com.maskbook.pets'
 export const TWITTER = 'twitter.com'
 export const MASK_TWITTER = 'realMaskNetwork'
-export const NFTS_CONFIG_ADDRESS = '0x500cF2ea6755ea35eAC8727A70D997ecc3d26258'
 export const DEFAULT_SET_WORD =
     'Click the wallet icon on the left side of the page and set up your Non-Fungible Friend in "NFTs" tab!'
 export const DEFAULT_PUNK_MASK_WORD =
     "I'm CryptoPunk #6128... in 3D & with a body! Voyagers, welcome to the uncharted waters of WEB3!"
+export const NFF_TWITTER = 'https://twitter.com/NonFFriend'
 
 export const initMeta = {
     userId: '',
@@ -19,18 +20,21 @@ export const initMeta = {
     word: '',
     image: '',
     type: ImageType.NORMAL,
+    chainId: undefined,
 }
 
 export const initCollection = {
     name: '',
     contract: '',
-    tokens: [],
+    icon: '',
+    tokens: EMPTY_LIST,
+    chainId: undefined,
 }
 
 export const Punk3D = {
     contract: '0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb',
     tokenId: '6128',
-    url: urlcat(mediaViewerUrl, {
+    url: urlcat(MEDIA_VIEWER_URL, {
         /* cspell:disable-next-line */
         url: resolveIPFSLink('QmZjfo1zKTfQZjqs4CaZJ7pQDZHrUBaozre8Z71c7ZXGMc'),
         type: 'model/gltf-binary',

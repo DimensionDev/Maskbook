@@ -1,12 +1,24 @@
-import { Link, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
+import {
+    Link,
+    Stack,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Typography,
+} from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { FormattedCurrency } from '@masknet/shared'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { formatCurrency } from '@masknet/web3-shared-base'
+import { formatCurrency, TokenType } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../utils'
 import type { Ticker } from '../../types'
 import { DataProvider } from '@masknet/public-api'
 import { formatElapsed } from '../../../Wallet/formatter'
+import { ReactNode, useMemo } from 'react'
+import { compact, pick } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -22,8 +34,11 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         fontWeight: 700,
         whiteSpace: 'nowrap',
-        background: theme.palette.background.paper,
+        backgroundColor: theme.palette.maskColor.bottom,
         border: 'none',
+        '&:not(:first-child)': {
+            textAlign: 'center',
+        },
     },
     logo: {
         width: 18,
@@ -41,79 +56,109 @@ const useStyles = makeStyles()((theme) => ({
 export interface TickersTableProps {
     dataProvider: DataProvider
     tickers: Ticker[]
+    coinType: TokenType
 }
 
-export function TickersTable(props: TickersTableProps) {
+type FungibleTokenCells = 'exchange' | 'pair' | 'price' | 'volume' | 'updated'
+type NonFungibleTokenCells = 'marketplace' | 'volume' | 'floor_price' | 'sales'
+type Cells = FungibleTokenCells | NonFungibleTokenCells
+
+export function TickersTable({ dataProvider, tickers, coinType }: TickersTableProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const rows = [
-        t('plugin_trader_table_exchange'),
-        t('plugin_trader_table_pair'),
-        props.dataProvider !== DataProvider.UNISWAP_INFO ? t('plugin_trader_table_price') : null,
-        t('plugin_trader_table_volume'),
-        t('plugin_trader_table_updated'),
-    ]
-    const tickers = props.tickers.map((ticker, index) => (
-        <TableRow key={index}>
-            <TableCell className={classes.cell}>
+    const isNFT = coinType === TokenType.NonFungible
+    const isUniswap = dataProvider === DataProvider.UNISWAP_INFO
+
+    const headCellMap: Record<Cells, string> = {
+        volume: t('plugin_trader_table_volume'),
+        updated: t('plugin_trader_table_updated'),
+        exchange: t('plugin_trader_table_exchange'),
+        pair: t('plugin_trader_table_pair'),
+        price: t('plugin_trader_table_price'),
+        marketplace: t('plugin_trader_marketplace'),
+        floor_price: t('plugin_trader_floor_price'),
+        sales: t('plugin_trader_sales'),
+    }
+
+    const columns: Cells[] = useMemo(() => {
+        if (isNFT) return ['marketplace', 'sales', 'volume', 'floor_price']
+        return compact(['exchange', 'pair', isUniswap ? null : 'price', 'volume', 'updated'])
+    }, [isNFT, isUniswap])
+    const tickerRows = tickers.map((ticker, index) => {
+        const price = ticker.price ?? ticker.floor_price
+        const volume = isNFT ? ticker.volume_24h : ticker.volume
+        const currency = isNFT ? 'ETH' : 'USD'
+        const marketplaceOrExchange = (
+            <Stack direction="row" alignItems="center">
                 {ticker.logo_url ? <img className={classes.logo} src={ticker.logo_url} /> : null}
-                <span>{ticker.market_name}</span>
+                <Typography component="span">{ticker.market_name}</Typography>
+            </Stack>
+        )
+        const cellMap: Record<Cells, ReactNode> = {
+            marketplace: marketplaceOrExchange,
+            volume: volume ? <FormattedCurrency value={volume} sign={currency} formatter={formatCurrency} /> : null,
+            floor_price: price ? <FormattedCurrency value={price} sign={currency} formatter={formatCurrency} /> : null,
+            updated: ticker.updated ? formatElapsed(ticker.updated.getTime()) : null,
+            exchange: marketplaceOrExchange,
+            pair: (() => {
+                if (!ticker.base_name || !ticker.target_name) return null
+                const formatted = formatEthereumAddress(ticker.base_name, 2)
+                return (
+                    <Link
+                        color={(theme) => theme.palette.maskColor?.primary}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href={ticker.trade_url}>
+                        <Typography component="span" title={formatted !== ticker.base_name ? ticker.base_name : ''}>
+                            {formatted}
+                        </Typography>
+                        <span>/</span>
+                        <Typography component="span">{formatEthereumAddress(ticker.target_name, 2)}</Typography>
+                    </Link>
+                )
+            })(),
+            price: price ? <FormattedCurrency value={price} sign={currency} formatter={formatCurrency} /> : null,
+            sales: ticker.sales_24 ?? null,
+        }
+
+        const cells = Object.entries(pick(cellMap, columns)).map(([name, cell]) => (
+            <TableCell key={name} className={classes.cell}>
+                {cell}
             </TableCell>
-            <TableCell className={classes.cell}>
-                {(() => {
-                    const formatted = formatEthereumAddress(ticker.base_name, 2)
-                    return (
-                        <Link
-                            color={(theme) => theme.palette.maskColor?.primary}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            href={ticker.trade_url}>
-                            <span title={formatted !== ticker.base_name ? ticker.base_name : ''}>{formatted}</span>
-                            <span>/</span>
-                            <span>{formatEthereumAddress(ticker.target_name, 2)}</span>
-                        </Link>
-                    )
-                })()}
-            </TableCell>
-            {ticker.price ? (
-                <TableCell className={classes.cell}>
-                    <FormattedCurrency value={ticker.price} formatter={formatCurrency} />
-                </TableCell>
-            ) : null}
-            <TableCell className={classes.cell}>
-                <FormattedCurrency value={ticker.volume} formatter={formatCurrency} />
-            </TableCell>
-            <TableCell className={classes.cell}>{formatElapsed(ticker.updated.getTime())}</TableCell>
-        </TableRow>
-    ))
+        ))
+        return <TableRow key={index}>{cells}</TableRow>
+    })
+
+    const headCells = Object.values(pick(headCellMap, columns))
 
     return (
         <TableContainer className={classes.container}>
             <Table size="small" stickyHeader>
                 <TableHead>
                     <TableRow>
-                        {rows.map((x) =>
-                            x ? (
-                                <TableCell className={classes.cell} key={x}>
-                                    {x}
-                                </TableCell>
-                            ) : null,
-                        )}
+                        {headCells.map((x) => (
+                            <TableCell className={classes.cell} key={x}>
+                                {x}
+                            </TableCell>
+                        ))}
                     </TableRow>
                 </TableHead>
-                {tickers.length ? (
-                    <TableBody>{tickers}</TableBody>
-                ) : (
-                    <TableBody>
+                <TableBody>
+                    {columns.length ? (
+                        tickerRows
+                    ) : (
                         <TableRow>
-                            <TableCell className={classes.cell} colSpan={5} style={{ borderStyle: 'none' }}>
+                            <TableCell
+                                className={classes.cell}
+                                colSpan={columns.length}
+                                style={{ borderStyle: 'none' }}>
                                 <Typography className={classes.placeholder} align="center" color="textSecondary">
                                     {t('plugin_trader_no_data')}
                                 </Typography>
                             </TableCell>
                         </TableRow>
-                    </TableBody>
-                )}
+                    )}
+                </TableBody>
             </Table>
         </TableContainer>
     )

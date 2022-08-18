@@ -1,10 +1,9 @@
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
 import { FungibleToken, formatBalance, isZero } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
 import type { BigNumber } from 'bignumber.js'
 import { useCallback } from 'react'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { getAssetAsBlobURL, useI18N } from '../../../utils'
 

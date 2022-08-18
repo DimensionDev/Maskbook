@@ -1,4 +1,4 @@
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
 import {
     FungibleToken,
     isGreaterThan,
@@ -9,7 +9,7 @@ import {
     formatBalance,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
-import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material'
+import { FormControl, InputLabel, MenuItem, Select, TextField, Box } from '@mui/material'
 import BigNumber from 'bignumber.js'
 import { omit } from 'lodash-unified'
 import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -23,7 +23,6 @@ import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants'
 import type { RedPacketSettings } from './hooks/useCreateCallback'
 import { useAccount, useChainId, useFungibleToken, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 // seconds of 1 day
@@ -287,30 +286,32 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     value={message}
                 />
             </div>
-            <PluginWalletStatusBar>
-                <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
-                    <WalletConnectedBoundary>
-                        <EthereumERC20TokenApprovedBoundary
-                            onlyInfiniteUnlock
-                            amount={totalAmount.toFixed()}
-                            classes={{ container: classes.unlockContainer }}
-                            ActionButtonProps={{
-                                size: 'medium',
-                            }}
-                            token={token?.schema === SchemaType.ERC20 ? token : undefined}
-                            spender={HAPPY_RED_PACKET_ADDRESS_V4}>
-                            <ActionButton
-                                size="large"
-                                className={classes.button}
-                                fullWidth
-                                disabled={!!validationMessage}
-                                onClick={onClick}>
-                                {validationMessage || t.next()}
-                            </ActionButton>
-                        </EthereumERC20TokenApprovedBoundary>
-                    </WalletConnectedBoundary>
-                </ChainBoundary>
-            </PluginWalletStatusBar>
+            <Box style={{ position: 'absolute', bottom: 0, width: '100%' }}>
+                <PluginWalletStatusBar>
+                    <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                        <WalletConnectedBoundary>
+                            <EthereumERC20TokenApprovedBoundary
+                                onlyInfiniteUnlock
+                                amount={totalAmount.toFixed()}
+                                classes={{ container: classes.unlockContainer }}
+                                ActionButtonProps={{
+                                    size: 'medium',
+                                }}
+                                token={token?.schema === SchemaType.ERC20 ? token : undefined}
+                                spender={HAPPY_RED_PACKET_ADDRESS_V4}>
+                                <ActionButton
+                                    size="large"
+                                    className={classes.button}
+                                    fullWidth
+                                    disabled={!!validationMessage}
+                                    onClick={onClick}>
+                                    {validationMessage || t.next()}
+                                </ActionButton>
+                            </EthereumERC20TokenApprovedBoundary>
+                        </WalletConnectedBoundary>
+                    </ChainBoundary>
+                </PluginWalletStatusBar>
+            </Box>
         </>
     )
 }

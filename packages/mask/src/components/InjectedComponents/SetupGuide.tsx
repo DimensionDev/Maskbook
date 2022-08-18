@@ -9,8 +9,7 @@ import {
     userGuideStatus,
     userGuideVersion,
     userPinExtension,
-} from '../../settings/settings'
-import type { SetupGuideCrossContextStatus } from '../../settings/types'
+} from '../../../shared/legacy-settings/settings'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import {
     PersonaIdentifier,
@@ -20,14 +19,13 @@ import {
     fromHex,
     NextIDAction,
     EnhanceableSite,
-    CrossIsolationMessages,
     EncryptionTargetType,
 } from '@masknet/shared-base'
 import Services from '../../extension/service'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 import { useAsync } from 'react-use'
 import stringify from 'json-stable-stringify'
-import { SetupGuideStep } from './SetupGuide/types'
+import { SetupGuideContext, SetupGuideStep } from '../../../shared/legacy-settings/types'
 import { FindUsername } from './SetupGuide/FindUsername'
 import { VerifyNextID } from './SetupGuide/VerifyNextID'
 import { PinExtension } from './SetupGuide/PinExtension'
@@ -49,9 +47,8 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const verifyPostCollectTimer = useRef<NodeJS.Timer | null>(null)
     const platform = ui.configuration.nextIDConfig?.platform as NextIDPlatform
     // #region parse setup status
-    const lastStateRef = currentSetupGuideStatus[ui.networkIdentifier]
-    const lastState_ = useValueRef(lastStateRef)
-    const lastState = useMemo<SetupGuideCrossContextStatus>(() => {
+    const lastState_ = useValueRef(currentSetupGuideStatus[ui.networkIdentifier])
+    const lastState = useMemo<SetupGuideContext>(() => {
         try {
             return JSON.parse(lastState_)
         } catch {
@@ -100,12 +97,6 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const { value: persona_ } = useAsync(async () => {
         return Services.Identity.queryPersona(persona)
     }, [persona])
-
-    useEffect(() => {
-        return CrossIsolationMessages.events.verifyNextID.on(() => {
-            setStep(SetupGuideStep.VerifyOnNextID)
-        })
-    }, [])
 
     const onConnect = async () => {
         const id = ProfileIdentifier.of(ui.networkIdentifier, username)

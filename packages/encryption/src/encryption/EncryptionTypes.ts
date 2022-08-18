@@ -7,7 +7,7 @@ import {
     registerSerializableClass,
 } from '@masknet/shared-base'
 import type { SerializableTypedMessages } from '@masknet/typed-message'
-import type { EC_Key, EC_KeyCurveEnum } from '../payload'
+import type { EC_Key, EC_KeyCurveEnum } from '../payload/index.js'
 
 export interface EncryptOptions {
     /** Payload version to use. */
@@ -37,7 +37,7 @@ export interface EncryptIO {
      *
      * Throw in this case. v37 will resolve this problem.
      */
-    encryptByLocalKey(content: Uint8Array, iv: Uint8Array): Promise<Uint8Array>
+    encryptByLocalKey(content: Uint8Array, iv: Uint8Array): Promise<Uint8Array | ArrayBuffer>
     /**
      * Derive a group of AES key by ECDH(selfPriv, targetPub).
      *

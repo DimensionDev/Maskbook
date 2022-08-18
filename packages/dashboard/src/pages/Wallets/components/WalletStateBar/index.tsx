@@ -1,8 +1,8 @@
 import React, { FC, memo } from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { FormattedAddress, LoadingAnimation, WalletIcon } from '@masknet/shared'
+import { makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
+import { FormattedAddress, WalletIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import {
     useNetworkDescriptor,
@@ -88,7 +88,7 @@ export const WalletStateBar = memo(() => {
     return (
         <WalletStateBarUI
             isPending={!!pendingTransactions.length}
-            name={wallet?.name ?? providerDescriptor.name}
+            name={wallet?.name ?? providerDescriptor?.name}
             address={account}
             domain={domain}
             network={networkDescriptor}
@@ -155,7 +155,7 @@ export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>
                         color: MaskColorVar.orangeMain,
                     }}
                     className={classes.bar}>
-                    <LoadingAnimation sx={{ fontSize: 12, mr: 0.8, color: MaskColorVar.orangeMain }} />
+                    <LoadingBase sx={{ fontSize: 12, mr: 0.8, color: MaskColorVar.orangeMain }} />
                     <Typography component="span" fontSize={12} display="inline-block">
                         {t.wallet_transactions_pending()}
                     </Typography>
@@ -180,7 +180,7 @@ export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>
                     )}
 
                     <Box fontSize={12}>
-                        <FormattedAddress address={address} size={10} formatter={Others?.formatAddress} />
+                        <FormattedAddress address={address} size={4} formatter={Others?.formatAddress} />
                     </Box>
                 </Box>
             </Stack>

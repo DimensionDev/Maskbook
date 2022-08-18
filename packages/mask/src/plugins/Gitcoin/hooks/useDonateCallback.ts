@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import BigNumber from 'bignumber.js'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { FungibleToken, NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
 import { ChainId, encodeContractTransaction, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
@@ -21,8 +22,7 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
     const donations = useMemo((): Array<[string, string, string]> => {
-        if (!address || !token) return []
-        if (!GITCOIN_ETH_ADDRESS || !GITCOIN_TIP_PERCENTAGE) return []
+        if (!connection || !address || !token || !GITCOIN_ETH_ADDRESS || !GITCOIN_TIP_PERCENTAGE) return EMPTY_LIST
         const tipAmount = new BigNumber(GITCOIN_TIP_PERCENTAGE / 100).multipliedBy(amount)
         const grantAmount = new BigNumber(amount).minus(tipAmount)
         return [
@@ -40,7 +40,7 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
     }, [address, amount, token])
 
     return useAsyncFn(async () => {
-        if (!token || !bulkCheckoutContract || !donations.length) {
+        if (!connection || !token || !bulkCheckoutContract || !donations.length) {
             return
         }
 

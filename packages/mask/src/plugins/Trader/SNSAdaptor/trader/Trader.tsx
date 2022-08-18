@@ -1,19 +1,19 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useState, useMemo } from 'react'
 import { useUnmount, useUpdateEffect } from 'react-use'
 import { delay } from '@dimensiondev/kit'
 import { useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { NetworkPluginID, isSameAddress, FungibleToken, formatBalance } from '@masknet/web3-shared-base'
+import { NetworkPluginID, FungibleToken, formatBalance } from '@masknet/web3-shared-base'
 import {
     ChainId,
     createERC20Token,
     createNativeToken,
+    GasOptionConfig,
+    isNativeTokenAddress,
     SchemaType,
-    useTokenConstants,
     UST,
 } from '@masknet/web3-shared-evm'
 import { useGasConfig, TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { useChainId, useChainIdValid, useFungibleTokenBalance, useWallet, useAccount } from '@masknet/plugin-infra/web3'
+import { useChainId, useChainIdValid, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
@@ -29,42 +29,34 @@ import { useSortedTrades } from './hooks/useSortedTrades'
 import { useUpdateBalance } from './hooks/useUpdateBalance'
 import { TradeForm } from './TradeForm'
 
-const useStyles = makeStyles()(() => {
-    return {
-        root: {
-            margin: 'auto',
-        },
-    }
-})
-
 export interface TraderProps extends withClasses<'root'> {
     coin?: Coin
     defaultInputCoin?: Coin
     defaultOutputCoin?: Coin
     tokenDetailed?: FungibleToken<ChainId, SchemaType>
     chainId?: ChainId
+    settings?: boolean
 }
 
-export function Trader(props: TraderProps) {
-    const { defaultOutputCoin, coin, chainId: targetChainId, defaultInputCoin } = props
+export interface TraderRef {
+    gasConfig?: GasOptionConfig
+    focusedTrade?: TradeInfo
+    refresh: () => void
+}
+
+export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, ref) => {
+    const { defaultOutputCoin, coin, chainId: targetChainId, defaultInputCoin, settings = false } = props
     const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
-    const wallet = useWallet(NetworkPluginID.PLUGIN_EVM)
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const chainId = targetChainId ?? currentChainId
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
-    const classes = useStylesExtends(useStyles(), props)
     const t = useI18N()
     const { setTargetChainId } = TargetChainIdContext.useContainer()
 
     // #region trade state
     const {
         setIsSwapping,
-        tradeState: [
-            { inputToken, outputToken, inputTokenBalance, outputTokenBalance, inputAmount },
-            dispatchTradeStore,
-        ],
+        tradeState: [{ inputToken, outputToken, inputTokenBalance, inputAmount }, dispatchTradeStore],
         allTradeComputed,
         setTemporarySlippage,
     } = AllProviderTradeContext.useContainer()
@@ -73,6 +65,18 @@ export function Trader(props: TraderProps) {
     // #region gas config and gas price
     const { gasPrice, gasConfig, setGasConfig } = useGasConfig(chainId)
     // #endregion
+
+    useImperativeHandle(
+        ref,
+        () => ({
+            gasConfig,
+            focusedTrade,
+            refresh: () => {
+                allTradeComputed.map((x) => x.retry())
+            },
+        }),
+        [allTradeComputed, focusedTrade, gasConfig],
+    )
 
     // #region if chain id be changed, update input token be native token
     useEffect(() => {
@@ -111,7 +115,7 @@ export function Trader(props: TraderProps) {
 
         // if coin be native token and input token also be native token, reset it
         if (
-            isSameAddress(coin.contract_address, NATIVE_TOKEN_ADDRESS) &&
+            isNativeTokenAddress(coin.contract_address) &&
             inputToken?.schema === SchemaType.Native &&
             coin.symbol === inputToken.symbol
         ) {
@@ -123,7 +127,7 @@ export function Trader(props: TraderProps) {
         if (!outputToken) {
             updateTradingCoin(AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN, coin)
         }
-    }, [coin, NATIVE_TOKEN_ADDRESS, inputToken, outputToken, currentChainId, targetChainId, updateTradingCoin])
+    }, [coin, inputToken, outputToken, currentChainId, targetChainId, updateTradingCoin])
 
     useEffect(() => {
         if (!defaultInputCoin) return
@@ -220,6 +224,7 @@ export function Trader(props: TraderProps) {
     useEffect(() => {
         setIsSwapping(isTrading)
     }, [isTrading])
+
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
 
     const shareText = useMemo(() => {
@@ -239,10 +244,13 @@ export function Trader(props: TraderProps) {
             : ''
     }, [focusedTrade?.value, inputToken, outputToken, t])
     const openShareTxDialog = useOpenShareTxDialog()
-    const onConfirmDialogConfirm = useCallback(async () => {
+    const onConfirm = useCallback(async () => {
         setOpenConfirmDialog(false)
         await delay(100)
         const hash = await tradeCallback()
+
+        setTemporarySlippage(undefined)
+
         if (typeof hash !== 'string') return
         await openShareTxDialog({
             hash,
@@ -255,12 +263,10 @@ export function Trader(props: TraderProps) {
             type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,
             amount: '',
         })
-        setTemporarySlippage(undefined)
     }, [tradeCallback, shareText, openShareTxDialog])
 
     const onConfirmDialogClose = useCallback(() => {
         setOpenConfirmDialog(false)
-        setTemporarySlippage(undefined)
     }, [])
     // #endregion
 
@@ -345,14 +351,14 @@ export function Trader(props: TraderProps) {
     // #endregion
 
     return (
-        <div className={classes.root}>
+        <>
             <TradeForm
-                account={account}
+                settings={settings}
+                classes={props.classes}
                 trades={sortedAllTradeComputed}
                 inputToken={inputToken}
                 outputToken={outputToken}
                 inputTokenBalance={inputTokenBalance}
-                outputTokenBalance={outputTokenBalance}
                 inputAmount={inputAmount}
                 onInputAmountChange={onInputAmountChange}
                 onTokenChipClick={onTokenChipClick}
@@ -360,22 +366,22 @@ export function Trader(props: TraderProps) {
                 onFocusedTradeChange={(trade) => setFocusTrade(trade)}
                 onSwap={onSwap}
                 gasPrice={gasPrice}
+                gasConfig={gasConfig}
                 onSwitch={onSwitchToken}
             />
             {focusedTrade?.value && !isNativeTokenWrapper(focusedTrade.value) && inputToken && outputToken ? (
                 <ConfirmDialog
-                    account={account}
-                    wallet={wallet}
                     open={openConfirmDialog}
                     trade={focusedTrade.value}
                     gas={focusedTrade.gas.value}
                     gasPrice={gasPrice}
+                    gasConfig={gasConfig}
                     inputToken={inputToken}
                     outputToken={outputToken}
-                    onConfirm={onConfirmDialogConfirm}
+                    onConfirm={onConfirm}
                     onClose={onConfirmDialogClose}
                 />
             ) : null}
-        </div>
+        </>
     )
-}
+})

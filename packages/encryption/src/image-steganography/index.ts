@@ -3,10 +3,10 @@ import { TransformAlgorithm } from '@dimensiondev/stego-js/cjs/transform.js'
 import { encode, decode } from '@dimensiondev/stego-js/cjs/dom.js'
 import type { EncodeOptions } from '@dimensiondev/stego-js/cjs/stego.js'
 import { omit } from 'lodash-unified'
-import { getDimension } from './utils'
+import { getDimension } from './utils.js'
 
 export { GrayscaleAlgorithm } from '@dimensiondev/stego-js/cjs/grayscale.js'
-export type ImageTemplateTypes = 'v2' | 'eth'
+export type ImageTemplateTypes = 'v2'
 
 interface Dimension {
     width: number
@@ -34,7 +34,6 @@ const dimensionPreset: Preset[] = [
     {
         width: 1200,
         height: 680,
-        template: 'eth',
         mask: new URL('./masks/mask-transparent.png', import.meta.url).toString(),
         options: {
             cropEdgePixels: true,

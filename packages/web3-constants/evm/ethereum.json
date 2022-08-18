@@ -12,6 +12,9 @@
         "Arbitrum": "0xAb7B1bE4233A04e5C43a810E75657ECED8E5463B",
         "Arbitrum_Rinkeby": "0xF98dC9391273c5ab9fa2c980A8d4F875ece802db",
         "xDai": "0x96c7D011cdFD467f551605f0f5Fce279F86F4186",
+        "Optimism": "0xB1c568e9C3E6bdaf755A60c7418C269eb11524FC",
+        "Optimism_Kovan": "0xB1c568e9C3E6bdaf755A60c7418C269eb11524FC",
+        "Optimism_Goerli": "",
         "Avalanche": "0xC119574D5Fb333F5AC018658D4d8b5035E16bf39",
         "Avalanche_Fuji": "",
         "Celo": "0x8e28F1d64ceD52b9A09aB1AA3071Aa3c05802d1F",
@@ -21,7 +24,8 @@
         "Conflux": "",
         "Evmos": "0xF3d8c63f52A6aFa6cE589e9844Cbbd75e027773A",
         "Harmony": "0xc119574d5fb333f5ac018658d4d8b5035e16bf39",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": "0xf5056B96ab242C566002852d0b98ce0BcDf1af51"
     },
     "MULTICALL_ADDRESS": {
         "Mainnet": "0x1F98415757620B543A52E61c46B32eB19261F984",
@@ -36,6 +40,9 @@
         "Arbitrum": "0xadF885960B47eA2CD9B55E6DAc6B42b7Cb2806dB",
         "Arbitrum_Rinkeby": "0xa501c031958F579dB7676fF1CE78AD305794d579",
         "xDai": "0xAb7B1bE4233A04e5C43a810E75657ECED8E5463B",
+        "Optimism": "0x1F98415757620B543A52E61c46B32eB19261F984",
+        "Optimism_Kovan": "0x1F98415757620B543A52E61c46B32eB19261F984",
+        "Optimism_Goerli": "0x1F98415757620B543A52E61c46B32eB19261F984",
         "Avalanche": "0x6cc1b1058F9153358278C35E0b2D382f1585854B",
         "Avalanche_Fuji": "",
         "Celo": "0x072453AdEC16cFC7FB6Af1517c3f25407180cccC",
@@ -45,7 +52,8 @@
         "Conflux": "0x19f179d7e0d7d9f9d5386afff64271d98a91615b",
         "Evmos": "0xE59a46c13dB891d9309d28F994095bDe0CE9246f",
         "Harmony": "0x6cc1b1058f9153358278c35e0b2d382f1585854b",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": "0x1410304B91a280ad083196B0B50e9d8df749d860"
     },
     "ENS_REGISTRAR_ADDRESS": {
         "Mainnet": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
@@ -60,6 +68,9 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Optimism": "",
+        "Optimism_Kovan": "",
+        "Optimism_Goerli": "",
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
@@ -69,7 +80,8 @@
         "Conflux": "",
         "Evmos": "",
         "Harmony": "",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": ""
     },
     "ENS_REVERSE_RECORDS_ADDRESS": {
         "Mainnet": "0x3671aE578E63FdF66ad4F3E12CC0c0d71Ac7510C",
@@ -84,6 +96,9 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Optimism": "",
+        "Optimism_Kovan": "",
+        "Optimism_Goerli": "",
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
@@ -93,6 +108,7 @@
         "Conflux": "",
         "Evmos": "",
         "Harmony": "",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": ""
     }
 }

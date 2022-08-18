@@ -18,64 +18,82 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v2
       - run: npx prettier@2.7.1 --check .
   markdownlint:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v2
       - run: npx markdownlint-cli .
   editorconfig:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
       - uses: DimensionDev/setup-editorconfig-action@latest
       - run: editorconfig-checker
   anti-trojan-source:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v2
       - run: npx anti-trojan-source --files='packages/**/src/**/*.{ts,tsx,js}'
-  type-check-and-jest:
+  type-check:
     runs-on: ubuntu-20.04
     steps:
-      - name: Get cache date
-        id: get-date
-        run: echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
-        shell: bash
       - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-      - uses: pnpm/action-setup@v2.2.1
+      - uses: pnpm/action-setup@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: "17"
+          node-version: "18"
           cache: "pnpm"
+      - name: Authenticate NPM
+        uses: DimensionDev/github-token-action@latest
+        with:
+            registry: true
+      - run: pnpm install
+      - run: npx gulp codegen
+      - run: npx gulp typescript
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "18"
+          cache: "pnpm"
+      - name: Authenticate NPM
+        uses: DimensionDev/github-token-action@latest
+        with:
+            registry: true
       - run: pnpm install
       - run: npx gulp codegen
       - run: npx gulp polyfill
-      - run: node --experimental-vm-modules ./node_modules/jest/bin/jest.js
+      - run: pnpm run test --coverage
   eslint:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
       - uses: pnpm/action-setup@v2.2.1
       - uses: actions/setup-node@v2
         with:
-          node-version: "17"
+          node-version: "18"
           cache: "pnpm"
+      - name: Authenticate NPM
+        uses: DimensionDev/github-token-action@latest
+        with:
+            registry: true
+      - name: Get cache date
+        id: get-date
+        run: echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+        shell: bash
+      - name: Restore ESLint cache
+        uses: actions/cache@v2
+        with:
+          path: ./.eslintcache
+          key: linter-${{ steps.get-date.outputs.date }}
+          restore-keys: linter-
       - run: pnpm install
       - name: Run Eslint
         run: |

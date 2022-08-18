@@ -3,7 +3,6 @@ import {
     isNativeTokenAddress,
     SchemaType,
     useRPCConstants,
-    useTokenConstants,
     useTraderConstants,
 } from '@masknet/web3-shared-evm'
 import { PluginTraderRPC } from '../../messages'
@@ -13,7 +12,7 @@ import { first } from 'lodash-unified'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useAccount, useDoubleBlockBeatRetry } from '@masknet/plugin-infra/web3'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import { FungibleToken, NetworkPluginID, isZero } from '@masknet/web3-shared-base'
 
 export function useTrade(
     strategy: TradeStrategy,
@@ -26,7 +25,6 @@ export function useTrade(
     const slippageSetting = useSlippageTolerance()
     const slippage = temporarySlippage || slippageSetting
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
     const { RPC_URLS } = useRPCConstants(chainId)
     const providerURL = first(RPC_URLS)
     const { DODO_ETH_ADDRESS } = useTraderConstants(chainId)
@@ -36,15 +34,15 @@ export function useTrade(
         NetworkPluginID.PLUGIN_EVM,
         async () => {
             if (!inputToken || !outputToken) return null
-            if (inputAmount === '0') return null
-            const sellToken = isNativeTokenAddress(inputToken)
+            if (isZero(inputAmount)) return null
+            const sellToken = isNativeTokenAddress(inputToken.address)
                 ? { ...inputToken, address: DODO_ETH_ADDRESS ?? '' }
                 : inputToken
-            const buyToken = isNativeTokenAddress(outputToken)
+            const buyToken = isNativeTokenAddress(outputToken.address)
                 ? { ...outputToken, address: DODO_ETH_ADDRESS ?? '' }
                 : outputToken
             return PluginTraderRPC.swapRoute({
-                isNativeSellToken: isNativeTokenAddress(inputToken),
+                isNativeSellToken: isNativeTokenAddress(inputToken.address),
                 fromToken: sellToken,
                 toToken: buyToken,
                 fromAmount: inputAmount,
@@ -55,7 +53,6 @@ export function useTrade(
             })
         },
         [
-            NATIVE_TOKEN_ADDRESS,
             strategy,
             inputAmount,
             outputAmount,

@@ -2,7 +2,6 @@ import { Box, Button, ButtonGroup, ButtonGroupProps, styled, Tab } from '@mui/ma
 import { useTabContext, getPanelId, getTabId } from '@mui/lab/TabContext'
 import {
     forwardRef,
-    cloneElement,
     Children,
     isValidElement,
     useState,
@@ -37,10 +36,9 @@ const ArrowButtonWrap = styled(Button)(({ theme }) => ({
     height: defaultTabSize,
     width: defaultTabSize,
     minWidth: `${defaultTabSize}px !important`,
-    background: theme.palette.maskColor.input ?? '#F2F6FA',
-
+    background: theme.palette.maskColor.input,
     '&:hover': {
-        background: theme.palette.maskColor.input ?? '#F2F6FA',
+        background: theme.palette.maskColor.input,
     },
 }))
 
@@ -59,10 +57,13 @@ const FlexibleButtonGroupPanel = styled(Box, {
     zIndex: 100,
     padding: theme.spacing(1.5),
     maxWidth: 'calc(100% - 24px)',
+    width: 'calc(100% - 24px)',
     boxShadow: isOpen
         ? `0px 0px 20px ${theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.05)'}`
         : 'none',
     backdropFilter: 'blur(20px)',
+    background: theme.palette.mode === 'dark' ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.8)',
+    boxSizing: 'content-box',
 }))
 
 const ButtonGroupWrap = styled(ButtonGroup, {
@@ -74,10 +75,24 @@ const ButtonGroupWrap = styled(ButtonGroup, {
     flexWrap: 'nowrap',
     overflowY: 'clip',
     flex: 1,
-    gap: maskVariant !== 'base' ? theme.spacing(1) : 0,
-    paddingTop: theme.spacing(1),
-    background: 'transparent',
-    borderRadius: 0,
+    gap: theme.spacing(1),
+    ...(maskVariant === 'round'
+        ? {
+              padding: theme.spacing(0.5),
+              background: theme.palette.background.input,
+              borderRadius: 18,
+          }
+        : maskVariant === 'flexible'
+        ? {
+              background: 'transparent',
+              borderRadius: 0,
+          }
+        : {
+              marginTop: theme.spacing(-1),
+              paddingTop: theme.spacing(1),
+              background: 'transparent',
+              borderRadius: 0,
+          }),
 }))
 
 const FlexButtonGroupWrap = styled(ButtonGroup, {
@@ -135,7 +150,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
 
     const [open, handleToggle] = useState(false)
     const [isTabsOverflow, setIsTabsOverflow] = useState(false)
-    const [firstId, setFirstTabId] = useState<string>()
+    const [firstId, setFirstTabId] = useState<string | undefined>(context?.value)
     const innerRef = useRef<HTMLDivElement>(null)
     const anchorRef = useRef<HTMLDivElement>(null)
     const flexPanelRef = useRef(null)
@@ -152,7 +167,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
         if (!innerRef?.current) return
 
         const current = innerRef.current
-        setIsTabsOverflow(current?.scrollWidth >= current?.clientWidth)
+        setIsTabsOverflow(current?.scrollWidth >= current?.clientWidth + defaultTabSize)
     }, [innerRef?.current?.scrollWidth, innerRef?.current?.clientWidth, width])
     // #endregion
 
@@ -162,11 +177,6 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
             'aria-controls': getPanelId(context, child.props.value),
             id: getTabId(context, child.props.value),
             selected: child.props.value === context.value,
-            // if move tab to first in flexible tabs
-            isVisitable: (top: number, right: number) => {
-                const anchor = anchorRef.current?.getBoundingClientRect()
-                return right <= (anchor?.right ?? 0) - defaultTabSize && top - (anchor?.top ?? 0) < defaultTabSize
-            },
             onChange: (event: object, value: string, visitable?: boolean) => {
                 handleToggle(false)
                 props.onChange(event, value)
@@ -176,16 +186,23 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
             },
         }
 
-        if (child.type === Tab) {
-            const C = tabMapping[variant]
-            return (
-                <C value={child.props.value} {...extra}>
-                    {child.props.label}
-                </C>
-            )
-        }
+        if (child.type !== Tab) return child
 
-        return cloneElement(child, extra)
+        if (variant === 'flexible') {
+            Object.assign(extra, {
+                // if move tab to first in flexible tabs
+                isVisitable: (top: number, right: number) => {
+                    const anchor = anchorRef.current?.getBoundingClientRect()
+                    return right <= (anchor?.right ?? 0) - defaultTabSize && top - (anchor?.top ?? 0) < defaultTabSize
+                },
+            })
+        }
+        const C = tabMapping[variant]
+        return (
+            <C value={child.props.value} {...extra}>
+                {child.props.label}
+            </C>
+        )
     })
 
     // #region hide tab should up to first when chick
@@ -218,7 +235,11 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
     if (variant === 'flexible') {
         return (
             <Box position="relative">
-                <ButtonGroupWrap ref={anchorRef} style={{ visibility: 'hidden', height: defaultTabSize }} />
+                <ButtonGroupWrap
+                    maskVariant={variant}
+                    ref={anchorRef}
+                    style={{ visibility: 'hidden', height: defaultTabSize }}
+                />
                 <FlexibleButtonGroupPanel isOpen={open && isTabsOverflow} ref={flexPanelRef}>
                     <FlexButtonGroupWrap
                         maskVariant={variant}

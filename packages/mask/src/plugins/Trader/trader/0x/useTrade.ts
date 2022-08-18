@@ -1,11 +1,4 @@
-import {
-    ChainId,
-    chainResolver,
-    isNativeTokenAddress,
-    NetworkType,
-    SchemaType,
-    useTokenConstants,
-} from '@masknet/web3-shared-evm'
+import { ChainId, chainResolver, isNativeTokenAddress, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 import { safeUnreachable } from '@dimensiondev/kit'
 import { ZRX_AFFILIATE_ADDRESS } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
@@ -14,7 +7,7 @@ import { useSlippageTolerance } from '../0x/useSlippageTolerance'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useAccount, useDoubleBlockBeatRetry, useNetworkType } from '@masknet/plugin-infra/web3'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import { FungibleToken, NetworkPluginID, isZero } from '@masknet/web3-shared-base'
 
 const NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 
@@ -33,9 +26,10 @@ export function getNativeTokenLabel(networkType: NetworkType) {
         case NetworkType.Fuse:
         case NetworkType.Metis:
         case NetworkType.Avalanche:
-        case NetworkType.Optimistic:
+        case NetworkType.Optimism:
         case NetworkType.Harmony:
         case NetworkType.Conflux:
+        case NetworkType.Astar:
         case NetworkType.Evmos:
             return NATIVE_TOKEN_ADDRESS
         default:
@@ -55,7 +49,6 @@ export function useTrade(
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
     const { targetChainId } = TargetChainIdContext.useContainer()
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(targetChainId)
 
     const slippageSetting = useSlippageTolerance()
     const slippage = temporarySlippage || slippageSetting
@@ -64,13 +57,13 @@ export function useTrade(
         async () => {
             if (!inputToken || !outputToken) return null
             const isExactIn = strategy === TradeStrategy.ExactIn
-            if (inputAmount === '0' && isExactIn) return null
-            if (outputAmount === '0' && !isExactIn) return null
+            if (isZero(inputAmount) && isExactIn) return null
+            if (isZero(outputAmount) && !isExactIn) return null
 
-            const sellToken = isNativeTokenAddress(inputToken)
+            const sellToken = isNativeTokenAddress(inputToken.address)
                 ? getNativeTokenLabel(chainResolver.chainNetworkType(targetChainId) ?? networkType)
                 : inputToken.address
-            const buyToken = isNativeTokenAddress(outputToken)
+            const buyToken = isNativeTokenAddress(outputToken.address)
                 ? getNativeTokenLabel(chainResolver.chainNetworkType(targetChainId) ?? networkType)
                 : outputToken.address
             return PluginTraderRPC.swapQuote(
@@ -88,7 +81,6 @@ export function useTrade(
             )
         },
         [
-            NATIVE_TOKEN_ADDRESS,
             networkType,
             account,
             strategy,
@@ -97,6 +89,7 @@ export function useTrade(
             inputToken?.address,
             outputToken?.address,
             slippage,
+            targetChainId,
         ],
     )
 }

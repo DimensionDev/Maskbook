@@ -1,6 +1,6 @@
 import { MenuItem, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { SuccessIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { useMenu, WalletIcon } from '@masknet/shared'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import {
@@ -41,7 +41,7 @@ export const useNetworkSelector = (pluginID?: NetworkPluginID) => {
         async (chainId: Web3Helper.ChainIdAll) => {
             if (!chainId || !Connection) throw new Error('Failed to connect to provider.')
             const connection = await Connection.getConnection?.({
-                providerType: providerDescriptor.type,
+                providerType: providerDescriptor?.type,
             })
             if (!connection) throw new Error('Failed to build connection.')
 
@@ -62,7 +62,7 @@ export const useNetworkSelector = (pluginID?: NetworkPluginID) => {
                         onClick={() => onConnect(network.chainId)}>
                         <Stack direction="row" gap={0.5} alignItems="center">
                             <Stack justifyContent="center" width={18}>
-                                {network.chainId === currentChainId && <SuccessIcon sx={{ fontSize: 18 }} />}
+                                {network.chainId === currentChainId && <Icons.Success size={18} />}
                             </Stack>
                             <Stack justifyContent="center" alignItems="center" width={30}>
                                 <WalletIcon mainIcon={network.icon} size={30} />

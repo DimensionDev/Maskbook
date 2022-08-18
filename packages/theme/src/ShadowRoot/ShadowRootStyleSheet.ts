@@ -1,3 +1,6 @@
+/// <reference types="@masknet/global-types/firefox" />
+/// <reference types="@masknet/global-types/flag" />
+
 const shadowHeadMap = new WeakMap<ShadowRoot, HTMLHeadElement>()
 const constructableStyleSheetEnabled = true
 
@@ -19,7 +22,9 @@ export class StyleSheet {
         this.key = options.key
         if (options.container instanceof ShadowRoot) {
             this.implementation =
-                constructableStyleSheetEnabled && 'adoptedStyleSheets' in Document.prototype
+                constructableStyleSheetEnabled &&
+                'adoptedStyleSheets' in Document.prototype &&
+                process.env.engine !== 'firefox'
                     ? new ConstructableStyleSheet()
                     : new SynchronizeStyleSheet()
             this.addContainer(options.container)
@@ -68,6 +73,7 @@ export class StyleSheet {
     private implementation!: ConstructableStyleSheet | SynchronizeStyleSheet
     private _alreadyInsertedOrderInsensitiveRule = false
 }
+
 class ConstructableStyleSheet {
     private sheet = new CSSStyleSheet()
     private globalSheet = new CSSStyleSheet()
@@ -75,7 +81,16 @@ class ConstructableStyleSheet {
     addContainer(container: ShadowRoot) {
         if (this.added.has(container)) return
         this.added.add(container)
-        container.adoptedStyleSheets = [this.globalSheet, ...(container.adoptedStyleSheets || []), this.sheet]
+
+        if (typeof XPCNativeWrapper === 'undefined') {
+            // push & unshift crashes Chrome 103. Not tested on other versions.
+            container.adoptedStyleSheets = [this.globalSheet, ...container.adoptedStyleSheets!, this.sheet]
+        } else {
+            // assignment does not work on Firefox 102. Not tested on other versions.
+            const unsafe = XPCNativeWrapper.unwrap(container.adoptedStyleSheets!)
+            Array.prototype.unshift.call(unsafe, XPCNativeWrapper.unwrap(this.globalSheet))
+            Array.prototype.push.call(unsafe, XPCNativeWrapper.unwrap(this.sheet))
+        }
     }
     insert(rule: string) {
         insertRuleSpeedy(this.sheet, rule)

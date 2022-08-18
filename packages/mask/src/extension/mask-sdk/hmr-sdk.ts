@@ -1,11 +1,11 @@
 import { MaskMessages } from '../../utils'
-import { startEffects } from '../../../utils-pure'
+import { hmr } from '../../../utils-pure'
 
-const { signal } = startEffects(import.meta.webpackHot)
+const { signal } = hmr(import.meta.webpackHot)
 
 try {
     if (process.env.NODE_ENV === 'development') {
-        document.addEventListener(
+        globalThis.addEventListener(
             'mask-sdk-reload',
             () => MaskMessages.events.maskSDKHotModuleReload.sendToBackgroundPage(undefined),
             { signal },

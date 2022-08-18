@@ -1,4 +1,4 @@
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { PluginCyberConnectRPC } from '../messages'
 import { Skeleton, Typography } from '@mui/material'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -6,6 +6,7 @@ import Avatar from 'boring-avatars'
 import ConnectButton from './ConnectButton'
 import FollowTab from './FollowTab'
 import { useAsyncRetry } from 'react-use'
+
 const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
@@ -53,10 +54,6 @@ const useStyles = makeStyles()((theme) => ({
         width: '30px',
         height: '30px',
         marginLeft: '15px',
-        cursor: 'pointer',
-    },
-    author: {
-        fill: MaskColorVar.secondaryBackground,
         cursor: 'pointer',
     },
 }))

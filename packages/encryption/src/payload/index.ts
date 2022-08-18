@@ -1,10 +1,18 @@
 import { Ok, Result } from 'ts-results'
-import type { PayloadWellFormed } from '..'
-import { encode37, encode38, parse37, parse38, parse39, parse40, PayloadParserResult } from '../payload_internal'
-import { encodeSignatureContainer } from '../payload_internal/SignatureContainer'
-import { PayloadException, CryptoException } from '../types'
+import type { PayloadWellFormed } from '../index.js'
+import {
+    encode37,
+    encode38,
+    parse37,
+    parse38,
+    parse39,
+    parse40,
+    PayloadParserResult,
+} from '../payload_internal/index.js'
+import { encodeSignatureContainer } from '../payload_internal/SignatureContainer.js'
+import { PayloadException, CryptoException } from '../types/index.js'
 import { CheckedError, OptionalResult } from '@masknet/shared-base'
-export * from './types'
+export * from './types.js'
 
 export async function parsePayload(payload: unknown): PayloadParserResult {
     if (payload instanceof Uint8Array) {

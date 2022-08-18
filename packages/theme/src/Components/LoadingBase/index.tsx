@@ -1,8 +1,7 @@
-import { LoadingBaseIcon as LoadingIcon } from '@masknet/icons'
-import type { SvgIconProps } from '@mui/material'
+import { GeneratedIconProps, Icons } from '@masknet/icons'
 import { makeStyles } from '../../UIHelper'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     animated: {
         '@keyframes loadingAnimation': {
             '0%': {
@@ -14,9 +13,9 @@ const useStyles = makeStyles()({
         },
         animation: 'loadingAnimation 1s linear infinite',
     },
-})
+}))
 
-export const LoadingBase = (props: SvgIconProps) => {
-    const { classes } = useStyles()
-    return <LoadingIcon {...props} className={`${classes.animated} ${props.className}`} />
+export const LoadingBase = (props: GeneratedIconProps) => {
+    const { classes, cx } = useStyles()
+    return <Icons.CircleLoading {...props} className={cx(classes.animated, props.className)} />
 }

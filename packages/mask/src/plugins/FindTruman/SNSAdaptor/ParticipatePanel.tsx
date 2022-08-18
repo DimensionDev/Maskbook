@@ -6,7 +6,7 @@ import { Box, Button, Card, DialogActions, DialogContent, Typography } from '@mu
 import { TabContext, TabPanel } from '@mui/lab'
 import StageCard from './StageCard'
 import { useControlledDialog } from '../../../utils'
-import { InjectedDialog } from '@masknet/shared'
+import { InjectedDialog, Image } from '@masknet/shared'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import OptionsCard from './OptionsCard'
 import ResultCard from './ResultCard'
@@ -86,7 +86,7 @@ export default function ParticipatePanel(props: ParticipatePanelProps) {
         <div className={classes.panel}>
             {userStoryStatus && (
                 <>
-                    <img className={classes.cover} src={userStoryStatus.img} />
+                    <Image className={classes.cover} src={userStoryStatus.img} />
                     <StageCard userStoryStatus={userStoryStatus} />
                     <DialogActions className={classes.buttons}>
                         <Button

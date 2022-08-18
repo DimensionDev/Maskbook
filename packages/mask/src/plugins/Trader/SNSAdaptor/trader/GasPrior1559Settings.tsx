@@ -3,12 +3,11 @@ import { useUpdateEffect } from 'react-use'
 import { formatGweiToEther, formatGweiToWei, formatWeiToGwei, GasOptionConfig } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
 import { Accordion, AccordionDetails, AccordionSummary, Box, TextField, Typography } from '@mui/material'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles, MaskColorVar, ActionButton } from '@masknet/theme'
 import classnames from 'classnames'
 import { ExpandMore } from '@mui/icons-material'
 import { toHex } from 'web3-utils'
 import BigNumber from 'bignumber.js'
-import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { isDashboardPage } from '@masknet/shared-base'
 import { useChainId, useFungibleToken, useGasOptions, useNativeTokenPrice } from '@masknet/plugin-infra/web3'
 import { GasOptionType, NetworkPluginID } from '@masknet/web3-shared-base'
@@ -244,15 +243,10 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(
                     </AccordionDetails>
                 </Accordion>
                 <Box className={classes.controller}>
-                    <ActionButton
-                        color="secondary"
-                        className={classnames(classes.button, classes.cancelButton)}
-                        onClick={onCancel}>
+                    <ActionButton variant="outlined" onClick={onCancel}>
                         {t('cancel')}
                     </ActionButton>
                     <ActionButton
-                        color="primary"
-                        className={classes.button}
                         onClick={() => {
                             handleConfirm()
                             onSaveSlippage()

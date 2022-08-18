@@ -11,13 +11,12 @@ import {
     SnackbarAction,
     OptionsObject,
 } from 'notistack'
-import { Typography, IconButton } from '@mui/material'
+import { Typography, IconButton, alpha } from '@mui/material'
 import classnames from 'classnames'
 import { Close as CloseIcon } from '@mui/icons-material'
 import WarningIcon from '@mui/icons-material/Warning'
 import InfoIcon from '@mui/icons-material/Info'
-import DoneIcon from '@mui/icons-material/Done'
-import { LoadingIcon, RiskIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '../../UIHelper'
 import { MaskColorVar } from '../../CSSVariables'
 
@@ -30,74 +29,107 @@ interface StyleProps {
 }
 
 const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, { offsetY }, refs) => {
-    const { palette } = theme
-    const isDark = palette.mode === 'dark'
     const spinningAnimationKeyFrames = keyframes`
-to {
-  transform: rotate(360deg)
-}`
-
+        to {
+          transform: rotate(360deg)
+        }
+    `
     const title = {
-        color: MaskColorVar.textPrimary,
-        fontWeight: 400,
+        color: theme.palette.maskColor.main,
+        fontWeight: 700,
         fontSize: 14,
-        lineHeight: '20px',
+        lineHeight: '18px',
     } as const
     const message = {
-        color: MaskColorVar.textSecondary,
+        color: theme.palette.maskColor.main,
         fontWeight: 400,
         display: 'flex',
         alignItems: 'center',
-        fontSize: 12,
+        fontSize: 14,
+        lineHeight: '18px',
+        '& > a': {
+            display: 'flex',
+            alignItems: 'center',
+        },
     } as const
     const defaultVariant = {
-        background: isDark ? '#17191D' : '#F7F9FA',
-        color: isDark ? '#D9D9D9' : '#0F1419',
+        background: theme.palette.maskColor.bottom,
+        color: theme.palette.maskColor.main,
+        boxShadow:
+            theme.palette.mode === 'dark'
+                ? '0px 4px 30px rgba(255, 255, 255, 0.15)'
+                : '0px 4px 30px rgba(0, 0, 0, 0.1)',
         [`& .${refs.title}`]: {
-            color: isDark ? '#D9D9D9' : palette.grey['800'],
+            color: 'inherit',
+        },
+
+        [`& .${refs.message}`]: {
+            color: 'inherit',
         },
     }
     const success = {
-        backgroundColor: '#60DFAB',
-        color: '#ffffff',
+        backgroundColor: theme.palette.maskColor.success,
+        color: theme.palette.maskColor.white,
+        boxShadow: `0px 6px 20px ${alpha(theme.palette.maskColor.success, 0.15)}`,
+        backdropFilter: 'blur(16px)',
         [`& .${refs.title}`]: {
             color: 'inherit',
         },
         [`& .${refs.message}`]: {
-            color: 'inherit',
+            color: alpha(theme.palette.maskColor.white, 0.8),
+            '& svg': {
+                color: theme.palette.maskColor.white,
+            },
         },
     } as const
 
     const error = {
-        background: '#FF5F5F',
-        color: '#ffffff',
+        background: theme.palette.maskColor.danger,
+        color: theme.palette.maskColor.white,
+        boxShadow: `0px 6px 20px ${alpha(theme.palette.maskColor.danger, 0.15)}`,
+        backdropFilter: 'blur(16px)',
         [`& .${refs.title}`]: {
             color: 'inherit',
         },
         [`& .${refs.message}`]: {
-            color: 'inherit',
+            color: alpha(theme.palette.maskColor.white, 0.8),
+            '& svg': {
+                color: theme.palette.maskColor.white,
+            },
         },
     } as const
 
     const info = {
-        background: '#8CA3C7',
-        color: '#ffffff',
+        background: theme.palette.maskColor.primary,
+        color: theme.palette.maskColor.white,
+        boxShadow:
+            theme.palette.mode === 'dark'
+                ? '0px 4px 30px rgba(255, 255, 255, 0.15)'
+                : '0px 4px 30px rgba(0, 0, 0, 0.1)',
         [`& .${refs.title}`]: {
             color: 'inherit',
         },
         [`& .${refs.message}`]: {
-            color: 'inherit',
+            color: alpha(theme.palette.maskColor.white, 0.8),
+            '& svg': {
+                color: theme.palette.maskColor.white,
+            },
         },
     }
 
     const warning = {
-        backgroundColor: '#FFB915',
-        color: '#ffffff',
+        backgroundColor: theme.palette.maskColor.warn,
+        color: theme.palette.maskColor.white,
+        boxShadow: `0px 6px 20px ${alpha(theme.palette.maskColor.warn, 0.15)}`,
+        backdropFilter: 'blur(16px)',
         [`& .${refs.title}`]: {
             color: 'inherit',
         },
         [`& .${refs.message}`]: {
-            color: 'inherit',
+            color: alpha(theme.palette.maskColor.white, 0.8),
+            '& svg': {
+                color: theme.palette.maskColor.white,
+            },
         },
     } as const
 
@@ -141,6 +173,10 @@ to {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            '& > svg': {
+                width: 24,
+                height: 24,
+            },
         },
         spinning: {
             display: 'flex',
@@ -151,16 +187,13 @@ to {
         },
         closeButton: {
             color: 'inherit',
+            transform: 'translateY(-10px)',
         },
         texts: {
-            marginLeft: theme.spacing(2),
+            marginLeft: theme.spacing(1.5),
         },
         title,
         message,
-        link: {
-            display: 'flex',
-            marginLeft: theme.spacing(0.5),
-        },
     }
 })
 
@@ -177,8 +210,8 @@ export interface CustomSnackbarContentProps {
 }
 const IconMap: Record<VariantType, React.ReactNode> = {
     default: <InfoIcon color="inherit" />,
-    success: <DoneIcon color="inherit" />,
-    error: <RiskIcon />,
+    success: <Icons.SuccessForSnackBar />,
+    error: <Icons.TransactionFailed />,
     warning: <WarningIcon color="inherit" />,
     info: <InfoIcon color="inherit" />,
 }
@@ -186,7 +219,7 @@ const IconMap: Record<VariantType, React.ReactNode> = {
 export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarContentProps>((props, ref) => {
     const classes = useStylesExtends(useStyles({ offsetY: props.offsetY }), props)
     const snackbar = useSnackbar()
-    const loadingIcon = <LoadingIcon color="inherit" className={classes.spinning} />
+    const loadingIcon = <Icons.CircleLoading className={classes.spinning} />
     const variantIcon = props.processing ? loadingIcon : props.variant ? IconMap[props.variant] : null
     let renderedAction: React.ReactNode = (
         <IconButton className={classes.closeButton} onClick={() => snackbar.closeSnackbar(props.id)}>

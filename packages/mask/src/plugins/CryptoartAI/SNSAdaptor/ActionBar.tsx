@@ -1,9 +1,8 @@
 import { useMemo } from 'react'
 import { Box } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { CollectibleState } from '../hooks/useCollectibleState'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useControlledDialog } from '../../../utils/hooks/useControlledDialog'
 import { MakeOfferDialog } from './MakeOfferDialog'
 import { CheckoutDialog } from './CheckoutDialog'
@@ -59,6 +58,7 @@ export function ActionBar(props: ActionBarProps) {
             assetSource?.trade?.is_auction ? (
                 <ActionButton
                     variant="roundedDark"
+                    fullWidth
                     onClick={() => {
                         onOpenOfferDialog()
                     }}>
@@ -70,7 +70,7 @@ export function ActionBar(props: ActionBarProps) {
             !assetSource?.is24Auction &&
             assetSource?.priceInEth < 100000 &&
             assetSource?.trade?.isCanBuy ? (
-                <ActionButton variant="roundedDark" onClick={onOpenCheckoutDialog}>
+                <ActionButton fullWidth variant="roundedDark" onClick={onOpenCheckoutDialog}>
                     {t('plugin_collectible_buy_now')}
                 </ActionButton>
             ) : null}

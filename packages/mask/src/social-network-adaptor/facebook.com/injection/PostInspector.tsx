@@ -21,6 +21,7 @@ export function injectPostInspectorFacebook(signal: AbortSignal, current: PostIn
     })(current, signal)
 }
 function zipPostLinkPreview(node: DOMProxy) {
+    if (node.destroyed) return
     const parentEle = node.current.parentElement
     if (!parentEle) return
     if (isMobileFacebook) {
@@ -44,6 +45,7 @@ function zipPostLinkPreview(node: DOMProxy) {
     }
 }
 function zipEncryptedPostContent(node: DOMProxy) {
+    if (node.destroyed) return
     const parent = node.current.parentElement
     // It's image based encryption, skip zip post.
     if (!node.current.innerText.includes('\u{1F3BC}')) return

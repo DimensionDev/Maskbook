@@ -1,3 +1,4 @@
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { useAvailableDataProviders } from '../../trending/useAvailableDataProviders'
 import { useSearchedKeyword } from '../../trending/useSearchedKeyword'
 import { TagType } from '../../types'
@@ -10,7 +11,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     const keyword = useSearchedKeyword()
     const [_, type, name = ''] = keyword.match(/([#$])(\w+)/) ?? []
     const type_ = type === '$' ? TagType.CASH : TagType.HASH
-    const { value: dataProviders = [] } = useAvailableDataProviders(type_, name)
+    const { value: dataProviders = EMPTY_LIST } = useAvailableDataProviders(type_, name)
 
     if (!name || !dataProviders?.length) return null
     return (

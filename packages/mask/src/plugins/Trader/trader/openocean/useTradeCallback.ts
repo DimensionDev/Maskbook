@@ -5,14 +5,14 @@ import { useAsyncFn } from 'react-use'
 import type { TransactionConfig } from 'web3-core'
 import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import type { SwapOOSuccessResponse, TradeComputed } from '../../types'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useAccount, useChainId, useWeb3 } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, ZERO } from '@masknet/web3-shared-base'
+import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 
 export function useTradeCallback(
     tradeComputed: TradeComputed<SwapOOSuccessResponse> | null,
     gasConfig?: GasOptionConfig,
 ) {
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM)
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
@@ -27,28 +27,21 @@ export function useTradeCallback(
 
     return useAsyncFn(async () => {
         // validate config
-        if (!account || !config || !web3) {
+        if (!account || !config || !connection) {
             return
         }
 
         // compose transaction config
         const config_ = {
             ...config,
-            gas: await web3.eth.estimateGas(config).catch((error) => {
-                throw error
-            }),
+            gas: (await connection.estimateTransaction?.(config)) ?? ZERO.toString(),
             ...gasConfig,
         }
 
         // send transaction and wait for hash
-        return new Promise<string>((resolve, reject) => {
-            web3.eth.sendTransaction(config_, (error, hash) => {
-                if (error) {
-                    reject(error)
-                } else {
-                    resolve(hash)
-                }
-            })
-        })
-    }, [web3, account, chainId, stringify(config)])
+
+        const hash = await connection.sendTransaction(config_)
+        const receipt = await connection.getTransactionReceipt(hash)
+        return receipt?.transactionHash
+    }, [connection, account, chainId, stringify(config)])
 }

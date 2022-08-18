@@ -9,10 +9,15 @@ export type ApplicationDialogEvent = {
     open: boolean
 }
 
+export type ApplicationPersonaListDialogEvent = {
+    open: boolean
+}
+
 export type SelectProviderDialogEvent =
     | {
           open: true
           walletConnectedCallback?: () => void
+          supportedNetworkList?: Array<Web3Helper.NetworkDescriptorAll['type']>
       }
     | {
           open: false

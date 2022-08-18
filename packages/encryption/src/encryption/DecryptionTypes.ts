@@ -1,6 +1,6 @@
 import type { TypedMessage } from '@masknet/typed-message'
 import type { ProfileIdentifier, AESCryptoKey, EC_Public_CryptoKey } from '@masknet/shared-base'
-import type { PayloadParseResult, SupportedPayloadVersions } from '../payload'
+import type { PayloadParseResult, SupportedPayloadVersions } from '../payload/index.js'
 import { registerSerializableClass } from '@masknet/shared-base'
 
 export interface DecryptOptions {
@@ -33,7 +33,11 @@ export interface DecryptIO {
      * @param iv
      * @returns The decrypted data
      */
-    decryptByLocalKey(authorHint: ProfileIdentifier | null, data: Uint8Array, iv: Uint8Array): Promise<Uint8Array>
+    decryptByLocalKey(
+        authorHint: ProfileIdentifier | null,
+        data: Uint8Array,
+        iv: Uint8Array,
+    ): Promise<Uint8Array | ArrayBuffer>
     /**
      * If the author is null, the host should use some heuristic approach (e.g. where they found the post).
      * @param author ProfileIdentifier of the author. Might be empty.

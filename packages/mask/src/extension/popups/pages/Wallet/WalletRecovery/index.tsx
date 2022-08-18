@@ -17,7 +17,7 @@ import { usePasswordForm } from '../hooks/usePasswordForm'
 import { PasswordField } from '../../../components/PasswordField'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { LoadingButton } from '@mui/lab'
-import { currentPersonaIdentifier } from '../../../../../settings/settings'
+import { currentPersonaIdentifier } from '../../../../../../shared/legacy-settings/settings'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 

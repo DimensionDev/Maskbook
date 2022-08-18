@@ -1,16 +1,15 @@
 {
   "name": "@masknet/web3-shared-evm",
   "private": true,
-  "sideEffects": false,
   "exports": {
     ".": {
-      "webpack": "./index.ts",
-      "default": "../dist/evm/index.js"
+      "types": "./dist/index.d.ts",
+      "webpack": "./src/index.ts",
+      "default": "./dist/index.js"
     }
   },
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@dimensiondev/holoflows-kit": "^0.9.0-20220520093249-0870919",
     "@ensdomains/address-encoder": "^0.2.6",
     "@masknet/shared-base": "workspace:*",
     "@masknet/web3-constants": "workspace:*",

@@ -2,13 +2,13 @@ import { useAsyncFn } from 'react-use'
 import BigNumber from 'bignumber.js'
 import type { TradeProvider } from '@masknet/public-api'
 import type { SwapParameters } from '@uniswap/v2-sdk'
-import { GasOptionConfig, TransactionEventType } from '@masknet/web3-shared-evm'
+import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
 import { swapErrorToUserReadableMessage } from '../../helpers'
 import type { SwapCall, Trade, TradeComputed } from '../../types'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { useAccount, useWeb3 } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, ZERO } from '@masknet/web3-shared-base'
 
 interface FailedCall {
     parameters: SwapParameters
@@ -36,15 +36,14 @@ export function useTradeCallback(
     allowedSlippage?: number,
 ) {
     const { targetChainId } = TargetChainIdContext.useContainer()
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId: targetChainId })
+    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: targetChainId })
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const tradeParameters = useTradeParameters(trade, tradeProvider, allowedSlippage)
 
     return useAsyncFn(async () => {
-        if (!tradeParameters.length || !web3) {
+        if (!tradeParameters.length || !connection) {
             return
         }
-
         // step 1: estimate each trade parameter
         const estimatedCalls: SwapCallEstimate[] = await Promise.all(
             tradeParameters.map(async (x) => {
@@ -58,30 +57,34 @@ export function useTradeCallback(
                         : { value: `0x${Number.parseInt(value, 16).toString(16)}` }),
                 }
 
-                return web3.eth
-                    .estimateGas(config)
-                    .then((gasEstimate) => {
-                        return {
-                            call: x,
-                            gasEstimate: new BigNumber(gasEstimate),
-                        }
-                    })
-                    .catch(() => {
-                        return web3.eth
-                            .call(config)
-                            .then(() => {
-                                return {
-                                    call: x,
-                                    error: new Error('Gas estimate failed.'),
-                                }
-                            })
-                            .catch((error) => {
-                                return {
-                                    call: x,
-                                    error: new Error(swapErrorToUserReadableMessage(error)),
-                                }
-                            })
-                    })
+                if (!connection.estimateTransaction) {
+                    return {
+                        call: x,
+                        gasEstimate: ZERO,
+                    }
+                }
+                try {
+                    const gas = await connection.estimateTransaction?.(config)
+                    return {
+                        call: x,
+                        gasEstimate: new BigNumber(gas ?? 0),
+                    }
+                } catch (error) {
+                    return connection
+                        .callTransaction(config)
+                        .then(() => {
+                            return {
+                                call: x,
+                                error: new Error('Gas estimate failed'),
+                            }
+                        })
+                        .catch((error) => {
+                            return {
+                                call: x,
+                                error: new Error(swapErrorToUserReadableMessage(error)),
+                            }
+                        })
+                }
             }),
         )
 
@@ -104,39 +107,34 @@ export function useTradeCallback(
             bestCallOption = firstNoErrorCall
         }
 
-        return new Promise<string>(async (resolve, reject) => {
-            if (!bestCallOption) {
-                return
+        if (!bestCallOption) {
+            return
+        }
+
+        const {
+            call: { address, calldata, value },
+        } = bestCallOption
+
+        try {
+            const hash = await connection.sendTransaction({
+                from: account,
+                to: address,
+                data: calldata,
+                ...('gasEstimate' in bestCallOption ? { gas: bestCallOption.gasEstimate.toFixed() } : {}),
+                ...(!value || /^0x0*$/.test(value) ? {} : { value }),
+                ...gasConfig,
+            })
+            const receipt = await connection.getTransactionReceipt(hash)
+            return receipt?.transactionHash
+        } catch (error: any) {
+            if (!(error as any)?.code) {
+                throw error
             }
-
-            const {
-                call: { address, calldata, value },
-            } = bestCallOption
-
-            web3.eth
-                .sendTransaction({
-                    from: account,
-                    to: address,
-                    data: calldata,
-                    ...('gasEstimate' in bestCallOption ? { gas: bestCallOption.gasEstimate.toFixed() } : {}),
-                    ...(!value || /^0x0*$/.test(value) ? {} : { value }),
-                    ...gasConfig,
-                })
-                .on(TransactionEventType.CONFIRMATION, (_, receipt) => {
-                    resolve(receipt.transactionHash)
-                })
-                .on(TransactionEventType.ERROR, (error) => {
-                    if (!(error as any)?.code) {
-                        reject(error)
-                        return
-                    }
-                    const error_ = new Error(
-                        error?.message === 'Unable to add more requests.'
-                            ? 'Unable to add more requests.'
-                            : 'Transaction rejected.',
-                    )
-                    reject(error_)
-                })
-        })
-    }, [web3, account, tradeParameters, gasConfig])
+            throw new Error(
+                error?.message === 'Unable to add more requests.'
+                    ? 'Unable to add more requests.'
+                    : 'Transaction rejected.',
+            )
+        }
+    }, [connection, account, tradeParameters, gasConfig])
 }

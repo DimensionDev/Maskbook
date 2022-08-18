@@ -4,10 +4,11 @@ import { Box, Link, Typography } from '@mui/material'
 import { CopyIconButton } from '../../../../components/CopyIconButton'
 import { ChainIcon, FormattedAddress, WalletIcon } from '@masknet/shared'
 import { ChainId, formatEthereumAddress, explorerResolver, NetworkType } from '@masknet/web3-shared-evm'
-import { ArrowDropIcon, LinkOutIcon, MaskBlueIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import type { NetworkDescriptor, Wallet } from '@masknet/web3-shared-base'
+import { useI18N } from '../../../../../../utils'
 
-const useStyles = makeStyles()(() => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
         background:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.2) 0%, rgba(59, 153, 252, 0.2) 100%)',
@@ -51,13 +52,16 @@ const useStyles = makeStyles()(() => ({
     },
     icon: {
         fontSize: 12,
-        fill: '#767F8D',
+        height: 12,
+        width: 12,
+        color: '#767F8D',
         cursor: 'pointer',
         marginLeft: 4,
     },
     arrow: {
         fontSize: 20,
         transition: 'all 300ms',
+        color: theme.palette.maskColor.secondaryDark,
     },
     colorChainICon: {
         borderRadius: '999px!important',
@@ -75,6 +79,25 @@ const useStyles = makeStyles()(() => ({
         display: 'flex',
         alignItems: 'center',
     },
+    connected: {
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: 14,
+        lineHeight: '18px',
+        color: theme.palette.maskColor.second,
+        columnGap: 4,
+    },
+    dot: {
+        width: 7,
+        height: 7,
+        borderRadius: 99,
+    },
+    connectedDot: {
+        backgroundColor: theme.palette.maskColor.success,
+    },
+    unconnectedDot: {
+        backgroundColor: theme.palette.maskColor.third,
+    },
 }))
 interface WalletHeaderUIProps {
     currentNetwork: NetworkDescriptor<ChainId, NetworkType>
@@ -84,11 +107,22 @@ interface WalletHeaderUIProps {
     wallet: Wallet
     isSwitchWallet: boolean
     disabled?: boolean
+    connected?: boolean
 }
 
 export const WalletHeaderUI = memo<WalletHeaderUIProps>(
-    ({ currentNetwork, chainId, onOpenNetworkSelector, onActionClick, wallet, isSwitchWallet, disabled }) => {
-        const { classes } = useStyles()
+    ({
+        currentNetwork,
+        chainId,
+        onOpenNetworkSelector,
+        onActionClick,
+        wallet,
+        isSwitchWallet,
+        disabled,
+        connected,
+    }) => {
+        const { t } = useI18N()
+        const { classes, cx } = useStyles()
 
         return (
             <Box className={classes.container}>
@@ -111,11 +145,21 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
                         <Typography className={classes.chainName}>
                             {currentNetwork.name}
                             {!disabled ? (
-                                <ArrowDropIcon
+                                <Icons.ArrowDrop
                                     className={classes.arrow}
                                     style={{ transform: status ? 'rotate(-180deg)' : undefined }}
                                 />
                             ) : null}
+                        </Typography>
+                        <Typography className={classes.connected}>
+                            <div
+                                className={cx(classes.dot, connected ? classes.connectedDot : classes.unconnectedDot)}
+                            />
+                            <span>
+                                {t('popups_wallet_connected_status', {
+                                    context: connected ? 'connected' : 'unconnected',
+                                })}
+                            </span>
                         </Typography>
                     </div>
                 </div>
@@ -124,7 +168,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
                     onClick={() => {
                         if (!disabled) onActionClick()
                     }}>
-                    <MaskBlueIcon className={classes.avatar} />
+                    <Icons.MaskBlue className={classes.avatar} />
                     <div>
                         <Typography className={classes.nickname}>{wallet.name}</Typography>
                         <Typography className={classes.identifier}>
@@ -136,12 +180,12 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
                                 href={explorerResolver.addressLink(chainId, wallet.address ?? '')}
                                 target="_blank"
                                 rel="noopener noreferrer">
-                                <LinkOutIcon className={classes.icon} />
+                                <Icons.PopupLink className={classes.icon} />
                             </Link>
                         </Typography>
                     </div>
                     {!disabled ? (
-                        <ArrowDropIcon
+                        <Icons.ArrowDrop
                             className={classes.arrow}
                             style={{ transform: isSwitchWallet ? 'rotate(-180deg)' : undefined }}
                         />

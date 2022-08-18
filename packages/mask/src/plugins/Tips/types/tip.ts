@@ -3,10 +3,15 @@ export enum TipType {
     NFT = 'nft',
 }
 
+export interface TipAccount {
+    address: string
+    name?: string
+    verified?: boolean
+}
 export interface TipTask {
-    to?: string
+    recipient?: string
     recipientSnsId?: string
-    addresses: string[]
+    addresses: TipAccount[]
 }
 
 export type TipNFTKeyPair = [address: string, tokenId: string]

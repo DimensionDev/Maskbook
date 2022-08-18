@@ -1,4 +1,4 @@
-const patchWebpackConfig = require('@masknet/storybook-shared/patch-webpack')
+const patchWebpackConfig = require('@masknet/storybook-shared/patch-webpack.cjs')
 
 module.exports = {
     stories: ['../stories/**/*.stories.mdx', '../stories/**/*.stories.@(js|jsx|ts|tsx)'],

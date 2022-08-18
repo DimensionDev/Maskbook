@@ -1,12 +1,12 @@
 import { memo, useState } from 'react'
 import { Box, DialogContent, Stack, Typography } from '@mui/material'
-import { MasksIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
 import { LoadingButton } from '@mui/lab'
 import DoneIcon from '@mui/icons-material/Done'
 import { useI18N } from '../locales'
-import { getMaskColor, makeStyles, MaskColorVar } from '@masknet/theme'
-import { InjectedDialog, LoadingAnimation } from '@masknet/shared'
+import { getMaskColor, makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
+import { InjectedDialog } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
@@ -111,7 +111,7 @@ export const UnbindPanelUI = memo<BindPanelUIProps>(
                             <Typography className={classes.subTitle}>{t.persona()}</Typography>
                             <Stack direction="row" className={classes.persona}>
                                 <div className={classes.iconContainer}>
-                                    <MasksIcon style={{ fontSize: '48px' }} />
+                                    <Icons.Masks size={48} />
                                 </div>
                                 <div>
                                     <Typography className={classes.name}>{currentPersona?.nickname}</Typography>
@@ -135,7 +135,7 @@ export const UnbindPanelUI = memo<BindPanelUIProps>(
                                 loading={signature.persona.loading}
                                 onClick={onPersonaSign}
                                 endIcon={isPersonaSigned ? <DoneIcon sx={{ color: MaskColorVar.white }} /> : null}
-                                loadingIndicator={<LoadingAnimation />}>
+                                loadingIndicator={<LoadingBase />}>
                                 {isPersonaSigned ? t.done() : t.persona_sign()}
                             </LoadingButton>
                         </Box>
@@ -168,7 +168,7 @@ export const UnbindPanelUI = memo<BindPanelUIProps>(
                                 loading={signature.wallet.loading}
                                 onClick={onWalletSign}
                                 endIcon={isWalletSigned ? <DoneIcon sx={{ color: MaskColorVar.white }} /> : null}
-                                loadingIndicator={<LoadingAnimation />}>
+                                loadingIndicator={<LoadingBase />}>
                                 {isWalletSigned ? t.done() : t.wallet_sign()}
                             </LoadingButton>
                         </Box>

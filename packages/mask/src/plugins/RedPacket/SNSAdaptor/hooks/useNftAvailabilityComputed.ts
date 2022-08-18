@@ -12,7 +12,7 @@ import { useAvailabilityNftRedPacket } from './useAvailabilityNftRedPacket'
  */
 export function useNftAvailabilityComputed(account: string, payload: NftRedPacketJSONPayload) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const asyncResult = useAvailabilityNftRedPacket(payload?.rpid, account)
+    const asyncResult = useAvailabilityNftRedPacket(payload?.rpid, account, chainId)
 
     const result = asyncResult
     const availability = result.value

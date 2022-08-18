@@ -8,7 +8,7 @@ import { PreviewCard } from './components/PreviewCard'
 import { Context } from '../hooks/useContext'
 import { ApplicationEntry } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
-import { MaskBoxIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { RootContext } from '../contexts'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
@@ -34,7 +34,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         (() => {
-            const icon = <MaskBoxIcon />
+            const icon = <Icons.MaskBox />
             const name = <Trans i18nKey="plugin_mask_box_name" />
             const iconFilterColor = 'rgba(0, 87, 255, 0.3)'
             return {
@@ -50,7 +50,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         />
                     )
                 },
-                appBoardSortingDefaultPriority: 6,
+                appBoardSortingDefaultPriority: 7,
                 marketListSortingPriority: 4,
                 icon,
                 tutorialLink: 'https://realmasknetwork.notion.site/d0941687649a4ef7a38d71f23ecbe4da',

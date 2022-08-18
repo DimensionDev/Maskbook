@@ -8,7 +8,7 @@ import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
 const useStyles = makeStyles()((theme) => {
     return {
         root: {
-            padding: theme.spacing(0, 2, 2, 2),
+            padding: theme.spacing(2),
         },
         approve: {
             marginLeft: theme.spacing(1),

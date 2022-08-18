@@ -26,7 +26,9 @@ import { IdentityProviderTwitter } from './identity'
 
 function getPostActionsNode(postNode: HTMLElement | null) {
     if (!postNode) return null
-    return postNode.closest('[data-testid="tweet"]')?.querySelector<HTMLElement>('[role="group"] > div:last-child')
+    return postNode
+        .closest('[data-testid="tweet"]')
+        ?.querySelector<HTMLElement>('[role="group"]:last-child > div:last-child')
 }
 
 const getParentTweetNode = (node: HTMLElement) => {

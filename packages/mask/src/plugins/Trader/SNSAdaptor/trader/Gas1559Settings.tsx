@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { I18NFunction, useI18N } from '../../../../utils'
 import { Accordion, AccordionDetails, AccordionSummary, Box, TextField, Typography } from '@mui/material'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles, MaskColorVar, ActionButton } from '@masknet/theme'
 import { formatGweiToWei, GasOptionConfig } from '@masknet/web3-shared-evm'
 import classnames from 'classnames'
 import { z as zod } from 'zod'
@@ -11,7 +11,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { ExpandMore } from '@mui/icons-material'
 import { fromWei, toHex } from 'web3-utils'
 import { isEmpty } from 'lodash-unified'
-import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import {
     GasOptionType,
     isGreaterThan,
@@ -363,15 +362,10 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(
                     </AccordionDetails>
                 </Accordion>
                 <Box className={classes.controller}>
-                    <ActionButton
-                        color="secondary"
-                        className={classnames(classes.button, classes.cancelButton)}
-                        onClick={onCancel}>
+                    <ActionButton variant="outlined" onClick={onCancel}>
                         {t('cancel')}
                     </ActionButton>
                     <ActionButton
-                        color="primary"
-                        className={classes.button}
                         onClick={() => {
                             onSave()
                             onSaveSlippage()

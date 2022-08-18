@@ -12,6 +12,9 @@
         "Arbitrum": "11841",
         "Arbitrum_Rinkeby": "",
         "xDai": "5601",
+        "Optimism": "10",
+        "Optimism_Kovan": "",
+        "Optimism_Goerli": "",
         "Avalanche": "43114",
         "Avalanche_Fuji": "",
         "Celo": "5567",
@@ -21,6 +24,7 @@
         "Evmos": "19899",
         "Conflux": "7334",
         "Harmony": "3945",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": "12885"
     }
 }

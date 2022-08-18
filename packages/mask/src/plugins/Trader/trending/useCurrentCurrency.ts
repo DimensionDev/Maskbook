@@ -34,6 +34,14 @@ const CURRENCIES_MAP: Record<
             description: 'Unite State Dollar',
         },
     ],
+    [DataProvider.NFTSCAN]: [
+        {
+            id: 'eth',
+            name: '\u039E',
+            symbol: '\u039E',
+            description: 'Ethereum',
+        },
+    ],
 }
 
 /**

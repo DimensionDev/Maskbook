@@ -103,7 +103,7 @@ export function PerformanceChart(props: PerformanceChartProps) {
             {loading ? (
                 <CircularProgress className={classes.progress} color="primary" size={15} />
             ) : (
-                <RefreshIcon className={classes.refresh} color="primary" onClick={retry} />
+                <RefreshIcon className={classes.refresh} color="primary" onClick={retry} style={{ fill: '#1C68F3' }} />
             )}
             {stats.length && !error ? (
                 <>

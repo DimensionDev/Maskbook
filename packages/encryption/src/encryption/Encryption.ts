@@ -7,8 +7,8 @@ import {
     SerializableTypedMessages,
 } from '@masknet/typed-message'
 import { None, Option, Some } from 'ts-results'
-import { EC_Key, encodePayload, PayloadWellFormed } from '../payload'
-import { encryptWithAES } from '../utils'
+import { EC_Key, encodePayload, PayloadWellFormed } from '../payload/index.js'
+import { encryptWithAES } from '../utils/index.js'
 
 import {
     EncryptError,
@@ -17,12 +17,12 @@ import {
     EncryptOptions,
     EncryptResult,
     EncryptTargetE2E,
-} from './EncryptionTypes'
-import { createEphemeralKeysMap, fillIV } from './utils'
-import { v37_addReceiver } from './v37-ecdh'
-import { v38_addReceiver } from './v38-ecdh'
+} from './EncryptionTypes.js'
+import { createEphemeralKeysMap, fillIV } from './utils.js'
+import { v37_addReceiver } from './v37-ecdh.js'
+import { v38_addReceiver } from './v38-ecdh.js'
 
-export * from './EncryptionTypes'
+export * from './EncryptionTypes.js'
 export async function encrypt(options: EncryptOptions, io: EncryptIO): Promise<EncryptResult> {
     const postIV = fillIV(io)
     const postKey = await aes256GCM(io)
@@ -143,7 +143,7 @@ async function e2e_v38(
         // v38 does not support ephemeral encryption.
         ephemeralPublicKey: new Map(),
         iv: postIV,
-        ownersAESKeyEncrypted: await io.encryptByLocalKey(await postKeyEncoded, postIV),
+        ownersAESKeyEncrypted: new Uint8Array(await io.encryptByLocalKey(await postKeyEncoded, postIV)),
     }
     return [encryption, ecdhResult]
 }

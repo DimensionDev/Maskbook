@@ -11,12 +11,17 @@ export function toZero(n: BigNumber.Value, m = 1e-6) {
 
 /** n === 0 */
 export function isZero(n: BigNumber.Value) {
-    return n === 0 || n === '0' || new BigNumber(n).isZero()
+    return n === 0 || n === '0' || n === '0x0' || new BigNumber(n).isZero()
 }
 
 /** n === 1 */
 export function isOne(n: BigNumber.Value) {
     return n === 1 || n === '1' || new BigNumber(n).isEqualTo(ONE)
+}
+
+/** n === m */
+export function isEqual(n: BigNumber.Value, m: BigNumber.Value) {
+    return new BigNumber(n).isEqualTo(m)
 }
 
 /** a > b */
@@ -91,4 +96,9 @@ export function toFixed(value: BigNumber.Value | undefined, decimalPlaces: numbe
 export function toFixed(value: BigNumber.Value = 0, decimalPlaces?: number) {
     const n = new BigNumber(value)
     return decimalPlaces ? n.toFixed(decimalPlaces) : n.toFixed()
+}
+
+export function formatInteger(value: BigNumber.Value | null | undefined, fallback?: string | number) {
+    if (value === undefined || value === null) return fallback
+    return new BigNumber(value).toFormat(0)
 }

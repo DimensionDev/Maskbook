@@ -1,12 +1,12 @@
 import { memo, useState } from 'react'
+import { Icons } from '@masknet/icons'
+import type { EnhanceableSite } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Button, Typography } from '@mui/material'
 import { AccountAvatar } from '../components/AccountAvatar'
 import { useI18N } from '../../../../../utils'
 import { ConnectDialog } from '../components/ConnectDialog'
-import { EmptyIcon } from '@masknet/icons'
 import type { Account } from '../type'
-import type { EnhanceableSite } from '@masknet/shared-base'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -90,7 +90,7 @@ export const AccountsUI = memo<AccountsUIProps>(({ accounts, networks, onConnect
                 </div>
             ) : (
                 <div className={classes.placeholder}>
-                    <EmptyIcon style={{ fontSize: 60 }} />
+                    <Icons.Empty size={60} />
                 </div>
             )}
             <Button className={classes.connect} onClick={() => setOpen(true)}>

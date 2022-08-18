@@ -1,6 +1,6 @@
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { base } from '../base'
-import { CyberConnectIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { useMemo } from 'react'
 import { parseURL } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
@@ -40,13 +40,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 fallback: 'Decentralized social graph protocol for user-centric Web3.',
             },
             name: { i18nKey: '__plugin_name', fallback: 'CyberConnect' },
-            icon: <CyberConnectIcon />,
+            icon: <Icons.CyberConnect size={36} />,
             tutorialLink: 'https://cyberconnect.me/',
         },
     ],
     wrapperProps: {
         icon: (
-            <CyberConnectIcon
+            <Icons.CyberConnect
                 style={{ width: 24, height: 24, filter: 'drop-shadow(0px 6px 12px rgba(27, 144, 238, 0.2))' }}
             />
         ),

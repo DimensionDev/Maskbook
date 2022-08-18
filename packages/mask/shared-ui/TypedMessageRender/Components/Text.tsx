@@ -23,7 +23,7 @@ export const Link = memo(function Anchor(props: RenderFragmentsContextType.LinkP
 
 export function useTagEnhancer(kind: 'hash' | 'cash', content: string) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const plugin = useActivatedPluginsSNSAdaptor(false)
+    const plugin = useActivatedPluginsSNSAdaptor('any')
         .filter((x) => x.enhanceTag)
         .at(0)
 

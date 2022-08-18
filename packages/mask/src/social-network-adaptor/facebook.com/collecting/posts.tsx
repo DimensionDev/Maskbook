@@ -86,7 +86,7 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
             function collectPostInfo() {
                 rootProxy.realCurrent = root.evaluate()[0] as HTMLElement
                 const nextTypedMessage: TypedMessage[] = []
-                info.postBy.value = getPostBy(metadata, postInfo.hasMaskPayload.getCurrentValue()).identifier || null
+                info.postBy.value = getPostBy(metadata, postInfo.hasMaskPayload.getCurrentValue())?.identifier || null
                 info.postID.value = getPostID(metadata, rootProxy.realCurrent)
                 // parse text
                 const text = collectNodeText(node, {
@@ -125,6 +125,7 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
 }
 
 function getPostBy(node: DOMProxy, allowCollectInfo: boolean) {
+    if (node.destroyed) return
     const dom = isMobileFacebook
         ? node.current.querySelectorAll('a')
         : [(node.current.closest('[role="article"]') ?? node.current.parentElement)!.querySelectorAll('a')[1]]
@@ -133,6 +134,7 @@ function getPostBy(node: DOMProxy, allowCollectInfo: boolean) {
 }
 
 function getPostID(node: DOMProxy, root: HTMLElement): null | string {
+    if (node.destroyed) return null
     if (isMobileFacebook) {
         const abbr = node.current.querySelector('abbr')
         if (!abbr) return null
@@ -183,6 +185,7 @@ function getPostID(node: DOMProxy, root: HTMLElement): null | string {
 }
 
 function getMetadataImages(node: DOMProxy): string[] {
+    if (node.destroyed) return []
     const parent = node.current.parentElement?.parentElement
 
     if (!parent) return []
@@ -196,9 +199,7 @@ function getMetadataImages(node: DOMProxy): string[] {
               .replace(/["']/g, '')
               .split(',')
               .filter(Boolean)
-        : Array.from(imgNodes)
-              .map((node) => node.src)
-              .filter(Boolean)
+        : Array.from(imgNodes, (node) => node.src).filter(Boolean)
     if (!imgUrls.length) return []
     return imgUrls
 }

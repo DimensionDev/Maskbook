@@ -1,4 +1,12 @@
-import { NextIDAction, PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import {
+    decompressSecp256k1Key,
+    ECKeyIdentifier,
+    NextIDAction,
+    PersonaIdentifier,
+    ProfileIdentifier,
+    ProfileInformationFromNextID,
+    RelationFavor,
+} from '@masknet/shared-base'
 import { MaskMessages } from '../../../../shared/messages'
 import { storeAvatar } from '../../../database/avatar-cache/avatar'
 import {
@@ -9,11 +17,13 @@ import {
     deleteProfileDB,
     detachProfileDB,
     LinkedProfileDetails,
+    PersonaRecord,
     ProfileRecord,
     queryProfileDB,
     queryProfilesDB,
 } from '../../../database/persona/db'
 import { NextIDProof } from '@masknet/web3-providers'
+import { createOrUpdatePersonaDB, createOrUpdateRelationDB } from '../../../database/persona/web'
 
 export interface UpdateProfileInfo {
     nickname?: string | null
@@ -89,4 +99,58 @@ export async function attachProfile(
 }
 export function detachProfile(identifier: ProfileIdentifier): Promise<void> {
     return detachProfileDB(identifier)
+}
+
+/**
+ * Set NextID profile to profileDB
+ * */
+
+export async function attachNextIDPersonaToProfile(item: ProfileInformationFromNextID, whoAmI: ECKeyIdentifier) {
+    if (!item.linkedPersona) throw new Error('LinkedPersona Not Found')
+    const now = new Date()
+    const personaRecord: PersonaRecord = {
+        createdAt: now,
+        updatedAt: now,
+        identifier: item.linkedPersona,
+        linkedProfiles: new Map(),
+        publicKey: await decompressSecp256k1Key(item.linkedPersona.rawPublicKey),
+        publicHexKey: item.linkedPersona?.publicKeyAsHex,
+        nickname: item.nickname,
+        hasLogout: false,
+        uninitialized: false,
+    }
+
+    const profileRecord: ProfileRecord = {
+        identifier: item.identifier,
+        nickname: item.nickname,
+        linkedPersona: item.linkedPersona,
+        createdAt: now,
+        updatedAt: now,
+    }
+    try {
+        await consistentPersonaDBWriteAccess(async (t) => {
+            await createOrUpdatePersonaDB(
+                personaRecord,
+                { explicitUndefinedField: 'ignore', linkedProfiles: 'merge' },
+                t,
+            )
+            await createOrUpdateProfileDB(profileRecord, t)
+            await attachProfileDB(
+                profileRecord.identifier,
+                item.linkedPersona!,
+                { connectionConfirmState: 'confirmed' },
+                t,
+            )
+            await createOrUpdateRelationDB(
+                {
+                    profile: profileRecord.identifier,
+                    linked: whoAmI,
+                    favor: RelationFavor.UNCOLLECTED,
+                },
+                t,
+            )
+        })
+    } catch {
+        // already exist
+    }
 }

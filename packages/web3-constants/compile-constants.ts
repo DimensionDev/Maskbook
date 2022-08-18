@@ -53,6 +53,9 @@ compileConstants(path.join(__dirname, 'evm'), [
     'Arbitrum',
     'Arbitrum_Rinkeby',
     'xDai',
+    'Optimism',
+    'Optimism_Kovan',
+    'Optimism_Goerli',
     'Avalanche',
     'Avalanche_Fuji',
     'Celo',
@@ -63,6 +66,7 @@ compileConstants(path.join(__dirname, 'evm'), [
     'Evmos',
     'Harmony',
     'Harmony_Test',
+    'Astar',
 ])
 
 compileConstants(path.join(__dirname, 'solana'), ['Mainnet', 'Testnet', 'Devnet'])

@@ -13,5 +13,5 @@ export function useProviderDescriptor<S extends 'all' | void = void, T extends N
 
     return getPluginDefine(pluginID)?.declareWeb3Providers?.find((x) =>
         [x.type, x.ID].includes(expectedProviderTypeOrID ?? providerType ?? ''),
-    ) as Web3Helper.ProviderDescriptorScope<S, T>
+    ) as Web3Helper.ProviderDescriptorScope<S, T> | undefined
 }

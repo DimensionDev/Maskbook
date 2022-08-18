@@ -2,9 +2,13 @@ import classNames from 'classnames'
 import { CircularProgress, useTheme } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { AssetPlayer } from '../AssetPlayer'
-import { useNonFungibleToken, Web3Helper } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useNetworkDescriptor, useNonFungibleToken, Web3Helper } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
 import { useImageChecker } from '../../../hooks'
+import { NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
+import { ImageIcon } from '../ImageIcon'
+import { Image } from '../Image'
+import { useMemo } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -29,6 +33,12 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        position: 'relative',
+    },
+    networkIcon: {
+        position: 'absolute',
+        top: 6,
+        right: 6,
     },
 }))
 
@@ -43,6 +53,8 @@ interface Props extends withClasses<'loadingFailImage' | 'iframe' | 'wrapper' | 
     isNative?: boolean
     setERC721TokenName?: (name: string) => void
     setSourceType?: (type: string) => void
+    showNetwork?: boolean
+    address?: SocialAddress<NetworkPluginID>
 }
 
 const assetPlayerFallbackImageDark = new URL('./nft_token_fallback_dark.png', import.meta.url)
@@ -57,9 +69,11 @@ export function NFTCardStyledAssetPlayer(props: Props) {
         fallbackImage,
         fallbackResourceLoader,
         url,
+        address,
         setERC721TokenName,
         renderOrder,
         setSourceType,
+        showNetwork = false,
     } = props
     const classes = useStylesExtends(useStyles(), props)
     const theme = useTheme()
@@ -79,18 +93,24 @@ export function NFTCardStyledAssetPlayer(props: Props) {
     const fallbackImageURL =
         theme.palette.mode === 'dark' ? assetPlayerFallbackImageDark : assetPlayerFallbackImageLight
 
+    const networkDescriptor = useNetworkDescriptor(address?.networkSupporterPluginID)
+
+    const networkIcon = useMemo(() => {
+        if (address?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM) {
+            return NETWORK_DESCRIPTORS.find((network) => network?.chainId === chainId)?.icon
+        }
+        return networkDescriptor?.icon
+    }, [networkDescriptor])
+
     return isImageToken || isNative ? (
         <div className={classes.imgWrapper}>
-            <img
+            <Image
                 width="100%"
+                height="100%"
                 style={{ objectFit: 'cover' }}
                 src={url || tokenDetailed?.metadata?.imageURL || tokenDetailed?.metadata?.mediaURL}
-                onError={(event) => {
-                    const target = event.currentTarget as HTMLImageElement
-                    target.src = fallbackImageURL.toString()
-                    target.classList.add(classes.loadingFailImage ?? '')
-                }}
             />
+            {showNetwork && <ImageIcon icon={networkIcon} size={20} classes={{ icon: classes.networkIcon }} />}
         </div>
     ) : (
         <AssetPlayer
@@ -119,6 +139,8 @@ export function NFTCardStyledAssetPlayer(props: Props) {
                 loadingFailImage: classes.loadingFailImage,
                 loadingIcon: classes.loadingIcon,
             }}
+            showNetwork={showNetwork}
+            networkIcon={networkIcon}
             fallbackResourceLoader={fallbackResourceLoader}
         />
     )

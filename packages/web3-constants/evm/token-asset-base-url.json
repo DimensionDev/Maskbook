@@ -60,15 +60,10 @@
             "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/aurora"
         ],
         "Aurora_Testnet": [],
-        "Evmos": [],
-        "Conflux": [
-            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/conflux",
-            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/conflux"
-        ],
-        "Harmony": [
-            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/harmony",
-            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/harmony"
-        ],
-        "Harmony_Test": []
+        "Conflux": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/conflux/assets"],
+        "Harmony": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/harmony/assets"],
+        "Harmony_Test": [],
+        "Astar": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/astar/assets"],
+        "Evmos": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/evmos/assets"]
     }
 }

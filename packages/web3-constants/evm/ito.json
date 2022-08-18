@@ -12,6 +12,9 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Optimism": "",
+        "Optimism_Kovan": "",
+        "Optimism_Goerli": "",
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
@@ -21,7 +24,8 @@
         "Conflux": "",
         "Evmos": "",
         "Harmony": "",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": ""
     },
     "MASK_ITO_CONTRACT_ADDRESS": {
         "Mainnet": "0x86812da3A623ab9606976078588b80C315E55FA3",
@@ -36,6 +40,9 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Optimism": "",
+        "Optimism_Kovan": "",
+        "Optimism_Goerli": "",
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
@@ -45,21 +52,25 @@
         "Conflux": "",
         "Evmos": "",
         "Harmony": "",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": ""
     },
     "ITO2_CONTRACT_ADDRESS": {
         "Mainnet": "0xc2CFbF22d6Dc87D0eE18d38d73733524c109Ff46",
-        "Ropsten": "0xBD4c3Cf084B6F4d25430Ee5d44436e860Cc58Ee4",
-        "Rinkeby": "",
+        "Ropsten": "0xcdE281B32b629f2e89E5953B674E1E507e6dabcF",
+        "Rinkeby": "0xBe62f1805C43559cC62f9326103354080588B158",
         "Kovan": "",
         "Gorli": "",
         "BSC": "0x96c7D011cdFD467f551605f0f5Fce279F86F4186",
-        "BSCT": "",
+        "BSCT": "0xbc558E7683F79FAAE236c1083671396cbB2Ac242",
         "Matic": "0xF9F7C1496c21bC0180f4B64daBE0754ebFc8A8c0",
         "Mumbai": "",
         "Arbitrum": "0x71834a3FDeA3E70F14a93ED85c6be70925D0CAd9",
         "Arbitrum_Rinkeby": "0x9b3649eC8C9f68484acC76D437B145a4e58Bf2A2",
         "xDai": "0x913975af2Bb8a6Be4100D7dc5e9765B77F6A5d6c",
+        "Optimism": "0x71834a3FDeA3E70F14a93ED85c6be70925D0CAd9",
+        "Optimism_Kovan": "0xd60A384B01Ac271B68483441a06BA32b96a94ad8",
+        "Optimism_Goerli": "",
         "Avalanche": "0x02Ea0720254F7fa4eca7d09A1b9C783F1020EbEF",
         "Avalanche_Fuji": "0xf5056B96ab242C566002852d0b98ce0BcDf1af51",
         "Celo": "0xaA5bfd7355637eA7405CB194a55303e821c4c569",
@@ -69,14 +80,15 @@
         "Conflux": "0x066804d9123bf2609ed4a4a40b1177a9c5a9ed51",
         "Evmos": "",
         "Harmony": "0x5b966f3a32db9c180843bcb40267a66b73e4f022",
-        "Harmony_Test": "0x578a7fee5f0d8cec7d00578bf37374c5b95c4b98"
+        "Harmony_Test": "0x578a7fee5f0d8cec7d00578bf37374c5b95c4b98",
+        "Astar": "0x1D720657e6B11F468BACE2d513b10C8CbfF247Cd"
     },
     "ITO2_CONTRACT_CREATION_BLOCK_HEIGHT": {
         "Mainnet": 12766513,
         "Ropsten": 10572050,
         "Rinkeby": 0,
         "Kovan": 0,
-        "Gorli": 0,
+        "Gorli": 6028660,
         "BSC": 8885927,
         "BSCT": 0,
         "Matic": 16516643,
@@ -84,6 +96,9 @@
         "Arbitrum": 102022,
         "Arbitrum_Rinkeby": 708696,
         "xDai": 17865755,
+        "Optimism": 8994,
+        "Optimism_Kovan": 0,
+        "Optimism_Goerli": 0,
         "Avalanche": 8289892,
         "Avalanche_Fuji": 4751103,
         "Celo": 10278776,
@@ -93,7 +108,8 @@
         "Conflux": 37722805,
         "Evmos": 0,
         "Harmony": 24133305,
-        "Harmony_Test": 22744597
+        "Harmony_Test": 22744597,
+        "Astar": 915536
     },
     "DEFAULT_QUALIFICATION_ADDRESS": {
         "Mainnet": "0x81b6ae377e360dcad63611846a2516f4ba8c88ac",
@@ -108,6 +124,9 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Optimism": "",
+        "Optimism_Kovan": "",
+        "Optimism_Goerli": "",
         "Avalanche": "0x02Ea0720254F7fa4eca7d09A1b9C783F1020EbEF",
         "Avalanche_Fuji": "",
         "Celo": "",
@@ -117,12 +136,13 @@
         "Conflux": "",
         "Evmos": "",
         "Harmony": "",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": ""
     },
     "DEFAULT_QUALIFICATION2_ADDRESS": {
         "Mainnet": "0x4dC5f343Fe57E4fbDA1B454d125D396A3181272c",
         "Ropsten": "",
-        "Rinkeby": "",
+        "Rinkeby": "0xEbd753E66649C824241E63894301BA8Db5DBF5Bb",
         "Kovan": "",
         "Gorli": "",
         "BSC": "0xAb7B1bE4233A04e5C43a810E75657ECED8E5463B",
@@ -132,6 +152,9 @@
         "Arbitrum": "0x913975af2Bb8a6Be4100D7dc5e9765B77F6A5d6c",
         "Arbitrum_Rinkeby": "0xEbd753E66649C824241E63894301BA8Db5DBF5Bb",
         "xDai": "0x71834a3FDeA3E70F14a93ED85c6be70925D0CAd9",
+        "Optimism": "0x913975af2Bb8a6Be4100D7dc5e9765B77F6A5d6c",
+        "Optimism_Kovan": "",
+        "Optimism_Goerli": "",
         "Avalanche": "0x54a0A221C25Fc0a347EC929cFC5db0be17fA2a2B",
         "Avalanche_Fuji": "",
         "Celo": "0x2cB220F925E603A04BEE05F210252120deBA29d7",
@@ -141,7 +164,8 @@
         "Conflux": "0x05ee315e407c21a594f807d61d6cc11306d1f149",
         "Evmos": "",
         "Harmony": "0x02Ea0720254F7fa4eca7d09A1b9C783F1020EbEF",
-        "Harmony_Test": "0x812463356F58fc8194645A1838ee6C52D8ca2D26"
+        "Harmony_Test": "0x812463356F58fc8194645A1838ee6C52D8ca2D26",
+        "Astar": "0xdd2Cf3fF67769d49613587CcE8A452D3b58AfC33"
     },
     "SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-mainnet",
@@ -156,6 +180,9 @@
         "Arbitrum": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-arbitrum-one",
         "Arbitrum_Rinkeby": "",
         "xDai": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-xdai",
+        "Optimism": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-Optimism",
+        "Optimism_Kovan": "",
+        "Optimism_Goerli": "",
         "Avalanche": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-avalanche",
         "Avalanche_Fuji": "",
         "Celo": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-celo",
@@ -165,6 +192,7 @@
         "Conflux": "",
         "Evmos": "",
         "Harmony": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-harmony",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": ""
     }
 }

@@ -1,5 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { Box, Skeleton } from '@mui/material'
+import { range } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -21,14 +22,12 @@ export const LoadingSkeleton = () => {
     const { classes } = useStyles()
     return (
         <Box className={classes.root}>
-            {Array.from({ length: 3 })
-                .fill(0)
-                .map((_, i) => (
-                    <Box className={classes.card} display="flex" flexDirection="column" key={i}>
-                        <Skeleton animation="wave" variant="rectangular" width={172} height={172} />
-                        <Skeleton animation="wave" variant="text" width={172} height={20} style={{ marginTop: 4 }} />
-                    </Box>
-                ))}
+            {range(3).map((i) => (
+                <Box className={classes.card} display="flex" flexDirection="column" key={i}>
+                    <Skeleton animation="wave" variant="rectangular" width={172} height={172} />
+                    <Skeleton animation="wave" variant="text" width={172} height={20} style={{ marginTop: 4 }} />
+                </Box>
+            ))}
         </Box>
     )
 }

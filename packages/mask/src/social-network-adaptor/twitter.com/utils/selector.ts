@@ -23,9 +23,7 @@ export const searchProfileTabListLastChildSelector: () => LiveSelector<E, true> 
     )
 
 export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>(
-        '[data-testid="primaryColumn"] [role="navigation"] + * > div[aria-label]:not([role="progressbar"])',
-    )
+    querySelector<E>('[data-testid="primaryColumn"] section > div[aria-label]:not([role="progressbar"])')
 
 export const searchProfileTabLoseConnectionPageSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
@@ -69,6 +67,11 @@ export const profileFollowButtonSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
         '[data-testid="primaryColumn"] [aria-haspopup="menu"][data-testid="userActions"] ~ [data-testid="placementTracking"]',
     )
+
+export const searchProfileCoverSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>(
+        '[data-testid="primaryColumn"] > div > div:last-child > div > div > div > div > div > div[style], [data-testid="primaryColumn"] > div > div:last-child > div > div > div > a > div > div[style]',
+    ).closest(1)
 // To get margin bottom of menu button, and apply it to tip button to align it.
 export const profileMenuButtonSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] [aria-haspopup="menu"][data-testid="userActions"]')
@@ -195,23 +198,6 @@ export const postsContentSelector = () =>
             // reply-tweets
             '[data-testid="tweet"] + div div div[lang][dir]',
         ].join(),
-    ).concat(
-        querySelectorAll('[data-testid="tweet"] > div:last-child').map((x) => {
-            const textElement = x.querySelector('[role="group"]')?.parentElement?.querySelector('div[lang]') as
-                | HTMLDivElement
-                | undefined
-
-            if (textElement) return textElement
-
-            // There's no textElement as there's only a twitter summary card parsed by a single url.
-            const summaryCardElement = x
-                .querySelector('[role="group"]')
-                ?.parentElement?.querySelector('[data-testid="card.wrapper"]')?.previousElementSibling as
-                | HTMLDivElement
-                | undefined
-
-            return summaryCardElement
-        }), // timeline page for new twitter
     )
 
 export const postAvatarsContentSelector = () =>
@@ -326,6 +312,16 @@ export const searchTwitterAvatarNFTSelector = () =>
 
 export const searchTwitterAvatarNFTLinkSelector = () => querySelector<E>('a[href$="/nft"]')
 
+export const inpageAvatarSelector = () =>
+    querySelectorAll<HTMLDivElement>(
+        [
+            // Avatars in post
+            'main[role="main"] [data-testid="cellInnerDiv"] [data-testid="Tweet-User-Avatar"]',
+            // Avatars in side panel
+            '[data-testid="UserCell"] [data-testid^="UserAvatar-Container-"]',
+        ].join(','),
+    )
+
 export const searchReplyToolbarSelector = () =>
     querySelector<E>('div[data-testid="primaryColumn"] div[data-testid="toolBar"]').querySelector<E>(
         'div[data-testid="geoButton"]',
@@ -333,3 +329,6 @@ export const searchReplyToolbarSelector = () =>
 
 export const searchRejectReplyTextSelector = () =>
     querySelector<E>('div[data-testid="tweetTextarea_0"] > div > div > div > span')
+
+// nameTag dom
+export const searchNameTag = () => querySelector<E>('#nft-gallery')

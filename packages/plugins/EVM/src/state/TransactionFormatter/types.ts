@@ -1,5 +1,5 @@
 import type { TransactionContext, TransactionDescriptor as TransactionDescriptorBase } from '@masknet/web3-shared-base'
-import type { ChainId, Transaction } from '@masknet/web3-shared-evm'
+import type { ChainId, Transaction, TransactionParameter } from '@masknet/web3-shared-evm'
 
 export interface TransactionMethodABI {
     name: string
@@ -30,6 +30,6 @@ export interface TransactionComputationContext {
 
 export interface TransactionDescriptor {
     compute: (
-        context: TransactionContext<ChainId, string | undefined>,
+        context: TransactionContext<ChainId, TransactionParameter>,
     ) => Promise<Omit<TransactionDescriptorBase<ChainId, Transaction>, 'type' | '_tx'> | undefined>
 }

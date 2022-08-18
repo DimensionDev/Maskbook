@@ -141,10 +141,20 @@ export function injectProfileTabAtFacebook(signal: AbortSignal) {
     startWatch(watcher, signal)
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabAtFacebook />)
 
-    setTimeout(() => {
+    const assign = () => {
         const web3Tab = web3TabSelector().evaluate()
-        if (web3Tab) {
-            web3Tab.style.float = 'left'
-        }
-    }, 1000)
+        if (web3Tab) web3Tab.style.float = 'left'
+    }
+
+    new MutationObserverWatcher(web3TabSelector())
+        .addListener('onChange', assign)
+        .addListener('onAdd', assign)
+        .startWatch(
+            {
+                childList: true,
+                subtree: true,
+                attributes: true,
+            },
+            signal,
+        )
 }

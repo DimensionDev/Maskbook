@@ -1,8 +1,14 @@
 import { useState, useCallback, useMemo } from 'react'
 import type { AbiOutput } from 'web3-utils'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainId, decodeOutputString, UnboxTransactionObject } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    decodeOutputString,
+    encodeContractTransaction,
+    UnboxTransactionObject,
+} from '@masknet/web3-shared-evm'
 import type { BaseContract, NonPayableTx } from '@masknet/web3-contracts/types/types'
+import type { Multicall } from '@masknet/web3-contracts/types/Multicall'
 import { useMulticallContract } from './useMulticallContract'
 import { useChainId } from '../useChainId'
 import { useWeb3 } from '../useWeb3'
@@ -109,6 +115,7 @@ export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?
     const [multicallState, setMulticallState] = useState<MulticallState>({
         type: MulticallStateType.UNKNOWN,
     })
+
     const multicallCallback = useCallback(
         async (calls: Call[], overrides?: NonPayableTx) => {
             if (calls.length === 0 || !multicallContract || !chainId) {
@@ -118,7 +125,7 @@ export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?
                 return
             }
 
-            const blockNumber = targetBlockNumber ?? (await connection.getBlockNumber())
+            const blockNumber = targetBlockNumber ?? (await connection?.getBlockNumber()) ?? 0
 
             try {
                 setMulticallState({
@@ -133,8 +140,28 @@ export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?
                     await Promise.all(
                         chunkArray(unresolvedCalls).map(async (chunk) => {
                             // we don't mind the actual block number of the current call
-                            const { returnData } = await multicallContract.methods.multicall(chunk).call(overrides)
-                            returnData.forEach((result, index) =>
+                            if (!connection) return
+                            const web3 = await connection.getWeb3()
+                            const tx = await encodeContractTransaction(
+                                multicallContract,
+                                multicallContract.methods.multicall(chunk),
+                                overrides,
+                            )
+                            const hex = await connection.callTransaction(tx)
+
+                            const outputType = multicallContract.options.jsonInterface.find(
+                                ({ name }) => name === 'multicall',
+                            )?.outputs
+
+                            if (!outputType) return
+
+                            const decodeResult = decodeOutputString(web3, outputType, hex) as
+                                | UnboxTransactionObject<ReturnType<Multicall['methods']['multicall']>>
+                                | undefined
+
+                            if (!decodeResult) return
+
+                            decodeResult.returnData.forEach((result, index) =>
                                 setCallResult(chunk[index], result, chainId, blockNumber),
                             )
                         }),
@@ -154,7 +181,7 @@ export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?
                 throw error
             }
         },
-        [chainId, targetBlockNumber, multicallContract],
+        [chainId, targetBlockNumber, multicallContract, connection],
     )
     return [multicallState, multicallCallback] as const
 }
@@ -207,7 +234,7 @@ export function useSingleContractMultipleData<T extends BaseContract, K extends 
     }, [contract?.options.address, names.join(), callDatas.flatMap((x) => x).join()])
     const [state, callback] = useMulticallCallback(chainId, blockNumber)
     const results = useMulticallStateDecoded(
-        Array.from({ length: calls.length }).fill(contract) as T[],
+        Array.from({ length: calls.length }, () => contract as T),
         names,
         state,
         chainId,

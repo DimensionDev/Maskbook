@@ -4,7 +4,7 @@ export function awaitChildProcess(child: ChildProcess) {
     return new Promise<number>((resolve, reject) => {
         const handleExitCode = (code: number | null) => {
             if (code) {
-                reject(new Error(`Child process fails: ${child.spawnargs.join(' ')}`))
+                reject(new Error(`Child process at ${(child as any).cwd} fails: ${child.spawnargs.join(' ')}`))
             } else {
                 resolve(0)
             }

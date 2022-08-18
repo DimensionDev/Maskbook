@@ -2,8 +2,10 @@ import { Button as MuiButton, ButtonProps } from '@mui/material'
 import { story, MuiArgs, matrix } from '../utils'
 
 const { meta, of } = story(MuiButton)
+
 export default meta({
     title: 'Atoms/Button',
+    component: MuiButton,
     argTypes: MuiArgs.button,
     parameters: {
         ...matrix<ButtonProps>({

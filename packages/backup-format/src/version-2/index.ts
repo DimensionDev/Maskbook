@@ -13,9 +13,9 @@ import __ from 'elliptic'
 import { Convert } from 'pvtsutils'
 import { decode, encode } from '@msgpack/msgpack'
 import { None, Some } from 'ts-results'
-import { createEmptyNormalizedBackup } from '../normalize'
-import type { NormalizedBackup } from '../normalize/type'
-import { hex2buffer } from '../utils/hex2buffer'
+import { createEmptyNormalizedBackup } from '../normalize/index.js'
+import type { NormalizedBackup } from '../normalize/type.js'
+import { hex2buffer } from '../utils/hex2buffer.js'
 
 export function isBackupVersion2(item: unknown): item is BackupJSONFileVersion2 {
     try {

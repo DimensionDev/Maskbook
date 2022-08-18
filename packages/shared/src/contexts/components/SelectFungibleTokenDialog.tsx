@@ -1,4 +1,4 @@
-import type { FC } from 'react'
+import { useCallback, FC, useState } from 'react'
 import { useCurrentWeb3NetworkPluginID, useNativeTokenAddress, Web3Helper } from '@masknet/plugin-infra/web3'
 import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
 import { EMPTY_LIST, EnhanceableSite, isDashboardPage } from '@masknet/shared-base'
@@ -8,17 +8,25 @@ import { DialogContent, Theme, useMediaQuery } from '@mui/material'
 import { useBaseUIRuntime } from '../base'
 import { InjectedDialog } from '../components'
 import { useRowSize } from './useRowSize'
+import { TokenListMode } from '../../UI/components/FungibleTokenList/type'
 
 interface StyleProps {
     compact: boolean
-    disablePaddingTop: boolean
+    isDashboard: boolean
 }
 
-const useStyles = makeStyles<StyleProps>()((theme, { compact, disablePaddingTop }) => ({
+const useStyles = makeStyles<StyleProps>()((theme, { compact, isDashboard }) => ({
     content: {
         ...(compact ? { minWidth: 552 } : {}),
-        padding: theme.spacing(3),
-        paddingTop: disablePaddingTop ? 0 : theme.spacing(2.8),
+        padding: theme.spacing(2),
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'auto',
+        '-ms-overflow-style': 'none',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     list: {
         scrollbarWidth: 'none',
@@ -33,8 +41,12 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, disablePaddingTop 
         boxSizing: 'border-box',
     },
     search: {
-        backgroundColor: 'transparent !important',
+        backgroundColor: isDashboard ? 'transparent !important' : theme.palette.maskColor.input,
         border: `solid 1px ${MaskColorVar.twitterBorderLine}`,
+    },
+    wrapper: {
+        paddingTop: theme.spacing(2),
+        paddingBottom: theme.spacing(6),
     },
 }))
 
@@ -73,26 +85,48 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
     const { networkIdentifier } = useBaseUIRuntime()
     const compact = networkIdentifier === EnhanceableSite.Minds
     const pluginId = useCurrentWeb3NetworkPluginID(pluginID)
-    const { classes } = useStyles({ compact, disablePaddingTop: isDashboard })
+    const { classes } = useStyles({ compact, isDashboard })
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
 
     const rowSize = useRowSize()
+    const [currentModeRef, setCurrentModeRef] = useState<{
+        updateMode(mode: TokenListMode): void
+        getCurrentMode(): TokenListMode
+    }>()
 
     const nativeTokenAddress = useNativeTokenAddress(pluginId)
+
+    const onRefChange = useCallback(
+        (node: { updateMode(mode: TokenListMode): void; getCurrentMode(): TokenListMode }) => {
+            if (!node) return
+            setCurrentModeRef(node)
+        },
+        [],
+    )
 
     return (
         <InjectedDialog
             titleBarIconStyle={isDashboard ? 'close' : 'back'}
             open={open}
-            onClose={onClose}
-            title={title ?? t.select_token()}>
+            onClose={() => {
+                currentModeRef?.getCurrentMode() === TokenListMode.List
+                    ? onClose?.()
+                    : currentModeRef?.updateMode(TokenListMode.List)
+            }}
+            title={
+                currentModeRef?.getCurrentMode() === TokenListMode.List
+                    ? title ?? t.select_token()
+                    : t.manage_token_list()
+            }>
             <DialogContent classes={{ root: classes.content }}>
                 <FungibleTokenList
+                    ref={onRefChange}
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
                     pluginID={pluginId}
                     chainId={chainId}
                     tokens={tokens ?? []}
                     whitelist={whitelist}
+                    enableManage
                     blacklist={
                         disableNativeToken && nativeTokenAddress ? [nativeTokenAddress, ...blacklist] : blacklist
                     }
@@ -100,10 +134,13 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
                     selectedTokens={selectedTokens}
                     onSelect={onSubmit}
                     FixedSizeListProps={{
-                        itemSize: rowSize,
-                        height: isMdScreen ? 300 : 503,
+                        itemSize: rowSize + 22,
+                        height: isMdScreen ? 300 : 428,
+                        className: classes.wrapper,
                     }}
-                    SearchTextFieldProps={{ InputProps: { classes: { root: classes.search } } }}
+                    SearchTextFieldProps={{
+                        InputProps: { classes: { root: classes.search } },
+                    }}
                 />
             </DialogContent>
         </InjectedDialog>

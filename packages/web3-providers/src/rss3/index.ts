@@ -1,10 +1,19 @@
 import urlcat from 'urlcat'
 import RSS3 from 'rss3-next'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { RSS3_ENDPOINT } from './constants'
+import { NETWORK_PLUGIN, NEW_RSS3_ENDPOINT, RSS3_ENDPOINT, RSS3_FEED_ENDPOINT, TAG, TYPE } from './constants'
 import { NonFungibleTokenAPI, RSS3BaseAPI } from '../types'
 import { fetchJSON } from '../helpers'
-import { createIndicator, createPageable, HubOptions, TokenType } from '@masknet/web3-shared-base'
+import {
+    createIndicator,
+    createPageable,
+    HubOptions,
+    leftShift,
+    NetworkPluginID,
+    TokenType,
+    ZERO,
+} from '@masknet/web3-shared-base'
+import { first } from 'lodash-unified'
 
 export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     createRSS3(
@@ -38,18 +47,24 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
         return value as T
     }
     async getDonations(address: string) {
-        const url = urlcat(RSS3_ENDPOINT, '/assets/list', {
-            personaID: address,
-            type: RSS3BaseAPI.AssetType.GitcoinDonation,
+        if (!address) return
+        const collectionURL = urlcat(NEW_RSS3_ENDPOINT, address, {
+            tag: TAG.donation,
+            type: TYPE.donate,
+            include_poap: true,
         })
-        return fetchJSON<RSS3BaseAPI.GeneralAssetResponse>(url)
+        const res = await fetchJSON<{ result: RSS3BaseAPI.CollectionResponse[] }>(collectionURL)
+        return createCollection(res.result)
     }
     async getFootprints(address: string) {
-        const url = urlcat(RSS3_ENDPOINT, '/assets/list', {
-            personaID: address,
-            type: RSS3BaseAPI.AssetType.POAP,
+        if (!address) return
+        const collectionURL = urlcat(NEW_RSS3_ENDPOINT, address, {
+            tag: TAG.collectible,
+            type: TYPE.poap,
+            include_poap: true,
         })
-        return fetchJSON<RSS3BaseAPI.GeneralAssetResponse>(url)
+        const res = await fetchJSON<{ result: RSS3BaseAPI.CollectionResponse[] }>(collectionURL)
+        return createCollection(res.result)
     }
     async getNameInfo(id: string) {
         if (!id) return
@@ -58,6 +73,7 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
     }
     async getProfileInfo(address: string) {
         if (!address) return
+
         const url = urlcat(RSS3_ENDPOINT, '/:address', { address })
         const rsp = await fetchJSON<{
             profile: RSS3BaseAPI.ProfileInfo
@@ -98,4 +114,45 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
             .filter((x) => x.chainId === chainId)
         return createPageable(data, createIndicator(indicator))
     }
+
+    async getWeb3Feed(address: string, type?: RSS3BaseAPI.FeedType, networkPluginId = NetworkPluginID.PLUGIN_EVM) {
+        if (!address) return
+        const url = urlcat(RSS3_FEED_ENDPOINT, 'account::address@:network/notes', {
+            address,
+            network: NETWORK_PLUGIN[networkPluginId],
+            limit: 100,
+            exclude_tags: TAG.POAP,
+            latest: false,
+        })
+        const res = fetchJSON<RSS3BaseAPI.Web3FeedResponse>(url + '&tags=Gitcoin&tags=POAP&tags=NFT&tags=Donation')
+        return res
+    }
+}
+
+const getIdFromDonationURL = (url?: string) => {
+    if (!url) return
+    return url?.match(/(?<=https:\/\/gitcoin.co\/grants)\d+/g)?.[0]
+}
+
+const createCollection = (collectionResponse: RSS3BaseAPI.CollectionResponse[]): RSS3BaseAPI.Collection[] => {
+    return collectionResponse.map((collection: RSS3BaseAPI.CollectionResponse) => {
+        const firstAction = first(collection.actions)
+        return {
+            ...collection,
+            title: firstAction?.metadata?.title || firstAction?.metadata?.name,
+            id: firstAction?.metadata?.id ?? getIdFromDonationURL(firstAction?.related_urls?.[0]) ?? collection?.hash,
+            imageURL: firstAction?.metadata?.logo ?? firstAction?.metadata?.image,
+            description: firstAction?.metadata?.description,
+            tokenAmount: collection.actions?.reduce((pre, cur) => {
+                return pre.plus(
+                    leftShift(cur?.metadata?.token?.value || '0', cur?.metadata?.token?.decimals).toFixed(8),
+                )
+            }, ZERO),
+            tokenSymbol: firstAction?.metadata?.token?.symbol,
+            location:
+                firstAction?.metadata?.attributes?.find((trait) => trait.trait_type === 'city')?.value ||
+                firstAction?.metadata?.attributes?.find((trait) => trait.trait_type === 'country')?.value ||
+                'Metaverse',
+        }
+    })
 }

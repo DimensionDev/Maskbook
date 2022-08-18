@@ -1,19 +1,20 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { activatedSocialNetworkUI } from '../../../social-network'
 
 export function useSearchedKeyword() {
     const [keyword, setKeyword] = useState('')
 
-    const onLocationChange = useCallback(() => {
-        if (activatedSocialNetworkUI?.collecting?.getSearchedKeyword) {
-            setKeyword(activatedSocialNetworkUI?.collecting?.getSearchedKeyword())
-        }
-    }, [])
-
     useEffect(() => {
+        const onLocationChange = () => {
+            if (!activatedSocialNetworkUI?.collecting?.getSearchedKeyword) return
+            const kw = activatedSocialNetworkUI.collecting.getSearchedKeyword()
+            setKeyword(kw)
+        }
         onLocationChange()
         window.addEventListener('locationchange', onLocationChange)
-        return () => window.removeEventListener('locationchange', onLocationChange)
-    }, [onLocationChange])
+        return () => {
+            window.removeEventListener('locationchange', onLocationChange)
+        }
+    }, [])
     return keyword
 }

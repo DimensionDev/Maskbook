@@ -12,6 +12,9 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Optimism": "",
+        "Optimism_Kovan": "",
+        "Optimism_Goerli": "",
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
@@ -21,7 +24,8 @@
         "Conflux": "",
         "Evmos": "",
         "Harmony": "",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": ""
     },
     "BULK_CHECKOUT_ADDRESS": {
         "Mainnet": "0x7d655c57f71464B6f83811C55D84009Cd9f5221C",
@@ -36,6 +40,9 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Optimism": "",
+        "Optimism_Kovan": "",
+        "Optimism_Goerli": "",
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
@@ -45,7 +52,8 @@
         "Conflux": "",
         "Evmos": "",
         "Harmony": "",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": ""
     },
     "GITCOIN_ETH_ADDRESS": {
         "Mainnet": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -60,6 +68,9 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Optimism": "",
+        "Optimism_Kovan": "",
+        "Optimism_Goerli": "",
         "Avalanche": "",
         "Avalanche_Fuji": "",
         "Celo": "",
@@ -69,7 +80,8 @@
         "Conflux": "",
         "Evmos": "",
         "Harmony": "",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": ""
     },
     "GITCOIN_TIP_PERCENTAGE": {
         "Mainnet": 5,
@@ -84,6 +96,9 @@
         "Arbitrum": 5,
         "Arbitrum_Rinkeby": 5,
         "xDai": 5,
+        "Optimism": 5,
+        "Optimism_Kovan": 0,
+        "Optimism_Goerli": 0,
         "Avalanche": 5,
         "Avalanche_Fuji": 0,
         "Celo": 0,
@@ -93,6 +108,7 @@
         "Conflux": 0,
         "Evmos": 0,
         "Harmony": 0,
-        "Harmony_Test": 0
+        "Harmony_Test": 0,
+        "Astar": 0
     }
 }

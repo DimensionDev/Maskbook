@@ -5,7 +5,7 @@ import { BuyTokenDialog } from './BuyTokenDialog'
 import { PluginTransakMessages } from '../messages'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ApplicationEntry } from '@masknet/shared'
-import { TransakIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -15,7 +15,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         (() => {
-            const icon = <TransakIcon />
+            const icon = <Icons.Transak size={36} />
             const name = <Trans i18nKey="plugin_transak_name" />
             const iconFilterColor = 'rgba(69, 110, 255, 0.3)'
             return {
@@ -37,7 +37,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         />
                     )
                 },
-                appBoardSortingDefaultPriority: 10,
+                appBoardSortingDefaultPriority: 11,
                 marketListSortingPriority: 6,
                 tutorialLink: 'https://transak.com/',
                 icon,

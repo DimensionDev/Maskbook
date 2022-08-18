@@ -2,11 +2,12 @@ import { ReactNode, useMemo, useState } from 'react'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-unified'
-import { Box, InputAdornment } from '@mui/material'
-import { makeStyles } from '../../UIHelper/makeStyles'
+import { Box, InputAdornment, Stack } from '@mui/material'
+import { makeStyles } from '../../UIHelper'
 import { MaskSearchableItemInList } from './MaskSearchableItemInList'
 import { MaskTextField, MaskTextFieldProps } from '../TextField'
-import { SearchIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
+import { EmptyResult } from './EmptyResult'
 
 export interface MaskSearchableListProps<T> {
     /** The list data should be render */
@@ -62,14 +63,16 @@ export function SearchableList<T extends {}>({
 }: MaskSearchableListProps<T>) {
     const [keyword, setKeyword] = useState('')
     const { classes } = useStyles()
-    const { height, itemSize, ...rest } = FixedSizeListProps
+    const { height = 300, itemSize, ...rest } = FixedSizeListProps
     const { InputProps, ...textFieldPropsRest } = SearchFieldProps ?? {}
+    const [inputValue, setInputValue] = useState<string>('')
 
     // #region fuse
     const fuse = useMemo(
         () =>
             new Fuse(data, {
                 shouldSort: true,
+                isCaseSensitive: false,
                 threshold: 0.45,
                 minMatchCharLength: 1,
                 keys: searchKey ?? Object.keys(data.length > 0 ? data[0] : []),
@@ -83,41 +86,71 @@ export function SearchableList<T extends {}>({
         if (!keyword) return data
         const filtered = fuse.search(keyword).map((x: any) => x.item)
         return itemKey ? uniqBy(filtered, (x) => x[itemKey]) : filtered
-    }, [keyword, fuse, data])
+    }, [keyword, fuse, JSON.stringify(data)])
     // #endregion
 
-    const handleSearch = (word: string) => {
-        setKeyword(word)
-        onSearch?.(word)
+    const handleSearch = () => {
+        setKeyword(inputValue)
+        onSearch?.(inputValue)
     }
+
+    const windowHeight = !!textFieldPropsRest.error && typeof height === 'number' ? height - 28 : height
 
     return (
         <div className={classes.container}>
             {!disableSearch && (
-                <Box pt={0.5}>
+                <Box>
                     <MaskTextField
+                        value={inputValue}
                         placeholder="Search"
                         autoFocus
                         fullWidth
                         InputProps={{
+                            style: { height: 40 },
                             startAdornment: (
                                 <InputAdornment position="start">
-                                    <SearchIcon />
+                                    <Icons.Search />
                                 </InputAdornment>
                             ),
+                            endAdornment: inputValue ? (
+                                <InputAdornment
+                                    position="end"
+                                    className={classes.closeIcon}
+                                    onClick={() => {
+                                        setKeyword('')
+                                        setInputValue('')
+                                    }}>
+                                    <Icons.Clear size={18} />
+                                </InputAdornment>
+                            ) : null,
                             ...InputProps,
                         }}
-                        onChange={(e) => handleSearch(e.currentTarget.value)}
+                        onBlur={(e) => handleSearch()}
+                        onKeyDown={(ev) => {
+                            if (ev.key === 'Enter') handleSearch()
+                        }}
+                        onChange={(e) => setInputValue(e.currentTarget.value)}
                         {...textFieldPropsRest}
                     />
                 </Box>
             )}
             {placeholder}
-            {!placeholder && (
-                <div className={classes.list}>
+            {!placeholder && readyToRenderData.length === 0 && (
+                <Stack
+                    height={windowHeight}
+                    justifyContent="center"
+                    alignContent="center"
+                    marginTop="18px"
+                    marginBottom="48px">
+                    <EmptyResult />
+                </Stack>
+            )}
+            {!placeholder && readyToRenderData.length !== 0 && (
+                <div className={classes.listBox}>
                     <FixedSizeList
+                        className={classes.list}
                         width="100%"
-                        height={height ?? 300}
+                        height={windowHeight}
                         overscanCount={25}
                         itemSize={itemSize ?? 100}
                         itemData={{
@@ -135,21 +168,33 @@ export function SearchableList<T extends {}>({
         </div>
     )
 }
+
 const useStyles = makeStyles()((theme) => ({
-    container: {},
-    list: {
-        marginTop: theme.spacing(1.5),
+    container: {
+        overflow: 'visible',
+    },
+    listBox: {
         '& > div::-webkit-scrollbar': {
-            width: '7px',
-        },
-        '& > div::-webkit-scrollbar-track': {
-            boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
-            webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+            backgroundColor: 'transparent',
+            width: 0,
         },
         '& > div::-webkit-scrollbar-thumb': {
-            borderRadius: '4px',
-            backgroundColor: theme.palette.background.default,
+            borderRadius: '20px',
+            width: 5,
+            border: '7px solid rgba(0, 0, 0, 0)',
+            backgroundColor: theme.palette.maskColor.secondaryLine,
+            backgroundClip: 'padding-box',
         },
+        '& > div > div': {
+            position: 'relative',
+            margin: 'auto',
+        },
+    },
+    list: {
+        scrollbarWidth: 'thin',
+    },
+    closeIcon: {
+        cursor: 'pointer',
     },
 }))
 

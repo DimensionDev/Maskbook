@@ -12,6 +12,9 @@
         "Arbitrum": ["BE8VU1P9FUKRT15FBHKQMU84829VITWWF2"],
         "Arbitrum_Rinkeby": [],
         "xDai": [],
+        "Optimism": [],
+        "Optimism_Kovan": [],
+        "Optimism_Goerli": [],
         "Avalanche": [],
         "Avalanche_Fuji": [],
         "Celo": [],
@@ -21,7 +24,8 @@
         "Conflux": [],
         "Evmos": [],
         "Harmony": [],
-        "Harmony_Test": []
+        "Harmony_Test": [],
+        "Astar": []
     },
     "EXPLORER_API": {
         "Mainnet": "https://api.etherscan.io/api",
@@ -36,6 +40,9 @@
         "Arbitrum": "https://api.arbiscan.io/api",
         "Arbitrum_Rinkeby": "",
         "xDai": "https://blockscout.com/xdai/mainnet/api",
+        "Optimism": "https://api-optimistic.etherscan.io/api",
+        "Optimism_Kovan": "https://kovan-optimistic.etherscan.io",
+        "Optimism_Goerli": "https://goerli-optimistic.etherscan.io",
         "Avalanche": "https://api.snowtrace.io/api",
         "Avalanche_Fuji": "https://api-testnet.snowtrace.io/api",
         "Celo": "https://explorer.celo.org/api",
@@ -45,6 +52,7 @@
         "Conflux": "https://evmapi.confluxscan.net/api",
         "Evmos": "",
         "Harmony": "https://explorer.harmony.one",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": "https://blockscout.com/astar/api"
     }
 }

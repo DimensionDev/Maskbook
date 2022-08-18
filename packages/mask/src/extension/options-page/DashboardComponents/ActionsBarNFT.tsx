@@ -2,7 +2,8 @@ import { useCallback } from 'react'
 import { IconButton, MenuItem } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
-import { useMenu, useI18N } from '../../../utils'
+import { useI18N } from '../../../utils'
+import { useMenu } from '@masknet/shared'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardWalletHideTokenConfirmDialog, DashboardWalletTransferDialogNFT } from '../DashboardDialogs/Wallet'
 import { useChainIdValid, Web3Helper } from '@masknet/plugin-infra/web3'
@@ -30,7 +31,7 @@ export function ActionsBarNFT(props: ActionsBarNFT_Props) {
 
     const [transferDialog, , openTransferDialogOpen] = useModal(DashboardWalletTransferDialogNFT)
     const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
-    const [menu, openMenu] = useMenu([
+    const [menu, openMenu] = useMenu(
         token.schema === SchemaType.ERC721 ? (
             <MenuItem
                 key="transfer"
@@ -46,7 +47,7 @@ export function ActionsBarNFT(props: ActionsBarNFT_Props) {
             }>
             {t('hide')}
         </MenuItem>,
-    ])
+    )
 
     const onClickButton = useCallback(
         (ev: React.MouseEvent<HTMLButtonElement>) => {

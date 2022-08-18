@@ -17,6 +17,7 @@ import { injectOpenNFTAvatarEditProfileButton, openNFTAvatarSettingDialog } from
 import { injectUserNFTAvatarAtInstagram } from './injection/NFT/NFTAvatarInTimeline'
 import { injectProfileTabAtInstagram } from './injection/ProfileTab'
 import { injectProfileTabContentAtInstagram } from './injection/ProfileTabContent'
+import { injectAvatar } from './injection/Avatar'
 
 const define: SocialNetworkUI.Definition = {
     ...instagramShared,
@@ -58,6 +59,7 @@ const define: SocialNetworkUI.Definition = {
             supportedInputTypes: { text: true, image: true },
             supportedOutputTypes: { text: false, image: true },
         },*/
+        avatar: injectAvatar,
     },
 }
 export default define

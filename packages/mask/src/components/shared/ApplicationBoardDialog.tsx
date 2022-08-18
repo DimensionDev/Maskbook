@@ -1,39 +1,49 @@
-import { DialogContent, useTheme } from '@mui/material'
+import { DialogContent, Tab } from '@mui/material'
+import { TabContext, TabPanel } from '@mui/lab'
 import { useState, useCallback } from 'react'
-import { ApplicationSettingDialog } from './ApplicationSettingDialog'
-import { makeStyles } from '@masknet/theme'
+import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch'
+import { ApplicationSettingPluginList } from './ApplicationSettingPluginList'
+import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { InjectedDialog } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ApplicationBoard } from './ApplicationBoard'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
-import { GearIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
+import { PersonaListDialog } from './PersonaListDialog'
+import { PluginNextIDMessages } from '../../plugins/NextID/messages'
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles<{ openSettings: boolean }>()((theme, { openSettings }) => {
     return {
         content: {
-            padding: theme.spacing(1.5, 2, 2),
-            height: 470,
-            overflow: 'hidden',
+            padding: theme.spacing(1.5, 2, '6px'),
+            height: openSettings ? 'auto' : 470,
+            overflow: openSettings ? 'hidden scroll' : 'hidden',
         },
         settingIcon: {
-            height: 24,
-            width: 24,
-            fill: theme.palette.text.primary,
             cursor: 'pointer',
         },
     }
 })
 
+export enum ApplicationSettingTabs {
+    pluginList = 'pluginList',
+    pluginSwitch = 'pluginSwitch',
+}
+
 export function ApplicationBoardDialog() {
-    const theme = useTheme()
-    const { classes } = useStyles()
-    const { t } = useI18N()
     const [openSettings, setOpenSettings] = useState(false)
+    const { classes } = useStyles({ openSettings })
+    const { t } = useI18N()
+    const [currentTab, onChange, tabs] = useTabs(ApplicationSettingTabs.pluginList, ApplicationSettingTabs.pluginSwitch)
 
     const { open, closeDialog: _closeDialog } = useRemoteControlledDialog(
         WalletMessages.events.ApplicationDialogUpdated,
+    )
+
+    const { open: openPersonaListDialog, closeDialog: _closePersonaListDialog } = useRemoteControlledDialog(
+        PluginNextIDMessages.PersonaListDialogUpdated,
     )
 
     const closeDialog = useCallback(() => {
@@ -44,19 +54,42 @@ export function ApplicationBoardDialog() {
         })
     }, [])
 
-    return (
-        <InjectedDialog
-            open={open}
-            maxWidth="sm"
-            onClose={closeDialog}
-            title={t('applications')}
-            titleTail={<GearIcon className={classes.settingIcon} onClick={() => setOpenSettings(true)} />}>
-            <DialogContent className={classes.content}>
-                <ApplicationBoard closeDialog={closeDialog} />
-                {openSettings ? (
-                    <ApplicationSettingDialog open={openSettings} onClose={() => setOpenSettings(false)} />
-                ) : null}
-            </DialogContent>
-        </InjectedDialog>
-    )
+    return open ? (
+        <TabContext value={currentTab}>
+            <InjectedDialog
+                open={open}
+                maxWidth="sm"
+                onClose={openSettings ? () => setOpenSettings(false) : closeDialog}
+                titleTabs={
+                    openSettings ? (
+                        <MaskTabList variant="base" onChange={onChange} aria-label="ApplicationBoard">
+                            <Tab label={t('application_settings_tab_app_list')} value={tabs.pluginList} />
+                            <Tab label={t('application_settings_tab_plug_in_switch')} value={tabs.pluginSwitch} />
+                        </MaskTabList>
+                    ) : null
+                }
+                title={t('applications')}
+                titleTail={
+                    openSettings ? null : (
+                        <Icons.Gear size={24} className={classes.settingIcon} onClick={() => setOpenSettings(true)} />
+                    )
+                }>
+                <DialogContent className={classes.content}>
+                    {openSettings ? (
+                        <>
+                            <TabPanel value={tabs.pluginList} style={{ padding: 0 }}>
+                                <ApplicationSettingPluginList />
+                            </TabPanel>
+                            <TabPanel value={tabs.pluginSwitch} style={{ padding: 0 }}>
+                                <ApplicationSettingPluginSwitch />
+                            </TabPanel>
+                        </>
+                    ) : (
+                        <ApplicationBoard closeDialog={closeDialog} />
+                    )}
+                    <PersonaListDialog />
+                </DialogContent>
+            </InjectedDialog>
+        </TabContext>
+    ) : null
 }

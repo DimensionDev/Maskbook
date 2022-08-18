@@ -94,6 +94,8 @@ export function FarmPost(props: FarmPostProps) {
     }, [])
 
     const onClickReferToFarm = useCallback(async () => {
+        if (!web3) return
+
         try {
             await singAndPostProofOfRecommendationOrigin(web3, account, payload.referral_token)
 
@@ -192,15 +194,18 @@ export function FarmPost(props: FarmPostProps) {
                 )}
             </Card>
             <Grid container className={classes.actions}>
-                <ChainBoundary expectedChainId={SWAP_CHAIN_ID} expectedPluginID={NetworkPluginID.PLUGIN_EVM}>
-                    <WalletConnectedBoundary offChain>
+                <ChainBoundary
+                    expectedChainId={SWAP_CHAIN_ID}
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
+                    <WalletConnectedBoundary offChain ActionButtonProps={{ variant: 'roundedDark' }}>
                         <Grid item xs={6} display="flex" textAlign="center">
-                            <Button size="medium" onClick={onClickBuyToFarm}>
+                            <Button size="medium" onClick={onClickBuyToFarm} variant="roundedDark">
                                 {t.buy_to_farm()}
                             </Button>
                         </Grid>
                         <Grid item xs={6} display="flex" justifyContent="end" textAlign="center">
-                            <Button size="medium" onClick={onClickReferToFarm}>
+                            <Button size="medium" onClick={onClickReferToFarm} variant="roundedDark">
                                 {t.refer_to_farm()}
                             </Button>
                         </Grid>

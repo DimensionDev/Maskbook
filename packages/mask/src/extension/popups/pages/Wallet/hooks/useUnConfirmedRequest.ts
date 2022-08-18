@@ -1,6 +1,6 @@
+import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { useEffect } from 'react'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { getPayloadConfig } from '@masknet/web3-shared-evm'
 import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
@@ -24,7 +24,7 @@ export const useUnconfirmedRequest = () => {
             formatterTransaction,
             transactionContext,
         }
-    }, [])
+    }, [chainId, TransactionFormatter])
 
     useEffect(() => {
         return WalletMessages.events.requestsUpdated.on(result.retry)

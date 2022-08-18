@@ -35,6 +35,7 @@ export interface Ownership {
     date: string
     price: string
     priceEth: string
+    buyValue: number
     buyToken: string
     buyTokenId: string
     status: string

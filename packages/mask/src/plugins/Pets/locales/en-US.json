@@ -1,0 +1,21 @@
+{
+    "pets_dialog_title": "Non-Fungible Friends",
+    "pets_dialog_title_share": "Successful",
+    "pets_dialog_contract": "NFT Contract",
+    "pets_dialog_token": "Token ID",
+    "pets_dialog_msg": "Greeting message",
+    "pets_dialog_msg_optional": "Optional, 100 characters max.",
+    "pets_dialog_btn": "Confirm",
+    "pets_dialog_btn_share": "Share",
+    "pets_dialog_preview": "Preview",
+    "pets_dialog_unverified": " (unverified)",
+    "pets_dialog_created": "Created by NonFFriend",
+    "pets_dialog_powered": "Powered by RSS3",
+    "pets_powered_by": "Powered by",
+    "pets_dialog_success": "Your Non-Fungible Friend has been set up successfully",
+    "pets_dialog_fail": "Setting failed, please try later",
+    "pets_dialog_check_title": "Show NFT friends on the profile page.",
+    "pets_dialog_menu_change": "Change",
+    "pets_dialog_menu_ski": "Ski",
+    "pets_dialog_menu_about": "About us"
+}

@@ -7,12 +7,15 @@ const useStyles = makeStyles()((theme) => {
             flex: 1,
             backgroundImage: 'none',
             boxShadow: 'none',
+            padding: 0,
+            maxWidth: 100,
             '&:hover': {
                 backgroundColor: 'transparent !important',
             },
         },
         button: {
             flex: 1,
+            fontSize: 16,
             '& span': {
                 display: 'none',
             },

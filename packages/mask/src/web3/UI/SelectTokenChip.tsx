@@ -13,6 +13,7 @@ const useStyles = makeStyles()((theme) => {
     return {
         chip: {
             border: 'none',
+            background: theme.palette.background.paper,
             borderRadius: 8,
             paddingLeft: theme.spacing(0.5),
         },

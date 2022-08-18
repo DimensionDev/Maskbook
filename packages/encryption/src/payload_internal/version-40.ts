@@ -1,9 +1,9 @@
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
-import type { PayloadParseResult, Signature } from '../payload'
+import type { PayloadParseResult, Signature } from '../payload/index.js'
 import { Ok } from 'ts-results'
-import { PayloadException } from '../types'
-import { decodeUint8ArrayF, assertIVLengthEq16 } from '../utils'
-import type { PayloadParserResult } from '.'
+import { PayloadException } from '../types/index.js'
+import { decodeUint8ArrayF, assertIVLengthEq16 } from '../utils/index.js'
+import type { PayloadParserResult } from './index.js'
 import { encodeText } from '@dimensiondev/kit'
 import { CheckedError, OptionalResult } from '@masknet/shared-base'
 

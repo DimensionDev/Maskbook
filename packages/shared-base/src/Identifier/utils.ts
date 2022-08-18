@@ -1,9 +1,9 @@
 import { type Option, Some, None } from 'ts-results'
-import { ProfileIdentifier } from './profile'
-import { PostIdentifier } from './post'
-import { ECKeyIdentifier } from './ec-key'
-import { PostIVIdentifier } from './post-iv'
-import { Identifier } from './base'
+import { ProfileIdentifier } from './profile.js'
+import { PostIdentifier } from './post.js'
+import { ECKeyIdentifier } from './ec-key.js'
+import { PostIVIdentifier } from './post-iv.js'
+import { Identifier } from './base.js'
 
 /**
  * This type only refers to the stringified Identifier. ANY suffix CANNOT be renamed.

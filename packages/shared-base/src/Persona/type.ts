@@ -1,15 +1,15 @@
-import type { PersonaIdentifier, ProfileIdentifier } from '../Identifier'
-import type { NextIDPersonaBindings } from '../NextID/type'
+import type { PersonaIdentifier, ProfileIdentifier } from '../Identifier/index.js'
+import type { NextIDPersonaBindings } from '../NextID/type.js'
 /**
  * This interface contains the minimal information for UI display
  */
 export interface PersonaInformation {
+    avatar?: string
     proof?: NextIDPersonaBindings
     /** The nickname of the persona. Should use profile.nickname if it presents. */
     nickname?: string
     identifier: PersonaIdentifier
     linkedProfiles: ProfileInformation[]
-    avatar?: string
 }
 export interface ProfileInformation {
     /** The nickname of the profile. Should be used in prior. */
@@ -23,6 +23,8 @@ export interface ProfileInformationFromNextID extends ProfileInformation {
     fromNextID: boolean
     linkedTwitterNames: string[]
     walletAddress?: string
+    createdAt?: Date
+    updatedAt?: Date
 }
 
 export enum RelationFavor {

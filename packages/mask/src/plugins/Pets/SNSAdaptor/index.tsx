@@ -6,6 +6,7 @@ import { PluginPetMessages } from '../messages'
 import { Trans } from 'react-i18next'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ApplicationEntry } from '@masknet/shared'
+import { Icons } from '@masknet/icons'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -20,7 +21,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         (() => {
-            const icon = <img src={new URL('../assets/pets.png', import.meta.url).toString()} />
+            const icon = <Icons.Pets size={36} />
             const name = <Trans i18nKey="plugin_pets_name" />
             const iconFilterColor = 'rgba(226, 0, 233, 0.2)'
             return {
@@ -42,7 +43,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         />
                     )
                 },
-                appBoardSortingDefaultPriority: 11,
+                appBoardSortingDefaultPriority: 12,
                 marketListSortingPriority: 12,
                 icon,
                 description: <Trans i18nKey="plugin_pets_description" />,

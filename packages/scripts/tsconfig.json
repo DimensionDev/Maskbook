@@ -3,14 +3,16 @@
   "compilerOptions": {
     "lib": ["ESNext"],
     "noEmit": true,
-    "types": ["node"]
+    "moduleResolution": "NodeNext",
+    "composite": false,
+    "incremental": false
   },
   "ts-node": {
     "compilerOptions": {
-      "target": "ES2018",
-      "module": "CommonJS",
+      "module": "NodeNext",
       "noEmit": false
     },
+    "esm": true,
     "swc": true
   },
   "include": ["./src"]

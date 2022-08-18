@@ -5,10 +5,11 @@ import {
     currentMaskWalletAccountSettings,
     currentMaskWalletChainIdSettings,
     currentMaskWalletNetworkSettings,
-} from '../settings'
+} from '../../../../shared/legacy-settings/wallet-settings'
 import { Flags } from '../../../../shared'
 import { WalletRPC } from '../messages'
 import { defer, DeferTuple } from '@dimensiondev/kit'
+import type { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
 
 export async function setDefaultMaskAccount() {
     if (currentMaskWalletAccountSettings.value) return
@@ -31,6 +32,16 @@ export async function updateMaskAccount(options: { account?: string; chainId?: C
         currentMaskWalletAccountSettings.value = account
         await resolveMaskAccount([account])
     }
+}
+
+const recordSites = new Map<EnhanceableSite | ExtensionSite, boolean>()
+
+export async function recordConnectedSites(site: EnhanceableSite | ExtensionSite, connected: boolean) {
+    recordSites.set(site, connected)
+}
+
+export async function getConnectedStatus(site: EnhanceableSite | ExtensionSite) {
+    return recordSites.get(site)
 }
 
 export async function resetMaskAccount() {
@@ -67,10 +78,12 @@ export async function getSupportedNetworks() {
         Flags.polygon_enabled ? NetworkType.Polygon : undefined,
         Flags.arbitrum_enabled ? NetworkType.Arbitrum : undefined,
         Flags.xdai_enabled ? NetworkType.xDai : undefined,
+        Flags.optimism_enabled ? NetworkType.Optimism : undefined,
         Flags.celo_enabled ? NetworkType.Celo : undefined,
         Flags.fantom_enabled ? NetworkType.Fantom : undefined,
         Flags.avalanche_enabled ? NetworkType.Avalanche : undefined,
         Flags.aurora_enabled ? NetworkType.Aurora : undefined,
+        Flags.astar_enabled ? NetworkType.Astar : undefined,
         Flags.evmos_enabled ? NetworkType.Evmos : undefined,
         Flags.harmony_enabled ? NetworkType.Harmony : undefined,
     ].filter(Boolean) as NetworkType[]

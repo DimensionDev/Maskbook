@@ -1,5 +1,5 @@
 // This file should not import any file!!
-/// <reference types="web-ext-types" />
+/// <reference types="@masknet/global-types/web-extension" />
 
 // If the current page is "", navigate to "#/personas", therefore we can avoid a Router skip when hydrating.
 if (location.hash === '') location.assign('#/personas')

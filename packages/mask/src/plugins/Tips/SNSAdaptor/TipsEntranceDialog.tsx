@@ -1,5 +1,5 @@
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { InjectedDialog, LoadingAnimation } from '@masknet/shared'
+import { InjectedDialog } from '@masknet/shared'
 import {
     BindingProof,
     ECKeyIdentifier,
@@ -8,14 +8,13 @@ import {
     NextIDStoragePayload,
 } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar, LoadingBase, ActionButton } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { Button, ButtonProps, DialogActions, DialogContent } from '@mui/material'
 import formatDateTime from 'date-fns/format'
 import { cloneDeep, isEqual } from 'lodash-unified'
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import Services from '../../../extension/service'
 import { useI18N } from '../locales'
 import { getKvPayload, setKvPatchData, useKvGet } from '../hooks/useKv'
@@ -51,6 +50,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(1.5),
     },
     dialogContent: {
+        padding: '12px 16px',
         position: 'relative',
         boxSizing: 'border-box',
     },
@@ -63,7 +63,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         top: '50%',
         left: '50%',
-        transform: 'translate(-50%,-50%)',
+        transform: 'translate(-50%, -50%)',
     },
 }))
 
@@ -261,7 +261,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             {loading ? (
                 <DialogContent className={classes.dialogContent}>
                     <div className={classes.loading}>
-                        <LoadingAnimation />
+                        <LoadingBase />
                     </div>
                 </DialogContent>
             ) : (

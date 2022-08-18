@@ -6,6 +6,7 @@ export const ZRX_BASE_URL: Record<NetworkType, string> = {
     [NetworkType.Polygon]: 'https://polygon.api.0x.org/',
     [NetworkType.Arbitrum]: 'https://arbitrum.api.0x.org/',
     [NetworkType.xDai]: 'https://xdai.api.0x.org/',
+    [NetworkType.Optimism]: 'https://optimism.api.0x.org/',
     [NetworkType.Avalanche]: 'https://avalanche.api.0x.org/',
     [NetworkType.Celo]: 'https://celo.api.0x.org/',
     [NetworkType.Fantom]: 'https://fantom.api.0x.org/',
@@ -13,9 +14,9 @@ export const ZRX_BASE_URL: Record<NetworkType, string> = {
     [NetworkType.Boba]: '',
     [NetworkType.Fuse]: '',
     [NetworkType.Metis]: '',
-    [NetworkType.Optimistic]: '',
     [NetworkType.Harmony]: '',
     [NetworkType.Conflux]: '',
+    [NetworkType.Astar]: '',
     [NetworkType.Evmos]: '',
 }
 

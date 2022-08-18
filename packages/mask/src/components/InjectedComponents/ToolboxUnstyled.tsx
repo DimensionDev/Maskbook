@@ -23,20 +23,19 @@ import {
     useChainIdMainnet,
     useRecentTransactions,
 } from '@masknet/plugin-infra/web3'
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { WalletIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
 import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
 import GuideStep from '../GuideStep'
-import { AccountBalanceWalletIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
-import { NextIDVerificationStatus, useNextIDConnectStatus } from '../DataSource/useNextID'
 import { MaskIcon } from '../../resources/MaskIcon'
 
-const useStyles = makeStyles<{ iconFontSize?: string }>()((theme, { iconFontSize = '1.5rem' }) => ({
+const useStyles = makeStyles()((theme) => ({
     title: {
         color: theme.palette.mode === 'dark' ? theme.palette.text.primary : 'rgb(15, 20, 25)',
         display: 'flex',
@@ -72,9 +71,6 @@ const useStyles = makeStyles<{ iconFontSize?: string }>()((theme, { iconFontSize
     maskFilledIcon: {
         marginRight: 6,
     },
-    iconFont: {
-        fontSize: iconFontSize,
-    },
 }))
 export interface ToolboxHintProps {
     Container?: React.ComponentType<React.PropsWithChildren<{}>>
@@ -84,7 +80,6 @@ export interface ToolboxHintProps {
     Typography?: React.ComponentType<Pick<TypographyProps, 'children' | 'className'>>
     iconSize?: number
     badgeSize?: number
-    iconFontSize?: string
     mini?: boolean
     category: 'wallet' | 'application'
 }
@@ -95,25 +90,20 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
 function ToolboxHintForApplication(props: ToolboxHintProps) {
     const {
         ListItemButton = MuiListItemButton,
-        ListItemIcon = MuiListItemIcon,
         Container = 'div',
         Typography = MuiTypography,
         iconSize = 24,
-        iconFontSize,
         mini,
         ListItemText = MuiListItemText,
     } = props
-    const { classes } = useStyles({ iconFontSize })
+    const { classes } = useStyles()
     const { t } = useI18N()
     const { openDialog } = useRemoteControlledDialog(WalletMessages.events.ApplicationDialogUpdated)
     return (
         <GuideStep step={1} total={4} tip={t('user_guide_tip_1')}>
             <Container>
                 <ListItemButton onClick={openDialog}>
-                    <MaskIcon
-                        style={{ width: iconFontSize ? '1em' : iconSize, height: iconFontSize ? '1em' : iconSize }}
-                        className={classes.iconFont}
-                    />
+                    <MaskIcon style={{ width: iconSize, height: iconSize }} />
                     {mini ? null : (
                         <ListItemText
                             primary={
@@ -136,7 +126,6 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
 
 function ToolboxHintForWallet(props: ToolboxHintProps) {
     const { t } = useI18N()
-    const nextIDConnectStatus = useNextIDConnectStatus()
     const {
         ListItemButton = MuiListItemButton,
         ListItemText = MuiListItemText,
@@ -144,24 +133,15 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
         Container = 'div',
         Typography = MuiTypography,
         iconSize = 24,
-        iconFontSize,
         badgeSize = 12,
         mini,
     } = props
-    const { classes } = useStyles({ iconFontSize })
+    const { classes } = useStyles()
     const { openWallet, isWalletValid, walletTitle, chainColor, shouldDisplayChainIndicator } = useToolbox()
 
     const theme = useTheme()
     const networkDescriptor = useNetworkDescriptor()
     const providerDescriptor = useProviderDescriptor()
-
-    useEffect(() => {
-        const { status, isVerified, action } = nextIDConnectStatus
-        if (isVerified || status === NextIDVerificationStatus.WaitingLocalConnect) return
-        if (action) {
-            action()
-        }
-    }, [nextIDConnectStatus.status])
 
     return (
         <GuideStep step={2} total={4} tip={t('user_guide_tip_2')}>
@@ -177,7 +157,7 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
                                 badgeIconBorderColor={theme.palette.background.paper}
                             />
                         ) : (
-                            <AccountBalanceWalletIcon className={classes.iconFont} />
+                            <Icons.ConnectWallet size={iconSize} />
                         )}
                     </ListItemIcon>
                     {mini ? null : (
@@ -243,7 +223,6 @@ function useToolbox() {
                 <span style={{ marginRight: 12 }}>
                     {t('plugin_wallet_pending_transactions', {
                         count: pendingTransactions.length,
-                        plural: pendingTransactions.length > 1 ? 's' : '',
                     })}
                 </span>
                 <CircularProgress thickness={6} size={20} color="inherit" />

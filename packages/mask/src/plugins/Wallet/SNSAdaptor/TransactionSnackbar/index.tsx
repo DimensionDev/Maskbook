@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import type { JsonRpcPayload } from 'web3-core-helpers'
 import { useAsync } from 'react-use'
 import { Link } from '@mui/material'
-import LaunchIcon from '@mui/icons-material/Launch'
+import { Icons } from '@masknet/icons'
 import { createLookupTableResolver, NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
 import { useWeb3State, useChainId, Web3Helper } from '@masknet/plugin-infra/web3'
 import { makeStyles, ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
@@ -23,18 +24,18 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
     const snackbarKeyRef = useRef<SnackbarKey>()
 
     const chainId = useChainId(pluginID)
-    const [error, setError] = useState<Error | undefined>()
+    const [errorInfo, setErrorInfo] = useState<{ error: Error; request: JsonRpcPayload } | undefined>()
     const [progress, setProgress] = useState<{
         chainId: Web3Helper.Definition[T]['ChainId']
         status: TransactionStatusType
-        id: string
+        txHash: string
         transaction: Web3Helper.Definition[T]['Transaction']
     }>()
     const { Others, TransactionFormatter, TransactionWatcher } = useWeb3State(pluginID)
 
     useEffect(() => {
-        const off = TransactionWatcher?.emitter.on('error', (error) => {
-            setError(error)
+        const off = TransactionWatcher?.emitter.on('error', (error, request) => {
+            setErrorInfo({ error, request })
         })
         return () => {
             off?.()
@@ -42,12 +43,12 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
     }, [TransactionWatcher])
 
     useEffect(() => {
-        const off = TransactionWatcher?.emitter.on('progress', (id, status, transaction) => {
+        const off = TransactionWatcher?.emitter.on('progress', (txHash, status, transaction) => {
             if (!transaction || !pluginID) return
             setProgress({
                 chainId,
                 status,
-                id,
+                txHash,
                 transaction,
             })
         })
@@ -56,6 +57,10 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
             off?.()
         }
     }, [TransactionWatcher, chainId, pluginID])
+
+    useEffect(() => {
+        setErrorInfo(undefined)
+    }, [chainId])
 
     const resolveSnackbarConfig = createLookupTableResolver<
         TransactionStatusType,
@@ -94,8 +99,11 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
 
     useAsync(async () => {
         if (!progress) return
-
-        const computed = await TransactionFormatter?.formatTransaction?.(progress.chainId, progress.transaction)
+        const computed = await TransactionFormatter?.formatTransaction?.(
+            progress.chainId,
+            progress.transaction,
+            progress.txHash,
+        )
         if (!computed) return
 
         showSingletonSnackbar(computed.title, {
@@ -105,10 +113,13 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
                     <Link
                         className={classes.link}
                         color="inherit"
-                        href={Others?.explorerResolver.transactionLink?.(progress.chainId, progress.id)}
+                        href={Others?.explorerResolver.transactionLink?.(progress.chainId, progress.txHash)}
                         target="_blank"
                         rel="noopener noreferrer">
-                        {computed.description} <LaunchIcon sx={{ ml: 1 }} fontSize="inherit" />
+                        {progress.status === TransactionStatusType.SUCCEED
+                            ? computed.successfulDescription ?? computed.description
+                            : computed.description}{' '}
+                        <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
                     </Link>
                 ),
             },
@@ -116,16 +127,20 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
     }, [progress])
 
     useAsync(async () => {
-        if (!error?.message) return
+        const transaction = errorInfo?.request?.params?.[0] as Web3Helper.Definition[T]['Transaction'] | undefined
+        const computed = transaction ? await TransactionFormatter?.formatTransaction?.(chainId, transaction) : undefined
+        const title = computed?.title ?? errorInfo?.error.message
+        const message = computed?.failedDescription
 
-        console.log({
-            error,
-        })
+        if (!title) return
 
-        showSingletonSnackbar(error.message, {
-            ...resolveSnackbarConfig(TransactionStatusType.FAILED),
+        const snackbarConfig = resolveSnackbarConfig(TransactionStatusType.FAILED)
+
+        showSingletonSnackbar(title, {
+            ...snackbarConfig,
+            message: message ?? snackbarConfig.message,
         })
-    }, [error?.message])
+    }, [JSON.stringify(errorInfo), chainId])
 
     return null
 }
