@@ -282,7 +282,7 @@ export function CollectionList({
                 <Box sx={{ flexGrow: 1 }}>
                     <Box>
                         {selectedCollection && (
-                            <Box display="flex" alignItems="center">
+                            <Box display="flex" alignItems="center" mt={2}>
                                 <CollectionIcon collection={selectedCollection} />
                                 <Typography
                                     className={classes.name}

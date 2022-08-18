@@ -8,9 +8,9 @@ import {
 import { useAvailablePlugins, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
 import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, useStylesExtends, useTabs } from '@masknet/theme'
-import { isSameAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
+import { isSameAddress, NetworkPluginID, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
-import { Box, CircularProgress, Tab } from '@mui/material'
+import { Box, CircularProgress, Tab, Typography } from '@mui/material'
 import { first } from 'lodash-unified'
 import { FC, useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
@@ -30,110 +30,136 @@ function getTabContent(tabId?: string) {
         return tab?.UI?.TabContent
     })
 }
-const useStyles = makeStyles()((theme) => ({
-    root: {},
-    container: {
-        background:
-            theme.palette.mode === 'dark'
+const HEADER_HEIGHT = 110
+const CONTENT_HEIGHT = 390
+const useStyles = makeStyles()((theme) => {
+    const isDark = theme.palette.mode === 'dark'
+    return {
+        root: {
+            position: 'relative',
+        },
+        header: {
+            background: isDark
                 ? 'linear-gradient(180deg, #202020 0%, #181818 100%)'
                 : 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)',
-        padding: '16px 16px 0 16px',
-    },
-    title: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '16px',
-    },
-    walletItem: {
-        display: 'flex',
-        alignItems: 'center',
-        fontSize: 18,
-        fontWeight: 700,
-    },
-    menuItem: {
-        display: 'flex',
-        alignItems: 'center',
-        flexGrow: 1,
-        justifyContent: 'space-between',
-    },
-    addressMenu: {
-        maxHeight: 192,
-        width: 248,
-        backgroundColor: theme.palette.maskColor.bottom,
-    },
-    addressItem: {
-        display: 'flex',
-        alignItems: 'center',
-    },
-    link: {
-        cursor: 'pointer',
-        marginTop: 2,
-        zIndex: 1,
-        '&:hover': {
-            textDecoration: 'none',
+            padding: theme.spacing(2, 2, 0, 2),
+            height: HEADER_HEIGHT,
+            boxSizing: 'border-box',
         },
-    },
-    settingLink: {
-        cursor: 'pointer',
-        marginTop: 4,
-        zIndex: 1,
-        '&:hover': {
-            textDecoration: 'none',
+        title: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '16px',
         },
-    },
-    linkIcon: {
-        color: theme.palette.maskColor.second,
-        fontSize: '20px',
-        margin: '4px 2px 0 2px',
-    },
-    content: {
-        position: 'relative',
-        height: 400,
-        overflow: 'auto',
-    },
-    settingItem: {
-        display: 'flex',
-        alignItems: 'center',
-    },
-    tipButton: {
-        width: 40,
-        height: 40,
-        borderRadius: 40,
-        border: `1px solid ${
-            theme.palette.mode === 'light' ? theme.palette.maskColor.publicLine : theme.palette.maskColor.line
-        }`,
-    },
-    tabs: {
-        display: 'flex',
-        position: 'relative',
-    },
-    addressLabel: {
-        color: theme.palette.maskColor.dark,
-        fontSize: 18,
-        fontWeight: 700,
-    },
-    arrowDropIcon: {
-        color: theme.palette.maskColor.dark,
-    },
-    selectedIcon: {
-        color: theme.palette.maskColor.primary,
-    },
-    gearIcon: {
-        color: theme.palette.maskColor.dark,
-    },
-    linkOutIcon: {
-        color: theme.palette.maskColor.secondaryDark,
-    },
-    mainLinkIcon: {
-        margin: '0px 2px',
-        color: theme.palette.maskColor.secondaryDark,
-    },
-    secondLinkIcon: {
-        margin: '4px 2px 0 2px',
-        color: theme.palette.maskColor.secondaryDark,
-    },
-}))
+        walletItem: {
+            display: 'flex',
+            alignItems: 'center',
+            fontSize: 18,
+            fontWeight: 700,
+        },
+        menuItem: {
+            display: 'flex',
+            alignItems: 'center',
+            flexGrow: 1,
+            justifyContent: 'space-between',
+        },
+        addressMenu: {
+            maxHeight: 192,
+            width: 248,
+            backgroundColor: theme.palette.maskColor.bottom,
+        },
+        addressItem: {
+            display: 'flex',
+            alignItems: 'center',
+        },
+        link: {
+            cursor: 'pointer',
+            marginTop: 2,
+            zIndex: 1,
+            '&:hover': {
+                textDecoration: 'none',
+            },
+        },
+        settingLink: {
+            cursor: 'pointer',
+            marginTop: 4,
+            zIndex: 1,
+            '&:hover': {
+                textDecoration: 'none',
+            },
+        },
+        linkIcon: {
+            color: theme.palette.maskColor.second,
+            fontSize: '20px',
+            margin: '4px 2px 0 2px',
+        },
+        content: {
+            position: 'relative',
+            height: CONTENT_HEIGHT,
+            overflow: 'auto',
+        },
+        settingItem: {
+            display: 'flex',
+            alignItems: 'center',
+        },
+        tipButton: {
+            width: 40,
+            height: 40,
+            borderRadius: 40,
+            border: `1px solid ${isDark ? theme.palette.maskColor.publicLine : theme.palette.maskColor.line}`,
+        },
+        tabs: {
+            display: 'flex',
+            position: 'relative',
+        },
+        addressLabel: {
+            color: theme.palette.maskColor.dark,
+            fontSize: 18,
+            fontWeight: 700,
+        },
+        arrowDropIcon: {
+            color: theme.palette.maskColor.dark,
+        },
+        selectedIcon: {
+            color: theme.palette.maskColor.primary,
+        },
+        gearIcon: {
+            color: theme.palette.maskColor.dark,
+        },
+        linkOutIcon: {
+            color: theme.palette.maskColor.secondaryDark,
+        },
+        mainLinkIcon: {
+            margin: '0px 2px',
+            color: theme.palette.maskColor.secondaryDark,
+        },
+        secondLinkIcon: {
+            margin: '4px 2px 0 2px',
+            color: theme.palette.maskColor.secondaryDark,
+        },
+        footer: {
+            position: 'absolute',
+            height: 48,
+            left: 0,
+            bottom: 0,
+            right: 0,
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            background: isDark ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.8)',
+            backdropFilter: 'blur(10px)',
+            padding: theme.spacing(1.5),
+            boxSizing: 'border-box',
+            fontSize: 14,
+            fontWeight: 700,
+            zIndex: 2,
+        },
+        powerBy: {
+            color: theme.palette.text.primary,
+        },
+    }
+})
 
 export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
     const classes = useStylesExtends(useStyles(), { classes: rest.classes })
@@ -145,22 +171,26 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         retry: retrySocialAddress,
     } = useSocialAddressListAll(identity, undefined, sorter)
 
+    const availableSocialAddressList = useMemo(() => {
+        return socialAddressList.filter((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM)
+    }, [socialAddressList])
+
     const [selectedAddress, setSelectedAddress] = useState<string>()
-    const firstAddress = first(socialAddressList)?.address
+    const firstAddress = first(availableSocialAddressList)?.address
     useEffect(() => {
         if (!selectedAddress && firstAddress) setSelectedAddress(firstAddress)
     }, [selectedAddress, firstAddress])
     const selectedSocialAddress = useMemo(() => {
-        return socialAddressList.find((x) => isSameAddress(x.address, selectedAddress))
-    }, [selectedAddress, socialAddressList])
+        return availableSocialAddressList.find((x) => isSameAddress(x.address, selectedAddress))
+    }, [selectedAddress, availableSocialAddressList])
 
     const tipAccounts: TipAccount[] = useMemo(() => {
-        return socialAddressList.map((x) => ({
+        return availableSocialAddressList.map((x) => ({
             address: x.address,
             name: x.label,
             verified: x.type === SocialAddressType.NEXT_ID,
         }))
-    }, [socialAddressList])
+    }, [availableSocialAddressList])
 
     const isMyIdentity = useIsMyIdentity(identity)
     const userId = identity.identifier?.userId
@@ -225,11 +255,11 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
     return (
         <div className={classes.root}>
             {tabs.length > 0 && (
-                <div className={classes.container}>
+                <div className={classes.header}>
                     <div className={classes.title}>
                         <ProfileBar
                             identity={identity}
-                            socialAddressList={socialAddressList}
+                            socialAddressList={availableSocialAddressList}
                             address={selectedAddress}
                             onAddressChange={setSelectedAddress}
                         />
@@ -262,6 +292,15 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
                 </div>
             )}
             <div className={classes.content}>{component}</div>
+            <div className={classes.footer}>
+                <Typography variant="body1" className={classes.powerBy}>
+                    Powered by
+                    <Typography variant="body1" component="span" color="main">
+                        RSS3
+                    </Typography>
+                </Typography>
+                <Icons.RSS3 size={24} sx={{ ml: '12px' }} />
+            </div>
         </div>
     )
 }

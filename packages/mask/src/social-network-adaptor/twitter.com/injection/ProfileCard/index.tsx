@@ -79,7 +79,6 @@ function ProfileCardHolder() {
                     }
                 })
             }
-            console.log('avatar click', event)
         })
     }, [])
 
