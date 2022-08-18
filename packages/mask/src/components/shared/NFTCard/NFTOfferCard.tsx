@@ -87,7 +87,7 @@ export function NFTOfferCard(props: NFTOfferCardProps) {
                         )}
                     </div>
                 </div>
-                <div className={classes.flex} style={{ marginLeft: 40 }}>
+                <div className={classes.flex}>
                     <Typography className={classes.textBase}>{t('plugin_collectible_from')}</Typography>
 
                     <Typography className={classes.textBase} style={{ marginRight: 6 }}>

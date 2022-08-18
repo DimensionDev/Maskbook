@@ -107,7 +107,7 @@ export function NFTPriceCard(props: NFTPriceCardProps) {
                         </strong>
                     </Typography>
                     <Typography className={classes.textBase}>
-                        <strong>${formatBalance(topOffer.price?.usd) || '-'}</strong>
+                        <strong>(${formatBalance(topOffer.price?.usd) || '-'})</strong>
                     </Typography>
                 </div>
             )}

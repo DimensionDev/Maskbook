@@ -102,7 +102,7 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
                     className={type === ActivityType.Sale ? cx(classes.title, classes.highlight) : classes.title}>
                     {type}
                 </Typography>
-                {activity.paymentToken && (
+                {![ActivityType.Mint, ActivityType.CancelOffer].includes(type) && activity.paymentToken && (
                     <div className={classes.salePrice}>
                         {(activity.paymentToken?.logoURL && (
                             <img width={24} height={24} src={activity.paymentToken?.logoURL} alt="" />

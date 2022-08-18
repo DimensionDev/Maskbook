@@ -31,12 +31,12 @@ const useStyles = makeStyles()((theme) => ({
     content: {
         width: '100%',
         display: 'flex',
-        justifyContent: 'space-between',
         flexWrap: 'wrap',
+        gap: 12,
     },
     traitsItem: {
         padding: 12,
-        width: 'calc(100%/3 - 48px)',
+        width: 'calc(100%/3)',
         display: 'flex',
         flexDirection: 'column',
         gap: 8,
@@ -48,6 +48,7 @@ const useStyles = makeStyles()((theme) => ({
         // there is no public bg, have to hardcode
         background: '#F9F9F9',
         borderRadius: 8,
+        boxSizing: 'border-box',
     },
     traitsTitle: {
         fontWeight: 400,
