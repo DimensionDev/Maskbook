@@ -3,8 +3,9 @@ import { useAsyncRetry } from 'react-use'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { PluginNFTAvatarRPC } from '../messages'
 
-export function useWallet(userId: string) {
+export function useWallet(userId?: string) {
     return useAsyncRetry(async () => {
+        if (!userId) return
         return PluginNFTAvatarRPC.getAddress(activatedSocialNetworkUI.networkIdentifier as EnhanceableSite, userId)
     }, [userId])
 }

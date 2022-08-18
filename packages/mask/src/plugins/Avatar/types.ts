@@ -46,10 +46,10 @@ export interface NFTInfo {
     amount: string
     name: string
     symbol: string
-    image: string
-    owner: string
-    slug: string
-    permalink: string
+    image?: string
+    owner?: string
+    slug?: string
+    permalink?: string
 }
 
 export enum PFP_TYPE {

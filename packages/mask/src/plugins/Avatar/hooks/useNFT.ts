@@ -6,32 +6,46 @@ import type { NFTInfo } from '../types'
 
 export function useNFT(
     account: string,
-    address: string,
-    tokenId: string,
-    pluginId: NetworkPluginID,
-    chainId?: ChainId,
+    address: string | undefined,
+    tokenId: string | undefined,
+    pluginId: NetworkPluginID = NetworkPluginID.PLUGIN_EVM,
+    chainId: ChainId = ChainId.Mainnet,
 ) {
-    const { Others } = useWeb3State<'all'>(pluginId ?? NetworkPluginID.PLUGIN_EVM)
+    const { Others, Connection } = useWeb3State<'all'>(pluginId ?? NetworkPluginID.PLUGIN_EVM)
     const hub = useWeb3Hub<'all'>(pluginId, {
         chainId,
         account,
     })
     return useAsyncRetry(async () => {
-        const asset = await hub?.getNonFungibleAsset?.(address, tokenId, {
+        if (!address || !tokenId) return
+        const connection = await Connection?.getConnection?.({
             chainId,
+            account,
         })
+        const [token, asset] = await Promise.all([
+            connection?.getNonFungibleToken(address, tokenId),
+            hub?.getNonFungibleAsset?.(address, tokenId, {
+                chainId,
+            }),
+        ])
+
+        const contract = token?.contract || asset?.contract
+        const metadata = token?.metadata || asset?.metadata
+
+        const amount = asset?.priceInToken?.amount ?? asset?.price?.[CurrencyType.USD] ?? '0'
+        const name = contract?.name || metadata?.name || ''
+        const imageURL = metadata?.imageURL
+        const permalink = token ? Others?.explorerResolver.nonFungibleTokenLink(chainId, address, tokenId) : asset?.link
 
         return {
-            amount: asset?.priceInToken?.amount ?? asset?.price?.[CurrencyType.USD] ?? '0',
-            name: asset?.contract?.name ?? asset?.metadata?.name ?? '',
-            symbol: asset?.priceInToken?.token.symbol ?? asset?.paymentTokens?.[0].symbol ?? 'ETH',
-            image: asset?.metadata?.imageURL ?? asset?.metadata?.imageURL ?? '',
-            owner: asset?.owner?.address ?? asset?.ownerId ?? '',
-            slug: asset?.collection?.slug ?? '',
-            permalink:
-                asset?.link ??
-                Others?.explorerResolver.nonFungibleTokenLink(chainId ?? ChainId.Mainnet, address, tokenId) ??
-                '',
+            amount,
+            name,
+            symbol: asset?.priceInToken?.token.symbol ?? asset?.paymentTokens?.[0].symbol ?? '<Symbol Unknown>',
+            image: imageURL,
+            owner: token?.ownerId ?? asset?.owner?.address ?? asset?.ownerId,
+            // Not all NFT markets have slug in the URL
+            slug: token ? undefined : asset?.collection?.slug,
+            permalink,
         } as NFTInfo
-    }, [hub?.getNonFungibleAsset, address, tokenId, Others, chainId])
+    }, [hub?.getNonFungibleAsset, Connection?.getConnection, address, tokenId, Others, chainId])
 }
