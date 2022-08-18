@@ -19,7 +19,6 @@ import {
     createIndicator,
     createNextIndicator,
     NonFungibleAsset,
-    formatBalance,
     NonFungibleTokenStats,
     HubIndicator,
     formatPercentage,

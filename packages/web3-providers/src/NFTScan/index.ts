@@ -71,7 +71,7 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
     ) {
         const path = urlcat('/api/v2/assets/:address', {
-            address: address,
+            address,
             contract_address: address,
             show_attribute: true,
             limit: size,
