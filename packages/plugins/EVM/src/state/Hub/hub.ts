@@ -16,6 +16,8 @@ import {
     FungibleTokenAPI,
     LooksRare,
     Gem,
+    Zora,
+    ChainbaseNonFungibleToken,
 } from '@masknet/web3-providers'
 import {
     FungibleToken,
@@ -279,10 +281,11 @@ class Hub implements EVM_Hub {
                 [SourceType.NFTScan]: NFTScan,
                 [SourceType.Alchemy_EVM]: Alchemy_EVM,
                 [SourceType.LooksRare]: LooksRare,
+                [SourceType.Zora]: Zora,
             },
             options.chainId === ChainId.Mainnet
-                ? [OpenSea, Alchemy_EVM, Rarible, LooksRare]
-                : [Alchemy_EVM, OpenSea, Rarible, LooksRare],
+                ? [OpenSea, Alchemy_EVM, Rarible, LooksRare, Zora]
+                : [Alchemy_EVM, OpenSea, Rarible, LooksRare, Zora],
             initial,
         )
         return attemptUntil(
@@ -429,10 +432,11 @@ class Hub implements EVM_Hub {
                 [SourceType.Rarible]: Rarible,
                 [SourceType.Alchemy_EVM]: Alchemy_EVM,
                 [SourceType.LooksRare]: LooksRare,
+                [SourceType.Zora]: Zora,
             },
             options.chainId === ChainId.Mainnet
-                ? [OpenSea, Alchemy_EVM, Rarible, LooksRare]
-                : [Alchemy_EVM, OpenSea, Rarible, LooksRare],
+                ? [OpenSea, Alchemy_EVM, Rarible, LooksRare, Zora]
+                : [Alchemy_EVM, OpenSea, Rarible, LooksRare, Zora],
             initial,
         )
 
@@ -454,10 +458,11 @@ class Hub implements EVM_Hub {
                 [SourceType.Rarible]: Rarible,
                 [SourceType.Alchemy_EVM]: Alchemy_EVM,
                 [SourceType.LooksRare]: LooksRare,
+                [SourceType.Zora]: Zora,
             },
             options.chainId === ChainId.Mainnet
-                ? [OpenSea, Alchemy_EVM, Rarible, LooksRare]
-                : [Alchemy_EVM, OpenSea, Rarible, LooksRare],
+                ? [OpenSea, Alchemy_EVM, Rarible, LooksRare, Zora]
+                : [Alchemy_EVM, OpenSea, Rarible, LooksRare, Zora],
             initial,
         )
 
@@ -479,10 +484,11 @@ class Hub implements EVM_Hub {
                 [SourceType.Rarible]: Rarible,
                 [SourceType.Alchemy_EVM]: Alchemy_EVM,
                 [SourceType.LooksRare]: LooksRare,
+                [SourceType.Zora]: Zora,
             },
             options.chainId === ChainId.Mainnet
-                ? [OpenSea, Alchemy_EVM, Rarible, LooksRare]
-                : [Alchemy_EVM, OpenSea, Rarible, LooksRare],
+                ? [OpenSea, Alchemy_EVM, Rarible, LooksRare, Zora]
+                : [Alchemy_EVM, OpenSea, Rarible, LooksRare, Zora],
             initial,
         )
 
@@ -505,10 +511,11 @@ class Hub implements EVM_Hub {
                 [SourceType.Rarible]: Rarible,
                 [SourceType.Alchemy_EVM]: Alchemy_EVM,
                 [SourceType.LooksRare]: LooksRare,
+                [SourceType.Zora]: Zora,
             },
             options.chainId === ChainId.Mainnet
-                ? [OpenSea, Alchemy_EVM, Rarible, LooksRare]
-                : [Alchemy_EVM, OpenSea, Rarible, LooksRare],
+                ? [OpenSea, Alchemy_EVM, Rarible, LooksRare, Zora]
+                : [Alchemy_EVM, OpenSea, Rarible, LooksRare, Zora],
             initial,
         )
 
@@ -526,6 +533,26 @@ class Hub implements EVM_Hub {
             account,
         })
         return OpenSea.getCollections(options.account, options)
+    }
+
+    async getNonFungibleCollectionsByKeyword(
+        keyword: string,
+        initial?: HubOptions<ChainId>,
+    ): Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>>> {
+        const options = this.getOptions(initial)
+        const providers = this.getProviders<NonFungibleTokenAPI.Provider<ChainId, SchemaType>>(
+            {
+                [SourceType.Chainbase]: ChainbaseNonFungibleToken,
+                [SourceType.Zora]: Zora,
+            },
+            [ChainbaseNonFungibleToken, Zora],
+            initial,
+        )
+
+        return attemptUntil(
+            providers.map((x) => () => x.getCollectionsByKeyword?.(keyword, options)),
+            createPageable(EMPTY_LIST, createIndicator(options.indicator)),
+        )
     }
 }
 
