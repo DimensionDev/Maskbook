@@ -133,7 +133,7 @@ class Hub implements EVM_Hub {
     async getNonFungibleTokenContract(
         address: string,
         initial?: HubOptions<ChainId, HubIndicator> | undefined,
-    ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
+    ): Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined> {
         throw new Error('Method not implemented.')
     }
 

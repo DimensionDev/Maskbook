@@ -72,6 +72,7 @@ export function HubContent(props: HubContentProps) {
         ['getNonFungibleAssets', [account]],
         ['getNonFungibleToken', [address, tokenId]],
         ['getNonFungibleTokens', [account]],
+        ['getNonFungibleRarity', [address, tokenId]],
         ['getNonFungibleTokenFloorPrice', [address, tokenId]],
         ['getNonFungibleTokensByCollection', [address]],
         ['getNonFungibleAssetsByCollection', [address]],
