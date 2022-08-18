@@ -6,18 +6,19 @@ import {
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
 import { useAvailablePlugins, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
-import { AddressItem } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
-import { makeStyles, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
-import type { SocialIdentity } from '@masknet/web3-shared-base'
-import { isSameAddress, NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
+import { makeStyles, MaskTabList, useStylesExtends, useTabs } from '@masknet/theme'
+import { isSameAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
-import { Box, Button, CircularProgress, Link, MenuItem, Tab, Typography } from '@mui/material'
-import { first, uniqBy } from 'lodash-unified'
+import { Box, CircularProgress, Tab } from '@mui/material'
+import { first } from 'lodash-unified'
 import { FC, useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { MaskMessages, sorter, useI18N, useLocationChange } from '../../../utils'
+import { TipButton } from '../../../plugins/Tips/components'
+import type { TipAccount } from '../../../plugins/Tips/types'
+import { MaskMessages, sorter, useLocationChange } from '../../../utils'
 import { useIsMyIdentity } from '../../DataSource/useActivatedUI'
+import { ProfileBar } from './ProfileBar'
 
 interface Props extends withClasses<'text' | 'button' | 'root'> {
     identity: SocialIdentity
@@ -33,7 +34,9 @@ const useStyles = makeStyles()((theme) => ({
     root: {},
     container: {
         background:
-            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
+            theme.palette.mode === 'dark'
+                ? 'linear-gradient(180deg, #202020 0%, #181818 100%)'
+                : 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)',
         padding: '16px 16px 0 16px',
     },
     title: {
@@ -89,18 +92,17 @@ const useStyles = makeStyles()((theme) => ({
         height: 400,
         overflow: 'auto',
     },
-    walletButton: {
-        padding: 0,
-        fontSize: '18px',
-        minWidth: 0,
-        background: 'transparent',
-        '&:hover': {
-            background: 'none',
-        },
-    },
     settingItem: {
         display: 'flex',
         alignItems: 'center',
+    },
+    tipButton: {
+        width: 40,
+        height: 40,
+        borderRadius: 40,
+        border: `1px solid ${
+            theme.palette.mode === 'light' ? theme.palette.maskColor.publicLine : theme.palette.maskColor.line
+        }`,
     },
     tabs: {
         display: 'flex',
@@ -136,22 +138,32 @@ const useStyles = makeStyles()((theme) => ({
 export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
     const classes = useStylesExtends(useStyles(), { classes: rest.classes })
 
-    const { t } = useI18N()
     const translate = usePluginI18NField()
-
-    const [selectedAddress, setSelectedAddress] = useState<SocialAddress<NetworkPluginID> | undefined>()
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-
-    const isMyIdentity = useIsMyIdentity(identity)
-    const userId = identity.identifier?.userId
-
     const {
         value: socialAddressList = EMPTY_LIST,
         loading: loadingSocialAddressList,
         retry: retrySocialAddress,
     } = useSocialAddressListAll(identity, undefined, sorter)
 
-    console.log('avatar address list', { isMyIdentity }, identity.identifier?.userId, socialAddressList)
+    const [selectedAddress, setSelectedAddress] = useState<string>()
+    const firstAddress = first(socialAddressList)?.address
+    useEffect(() => {
+        if (!selectedAddress && firstAddress) setSelectedAddress(firstAddress)
+    }, [selectedAddress, firstAddress])
+    const selectedSocialAddress = useMemo(() => {
+        return socialAddressList.find((x) => isSameAddress(x.address, selectedAddress))
+    }, [selectedAddress, socialAddressList])
+
+    const tipAccounts: TipAccount[] = useMemo(() => {
+        return socialAddressList.map((x) => ({
+            address: x.address,
+            name: x.label,
+            verified: x.type === SocialAddressType.NEXT_ID,
+        }))
+    }, [socialAddressList])
+
+    const isMyIdentity = useIsMyIdentity(identity)
+    const userId = identity.identifier?.userId
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
@@ -159,17 +171,13 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         })
     }, [retrySocialAddress])
 
-    useEffect(() => {
-        setSelectedAddress(first(socialAddressList))
-    }, [socialAddressList])
-
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
     const displayPlugins = useAvailablePlugins(activatedPlugins, (plugins) => {
         return plugins
             .flatMap((x) => x.ProfileCardTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
             .filter((x) => {
                 const isAllowed = x.pluginID === PluginId.RSS3 || x.pluginID === PluginId.Collectible
-                const shouldDisplay = x.Utils?.shouldDisplay?.(identity, selectedAddress) ?? true
+                const shouldDisplay = x.Utils?.shouldDisplay?.(identity, selectedSocialAddress) ?? true
                 return isAllowed && shouldDisplay
             })
             .sort((a, z) => a.priority - z.priority)
@@ -184,8 +192,8 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
     const component = useMemo(() => {
         const Component = getTabContent(currentTab)
 
-        return <Component identity={identity} socialAddress={selectedAddress} />
-    }, [currentTab, identity?.publicKey, selectedAddress])
+        return <Component identity={identity} socialAddress={selectedSocialAddress} />
+    }, [currentTab, identity?.publicKey, selectedSocialAddress])
 
     useLocationChange(() => {
         onChange(undefined, first(tabs)?.id)
@@ -195,27 +203,11 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         onChange(undefined, first(tabs)?.id)
     }, [userId])
 
-    useEffect(() => {
-        const listener = () => setAnchorEl(null)
-
-        window.addEventListener('scroll', listener, false)
-
-        return () => {
-            window.removeEventListener('scroll', listener, false)
-        }
-    }, [])
-
-    const onOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget)
-    const onSelect = (option: SocialAddress<NetworkPluginID>) => {
-        setSelectedAddress(option)
-    }
     const handleOpenDialog = () => {
         CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToLocal({
             open: true,
         })
     }
-
-    console.log('avatar tabs', tabs)
 
     if (!userId || loadingSocialAddressList)
         return (
@@ -235,77 +227,13 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
             {tabs.length > 0 && (
                 <div className={classes.container}>
                     <div className={classes.title}>
-                        <div className={classes.walletItem}>
-                            <Button
-                                id="demo-positioned-button"
-                                variant="text"
-                                size="small"
-                                onClick={onOpen}
-                                className={classes.walletButton}>
-                                <AddressItem
-                                    reverse={
-                                        selectedAddress?.type === SocialAddressType.KV ||
-                                        selectedAddress?.type === SocialAddressType.ADDRESS ||
-                                        selectedAddress?.type === SocialAddressType.NEXT_ID
-                                    }
-                                    iconProps={classes.mainLinkIcon}
-                                    TypographyProps={{
-                                        fontSize: '18px',
-                                        fontWeight: 700,
-                                        color: (theme) => theme.palette.maskColor.dark,
-                                    }}
-                                    identityAddress={selectedAddress}
-                                />
-                                <Icons.ArrowDrop className={classes.arrowDropIcon} />
-                            </Button>
-                            <ShadowRootMenu
-                                anchorEl={anchorEl}
-                                open={Boolean(anchorEl)}
-                                PaperProps={{
-                                    className: classes.addressMenu,
-                                }}
-                                aria-labelledby="demo-positioned-button"
-                                onClose={() => setAnchorEl(null)}>
-                                {uniqBy(socialAddressList ?? [], (x) => x.address.toLowerCase()).map((x) => {
-                                    return (
-                                        <MenuItem key={x.address} value={x.address} onClick={() => onSelect(x)}>
-                                            <div className={classes.menuItem}>
-                                                <div className={classes.addressItem}>
-                                                    <AddressItem
-                                                        reverse={
-                                                            x.type === SocialAddressType.KV ||
-                                                            x.type === SocialAddressType.ADDRESS ||
-                                                            x.type === SocialAddressType.NEXT_ID
-                                                        }
-                                                        identityAddress={x}
-                                                        iconProps={classes.secondLinkIcon}
-                                                    />
-                                                    {x?.type === SocialAddressType.NEXT_ID && <Icons.Verified />}
-                                                </div>
-                                                {isSameAddress(selectedAddress?.address, x.address) && (
-                                                    <Icons.Selected className={classes.selectedIcon} />
-                                                )}
-                                            </div>
-                                        </MenuItem>
-                                    )
-                                })}
-                            </ShadowRootMenu>
-                        </div>
+                        <ProfileBar
+                            identity={identity}
+                            socialAddressList={socialAddressList}
+                            address={selectedAddress}
+                            onAddressChange={setSelectedAddress}
+                        />
                         <div className={classes.settingItem}>
-                            <Typography
-                                fontSize="14px"
-                                fontWeight={700}
-                                marginRight="5px"
-                                color={(theme) => theme.palette.maskColor.secondaryDark}>
-                                {t('powered_by')}
-                            </Typography>
-                            <Typography
-                                fontSize="14px"
-                                fontWeight={700}
-                                marginRight="4px"
-                                color={(theme) => theme.palette.maskColor.dark}>
-                                {t('mask_network')}
-                            </Typography>
                             {isMyIdentity ? (
                                 <Icons.Gear
                                     variant="light"
@@ -314,13 +242,11 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
                                     sx={{ cursor: 'pointer' }}
                                 />
                             ) : (
-                                <Link
-                                    className={classes.settingLink}
-                                    href="https://mask.io"
-                                    target="_blank"
-                                    rel="noopener noreferrer">
-                                    <Icons.LinkOut className={classes.linkOutIcon} size={20} />
-                                </Link>
+                                <TipButton
+                                    className={classes.tipButton}
+                                    receiver={identity.identifier}
+                                    addresses={tipAccounts}
+                                />
                             )}
                         </div>
                     </div>

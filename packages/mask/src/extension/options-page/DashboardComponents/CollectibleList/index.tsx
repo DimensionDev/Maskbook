@@ -71,6 +71,10 @@ const useStyles = makeStyles<{ columns?: number }>()((theme, { columns = 3 }) =>
         height: 'calc(100% - 52px)',
         overflow: 'auto',
     },
+    sidebar: {
+        width: 30,
+        flexShrink: 0,
+    },
     name: {
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
@@ -253,7 +257,7 @@ export function CollectionList({
             <Box className={classes.container}>
                 <Stack spacing={1} direction="row" mt={1.5}>
                     <LoadingSkeleton className={classes.root} />
-                    {disableSidebar ? null : <Box width="30px" />}
+                    {disableSidebar ? null : <div className={classes.sidebar} />}
                 </Stack>
             </Box>
         )
@@ -269,6 +273,8 @@ export function CollectionList({
                 </Typography>
             </Box>
         )
+
+    const showSidebar = !disableSidebar && collectionsWithName.length > 0
 
     return (
         <Box className={classes.container}>
@@ -303,32 +309,28 @@ export function CollectionList({
                         {!done && <LoadingBase />}
                     </ElementAnchor>
                 </Box>
-                {disableSidebar ? null : (
-                    <Box width="30px">
-                        {collectionsWithName.length ? (
-                            <Box>
-                                <Box className={classes.collectionButton}>
-                                    <AllButton
-                                        className={classes.networkSelected}
-                                        onClick={() => setSelectedCollection(undefined)}>
-                                        ALL
-                                    </AllButton>
-                                </Box>
-                                {collectionsWithName.map((x, i) => (
-                                    <Box key={i} className={classes.collectionButton}>
-                                        <CollectionIcon
-                                            selectedCollection={selectedCollection?.address}
-                                            collection={x}
-                                            onClick={() => {
-                                                setSelectedCollection(x)
-                                            }}
-                                        />
-                                    </Box>
-                                ))}
+                {showSidebar ? (
+                    <div className={classes.sidebar}>
+                        <Box className={classes.collectionButton}>
+                            <AllButton
+                                className={classes.networkSelected}
+                                onClick={() => setSelectedCollection(undefined)}>
+                                ALL
+                            </AllButton>
+                        </Box>
+                        {collectionsWithName.map((x, i) => (
+                            <Box key={i} className={classes.collectionButton}>
+                                <CollectionIcon
+                                    selectedCollection={selectedCollection?.address}
+                                    collection={x}
+                                    onClick={() => {
+                                        setSelectedCollection(x)
+                                    }}
+                                />
                             </Box>
-                        ) : null}
-                    </Box>
-                )}
+                        ))}
+                    </div>
+                ) : null}
             </Stack>
         </Box>
     )
