@@ -2,7 +2,6 @@ import urlcat from 'urlcat'
 import Web3SDK from 'web3'
 import type { AbiItem } from 'web3-utils'
 import { first } from 'lodash-unified'
-import getUnixTime from 'date-fns/getUnixTime'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
@@ -227,7 +226,7 @@ export function createNonFungibleTokenEvent(
         chainId,
         id: transaction.hash,
         quantity: transaction.amount,
-        timestamp: getUnixTime(transaction.timestamp),
+        timestamp: transaction.timestamp,
         type: transaction.event_type,
         hash: transaction.hash,
         from: {
