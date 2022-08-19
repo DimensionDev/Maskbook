@@ -14,7 +14,9 @@ export const useAvailableCollections = (
     return useMemo(() => {
         if (!address || !userId) return EMPTY_LIST
 
-        const proof = proofs.find((proof) => proof.platform === NextIDPlatform.Twitter && proof.identity === userId)
+        const proof = proofs.find(
+            (proof) => proof.platform === NextIDPlatform.Twitter && proof.identity === userId.toLowerCase(),
+        )
         const hiddenList =
             proof?.content?.[PluginId.Web3Profile]?.unListedCollections?.[address.toLowerCase()]?.[type] ?? []
         if (!hiddenList.length) return collections
