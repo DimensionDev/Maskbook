@@ -21,6 +21,7 @@ import {
 } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../../locales'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { getNowTime } from '../../utils'
 
 interface AddWalletViewProps {
     currentPersona: PersonaInformation
@@ -71,7 +72,7 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
             )
             showSnackbar(t.tip_persona_sign_success(), {
                 variant: 'success',
-                message: nowTime,
+                message: getNowTime(),
             })
             return signResult.signature.signature
         } catch (error) {
@@ -107,7 +108,6 @@ const AddWalletView = memo(({ currentPersona, bindings, onCancel }: AddWalletVie
             showSnackbar(t.tip_wallet_sign_success(), { variant: 'success', message: nowTime })
             return true
         } catch (error) {
-            console.log(error, 'error')
             showSnackbar(t.tip_wallet_sign_error(), { variant: 'error', message: nowTime })
             return false
         }
