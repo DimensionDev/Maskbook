@@ -22,8 +22,7 @@ import { isNativeTokenWrapper } from '../../helpers'
 import { PluginTraderMessages } from '../../messages'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import { useTradeCallback } from '../../trader/useTradeCallback'
-import type { Coin } from '../../types'
-import { TokenPanelType, TradeInfo } from '../../types'
+import { Coin, TokenPanelType, TradeInfo } from '../../types'
 import { ConfirmDialog } from './ConfirmDialog'
 import { useSortedTrades } from './hooks/useSortedTrades'
 import { useUpdateBalance } from './hooks/useUpdateBalance'
@@ -84,7 +83,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
 
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
-            token: chainId === ChainId.Mainnet && coin?.is_mirrored ? UST[ChainId.Mainnet] : createNativeToken(chainId),
+            token: createNativeToken(chainId),
         })
     }, [chainId, chainIdValid])
     // #endregion

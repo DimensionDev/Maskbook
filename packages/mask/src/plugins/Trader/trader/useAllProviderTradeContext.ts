@@ -4,6 +4,12 @@ import { createContainer } from 'unstated-next'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
+export const INITIAL_STATE = {
+    inputAmount: '',
+    inputTokenBalance: '0',
+    outputTokenBalance: '0',
+}
+
 export interface AllProviderTradeState {
     inputAmount: string
     inputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
@@ -69,15 +75,13 @@ function reducer(state: AllProviderTradeState, action: AllProviderSwapAction): A
                 ...state,
                 outputTokenBalance: action.balance,
             }
+        default:
+            return state
     }
 }
 
 export function useAllProviderTradeContext() {
-    const [tradeStore, dispatchTradeStore] = useReducer(reducer, {
-        inputAmount: '',
-        inputTokenBalance: '0',
-        outputTokenBalance: '0',
-    })
+    const [tradeStore, dispatchTradeStore] = useReducer(reducer, INITIAL_STATE)
     const [isSwapping, setIsSwapping] = useState(false)
     const [temporarySlippage, setTemporarySlippage] = useState<number | undefined>()
     const { inputAmount, inputToken, outputToken } = tradeStore
