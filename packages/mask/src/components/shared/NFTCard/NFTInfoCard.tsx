@@ -62,7 +62,6 @@ const platformCosts: { [k in SourceType]?: number } = {
 }
 
 const resolveTokenSchema = (schema?: SchemaType) => {
-    if (Number.isNaN(schema)) return schema || SchemaType.ERC721
     return getEnumAsArray(SchemaType).find((x) => isEqual(x.value, schema))?.key ?? SchemaType.ERC721
 }
 

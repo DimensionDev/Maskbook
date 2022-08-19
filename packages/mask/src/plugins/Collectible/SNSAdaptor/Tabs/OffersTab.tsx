@@ -31,6 +31,7 @@ export const OffersTab = memo(() => {
     const { classes } = useStyles()
     const { orders, provider } = CollectibleState.useContainer()
     const _orders = orders.value?.data ?? EMPTY_LIST
+
     const { t } = useI18N()
     if (orders.loading)
         return (
