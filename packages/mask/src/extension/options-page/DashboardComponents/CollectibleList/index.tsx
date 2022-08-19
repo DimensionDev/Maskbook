@@ -121,19 +121,20 @@ const useStyles = makeStyles()((theme) => ({
 interface CollectibleItemProps {
     provider: SourceType
     wallet?: Wallet
-    token: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    link?: string
+    asset: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     readonly?: boolean
     renderOrder: number
     address?: SocialAddress<NetworkPluginID>
 }
 
 function CollectibleItem(props: CollectibleItemProps) {
-    const { provider, wallet, token, readonly, renderOrder, address } = props
+    const { provider, wallet, asset, readonly, renderOrder, address } = props
     const { classes } = useStyles()
     return (
         <div className={classes.card}>
             <CollectibleCard
-                token={token}
+                asset={asset}
                 provider={provider}
                 wallet={wallet}
                 readonly={readonly}
@@ -142,7 +143,7 @@ function CollectibleItem(props: CollectibleItemProps) {
             />
             <div className={classes.description}>
                 <Typography className={classes.name} color="textPrimary" variant="body2">
-                    {token.metadata?.name}
+                    {asset.metadata?.name}
                 </Typography>
             </div>
         </div>
@@ -193,7 +194,7 @@ function CollectibleListUI(props: CollectibleListUIProps) {
                         {collectibles.map((token, index) => (
                             <CollectibleItem
                                 renderOrder={index}
-                                token={token}
+                                asset={token}
                                 provider={provider}
                                 wallet={wallet}
                                 readonly={readonly}
@@ -264,7 +265,6 @@ export function CollectionList({
         done,
         next: nextPage,
         error,
-        loading,
         retry: retryFetchCollectible,
     } = useNonFungibleAssets(addressName.networkSupporterPluginID, undefined, { account })
 
