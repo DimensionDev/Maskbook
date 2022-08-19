@@ -8,7 +8,7 @@ import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../t
 import { makeFileKeySigned } from '../helpers'
 
 const POSTAGE_STAMP = '0'.repeat(64)
-const BEE_HOSTS = times(10, (n) => `https://bee-${n}.gateway.ethswarm.org`)
+const BEE_HOSTS = times(10, (n) => `https://gateway-proxy-bee-${n}-0.gateway.ethswarm.org`)
 const BEE_HOST = sample(BEE_HOSTS) ?? BEE_HOSTS[0]
 
 class SwarmAgent implements ProviderAgent {
@@ -53,12 +53,11 @@ class SwarmAgent implements ProviderAgent {
     }
 
     async uploadLandingPage(metadata: LandingPageMetadata) {
-        const linkPrefix = `${BEE_HOST}/bzz`
         const encodedMetadata = JSON.stringify({
             name: metadata.name,
             size: metadata.size,
             provider: 'swarm',
-            link: urlcat(linkPrefix, '/:txId', { txId: metadata.txId }),
+            link: urlcat(`${BEE_HOST}/bzz`, '/:txId', { txId: metadata.txId }),
             signed: await makeFileKeySigned(metadata.key),
             createdAt: new Date().toISOString(),
         })
