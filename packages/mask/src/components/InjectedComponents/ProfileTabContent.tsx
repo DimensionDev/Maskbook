@@ -161,11 +161,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         value: socialAddressList = EMPTY_LIST,
         loading: loadingSocialAddressList,
         retry: retrySocialAddress,
-    } = useSocialAddressListAll(
-        currentVisitingSocialIdentity,
-        isOwnerIdentity ? [SocialAddressType.NEXT_ID] : undefined,
-        sorter,
-    )
+    } = useSocialAddressListAll(currentVisitingSocialIdentity, undefined, sorter)
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
