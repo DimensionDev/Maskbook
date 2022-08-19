@@ -20,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 440,
         position: 'relative',
         padding: '16px 16px 0 16px',
-        backgroundColor: theme.palette.background.paper,
+        backgroundColor: theme.palette.maskColor.bottom,
         '::-webkit-scrollbar': {
             display: 'none',
         },
