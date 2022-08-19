@@ -226,10 +226,9 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const isOwnerNotHasAddress =
         isOwnerIdentity && socialAddressList.findIndex((address) => address.type === SocialAddressType.NEXT_ID) === -1
 
-    const showNextID = !!(
+    const showNextID =
         isTwitterPlatform &&
         (isWeb3ProfileDisable || isOwnerNotHasBinding || isOwnerNotHasAddress || socialAddressList.length === 0)
-    )
 
     const componentTabId = showNextID ? `${PluginId.NextID}_tabContent` : currentTab
 
