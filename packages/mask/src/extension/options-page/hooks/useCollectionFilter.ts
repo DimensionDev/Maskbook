@@ -3,6 +3,7 @@ import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { NextIDPlatform } from '@masknet/shared-base'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useMemo } from 'react'
+import { differenceWith } from 'lodash-unified'
 import type { Proof, COLLECTION_TYPE } from '../types'
 
 export const useCollectionFilter = (
@@ -22,6 +23,7 @@ export const useCollectionFilter = (
         )
         const hiddenList =
             proof?.content?.[PluginId.Web3Profile]?.unListedCollections?.[address?.toLowerCase()]?.[type] ?? []
-        return collections.filter((collection) => hiddenList?.findIndex((url) => url === collection?.id) === -1)
+
+        return differenceWith(collections, hiddenList, (collection, id) => collection.id === id)
     }, [address, currentVisitingProfile?.identifier?.userId, type, hiddenInfo, collections])
 }
