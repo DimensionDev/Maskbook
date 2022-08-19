@@ -1,6 +1,5 @@
 import urlcat from 'urlcat'
 import { GraphQLClient } from 'graphql-request'
-import getUnixTime from 'date-fns/getUnixTime'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     createIndicator,
@@ -15,7 +14,6 @@ import {
     NonFungibleTokenOrder,
     OrderSide,
     Pageable,
-    scale10,
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, createNativeToken, SchemaType } from '@masknet/web3-shared-evm'
