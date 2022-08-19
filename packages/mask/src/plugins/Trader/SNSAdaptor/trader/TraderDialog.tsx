@@ -91,7 +91,8 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
     const { open: remoteOpen, closeDialog } = useRemoteControlledDialog(
         PluginTraderMessages.swapDialogUpdated,
         (ev) => {
-            if (ev?.traderProps) setTraderProps(ev.traderProps)
+            if (ev.open && ev?.traderProps) setTraderProps(ev.traderProps)
+            if (!ev.open) setTraderProps(undefined)
         },
     )
 

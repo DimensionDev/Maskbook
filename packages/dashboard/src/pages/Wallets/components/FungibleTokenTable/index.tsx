@@ -128,7 +128,7 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
                 },
             })
         },
-        [],
+        [openSwapDialog],
     )
 
     const onSend = useCallback(
