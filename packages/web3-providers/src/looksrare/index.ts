@@ -28,6 +28,13 @@ async function fetchFromLooksRare<T>(chainId: ChainId, url: string) {
     throw new Error('Fetch failed')
 }
 
+function createAssetLink(chainId: ChainId, address: string, tokenId: string) {
+    return urlcat('https://looksrare.org/collections/:address/:tokenId', {
+        address,
+        tokenId,
+    })
+}
+
 function createNonFungibleAssetFromToken(
     chainId: ChainId,
     token?: Token,
@@ -65,10 +72,7 @@ function createNonFungibleAssetFromToken(
             slug: token.collection?.name ?? '',
             verified: token.collection?.isVerified,
         },
-        link: urlcat('https://looksrare.org/collections/:address/:tokenId', {
-            address: token.collectionAddress,
-            tokenId: token.tokenId,
-        }),
+        link: createAssetLink(chainId, token.collectionAddress, token.tokenId),
         creator: {
             address: token.collection?.owner,
         },
