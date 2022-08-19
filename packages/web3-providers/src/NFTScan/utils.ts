@@ -57,7 +57,7 @@ export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, 
         ...init,
         headers: {
             ...init?.headers,
-            chainId: chainId.toString(),
+            'x-app-chainid': chainId.toString(),
         },
     })
     const json = await response.json()
