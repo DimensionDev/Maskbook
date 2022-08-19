@@ -51,7 +51,7 @@ interface WalletSwitchProps {
     type: NetworkPluginID
     address: string
     isPublic: boolean
-    onChange: (addres: string, v: boolean) => void
+    onChange: (address: string, v: boolean) => void
 }
 
 export function WalletSwitch({ type, address, isPublic, chainId, onChange }: WalletSwitchProps) {

@@ -95,7 +95,7 @@ export const Uploading: React.FC = () => {
         navigate(FileRouter.Uploaded, { state: item })
     }, [])
     useEffect(() => {
-        onUploading(error ? false : true)
+        onUploading(!error)
         return () => onUploading(false)
     }, [error, onUploading])
     if (error) {
