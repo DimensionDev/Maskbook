@@ -1,3 +1,4 @@
+import { isFirefox } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { RainbowBox } from './RainbowBox'
 
@@ -103,7 +104,11 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
                     </textPath>
                 </text>
 
-                <text x="0%" textAnchor="middle" fontFamily="sans-serif">
+                <text
+                    x="0%"
+                    textAnchor="middle"
+                    fill={isFirefox() ? 'currentColor' : `url(#${id}-pattern)`}
+                    fontFamily="sans-serif">
                     <textPath xlinkHref={`#${id}-path-price`} startOffset="50%" rotate="auto">
                         <tspan fontWeight="bold" fontSize={fontSize} dy="0.5em">
                             {price}

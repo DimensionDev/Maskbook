@@ -22,8 +22,8 @@ export function HubContent(props: HubContentProps) {
     const chainId = useChainId()
     const account = useAccount()
     const [keyword, setKeyword] = useState<string>('PUNK')
-    const [address, setAddress] = useState<string>('0x60e4d786628fea6478f785a6d7e704777c86a7c6')
-    const [tokenId, setTokenId] = useState<string>('28850')
+    const [address, setAddress] = useState<string>('0x5537d90a4a2dc9d9b37bab49b490cf67d4c54e91')
+    const [tokenId, setTokenId] = useState<string>('5431')
     const [sourceType, setSourceType] = useState(SourceType.NFTScan)
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
