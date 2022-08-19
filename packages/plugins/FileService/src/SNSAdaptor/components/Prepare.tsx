@@ -78,7 +78,7 @@ export const Prepare: React.FC = () => {
 
     const onFile = useCallback(
         async (file: File) => {
-            console.log('DEBUG: onfile')
+            console.log('DEBUG: onFile')
             console.log({
                 file,
             })
