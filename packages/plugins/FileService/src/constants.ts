@@ -8,7 +8,7 @@ export const signing = 'https://service.r2d2.to/arweave-remote-signing'
 export const mesonPrefix = 'https://pz-yyxfhb.meson.network'
 
 export const enum FileRouter {
-    upload = '/upload',
-    uploading = '/uploading',
-    uploaded = '/uploaded',
+    Prepare = '/prepare',
+    Uploading = '/uploading',
+    Uploaded = '/uploaded',
 }
