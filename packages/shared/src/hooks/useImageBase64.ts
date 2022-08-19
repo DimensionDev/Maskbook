@@ -46,12 +46,11 @@ export function useAccessibleUrl(
         }
 
         if (!url) return
-        const fetchingTask = globalThis.r2d2Fetch(`https://cors.r2d2.to/?${url}`)
+        const fetchingTask = fetch(url)
         cache.set(key, fetchingTask)
         const response = await fetchingTask
         if (!response.ok) {
             cache.delete(key)
-            setAvailableUrl('')
             return
         }
 
