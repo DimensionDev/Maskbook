@@ -45,5 +45,5 @@ export function useTipsWalletsList(
             }
         })
         return proofs
-    }, [proofList])
+    }, [proofList, kv?.proofs])
 }

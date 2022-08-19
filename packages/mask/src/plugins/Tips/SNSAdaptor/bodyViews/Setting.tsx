@@ -1,10 +1,10 @@
-import { memo } from 'react'
 import type { BindingProof } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { Typography } from '@mui/material'
-import { WalletSwitch } from '../components/WalletSwitch'
-import { ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { Typography } from '@mui/material'
+import { memo } from 'react'
+import { WalletSwitch } from '../components/WalletSwitch'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

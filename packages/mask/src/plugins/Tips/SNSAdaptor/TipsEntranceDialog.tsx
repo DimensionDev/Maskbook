@@ -123,10 +123,13 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         kv?.ok ? kv.val : undefined,
     )
 
-    const refresh = () => {
-        setStep(Step.Main)
+    const refetch = () => {
         retryProof()
         retryKv()
+    }
+    const refresh = () => {
+        setStep(Step.Main)
+        refetch()
     }
 
     const [pendingDefault, setPendingDefault] = useState<string>()
@@ -137,10 +140,12 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     }
 
     const onSwitchChange = (address: string, checked: boolean) => {
-        const newList = bindingWallets
-            .filter((x) => (x.identity === address ? checked : !!x.isPublic))
-            .map((x) => x.identity)
-        setPendingPublicAddress(newList)
+        setPendingPublicAddress((oldList) => {
+            const newList = bindingWallets
+                .filter((x) => (x.identity === address ? checked : oldList.includes(x.identity)))
+                .map((x) => x.identity)
+            return newList
+        })
     }
 
     const { setDialog, open: providerDialogOpen } = useRemoteControlledDialog(
@@ -162,7 +167,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             setStep(Step.AddWallet)
         })
     }, [providerDialogOpen])
-    const [confirmState, onConfirmRelease] = useAsyncFn(
+    const [confirmState, onConfirmDelete] = useAsyncFn(
         async (wallet: BindingProof | undefined) => {
             try {
                 if (!currentPersona?.identifier.publicKeyAsHex || !wallet) throw new Error('Create Payload Error')
@@ -200,7 +205,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                     message: getNowTime(),
                 })
             } finally {
-                retryProof()
+                refetch()
             }
         },
         [currentPersona, proofRes],
@@ -238,7 +243,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                 isPublic: pendingPublicAddress.includes(x.identity) ? 1 : 0,
             } as BindingProof
         })
-    }, [isDirty, pendingDefault, pendingPublicAddress])
+    }, [isDirty, bindingWallets, pendingDefault, pendingPublicAddress])
 
     const [kvFetchState, onConfirm] = useAsyncFn(async () => {
         try {
@@ -254,7 +259,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                 variant: 'success',
                 message: getNowTime(),
             })
-            retryKv()
+            refetch()
             return true
         } catch (error) {
             showSnackbar(t.tip_persona_sign_error(), {
@@ -324,7 +329,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                         <WalletsView
                             personaName={currentPersona?.nickname}
                             releaseLoading={confirmState.loading}
-                            onDelete={onConfirmRelease}
+                            onDelete={onConfirmDelete}
                             defaultAddress={defaultAddress}
                             wallets={bindingWallets}
                         />
