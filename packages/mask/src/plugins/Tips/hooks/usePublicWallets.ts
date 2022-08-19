@@ -4,13 +4,13 @@ import { NextIDProof } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { first, uniqBy } from 'lodash-unified'
 import { useEffect, useMemo } from 'react'
-import { useAsync, useAsyncFn } from 'react-use'
+import { useAsyncRetry } from 'react-use'
 import { MaskMessages } from '../../../utils'
 import type { TipAccount } from '../types'
 import { useKvGet } from './useKv'
 
 export function usePublicWallets(personaPubkey: string | undefined): TipAccount[] {
-    const [{ value: nextIdWallets }, queryWallets] = useAsyncFn(async (): Promise<TipAccount[]> => {
+    const { value: nextIdWallets, retry: queryWallets } = useAsyncRetry(async (): Promise<TipAccount[]> => {
         if (!personaPubkey) return EMPTY_LIST
 
         const bindings = await NextIDProof.queryExistedBindingByPersona(personaPubkey, true)
@@ -21,9 +21,8 @@ export function usePublicWallets(personaPubkey: string | undefined): TipAccount[
             .map((p) => ({ address: p.identity, verified: true }))
         return wallets
     }, [personaPubkey])
-    useAsync(queryWallets, [queryWallets])
 
-    const { value: kv } = useKvGet<NextIDStorageInfo<BindingProof[]>>(personaPubkey)
+    const { value: kv, retry: refetchKv } = useKvGet<NextIDStorageInfo<BindingProof[]>>(personaPubkey)
     const walletsFromCloud = useMemo((): TipAccount[] | null => {
         if (!kv?.ok) return null
         const { proofs } = kv.val
@@ -50,6 +49,7 @@ export function usePublicWallets(personaPubkey: string | undefined): TipAccount[
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
             queryWallets()
+            refetchKv()
         })
     }, [])
 
