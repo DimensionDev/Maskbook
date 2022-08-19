@@ -37,7 +37,7 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const { classes } = useStyles({ isDashboard })
 
     const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const [chainId, setChainId] = useState<ChainId>(currentChainId)
+    const [chainId, setChainId] = useState<ChainId>(ChainId.Mainnet)
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     const [tab, setTab] = useState<TabType>(TabType.Deposit)

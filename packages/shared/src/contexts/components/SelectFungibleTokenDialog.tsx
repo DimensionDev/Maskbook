@@ -52,6 +52,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, isDashboard }) => 
 
 export interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = NetworkPluginID> {
     open: boolean
+    enableManage?: boolean
     pluginID?: T
     chainId?: Web3Helper.Definition[T]['ChainId']
     keyword?: string
@@ -80,6 +81,7 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
     onSubmit,
     onClose,
     title,
+    enableManage = true,
 }) => {
     const t = useSharedI18N()
     const { networkIdentifier } = useBaseUIRuntime()
@@ -131,7 +133,7 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
                     chainId={chainId}
                     tokens={tokens ?? []}
                     whitelist={whitelist}
-                    enableManage
+                    enableManage={enableManage}
                     blacklist={
                         disableNativeToken && nativeTokenAddress ? [nativeTokenAddress, ...blacklist] : blacklist
                     }
