@@ -51,6 +51,7 @@ export function useAccessibleUrl(
         const response = await fetchingTask
         if (!response.ok) {
             cache.delete(key)
+            setAvailableUrl('')
             return
         }
 
