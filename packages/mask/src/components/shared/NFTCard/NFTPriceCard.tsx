@@ -8,7 +8,6 @@ import {
     NonFungibleTokenOrder,
     formatBalance,
     formatCurrency,
-    toFixed,
 } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -101,12 +100,7 @@ export function NFTPriceCard(props: NFTPriceCardProps) {
                 {priceTokenImg}
                 <Typography className={classes.priceText}>
                     {asset.priceInToken
-                        ? Number.parseFloat(
-                              toFixed(
-                                  formatBalance(asset.priceInToken.amount, asset.priceInToken.token.decimals || 18),
-                                  6,
-                              ),
-                          )
+                        ? formatBalance(asset.priceInToken.amount, asset.priceInToken.token.decimals || 18, 2)
                         : '-'}
                 </Typography>
             </div>
@@ -128,6 +122,7 @@ export function NFTPriceCard(props: NFTPriceCardProps) {
                             {formatBalance(
                                 topOffer?.priceInToken?.amount,
                                 topOffer?.priceInToken?.token.decimals || 18,
+                                6,
                             )}
                         </strong>
                     </Typography>

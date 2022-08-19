@@ -52,6 +52,8 @@ const useStyles = makeStyles()((theme) => ({
         minHeight: 300,
         width: '100%',
         height: '100%',
+        borderRadius: 20,
+        background: '#000',
     },
     imgWrapper: {
         position: 'absolute',

@@ -48,7 +48,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         marginRight: theme.spacing(0.5),
     },
-    upperCase: {},
 }))
 
 interface NFTInfoCardProps {
