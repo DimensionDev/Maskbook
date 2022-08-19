@@ -36,7 +36,7 @@ export async function makeFileKeySigned(fileKey: string | undefined | null) {
 export const resolveGatewayAPI = createLookupTableResolver<Provider, string>(
     {
         [Provider.arweave]: 'https://arweave.net',
-        [Provider.ipfs]: 'https://infura-ipfs.io/ipfs',
+        [Provider.ipfs]: 'https://mask.infura-ipfs.io/ipfs',
         [Provider.swarm]: 'https://bee-2.gateway.ethswarm.org/bzz',
     },
     () => 'Unknown provider',
