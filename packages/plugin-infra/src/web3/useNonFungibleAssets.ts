@@ -28,7 +28,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
         return flattenAsyncIterator(
             networks
                 .filter((x) => x.isMainnet)
-                .filter((x) => (options?.chainId ? x.chainId === options?.chainId : true))
+                .filter((x) => (options?.chainId ? x.chainId === options.chainId : true))
                 .map((x) => {
                     return pageableToIterator(async (indicator) => {
                         return hub.getNonFungibleAssets!(options?.account ?? account, {
