@@ -38,13 +38,11 @@ export function useNFT(
             : asset?.price?.[CurrencyType.USD] ?? '0'
         const name = contract?.name || metadata?.name || ''
         const imageURL = metadata?.imageURL
-        let permalink = asset?.link
-        if (!permalink) {
-            permalink =
-                pluginId === NetworkPluginID.PLUGIN_SOLANA
-                    ? MagicEdenAPI.getUrl(tokenId)
-                    : Others?.explorerResolver.nonFungibleTokenLink(chainId, address, tokenId)
-        }
+        const permalink =
+            asset?.link ??
+            (pluginId === NetworkPluginID.PLUGIN_SOLANA
+                ? MagicEdenAPI.getUrl(tokenId)
+                : Others?.explorerResolver.nonFungibleTokenLink(chainId, address, tokenId))
 
         return {
             amount,
