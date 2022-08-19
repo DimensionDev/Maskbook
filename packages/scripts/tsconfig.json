@@ -4,7 +4,8 @@
     "lib": ["ESNext"],
     "noEmit": true,
     "moduleResolution": "NodeNext",
-    "declaration": false
+    "composite": false,
+    "incremental": false
   },
   "ts-node": {
     "compilerOptions": {

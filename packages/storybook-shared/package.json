@@ -19,7 +19,7 @@
   "devDependencies": {
     "@storybook/addons": "^6.5.9",
     "@storybook/react": "^6.5.9",
-    "@swc/core": "^1.2.218",
+    "@swc/core": "1.2.223",
     "stream-browserify": "3",
     "swc-loader": "^0.2.3",
     "webpack": "^5.74.0"
