@@ -704,7 +704,7 @@ export function ITO(props: ITO_Props) {
                     ) {
                         return (
                             <>
-                                <Box style={{ padding: 12, flex: 1 }}>
+                                <Box style={{ padding: '12px 5px', flex: 1 }}>
                                     <ActionButton
                                         startIcon={<Icons.Shared size={18} />}
                                         onClick={onShareSuccess}
@@ -713,7 +713,7 @@ export function ITO(props: ITO_Props) {
                                         {t('plugin_ito_share')}
                                     </ActionButton>
                                 </Box>
-                                <Box style={{ padding: 12, flex: 1 }}>
+                                <Box style={{ padding: '12px 5px', flex: 1 }}>
                                     <ChainBoundary
                                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                                         expectedChainId={payload.chain_id}
@@ -748,7 +748,7 @@ export function ITO(props: ITO_Props) {
                     if (listOfStatus.includes(ITO_Status.waited)) {
                         return (
                             <>
-                                <Box style={{ padding: 12, flex: 1 }}>
+                                <Box style={{ padding: '12px 5px', flex: 1 }}>
                                     <ActionButton
                                         onClick={onUnlock}
                                         className={classes.actionButton}
@@ -757,7 +757,7 @@ export function ITO(props: ITO_Props) {
                                     </ActionButton>
                                 </Box>
                                 {shareText ? (
-                                    <Box style={{ flex: 1, padding: 12 }}>
+                                    <Box style={{ flex: 1, padding: '12px 5px' }}>
                                         <ActionButton
                                             startIcon={<Icons.Shared size={18} />}
                                             onClick={onShare}
@@ -774,7 +774,7 @@ export function ITO(props: ITO_Props) {
                     if (listOfStatus.includes(ITO_Status.started)) {
                         return (
                             <>
-                                <Box style={{ flex: 1, padding: 12 }}>
+                                <Box style={{ flex: 1, padding: '12px 5px' }}>
                                     <ActionButton
                                         onClick={onClaim}
                                         className={classes.actionButton}
@@ -782,7 +782,7 @@ export function ITO(props: ITO_Props) {
                                         {t('plugin_ito_enter')}
                                     </ActionButton>
                                 </Box>
-                                <Box style={{ flex: 1, padding: 12 }}>
+                                <Box style={{ flex: 1, padding: '12px 5px' }}>
                                     <ActionButton
                                         startIcon={<Icons.Shared size={18} />}
                                         onClick={onShareSuccess}
