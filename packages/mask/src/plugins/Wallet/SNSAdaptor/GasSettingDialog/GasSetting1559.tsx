@@ -3,9 +3,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { Controller, useForm } from 'react-hook-form'
+import { ActionButton } from '@masknet/theme'
 import { formatGweiToEther, formatGweiToWei, formatWeiToEther, useTokenConstants } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
-import { LoadingButton } from '@mui/lab'
 import BigNumber from 'bignumber.js'
 import { isEmpty, noop } from 'lodash-unified'
 // import { StyledInput } from '../../../../extension/popups/components/StyledInput'
@@ -309,14 +309,14 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                         name="maxFeePerGas"
                     />
                 </form>
-                <LoadingButton
+                <ActionButton
                     loading={getGasOptionsLoading}
                     fullWidth
                     className={classes.button}
                     disabled={!isEmpty(errors)}
                     onClick={onSubmit}>
                     {t('confirm')}
-                </LoadingButton>
+                </ActionButton>
             </>
         )
     },

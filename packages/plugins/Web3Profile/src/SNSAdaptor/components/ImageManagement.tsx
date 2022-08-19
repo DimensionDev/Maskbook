@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
         width: 568,
         height: 548,
         padding: '0 16px 16px 16px',
-        backgroundColor: theme.palette.background.paper,
+
         display: 'flex',
         position: 'relative',
         flexDirection: 'column',
