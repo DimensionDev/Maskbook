@@ -7,12 +7,12 @@ import { BaseInjectedProvider } from './BaseInjected'
 
 export class PhantomProvider extends BaseInjectedProvider implements SolanaProvider {
     constructor() {
-        injectedPhantomProvider.untilAvailable().then(() => {
-            injectedPhantomProvider.connect({
+        super(ProviderType.Phantom, injectedPhantomProvider)
+        injectedPhantomProvider.untilAvailable().then(async () => {
+            await injectedPhantomProvider.connect({
                 onlyIfTrusted: true,
             })
         })
-        super(ProviderType.Phantom, injectedPhantomProvider)
     }
 
     override async signMessage(dataToSign: string) {

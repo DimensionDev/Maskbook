@@ -86,9 +86,11 @@ export class ProviderState<
                     chainId: Number.parseInt(chainId, 16) as ChainId,
                 })
             })
-            provider.emitter.on('connect', ({ account }) => {
+            provider.emitter.on('connect', async ({ account }) => {
                 if (account && this.options.isValidAddress(account)) {
-                    this.setAccount(providerType, {
+                    // provider should update before account, otherwise account failed to update
+                    await this.setProvider(providerType)
+                    await this.setAccount(providerType, {
                         account,
                     })
                 }
@@ -142,9 +144,7 @@ export class ProviderState<
         const siteType = getSiteType()
         if (!siteType) return
 
-        const needToUpdateProviderType = this.storage.providerType.value !== providerType
-
-        if (needToUpdateProviderType) {
+        if (this.storage.providerType.value !== providerType) {
             await this.storage.providerType.setValue(providerType)
         }
     }
