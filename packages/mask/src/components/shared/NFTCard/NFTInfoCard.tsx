@@ -6,6 +6,8 @@ import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { SchemaType, formatTokenId, ChainId } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { Icons } from '@masknet/icons'
+import { getEnumAsArray } from '@dimensiondev/kit'
+import { isEqual } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -24,6 +26,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
+        textTransform: 'capitalize',
     },
     textBase: {
         fontSize: 14,
@@ -45,6 +48,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         marginRight: theme.spacing(0.5),
     },
+    upperCase: {},
 }))
 
 interface NFTInfoCardProps {
@@ -58,6 +62,11 @@ const platformCosts: { [k in SourceType]?: number } = {
     [SourceType.LooksRare]: 2,
 }
 
+const resolveTokenSchema = (schema?: SchemaType) => {
+    if (Number.isNaN(schema)) return schema || SchemaType.ERC721
+    return getEnumAsArray(SchemaType).find((x) => isEqual(x.value, schema))?.key ?? SchemaType.ERC721
+}
+
 export function NFTInfoCard(props: NFTInfoCardProps) {
     const { asset, sourceType } = props
     const { classes } = useStyles()
@@ -68,7 +77,7 @@ export function NFTInfoCard(props: NFTInfoCardProps) {
         { title: t('plugin_collectible_token_id'), value: formatTokenId(asset.tokenId, 4) },
         { title: t('contract'), value: Others?.formatAddress(asset.address, 4) ?? '-', link: true },
         { title: t('plugin_collectible_block_chain'), value: 'Ethereum' },
-        { title: t('token_standard'), value: asset.contract?.schema ?? SchemaType.ERC721 },
+        { title: t('token_standard'), value: resolveTokenSchema(asset.schema || asset.contract?.schema) },
         {
             title: t('plugin_collectible_creator_earning'),
             value: `${Number.parseInt(asset.contract?.creatorEarning || '0', 10) / 100}%` ?? '0',
@@ -78,6 +87,7 @@ export function NFTInfoCard(props: NFTInfoCardProps) {
             value: sourceType && platformCosts[sourceType] ? `${platformCosts[sourceType]}%` : '-',
         },
     ]
+    console.log(asset, 'asset')
     return (
         <div className={classes.wrapper}>
             {infoConfigMapping.map((x) => {
