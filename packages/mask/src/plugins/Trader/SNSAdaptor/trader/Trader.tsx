@@ -95,10 +95,13 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             if (!coin?.contract_address) return
             dispatchTradeStore({
                 type,
-                token: createERC20Token(chainId, coin.contract_address, coin.name, coin.symbol, coin.decimals),
+                token:
+                    isNativeTokenAddress(coin.contract_address) || chainId !== currentChainId
+                        ? createNativeToken(chainId)
+                        : createERC20Token(chainId, coin.contract_address, coin.name, coin.symbol, coin.decimals),
             })
         },
-        [chainId],
+        [chainId, currentChainId],
     )
     useEffect(() => {
         updateTradingCoin(AllProviderTradeActionType.UPDATE_INPUT_TOKEN, defaultInputCoin)
@@ -126,22 +129,6 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             updateTradingCoin(AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN, coin)
         }
     }, [coin, inputToken, outputToken, currentChainId, targetChainId, updateTradingCoin])
-
-    useEffect(() => {
-        if (!defaultInputCoin) return
-        dispatchTradeStore({
-            type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
-            token: defaultInputCoin.contract_address
-                ? createERC20Token(
-                      chainId,
-                      defaultInputCoin.contract_address,
-                      defaultInputCoin.name,
-                      defaultInputCoin.symbol,
-                      defaultInputCoin.decimals,
-                  )
-                : undefined,
-        })
-    }, [defaultInputCoin, chainId])
 
     const onInputAmountChange = useCallback((amount: string) => {
         dispatchTradeStore({
