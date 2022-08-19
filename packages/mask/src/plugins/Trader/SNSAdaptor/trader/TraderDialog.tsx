@@ -92,6 +92,7 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
         PluginTraderMessages.swapDialogUpdated,
         (ev) => {
             if (ev.open && ev?.traderProps) setTraderProps(ev.traderProps)
+            if (!ev.open) setTraderProps(undefined)
         },
     )
 
