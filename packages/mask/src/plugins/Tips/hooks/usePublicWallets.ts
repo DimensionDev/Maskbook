@@ -43,6 +43,7 @@ export function usePublicWallets(personaPubkey: string | undefined): TipAccount[
                     return x.isPublic
                 }
             })
+            .sort((x) => (x.isDefault ? -1 : 0))
             .map((x) => ({ address: x.identity, verified: true }))
     }, [kv, nextIdWallets])
 
