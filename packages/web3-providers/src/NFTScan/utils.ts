@@ -114,6 +114,7 @@ export function createNonFungibleTokenAsset(chainId: ChainId, asset: Asset): Non
     return {
         id: asset.contract_address,
         chainId,
+        link: createPermalink(chainId, asset.contract_address, asset.token_id),
         tokenId: asset.token_id,
         type: TokenType.NonFungible,
         address: asset.contract_address,

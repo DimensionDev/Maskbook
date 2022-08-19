@@ -43,7 +43,7 @@ const cache = new LRU<string, any>({
     ttl: 30_000,
 })
 
-export async function fetchFromOpenSea<T>(url: string, chainId: ChainId, options?: LRUOptions<string, any>) {
+async function fetchFromOpenSea<T>(url: string, chainId: ChainId, options?: LRUOptions<string, any>) {
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
     const cacheKey = `${chainId}/${url}`
     let fetchingTask = cache.get(cacheKey)
@@ -76,7 +76,21 @@ function createTokenDetailed(
     return createERC20Token(chainId, token.address, token.name, token.symbol, token.decimals, token.image_url)
 }
 
-function createAssetLink(account: OpenSeaCustomAccount | undefined) {
+function createAssetLink(chainId: ChainId, address: string, tokenId: string) {
+    if (chainId === ChainId.Mainnet)
+        return urlcat('https://opensea.io/assets/ethereum/:address/:tokenId', {
+            address,
+            tokenId,
+        })
+    if (chainId === ChainId.Matic)
+        return urlcat('https://opensea.io/assets/matic/:address/:tokenId', {
+            address,
+            tokenId,
+        })
+    return
+}
+
+function createAccountLink(account: OpenSeaCustomAccount | undefined) {
     if (!account) return ''
     return urlcat(OPENSEA_ACCOUNT_URL, {
         address: account?.user?.username ?? account?.address,
@@ -126,9 +140,10 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungi
 }
 
 function createNFTAsset(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungibleAsset<ChainId, SchemaType> {
+    const token = createNFTToken(chainId, asset)
     return {
-        ...createNFTToken(chainId, asset),
-        link: asset.opensea_link ?? asset.permalink,
+        ...token,
+        link: asset.opensea_link ?? asset.permalink ?? createAssetLink(chainId, token.address, token.tokenId),
         paymentTokens: uniqBy(
             asset.collection?.payment_tokens?.map((x) => createTokenDetailed(chainId, x)),
             (x) => x.address.toLowerCase(),
@@ -137,13 +152,13 @@ function createNFTAsset(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungi
             address: asset.creator.address,
             nickname: asset.creator.user?.username ?? 'Unknown',
             avatarURL: asset.creator.profile_img_url,
-            link: createAssetLink(asset.creator),
+            link: createAccountLink(asset.creator),
         },
         owner: {
             address: asset.owner.address,
             nickname: asset.owner.user?.username ?? 'Unknown',
             avatarURL: asset.owner.profile_img_url,
-            link: createAssetLink(asset.owner),
+            link: createAccountLink(asset.owner),
         },
         traits: asset.traits.map((x) => ({
             type: x.trait_type,
@@ -179,7 +194,7 @@ function createAccount(account?: OpenSeaCustomAccount) {
         address: account.address,
         nickname: account.user?.username,
         avatarURL: account.profile_img_url,
-        link: createAssetLink(account),
+        link: createAccountLink(account),
     }
 }
 
