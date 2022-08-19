@@ -10,7 +10,6 @@ import {
     GasOptionConfig,
     isNativeTokenAddress,
     SchemaType,
-    UST,
 } from '@masknet/web3-shared-evm'
 import { useGasConfig, TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useChainId, useChainIdValid, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
