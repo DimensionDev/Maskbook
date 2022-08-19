@@ -104,7 +104,7 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungi
         },
         contract: {
             chainId,
-            schema: (asset.asset_contract.schema_name as unknown as SchemaType) ?? SchemaType.ERC721,
+            schema: asset.asset_contract.schema_name === 'ERC1155' ? SchemaType.ERC1155 : SchemaType.ERC721,
             address: asset.token_address ?? asset.asset_contract.address,
             name: asset.name ?? asset.collection.name,
             symbol: asset.asset_contract.symbol,
