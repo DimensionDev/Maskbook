@@ -87,7 +87,7 @@ export class ProviderState<
                 })
             })
             provider.emitter.on('connect', async ({ account }) => {
-                if (!(account && this.options.isValidAddress(account))) return
+                if (!this.options.isValidAddress(account)) return
                 // provider should update before account, otherwise account failed to update
                 await this.setProvider(providerType)
                 await this.setAccount(providerType, {
