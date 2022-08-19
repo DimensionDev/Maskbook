@@ -183,6 +183,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         name: 'Sokol',
         icon: new URL('../assets/sokol.png', import.meta.url),
         iconColor: 'rgb(73, 169, 166)',
+        averageBlockDelay: 15,
         isMainnet: false,
     },
     {
