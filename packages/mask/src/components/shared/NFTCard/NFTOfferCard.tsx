@@ -105,14 +105,14 @@ export function NFTOfferCard(props: NFTOfferCardProps) {
 
                     <Typography className={classes.textBase}>
                         {(offer.createdAt &&
-                            formatDistanceToNow(new Date(offer.createdAt * 1000), {
+                            formatDistanceToNow(Math.ceil(offer.createdAt), {
                                 addSuffix: true,
                             })) ||
                             '-'}
                         {offer.expiredAt && (
                             <>
                                 <span style={{ margin: '0 4px' }}>{t('plugin_collectible_expires_in')}</span>
-                                {formatDistanceToNow(new Date(offer.expiredAt * 1000), {
+                                {formatDistanceToNow(Math.ceil(offer.expiredAt), {
                                     addSuffix: true,
                                 })}
                             </>
