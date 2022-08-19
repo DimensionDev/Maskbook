@@ -21,14 +21,7 @@ const responseToBase64 = async (response: Response) => {
     return dataURL
 }
 
-export function useAccessibleUrl(
-    key = '',
-    url?: string,
-    options?: {
-        fetch: typeof globalThis.fetch
-    },
-) {
-    const fetch = options?.fetch ?? globalThis.fetch
+export function useAccessibleUrl(key = '', url?: string) {
     const [availableUrl, setAvailableUrl] = useState(() => {
         const hit = cache.get(key)
         return typeof hit === 'string' ? hit : ''
@@ -44,6 +37,7 @@ export function useAccessibleUrl(
             setAvailableUrl(await responseToBase64((await hit).clone()))
             return
         }
+
 
         if (!url || !fetch) return
         const fetchingTask = fetch(`https://cors.r2d2.to/?${url}`)

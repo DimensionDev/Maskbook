@@ -23,3 +23,4 @@ export { buildInjectedScript, watchInjectedScript } from './projects/injected-sc
 export { buildMaskSDK, watchMaskSDK } from './projects/mask-sdk.js'
 export { buildPolyfill } from './projects/polyfill.js'
 export { buildGun } from './projects/gun.js'
+export { buildSandboxedPlugin, watchSandboxedPlugin } from './projects/sandboxed-plugins.js'

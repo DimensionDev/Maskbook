@@ -45,37 +45,44 @@ jobs:
       - run: pnpm install
       - run: npx gulp build-ci
       - name: Upload `MaskNetwork.base.zip`
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: MaskNetwork.base.zip
           path: masknetwork.base.zip
+          if-no-files-found: error
       - name: Upload `MaskNetwork.iOS.zip`
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: MaskNetwork.iOS.zip
           path: masknetwork.ios.zip
+          if-no-files-found: error
       - name: Upload `MaskNetwork.chromium.zip`
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: MaskNetwork.chromium.zip
           path: masknetwork.chromium.zip
+          if-no-files-found: error
       - name: Upload `MaskNetwork.chromium-beta.zip`
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: MaskNetwork.chromium-beta.zip
           path: masknetwork.chromium-beta.zip
+          if-no-files-found: error
       - name: Upload `MaskNetwork.chromium-mv3.zip`
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: MaskNetwork.chromium-mv3.zip
           path: masknetwork.chromium-mv3.zip
+          if-no-files-found: error
       - name: Upload `MaskNetwork.firefox.zip`
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: MaskNetwork.firefox.zip
           path: masknetwork.firefox.zip
+          if-no-files-found: error
       - name: Upload `MaskNetwork.gecko.zip`
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: MaskNetwork.gecko.zip
           path: masknetwork.gecko.zip
+          if-no-files-found: error
