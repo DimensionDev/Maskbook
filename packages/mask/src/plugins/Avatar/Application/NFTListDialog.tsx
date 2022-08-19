@@ -255,8 +255,8 @@ export function NFTListDialog(props: NFTListDialogProps) {
 
     const AddCollectible = (
         <Box className={classes.error}>
-            <Icons.AvatarEmpty size={36} style={{ marginBottom: 14 }} />
-            <Typography color="textSecondary" textAlign="center" fontSize={14} fontWeight={600}>
+            <Icons.EmptySimple variant="light" size={36} />
+            <Typography color="textSecondary" textAlign="center" fontSize={14} fontWeight={600} mt="14px">
                 {t.collectible_no_collectible()}
             </Typography>
 
@@ -327,8 +327,8 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     </>
                 ) : (
                     <Box className={classes.noWallet}>
-                        <Icons.AvatarEmpty size={36} style={{ paddingBottom: 12 }} />
-                        <Typography fontSize={14} color={(theme) => theme.palette.maskColor.second}>
+                        <Icons.EmptySimple variant="light" size={36} />
+                        <Typography fontSize={14} color={(theme) => theme.palette.maskColor.second} mt="12px">
                             {t.no_wallet_message()}
                         </Typography>
                     </Box>

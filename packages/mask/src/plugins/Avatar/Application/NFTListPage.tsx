@@ -97,8 +97,8 @@ export function NFTListPage(props: NFTListPageProps) {
                     justifyContent: 'center',
                     flexDirection: 'column',
                 }}>
-                <Icons.AvatarEmpty size={36} style={{ paddingBottom: 14 }} />
-                <Typography color={(theme) => theme.palette.maskColor.main} fontSize={14}>
+                <Icons.EmptySimple variant="light" size={36} />
+                <Typography color={(theme) => theme.palette.maskColor.main} fontSize={14} mt="14px">
                     {t.loading()}
                 </Typography>
             </Box>
