@@ -35,7 +35,7 @@ export function useNFT(
         const amount = asset?.priceInToken?.amount ?? asset?.price?.[CurrencyType.USD] ?? '0'
         const name = contract?.name || metadata?.name || ''
         const imageURL = metadata?.imageURL
-        const permalink = token ? Others?.explorerResolver.nonFungibleTokenLink(chainId, address, tokenId) : asset?.link
+        const permalink = asset?.link ?? Others?.explorerResolver.nonFungibleTokenLink(chainId, address, tokenId)
 
         return {
             amount,
