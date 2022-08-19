@@ -1,11 +1,12 @@
 import { makeStyles } from '@masknet/theme'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { Typography } from '@mui/material'
-import { NonFungibleTokenOrder, SourceType, formatBalance, toFixed, formatCurrency } from '@masknet/web3-shared-base'
+import { NonFungibleTokenOrder, SourceType, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../../../utils'
 import { CollectibleProviderIcon } from '../../../plugins/Collectible/SNSAdaptor/CollectibleProviderIcon'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -23,7 +24,7 @@ const useStyles = makeStyles()((theme) => ({
     offerDetail: {
         display: 'flex',
         flexDirection: 'column',
-        gap: 10,
+        alignItems: 'flex-start',
     },
     flex: {
         display: 'flex',
@@ -68,24 +69,19 @@ export function NFTOfferCard(props: NFTOfferCardProps) {
             <div className={classes.offerDetail}>
                 <div className={classes.flex}>
                     {(offer.priceInToken?.token.logoURL && (
-                        <img className={classes.currencyIcon} src={offer.priceInToken?.token.logoURL} alt="" />
-                    )) || (
-                        <Typography className={classes.fallbackSymbol}>
-                            {offer.priceInToken?.token.symbol || offer.priceInToken?.token.name}
-                        </Typography>
-                    )}
+                        <img width={18} height={18} src={offer.priceInToken?.token.logoURL} alt="" />
+                    )) ||
+                        (offer.priceInToken?.token.symbol.toUpperCase() === 'WETH' ? (
+                            <Icons.WETH size={18} />
+                        ) : (
+                            <Typography className={classes.fallbackSymbol}>
+                                {offer.priceInToken?.token.symbol || offer.priceInToken?.token.name}
+                            </Typography>
+                        ))}
                     <div className={classes.flex}>
                         <Typography className={classes.textBase}>
                             <strong style={{ fontSize: 14 }}>
-                                {Number.parseFloat(
-                                    toFixed(
-                                        formatBalance(
-                                            offer.priceInToken?.amount,
-                                            offer.priceInToken?.token.decimals || 18,
-                                        ),
-                                        6,
-                                    ),
-                                )}
+                                {formatBalance(offer.priceInToken?.amount, offer.priceInToken?.token.decimals || 18, 6)}
                             </strong>
                         </Typography>
                         {offer.price?.usd && (
@@ -109,14 +105,14 @@ export function NFTOfferCard(props: NFTOfferCardProps) {
 
                     <Typography className={classes.textBase}>
                         {(offer.createdAt &&
-                            formatDistanceToNow(new Date(offer.createdAt * 1000), {
+                            formatDistanceToNow(Math.ceil(offer.createdAt), {
                                 addSuffix: true,
                             })) ||
                             '-'}
                         {offer.expiredAt && (
                             <>
                                 <span style={{ margin: '0 4px' }}>{t('plugin_collectible_expires_in')}</span>
-                                {formatDistanceToNow(new Date(offer.expiredAt * 1000), {
+                                {formatDistanceToNow(Math.ceil(offer.expiredAt), {
                                     addSuffix: true,
                                 })}
                             </>

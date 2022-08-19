@@ -70,7 +70,7 @@ interface NFTPriceCardProps {
 
 export function NFTPriceCard(props: NFTPriceCardProps) {
     const { asset, topOffer } = props
-    const { classes, cx } = useStyles()
+    const { classes } = useStyles()
     const { t } = useI18N()
 
     if (!asset.priceInToken) return null
@@ -100,7 +100,7 @@ export function NFTPriceCard(props: NFTPriceCardProps) {
                 {priceTokenImg}
                 <Typography className={classes.priceText}>
                     {asset.priceInToken
-                        ? formatBalance(asset.priceInToken.amount, asset.priceInToken.token.decimals)
+                        ? formatBalance(asset.priceInToken.amount, asset.priceInToken.token.decimals || 18, 6)
                         : '-'}
                 </Typography>
             </div>
@@ -121,7 +121,8 @@ export function NFTPriceCard(props: NFTPriceCardProps) {
                         <strong>
                             {formatBalance(
                                 topOffer?.priceInToken?.amount,
-                                topOffer?.priceInToken?.token.decimals ?? 18,
+                                topOffer?.priceInToken?.token.decimals || 18,
+                                6,
                             )}
                         </strong>
                     </Typography>

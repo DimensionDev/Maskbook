@@ -141,9 +141,9 @@ const supportedProvider = [
     SourceType.Gem,
     SourceType.Rarible,
     // SourceType.X2Y2,
-    SourceType.NFTScan,
-    SourceType.Zora,
-    SourceType.LooksRare,
+    // SourceType.NFTScan,
+    // SourceType.Zora,
+    // SourceType.LooksRare,
 ]
 
 export interface CollectibleProps {}
@@ -217,6 +217,7 @@ export function Collectible(props: CollectibleProps) {
         { value: tabs.offers, label: t('plugin_collectible_offers') },
         { value: tabs.activity, label: t('plugin_collectible_activity') },
     ]
+
     return (
         <>
             <CollectibleCard classes={{ root: classes.root }}>
