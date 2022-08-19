@@ -92,7 +92,7 @@ export function Web3ProfileDialog() {
             ?.map((address) => ({
                 address: address?.identity,
                 platform: NetworkPluginID.PLUGIN_EVM,
-                updateTime: address.created_at ?? address.last_checked_at,
+                updateTime: address.last_checked_at ?? address.created_at,
             })) || []
 
     const accounts = bindings?.proofs?.filter((proof) => proof?.platform === NextIDPlatform.Twitter) || []
