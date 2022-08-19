@@ -16,10 +16,10 @@ const useStyles = makeStyles()((theme) => ({
     content: {
         display: 'flex',
         alignItems: 'center',
+        justifyContent: 'center',
         flex: 1,
     },
     notice: {
-        textAlign: 'center',
         color: theme.palette.maskColor.main,
         fontSize: '16px',
         fontFamily: 'TwitterChirp',
