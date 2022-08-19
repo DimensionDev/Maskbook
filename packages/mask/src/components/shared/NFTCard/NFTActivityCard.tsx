@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { Typography, Link } from '@mui/material'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
-import type { NonFungibleTokenEvent } from '@masknet/web3-shared-base'
+import { NonFungibleTokenEvent, formatBalance, isZero } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 import { useI18N } from '../../../utils'
@@ -102,18 +102,26 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
                     className={type === ActivityType.Sale ? cx(classes.title, classes.highlight) : classes.title}>
                     {type}
                 </Typography>
-                {![ActivityType.Mint, ActivityType.CancelOffer].includes(type) && activity.paymentToken && (
-                    <div className={classes.salePrice}>
-                        {(activity.paymentToken?.logoURL && (
-                            <img width={24} height={24} src={activity.paymentToken?.logoURL} alt="" />
-                        )) || (
-                            <Typography className={classes.fallbackSymbol}>
-                                {activity.paymentToken?.symbol || activity.paymentToken?.name}
+                {![ActivityType.Mint, ActivityType.CancelOffer].includes(type) &&
+                    activity.priceInToken &&
+                    !isZero(activity.priceInToken.amount) && (
+                        <div className={classes.salePrice}>
+                            {(activity.paymentToken?.logoURL && (
+                                <img width={24} height={24} src={activity.priceInToken.token.logoURL} alt="" />
+                            )) || (
+                                <Typography className={classes.fallbackSymbol}>
+                                    {activity.priceInToken.token.symbol || activity.priceInToken.token.name}
+                                </Typography>
+                            )}
+                            <Typography className={classes.salePriceText}>
+                                {formatBalance(
+                                    activity.priceInToken.amount,
+                                    activity.priceInToken.token.decimals || 18,
+                                    2,
+                                )}
                             </Typography>
-                        )}
-                        <Typography className={classes.salePriceText}>${activity.price?.usd || 0}</Typography>
-                    </div>
-                )}
+                        </div>
+                    )}
             </div>
             <div className={classes.flex}>
                 <Typography className={classes.textBase}>

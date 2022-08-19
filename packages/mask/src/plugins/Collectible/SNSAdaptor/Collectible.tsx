@@ -141,9 +141,9 @@ const supportedProvider = [
     SourceType.Gem,
     SourceType.Rarible,
     // SourceType.X2Y2,
-    SourceType.NFTScan,
-    SourceType.Zora,
-    SourceType.LooksRare,
+    // SourceType.NFTScan,
+    // SourceType.Zora,
+    // SourceType.LooksRare,
 ]
 
 export interface CollectibleProps {}
