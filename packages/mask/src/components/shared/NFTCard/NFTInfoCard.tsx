@@ -87,7 +87,7 @@ export function NFTInfoCard(props: NFTInfoCardProps) {
             value: sourceType && platformCosts[sourceType] ? `${platformCosts[sourceType]}%` : '-',
         },
     ]
-    console.log(asset, 'asset')
+
     return (
         <div className={classes.wrapper}>
             {infoConfigMapping.map((x) => {

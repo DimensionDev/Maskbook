@@ -101,7 +101,12 @@ export function NFTPriceCard(props: NFTPriceCardProps) {
                 {priceTokenImg}
                 <Typography className={classes.priceText}>
                     {asset.priceInToken
-                        ? toFixed(formatBalance(asset.priceInToken.amount, asset.priceInToken.token.decimals || 18), 2)
+                        ? Number.parseFloat(
+                              toFixed(
+                                  formatBalance(asset.priceInToken.amount, asset.priceInToken.token.decimals || 18),
+                                  6,
+                              ),
+                          )
                         : '-'}
                 </Typography>
             </div>
