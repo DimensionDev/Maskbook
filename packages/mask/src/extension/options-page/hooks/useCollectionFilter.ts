@@ -24,6 +24,10 @@ export const useCollectionFilter = (
         const hiddenList =
             proof?.content?.[PluginId.Web3Profile]?.unListedCollections?.[address?.toLowerCase()]?.[type] ?? []
 
-        return differenceWith(collections, hiddenList, (collection, id) => collection.id === id)
+        return differenceWith(
+            collections,
+            hiddenList,
+            (collection, id) => `${collection.id}_${collection.tokenId}` === id,
+        )
     }, [address, currentVisitingProfile?.identifier?.userId, type, hiddenInfo, collections])
 }
