@@ -173,13 +173,15 @@ export function Web3ProfileDialog() {
                     getWalletHiddenRetry={retryGetWalletHiddenList}
                 />
             </DialogContent>
-            <DialogActions className={classes.actions}>
-                <PersonaAction
-                    avatar={avatar === null ? undefined : avatar}
-                    currentPersona={currentPersona}
-                    currentVisitingProfile={currentVisitingProfile}
-                />
-            </DialogActions>
+            {currentPersona ? (
+                <DialogActions className={classes.actions}>
+                    <PersonaAction
+                        avatar={avatar === null ? undefined : avatar}
+                        currentPersona={currentPersona}
+                        currentVisitingProfile={currentVisitingProfile}
+                    />
+                </DialogActions>
+            ) : null}
         </InjectedDialog>
     )
 }

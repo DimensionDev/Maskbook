@@ -6,7 +6,8 @@ import type { CURRENT_STATUS } from '../../constants'
 import { Empty } from './Empty'
 import { Box } from '@mui/material'
 import { useI18N } from '../../locales'
-interface MainProps {
+
+export interface MainProps {
     persona?: PersonaInformation
     openImageSetting: (status: CURRENT_STATUS, accountId: string) => void
     currentVisitingProfile?: IdentityResolved
