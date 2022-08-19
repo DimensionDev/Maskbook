@@ -68,7 +68,7 @@ const resolveTokenSchema = (schema?: SchemaType) => {
 export function NFTInfoCard(props: NFTInfoCardProps) {
     const { asset, sourceType } = props
     const { classes } = useStyles()
-    const { Others } = useWeb3State()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { t } = useI18N()
 
     const infoConfigMapping = [

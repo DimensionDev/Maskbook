@@ -1,7 +1,13 @@
 import { makeStyles } from '@masknet/theme'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { Typography } from '@mui/material'
-import { NonFungibleTokenOrder, SourceType, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
+import {
+    NonFungibleTokenOrder,
+    SourceType,
+    formatBalance,
+    formatCurrency,
+    NetworkPluginID,
+} from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../../../utils'
@@ -60,7 +66,7 @@ interface NFTOfferCardProps {
 export function NFTOfferCard(props: NFTOfferCardProps) {
     const { offer, provider } = props
     const { classes } = useStyles()
-    const { Others } = useWeb3State()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { t } = useI18N()
 
     return (
