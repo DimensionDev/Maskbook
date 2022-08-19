@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { Typography, Link } from '@mui/material'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
-import { NonFungibleTokenEvent, formatBalance, isZero } from '@masknet/web3-shared-base'
+import { NonFungibleTokenEvent, formatBalance, isZero, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 import { useI18N } from '../../../utils'
@@ -92,7 +92,7 @@ interface NFTActivityCardProps {
 export function NFTActivityCard(props: NFTActivityCardProps) {
     const { activity, type } = props
     const { classes, cx } = useStyles()
-    const { Others } = useWeb3State()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { t } = useI18N()
 
     return (
