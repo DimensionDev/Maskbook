@@ -1,7 +1,8 @@
+import { useWeb3Hub, useWeb3State } from '@masknet/plugin-infra/web3'
+import { MagicEdenAPI } from '@masknet/web3-providers'
+import { CurrencyType, formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
-import { useWeb3Hub, useWeb3State } from '@masknet/plugin-infra/web3'
-import { formatBalance, CurrencyType, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { NFTInfo } from '../types'
 
 export function useNFT(
@@ -37,7 +38,13 @@ export function useNFT(
             : asset?.price?.[CurrencyType.USD] ?? '0'
         const name = contract?.name || metadata?.name || ''
         const imageURL = metadata?.imageURL
-        const permalink = asset?.link ?? Others?.explorerResolver.nonFungibleTokenLink(chainId, address, tokenId)
+        let permalink = asset?.link
+        if (!permalink) {
+            permalink =
+                pluginId === NetworkPluginID.PLUGIN_SOLANA
+                    ? MagicEdenAPI.getUrl(tokenId)
+                    : Others?.explorerResolver.nonFungibleTokenLink(chainId, address, tokenId)
+        }
 
         return {
             amount,

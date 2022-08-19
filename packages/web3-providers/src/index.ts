@@ -66,3 +66,5 @@ export const X2Y2 = new X2Y2API()
 export const ChainbaseHistory = new ChainbaseHistoryAPI()
 export const ChainbaseFungibleToken = new ChainbaseFungibleTokenAPI()
 export const ChainbaseNonFungibleToken = new ChainbaseNonFungibleTokenAPI()
+
+export { MagicEdenAPI }

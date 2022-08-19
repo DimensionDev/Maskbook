@@ -90,6 +90,11 @@ function createNFTCollection(collection: Collection): NonFungibleTokenContract<C
 }
 
 export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+    static getUrl(mint: string): string {
+        return urlcat('https://magiceden.io/item-details/:mint_address', {
+            mint_address: mint,
+        })
+    }
     async getToken(address: string, tokenMint: string) {
         const token = await fetchFromMagicEden<MagicEdenToken>(
             urlcat('/v2/tokens/:mint_address', { mint_address: tokenMint }),
@@ -157,9 +162,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                 urlcat('/rpc/getNFTByMintAddress/:mint_address', { mint_address: tokenMint }),
             ),
         ])
-        const link = urlcat('https://magiceden.io/item-details/:mint_address', {
-            mint_address: tokenMint,
-        })
+        const link = MagicEdenAPI.getUrl(tokenMint)
         if (!token) return
         return {
             ...token,
