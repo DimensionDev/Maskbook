@@ -51,17 +51,16 @@ interface WalletSwitchProps {
     type: NetworkPluginID
     address: string
     isPublic: boolean
-    onChange: (idx: number, v: boolean) => void
-    index: number
+    onChange: (addres: string, v: boolean) => void
 }
 
-export function WalletSwitch({ type, address, isPublic, chainId, index, onChange }: WalletSwitchProps) {
+export function WalletSwitch({ type, address, isPublic, chainId, onChange }: WalletSwitchProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     const onSwitch = (e: React.ChangeEvent<HTMLInputElement>) => {
-        onChange(index, e.target.checked)
+        onChange(address, e.target.checked)
     }
     return (
         <div className={classes.currentAccount}>
