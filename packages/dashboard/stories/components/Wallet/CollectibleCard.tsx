@@ -8,7 +8,7 @@ const { meta, of } = story(C)
 export default meta({ title: 'Components/Wallet/Collectible Card' })
 export const CollectibleCard = of({
     args: {
-        token: {
+        asset: {
             id: 'token_id',
             chainId: 1,
             tokenId: '608932',
