@@ -10,7 +10,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
         minHeight: 80,
-        margin: theme.spacing(0, 1),
+        margin: theme.spacing(0),
         fontSize: 18,
         fontWeight: 'bold',
     },

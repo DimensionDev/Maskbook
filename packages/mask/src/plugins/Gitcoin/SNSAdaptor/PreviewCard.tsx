@@ -160,7 +160,7 @@ export function PreviewCard(props: PreviewCardProps) {
                 </div>
             </Card>
             <Box sx={{ display: 'flex', width: '100%' }}>
-                <Box sx={{ flex: 1, padding: 1.5 }}>
+                <Box sx={{ flex: 1, padding: '12px 5px' }}>
                     <Button
                         fullWidth
                         variant="roundedDark"
@@ -171,7 +171,7 @@ export function PreviewCard(props: PreviewCardProps) {
                         {t.view_on()}
                     </Button>
                 </Box>
-                <Box sx={{ flex: 1, padding: 1.5 }}>
+                <Box sx={{ flex: 1, padding: '12px 5px' }}>
                     <ChainBoundary
                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                         expectedChainId={ChainId.Mainnet}

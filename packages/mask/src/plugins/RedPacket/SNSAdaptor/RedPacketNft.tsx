@@ -118,6 +118,11 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
         maxHeight: 180,
+        '& > div': {
+            display: 'flex',
+            justifyContent: 'center',
+            overflow: 'hidden',
+        },
     },
     tokenImg: {
         width: '100%',
