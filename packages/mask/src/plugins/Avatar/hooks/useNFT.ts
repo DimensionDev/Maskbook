@@ -1,7 +1,7 @@
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
 import { useWeb3Hub, useWeb3State } from '@masknet/plugin-infra/web3'
-import { CurrencyType, NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance, CurrencyType, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { NFTInfo } from '../types'
 
 export function useNFT(
@@ -32,7 +32,9 @@ export function useNFT(
         const contract = token?.contract || asset?.contract
         const metadata = token?.metadata || asset?.metadata
 
-        const amount = asset?.priceInToken?.amount ?? asset?.price?.[CurrencyType.USD] ?? '0'
+        const amount = asset?.priceInToken
+            ? formatBalance(asset.priceInToken.amount, asset.priceInToken.token.decimals)
+            : asset?.price?.[CurrencyType.USD] ?? '0'
         const name = contract?.name || metadata?.name || ''
         const imageURL = metadata?.imageURL
         const permalink = asset?.link ?? Others?.explorerResolver.nonFungibleTokenLink(chainId, address, tokenId)
@@ -40,7 +42,7 @@ export function useNFT(
         return {
             amount,
             name,
-            symbol: asset?.priceInToken?.token.symbol ?? asset?.paymentTokens?.[0].symbol ?? '<Symbol Unknown>',
+            symbol: asset?.priceInToken ? asset.priceInToken.token.symbol : 'USD',
             image: imageURL,
             owner: token?.ownerId ?? asset?.owner?.address ?? asset?.ownerId,
             // Not all NFT markets have slug in the URL
