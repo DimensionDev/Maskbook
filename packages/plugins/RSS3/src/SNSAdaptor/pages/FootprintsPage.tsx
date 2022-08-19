@@ -6,17 +6,29 @@ import { Box } from '@mui/material'
 import { memo, useState } from 'react'
 import { useI18N } from '../../locales'
 import { FootprintCard, StatusBox } from '../components'
-import { useFootprints, useRSS3Profile } from '../hooks'
+import { useFootprints, useRSS3Profile, useAvailableCollections } from '../hooks'
+import { useKV } from '../hooks/useKV'
 
 export interface FootprintPageProps {
     address: string
+    publicKey: string
+    userId: string
 }
 
-export const FootprintsPage = memo(function FootprintsPage({ address }: FootprintPageProps) {
+export const FootprintsPage = memo(function FootprintsPage({ address, publicKey, userId }: FootprintPageProps) {
     const { value: profile } = useRSS3Profile(address)
     const username = profile?.name
 
-    const { value: footprints = EMPTY_LIST, loading } = useFootprints(formatEthereumAddress(address))
+    const { value: kvValue } = useKV(publicKey)
+    const { value: allFootprints = EMPTY_LIST, loading } = useFootprints(formatEthereumAddress(address))
+
+    const footprints = useAvailableCollections(
+        kvValue?.proofs ?? EMPTY_LIST,
+        CollectionType.Footprints,
+        allFootprints,
+        userId,
+        address,
+    )
 
     const t = useI18N()
 

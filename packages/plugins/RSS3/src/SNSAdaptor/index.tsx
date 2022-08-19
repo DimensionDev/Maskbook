@@ -34,8 +34,15 @@ const FootprintsTabConfig: Plugin.SNSAdaptor.ProfileTab = {
     label: 'Footprints',
     priority: 2,
     UI: {
-        TabContent: ({ socialAddress }) => {
-            return socialAddress?.address ? <FootprintsPage address={socialAddress.address} /> : null
+        TabContent: ({ socialAddress, identity }) => {
+            if (!socialAddress?.address || !identity?.identifier?.userId || !identity.publicKey) return null
+            return socialAddress?.address ? (
+                <FootprintsPage
+                    address={socialAddress.address}
+                    publicKey={identity.publicKey}
+                    userId={identity?.identifier?.userId}
+                />
+            ) : null
         },
     },
     Utils: {
