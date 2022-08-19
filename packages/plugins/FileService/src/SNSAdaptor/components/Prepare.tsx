@@ -78,11 +78,6 @@ export const Prepare: React.FC = () => {
 
     const onFile = useCallback(
         async (file: File) => {
-            console.log('DEBUG: onFile')
-            console.log({
-                file,
-            })
-
             const key = encrypted ? makeFileKey() : undefined
             const block = new Uint8Array(await file.arrayBuffer())
             const checksum = encodeArrayBuffer(await Attachment.checksum(block))
