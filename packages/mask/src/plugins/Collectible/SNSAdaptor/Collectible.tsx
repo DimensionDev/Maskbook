@@ -119,7 +119,7 @@ const useStyles = makeStyles()((theme) => {
         },
         markdown: {
             textOverflow: 'ellipsis',
-            display: 'block',
+            display: '-webkit-box',
             webkitBoxOrient: 'vertical',
             webkitLineClamp: '3',
             '& > p': {

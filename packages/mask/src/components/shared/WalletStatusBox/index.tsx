@@ -13,7 +13,7 @@ import {
 import { FormattedAddress, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { isDashboardPage } from '@masknet/shared-base'
-import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Button, Link, Typography, useTheme } from '@mui/material'
@@ -142,7 +142,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const { value: balance = '0', loading: loadingBalance } = useBalance()
     const { value: nativeToken, loading: loadingNativeToken } = useNativeToken()
     const networkDescriptor = useNetworkDescriptor()
-    const { Others } = useWeb3State<'all'>(NetworkPluginID.PLUGIN_EVM)
+    const { Others } = useWeb3State()
     const { value: domain } = useReverseAddress(undefined, account)
 
     // #region copy addr to clipboard

@@ -71,7 +71,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     const pluginID = useCurrentWeb3NetworkPluginID(props.pluginID)
     const account = useAccount()
     const chainId = useChainId(pluginID, props.chainId)
-    const { Token, Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM) as Web3Helper.Web3StateAll
+    const { Token, Others } = useWeb3State() as Web3Helper.Web3StateAll
     const { value: fungibleTokens = EMPTY_LIST } = useFungibleTokensFromTokenList()
     const trustedFungibleTokens = useTrustedFungibleTokens()
 

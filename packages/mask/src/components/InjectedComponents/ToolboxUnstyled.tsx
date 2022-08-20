@@ -11,7 +11,7 @@ import {
     Box,
     useTheme,
 } from '@mui/material'
-import { NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
+import { TransactionStatusType } from '@masknet/web3-shared-base'
 import {
     useNetworkDescriptor,
     useProviderDescriptor,
@@ -194,7 +194,7 @@ function useToolbox() {
     const chainColor = useChainColor()
     const chainIdValid = useChainIdValid()
     const chainIdMainnet = useChainIdMainnet()
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { Others } = useWeb3State()
 
     // #region recent pending transactions
     const pendingTransactions = useRecentTransactions(undefined, TransactionStatusType.NOT_DEPEND)
