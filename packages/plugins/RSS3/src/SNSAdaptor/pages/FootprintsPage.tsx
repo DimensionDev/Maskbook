@@ -35,7 +35,7 @@ export const FootprintsPage = memo(function FootprintsPage({ address, publicKey,
     const isHiddenAddress = useMemo(() => {
         return kvValue?.proofs
             .find((proof) => proof?.platform === NextIDPlatform.Twitter && proof?.identity === userId?.toLowerCase())
-            ?.content?.[PluginId.Web3Profile].hiddenAddresses.footprints?.some((x) => x.address === address)
+            ?.content?.[PluginId.Web3Profile]?.hiddenAddresses?.footprints?.some((x) => x.address === address)
     }, [userId, address, kvValue?.proofs])
     const t = useI18N()
 

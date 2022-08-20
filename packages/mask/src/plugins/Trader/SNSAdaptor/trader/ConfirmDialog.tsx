@@ -123,6 +123,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 onClose={onPriceImpactDialogClose}
                 onConfirm={handlePriceImpactDialogConfirm}
                 lostToken={lostToken}
+                symbol={inputToken.symbol}
                 lostValue={lostValue}
                 priceImpact={trade.priceImpact}
             />
