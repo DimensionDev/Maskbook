@@ -2,7 +2,13 @@ import { makeStyles } from '@masknet/theme'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { Typography, Link } from '@mui/material'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
-import { NonFungibleTokenEvent, formatBalance, isZero, NetworkPluginID } from '@masknet/web3-shared-base'
+import {
+    NonFungibleTokenEvent,
+    formatBalance,
+    isZero,
+    NetworkPluginID,
+    isValidTimesTamp,
+} from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 import { useI18N } from '../../../utils'
@@ -147,8 +153,8 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
                         </>
                     )}
 
-                    {activity.timestamp &&
-                        formatDistanceToNow(new Date(activity.timestamp), {
+                    {isValidTimesTamp(activity.timestamp) &&
+                        formatDistanceToNow(new Date(activity.timestamp!), {
                             addSuffix: true,
                         })}
                     {activity.hash && (
