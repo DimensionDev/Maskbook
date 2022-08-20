@@ -9,7 +9,7 @@ import { TokenTab } from './TokenTab'
 import { OfferTab } from './OfferTab'
 import { HistoryTab } from './HistoryTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
-import { CollectibleCard } from './CollectibleCard'
+import { CollectiblePaper } from './CollectiblePaper'
 import { PluginSkeleton } from './PluginSkeleton'
 import { TabState, TransactionType } from '../types'
 import { resolveAssetLinkOnCryptoartAI, resolveWebLinkOnCryptoartAI } from '../pipes'
@@ -123,7 +123,7 @@ export function Collectible(props: CollectibleProps) {
 
     return (
         <>
-            <CollectibleCard classes={{ root: classes.root }}>
+            <CollectiblePaper classes={{ root: classes.root }}>
                 <CardHeader
                     avatar={
                         <Link
@@ -265,7 +265,7 @@ export function Collectible(props: CollectibleProps) {
                         {tabIndex === TabState.HISTORY ? <HistoryTab /> : null}
                     </Paper>
                 </CardContent>
-            </CollectibleCard>
+            </CollectiblePaper>
             <Box sx={{ display: 'flex', width: 'calc(100% - 24px)', padding: 1.5 }}>
                 <ChainBoundary
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}

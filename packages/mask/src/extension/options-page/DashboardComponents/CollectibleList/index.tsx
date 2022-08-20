@@ -12,8 +12,8 @@ import {
 import { Box, Button, Stack, styled, Typography } from '@mui/material'
 import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
 import { ElementAnchor, RetryHint } from '@masknet/shared'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import type { IdentityResolved } from '@masknet/plugin-infra'
+import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
+import { IdentityResolved, PluginId } from '@masknet/plugin-infra'
 import { useNonFungibleAssets, useTrustedNonFungibleTokens, Web3Helper } from '@masknet/plugin-infra/web3'
 import { CollectibleCard } from './CollectibleCard'
 import { useI18N } from '../../../../utils'
@@ -121,19 +121,20 @@ const useStyles = makeStyles()((theme) => ({
 interface CollectibleItemProps {
     provider: SourceType
     wallet?: Wallet
-    token: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    link?: string
+    asset: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     readonly?: boolean
     renderOrder: number
     address?: SocialAddress<NetworkPluginID>
 }
 
 function CollectibleItem(props: CollectibleItemProps) {
-    const { provider, wallet, token, readonly, renderOrder, address } = props
+    const { provider, wallet, asset, readonly, renderOrder, address } = props
     const { classes } = useStyles()
     return (
         <div className={classes.card}>
             <CollectibleCard
-                token={token}
+                asset={asset}
                 provider={provider}
                 wallet={wallet}
                 readonly={readonly}
@@ -142,7 +143,7 @@ function CollectibleItem(props: CollectibleItemProps) {
             />
             <div className={classes.description}>
                 <Typography className={classes.name} color="textPrimary" variant="body2">
-                    {token.metadata?.name}
+                    {asset.metadata?.name}
                 </Typography>
             </div>
         </div>
@@ -193,7 +194,7 @@ function CollectibleListUI(props: CollectibleListUIProps) {
                         {collectibles.map((token, index) => (
                             <CollectibleItem
                                 renderOrder={index}
-                                token={token}
+                                asset={token}
                                 provider={provider}
                                 wallet={wallet}
                                 readonly={readonly}
@@ -264,11 +265,21 @@ export function CollectionList({
         done,
         next: nextPage,
         error,
-        loading,
         retry: retryFetchCollectible,
     } = useNonFungibleAssets(addressName.networkSupporterPluginID, undefined, { account })
 
     const { value: kvValue } = useKV(persona)
+
+    const isHiddenAddress = useMemo(() => {
+        return kvValue?.proofs
+            .find(
+                (proof) =>
+                    proof?.platform === NextIDPlatform.Twitter &&
+                    proof?.identity === visitingProfile?.identifier?.userId?.toLowerCase(),
+            )
+            ?.content?.[PluginId.Web3Profile].hiddenAddresses.NFTs?.some((x) => x.address === addressName.address)
+    }, [visitingProfile?.identifier?.userId, addressName.address, kvValue?.proofs])
+
     const unHiddenCollectibles = useCollectionFilter(
         kvValue?.proofs ?? EMPTY_LIST,
         collectibles,
@@ -302,7 +313,7 @@ export function CollectionList({
 
     if (!allCollectibles.length && error && account) return <RetryHint retry={nextPage} />
 
-    if ((done && !allCollectibles.length) || !account)
+    if ((done && !allCollectibles.length) || !account || isHiddenAddress)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height={400}>
                 <Icons.EmptySimple size={32} />

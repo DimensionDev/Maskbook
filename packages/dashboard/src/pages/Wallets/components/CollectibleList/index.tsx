@@ -2,7 +2,7 @@ import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Box, Button, Stack } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
+import { isSameAddress, NetworkPluginID, NonFungibleAsset, NonFungibleToken } from '@masknet/web3-shared-base'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
@@ -112,13 +112,13 @@ export interface CollectibleListUIProps {
     isEmpty: boolean
     chainId?: Web3Helper.ChainIdAll
     dataSource: Array<
-        NonFungibleToken<
+        NonFungibleAsset<
             Web3Helper.Definition[NetworkPluginID]['ChainId'],
             Web3Helper.Definition[NetworkPluginID]['SchemaType']
         >
     >
     onSend(
-        detail: NonFungibleToken<
+        detail: NonFungibleAsset<
             Web3Helper.Definition[NetworkPluginID]['ChainId'],
             Web3Helper.Definition[NetworkPluginID]['SchemaType']
         >,
@@ -148,7 +148,7 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
                             <div className={classes.root}>
                                 {dataSource.map((x, index) => (
                                     <div className={classes.card} key={index}>
-                                        <CollectibleCard token={x} renderOrder={index} onSend={() => onSend(x)} />
+                                        <CollectibleCard asset={x} renderOrder={index} onSend={() => onSend(x)} />
                                     </div>
                                 ))}
                             </div>

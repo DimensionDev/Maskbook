@@ -7,7 +7,7 @@ import isAfter from 'date-fns/isAfter'
 import { useI18N, useSwitcher } from '../../../utils'
 import { LinkingAvatar } from './LinkingAvatar'
 import { CollectibleState } from '../hooks/useCollectibleState'
-import { CollectibleCard } from './CollectibleCard'
+import { CollectiblePaper } from './CollectiblePaper'
 import { ActionBar } from './OpenSea/ActionBar'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { resolveSourceName, SourceType } from '@masknet/web3-shared-base'
@@ -119,7 +119,7 @@ const useStyles = makeStyles()((theme) => {
         },
         markdown: {
             textOverflow: 'ellipsis',
-            display: '-webkit-box',
+            display: 'block',
             webkitBoxOrient: 'vertical',
             webkitLineClamp: '3',
             '& > p': {
@@ -220,7 +220,7 @@ export function Collectible(props: CollectibleProps) {
 
     return (
         <>
-            <CollectibleCard classes={{ root: classes.root }}>
+            <CollectiblePaper classes={{ root: classes.root }}>
                 <CardHeader
                     className={classes.header}
                     avatar={
@@ -268,7 +268,7 @@ export function Collectible(props: CollectibleProps) {
                     </TabContext>
                     <Paper className={classes.body}>{renderTab()}</Paper>
                 </CardContent>
-            </CollectibleCard>
+            </CollectiblePaper>
             {endDate && isValidDate(endDate) && isAfter(endDate, Date.now()) && (
                 <Box sx={{ marginTop: 1 }}>
                     <Typography className={classes.countdown}>

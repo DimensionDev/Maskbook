@@ -102,7 +102,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
     return memo(({ data, index, style }: any) => {
         const t = useSharedI18N()
         const { classes } = useStyles()
-        const { Others } = useWeb3State()
+        const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
         const token = data.dataSet[index]
         const onSelect = data.onSelect

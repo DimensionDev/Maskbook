@@ -30,7 +30,7 @@ type NFTScanChainId = ChainId.Mainnet | ChainId.Matic | ChainId.BSC | ChainId.Ar
 
 export const resolveHostName = createLookupTableResolver<NFTScanChainId, string>(
     {
-        [ChainId.Mainnet]: 'https://www.nftsca.com',
+        [ChainId.Mainnet]: 'https://www.nftscan.com',
         [ChainId.Matic]: 'https://polygon.nftscan.com',
         [ChainId.BSC]: 'https://bnb.nftscan.com',
         [ChainId.Arbitrum]: 'https://arbitrum.nftscan.com/',
@@ -88,7 +88,7 @@ export function getPayload(json?: string): Payload {
 }
 
 export function createPermalink(chainId: ChainId, address: string, tokenId: string) {
-    return urlcat(resolveHostName(chainId as NFTScanChainId) || 'https://www.nftsca.com', '/:address/:tokenId', {
+    return urlcat(resolveHostName(chainId as NFTScanChainId) || 'https://www.nftscan.com', '/:address/:tokenId', {
         address,
         tokenId,
     })

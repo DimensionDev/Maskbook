@@ -18,6 +18,7 @@ const useStyles = makeStyles()((theme) => {
         wrapper: {
             width: '100%',
             marginTop: '16px',
+            backgroundColor: theme.palette.maskColor.bottom,
         },
 
         walletInfo: {
