@@ -270,17 +270,14 @@ export function CollectionList({
 
     const { value: kvValue } = useKV(persona)
 
+    const userId = visitingProfile?.identifier?.userId.toLowerCase()
     const isHiddenAddress = useMemo(() => {
         return kvValue?.proofs
-            .find(
-                (proof) =>
-                    proof?.platform === NextIDPlatform.Twitter &&
-                    proof?.identity === visitingProfile?.identifier?.userId?.toLowerCase(),
-            )
+            .find((proof) => proof?.platform === NextIDPlatform.Twitter && proof?.identity === userId)
             ?.content?.[PluginId.Web3Profile]?.hiddenAddresses?.NFTs?.some((x) =>
                 isSameAddress(x.address, addressName.address),
             )
-    }, [visitingProfile?.identifier?.userId, addressName.address, kvValue?.proofs])
+    }, [userId, addressName.address, kvValue?.proofs])
 
     const unHiddenCollectibles = useCollectionFilter(
         kvValue?.proofs ?? EMPTY_LIST,

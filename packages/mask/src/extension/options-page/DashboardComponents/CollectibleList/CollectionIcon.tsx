@@ -1,8 +1,8 @@
 import { memo } from 'react'
 import { Box, Tooltip } from '@mui/material'
-import { Image } from '../../../../components/shared/Image'
+// import { Image } from '../../../../components/shared/Image'
 import { makeStyles } from '@masknet/theme'
-import { TokenIcon } from '@masknet/shared'
+import { Image, TokenIcon } from '@masknet/shared'
 import classNames from 'classnames'
 import { isSameAddress, NonFungibleTokenCollection } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/plugin-infra/src/entry-web3'
@@ -61,8 +61,8 @@ export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, 
                     <Image
                         width={24}
                         height={24}
-                        component="img"
                         className={classes.collectionImg}
+                        disableLoading
                         src={collection?.iconURL}
                     />
                 ) : (
