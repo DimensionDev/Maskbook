@@ -296,8 +296,11 @@ export function CollectionList({
         if (selectedCollection === 'all') return allCollectibles
         const uniqCollectibles = uniqBy(allCollectibles, (x) => x?.contract?.address.toLowerCase() + x?.tokenId)
         if (!selectedCollection) return uniqCollectibles.filter((x) => !x.collection)
-
-        return uniqCollectibles.filter((x) => isSameAddress(selectedCollection.address, x.collection?.address))
+        return uniqCollectibles.filter(
+            (x) =>
+                selectedCollection.name === x.collection?.name ||
+                isSameAddress(selectedCollection.address, x.collection?.address),
+        )
     }, [selectedCollection, allCollectibles.length])
 
     const collections = useMemo(() => {
