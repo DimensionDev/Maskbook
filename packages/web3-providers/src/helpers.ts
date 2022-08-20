@@ -31,6 +31,7 @@ export async function fetchJSON<T = unknown>(
 }
 
 const CORS_PROXY = 'https://cors.r2d2.to'
+
 export function courier(url: string) {
     return urlcat(`${CORS_PROXY}?:url`, { url })
 }
@@ -40,12 +41,6 @@ export function getAllEVMNativeAssets(): Array<FungibleAsset<ChainId, SchemaType
         ...createNativeToken(x.chainId),
         balance: '0',
     }))
-}
-
-export function getTraderAllAPICachedFlag(): RequestCache {
-    // TODO: handle flags
-    // cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
-    return 'default'
 }
 
 export function getPaymentToken(chainId: ChainId, token?: { name?: string; symbol?: string; address?: string }) {

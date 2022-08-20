@@ -83,8 +83,9 @@ class Hub implements SolanaHub {
             account,
         })
         try {
-            return MagicEden.getTokens(options.account, options)
+            return MagicEden.getAssets(options.account, options)
         } catch {
+            // TODO: move to web3-provider
             return SolanaRPC.getNonFungibleAssets(options.account, options)
         }
     }
