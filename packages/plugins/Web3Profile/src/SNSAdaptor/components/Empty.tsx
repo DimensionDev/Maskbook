@@ -8,7 +8,7 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: 'calc(50% - 16px)',
     },
     content: {
-        color: theme.palette.maskColor.bottom,
+        color: theme.palette.maskColor.second,
         marginTop: '10px',
     },
     wrapper: {
