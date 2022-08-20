@@ -35,7 +35,10 @@ export function createChainResolver<ChainId, SchemaType, NetworkType>(
         coinMarketCapChainId: (chainId?: ChainId) => getChainDescriptor(chainId)?.coinMarketCapChainId,
         coinGeckoChainId: (chainId?: ChainId) => getChainDescriptor(chainId)?.coinGeckoChainId,
         coinGeckoPlatformId: (chainId?: ChainId) => getChainDescriptor(chainId)?.coinGeckoPlatformId,
-        chainName: (chainId?: ChainId) => getChainDescriptor(chainId)?.name,
+        chainName: (chainId?: ChainId) => {
+            const descriptor = getChainDescriptor(chainId)
+            return descriptor?.name === 'BNB Chain' ? 'BNB' : descriptor?.name
+        },
         chainFullName: (chainId?: ChainId) => getChainDescriptor(chainId)?.fullName,
         chainShortName: (chainId?: ChainId) => getChainDescriptor(chainId)?.shortName,
         chainColor: (chainId?: ChainId) => getChainDescriptor(chainId)?.color,

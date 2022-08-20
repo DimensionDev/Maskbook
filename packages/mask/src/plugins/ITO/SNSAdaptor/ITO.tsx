@@ -211,6 +211,7 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
                 address={exchangeToken.address}
                 logoURL={exchangeToken.logoURL}
                 chainId={token.chainId}
+                name={exchangeToken.symbol}
             />
             <Typography component="span">
                 <strong>{price}</strong>{' '}
