@@ -7,7 +7,6 @@ import { useChainId, useReverseAddress, useWeb3State, Web3Helper } from '@maskne
 import { chainResolver } from '@masknet/web3-shared-evm'
 import { WalletQRCodeContainer } from '../../../../components/WalletQRCodeContainer'
 import { useDashboardI18N } from '../../../../locales'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -35,7 +34,7 @@ export interface ReceiveDialogProps {
 }
 
 export const ReceiveDialog = memo<ReceiveDialogProps>(({ open, address, onClose }) => {
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { Others } = useWeb3State()
 
     const chainId = useChainId()
     const { value: domain } = useReverseAddress(undefined, address)

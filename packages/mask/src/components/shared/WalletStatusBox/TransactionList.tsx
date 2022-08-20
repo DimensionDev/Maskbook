@@ -3,13 +3,7 @@ import { useAsync } from 'react-use'
 import { Icons } from '@masknet/icons'
 import { useChainId, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import {
-    isSameAddress,
-    RecentTransactionComputed,
-    TransactionStatusType,
-    Transaction,
-    NetworkPluginID,
-} from '@masknet/web3-shared-base'
+import { isSameAddress, RecentTransactionComputed, TransactionStatusType, Transaction } from '@masknet/web3-shared-base'
 import { getContractOwnerDomain } from '@masknet/web3-shared-evm'
 import { Grid, GridProps, Link, List, ListItem, ListProps, Stack, Typography } from '@mui/material'
 import classnames from 'classnames'
@@ -96,7 +90,7 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
         [TransactionStatusType.FAILED]: t('recent_transaction_failed'),
     }
 
-    const { Others, TransactionFormatter, TransactionWatcher } = useWeb3State<'all'>(NetworkPluginID.PLUGIN_EVM)
+    const { Others, TransactionFormatter, TransactionWatcher } = useWeb3State()
 
     const address = ((tx._tx as Transaction<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>).to || '').toLowerCase()
 
