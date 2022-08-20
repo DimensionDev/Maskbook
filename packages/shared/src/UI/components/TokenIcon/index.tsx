@@ -51,7 +51,7 @@ export function TokenIcon(props: TokenIconProps) {
     return (
         <TokenIconUI
             key={key}
-            logoURL={isNFT ? logoURL : accessibleUrl || first(urls)}
+            logoURL={isNFT ? logoURL : accessibleUrl}
             AvatarProps={AvatarProps}
             classes={classes}
             name={name}
