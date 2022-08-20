@@ -7,7 +7,7 @@ import {
     formatBalance,
     formatCurrency,
     NetworkPluginID,
-    isValidTimesTamp,
+    isValidTimestamp,
 } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
@@ -111,12 +111,12 @@ export function NFTOfferCard(props: NFTOfferCardProps) {
                     </Typography>
 
                     <Typography className={classes.textBase}>
-                        {(isValidTimesTamp(offer.createdAt) &&
+                        {(isValidTimestamp(offer.createdAt) &&
                             formatDistanceToNow(Math.ceil(offer.createdAt!), {
                                 addSuffix: true,
                             })) ||
                             '-'}
-                        {isValidTimesTamp(offer.expiredAt) && (
+                        {isValidTimestamp(offer.expiredAt) && (
                             <>
                                 <span style={{ margin: '0 4px' }}>{t('plugin_collectible_expires_in')}</span>
                                 {formatDistanceToNow(Math.ceil(offer.expiredAt!), {

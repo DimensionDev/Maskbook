@@ -1,4 +1,6 @@
-export function isValidTimesTamp(time?: number) {
+const errorTriggerTimestamp = '2010-1-1'
+
+export function isValidTimestamp(time?: number) {
     if (!time) return
-    return new Date(time).toString() !== new Date(1).toString()
+    return time < new Date(errorTriggerTimestamp).getTime()
 }

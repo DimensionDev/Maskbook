@@ -7,7 +7,7 @@ import {
     formatBalance,
     isZero,
     NetworkPluginID,
-    isValidTimesTamp,
+    isValidTimestamp,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
@@ -153,7 +153,7 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
                         </>
                     )}
 
-                    {isValidTimesTamp(activity.timestamp) &&
+                    {isValidTimestamp(activity.timestamp) &&
                         formatDistanceToNow(new Date(activity.timestamp!), {
                             addSuffix: true,
                         })}
