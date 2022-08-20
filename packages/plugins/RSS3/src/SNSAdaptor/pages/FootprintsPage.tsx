@@ -1,13 +1,15 @@
-import { memo, useState } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { CollectionDetailCard } from '@masknet/shared'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { CollectionType, RSS3BaseAPI } from '@masknet/web3-providers'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { useI18N } from '../../locales'
 import { FootprintCard, StatusBox } from '../components'
 import { useFootprints, useRSS3Profile, useAvailableCollections } from '../hooks'
 import { useKV } from '../hooks/useKV'
+import { PluginId } from '@masknet/plugin-infra'
+import { Icons } from '@masknet/icons'
 
 export interface FootprintPageProps {
     address: string
@@ -30,12 +32,28 @@ export const FootprintsPage = memo(function FootprintsPage({ address, publicKey,
         address,
     )
 
+    const isHiddenAddress = useMemo(() => {
+        return kvValue?.proofs
+            .find((proof) => proof?.platform === NextIDPlatform.Twitter && proof?.identity === userId?.toLowerCase())
+            ?.content?.[PluginId.Web3Profile].hiddenAddresses.footprints?.some((x) => x.address === address)
+    }, [userId, address, kvValue?.proofs])
     const t = useI18N()
 
     const [selectedFootprint, setSelectedFootprint] = useState<RSS3BaseAPI.Collection | undefined>()
 
     if (loading || !footprints.length) {
         return <StatusBox loading description={t.no_Footprint_found()} empty={!footprints.length} />
+    }
+
+    if (isHiddenAddress) {
+        return (
+            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height={400}>
+                <Icons.EmptySimple size={32} />
+                <Typography color={(theme) => theme.palette.maskColor.second} fontSize="14px" marginTop="12px">
+                    {t.no_data({ collection: CollectionType.Donations })}
+                </Typography>
+            </Box>
+        )
     }
 
     return (

@@ -12,8 +12,8 @@ import {
 import { Box, Button, Stack, styled, Typography } from '@mui/material'
 import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
 import { ElementAnchor, RetryHint } from '@masknet/shared'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import type { IdentityResolved } from '@masknet/plugin-infra'
+import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
+import { IdentityResolved, PluginId } from '@masknet/plugin-infra'
 import { useNonFungibleAssets, useTrustedNonFungibleTokens, Web3Helper } from '@masknet/plugin-infra/web3'
 import { CollectibleCard } from './CollectibleCard'
 import { useI18N } from '../../../../utils'
@@ -269,6 +269,17 @@ export function CollectionList({
     } = useNonFungibleAssets(addressName.networkSupporterPluginID, undefined, { account })
 
     const { value: kvValue } = useKV(persona)
+
+    const isHiddenAddress = useMemo(() => {
+        return kvValue?.proofs
+            .find(
+                (proof) =>
+                    proof?.platform === NextIDPlatform.Twitter &&
+                    proof?.identity === visitingProfile?.identifier?.userId?.toLowerCase(),
+            )
+            ?.content?.[PluginId.Web3Profile].hiddenAddresses.NFTs?.some((x) => x.address === addressName.address)
+    }, [visitingProfile?.identifier?.userId, addressName.address, kvValue?.proofs])
+
     const unHiddenCollectibles = useCollectionFilter(
         kvValue?.proofs ?? EMPTY_LIST,
         collectibles,
@@ -302,7 +313,7 @@ export function CollectionList({
 
     if (!allCollectibles.length && error && account) return <RetryHint retry={nextPage} />
 
-    if ((done && !allCollectibles.length) || !account)
+    if ((done && !allCollectibles.length) || !account || isHiddenAddress)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height={400}>
                 <Icons.EmptySimple size={32} />
