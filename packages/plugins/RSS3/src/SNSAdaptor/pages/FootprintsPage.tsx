@@ -50,7 +50,7 @@ export const FootprintsPage = memo(function FootprintsPage({ address, publicKey,
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height={400}>
                 <Icons.EmptySimple size={32} />
                 <Typography color={(theme) => theme.palette.maskColor.second} fontSize="14px" marginTop="12px">
-                    {t.no_data({ collection: CollectionType.Donations })}
+                    {t.no_data({ collection: CollectionType.Footprints })}
                 </Typography>
             </Box>
         )
