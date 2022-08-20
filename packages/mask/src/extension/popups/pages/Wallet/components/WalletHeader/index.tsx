@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { useMatch, useNavigate } from 'react-router-dom'
+import { useLocation, useMatch, useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
 import { WalletHeaderUI } from './UI'
@@ -32,7 +32,7 @@ const useStyles = makeStyles()({
 
 export const WalletHeader = memo(() => {
     const { classes } = useStyles()
-
+    const location = useLocation()
     const navigate = useNavigate()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
@@ -47,7 +47,7 @@ export const WalletHeader = memo(() => {
         () => networks.find((x) => x.chainId === chainId) ?? networks[0],
         [networks, chainId],
     )
-    const connected = useConnected()
+    const { connected, url } = useConnected()
     const matchWallet = useMatch(PopupRoutes.Wallet)
     const matchSwitchWallet = useMatch(PopupRoutes.SwitchWallet)
     const matchContractInteraction = useMatch(PopupRoutes.ContractInteraction)
@@ -103,6 +103,7 @@ export const WalletHeader = memo(() => {
                     isSwitchWallet={!!matchSwitchWallet}
                     disabled
                     connected={connected}
+                    hiddenConnected={!url}
                 />
                 {menu}
             </>
@@ -119,6 +120,7 @@ export const WalletHeader = memo(() => {
                 onActionClick={() => navigate(matchSwitchWallet ? PopupRoutes.Wallet : PopupRoutes.SwitchWallet)}
                 wallet={wallet}
                 isSwitchWallet={!!matchSwitchWallet}
+                hiddenConnected={!url}
             />
             {menu}
         </>

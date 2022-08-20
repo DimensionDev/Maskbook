@@ -24,12 +24,14 @@ export enum AllProviderTradeActionType {
     UPDATE_INPUT_AMOUNT = 2,
     UPDATE_INPUT_TOKEN_BALANCE = 3,
     UPDATE_OUTPUT_TOKEN_BALANCE = 4,
+    SWITCH_TOKEN = 5,
 }
 
 export type AllProviderSwapAction =
     | {
           type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN
           token?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
+          balance?: string
       }
     | {
           type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN
@@ -47,6 +49,13 @@ export type AllProviderSwapAction =
           type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE
           balance: string
       }
+    | {
+          type: AllProviderTradeActionType.SWITCH_TOKEN
+          inputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
+          outputToken?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
+          inputBalance: string
+          outputBalance: string
+      }
 
 function reducer(state: AllProviderTradeState, action: AllProviderSwapAction): AllProviderTradeState {
     switch (action.type) {
@@ -54,6 +63,7 @@ function reducer(state: AllProviderTradeState, action: AllProviderSwapAction): A
             return {
                 ...state,
                 inputToken: action.token,
+                inputTokenBalance: action.balance ?? state.inputTokenBalance,
             }
         case AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN:
             return {
@@ -74,6 +84,15 @@ function reducer(state: AllProviderTradeState, action: AllProviderSwapAction): A
             return {
                 ...state,
                 outputTokenBalance: action.balance,
+            }
+        case AllProviderTradeActionType.SWITCH_TOKEN:
+            return {
+                ...state,
+                inputToken: action.inputToken,
+                outputToken: action.outputToken,
+                inputTokenBalance: action.inputBalance,
+                outputTokenBalance: action.outputBalance,
+                inputAmount: '',
             }
         default:
             return state

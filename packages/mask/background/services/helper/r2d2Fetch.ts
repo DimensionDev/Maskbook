@@ -77,8 +77,8 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
         return originalFetch(url.replace(u.origin, `https://${r2deWorkerType}.${R2D2_ROOT_URL}`), info)
     }
 
-    // hack astar rpc fetch
-    if (url.includes('astar.api.onfinality.io')) {
+    // hack astar & arbitrum rpc fetch
+    if (url.includes('astar.api.onfinality.io') || url.includes('arbitrum.io')) {
         return originalFetch(info, { ...init, headers: { ...init?.headers, 'Content-type': 'application/JSON' } })
     }
 

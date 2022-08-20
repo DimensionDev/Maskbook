@@ -12,6 +12,7 @@ import { useI18N } from '../../locales'
 import { DonationCard, StatusBox } from '../components'
 import { useAvailableCollections, useDonations } from '../hooks'
 import { useKV } from '../hooks/useKV'
+import { isSameAddress } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     statusBox: {
@@ -68,8 +69,8 @@ export function DonationPage({ socialAddress, publicKey, userId }: DonationPageP
     const isHiddenAddress = useMemo(() => {
         return kvValue?.proofs
             .find((proof) => proof?.platform === NextIDPlatform.Twitter && proof?.identity === userId?.toLowerCase())
-            ?.content?.[PluginId.Web3Profile].hiddenAddresses.donations?.some(
-                (x) => x.address === socialAddress.address,
+            ?.content?.[PluginId.Web3Profile]?.hiddenAddresses?.donations?.some((x) =>
+                isSameAddress(x.address, socialAddress.address),
             )
     }, [userId, socialAddress, kvValue?.proofs])
 

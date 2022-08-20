@@ -2,7 +2,6 @@ import urlcat from 'urlcat'
 import { uniqBy } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import getUnixTime from 'date-fns/getUnixTime'
-import LRU, { Options as LRUOptions } from 'lru-cache'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     createPageable,
@@ -37,29 +36,11 @@ import {
 } from './types'
 import { getOrderUSDPrice, toImage } from './utils'
 import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants'
+import { getPaymentToken } from '../helpers'
 
-const cache = new LRU<string, any>({
-    max: 50,
-    ttl: 30_000,
-})
-
-async function fetchFromOpenSea<T>(url: string, chainId: ChainId, options?: LRUOptions<string, any>) {
+async function fetchFromOpenSea<T>(url: string, chainId: ChainId, init?: RequestInit) {
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
-    const cacheKey = `${chainId}/${url}`
-    let fetchingTask = cache.get(cacheKey)
-    if (!fetchingTask) {
-        const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
-
-        fetchingTask = fetch(urlcat(OPENSEA_API_URL, url), { method: 'GET' })
-        cache.set(cacheKey, fetchingTask, options)
-    }
-    const response = (await fetchingTask).clone()
-    if (response.ok) {
-        return (await response.json()) as T
-    } else {
-        cache.delete(cacheKey)
-        throw new Error('Fetch failed')
-    }
+    return fetch(urlcat(OPENSEA_API_URL, url), { method: 'GET', ...init }) as T
 }
 
 function createTokenDetailed(
@@ -141,6 +122,10 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungi
 
 function createNFTAsset(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungibleAsset<ChainId, SchemaType> {
     const token = createNFTToken(chainId, asset)
+    const paymentToken = getPaymentToken(chainId, {
+        address: asset.last_sale?.payment_token.address,
+        symbol: asset.last_sale?.payment_token.symbol,
+    })
     return {
         ...token,
         link: asset.opensea_link ?? asset.permalink ?? createAssetLink(chainId, token.address, token.tokenId),
@@ -176,12 +161,14 @@ function createNFTAsset(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungi
             : undefined,
         priceInToken: asset.last_sale
             ? {
-                  token: createTokenDetailed(chainId, {
-                      address: asset.last_sale.payment_token.address ?? '',
-                      decimals: Number(asset.last_sale.payment_token.decimals ?? '0'),
-                      name: '',
-                      symbol: asset.last_sale.payment_token.symbol ?? '',
-                  }),
+                  token:
+                      paymentToken ??
+                      createTokenDetailed(chainId, {
+                          address: asset.last_sale.payment_token.address ?? '',
+                          decimals: Number(asset.last_sale.payment_token.decimals ?? '0'),
+                          name: '',
+                          symbol: asset.last_sale.payment_token.symbol ?? '',
+                      }),
                   amount: asset.last_sale.total_price ?? '0',
               }
             : undefined,
@@ -201,7 +188,7 @@ function createAccount(account?: OpenSeaCustomAccount) {
 function createEvent(chainId: ChainId, event: OpenSeaAssetEvent): NonFungibleTokenEvent<ChainId, SchemaType> {
     const paymentToken = event.payment_token
         ? createERC20Token(
-              ChainId.Mainnet,
+              chainId,
               event.payment_token.address,
               event.payment_token.name,
               event.payment_token.symbol,
@@ -278,14 +265,11 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             urlcat('/api/v1/asset/:address/:tokenId', { address, tokenId }),
             chainId,
         )
-
         if (!response) return
         return createNFTAsset(chainId, response)
     }
 
     async getAssets(account: string, { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {}) {
-        if (chainId !== ChainId.Mainnet) return createPageable(EMPTY_LIST, createIndicator(indicator))
-
         const response = await fetchFromOpenSea<{ assets?: OpenSeaAssetResponse[]; next: string; previous?: string }>(
             urlcat('/api/v1/assets', {
                 owner: account,
@@ -295,7 +279,6 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             }),
             chainId,
         )
-
         const tokens = (response?.assets ?? EMPTY_LIST)
             ?.filter(
                 (x: OpenSeaAssetResponse) =>
@@ -311,28 +294,18 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         )
     }
 
-    async getToken(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
-        const response = await fetchFromOpenSea<OpenSeaAssetResponse>(
-            urlcat('/api/v1/asset/:address/:tokenId', { address, tokenId }),
-            chainId,
-        )
-        if (!response) return
-        return createNFTToken(chainId, response)
-    }
-
     async getContract(address: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
-        const assetContract = await fetchFromOpenSea<OpenSeaAssetContract>(
+        const contract = await fetchFromOpenSea<OpenSeaAssetContract>(
             urlcat('/api/v1/asset_contract/:address', { address }),
             chainId,
         )
-        const result = createNonFungibleTokenContract(
+        return createNonFungibleTokenContract(
             chainId,
             SchemaType.ERC721,
             address,
-            assetContract?.name ?? 'Unknown Token',
-            assetContract?.symbol ?? 'UNKNOWN',
+            contract?.name ?? 'Unknown Token',
+            contract?.symbol ?? 'UNKNOWN',
         )
-        return result
     }
 
     async getEvents(
@@ -407,7 +380,6 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         address: string,
         { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {},
     ) {
-        if (chainId !== ChainId.Mainnet) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const response = await fetchFromOpenSea<OpenSeaCollection[]>(
             urlcat('/api/v1/collections', {
                 asset_owner: address,
@@ -452,9 +424,6 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         const assetContract = await fetchFromOpenSea<OpenSeaAssetContract>(
             urlcat('/api/v1/asset_contract/:address', { address }),
             chainId,
-            {
-                ttl: 0,
-            },
         )
         const slug = assetContract?.collection.slug
         if (!slug) return

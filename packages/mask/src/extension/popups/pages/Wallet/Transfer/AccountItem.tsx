@@ -37,7 +37,7 @@ export interface AccountItemProps {
 
 export const AccountItem = memo<AccountItemProps>(({ account, onClick }) => {
     const { classes } = useStyles()
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { Others } = useWeb3State()
     const { value: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, account.address)
 
     return (

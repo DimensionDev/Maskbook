@@ -3,10 +3,10 @@ import { useAsyncRetry } from 'react-use'
 import { first } from 'lodash-unified'
 import { Avatar, AvatarProps, useTheme } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import NO_IMAGE_COLOR from './constants'
 import { useChainId, useWeb3Hub, Web3Helper } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import NO_IMAGE_COLOR from './constants'
 import { useAccessibleUrl } from '../../../hooks/useImageBase64'
 
 const useStyles = makeStyles()((theme) => ({
@@ -51,7 +51,7 @@ export function TokenIcon(props: TokenIconProps) {
     return (
         <TokenIconUI
             key={key}
-            logoURL={isNFT ? logoURL : accessibleUrl || first(urls)}
+            logoURL={isNFT ? logoURL : accessibleUrl}
             AvatarProps={AvatarProps}
             classes={classes}
             name={name}
