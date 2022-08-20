@@ -277,7 +277,9 @@ export function CollectionList({
                     proof?.platform === NextIDPlatform.Twitter &&
                     proof?.identity === visitingProfile?.identifier?.userId?.toLowerCase(),
             )
-            ?.content?.[PluginId.Web3Profile]?.hiddenAddresses?.NFTs?.some((x) => x.address === addressName.address)
+            ?.content?.[PluginId.Web3Profile]?.hiddenAddresses?.NFTs?.some((x) =>
+                isSameAddress(x.address, addressName.address),
+            )
     }, [visitingProfile?.identifier?.userId, addressName.address, kvValue?.proofs])
 
     const unHiddenCollectibles = useCollectionFilter(

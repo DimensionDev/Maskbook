@@ -10,6 +10,7 @@ import { useFootprints, useRSS3Profile, useAvailableCollections } from '../hooks
 import { useKV } from '../hooks/useKV'
 import { PluginId } from '@masknet/plugin-infra'
 import { Icons } from '@masknet/icons'
+import { isSameAddress } from '@masknet/web3-shared-base'
 
 export interface FootprintPageProps {
     address: string
@@ -35,7 +36,9 @@ export const FootprintsPage = memo(function FootprintsPage({ address, publicKey,
     const isHiddenAddress = useMemo(() => {
         return kvValue?.proofs
             .find((proof) => proof?.platform === NextIDPlatform.Twitter && proof?.identity === userId?.toLowerCase())
-            ?.content?.[PluginId.Web3Profile]?.hiddenAddresses?.footprints?.some((x) => x.address === address)
+            ?.content?.[PluginId.Web3Profile]?.hiddenAddresses?.footprints?.some((x) =>
+                isSameAddress(x.address, address),
+            )
     }, [userId, address, kvValue?.proofs])
     const t = useI18N()
 
