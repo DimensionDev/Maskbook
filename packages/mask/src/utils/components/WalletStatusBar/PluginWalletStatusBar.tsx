@@ -12,7 +12,7 @@ import {
 } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { TransactionStatusType } from '@masknet/web3-shared-base'
+import { NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
 import { Box, Button } from '@mui/material'
 import { useI18N } from '../../i18n-next-ui'
 import { Icons } from '@masknet/icons'
@@ -42,7 +42,7 @@ export const PluginWalletStatusBar = memo<WalletStatusBarProps>(({ className, on
     const providerType = useProviderType()
     const networkDescriptor = useNetworkDescriptor(currentPluginId, chainId)
     const { value: domain } = useReverseAddress(currentPluginId, account)
-    const { Others } = useWeb3State()
+    const { Others } = useWeb3State<'all'>(NetworkPluginID.PLUGIN_EVM)
 
     const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,

@@ -124,7 +124,7 @@ export const WalletStateBarUI: FC<React.PropsWithChildren<WalletStateBarUIProps>
 }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
-    const { Others } = useWeb3State()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     if (!network || !provider) return null
 

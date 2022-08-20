@@ -64,7 +64,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const is1559Supported = useMemo(() => chainResolver.isSupport(chainId, 'EIP1559'), [chainId])
 
-    const { Others } = useWeb3State()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     useEffect(() => {
         setSelectedToken(token)

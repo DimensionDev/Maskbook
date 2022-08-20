@@ -7,7 +7,7 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { ChainId, DebankTransactionDirection, SchemaType, ZerionTransactionDirection } from '@masknet/web3-shared-evm'
 import { Box, Link, Stack, TableCell, TableRow, Tooltip, Typography } from '@mui/material'
 import { TransactionIcon } from '../TransactionIcon'
-import { TokenType, Transaction } from '@masknet/web3-shared-base'
+import { NetworkPluginID, TokenType, Transaction } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import fromUnixTime from 'date-fns/fromUnixTime'
 
@@ -84,7 +84,7 @@ export interface HistoryTableRowUIProps extends HistoryTableRowProps {
 export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(
     ({ transaction, selectedChainId, formattedType, domain }) => {
         const { classes } = useStyles()
-        const { Others } = useWeb3State()
+        const { Others } = useWeb3State<'all'>(NetworkPluginID.PLUGIN_EVM)
         return (
             <TableRow className={classes.hover}>
                 <TableCell className={classes.cell} align="center" variant="body">

@@ -6,6 +6,7 @@ import { FC, useRef } from 'react'
 import { CopyIconButton } from '../../NextID/components/CopyIconButton'
 import { useTip } from '../contexts'
 import { Icons } from '@masknet/icons'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles<{}, 'icon'>()((theme, _, refs) => {
     return {
@@ -47,7 +48,7 @@ export const RecipientSelect: FC = () => {
     const { classes, cx } = useStyles({})
     const selectRef = useRef(null)
     const { recipient, recipients, setRecipient, isSending } = useTip()
-    const { Others } = useWeb3State()
+    const { Others } = useWeb3State<'all'>(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId()
     return (
         <Select

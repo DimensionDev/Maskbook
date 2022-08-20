@@ -145,7 +145,7 @@ export const NFTList: FC<Props> = ({
               }
 
     const SelectComponent = isRadio ? Radio : Checkbox
-    const { Others } = useWeb3State()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     return (
         <List className={classnames(classes.list, className)}>

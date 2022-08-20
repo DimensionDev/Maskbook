@@ -87,7 +87,7 @@ export const TransferERC721 = memo(() => {
     const [id] = useState(uuid)
     const [gasLimit_, setGasLimit_] = useState(0)
     const network = useNetworkDescriptor()
-    const { Others } = useWeb3State()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const nativeToken = useNativeToken(NetworkPluginID.PLUGIN_EVM)

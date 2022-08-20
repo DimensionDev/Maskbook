@@ -28,7 +28,7 @@ const useStyles = makeStyles()({
 export function ConsoleContent(props: ConsoleContentProps) {
     const { classes } = useStyles()
     const pluginID = useCurrentWeb3NetworkPluginID()
-    const { Others } = useWeb3State()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount()
     const chainId = useChainId()
     const networkType = useNetworkType()
