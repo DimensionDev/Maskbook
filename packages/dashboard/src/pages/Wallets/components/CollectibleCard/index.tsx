@@ -4,7 +4,6 @@ import { WalletIcon, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { Box, Button, Link, Tooltip, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { CollectiblePlaceholder } from '../CollectiblePlaceHolder'
 import { useDashboardI18N } from '../../../../locales'
 import { ChangeNetworkTip } from '../FungibleTokenTableRow/ChangeNetworkTip'
 import {
@@ -130,32 +129,26 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ asset, onSend, rend
                 <Box className={classes.chainIcon}>
                     <WalletIcon mainIcon={networkDescriptor?.icon} size={20} />
                 </Box>
-                {(asset.metadata?.mediaURL || asset.metadata?.imageURL) && asset.contract ? (
-                    <Link
-                        target={asset.link ?? nftLink ? '_blank' : '_self'}
-                        rel="noopener noreferrer"
-                        className={classes.linkWrapper}
-                        href={asset.link ?? nftLink}>
-                        <div className={classes.blocker} />
-                        <div className={classes.mediaContainer}>
-                            <NFTCardStyledAssetPlayer
-                                contractAddress={asset.contract.address}
-                                chainId={asset.contract.chainId}
-                                renderOrder={renderOrder}
-                                url={asset.metadata.imageURL || asset.metadata.mediaURL}
-                                tokenId={asset.tokenId}
-                                classes={{
-                                    loadingFailImage: classes.loadingFailImage,
-                                    wrapper: classes.wrapper,
-                                }}
-                            />
-                        </div>
-                    </Link>
-                ) : (
-                    <Box>
-                        <CollectiblePlaceholder chainId={asset.contract?.chainId} />
-                    </Box>
-                )}
+                <Link
+                    target={asset.link ?? nftLink ? '_blank' : '_self'}
+                    rel="noopener noreferrer"
+                    className={classes.linkWrapper}
+                    href={asset.link ?? nftLink}>
+                    <div className={classes.blocker} />
+                    <div className={classes.mediaContainer}>
+                        <NFTCardStyledAssetPlayer
+                            contractAddress={asset.contract?.address}
+                            chainId={asset.contract?.chainId}
+                            renderOrder={renderOrder}
+                            url={asset.metadata?.imageURL || asset.metadata?.mediaURL}
+                            tokenId={asset.tokenId}
+                            classes={{
+                                loadingFailImage: classes.loadingFailImage,
+                                wrapper: classes.wrapper,
+                            }}
+                        />
+                    </div>
+                </Link>
                 <Box className={classes.description} py={1} px={3}>
                     {showSendButton ? (
                         <Box>

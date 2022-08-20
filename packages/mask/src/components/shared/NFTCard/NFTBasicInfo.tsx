@@ -133,7 +133,7 @@ export function NFTBasicInfo(props: NFTBasicInfoProps) {
                         loadingPlaceholder: classes.loadingPlaceholder,
                         loadingFailImage: classes.loadingFailImage,
                     }}
-                    isNative={false}
+                    isImageOnly={false}
                 />
             </div>
             <Typography className={classes.nameSm}>{asset.metadata?.name ?? '-'}</Typography>
