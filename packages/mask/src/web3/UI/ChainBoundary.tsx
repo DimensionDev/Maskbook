@@ -14,7 +14,7 @@ import {
     useChainIdValid,
     useProviderDescriptor,
 } from '@masknet/plugin-infra/web3'
-import { ProviderType } from '@masknet/web3-shared-evm'
+import { ProviderType, ChainId } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { delay } from '@dimensiondev/kit'
 import {
@@ -94,7 +94,10 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
 
     const chainIdValid = useChainIdValid(actualPluginID)
 
-    const expectedChainName = expectedOthers?.chainResolver.chainName(expectedChainId)
+    const expectedChainName =
+        actualPluginID !== expectedPluginID && expectedChainId === ChainId.BSC
+            ? expectedOthers?.chainResolver.nativeCurrency(expectedChainId)?.symbol
+            : expectedOthers?.chainResolver.chainName(expectedChainId)
     const expectedNetworkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, expectedChainId)
     const expectedChainAllowed = expectedOthers?.chainResolver.isValid(expectedChainId, expectedAllowTestnet)
 
