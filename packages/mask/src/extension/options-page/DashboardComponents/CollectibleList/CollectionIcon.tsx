@@ -1,6 +1,5 @@
 import { memo } from 'react'
 import { Box, Tooltip } from '@mui/material'
-// import { Image } from '../../../../components/shared/Image'
 import { makeStyles } from '@masknet/theme'
 import { Image, TokenIcon } from '@masknet/shared'
 import classNames from 'classnames'
@@ -49,7 +48,7 @@ export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, 
             PopperProps={{
                 disablePortal: true,
             }}
-            title={collection?.name ?? ''}
+            title={collection.name ?? ''}
             arrow>
             <Box
                 className={classNames(
@@ -57,18 +56,25 @@ export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, 
                     isSameAddress(collection.address, selectedCollection) ? classes.selected : '',
                 )}
                 onClick={onClick}>
-                {collection?.iconURL ? (
+                {collection.iconURL ? (
                     <Image
                         width={24}
                         height={24}
-                        className={classes.collectionImg}
                         disableLoading
+                        className={classes.collectionImg}
                         src={collection?.iconURL}
+                        fallback={
+                            <TokenIcon
+                                classes={{ icon: classes.collectionImg }}
+                                name={collection.name}
+                                address={collection.name}
+                            />
+                        }
                     />
                 ) : (
                     <TokenIcon
                         classes={{ icon: classes.collectionImg }}
-                        name={collection?.name}
+                        name={collection.name}
                         address={collection.name}
                     />
                 )}
