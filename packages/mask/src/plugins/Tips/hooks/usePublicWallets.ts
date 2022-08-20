@@ -2,7 +2,7 @@ import { PluginId } from '@masknet/plugin-infra'
 import { BindingProof, EMPTY_LIST, NextIDPlatform, NextIDStorageInfo } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { first, uniqBy } from 'lodash-unified'
+import { uniqBy } from 'lodash-unified'
 import { useEffect, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { MaskMessages } from '../../../utils'
@@ -27,12 +27,10 @@ export function usePublicWallets(personaPubkey: string | undefined): TipAccount[
         if (!kv?.ok) return null
         const { proofs } = kv.val
         if (!proofs.length) return null
-        const configuredTipsWallets = proofs.some((x) => x.content[PluginId.Tips])
+        const configuredTipsWallets = proofs.find((x) => x.identity === personaPubkey)?.content[PluginId.Tips]
         if (!configuredTipsWallets) return null
 
-        const tipWallets = first(
-            proofs.map((x) => x.content[PluginId.Tips]?.filter((y) => y.platform === NextIDPlatform.Ethereum)),
-        )
+        const tipWallets = configuredTipsWallets.filter((x) => x.platform === NextIDPlatform.Ethereum)
         if (!tipWallets) return null
         return tipWallets
             .filter((x) => {
