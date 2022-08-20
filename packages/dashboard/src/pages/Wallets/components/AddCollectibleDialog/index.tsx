@@ -38,7 +38,7 @@ enum FormErrorType {
 export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onClose, selectedNetwork }) => {
     const currentNetworkPluginID = useCurrentWeb3NetworkPluginID()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const { Token } = useWeb3State<'all'>()
+    const { Token } = useWeb3State<'all'>(NetworkPluginID.PLUGIN_EVM)
     const trustedNonFungibleTokens = useTrustedNonFungibleTokens(currentNetworkPluginID)
     const hub = useWeb3Hub()
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
