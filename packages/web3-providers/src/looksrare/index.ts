@@ -14,6 +14,7 @@ import {
     Pageable,
     TokenType,
 } from '@masknet/web3-shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, createERC20Token, formatWeiToEther, SchemaType } from '@masknet/web3-shared-evm'
 import type { NonFungibleTokenAPI } from '../types'
 import type { Collection, Event, Order, Stats, Token } from './types'
@@ -21,11 +22,9 @@ import { LOOKSRARE_API_URL, LOOKSRARE_PAGE_SIZE } from './constants'
 
 async function fetchFromLooksRare<T>(chainId: ChainId, url: string) {
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
-    const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
-
     const response = await fetch(urlcat(LOOKSRARE_API_URL, url), { method: 'GET' })
     if (response.ok) return (await response.json()) as T
-    throw new Error('Fetch failed')
+    return
 }
 
 function createAssetLink(chainId: ChainId, address: string, tokenId: string) {
@@ -168,10 +167,6 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         throw new Error('Method not implemented.')
     }
 
-    async getToken(address: string, tokenId: string, options: HubOptions<ChainId> = {}) {
-        return this.getAsset(address, tokenId, options)
-    }
-
     async getContract(
         address: string,
         { chainId = ChainId.Mainnet }: HubOptions<ChainId, HubIndicator> = {},
@@ -199,7 +194,7 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
             }),
         )
 
-        if (!response?.data.length) return createPageable([], createIndicator(indicator))
+        if (!response?.data.length) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const events = response.data.map((x) => createNonFungibleEventFromEvent(chainId, x))
         return createPageable(
             events,
@@ -250,7 +245,7 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
             }),
         )
 
-        if (!response?.data.length) return createPageable([], createIndicator(indicator))
+        if (!response?.data.length) return createPageable(EMPTY_LIST, createIndicator(indicator))
         const orders = response.data.map((x) => createNonFungibleTokenOrderFromOrder(chainId, x))
         return createPageable(
             orders,
