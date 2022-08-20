@@ -1,4 +1,4 @@
-const errorTriggerTimestamp = '2010-1-1'
+const errorTriggerTimestamp = 1262304000000 // 2010-01-01
 
 export function isValidTimestamp(time?: number) {
     if (!time) return
