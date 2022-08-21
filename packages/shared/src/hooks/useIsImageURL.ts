@@ -2,7 +2,7 @@ import { useAsync } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
 
 // filter out nft with image resource
-export function useImageChecker(url: string | undefined): AsyncState<boolean> {
+export function useIsImageURL(url: string | undefined): AsyncState<boolean> {
     return useAsync(async () => {
         if (!url) return false
 
@@ -20,7 +20,6 @@ async function getContentType(url: string) {
     if (!/^https?:/.test(url)) {
         return ''
     }
-    const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
     return Promise.race([
         new Promise((resolve) => setTimeout(() => resolve(''), 20000)),
         new Promise((resolve) => {

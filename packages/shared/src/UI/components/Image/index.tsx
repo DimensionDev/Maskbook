@@ -1,9 +1,9 @@
+import type { ImgHTMLAttributes } from 'react'
+import { useAsync } from 'react-use'
+import classNames from 'classnames'
 import { makeStyles, parseColor, useStylesExtends } from '@masknet/theme'
 import { Box, CircularProgress, useTheme } from '@mui/material'
-import classNames from 'classnames'
-import { ImgHTMLAttributes, isValidElement, ReactElement, useState } from 'react'
-import { useAsync } from 'react-use'
-import { useImageChecker } from '../../../hooks'
+import { useIsImageURL } from '../../../hooks'
 
 const useStyles = makeStyles()((theme) => ({
     circle: {
@@ -18,32 +18,30 @@ const useStyles = makeStyles()((theme) => ({
 interface ImageProps
     extends ImgHTMLAttributes<HTMLImageElement>,
         withClasses<'loadingFailImage' | 'imageLoading' | 'imageLoadingBox'> {
-    fallback?: URL | ReactElement
-    // Do not show the spinner
-    disableLoading?: boolean
+    fallbackImage?: URL
 }
 
-export function Image({ fallback, disableLoading, ...rest }: ImageProps) {
+export function Image({ fallbackImage, ...rest }: ImageProps) {
     const classes = useStylesExtends(useStyles(), rest)
     const theme = useTheme()
-    const maskImageURL =
-        theme.palette.mode === 'dark'
-            ? new URL('./mask_dark.png', import.meta.url)
-            : new URL('./mask_light.png', import.meta.url)
+    const fallbackImageURL =
+        fallbackImage ??
+        (theme.palette.mode === 'dark'
+            ? new URL('./nft_token_fallback_dark.png', import.meta.url)
+            : new URL('./nft_token_fallback.png', import.meta.url))
 
-    const { loading: loadingImage, value: image } = useAsync(async () => {
+    const { value: image, loading: imageLoading } = useAsync(async () => {
         if (!rest.src) return
-        const data = await globalThis.r2d2Fetch(`https://cors.r2d2.to?${rest.src}`)
-        return URL.createObjectURL(await data.blob())
+        // base64 image
+        if (rest.src.startsWith('data')) return rest.src
+        const response = await fetch(rest.src)
+        return URL.createObjectURL(await response.blob())
     }, [rest.src])
 
-    const [failed, setFailed] = useState(false)
+    const { value: isImageURL, loading: isImageURLLoading } = useIsImageURL(rest.src)
 
-    const { value: isImageToken, loading: checkImageTokenLoading } = useImageChecker(rest.src)
-    const loading = loadingImage || checkImageTokenLoading
-
-    if (loading) {
-        return !disableLoading ? (
+    if (imageLoading || isImageURLLoading) {
+        return (
             <Box className={classes.imageLoadingBox}>
                 <Box sx={{ position: 'relative' }}>
                     <CircularProgress
@@ -59,24 +57,14 @@ export function Image({ fallback, disableLoading, ...rest }: ImageProps) {
                     />
                 </Box>
             </Box>
-        ) : null
+        )
     }
 
-    if (failed && isValidElement(fallback)) {
-        return fallback
-    }
-    if (isImageToken) {
-        const fallbackImage = (fallback ?? maskImageURL).toString()
+    if (image && isImageURL) {
         return (
-            <img
-                crossOrigin="anonymous"
-                {...rest}
-                className={classNames(rest.className, classes.loadingFailImage)}
-                src={failed ? fallbackImage : image ?? rest.src}
-                onError={() => {
-                    setFailed(true)
-                }}
-            />
+            <Box className={classes.imageLoadingBox}>
+                <img crossOrigin="anonymous" {...rest} src={image} />
+            </Box>
         )
     }
 
@@ -84,7 +72,7 @@ export function Image({ fallback, disableLoading, ...rest }: ImageProps) {
         <Box className={classes.imageLoadingBox}>
             <img
                 {...rest}
-                src={(fallback ?? maskImageURL).toString()}
+                src={fallbackImageURL.toString()}
                 className={classNames(classes.failImage, classes.loadingFailImage)}
             />
         </Box>

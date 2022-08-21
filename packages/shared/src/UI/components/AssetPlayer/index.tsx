@@ -1,14 +1,14 @@
-import { first } from 'lodash-unified'
 import { memo, useRef, useCallback, useState, useEffect, useMemo } from 'react'
-import { getRPCConstants } from '@masknet/web3-shared-evm'
-import IframeResizer, { IFrameComponent } from 'iframe-resizer-react'
-import { MEDIA_VIEWER_URL } from '../../../constants'
 import { useUpdateEffect } from 'react-use'
+import { first } from 'lodash-unified'
+import IframeResizer, { IFrameComponent } from 'iframe-resizer-react'
+import { getRPCConstants } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box } from '@mui/material'
+import { ImageIcon } from '@masknet/shared'
 import { GeneratedIconProps, Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
-import { ImageIcon } from '@masknet/shared'
+import { MEDIA_VIEWER_URL } from '../../../constants'
 
 interface ERC721TokenQuery {
     contractAddress: string
