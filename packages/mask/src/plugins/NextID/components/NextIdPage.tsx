@@ -7,7 +7,7 @@ import { useMemo, useState } from 'react'
 import { useAsync, useAsyncRetry } from 'react-use'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 import { useNextIDConnectStatus } from '../../../components/DataSource/useNextIDConnectStatus'
-import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
+import { useCurrentPersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
 import Services from '../../../extension/service'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { useI18N } from '../locales'
@@ -141,7 +141,7 @@ export function NextIdPage() {
 
     const currentProfileIdentifier = useLastRecognizedIdentity()
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
-    const personaConnectStatus = usePersonaConnectStatus()
+    const personaConnectStatus = useCurrentPersonaConnectStatus()
     const { reset, isVerified } = useNextIDConnectStatus()
 
     const [openBindDialog, toggleBindDialog] = useState(false)
@@ -158,7 +158,7 @@ export function NextIdPage() {
         )
 
         return (
-            <Button className={classes.button} onClick={personaConnectStatus.action}>
+            <Button className={classes.button} onClick={() => personaConnectStatus.action?.(undefined, 'top-right')}>
                 {icon}
                 {button}
             </Button>

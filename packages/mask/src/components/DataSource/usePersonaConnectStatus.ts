@@ -7,8 +7,9 @@ import { activatedSocialNetworkUI } from '../../social-network'
 import { SetupGuideStep } from '../../../shared/legacy-settings/types'
 import { useLastRecognizedIdentity } from './useActivatedUI'
 import { usePersonasFromDB } from './usePersonasFromDB'
-import { useValueRef } from '@masknet/shared-base-ui'
+import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { useAsync } from 'react-use'
+import { PluginNextIDMessages } from '../../plugins/NextID/messages'
 
 const createPersona = () => {
     Services.Helper.openDashboard(DashboardRoutes.Setup)
@@ -62,6 +63,7 @@ export function useCurrentPersonaConnectStatus() {
     const personas = usePersonasFromDB()
     const lastRecognized = useLastRecognizedIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
+    const { setDialog: setPersonaListDialog } = useRemoteControlledDialog(PluginNextIDMessages.PersonaListDialogUpdated)
 
     return useMemo(() => {
         const currentPersona = personas.find((x) => isSamePersona(x, currentIdentifier))
@@ -69,8 +71,15 @@ export function useCurrentPersonaConnectStatus() {
             isSameProfile(x.identifier, lastRecognized.identifier),
         )
 
+        const action = !personas.length
+            ? createPersona
+            : !currentProfile
+            ? (target?: string, position?: 'center' | 'top-right') =>
+                  setPersonaListDialog({ open: true, target, position })
+            : undefined
+
         return {
-            action: !personas.length ? createPersona : !currentProfile ? connectPersona : undefined,
+            action,
             currentPersona,
             connected: !!currentProfile,
             hasPersona: !!personas.length,

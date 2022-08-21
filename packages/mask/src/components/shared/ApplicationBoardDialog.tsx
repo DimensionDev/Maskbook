@@ -110,6 +110,7 @@ export function ApplicationBoardDialog() {
                     ) : (
                         <ApplicationBoard closeDialog={closeDialog} />
                     )}
+                    {/* TODO: remove this*/}
                     {openPersonaListDialog && <PersonaListDialog />}
                 </DialogContent>
             </InjectedDialog>
