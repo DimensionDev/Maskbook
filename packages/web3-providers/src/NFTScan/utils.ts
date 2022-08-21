@@ -26,15 +26,15 @@ import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from './constants'
 import type { Asset, Collection, Payload, AssetsGroup, Transaction } from './types'
 import { courier, getPaymentToken } from '../helpers'
 
-type NFTScanChainId = ChainId.Mainnet | ChainId.Matic | ChainId.BSC | ChainId.Arbitrum | ChainId.Optimism
+type NFTScanChainId = ChainId.Mainnet | ChainId.Matic
 
 export const resolveHostName = createLookupTableResolver<NFTScanChainId, string>(
     {
         [ChainId.Mainnet]: 'https://www.nftscan.com',
         [ChainId.Matic]: 'https://polygon.nftscan.com',
-        [ChainId.BSC]: 'https://bnb.nftscan.com',
-        [ChainId.Arbitrum]: 'https://arbitrum.nftscan.com/',
-        [ChainId.Optimism]: 'https://optimism.nftscan.com/',
+        // [ChainId.BSC]: 'https://bnb.nftscan.com',
+        // [ChainId.Arbitrum]: 'https://arbitrum.nftscan.com/',
+        // [ChainId.Optimism]: 'https://optimism.nftscan.com/',
     },
     '',
 )
@@ -59,6 +59,7 @@ export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, 
             ...init?.headers,
             'x-app-chainid': chainId.toString(),
         },
+        cache: 'no-cache',
     })
     const json = await response.json()
     return json as T
@@ -162,6 +163,7 @@ export function createNonFungibleTokenAsset(chainId: ChainId, asset: Asset): Non
             name,
             slug: name,
             description,
+            address: asset.contract_address,
             iconURL: urlcat(NFTSCAN_LOGO_BASE + '/:id', { id: asset.contract_address + '.png' }),
             // TODO fetch via `collections` API
             verified: false,

@@ -124,6 +124,9 @@ const useStyles = makeStyles()((theme) => {
             '& > p': {
                 color: `${theme.palette.maskColor.publicSecond} !important`,
             },
+            '& a': {
+                color: theme.palette.maskColor.publicMain,
+            },
         },
         cardTitle: {
             fontSize: 16,
