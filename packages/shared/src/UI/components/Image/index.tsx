@@ -1,7 +1,7 @@
 import { makeStyles, parseColor, useStylesExtends } from '@masknet/theme'
 import { Box, CircularProgress, useTheme } from '@mui/material'
 import classNames from 'classnames'
-import { ImgHTMLAttributes, isValidElement, ReactElement, useState } from 'react'
+import type { ImgHTMLAttributes } from 'react'
 import { useAsync } from 'react-use'
 import { useImageChecker } from '../../../hooks'
 
@@ -18,12 +18,10 @@ const useStyles = makeStyles()((theme) => ({
 interface ImageProps
     extends ImgHTMLAttributes<HTMLImageElement>,
         withClasses<'loadingFailImage' | 'imageLoading' | 'imageLoadingBox'> {
-    fallback?: URL | ReactElement
-    // Do not show the spinner
-    disableLoading?: boolean
+    fallbackImage?: URL
 }
 
-export function Image({ fallback, disableLoading, ...rest }: ImageProps) {
+export function Image({ fallbackImage, ...rest }: ImageProps) {
     const classes = useStylesExtends(useStyles(), rest)
     const theme = useTheme()
     const maskImageURL =
@@ -37,56 +35,47 @@ export function Image({ fallback, disableLoading, ...rest }: ImageProps) {
         return URL.createObjectURL(await data.blob())
     }, [rest.src])
 
-    const [failed, setFailed] = useState(false)
-
     const { value: isImageToken, loading: checkImageTokenLoading } = useImageChecker(rest.src)
-    const loading = loadingImage || checkImageTokenLoading
-
-    if (loading) {
-        return !disableLoading ? (
-            <Box className={classes.imageLoadingBox}>
-                <Box sx={{ position: 'relative' }}>
-                    <CircularProgress
-                        variant="determinate"
-                        value={100}
-                        className={classNames(classes.imageLoading, classes.circle)}
-                    />
-                    <CircularProgress
-                        variant="indeterminate"
-                        disableShrink
-                        className={classes.imageLoading}
-                        sx={{ position: 'absolute', left: 0 }}
-                    />
-                </Box>
-            </Box>
-        ) : null
-    }
-
-    if (failed && isValidElement(fallback)) {
-        return fallback
-    }
-    if (isImageToken) {
-        const fallbackImage = (fallback ?? maskImageURL).toString()
-        return (
-            <img
-                crossOrigin="anonymous"
-                {...rest}
-                className={classNames(rest.className, classes.loadingFailImage)}
-                src={failed ? fallbackImage : image ?? rest.src}
-                onError={() => {
-                    setFailed(true)
-                }}
-            />
-        )
-    }
 
     return (
-        <Box className={classes.imageLoadingBox}>
-            <img
-                {...rest}
-                src={(fallback ?? maskImageURL).toString()}
-                className={classNames(classes.failImage, classes.loadingFailImage)}
-            />
-        </Box>
+        <>
+            {loadingImage || checkImageTokenLoading ? (
+                <Box className={classes.imageLoadingBox}>
+                    <Box sx={{ position: 'relative' }}>
+                        <CircularProgress
+                            variant="determinate"
+                            value={100}
+                            className={classNames(classes.imageLoading, classes.circle)}
+                        />
+
+                        <CircularProgress
+                            variant="indeterminate"
+                            disableShrink
+                            className={classes.imageLoading}
+                            sx={{ position: 'absolute', left: 0 }}
+                        />
+                    </Box>
+                </Box>
+            ) : isImageToken ? (
+                <img
+                    crossOrigin="anonymous"
+                    {...rest}
+                    src={image ?? rest.src}
+                    onError={(event) => {
+                        const target = event.currentTarget as HTMLImageElement
+                        target.src = (fallbackImage ?? maskImageURL).toString()
+                        target.classList.add(classes.loadingFailImage ?? '')
+                    }}
+                />
+            ) : (
+                <Box className={classes.imageLoadingBox}>
+                    <img
+                        {...rest}
+                        src={(fallbackImage ?? maskImageURL).toString()}
+                        className={classNames(classes.failImage, classes.loadingFailImage)}
+                    />
+                </Box>
+            )}
+        </>
     )
 }
