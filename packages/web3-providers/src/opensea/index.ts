@@ -40,7 +40,8 @@ import { getPaymentToken } from '../helpers'
 
 async function fetchFromOpenSea<T>(url: string, chainId: ChainId, init?: RequestInit) {
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
-    return fetch(urlcat(OPENSEA_API_URL, url), { method: 'GET', ...init }) as T
+    const response = await fetch(urlcat(OPENSEA_API_URL, url), { method: 'GET', ...init })
+    return response.json() as T
 }
 
 function createTokenDetailed(
@@ -313,20 +314,20 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         tokenId: string,
         { chainId = ChainId.Mainnet, indicator, size }: HubOptions<ChainId> = {},
     ) {
+        const parameters = new URLSearchParams()
+        parameters.append('event_type', EventType.Successful)
+        parameters.append('event_type', EventType.OfferEntered)
+        parameters.append('event_type', EventType.Transfer)
+        parameters.append('asset_contract_address', address)
+        parameters.append('token_id', tokenId)
+        if (indicator?.id) parameters.append('cursor', indicator?.id)
+        if (size) parameters.append('limit', size.toString())
+
         const response = await fetchFromOpenSea<{
             asset_events: OpenSeaAssetEvent[]
             next: string
             previous?: string
-        }>(
-            urlcat('/api/v1/events', {
-                asset_contract_address: address,
-                token_id: tokenId,
-                cursor: indicator?.id,
-                limit: size,
-                event_type: [EventType.Successful, EventType.OfferEntered, EventType.Transfer],
-            }),
-            chainId,
-        )
+        }>(`/api/v1/events?${parameters.toString()}`, chainId)
         const events = response?.asset_events?.map((x) => createEvent(chainId, x)) ?? EMPTY_LIST
         return createPageable(
             events,
