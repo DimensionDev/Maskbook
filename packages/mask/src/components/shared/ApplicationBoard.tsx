@@ -279,11 +279,6 @@ const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContex
 
 function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
     const { value: personaConnectStatus, loading: personaStatusLoading } = useCurrentPersonaConnectStatus()
-
-    console.log('------------------')
-    console.log(personaConnectStatus)
-    console.log(personaStatusLoading)
-
     const { value: ApplicationCurrentStatus, loading: personaAgainstSNSConnectStatusLoading } =
         usePersonaAgainstSNSConnectStatus()
 

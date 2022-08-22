@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         header: {
-            background: theme.palette.maskColor.bottom,
+            background: `${theme.palette.maskColor.bottom} !important`,
         },
         items: {
             overflow: 'auto',
