@@ -215,11 +215,7 @@ function RenderEntryComponent({ application }: { application: Application }) {
     const disabled = useMemo(() => {
         if (!application.enabled) return true
 
-        if (application.entry.nextIdRequired) {
-            return Boolean(ApplicationEntryStatus.isLoading || ApplicationEntryStatus.isNextIDVerify === undefined)
-        } else {
-            return false
-        }
+        return !!application.entry.nextIdRequired && ApplicationEntryStatus.isLoading
     }, [application, ApplicationEntryStatus])
     // #endregion
 
@@ -283,6 +279,10 @@ const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContex
 
 function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
     const { value: personaConnectStatus, loading: personaStatusLoading } = useCurrentPersonaConnectStatus()
+
+    console.log('------------------')
+    console.log(personaConnectStatus)
+    console.log(personaStatusLoading)
 
     const { value: ApplicationCurrentStatus, loading: personaAgainstSNSConnectStatusLoading } =
         usePersonaAgainstSNSConnectStatus()

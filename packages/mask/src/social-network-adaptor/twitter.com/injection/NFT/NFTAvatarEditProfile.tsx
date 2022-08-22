@@ -1,8 +1,8 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { PluginId } from '@masknet/plugin-infra'
 import { makeStyles } from '@masknet/theme'
-import { useState, useEffect, useCallback } from 'react'
-import { useNextIDConnectStatus } from '../../../../components/DataSource/useNextIDConnectStatus'
-import { usePersonaConnectStatus } from '../../../../components/DataSource/usePersonaConnectStatus'
+import { useState, useEffect } from 'react'
+import { useCurrentPersonaConnectStatus } from '../../../../components/DataSource/usePersonaConnectStatus'
 import { NFTAvatarDialog } from '../../../../plugins/Avatar/Application/NFTAvatarsDialog'
 import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
 import { startWatch, createReactRootShadowed, useLocationChange } from '../../../../utils'
@@ -52,23 +52,7 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     })
     const [open, setOpen] = useState(false)
 
-    const personaConnectStatus = usePersonaConnectStatus()
-    const nextIDConnectStatus = useNextIDConnectStatus()
-
-    const createOrConnectPersona = useCallback(() => {
-        personaConnectStatus.action?.()
-    }, [personaConnectStatus])
-
-    const verifyPersona = useCallback(() => {
-        nextIDConnectStatus.reset()
-    }, [nextIDConnectStatus])
-
-    const clickHandler = () => {
-        if (!personaConnectStatus.hasPersona || !personaConnectStatus.connected) return createOrConnectPersona()
-        if (!nextIDConnectStatus.isVerified) return verifyPersona()
-        setOpen(true)
-        return
-    }
+    const { value: personaConnectStatus, loading: personaConnectStatusLoading } = useCurrentPersonaConnectStatus()
 
     const setStyleFromEditProfileSelector = () => {
         const editDom = searchEditProfileSelector().evaluate()
@@ -92,7 +76,12 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     const { classes } = useStyles(style)
     return (
         <>
-            <NFTAvatarButton classes={{ root: classes.root, text: classes.text }} onClick={clickHandler} />
+            {!personaConnectStatusLoading && (
+                <NFTAvatarButton
+                    classes={{ root: classes.root, text: classes.text }}
+                    onClick={() => personaConnectStatus.action?.(PluginId.Avatar)}
+                />
+            )}
             <NFTAvatarDialog open={open} onClose={() => setOpen(false)} />
         </>
     )

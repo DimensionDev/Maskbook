@@ -132,20 +132,30 @@ export function useCurrentPersonaConnectStatus() {
         }
 
         // handle had persona and connected current sns, then check the nextID
-        const nextIDInfo = await NextIDProof.queryExistedBindingByPersona(
-            currentPersona?.identifier.publicKeyAsHex,
-            false,
-        )
-        const verifiedProfile = nextIDInfo?.proofs.find(
-            (x) => isSameProfile(x.identity, currentProfile?.identifier) && x.is_valid,
-        )
+        try {
+            const nextIDInfo = await NextIDProof.queryExistedBindingByPersona(
+                currentPersona?.identifier.publicKeyAsHex,
+                false,
+            )
+            const verifiedProfile = nextIDInfo?.proofs.find(
+                (x) => isSameProfile(x.identity, currentProfile?.identifier) && x.is_valid,
+            )
 
-        return {
-            action: verifiedProfile ? undefined : openPersonListDialog,
-            currentPersona,
-            connected: true,
-            hasPersona: true,
-            verified: !!verifiedProfile,
+            return {
+                action: verifiedProfile ? undefined : openPersonListDialog,
+                currentPersona,
+                connected: true,
+                hasPersona: true,
+                verified: !!verifiedProfile,
+            }
+        } catch {
+            // TODO: How to handle the nextID down or network failed
+            return {
+                action: openPersonListDialog,
+                currentPersona,
+                connected: false,
+                hasPersona: true,
+            }
         }
     }, [
         currentIdentifier,
