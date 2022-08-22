@@ -220,33 +220,31 @@ function NFTAvatarInTwitter() {
         const linkParentDom = searchTwitterAvatarLinkSelector().evaluate()?.closest('div')
         if (!nftAvatar || !linkParentDom || !showAvatar) return
 
-        const handler = () => {
+        const handler = (event: MouseEvent) => {
             if (!nftInfo?.permalink) return
+            event.stopPropagation()
+            event.preventDefault()
             openWindow(nftInfo?.permalink)
         }
 
-        linkParentDom.addEventListener('click', handler)
+        linkParentDom.addEventListener('click', handler, true)
 
         return () => {
             linkParentDom.removeEventListener('click', handler)
         }
     }, [nftAvatar, showAvatar, nftInfo])
 
-    if (!nftAvatar || !size || loadingWallet || loadingNFTInfo) return null
+    if (!nftAvatar || !size || loadingWallet || loadingNFTInfo || !showAvatar) return null
 
     return (
-        <>
-            {showAvatar ? (
-                <NFTBadge
-                    nftInfo={nftInfo}
-                    borderSize={5}
-                    hasRainbow
-                    avatar={nftAvatar}
-                    size={size}
-                    width={15}
-                    classes={{ root: classes.root, text: classes.text, icon: classes.icon }}
-                />
-            ) : null}
-        </>
+        <NFTBadge
+            nftInfo={nftInfo}
+            borderSize={5}
+            hasRainbow
+            avatar={nftAvatar}
+            size={size}
+            width={15}
+            classes={{ root: classes.root, text: classes.text, icon: classes.icon }}
+        />
     )
 }
