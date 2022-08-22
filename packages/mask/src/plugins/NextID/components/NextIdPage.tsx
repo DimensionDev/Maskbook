@@ -141,7 +141,7 @@ export function NextIdPage() {
 
     const currentProfileIdentifier = useLastRecognizedIdentity()
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
-    const personaConnectStatus = useCurrentPersonaConnectStatus()
+    const { value: personaConnectStatus } = useCurrentPersonaConnectStatus()
     const { reset, isVerified } = useNextIDConnectStatus()
 
     const [openBindDialog, toggleBindDialog] = useState(false)

@@ -307,7 +307,7 @@ const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContex
 })
 
 function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
-    const personaConnectStatus = useCurrentPersonaConnectStatus()
+    const { value: personaConnectStatus } = useCurrentPersonaConnectStatus()
     const nextIDConnectStatus = useNextIDConnectStatus(true)
 
     const {

@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import stringify from 'json-stable-stringify'
 import { DashboardRoutes, isSamePersona, isSameProfile } from '@masknet/shared-base'
 import Services from '../../extension/service'
@@ -8,8 +8,10 @@ import { SetupGuideStep } from '../../../shared/legacy-settings/types'
 import { useLastRecognizedIdentity } from './useActivatedUI'
 import { usePersonasFromDB } from './usePersonasFromDB'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
-import { useAsync } from 'react-use'
+import { useAsync, useAsyncRetry } from 'react-use'
 import { PluginNextIDMessages } from '../../plugins/NextID/messages'
+import { NextIDProof } from '@masknet/web3-providers'
+import { MaskMessages } from '../../utils'
 
 const createPersona = () => {
     Services.Helper.openDashboard(DashboardRoutes.Setup)
@@ -59,30 +61,75 @@ export function useCurrentPersona() {
     return value
 }
 
+const defaultStatus = {
+    action: undefined,
+    currentPersona: undefined,
+    connected: false,
+    hasPersona: false,
+    verified: false,
+}
+
 export function useCurrentPersonaConnectStatus() {
     const personas = usePersonasFromDB()
     const lastRecognized = useLastRecognizedIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const { setDialog: setPersonaListDialog } = useRemoteControlledDialog(PluginNextIDMessages.PersonaListDialogUpdated)
 
-    return useMemo(() => {
+    const {
+        value = defaultStatus,
+        loading,
+        retry,
+    } = useAsyncRetry(async () => {
         const currentPersona = personas.find((x) => isSamePersona(x, currentIdentifier))
         const currentProfile = currentPersona?.linkedProfiles.find((x) =>
             isSameProfile(x.identifier, lastRecognized.identifier),
         )
 
-        const action = !personas.length
-            ? createPersona
-            : !currentProfile
-            ? (target?: string, position?: 'center' | 'top-right') =>
-                  setPersonaListDialog({ open: true, target, position })
-            : undefined
+        // handle not have persona
+        if (!currentPersona || !personas.length) {
+            return {
+                action: createPersona(),
+                currentPersona: undefined,
+                connected: false,
+                hasPersona: false,
+            }
+        }
+
+        const openPersonListDialog = (target?: string, position?: 'center' | 'top-right') =>
+            setPersonaListDialog({
+                open: true,
+                target,
+                position,
+            })
+
+        // handle had persona but not connect current sns
+        if (!currentProfile) {
+            return {
+                action: openPersonListDialog,
+                currentPersona,
+                connected: false,
+                hasPersona: true,
+            }
+        }
+
+        // handle had persona and connected current sns, then check the nextID
+        const nextIDInfo = await NextIDProof.queryExistedBindingByPersona(
+            currentPersona?.identifier.publicKeyAsHex,
+            false,
+        )
+        const verifiedProfile = nextIDInfo?.proofs.find(
+            (x) => isSameProfile(x.identity, currentProfile?.identifier) && x.is_valid,
+        )
 
         return {
-            action,
+            action: verifiedProfile ? undefined : openPersonListDialog,
             currentPersona,
-            connected: !!currentProfile,
-            hasPersona: !!personas.length,
+            connected: true,
+            hasPersona: true,
+            verified: !!verifiedProfile,
         }
     }, [currentIdentifier, personas, lastRecognized.identifier?.toText(), activatedSocialNetworkUI])
+
+    useEffect(() => MaskMessages.events.ownProofChanged.on(retry), [retry])
+    return { value, loading, retry }
 }
