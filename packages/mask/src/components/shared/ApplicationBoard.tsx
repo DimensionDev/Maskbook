@@ -1,4 +1,4 @@
-import { useState, useContext, createContext, PropsWithChildren, useMemo, useCallback, useEffect } from 'react'
+import { useState, useContext, createContext, PropsWithChildren, useMemo } from 'react'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
@@ -10,15 +10,11 @@ import { useI18N } from '../../utils'
 import { Application, getUnlistedApp } from './ApplicationSettingPluginList'
 import { ApplicationRecommendArea } from './ApplicationRecommendArea'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useNextIDConnectStatus, verifyPersona } from '../DataSource/useNextIDConnectStatus'
 import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext'
-import { MaskMessages } from '../../../shared'
 import { useTimeout } from 'react-use'
-import { DashboardRoutes } from '@masknet/shared-base'
-import { PluginNextIDMessages } from '../../plugins/NextID/messages'
 
 const useStyles = makeStyles<{ shouldScroll: boolean; isCarouselReady: boolean }>()((theme, props) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -213,10 +209,6 @@ function RenderEntryComponent({ application }: { application: Application }) {
         WalletMessages.events.selectProviderDialogUpdated,
     )
 
-    const { setDialog: setPersonaListDialog } = useRemoteControlledDialog(PluginNextIDMessages.PersonaListDialogUpdated)
-
-    const { setDialog: setCreatePersonaConfirmDialog } = useRemoteControlledDialog(MaskMessages.events.openPageConfirm)
-
     const ApplicationEntryStatus = useContext(ApplicationEntryStatusContext)
 
     // #region entry disabled
@@ -231,32 +223,17 @@ function RenderEntryComponent({ application }: { application: Application }) {
     }, [application, ApplicationEntryStatus])
     // #endregion
 
-    // #region entry click effect
-    const createPersona = useCallback(() => {
-        setCreatePersonaConfirmDialog({
-            open: true,
-            target: 'dashboard',
-            url: DashboardRoutes.Setup,
-            text: t('applications_create_persona_hint'),
-            title: t('applications_create_persona_title'),
-            actionHint: t('applications_create_persona_action'),
-        })
-    }, [ApplicationEntryStatus])
-
-    const verifyPersona = useCallback(() => {
-        setPersonaListDialog({ open: true, target: application.pluginId })
-    }, [])
-
     const clickHandler = useMemo(() => {
         if (application.isWalletConnectedRequired || application.isWalletConnectedEVMRequired) {
             return (walletConnectedCallback?: () => void) =>
                 setSelectProviderDialog({ open: true, walletConnectedCallback })
         }
         if (!application.entry.nextIdRequired) return
-        if (ApplicationEntryStatus.isPersonaCreated === false) return createPersona
-        if (ApplicationEntryStatus.shouldVerifyNextId) return verifyPersona
+        if (ApplicationEntryStatus.isPersonaCreated === false) return ApplicationEntryStatus.personaAction as () => void
+        if (ApplicationEntryStatus.shouldVerifyNextId)
+            return () => ApplicationEntryStatus.personaAction?.(application.pluginId)
         return
-    }, [setSelectProviderDialog, createPersona, ApplicationEntryStatus, verifyPersona, application])
+    }, [setSelectProviderDialog, ApplicationEntryStatus, application])
 
     // #endregion
 
@@ -287,8 +264,7 @@ interface ApplicationEntryStatusContextProps {
     shouldVerifyNextId: boolean | undefined
     currentPersonaPublicKey: string | undefined
     currentSNSConnectedPersonaPublicKey: string | undefined
-    personaConnectAction: (() => void) | undefined
-    personaNextIDReset: (() => void) | undefined
+    personaAction: ((target?: string | undefined, position?: 'center' | 'top-right' | undefined) => void) | undefined
     isLoading: boolean
 }
 
@@ -301,34 +277,15 @@ const ApplicationEntryStatusContext = createContext<ApplicationEntryStatusContex
     shouldVerifyNextId: undefined,
     currentPersonaPublicKey: undefined,
     currentSNSConnectedPersonaPublicKey: undefined,
-    personaConnectAction: undefined,
-    personaNextIDReset: undefined,
+    personaAction: undefined,
     isLoading: false,
 })
 
 function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
-    const { value: personaConnectStatus } = useCurrentPersonaConnectStatus()
-    const nextIDConnectStatus = useNextIDConnectStatus(true)
+    const { value: personaConnectStatus, loading: personaStatusLoading } = useCurrentPersonaConnectStatus()
 
-    const {
-        value: ApplicationCurrentStatus,
-        retry,
-        loading: personaAgainstSNSConnectStatusLoading,
-    } = usePersonaAgainstSNSConnectStatus()
-
-    useEffect(() => {
-        retry()
-        nextIDConnectStatus.reset()
-        return MaskMessages.events.currentPersonaIdentifier.on(() => {
-            retry()
-            nextIDConnectStatus.reset()
-        })
-    }, [])
-
-    const personaNextIDReset = useCallback(() => {
-        nextIDConnectStatus.reset()
-        verifyPersona(personaConnectStatus.currentPersona?.identifier)()
-    }, [nextIDConnectStatus, personaConnectStatus])
+    const { value: ApplicationCurrentStatus, loading: personaAgainstSNSConnectStatusLoading } =
+        usePersonaAgainstSNSConnectStatus()
 
     const { isSNSConnectToCurrentPersona, currentPersonaPublicKey, currentSNSConnectedPersonaPublicKey } =
         ApplicationCurrentStatus ?? {}
@@ -336,18 +293,17 @@ function ApplicationEntryStatusProvider(props: PropsWithChildren<{}>) {
     return (
         <ApplicationEntryStatusContext.Provider
             value={{
-                personaConnectAction: personaConnectStatus.action ?? undefined,
-                personaNextIDReset,
+                personaAction: personaConnectStatus.action,
                 isPersonaCreated: personaConnectStatus.hasPersona,
                 isPersonaConnected: personaConnectStatus.connected,
-                isNextIDVerify: nextIDConnectStatus.isVerified,
+                isNextIDVerify: personaConnectStatus.verified,
                 isSNSConnectToCurrentPersona,
                 shouldDisplayTooltipHint:
                     ApplicationCurrentStatus?.isSNSConnectToCurrentPersona === false && personaConnectStatus.connected,
-                shouldVerifyNextId: Boolean(!nextIDConnectStatus.isVerified && ApplicationCurrentStatus),
+                shouldVerifyNextId: Boolean(!personaConnectStatus.verified && ApplicationCurrentStatus),
                 currentPersonaPublicKey,
                 currentSNSConnectedPersonaPublicKey,
-                isLoading: nextIDConnectStatus.loading || personaAgainstSNSConnectStatusLoading,
+                isLoading: personaStatusLoading || personaAgainstSNSConnectStatusLoading,
             }}>
             {props.children}
         </ApplicationEntryStatusContext.Provider>

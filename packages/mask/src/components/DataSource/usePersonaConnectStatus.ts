@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import stringify from 'json-stable-stringify'
 import { DashboardRoutes, isSamePersona, isSameProfile } from '@masknet/shared-base'
 import Services from '../../extension/service'
@@ -11,7 +11,7 @@ import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { useAsync, useAsyncRetry } from 'react-use'
 import { PluginNextIDMessages } from '../../plugins/NextID/messages'
 import { NextIDProof } from '@masknet/web3-providers'
-import { MaskMessages } from '../../utils'
+import { MaskMessages, useI18N } from '../../utils'
 
 const createPersona = () => {
     Services.Helper.openDashboard(DashboardRoutes.Setup)
@@ -70,10 +70,36 @@ const defaultStatus = {
 }
 
 export function useCurrentPersonaConnectStatus() {
+    const { t } = useI18N()
+
     const personas = usePersonasFromDB()
     const lastRecognized = useLastRecognizedIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
+
     const { setDialog: setPersonaListDialog } = useRemoteControlledDialog(PluginNextIDMessages.PersonaListDialogUpdated)
+    const { setDialog: setCreatePersonaConfirmDialog } = useRemoteControlledDialog(MaskMessages.events.openPageConfirm)
+
+    const create = useCallback(() => {
+        setCreatePersonaConfirmDialog({
+            open: true,
+            target: 'dashboard',
+            url: DashboardRoutes.Setup,
+            text: t('applications_create_persona_hint'),
+            title: t('applications_create_persona_title'),
+            actionHint: t('applications_create_persona_action'),
+        })
+    }, [setCreatePersonaConfirmDialog])
+
+    const openPersonListDialog = useCallback(
+        (target?: string, position?: 'center' | 'top-right') => {
+            setPersonaListDialog({
+                open: true,
+                target,
+                position,
+            })
+        },
+        [setPersonaListDialog],
+    )
 
     const {
         value = defaultStatus,
@@ -88,19 +114,12 @@ export function useCurrentPersonaConnectStatus() {
         // handle not have persona
         if (!currentPersona || !personas.length) {
             return {
-                action: createPersona(),
+                action: create,
                 currentPersona: undefined,
                 connected: false,
                 hasPersona: false,
             }
         }
-
-        const openPersonListDialog = (target?: string, position?: 'center' | 'top-right') =>
-            setPersonaListDialog({
-                open: true,
-                target,
-                position,
-            })
 
         // handle had persona but not connect current sns
         if (!currentProfile) {
@@ -128,7 +147,14 @@ export function useCurrentPersonaConnectStatus() {
             hasPersona: true,
             verified: !!verifiedProfile,
         }
-    }, [currentIdentifier, personas, lastRecognized.identifier?.toText(), activatedSocialNetworkUI])
+    }, [
+        currentIdentifier,
+        personas,
+        lastRecognized.identifier?.toText(),
+        activatedSocialNetworkUI,
+        create,
+        openPersonListDialog,
+    ])
 
     useEffect(() => MaskMessages.events.ownProofChanged.on(retry), [retry])
     return { value, loading, retry }
