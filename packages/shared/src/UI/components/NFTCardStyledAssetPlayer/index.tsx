@@ -24,6 +24,10 @@ const useStyles = makeStyles()((theme) => ({
         height: 160,
         width: 120,
     },
+    loadingFailImage: {
+        height: '64px !important',
+        width: '64px !important',
+    },
     loadingIcon: {
         width: 30,
         height: 30,
@@ -104,7 +108,15 @@ export function NFTCardStyledAssetPlayer(props: Props) {
     if (isImageURL || isNative) {
         return (
             <div className={classes.imgWrapper}>
-                <Image width="100%" height="100%" style={{ objectFit: 'cover' }} src={urlComputed} />
+                <Image
+                    classes={{
+                        loadingFailImage: classes.loadingFailImage,
+                    }}
+                    width="100%"
+                    height="100%"
+                    style={{ objectFit: 'cover' }}
+                    src={urlComputed}
+                />
                 {showNetwork && <ImageIcon icon={networkIcon} size={20} classes={{ icon: classes.networkIcon }} />}
             </div>
         )
