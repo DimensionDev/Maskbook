@@ -13,7 +13,7 @@ export function NFTPage({ socialAddress, identity }: NFTPageProps) {
         <CollectionList
             addressName={socialAddress}
             persona={identity?.publicKey}
-            twitterId={identity?.identifier?.userId}
+            twitterId={identity?.identifier?.userId.toLowerCase()}
         />
     )
 }

@@ -1,5 +1,5 @@
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import type { NetworkPluginID, NonFungibleAsset, SocialAddress, SourceType, Wallet } from '@masknet/web3-shared-base'
 import { Skeleton, Typography } from '@mui/material'
 import type { HTMLProps } from 'react'
@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
         aspectRatio: '1/1',
     },
     description: {
-        background: theme.palette.mode === 'light' ? '#F7F9FA' : '#2F3336',
+        background: theme.palette.mode === 'light' ? MaskColorVar.twitterBackground : MaskColorVar.twitterLine,
         alignSelf: 'stretch',
         borderRadius: '0 0 8px 8px',
     },
@@ -36,19 +36,19 @@ const useStyles = makeStyles()((theme) => ({
 interface CollectibleItemProps extends HTMLProps<HTMLDivElement> {
     provider: SourceType
     wallet?: Wallet
-    token: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    asset: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     readonly?: boolean
     renderOrder: number
     address?: SocialAddress<NetworkPluginID>
 }
 export function CollectibleItem(props: CollectibleItemProps) {
-    const { provider, wallet, token, readonly, renderOrder, address, className, ...rest } = props
+    const { provider, wallet, asset, readonly, renderOrder, address, className, ...rest } = props
     const { classes, cx } = useStyles()
     return (
         <div className={cx(classes.card, className)} {...rest}>
             <CollectibleCard
                 className={classes.collectibleCard}
-                token={token}
+                asset={asset}
                 provider={provider}
                 wallet={wallet}
                 readonly={readonly}
@@ -57,7 +57,7 @@ export function CollectibleItem(props: CollectibleItemProps) {
             />
             <div className={classes.description}>
                 <Typography className={classes.name} color="textPrimary" variant="body2">
-                    {token.metadata?.name}
+                    {asset.metadata?.name}
                 </Typography>
             </div>
         </div>

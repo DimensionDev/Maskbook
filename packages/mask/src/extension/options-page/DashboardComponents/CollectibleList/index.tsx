@@ -28,7 +28,7 @@ export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
 }>(null!)
 
-const AllNetworkButton = styled(Button)(({ theme }) => ({
+const AllButton = styled(Button)(({ theme }) => ({
     display: 'inline-block',
     padding: 0,
     borderRadius: '50%',
@@ -43,8 +43,8 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         width: '100%',
         display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gridGap: theme.spacing(1),
+        gridTemplateColumns: 'repeat(3, 1fr)',
+        gridGap: theme.spacing(2),
     },
     collectibleItem: {
         overflowX: 'hidden',
@@ -220,12 +220,12 @@ export function CollectionList({
     const { t } = useI18N()
     const { classes } = useStyles()
     const [selectedCollection, setSelectedCollection] = useState<
-        NonFungibleTokenCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | 'all' | undefined
-    >('all')
+        NonFungibleTokenCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | undefined
+    >()
     const { address: account } = addressName
 
     useEffect(() => {
-        setSelectedCollection('all')
+        setSelectedCollection(undefined)
     }, [account])
 
     const trustedNonFungibleTokens = useTrustedNonFungibleTokens() as Array<
@@ -264,7 +264,7 @@ export function CollectionList({
     ]
 
     const renderCollectibles = useMemo(() => {
-        if (selectedCollection === 'all') return allCollectibles
+        if (!selectedCollection) return allCollectibles
         const uniqCollectibles = uniqBy(allCollectibles, (x) => x?.contract?.address.toLowerCase() + x?.tokenId)
         if (!selectedCollection) return uniqCollectibles.filter((x) => !x.collection)
         return uniqCollectibles.filter(
@@ -288,7 +288,7 @@ export function CollectionList({
             <Box className={classes.container}>
                 <Stack spacing={1} direction="row" mt={1.5}>
                     <LoadingSkeleton className={classes.root} />
-                    <Box width="24px" />
+                    <Box width="30px" />
                 </Stack>
             </Box>
         )
@@ -310,19 +310,7 @@ export function CollectionList({
             <Stack spacing={1} direction="row" mt={1.5}>
                 <Box sx={{ flexGrow: 1 }}>
                     <Box>
-                        {!selectedCollection && selectedCollection !== 'all' && (
-                            <Box display="flex" alignItems="center">
-                                <Typography
-                                    className={classes.name}
-                                    color="textPrimary"
-                                    variant="body2"
-                                    sx={{ fontSize: '16px' }}>
-                                    Other
-                                    {renderCollectibles.length ? `(${renderCollectibles.length})` : null}
-                                </Typography>
-                            </Box>
-                        )}
-                        {selectedCollection && selectedCollection !== 'all' && (
+                        {selectedCollection && (
                             <Box display="flex" alignItems="center">
                                 <CollectionIcon collection={selectedCollection} />
                                 <Typography
@@ -350,22 +338,20 @@ export function CollectionList({
                         {!done && <LoadingBase />}
                     </ElementAnchor>
                 </Box>
-                <Box width="24px">
+                <Box width="30px">
                     {collectionsWithName.length ? (
                         <Box>
                             <Box className={classes.collectionButton}>
-                                <AllNetworkButton
+                                <AllButton
                                     className={classes.networkSelected}
-                                    onClick={() => setSelectedCollection('all')}>
+                                    onClick={() => setSelectedCollection(undefined)}>
                                     ALL
-                                </AllNetworkButton>
+                                </AllButton>
                             </Box>
                             {collectionsWithName.map((x, i) => (
                                 <Box key={i} className={classes.collectionButton}>
                                     <CollectionIcon
-                                        selectedCollection={
-                                            selectedCollection === 'all' ? undefined : selectedCollection?.address
-                                        }
+                                        selectedCollection={selectedCollection?.address}
                                         collection={x}
                                         onClick={() => {
                                             setSelectedCollection(x)

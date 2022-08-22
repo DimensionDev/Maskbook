@@ -7,10 +7,6 @@ import { differenceWith } from 'lodash-unified'
 import { useMemo } from 'react'
 import type { Proof } from '../types'
 
-/**
- * TODO
- * duplicate with packages/plugins/RSS3/src/SNSAdaptor/hooks/useAvailableCollections.ts
- */
 export const useAvailableCollections = (
     proofs: Proof[],
     collections: Array<Web3Helper.NonFungibleTokenScope<void, NetworkPluginID>>,
@@ -21,7 +17,9 @@ export const useAvailableCollections = (
     return useMemo(() => {
         if (!address || !twitterId) return EMPTY_LIST
 
-        const proof = proofs.find((x) => x.platform === NextIDPlatform.Twitter && x.identity === twitterId)
+        const proof = proofs.find(
+            (x) => x.platform === NextIDPlatform.Twitter && x.identity === twitterId.toLowerCase(),
+        )
         const hiddenList =
             proof?.content?.[PluginId.Web3Profile]?.unListedCollections?.[address.toLowerCase()]?.[type] ?? []
         if (!hiddenList.length) return collections

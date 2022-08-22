@@ -6,8 +6,8 @@ import type { Proof } from '../../types'
 
 export const useAvailableCollections = (
     proofs: Proof[],
-    type: CollectionType,
     collections: RSS3BaseAPI.Collection[],
+    type: CollectionType,
     twitterId?: string,
     address?: string,
 ) => {

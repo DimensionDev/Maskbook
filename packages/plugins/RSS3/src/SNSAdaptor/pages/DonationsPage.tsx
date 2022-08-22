@@ -47,8 +47,8 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface DonationPageProps {
     socialAddress: SocialAddress<NetworkPluginID>
-    publicKey: string
     userId: string
+    publicKey?: string
 }
 
 export function DonationPage({ socialAddress, publicKey, userId }: DonationPageProps) {
@@ -60,19 +60,20 @@ export function DonationPage({ socialAddress, publicKey, userId }: DonationPageP
     )
     const donations = useAvailableCollections(
         kvValue?.proofs ?? EMPTY_LIST,
-        CollectionType.Donations,
         allDonations,
+        CollectionType.Donations,
         userId,
         socialAddress.address,
     )
 
+    const twitterId = userId.toLowerCase()
     const isHiddenAddress = useMemo(() => {
         return kvValue?.proofs
-            .find((proof) => proof?.platform === NextIDPlatform.Twitter && proof?.identity === userId?.toLowerCase())
+            .find((proof) => proof?.platform === NextIDPlatform.Twitter && proof?.identity === twitterId)
             ?.content?.[PluginId.Web3Profile]?.hiddenAddresses?.donations?.some((x) =>
                 isSameAddress(x.address, socialAddress.address),
             )
-    }, [userId, socialAddress, kvValue?.proofs])
+    }, [twitterId, socialAddress, kvValue?.proofs])
 
     const [selectedDonation, setSelectedDonation] = useState<RSS3BaseAPI.Collection | undefined>()
 

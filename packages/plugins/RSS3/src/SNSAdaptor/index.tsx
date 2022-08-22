@@ -16,7 +16,7 @@ const DonationsTabConfig: Plugin.SNSAdaptor.ProfileTab = {
     priority: 1,
     UI: {
         TabContent: ({ socialAddress, identity }) => {
-            if (!socialAddress?.address || !identity?.identifier?.userId || !identity.publicKey) return null
+            if (!socialAddress?.address || !identity?.identifier?.userId) return null
             return (
                 <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
                     <DonationPage
@@ -38,8 +38,8 @@ const FootprintsTabConfig: Plugin.SNSAdaptor.ProfileTab = {
     priority: 2,
     UI: {
         TabContent: ({ socialAddress, identity }) => {
-            if (!socialAddress?.address || !identity?.identifier?.userId || !identity.publicKey) return null
-            return socialAddress?.address ? (
+            if (!socialAddress?.address || !identity?.identifier?.userId) return null
+            return (
                 <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
                     <FootprintsPage
                         address={socialAddress.address}
@@ -47,7 +47,7 @@ const FootprintsTabConfig: Plugin.SNSAdaptor.ProfileTab = {
                         userId={identity?.identifier?.userId}
                     />
                 </PluginIDContextProvider>
-            ) : null
+            )
         },
     },
     Utils: {

@@ -2,11 +2,15 @@ import type { NextIDPlatform } from '@masknet/shared-base'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
+type CollectionKey = `${string}_${string}`
+/**
+ * Keys are in the format of `${collection.id}_${collection.id}`
+ */
 export interface CollectionKeys {
-    NFTs: string[]
-    Donations: string[]
-    Footprints: string[]
-    Feeds: string[]
+    NFTs: CollectionKey[]
+    Donations: CollectionKey[]
+    Footprints: CollectionKey[]
+    Feeds: CollectionKey[]
 }
 export interface WalletsCollection {
     NFTs?: WalletTypes[]
