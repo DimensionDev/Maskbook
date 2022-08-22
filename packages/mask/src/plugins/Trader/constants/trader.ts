@@ -1,5 +1,8 @@
-import { ONE } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
+import { ONE } from '@masknet/web3-shared-base'
+import { PluginId } from '@masknet/plugin-infra'
+
+export const PLUGIN_ID = PluginId.Trader
 
 export const MIN_GAS_LIMIT = 150000
 export const MIN_SLIPPAGE = 50 // 0.5%

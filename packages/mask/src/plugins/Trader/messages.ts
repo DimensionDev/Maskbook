@@ -17,10 +17,6 @@ interface SwapSettingsEvent {
     gasConfig?: GasOptionConfig
 }
 
-interface SwapConfirmationEvent {
-    open: boolean
-}
-
 interface SwapDialogEvent {
     open: boolean
     traderProps?: TraderProps
