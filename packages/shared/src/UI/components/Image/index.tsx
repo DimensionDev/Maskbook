@@ -3,7 +3,6 @@ import { useAsync } from 'react-use'
 import classNames from 'classnames'
 import { makeStyles, parseColor, useStylesExtends } from '@masknet/theme'
 import { Box, CircularProgress, useTheme } from '@mui/material'
-import { useIsImageURL } from '../../../hooks'
 
 const useStyles = makeStyles()((theme) => ({
     circle: {
@@ -34,13 +33,13 @@ export function Image({ fallbackImage, ...rest }: ImageProps) {
         if (!rest.src) return
         // base64 image
         if (rest.src.startsWith('data')) return rest.src
-        const response = await fetch(rest.src)
+        const response = await fetch(rest.src, {
+            cache: 'force-cache',
+        })
         return URL.createObjectURL(await response.blob())
     }, [rest.src])
 
-    const { value: isImageURL, loading: isImageURLLoading } = useIsImageURL(rest.src)
-
-    if (imageLoading || isImageURLLoading) {
+    if (imageLoading) {
         return (
             <Box className={classes.imageLoadingBox}>
                 <Box sx={{ position: 'relative' }}>
@@ -60,7 +59,7 @@ export function Image({ fallbackImage, ...rest }: ImageProps) {
         )
     }
 
-    if (image && isImageURL) {
+    if (image) {
         return (
             <Box className={classes.imageLoadingBox}>
                 <img crossOrigin="anonymous" {...rest} src={image} />
