@@ -1029,6 +1029,7 @@ export enum PluginId {
     Poll = 'com.maskbook.poll',
     Profile = 'com.mask.profile',
     Trader = 'com.maskbook.trader',
+    Trending = 'com.maskbook.trending',
     Tips = 'com.maskbook.tip',
     Transak = 'com.maskbook.transak',
     Valuables = 'com.maskbook.tweet',

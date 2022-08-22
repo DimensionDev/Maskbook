@@ -6,8 +6,8 @@ import { languages } from './locales/languages'
 
 export const base: Plugin.Shared.Definition<ChainId> = {
     ID: PLUGIN_ID,
-    name: { fallback: 'Trader' },
-    description: { fallback: 'Swap ERC20 tokens in various DEX markets.' },
+    name: { fallback: 'Trending' },
+    description: { fallback: 'View trending of cryptocurrencies.' },
     publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
     enableRequirement: {
         architecture: { app: true, web: true },
