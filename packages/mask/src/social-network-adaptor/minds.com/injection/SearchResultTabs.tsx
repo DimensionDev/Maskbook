@@ -1,11 +1,11 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { SearchResultBox } from '../../../components/InjectedComponents/SearchResultBox'
+import { SearchResultTabs } from '../../../components/InjectedComponents/SearchResultTabs'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { startWatch } from '../../../utils/watcher'
 import { searchResultHeadingSelector } from '../utils/selector'
 
-export function injectSearchResultBoxAtTwitter(signal: AbortSignal) {
+export function injectSearchResultTabsAtMinds(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchResultHeadingSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<SearchResultBox />)
+    createReactRootShadowed(watcher.firstDOMProxy.beforeShadow, { signal }).render(<SearchResultTabs />)
 }

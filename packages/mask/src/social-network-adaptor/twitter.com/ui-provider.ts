@@ -12,7 +12,7 @@ import { collectVerificationPost, PostProviderTwitter } from './collecting/post'
 import { PaletteModeProviderTwitter, useThemeTwitterVariant } from './customization/custom'
 import { injectToolboxHintAtTwitter } from './injection/ToolboxHint'
 import { i18NOverwriteTwitter } from './customization/i18n'
-import { injectSearchResultBoxAtTwitter } from './injection/SearchResultBox'
+import { injectSearchResultTabsAtTwitter } from './injection/SearchResultTabs'
 import { injectProfileTabAtTwitter } from './injection/ProfileTab'
 import { injectProfileTabContentAtTwitter } from './injection/ProfileTabContent'
 import { injectPostReplacerAtTwitter } from './injection/PostReplacer'
@@ -162,7 +162,7 @@ const twitterUI: SocialNetworkUI.Definition = {
     },
     injection: {
         toolbox: injectToolboxHintAtTwitter,
-        searchResult: injectSearchResultBoxAtTwitter,
+        searchResultTabs: injectSearchResultTabsAtTwitter,
         profileTab: injectProfileTabAtTwitter,
         profileCover: injectProfileCover,
         profileTabContent: injectProfileTabContentAtTwitter,

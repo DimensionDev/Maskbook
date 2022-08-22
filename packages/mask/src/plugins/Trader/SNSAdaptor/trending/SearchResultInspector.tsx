@@ -5,9 +5,9 @@ import { TagType } from '../../types'
 import { TraderView } from './TraderView'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 
-export interface SearchResultInspectorProps {}
+export interface SearchResultTabsProps {}
 
-export function SearchResultInspector(props: SearchResultInspectorProps) {
+export function SearchResultTabs(props: SearchResultTabsProps) {
     const keyword = useSearchedKeyword()
     const [_, type, name = ''] = keyword.match(/([#$])(\w+)/) ?? []
     const type_ = type === '$' ? TagType.CASH : TagType.HASH

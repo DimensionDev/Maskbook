@@ -2,11 +2,11 @@ import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@maskn
 
 const PluginRenderer = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useAnyMode,
-    (x) => x.SearchResultBox,
+    (x) => x.SearchResultTabs,
 )
 
-export interface SearchResultBoxProps {}
+export interface SearchResultTabsProps {}
 
-export function SearchResultBox(props: SearchResultBoxProps) {
+export function SearchResultTabs(props: SearchResultTabsProps) {
     return <PluginRenderer />
 }

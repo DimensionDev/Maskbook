@@ -1,7 +1,7 @@
+import { useCallback } from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { useCallback } from 'react'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { startWatch } from '../../../utils/watcher'

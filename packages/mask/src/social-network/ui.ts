@@ -87,7 +87,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         ui.injection.toolbox?.(signal, 'application')
     }
     ui.injection.newPostComposition?.start?.(signal)
-    ui.injection.searchResult?.(signal)
+    ui.injection.searchResultTabs?.(signal)
     ui.injection.userBadge?.(signal)
 
     ui.injection.profileTab?.(signal)

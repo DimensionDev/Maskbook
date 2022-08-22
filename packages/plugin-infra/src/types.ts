@@ -416,8 +416,6 @@ export namespace Plugin.SNSAdaptor {
         PostActions?: InjectUI<{}>
         /** This UI will be rendered for each decrypted post. */
         DecryptedInspector?: InjectUI<{ message: TypedMessage }>
-        /** This UI will be rendered under the Search of the SNS. */
-        SearchResultBox?: InjectUI<{}>
         /** This UI will be rendered into the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
@@ -445,6 +443,8 @@ export namespace Plugin.SNSAdaptor {
         CompositionDialogMetadataBadgeRender?: CompositionMetadataBadgeRender
         /** This UI will be rendered as an entry in the wallet status dialog */
         ApplicationEntries?: ApplicationEntry[]
+        /** This UI will be rendered under the Search of the SNS. */
+        SearchResultTabs?: InjectUI<{}>
         /** This UI will be rendered as tabs on the profile page */
         ProfileTabs?: ProfileTab[]
         /** This UI will be rendered as tabs on the profile card */

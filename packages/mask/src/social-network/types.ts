@@ -99,7 +99,7 @@ export namespace SocialNetworkUI {
             /** Inject a badge to a user. */
             userBadge?(signal: AbortSignal): void
             /** Inject UI to the search result */
-            searchResult?(signal: AbortSignal): void
+            searchResultTabs?(signal: AbortSignal): void
             /** Inject UI to the profile tab */
             profileTab?(signal: AbortSignal): void
             /** Inject UI to the profile cover */

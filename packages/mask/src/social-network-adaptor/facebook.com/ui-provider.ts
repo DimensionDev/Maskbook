@@ -14,7 +14,7 @@ import { pasteToCommentBoxFacebook } from './automation/pasteToCommentBoxFaceboo
 import { injectCommentBoxDefaultFactory } from '../../social-network/defaults/inject/CommentBox'
 import { injectPostInspectorFacebook } from './injection/PostInspector'
 import getSearchedKeywordAtFacebook from './collecting/getSearchedKeyword'
-import { injectSearchResultBoxAtFacebook } from './injection/SearchResultBox'
+import { injectSearchResultTabsAtFacebook } from './injection/SearchResultTabs'
 import { PostProviderFacebook } from './collecting/posts'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector'
@@ -175,7 +175,7 @@ const facebookUI: SocialNetworkUI.Definition = {
             },
         },
         userBadge: undefined,
-        searchResult: injectSearchResultBoxAtFacebook,
+        searchResultTabs: injectSearchResultTabsAtFacebook,
         setupPrompt: injectSetupPromptFacebook,
         commentComposition: {
             compositionBox: injectPostCommentsDefault(),
