@@ -65,7 +65,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
         chainId,
         contractAddress = '',
         tokenId = '',
-        isImageOnly: isNative = false,
+        isImageOnly = false,
         fallbackImage,
         fallbackResourceLoader,
         url,
@@ -101,7 +101,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
         return networkDescriptor?.icon
     }, [networkDescriptor])
 
-    if (isImageURL || isNative) {
+    if (isImageURL || isImageOnly) {
         return (
             <div className={classes.imgWrapper}>
                 <Image width="100%" height="100%" style={{ objectFit: 'cover' }} src={urlComputed} />
@@ -109,6 +109,8 @@ export function NFTCardStyledAssetPlayer(props: Props) {
             </div>
         )
     }
+
+    if (typeof isImageURL === 'undefined') return null
 
     return (
         <AssetPlayer
