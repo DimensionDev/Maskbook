@@ -79,7 +79,7 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
             {!personaConnectStatusLoading && (
                 <NFTAvatarButton
                     classes={{ root: classes.root, text: classes.text }}
-                    onClick={() => personaConnectStatus.action?.(PluginId.Avatar)}
+                    onClick={() => personaConnectStatus.action?.(PluginId.Avatar, 'top-right')}
                 />
             )}
             <NFTAvatarDialog open={open} onClose={() => setOpen(false)} />

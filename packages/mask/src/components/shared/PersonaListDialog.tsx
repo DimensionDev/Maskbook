@@ -27,13 +27,29 @@ import { PersonaItemUI } from './PersonaListUI/PersonaItemUI'
 import { useCurrentPersona } from '../DataSource/usePersonaConnectStatus'
 import { delay } from '@dimensiondev/kit'
 
-const useStyles = makeStyles()((theme) => {
+type PositionOption = 'center' | 'top-right'
+type PositionStyle = {
+    top?: number
+    right?: number
+    position?: 'absolute'
+}
+
+const useStyles = makeStyles<{
+    positionStyle: {
+        top?: number
+        right?: number
+        position?: 'absolute'
+    }
+}>()((theme, props) => {
     return {
         root: {
             width: 384,
             height: 386,
             padding: theme.spacing(1),
             background: theme.palette.maskColor.bottom,
+            position: props.positionStyle.position,
+            top: props.positionStyle.top,
+            right: props.positionStyle.right,
         },
         content: {
             padding: theme.spacing(0, 2, 2, 2),
@@ -55,21 +71,33 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
+const positionStyleMap: Record<PositionOption, PositionStyle> = {
+    center: {},
+    'top-right': {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+    },
+}
+
 export const PersonaListDialog = () => {
     const { t } = useI18N()
-    const { classes } = useStyles()
     const [, copyToClipboard] = useCopyToClipboard()
     const { showSnackbar } = useCustomSnackbar()
     const currentPlatform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
     const currentPersona = useCurrentPersona()
     const currentPersonaIdentifier = currentPersona?.identifier
+
     const [finishTarget, setFinishTarget] = useState<string>()
+    const [position, setPosition] = useState<PositionOption>('center')
+    const { classes } = useStyles({ positionStyle: positionStyleMap[position] })
 
     const { open, closeDialog } = useRemoteControlledDialog(PluginNextIDMessages.PersonaListDialogUpdated, (ev) => {
         if (!ev.open) {
             setFinishTarget(undefined)
         } else {
             setFinishTarget(ev.target)
+            setPosition(ev.position ?? 'center')
         }
     })
 
