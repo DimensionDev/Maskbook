@@ -1,7 +1,14 @@
 import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Emitter } from '@servie/events'
-import type { EnhanceableSite, ExtensionSite, NextIDPersonaBindings, ProfileIdentifier } from '@masknet/shared-base'
+import type {
+    EnhanceableSite,
+    ExtensionSite,
+    ProfileIdentifier,
+    ECKeyIdentifier,
+    NextIDPersonaBindings,
+    NextIDPlatform,
+} from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type {
     ReturnChainResolver,
@@ -109,6 +116,14 @@ export enum SocialAddressType {
     TWITTER_BLUE = 'TWITTER_BLUE',
     NEXT_ID = 'NEXT_ID',
     SOL = 'SOL',
+}
+
+export enum StorageProviderType {
+    NextID = 'NextID',
+    // RSS3 File API
+    RSS3 = 'RSS3',
+    // KV storage powered by CloudFlare
+    KV = 'kv',
 }
 
 export interface Identity {
@@ -912,11 +927,7 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
     /** Get a non-fungible token owner address. */
-    getNonFungibleTokenOwner?: (
-        address: string,
-        tokenId: string,
-        initial?: Web3HubOptions,
-    ) => Promise<string>
+    getNonFungibleTokenOwner?: (address: string, tokenId: string, initial?: Web3HubOptions) => Promise<string>
     /** Get a non-fungible token floor price. */
     getNonFungibleTokenFloorPrice?: (
         address: string,
@@ -1080,6 +1091,15 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
     cancelOrder?: (/** TODO: add parameters */) => Promise<void>
 }
 
+export interface Storage {
+    has(key: string): Promise<boolean>
+    get<T>(key: string): Promise<T | undefined>
+    getAll?<T>(key: string): Promise<T[] | undefined>
+    set<T>(key: string, value: T): Promise<void>
+    delete?(key: string): Promise<void>
+    clearAll?(): Promise<void>
+}
+
 export interface SettingsState {
     /** Is testnets valid */
     allowTestnet?: Subscription<boolean>
@@ -1122,6 +1142,20 @@ export interface HubState<
 > {
     /** Get external data hub */
     getHub?: (options: Web3HubOptions) => Promise<Web3Hub>
+}
+
+export interface Web3StorageServiceState {
+    createStorage: (
+        providerType: StorageProviderType,
+        options: {
+            namespace: string
+            personaIdentifier?: ECKeyIdentifier
+            platform?: NextIDPlatform
+        },
+    ) => Storage
+    createKVStorage: (namespace: string) => Storage
+    createRSS3Storage: (namespace: string) => Storage
+    createNextIDStorage: (proofIdentity: string, platform: NextIDPlatform,personaIdentifier: ECKeyIdentifier,) => Storage
 }
 
 export interface IdentityServiceState {
@@ -1192,7 +1226,7 @@ export interface TransactionFormatterState<ChainId, Parameters, Transaction> {
     formatTransaction: (
         chainId: ChainId,
         transaction: Transaction,
-        txHash?: string
+        txHash?: string,
     ) => Promise<TransactionDescriptor<ChainId, Transaction>>
 }
 export interface TransactionWatcherState<ChainId, Transaction> {

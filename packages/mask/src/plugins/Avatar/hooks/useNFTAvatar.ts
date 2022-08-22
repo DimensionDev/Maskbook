@@ -7,7 +7,7 @@ import type { EnhanceableSite } from '@masknet/shared-base'
 import { useGetNFTAvatar } from './useGetNFTAvatar'
 
 export function useNFTAvatar(userId: string | undefined, snsKey: RSS3_KEY_SNS): AsyncState<AvatarMetaDB | undefined> {
-    const [, getNFTAvatar] = useGetNFTAvatar()
+    const getNFTAvatar = useGetNFTAvatar()
 
     return useAsync(async () => {
         return getNFTAvatar(userId, activatedSocialNetworkUI.networkIdentifier as EnhanceableSite, snsKey)

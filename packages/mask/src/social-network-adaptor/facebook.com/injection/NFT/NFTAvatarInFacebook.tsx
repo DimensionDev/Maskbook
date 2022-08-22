@@ -76,7 +76,7 @@ function NFTAvatarInFacebook() {
     )
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
-    const [, saveNFTAvatar] = useSaveNFTAvatar()
+    const saveNFTAvatar = useSaveNFTAvatar()
 
     const windowSize = useWindowSize()
     const showAvatar = useMemo(() => {

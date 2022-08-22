@@ -1,14 +1,9 @@
-import { BindingProof, EMPTY_LIST, NextIDStorageInfo } from '@masknet/shared-base'
-import { PluginId } from '@masknet/plugin-infra'
+import { BindingProof, EMPTY_LIST } from '@masknet/shared-base'
 import { sortBy } from 'lodash-unified'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useMemo } from 'react'
 
-export function useTipsWalletsList(
-    proofList: BindingProof[] | undefined,
-    identity?: string,
-    kv?: NextIDStorageInfo<BindingProof[]>,
-) {
+export function useTipsWalletsList(proofList: BindingProof[] | undefined, identity?: string, kv?: BindingProof[]) {
     return useMemo(() => {
         if (!proofList?.length) return EMPTY_LIST
         const proofs = sortBy(proofList, (x) => -Number.parseInt(x.last_checked_at, 10)).map(
@@ -17,12 +12,11 @@ export function useTipsWalletsList(
                 rawIdx: list.length - index - 1,
             }),
         )
-        if (kv?.proofs?.length) {
-            const bindings = kv.proofs.find((x) => x.identity === identity)?.content[PluginId.Tips]
+        if (kv && kv.length > 0 && proofs.length > 0) {
             const result = proofs.map((x) => {
                 x.isDefault = 0
                 x.isPublic = 1
-                const matched = bindings?.find((proof) => isSameAddress(x.identity, proof.identity))
+                const matched = kv?.find((proof) => isSameAddress(x.identity, proof.identity))
                 if (matched) {
                     x.isDefault = matched.isDefault
                     x.isPublic = matched.isPublic
@@ -45,5 +39,5 @@ export function useTipsWalletsList(
             }
         })
         return proofs
-    }, [proofList, kv?.proofs])
+    }, [proofList, kv])
 }

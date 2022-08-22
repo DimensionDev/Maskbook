@@ -2,12 +2,12 @@ import { useAsyncRetry } from 'react-use'
 import { isValidAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { PluginNFTAvatarRPC } from '../messages'
 import { EMPTY_LIST, EnhanceableSite, NextIDPlatform } from '@masknet/shared-base'
 import type { NetworkPluginID, SocialIdentity } from '@masknet/web3-shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import Services from '../../../extension/service'
+import { useGetAddress } from './useGetAddress'
 
 async function queryCurrentPersona(identityResolved: IdentityResolved) {
     if (!identityResolved.identifier) return
@@ -25,6 +25,8 @@ export function useCheckTokenOwner(
 ) {
     const connection = useWeb3Connection(pluginId)
 
+    const getAddress = useGetAddress()
+
     return useAsyncRetry(async () => {
         if (!socialIdentity?.identifier?.userId || socialIdentity?.identifier.userId === '$unknown') return
         if (!address || !tokenId) return
@@ -36,7 +38,7 @@ export function useCheckTokenOwner(
                 (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),
             ) ?? EMPTY_LIST
 
-        const storage = await PluginNFTAvatarRPC.getAddress(
+        const storage = await getAddress(
             activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
             socialIdentity.identifier?.userId ?? '',
         )

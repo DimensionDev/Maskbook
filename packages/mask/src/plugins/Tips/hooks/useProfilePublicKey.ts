@@ -6,6 +6,6 @@ export function useProfilePublicKey(receiver: ProfileIdentifier | null | undefin
     return useAsync(async () => {
         if (!receiver) return
         const persona = await Services.Identity.queryPersonaByProfile(receiver)
-        return persona?.identifier.publicKeyAsHex
+        return persona?.identifier
     }, [receiver])
 }

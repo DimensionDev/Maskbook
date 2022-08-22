@@ -1,13 +1,8 @@
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { useAccount, useWeb3State } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { InjectedDialog } from '@masknet/shared'
-import {
-    BindingProof,
-    ECKeyIdentifier,
-    NextIDAction,
-    NextIDStorageInfo,
-    NextIDStoragePayload,
-} from '@masknet/shared-base'
+import { PluginId } from '@masknet/plugin-infra'
+import { BindingProof, NextIDAction, NextIDPlatform } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ActionButton, LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
@@ -17,7 +12,6 @@ import { isEqual } from 'lodash-unified'
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import Services from '../../../extension/service'
-import { getKvPayload, setKvPatchData, useKvGet } from '../hooks/useKv'
 import { useProvedWallets } from '../hooks/useProvedWallets'
 import { useTipsWalletsList } from '../hooks/useTipsWalletsList'
 import { useI18N } from '../locales'
@@ -93,6 +87,7 @@ const WalletButton: FC<WalletButtonProps> = ({ step, onClick }) => {
 export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const t = useI18N()
     const { classes } = useStyles()
+    const { Storage } = useWeb3State()
     const [showAlert, setShowAlert] = useState(true)
     const [step, setStep] = useState<Step>(Step.Main)
     const supportedNetworkIds = [NetworkPluginID.PLUGIN_EVM]
@@ -113,15 +108,20 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             setStep(Step.Main)
         }
     }
-    const { value: kv, retry: retryKv } = useKvGet<NextIDStorageInfo<BindingProof[]>>(
-        currentPersonaIdentifier?.publicKeyAsHex,
-    )
+
+    const { value: kv, retry: retryKv } = useAsyncRetry(async () => {
+        if (!Storage || !currentPersonaIdentifier) return
+        const storage = Storage.createNextIDStorage(
+            currentPersonaIdentifier.publicKeyAsHex,
+            NextIDPlatform.NextID,
+            currentPersonaIdentifier,
+        )
+
+        return storage.get<BindingProof[]>(PluginId.Tips)
+    }, [currentPersonaIdentifier, Storage])
+
     const { loading, value: proofRes, retry: retryProof } = useProvedWallets()
-    const bindingWallets = useTipsWalletsList(
-        proofRes,
-        currentPersona?.identifier.publicKeyAsHex,
-        kv?.ok ? kv.val : undefined,
-    )
+    const bindingWallets = useTipsWalletsList(proofRes, currentPersona?.identifier.publicKeyAsHex, kv)
 
     const refetch = () => {
         retryProof()
@@ -246,20 +246,20 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     }, [isDirty, bindingWallets, pendingDefault, pendingPublicAddress])
 
     const [kvFetchState, onConfirm] = useAsyncFn(async () => {
+        if (!Storage || !currentPersonaIdentifier) return
         try {
-            const payload = await getKvPayload(modifiedWallets)
-            if (!payload || !payload.val) throw new Error('Payload Error')
-            const signResult = await Services.Identity.generateSignResult(
-                currentPersonaIdentifier as ECKeyIdentifier,
-                (payload.val as NextIDStoragePayload).signPayload,
+            const storage = Storage.createNextIDStorage(
+                currentPersonaIdentifier.publicKeyAsHex,
+                NextIDPlatform.NextID,
+                currentPersonaIdentifier,
             )
-            if (!signResult) throw new Error('Sign Error')
-            await setKvPatchData(payload.val, signResult.signature.signature, modifiedWallets)
+            await storage.set<BindingProof[]>(PluginId.Tips, modifiedWallets)
+
             showSnackbar(t.tip_persona_sign_success(), {
                 variant: 'success',
                 message: getNowTime(),
             })
-            refetch()
+            retryKv()
             return true
         } catch (error) {
             showSnackbar(t.tip_persona_sign_error(), {

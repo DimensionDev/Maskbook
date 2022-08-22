@@ -20,7 +20,7 @@ type GetNFTAvatar = (
 ) => Promise<AvatarMetaDB | undefined>
 
 export function usePersonaNFTAvatar(userId: string, avatarId: string, persona: string, snsKey: RSS3_KEY_SNS) {
-    const [, getNFTAvatar] = useGetNFTAvatar()
+    const getNFTAvatar = useGetNFTAvatar()
 
     return useAsyncRetry(async () => {
         if (!userId) return
