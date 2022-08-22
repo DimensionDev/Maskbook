@@ -67,11 +67,6 @@ export function Image({ fallbackImage, ...rest }: ImageProps) {
         )
     }
 
-    console.log('DEBUG: test')
-    console.log({
-        src: rest.src,
-    })
-
     return (
         <Box className={classes.imageLoadingBox}>
             <img
