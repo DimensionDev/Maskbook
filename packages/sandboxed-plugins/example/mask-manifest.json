@@ -1,4 +1,5 @@
 {
+    "id": "example",
     "entries": {
         "background": "./background.js",
         "rpc": "./rpc.js",
