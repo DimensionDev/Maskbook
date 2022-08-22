@@ -2,7 +2,7 @@ import { Card, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { ActionsBarNFT } from '../ActionsBarNFT'
-import type { NetworkPluginID, NonFungibleToken, SocialAddress, SourceType, Wallet } from '@masknet/web3-shared-base'
+import type { NetworkPluginID, NonFungibleAsset, SocialAddress, SourceType, Wallet } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/plugin-infra/src/entry-web3'
 import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
 
@@ -62,37 +62,41 @@ const useStyles = makeStyles()((theme) => ({
 export interface CollectibleCardProps {
     provider: SourceType
     wallet?: Wallet
-    token: NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    asset: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     readonly?: boolean
     renderOrder: number
     address?: SocialAddress<NetworkPluginID>
 }
 
 export function CollectibleCard(props: CollectibleCardProps) {
-    const { wallet, token, readonly, renderOrder, address } = props
+    const { wallet, asset, readonly, renderOrder, address } = props
     const { classes } = useStyles()
 
     return (
         <Link
             target="_blank"
             rel="noopener noreferrer"
-            href={resolveOpenSeaLink(token.address, token.tokenId)}
+            // TODO:
+            // add useNonFungibleTokenLink()
+            href={asset.link ?? resolveOpenSeaLink(asset.address, asset.tokenId)}
             className={classes.linkWrapper}>
             <div className={classes.blocker} />
             <Card className={classes.root}>
                 {readonly || !wallet ? null : (
-                    <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} token={token} />
+                    <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} asset={asset} />
                 )}
                 <NFTCardStyledAssetPlayer
-                    contractAddress={token.address}
-                    chainId={token.chainId}
-                    url={token.metadata?.mediaURL || token.metadata?.imageURL}
+                    contractAddress={asset.address}
+                    chainId={asset.chainId}
+                    isImageOnly
+                    url={asset.metadata?.mediaURL || asset.metadata?.imageURL}
                     renderOrder={renderOrder}
-                    tokenId={token.tokenId}
+                    tokenId={asset.tokenId}
                     address={address}
                     classes={{
                         loadingFailImage: classes.loadingFailImage,
                         wrapper: classes.wrapper,
+                        imgWrapper: classes.wrapper,
                     }}
                     showNetwork
                 />

@@ -83,19 +83,26 @@ class Hub implements SolanaHub {
             account,
         })
         try {
-            return MagicEden.getTokens(options.account, options)
+            return MagicEden.getAssets(options.account, options)
         } catch {
+            // TODO: move to web3-provider
             return SolanaRPC.getNonFungibleAssets(options.account, options)
         }
     }
-    getNonFungibleCollections(
+    async getNonFungibleAssets(
+        account: string,
+        initial?: HubOptions<ChainId>,
+    ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
+        return this.getNonFungibleTokens(account, initial)
+    }
+    getNonFungibleCollectionsByOwner(
         account: string,
         initial?: HubOptions<ChainId>,
     ): Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>>> {
         const options = this.getOptions(initial, {
             account,
         })
-        return MagicEden.getCollections(options.account, options)
+        return MagicEden.getCollectionsByOwner(options.account, options)
     }
     getFungibleTokenPrice(chainId: ChainId, address: string, initial?: HubOptions<ChainId>): Promise<number> {
         const options = this.getOptions(initial)

@@ -186,7 +186,7 @@ export const getNFTList = async (walletList: WalletTypes[]) => {
                 return {
                     address,
                     collections: result?.data?.map((asset) => ({
-                        key: `${asset?.contract?.address}+${asset.tokenId}`,
+                        key: `${asset?.contract?.address}_${asset.tokenId}`,
                         address: asset?.address,
                         platform: platform ?? NetworkPluginID.PLUGIN_EVM,
                         tokenId: asset.tokenId,
@@ -213,7 +213,7 @@ export const getNFTList_Polygon = async (walletList: WalletTypes[]) => {
                 return {
                     address,
                     collections: result?.data?.map((asset) => ({
-                        key: `${asset?.contract?.address}+${asset.tokenId}`,
+                        key: `${asset?.contract?.address}_${asset.tokenId}`,
                         address: asset?.address,
                         platform: platform ?? NetworkPluginID.PLUGIN_EVM,
                         tokenId: asset.tokenId,

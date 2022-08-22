@@ -35,7 +35,7 @@ const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, pro
         overflow: 'hidden',
         padding: 0,
         flexDirection: 'column',
-        borderRadius: 12,
+        borderRadius: 8,
         userSelect: 'none',
         justifyContent: 'center',
         lineHeight: 0,
@@ -58,7 +58,7 @@ const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, pro
         '&:hover': {
             border: `1px solid ${theme.palette.primary.main}`,
         },
-        borderRadius: 12,
+        borderRadius: 8,
     },
 }))
 
@@ -97,8 +97,8 @@ export function NFTListPage(props: NFTListPageProps) {
                     justifyContent: 'center',
                     flexDirection: 'column',
                 }}>
-                <Icons.AvatarEmpty size={36} style={{ paddingBottom: 14 }} />
-                <Typography color={(theme) => theme.palette.maskColor.main} fontSize={14}>
+                <Icons.EmptySimple variant="light" size={36} />
+                <Typography color={(theme) => theme.palette.maskColor.main} fontSize={14} mt="14px">
                     {t.loading()}
                 </Typography>
             </Box>

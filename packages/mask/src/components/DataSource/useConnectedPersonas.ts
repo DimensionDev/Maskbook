@@ -1,13 +1,15 @@
 import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import { useAsync } from 'react-use'
+import { useAsyncRetry } from 'react-use'
 import Services from '../../extension/service'
 import { usePersonasFromDB } from './usePersonasFromDB'
+import { useEffect } from 'react'
+import { MaskMessages } from '../../utils'
 
 export function useConnectedPersonas() {
     const personasInDB = usePersonasFromDB()
 
-    return useAsync(async () => {
+    const result = useAsyncRetry(async () => {
         const allPersonaPublicKeys = personasInDB.map((x) => x.identifier.publicKeyAsHex)
         const allPersonaIdentifiers = personasInDB.map((x) => x.identifier)
 
@@ -28,4 +30,8 @@ export function useConnectedPersonas() {
             }
         })
     }, [personasInDB.length])
+
+    useEffect(() => MaskMessages.events.ownProofChanged.on(result.retry), [result.retry])
+
+    return result
 }

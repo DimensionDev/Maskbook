@@ -1,10 +1,10 @@
-import { memo } from 'react'
 import type { BindingProof } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { Typography } from '@mui/material'
-import { WalletSwitch } from '../components/WalletSwitch'
-import { ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { Typography } from '@mui/material'
+import { memo } from 'react'
+import { WalletSwitch } from '../components/WalletSwitch'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -28,29 +28,29 @@ const useStyles = makeStyles()((theme) => ({
 
 interface SettingPageProp {
     wallets: BindingProof[]
-    onSwitchChange(idx: number, v: boolean): void
+    publicAddresses: string[]
+    onSwitchChange(address: string, v: boolean): void
 }
 
-const SettingPage = memo(({ wallets, onSwitchChange }: SettingPageProp) => {
+const SettingPage = memo(({ wallets, publicAddresses, onSwitchChange }: SettingPageProp) => {
     const { classes } = useStyles()
     return (
         <div className={classes.container}>
             <div className={classes.titleBox}>
                 <Typography sx={{ fontWeight: 'bold', fontSize: 16 }}>Tips</Typography>
                 <Typography>
-                    ({wallets.filter((x) => x.isPublic === 1).length}/{wallets.length})
+                    ({publicAddresses.length}/{wallets.length})
                 </Typography>
             </div>
             <div className={classes.walletSwitchBox}>
-                {wallets.map((x, idx) => {
+                {wallets.map((x) => {
                     return (
-                        <div key={idx} className={classes.switchContainer}>
+                        <div key={x.identity} className={classes.switchContainer}>
                             <WalletSwitch
                                 chainId={ChainId.Mainnet}
                                 type={NetworkPluginID.PLUGIN_EVM}
-                                index={idx}
                                 address={x.identity}
-                                isPublic={!!x.isPublic}
+                                isPublic={publicAddresses.includes(x.identity)}
                                 onChange={onSwitchChange}
                             />
                         </div>

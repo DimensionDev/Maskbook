@@ -136,6 +136,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                         },
                     },
                 },
+                // compress svg files
                 mode === 'production'
                     ? {
                           test: /\.svg$/,
@@ -157,7 +158,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                           },
                           type: 'asset/resource',
                       }
-                    : undefined,
+                    : undefined!,
             ],
         },
         plugins: [

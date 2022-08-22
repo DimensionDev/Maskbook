@@ -2,16 +2,21 @@
 /// <reference types="@masknet/global-types/flag" />
 
 import urlcat from 'urlcat'
-import { ChainId, createNativeToken, NETWORK_DESCRIPTORS, SchemaType } from '@masknet/web3-shared-evm'
-import type { FungibleAsset } from '@masknet/web3-shared-base'
-
-export function isProxyENV() {
-    try {
-        return process.env.PROVIDER_API_ENV === 'proxy'
-    } catch {
-        return false
-    }
-}
+import {
+    APE,
+    BUSD,
+    ChainId,
+    createNativeToken,
+    DAI,
+    HUSD,
+    NETWORK_DESCRIPTORS,
+    SchemaType,
+    USDC,
+    USDT,
+    WBTC,
+    WNATIVE,
+} from '@masknet/web3-shared-evm'
+import { FungibleAsset, isSameAddress } from '@masknet/web3-shared-base'
 
 export async function fetchJSON<T = unknown>(
     requestInfo: string,
@@ -26,6 +31,7 @@ export async function fetchJSON<T = unknown>(
 }
 
 const CORS_PROXY = 'https://cors.r2d2.to'
+
 export function courier(url: string) {
     return urlcat(`${CORS_PROXY}?:url`, { url })
 }
@@ -37,8 +43,16 @@ export function getAllEVMNativeAssets(): Array<FungibleAsset<ChainId, SchemaType
     }))
 }
 
-export function getTraderAllAPICachedFlag(): RequestCache {
-    // TODO: handle flags
-    // cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
-    return 'default'
+export function getPaymentToken(chainId: ChainId, token?: { name?: string; symbol?: string; address?: string }) {
+    if (!token) return
+
+    return [
+        createNativeToken(chainId),
+        ...[APE, USDC, USDT, HUSD, BUSD, DAI, WBTC, WNATIVE].map((x) => x[chainId]),
+    ].find(
+        (x) =>
+            x.name.toLowerCase() === token.name?.toLowerCase() ||
+            x.symbol.toLowerCase() === token.symbol?.toLowerCase() ||
+            isSameAddress(x.address, token.address),
+    )
 }

@@ -6,6 +6,8 @@ import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { SchemaType, formatTokenId, ChainId } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { Icons } from '@masknet/icons'
+import { getEnumAsArray } from '@dimensiondev/kit'
+import { isEqual } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -16,17 +18,19 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
         gap: 8,
         borderRadius: 12,
-        background: theme.palette.maskColor.bg,
+        // there is no public bg, have to hardcode
+        background: '#F9F9F9',
     },
     listItem: {
         width: '100%',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
+        textTransform: 'capitalize',
     },
     textBase: {
         fontSize: 14,
-        color: theme.palette.text.secondary,
+        color: theme.palette.maskColor.publicSecond,
     },
     listItemContent: {
         maxWidth: '30%',
@@ -35,9 +39,10 @@ const useStyles = makeStyles()((theme) => ({
         whiteSpace: 'nowrap',
         display: 'flex',
         gap: 6,
+        color: theme.palette.maskColor.publicMain,
     },
     link: {
-        color: theme.palette.text.secondary,
+        color: theme.palette.maskColor.publicSecond,
         fontSize: 14,
         display: 'flex',
         alignItems: 'center',
@@ -50,26 +55,37 @@ interface NFTInfoCardProps {
     sourceType?: SourceType
 }
 
+const platformCosts: { [k in SourceType]?: number } = {
+    [SourceType.OpenSea]: 2.5,
+    [SourceType.X2Y2]: 0.5,
+    [SourceType.LooksRare]: 2,
+}
+
+const resolveTokenSchema = (schema?: SchemaType) => {
+    return getEnumAsArray(SchemaType).find((x) => isEqual(x.value, schema))?.key ?? SchemaType.ERC721
+}
+
 export function NFTInfoCard(props: NFTInfoCardProps) {
     const { asset, sourceType } = props
     const { classes } = useStyles()
-    const { Others } = useWeb3State()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { t } = useI18N()
 
     const infoConfigMapping = [
         { title: t('plugin_collectible_token_id'), value: formatTokenId(asset.tokenId, 4) },
         { title: t('contract'), value: Others?.formatAddress(asset.address, 4) ?? '-', link: true },
         { title: t('plugin_collectible_block_chain'), value: 'Ethereum' },
-        { title: t('token_standard'), value: asset.contract?.schema ?? SchemaType.ERC721 },
+        { title: t('token_standard'), value: resolveTokenSchema(asset.schema || asset.contract?.schema) },
         {
             title: t('plugin_collectible_creator_earning'),
             value: `${Number.parseInt(asset.contract?.creatorEarning || '0', 10) / 100}%` ?? '0',
         },
         {
             title: t('plugin_collectible_platform_costs', { platform: sourceType ?? SourceType.OpenSea }),
-            value: '-',
+            value: sourceType && platformCosts[sourceType] ? `${platformCosts[sourceType]}%` : '-',
         },
     ]
+
     return (
         <div className={classes.wrapper}>
             {infoConfigMapping.map((x) => {

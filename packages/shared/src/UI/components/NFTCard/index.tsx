@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { ImageIcon, useImageChecker } from '@masknet/shared'
+import { ImageIcon, useIsImageURL } from '@masknet/shared'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 import { ChainId, NETWORK_DESCRIPTORS, SchemaType } from '@masknet/web3-shared-evm'
@@ -106,7 +106,7 @@ export function NFTImageCollectibleAvatar({
     showNetwork = false,
 }: NFTImageCollectibleAvatarProps) {
     const { classes } = useStyles({ networkPluginID: pluginId })
-    const { value: isImageToken, loading } = useImageChecker(token.metadata?.imageURL)
+    const { value: isImageToken, loading } = useIsImageURL(token.metadata?.imageURL)
 
     if (loading)
         return (

@@ -16,7 +16,7 @@ import { isDashboardPage } from '@masknet/shared-base'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import { Button, Link, Typography } from '@mui/material'
+import { Button, Link, Typography, useTheme } from '@mui/material'
 import classNames from 'classnames'
 import { Icons } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
@@ -28,7 +28,8 @@ const useStyles = makeStyles<{
     contentBackground?: string
     disableChange?: boolean
     withinRiskWarningDialog?: boolean
-}>()((theme, { contentBackground, disableChange, withinRiskWarningDialog }) => ({
+    textColor?: string
+}>()((theme, { contentBackground, disableChange, withinRiskWarningDialog, textColor }) => ({
     content: {
         padding: theme.spacing(2, 3, 3),
     },
@@ -52,14 +53,14 @@ const useStyles = makeStyles<{
         marginLeft: theme.spacing(1.5),
     },
     accountName: {
-        color: !isDashboardPage() ? theme.palette.maskColor.dark : undefined,
+        color: !isDashboardPage() ? theme.palette.maskColor.dark : textColor,
         fontWeight: 700,
         fontSize: 14,
         marginRight: 5,
         lineHeight: '18px',
     },
     balance: {
-        color: !isDashboardPage() ? theme.palette.maskColor.dark : undefined,
+        color: !isDashboardPage() ? theme.palette.maskColor.dark : textColor,
         fontSize: 14,
         paddingTop: 2,
         lineHeight: '18px',
@@ -104,10 +105,10 @@ const useStyles = makeStyles<{
         marginRight: theme.spacing(0.5),
     },
     copyIcon: {
-        color: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor.dark,
+        color: isDashboardPage() ? textColor : theme.palette.maskColor.dark,
     },
     linkIcon: {
-        color: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor?.dark,
+        color: isDashboardPage() ? textColor : theme.palette.maskColor?.dark,
     },
     statusBox: {
         position: 'relative',
@@ -123,11 +124,17 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const { t } = useI18N()
 
     const providerDescriptor = useProviderDescriptor<'all'>()
+    const theme = useTheme()
     const { classes } = useStyles({
         contentBackground: providerDescriptor?.backgroundGradient,
         disableChange: props.disableChange,
         withinRiskWarningDialog: props.withinRiskWarningDialog,
+        textColor:
+            providerDescriptor?.type === ProviderType.MaskWallet
+                ? theme.palette.text.primary
+                : theme.palette.maskColor.dark,
     })
+
     const connection = useWeb3Connection()
     const chainId = useChainId()
     const account = useAccount()

@@ -12,6 +12,7 @@ const createERC20Tokens = createFungibleTokensFromConstants<typeof Token, ChainI
     Token,
 )
 
+export const APE = createERC20Tokens('APE_ADDRESS', 'ApeCoin', 'APE', 18)
 export const USDC = createERC20Tokens('USDC_ADDRESS', 'USC Coin', 'USDC', 6)
 export const USDCe = createERC20Tokens('USDC_ADDRESS', 'USD Coin', 'USDCe', 6)
 export const USDT = createERC20Tokens('USDT_ADDRESS', 'Tether USD', 'USDT', 6)

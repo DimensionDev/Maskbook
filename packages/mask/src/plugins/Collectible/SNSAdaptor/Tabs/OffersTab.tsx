@@ -23,7 +23,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     emptyText: {
         fontSize: 14,
-        color: theme.palette.maskColor.second,
+        color: theme.palette.maskColor.publicSecond,
     },
 }))
 
@@ -31,8 +31,14 @@ export const OffersTab = memo(() => {
     const { classes } = useStyles()
     const { orders, provider } = CollectibleState.useContainer()
     const _orders = orders.value?.data ?? EMPTY_LIST
+
     const { t } = useI18N()
-    if (orders.loading) return <LoadingBase />
+    if (orders.loading)
+        return (
+            <div className={classes.body}>
+                <LoadingBase />
+            </div>
+        )
     if (orders.error || !orders.value)
         return (
             <div className={classes.body}>

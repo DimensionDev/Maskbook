@@ -8,7 +8,7 @@ import {
     ChainId,
 } from '@masknet/web3-shared-evm'
 import { formatBalance, FungibleToken, NetworkPluginID, ONE } from '@masknet/web3-shared-base'
-import { Card, Grid, IconButton, Link, Paper, Typography } from '@mui/material'
+import { Grid, IconButton, Link, Paper, Typography, Box } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import LaunchIcon from '@mui/icons-material/Launch'
 import RepeatIcon from '@mui/icons-material/Repeat'
@@ -104,6 +104,12 @@ const useStyles = makeStyles()((theme) => ({
             color: theme.palette.mode === 'light' ? '#7B8192' : '#6F767C',
         },
     },
+    grid: {
+        '& div': {
+            borderRadius: 0,
+            backgroundColor: theme.palette.maskColor.bottom,
+        },
+    },
 }))
 export interface ConfirmDialogProps {
     poolSettings?: PoolSettings
@@ -130,8 +136,8 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
 
     return (
         <>
-            <Card elevation={0} style={{ padding: '0 16px' }}>
-                <Grid container spacing={0}>
+            <Box style={{ padding: '0 16px' }}>
+                <Grid container spacing={0} className={classes.grid}>
                     <Grid item xs={12}>
                         <Typography variant="h3" className={classes.title} component="h3" color="textPrimary">
                             {poolSettings?.title}
@@ -307,7 +313,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         </Typography>
                     </Grid>
                 </Grid>
-            </Card>
+            </Box>
             <PluginWalletStatusBar>
                 <ActionButton loading={loading} disabled={loading} fullWidth onClick={onDone}>
                     {t('plugin_ito_send_text', {

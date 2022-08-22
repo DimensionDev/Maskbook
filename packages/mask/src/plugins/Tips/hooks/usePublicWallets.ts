@@ -41,6 +41,7 @@ export function usePublicWallets(persona: ECKeyIdentifier | undefined): TipAccou
                 }
                 return x.isPublic
             })
+            .sort((x) => (x.isDefault ? -1 : 0))
             .map((x) => ({ address: x.identity, verified: true }))
     }, [persona, Storage, nextIdWallets])
 

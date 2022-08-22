@@ -1,4 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
+import { PluginIDContextProvider } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
 import { base } from '../base'
 import { PLUGIN_ID } from '../constants'
@@ -17,11 +18,13 @@ const DonationsTabConfig: Plugin.SNSAdaptor.ProfileTab = {
         TabContent: ({ socialAddress, identity }) => {
             if (!socialAddress?.address || !identity?.identifier?.userId || !identity.publicKey) return null
             return (
-                <DonationPage
-                    socialAddress={socialAddress}
-                    userId={identity?.identifier?.userId}
-                    publicKey={identity.publicKey}
-                />
+                <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
+                    <DonationPage
+                        socialAddress={socialAddress}
+                        userId={identity?.identifier?.userId}
+                        publicKey={identity.publicKey}
+                    />
+                </PluginIDContextProvider>
             )
         },
     },
@@ -34,8 +37,17 @@ const FootprintsTabConfig: Plugin.SNSAdaptor.ProfileTab = {
     label: 'Footprints',
     priority: 2,
     UI: {
-        TabContent: ({ socialAddress }) => {
-            return socialAddress?.address ? <FootprintsPage address={socialAddress.address} /> : null
+        TabContent: ({ socialAddress, identity }) => {
+            if (!socialAddress?.address || !identity?.identifier?.userId || !identity.publicKey) return null
+            return socialAddress?.address ? (
+                <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
+                    <FootprintsPage
+                        address={socialAddress.address}
+                        publicKey={identity.publicKey}
+                        userId={identity?.identifier?.userId}
+                    />
+                </PluginIDContextProvider>
+            ) : null
         },
     },
     Utils: {
@@ -48,7 +60,11 @@ const ActivitiesTabConfig: Plugin.SNSAdaptor.ProfileTab = {
     priority: 3,
     UI: {
         TabContent: ({ socialAddress }) => {
-            return socialAddress?.address ? <FeedsPage address={socialAddress.address} /> : null
+            return socialAddress?.address ? (
+                <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
+                    <FeedsPage address={socialAddress.address} />
+                </PluginIDContextProvider>
+            ) : null
         },
     },
     Utils: {

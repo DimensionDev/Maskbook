@@ -1,11 +1,11 @@
+import { useCallback, useState } from 'react'
+import { useAsync } from 'react-use'
+import { useNavigate } from 'react-router-dom'
+import { makeStyles } from '@masknet/theme'
 import { Attachment } from '@dimensiondev/common-protocols'
 import { encodeArrayBuffer } from '@dimensiondev/kit'
 import { Checkbox, Radio, FormControlLabel, Link, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
 import { isNil } from 'lodash-unified'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useAsync } from 'react-use'
 import { useI18N, Translate } from '../../locales/i18n_generated'
 import { makeFileKey } from '../../file-key'
 import type { ProviderConfig } from '../../types'
@@ -53,7 +53,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const Upload: React.FC = () => {
+export const Prepare: React.FC = () => {
     const t = useI18N()
     const { classes } = useStyles()
     const navigate = useNavigate()
@@ -76,31 +76,31 @@ export const Upload: React.FC = () => {
         },
     ]
 
-    const onFile = async (file: File) => {
-        let key: string | undefined = undefined
-        if (encrypted) {
-            key = makeFileKey()
-        }
-        const block = new Uint8Array(await file.arrayBuffer())
-        const checksum = encodeArrayBuffer(await Attachment.checksum(block))
-        const item = await PluginFileServiceRPC.getFileInfo(checksum)
-        if (isNil(item)) {
-            navigate(FileRouter.uploading, {
-                state: {
-                    key,
-                    name: file.name,
-                    size: file.size,
-                    type: file.type,
-                    block,
-                    checksum,
-                    useCDN,
-                    provider,
-                },
-            })
-        } else {
-            navigate(FileRouter.uploaded, { state: item })
-        }
-    }
+    const onFile = useCallback(
+        async (file: File) => {
+            const key = encrypted ? makeFileKey() : undefined
+            const block = new Uint8Array(await file.arrayBuffer())
+            const checksum = encodeArrayBuffer(await Attachment.checksum(block))
+            const item = await PluginFileServiceRPC.getFileInfo(checksum)
+            if (isNil(item)) {
+                navigate(FileRouter.Uploading, {
+                    state: {
+                        key,
+                        name: file.name,
+                        size: file.size,
+                        type: file.type,
+                        block,
+                        checksum,
+                        useCDN,
+                        provider,
+                    },
+                })
+            } else {
+                navigate(FileRouter.Uploaded, { state: item })
+            }
+        },
+        [encrypted, useCDN, provider],
+    )
 
     const allProviderOptions = allProviders.map((config: ProviderConfig) => (
         <FormControlLabel

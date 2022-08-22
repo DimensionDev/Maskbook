@@ -1,4 +1,4 @@
-import type { TaskFunction } from 'gulp'
+import { series, TaskFunction } from 'gulp'
 import { shell } from './run.js'
 import { awaitChildProcess } from './awaitChildProcess.js'
 
@@ -31,4 +31,13 @@ export function fromNPMTask(baseDir: URL, name: string, description: string, fla
     }
     watchTask(build, watch, name, description, flags)
     return [build, watch]
+}
+
+export function awaitTask(taskFunction: TaskFunction) {
+    return new Promise<void>((resolve, reject) => {
+        series(taskFunction)((err) => {
+            if (err) reject(err)
+            else resolve()
+        })
+    })
 }

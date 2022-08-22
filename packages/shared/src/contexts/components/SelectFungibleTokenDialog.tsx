@@ -1,4 +1,4 @@
-import { useCallback, FC, useState } from 'react'
+import { useCallback, FC, useState, useMemo } from 'react'
 import { useCurrentWeb3NetworkPluginID, useNativeTokenAddress, Web3Helper } from '@masknet/plugin-infra/web3'
 import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
 import { EMPTY_LIST, EnhanceableSite, isDashboardPage } from '@masknet/shared-base'
@@ -52,6 +52,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, isDashboard }) => 
 
 export interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = NetworkPluginID> {
     open: boolean
+    enableManage?: boolean
     pluginID?: T
     chainId?: Web3Helper.Definition[T]['ChainId']
     keyword?: string
@@ -80,6 +81,7 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
     onSubmit,
     onClose,
     title,
+    enableManage = true,
 }) => {
     const t = useSharedI18N()
     const { networkIdentifier } = useBaseUIRuntime()
@@ -104,6 +106,11 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
         [],
     )
 
+    const FixedSizeListProps = useMemo(
+        () => ({ itemSize: rowSize + 22, height: isMdScreen ? 300 : 428, className: classes.wrapper }),
+        [rowSize, isMdScreen],
+    )
+
     return (
         <InjectedDialog
             titleBarIconStyle={isDashboard ? 'close' : 'back'}
@@ -126,18 +133,14 @@ export const SelectFungibleTokenDialog: FC<SelectFungibleTokenDialogProps> = ({
                     chainId={chainId}
                     tokens={tokens ?? []}
                     whitelist={whitelist}
-                    enableManage
+                    enableManage={enableManage}
                     blacklist={
                         disableNativeToken && nativeTokenAddress ? [nativeTokenAddress, ...blacklist] : blacklist
                     }
                     disableSearch={disableSearchBar}
                     selectedTokens={selectedTokens}
                     onSelect={onSubmit}
-                    FixedSizeListProps={{
-                        itemSize: rowSize + 22,
-                        height: isMdScreen ? 300 : 428,
-                        className: classes.wrapper,
-                    }}
+                    FixedSizeListProps={FixedSizeListProps}
                     SearchTextFieldProps={{
                         InputProps: { classes: { root: classes.search } },
                     }}

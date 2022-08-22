@@ -7,12 +7,10 @@ import isAfter from 'date-fns/isAfter'
 import { useI18N, useSwitcher } from '../../../utils'
 import { LinkingAvatar } from './LinkingAvatar'
 import { CollectibleState } from '../hooks/useCollectibleState'
-import { CollectibleCard } from './CollectibleCard'
+import { CollectiblePaper } from './CollectiblePaper'
 import { ActionBar } from './OpenSea/ActionBar'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, resolveSourceName, SourceType } from '@masknet/web3-shared-base'
-import { getEnumAsArray } from '@dimensiondev/kit'
+import { resolveSourceName, SourceType } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { AboutTab } from './Tabs/AboutTab'
 import { DetailTab } from './Tabs/DetailTab'
@@ -41,12 +39,13 @@ const useStyles = makeStyles()((theme) => {
             flex: 1,
             backgroundColor: theme.palette.maskColor.white,
             overflow: 'auto',
-            maxHeight: 350,
+            maxHeight: 800,
             borderRadius: '0 0 12px 12px',
             scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
+            background: '#fff !important',
         },
         footer: {
             marginTop: -1, // merge duplicate borders
@@ -64,6 +63,18 @@ const useStyles = makeStyles()((theme) => {
         },
         tab: {
             whiteSpace: 'nowrap',
+            background: 'transparent',
+            color: theme.palette.maskColor.publicMain,
+            '&:hover': {
+                background: 'transparent',
+            },
+        },
+        tabActive: {
+            background: '#fff',
+            color: theme.palette.maskColor.publicMain,
+            '&:hover': {
+                background: '#fff',
+            },
         },
         subtitle: {
             fontSize: 14,
@@ -108,9 +119,14 @@ const useStyles = makeStyles()((theme) => {
         },
         markdown: {
             textOverflow: 'ellipsis',
-            display: '-webkit-box',
             webkitBoxOrient: 'vertical',
             webkitLineClamp: '3',
+            '& > p': {
+                color: `${theme.palette.maskColor.publicSecond} !important`,
+            },
+            '& a': {
+                color: theme.palette.maskColor.publicMain,
+            },
         },
         cardTitle: {
             fontSize: 16,
@@ -122,11 +138,14 @@ const useStyles = makeStyles()((theme) => {
 })
 
 const supportedProvider = [
-    SourceType.Rarible,
-    SourceType.Gem,
-    SourceType.X2Y2,
-    SourceType.LooksRare,
+    // to add providers, temp hide some providers
     SourceType.OpenSea,
+    SourceType.Gem,
+    SourceType.Rarible,
+    // SourceType.X2Y2,
+    // SourceType.NFTScan,
+    // SourceType.Zora,
+    // SourceType.LooksRare,
 ]
 
 export interface CollectibleProps {}
@@ -134,21 +153,15 @@ export interface CollectibleProps {}
 export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const { token, asset, provider, setProvider } = CollectibleState.useContainer()
-
-    // #region sync with settings
-    const collectibleProviderOptions = getEnumAsArray(SourceType).filter((x) => supportedProvider.includes(x.value))
-
+    const { asset, provider, setProvider } = CollectibleState.useContainer()
     const onDataProviderChange = useCallback((v: SourceType) => {
         setProvider(v)
     }, [])
-    // #endregion
 
     // #region provider switcher
     const CollectibleProviderSwitcher = useSwitcher(provider, setProvider, supportedProvider, resolveSourceName, true)
     // #endregion
-    const [currentTab, onChange, tabs, setTab] = useTabs('about', 'details', 'offers', 'activity')
+    const [currentTab, onChange, tabs] = useTabs('about', 'details', 'offers', 'activity')
     if (asset.loading)
         return (
             <Box
@@ -164,7 +177,7 @@ export function Collectible(props: CollectibleProps) {
                 <Typography>{t('loading')}</Typography>
             </Box>
         )
-    if (!asset.value || !token)
+    if (!asset.value)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
                 <Typography color={MaskColorVar.textPluginColor} sx={{ marginTop: 8, marginBottom: 8 }}>
@@ -186,7 +199,12 @@ export function Collectible(props: CollectibleProps) {
     const renderTab = () => {
         const tabMap = {
             [tabs.about]: (
-                <AboutTab providers={supportedProvider} onChangeProvider={onDataProviderChange} asset={asset} />
+                <AboutTab
+                    currentProvider={provider}
+                    providers={supportedProvider}
+                    onChangeProvider={onDataProviderChange}
+                    asset={asset}
+                />
             ),
             [tabs.details]: <DetailTab asset={asset} />,
             [tabs.offers]: <OffersTab />,
@@ -195,9 +213,16 @@ export function Collectible(props: CollectibleProps) {
 
         return tabMap[currentTab] || null
     }
+    const Tabs = [
+        { value: tabs.about, label: t('plugin_collectible_about') },
+        { value: tabs.details, label: t('plugin_collectible_details') },
+        { value: tabs.offers, label: t('plugin_collectible_offers') },
+        { value: tabs.activity, label: t('plugin_collectible_activity') },
+    ]
+
     return (
         <>
-            <CollectibleCard classes={{ root: classes.root }}>
+            <CollectiblePaper classes={{ root: classes.root }}>
                 <CardHeader
                     className={classes.header}
                     avatar={
@@ -211,7 +236,7 @@ export function Collectible(props: CollectibleProps) {
                     }
                     title={
                         <Typography style={{ display: 'flex', alignItems: 'center' }}>
-                            <Typography className={classes.cardTitle}>{_asset.metadata?.name ?? ''}</Typography>
+                            <Typography className={classes.cardTitle}>{_asset.metadata?.name || '-'}</Typography>
                             {_asset.collection?.verified ? <Icons.VerifiedCollection sx={{ marginLeft: 0.5 }} /> : null}
                         </Typography>
                     }
@@ -233,19 +258,19 @@ export function Collectible(props: CollectibleProps) {
                 <CardContent className={classes.content}>
                     <TabContext value={currentTab}>
                         <MaskTabList variant="base" aria-label="collectible" onChange={onChange}>
-                            <Tab className={classes.tab} value={tabs.about} label={t('plugin_collectible_about')} />
-                            <Tab className={classes.tab} value={tabs.details} label={t('plugin_collectible_details')} />
-                            <Tab className={classes.tab} value={tabs.offers} label={t('plugin_collectible_offers')} />
-                            <Tab
-                                className={classes.tab}
-                                value={tabs.activity}
-                                label={t('plugin_collectible_activity')}
-                            />
+                            {Tabs.map((x) => (
+                                <Tab
+                                    key={x.value}
+                                    className={x.value === currentTab ? classes.tabActive : classes.tab}
+                                    value={x.value}
+                                    label={x.label}
+                                />
+                            ))}
                         </MaskTabList>
                     </TabContext>
                     <Paper className={classes.body}>{renderTab()}</Paper>
                 </CardContent>
-            </CollectibleCard>
+            </CollectiblePaper>
             {endDate && isValidDate(endDate) && isAfter(endDate, Date.now()) && (
                 <Box sx={{ marginTop: 1 }}>
                     <Typography className={classes.countdown}>
@@ -255,7 +280,7 @@ export function Collectible(props: CollectibleProps) {
                     </Typography>
                 </Box>
             )}
-            {provider === SourceType.OpenSea ? <ActionBar /> : null}
+            <ActionBar />
         </>
     )
 }

@@ -160,13 +160,12 @@ export namespace TrendingAPI {
     export interface Provider<ChainId> {
         getCoinTrending(chainId: ChainId, id: string, currency: Currency): Promise<Trending>
 
-        // #region get all coins
+        // get all coins
         getCoins(keyword?: string): Promise<Coin[]>
-        // #endregion
 
-        // #region get all currency
+        // get all currency
         getCurrencies(): Promise<Currency[]>
-        // #endregion
+
         getPriceStats(chainId: ChainId, coinId: string, currency: Currency, days: number): Promise<Stat[]>
     }
 }

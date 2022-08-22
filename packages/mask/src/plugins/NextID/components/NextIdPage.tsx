@@ -184,12 +184,12 @@ export function NextIdPage() {
     const isWeb3ProfileDisable = useIsMinimalMode(PluginId.Web3Profile)
 
     const description = useMemo(() => {
+        if (!isOwn) {
+            return t.others_lack_wallet()
+        }
         if (isWeb3ProfileDisable) return ''
         if (personaConnectStatus.action && !personaConnectStatus.hasPersona) {
             return t.create_persona_intro()
-        }
-        if (!isOwn) {
-            return t.others_lack_wallet()
         }
         if (isAccountVerified) {
             return t.add_wallet_intro()

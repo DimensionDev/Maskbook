@@ -12,6 +12,9 @@ function createClient(): IPFSHTTPClient {
         host: 'ipfs.infura.io',
         port: 5001,
         protocol: 'https',
+        headers: {
+            authorization: 'Basic MkRZaG10eThyM21DOWl5dE5tdG9ZdkdmWkxiOmM5YjVlOTRmNjM1OTdiMGEyNmJhY2RlNmI3NTgxOTgx',
+        },
     })
 }
 
@@ -40,7 +43,7 @@ class IPFSAgent implements ProviderAgent {
     }
 
     async uploadLandingPage(metadata: LandingPageMetadata) {
-        const linkPrefix = 'https://ipfs.infura.io/ipfs'
+        const linkPrefix = 'https://mask.infura-ipfs.io/ipfs'
         const encodedMetadata = JSON.stringify({
             name: metadata.name,
             size: metadata.size,

@@ -42,9 +42,7 @@ export function ApplicationBoardDialog() {
         WalletMessages.events.ApplicationDialogUpdated,
     )
 
-    const { open: openPersonaListDialog, closeDialog: _closePersonaListDialog } = useRemoteControlledDialog(
-        PluginNextIDMessages.PersonaListDialogUpdated,
-    )
+    const { open: openPersonaListDialog } = useRemoteControlledDialog(PluginNextIDMessages.PersonaListDialogUpdated)
 
     const closeDialog = useCallback(() => {
         _closeDialog()
@@ -87,7 +85,7 @@ export function ApplicationBoardDialog() {
                     ) : (
                         <ApplicationBoard closeDialog={closeDialog} />
                     )}
-                    <PersonaListDialog />
+                    {openPersonaListDialog && <PersonaListDialog />}
                 </DialogContent>
             </InjectedDialog>
         </TabContext>

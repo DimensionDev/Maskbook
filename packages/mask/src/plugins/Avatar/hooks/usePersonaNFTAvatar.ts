@@ -19,28 +19,26 @@ type GetNFTAvatar = (
     snsKey?: RSS3_KEY_SNS,
 ) => Promise<AvatarMetaDB | undefined>
 
-export function usePersonaNFTAvatar(userId: string, avatarId: string, snsKey: RSS3_KEY_SNS) {
+export function usePersonaNFTAvatar(userId: string, avatarId: string, persona: string, snsKey: RSS3_KEY_SNS) {
     const getNFTAvatar = useGetNFTAvatar()
 
     return useAsyncRetry(async () => {
         if (!userId) return
         const key = `${userId}-${activatedSocialNetworkUI.networkIdentifier}`
-        if (!cache.has(key)) cache.set(key, getNFTAvatarForCache(userId, snsKey, avatarId, getNFTAvatar))
+        if (!cache.has(key)) cache.set(key, getNFTAvatarForCache(userId, snsKey, avatarId, persona, getNFTAvatar))
         const v = cache.get(key)
         return v
-    }, [
-        userId,
-        getNFTAvatar,
-        avatarId,
-        activatedSocialNetworkUI.networkIdentifier,
-        snsKey,
-        cache,
-        getNFTAvatarForCache,
-    ])
+    }, [userId, getNFTAvatar, avatarId, activatedSocialNetworkUI.networkIdentifier])
 }
 
-async function getNFTAvatarForCache(userId: string, snsKey: RSS3_KEY_SNS, avatarId: string, fn: GetNFTAvatar) {
-    const avatarMetaFromPersona = await getNFTAvatarByUserId(userId, avatarId)
+async function getNFTAvatarForCache(
+    userId: string,
+    snsKey: RSS3_KEY_SNS,
+    avatarId: string,
+    persona: string,
+    fn: GetNFTAvatar,
+) {
+    const avatarMetaFromPersona = await getNFTAvatarByUserId(userId, avatarId, persona)
     if (avatarMetaFromPersona) return avatarMetaFromPersona
     const avatarMeta = await fn(userId, activatedSocialNetworkUI.networkIdentifier as EnhanceableSite, snsKey)
     if (!avatarMeta) return

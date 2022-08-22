@@ -177,6 +177,7 @@ export const MaskTabList = forwardRef<HTMLDivElement, MaskTabListProps>((props, 
             'aria-controls': getPanelId(context, child.props.value),
             id: getTabId(context, child.props.value),
             selected: child.props.value === context.value,
+            className: child.props.className,
             onChange: (event: object, value: string, visitable?: boolean) => {
                 handleToggle(false)
                 props.onChange(event, value)

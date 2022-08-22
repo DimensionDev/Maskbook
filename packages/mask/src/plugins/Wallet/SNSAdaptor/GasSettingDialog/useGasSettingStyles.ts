@@ -1,4 +1,4 @@
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 
 export const useGasSettingStyles = makeStyles()((theme) => ({
     options: {
@@ -66,6 +66,6 @@ export const useGasSettingStyles = makeStyles()((theme) => ({
     price: {
         fontSize: 12,
         lineHeight: '16px',
-        color: '#15181B',
+        color: MaskColorVar.normalText,
     },
 }))

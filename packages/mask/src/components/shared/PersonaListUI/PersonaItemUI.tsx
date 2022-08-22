@@ -43,9 +43,6 @@ const useStyles = makeStyles()((theme) => {
             lineHeight: '16px',
             color: theme.palette.maskColor.second,
         },
-        copyIcon: {
-            color: 'red',
-        },
         dot: {
             display: 'inline-block',
             background: '#2DDF00',

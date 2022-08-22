@@ -1,9 +1,9 @@
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { NFTRank } from './NFTRank'
-import { useI18N } from '../../../utils'
 import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NFTRank } from './NFTRank'
+import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -26,30 +26,33 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '24px',
         fontWeight: 700,
         marginBottom: 12,
-        color: theme.palette.maskColor.main,
+        color: theme.palette.maskColor.publicMain,
     },
     content: {
         width: '100%',
         display: 'flex',
         flexWrap: 'wrap',
-        gap: 16,
+        gap: 12,
     },
     traitsItem: {
         padding: 12,
-        width: 'calc(100%/3 - 48px)',
+        width: 'calc(100%/3 - 8px)',
         display: 'flex',
         flexDirection: 'column',
         gap: 8,
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.main,
+        color: theme.palette.maskColor.publicMain,
         fontWeight: 700,
-        background: theme.palette.maskColor.bg,
+        marginBottom: 12,
+        // there is no public bg, have to hardcode
+        background: '#F9F9F9',
         borderRadius: 8,
+        boxSizing: 'border-box',
     },
     traitsTitle: {
         fontWeight: 400,
-        color: theme.palette.maskColor.second,
+        color: theme.palette.maskColor.publicMain,
     },
 }))
 interface NFTPropertiesCardProps {
@@ -77,7 +80,7 @@ export function NFTPropertiesCard(props: NFTPropertiesCardProps) {
                         <div key={x.type} className={classes.traitsItem}>
                             <Typography className={classes.traitsTitle}>{x.type}</Typography>
                             <Typography>{x.value}</Typography>
-                            <Typography>{x.rarity ?? '(-)%'}</Typography>
+                            <Typography>({x.rarity ?? '-%'})</Typography>
                         </div>
                     )
                 })}

@@ -17,6 +17,7 @@ import type {
     ReturnProviderResolver,
 } from '../utils'
 
+
 export interface Pageable<Item, Indicator = unknown> {
     /** the indicator of the current page */
     indicator: Indicator
@@ -276,7 +277,7 @@ export interface NonFungibleTokenRarity {
 export interface NonFungibleTokenContract<ChainId, SchemaType> {
     chainId: ChainId
     name: string
-    symbol: string
+    symbol?: string
     address: string
     schema: SchemaType
     owner?: string
@@ -289,7 +290,7 @@ export interface NonFungibleTokenMetadata<ChainId> {
     chainId: ChainId
     /** Might be the format `TheName #42` */
     name: string
-    symbol: string
+    symbol?: string
     description?: string
     /** preview image url */
     imageURL?: string
@@ -303,11 +304,11 @@ export interface NonFungibleTokenCollection<ChainId, SchemaType> {
     chainId: ChainId
     name: string
     slug: string
-    address?: string
     symbol?: string
+    description?: string
+    address?: string
     schema?: SchemaType
     balance?: number
-    description?: string
     iconURL?: string
     /** verified by provider */
     verified?: boolean
@@ -382,6 +383,8 @@ export interface NonFungibleTokenEvent<ChainId, SchemaType> {
     type: string
     /** permalink of asset */
     assetPermalink?: string
+    /** name of asset */
+    assetName?: string
     /** symbol of asset */
     assetSymbol?: string
     /** token amount */
@@ -389,13 +392,16 @@ export interface NonFungibleTokenEvent<ChainId, SchemaType> {
     /** transaction hash */
     hash?: string
     /** the account make the order */
-    from: Identity
+    from?: Identity
     /** the account fullfil the order */
-    to: Identity
+    to?: Identity
     /** unix timestamp */
     timestamp: number
     /** relate token price */
     price?: Price
+    /** the payment token and corresponding price */
+    priceInToken?: PriceInToken<ChainId, SchemaType>
+    /** the payment token */
     paymentToken?: FungibleToken<ChainId, SchemaType>
 }
 
@@ -733,6 +739,8 @@ export interface Connection<
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>>
+    getNonFungibleTokenOwner(address: string, tokenId: string, schema?: SchemaType,
+        initial?: Web3ConnectionOptions,): Promise<string>
     getNonFungibleTokenOwnership(
         address: string,
         tokenId: string,
@@ -930,7 +938,7 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
     getNonFungibleTokenContract?: (
         address: string,
         initial?: Web3HubOptions,
-    ) => Promise<NonFungibleTokenContract<ChainId, SchemaType>>
+    ) => Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined>
     /** Get balance of a fungible token owned by the given account. */
     getFungibleTokenBalance?: (address: string, initial?: Web3HubOptions) => Promise<number>
     /** Get balance of non-fungible tokens in a collection owned by the given account. */
@@ -1059,7 +1067,7 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
     /** Get non-fungible collections owned by the given account. */
-    getNonFungibleCollections?: (
+    getNonFungibleCollectionsByOwner?: (
         account: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>>>

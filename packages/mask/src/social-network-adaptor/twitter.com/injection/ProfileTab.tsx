@@ -93,7 +93,7 @@ function nameTagClickHandler() {
     const elePage = searchProfileTabPageSelector().evaluate()
     if (elePage) {
         elePage.style.visibility = 'hidden'
-        elePage.style.height = '0'
+        elePage.style.height = 'auto'
     }
 }
 
@@ -135,7 +135,7 @@ async function hideTwitterActivatedContent() {
     const elePage = searchProfileTabPageSelector().evaluate()
     if (elePage) {
         elePage.style.visibility = 'hidden'
-        elePage.style.height = '0'
+        elePage.style.height = 'auto'
     }
 }
 

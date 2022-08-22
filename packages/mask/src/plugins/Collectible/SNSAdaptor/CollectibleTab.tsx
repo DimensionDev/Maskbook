@@ -8,6 +8,9 @@ const useStyles = makeStyles()({
         borderRadius: 0,
         overflow: 'auto',
     },
+    overContent: {
+        background: '#fff',
+    },
 })
 
 export interface CollectibleTabProps extends withClasses<'root' | 'content'> {
@@ -20,7 +23,7 @@ export function CollectibleTab(props: CollectibleTabProps) {
 
     return (
         <Card className={classes.root} elevation={0} {...props.CardProps}>
-            <CardContent className={classes.content}>{props.children}</CardContent>
+            <CardContent className={classes.overContent}>{props.children}</CardContent>
         </Card>
     )
 }
