@@ -57,7 +57,7 @@ function Wallets() {
         CrossIsolationMessages.events.swapDialogUpdate.sendToLocal({
             open: true,
         })
-    }, [CrossIsolationMessages])
+    }, [])
 
     const renderNetworks = useMemo(() => {
         return networks.filter((x) => pluginId === x.networkSupporterPluginID && x.isMainnet)
