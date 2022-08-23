@@ -1,10 +1,10 @@
-import { Card, Link, LinkProps } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
-import { ActionsBarNFT } from '../ActionsBarNFT'
-import type { NetworkPluginID, NonFungibleAsset, SocialAddress, SourceType, Wallet } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/plugin-infra/src/entry-web3'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
+import type { NetworkPluginID, NonFungibleAsset, SocialAddress, SourceType, Wallet } from '@masknet/web3-shared-base'
 import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
+import { Card, Link } from '@mui/material'
+import { ActionsBarNFT } from '../ActionsBarNFT'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

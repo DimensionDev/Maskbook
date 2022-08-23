@@ -37,13 +37,12 @@ const FootprintsTabConfig: Plugin.SNSAdaptor.ProfileTab = {
     priority: 2,
     UI: {
         TabContent: ({ socialAddress, identity }) => {
-            if (!socialAddress?.address || !identity?.identifier?.userId) return null
             return (
                 <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
                     <FootprintsPage
-                        address={socialAddress.address}
-                        publicKey={identity.publicKey}
-                        userId={identity?.identifier?.userId}
+                        address={socialAddress?.address ?? ''}
+                        publicKey={identity?.publicKey}
+                        userId={identity?.identifier?.userId ?? ''}
                     />
                 </PluginIDContextProvider>
             )
@@ -59,11 +58,11 @@ const ActivitiesTabConfig: Plugin.SNSAdaptor.ProfileTab = {
     priority: 3,
     UI: {
         TabContent: ({ socialAddress }) => {
-            return socialAddress?.address ? (
+            return (
                 <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
-                    <FeedsPage address={socialAddress.address} />
+                    <FeedsPage address={socialAddress?.address} />
                 </PluginIDContextProvider>
-            ) : null
+            )
         },
     },
     Utils: {

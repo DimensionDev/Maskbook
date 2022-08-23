@@ -11,6 +11,7 @@ import {
     NonFungibleAsset,
     NonFungibleTokenCollection,
     SocialAddress,
+    SocialIdentity,
     SourceType,
     Wallet,
 } from '@masknet/web3-shared-base'
@@ -211,11 +212,11 @@ export function CollectibleList(props: CollectibleListProps) {
 export function CollectionList({
     addressName,
     persona,
-    twitterId,
+    profile,
 }: {
     addressName: SocialAddress<NetworkPluginID>
     persona?: string
-    twitterId?: string
+    profile?: SocialIdentity
 }) {
     const { t } = useI18N()
     const { classes } = useStyles()
@@ -241,20 +242,20 @@ export function CollectionList({
     } = useNonFungibleAssets(addressName.networkSupporterPluginID, undefined, { account })
 
     const { value: kvValue } = useKV(persona)
-
+    const userId = profile?.identifier?.userId.toLowerCase()
     const isHiddenAddress = useMemo(() => {
         return kvValue?.proofs
-            .find((proof) => proof?.platform === NextIDPlatform.Twitter && proof?.identity === twitterId)
+            .find((proof) => proof?.platform === NextIDPlatform.Twitter && proof?.identity === userId)
             ?.content?.[PluginId.Web3Profile]?.hiddenAddresses?.NFTs?.some((x) =>
                 isSameAddress(x.address, addressName.address),
             )
-    }, [twitterId, addressName.address, kvValue?.proofs])
+    }, [userId, addressName.address, kvValue?.proofs])
 
     const unHiddenCollectibles = useAvailableCollections(
         kvValue?.proofs ?? EMPTY_LIST,
         collectibles,
         CollectionType.NFTs,
-        twitterId,
+        userId,
         account?.toLowerCase(),
     )
 

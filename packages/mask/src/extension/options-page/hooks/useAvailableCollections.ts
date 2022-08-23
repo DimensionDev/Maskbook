@@ -11,15 +11,13 @@ export const useAvailableCollections = (
     proofs: Proof[],
     collections: Array<Web3Helper.NonFungibleTokenScope<void, NetworkPluginID>>,
     type: CollectionType,
-    twitterId?: string,
+    userId?: string,
     address?: string,
 ) => {
     return useMemo(() => {
-        if (!address || !twitterId) return EMPTY_LIST
+        if (!address || !userId) return EMPTY_LIST
 
-        const proof = proofs.find(
-            (x) => x.platform === NextIDPlatform.Twitter && x.identity === twitterId.toLowerCase(),
-        )
+        const proof = proofs.find((x) => x.platform === NextIDPlatform.Twitter && x.identity === userId.toLowerCase())
         const hiddenList =
             proof?.content?.[PluginId.Web3Profile]?.unListedCollections?.[address.toLowerCase()]?.[type] ?? []
         if (!hiddenList.length) return collections
@@ -28,5 +26,5 @@ export const useAvailableCollections = (
             hiddenList,
             (collection, id) => `${collection.id}_${collection.tokenId}` === id,
         )
-    }, [address, twitterId, type, proofs, collections])
+    }, [address, userId, type, proofs, collections])
 }

@@ -66,14 +66,13 @@ export function DonationPage({ socialAddress, publicKey, userId }: DonationPageP
         socialAddress?.address,
     )
 
-    const twitterId = userId?.toLowerCase()
     const isHiddenAddress = useMemo(() => {
         return kvValue?.proofs
-            .find((proof) => proof?.platform === NextIDPlatform.Twitter && proof?.identity === twitterId)
+            .find((proof) => proof?.platform === NextIDPlatform.Twitter && proof?.identity === userId?.toLowerCase())
             ?.content?.[PluginId.Web3Profile]?.hiddenAddresses?.donations?.some((x) =>
                 isSameAddress(x.address, socialAddress?.address),
             )
-    }, [twitterId, socialAddress, kvValue?.proofs])
+    }, [userId, socialAddress, kvValue?.proofs])
 
     const [selectedDonation, setSelectedDonation] = useState<RSS3BaseAPI.Collection | undefined>()
 

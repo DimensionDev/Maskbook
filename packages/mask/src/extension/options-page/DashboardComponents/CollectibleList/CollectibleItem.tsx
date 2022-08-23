@@ -1,4 +1,4 @@
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Skeleton, Typography } from '@mui/material'
 import type { HTMLProps } from 'react'
 import { CollectibleCard, CollectibleCardProps } from './CollectibleCard'
@@ -17,7 +17,7 @@ const useStyles = makeStyles()((theme) => ({
         aspectRatio: '1/1',
     },
     description: {
-        background: theme.palette.mode === 'light' ? MaskColorVar.twitterBackground : MaskColorVar.twitterLine,
+        background: theme.palette.maskColor.bg,
         alignSelf: 'stretch',
         borderRadius: '0 0 8px 8px',
     },

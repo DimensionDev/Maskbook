@@ -8,18 +8,18 @@ export const useAvailableCollections = (
     proofs: Proof[],
     collections: RSS3BaseAPI.Collection[],
     type: CollectionType,
-    twitterId?: string,
+    userId?: string,
     address?: string,
 ) => {
     return useMemo(() => {
-        if (!address || !twitterId) return EMPTY_LIST
+        if (!address || !userId) return EMPTY_LIST
 
         const proof = proofs.find(
-            (proof) => proof.platform === NextIDPlatform.Twitter && proof.identity === twitterId.toLowerCase(),
+            (proof) => proof.platform === NextIDPlatform.Twitter && proof.identity === userId.toLowerCase(),
         )
         const hiddenList =
             proof?.content?.[PluginId.Web3Profile]?.unListedCollections?.[address.toLowerCase()]?.[type] ?? []
         if (!hiddenList.length) return collections
         return collections.filter((x) => hiddenList.findIndex((url) => url === x.id) === -1)
-    }, [address, twitterId, type, proofs, collections])
+    }, [address, userId, type, proofs, collections])
 }
