@@ -5,7 +5,7 @@ import {
     EMPTY_LIST,
     isSamePersona,
     isSameProfile,
-    NextIDPlatform,
+    nextIDIdentityToProfile,
     PersonaIdentifier,
     ProfileIdentifier,
 } from '@masknet/shared-base'
@@ -20,7 +20,6 @@ import { MaskMessages, useI18N } from '../../utils'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { activatedSocialNetworkUI } from '../../social-network'
 import { PluginNextIDMessages } from '../../plugins/NextID/messages'
 import type { PersonaNextIDMixture } from './PersonaListUI/PersonaItemUI'
 import { PersonaItemUI } from './PersonaListUI/PersonaItemUI'
@@ -84,7 +83,6 @@ export const PersonaListDialog = () => {
     const { t } = useI18N()
     const [, copyToClipboard] = useCopyToClipboard()
     const { showSnackbar } = useCustomSnackbar()
-    const currentPlatform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
     const currentPersona = useCurrentPersona()
     const currentPersonaIdentifier = currentPersona?.identifier
 
@@ -161,10 +159,8 @@ export const PersonaListDialog = () => {
 
         if (!isSamePersona(selectedPersona.persona, currentPersonaIdentifier)) isConnected = false
 
-        const verifiedSns = selectedPersona.proof.find(
-            (x) =>
-                x.identity.toLowerCase() === currentProfileIdentify.identifier?.userId.toLowerCase() &&
-                x.platform === currentPlatform,
+        const verifiedSns = selectedPersona.proof.find((x) =>
+            isSameProfile(nextIDIdentityToProfile(x.identity, x.platform), currentProfileIdentify.identifier),
         )
         if (!verifiedSns) {
             isVerified = false

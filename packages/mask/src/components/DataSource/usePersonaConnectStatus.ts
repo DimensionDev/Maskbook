@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo } from 'react'
 import stringify from 'json-stable-stringify'
-import { DashboardRoutes, isSamePersona, isSameProfile } from '@masknet/shared-base'
+import { DashboardRoutes, isSamePersona, isSameProfile, nextIDIdentityToProfile } from '@masknet/shared-base'
 import Services from '../../extension/service'
 import { currentPersonaIdentifier, currentSetupGuideStatus } from '../../../shared/legacy-settings/settings'
 import { activatedSocialNetworkUI } from '../../social-network'
@@ -138,7 +138,10 @@ export function useCurrentPersonaConnectStatus() {
                 false,
             )
             const verifiedProfile = nextIDInfo?.proofs.find(
-                (x) => isSameProfile(x.identity, currentProfile?.identifier) && x.is_valid,
+                (x) =>
+                    // TODO: should move to next id api center
+                    isSameProfile(nextIDIdentityToProfile(x.identity, x.platform), currentProfile?.identifier) &&
+                    x.is_valid,
             )
 
             return {

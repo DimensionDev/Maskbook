@@ -14,6 +14,7 @@ export function networkToNextIDPlatform(site: EnhanceableSite) {
     return pair?.[0]
 }
 
+// TODO: should case sensitive on next id?
 export function nextIDIdentityToProfile(nextIDIdentity: string, platform: NextIDPlatform) {
     const network = nextIDPlatformToNetwork(platform)
     return ProfileIdentifier.of(network, nextIDIdentity).unwrap()
