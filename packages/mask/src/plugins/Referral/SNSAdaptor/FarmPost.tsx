@@ -67,7 +67,6 @@ export function FarmPost(props: FarmPostProps) {
     const t = useI18N()
     const currentIdentity = useCurrentIdentity()
     const { value: linkedPersona } = useCurrentLinkedPersona()
-    // const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
     const { showSnackbar } = useCustomSnackbar()
 
     const { value: rewards = EMPTY_LIST, error } = useAsync(
