@@ -1,7 +1,6 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useState, useEffect } from 'react'
-import { useCurrentPersonaConnectStatus } from '../../../../components/DataSource/usePersonaConnectStatus'
 import { NFTAvatarDialog } from '../../../../plugins/Avatar/Application/NFTAvatarsDialog'
 import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
 import { startWatch, createReactRootShadowed, useLocationChange } from '../../../../utils'
@@ -52,8 +51,6 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     })
     const [open, setOpen] = useState(false)
 
-    const { value: personaConnectStatus, loading: personaConnectStatusLoading } = useCurrentPersonaConnectStatus()
-
     const setStyleFromEditProfileSelector = () => {
         const editDom = searchEditProfileSelector().evaluate()
         if (!editDom) return
@@ -76,7 +73,7 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     const { classes } = useStyles(style)
     return (
         <>
-            <PersonaBoundary handlerPosition="top-right">
+            <PersonaBoundary handlerPosition="top-right" customHint>
                 <NFTAvatarButton classes={{ root: classes.root, text: classes.text }} onClick={() => setOpen(true)} />
             </PersonaBoundary>
             <NFTAvatarDialog open={open} onClose={() => setOpen(false)} />

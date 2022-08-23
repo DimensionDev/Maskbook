@@ -4,9 +4,8 @@ import { makeStyles } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { Box, Button, Link, Skeleton, Stack, Typography } from '@mui/material'
 import { useMemo, useState } from 'react'
-import { useAsync, useAsyncRetry } from 'react-use'
+import { useAsyncRetry } from 'react-use'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
-import { useNextIDConnectStatus } from '../../../components/DataSource/useNextIDConnectStatus'
 import { useCurrentPersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
 import Services from '../../../extension/service'
 import { activatedSocialNetworkUI } from '../../../social-network'
@@ -15,6 +14,8 @@ import { BindDialog } from './BindDialog'
 import type { LiveSelector } from '@dimensiondev/holoflows-kit'
 import { searchAllProfileTabSelector } from '../../../social-network-adaptor/twitter.com/utils/selector'
 import { Icons } from '@masknet/icons'
+import { PluginEnableBoundary } from '../../../components/shared/PluginEnableBoundary'
+import { PersonaBoundary } from '../../../components/shared/PersonaBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     tip: {
@@ -142,44 +143,16 @@ export function NextIdPage() {
     const currentProfileIdentifier = useLastRecognizedIdentity()
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
     const { value: personaConnectStatus } = useCurrentPersonaConnectStatus()
-    const { reset, isVerified } = useNextIDConnectStatus()
 
     const [openBindDialog, toggleBindDialog] = useState(false)
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
     const isOwn = currentProfileIdentifier.identifier === visitingPersonaIdentifier.identifier
-
-    const personaActionButton = useMemo(() => {
-        if (!personaConnectStatus.action) return null
-        const button = personaConnectStatus.hasPersona ? t.connect_persona() : t.create_persona()
-        const icon = personaConnectStatus.hasPersona ? (
-            <Icons.Connect sx={{ marginRight: '8px' }} />
-        ) : (
-            <Icons.Identity size={18} sx={{ marginRight: '8px' }} />
-        )
-
-        return (
-            <Button className={classes.button} onClick={() => personaConnectStatus.action?.(undefined, 'top-right')}>
-                {icon}
-                {button}
-            </Button>
-        )
-    }, [personaConnectStatus, t])
 
     const { value: currentPersona, loading: loadingPersona } = useAsyncRetry(async () => {
         if (!visitingPersonaIdentifier?.identifier) return
         return Services.Identity.queryPersonaByProfile(visitingPersonaIdentifier.identifier)
     }, [visitingPersonaIdentifier, personaConnectStatus.hasPersona])
     const publicKeyAsHex = currentPersona?.identifier.publicKeyAsHex
-
-    const { value: isAccountVerified, loading: loadingVerifyInfo } = useAsync(async () => {
-        if (!publicKeyAsHex) return
-        if (!visitingPersonaIdentifier.identifier) return
-        return NextIDProof.queryIsBound(
-            publicKeyAsHex,
-            platform,
-            visitingPersonaIdentifier.identifier.userId?.toLowerCase(),
-        )
-    }, [publicKeyAsHex, visitingPersonaIdentifier, isVerified])
 
     const isWeb3ProfileDisable = useIsMinimalMode(PluginId.Web3Profile)
 
@@ -188,14 +161,14 @@ export function NextIdPage() {
             return t.others_lack_wallet()
         }
         if (isWeb3ProfileDisable) return ''
-        if (personaConnectStatus.action && !personaConnectStatus.hasPersona) {
+        if (!personaConnectStatus.hasPersona) {
             return t.create_persona_intro()
         }
-        if (isAccountVerified) {
+        if (personaConnectStatus.verified) {
             return t.add_wallet_intro()
         }
         return ''
-    }, [personaConnectStatus, isOwn, isAccountVerified, t, isWeb3ProfileDisable])
+    }, [personaConnectStatus, isOwn, t, isWeb3ProfileDisable])
 
     const {
         value: bindings,
@@ -206,15 +179,12 @@ export function NextIdPage() {
         return NextIDProof.queryExistedBindingByPersona(publicKeyAsHex)
     }, [publicKeyAsHex])
 
+    // TODO: move to persona list dialog
     const onVerify = async () => {
-        reset()
+        // reset()
         const firstTab = TAB_SELECTOR?.[platform]?.evaluate()?.querySelector('div')?.parentNode
             ?.firstChild as HTMLElement
         firstTab.click()
-    }
-
-    const onEnablePlugin = async () => {
-        await Services.Settings.setPluginMinimalModeEnabled(PluginId.Web3Profile, false)
     }
 
     const handleAddWallets = () => {
@@ -224,37 +194,21 @@ export function NextIdPage() {
     }
 
     const getButton = useMemo(() => {
-        if (!isOwn) {
-            return
-        }
-        if (isWeb3ProfileDisable) {
-            return (
-                <Button className={classes.button} variant="contained" onClick={onEnablePlugin}>
-                    <Icons.Plugin />
-                    <Typography marginLeft="9px">{t.enable_plugin()}</Typography>
-                </Button>
-            )
-        }
-        if (personaActionButton && isOwn) {
-            return personaActionButton
-        }
-        if (!isAccountVerified && isOwn) {
-            return (
-                <Button className={classes.button} variant="contained" onClick={onVerify}>
-                    <Icons.Connect sx={{ margin: '2px 8px 0 0' }} />
-                    {t.verify_Twitter_ID_button()}
-                </Button>
-            )
-        }
-        return (
-            <Button className={classes.button} variant="contained" onClick={handleAddWallets}>
-                <Icons.WalletUnderTabs size={16} className={classes.walletIcon} />
-                {t.add_wallet_button()}
-            </Button>
-        )
-    }, [isWeb3ProfileDisable, personaActionButton, isOwn, isAccountVerified, t])
+        if (!isOwn) return null
 
-    if (loadingBindings || loadingPersona || loadingVerifyInfo) {
+        return (
+            <PluginEnableBoundary pluginId={PluginId.Web3Profile}>
+                <PersonaBoundary handlerPosition="top-right">
+                    <Button className={classes.button} variant="contained" onClick={handleAddWallets}>
+                        <Icons.WalletUnderTabs size={16} className={classes.walletIcon} />
+                        {t.add_wallet_button()}
+                    </Button>
+                </PersonaBoundary>
+            </PluginEnableBoundary>
+        )
+    }, [isOwn, t])
+
+    if (loadingBindings || loadingPersona) {
         return (
             <div>
                 <Skeleton className={classes.skeleton} animation="wave" variant="rectangular" />
