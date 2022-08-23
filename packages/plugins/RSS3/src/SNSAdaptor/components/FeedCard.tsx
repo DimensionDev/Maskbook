@@ -1,6 +1,6 @@
 import { NFTCardStyledAssetPlayer, ReversedAddress, TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { Alchemy_EVM, RSS3BaseAPI } from '@masknet/web3-providers'
+import { AlchemyEVM, RSS3BaseAPI } from '@masknet/web3-providers'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, formatTokenId, isZeroAddress, resolveIPFSLinkFromURL, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Box, Typography, Card } from '@mui/material'
@@ -86,7 +86,7 @@ export function FeedCard({ feed, address, onSelect }: FeedCardProps) {
     const { value: NFTMetadata } = useAsyncRetry(async () => {
         if ((feed.title && feed.summary) || !feed.metadata?.collection_address) return
 
-        const res = await Alchemy_EVM.getAsset(feed.metadata?.collection_address, feed.metadata?.token_id ?? '', {
+        const res = await AlchemyEVM.getAsset(feed.metadata?.collection_address, feed.metadata?.token_id ?? '', {
             chainId: ChainID[feed.metadata?.network ?? 'ethereum'],
         })
         return res

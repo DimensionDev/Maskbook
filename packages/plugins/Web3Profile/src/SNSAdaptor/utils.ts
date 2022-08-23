@@ -6,7 +6,7 @@ import {
     PersonaInformation,
     toBase64,
 } from '@masknet/shared-base'
-import { Alchemy_EVM, NextIDStorage, RSS3 } from '@masknet/web3-providers'
+import { AlchemyEVM, NextIDStorage, RSS3 } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '../../../../web3-shared/base/src/utils'
@@ -181,7 +181,7 @@ export const getFootprintList = async (walletList: WalletTypes[]) => {
 
 export const getNFTList = async (walletList: WalletTypes[]) => {
     const promises = walletList.map(({ address, platform }) => {
-        return Alchemy_EVM.getAssets(formatEthereumAddress(address), { chainId: ChainId.Mainnet }).then((result) => {
+        return AlchemyEVM.getAssets(formatEthereumAddress(address), { chainId: ChainId.Mainnet }).then((result) => {
             if (result) {
                 return {
                     address,
@@ -208,7 +208,7 @@ export const getNFTList = async (walletList: WalletTypes[]) => {
 
 export const getNFTList_Polygon = async (walletList: WalletTypes[]) => {
     const promises = walletList.map(({ address, platform }) => {
-        return Alchemy_EVM.getAssets(formatEthereumAddress(address), { chainId: ChainId.Matic }).then((result) => {
+        return AlchemyEVM.getAssets(formatEthereumAddress(address), { chainId: ChainId.Matic }).then((result) => {
             if (result) {
                 return {
                     address,

@@ -108,7 +108,7 @@ function createNonFungibleAsset(
     }
 }
 
-export class Alchemy_FLOW_API implements NonFungibleTokenAPI.Provider<ChainId_FLOW, SchemaType_FLOW> {
+export class AlchemyFlowAPI implements NonFungibleTokenAPI.Provider<ChainId_FLOW, SchemaType_FLOW> {
     async getAsset(
         address: string,
         tokenId: string,
