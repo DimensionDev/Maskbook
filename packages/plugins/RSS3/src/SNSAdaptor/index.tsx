@@ -16,13 +16,12 @@ const DonationsTabConfig: Plugin.SNSAdaptor.ProfileTab = {
     priority: 1,
     UI: {
         TabContent: ({ socialAddress, identity }) => {
-            if (!socialAddress?.address || !identity?.identifier?.userId || !identity.publicKey) return null
             return (
                 <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
                     <DonationPage
                         socialAddress={socialAddress}
                         userId={identity?.identifier?.userId}
-                        publicKey={identity.publicKey}
+                        publicKey={identity?.publicKey}
                     />
                 </PluginIDContextProvider>
             )
@@ -38,16 +37,15 @@ const FootprintsTabConfig: Plugin.SNSAdaptor.ProfileTab = {
     priority: 2,
     UI: {
         TabContent: ({ socialAddress, identity }) => {
-            if (!socialAddress?.address || !identity?.identifier?.userId || !identity.publicKey) return null
-            return socialAddress?.address ? (
+            return (
                 <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
                     <FootprintsPage
-                        address={socialAddress.address}
-                        publicKey={identity.publicKey}
-                        userId={identity?.identifier?.userId}
+                        address={socialAddress?.address ?? ''}
+                        publicKey={identity?.publicKey}
+                        userId={identity?.identifier?.userId ?? ''}
                     />
                 </PluginIDContextProvider>
-            ) : null
+            )
         },
     },
     Utils: {
@@ -60,11 +58,11 @@ const ActivitiesTabConfig: Plugin.SNSAdaptor.ProfileTab = {
     priority: 3,
     UI: {
         TabContent: ({ socialAddress }) => {
-            return socialAddress?.address ? (
+            return (
                 <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
-                    <FeedsPage address={socialAddress.address} />
+                    <FeedsPage address={socialAddress?.address} />
                 </PluginIDContextProvider>
-            ) : null
+            )
         },
     },
     Utils: {

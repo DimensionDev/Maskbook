@@ -14,7 +14,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 
 export interface FootprintPageProps {
     address: string
-    publicKey: string
+    publicKey?: string
     userId: string
 }
 
@@ -27,8 +27,8 @@ export const FootprintsPage = memo(function FootprintsPage({ address, publicKey,
 
     const footprints = useAvailableCollections(
         kvValue?.proofs ?? EMPTY_LIST,
-        CollectionType.Footprints,
         allFootprints,
+        CollectionType.Footprints,
         userId,
         address,
     )
