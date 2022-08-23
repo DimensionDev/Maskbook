@@ -248,8 +248,8 @@ export function useAllTradeComputed(
         traderEstimateGas: yumiswapEstimateGas,
     } = useUniswapV2Like(tradeProviders, TradeProvider.YUMISWAP, inputAmount_, inputToken, outputToken)
 
-     // Diffusion finance
-     const {
+    // Diffusion finance
+    const {
         trader_: diffusion_,
         trader: diffusion,
         traderEstimateGas: diffusionEstimateGas,
