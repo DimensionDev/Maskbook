@@ -1,4 +1,4 @@
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 import urlcat from 'urlcat'
 import {
     createIndicator,
