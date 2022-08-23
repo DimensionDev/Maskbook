@@ -56,7 +56,7 @@ export const ProfileCardTitle: FC<Props> = ({
             open: true,
             settings: {
                 switchTab: {
-                    focusPluginId: PluginId.RSS3,
+                    focusPluginId: PluginId.Web3ProfileCard,
                 },
             },
         })

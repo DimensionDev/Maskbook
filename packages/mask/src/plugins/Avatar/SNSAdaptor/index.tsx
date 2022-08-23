@@ -1,16 +1,12 @@
 import { Icons } from '@masknet/icons'
-import { Plugin, PluginI18NFieldRender, PluginId } from '@masknet/plugin-infra/content-script'
+import { Plugin, PluginId, PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
-import type { EnhanceableSite } from '@masknet/shared-base'
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { Box } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { NFTAvatarDialog } from '../Application/NFTAvatarsDialog'
 import { base } from '../base'
-import { PLUGIN_ID, SNS_RSS3_FIELD_KEY_MAP } from '../constants'
 import { setupContext } from '../context'
-import { ProfileAvatarBadge } from './ProfileAvatarBadge'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -66,30 +62,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
         })(),
     ],
-    AvatarRealm: {
-        ID: `${PLUGIN_ID}_profile_card`,
-        label: 'Avatar',
-        priority: 99999,
-        UI: {
-            Decorator({ identity }) {
-                if (!identity?.identifier?.userId) return null
-                const rss3Key = SNS_RSS3_FIELD_KEY_MAP[identity.identifier.network as EnhanceableSite]
-                if (!rss3Key) return null
-                return (
-                    <Box display="flex" alignItems="top" justifyContent="center">
-                        <div style={{ display: 'flex', alignItems: 'top', justifyContent: 'center' }}>
-                            <ProfileAvatarBadge userId={identity.identifier.userId} />
-                        </div>
-                    </Box>
-                )
-            },
-        },
-        Utils: {
-            shouldDisplay(_, socialAddressList) {
-                return !!socialAddressList?.length
-            },
-        },
-    },
 }
 
 export default sns

@@ -25,9 +25,9 @@ export const rainbowBorderKeyFrames: Keyframes = keyframes`
 `
 
 interface StyleProps {
-    width?: number | string
-    height?: number | string
-    radius?: string | string
+    width?: number
+    height?: number
+    radius?: string
     size?: number
 }
 const useStyles = makeStyles<StyleProps>()((theme, { width, height, radius = '100%', size = 2 }) => ({
@@ -48,9 +48,9 @@ const useStyles = makeStyles<StyleProps>()((theme, { width, height, radius = '10
 
 interface RainbowBoxProps extends withClasses<'root'> {
     borderSize?: number
-    width?: number | string
-    height?: number | string
-    radius?: string | string
+    width?: number
+    height?: number
+    radius?: string
     children?: React.ReactNode
 }
 export function RainbowBox(props: RainbowBoxProps) {
