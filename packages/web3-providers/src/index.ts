@@ -2,7 +2,7 @@ import { CoinGeckoAPI } from './coingecko'
 import { OpenSeaAPI } from './opensea'
 import { LooksRareAPI } from './looksrare'
 import { RaribleAPI } from './rarible'
-import { NFTScanAPI } from './NFTScan'
+import { NFTScanEVM_API } from './NFTScan'
 import { ZoraAPI } from './zora'
 import { NativeExplorerAPI } from './explorer'
 import { RiskWarningAPI } from './risk-warning'
@@ -37,7 +37,7 @@ export const OpenSea = new OpenSeaAPI()
 export const LooksRare = new LooksRareAPI()
 export const MagicEden = new MagicEdenAPI()
 export const Rarible = new RaribleAPI()
-export const NFTScan = new NFTScanAPI()
+export const NFTScan = new NFTScanEVM_API()
 export const Zora = new ZoraAPI()
 export const Gem = new GemAPI()
 export const CoinGecko = new CoinGeckoAPI()
