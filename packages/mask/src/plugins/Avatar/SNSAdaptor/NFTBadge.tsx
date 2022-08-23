@@ -66,7 +66,7 @@ export function NFTBadge(props: NFTBadgeProps) {
                     borderSize={borderSize}
                     fontSize={9}
                     text={`${formatText(nftInfo.name ?? '', avatar.tokenId)} ${
-                        nftInfo.slug.toLowerCase() === 'ens' ? 'ENS' : ''
+                        nftInfo.slug?.toLowerCase() === 'ens' ? 'ENS' : ''
                     }`}
                     price={formatPrice(nftInfo.amount ?? '0', nftInfo.symbol ?? 'ETH')}
                 />

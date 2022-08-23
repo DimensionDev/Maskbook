@@ -14,9 +14,11 @@ export function useProvedWallets() {
         async () => Services.Identity.queryOwnedPersonaInformation(false),
         [currentIdentifier],
     )
+
     useEffect(() => {
         return MaskMessages.events.ownPersonaChanged.on(retry)
     }, [retry])
+
     const res = useAsyncRetry(async () => {
         if (!currentIdentifier) return EMPTY_LIST
         const currentPersona = personas?.find(

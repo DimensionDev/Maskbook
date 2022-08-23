@@ -34,7 +34,7 @@ export function useSocialAddressListAll(
                 [EVM_IdentityService, SolanaIdentityService].map((x) => x?.lookup(identity) ?? []),
             )
             if (!identity.isOwner) {
-                addressCache.set(userId, cached)
+                addressCache.set(`${userId}_${identity.publicKey ?? ''}`, cached)
             }
         }
         const allSettled = await cached

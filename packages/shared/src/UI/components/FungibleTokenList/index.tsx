@@ -1,4 +1,14 @@
-import { ForwardedRef, forwardRef, memo, ReactNode, useImperativeHandle, useMemo, useState } from 'react'
+import {
+    ForwardedRef,
+    forwardRef,
+    memo,
+    ReactNode,
+    useCallback,
+    useEffect,
+    useImperativeHandle,
+    useMemo,
+    useState,
+} from 'react'
 import { uniqBy } from 'lodash-unified'
 import { EMPTY_LIST, EMPTY_OBJECT } from '@masknet/shared-base'
 import { makeStyles, MaskFixedSizeListProps, MaskTextFieldProps, SearchableList } from '@masknet/theme'
@@ -30,6 +40,7 @@ import {
 import { getFungibleTokenItem } from './FungibleTokenItem'
 import { ManageTokenListBar } from './ManageTokenListBar'
 import { TokenListMode } from './type'
+import { Icons } from '@masknet/icons'
 
 const DEFAULT_LIST_HEIGHT = 300
 const SEARCH_KEYS = ['address', 'symbol', 'name']
@@ -62,13 +73,23 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const Content = memo(({ message, height }: { message: ReactNode; height?: number | string }) => (
-    <Stack minHeight={height ?? DEFAULT_LIST_HEIGHT} justifyContent="center" alignContent="center" marginTop="12px">
-        <Typography color="textSecondary" textAlign="center">
-            {message}
-        </Typography>
-    </Stack>
-))
+const Content = memo(({ message, height }: { message: ReactNode; height?: number | string }) => {
+    const h = height ?? DEFAULT_LIST_HEIGHT
+    return (
+        <Stack
+            minHeight={typeof h === 'number' ? h + 52 : h}
+            justifyContent="center"
+            alignContent="center"
+            marginTop="12px">
+            <Stack justifyContent="center" gap={1.5} alignItems="center">
+                <Icons.EmptySimple size={36} />
+                <Typography color="textSecondary" textAlign="center">
+                    {message}
+                </Typography>
+            </Stack>
+        </Stack>
+    )
+})
 
 export const FungibleTokenList = forwardRef(
     <T extends NetworkPluginID>(
@@ -90,6 +111,17 @@ export const FungibleTokenList = forwardRef(
 
         // #region control mode
         const [mode, setMode] = useState(TokenListMode.List)
+        const [modeTransition, setModeTransition] = useState(false)
+
+        // should have transition ui for change to manage from list
+        useEffect(() => {
+            if (mode === TokenListMode.List) return
+            setModeTransition(true)
+            setTimeout(() => {
+                setModeTransition(false)
+            }, 800)
+        }, [mode])
+
         useImperativeHandle(
             ref,
             () => ({
@@ -142,7 +174,45 @@ export const FungibleTokenList = forwardRef(
             },
         )
 
-        const sortedFungibleTokens = useMemo(() => {
+        // To avoid SearchableList re-render, reduce the dep
+        const sortedFungibleTokensForManage = useMemo(() => {
+            if (mode === TokenListMode.List) return []
+            const isTrustedToken = currySameAddress(trustedFungibleTokens.map((x) => x.address))
+
+            return filteredFungibleTokens.sort((a, z) => {
+                // trusted token
+                if (isTrustedToken(a.address)) return -1
+                if (isTrustedToken(z.address)) return 1
+
+                const isNativeTokenA = isSameAddress(a.address, Others?.getNativeTokenAddress(a.chainId))
+                const isNativeTokenZ = isSameAddress(z.address, Others?.getNativeTokenAddress(z.chainId))
+
+                const isMaskTokenA = isSameAddress(a.address, Others?.getMaskTokenAddress(a.chainId))
+                const isMaskTokenZ = isSameAddress(z.address, Others?.getMaskTokenAddress(z.chainId))
+
+                // the currently selected chain id
+                if (a.chainId !== z.chainId) {
+                    if (a.chainId === chainId) return -1
+                    if (z.chainId === chainId) return 1
+                }
+
+                // native token
+                if (isNativeTokenA) return -1
+                if (isNativeTokenZ) return 1
+
+                // mask token with position value
+                if (isMaskTokenA) return -1
+                if (isMaskTokenZ) return 1
+
+                // alphabet
+                if (a.name !== z.name) return a.name < z.name ? -1 : 1
+
+                return 0
+            })
+        }, [chainId, trustedFungibleTokens, Others, mode])
+
+        const sortedFungibleTokensForList = useMemo(() => {
+            if (mode === TokenListMode.Manage) return []
             const fungibleAssetsTable = Object.fromEntries(
                 fungibleAssets.filter((x) => x.chainId === chainId).map((x) => [x.address, x]),
             )
@@ -150,15 +220,8 @@ export const FungibleTokenList = forwardRef(
             const isBlockedToken = currySameAddress(blockedFungibleTokens.map((x) => x.address))
 
             return filteredFungibleTokens
-                .filter((x) => (mode === TokenListMode.List ? !isBlockedToken(x) : true))
+                .filter((x) => !isBlockedToken(x))
                 .sort((a, z) => {
-                    if (mode === TokenListMode.Manage) {
-                        // trusted token
-                        if (isTrustedToken(a.address)) return -1
-                        if (isTrustedToken(z.address)) return 1
-
-                        return 0
-                    }
                     const aBalance = toZero(formatBalance(fungibleTokensBalance[a.address] ?? '0', a.decimals))
                     const zBalance = toZero(formatBalance(fungibleTokensBalance[z.address] ?? '0', z.decimals))
 
@@ -204,6 +267,11 @@ export const FungibleTokenList = forwardRef(
 
                     return 0
                 })
+                .map((x) => ({
+                    ...x,
+                    // To avoid reduce re-render, merge balance into token, when value is `undefined` to represent loading
+                    balance: fungibleTokensBalance[x.address],
+                }))
         }, [
             chainId,
             fungibleAssets,
@@ -223,7 +291,6 @@ export const FungibleTokenList = forwardRef(
                 setSearchError(undefined)
                 return
             }
-            if (mode === TokenListMode.Manage) return ''
 
             if (
                 (keyword.startsWith('0x') || keyword.startsWith('0X')) &&
@@ -234,11 +301,13 @@ export const FungibleTokenList = forwardRef(
                 return
             }
 
+            if (mode === TokenListMode.Manage) return ''
+
             return Others?.isValidAddress(keyword) &&
-                !sortedFungibleTokens.some((x) => isSameAddress(x.address, keyword))
+                !sortedFungibleTokensForList.some((x) => isSameAddress(x.address, keyword))
                 ? keyword
                 : ''
-        }, [keyword, sortedFungibleTokens, Others, mode])
+        }, [keyword, sortedFungibleTokensForList, Others, mode])
 
         const { value: searchedToken, loading: searchingToken } = useFungibleToken(pluginID, searchedTokenAddress, {
             chainId,
@@ -246,6 +315,8 @@ export const FungibleTokenList = forwardRef(
         // #endregion
 
         const getPlaceholder = () => {
+            if (modeTransition) return <Content height={FixedSizeListProps?.height} message={t.token_list_loading()} />
+
             // Add token in dashboard, includeTokens is empty
             if (Object.keys(fungibleTokensBalance).length === 0 && includeTokens?.length === 0 && !searchedToken)
                 return null
@@ -266,66 +337,79 @@ export const FungibleTokenList = forwardRef(
             return null
         }
 
+        const itemRender = useMemo(() => {
+            return getFungibleTokenItem<T>(
+                (address) => {
+                    if (isSameAddress(nativeToken?.address, address)) return 'official-native'
+
+                    const inOfficialList = fungibleTokens.some((x) => isSameAddress(x.address, address))
+                    if (inOfficialList) return 'official'
+
+                    const inPersonaList = trustedFungibleTokens.some((x) => isSameAddress(x.address, address))
+                    if (inPersonaList) return 'personal'
+
+                    return 'external'
+                },
+                (address) => selectedTokens.some((x) => isSameAddress(x, address)),
+                mode,
+                async (
+                    token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
+                    strategy: 'add' | 'remove',
+                ) => {
+                    if (strategy === 'add') Token?.addToken?.(account, token)
+                    if (strategy === 'remove') Token?.removeToken?.(account, token)
+                },
+                async (
+                    token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
+                    strategy: 'trust' | 'block',
+                ) => {
+                    if (strategy === 'trust') Token?.trustToken?.(account, token)
+                    if (strategy === 'block') Token?.blockToken?.(account, token)
+                },
+            )
+        }, [nativeToken?.address, selectedTokens, mode, trustedFungibleTokens, fungibleTokens])
+
+        const SearchFieldProps = useMemo(
+            () => ({
+                placeholder: t.erc20_token_list_placeholder(),
+                helperText: searchError,
+                error: !!searchError,
+                ...props.SearchTextFieldProps,
+            }),
+            [searchError, JSON.stringify(props.SearchTextFieldProps)],
+        )
+
+        const handleSelect = useCallback(
+            (
+                token: FungibleToken<
+                    Web3Helper.Definition[T]['ChainId'],
+                    Web3Helper.Definition[T]['SchemaType']
+                > | null,
+            ) => onSelect?.(token),
+            [onSelect],
+        )
+
         return (
             <Stack className={classes.channel}>
                 <SearchableList<
                     FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>
                 >
-                    onSelect={(token) => onSelect?.(token)}
+                    onSelect={handleSelect}
                     onSearch={setKeyword}
                     data={
                         searchedToken && isSameAddress(searchedToken.address, searchedTokenAddress)
                             ? [searchedToken]
-                            : sortedFungibleTokens
+                            : mode === TokenListMode.List
+                            ? sortedFungibleTokensForList
+                            : sortedFungibleTokensForManage
                     }
                     searchKey={SEARCH_KEYS}
                     disableSearch={!!props.disableSearch}
-                    itemRender={getFungibleTokenItem<T>(
-                        (address) => {
-                            if (isSameAddress(nativeToken?.address, address)) return 'official-native'
-
-                            const inOfficialList = fungibleTokens.some((x) => isSameAddress(x.address, address))
-                            if (inOfficialList) return 'official'
-
-                            const inPersonaList = trustedFungibleTokens.some((x) => isSameAddress(x.address, address))
-                            if (inPersonaList) return 'personal'
-
-                            return 'external'
-                        },
-                        (address) => fungibleTokensBalance[address] ?? '0',
-                        (address) => selectedTokens.some((x) => isSameAddress(x, address)),
-                        () => loadingFungibleTokensBalance || loadingFungibleAssets,
-                        mode,
-                        async (
-                            token: FungibleToken<
-                                Web3Helper.Definition[T]['ChainId'],
-                                Web3Helper.Definition[T]['SchemaType']
-                            >,
-                            strategy: 'add' | 'remove',
-                        ) => {
-                            if (strategy === 'add') await Token?.addToken?.(account, token)
-                            if (strategy === 'remove') await Token?.removeToken?.(account, token)
-                        },
-                        async (
-                            token: FungibleToken<
-                                Web3Helper.Definition[T]['ChainId'],
-                                Web3Helper.Definition[T]['SchemaType']
-                            >,
-                            strategy: 'trust' | 'block',
-                        ) => {
-                            if (strategy === 'trust') await Token?.trustToken?.(account, token)
-                            if (strategy === 'block') await Token?.blockToken?.(account, token)
-                        },
-                        (address) => !!blockedFungibleTokens?.find((x) => isSameAddress(x.address, address)),
-                    )}
+                    itemKey="address"
+                    itemRender={itemRender}
                     placeholder={getPlaceholder()}
                     FixedSizeListProps={FixedSizeListProps}
-                    SearchFieldProps={{
-                        placeholder: t.erc20_token_list_placeholder(),
-                        helperText: searchError,
-                        error: !!searchError,
-                        ...props.SearchTextFieldProps,
-                    }}
+                    SearchFieldProps={SearchFieldProps}
                 />
                 {mode === TokenListMode.List && enableManage && (
                     <Box className={classes.bar}>

@@ -13,6 +13,7 @@ import { useI18N } from '../../utils'
 import { Icons } from '@masknet/icons'
 import { PersonaListDialog } from './PersonaListDialog'
 import { PluginNextIDMessages } from '../../plugins/NextID/messages'
+import type { PluginId } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles<{ openSettings: boolean }>()((theme, { openSettings }) => {
     return {
@@ -36,18 +37,29 @@ export function ApplicationBoardDialog() {
     const [openSettings, setOpenSettings] = useState(false)
     const { classes } = useStyles({ openSettings })
     const { t } = useI18N()
-    const [currentTab, onChange, tabs] = useTabs(ApplicationSettingTabs.pluginList, ApplicationSettingTabs.pluginSwitch)
+    const [currentTab, onChange, tabs, setTab] = useTabs(
+        ApplicationSettingTabs.pluginList,
+        ApplicationSettingTabs.pluginSwitch,
+    )
 
-    const { open, closeDialog: _closeDialog } = useRemoteControlledDialog(
+    const [focusPluginId, setFocusPluginId] = useState<PluginId>()
+
+    const { open, closeDialog: closeBoard } = useRemoteControlledDialog(
         WalletMessages.events.ApplicationDialogUpdated,
+        (evt) => {
+            if (!open) return
+            if (evt.settings?.switchTab) {
+                setOpenSettings(true)
+                setTab(ApplicationSettingTabs.pluginSwitch)
+                setFocusPluginId(evt.settings.switchTab.focusPluginId)
+            }
+        },
     )
 
-    const { open: openPersonaListDialog, closeDialog: _closePersonaListDialog } = useRemoteControlledDialog(
-        PluginNextIDMessages.PersonaListDialogUpdated,
-    )
+    const { open: openPersonaListDialog } = useRemoteControlledDialog(PluginNextIDMessages.PersonaListDialogUpdated)
 
     const closeDialog = useCallback(() => {
-        _closeDialog()
+        closeBoard()
         CrossIsolationMessages.events.requestComposition.sendToLocal({
             reason: 'timeline',
             open: false,
@@ -81,13 +93,13 @@ export function ApplicationBoardDialog() {
                                 <ApplicationSettingPluginList />
                             </TabPanel>
                             <TabPanel value={tabs.pluginSwitch} style={{ padding: 0 }}>
-                                <ApplicationSettingPluginSwitch />
+                                <ApplicationSettingPluginSwitch focusPluginId={focusPluginId} />
                             </TabPanel>
                         </>
                     ) : (
                         <ApplicationBoard closeDialog={closeDialog} />
                     )}
-                    <PersonaListDialog />
+                    {openPersonaListDialog && <PersonaListDialog />}
                 </DialogContent>
             </InjectedDialog>
         </TabContext>

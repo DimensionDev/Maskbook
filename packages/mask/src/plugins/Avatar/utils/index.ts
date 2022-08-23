@@ -75,19 +75,41 @@ export function formatAddress(address: string, size = 0) {
     return `${address.slice(0, Math.max(0, 2 + size))}...${address.slice(-size)}`
 }
 
-export async function getNFTAvatarByUserId(userId: string, avatarId: string): Promise<NextIDAvatarMeta | undefined> {
+async function getAvatarFromNextIDStorage(
+    persona: string,
+    platform: NextIDPlatform,
+    userId: string,
+    avatarId?: string,
+) {
+    const response = await NextIDStorage.getByIdentity<NextIDAvatarMeta>(
+        persona,
+        platform,
+        userId.toLowerCase(),
+        PLUGIN_ID,
+    )
+
+    if (!avatarId && response.ok) return response.val
+    if (response.ok && response.val?.avatarId === avatarId) return response.val
+    return
+}
+
+export async function getNFTAvatarByUserId(
+    userId: string,
+    avatarId: string,
+    persona: string,
+): Promise<NextIDAvatarMeta | undefined> {
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
     const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(platform, userId)
 
+    if (persona) {
+        const binding = bindings.filter((x) => x.persona.toLowerCase() === persona.toLowerCase())?.[0]
+        if (binding) {
+            return getAvatarFromNextIDStorage(binding.persona, platform, userId, avatarId)
+        }
+    }
     for (const binding of bindings.sort((a, b) => sortPersonaBindings(a, b, userId))) {
-        const response = await NextIDStorage.getByIdentity<NextIDAvatarMeta>(
-            binding.persona,
-            platform,
-            userId.toLowerCase(),
-            PLUGIN_ID,
-        )
-        if (!avatarId && response.ok) return response.val
-        if (response.ok && response.val?.avatarId === avatarId) return response.val
+        const avatar = await getAvatarFromNextIDStorage(binding.persona, platform, userId, avatarId)
+        if (avatar) return avatar
     }
     return
 }

@@ -224,7 +224,7 @@ export function FeedCard({ feed, address, onSelect }: FeedCardProps) {
                 })
             }>
             <div>
-                <Typography>
+                <Typography width={490}>
                     <span className={classes.action}>
                         <ReversedAddress TypographyProps={{ display: 'inline' }} address={address!} /> {action}
                     </span>{' '}

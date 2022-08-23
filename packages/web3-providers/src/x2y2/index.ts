@@ -79,7 +79,7 @@ export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             to: {
                 address: event.to_address,
             },
-            timestamp: Number.parseInt(event.created_at, 10),
+            timestamp: Number.parseInt(event.created_at, 10) * 1000,
             paymentToken: isZeroAddress(event.order.currency)
                 ? createNativeToken(ChainId.Mainnet)
                 : createERC20Token(ChainId.Mainnet, event.order.currency),

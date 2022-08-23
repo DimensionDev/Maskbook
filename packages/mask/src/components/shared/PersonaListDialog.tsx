@@ -16,7 +16,7 @@ import Services from '../../extension/service'
 import { InjectedDialog } from '@masknet/shared'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNextIDVerify } from '../DataSource/useNextIDVerify'
-import { useI18N } from '../../utils'
+import { MaskMessages, useI18N } from '../../utils'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
@@ -88,7 +88,9 @@ export const PersonaListDialog = () => {
             setSelectedPersona(personas[0])
             return
         }
-        setSelectedPersona(personas.find((x) => isSamePersona(x.persona, currentPersonaIdentifier)))
+
+        const persona = personas.find((x) => isSamePersona(x.persona, currentPersonaIdentifier))
+        setSelectedPersona(persona ?? personas[0])
     }, [currentPersonaIdentifier?.toText(), personas.length])
 
     const [, connect] = useAsyncFn(
@@ -102,21 +104,23 @@ export const PersonaListDialog = () => {
         [],
     )
 
-    const gotoSetup = async () => {
-        await Services.Helper.openDashboard(DashboardRoutes.Setup)
+    const { setDialog: setCreatePersonaConfirmDialog } = useRemoteControlledDialog(MaskMessages.events.openPageConfirm)
+
+    useEffect(() => {
+        if (personas.length || !finishTarget) return
+
         closeDialog()
-    }
+        setCreatePersonaConfirmDialog({
+            open: true,
+            target: 'dashboard',
+            url: DashboardRoutes.Setup,
+            text: t('applications_create_persona_hint'),
+            title: t('applications_create_persona_title'),
+            actionHint: t('applications_create_persona_action'),
+        })
+    }, [personas.length, finishTarget])
 
     const actionButton = useMemo(() => {
-        console.log(personas)
-        if (!personas.length)
-            return (
-                <ActionContent
-                    onClick={gotoSetup}
-                    buttonText={t('applications_create_persona_action')}
-                    hint={t('applications_create_persona_hint')}
-                />
-            )
         let isConnected = true
         let isVerified = true
 
@@ -189,7 +193,7 @@ export const PersonaListDialog = () => {
                         }),
                     }
                 return {
-                    hint: t('applications_persona_verify_hint', {
+                    buttonText: t('applications_persona_connect', {
                         nickname: selectedPersona?.persona.nickname,
                     }),
                 }
@@ -198,7 +202,7 @@ export const PersonaListDialog = () => {
         }
 
         return <ActionContent {...actionProps} />
-    }, [currentPersonaIdentifier, currentProfileIdentify, selectedPersona, personas.length])
+    }, [currentPersonaIdentifier, currentProfileIdentify, selectedPersona])
 
     const onSelectPersona = useCallback((x: PersonaNextIDMixture) => {
         setSelectedPersona(x)

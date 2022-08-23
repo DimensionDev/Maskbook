@@ -1,33 +1,27 @@
+import { useAccount, useWeb3State } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { InjectedDialog } from '@masknet/shared'
-import {
-    BindingProof,
-    ECKeyIdentifier,
-    NextIDAction,
-    NextIDStorageInfo,
-    NextIDStoragePayload,
-} from '@masknet/shared-base'
+import { PluginId } from '@masknet/plugin-infra'
+import { BindingProof, NextIDAction, NextIDPlatform } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles, useCustomSnackbar, LoadingBase, ActionButton } from '@masknet/theme'
+import { ActionButton, LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Button, ButtonProps, DialogActions, DialogContent } from '@mui/material'
-import formatDateTime from 'date-fns/format'
-import { cloneDeep, isEqual } from 'lodash-unified'
+import { isEqual } from 'lodash-unified'
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import Services from '../../../extension/service'
-import { useI18N } from '../locales'
-import { getKvPayload, setKvPatchData, useKvGet } from '../hooks/useKv'
-import { useTipsWalletsList } from '../hooks/useTipsWalletsList'
 import { useProvedWallets } from '../hooks/useProvedWallets'
+import { useTipsWalletsList } from '../hooks/useTipsWalletsList'
+import { useI18N } from '../locales'
+import { getNowTime } from '../utils'
 import AddWalletView from './bodyViews/AddWallet'
 import SettingView from './bodyViews/Setting'
 import WalletsView from './bodyViews/Wallets'
 import { EmptyStatus } from './components/EmptyStatus'
 import { VerifyAlertLine } from './components/VerifyAlertLine'
 import { WalletsByNetwork } from './components/WalletsByNetwork'
-import { useAccount } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export interface TipsEntranceDialogProps {
     open: boolean
@@ -67,7 +61,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-enum BodyViewStep {
+enum Step {
     Main = 'Tips',
     Setting = 'Settings',
     Wallets = 'Wallets',
@@ -75,16 +69,16 @@ enum BodyViewStep {
 }
 
 interface WalletButtonProps extends ButtonProps {
-    step: BodyViewStep
+    step: Step
 }
 
 const WalletButton: FC<WalletButtonProps> = ({ step, onClick }) => {
     const { classes } = useStyles()
-    if (step === BodyViewStep.AddWallet) return null
+    if (step === Step.AddWallet) return null
     return (
         <div className={classes.btnContainer}>
             <Button onClick={onClick} className={classes.walletBtn} size="small">
-                {step === BodyViewStep.Wallets ? BodyViewStep.AddWallet : BodyViewStep.Wallets}
+                {step === Step.Wallets ? Step.AddWallet : Step.Wallets}
             </Button>
         </div>
     )
@@ -93,15 +87,12 @@ const WalletButton: FC<WalletButtonProps> = ({ step, onClick }) => {
 export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const t = useI18N()
     const { classes } = useStyles()
+    const { Storage } = useWeb3State()
     const [showAlert, setShowAlert] = useState(true)
-    const [bodyViewStep, setBodyViewStep] = useState<BodyViewStep>(BodyViewStep.Main)
-    const [hasChanged, setHasChanged] = useState(false)
-    const [rawPatchData, setRawPatchData] = useState<BindingProof[]>([])
-    const [rawWalletList, setRawWalletList] = useState<BindingProof[]>([])
+    const [step, setStep] = useState<Step>(Step.Main)
     const supportedNetworkIds = [NetworkPluginID.PLUGIN_EVM]
     const { showSnackbar } = useCustomSnackbar()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const nowTime = useMemo(() => formatDateTime(new Date(), 'yyyy-MM-dd HH:mm'), [])
 
     const { value: currentPersonaIdentifier } = useAsyncRetry(() => {
         setShowAlert(true)
@@ -111,79 +102,58 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         return Services.Identity.queryPersona(currentPersonaIdentifier!)
     }, [currentPersonaIdentifier])
     const clickBack = () => {
-        if (bodyViewStep === BodyViewStep.Main) {
+        if (step === Step.Main) {
             onClose()
         } else {
-            setBodyViewStep(BodyViewStep.Main)
+            setStep(Step.Main)
         }
     }
-    const { value: kv, retry: retryKv } = useKvGet<NextIDStorageInfo<BindingProof[]>>(
-        currentPersonaIdentifier?.publicKeyAsHex,
-    )
+
+    const { value: kv, retry: retryKv } = useAsyncRetry(async () => {
+        if (!Storage || !currentPersonaIdentifier) return
+        const storage = Storage.createNextIDStorage(
+            currentPersonaIdentifier.publicKeyAsHex,
+            NextIDPlatform.NextID,
+            currentPersonaIdentifier,
+        )
+
+        return storage.get<BindingProof[]>(PluginId.Tips)
+    }, [currentPersonaIdentifier, Storage])
+
     const { loading, value: proofRes, retry: retryProof } = useProvedWallets()
-    const list = useTipsWalletsList(proofRes, currentPersona?.identifier.publicKeyAsHex, kv?.ok ? kv.val : undefined)
-    useMemo(() => {
-        setHasChanged(false)
-        setRawPatchData(list)
-        setRawWalletList(list)
-    }, [proofRes, kv, bodyViewStep])
+    const bindingWallets = useTipsWalletsList(proofRes, currentPersona?.identifier.publicKeyAsHex, kv)
 
-    const onCancel = () => {
-        setRawPatchData(cloneDeep(rawWalletList))
-        setHasChanged(false)
-    }
-
-    const refresh = () => {
-        setBodyViewStep(BodyViewStep.Main)
+    const refetch = () => {
         retryProof()
         retryKv()
     }
-
-    const setAsDefault = (idx: number) => {
-        const changed = cloneDeep(rawPatchData)
-        changed.forEach((x) => (x.isDefault = 0))
-        changed[idx].isDefault = 1
-        setHasChanged(!isEqual(changed, rawWalletList))
-        setRawPatchData(changed)
+    const refresh = () => {
+        setStep(Step.Main)
+        refetch()
     }
 
-    const onSwitchChange = (idx: number, v: boolean) => {
-        const changed = cloneDeep(rawPatchData)
-        changed[idx].isPublic = v ? 1 : 0
-        setRawPatchData(changed)
-        setHasChanged(true)
+    const [pendingDefault, setPendingDefault] = useState<string>()
+    const defaultAddress = bindingWallets.find((x) => x.isDefault)?.identity
+
+    const setAsDefault = (addr: string) => {
+        setPendingDefault(addr)
     }
 
-    const [kvFetchState, onConfirm] = useAsyncFn(async () => {
-        try {
-            const payload = await getKvPayload(rawPatchData)
-            if (!payload || !payload.val) throw new Error('payload error')
-            const signResult = await Services.Identity.generateSignResult(
-                currentPersonaIdentifier as ECKeyIdentifier,
-                (payload.val as NextIDStoragePayload).signPayload,
-            )
-            if (!signResult) throw new Error('sign error')
-            await setKvPatchData(payload.val, signResult.signature.signature, rawPatchData)
-            showSnackbar(t.tip_persona_sign_success(), {
-                variant: 'success',
-                message: nowTime,
-            })
-            retryKv()
-            return true
-        } catch (error) {
-            showSnackbar(t.tip_persona_sign_error(), {
-                variant: 'error',
-                message: nowTime,
-            })
-            return false
-        }
-    }, [hasChanged, rawPatchData])
+    const onSwitchChange = (address: string, checked: boolean) => {
+        setPendingPublicAddress((oldList) => {
+            const newList = bindingWallets
+                .filter((x) => (x.identity === address ? checked : oldList.includes(x.identity)))
+                .map((x) => x.identity)
+            return newList
+        })
+    }
+
     const { setDialog, open: providerDialogOpen } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
     const onConnectWalletClick = useCallback(() => {
         if (account) {
-            setBodyViewStep(BodyViewStep.AddWallet)
+            setStep(Step.AddWallet)
         } else {
             setDialog({
                 open: true,
@@ -194,13 +164,13 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     useEffect(() => {
         if (!providerDialogOpen) return
         return WalletMessages.events.walletsUpdated.on(() => {
-            setBodyViewStep(BodyViewStep.AddWallet)
+            setStep(Step.AddWallet)
         })
     }, [providerDialogOpen])
-    const [confirmState, onConfirmRelease] = useAsyncFn(
+    const [confirmState, onConfirmDelete] = useAsyncFn(
         async (wallet: BindingProof | undefined) => {
             try {
-                if (!currentPersona?.identifier.publicKeyAsHex || !wallet) throw new Error('create payload error')
+                if (!currentPersona?.identifier.publicKeyAsHex || !wallet) throw new Error('Create Payload Error')
 
                 const result = await NextIDProof.createPersonaPayload(
                     currentPersona.identifier.publicKeyAsHex,
@@ -208,14 +178,14 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                     wallet.identity,
                     wallet.platform,
                 )
-                if (!result) throw new Error('payload error')
+                if (!result) throw new Error('Payload Error')
 
                 const signature = await Services.Identity.generateSignResult(
                     currentPersona.identifier,
                     result.signPayload,
                 )
 
-                if (!signature) throw new Error('sign error')
+                if (!signature) throw new Error('Sign Error')
                 await NextIDProof.bindProof(
                     result.uuid,
                     currentPersona.identifier.publicKeyAsHex,
@@ -227,34 +197,91 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                 )
                 showSnackbar(t.tip_persona_sign_success(), {
                     variant: 'success',
-                    message: nowTime,
+                    message: getNowTime(),
                 })
             } catch (error) {
                 showSnackbar(t.tip_persona_sign_error(), {
                     variant: 'error',
-                    message: nowTime,
+                    message: getNowTime(),
                 })
             } finally {
-                retryProof()
+                refetch()
             }
         },
         [currentPersona, proofRes],
     )
 
+    const publicWallets = useMemo(() => bindingWallets.filter((x) => x.isPublic), [bindingWallets])
+    const publicAddresses = useMemo(() => {
+        return bindingWallets.filter((x) => x.isPublic).map((x) => x.identity)
+    }, [bindingWallets])
+    const [pendingPublicAddress, setPendingPublicAddress] = useState<string[]>([])
+    useEffect(() => {
+        setPendingPublicAddress(publicAddresses)
+    }, [publicAddresses])
+
+    const isDirty = useMemo(() => {
+        if (step === Step.Main) {
+            return !!pendingDefault && pendingDefault !== defaultAddress
+        } else if (step === Step.Setting) {
+            return !isEqual(pendingPublicAddress, publicAddresses)
+        }
+        return false
+    }, [step, pendingDefault, defaultAddress, pendingPublicAddress, publicAddresses])
+
+    const handleReset = () => {
+        setPendingDefault(defaultAddress)
+        setPendingPublicAddress(publicAddresses)
+    }
+
+    const modifiedWallets = useMemo(() => {
+        if (!isDirty) return bindingWallets
+        return bindingWallets.map((x) => {
+            return {
+                ...x,
+                isDefault: pendingDefault === x.identity ? 1 : 0,
+                isPublic: pendingPublicAddress.includes(x.identity) ? 1 : 0,
+            } as BindingProof
+        })
+    }, [isDirty, bindingWallets, pendingDefault, pendingPublicAddress])
+
+    const [kvFetchState, onConfirm] = useAsyncFn(async () => {
+        if (!Storage || !currentPersonaIdentifier) return
+        try {
+            const storage = Storage.createNextIDStorage(
+                currentPersonaIdentifier.publicKeyAsHex,
+                NextIDPlatform.NextID,
+                currentPersonaIdentifier,
+            )
+            await storage.set<BindingProof[]>(PluginId.Tips, modifiedWallets)
+
+            showSnackbar(t.tip_persona_sign_success(), {
+                variant: 'success',
+                message: getNowTime(),
+            })
+            retryKv()
+            return true
+        } catch (error) {
+            showSnackbar(t.tip_persona_sign_error(), {
+                variant: 'error',
+                message: getNowTime(),
+            })
+            return false
+        }
+    }, [modifiedWallets, t])
+
     return (
         <InjectedDialog
             open={open}
             onClose={clickBack}
-            isOnBack={bodyViewStep !== BodyViewStep.Main}
-            title={bodyViewStep}
+            isOnBack={step !== Step.Main}
+            title={step}
             titleTail={
                 <WalletButton
                     className={classes.walletBtn}
-                    step={bodyViewStep}
+                    step={step}
                     onClick={() => {
-                        setBodyViewStep(
-                            bodyViewStep === BodyViewStep.Wallets ? BodyViewStep.AddWallet : BodyViewStep.Wallets,
-                        )
+                        setStep(step === Step.Wallets ? Step.AddWallet : Step.Wallets)
                     }}
                 />
             }>
@@ -266,53 +293,59 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                 </DialogContent>
             ) : (
                 <DialogContent className={classes.dialogContent}>
-                    {showAlert && bodyViewStep === BodyViewStep.Main && (
+                    {showAlert && step === Step.Main && (
                         <div className={classes.alertBox}>
                             <VerifyAlertLine onClose={() => setShowAlert(false)} />
                         </div>
                     )}
 
-                    {bodyViewStep === BodyViewStep.Main && rawPatchData.length > 0 ? (
+                    {step === Step.Main && bindingWallets.length > 0 ? (
                         <div>
                             {supportedNetworkIds?.map((x, idx) => {
                                 return (
                                     <WalletsByNetwork
-                                        wallets={rawPatchData}
-                                        toSetting={() => setBodyViewStep(BodyViewStep.Setting)}
+                                        wallets={publicWallets}
+                                        toSetting={() => setStep(Step.Setting)}
                                         key={idx}
                                         networkId={x}
+                                        defaultAddress={pendingDefault}
                                         setAsDefault={setAsDefault}
                                     />
                                 )
                             })}
                         </div>
-                    ) : bodyViewStep === BodyViewStep.Main && rawPatchData.length === 0 ? (
+                    ) : step === Step.Main && bindingWallets.length === 0 ? (
                         <EmptyStatus toAdd={onConnectWalletClick} />
                     ) : null}
 
-                    {bodyViewStep === BodyViewStep.Setting && (
-                        <SettingView onSwitchChange={onSwitchChange} wallets={rawPatchData} />
+                    {step === Step.Setting && (
+                        <SettingView
+                            wallets={bindingWallets}
+                            publicAddresses={pendingPublicAddress}
+                            onSwitchChange={onSwitchChange}
+                        />
                     )}
-                    {bodyViewStep === BodyViewStep.Wallets && (
+                    {step === Step.Wallets && (
                         <WalletsView
                             personaName={currentPersona?.nickname}
                             releaseLoading={confirmState.loading}
-                            onRelease={(wallet) => onConfirmRelease(wallet)}
-                            wallets={rawPatchData}
+                            onDelete={onConfirmDelete}
+                            defaultAddress={defaultAddress}
+                            wallets={bindingWallets}
                         />
                     )}
-                    {bodyViewStep === BodyViewStep.AddWallet && (
-                        <AddWalletView onCancel={refresh} bindings={rawWalletList} currentPersona={currentPersona!} />
+                    {step === Step.AddWallet && (
+                        <AddWalletView onCancel={refresh} bindings={bindingWallets} currentPersona={currentPersona!} />
                     )}
                 </DialogContent>
             )}
 
-            {![BodyViewStep.AddWallet, BodyViewStep.Wallets].includes(bodyViewStep) && rawPatchData.length > 0 && (
+            {![Step.AddWallet, Step.Wallets].includes(step) && bindingWallets.length > 0 && (
                 <DialogActions className={classes.actions}>
-                    <ActionButton fullWidth variant="outlined" disabled={!hasChanged} onClick={onCancel}>
+                    <ActionButton fullWidth variant="outlined" disabled={!isDirty} onClick={handleReset}>
                         {t.cancel()}
                     </ActionButton>
-                    <ActionButton loading={kvFetchState.loading} fullWidth disabled={!hasChanged} onClick={onConfirm}>
+                    <ActionButton loading={kvFetchState.loading} fullWidth disabled={!isDirty} onClick={onConfirm}>
                         {t.confirm()}
                     </ActionButton>
                 </DialogActions>

@@ -1,30 +1,22 @@
+import urlcat from 'urlcat'
+import { isEmpty, times, sample } from 'lodash-unified'
 import { Attachment } from '@dimensiondev/common-protocols'
 import { encodeText } from '@dimensiondev/kit'
 import { Bee, CollectionEntry } from '@ethersphere/bee-js'
-import urlcat from 'urlcat'
-import { isEmpty, times, sample } from 'lodash-unified'
 import { landing } from '../constants'
 import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types'
 import { makeFileKeySigned } from '../helpers'
 
 const POSTAGE_STAMP = '0'.repeat(64)
-const BEE_HOSTS = times(10, (n) => `https://bee-${n}.gateway.ethswarm.org`)
-
-function createBee(): Bee {
-    return new Bee(sample(BEE_HOSTS)!)
-}
+const BEE_HOSTS = times(10, (n) => `https://gateway-proxy-bee-${n}-0.gateway.ethswarm.org`)
+const BEE_HOST = sample(BEE_HOSTS) ?? BEE_HOSTS[0]
 
 class SwarmAgent implements ProviderAgent {
     static providerName = 'Swarm'
-    bee!: Bee
 
-    init() {
-        if (this.bee) return
-        this.bee = createBee()
-    }
+    private bee = new Bee(BEE_HOST)
 
     async makePayload(data: Uint8Array, type: string, name: string) {
-        this.init()
         const isHTML = type === 'text/html'
         if (isHTML) {
             const file: CollectionEntry<Uint8Array> = {
@@ -61,12 +53,11 @@ class SwarmAgent implements ProviderAgent {
     }
 
     async uploadLandingPage(metadata: LandingPageMetadata) {
-        const linkPrefix = `${sample(BEE_HOSTS)!}/bzz`
         const encodedMetadata = JSON.stringify({
             name: metadata.name,
             size: metadata.size,
             provider: 'swarm',
-            link: urlcat(linkPrefix, '/:txId', { txId: metadata.txId }),
+            link: urlcat(`${BEE_HOST}/bzz`, '/:txId', { txId: metadata.txId }),
             signed: await makeFileKeySigned(metadata.key),
             createdAt: new Date().toISOString(),
         })

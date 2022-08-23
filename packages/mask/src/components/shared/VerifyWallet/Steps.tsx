@@ -155,9 +155,14 @@ export function Steps(props: StepsProps) {
 
     useEffect(() => {
         if (disableConfirm && !notInPop) {
-            showSnackbar(t('wallet_verify_has_bound'), { variant: 'error' })
+            showSnackbar(
+                t('wallet_verify_has_bound', {
+                    currentPersona: nickname ?? 'Persona Name',
+                }),
+                { variant: 'error' },
+            )
         }
-    }, [disableConfirm])
+    }, [disableConfirm, nickname])
 
     return (
         <div className={classes.container}>
@@ -165,7 +170,13 @@ export function Steps(props: StepsProps) {
             {notEvm && wallet.account && (
                 <Typography className={classes.hasBound}>{t('plugin_tips_not_evm_alert')}</Typography>
             )}
-            {isBound && <Typography className={classes.hasBound}>{t('wallet_verify_has_bound')}</Typography>}
+            {isBound && step !== SignSteps.SecondStepDone && (
+                <Typography className={classes.hasBound}>
+                    {t('wallet_verify_has_bound', {
+                        currentPersona: nickname ?? 'Persona Name',
+                    })}
+                </Typography>
+            )}
             {notConnected && (
                 <Typography className={classes.hasBound} style={{ textAlign: 'center' }}>
                     {t('wallet_verify_empty_alert')}
@@ -216,7 +227,11 @@ export function Steps(props: StepsProps) {
                     variant="contained"
                     fullWidth
                     onClick={onConfirm}>
-                    {disableConfirm ? t('wallet_verify_persona_sign') : step === 2 ? t('done') : t('confirm')}
+                    {disableConfirm
+                        ? t('wallet_verify_persona_sign')
+                        : step === SignSteps.SecondStepDone
+                        ? t('done')
+                        : t('confirm')}
                 </LoadingButton>
             </div>
         </div>

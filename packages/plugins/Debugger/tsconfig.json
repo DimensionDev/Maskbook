@@ -6,5 +6,10 @@
     "tsBuildInfoFile": "dist/.tsbuildinfo"
   },
   "include": ["src", "src/**/*.json"],
-  "references": [{ "path": "../../plugin-infra" }, { "path": "../../shared" }]
+  "references": [
+    { "path": "../../plugin-infra" },
+    { "path": "../../plugins/Wallet" },
+    { "path": "../../shared" },
+    { "path": "../../shared-base-ui" }
+  ]
 }

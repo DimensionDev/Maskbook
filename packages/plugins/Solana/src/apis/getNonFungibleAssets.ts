@@ -1,4 +1,5 @@
 import { Connection } from '@metaplex/js'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     createPageable,
     HubOptions,
@@ -52,7 +53,7 @@ async function getNftList(chainId: ChainId, account: string): Promise<Array<NonF
             },
         ],
     })
-    if (!data.result?.length) return []
+    if (!data.result?.length) return EMPTY_LIST
     const connection = new Connection(ENDPOINT_KEY)
     const nftTokens = data.result.filter((x) => x.account.data.parsed.info.tokenAmount.decimals === 0)
     const promises = nftTokens.map(async (x): Promise<NonFungibleAsset<ChainId, SchemaType> | null> => {

@@ -18,6 +18,7 @@ const useStyles = makeStyles()((theme) => {
         wrapper: {
             width: '100%',
             marginTop: '16px',
+            backgroundColor: theme.palette.maskColor.bottom,
         },
 
         walletInfo: {
@@ -87,6 +88,7 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
+            fontFamily: 'Helvetica',
             backgroundColor: theme.palette.maskColor.thirdMain,
             fontSize: 12,
             fontWeight: 700,

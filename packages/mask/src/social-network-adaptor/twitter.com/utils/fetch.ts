@@ -88,10 +88,15 @@ export const postContentMessageParser = (node: HTMLElement) => {
         } else if (node instanceof HTMLImageElement) {
             const image = node
             const src = image.getAttribute('src')
+            const alt = image.getAttribute('alt')
             const matched = src?.match(/emoji\/v2\/svg\/([\w\-]+)\.svg/)
-            if (!matched) return makeTypedMessageEmpty()
-            const points = matched[1].split('-').map((point) => Number.parseInt(point, 16))
-            return makeTypedMessageText(collectTwitterEmoji(points))
+            if (matched) {
+                const points = matched[1].split('-').map((point) => Number.parseInt(point, 16))
+                return makeTypedMessageText(collectTwitterEmoji(points))
+            }
+            if (!alt) return makeTypedMessageEmpty()
+
+            return makeTypedMessageText(alt)
         } else if (node.childNodes.length) {
             const flattened = flattenDeep(Array.from(node.childNodes).map(make))
             // conjunct text messages under same node

@@ -63,7 +63,7 @@ export const getAvatar = () => {
 }
 
 const TWITTER_AVATAR_ID_MATCH = /^\/profile_images\/(\d+)/
-export const getAvatarId = (avatarURL: string) => {
+export const getAvatarId = (avatarURL?: string) => {
     if (!avatarURL) return ''
     const _url = new URL(avatarURL)
     const match = _url.pathname.match(TWITTER_AVATAR_ID_MATCH)

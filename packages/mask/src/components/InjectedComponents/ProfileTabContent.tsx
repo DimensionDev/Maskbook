@@ -131,7 +131,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     secondLinkIcon: {
         margin: '4px 2px 0 2px',
-        color: theme.palette.maskColor.secondaryDark,
+        color: theme.palette.maskColor.second,
     },
 }))
 
@@ -161,17 +161,14 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         value: socialAddressList = EMPTY_LIST,
         loading: loadingSocialAddressList,
         retry: retrySocialAddress,
-    } = useSocialAddressListAll(
-        currentVisitingSocialIdentity,
-        isOwnerIdentity ? [SocialAddressType.NEXT_ID] : undefined,
-        sorter,
-    )
+    } = useSocialAddressListAll(currentVisitingSocialIdentity, undefined, sorter)
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
+            retryIdentity()
             retrySocialAddress()
         })
-    }, [retrySocialAddress])
+    }, [retrySocialAddress, retryIdentity])
 
     useEffect(() => {
         return MaskMessages.events.ownPersonaChanged.on(() => {
@@ -220,13 +217,14 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     const isWeb3ProfileDisable = useIsMinimalMode(PluginId.Web3Profile)
 
-    const showNextID = !!(
-        isTwitter(activatedSocialNetworkUI) &&
-        (isWeb3ProfileDisable ||
-            (isOwnerIdentity && !currentVisitingSocialIdentity?.hasBinding) ||
-            (isOwnerIdentity &&
-                socialAddressList.findIndex((address) => address.type === SocialAddressType.NEXT_ID)) === -1)
-    )
+    const isTwitterPlatform = isTwitter(activatedSocialNetworkUI)
+    const isOwnerNotHasBinding = isOwnerIdentity && !currentVisitingSocialIdentity?.hasBinding
+    const isOwnerNotHasAddress =
+        isOwnerIdentity && socialAddressList.findIndex((address) => address.type === SocialAddressType.NEXT_ID) === -1
+
+    const showNextID =
+        isTwitterPlatform &&
+        (isWeb3ProfileDisable || isOwnerNotHasBinding || isOwnerNotHasAddress || socialAddressList.length === 0)
 
     const componentTabId = showNextID ? `${PluginId.NextID}_tabContent` : currentTab
 
@@ -270,6 +268,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const onOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget)
     const onSelect = (option: SocialAddress<NetworkPluginID>) => {
         setSelectedAddress(option)
+        setAnchorEl(null)
     }
     const handleOpenDialog = () => {
         CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToAll({
@@ -345,7 +344,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                                         {x?.type === SocialAddressType.NEXT_ID && <Icons.Verified />}
                                                     </div>
                                                     {isSameAddress(selectedAddress?.address, x.address) && (
-                                                        <Icons.Selected className={classes.selectedIcon} />
+                                                        <Icons.CheckCircle className={classes.selectedIcon} />
                                                     )}
                                                 </div>
                                             </MenuItem>

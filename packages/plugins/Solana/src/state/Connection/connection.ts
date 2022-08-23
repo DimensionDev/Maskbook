@@ -435,6 +435,14 @@ class Connection implements BaseConnection {
             asset?.collection,
         )
     }
+    getNonFungibleTokenOwner(
+        address: string,
+        tokenId: string,
+        schema?: SchemaType,
+        initial?: SolanaWeb3ConnectionOptions,
+    ): Promise<string> {
+        throw new Error('Method not implemented.')
+    }
     getNonFungibleTokenOwnership(
         address: string,
         tokenId: string,

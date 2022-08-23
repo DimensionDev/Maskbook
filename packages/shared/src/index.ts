@@ -5,6 +5,7 @@ export * from './UI'
 export * from './locales'
 export * from './locales/languages'
 export * from './constants'
+export * from './storage'
 // This interface is used as a proxy type to avoid circular project dependencies
 export interface DashboardPluginMessages {
     Wallet: unknown

@@ -6,18 +6,20 @@ import type { Proof } from '../../types'
 
 export const useAvailableCollections = (
     proofs: Proof[],
-    type: CollectionType,
     collections: RSS3BaseAPI.Collection[],
+    type: CollectionType,
     userId?: string,
     address?: string,
 ) => {
     return useMemo(() => {
         if (!address || !userId) return EMPTY_LIST
 
-        const proof = proofs.find((proof) => proof.platform === NextIDPlatform.Twitter && proof.identity === userId)
+        const proof = proofs.find(
+            (proof) => proof.platform === NextIDPlatform.Twitter && proof.identity === userId.toLowerCase(),
+        )
         const hiddenList =
             proof?.content?.[PluginId.Web3Profile]?.unListedCollections?.[address.toLowerCase()]?.[type] ?? []
         if (!hiddenList.length) return collections
-        return collections.filter((collection) => hiddenList?.findIndex((url) => url === collection?.id) === -1)
+        return collections.filter((x) => hiddenList.findIndex((url) => url === x.id) === -1)
     }, [address, userId, type, proofs, collections])
 }

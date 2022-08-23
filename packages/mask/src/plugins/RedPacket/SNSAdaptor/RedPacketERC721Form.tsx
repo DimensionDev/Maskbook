@@ -70,6 +70,7 @@ const useStyles = makeStyles()((theme) => {
             gap: 16,
             width: '100%',
             overflowY: 'auto',
+            overflowX: 'hidden',
             height: 200,
             background: theme.palette.background.default,
             borderRadius: 12,
@@ -399,10 +400,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     <RedpacketMessagePanel onChange={(val: string) => setMessage(val)} message={message} />
                 </div>
                 {contract && balance && !loadingOwnerList ? (
-                    <>
-                        <Typography className={classes.unapprovedTip}>{t.nft_unapproved_tip()}</Typography>
-                        <Typography className={classes.approveAllTip}>{t.nft_approve_all_tip()}</Typography>
-                    </>
+                    <Typography className={classes.approveAllTip}>{t.nft_approve_all_tip()}</Typography>
                 ) : null}
             </Box>
             <Box style={{ position: 'absolute', bottom: 0, width: '100%' }}>

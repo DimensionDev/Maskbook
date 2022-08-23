@@ -22,14 +22,16 @@ const resolveRarityId = createLookupTableResolver<
     '',
 )
 
-async function fetchFromGem<T>(pathname: string) {
-    const response = await globalThis.fetch(urlcat(GEM_API_URL, pathname))
-    const data = await response.json()
-    return data as T
+async function fetchFromGem<T>(pathname: string, init?: RequestInit) {
+    const response = await globalThis.fetch(urlcat(GEM_API_URL, pathname), init)
+    const data = (await response.json()) as {
+        data: T
+    }
+    return data.data
 }
 
 export class GemAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    async getRarity(address: string, tokenId: string, options?: HubOptions<ChainId, HubIndicator> | undefined) {
+    async getRarity(address: string, tokenId: string, options?: HubOptions<ChainId, HubIndicator>) {
         const response = await fetchFromGem<Record<string, NonFungibleTokenRarity>>(
             urlcat('/rarity/:address/:tokenId', {
                 address: address.toLowerCase(),

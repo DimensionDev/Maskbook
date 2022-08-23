@@ -15,7 +15,10 @@ const useStyles = makeStyles()((theme) => ({
         display: 'inline-flex',
         alignItems: 'center',
         fontSize: 10,
-        color: theme.palette.text.primary,
+        color: theme.palette.maskColor.dark,
+    },
+    icon: {
+        color: theme.palette.maskColor.dark,
     },
 }))
 
@@ -83,7 +86,7 @@ export function FootnoteMenuUI(props: FootnoteMenuProps) {
             <Link className={classes.link} color="inherit" underline="none" onClick={openMenu}>
                 <Typography className={classes.title} variant="subtitle2">
                     {options[selectedIndex]?.name}
-                    <ArrowDropDownIcon style={{ fontSize: 16, cursor: 'pointer' }} />
+                    <ArrowDropDownIcon style={{ fontSize: 16, cursor: 'pointer' }} className={classes.icon} />
                 </Typography>
                 {children}
             </Link>

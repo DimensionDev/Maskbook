@@ -147,7 +147,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         gridTemplateColumns: 'repeat(4, 1fr)',
         gap: 16,
         width: '100%',
-        height: 320,
+        height: 305,
         overflowY: 'auto',
         borderRadius: 12,
         marginBottom: theme.spacing(1.5),

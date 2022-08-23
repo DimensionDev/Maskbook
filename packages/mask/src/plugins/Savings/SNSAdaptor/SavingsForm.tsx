@@ -21,7 +21,13 @@ import {
     chainResolver,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
-import { useAccount, useFungibleTokenBalance, useFungibleTokenPrice, useWeb3 } from '@masknet/plugin-infra/web3'
+import {
+    useAccount,
+    useFungibleTokenBalance,
+    useFungibleTokenPrice,
+    useNativeToken,
+    useWeb3,
+} from '@masknet/plugin-infra/web3'
 import { FormattedCurrency, InjectedDialog, TokenAmountPanel, TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
 import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider'
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
@@ -60,7 +66,12 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
     const [inputAmount, setInputAmount] = useState('')
     const [estimatedGas, setEstimatedGas] = useState<BigNumber.Value>(ZERO)
 
-    const { value: nativeTokenBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, '', { chainId })
+    const { value: nativeToken } = useNativeToken<'all'>(NetworkPluginID.PLUGIN_EVM, {
+        chainId,
+    })
+    const { value: nativeTokenBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, nativeToken?.address, {
+        chainId,
+    })
 
     // #region form variables
     const { value: inputTokenBalance } = useFungibleTokenBalance(
@@ -110,7 +121,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
 
     const { value: tokenPrice = 0 } = useFungibleTokenPrice(
         NetworkPluginID.PLUGIN_EVM,
-        !isNativeTokenAddress(protocol.bareToken.address) ? protocol.bareToken.address : undefined,
+        !isNativeTokenAddress(protocol.bareToken.address) ? protocol.bareToken.address : nativeToken?.address,
         { chainId },
     )
 

@@ -1,4 +1,5 @@
 import { CollectionDetailCard } from '@masknet/shared'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { CollectionType, RSS3, RSS3BaseAPI } from '@masknet/web3-providers'
 import { memo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
@@ -7,28 +8,30 @@ import { FeedCard } from '../components/FeedCard'
 import { StatusBox } from '../components/StatusBox'
 
 export interface FeedPageProps {
-    address: string
+    address?: string
 }
 
 export const FeedsPage = memo(function FeedsPage({ address }: FeedPageProps) {
     const t = useI18N()
     const [selectedFeed, setSelectedFeed] = useState<RSS3BaseAPI.Web3Feed>()
-    const { value: feed, loading } = useAsyncRetry(async () => {
-        return RSS3.getWeb3Feed(address)
+    const { value: feeds = EMPTY_LIST, loading } = useAsyncRetry(async () => {
+        if (!address) return
+        const result = await RSS3.getWeb3Feed(address)
+        return result?.list
     }, [address])
 
-    if (loading || !feed?.list?.length) {
-        return <StatusBox loading={loading} description={t.no_Activities_found()} empty={!feed?.list?.length} />
+    if (loading || !feeds.length) {
+        return <StatusBox loading={loading} description={t.no_Activities_found()} empty={!feeds.length} />
     }
 
     return (
         <div style={{ margin: '16px 16px 0 16px' }}>
-            {feed.list.map((info) => {
+            {feeds.map((feed) => {
                 return (
                     <FeedCard
-                        key={info.links}
+                        key={feed.links}
                         onSelect={(feed) => setSelectedFeed(feed)}
-                        feed={info}
+                        feed={feed}
                         address={address}
                     />
                 )
