@@ -6,19 +6,16 @@ import {
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
 import { useAvailablePlugins, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
-import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, useStylesExtends, useTabs } from '@masknet/theme'
-import { isSameAddress, NetworkPluginID, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
+import { isSameAddress, NetworkPluginID, SocialIdentity } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { Box, CircularProgress, Tab, Typography } from '@mui/material'
 import { first } from 'lodash-unified'
 import { FC, useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { TipButton } from '../../../plugins/Tips/components'
-import type { TipAccount } from '../../../plugins/Tips/types'
 import { MaskMessages, sorter, useLocationChange } from '../../../utils'
-import { useIsMyIdentity } from '../../DataSource/useActivatedUI'
-import { ProfileBar } from './ProfileBar'
+import { ProfileCardTitle } from './ProfileCardTitle'
 
 interface Props extends withClasses<'text' | 'button' | 'root'> {
     identity: SocialIdentity
@@ -47,11 +44,6 @@ const useStyles = makeStyles()((theme) => {
             padding: theme.spacing(2, 2, 0, 2),
             boxSizing: 'border-box',
             flexShrink: 0,
-        },
-        title: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
         },
         walletItem: {
             display: 'flex',
@@ -102,16 +94,6 @@ const useStyles = makeStyles()((theme) => {
             overflow: 'auto',
             paddingBottom: 48,
         },
-        settingItem: {
-            display: 'flex',
-            alignItems: 'center',
-        },
-        tipButton: {
-            width: 40,
-            height: 40,
-            borderRadius: 40,
-            border: `1px solid ${isDark ? theme.palette.maskColor.publicLine : theme.palette.maskColor.line}`,
-        },
         tabs: {
             display: 'flex',
             position: 'relative',
@@ -128,9 +110,6 @@ const useStyles = makeStyles()((theme) => {
         },
         selectedIcon: {
             color: theme.palette.maskColor.primary,
-        },
-        gearIcon: {
-            color: theme.palette.maskColor.dark,
         },
         linkOutIcon: {
             color: theme.palette.maskColor.secondaryDark,
@@ -189,15 +168,6 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         return availableSocialAddressList.find((x) => isSameAddress(x.address, selectedAddress))
     }, [selectedAddress, availableSocialAddressList])
 
-    const tipAccounts: TipAccount[] = useMemo(() => {
-        return availableSocialAddressList.map((x) => ({
-            address: x.address,
-            name: x.label,
-            verified: x.type === SocialAddressType.NEXT_ID,
-        }))
-    }, [availableSocialAddressList])
-
-    const isMyIdentity = useIsMyIdentity(identity)
     const userId = identity.identifier?.userId
 
     useEffect(() => {
@@ -238,12 +208,6 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         onChange(undefined, first(tabs)?.id)
     }, [userId])
 
-    const handleOpenDialog = () => {
-        CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToLocal({
-            open: true,
-        })
-    }
-
     if (!userId || loadingSocialAddressList)
         return (
             <div className={classes.root}>
@@ -261,30 +225,12 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         <div className={classes.root}>
             {tabs.length > 0 && (
                 <div className={classes.header}>
-                    <div className={classes.title}>
-                        <ProfileBar
-                            identity={identity}
-                            socialAddressList={availableSocialAddressList}
-                            address={selectedAddress}
-                            onAddressChange={setSelectedAddress}
-                        />
-                        <div className={classes.settingItem}>
-                            {isMyIdentity ? (
-                                <Icons.Gear
-                                    variant="light"
-                                    onClick={handleOpenDialog}
-                                    className={classes.gearIcon}
-                                    sx={{ cursor: 'pointer' }}
-                                />
-                            ) : (
-                                <TipButton
-                                    className={classes.tipButton}
-                                    receiver={identity.identifier}
-                                    addresses={tipAccounts}
-                                />
-                            )}
-                        </div>
-                    </div>
+                    <ProfileCardTitle
+                        socialAddressList={availableSocialAddressList}
+                        selectedAddress={selectedAddress}
+                        onAddressChange={setSelectedAddress}
+                        identity={identity}
+                    />
                     <div className={classes.tabs}>
                         <TabContext value={currentTab}>
                             <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">

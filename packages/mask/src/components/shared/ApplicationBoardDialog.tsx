@@ -47,12 +47,10 @@ export function ApplicationBoardDialog() {
     const { open, closeDialog: closeBoard } = useRemoteControlledDialog(
         WalletMessages.events.ApplicationDialogUpdated,
         (evt) => {
-            if (!open) return
-            if (evt.settings?.switchTab) {
-                setOpenSettings(true)
-                setTab(ApplicationSettingTabs.pluginSwitch)
-                setFocusPluginId(evt.settings.switchTab.focusPluginId)
-            }
+            if (!evt.open || !evt.settings?.switchTab) return
+            setOpenSettings(true)
+            setTab(ApplicationSettingTabs.pluginSwitch)
+            setFocusPluginId(evt.settings?.switchTab?.focusPluginId)
         },
     )
 
