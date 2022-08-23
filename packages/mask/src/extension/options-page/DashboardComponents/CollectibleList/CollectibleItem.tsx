@@ -1,9 +1,7 @@
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import type { NetworkPluginID, NonFungibleAsset, SocialAddress, SourceType, Wallet } from '@masknet/web3-shared-base'
 import { Skeleton, Typography } from '@mui/material'
 import type { HTMLProps } from 'react'
-import { CollectibleCard } from './CollectibleCard'
+import { CollectibleCard, CollectibleCardProps } from './CollectibleCard'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -33,14 +31,8 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface CollectibleItemProps extends HTMLProps<HTMLDivElement> {
-    provider: SourceType
-    wallet?: Wallet
-    asset: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    readonly?: boolean
-    renderOrder: number
-    address?: SocialAddress<NetworkPluginID>
-}
+interface CollectibleItemProps extends HTMLProps<HTMLDivElement>, CollectibleCardProps {}
+
 export function CollectibleItem(props: CollectibleItemProps) {
     const { provider, wallet, asset, readonly, renderOrder, address, className, ...rest } = props
     const { classes, cx } = useStyles()

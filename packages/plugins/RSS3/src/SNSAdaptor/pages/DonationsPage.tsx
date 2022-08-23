@@ -46,8 +46,8 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface DonationPageProps {
-    socialAddress: SocialAddress<NetworkPluginID>
-    userId: string
+    socialAddress?: SocialAddress<NetworkPluginID>
+    userId?: string
     publicKey?: string
 }
 
@@ -63,15 +63,15 @@ export function DonationPage({ socialAddress, publicKey, userId }: DonationPageP
         allDonations,
         CollectionType.Donations,
         userId,
-        socialAddress.address,
+        socialAddress?.address,
     )
 
-    const twitterId = userId.toLowerCase()
+    const twitterId = userId?.toLowerCase()
     const isHiddenAddress = useMemo(() => {
         return kvValue?.proofs
             .find((proof) => proof?.platform === NextIDPlatform.Twitter && proof?.identity === twitterId)
             ?.content?.[PluginId.Web3Profile]?.hiddenAddresses?.donations?.some((x) =>
-                isSameAddress(x.address, socialAddress.address),
+                isSameAddress(x.address, socialAddress?.address),
             )
     }, [twitterId, socialAddress, kvValue?.proofs])
 
@@ -81,7 +81,7 @@ export function DonationPage({ socialAddress, publicKey, userId }: DonationPageP
         return <StatusBox loading={loading} description={t.no_Donation_found()} empty={!donations.length} />
     }
 
-    if (isHiddenAddress) {
+    if (isHiddenAddress || !socialAddress) {
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height={400}>
                 <Icons.EmptySimple size={32} />

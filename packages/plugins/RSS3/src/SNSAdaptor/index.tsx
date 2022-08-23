@@ -16,13 +16,12 @@ const DonationsTabConfig: Plugin.SNSAdaptor.ProfileTab = {
     priority: 1,
     UI: {
         TabContent: ({ socialAddress, identity }) => {
-            if (!socialAddress?.address || !identity?.identifier?.userId) return null
             return (
                 <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
                     <DonationPage
                         socialAddress={socialAddress}
                         userId={identity?.identifier?.userId}
-                        publicKey={identity.publicKey}
+                        publicKey={identity?.publicKey}
                     />
                 </PluginIDContextProvider>
             )

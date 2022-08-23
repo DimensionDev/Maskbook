@@ -57,7 +57,8 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface CollectibleCardProps extends LinkProps {
+export interface CollectibleCardProps {
+    className?: string
     provider: SourceType
     wallet?: Wallet
     asset: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
