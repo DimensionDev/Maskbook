@@ -1,15 +1,14 @@
 import { Button, Stack } from '@mui/material'
-import { memo, useMemo } from 'react'
+import { memo, ReactNode, useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import type { PluginId } from '@masknet/plugin-infra'
-import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
+import { PersonaConnectStatus, useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { useI18N } from '../../utils'
 import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
         position: 'relative',
-        '&:after': {},
     },
     mask: {
         position: 'absolute',
@@ -30,10 +29,14 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
 }))
-interface PersonaBoundaryProps extends React.PropsWithChildren<{}> {
+
+type SupportChildren = ((status: PersonaConnectStatus) => ReactNode) | ReactNode
+
+interface PersonaBoundaryProps {
     handlerPosition?: 'center' | 'top-right'
     directTo?: PluginId
     customHint?: boolean
+    children: SupportChildren
 }
 
 export const PersonaBoundary = memo<PersonaBoundaryProps>(
@@ -42,9 +45,12 @@ export const PersonaBoundary = memo<PersonaBoundaryProps>(
         const { classes } = useStyles()
 
         const { value: status, loading: statusLoading } = useCurrentPersonaConnectStatus()
+        const isFnChildren = typeof children === 'function'
 
         const actionComponent = useMemo(() => {
-            if (children && customHint) return children
+            if (children && customHint && !isFnChildren) return children
+            if (isFnChildren) return children(status)
+
             if (!status.action) return null
             const button = status.hasPersona
                 ? t('persona_boundary_connect_persona')
@@ -65,7 +71,10 @@ export const PersonaBoundary = memo<PersonaBoundaryProps>(
         }, [status, t, statusLoading, customHint])
         // TODO: how to show the loading status
         return (
-            <Stack display="inline-flex" onClick={() => status.action?.(directTo, handlerPosition)}>
+            <Stack
+                className={classes.root}
+                display="inline-flex"
+                onClick={() => status.action?.(directTo, handlerPosition)}>
                 <Stack style={{ pointerEvents: status.action ? 'none' : 'auto' }} display="inline-flex">
                     {actionComponent}
                 </Stack>

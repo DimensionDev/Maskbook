@@ -1,6 +1,12 @@
 import { useCallback, useEffect, useMemo } from 'react'
 import stringify from 'json-stable-stringify'
-import { DashboardRoutes, isSamePersona, isSameProfile, nextIDIdentityToProfile } from '@masknet/shared-base'
+import {
+    DashboardRoutes,
+    isSamePersona,
+    isSameProfile,
+    nextIDIdentityToProfile,
+    PersonaInformation,
+} from '@masknet/shared-base'
 import Services from '../../extension/service'
 import { currentPersonaIdentifier, currentSetupGuideStatus } from '../../../shared/legacy-settings/settings'
 import { activatedSocialNetworkUI } from '../../social-network'
@@ -61,7 +67,15 @@ export function useCurrentPersona() {
     return value
 }
 
-const defaultStatus = {
+export interface PersonaConnectStatus {
+    action?: (target?: string | undefined, position?: 'center' | 'top-right' | undefined) => void
+    currentPersona?: PersonaInformation
+    connected?: boolean
+    hasPersona?: boolean
+    verified?: boolean
+}
+
+const defaultStatus: PersonaConnectStatus = {
     action: undefined,
     currentPersona: undefined,
     connected: false,
@@ -105,7 +119,7 @@ export function useCurrentPersonaConnectStatus() {
         value = defaultStatus,
         loading,
         retry,
-    } = useAsyncRetry(async () => {
+    } = useAsyncRetry<PersonaConnectStatus>(async () => {
         const currentPersona = personas.find((x) => isSamePersona(x, currentIdentifier))
         const currentProfile = currentPersona?.linkedProfiles.find((x) =>
             isSameProfile(x.identifier, lastRecognized.identifier),
