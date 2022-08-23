@@ -15,10 +15,10 @@ import {
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
 import { compact } from 'lodash-unified'
-import { LooksRare, OpenSea } from '../index'
-import { LooksRareLogo, OpenSeaLogo } from '../resources'
-import { NonFungibleMarketplace, NonFungibleTokenAPI, TrendingAPI } from '../types'
-import { NFTSCAN_API } from './constants'
+import { LooksRare, OpenSea } from '../../'
+import { LooksRareLogo, OpenSeaLogo } from '../../resources'
+import { NonFungibleMarketplace, NonFungibleTokenAPI, TrendingAPI } from '../../types'
+import { NFTSCAN_API } from '../constants'
 import {
     ErcType,
     NFTPlatformInfo,
@@ -28,7 +28,7 @@ import {
     AssetsGroup,
     VolumeAndFloorRecord,
     Transaction,
-} from './types'
+} from '../types'
 import {
     createNonFungibleTokenAsset,
     createNonFungibleTokenContract,
@@ -38,9 +38,11 @@ import {
     createNonFungibleTokenEvent,
     createNonFungibleTokenCollectionFromGroup,
     createNonFungibleTokenCollectionFromCollection,
-} from './utils'
+} from '../utils'
 
-export class NFTScanEVM_API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType>, TrendingAPI.Provider<ChainId> {
+export class NFTScanEVM_API
+    implements NonFungibleTokenAPI.Provider<ChainId, SchemaType>, TrendingAPI.Provider<ChainId>
+{
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
         const path = urlcat('/api/v2/assets/:address/:token_id', {
             address,
