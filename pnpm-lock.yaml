@@ -1167,12 +1167,18 @@ importers:
       '@masknet/plugin-infra':
         specifier: workspace:*
         version: link:../../plugin-infra
+      '@masknet/plugin-wallet':
+        specifier: workspace:*
+        version: link:../Wallet
       '@masknet/shared':
         specifier: workspace:*
         version: link:../../shared
       '@masknet/shared-base':
         specifier: workspace:*
         version: link:../../shared-base
+      '@masknet/shared-base-ui':
+        specifier: workspace:*
+        version: link:../../shared-base-ui
       '@masknet/theme':
         specifier: workspace:*
         version: link:../../theme
@@ -15562,7 +15568,7 @@ packages:
       mississippi: 3.0.0
       mkdirp: 0.5.6
       move-concurrently: 1.0.1
-      promise-inflight: 1.0.1_bluebird@3.7.2
+      promise-inflight: 1.0.1
       rimraf: 2.7.1
       ssri: 6.0.2
       unique-filename: 1.1.1
@@ -22004,7 +22010,7 @@ packages:
     patched: true
 
   /immutable/3.8.1:
-    resolution: {integrity: sha512-0R2q5f83L0h+zizu3lAA3ZR/mzEl04U1jVVXIqf2rQbZs9eX5YGtx1EFQuuJJHzVXH10ur6hGKehR8yBOQmZlQ==}
+    resolution: {integrity: sha1-IAgH8Rqw9ycQ6khVQt4IgHX2jNI=}
     engines: {node: '>=0.10.0'}
     dev: false
 
@@ -26380,17 +26386,6 @@ packages:
     peerDependenciesMeta:
       bluebird:
         optional: true
-    dev: true
-
-  /promise-inflight/1.0.1_bluebird@3.7.2:
-    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
-    peerDependencies:
-      bluebird: '*'
-    peerDependenciesMeta:
-      bluebird:
-        optional: true
-    dependencies:
-      bluebird: 3.7.2
     dev: true
 
   /promise-to-callback/1.0.0:

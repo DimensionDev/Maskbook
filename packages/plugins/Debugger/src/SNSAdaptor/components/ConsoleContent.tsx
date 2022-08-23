@@ -1,3 +1,5 @@
+import { getEnumAsArray } from '@dimensiondev/kit'
+import { PluginId } from '@masknet/plugin-infra'
 import {
     useAccount,
     useBalance,
@@ -9,11 +11,14 @@ import {
     useProviderType,
     useWeb3State,
 } from '@masknet/plugin-infra/web3'
+import { WalletMessages } from '@masknet/plugin-wallet'
+import { useSelectAdvancedSettings, useSelectFungibleToken } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Button, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
-import { useSelectFungibleToken, useSelectAdvancedSettings } from '@masknet/shared'
+import { useState } from 'react'
 
 export interface ConsoleContentProps {
     onClose?: () => void
@@ -40,7 +45,11 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const onSelectFungibleToken = useSelectFungibleToken()
     const onSelectGasSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
 
-    const { showSnackbar, closeSnackbar } = useCustomSnackbar()
+    const [pluginId, setPluginId] = useState<PluginId>(PluginId.RSS3)
+    const plugins = getEnumAsArray(PluginId) as Array<{ key: PluginId; value: string }>
+    const { setDialog } = useRemoteControlledDialog(WalletMessages.events.ApplicationDialogUpdated)
+
+    const { showSnackbar } = useCustomSnackbar()
 
     return (
         <section className={classes.container}>
@@ -185,6 +194,32 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                     })
                                 }}>
                                 show
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>Open plugin setting</TableCell>
+                        <TableCell>
+                            <select onChange={(event) => setPluginId(event.target.value as PluginId)}>
+                                {plugins.map((x) => (
+                                    <option key={x.value} value={x.value}>
+                                        {x.key}
+                                    </option>
+                                ))}
+                            </select>
+                            <Button
+                                size="small"
+                                onClick={() => {
+                                    setDialog({
+                                        open: true,
+                                        settings: {
+                                            switchTab: {
+                                                focusPluginId: pluginId,
+                                            },
+                                        },
+                                    })
+                                }}>
+                                open
                             </Button>
                         </TableCell>
                     </TableRow>

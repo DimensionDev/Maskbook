@@ -1,14 +1,13 @@
-import { List, ListItem, ListItemAvatar, Avatar, Typography, Box } from '@mui/material'
-import { openWindow } from '@masknet/shared-base-ui'
 import { Icons } from '@masknet/icons'
-import { useActivatedPluginsSNSAdaptor, PluginI18NFieldRender, PluginId } from '@masknet/plugin-infra/content-script'
+import { PluginI18NFieldRender, PluginId, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { SettingSwitch } from '@masknet/shared'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { Services } from '../../extension/service'
-import { useState } from 'react'
 import { CrossIsolationMessages } from '@masknet/shared-base'
+import { openWindow } from '@masknet/shared-base-ui'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { Avatar, Box, List, ListItem, ListItemAvatar, Typography } from '@mui/material'
+import { memo, useLayoutEffect, useMemo, useRef } from 'react'
+import { Services } from '../../extension/service'
 
-interface Props {}
 const useStyles = makeStyles()((theme) => ({
     listItem: {
         display: 'flex',
@@ -63,11 +62,28 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.mode === 'dark' ? theme.palette.text.secondary : theme.palette.text.primary,
     },
 }))
-export function ApplicationSettingPluginSwitch(props: Props) {
+
+interface Props {
+    focusPluginId?: PluginId
+}
+export const ApplicationSettingPluginSwitch = memo(({ focusPluginId }: Props) => {
     const { classes } = useStyles()
     const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor('any')
     const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
-    const [open, setOpen] = useState(false)
+    const availablePlugins = useMemo(() => {
+        return snsAdaptorPlugins
+            .flatMap(({ ID, ApplicationEntries: entries }) => (entries ?? []).map((entry) => ({ entry, pluginId: ID })))
+            .filter((x) => x.entry.category === 'dapp')
+            .sort((a, b) => (a.entry.marketListSortingPriority ?? 0) - (b.entry.marketListSortingPriority ?? 0))
+    }, [snsAdaptorPlugins])
+
+    const targetPluginRef = useRef<HTMLLIElement | null>()
+    const noAvailablePlugins = availablePlugins.length === 0
+
+    useLayoutEffect(() => {
+        if (!focusPluginId || noAvailablePlugins || !targetPluginRef.current) return
+        targetPluginRef.current.scrollIntoView()
+    }, [focusPluginId, noAvailablePlugins])
 
     async function onSwitch(id: string, checked: boolean) {
         if (id === PluginId.GoPlusSecurity && checked === false)
@@ -76,48 +92,44 @@ export function ApplicationSettingPluginSwitch(props: Props) {
     }
 
     return (
-        <>
-            <List>
-                {snsAdaptorPlugins
-                    .flatMap(({ ID, ApplicationEntries: entries }) =>
-                        (entries ?? []).map((entry) => ({ entry, pluginId: ID })),
-                    )
-                    .filter((x) => x.entry.category === 'dapp')
-                    .sort((a, b) => (a.entry.marketListSortingPriority ?? 0) - (b.entry.marketListSortingPriority ?? 0))
-                    .map((x) => (
-                        <ListItem key={x.entry.ApplicationEntryID} className={classes.listItem}>
-                            <section className={classes.listContent}>
-                                <ListItemAvatar>
-                                    <Avatar className={classes.avatar}>{x.entry.icon}</Avatar>
-                                </ListItemAvatar>
-                                <div className={classes.info}>
-                                    <div className={classes.headerWrapper}>
-                                        <Typography className={classes.name}>
-                                            <PluginI18NFieldRender field={x.entry.name} pluginID={x.pluginId} />
-                                        </Typography>
-                                        {x.entry.tutorialLink ? (
-                                            <Box className={classes.settings}>
-                                                <Icons.Tutorial
-                                                    size={22}
-                                                    onClick={() => openWindow(x.entry.tutorialLink)}
-                                                />
-                                            </Box>
-                                        ) : null}
-                                    </div>
-                                    <Typography className={classes.desc}>
-                                        <PluginI18NFieldRender field={x.entry.description} pluginID={x.pluginId} />
-                                    </Typography>
-                                </div>
-                            </section>
+        <List>
+            {availablePlugins.map((x) => (
+                <ListItem
+                    key={x.entry.ApplicationEntryID}
+                    ref={(ele) => {
+                        if (x.pluginId === focusPluginId) {
+                            targetPluginRef.current = ele
+                        }
+                    }}
+                    className={classes.listItem}>
+                    <section className={classes.listContent}>
+                        <ListItemAvatar>
+                            <Avatar className={classes.avatar}>{x.entry.icon}</Avatar>
+                        </ListItemAvatar>
+                        <div className={classes.info}>
+                            <div className={classes.headerWrapper}>
+                                <Typography className={classes.name}>
+                                    <PluginI18NFieldRender field={x.entry.name} pluginID={x.pluginId} />
+                                </Typography>
+                                {x.entry.tutorialLink ? (
+                                    <Box className={classes.settings}>
+                                        <Icons.Tutorial size={22} onClick={() => openWindow(x.entry.tutorialLink)} />
+                                    </Box>
+                                ) : null}
+                            </div>
+                            <Typography className={classes.desc}>
+                                <PluginI18NFieldRender field={x.entry.description} pluginID={x.pluginId} />
+                            </Typography>
+                        </div>
+                    </section>
 
-                            <SettingSwitch
-                                size="small"
-                                checked={!snsAdaptorMinimalPlugins.map((x) => x.ID).includes(x.pluginId)}
-                                onChange={(event) => onSwitch(x.pluginId, event.target.checked)}
-                            />
-                        </ListItem>
-                    ))}
-            </List>
-        </>
+                    <SettingSwitch
+                        size="small"
+                        checked={!snsAdaptorMinimalPlugins.map((x) => x.ID).includes(x.pluginId)}
+                        onChange={(event) => onSwitch(x.pluginId, event.target.checked)}
+                    />
+                </ListItem>
+            ))}
+        </List>
     )
-}
+})
