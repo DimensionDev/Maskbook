@@ -37,11 +37,6 @@ export interface TraderMessage {
      */
     swapSettingsUpdated: SwapSettingsEvent
 
-    /**
-     * Swap dialog
-     */
-    swapDialogUpdated: SwapDialogEvent
-
     rpc: unknown
 }
 

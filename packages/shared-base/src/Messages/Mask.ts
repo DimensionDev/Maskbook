@@ -143,6 +143,21 @@ export interface NFTAvatarEvent {
     pluginId?: string
 }
 
+export interface TokenType {
+    name: string
+    symbol: string
+    address: string
+    decimals?: number
+}
+export interface SwapDialogEvent {
+    open: boolean
+    traderProps?: {
+        defaultInputCoin?: TokenType
+        defaultOutputCoin?: TokenType
+        chainId?: number
+    }
+}
+
 /** This is a subset of browser.permissions.Permission */
 export type PossiblyUsedWebExtensionPermission = 'clipboardRead'
 

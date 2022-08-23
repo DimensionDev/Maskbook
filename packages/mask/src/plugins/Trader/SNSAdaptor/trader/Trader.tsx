@@ -3,14 +3,7 @@ import { useUnmount, useUpdateEffect } from 'react-use'
 import { delay } from '@dimensiondev/kit'
 import { useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
 import { NetworkPluginID, FungibleToken, formatBalance } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    createERC20Token,
-    createNativeToken,
-    GasOptionConfig,
-    isNativeTokenAddress,
-    SchemaType,
-} from '@masknet/web3-shared-evm'
+import { ChainId, createNativeToken, GasOptionConfig, SchemaType } from '@masknet/web3-shared-evm'
 import { useGasConfig, TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useChainId, useChainIdValid, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 import { activatedSocialNetworkUI } from '../../../../social-network'
@@ -21,17 +14,15 @@ import { isNativeTokenWrapper } from '../../helpers'
 import { PluginTraderMessages } from '../../messages'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import { useTradeCallback } from '../../trader/useTradeCallback'
-import { Coin, TokenPanelType, TradeInfo } from '../../types'
+import { TokenPanelType, TradeInfo } from '../../types'
 import { ConfirmDialog } from './ConfirmDialog'
 import { useSortedTrades } from './hooks/useSortedTrades'
 import { useUpdateBalance } from './hooks/useUpdateBalance'
 import { TradeForm } from './TradeForm'
 
 export interface TraderProps extends withClasses<'root'> {
-    coin?: Coin
-    defaultInputCoin?: Coin
-    defaultOutputCoin?: Coin
-    tokenDetailed?: FungibleToken<ChainId, SchemaType>
+    defaultInputCoin?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
+    defaultOutputCoin?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
     chainId?: ChainId
     settings?: boolean
 }
@@ -43,7 +34,7 @@ export interface TraderRef {
 }
 
 export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, ref) => {
-    const { defaultOutputCoin, coin, chainId: targetChainId, defaultInputCoin, settings = false } = props
+    const { defaultOutputCoin, chainId: targetChainId, defaultInputCoin, settings = false } = props
     const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
     const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const chainId = targetChainId ?? currentChainId
@@ -90,18 +81,15 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const updateTradingCoin = useCallback(
         (
             type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN | AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
-            coin?: Coin,
+            coin?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>,
         ) => {
-            if (!coin?.contract_address) return
+            if (!coin?.address) return
             dispatchTradeStore({
                 type,
-                token:
-                    isNativeTokenAddress(coin.contract_address) || chainId !== currentChainId
-                        ? createNativeToken(chainId)
-                        : createERC20Token(chainId, coin.contract_address, coin.name, coin.symbol, coin.decimals),
+                token: coin,
             })
         },
-        [chainId, currentChainId],
+        [],
     )
     useEffect(() => {
         updateTradingCoin(AllProviderTradeActionType.UPDATE_INPUT_TOKEN, defaultInputCoin)
@@ -109,26 +97,6 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     useEffect(() => {
         updateTradingCoin(AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN, defaultOutputCoin)
     }, [updateTradingCoin, defaultOutputCoin])
-
-    // #region if coin be changed, update output token
-    useEffect(() => {
-        if (!coin || currentChainId !== targetChainId) return
-
-        // if coin be native token and input token also be native token, reset it
-        if (
-            isNativeTokenAddress(coin.contract_address) &&
-            inputToken?.schema === SchemaType.Native &&
-            coin.symbol === inputToken.symbol
-        ) {
-            dispatchTradeStore({
-                type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
-                token: undefined,
-            })
-        }
-        if (!outputToken) {
-            updateTradingCoin(AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN, coin)
-        }
-    }, [coin, inputToken, outputToken, currentChainId, targetChainId, updateTradingCoin])
 
     const onInputAmountChange = useCallback((amount: string) => {
         dispatchTradeStore({

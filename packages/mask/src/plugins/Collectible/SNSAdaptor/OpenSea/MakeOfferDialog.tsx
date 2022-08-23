@@ -17,15 +17,13 @@ import BigNumber from 'bignumber.js'
 import formatDateTime from 'date-fns/format'
 import { PluginWalletStatusBar, useI18N } from '../../../../utils'
 import { InjectedDialog } from '@masknet/shared'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { UnreviewedWarning } from '.././UnreviewedWarning'
 import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { DateTimePanel } from '../../../../web3/UI/DateTimePanel'
 import { toAsset } from '../../helpers'
-import { PluginTraderMessages } from '../../../Trader/messages'
 import getUnixTime from 'date-fns/getUnixTime'
 import { CurrencyType, NetworkPluginID, NonFungibleAsset, rightShift, ZERO } from '@masknet/web3-shared-base'
-import type { Coin } from '../../../Trader/types'
 import { SelectTokenListPanel } from '.././SelectTokenListPanel'
 import { isWyvernSchemaName } from '../../utils'
 import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
@@ -119,23 +117,15 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         })
     }, [asset, token, account, amount, expirationDateTime, isAuction, opensea])
 
-    const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
-
     const onConvertClick = useCallback(() => {
         if (!token?.value) return
-        openSwapDialog({
+        CrossIsolationMessages.events.swapDialogUpdate.sendToLocal({
             open: true,
             traderProps: {
-                coin: {
-                    id: token.value.address,
-                    name: token.value.name ?? '',
-                    symbol: token.value.symbol ?? '',
-                    contract_address: token.value.address,
-                    decimals: token.value.decimals,
-                } as Coin,
+                defaultInputCoin: token.value,
             },
         })
-    }, [token.value, openSwapDialog])
+    }, [token.value])
 
     useEffect(() => {
         setAmount('')
