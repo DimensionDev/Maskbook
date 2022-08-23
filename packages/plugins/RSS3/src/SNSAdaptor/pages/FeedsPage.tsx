@@ -1,6 +1,7 @@
 import { CollectionDetailCard } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { CollectionType, RSS3, RSS3BaseAPI } from '@masknet/web3-providers'
+import { Box } from '@mui/material'
 import { memo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { useI18N } from '../../locales'
@@ -21,11 +22,15 @@ export const FeedsPage = memo(function FeedsPage({ address }: FeedPageProps) {
     }, [address])
 
     if (loading || !feeds.length) {
-        return <StatusBox loading={loading} description={t.no_Activities_found()} empty={!feeds.length} />
+        return (
+            <Box p={2} boxSizing="border-box">
+                <StatusBox loading={loading} description={t.no_Activities_found()} empty={!feeds.length} />
+            </Box>
+        )
     }
 
     return (
-        <div style={{ margin: '16px 16px 0 16px' }}>
+        <Box p={2} boxSizing="border-box">
             {feeds.map((feed) => {
                 return <FeedCard key={feed.links} onSelect={setSelectedFeed} feed={feed} address={address} />
             })}
@@ -42,6 +47,6 @@ export const FeedsPage = memo(function FeedsPage({ address }: FeedPageProps) {
                     type={CollectionType.Feeds}
                 />
             ) : null}
-        </div>
+        </Box>
     )
 })

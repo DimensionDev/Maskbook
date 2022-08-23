@@ -55,9 +55,11 @@ const useStyles = makeStyles()((theme) => ({
     },
     texts: {
         overflow: 'auto',
+        flexGrow: 1,
     },
     media: {
         marginLeft: theme.spacing(1),
+        flexShrink: 0,
     },
     action: {
         color: theme.palette.maskColor.main,
@@ -198,7 +200,7 @@ export const FeedCard = memo(({ feed, address, onSelect }: FeedCardProps) => {
     return (
         <Box className={classes.wrapper} onClick={() => onSelect(patchedFeed)}>
             <div className={classes.texts}>
-                <Typography width={490}>
+                <Typography>
                     <span className={classes.action}>
                         <ReversedAddress TypographyProps={{ display: 'inline' }} address={address!} /> {action}
                     </span>{' '}

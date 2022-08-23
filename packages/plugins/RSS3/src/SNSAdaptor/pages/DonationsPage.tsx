@@ -77,7 +77,11 @@ export function DonationPage({ socialAddress, publicKey, userId }: DonationPageP
     const [selectedDonation, setSelectedDonation] = useState<RSS3BaseAPI.Collection | undefined>()
 
     if (loading || !donations.length) {
-        return <StatusBox loading={loading} description={t.no_Donation_found()} empty={!donations.length} />
+        return (
+            <Box p={2}>
+                <StatusBox loading={loading} description={t.no_Donation_found()} empty={!donations.length} />
+            </Box>
+        )
     }
 
     if (isHiddenAddress || !socialAddress) {
@@ -91,7 +95,7 @@ export function DonationPage({ socialAddress, publicKey, userId }: DonationPageP
         )
     }
     return (
-        <Box margin="16px 0 0 16px">
+        <Box p={2}>
             <List className={classes.list}>
                 {donations.map((donation) => (
                     <ListItem key={donation.id} className={classes.listItem}>

@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
-import { AddressItem, Image, useSnackbarCallback } from '@masknet/shared'
+import { AddressItem, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import {
     isSameAddress,
@@ -24,6 +24,9 @@ const useStyles = makeStyles()((theme) => ({
     avatar: {
         height: 40,
         width: 40,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         borderRadius: 40,
         filter: 'drop-shadow(0px 6px 12px rgba(28, 104, 243, 0.2))',
         backdropFilter: 'blur(16px)',
@@ -113,7 +116,7 @@ export const ProfileBar = memo<ProfileBarProps>(
 
         return (
             <Box onClick={onClick} className={classes.root}>
-                <Image src={identity.avatar} className={classes.avatar} />
+                <img src={identity.avatar} alt={identity.nickname} className={classes.avatar} />
                 <Box className={classes.description} ref={nicknameRef}>
                     <Typography className={classes.nickname}>
                         <span>{identity.nickname}</span>
@@ -132,7 +135,7 @@ export const ProfileBar = memo<ProfileBarProps>(
                             className={classes.linkIcon}>
                             <Icons.LinkOut size={14} className={classes.linkIcon} />
                         </Link>
-                        <Icons.ArrowDrop onClick={() => setWalletMenuOpen((v) => !v)} />
+                        <Icons.ArrowDrop size={14} onClick={() => setWalletMenuOpen((v) => !v)} />
                     </Typography>
                 </Box>
                 <ShadowRootMenu

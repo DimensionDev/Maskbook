@@ -30,27 +30,28 @@ function getTabContent(tabId?: string) {
         return tab?.UI?.TabContent
     })
 }
-const HEADER_HEIGHT = 110
-const CONTENT_HEIGHT = 390
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
     return {
         root: {
             position: 'relative',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'auto',
+            height: '100%',
         },
         header: {
             background: isDark
                 ? 'linear-gradient(180deg, #202020 0%, #181818 100%)'
                 : 'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%), linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%)',
             padding: theme.spacing(2, 2, 0, 2),
-            height: HEADER_HEIGHT,
             boxSizing: 'border-box',
+            flexShrink: 0,
         },
         title: {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginBottom: '16px',
         },
         walletItem: {
             display: 'flex',
@@ -96,8 +97,10 @@ const useStyles = makeStyles()((theme) => {
         },
         content: {
             position: 'relative',
-            height: CONTENT_HEIGHT,
+            flexGrow: 1,
+            backgroundColor: theme.palette.maskColor.bottom,
             overflow: 'auto',
+            paddingBottom: 48,
         },
         settingItem: {
             display: 'flex',
@@ -112,6 +115,8 @@ const useStyles = makeStyles()((theme) => {
         tabs: {
             display: 'flex',
             position: 'relative',
+            paddingTop: 0,
+            marginTop: theme.spacing(2),
         },
         addressLabel: {
             color: theme.palette.maskColor.dark,
@@ -294,7 +299,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
             <div className={classes.content}>{component}</div>
             <div className={classes.footer}>
                 <Typography variant="body1" className={classes.powerBy}>
-                    Powered by
+                    Powered by{' '}
                     <Typography variant="body1" component="span" color="main">
                         RSS3
                     </Typography>

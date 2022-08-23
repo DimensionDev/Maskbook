@@ -179,12 +179,10 @@ export function CollectionList({
     addressName,
     persona,
     profile,
-    disableSidebar = false,
 }: {
     addressName: SocialAddress<NetworkPluginID>
     persona?: string
     profile?: SocialIdentity
-    disableSidebar?: boolean
 }) {
     const { t } = useI18N()
     const { classes } = useStyles({})
@@ -257,7 +255,7 @@ export function CollectionList({
             <Box className={classes.container}>
                 <Stack spacing={1} direction="row" mt={1.5}>
                     <LoadingSkeleton className={classes.root} />
-                    {disableSidebar ? null : <div className={classes.sidebar} />}
+                    <div className={classes.sidebar} />
                 </Stack>
             </Box>
         )
@@ -274,7 +272,7 @@ export function CollectionList({
             </Box>
         )
 
-    const showSidebar = !disableSidebar && collectionsWithName.length > 0
+    const showSidebar = collectionsWithName.length > 0
 
     return (
         <Box className={classes.container}>
@@ -282,7 +280,7 @@ export function CollectionList({
                 <Box sx={{ flexGrow: 1 }}>
                     <Box>
                         {selectedCollection && (
-                            <Box display="flex" alignItems="center" mt={2}>
+                            <Box display="flex" alignItems="center" ml={2}>
                                 <CollectionIcon collection={selectedCollection} />
                                 <Typography
                                     className={classes.name}
