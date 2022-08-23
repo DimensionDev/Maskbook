@@ -27,7 +27,7 @@ function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<IdentityResolv
     function assign(i: IdentityResolved) {
         if (i.identifier) ref.value = i
     }
-    fetch('/me', { method: 'HEAD', signal })
+    fetch(`${location.href}/me`, { method: 'HEAD', signal })
         .then((x) => x.url)
         .then(getUserID)
         .then((id) =>
