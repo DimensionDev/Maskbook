@@ -1,32 +1,14 @@
 import urlcat from 'urlcat'
-import {
-    createIndicator,
-    createPageable,
-    HubOptions,
-    NonFungibleAsset,
-    TokenType,
-} from '@masknet/web3-shared-base'
-import {
-    ChainId as ChainId_EVM,
-    resolveAR,
-    resolveIPFS,
-    resolveIPFSLinkFromURL,
-    resolveOpenSeaLink,
-    SchemaType as SchemaType_EVM,
-} from '@masknet/web3-shared-evm'
+import { createIndicator, createPageable, HubOptions, NonFungibleAsset, TokenType } from '@masknet/web3-shared-base'
+import { resolveAR, resolveIPFS } from '@masknet/web3-shared-evm'
 import { ChainId as ChainId_FLOW, SchemaType as SchemaType_FLOW } from '@masknet/web3-shared-flow'
 import type { NonFungibleTokenAPI } from '../../types'
 import { fetchJSON } from '../../helpers'
-import {  Alchemy_FLOW_NetworkMap, FILTER_WORDS } from '../constants'
-import type {
-    AlchemyNFT_EVM,
-    AlchemyNFT_FLOW,
-    AlchemyResponse_FLOW,
-    AlchemyResponse_FLOW_Metadata,
-} from '../types'
+import { Alchemy_FLOW_NetworkMap, FILTER_WORDS } from '../constants'
+import type { AlchemyNFT_FLOW, AlchemyResponse_FLOW, AlchemyResponse_FLOW_Metadata } from '../types'
 import { formatAlchemyTokenId } from '../helpers'
 
-function createNftToken_FLOW(
+function createNonFungibleToken(
     chainId: ChainId_FLOW,
     asset: AlchemyNFT_FLOW,
 ): NonFungibleAsset<ChainId_FLOW, SchemaType_FLOW> {
@@ -69,7 +51,7 @@ function createNftToken_FLOW(
     }
 }
 
-function createNFTAsset_FLOW(
+function createNonFungibleAsset(
     chainId: ChainId_FLOW,
     ownerAddress: string,
     metaDataResponse: AlchemyResponse_FLOW_Metadata,
@@ -126,7 +108,6 @@ function createNFTAsset_FLOW(
     }
 }
 
-
 export class Alchemy_FLOW_API implements NonFungibleTokenAPI.Provider<ChainId_FLOW, SchemaType_FLOW> {
     async getAsset(
         address: string,
@@ -148,7 +129,7 @@ export class Alchemy_FLOW_API implements NonFungibleTokenAPI.Provider<ChainId_FL
         )
 
         if (!metaDataResponse) return
-        return createNFTAsset_FLOW(chainId, ownerAddress, metaDataResponse)
+        return createNonFungibleAsset(chainId, ownerAddress, metaDataResponse)
     }
 
     async getAssets(from: string, { chainId, indicator }: HubOptions<ChainId_FLOW> = {}) {
@@ -160,54 +141,8 @@ export class Alchemy_FLOW_API implements NonFungibleTokenAPI.Provider<ChainId_FL
             }),
         )
         const assets = res?.nfts?.map((nft) =>
-            createNftToken_FLOW((chainId as ChainId_FLOW | undefined) ?? ChainId_FLOW.Mainnet, nft),
+            createNonFungibleToken((chainId as ChainId_FLOW | undefined) ?? ChainId_FLOW.Mainnet, nft),
         )
         return createPageable(assets, createIndicator(indicator))
-    }
-}
-
-function createNftToken_EVM(
-    chainId: ChainId_EVM,
-    asset: AlchemyNFT_EVM,
-): NonFungibleAsset<ChainId_EVM, SchemaType_EVM> {
-    const contractAddress = asset.contract.address
-    const tokenId = formatAlchemyTokenId(asset.id.tokenId)
-    return {
-        id: `${contractAddress}_${tokenId}`,
-        chainId,
-        type: TokenType.NonFungible,
-        schema: asset.id?.tokenMetadata?.tokenType === 'ERC721' ? SchemaType_EVM.ERC721 : SchemaType_EVM.ERC1155,
-        tokenId,
-        address: contractAddress,
-        link: resolveOpenSeaLink(contractAddress, tokenId, chainId),
-        metadata: {
-            chainId,
-            name: asset.metadata.name ?? asset.title,
-            description: asset.metadata.description || asset.description,
-            imageURL: resolveIPFSLinkFromURL(
-                asset.metadata.image ||
-                    asset.metadata.image_url ||
-                    asset.media?.[0]?.gateway ||
-                    asset.metadata.animation_url ||
-                    '',
-            ),
-            mediaURL: resolveIPFSLinkFromURL(
-                asset.media?.[0]?.gateway ?? asset.media?.[0]?.raw ?? asset.metadata.image_url ?? asset.metadata.image,
-            ),
-        },
-        contract: {
-            chainId,
-            schema: asset.id?.tokenMetadata.tokenType === 'ERC721' ? SchemaType_EVM.ERC721 : SchemaType_EVM.ERC1155,
-            address: contractAddress,
-            name: asset.metadata.name ?? asset.title,
-            symbol: '',
-        },
-        collection: {
-            address: contractAddress,
-            chainId,
-            name: asset.metadata.name || asset.title,
-            slug: '',
-            description: asset.metadata.description || asset.description,
-        },
     }
 }

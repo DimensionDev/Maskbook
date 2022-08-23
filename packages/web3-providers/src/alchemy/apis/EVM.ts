@@ -16,7 +16,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import type { NonFungibleTokenAPI } from '../../types'
 import { fetchJSON } from '../../helpers'
-import { Alchemy_EVM_NetworkMap,  } from '../constants'
+import { Alchemy_EVM_NetworkMap } from '../constants'
 import type {
     AlchemyNFT_EVM,
     AlchemyResponse_EVM,
@@ -26,7 +26,7 @@ import type {
 } from '../types'
 import { formatAlchemyTokenId } from '../helpers'
 
-function createNFTToken_EVM(
+function createNonFungibleToken(
     chainId: ChainId_EVM,
     asset: AlchemyNFT_EVM,
 ): NonFungibleAsset<ChainId_EVM, SchemaType_EVM> {
@@ -72,7 +72,7 @@ function createNFTToken_EVM(
     }
 }
 
-function createNFTAsset_EVM(
+function createNonFungibleAsset(
     chainId: ChainId_EVM,
     metaDataResponse: AlchemyResponse_EVM_Metadata,
     contractMetadataResponse?: AlchemyResponse_EVM_Contact_Metadata,
@@ -171,7 +171,7 @@ export class Alchemy_EVM_API implements NonFungibleTokenAPI.Provider<ChainId_EVM
         ]
 
         if (!metadataResponse) return
-        return createNFTAsset_EVM(chainId, metadataResponse, contractMetadataResponse, ownersResponse)
+        return createNonFungibleAsset(chainId, metadataResponse, contractMetadataResponse, ownersResponse)
     }
 
     async getAssets(from: string, { chainId = ChainId_EVM.Mainnet, indicator }: HubOptions<ChainId_EVM> = {}) {
@@ -186,7 +186,7 @@ export class Alchemy_EVM_API implements NonFungibleTokenAPI.Provider<ChainId_EVM
         )
 
         const assets = response?.ownedNfts?.map((nft) =>
-            createNFTToken_EVM((chainId as ChainId_EVM | undefined) ?? ChainId_EVM.Mainnet, nft),
+            createNonFungibleToken((chainId as ChainId_EVM | undefined) ?? ChainId_EVM.Mainnet, nft),
         )
         return createPageable(
             assets,
