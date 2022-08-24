@@ -30,7 +30,7 @@
         } else {
             // pathname is started "//"
             await import('/sandboxed-modules' + spec.pathname.slice(1))
-            if (modules.has(spec)) return modules.get(spec)
+            if (modules.has(spec.href)) return modules.get(spec.href)
             throw new SyntaxError(`Module ${specifier} is not a valid module.`)
         }
     }
