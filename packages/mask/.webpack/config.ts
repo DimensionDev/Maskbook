@@ -37,7 +37,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         name: 'mask',
         mode,
         devtool: sourceMapKind,
-        target: ['web', 'es2021'],
+        target: ['web', 'es2022'],
         entry: {},
         experiments: { backCompat: false, asyncWebAssembly: true },
         cache: {
@@ -118,7 +118,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                                 dynamicImport: true,
                                 tsx: true,
                             },
-                            target: 'es2021',
+                            target: 'es2022',
                             externalHelpers: true,
                             transform: {
                                 react: {
