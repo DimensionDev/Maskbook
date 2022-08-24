@@ -4,6 +4,7 @@ import { first } from 'lodash-unified'
 import {
     createInjectHooksRenderer,
     PluginId,
+    useIsMinimalMode,
     useActivatedPluginsSNSAdaptor,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
@@ -67,7 +68,10 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const displayPlugins = useAvailablePlugins(activatedPlugins, (plugins) => {
         return plugins
             .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
-            .filter((x) => x.Utils?.shouldDisplay?.(currentVisitingIdentity, socialAddressList) ?? true)
+            .filter((x) => {
+                const shouldDisplay = x.Utils?.shouldDisplay?.(currentVisitingIdentity, selectedAddress) ?? true
+                return x.pluginID !== PluginId.NextID && shouldDisplay
+            })
             .sort((a, z) => {
                 // order those tabs from next id first
                 if (a.pluginID === PluginId.NextID) return -1
@@ -98,11 +102,16 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const { value: currentVisitingSocialIdentity, loading: loadingCurrentVisitingSocialIdentity } =
         useCurrentVisitingSocialIdentity()
 
-    const showNextID = !!(
-        isTwitter(activatedSocialNetworkUI) &&
-        isOwnerIdentity &&
-        (socialAddressList.length === 0 || !currentVisitingSocialIdentity?.hasBinding)
-    )
+    const isTwitterPlatform = isTwitter(activatedSocialNetworkUI)
+    const isOwnerNotHasBinding = isOwnerIdentity && !currentVisitingSocialIdentity?.hasBinding
+    const isOwnerNotHasAddress =
+        isOwnerIdentity && socialAddressList.findIndex((address) => address.type === SocialAddressType.NEXT_ID) === -1
+
+    const isWeb3ProfileDisable = useIsMinimalMode(PluginId.Web3Profile)
+    const showNextID =
+        isTwitterPlatform &&
+        (isWeb3ProfileDisable || isOwnerNotHasBinding || isOwnerNotHasAddress || socialAddressList.length === 0)
+
     const handleOpenDialog = () => {
         CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToAll({
             open: true,
