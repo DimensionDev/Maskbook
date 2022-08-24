@@ -1,13 +1,13 @@
+import { memo, useMemo } from 'react'
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { NFTCardStyledAssetPlayer, ReversedAddress, TokenIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainId, formatTokenId, isZeroAddress, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { formatTokenId, isZeroAddress, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Box, Card, Typography } from '@mui/material'
-import formatDistanceToNow from 'date-fns/formatDistanceToNow'
-import { memo, useMemo } from 'react'
 import { useI18N } from '../../locales'
-import { usePatchFeed } from '../hooks'
+import { ChainID, usePatchFeed } from '../hooks/usePatchFeed'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -65,12 +65,6 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
     },
 }))
-
-export const ChainID = {
-    ethereum: ChainId.Mainnet,
-    polygon: ChainId.Matic,
-    bnb: ChainId.BSC,
-}
 
 enum TAG {
     NFT = 'NFT',

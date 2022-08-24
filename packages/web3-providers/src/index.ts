@@ -2,7 +2,7 @@ import { CoinGeckoAPI } from './coingecko'
 import { OpenSeaAPI } from './opensea'
 import { LooksRareAPI } from './looksrare'
 import { RaribleAPI } from './rarible'
-import { NFTScanAPI } from './NFTScan'
+import { NFTScanEVM_API, NFTScanSolanaAPI } from './NFTScan'
 import { ZoraAPI } from './zora'
 import { NativeExplorerAPI } from './explorer'
 import { RiskWarningAPI } from './risk-warning'
@@ -17,7 +17,7 @@ import { MetaSwapAPI } from './metaswap'
 import { AstarAPI } from './astar'
 import { GoPlusLabsAPI } from './gopluslabs'
 import { NextIDProofAPI, NextIDStorageAPI } from './NextID'
-import { Alchemy_EVM_API, Alchemy_FLOW_API } from './alchemy'
+import { AlchemyEVM_API, AlchemyFlowAPI } from './alchemy'
 import { EthereumWeb3API } from './web3'
 import { MagicEdenAPI } from './MagicEden'
 import { TokenViewAPI } from './token-view'
@@ -27,6 +27,7 @@ import { RabbyAPI } from './rabby'
 import { GemAPI } from './gem'
 import { X2Y2API } from './x2y2'
 import { ChainbaseHistoryAPI, ChainbaseFungibleTokenAPI, ChainbaseNonFungibleTokenAPI } from './chainbase'
+import { SolanaFungibleAPI, SolanaNonFungibleAPI } from './solana'
 
 export * from './helpers'
 export * from './types'
@@ -37,7 +38,8 @@ export const OpenSea = new OpenSeaAPI()
 export const LooksRare = new LooksRareAPI()
 export const MagicEden = new MagicEdenAPI()
 export const Rarible = new RaribleAPI()
-export const NFTScan = new NFTScanAPI()
+export const NFTScanEVM = new NFTScanEVM_API()
+export const NFTScanSolana = new NFTScanSolanaAPI()
 export const Zora = new ZoraAPI()
 export const Gem = new GemAPI()
 export const CoinGecko = new CoinGeckoAPI()
@@ -56,13 +58,15 @@ export const AstarGas = new AstarAPI()
 export const NextIDStorage = new NextIDStorageAPI()
 export const EthereumWeb3 = new EthereumWeb3API()
 export const NextIDProof = new NextIDProofAPI()
-export const Alchemy_EVM = new Alchemy_EVM_API()
-export const Alchemy_FLOW = new Alchemy_FLOW_API()
+export const AlchemyEVM = new AlchemyEVM_API()
+export const AlchemyFlow = new AlchemyFlowAPI()
 export const TokenView = new TokenViewAPI()
 export const CoinMarketCap = new CoinMarketCapAPI()
 export const UniSwap = new UniSwapAPI()
 export const Rabby = new RabbyAPI()
 export const X2Y2 = new X2Y2API()
+export const SolanaFungible = new SolanaFungibleAPI()
+export const SolanaNonFungible = new SolanaNonFungibleAPI()
 export const ChainbaseHistory = new ChainbaseHistoryAPI()
 export const ChainbaseFungibleToken = new ChainbaseFungibleTokenAPI()
 export const ChainbaseNonFungibleToken = new ChainbaseNonFungibleTokenAPI()

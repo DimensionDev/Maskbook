@@ -1,8 +1,13 @@
-import { Alchemy_EVM, RSS3BaseAPI } from '@masknet/web3-providers'
-import { resolveIPFSLinkFromURL } from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { ChainID } from '../components/FeedCard'
+import { AlchemyEVM, RSS3BaseAPI } from '@masknet/web3-providers'
+import { ChainId, resolveIPFSLinkFromURL } from '@masknet/web3-shared-evm'
+
+export const ChainID = {
+    ethereum: ChainId.Mainnet,
+    polygon: ChainId.Matic,
+    bnb: ChainId.BSC,
+}
 
 /**
  *
@@ -12,7 +17,7 @@ export function usePatchFeed(feed: RSS3BaseAPI.Web3Feed) {
     const { value: asset } = useAsyncRetry(async () => {
         if ((feed.title && feed.summary) || !feed.metadata?.collection_address) return
 
-        const asset = await Alchemy_EVM.getAsset(feed.metadata.collection_address, feed.metadata?.token_id ?? '', {
+        const asset = await AlchemyEVM.getAsset(feed.metadata.collection_address, feed.metadata?.token_id ?? '', {
             chainId: ChainID[feed.metadata?.network ?? 'ethereum'],
         })
         return asset

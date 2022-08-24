@@ -1,8 +1,9 @@
 import { uniqBy } from 'lodash-unified'
 import { memoizePromise } from '@dimensiondev/kit'
-import { FungibleToken, TokenType } from '@masknet/web3-shared-base'
+import { FungibleToken, NonFungibleToken, TokenType } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, formatEthereumAddress, chainResolver } from '@masknet/web3-shared-evm'
 import type { TokenListBaseAPI } from '../types'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 const fetchTokenList = memoizePromise(
     async (url: string) => {
@@ -59,7 +60,7 @@ async function fetchERC20TokensFromTokenList(urls: string[], chainId = ChainId.M
  * @param chainId
  */
 export class TokenListAPI implements TokenListBaseAPI.Provider<ChainId, SchemaType> {
-    async fetchFungibleTokensFromTokenLists(chainId: ChainId, url: string[]) {
+    async getFungibleTokens(chainId: ChainId, url: string[]) {
         const result = memoizePromise(
             async (urls: string[], chainId = ChainId.Mainnet): Promise<Array<FungibleToken<ChainId, SchemaType>>> => {
                 const tokens = (await fetchERC20TokensFromTokenList(urls, chainId))
@@ -77,5 +78,8 @@ export class TokenListAPI implements TokenListBaseAPI.Provider<ChainId, SchemaTy
         )
 
         return result(url, chainId)
+    }
+    async getNonFungibleTokens(chainId: ChainId, urls: string[]): Promise<Array<NonFungibleToken<ChainId, SchemaType>>> {
+        return EMPTY_LIST
     }
 }
