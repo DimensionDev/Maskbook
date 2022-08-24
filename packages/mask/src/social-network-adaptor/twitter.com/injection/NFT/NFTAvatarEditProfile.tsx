@@ -1,11 +1,12 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useState, useEffect } from 'react'
-import { NFTAvatarDialog } from '../../../../plugins/Avatar/Application/NFTAvatarsDialog'
 import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
 import { startWatch, createReactRootShadowed, useLocationChange } from '../../../../utils'
 import { searchEditProfileSelector } from '../../utils/selector'
 import { PersonaBoundary } from '../../../../components/shared/PersonaBoundary'
+import { PluginId } from '@masknet/plugin-infra'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchEditProfileSelector())
@@ -49,7 +50,6 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
         border: 'none',
         color: '',
     })
-    const [open, setOpen] = useState(false)
 
     const setStyleFromEditProfileSelector = () => {
         const editDom = searchEditProfileSelector().evaluate()
@@ -70,13 +70,17 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
 
     useLocationChange(() => setStyleFromEditProfileSelector())
 
+    const clickHandler = () => {
+        CrossIsolationMessages.events.requestOpenApplication.sendToLocal({
+            open: true,
+            application: PluginId.Avatar,
+        })
+    }
+
     const { classes } = useStyles(style)
     return (
-        <>
-            <PersonaBoundary handlerPosition="top-right" customHint>
-                <NFTAvatarButton classes={{ root: classes.root, text: classes.text }} onClick={() => setOpen(true)} />
-            </PersonaBoundary>
-            <NFTAvatarDialog open={open} onClose={() => setOpen(false)} />
-        </>
+        <PersonaBoundary handlerPosition="top-right" customHint directTo={PluginId.Avatar}>
+            <NFTAvatarButton classes={{ root: classes.root, text: classes.text }} onClick={clickHandler} />
+        </PersonaBoundary>
     )
 }

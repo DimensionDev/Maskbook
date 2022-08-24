@@ -81,7 +81,7 @@ export const PersonaBoundary = memo<PersonaBoundaryProps>(
         const handleClick = useCallback(() => {
             if (!status.verified && status.connected) beforeVerify?.()
             status.action?.(directTo, handlerPosition)
-        }, [directTo, handlerPosition, status?.action])
+        }, [directTo, handlerPosition, JSON.stringify(status)])
 
         return (
             <Stack className={classes.root} display="inline-flex" onClick={handleClick}>
