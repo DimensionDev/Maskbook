@@ -5,6 +5,7 @@ import {
     isSamePersona,
     isSameProfile,
     nextIDIdentityToProfile,
+    BindingProof,
     PersonaInformation,
 } from '@masknet/shared-base'
 import Services from '../../extension/service'
@@ -73,6 +74,7 @@ export interface PersonaConnectStatus {
     connected?: boolean
     hasPersona?: boolean
     verified?: boolean
+    proof?: BindingProof[]
 }
 
 const defaultStatus: PersonaConnectStatus = {
@@ -81,6 +83,7 @@ const defaultStatus: PersonaConnectStatus = {
     connected: false,
     hasPersona: false,
     verified: false,
+    proof: undefined,
 }
 
 export function useCurrentPersonaConnectStatus() {
@@ -164,6 +167,7 @@ export function useCurrentPersonaConnectStatus() {
                 connected: true,
                 hasPersona: true,
                 verified: !!verifiedProfile,
+                proof: nextIDInfo?.proofs,
             }
         } catch {
             // TODO: How to handle the nextID down or network failed
