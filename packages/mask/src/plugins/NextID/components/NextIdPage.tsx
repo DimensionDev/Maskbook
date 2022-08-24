@@ -179,9 +179,7 @@ export function NextIdPage() {
         return NextIDProof.queryExistedBindingByPersona(publicKeyAsHex)
     }, [publicKeyAsHex])
 
-    // TODO: move to persona list dialog
-    const onVerify = async () => {
-        // reset()
+    const handleBeforeVerify = async () => {
         const firstTab = TAB_SELECTOR?.[platform]?.evaluate()?.querySelector('div')?.parentNode
             ?.firstChild as HTMLElement
         firstTab.click()
@@ -198,7 +196,7 @@ export function NextIdPage() {
 
         return (
             <PluginEnableBoundary pluginId={PluginId.Web3Profile}>
-                <PersonaBoundary handlerPosition="top-right">
+                <PersonaBoundary handlerPosition="top-right" beforeVerify={handleBeforeVerify}>
                     <Button className={classes.button} variant="contained" onClick={handleAddWallets}>
                         <Icons.WalletUnderTabs size={16} className={classes.walletIcon} />
                         {t.add_wallet_button()}

@@ -1,5 +1,5 @@
 import { Button, Stack } from '@mui/material'
-import { memo, ReactNode, useMemo } from 'react'
+import { memo, ReactNode, useCallback, useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import type { PluginId } from '@masknet/plugin-infra'
 import { PersonaConnectStatus, useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
@@ -37,10 +37,11 @@ interface PersonaBoundaryProps {
     directTo?: PluginId
     customHint?: boolean
     children: SupportChildren
+    beforeVerify?: () => void | Promise<void>
 }
 
 export const PersonaBoundary = memo<PersonaBoundaryProps>(
-    ({ children, directTo, handlerPosition = 'center', customHint = false }) => {
+    ({ children, directTo, handlerPosition = 'center', customHint = false, beforeVerify }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
 
@@ -52,29 +53,38 @@ export const PersonaBoundary = memo<PersonaBoundaryProps>(
             if (isFnChildren) return children(status)
 
             if (!status.action) return null
-            const button = status.hasPersona
-                ? t('persona_boundary_connect_persona')
-                : t('persona_boundary_create_persona')
+            if (!status.hasPersona)
+                return (
+                    <Button disabled={statusLoading} className={classes.button}>
+                        <Icons.Identity size={18} sx={{ marginRight: '8px' }} />
+                        {t('persona_boundary_create_persona')}
+                    </Button>
+                )
 
-            const icon = status.hasPersona ? (
-                <Icons.Connect sx={{ marginRight: '8px' }} />
-            ) : (
-                <Icons.Identity size={18} sx={{ marginRight: '8px' }} />
-            )
-
-            return (
-                <Button disabled={statusLoading} className={classes.button}>
-                    {icon}
-                    {button}
-                </Button>
-            )
+            if (!status.connected)
+                return (
+                    <Button disabled={statusLoading} className={classes.button}>
+                        <Icons.Connect size={18} sx={{ marginRight: '8px' }} />
+                        {t('persona_boundary_connect_persona')}
+                    </Button>
+                )
+            if (!status.verified)
+                return (
+                    <Button disabled={statusLoading} className={classes.button}>
+                        <Icons.Connect size={18} sx={{ marginRight: '8px' }} />
+                        {t('persona_boundary_verify_persona')}
+                    </Button>
+                )
+            return null
         }, [status, t, statusLoading, customHint])
-        // TODO: how to show the loading status
+
+        const handleClick = useCallback(() => {
+            if (!status.verified && status.connected) beforeVerify?.()
+            status.action?.(directTo, handlerPosition)
+        }, [directTo, handlerPosition, status?.action])
+
         return (
-            <Stack
-                className={classes.root}
-                display="inline-flex"
-                onClick={() => status.action?.(directTo, handlerPosition)}>
+            <Stack className={classes.root} display="inline-flex" onClick={handleClick}>
                 <Stack style={{ pointerEvents: status.action ? 'none' : 'auto' }} display="inline-flex">
                     {actionComponent}
                 </Stack>
