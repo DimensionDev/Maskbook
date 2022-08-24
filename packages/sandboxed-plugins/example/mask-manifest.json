@@ -1,0 +1,8 @@
+{
+    "id": "example",
+    "entries": {
+        "background": "./background.js",
+        "rpc": "./rpc.js",
+        "content_script": "./site-adaptor.js"
+    }
+}
