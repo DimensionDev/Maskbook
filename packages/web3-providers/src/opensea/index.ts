@@ -7,7 +7,7 @@ import {
     createPageable,
     CurrencyType,
     NonFungibleToken,
-    NonFungibleTokenCollection,
+    NonFungibleCollection,
     NonFungibleTokenEvent,
     NonFungibleTokenOrder,
     OrderSide,
@@ -391,7 +391,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         )
         if (!response) return createPageable(EMPTY_LIST, createIndicator(indicator))
 
-        const collections: Array<NonFungibleTokenCollection<ChainId, SchemaType>> =
+        const collections: Array<NonFungibleCollection<ChainId, SchemaType>> =
             response
                 ?.map((x) => ({
                     chainId,

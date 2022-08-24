@@ -6,7 +6,7 @@ import { CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants'
 import { isBlockedId, isBlockedKeyword, resolveAlias, resolveCoinId, isBlockedAddress } from './hotfix'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { Days } from '../../SNSAdaptor/trending/PriceChartDaysControl'
-import { CoinGecko, CoinMarketCap, NFTScanEVM, UniSwap } from '@masknet/web3-providers'
+import { CoinGecko, CoinMarketCap, NFTScanTrending, UniSwap } from '@masknet/web3-providers'
 
 /**
  * Get supported currencies of specific data provider
@@ -51,7 +51,7 @@ export async function getCoinsByKeyword(
         case DataProvider.UNISWAP_INFO:
             return UniSwap.getCoinsByKeyword(chainId, keyword)
         case DataProvider.NFTSCAN:
-            return keyword ? NFTScanEVM.getCoins(keyword) : []
+            return keyword ? NFTScanTrending.getCoins(keyword) : []
         default:
             return []
     }
@@ -190,7 +190,7 @@ async function getCoinTrending(
         case DataProvider.UNISWAP_INFO:
             return UniSwap.getCoinTrending(chainId, id, currency)
         case DataProvider.NFTSCAN:
-            return NFTScanEVM.getCoinTrending(chainId, id, currency)
+            return NFTScanTrending.getCoinTrending(chainId, id, currency)
         default:
             unreachable(dataProvider)
     }
@@ -241,7 +241,7 @@ export async function getPriceStats(
         case DataProvider.UNISWAP_INFO:
             return UniSwap.getPriceStats(chainId, id, currency, days)
         case DataProvider.NFTSCAN:
-            return NFTScanEVM.getPriceStats(chainId, id, currency, days)
+            return NFTScanTrending.getPriceStats(chainId, id, currency, days)
         default:
             return []
     }

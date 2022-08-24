@@ -2,7 +2,7 @@ import { CoinGeckoAPI } from './coingecko'
 import { OpenSeaAPI } from './opensea'
 import { LooksRareAPI } from './looksrare'
 import { RaribleAPI } from './rarible'
-import { NFTScanEVM_API, NFTScanSolanaAPI } from './NFTScan'
+import { NFTScanTrendingAPI, NFTScanNonFungibleTokenAPI_EVM, NFTScanNonFungibleTokenAPI_Solana } from './NFTScan'
 import { ZoraAPI } from './zora'
 import { NativeExplorerAPI } from './explorer'
 import { RiskWarningAPI } from './risk-warning'
@@ -38,8 +38,6 @@ export const OpenSea = new OpenSeaAPI()
 export const LooksRare = new LooksRareAPI()
 export const MagicEden = new MagicEdenAPI()
 export const Rarible = new RaribleAPI()
-export const NFTScanEVM = new NFTScanEVM_API()
-export const NFTScanSolana = new NFTScanSolanaAPI()
 export const Zora = new ZoraAPI()
 export const Gem = new GemAPI()
 export const CoinGecko = new CoinGeckoAPI()
@@ -58,15 +56,26 @@ export const AstarGas = new AstarAPI()
 export const NextIDStorage = new NextIDStorageAPI()
 export const EthereumWeb3 = new EthereumWeb3API()
 export const NextIDProof = new NextIDProofAPI()
-export const AlchemyEVM = new AlchemyEVM_API()
-export const AlchemyFlow = new AlchemyFlowAPI()
 export const TokenView = new TokenViewAPI()
 export const CoinMarketCap = new CoinMarketCapAPI()
 export const UniSwap = new UniSwapAPI()
 export const Rabby = new RabbyAPI()
 export const X2Y2 = new X2Y2API()
+
+// Alchemy
+export const AlchemyEVM = new AlchemyEVM_API()
+export const AlchemyFlow = new AlchemyFlowAPI()
+
+// Solana RPC
 export const SolanaFungible = new SolanaFungibleAPI()
 export const SolanaNonFungible = new SolanaNonFungibleAPI()
+
+// NFTScan
+export const NFTScanTrending = new NFTScanTrendingAPI()
+export const NFTScanNonFungibleTokenEVM = new NFTScanNonFungibleTokenAPI_EVM()
+export const NFTScanNonFungibleTokenSolana = new NFTScanNonFungibleTokenAPI_Solana()
+
+// Chainbase
 export const ChainbaseHistory = new ChainbaseHistoryAPI()
 export const ChainbaseFungibleToken = new ChainbaseFungibleTokenAPI()
 export const ChainbaseNonFungibleToken = new ChainbaseNonFungibleTokenAPI()

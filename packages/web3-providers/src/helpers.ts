@@ -43,6 +43,15 @@ export function getAllEVMNativeAssets(): Array<FungibleAsset<ChainId, SchemaType
     }))
 }
 
+export function getJSON<T>(json?: string): T | undefined {
+    if (!json) return
+    try {
+        return JSON.parse(json) as T
+    } catch {
+        return
+    }
+}
+
 export function getPaymentToken(chainId: ChainId, token?: { name?: string; symbol?: string; address?: string }) {
     if (!token) return
 

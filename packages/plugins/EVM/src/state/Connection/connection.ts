@@ -47,7 +47,7 @@ import {
     FungibleToken,
     isSameAddress,
     NonFungibleToken,
-    NonFungibleTokenCollection,
+    NonFungibleCollection,
     NonFungibleTokenContract,
     NonFungibleTokenMetadata,
     TransactionStatusType,
@@ -529,7 +529,7 @@ class Connection implements EVM_Connection {
         address: string,
         schema?: SchemaType,
         initial?: EVM_Web3ConnectionOptions,
-    ): Promise<NonFungibleTokenCollection<ChainId, SchemaType>> {
+    ): Promise<NonFungibleCollection<ChainId, SchemaType>> {
         const options = this.getOptions(initial)
         const actualSchema = schema ?? (await this.getTokenSchema(address, options))
 

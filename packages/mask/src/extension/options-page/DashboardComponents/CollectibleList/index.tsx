@@ -9,7 +9,7 @@ import {
     isSameAddress,
     NetworkPluginID,
     NonFungibleAsset,
-    NonFungibleTokenCollection,
+    NonFungibleCollection,
     SocialAddress,
     SocialIdentity,
     SourceType,
@@ -187,7 +187,7 @@ export function CollectionList({
     const { t } = useI18N()
     const { classes } = useStyles({})
     const [selectedCollection, setSelectedCollection] = useState<
-        NonFungibleTokenCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | undefined
+        NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | undefined
     >()
     const { address: account } = addressName
 
@@ -245,7 +245,7 @@ export function CollectionList({
         const collections = uniqBy(allCollectibles, (x) => x?.contract?.address.toLowerCase())
             .map((x) => x?.collection)
             .filter((x) => x?.name.length) as Array<
-            NonFungibleTokenCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+            NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
         >
         return collections
     }, [allCollectibles.length])

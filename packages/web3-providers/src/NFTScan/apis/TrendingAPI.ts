@@ -1,43 +1,14 @@
 import { DataProvider } from '@masknet/public-api'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import {
-    createIndicator,
-    createNextIndicator,
-    createPageable,
-    HubIndicator,
-    HubOptions,
-    NonFungibleTokenCollection,
-    NonFungibleTokenContract,
-    NonFungibleTokenEvent,
-    Pageable,
-    TokenType,
-} from '@masknet/web3-shared-base'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { TokenType } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
 import { compact } from 'lodash-unified'
 import { LooksRareLogo, OpenSeaLogo } from '../../resources'
-import type { NonFungibleTokenAPI, TrendingAPI } from '../../types'
+import type { TrendingAPI } from '../../types'
 import { NFTSCAN_API } from '../constants'
-import {
-    ErcType,
-    NFTPlatformInfo,
-    Asset,
-    Collection,
-    SearchNFTPlatformNameResult,
-    AssetsGroup,
-    VolumeAndFloorRecord,
-    Transaction,
-} from '../types/EVM'
-import {
-    createNonFungibleAsset,
-    createNonFungibleTokenContract,
-    fetchFromNFTScan,
-    fetchFromNFTScanV2,
-    getContractSymbol,
-    createNonFungibleTokenEvent,
-    createNonFungibleTokenCollectionFromGroup,
-    createNonFungibleTokenCollectionFromCollection,
-} from '../helpers/EVM'
+import type { EVM, Response } from '../types'
+import { fetchFromNFTScan, getContractSymbol } from '../helpers/EVM'
 import { LooksRareAPI } from '../../looksrare'
 import { OpenSeaAPI } from '../../opensea'
 
@@ -46,154 +17,35 @@ enum NonFungibleMarketplace {
     LooksRare = 'LooksRare',
 }
 
-export class NFTScanEVM_API
-    implements NonFungibleTokenAPI.Provider<ChainId, SchemaType>, TrendingAPI.Provider<ChainId>
-{
+export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
     private looksrare = new LooksRareAPI()
     private opensea = new OpenSeaAPI()
 
-    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
-        const path = urlcat('/api/v2/assets/:address/:token_id', {
-            address,
-            contract_address: address,
-            token_id: tokenId,
-            show_attribute: true,
-        })
-        const response = await fetchFromNFTScanV2<{ data: Asset }>(chainId, path)
-        if (!response?.data) return
-        return createNonFungibleAsset(chainId, response.data)
-    }
-
-    async getAssets(account: string, { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {}) {
-        const path = urlcat('/api/v2/account/own/all/:from', {
-            from: account,
-            erc_type: ErcType.ERC721,
-            show_attribute: true,
-        })
-        const response = await fetchFromNFTScanV2<{ data: AssetsGroup[] }>(chainId, path)
-        const assets =
-            response?.data?.flatMap((x) => x.assets.map((x) => createNonFungibleAsset(chainId, x))) ?? EMPTY_LIST
-        return createPageable(assets, createIndicator(indicator))
-    }
-
-    async getAssetsByCollection(
-        address: string,
-        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {},
-    ) {
-        const path = urlcat('/api/v2/assets/:address', {
-            address,
-            contract_address: address,
-            show_attribute: true,
-            limit: size,
-            cursor: indicator?.id,
-        })
-        const response = await fetchFromNFTScanV2<{
-            data: {
-                content: Asset[]
-                next?: string
-                total?: number
-            }
-        }>(chainId, path)
-        const assets = response?.data?.content.map((x) => createNonFungibleAsset(chainId, x)) ?? EMPTY_LIST
-        return createPageable(
-            assets,
-            createIndicator(indicator),
-            response?.data.next ? createNextIndicator(indicator, response?.data.next) : undefined,
-        )
-    }
-
-    async getCollectionsByOwner(
-        account: string,
-        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
-    ): Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>, HubIndicator>> {
-        const path = urlcat('/api/v2/account/own/all/:from', {
-            from: account,
-            erc_type: ErcType.ERC721,
-            show_attribute: true,
-        })
-        const response = await fetchFromNFTScanV2<{ data: AssetsGroup[] }>(chainId, path)
-        const collections =
-            response?.data.map((x) => createNonFungibleTokenCollectionFromGroup(chainId, x)) ?? EMPTY_LIST
-        return createPageable(collections, createIndicator(indicator))
-    }
-
-    async getCollectionsByKeyword(
-        keyword: string,
-        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId, HubIndicator> = {},
-    ): Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>, HubIndicator>> {
-        const path = '/api/v2/collections/filters'
-        const response = await fetchFromNFTScanV2<{ data: Collection[] }>(chainId, path, {
-            method: 'POST',
-            body: JSON.stringify({
-                name: keyword,
-                symbol: '',
-                limit: size.toString(),
-                offset: indicator?.index ?? '',
-                contract_address_list: [],
-            }),
-        })
-        const collections =
-            response?.data.map((x) => createNonFungibleTokenCollectionFromCollection(chainId, x)) ?? EMPTY_LIST
-        return createPageable(collections, createIndicator(indicator))
-    }
-
-    async getContract(
-        address: string,
-        { chainId = ChainId.Mainnet }: HubOptions<ChainId, HubIndicator> = {},
-    ): Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined> {
-        const path = urlcat('/api/v2/collections/:address', {
-            address,
-        })
-        const response = await fetchFromNFTScanV2<{ data: Collection }>(chainId, path)
-        if (!response?.data) return
-        return createNonFungibleTokenContract(chainId, response.data)
-    }
-
-    async getEvents(
-        address: string,
-        tokenId: string,
-        { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId, HubIndicator> = {},
-    ): Promise<Pageable<NonFungibleTokenEvent<ChainId, SchemaType>>> {
-        const path = urlcat('/api/v2/transactions/:address/:tokenId', {
-            address,
-            tokenId,
-            limit: size,
-            cursor: indicator?.id,
-        })
-        const response = await fetchFromNFTScanV2<{ data: { content: Transaction[]; next?: string; total?: number } }>(
-            chainId,
-            path,
-        )
-        const events = response?.data.content.map((x) => createNonFungibleTokenEvent(chainId, x)) ?? EMPTY_LIST
-        return createPageable(
-            events,
-            createIndicator(indicator),
-            response?.data.next ? createNextIndicator(indicator, response?.data.next) : undefined,
-        )
-    }
-
-    private async getNftPlatformInfo(address: string): Promise<NFTPlatformInfo> {
+    private async getNftPlatformInfo(address: string): Promise<EVM.NFTPlatformInfo> {
         const url = urlcat(NFTSCAN_API, '/nftscan/getNftPlatformInfo', {
             keyword: address,
         })
-        const response = await fetchFromNFTScan<{ data: NFTPlatformInfo }>(url)
+        const response = await fetchFromNFTScan<Response<EVM.NFTPlatformInfo>>(url)
         return response.data
     }
 
-    private async searchNftPlatformName(keyword: string): Promise<SearchNFTPlatformNameResult[]> {
+    private async searchNftPlatformName(keyword: string): Promise<EVM.SearchNFTPlatformNameResult[]> {
         const url = urlcat(NFTSCAN_API, '/nftscan/searchNftPlatformName', {
             keyword,
         })
-        const response = await fetchFromNFTScan<{ data: SearchNFTPlatformNameResult[] }>(url)
+        const response = await fetchFromNFTScan<Response<EVM.SearchNFTPlatformNameResult[]>>(url)
         return response.data ?? EMPTY_LIST
     }
 
-    private async getContractVolumeAndFloorByRange(contract: string, range: string): Promise<VolumeAndFloorRecord[]> {
+    private async getContractVolumeAndFloorByRange(
+        contract: string,
+        range: string,
+    ): Promise<EVM.VolumeAndFloorRecord[]> {
         const url = urlcat(NFTSCAN_API, '/nftscan/getContractVolumeAndFloorByRange', {
             contract,
             range,
         })
-        const response = await fetchFromNFTScan<{ data: VolumeAndFloorRecord[] }>(url)
+        const response = await fetchFromNFTScan<Response<EVM.VolumeAndFloorRecord[]>>(url)
         return response.data ?? EMPTY_LIST
     }
 

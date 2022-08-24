@@ -2,7 +2,7 @@ import { keyBy, mapValues } from 'lodash-unified'
 import {
     FungibleToken,
     NonFungibleToken,
-    NonFungibleTokenCollection,
+    NonFungibleCollection,
     NonFungibleTokenContract,
     NonFungibleTokenMetadata,
     TokenType,
@@ -72,7 +72,7 @@ export function createNonFungibleTokenCollection<ChainId, SchemaType>(
     iconURL?: string,
     verified?: boolean,
     createdAt?: number,
-): NonFungibleTokenCollection<ChainId, SchemaType> {
+): NonFungibleCollection<ChainId, SchemaType> {
     return {
         chainId,
         name,
