@@ -15,25 +15,22 @@ export const pasteTextToCompositionTwitter: SocialNetworkUI.AutomationCapabiliti
     (text, opt) => {
         const interval = 500
         const timeout = 5000
-        const worker = async function (abort: AbortSignal) {
-            const checkSignal = () => {
-                if (abort.aborted) throw new Error('Aborted')
-            }
-
+        const worker = async function (signal: AbortSignal) {
             if (!isCompose() && !hasEditor() && opt?.reason !== 'reply') {
                 // open tweet window
                 await untilElementAvailable(newPostButtonSelector())
                 newPostButtonSelector().evaluate()!.click()
-                checkSignal()
+                signal.throwIfAborted()
+                await delay(interval)
             }
 
             // get focus
             const i = postEditorDraftContentSelector()
             await untilElementAvailable(i)
-            checkSignal()
+            signal.throwIfAborted()
             while (!hasFocus(i)) {
                 i.evaluate()!.focus()
-                checkSignal()
+                signal.throwIfAborted()
                 await delay(interval)
             }
             // paste
