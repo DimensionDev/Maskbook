@@ -2,13 +2,13 @@ import { memo, useState, useMemo } from 'react'
 import { CollectionDetailCard, useWeb3ProfileHiddenSettings } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { CollectionType, RSS3BaseAPI } from '@masknet/web3-providers'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { Box, BoxProps, Typography } from '@mui/material'
+import { Box, BoxProps, Typography, Box, Typography } from '@mui/material'
+import { useI18N, useI18N } from '../../locales'
 import { FootprintCard, StatusBox } from '../components'
 import { useFootprints, useRSS3Profile } from '../hooks'
 import { Icons } from '@masknet/icons'
 import { differenceWith } from 'lodash-unified'
-import { useI18N } from '../../locales'
+import { RSS3_DEFAULT_IMAGE } from '../../constants'
 
 export interface FootprintPageProps extends BoxProps {
     address: string
@@ -26,7 +26,7 @@ export const FootprintsPage = memo(function FootprintsPage({
     const { value: profile } = useRSS3Profile(address)
     const username = profile?.name
 
-    const { value: allFootprints = EMPTY_LIST, loading } = useFootprints(formatEthereumAddress(address))
+    const { value: allFootprints = EMPTY_LIST, loading } = useFootprints(address)
 
     const { isHiddenAddress, hiddenList } = useWeb3ProfileHiddenSettings(userId, publicKey, {
         address,
@@ -36,10 +36,10 @@ export const FootprintsPage = memo(function FootprintsPage({
 
     const footprints = useMemo(() => {
         if (!hiddenList.length) return allFootprints
-        return differenceWith(allFootprints, hiddenList, (footprint, id) => footprint.id === id)
+        return differenceWith(allFootprints, hiddenList, (footprint, id) => footprint.hash === id)
     }, [allFootprints, hiddenList])
 
-    const [selectedFootprint, setSelectedFootprint] = useState<RSS3BaseAPI.Collection | undefined>()
+    const [selectedFootprint, setSelectedFootprint] = useState<RSS3BaseAPI.Footprint | undefined>()
 
     if (loading || !footprints.length) {
         return (
@@ -68,12 +68,14 @@ export const FootprintsPage = memo(function FootprintsPage({
         )
     }
 
+    const action = selectedFootprint?.actions[0]
+
     return (
         <Box p={2} {...rest}>
             <section className="grid items-center justify-start grid-cols-1 gap-2 py-4 ">
                 {footprints.map((footprint) => (
                     <FootprintCard
-                        key={footprint.id}
+                        key={footprint.hash}
                         onSelect={setSelectedFootprint}
                         username={username ?? ''}
                         footprint={footprint}
@@ -84,13 +86,12 @@ export const FootprintsPage = memo(function FootprintsPage({
                 <CollectionDetailCard
                     open
                     onClose={() => setSelectedFootprint(undefined)}
-                    img={selectedFootprint.imageURL}
-                    title={selectedFootprint.title}
-                    referenceURL={selectedFootprint.actions?.[0]?.related_urls?.[0]}
-                    description={selectedFootprint.description}
+                    img={action?.metadata?.image || RSS3_DEFAULT_IMAGE}
+                    title={action?.metadata?.name}
+                    referenceURL={action?.related_urls?.[0]}
+                    description={action?.metadata?.description}
                     type={CollectionType.Footprints}
                     time={selectedFootprint.timestamp}
-                    location={selectedFootprint.location}
                 />
             ) : null}
         </Box>

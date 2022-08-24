@@ -47,8 +47,8 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface FootprintProps {
     username: string
-    footprint: RSS3BaseAPI.Collection
-    onSelect: (footprint: RSS3BaseAPI.Collection) => void
+    footprint: RSS3BaseAPI.Footprint
+    onSelect: (footprint: RSS3BaseAPI.Footprint) => void
 }
 
 export const FootprintCard = memo(({ footprint, onSelect }: FootprintProps) => {
@@ -58,13 +58,14 @@ export const FootprintCard = memo(({ footprint, onSelect }: FootprintProps) => {
     const date = footprint.timestamp
         ? formatDateTime(new Date(footprint.timestamp), 'MMM dd, yyyy')
         : t.no_activity_time()
+    const action = footprint.actions[0]
 
     return (
         <div className={classes.card} onClick={() => onSelect(footprint)}>
             <section className="flex flex-row flex-shrink-0 w-max h-max">
                 <Card className={classes.img}>
                     <NFTCardStyledAssetPlayer
-                        url={footprint.imageURL || RSS3_DEFAULT_IMAGE}
+                        url={action.metadata?.image || RSS3_DEFAULT_IMAGE}
                         classes={{
                             fallbackImage: classes.fallbackImage,
                             wrapper: classes.img,
@@ -75,8 +76,9 @@ export const FootprintCard = memo(({ footprint, onSelect }: FootprintProps) => {
             </section>
             <section className={classes.content}>
                 <Typography className={classes.infoRow}>{date}</Typography>
-                <Typography className={classes.infoRow}>@ {footprint.location}</Typography>
-                <Typography className={classes.infoRow}>{footprint.title}</Typography>
+                {/* TODO location is missed in RSS3 v1 API */}
+                {/* <Typography className={classes.infoRow}>@ {footprint.location}</Typography> */}
+                <Typography className={classes.infoRow}>{action.metadata?.name}</Typography>
             </section>
         </div>
     )
