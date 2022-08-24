@@ -1,6 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useUpdateEffect } from 'react-use'
-import { first, uniqBy } from 'lodash-unified'
+import { Icons } from '@masknet/icons'
 import {
     createInjectHooksRenderer,
     PluginId,
@@ -8,23 +6,24 @@ import {
     useIsMinimalMode,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
-import { useSocialAddressListAll, useAvailablePlugins } from '@masknet/plugin-infra/web3'
+import { useAvailablePlugins, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
 import { AddressItem } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
-import { Box, Button, CircularProgress, Link, MenuItem, Tab, Typography } from '@mui/material'
-import { Icons } from '@masknet/icons'
 import { isSameAddress, NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
+import { TabContext } from '@mui/lab'
+import { Box, Button, CircularProgress, Link, MenuItem, Tab, Typography } from '@mui/material'
+import { first, uniqBy } from 'lodash-unified'
+import { useEffect, useMemo, useState } from 'react'
+import { useUpdateEffect } from 'react-use'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
-import { MaskMessages, useI18N, sorter } from '../../utils'
-import { useLocationChange } from '../../utils/hooks/useLocationChange'
+import { MaskMessages, sorter, useI18N, useLocationChange } from '../../utils'
 import {
     useCurrentVisitingIdentity,
     useCurrentVisitingSocialIdentity,
     useIsOwnerIdentity,
 } from '../DataSource/useActivatedUI'
-import { TabContext } from '@mui/lab'
 
 function getTabContent(tabId?: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {

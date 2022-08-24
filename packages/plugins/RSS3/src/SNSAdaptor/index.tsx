@@ -53,7 +53,7 @@ const FootprintsTabConfig: Plugin.SNSAdaptor.ProfileTab = {
     },
 }
 const ActivitiesTabConfig: Plugin.SNSAdaptor.ProfileTab = {
-    ID: `${PLUGIN_ID}_feed`,
+    ID: `${PLUGIN_ID}_feeds`,
     label: 'Activities',
     priority: 3,
     UI: {
@@ -76,6 +76,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
         setupContext(context)
     },
     ProfileTabs: [DonationsTabConfig, FootprintsTabConfig, ActivitiesTabConfig],
+    ProfileCardTabs: [
+        { ...ActivitiesTabConfig, priority: 1 },
+        { ...FootprintsTabConfig, label: 'POAPs', priority: 3 },
+    ],
 }
 
 export default sns

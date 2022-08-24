@@ -104,6 +104,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.injection.avatarClipNFT?.(signal)
 
     ui.injection.avatar?.(signal)
+    ui.injection.profileCard?.(signal)
 
     // Update user avatar
     ui.collecting.currentVisitingIdentityProvider?.recognized.addListener((ref) => {

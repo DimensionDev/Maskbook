@@ -26,6 +26,7 @@
     "redirect_to": "Redirect to",
     "sign": "Sign",
     "powered_by": "Powered by",
+    "powered_by_whom": "Powered by <span>{{whom}}</span>",
     "reload": "Reload",
     "load": "Load",
     "load_all": "Load All",

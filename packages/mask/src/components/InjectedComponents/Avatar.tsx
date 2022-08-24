@@ -23,15 +23,18 @@ export function Avatar(props: AvatarProps) {
         useSocialAddressListAll(identity)
 
     const component = useMemo(() => {
-        const Component = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (plugin) => {
-            const shouldDisplay =
-                plugin.AvatarRealm?.Utils?.shouldDisplay?.(identity, socialAddressList, sourceType) ?? true
-            return shouldDisplay ? plugin.AvatarRealm?.UI?.Decorator : undefined
-        })
+        const Component = createInjectHooksRenderer(
+            useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
+            (plugin) => {
+                const shouldDisplay =
+                    plugin.AvatarRealm?.Utils?.shouldDisplay?.(identity, socialAddressList, sourceType) ?? true
+                return shouldDisplay ? plugin.AvatarRealm?.UI?.Decorator : undefined
+            },
+        )
 
-        return <Component identity={identity} />
+        return <Component identity={identity} socialAddressList={socialAddressList} />
     }, [identity, socialAddressList, sourceType])
 
     if (loadingSocialAddressList || !component) return null
-    return <div className={classes?.root}>{component}</div>
+    return <div className={classes.root}>{component}</div>
 }

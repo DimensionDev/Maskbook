@@ -1,11 +1,11 @@
-import { Card, Typography } from '@mui/material'
-import fromUnixTime from 'date-fns/fromUnixTime'
-import formatDateTime from 'date-fns/format'
-import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../locales'
-import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
+import type { RSS3BaseAPI } from '@masknet/web3-providers'
+import { Card, Typography } from '@mui/material'
+import formatDateTime from 'date-fns/format'
+import { memo } from 'react'
 import { RSS3_DEFAULT_IMAGE } from '../../constants'
+import { useI18N } from '../../locales'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -45,16 +45,13 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const formatDate = (ts: string): string => {
-    return fromUnixTime(Number.parseInt(ts, 16)).toLocaleDateString('en-US')
-}
 export interface FootprintProps {
     username: string
     footprint: RSS3BaseAPI.Collection
-    onSelect: () => void
+    onSelect: (footprint: RSS3BaseAPI.Collection) => void
 }
 
-export const FootprintCard = ({ footprint, onSelect }: FootprintProps) => {
+export const FootprintCard = memo(({ footprint, onSelect }: FootprintProps) => {
     const t = useI18N()
     const { classes } = useStyles()
 
@@ -63,7 +60,7 @@ export const FootprintCard = ({ footprint, onSelect }: FootprintProps) => {
         : t.no_activity_time()
 
     return (
-        <div className={classes.card} onClick={onSelect}>
+        <div className={classes.card} onClick={() => onSelect(footprint)}>
             <section className="flex flex-row flex-shrink-0 w-max h-max">
                 <Card className={classes.img}>
                     <NFTCardStyledAssetPlayer
@@ -83,4 +80,4 @@ export const FootprintCard = ({ footprint, onSelect }: FootprintProps) => {
             </section>
         </div>
     )
-}
+})

@@ -9,7 +9,6 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
         position: 'relative',
-        padding: theme.spacing(1, 0),
     },
     collectibleCard: {
         width: '100%',
@@ -34,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
 interface CollectibleItemProps extends HTMLProps<HTMLDivElement>, CollectibleCardProps {}
 
 export function CollectibleItem(props: CollectibleItemProps) {
-    const { provider, wallet, asset, readonly, renderOrder, address, className, ...rest } = props
+    const { provider, asset, readonly, renderOrder, address, className, ...rest } = props
     const { classes, cx } = useStyles()
     return (
         <div className={cx(classes.card, className)} {...rest}>
@@ -42,7 +41,6 @@ export function CollectibleItem(props: CollectibleItemProps) {
                 className={classes.collectibleCard}
                 asset={asset}
                 provider={provider}
-                wallet={wallet}
                 readonly={readonly}
                 renderOrder={renderOrder}
                 address={address}

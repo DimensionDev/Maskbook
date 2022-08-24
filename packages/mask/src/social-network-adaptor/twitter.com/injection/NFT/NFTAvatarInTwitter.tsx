@@ -94,13 +94,11 @@ function NFTAvatarInTwitter() {
     const { classes } = useStyles()
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
-    const onUpdate = (data: NFTAvatarEvent) => {
-        setNFTEvent(data)
-    }
     const openConfirmDialog = useShowConfirm()
     const saveNFTAvatar = useSaveNFTAvatar()
 
-    // After the avatar is set, it cannot be saved immediately, and must wait until the avatar of twitter is updated
+    // After the avatar is set, it cannot be saved immediately,
+    // and must wait until the avatar of twitter gets updated
     useAsync(async () => {
         if (!account || !NFTAvatar) return
         if (!identity.identifier) return
@@ -168,8 +166,8 @@ function NFTAvatarInTwitter() {
     }, [identity.avatar, openConfirmDialog, t, saveNFTAvatar])
 
     useEffect(() => {
-        return MaskMessages.events.NFTAvatarUpdated.on((data) => onUpdate(data))
-    }, [onUpdate])
+        return MaskMessages.events.NFTAvatarUpdated.on((data) => setNFTEvent(data))
+    }, [])
 
     useEffect(() => {
         if (!showAvatar) return
@@ -211,7 +209,7 @@ function NFTAvatarInTwitter() {
                 linkDom?.insertBefore(borderElement.current, linkDom.firstChild)
             }
             if (rainBowElement.current) {
-                rainBowElement.current?.classList.remove('rainbowBorder')
+                rainBowElement.current.classList.remove('rainbowBorder')
             }
         }
     }, [location.pathname, showAvatar])

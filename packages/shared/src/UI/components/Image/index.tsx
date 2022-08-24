@@ -12,6 +12,12 @@ const useStyles = makeStyles()((theme) => ({
         width: 30,
         height: 30,
     },
+    spinContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+    },
 }))
 
 interface ImageProps
@@ -42,7 +48,7 @@ export function Image({ fallbackImage, ...rest }: ImageProps) {
     if (imageLoading) {
         return (
             <Box className={classes.imageLoadingBox}>
-                <Box sx={{ position: 'relative' }}>
+                <Box className={classes.spinContainer}>
                     <CircularProgress
                         variant="determinate"
                         value={100}
