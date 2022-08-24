@@ -112,7 +112,7 @@ export const ProfileBar = memo<ProfileBarProps>(
 
         const [walletMenuOpen, setWalletMenuOpen] = useState(false)
 
-        const formattedAddress = address ? Others?.formatAddress(address, 4) ?? '' : address
+        const formattedAddress = Others?.formatAddress(address ?? '', 4) ?? ''
 
         return (
             <Box onClick={onClick} className={classes.root}>
@@ -147,16 +147,17 @@ export const ProfileBar = memo<ProfileBarProps>(
                     }}
                     onClose={() => setWalletMenuOpen(false)}>
                     {socialAddressList.map((x) => {
+                        const reversible = [
+                            SocialAddressType.KV,
+                            SocialAddressType.ADDRESS,
+                            SocialAddressType.NEXT_ID,
+                        ].includes(x.type)
                         return (
                             <MenuItem key={x.address} value={x.address} onClick={() => onAddressChange?.(x.address)}>
                                 <div className={classes.menuItem}>
                                     <div className={classes.addressItem}>
                                         <AddressItem
-                                            reverse={
-                                                x.type === SocialAddressType.KV ||
-                                                x.type === SocialAddressType.ADDRESS ||
-                                                x.type === SocialAddressType.NEXT_ID
-                                            }
+                                            reverse={reversible}
                                             identityAddress={x}
                                             iconProps={classes.secondLinkIcon}
                                         />

@@ -7,12 +7,13 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { useAvailablePlugins, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { makeStyles, MaskTabList, useStylesExtends, useTabs } from '@masknet/theme'
+import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, SocialIdentity } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { Box, CircularProgress, Tab, Typography } from '@mui/material'
 import { first } from 'lodash-unified'
 import { FC, useEffect, useMemo, useState } from 'react'
+import { Trans } from 'react-i18next'
 import { useUpdateEffect } from 'react-use'
 import { MaskMessages, sorter, useLocationChange } from '../../../utils'
 import { ProfileCardTitle } from './ProfileCardTitle'
@@ -140,13 +141,13 @@ const useStyles = makeStyles()((theme) => {
             zIndex: 2,
         },
         powerBy: {
-            color: theme.palette.text.primary,
+            color: theme.palette.text.secondary,
         },
     }
 })
 
 export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
-    const classes = useStylesExtends(useStyles(), { classes: rest.classes })
+    const { classes } = useStyles(undefined, { props: { classes: rest.classes } })
 
     const translate = usePluginI18NField()
     const {
@@ -161,12 +162,10 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
 
     const [selectedAddress, setSelectedAddress] = useState<string>()
     const firstAddress = first(availableSocialAddressList)?.address
-    useEffect(() => {
-        if (!selectedAddress && firstAddress) setSelectedAddress(firstAddress)
-    }, [selectedAddress, firstAddress])
+    const activeAddress = selectedAddress ?? firstAddress
     const selectedSocialAddress = useMemo(() => {
-        return availableSocialAddressList.find((x) => isSameAddress(x.address, selectedAddress))
-    }, [selectedAddress, availableSocialAddressList])
+        return availableSocialAddressList.find((x) => isSameAddress(x.address, activeAddress))
+    }, [activeAddress, availableSocialAddressList])
 
     const userId = identity.identifier?.userId
 
@@ -227,7 +226,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
                 <div className={classes.header}>
                     <ProfileCardTitle
                         socialAddressList={availableSocialAddressList}
-                        selectedAddress={selectedAddress}
+                        address={activeAddress}
                         onAddressChange={setSelectedAddress}
                         identity={identity}
                     />
@@ -245,10 +244,19 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
             <div className={classes.content}>{component}</div>
             <div className={classes.footer}>
                 <Typography variant="body1" className={classes.powerBy}>
-                    Powered by{' '}
-                    <Typography variant="body1" component="span" color="main">
-                        RSS3
-                    </Typography>
+                    <Trans
+                        i18nKey="powered_by_whom"
+                        values={{ whom: 'RSS3' }}
+                        components={{
+                            span: (
+                                <Typography
+                                    variant="body1"
+                                    component="span"
+                                    color={(theme) => theme.palette.text.primary}
+                                />
+                            ),
+                        }}
+                    />
                 </Typography>
                 <Icons.RSS3 size={24} sx={{ ml: '12px' }} />
             </div>

@@ -1,9 +1,10 @@
-import { CrossIsolationMessages, ProfileIdentifier } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_OBJECT, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Twitter } from '@masknet/web3-providers'
 import { CircularProgress } from '@mui/material'
 import { CSSProperties, useEffect, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
+import { useSocialIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { ProfileCard } from '../../../../components/InjectedComponents/ProfileCard'
 import { createReactRootShadowed } from '../../../../utils'
 import { twitterBase } from '../../base'
@@ -67,7 +68,7 @@ function ProfileCardHolder() {
     }, [])
 
     useEffect(() => {
-        document.body.addEventListener('click', (event) => {
+        const onClick = (event: MouseEvent) => {
             // @ts-ignore
             // `NODE.contains(other)` doesn't work for cross multiple layer of Shadow DOM
             if (!event.path.includes(holderRef.current)) {
@@ -79,7 +80,11 @@ function ProfileCardHolder() {
                     }
                 })
             }
-        })
+        }
+        document.body.addEventListener('click', onClick)
+        return () => {
+            document.body.removeEventListener('click', onClick)
+        }
     }, [])
 
     const { value: identity, loading } = useAsync(async () => {
@@ -102,14 +107,16 @@ function ProfileCardHolder() {
         }
     }, [twitterId])
 
+    const { value: resolvedIdentity, loading: resolving } = useSocialIdentity(identity ?? EMPTY_OBJECT)
+
     return (
         <div className={classes.root} style={style} ref={holderRef}>
-            {loading ? (
+            {loading || resolving ? (
                 <div className={classes.loading}>
                     <CircularProgress size={36} />
                 </div>
-            ) : identity ? (
-                <ProfileCard identity={identity} />
+            ) : resolvedIdentity ? (
+                <ProfileCard identity={resolvedIdentity} />
             ) : null}
         </div>
     )

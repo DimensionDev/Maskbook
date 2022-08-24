@@ -7,11 +7,9 @@ import { NetworkPluginID, SocialAddress, SocialAddressType, SocialIdentity } fro
 import { FC, HTMLProps, useMemo } from 'react'
 import { TipButton } from '../../../plugins/Tips/components'
 import type { TipAccount } from '../../../plugins/Tips/types'
-import { useIsMyIdentity } from '../../DataSource/useActivatedUI'
 import { ProfileBar } from './ProfileBar'
 
 const useStyles = makeStyles()((theme) => {
-    const isDark = theme.palette.mode === 'dark'
     return {
         title: {
             display: 'flex',
@@ -24,12 +22,13 @@ const useStyles = makeStyles()((theme) => {
         },
         gearIcon: {
             color: theme.palette.text.primary,
+            cursor: 'pointer',
         },
         tipButton: {
             width: 40,
             height: 40,
             borderRadius: 40,
-            border: `1px solid ${isDark ? theme.palette.maskColor.publicLine : theme.palette.maskColor.line}`,
+            border: `1px solid ${theme.palette.maskColor.line}`,
         },
     }
 })
@@ -37,19 +36,18 @@ const useStyles = makeStyles()((theme) => {
 interface Props extends HTMLProps<HTMLDivElement> {
     identity: SocialIdentity
     socialAddressList: Array<SocialAddress<NetworkPluginID>>
-    selectedAddress?: string
+    address?: string
     onAddressChange?(address: string): void
 }
 export const ProfileCardTitle: FC<Props> = ({
     className,
     socialAddressList,
-    selectedAddress,
+    address,
     identity,
     onAddressChange,
     ...rest
 }) => {
     const { classes, cx } = useStyles()
-    const isMyIdentity = useIsMyIdentity(identity)
     const { setDialog } = useRemoteControlledDialog(WalletMessages.events.ApplicationDialogUpdated)
     const handleOpenDialog = () => {
         setDialog({
@@ -74,12 +72,12 @@ export const ProfileCardTitle: FC<Props> = ({
             <ProfileBar
                 identity={identity}
                 socialAddressList={socialAddressList}
-                address={selectedAddress}
+                address={address}
                 onAddressChange={onAddressChange}
             />
             <div className={classes.settingItem}>
-                {isMyIdentity ? (
-                    <Icons.Gear onClick={handleOpenDialog} className={classes.gearIcon} sx={{ cursor: 'pointer' }} />
+                {identity.isOwner ? (
+                    <Icons.Gear onClick={handleOpenDialog} className={classes.gearIcon} />
                 ) : (
                     <TipButton className={classes.tipButton} receiver={identity.identifier} addresses={tipAccounts} />
                 )}

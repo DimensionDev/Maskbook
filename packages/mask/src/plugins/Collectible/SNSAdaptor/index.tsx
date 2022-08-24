@@ -75,7 +75,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             priority: 2,
             UI: {
                 TabContent({ socialAddress, identity }) {
-                    return <NFTPage socialAddress={socialAddress} identity={identity} disableSidebar />
+                    return <NFTPage socialAddress={socialAddress} identity={identity} />
                 },
             },
             Utils: {
