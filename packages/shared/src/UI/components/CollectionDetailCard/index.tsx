@@ -39,7 +39,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 8,
         objectFit: 'cover',
     },
-    loadingFailImage: {
+    fallbackImage: {
         minHeight: '0 !important',
         maxWidth: 'none',
         width: 300,
@@ -194,7 +194,7 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                                 url={img}
                                 tokenId={metadata?.token_id}
                                 classes={{
-                                    loadingFailImage: classes.loadingFailImage,
+                                    fallbackImage: classes.fallbackImage,
                                     wrapper: classes.img,
                                     iframe: classes.img,
                                 }}
