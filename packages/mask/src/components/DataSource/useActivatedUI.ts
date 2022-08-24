@@ -52,11 +52,10 @@ export function useCurrentVisitingIdentity() {
     return useValueRef(activatedSocialNetworkUI.collecting.currentVisitingIdentityProvider?.recognized || defaults)
 }
 
-export function useIsCurrentVisitingOwnerIdentity() {
+export function useIsOwnerIdentity(identity: IdentityResolved) {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
-    const currentVisitingIdentity = useCurrentVisitingIdentity()
     const lastRecognizedUserId = lastRecognizedIdentity.identifier?.userId
-    const currentVisitingUserId = currentVisitingIdentity.identifier?.userId
+    const currentVisitingUserId = identity.identifier?.userId
     return !!(
         lastRecognizedUserId &&
         currentVisitingUserId &&
@@ -111,10 +110,10 @@ export function useCurrentVisitingPersonas() {
 }
 
 /**
- * Get the social identity of the last recognized identity
+ * Get the social identity of the given identity
  */
-export function useLastRecognizedSocialIdentity() {
-    const identity = useLastRecognizedIdentity()
+export function useSocialIdentity(identity: IdentityResolved) {
+    const isOwner = useIsOwnerIdentity(identity)
 
     return useAsyncRetry<SocialIdentity>(async () => {
         const bindings = await queryPersonasFromNextID(identity)
@@ -123,11 +122,20 @@ export function useLastRecognizedSocialIdentity() {
             bindings?.filter((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()) ?? EMPTY_LIST
         return {
             ...identity,
+            isOwner,
             publicKey: persona?.identifier.publicKeyAsHex,
             hasBinding: personaBindings.length > 0,
             binding: first(personaBindings),
         }
-    }, [identity.identifier?.toText()])
+    }, [isOwner, identity.identifier?.toText()])
+}
+
+/**
+ * Get the social identity of the last recognized identity
+ */
+export function useLastRecognizedSocialIdentity() {
+    const identity = useLastRecognizedIdentity()
+    return useSocialIdentity(identity)
 }
 
 /**
@@ -135,23 +143,5 @@ export function useLastRecognizedSocialIdentity() {
  */
 export function useCurrentVisitingSocialIdentity() {
     const identity = useCurrentVisitingIdentity()
-    const isOwnerIdentity = useIsCurrentVisitingOwnerIdentity()
-
-    return useAsyncRetry<SocialIdentity>(async () => {
-        const bindings = await queryPersonasFromNextID(identity)
-        const persona = await queryPersonaFromDB(identity)
-        const sortedBindings = bindings?.sort((a, b) =>
-            sortPersonaBindings(a, b, identity.identifier?.userId.toLowerCase()),
-        )
-        const personaBindings =
-            bindings?.filter((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()) ?? EMPTY_LIST
-
-        return {
-            ...identity,
-            isOwner: isOwnerIdentity,
-            publicKey: isOwnerIdentity ? persona?.identifier.publicKeyAsHex : first(sortedBindings)?.persona,
-            hasBinding: personaBindings.length > 0,
-            binding: first(personaBindings),
-        }
-    }, [isOwnerIdentity, identity.identifier?.userId])
+    return useSocialIdentity(identity)
 }

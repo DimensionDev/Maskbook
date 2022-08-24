@@ -22,7 +22,7 @@ import { useLocationChange } from '../../utils/hooks/useLocationChange'
 import {
     useCurrentVisitingIdentity,
     useCurrentVisitingSocialIdentity,
-    useIsCurrentVisitingOwnerIdentity,
+    useIsOwnerIdentity,
 } from '../DataSource/useActivatedUI'
 import { TabContext } from '@mui/lab'
 
@@ -147,9 +147,9 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const [selectedAddress, setSelectedAddress] = useState<SocialAddress<NetworkPluginID> | undefined>()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
-    const isOwnerIdentity = useIsCurrentVisitingOwnerIdentity()
     const currentVisitingIdentity = useCurrentVisitingIdentity()
     const currentVisitingUserId = currentVisitingIdentity.identifier?.userId
+    const isOwnerIdentity = useIsOwnerIdentity(currentVisitingIdentity)
 
     const {
         value: currentVisitingSocialIdentity,
