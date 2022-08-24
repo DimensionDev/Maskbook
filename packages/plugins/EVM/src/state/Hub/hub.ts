@@ -209,7 +209,7 @@ class Hub implements EVM_Hub {
             chainId,
         })
         const { FUNGIBLE_TOKEN_LISTS = EMPTY_LIST } = getTokenListConstants(options.chainId)
-        return TokenList.fetchFungibleTokensFromTokenLists(options.chainId, FUNGIBLE_TOKEN_LISTS)
+        return TokenList.getFungibleTokens(options.chainId, FUNGIBLE_TOKEN_LISTS)
     }
 
     async getNonFungibleTokensFromTokenList(

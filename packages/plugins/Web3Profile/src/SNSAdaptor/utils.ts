@@ -1,5 +1,6 @@
 import {
     BindingProof,
+    EMPTY_LIST,
     fromHex,
     NextIDPlatform,
     NextIDStoragePayload,
@@ -180,27 +181,22 @@ export const getFootprintList = async (walletList: WalletTypes[]) => {
 }
 
 export const getNFTList = async (walletList: WalletTypes[]) => {
-    const promises = walletList.map(({ address, platform }) => {
-        return AlchemyEVM.getAssets(formatEthereumAddress(address), { chainId: ChainId.Mainnet }).then((result) => {
-            if (result) {
-                return {
-                    address,
-                    collections: result?.data?.map((asset) => ({
-                        key: `${asset?.contract?.address}_${asset.tokenId}`,
-                        address: asset?.address,
-                        platform: platform ?? NetworkPluginID.PLUGIN_EVM,
-                        tokenId: asset.tokenId,
-                        iconURL: asset?.metadata?.imageURL,
-                        name: asset?.metadata?.name,
-                        chainId: ChainId.Mainnet,
-                    })),
-                }
-            } else {
-                return {
-                    address,
-                }
-            }
+    const promises = walletList.map(async ({ address, platform }) => {
+        const { data: assets = EMPTY_LIST } = await AlchemyEVM.getAssets(formatEthereumAddress(address), {
+            chainId: ChainId.Mainnet,
         })
+        return {
+            address,
+            collections: assets.map((asset) => ({
+                key: `${asset?.contract?.address}_${asset.tokenId}`,
+                address: asset?.address,
+                platform: platform ?? NetworkPluginID.PLUGIN_EVM,
+                tokenId: asset.tokenId,
+                iconURL: asset?.metadata?.imageURL,
+                name: asset?.metadata?.name,
+                chainId: ChainId.Mainnet,
+            })),
+        }
     })
     const collections = await Promise.all(promises)
     return collections

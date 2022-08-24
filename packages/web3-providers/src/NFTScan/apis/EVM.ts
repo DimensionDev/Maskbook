@@ -17,7 +17,7 @@ import urlcat from 'urlcat'
 import { compact } from 'lodash-unified'
 import { LooksRare, OpenSea } from '../../'
 import { LooksRareLogo, OpenSeaLogo } from '../../resources'
-import { NonFungibleMarketplace, NonFungibleTokenAPI, TrendingAPI } from '../../types'
+import type { NonFungibleTokenAPI, TrendingAPI } from '../../types'
 import { NFTSCAN_API } from '../constants'
 import {
     ErcType,
@@ -39,6 +39,11 @@ import {
     createNonFungibleTokenCollectionFromGroup,
     createNonFungibleTokenCollectionFromCollection,
 } from '../utils'
+
+enum NonFungibleMarketplace {
+    OpenSea = 'OpenSea',
+    LooksRare = 'LooksRare',
+}
 
 export class NFTScanEVM_API
     implements NonFungibleTokenAPI.Provider<ChainId, SchemaType>, TrendingAPI.Provider<ChainId>

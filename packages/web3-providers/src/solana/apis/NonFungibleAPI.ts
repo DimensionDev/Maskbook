@@ -1,17 +1,13 @@
 import { Connection } from '@metaplex/js'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import {
-    createPageable,
-    HubOptions,
-    NonFungibleAsset,
-    NonFungibleToken,
-    Pageable,
-    TokenType,
-} from '@masknet/web3-shared-base'
-import { ChainId, SchemaType } from '@masknet/web3-shared-solana'
 import { Metadata } from '@metaplex-foundation/mpl-token-metadata'
-import { fetchJSON, GetProgramAccountsResponse, requestRPC, SPL_TOKEN_PROGRAM_ID } from './shared'
-import { ENDPOINT_KEY } from '../constants'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { createPageable, HubOptions, NonFungibleAsset, Pageable, TokenType } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType } from '@masknet/web3-shared-solana'
+import type { NonFungibleTokenAPI } from '../../types'
+import { ENDPOINT_KEY, SPL_TOKEN_PROGRAM_ID } from '../constants'
+import type { GetProgramAccountsResponse } from '../types'
+import { fetchJSON } from '../../helpers'
+import { requestRPC } from '../helpers'
 
 interface ExternalMetadata {
     name: string
@@ -32,7 +28,10 @@ interface ExternalMetadata {
     }
 }
 
-async function getNftList(chainId: ChainId, account: string): Promise<Array<NonFungibleToken<ChainId, SchemaType>>> {
+async function getNonFungibleAssets(
+    chainId: ChainId,
+    account: string,
+): Promise<Array<NonFungibleAsset<ChainId, SchemaType>>> {
     const data = await requestRPC<GetProgramAccountsResponse>(chainId, {
         method: 'getProgramAccounts',
         params: [
@@ -88,15 +87,16 @@ async function getNftList(chainId: ChainId, account: string): Promise<Array<NonF
     })
 
     const allSettled = await Promise.allSettled(promises)
-    const assets = allSettled.map((x) => (x.status === 'fulfilled' ? x.value : null)).filter(Boolean)
-    return assets as Array<NonFungibleAsset<ChainId, SchemaType>>
+    return allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value ?? [] : []))
 }
 
-export async function getNonFungibleAssets(
-    address: string,
-    options?: HubOptions<ChainId>,
-): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
-    const tokens = await getNftList(options?.chainId ?? ChainId.Mainnet, address)
+export class SolanaNonFungibleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+    async getAssets(
+        address: string,
+        options?: HubOptions<ChainId>,
+    ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
+        const tokens = await getNonFungibleAssets(options?.chainId ?? ChainId.Mainnet, address)
 
-    return createPageable(tokens, 0)
+        return createPageable(tokens, 0)
+    }
 }

@@ -5,7 +5,7 @@ import { TOKEN_LIST_URL } from '../../constants'
 
 export const fetchERC20TokensFromTokenListsMap = async (chainId: ChainId) => {
     const { FUNGIBLE_TOKEN_LISTS = [] } = getTokenListConstants(chainId)
-    const ERC20Tokens = await TokenList.fetchFungibleTokensFromTokenLists(chainId, [
+    const ERC20Tokens = await TokenList.getFungibleTokens(chainId, [
         ...FUNGIBLE_TOKEN_LISTS,
         TOKEN_LIST_URL,
     ])

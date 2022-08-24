@@ -1,0 +1,66 @@
+import {
+    CurrencyType,
+    FungibleAsset,
+    FungibleToken,
+    leftShift,
+    multipliedBy,
+    TokenType,
+} from '@masknet/web3-shared-base'
+import { ChainId, SchemaType } from '@masknet/web3-shared-solana'
+import { NETWORK_ENDPOINTS } from './constants'
+import type { RpcOptions } from './types'
+
+export async function requestRPC<T = unknown>(chainId: ChainId, options: RpcOptions): Promise<T> {
+    const endpoint = NETWORK_ENDPOINTS[chainId]
+    const response = await globalThis.fetch(endpoint, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        mode: 'cors',
+        body: JSON.stringify({
+            ...options,
+            jsonrpc: '2.0',
+            id: 0,
+        }),
+    })
+    const json = await response.json()
+    if (json.error) throw new Error(json.message || 'Fails in requesting RPC')
+    return json
+}
+
+export function createFungibleToken(
+    chainId: ChainId,
+    address: string,
+    name: string,
+    symbol: string,
+    decimals: number,
+    logoURL?: string,
+): FungibleToken<ChainId, SchemaType> {
+    return {
+        id: address,
+        chainId,
+        type: TokenType.Fungible,
+        schema: SchemaType.Fungible,
+        address,
+        name,
+        symbol,
+        decimals,
+        logoURL,
+    }
+}
+
+export function createFungibleAsset(
+    token: FungibleToken<ChainId, SchemaType>,
+    balance: string,
+    price?: { [key in CurrencyType]?: string },
+): FungibleAsset<ChainId, SchemaType> {
+    return {
+        ...token,
+        balance,
+        price,
+        value: {
+            [CurrencyType.USD]: multipliedBy(price?.usd ?? 0, leftShift(balance, token.decimals)).toFixed(),
+        },
+    }
+}

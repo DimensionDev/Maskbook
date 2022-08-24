@@ -1,9 +1,10 @@
-import { MagicEden } from '@masknet/web3-providers'
+import { MagicEden, SolanaFungible } from '@masknet/web3-providers'
 import {
     Account,
     ConnectionOptions,
     createNonFungibleToken,
     FungibleToken,
+    isSameAddress,
     NonFungibleToken,
     NonFungibleTokenCollection,
     NonFungibleTokenContract,
@@ -27,14 +28,13 @@ import {
     SystemProgram,
     Transaction,
 } from '@solana/web3.js'
-import { NETWORK_ENDPOINTS } from '../../constants'
-import { SolanaRPC } from '../../messages'
-import { Web3StateSettings } from '../../settings'
 import type { Plugin } from '@masknet/plugin-infra'
+import type { PartialRequired } from '@masknet/shared-base'
+import { NETWORK_ENDPOINTS } from '../../constants'
+import { Web3StateSettings } from '../../settings'
 import { Providers } from './provider'
 import { createTransferInstruction, getOrCreateAssociatedTokenAccount } from './spl-token'
 import type { SolanaConnection as BaseConnection, SolanaWeb3ConnectionOptions } from './types'
-import type { PartialRequired } from '@masknet/shared-base'
 
 class Connection implements BaseConnection {
     private connections: Map<ChainId, SolConnection> = new Map()
@@ -248,7 +248,9 @@ class Connection implements BaseConnection {
         if (isNativeTokenAddress(address)) {
             return this.getNativeTokenBalance(options)
         }
-        return SolanaRPC.getSplTokenBalance(options.chainId, options.account, address)
+        const { data: assets } = await SolanaFungible.getAssets(options.account, options)
+        const splToken = assets.find((x) => isSameAddress(x.address, address))
+        return splToken?.balance ?? '0'
     }
     getNonFungibleTokenBalance(
         address: string,
@@ -264,8 +266,8 @@ class Connection implements BaseConnection {
     ): Promise<Record<string, string>> {
         const options = this.getOptions(initial)
         if (!options.account) return {}
-        const splTokens = await SolanaRPC.getSplTokenList(options.chainId, options.account)
-        const records = splTokens.reduce(
+        const { data: assets } = await SolanaFungible.getAssets(options.account, options)
+        const records = assets.reduce(
             (map: Record<string, string>, asset) => ({ ...map, [asset.address]: asset.balance }),
             {},
         )
@@ -406,7 +408,7 @@ class Connection implements BaseConnection {
         if (!address || isNativeTokenAddress(address)) {
             return this.getNativeToken()
         }
-        const splTokens = await SolanaRPC.getAllSplTokens()
+        const splTokens = await SolanaFungible.getFungibleTokens(options.chainId, [])
         const token = splTokens.find((x) => x.address === address)
         return (
             token ??

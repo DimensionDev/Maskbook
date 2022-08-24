@@ -27,6 +27,7 @@ import { RabbyAPI } from './rabby'
 import { GemAPI } from './gem'
 import { X2Y2API } from './x2y2'
 import { ChainbaseHistoryAPI, ChainbaseFungibleTokenAPI, ChainbaseNonFungibleTokenAPI } from './chainbase'
+import { SolanaFungibleAPI, SolanaNonFungibleAPI } from './solana'
 
 export * from './helpers'
 export * from './types'
@@ -64,6 +65,8 @@ export const CoinMarketCap = new CoinMarketCapAPI()
 export const UniSwap = new UniSwapAPI()
 export const Rabby = new RabbyAPI()
 export const X2Y2 = new X2Y2API()
+export const SolanaFungible = new SolanaFungibleAPI()
+export const SolanaNonFungible = new SolanaNonFungibleAPI()
 export const ChainbaseHistory = new ChainbaseHistoryAPI()
 export const ChainbaseFungibleToken = new ChainbaseFungibleTokenAPI()
 export const ChainbaseNonFungibleToken = new ChainbaseNonFungibleTokenAPI()
