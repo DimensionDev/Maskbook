@@ -15,13 +15,11 @@ import { Trans } from 'react-i18next'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { UnreviewedWarning } from '../UnreviewedWarning'
 import { useI18N } from '../../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { InjectedDialog } from '@masknet/shared'
 import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
-import { PluginTraderMessages } from '../../../Trader/messages'
 import { CheckoutOrder } from './CheckoutOrder'
-import type { Coin } from '../../../Trader/types'
 import { isGreaterThan, NetworkPluginID, NonFungibleAsset } from '@masknet/web3-shared-base'
 import { useAccount, useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
 import type { Order } from 'opensea-js/lib/types'
@@ -85,23 +83,15 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
         })
     }, [account, asset, order, opensea])
 
-    const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
-
     const onConvertClick = useCallback(() => {
         if (!token?.value) return
-        openSwapDialog({
+        CrossIsolationMessages.events.swapDialogUpdate.sendToLocal({
             open: true,
             traderProps: {
-                coin: {
-                    id: token.value.address,
-                    name: token.value.name ?? '',
-                    symbol: token.value.symbol ?? '',
-                    contract_address: token.value.address,
-                    decimals: token.value.decimals,
-                } as Coin,
+                defaultInputCoin: token.value,
             },
         })
-    }, [token.value, openSwapDialog])
+    }, [token.value])
 
     const validationMessage = useMemo(() => {
         if (isGreaterThan(order?.basePrice ?? 0, balance.value ?? 0)) {
