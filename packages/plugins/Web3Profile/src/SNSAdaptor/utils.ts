@@ -11,7 +11,8 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '../../../../web3-shared/base/src/utils'
 import { PLUGIN_ID } from '../constants'
-import type { AccountType, Collection, CollectionTypes, PersonaKV, WalletsCollection, WalletTypes } from './types'
+import type { AccountType, PersonaKV, Collection } from './types'
+import type { CollectionTypes, WalletTypes, WalletsCollection } from '@masknet/shared'
 
 export const formatPublicKey = (publicKey?: string) => {
     return `${publicKey?.slice(0, 6)}...${publicKey?.slice(-6)}`

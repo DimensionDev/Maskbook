@@ -1,18 +1,16 @@
 import { Icons } from '@masknet/icons'
-import { PluginId } from '@masknet/plugin-infra'
-import { CollectionDetailCard } from '@masknet/shared'
-import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
+import { CollectionDetailCard, useWeb3ProfileHiddenSetting } from '@masknet/shared'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { CollectionType, RSS3BaseAPI } from '@masknet/web3-providers'
 import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
 import { formatEthereumAddress, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Box, List, ListItem, Typography } from '@mui/material'
 import { useMemo, useState } from 'react'
+import { differenceWith } from 'lodash-unified'
 import { useI18N } from '../../locales'
 import { DonationCard, StatusBox } from '../components'
-import { useAvailableCollections, useDonations } from '../hooks'
-import { useKV } from '../hooks/useKV'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { useDonations } from '../hooks'
 
 const useStyles = makeStyles()((theme) => ({
     statusBox: {
@@ -54,25 +52,20 @@ export interface DonationPageProps {
 export function DonationPage({ socialAddress, publicKey, userId }: DonationPageProps) {
     const { classes } = useStyles()
     const t = useI18N()
-    const { value: kvValue } = useKV(publicKey)
     const { value: allDonations = EMPTY_LIST, loading } = useDonations(
         formatEthereumAddress(socialAddress?.address ?? ZERO_ADDRESS),
     )
-    const donations = useAvailableCollections(
-        kvValue?.proofs ?? EMPTY_LIST,
-        allDonations,
-        CollectionType.Donations,
-        userId,
-        socialAddress?.address,
-    )
 
-    const isHiddenAddress = useMemo(() => {
-        return kvValue?.proofs
-            .find((proof) => proof?.platform === NextIDPlatform.Twitter && proof?.identity === userId?.toLowerCase())
-            ?.content?.[PluginId.Web3Profile]?.hiddenAddresses?.donations?.some((x) =>
-                isSameAddress(x.address, socialAddress?.address),
-            )
-    }, [userId, socialAddress, kvValue?.proofs])
+    const { isHiddenAddress, hiddenList } = useWeb3ProfileHiddenSetting(userId, publicKey, {
+        address: socialAddress?.address,
+        hiddenAddressesKey: 'donations',
+        collectionKey: CollectionType.Donations,
+    })
+
+    const donations = useMemo(() => {
+        if (!hiddenList.length) return allDonations
+        return differenceWith(allDonations, hiddenList, (donation, id) => donation.id === id)
+    }, [hiddenList, allDonations])
 
     const [selectedDonation, setSelectedDonation] = useState<RSS3BaseAPI.Collection | undefined>()
 

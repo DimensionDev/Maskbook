@@ -1,7 +1,6 @@
-import type { CollectionTypes } from '../types'
 import { List, ListItem } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { NFTImageCollectibleAvatar } from '@masknet/shared'
+import { NFTImageCollectibleAvatar, CollectionTypes } from '@masknet/shared'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
 
