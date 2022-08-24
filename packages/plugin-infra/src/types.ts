@@ -1057,6 +1057,7 @@ export enum PluginId {
     Web3Profile = 'io.mask.web3-profile',
     Web3ProfileCard = 'io.mask.web3-profile-card',
     ScamSniffer = 'io.scamsniffer.mask-plugin',
+    NFTCard = 'com.maskbook.nft-card',
     // @masknet/scripts: insert-here
 }
 /**
