@@ -6,7 +6,7 @@ import {
     EthereumWeb3,
     MetaSwap,
     AstarGas,
-    NFTScanEVM,
+    NFTScanNonFungibleTokenEVM,
     OpenSea,
     Rarible,
     TokenList,
@@ -22,7 +22,7 @@ import {
 import {
     FungibleToken,
     NonFungibleToken,
-    NonFungibleTokenCollection,
+    NonFungibleCollection,
     SourceType,
     FungibleAsset,
     HubOptions,
@@ -110,7 +110,7 @@ class Hub implements EVM_Hub {
         const options = this.getOptions(initial)
         return this.getProviders<NonFungibleTokenAPI.Provider<ChainId, SchemaType>>(
             {
-                [SourceType.NFTScan]: NFTScanEVM,
+                [SourceType.NFTScan]: NFTScanNonFungibleTokenEVM,
                 [SourceType.Rarible]: Rarible,
                 [SourceType.OpenSea]: OpenSea,
                 [SourceType.Alchemy_EVM]: AlchemyEVM,
@@ -118,8 +118,8 @@ class Hub implements EVM_Hub {
                 [SourceType.Zora]: Zora,
             },
             options.chainId === ChainId.Mainnet
-                ? [NFTScanEVM, Rarible, OpenSea, AlchemyEVM, LooksRare, Zora]
-                : [NFTScanEVM, Rarible, AlchemyEVM, OpenSea, LooksRare, Zora],
+                ? [NFTScanNonFungibleTokenEVM, Rarible, OpenSea, AlchemyEVM, LooksRare, Zora]
+                : [NFTScanNonFungibleTokenEVM, Rarible, AlchemyEVM, OpenSea, LooksRare, Zora],
             initial,
         )
     }
@@ -161,14 +161,14 @@ class Hub implements EVM_Hub {
         address: string,
         initial?: HubOptions<ChainId>,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
-        return NFTScanEVM.getAssetsByCollection(address, initial)
+        return NFTScanNonFungibleTokenEVM.getAssetsByCollection(address, initial)
     }
 
     async getNonFungibleTokenContract(
         address: string,
         initial?: HubOptions<ChainId, HubIndicator> | undefined,
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined> {
-        return NFTScanEVM.getContract(address, initial)
+        return NFTScanNonFungibleTokenEVM.getContract(address, initial)
     }
 
     async getFungibleTokenBalance(
@@ -449,14 +449,14 @@ class Hub implements EVM_Hub {
     async getNonFungibleCollectionsByOwner(
         account: string,
         initial?: HubOptions<ChainId>,
-    ): Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>>> {
+    ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>>> {
         const options = this.getOptions(initial)
         const providers = this.getProviders<NonFungibleTokenAPI.Provider<ChainId, SchemaType>>(
             {
-                [SourceType.NFTScan]: NFTScanEVM,
+                [SourceType.NFTScan]: NFTScanNonFungibleTokenEVM,
                 [SourceType.OpenSea]: OpenSea,
             },
-            [NFTScanEVM, OpenSea],
+            [NFTScanNonFungibleTokenEVM, OpenSea],
             initial,
         )
 
@@ -469,15 +469,15 @@ class Hub implements EVM_Hub {
     async getNonFungibleCollectionsByKeyword(
         keyword: string,
         initial?: HubOptions<ChainId>,
-    ): Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>>> {
+    ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>>> {
         const options = this.getOptions(initial)
         const providers = this.getProviders<NonFungibleTokenAPI.Provider<ChainId, SchemaType>>(
             {
-                [SourceType.NFTScan]: NFTScanEVM,
+                [SourceType.NFTScan]: NFTScanNonFungibleTokenEVM,
                 [SourceType.Chainbase]: ChainbaseNonFungibleToken,
                 [SourceType.Zora]: Zora,
             },
-            [NFTScanEVM, ChainbaseNonFungibleToken, Zora],
+            [NFTScanNonFungibleTokenEVM, ChainbaseNonFungibleToken, Zora],
             initial,
         )
 

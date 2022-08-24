@@ -1,2 +1,3 @@
-export * from './apis/EVM'
-export * from './apis/Solana'
+export * from './apis/NonFungibleTokenAPI_EVM'
+export * from './apis/NonFungibleTokenAPI_Solana'
+export * from './apis/TrendingAPI'

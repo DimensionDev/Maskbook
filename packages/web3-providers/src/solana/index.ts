@@ -1,2 +1,2 @@
-export * from './apis/FungibleAPI'
-export * from './apis/NonFungibleAPI'
+export * from './apis/FungibleTokenAPI'
+export * from './apis/NonFungibleTokenAPI'

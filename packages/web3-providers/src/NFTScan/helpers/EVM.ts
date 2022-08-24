@@ -8,7 +8,7 @@ import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 import {
     createLookupTableResolver,
     NonFungibleAsset,
-    NonFungibleTokenCollection,
+    NonFungibleCollection,
     NonFungibleTokenContract,
     NonFungibleTokenEvent,
     scale10,
@@ -22,9 +22,9 @@ import {
     SchemaType,
     WNATIVE,
 } from '@masknet/web3-shared-evm'
-import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from './constants'
-import type { Asset, Collection, Payload, AssetsGroup, Transaction } from './types'
-import { courier, getPaymentToken } from '../helpers'
+import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants'
+import type { EVM } from '../types/EVM'
+import { courier, getJSON, getPaymentToken } from '../../helpers'
 
 type NFTScanChainId = ChainId.Mainnet | ChainId.Matic | ChainId.BSC | ChainId.Arbitrum | ChainId.Optimism
 
@@ -79,15 +79,6 @@ export async function getContractSymbol(address: string, chainId: ChainId) {
     }
 }
 
-export function getPayload(json?: string): Payload {
-    if (!json) return {}
-    try {
-        return JSON.parse(json) as Payload
-    } catch {
-        return {}
-    }
-}
-
 export function createPermalink(chainId: ChainId, address: string, tokenId: string) {
     return urlcat(resolveHostName(chainId as NFTScanChainId) || 'https://www.nftscan.com', '/:address/:tokenId', {
         address,
@@ -95,8 +86,8 @@ export function createPermalink(chainId: ChainId, address: string, tokenId: stri
     })
 }
 
-export function createNonFungibleTokenAsset(chainId: ChainId, asset: Asset): NonFungibleAsset<ChainId, SchemaType> {
-    const payload = getPayload(asset.metadata_json)
+export function createNonFungibleAsset(chainId: ChainId, asset: EVM.Asset): NonFungibleAsset<ChainId, SchemaType> {
+    const payload = getJSON<EVM.Payload>(asset.metadata_json)
     const name = payload?.name || asset.name || asset.contract_name || ''
     const description = payload?.description
     const mediaURL = resolveIPFSLinkFromURL(
@@ -172,28 +163,28 @@ export function createNonFungibleTokenAsset(chainId: ChainId, asset: Asset): Non
     }
 }
 
-export function createNonFungibleTokenCollectionFromGroup(
+export function createNonFungibleCollectionFromGroup(
     chainId: ChainId,
-    group: AssetsGroup,
-): NonFungibleTokenCollection<ChainId, SchemaType> {
+    group: EVM.AssetsGroup,
+): NonFungibleCollection<ChainId, SchemaType> {
     const sample = first(group.assets)
-    const payload = getPayload(sample?.metadata_json)
+    const payload = getJSON<EVM.Payload>(sample?.metadata_json)
     return {
         chainId,
         schema: sample?.erc_type === 'erc1155' ? SchemaType.ERC1155 : SchemaType.ERC721,
         name: group.contract_name,
         slug: group.contract_name,
         address: group.contract_address,
-        description: group.description || payload.description,
+        description: group.description || payload?.description,
         iconURL: group.logo_url,
-        balance: group.assets.length,
+        tokensTotal: group.assets.length,
     }
 }
 
-export function createNonFungibleTokenCollectionFromCollection(
+export function createNonFungibleCollectionFromCollection(
     chainId: ChainId,
-    collection: Collection,
-): NonFungibleTokenCollection<ChainId, SchemaType> {
+    collection: EVM.Collection,
+): NonFungibleCollection<ChainId, SchemaType> {
     return {
         chainId,
         schema: collection.erc_type === 'erc1155' ? SchemaType.ERC1155 : SchemaType.ERC721,
@@ -203,12 +194,13 @@ export function createNonFungibleTokenCollectionFromCollection(
         address: collection.contract_address,
         description: collection.description,
         iconURL: collection.logo_url,
+        verified: collection.verified,
     }
 }
 
 export function createNonFungibleTokenContract(
     chainId: ChainId,
-    collection: Collection,
+    collection: EVM.Collection,
 ): NonFungibleTokenContract<ChainId, SchemaType> {
     return {
         chainId,
@@ -224,7 +216,7 @@ export function createNonFungibleTokenContract(
 
 export function createNonFungibleTokenEvent(
     chainId: ChainId,
-    transaction: Transaction,
+    transaction: EVM.Transaction,
 ): NonFungibleTokenEvent<ChainId, SchemaType> {
     const paymentToken = getPaymentToken(chainId, { symbol: transaction.trade_symbol })
     return {
