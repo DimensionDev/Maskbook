@@ -137,7 +137,7 @@ function createBuilder({ id, manifestRoot, distPath, onJS, origin }: BuilderOpti
             since: lastRun(compile),
             cwd: manifestRoot,
         })
-            .pipe(new TransformStream(id, onJS))
+            .pipe(new TransformStream(origin, onJS))
             .pipe(dest(origin, { cwd: distPath }))
     }
     return compile
