@@ -4,13 +4,14 @@ import {
     useFungibleToken,
     useNetworkType,
     useNonFungibleAssetsByCollection,
+    useChainId,
 } from '@masknet/plugin-infra/web3'
 import { DataProvider } from '@masknet/public-api'
 import { NFTList } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, useTabs, ActionButton } from '@masknet/theme'
-import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
-import { isNativeTokenSymbol } from '@masknet/web3-shared-evm'
+import { NetworkPluginID, TokenType, createFungibleToken } from '@masknet/web3-shared-base'
+import { isNativeTokenSymbol, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { Link, Stack, Tab } from '@mui/material'
 import { Box, useTheme } from '@mui/system'
@@ -119,6 +120,7 @@ export function TraderView(props: TraderViewProps) {
 
     const { t } = useI18N()
     const { classes } = useStyles({ isPopper })
+    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const theme = useTheme()
     const isMinimalMode = useIsMinimalMode(PluginId.Trader)
     const dataProvider = useCurrentDataProvider(dataProviders)
@@ -342,8 +344,16 @@ export function TraderView(props: TraderViewProps) {
                     <TradeView
                         classes={{ root: classes.tradeViewRoot }}
                         TraderProps={{
-                            coin,
-                            tokenDetailed,
+                            defaultInputCoin: coin.address
+                                ? createFungibleToken(
+                                      chainId,
+                                      isNativeTokenAddress(coin.address) ? SchemaType.Native : SchemaType.ERC20,
+                                      coin.address,
+                                      coin.name,
+                                      coin.symbol,
+                                      coin.decimals ?? 0,
+                                  )
+                                : undefined,
                         }}
                     />
                 ) : null}

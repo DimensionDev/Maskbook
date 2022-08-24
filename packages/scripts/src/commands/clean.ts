@@ -6,7 +6,11 @@ import { fileURLToPath } from 'url'
 export async function clean() {
     const rimraf = await import('rimraf')
     const rm = promisify(rimraf.default)
-    await awaitChildProcess(shell.cwd(ROOT_PATH)`git clean -xdf -e node_modules ./packages/`)
+    await awaitChildProcess(
+        shell.cwd(
+            ROOT_PATH,
+        )`git clean -xdf -e node_modules -e plugins-local.json -e i18n_generated.* -e icon-generated-as-* ./packages/`,
+    )
     printShell`rm -rf **/node_modules/.cache`
     await rm(join(fileURLToPath(ROOT_PATH), '**/node_modules/.cache'))
     await awaitChildProcess(shell.cwd(ROOT_PATH)`pnpm install --frozen-lockfile --prefer-offline`)

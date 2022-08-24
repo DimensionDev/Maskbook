@@ -39,7 +39,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 8,
         objectFit: 'cover',
     },
-    loadingFailImage: {
+    fallbackImage: {
         minHeight: '0 !important',
         maxWidth: 'none',
         width: 300,
@@ -153,7 +153,7 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
         date,
         location,
         relatedURLs = EMPTY_LIST,
-        traits,
+        traits = EMPTY_LIST,
         type,
         time,
         tokenAmount,
@@ -194,7 +194,7 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                                 url={img}
                                 tokenId={metadata?.token_id}
                                 classes={{
-                                    loadingFailImage: classes.loadingFailImage,
+                                    fallbackImage: classes.fallbackImage,
                                     wrapper: classes.img,
                                     iframe: classes.img,
                                 }}
@@ -236,32 +236,30 @@ export const CollectionDetailCard = memo<CollectionDetailCardProps>(
                             <Typography fontSize="16px" fontWeight={700} marginBottom="16px">
                                 {1}
                             </Typography>
+                            <div className={classes.txItem}>
+                                <Typography className={classes.donationAmount}>
+                                    {tokenAmount} {tokenSymbol}
+                                </Typography>
+                                <div className={classes.dayBox}>
+                                    {formatDistanceToNow(new Date(time ?? 0))} {t.ago()}
+                                    <Link
+                                        className={classes.linkBox}
+                                        target="_blank"
+                                        href={explorerResolver.transactionLink(ChainId.Mainnet, hash ?? ZERO_ADDRESS)}>
+                                        <Icons.LinkOut size={18} className={classes.linkOutIcon} />
+                                    </Link>
+                                </div>
+                            </div>
                         </>
                     ) : null}
-                    {type === CollectionType.Donations && (
-                        <div className={classes.txItem}>
-                            <Typography className={classes.donationAmount}>
-                                {tokenAmount} {tokenSymbol}
-                            </Typography>
-                            <div className={classes.dayBox}>
-                                {formatDistanceToNow(new Date(time ?? 0))} {t.ago()}
-                                <Link
-                                    className={classes.linkBox}
-                                    target="_blank"
-                                    href={explorerResolver.transactionLink(ChainId.Mainnet, hash ?? ZERO_ADDRESS)}>
-                                    <Icons.LinkOut size={18} className={classes.linkOutIcon} />
-                                </Link>
-                            </div>
-                        </div>
-                    )}
-                    {traits && traits.length > 0 && (
+                    {traits.length > 0 && (
                         <Typography fontSize="16px" fontWeight={700}>
                             {t.properties()}
                         </Typography>
                     )}
-                    {traits && traits.length > 0 && (
+                    {traits.length > 0 && (
                         <Box className={classes.traitsBox}>
-                            {traits?.map((trait) => (
+                            {traits.map((trait) => (
                                 <div key={trait.type + trait.value} className={classes.traitItem}>
                                     <Typography className={classes.secondText}>{trait.type}</Typography>
                                     <Typography className={classes.traitValue}>{trait.value}</Typography>

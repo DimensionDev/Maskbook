@@ -24,6 +24,10 @@ const useStyles = makeStyles()((theme) => ({
         height: 160,
         width: 120,
     },
+    fallbackImage: {
+        height: '64px !important',
+        width: '64px !important',
+    },
     loadingIcon: {
         width: 30,
         height: 30,
@@ -42,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface Props extends withClasses<'loadingFailImage' | 'iframe' | 'wrapper' | 'loadingPlaceholder' | 'imgWrapper'> {
+interface Props extends withClasses<'fallbackImage' | 'iframe' | 'wrapper' | 'loadingPlaceholder' | 'imgWrapper'> {
     chainId?: Web3Helper.ChainIdAll
     tokenId?: string
     contractAddress?: string
@@ -104,7 +108,15 @@ export function NFTCardStyledAssetPlayer(props: Props) {
     if (isImageURL || isImageOnly) {
         return (
             <div className={classes.imgWrapper}>
-                <Image width="100%" height="100%" style={{ objectFit: 'cover' }} src={urlComputed} />
+                <Image
+                    classes={{
+                        fallbackImage: classes.fallbackImage,
+                    }}
+                    width="100%"
+                    height="100%"
+                    style={{ objectFit: 'cover' }}
+                    src={urlComputed}
+                />
                 {showNetwork && <ImageIcon icon={networkIcon} size={20} classes={{ icon: classes.networkIcon }} />}
             </div>
         )
@@ -135,9 +147,9 @@ export function NFTCardStyledAssetPlayer(props: Props) {
                 iframe: classNames(classes.wrapper, classes.iframe),
                 errorPlaceholder: classes.wrapper,
                 loadingPlaceholder: classes.wrapper,
-                loadingFailImage: classes.loadingFailImage,
+                fallbackImage: classes.fallbackImage,
                 loadingIcon: classes.loadingIcon,
-                errorIcon: classes.loadingFailImage,
+                errorIcon: classes.fallbackImage,
             }}
             showNetwork={showNetwork}
             networkIcon={networkIcon}

@@ -46,9 +46,9 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface DonationPageProps {
-    socialAddress: SocialAddress<NetworkPluginID>
-    publicKey: string
-    userId: string
+    socialAddress?: SocialAddress<NetworkPluginID>
+    userId?: string
+    publicKey?: string
 }
 
 export function DonationPage({ socialAddress, publicKey, userId }: DonationPageProps) {
@@ -60,27 +60,31 @@ export function DonationPage({ socialAddress, publicKey, userId }: DonationPageP
     )
     const donations = useAvailableCollections(
         kvValue?.proofs ?? EMPTY_LIST,
-        CollectionType.Donations,
         allDonations,
+        CollectionType.Donations,
         userId,
-        socialAddress.address,
+        socialAddress?.address,
     )
 
     const isHiddenAddress = useMemo(() => {
         return kvValue?.proofs
             .find((proof) => proof?.platform === NextIDPlatform.Twitter && proof?.identity === userId?.toLowerCase())
             ?.content?.[PluginId.Web3Profile]?.hiddenAddresses?.donations?.some((x) =>
-                isSameAddress(x.address, socialAddress.address),
+                isSameAddress(x.address, socialAddress?.address),
             )
     }, [userId, socialAddress, kvValue?.proofs])
 
     const [selectedDonation, setSelectedDonation] = useState<RSS3BaseAPI.Collection | undefined>()
 
     if (loading || !donations.length) {
-        return <StatusBox loading={loading} description={t.no_Donation_found()} empty={!donations.length} />
+        return (
+            <Box p={2}>
+                <StatusBox loading={loading} description={t.no_Donation_found()} empty={!donations.length} />
+            </Box>
+        )
     }
 
-    if (isHiddenAddress) {
+    if (isHiddenAddress || !socialAddress) {
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height={400}>
                 <Icons.EmptySimple size={32} />
@@ -91,12 +95,12 @@ export function DonationPage({ socialAddress, publicKey, userId }: DonationPageP
         )
     }
     return (
-        <Box margin="16px 0 0 16px">
+        <Box p={2}>
             <List className={classes.list}>
                 {donations.map((donation) => (
                     <ListItem key={donation.id} className={classes.listItem}>
                         <DonationCard
-                            onSelect={() => setSelectedDonation(donation)}
+                            onSelect={setSelectedDonation}
                             className={classes.donationCard}
                             donation={donation}
                             socialAddress={socialAddress}
@@ -104,19 +108,21 @@ export function DonationPage({ socialAddress, publicKey, userId }: DonationPageP
                     </ListItem>
                 ))}
             </List>
-            <CollectionDetailCard
-                open={Boolean(selectedDonation)}
-                onClose={() => setSelectedDonation(undefined)}
-                img={selectedDonation?.imageURL}
-                title={selectedDonation?.title}
-                referenceURL={selectedDonation?.actions?.[0]?.related_urls?.[0]}
-                description={selectedDonation?.description}
-                type={CollectionType.Donations}
-                time={selectedDonation?.timestamp}
-                tokenSymbol={selectedDonation?.tokenSymbol}
-                tokenAmount={selectedDonation?.tokenAmount?.toString()}
-                hash={selectedDonation?.hash}
-            />
+            {selectedDonation ? (
+                <CollectionDetailCard
+                    open
+                    onClose={() => setSelectedDonation(undefined)}
+                    img={selectedDonation?.imageURL}
+                    title={selectedDonation?.title}
+                    referenceURL={selectedDonation?.actions?.[0]?.related_urls?.[0]}
+                    description={selectedDonation?.description}
+                    type={CollectionType.Donations}
+                    time={selectedDonation?.timestamp}
+                    tokenSymbol={selectedDonation?.tokenSymbol}
+                    tokenAmount={selectedDonation?.tokenAmount?.toString()}
+                    hash={selectedDonation?.hash}
+                />
+            ) : null}
         </Box>
     )
 }

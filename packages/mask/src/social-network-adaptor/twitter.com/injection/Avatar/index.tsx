@@ -36,10 +36,10 @@ export async function injectAvatar(signal: AbortSignal) {
                     <div
                         style={{
                             position: 'absolute',
-                            left: 0,
-                            top: 0,
-                            width: '100%',
-                            height: '100%',
+                            right: -4,
+                            bottom: -4,
+                            width: 16,
+                            height: 16,
                             zIndex: 2,
                         }}>
                         {identity ? <Avatar identity={identity} sourceType={sourceType} /> : null}

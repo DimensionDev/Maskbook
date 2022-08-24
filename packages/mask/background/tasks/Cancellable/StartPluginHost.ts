@@ -3,9 +3,14 @@ import { createPluginDatabase } from '../../database/plugin-db'
 import { createPluginHost, createSharedContext } from '../../../shared/plugin-infra/host'
 import { getPluginMinimalModeEnabled } from '../../services/settings/old-settings-accessor'
 import { hmr } from '../../../utils-pure'
+import { startBackgroundHost } from '@masknet/sandboxed-plugin-runtime/background'
+import { Flags } from '../../../shared/flags'
 
 const { signal } = hmr(import.meta.webpackHot)
 startPluginWorker(createPluginHost(signal, createWorkerContext, getPluginMinimalModeEnabled))
+if (Flags.sandboxedPluginRuntime) {
+    startBackgroundHost(signal, process.env.NODE_ENV === 'development')
+}
 
 function createWorkerContext(pluginID: string, signal: AbortSignal): Plugin.Worker.WorkerContext {
     let storage: Plugin.Worker.DatabaseStorage<any> = undefined!

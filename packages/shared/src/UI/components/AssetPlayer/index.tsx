@@ -18,7 +18,7 @@ interface ERC721TokenQuery {
 
 interface AssetPlayerProps
     extends withClasses<
-        'errorPlaceholder' | 'errorIcon' | 'loadingPlaceholder' | 'loadingIcon' | 'loadingFailImage' | 'iframe'
+        'errorPlaceholder' | 'errorIcon' | 'loadingPlaceholder' | 'loadingIcon' | 'fallbackImage' | 'iframe'
     > {
     url?: string
     type?: string
@@ -209,13 +209,13 @@ export const AssetPlayer = memo<AssetPlayerProps>((props) => {
                 {playerState === AssetPlayerState.ERROR
                     ? props.fallbackResourceLoader ??
                       (props.fallbackImage ? (
-                          <img className={classes.loadingFailImage} src={props.fallbackImage.toString()} />
+                          <img className={classes.fallbackImage} src={props.fallbackImage.toString()} />
                       ) : (
                           <Icons.MaskPlaceholder className={classes.errorIcon} {...iconProps} />
                       ))
                     : props.loadingIcon ??
                       (props.fallbackImage && (
-                          <img className={classes.loadingFailImage} src={props.fallbackImage.toString()} />
+                          <img className={classes.fallbackImage} src={props.fallbackImage.toString()} />
                       )) ?? <Icons.AssetLoading className={classes.loadingIcon} />}
             </Box>
             {IframeResizerMemo}

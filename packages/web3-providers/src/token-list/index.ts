@@ -79,7 +79,7 @@ export class TokenListAPI implements TokenListBaseAPI.Provider<ChainId, SchemaTy
 
         return result(url, chainId)
     }
-    async getNonFungibleTokens(chainId: ChainId, urls: string[]): Promise<NonFungibleToken<ChainId, SchemaType>[]> {
+    async getNonFungibleTokens(chainId: ChainId, urls: string[]): Promise<Array<NonFungibleToken<ChainId, SchemaType>>> {
         return EMPTY_LIST
     }
 }

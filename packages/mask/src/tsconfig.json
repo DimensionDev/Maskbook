@@ -5,7 +5,7 @@
     "outDir": "../dist/src/",
     "tsBuildInfoFile": "../dist/legacy.tsbuildinfo",
     "emitDeclarationOnly": true,
-    "lib": ["ES2021"]
+    "lib": ["ES2022"]
   },
   "include": ["./", "./**/*.json"],
 

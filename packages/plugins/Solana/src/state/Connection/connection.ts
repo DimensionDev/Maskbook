@@ -13,6 +13,7 @@ import {
 } from '@masknet/web3-shared-base'
 import {
     ChainId,
+    createClient,
     createNativeToken,
     decodeAddress,
     getNativeTokenAddress,
@@ -30,7 +31,6 @@ import {
 } from '@solana/web3.js'
 import type { Plugin } from '@masknet/plugin-infra'
 import type { PartialRequired } from '@masknet/shared-base'
-import { NETWORK_ENDPOINTS } from '../../constants'
 import { Web3StateSettings } from '../../settings'
 import { Providers } from './provider'
 import { createTransferInstruction, getOrCreateAssociatedTokenAccount } from './spl-token'
@@ -66,8 +66,7 @@ class Connection implements BaseConnection {
 
     private async _attachRecentBlockHash(transaction: Transaction, initial?: SolanaWeb3ConnectionOptions) {
         const options = this.getOptions(initial)
-        const connection =
-            this.connections.get(options.chainId) ?? new SolConnection(NETWORK_ENDPOINTS[options.chainId])
+        const connection = this.connections.get(options.chainId) ?? createClient(options.chainId)
         const blockHash = await connection.getRecentBlockhash()
         transaction.recentBlockhash = blockHash.blockhash
         return transaction
@@ -120,8 +119,7 @@ class Connection implements BaseConnection {
     ): Promise<string> {
         const options = this.getOptions(initial)
         if (!options.account) throw new Error('No payer provides.')
-        const connection =
-            this.connections.get(options.chainId) ?? new SolConnection(NETWORK_ENDPOINTS[options.chainId])
+        const connection = this.connections.get(options.chainId) ?? createClient(options.chainId)
 
         const payerPubkey = new PublicKey(options.account)
         const recipientPubkey = new PublicKey(recipient)
@@ -249,8 +247,8 @@ class Connection implements BaseConnection {
             return this.getNativeTokenBalance(options)
         }
         const { data: assets } = await SolanaFungible.getAssets(options.account, options)
-        const splToken = assets.find((x) => isSameAddress(x.address, address))
-        return splToken?.balance ?? '0'
+        const asset = assets.find((x) => isSameAddress(x.address, address))
+        return asset?.balance ?? '0'
     }
     getNonFungibleTokenBalance(
         address: string,
@@ -289,8 +287,7 @@ class Connection implements BaseConnection {
 
     getWeb3Connection(initial?: SolanaWeb3ConnectionOptions) {
         const options = this.getOptions(initial)
-        const connection =
-            this.connections.get(options.chainId) ?? new SolConnection(NETWORK_ENDPOINTS[options.chainId])
+        const connection = this.connections.get(options.chainId) ?? createClient(options.chainId)
         this.connections.set(options.chainId, connection)
         return connection
     }
@@ -408,8 +405,8 @@ class Connection implements BaseConnection {
         if (!address || isNativeTokenAddress(address)) {
             return this.getNativeToken()
         }
-        const splTokens = await SolanaFungible.getFungibleTokens(options.chainId, [])
-        const token = splTokens.find((x) => x.address === address)
+        const tokens = await SolanaFungible.getFungibleTokens(options.chainId, [])
+        const token = tokens.find((x) => x.address === address)
         return (
             token ??
             ({

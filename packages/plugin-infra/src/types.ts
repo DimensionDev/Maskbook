@@ -447,6 +447,8 @@ export namespace Plugin.SNSAdaptor {
         ApplicationEntries?: ApplicationEntry[]
         /** This UI will be rendered as tabs on the profile page */
         ProfileTabs?: ProfileTab[]
+        /** This UI will be rendered as tabs on the profile card */
+        ProfileCardTabs?: ProfileTab[]
         /** This UI will be rendered as cover on the profile page */
         ProfileCover?: ProfileCover[]
         /** This UI will be rendered as tabs on the profile card */
@@ -1053,6 +1055,7 @@ export enum PluginId {
     CrossChainBridge = 'io.mask.cross-chain-bridge',
     Referral = 'com.maskbook.referral',
     Web3Profile = 'io.mask.web3-profile',
+    Web3ProfileCard = 'io.mask.web3-profile-card',
     ScamSniffer = 'io.scamsniffer.mask-plugin',
     // @masknet/scripts: insert-here
 }

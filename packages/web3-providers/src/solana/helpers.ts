@@ -6,13 +6,11 @@ import {
     multipliedBy,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType } from '@masknet/web3-shared-solana'
-import { NETWORK_ENDPOINTS } from './constants'
+import { ChainId, createClientEndpoint, SchemaType } from '@masknet/web3-shared-solana'
 import type { RpcOptions } from './types'
 
 export async function requestRPC<T = unknown>(chainId: ChainId, options: RpcOptions): Promise<T> {
-    const endpoint = NETWORK_ENDPOINTS[chainId]
-    const response = await globalThis.fetch(endpoint, {
+    const response = await globalThis.fetch(createClientEndpoint(chainId), {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

@@ -37,6 +37,7 @@
     "@masknet/plugin-wallet": "workspace:*",
     "@masknet/plugin-web3-profile": "workspace:*",
     "@masknet/public-api": "workspace:*",
+    "@masknet/sandboxed-plugin-runtime": "workspace:*",
     "@masknet/sdk": "workspace:*",
     "@masknet/shared": "workspace:*",
     "@masknet/shared-base": "workspace:*",

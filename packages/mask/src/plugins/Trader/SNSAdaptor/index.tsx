@@ -2,13 +2,12 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base'
 import { TraderDialog } from './trader/TraderDialog'
 import { SearchResultInspector } from './trending/SearchResultInspector'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Trans } from 'react-i18next'
 import { TagInspector } from './trending/TagInspector'
 import { enhanceTag } from './cashTag'
 import { ApplicationEntry } from '@masknet/shared'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
-import { PluginTraderMessages } from '../messages'
 import { setupStorage, storageDefaultValue } from '../storage'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
@@ -48,8 +47,10 @@ const sns: Plugin.SNSAdaptor.Definition<
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
-                    const { openDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
-
+                    const openDialog = () =>
+                        CrossIsolationMessages.events.swapDialogUpdate.sendToLocal({
+                            open: true,
+                        })
                     return (
                         <ApplicationEntry
                             {...EntryComponentProps}

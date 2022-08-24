@@ -616,6 +616,9 @@ importers:
       '@masknet/public-api':
         specifier: workspace:*
         version: link:../public-api
+      '@masknet/sandboxed-plugin-runtime':
+        specifier: workspace:*
+        version: link:../sandboxed-plugin-runtime
       '@masknet/sdk':
         specifier: workspace:*
         version: link:../mask-sdk
@@ -1759,8 +1762,8 @@ importers:
   packages/polyfills:
     dependencies:
       '@masknet/compartment':
-        specifier: ^0.2.3
-        version: 0.2.3
+        specifier: ^0.3.0
+        version: 0.3.0
       buffer:
         specifier: ^6.0.3
         version: 6.0.3
@@ -1805,6 +1808,30 @@ importers:
   packages/polyfills/types: {}
 
   packages/public-api: {}
+
+  packages/sandboxed-plugin-runtime:
+    dependencies:
+      '@dimensiondev/holoflows-kit':
+        specifier: 0.9.0-20220807034934-68f04f1
+        version: 0.9.0-20220807034934-68f04f1
+      '@masknet/compartment':
+        specifier: ^0.3.0
+        version: 0.3.0
+      '@masknet/icons':
+        specifier: workspace:*
+        version: link:../icons
+      '@masknet/membrane':
+        specifier: ^0.1.0
+        version: 0.1.0
+      '@masknet/shared-base':
+        specifier: workspace:*
+        version: link:../shared-base
+      '@masknet/theme':
+        specifier: workspace:*
+        version: link:../theme
+      '@masknet/typed-message':
+        specifier: workspace:*
+        version: link:../typed-message
 
   packages/sandboxed-plugins: {}
 
@@ -8180,6 +8207,10 @@ packages:
   /@leichtgewicht/ip-codec/2.0.4:
     resolution: {integrity: sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==}
 
+  /@locker/near-membrane-base/0.11.1:
+    resolution: {integrity: sha512-G3/6j5wAgWfKm9Cp8yA6xkhr4+0Ldm85MneMjieQxJZdldQdeH/agb3f7Pw0pQB61eUpFHPBCzrpvhQ5pTvIYw==}
+    dev: false
+
   /@magic-works/i18n-codegen/0.2.0_typescript@4.8.1-rc:
     resolution: {integrity: sha512-OGe/pPQ5HbZkwPusr6MhTDMIoLLAfl/44JpjtjBri5ijKpjQmS7eKe9zdPuRbwp9agpu0tqMJI/I/uXw48/iSw==}
     hasBin: true
@@ -8195,8 +8226,14 @@ packages:
       yargs: 17.5.1
     dev: true
 
-  /@masknet/compartment/0.2.3:
-    resolution: {integrity: sha512-A7+2z0WuWN5noMsKuorDY5eoqkpP2qQLeelkfjG0s5FxN/d6ezO4QW1+YTJ8R94OGmIHqHgotz6pkswscPrd5A==}
+  /@masknet/compartment/0.3.0:
+    resolution: {integrity: sha512-ES4K02F+mdEMSgPIyovtDfGnaZv9apdX44LR3IzIdO12D8bkzcWfmX5X26sVwZua2VT9NZ/r/8rO2HR/JRyCww==}
+    dev: false
+
+  /@masknet/membrane/0.1.0:
+    resolution: {integrity: sha512-aCM6HWyZcZdevJZjoOGZJces2WOan+TLHR65pmVN2Wpx09g5ehaFd1URT1BHaEsmjfDDsQGY9NMK9Jnz0jua7A==}
+    dependencies:
+      '@locker/near-membrane-base': 0.11.1
     dev: false
 
   /@masknet/static-module-record-swc/0.3.2:
@@ -21992,7 +22029,7 @@ packages:
     patched: true
 
   /immutable/3.8.1:
-    resolution: {integrity: sha1-IAgH8Rqw9ycQ6khVQt4IgHX2jNI=}
+    resolution: {integrity: sha512-0R2q5f83L0h+zizu3lAA3ZR/mzEl04U1jVVXIqf2rQbZs9eX5YGtx1EFQuuJJHzVXH10ur6hGKehR8yBOQmZlQ==}
     engines: {node: '>=0.10.0'}
     dev: false
 

@@ -1,10 +1,16 @@
 import { Connection } from '@metaplex/js'
 import { Metadata } from '@metaplex-foundation/mpl-token-metadata'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { createPageable, HubOptions, NonFungibleAsset, Pageable, TokenType } from '@masknet/web3-shared-base'
+import {
+    createIndicator,
+    createPageable,
+    HubOptions,
+    NonFungibleAsset,
+    Pageable,
+    TokenType,
+} from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-solana'
 import type { NonFungibleTokenAPI } from '../../types'
-import { ENDPOINT_KEY, SPL_TOKEN_PROGRAM_ID } from '../constants'
 import type { GetProgramAccountsResponse } from '../types'
 import { fetchJSON } from '../../helpers'
 import { requestRPC } from '../helpers'
@@ -35,7 +41,7 @@ async function getNonFungibleAssets(
     const data = await requestRPC<GetProgramAccountsResponse>(chainId, {
         method: 'getProgramAccounts',
         params: [
-            SPL_TOKEN_PROGRAM_ID,
+            'https://api.raydium.io/v2/sdk/token/raydium.mainnet.json',
             {
                 encoding: 'jsonParsed',
                 filters: [
@@ -53,7 +59,7 @@ async function getNonFungibleAssets(
         ],
     })
     if (!data.result?.length) return EMPTY_LIST
-    const connection = new Connection(ENDPOINT_KEY)
+    const connection = new Connection('mainnet-beta')
     const nftTokens = data.result.filter((x) => x.account.data.parsed.info.tokenAmount.decimals === 0)
     const promises = nftTokens.map(async (x): Promise<NonFungibleAsset<ChainId, SchemaType> | null> => {
         const pda = await Metadata.getPDA(x.account.data.parsed.info.mint)
@@ -97,6 +103,6 @@ export class SolanaNonFungibleAPI implements NonFungibleTokenAPI.Provider<ChainI
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
         const tokens = await getNonFungibleAssets(options?.chainId ?? ChainId.Mainnet, address)
 
-        return createPageable(tokens, 0)
+        return createPageable(tokens, createIndicator(options?.indicator))
     }
 }

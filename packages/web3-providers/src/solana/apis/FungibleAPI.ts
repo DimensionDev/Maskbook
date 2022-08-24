@@ -14,11 +14,11 @@ import {
 import { ChainId, SchemaType, createNativeToken } from '@masknet/web3-shared-solana'
 import { memoizePromise } from '@dimensiondev/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { CoinGeckoAPI } from '../../coingecko'
 import type { FungibleTokenAPI, TokenListBaseAPI } from '../../types'
 import { RAYDIUM_TOKEN_LIST, SPL_TOKEN_PROGRAM_ID } from '../constants'
 import { createFungibleAsset, createFungibleToken, requestRPC } from '../helpers'
 import type { GetAccountInfoResponse, GetProgramAccountsResponse, RaydiumTokenList } from '../types'
-import { CoinGeckoAPI } from '../../coingecko'
 
 const fetchTokenList = memoizePromise(
     async (url: string): Promise<Array<FungibleToken<ChainId, SchemaType>>> => {
@@ -49,7 +49,7 @@ const fetchTokenList = memoizePromise(
 export class SolanaFungibleAPI
     implements TokenListBaseAPI.Provider<ChainId, SchemaType>, FungibleTokenAPI.Provider<ChainId, SchemaType>
 {
-    coingecko = new CoinGeckoAPI()
+    private coingecko = new CoinGeckoAPI()
 
     private async getSplTokenList(chainId: ChainId, account: string) {
         const data = await requestRPC<GetProgramAccountsResponse>(chainId, {
@@ -121,12 +121,15 @@ export class SolanaFungibleAPI
         return createPageable(assets as Array<FungibleAsset<ChainId, SchemaType>>, createIndicator(indicator))
     }
 
-    async getFungibleTokens(chainId: ChainId, urls: string[]): Promise<FungibleToken<ChainId, SchemaType>[]> {
+    async getFungibleTokens(chainId: ChainId, urls: string[]): Promise<Array<FungibleToken<ChainId, SchemaType>>> {
         if (chainId !== ChainId.Mainnet) return EMPTY_LIST
         return fetchTokenList(RAYDIUM_TOKEN_LIST)
     }
 
-    async getNonFungibleTokens(chainId: ChainId, urls: string[]): Promise<NonFungibleToken<ChainId, SchemaType>[]> {
+    async getNonFungibleTokens(
+        chainId: ChainId,
+        urls: string[],
+    ): Promise<Array<NonFungibleToken<ChainId, SchemaType>>> {
         return EMPTY_LIST
     }
 }

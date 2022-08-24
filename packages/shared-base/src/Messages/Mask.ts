@@ -122,6 +122,12 @@ export type OpenApplicationRequestEvent = {
     application: string
 }
 
+export type OpenProfileCardEvent = {
+    userId: string
+    x: number
+    y: number
+}
+
 export type CheckSecurityDialogRequest =
     | {
           open: true
@@ -141,6 +147,21 @@ export interface NFTAvatarEvent {
     schema?: number
     chainId?: number
     pluginId?: string
+}
+
+export interface TokenType {
+    name: string
+    symbol: string
+    address: string
+    decimals?: number
+}
+export interface SwapDialogEvent {
+    open: boolean
+    traderProps?: {
+        defaultInputCoin?: TokenType
+        defaultOutputCoin?: TokenType
+        chainId?: number
+    }
 }
 
 /** This is a subset of browser.permissions.Permission */

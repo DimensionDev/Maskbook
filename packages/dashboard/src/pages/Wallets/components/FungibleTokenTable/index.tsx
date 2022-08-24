@@ -8,8 +8,7 @@ import { useDashboardI18N } from '../../../../locales'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { FungibleTokenTableRow } from '../FungibleTokenTableRow'
-import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { DashboardRoutes, EMPTY_LIST, CrossIsolationMessages } from '@masknet/shared-base'
 import {
     CurrencyType,
     formatBalance,
@@ -18,7 +17,6 @@ import {
     isLessThan,
     minus,
     NetworkPluginID,
-    TokenType,
     toZero,
 } from '@masknet/web3-shared-base'
 import {
@@ -27,7 +25,6 @@ import {
     useNativeToken,
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
-import { PluginMessages } from '../../../../API'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
@@ -105,8 +102,6 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
     } = useFungibleAssets<'all'>(NetworkPluginID.PLUGIN_EVM, undefined, {
         chainId: selectedChainId,
     })
-    const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
-
     const onSwap = useCallback(
         (
             token: FungibleAsset<
@@ -114,21 +109,19 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
                 Web3Helper.Definition[NetworkPluginID]['SchemaType']
             >,
         ) => {
-            openSwapDialog({
+            return CrossIsolationMessages.events.swapDialogUpdate.sendToLocal({
                 open: true,
                 traderProps: {
                     defaultInputCoin: {
-                        id: token.id,
                         name: token.name || '',
                         symbol: token.symbol || '',
-                        type: TokenType.Fungible,
-                        contract_address: token.address,
+                        address: token.address,
                         decimals: token.decimals,
                     },
                 },
             })
         },
-        [openSwapDialog],
+        [],
     )
 
     const onSend = useCallback(
