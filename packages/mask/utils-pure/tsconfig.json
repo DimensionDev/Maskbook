@@ -5,7 +5,7 @@
     "outDir": "../dist/utils-pure/",
     "tsBuildInfoFile": "../dist/utils-pure.tsbuildinfo",
     "emitDeclarationOnly": true,
-    "lib": ["ES2021"]
+    "lib": ["ES2022"]
   },
   "include": ["./"],
   "references": [{ "path": "../../shared-base" }]

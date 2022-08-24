@@ -5,7 +5,7 @@
     "outDir": "../dist/shared/",
     "tsBuildInfoFile": "../dist/shared.tsbuildinfo",
     "emitDeclarationOnly": true,
-    "lib": ["ES2021"]
+    "lib": ["ES2022"]
   },
   "include": ["./"],
   "exclude": ["./plugin-infra/register.js"],
