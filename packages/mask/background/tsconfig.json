@@ -16,6 +16,7 @@
     { "path": "../../encryption" },
     { "path": "../../backup-format" },
     { "path": "../../gun-utils" },
-    { "path": "../../web3-providers" }
+    { "path": "../../web3-providers" },
+    { "path": "../../sandboxed-plugin-runtime/src/background" }
   ]
 }

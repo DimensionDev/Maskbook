@@ -1,0 +1,38 @@
+{
+  "name": "@masknet/sandboxed-plugin-runtime",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./background": {
+      "types": "./dist/background/index.d.ts",
+      "webpack": "./src/background/index.ts",
+      "default": "./dist/background/index.js"
+    },
+    "./site-adaptor": {
+      "types": "./dist/site-adaptor/index.d.ts",
+      "webpack": "./src/site-adaptor/index.ts",
+      "default": "./dist/site-adaptor/index.js"
+    },
+    "./extension-page": {
+      "types": "./dist/extension-page/index.d.ts",
+      "webpack": "./src/extension-page/index.ts",
+      "default": "./dist/extension-page/index.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "./background": ["./dist/background/index.d.ts"],
+      "./site-adaptor": ["./dist/site-adaptor/index.d.ts"],
+      "./extension-page": ["./dist/extension-page/index.d.ts"]
+    }
+  },
+  "dependencies": {
+    "@dimensiondev/holoflows-kit": "0.9.0-20220807034934-68f04f1",
+    "@masknet/compartment": "^0.3.0",
+    "@masknet/icons": "workspace:*",
+    "@masknet/shared-base": "workspace:*",
+    "@masknet/theme": "workspace:*",
+    "@masknet/typed-message": "workspace:*",
+    "@masknet/membrane": "^0.1.0"
+  }
+}
