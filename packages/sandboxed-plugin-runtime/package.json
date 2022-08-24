@@ -2,6 +2,7 @@
   "name": "@masknet/sandboxed-plugin-runtime",
   "private": true,
   "type": "module",
+  "sideEffects": false,
   "exports": {
     "./background": {
       "types": "./dist/background/index.d.ts",
