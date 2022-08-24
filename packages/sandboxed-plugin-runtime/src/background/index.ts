@@ -1,5 +1,9 @@
 import { PluginRuntime } from '../runtime/runtime.js'
+import { getURL } from '../runtime/utils.js'
 import { addPeerDependencies } from '../peer-dependencies/index.js'
+import { AsyncCall } from 'async-call-rpc'
+import { MessageTarget, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
+import { serializer } from '@masknet/shared-base'
 
 export async function startBackgroundHost(signal: AbortSignal, includeLocals = false) {
     // TODO: support HMR for plugin list update.
@@ -31,12 +35,22 @@ async function loadPlugin(id: string, isLocal: boolean, signal: AbortSignal) {
     const runtime = new PluginRuntime(id, {}, signal)
     addPeerDependencies(runtime)
 
-    if (manifest.entries.rpc) {
+    const { background, rpc } = manifest.entries
+    if (background) await runtime.imports(getURL(id, background, isLocal))
+    if (rpc) {
+        const channel = new WebExtensionMessage<{ _: any; $: any }>({ domain: `mask-plugin-${id}-rpc` })
+        const rpcFull = getURL(id, rpc, isLocal)
+
         runtime.addReExportModule('@masknet/plugin/utils/rpc', {
             export: 'worker',
-            from: `mask-modules://plugin-${id}/${manifest.entries.rpc}`,
+            from: rpcFull,
         })
-        // TODO: setup an RPC server for it
+        AsyncCall(runtime.imports(rpcFull), {
+            channel: channel.events._.bind(MessageTarget.Broadcast),
+            serializer,
+            log: true,
+            thenable: false,
+        })
     }
-    await runtime.imports(`mask-modules://plugin-${id}/${manifest.entries.background}`)
+    // TODO: support AsyncGeneratorCall
 }

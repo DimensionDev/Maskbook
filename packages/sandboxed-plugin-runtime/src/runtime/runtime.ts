@@ -66,7 +66,7 @@ export class PluginRuntime {
         }
 
         // normalize URL
-        const target = new URL(specifier, referral)
+        const target = new URL(specifier, referral?.includes('://') ? referral : undefined)
         const oldProtocol = target.protocol
         target.protocol = 'https:'
         target.protocol = oldProtocol
