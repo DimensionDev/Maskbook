@@ -1,0 +1,10 @@
+{
+  "extends": "../../../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "../../dist/peer-dependencies-dom/",
+    "tsBuildInfoFile": "../../dist/peer-dependencies-dom.tsbuildinfo"
+  },
+  "include": ["./"],
+  "references": [{ "path": "../peer-dependencies" }, { "path": "../runtime" }, { "path": "../../../theme" }]
+}

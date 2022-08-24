@@ -1,6 +1,14 @@
 /// <reference types="@masknet/global-types/module-loader" />
 
-import { imports, type Module, Evaluators, Referral, VirtualModuleRecord } from '@masknet/compartment'
+import {
+    imports,
+    type Module,
+    Evaluators,
+    Referral,
+    VirtualModuleRecord,
+    type ExportAllBinding,
+    type ExportBinding,
+} from '@masknet/compartment'
 import type { MembraneInstance } from '@masknet/membrane'
 import { createGlobal } from './global.js'
 
@@ -28,7 +36,22 @@ export class PluginRuntime {
     globalThis: typeof globalThis
 
     #moduleMap = new Map<string, VirtualModuleRecord>()
-    addModule = this.#moduleMap.set.bind(this.#moduleMap)
+    addReExportModule(moduleName: string, ...bindings: Array<ExportBinding | ExportAllBinding>) {
+        if (this.#moduleMap.has(moduleName)) throw new TypeError('Module is already defined.')
+        this.#moduleMap.set(moduleName, { bindings })
+    }
+    addNamespaceModule(moduleName: string, blueNamespace: object) {
+        if (this.#moduleMap.has(moduleName)) throw new TypeError('Module is already defined.')
+        const keys = Object.keys(blueNamespace)
+        this.#moduleMap.set(moduleName, {
+            bindings: keys.map((key) => ({ export: key })),
+            execute: (redEnvironment) => {
+                this.#membrane.execute(() => (redNamespace: any) => {
+                    for (const k of keys) redEnvironment[k] = redNamespace[k]
+                })(blueNamespace)
+            },
+        })
+    }
 
     // internals
     #instanceFromURL = new Map<string, Module>()

@@ -1,4 +1,5 @@
 import { PluginRuntime } from '../runtime/runtime.js'
+import { addPeerDependencies } from '../peer-dependencies/index.js'
 
 export async function startBackgroundHost(signal: AbortSignal, includeLocals = false) {
     // TODO: support HMR for plugin list update.
@@ -28,9 +29,12 @@ async function loadPlugin(id: string, isLocal: boolean, signal: AbortSignal) {
     const manifest = await fetch(manifestPath).then((x) => x.json())
     // TODO: check shape of the manifest
     const runtime = new PluginRuntime(id, {}, signal)
+    addPeerDependencies(runtime)
+
     if (manifest.entries.rpc) {
-        runtime.addModule('@masknet/plugin/utils/rpc', {
-            bindings: [{ export: 'worker', from: `mask-modules://plugin-${id}/${manifest.entries.rpc}` }],
+        runtime.addReExportModule('@masknet/plugin/utils/rpc', {
+            export: 'worker',
+            from: `mask-modules://plugin-${id}/${manifest.entries.rpc}`,
         })
         // TODO: setup an RPC server for it
     }
