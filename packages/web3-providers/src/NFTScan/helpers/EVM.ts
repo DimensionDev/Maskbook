@@ -22,9 +22,9 @@ import {
     SchemaType,
     WNATIVE,
 } from '@masknet/web3-shared-evm'
-import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from './constants'
-import type { Asset, Collection, Payload, AssetsGroup, Transaction } from './types'
-import { courier, getPaymentToken } from '../helpers'
+import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants'
+import type { Asset, Collection, Payload, AssetsGroup, Transaction } from '../types/EVM'
+import { courier, getPaymentToken } from '../../helpers'
 
 type NFTScanChainId = ChainId.Mainnet | ChainId.Matic | ChainId.BSC | ChainId.Arbitrum | ChainId.Optimism
 
@@ -95,7 +95,7 @@ export function createPermalink(chainId: ChainId, address: string, tokenId: stri
     })
 }
 
-export function createNonFungibleTokenAsset(chainId: ChainId, asset: Asset): NonFungibleAsset<ChainId, SchemaType> {
+export function createNonFungibleAsset(chainId: ChainId, asset: Asset): NonFungibleAsset<ChainId, SchemaType> {
     const payload = getPayload(asset.metadata_json)
     const name = payload?.name || asset.name || asset.contract_name || ''
     const description = payload?.description

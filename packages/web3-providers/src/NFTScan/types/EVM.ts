@@ -170,20 +170,3 @@ export interface VolumeAndFloorRecord {
     floor: number
     value: number
 }
-
-export interface NFTItem {
-    nft_name: string
-    nft_asset_address: string
-    nft_asset_number: string
-    auth_flag: boolean
-    nft_unique_num: string
-    /** url */
-    cover: string
-    /** url */
-    link: string
-    /** mime type */
-    type: string
-    ercType: number
-    /** url */
-    logo: string
-}

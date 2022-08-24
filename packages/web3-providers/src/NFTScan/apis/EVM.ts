@@ -15,7 +15,6 @@ import {
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
 import { compact } from 'lodash-unified'
-import { LooksRare, OpenSea } from '../../'
 import { LooksRareLogo, OpenSeaLogo } from '../../resources'
 import type { NonFungibleTokenAPI, TrendingAPI } from '../../types'
 import { NFTSCAN_API } from '../constants'
@@ -28,9 +27,9 @@ import {
     AssetsGroup,
     VolumeAndFloorRecord,
     Transaction,
-} from '../types'
+} from '../types/EVM'
 import {
-    createNonFungibleTokenAsset,
+    createNonFungibleAsset,
     createNonFungibleTokenContract,
     fetchFromNFTScan,
     fetchFromNFTScanV2,
@@ -38,7 +37,9 @@ import {
     createNonFungibleTokenEvent,
     createNonFungibleTokenCollectionFromGroup,
     createNonFungibleTokenCollectionFromCollection,
-} from '../utils'
+} from '../helpers/EVM'
+import { LooksRareAPI } from '../../looksrare'
+import { OpenSeaAPI } from '../../opensea'
 
 enum NonFungibleMarketplace {
     OpenSea = 'OpenSea',
@@ -48,6 +49,9 @@ enum NonFungibleMarketplace {
 export class NFTScanEVM_API
     implements NonFungibleTokenAPI.Provider<ChainId, SchemaType>, TrendingAPI.Provider<ChainId>
 {
+    private looksrare = new LooksRareAPI()
+    private opensea = new OpenSeaAPI()
+
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
         const path = urlcat('/api/v2/assets/:address/:token_id', {
             address,
@@ -57,7 +61,7 @@ export class NFTScanEVM_API
         })
         const response = await fetchFromNFTScanV2<{ data: Asset }>(chainId, path)
         if (!response?.data) return
-        return createNonFungibleTokenAsset(chainId, response.data)
+        return createNonFungibleAsset(chainId, response.data)
     }
 
     async getAssets(account: string, { chainId = ChainId.Mainnet, indicator, size = 20 }: HubOptions<ChainId> = {}) {
@@ -68,7 +72,7 @@ export class NFTScanEVM_API
         })
         const response = await fetchFromNFTScanV2<{ data: AssetsGroup[] }>(chainId, path)
         const assets =
-            response?.data?.flatMap((x) => x.assets.map((x) => createNonFungibleTokenAsset(chainId, x))) ?? EMPTY_LIST
+            response?.data?.flatMap((x) => x.assets.map((x) => createNonFungibleAsset(chainId, x))) ?? EMPTY_LIST
         return createPageable(assets, createIndicator(indicator))
     }
 
@@ -90,7 +94,7 @@ export class NFTScanEVM_API
                 total?: number
             }
         }>(chainId, path)
-        const assets = response?.data?.content.map((x) => createNonFungibleTokenAsset(chainId, x)) ?? EMPTY_LIST
+        const assets = response?.data?.content.map((x) => createNonFungibleAsset(chainId, x)) ?? EMPTY_LIST
         return createPageable(
             assets,
             createIndicator(indicator),
@@ -240,8 +244,8 @@ export class NFTScanEVM_API
         }
         const [symbol, openseaStats, looksrareStats] = await Promise.all([
             getContractSymbol(id, chainId),
-            OpenSea.getStats(platformInfo.address).catch(() => null),
-            LooksRare.getStats(platformInfo.address).catch(() => null),
+            this.opensea.getStats(platformInfo.address).catch(() => null),
+            this.looksrare.getStats(platformInfo.address).catch(() => null),
         ])
         const tickers: TrendingAPI.Ticker[] = compact([
             openseaStats
