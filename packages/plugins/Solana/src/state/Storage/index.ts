@@ -9,7 +9,8 @@ function createStorage(
     providerType: StorageProviderType,
     options: {
         namespace: string
-        personaIdentifier?: ECKeyIdentifier
+        publicKeyAsHex?: string
+        signer?: ECKeyIdentifier
         address?: string
         platform?: NextIDPlatform
     },
@@ -20,12 +21,13 @@ function createStorage(
         case StorageProviderType.RSS3:
             throw new Error('RSS3 storage is not support sol')
         case StorageProviderType.NextID:
-            if (!options?.platform || !options.personaIdentifier)
+            if (!options?.platform || !options.publicKeyAsHex)
                 throw new Error('platform and personaIdentifier is required When providerType is NextID')
             return new NextIDStorage(
                 options.namespace,
                 options.platform,
-                options.personaIdentifier,
+                options.publicKeyAsHex,
+                options.signer,
                 SharedContextSettings.value.generateSignResult,
             )
         default:

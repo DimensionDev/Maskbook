@@ -114,7 +114,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         const storage = Storage.createNextIDStorage(
             currentPersonaIdentifier.publicKeyAsHex,
             NextIDPlatform.NextID,
-            currentPersonaIdentifier,
+            currentPersonaIdentifier.publicKeyAsHex,
         )
 
         return storage.get<BindingProof[]>(PluginId.Tips)
@@ -251,6 +251,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             const storage = Storage.createNextIDStorage(
                 currentPersonaIdentifier.publicKeyAsHex,
                 NextIDPlatform.NextID,
+                currentPersonaIdentifier.publicKeyAsHex,
                 currentPersonaIdentifier,
             )
             await storage.set<BindingProof[]>(PluginId.Tips, modifiedWallets)

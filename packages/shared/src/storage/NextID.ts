@@ -7,16 +7,13 @@ export class NextIDStorage implements Storage {
     constructor(
         private proofIdentity: string, // proof identity as key
         private platform: NextIDPlatform, // proof platform
-        private personaIdentifier: ECKeyIdentifier,
+        private publicKeyAsHex: string, // publicKey, like SocialIdentity publicKey or PersonaIdentifier publicKeyAsHex
+        private signer?: ECKeyIdentifier, // persona identifier
         private generateSignResult?: (
             signer: ECKeyIdentifier,
             message: string,
         ) => Promise<Plugin.SNSAdaptor.PersonaSignResult>,
     ) {}
-
-    get publicKey() {
-        return this.personaIdentifier.publicKeyAsHex
-    }
 
     async has(key: string) {
         return !!this.get(key)
@@ -24,7 +21,7 @@ export class NextIDStorage implements Storage {
 
     async get<T>(key: string) {
         const response = await NextIDStorageProvider.getByIdentity<T>(
-            this.publicKey,
+            this.publicKeyAsHex,
             this.platform,
             this.proofIdentity,
             key,
@@ -44,8 +41,10 @@ export class NextIDStorage implements Storage {
     }
 
     async set<T>(key: string, value: T) {
+        if (!this.signer) throw new Error('signer is requirement when set data to NextID Storage')
+
         const payload = await NextIDStorageProvider.getPayload(
-            this.publicKey,
+            this.publicKeyAsHex,
             this.platform,
             this.proofIdentity, // identity
             value,
@@ -54,13 +53,13 @@ export class NextIDStorage implements Storage {
 
         if (!payload?.ok) throw new Error('Invalid payload Error')
 
-        const signResult = await this.generateSignResult?.(this.personaIdentifier, payload.val.signPayload)
+        const signResult = await this.generateSignResult?.(this.signer, payload.val.signPayload)
 
         if (!signResult) throw new Error('Failed to sign payload.')
 
         await NextIDStorageProvider.set(
             payload.val.uuid,
-            this.publicKey,
+            this.publicKeyAsHex,
             toBase64(fromHex(signResult.signature.signature)),
             this.platform,
             this.proofIdentity,
