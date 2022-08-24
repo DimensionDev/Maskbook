@@ -31,7 +31,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 64,
         opacity: 0.1,
     },
-    loadingFailImage: {
+    fallbackImage: {
         minHeight: '0 !important',
         maxWidth: 'none',
         width: 30,
@@ -94,7 +94,7 @@ export function CollectibleCard(props: CollectibleCardProps) {
                     tokenId={asset.tokenId}
                     address={address}
                     classes={{
-                        loadingFailImage: classes.loadingFailImage,
+                        fallbackImage: classes.fallbackImage,
                         wrapper: classes.wrapper,
                         imgWrapper: classes.wrapper,
                     }}

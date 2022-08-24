@@ -51,7 +51,7 @@ const useStyles = makeStyles()({
         width: '140px !important',
         height: '186px !important',
     },
-    loadingFailImage: {
+    fallbackImage: {
         minHeight: '0 !important',
         maxWidth: 'none',
         transform: 'translateY(10px)',
@@ -110,7 +110,7 @@ export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect, r
                 setERC721TokenName={setName}
                 renderOrder={renderOrder}
                 classes={{
-                    loadingFailImage: classes.loadingFailImage,
+                    fallbackImage: classes.fallbackImage,
                     loadingPlaceholder: classes.loadingPlaceholder,
                     wrapper: classes.wrapper,
                 }}

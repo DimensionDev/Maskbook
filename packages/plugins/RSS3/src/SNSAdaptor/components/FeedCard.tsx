@@ -47,7 +47,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         borderRadius: 12,
     },
-    loadingFailImage: {
+    fallbackImage: {
         minHeight: '0 !important',
         maxWidth: 'none',
         width: 64,
@@ -173,7 +173,7 @@ export function FeedCard({ feed, address, onSelect }: FeedCardProps) {
                         )}
                         tokenId={feed.metadata?.token_id}
                         classes={{
-                            loadingFailImage: classes.loadingFailImage,
+                            fallbackImage: classes.fallbackImage,
                             wrapper: classes.img,
                             iframe: classes.img,
                         }}

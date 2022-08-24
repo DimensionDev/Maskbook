@@ -67,7 +67,7 @@ const useStyles = makeStyles()((theme) => ({
     tipArrow: {
         color: '#111432',
     },
-    loadingFailImage: {
+    fallbackImage: {
         minHeight: '0 !important',
         maxWidth: 'none',
         transform: 'translateY(10px)',
@@ -143,7 +143,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ asset, onSend, rend
                             url={asset.metadata?.imageURL || asset.metadata?.mediaURL}
                             tokenId={asset.tokenId}
                             classes={{
-                                loadingFailImage: classes.loadingFailImage,
+                                fallbackImage: classes.fallbackImage,
                                 wrapper: classes.wrapper,
                             }}
                         />

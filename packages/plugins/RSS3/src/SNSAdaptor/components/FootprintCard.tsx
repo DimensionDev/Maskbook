@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '8px',
         objectFit: 'cover',
     },
-    loadingFailImage: {
+    fallbackImage: {
         minHeight: '0 !important',
         maxWidth: 'none',
         width: 64,
@@ -69,7 +69,7 @@ export const FootprintCard = ({ footprint, onSelect }: FootprintProps) => {
                     <NFTCardStyledAssetPlayer
                         url={footprint.imageURL || RSS3_DEFAULT_IMAGE}
                         classes={{
-                            loadingFailImage: classes.loadingFailImage,
+                            fallbackImage: classes.fallbackImage,
                             wrapper: classes.img,
                             iframe: classes.img,
                         }}

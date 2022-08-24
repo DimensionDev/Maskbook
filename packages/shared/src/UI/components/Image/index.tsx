@@ -17,7 +17,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface ImageProps
     extends ImgHTMLAttributes<HTMLImageElement>,
-        withClasses<'loadingFailImage' | 'imageLoading' | 'imageLoadingBox'> {
+        withClasses<'fallbackImage' | 'imageLoading' | 'imageLoadingBox'> {
     fallbackImage?: URL
 }
 
@@ -73,7 +73,7 @@ export function Image({ fallbackImage, ...rest }: ImageProps) {
             <img
                 {...rest}
                 src={fallbackImageURL.toString()}
-                className={classNames(classes.failImage, classes.loadingFailImage)}
+                className={classNames(classes.failImage, classes.fallbackImage)}
             />
         </Box>
     )
