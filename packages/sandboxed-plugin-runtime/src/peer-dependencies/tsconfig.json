@@ -6,5 +6,9 @@
     "tsBuildInfoFile": "../../dist/peer-dependencies.tsbuildinfo"
   },
   "include": ["./"],
-  "references": [{ "path": "../../../shared-base" }, { "path": "../runtime" }]
+  "references": [
+    { "path": "../../../shared-base" },
+    { "path": "../../../typed-message/base" },
+    { "path": "../runtime" }
+  ]
 }

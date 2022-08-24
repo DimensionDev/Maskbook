@@ -29,6 +29,8 @@ async function loadPlugin(id: string, isLocal: boolean, signal: AbortSignal) {
 
     const runtime = new PluginRuntime(id, {}, signal)
     addPeerDependencies(runtime)
+    // TODO: provide impl for @masknet/plugin/utils/open (openWindow)
+    // TODO: provide impl for @masknet/plugin/worker (taggedStorage, addBackupHandler)
 
     const { background, rpc } = manifest.entries || {}
     if (background) await runtime.imports(getURL(id, background, isLocal))
@@ -36,6 +38,7 @@ async function loadPlugin(id: string, isLocal: boolean, signal: AbortSignal) {
         const channel = new WebExtensionMessage<{ _: any; $: any }>({ domain: `mask-plugin-${id}-rpc` })
         const rpcFull = getURL(id, rpc, isLocal)
 
+        // TODO: re-export workerGenerator
         runtime.addReExportModule('@masknet/plugin/utils/rpc', {
             export: 'worker',
             from: rpcFull,
