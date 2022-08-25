@@ -15,7 +15,6 @@ const useStyles = makeStyles()((theme) => ({
     spinContainer: {
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
         position: 'relative',
     },
 }))
