@@ -12,6 +12,7 @@ import {
     NonFungibleTokenContract,
     NonFungibleTokenEvent,
     resolveCORSLink,
+    resolveIPFSLink,
     scale10,
     TokenType,
 } from '@masknet/web3-shared-base'
@@ -84,12 +85,7 @@ export function createNonFungibleAsset(chainId: ChainId, asset: EVM.Asset): NonF
     const payload = getJSON<EVM.Payload>(asset.metadata_json)
     const name = payload?.name || asset.name || asset.contract_name || ''
     const description = payload?.description
-    const mediaURL =
-        asset.nftscan_uri ?? asset.image_uri?.startsWith('http')
-            ? asset.image_uri
-            : asset.image_uri
-            ? `ipfs://${asset.image_uri}`
-            : undefined
+    const mediaURL = resolveIPFSLink(asset.nftscan_uri ?? asset.image_uri)
 
     const creator = asset.minter
     const owner = asset.owner
