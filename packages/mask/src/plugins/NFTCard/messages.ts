@@ -11,7 +11,7 @@ export type NFTCardDialogUpdateEvent = {
 }
 
 export interface NFTCardDialogMessage {
-    NFTCardDialogUpdated: NFTCardDialogUpdateEvent
+    nftCardDialogUpdated: NFTCardDialogUpdateEvent
 }
 
 export const NFTCardMessage: { events: PluginMessageEmitter<NFTCardDialogMessage> } = {

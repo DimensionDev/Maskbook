@@ -10,7 +10,6 @@ import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
 import { useAsync, useLocation, useUpdateEffect, useWindowSize } from 'react-use'
 import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/RainbowBox'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
-import { openWindow } from '@masknet/shared-base-ui'
 import { usePersonaNFTAvatar } from '../../../../plugins/Avatar/hooks/usePersonaNFTAvatar'
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
@@ -22,6 +21,8 @@ import type { EnhanceableSite, NFTAvatarEvent } from '@masknet/shared-base'
 import { Box, Typography } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { NFTCardMessage } from '../../../../plugins/NFTCard/messages'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -65,6 +66,7 @@ function NFTAvatarInTwitter() {
         RSS3_KEY_SNS.TWITTER,
     )
     const account = useAccount()
+    const { setDialog: setNFTCardDialog } = useRemoteControlledDialog(NFTCardMessage.events.nftCardDialogUpdated)
     const { loading: loadingWallet, value: storage } = useWallet(nftAvatar?.userId)
     const { value: nftInfo, loading: loadingNFTInfo } = useNFT(
         storage?.address ?? account,
@@ -219,10 +221,14 @@ function NFTAvatarInTwitter() {
         if (!nftAvatar || !linkParentDom || !showAvatar) return
 
         const handler = (event: MouseEvent) => {
-            if (!nftInfo?.permalink) return
+            if (!nftAvatar.tokenId || !nftAvatar.address) return
+            setNFTCardDialog({
+                open: true,
+                address: nftAvatar.address,
+                tokenId: nftAvatar.tokenId,
+            })
             event.stopPropagation()
             event.preventDefault()
-            openWindow(nftInfo?.permalink)
         }
 
         linkParentDom.addEventListener('click', handler, true)
