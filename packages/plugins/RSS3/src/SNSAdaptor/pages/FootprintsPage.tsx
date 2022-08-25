@@ -1,5 +1,5 @@
 import { memo, useState, useMemo } from 'react'
-import { CollectionDetailCard, useWeb3ProfileHiddenSetting } from '@masknet/shared'
+import { CollectionDetailCard, useWeb3ProfileHiddenSettings } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { CollectionType, RSS3BaseAPI } from '@masknet/web3-providers'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -23,7 +23,7 @@ export const FootprintsPage = memo(function FootprintsPage({ address, publicKey,
 
     const { value: allFootprints = EMPTY_LIST, loading } = useFootprints(formatEthereumAddress(address))
 
-    const { isHiddenAddress, hiddenList } = useWeb3ProfileHiddenSetting(userId, publicKey, {
+    const { isHiddenAddress, hiddenList } = useWeb3ProfileHiddenSettings(userId, publicKey, {
         address,
         hiddenAddressesKey: 'footprints',
         collectionKey: CollectionType.Footprints,

@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { useNonFungibleAssets, useTrustedNonFungibleTokens, Web3Helper, useWeb3State } from '@masknet/plugin-infra/web3'
-import { ElementAnchor, RetryHint, useWeb3ProfileHiddenSetting } from '@masknet/shared'
+import { ElementAnchor, RetryHint, useWeb3ProfileHiddenSettings } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
 import { CollectionType } from '@masknet/web3-providers'
@@ -207,7 +207,7 @@ export function CollectionList({
 
     const userId = profile?.identifier?.userId.toLowerCase()
 
-    const { isHiddenAddress, hiddenList } = useWeb3ProfileHiddenSetting(userId, persona, {
+    const { isHiddenAddress, hiddenList } = useWeb3ProfileHiddenSettings(userId, persona, {
         address: account,
         hiddenAddressesKey: 'NFTs',
         collectionKey: CollectionType.NFTs,

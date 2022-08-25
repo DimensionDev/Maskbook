@@ -29,33 +29,11 @@ export interface PersonaKV {
     persona: string
     proofs?: Proof[]
 }
-// export interface Patch {
-//     hiddenAddresses: WalletsCollection
-//     unListedCollections: Record<
-//         string,
-//         {
-//             NFTs: string[]
-//             Donations: string[]
-//             Footprints: string[]
-//         }
-//     >
-// }
 export interface Proof {
     platform: NextIDPlatform
     identity: string
     content?: Record<string, Web3ProfileStorage>
 }
-// export interface CollectionTypes {
-//     platform: NetworkPluginID
-//     address: string // take id as address if collection is a poap
-//     key: string // address + tokenId as unique key of NFT, id as unique key of poap
-//     tokenId?: string
-//     iconURL?: string
-//     hidden?: boolean
-//     name?: string
-//     chainId?: ChainId
-// }
-
 export interface Collection {
     address: string
     collections?: CollectionTypes[]
@@ -68,19 +46,6 @@ export interface Response {
     status: boolean
     assets: GeneralAsset[]
 }
-
-// export interface WalletsCollection {
-//     NFTs?: WalletTypes[]
-//     donations?: WalletTypes[]
-//     footprints?: WalletTypes[]
-// }
-
-// export interface WalletTypes {
-//     address: string
-//     platform?: NetworkPluginID
-//     updateTime?: string
-//     collections?: CollectionTypes[]
-// }
 
 export interface AccountType extends BindingProof {
     walletList: WalletsCollection

@@ -40,6 +40,6 @@ export function useCurrentVisitingUser(flag?: number) {
                 address: '',
             })
         }
-    }, [identity, flag, location.href])
+    }, [identity, flag, location.href, Storage])
     return user
 }

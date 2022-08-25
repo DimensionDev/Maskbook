@@ -1,13 +1,13 @@
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { PluginId } from '@masknet/plugin-infra'
 import { NextIDPlatform, EMPTY_LIST } from '@masknet/shared-base'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useAsync } from 'react-use'
 import { useMemo } from 'react'
 import type { CollectionType } from '@masknet/web3-providers'
 import type { Web3ProfileStorage } from '../types'
 
-export function useWeb3ProfileHiddenSetting(
+export function useWeb3ProfileHiddenSettings(
     identity?: string,
     publicKeyAsHex?: string,
     options?: {
@@ -16,7 +16,7 @@ export function useWeb3ProfileHiddenSetting(
         collectionKey?: CollectionType
     },
 ) {
-    const { Storage } = useWeb3State()
+    const { Storage } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     const { value } = useAsync(async () => {
         if (!Storage || !publicKeyAsHex || !identity) return

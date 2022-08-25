@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { CollectionDetailCard, useWeb3ProfileHiddenSetting } from '@masknet/shared'
+import { CollectionDetailCard, useWeb3ProfileHiddenSettings } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { CollectionType, RSS3BaseAPI } from '@masknet/web3-providers'
@@ -56,7 +56,7 @@ export function DonationPage({ socialAddress, publicKey, userId }: DonationPageP
         formatEthereumAddress(socialAddress?.address ?? ZERO_ADDRESS),
     )
 
-    const { isHiddenAddress, hiddenList } = useWeb3ProfileHiddenSetting(userId, publicKey, {
+    const { isHiddenAddress, hiddenList } = useWeb3ProfileHiddenSettings(userId, publicKey, {
         address: socialAddress?.address,
         hiddenAddressesKey: 'donations',
         collectionKey: CollectionType.Donations,
