@@ -39,7 +39,7 @@ export function Image({ fallbackImage, ...rest }: ImageProps) {
         if (!rest.src) return
         // base64 image
         if (rest.src.startsWith('data')) return rest.src
-        const response = await fetch(rest.src, {
+        const response = await fetch(`https://cors.r2d2.to?${rest.src}`, {
             cache: 'force-cache',
         })
         return URL.createObjectURL(await response.blob())
