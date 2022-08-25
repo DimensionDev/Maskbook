@@ -13,7 +13,7 @@ export function useNFTs(user: User | undefined) {
             for (const NFT of assets) {
                 if (NFT.chainId !== ChainId.Mainnet) continue
                 const glbSupport = NFT.metadata?.imageURL?.endsWith('.glb') ?? false
-                if (NFT.metadata?.imageURL?.includes('ipfs://')) {
+                if (NFT.metadata?.imageURL) {
                     NFT.metadata.imageURL = resolveIPFSLink(NFT.metadata.imageURL)
                 }
                 const tokens: Record<string, OwnerERC721TokenInfo> = {
