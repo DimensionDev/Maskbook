@@ -108,6 +108,7 @@ export interface OpenPageConfirmEvent {
     title: string
     text: string
     actionHint: string
+    position?: 'center' | 'top-right'
 }
 
 export interface Web3ProfileDialogRequest {

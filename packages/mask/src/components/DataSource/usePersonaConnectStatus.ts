@@ -96,16 +96,20 @@ export function useCurrentPersonaConnectStatus() {
     const { setDialog: setPersonaListDialog } = useRemoteControlledDialog(PluginNextIDMessages.PersonaListDialogUpdated)
     const { setDialog: setCreatePersonaConfirmDialog } = useRemoteControlledDialog(MaskMessages.events.openPageConfirm)
 
-    const create = useCallback(() => {
-        setCreatePersonaConfirmDialog({
-            open: true,
-            target: 'dashboard',
-            url: DashboardRoutes.Setup,
-            text: t('applications_create_persona_hint'),
-            title: t('applications_create_persona_title'),
-            actionHint: t('applications_create_persona_action'),
-        })
-    }, [setCreatePersonaConfirmDialog])
+    const create = useCallback(
+        (target?: string, position?: 'center' | 'top-right') => {
+            setCreatePersonaConfirmDialog({
+                open: true,
+                target: 'dashboard',
+                url: target ?? DashboardRoutes.Setup,
+                text: t('applications_create_persona_hint'),
+                title: t('applications_create_persona_title'),
+                actionHint: t('applications_create_persona_action'),
+                position,
+            })
+        },
+        [setCreatePersonaConfirmDialog],
+    )
 
     const openPersonListDialog = useCallback(
         (target?: string, position?: 'center' | 'top-right') => {
@@ -156,7 +160,7 @@ export function useCurrentPersonaConnectStatus() {
             )
             const verifiedProfile = nextIDInfo?.proofs.find(
                 (x) =>
-                    // TODO: should move to next id api center
+                    // TODO: should move to next id api center, link the MF-1845
                     isSameProfile(nextIDIdentityToProfile(x.identity, x.platform), currentProfile?.identifier) &&
                     x.is_valid,
             )
