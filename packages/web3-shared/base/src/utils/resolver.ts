@@ -270,6 +270,12 @@ export function resolveIPFSLink(fragmentOrURL?: string): string | undefined {
     return fragmentOrURL
 }
 
+export function resolveARLink(str?: string): string {
+    if (!str) return ''
+    if (str.startsWith('https://')) return str
+    return urlcat('https://arweave.net/:str', { str })
+}
+
 export function resolveCORSLink(url?: string): string | undefined {
     if (!url) return url
     if (url.startsWith(CORS_HOST)) return url

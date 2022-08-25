@@ -1,6 +1,12 @@
 import urlcat from 'urlcat'
-import { createIndicator, createPageable, HubOptions, NonFungibleAsset, TokenType } from '@masknet/web3-shared-base'
-import { resolveAR } from '@masknet/web3-shared-evm'
+import {
+    createIndicator,
+    createPageable,
+    resolveARLink,
+    HubOptions,
+    NonFungibleAsset,
+    TokenType,
+} from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-flow'
 import type { NonFungibleTokenAPI } from '../../types'
 import { fetchJSON } from '../../helpers'
@@ -14,7 +20,7 @@ function createNonFungibleTokenImageURL(asset: AlchemyNFT_FLOW | AlchemyResponse
         asset?.metadata?.metadata?.find((data) => data?.name === 'eventImage')?.value ||
         asset?.metadata?.metadata?.find((data) => data?.name === 'ipfsLink')?.value ||
         asset?.media?.find((data) => data?.mimeType === 'image/png | image')?.uri ||
-        resolveAR(asset?.metadata?.metadata?.find((data) => data?.name === 'arLink')?.value || '')
+        resolveARLink(asset?.metadata?.metadata?.find((data) => data?.name === 'arLink')?.value || '')
     )
 }
 

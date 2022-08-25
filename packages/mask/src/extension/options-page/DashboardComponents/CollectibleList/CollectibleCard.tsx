@@ -1,9 +1,8 @@
-import type { Web3Helper } from '@masknet/plugin-infra/src/entry-web3'
-import { NFTCardStyledAssetPlayer } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
-import type { NetworkPluginID, NonFungibleAsset, SocialAddress, SourceType, Wallet } from '@masknet/web3-shared-base'
-import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
 import { Card, Link } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
+import { useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import type { NetworkPluginID, NonFungibleAsset, SocialAddress, SourceType, Wallet } from '@masknet/web3-shared-base'
 import { ActionsBarNFT } from '../ActionsBarNFT'
 
 const useStyles = makeStyles()((theme) => ({
@@ -78,14 +77,16 @@ export function CollectibleCard({
     ...rest
 }: CollectibleCardProps) {
     const { classes, cx } = useStyles()
+    const { Others } = useWeb3State()
 
     return (
         <Link
             target="_blank"
             rel="noopener noreferrer"
-            // TODO:
-            // add useNonFungibleTokenLink()
-            href={asset.link ?? resolveOpenSeaLink(asset.address, asset.tokenId)}
+            href={
+                asset.link ??
+                Others?.explorerResolver.nonFungibleTokenLink?.(asset.chainId, asset.address, asset.tokenId)
+            }
             className={cx(classes.linkWrapper, className)}
             {...rest}>
             <div className={classes.blocker} />
