@@ -8,12 +8,7 @@ import {
     NonFungibleAsset,
     TokenType,
 } from '@masknet/web3-shared-base'
-import {
-    ChainId as ChainId_EVM,
-    resolveIPFSLinkFromURL,
-    resolveOpenSeaLink,
-    SchemaType as SchemaType_EVM,
-} from '@masknet/web3-shared-evm'
+import { ChainId as ChainId_EVM, resolveOpenSeaLink, SchemaType as SchemaType_EVM } from '@masknet/web3-shared-evm'
 import type { NonFungibleTokenAPI } from '../../types'
 import { fetchJSON } from '../../helpers'
 import { Alchemy_EVM_NetworkMap } from '../constants'
@@ -44,16 +39,13 @@ function createNonFungibleToken(
             chainId,
             name: asset.metadata.name ?? asset.title,
             description: asset.metadata.description || asset.description,
-            imageURL: resolveIPFSLinkFromURL(
+            imageURL:
                 asset.metadata.image ||
-                    asset.metadata.image_url ||
-                    asset.media?.[0]?.gateway ||
-                    asset.metadata.animation_url ||
-                    '',
-            ),
-            mediaURL: resolveIPFSLinkFromURL(
+                asset.metadata.image_url ||
+                asset.media?.[0]?.gateway ||
+                asset.metadata.animation_url,
+            mediaURL:
                 asset.media?.[0]?.gateway ?? asset.media?.[0]?.raw ?? asset.metadata.image_url ?? asset.metadata.image,
-            ),
         },
         contract: {
             chainId,
@@ -95,13 +87,11 @@ function createNonFungibleAsset(
                 metaDataResponse.title,
             symbol: contractMetadataResponse?.contractMetadata?.symbol ?? '',
             description: metaDataResponse.description,
-            imageURL: resolveIPFSLinkFromURL(
+            imageURL:
                 metaDataResponse.metadata?.image ||
-                    metaDataResponse.media?.[0]?.gateway ||
-                    metaDataResponse.media?.[0]?.raw ||
-                    '',
-            ),
-            mediaURL: resolveIPFSLinkFromURL(metaDataResponse.media?.[0]?.gateway),
+                metaDataResponse.media?.[0]?.gateway ||
+                metaDataResponse.media?.[0]?.raw,
+            mediaURL: metaDataResponse.media?.[0]?.gateway,
         },
         contract: {
             chainId,

@@ -14,14 +14,7 @@ import {
     scale10,
     TokenType,
 } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    createContract,
-    getRPCConstants,
-    resolveIPFSLinkFromURL,
-    SchemaType,
-    WNATIVE,
-} from '@masknet/web3-shared-evm'
+import { ChainId, createContract, getRPCConstants, SchemaType, WNATIVE } from '@masknet/web3-shared-evm'
 import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants'
 import type { EVM } from '../types/EVM'
 import { courier, getJSON, getPaymentToken } from '../../helpers'
@@ -90,13 +83,12 @@ export function createNonFungibleAsset(chainId: ChainId, asset: EVM.Asset): NonF
     const payload = getJSON<EVM.Payload>(asset.metadata_json)
     const name = payload?.name || asset.name || asset.contract_name || ''
     const description = payload?.description
-    const mediaURL = resolveIPFSLinkFromURL(
+    const mediaURL =
         asset.nftscan_uri ?? asset.image_uri?.startsWith('http')
             ? asset.image_uri
             : asset.image_uri
             ? `ipfs://${asset.image_uri}`
-            : undefined,
-    )
+            : undefined
 
     const creator = asset.minter
     const owner = asset.owner

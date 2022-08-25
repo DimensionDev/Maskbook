@@ -13,15 +13,8 @@ export function resolveIPFSLinkFromURL(url?: string): string {
     return resolveIPFSLink(url.replace(/^ipfs:\/\/(ipfs\/)?/, ''))
 }
 
-export function resolveIPFS(str: string): string {
-    if (str?.length === 0) return str
-    if (str.startsWith('https://')) return str
-    if (!str.startsWith('ipfs://')) return resolveIPFSLink(str)
-    return resolveIPFSLink(str.replace(/^ipfs:\/\/(ipfs\/)?/, ''))
-}
-
-export function resolveAR(str: string): string {
-    if (str.length === 0) return str
+export function resolveAR(str?: string): string {
+    if (!str) return ''
     if (str.startsWith('https://')) return str
     return urlcat('https://arweave.net/:str', { str })
 }
