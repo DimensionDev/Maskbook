@@ -444,7 +444,7 @@ export namespace Plugin.SNSAdaptor {
         /** This UI will be rendered as an entry in the wallet status dialog */
         ApplicationEntries?: ApplicationEntry[]
         /** This UI will be rendered under the Search of the SNS. */
-        SearchResultTabs?: InjectUI<{}>
+        SearchResultTabs?: SearchResultTab[]
         /** This UI will be rendered as tabs on the profile page */
         ProfileTabs?: ProfileTab[]
         /** This UI will be rendered as tabs on the profile card */
@@ -614,6 +614,28 @@ export namespace Plugin.SNSAdaptor {
                 addressNames?: Array<SocialAddress<NetworkPluginID>>,
                 sourceType?: AvatarRealmSourceType,
             ): boolean
+        }
+    }
+    export interface SearchResultTab {
+        ID: string
+
+        /**
+         * The name of the tab
+         */
+        label: I18NStringField | string
+
+        /**
+         * Used to order the sliders
+         */
+        priority: number
+
+        UI?: {
+            /**
+             * The injected tab content
+             */
+            TabContent: InjectUI<{
+                keyword?: string
+            }>
         }
     }
     export interface ProfileSlider {

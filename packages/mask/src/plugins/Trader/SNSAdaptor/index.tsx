@@ -1,7 +1,7 @@
-import type { Plugin } from '@masknet/plugin-infra'
+import { Plugin, PluginId } from '@masknet/plugin-infra'
 import { base } from '../base'
 import { TraderDialog } from './trader/TraderDialog'
-import { SearchResultTabs } from './trending/SearchResultInspector'
+import { SearchResultTabs } from './trending/SearchResultTabs'
 import { Trans } from 'react-i18next'
 import { TagInspector } from './trending/TagInspector'
 import { enhanceTag } from './cashTag'
@@ -29,7 +29,28 @@ const sns: Plugin.SNSAdaptor.Definition<
     init(signal, context) {
         setupStorage(context.createKVStorage('persistent', storageDefaultValue))
     },
-    SearchResultTabs,
+    SearchResultTabs: [
+        {
+            ID: `${PluginId.Trader}_a`,
+            priority: 0,
+            label: 'Tab A',
+            UI: {
+                TabContent: () => {
+                    return <h1>Tab A</h1>
+                },
+            },
+        },
+        {
+            ID: `${PluginId.Trader}_b`,
+            priority: 1,
+            label: 'Tab B',
+            UI: {
+                TabContent: () => {
+                    return <h1>Tab B</h1>
+                },
+            },
+        },
+    ],
     GlobalInjection: function Component() {
         return (
             <>
