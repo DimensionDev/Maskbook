@@ -9,7 +9,8 @@ import { EMPTY_LIST, ProfileInformation } from '@masknet/shared-base'
 import type { SocialIdentity } from '@masknet/web3-shared-base'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
 import Services from '../../extension/service'
-import { sortPersonaBindings } from '../../utils'
+import { MaskMessages, sortPersonaBindings } from '../../utils'
+import { useEffect } from 'react'
 
 async function queryPersonaFromDB(identityResolved: IdentityResolved) {
     if (!identityResolved.identifier) return
@@ -115,7 +116,7 @@ export function useCurrentVisitingPersonas() {
 export function useSocialIdentity(identity: IdentityResolved) {
     const isOwner = useIsOwnerIdentity(identity)
 
-    return useAsyncRetry<SocialIdentity>(async () => {
+    const result = useAsyncRetry<SocialIdentity>(async () => {
         const bindings = await queryPersonasFromNextID(identity)
         const persona = await queryPersonaFromDB(identity)
         const personaBindings =
@@ -128,6 +129,10 @@ export function useSocialIdentity(identity: IdentityResolved) {
             binding: first(personaBindings),
         }
     }, [isOwner, identity.identifier?.toText()])
+
+    useEffect(() => MaskMessages.events.ownProofChanged.on(result.retry), [result.retry])
+
+    return result
 }
 
 /**

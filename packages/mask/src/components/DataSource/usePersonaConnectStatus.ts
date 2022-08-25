@@ -198,5 +198,7 @@ export function useCurrentPersonaConnectStatus() {
     ])
 
     useEffect(() => MaskMessages.events.ownProofChanged.on(retry), [retry])
+    useEffect(() => MaskMessages.events.ownPersonaChanged.on(retry), [retry])
+
     return { value, loading, retry }
 }
