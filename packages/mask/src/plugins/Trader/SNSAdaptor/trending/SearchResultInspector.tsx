@@ -2,7 +2,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useAvailableDataProviders } from '../../trending/useAvailableDataProviders'
 import { TagType } from '../../types'
-import { TraderView } from './TraderView'
+import { TrendingView } from './TrendingView'
 
 export interface SearchResultInspectorProps {
     keyword: string
@@ -16,7 +16,7 @@ export function SearchResultInspector({ keyword }: SearchResultInspectorProps) {
     if (!name || !dataProviders?.length) return null
     return (
         <TargetChainIdContext.Provider>
-            <TraderView isPopper={false} name={name} tagType={type_} dataProviders={dataProviders} />
+            <TrendingView isPopper={false} name={name} tagType={type_} dataProviders={dataProviders} />
         </TargetChainIdContext.Provider>
     )
 }
