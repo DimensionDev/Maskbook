@@ -238,7 +238,7 @@ const IPFS_PROTOCOL_PREFIX = 'ipfs://'
 export function resolveIPFSLink(fragmentOrURL?: string): string | undefined {
     if (!fragmentOrURL) return fragmentOrURL
 
-    // deliminate cors proxy
+    // eliminate cors proxy
     if (fragmentOrURL.startsWith(CORS_HOST)) {
         return resolveIPFSLink(decodeURIComponent(fragmentOrURL.replace(new RegExp(`${CORS_HOST}\??`), '')))
     }
