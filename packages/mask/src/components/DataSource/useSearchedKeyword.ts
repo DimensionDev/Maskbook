@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { activatedSocialNetworkUI } from '../../../social-network'
+import { activatedSocialNetworkUI } from '../../social-network'
 
 export function useSearchedKeyword() {
     const [keyword, setKeyword] = useState('')
