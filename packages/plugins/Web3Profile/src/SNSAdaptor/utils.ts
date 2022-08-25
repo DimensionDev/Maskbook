@@ -1,12 +1,4 @@
-import {
-    BindingProof,
-    EMPTY_LIST,
-    fromHex,
-    NextIDPlatform,
-    NextIDStoragePayload,
-    PersonaInformation,
-    toBase64,
-} from '@masknet/shared-base'
+import { BindingProof, EMPTY_LIST, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
 import { AlchemyEVM, NextIDStorage, RSS3 } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
@@ -259,39 +251,4 @@ export const getWalletHiddenList = async (publicKey: string) => {
         return hiddenObj
     }
     return
-}
-
-export const getKvPayload = async (patchData: unknown, publicHexKey: string, accountId: string) => {
-    try {
-        const data = JSON.parse(JSON.stringify(patchData))
-        const payload = await NextIDStorage.getPayload(publicHexKey, NextIDPlatform.Twitter, accountId, data, PLUGIN_ID)
-        return payload
-    } catch (error) {
-        console.error(error)
-        return null
-    }
-}
-
-export const setKvPatchData = async (
-    payload: NextIDStoragePayload,
-    signature: string,
-    patchData: unknown,
-    publicHexKey: string,
-    accountId: string,
-) => {
-    try {
-        const base64Sig = toBase64(fromHex(signature))
-        await NextIDStorage.set(
-            payload?.uuid,
-            publicHexKey,
-            base64Sig,
-            NextIDPlatform.Twitter,
-            accountId,
-            payload?.createdAt,
-            patchData,
-            PLUGIN_ID,
-        )
-    } catch (error) {
-        console.error(error)
-    }
 }

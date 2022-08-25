@@ -1,16 +1,16 @@
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { ChainId, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { useEffect, useState } from 'react'
 import { useI18N } from '../../locales'
+import { PLUGIN_ID } from '../../constants'
 import { InjectedDialog, CollectionTypes, WalletTypes } from '@masknet/shared'
-import type { PersonaInformation, NextIDStoragePayload } from '@masknet/shared-base'
-import { context } from '../context'
+import { PersonaInformation, NextIDPlatform } from '@masknet/shared-base'
 import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 import { AddNFT } from './AddCollectibles'
 import classNames from 'classnames'
 import { CollectionList } from './CollectionList'
-import { getKvPayload, setKvPatchData } from '../utils'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -146,6 +146,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
         collectionList,
     } = props
     const t = useI18N()
+    const { Storage } = useWeb3State()
     const classes = useStylesExtends(useStyles(), props)
     const [unListedCollections, setUnListedCollections] = useState<CollectionTypes[]>([])
     const [listedCollections, setListedCollections] = useState<CollectionTypes[]>([])
@@ -190,19 +191,16 @@ export function ImageListDialog(props: ImageListDialogProps) {
             },
         }
         try {
-            const payload = await getKvPayload(patch, currentPersona.identifier.publicKeyAsHex, accountId!)
-            if (!payload) throw new Error('get payload failed')
-            const signature = await context.privileged_silentSign()?.(
+            if (!Storage || !accountId) return
+            const storage = Storage.createNextIDStorage(
+                accountId,
+                NextIDPlatform.Twitter,
+                currentPersona.identifier.publicKeyAsHex,
                 currentPersona.identifier,
-                (payload.val as NextIDStoragePayload)?.signPayload,
             )
-            const res = await setKvPatchData(
-                payload.val as NextIDStoragePayload,
-                signature?.signature?.signature,
-                patch,
-                currentPersona.identifier.publicKeyAsHex?.replace(/^0x/, ''),
-                accountId!,
-            )
+
+            await storage.set(PLUGIN_ID, patch)
+
             onClose()
             retryData()
         } catch (err) {
