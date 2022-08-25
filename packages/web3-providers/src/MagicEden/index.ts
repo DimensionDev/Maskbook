@@ -9,8 +9,8 @@ import {
     NonFungibleTokenContract,
     OrderSide,
     TokenType,
+    resolveIPFSLink,
 } from '@masknet/web3-shared-base'
-import { resolveIPFSLink } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-solana'
 import { courier } from '../helpers'
 import type { NonFungibleTokenAPI } from '../types'
