@@ -170,7 +170,6 @@ export function useCurrentPersonaConnectStatus() {
                 proof: nextIDInfo?.proofs,
             }
         } catch {
-            // TODO: How to handle the nextID down or network failed
             return {
                 action: openPersonListDialog,
                 currentPersona,
