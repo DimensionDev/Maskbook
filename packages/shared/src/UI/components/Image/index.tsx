@@ -12,11 +12,16 @@ const useStyles = makeStyles()((theme) => ({
         width: 30,
         height: 30,
     },
+    spinContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        position: 'relative',
+    },
 }))
 
 interface ImageProps
     extends ImgHTMLAttributes<HTMLImageElement>,
-        withClasses<'loadingFailImage' | 'imageLoading' | 'imageLoadingBox'> {
+        withClasses<'fallbackImage' | 'imageLoading' | 'imageLoadingBox'> {
     fallbackImage?: URL
 }
 
@@ -42,7 +47,7 @@ export function Image({ fallbackImage, ...rest }: ImageProps) {
     if (imageLoading) {
         return (
             <Box className={classes.imageLoadingBox}>
-                <Box sx={{ position: 'relative' }}>
+                <Box className={classes.spinContainer}>
                     <CircularProgress
                         variant="determinate"
                         value={100}
@@ -72,7 +77,7 @@ export function Image({ fallbackImage, ...rest }: ImageProps) {
             <img
                 {...rest}
                 src={fallbackImageURL.toString()}
-                className={classNames(classes.failImage, classes.loadingFailImage)}
+                className={classNames(classes.failImage, classes.fallbackImage)}
             />
         </Box>
     )

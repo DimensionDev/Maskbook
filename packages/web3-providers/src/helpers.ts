@@ -25,7 +25,7 @@ export async function fetchJSON<T = unknown>(
         fetch: typeof globalThis.fetch
     },
 ): Promise<T> {
-    const fetch = options?.fetch ?? globalThis.r2d2Fetch ?? globalThis.fetch
+    const fetch = options?.fetch ?? globalThis.fetch
     const res = await fetch(requestInfo, requestInit)
     return res.json()
 }
@@ -41,6 +41,15 @@ export function getAllEVMNativeAssets(): Array<FungibleAsset<ChainId, SchemaType
         ...createNativeToken(x.chainId),
         balance: '0',
     }))
+}
+
+export function getJSON<T>(json?: string): T | undefined {
+    if (!json) return
+    try {
+        return JSON.parse(json) as T
+    } catch {
+        return
+    }
 }
 
 export function getPaymentToken(chainId: ChainId, token?: { name?: string; symbol?: string; address?: string }) {

@@ -91,7 +91,7 @@ const useStyles = makeStyles()((theme) => ({
     providerIcon: {
         cursor: 'pointer',
     },
-    loadingFailImage: {
+    fallbackImage: {
         position: 'absolute',
     },
 }))
@@ -131,7 +131,7 @@ export function NFTBasicInfo(props: NFTBasicInfoProps) {
                         wrapper: classes.wrapper,
                         imgWrapper: classes.imgWrapper,
                         loadingPlaceholder: classes.loadingPlaceholder,
-                        loadingFailImage: classes.loadingFailImage,
+                        fallbackImage: classes.fallbackImage,
                     }}
                     isImageOnly={false}
                 />

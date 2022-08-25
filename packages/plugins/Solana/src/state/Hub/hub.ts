@@ -1,5 +1,5 @@
 import type { PartialRequired } from '@masknet/shared-base'
-import { CoinGecko, MagicEden } from '@masknet/web3-providers'
+import { CoinGecko, MagicEden, SolanaFungible, SolanaNonFungible } from '@masknet/web3-providers'
 import {
     CurrencyType,
     FungibleAsset,
@@ -9,13 +9,12 @@ import {
     isSameAddress,
     NonFungibleAsset,
     NonFungibleToken,
-    NonFungibleTokenCollection,
+    NonFungibleCollection,
     Pageable,
     SourceType,
     Transaction,
 } from '@masknet/web3-shared-base'
 import { ChainId, GasOption, getCoinGeckoConstants, getTokenConstants, SchemaType } from '@masknet/web3-shared-solana'
-import { SolanaRPC } from '../../messages'
 import type { SolanaHub } from './types'
 
 class Hub implements SolanaHub {
@@ -44,7 +43,7 @@ class Hub implements SolanaHub {
         chainId: ChainId,
         initial?: HubOptions<ChainId>,
     ): Promise<Array<FungibleToken<ChainId, SchemaType>>> {
-        return SolanaRPC.getAllSplTokens()
+        return SolanaFungible.getFungibleTokens(chainId, [])
     }
     async getNonFungibleTokensFromTokenList(
         chainId: ChainId,
@@ -73,7 +72,7 @@ class Hub implements SolanaHub {
         const options = this.getOptions(initial, {
             account,
         })
-        return SolanaRPC.getFungibleAssets(options.account, options)
+        return SolanaFungible.getAssets(options.account, options)
     }
     getNonFungibleTokens(
         account: string,
@@ -86,7 +85,7 @@ class Hub implements SolanaHub {
             return MagicEden.getAssets(options.account, options)
         } catch {
             // TODO: move to web3-provider
-            return SolanaRPC.getNonFungibleAssets(options.account, options)
+            return SolanaNonFungible.getAssets(options.account, options)
         }
     }
     async getNonFungibleAssets(
@@ -98,7 +97,7 @@ class Hub implements SolanaHub {
     getNonFungibleCollectionsByOwner(
         account: string,
         initial?: HubOptions<ChainId>,
-    ): Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>>> {
+    ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>>> {
         const options = this.getOptions(initial, {
             account,
         })

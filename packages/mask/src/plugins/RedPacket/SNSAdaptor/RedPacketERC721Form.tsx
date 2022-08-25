@@ -144,7 +144,7 @@ const useStyles = makeStyles()((theme) => {
             cursor: 'pointer',
             color: 'rgba(255, 95, 95, 1)',
         },
-        loadingFailImage: {
+        fallbackImage: {
             minHeight: '0 !important',
             maxWidth: 'none',
             transform: 'translateY(10px)',
@@ -450,7 +450,7 @@ function NFTCard(props: NFTCardProps) {
                 renderOrder={renderOrder}
                 setERC721TokenName={setName}
                 classes={{
-                    loadingFailImage: classes.loadingFailImage,
+                    fallbackImage: classes.fallbackImage,
                     iframe: classes.iframe,
                     imgWrapper: classes.assetImgWrapper,
                 }}

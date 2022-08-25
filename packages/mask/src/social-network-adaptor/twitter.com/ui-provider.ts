@@ -34,6 +34,7 @@ import { injectUserNFTAvatarAtTweet } from './injection/NFT/TweetNFTAvatar'
 import { injectNFTAvatarClipInTwitter } from './injection/NFT/NFTAvatarClip'
 import { TwitterRenderFragments } from './customization/render-fragments'
 import { injectProfileCover } from './injection/ProfileCover'
+import { injectProfileCardHolder } from './injection/ProfileCard'
 import { injectAvatar } from './injection/Avatar'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
@@ -192,6 +193,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         avatarClipNFT: injectNFTAvatarClipInTwitter,
         openNFTAvatarSettingDialog,
         avatar: injectAvatar,
+        profileCard: injectProfileCardHolder,
     },
     configuration: {
         nextIDConfig: {

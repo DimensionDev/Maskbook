@@ -9,7 +9,7 @@ import {
     HubIndicator,
     HubOptions,
     NonFungibleAsset,
-    NonFungibleTokenCollection,
+    NonFungibleCollection,
     NonFungibleTokenEvent,
     NonFungibleTokenOrder,
     OrderSide,
@@ -106,7 +106,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
     private createNonFungibleCollectionFromCollection(
         chainId: ChainId,
         collection: Collection,
-    ): NonFungibleTokenCollection<ChainId, SchemaType> {
+    ): NonFungibleCollection<ChainId, SchemaType> {
         return {
             chainId,
             address: collection.collectionAddress,

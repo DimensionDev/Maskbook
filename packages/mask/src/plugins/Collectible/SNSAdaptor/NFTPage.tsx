@@ -8,6 +8,5 @@ export interface NFTPageProps {
 
 export function NFTPage({ socialAddress, identity }: NFTPageProps) {
     if (!socialAddress) return null
-
     return <CollectionList addressName={socialAddress} persona={identity?.publicKey} profile={identity} />
 }

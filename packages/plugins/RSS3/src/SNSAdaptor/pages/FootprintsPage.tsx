@@ -35,7 +35,11 @@ export const FootprintsPage = memo(function FootprintsPage({ address, publicKey,
     const [selectedFootprint, setSelectedFootprint] = useState<RSS3BaseAPI.Collection | undefined>()
 
     if (loading || !footprints.length) {
-        return <StatusBox loading description={t.no_Footprint_found()} empty={!footprints.length} />
+        return (
+            <Box p={2}>
+                <StatusBox loading={loading} description={t.no_Footprint_found()} empty={!footprints.length} />
+            </Box>
+        )
     }
 
     if (isHiddenAddress) {
@@ -50,28 +54,30 @@ export const FootprintsPage = memo(function FootprintsPage({ address, publicKey,
     }
 
     return (
-        <Box margin="16px 0 0 16px">
+        <Box p={2}>
             <section className="grid items-center justify-start grid-cols-1 gap-2 py-4 ">
                 {footprints.map((footprint) => (
                     <FootprintCard
                         key={footprint.id}
-                        onSelect={() => setSelectedFootprint(footprint)}
+                        onSelect={setSelectedFootprint}
                         username={username ?? ''}
                         footprint={footprint}
                     />
                 ))}
             </section>
-            <CollectionDetailCard
-                open={Boolean(selectedFootprint)}
-                onClose={() => setSelectedFootprint(undefined)}
-                img={selectedFootprint?.imageURL}
-                title={selectedFootprint?.title}
-                referenceURL={selectedFootprint?.actions?.[0]?.related_urls?.[0]}
-                description={selectedFootprint?.description}
-                type={CollectionType.Footprints}
-                time={selectedFootprint?.timestamp}
-                location={selectedFootprint?.location}
-            />
+            {selectedFootprint ? (
+                <CollectionDetailCard
+                    open
+                    onClose={() => setSelectedFootprint(undefined)}
+                    img={selectedFootprint.imageURL}
+                    title={selectedFootprint.title}
+                    referenceURL={selectedFootprint.actions?.[0]?.related_urls?.[0]}
+                    description={selectedFootprint.description}
+                    type={CollectionType.Footprints}
+                    time={selectedFootprint.timestamp}
+                    location={selectedFootprint.location}
+                />
+            ) : null}
         </Box>
     )
 })

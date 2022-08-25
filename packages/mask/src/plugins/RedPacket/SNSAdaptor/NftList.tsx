@@ -82,7 +82,7 @@ const useStyles = makeStyles()((theme) => {
             padding: '2px 2px 6px',
             color: MaskColorVar.textSecondary,
         },
-        loadingFailImage: {
+        fallbackImage: {
             minHeight: '0 !important',
             maxWidth: 'none',
             transform: 'translateY(-10px)',
@@ -108,7 +108,7 @@ export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claime
         <div className={classnames(className, classes.nft)} {...rest}>
             <NFTCardStyledAssetPlayer
                 classes={{
-                    loadingFailImage: classes.loadingFailImage,
+                    fallbackImage: classes.fallbackImage,
                 }}
                 tokenId={tokenId}
                 renderOrder={renderOrder}

@@ -89,7 +89,7 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
         inactive: {
             opacity: 0.5,
         },
-        loadingFailImage: {
+        fallbackImage: {
             width: 64,
             height: 64,
         },
@@ -135,7 +135,7 @@ export const NFTItem: FC<NFTItemProps> = ({ token }) => {
                 url={token.metadata?.imageURL ?? token.metadata?.imageURL}
                 tokenId={token.tokenId}
                 classes={{
-                    loadingFailImage: classes.loadingFailImage,
+                    fallbackImage: classes.fallbackImage,
                     iframe: classes.assetPlayerIframe,
                     imgWrapper: classes.imgWrapper,
                     wrapper: classes.wrapper,

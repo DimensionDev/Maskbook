@@ -1,11 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import { asyncIteratorToArray } from '@masknet/shared-base'
-import {
-    HubIndicator,
-    NetworkPluginID,
-    NonFungibleTokenCollection,
-    pageableToIterator,
-} from '@masknet/web3-shared-base'
+import { HubIndicator, NetworkPluginID, NonFungibleCollection, pageableToIterator } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '../web3-helpers'
 import { useAccount } from './useAccount'
 import { useWeb3Hub } from './useWeb3Hub'
@@ -18,7 +13,7 @@ export function useNonFungibleCollections<S extends 'all' | void = void, T exten
     const hub = useWeb3Hub(pluginID, options)
 
     return useAsyncRetry<
-        Array<NonFungibleTokenCollection<Web3Helper.ChainIdScope<S, T>, Web3Helper.SchemaTypeScope<S, T>>>
+        Array<NonFungibleCollection<Web3Helper.ChainIdScope<S, T>, Web3Helper.SchemaTypeScope<S, T>>>
     >(async () => {
         if (!account || !hub) return []
 

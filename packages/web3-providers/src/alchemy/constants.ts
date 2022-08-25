@@ -1,6 +1,7 @@
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId as ChainId_EVM } from '@masknet/web3-shared-evm'
 import { ChainId as ChainId_FLOW } from '@masknet/web3-shared-flow'
+
 export const Alchemy_EVM_NetworkMap = {
     network: NetworkPluginID.PLUGIN_EVM,
     chains: [
