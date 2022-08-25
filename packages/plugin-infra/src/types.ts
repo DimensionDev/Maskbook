@@ -451,7 +451,7 @@ export namespace Plugin.SNSAdaptor {
         ProfileCardTabs?: ProfileTab[]
         /** This UI will be rendered as cover on the profile page */
         ProfileCover?: ProfileCover[]
-        /** This UI will be rendered as tabs on the profile card */
+        /** This UI will be rendered components on the avatar realm */
         AvatarRealm?: AvatarRealm
         /** This UI will be rendered as plugin wrapper page */
         wrapperProps?: PluginWrapperProps

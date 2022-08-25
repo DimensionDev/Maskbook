@@ -34,7 +34,6 @@ import {
     getEthereumConstant,
     isValidAddress,
     isNativeTokenAddress,
-    resolveIPFSLinkFromURL,
     encodeTransaction,
 } from '@masknet/web3-shared-evm'
 import {
@@ -51,6 +50,7 @@ import {
     NonFungibleTokenContract,
     NonFungibleTokenMetadata,
     TransactionStatusType,
+    resolveIPFSLink,
 } from '@masknet/web3-shared-base'
 import type { BaseContract } from '@masknet/web3-contracts/types/types'
 import { createContext, dispatch } from './composer'
@@ -457,8 +457,8 @@ class Connection implements EVM_Connection {
                 '',
                 response.description,
                 undefined,
-                resolveIPFSLinkFromURL(response.image),
-                resolveIPFSLinkFromURL(response.image),
+                resolveIPFSLink(response.image),
+                resolveIPFSLink(response.image),
             )
         }
 
@@ -475,8 +475,8 @@ class Connection implements EVM_Connection {
             '',
             response.description,
             undefined,
-            resolveIPFSLinkFromURL(response.image),
-            resolveIPFSLinkFromURL(response.image),
+            resolveIPFSLink(response.image),
+            resolveIPFSLink(response.image),
         )
     }
     async getNonFungibleTokenContract(

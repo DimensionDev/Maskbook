@@ -1,17 +1,6 @@
 import urlcat from 'urlcat'
-import { ChainId } from '../types'
 import { SourceType } from '@masknet/web3-shared-base'
-
-// TODO check ipfs inside before resolving
-export function resolveIPFSLink(ipfs: string): string {
-    return urlcat('https://ipfs.io/ipfs/:ipfs', { ipfs })
-}
-
-export function resolveIPFSLinkFromURL(url?: string): string {
-    if (!url) return ''
-    if (url.match(/^https?:\/\//)) return url
-    return resolveIPFSLink(url.replace(/^ipfs:\/\/(ipfs\/)?/, ''))
-}
+import { ChainId } from '../types'
 
 export function resolveAR(str?: string): string {
     if (!str) return ''

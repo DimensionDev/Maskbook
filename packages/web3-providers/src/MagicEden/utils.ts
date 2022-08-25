@@ -1,4 +1,4 @@
-import { resolveIPFSLink } from '@masknet/web3-shared-evm'
+import { resolveIPFSLink } from '@masknet/web3-shared-base'
 
 export function toImage(url?: string) {
     if (!url) return ''
