@@ -11,7 +11,7 @@ import { ApplicationBoard } from './ApplicationBoard'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
 import { Icons } from '@masknet/icons'
-import { PersonaListDialog } from './PersonaListDialog'
+import { PersonaSelectPanelDialog } from './PersonaSelectPanelDialog'
 import { PluginNextIDMessages } from '../../plugins/NextID/messages'
 import type { PluginId } from '@masknet/plugin-infra'
 
@@ -111,7 +111,7 @@ export function ApplicationBoardDialog() {
                         <ApplicationBoard closeDialog={closeDialog} />
                     )}
                     {/* TODO: remove this*/}
-                    {openPersonaListDialog && <PersonaListDialog />}
+                    {openPersonaListDialog && <PersonaSelectPanelDialog />}
                 </DialogContent>
             </InjectedDialog>
         </TabContext>

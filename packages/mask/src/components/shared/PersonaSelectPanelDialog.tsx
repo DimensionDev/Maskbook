@@ -79,10 +79,11 @@ const positionStyleMap: Record<PositionOption, PositionStyle> = {
     },
 }
 
-export const PersonaListDialog = () => {
+export const PersonaSelectPanelDialog = () => {
     const { t } = useI18N()
     const [, copyToClipboard] = useCopyToClipboard()
     const { showSnackbar } = useCustomSnackbar()
+
     const currentPersona = useCurrentPersona()
     const currentPersonaIdentifier = currentPersona?.identifier
 
