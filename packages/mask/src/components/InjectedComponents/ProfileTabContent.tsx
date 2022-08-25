@@ -69,7 +69,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         return plugins
             .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
             .filter((x) => {
-                const shouldDisplay = x.Utils?.shouldDisplay?.(currentVisitingIdentity, selectedAddress) ?? true
+                const shouldDisplay = x.Utils?.shouldDisplay?.(currentVisitingIdentity, socialAddressList) ?? true
                 return x.pluginID !== PluginId.NextID && shouldDisplay
             })
             .sort((a, z) => {
