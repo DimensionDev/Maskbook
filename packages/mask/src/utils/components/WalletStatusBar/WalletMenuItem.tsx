@@ -2,7 +2,7 @@ import { Button, ListItemIcon, MenuItem } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { memo } from 'react'
 import { useI18N } from '../../i18n-next-ui'
-import { resolveNetworkPluginID, NetworkPluginID } from '@masknet/web3-shared-base'
+import { resolveNextID_NetworkPluginID, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { NextIDPlatform } from '@masknet/shared-base'
 import { useWalletName } from './hooks/useWalletName'
 import {
@@ -29,7 +29,7 @@ export const WalletMenuItem = memo<WalletMenuItemProps>(
     ({ address, selected, onChangeWallet, platform, onSelect, verified }) => {
         const { t } = useI18N()
 
-        const pluginId = useCurrentWeb3NetworkPluginID(platform ? resolveNetworkPluginID(platform) : undefined)
+        const pluginId = useCurrentWeb3NetworkPluginID(platform ? resolveNextID_NetworkPluginID(platform) : undefined)
         const currentChainId = useChainId()
         const defaultChainId = useDefaultChainId(pluginId)
         const chainId = platform ? defaultChainId : currentChainId

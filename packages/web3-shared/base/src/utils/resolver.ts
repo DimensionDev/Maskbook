@@ -215,7 +215,7 @@ export const resolveNetworkWalletName = createLookupTableResolver<NetworkPluginI
     },
 )
 
-export const resolveNetworkPluginID = createLookupTableResolver<NextIDPlatform, NetworkPluginID | undefined>(
+export const resolveNextID_NetworkPluginID = createLookupTableResolver<NextIDPlatform, NetworkPluginID | undefined>(
     {
         [NextIDPlatform.Ethereum]: NetworkPluginID.PLUGIN_EVM,
         [NextIDPlatform.NextID]: undefined,
