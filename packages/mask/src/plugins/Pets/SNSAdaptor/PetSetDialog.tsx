@@ -17,8 +17,8 @@ import {
     CircularProgress,
     useTheme,
 } from '@mui/material'
-import { PluginPetMessages, PluginPetRPC } from '../messages'
-import { initMeta, initCollection, GLB3DIcon } from '../constants'
+import { PluginPetMessages } from '../messages'
+import { initMeta, initCollection, GLB3DIcon, PetsPluginID } from '../constants'
 import { PreviewBox } from './PreviewBox'
 import { PetMetaDB, FilterContract, OwnerERC721TokenInfo, ImageType } from '../types'
 import { useUser, useNFTs } from '../hooks'
@@ -27,8 +27,7 @@ import { useI18N } from '../locales'
 import { ImageLoader } from './ImageLoader'
 import { petShowSettings } from '../settings'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import { useWeb3Connection } from '@masknet/plugin-infra/web3'
-import { saveCustomEssayToRSS } from '../Services/rss3'
+import { useWeb3Connection, useWeb3State } from '@masknet/plugin-infra/web3'
 import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
@@ -129,7 +128,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const [isReady, cancel] = useTimeout(2000)
 
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
-
+    const { Storage } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const user = useUser()
     const { nfts, state } = useNFTs(user)
     const blacklist = Object.values(configNFTs ?? {}).map((v) => v.Mainnet)
@@ -170,11 +169,12 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
             chainId: chosenToken?.chainId,
         }
         try {
-            await PluginPetRPC.setUserAddress(user)
+            if (!Storage) return
+            const kvStorage = Storage.createKVStorage(PetsPluginID)
+            await kvStorage.set(user.userId, user.address)
             const signature = await connection?.signMessage(user.userId, 'personalSign', { account: user.address })
-            if (signature && connection) {
-                await saveCustomEssayToRSS(user.address, meta, signature, connection)
-            }
+            const storage = Storage.createRSS3Storage(user.address)
+            storage.set('_pet', { address: user.address, signature, essay: meta })
             closeDialogHandle()
         } catch {
             showSnackbar(t.pets_dialog_fail(), { variant: 'error' })

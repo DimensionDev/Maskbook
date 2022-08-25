@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
 import type { User } from '../types'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
-import { PluginPetRPC } from '../messages'
-import { useAccount } from '@masknet/plugin-infra/web3'
+import { PetsPluginID } from '../constants'
+import { useAccount, useWeb3State } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function useUser() {
@@ -20,12 +20,16 @@ export function useUser() {
 export function useCurrentVisitingUser(flag?: number) {
     const [user, setUser] = useState<User>({ userId: '', address: '' })
     const identity = useCurrentVisitingIdentity()
+    const { Storage } = useWeb3State()
     useAsync(async () => {
         const userId = location.href?.endsWith(identity.identifier?.userId ?? '')
             ? identity.identifier?.userId ?? ''
             : ''
         try {
-            const address = (await PluginPetRPC.getUserAddress(identity.identifier?.userId ?? '')) ?? ''
+            const userId = identity.identifier?.userId
+            if (!Storage || !userId || userId === '$unknown') return
+            const storage = Storage.createKVStorage(PetsPluginID)
+            const address = (await storage.get<string>(userId)) ?? ''
             setUser({
                 userId,
                 address,

@@ -8,6 +8,7 @@ import { FootprintCard, StatusBox } from '../components'
 import { useFootprints, useRSS3Profile } from '../hooks'
 import { Icons } from '@masknet/icons'
 import { differenceWith } from 'lodash-unified'
+import { useI18N } from '../../locales'
 
 export interface FootprintPageProps {
     address: string
@@ -16,6 +17,7 @@ export interface FootprintPageProps {
 }
 
 export const FootprintsPage = memo(function FootprintsPage({ address, publicKey, userId }: FootprintPageProps) {
+    const t = useI18N()
     const { value: profile } = useRSS3Profile(address)
     const username = profile?.name
 
