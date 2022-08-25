@@ -3,6 +3,7 @@ import { useAsync } from 'react-use'
 import classNames from 'classnames'
 import { makeStyles, parseColor, useStylesExtends } from '@masknet/theme'
 import { Box, CircularProgress, useTheme } from '@mui/material'
+import { resolveCORSLink, resolveIPFSLink } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     circle: {
@@ -28,11 +29,13 @@ interface ImageProps
 export function Image({ fallbackImage, ...rest }: ImageProps) {
     const classes = useStylesExtends(useStyles(), rest)
     const theme = useTheme()
-    const fallbackImageURL =
-        fallbackImage ??
-        (theme.palette.mode === 'dark'
-            ? new URL('./nft_token_fallback_dark.png', import.meta.url)
-            : new URL('./nft_token_fallback.png', import.meta.url))
+    const fallbackImageURL = resolveCORSLink(
+        resolveIPFSLink(fallbackImage?.toString()) ??
+            (theme.palette.mode === 'dark'
+                ? new URL('./nft_token_fallback_dark.png', import.meta.url).toString()
+                : new URL('./nft_token_fallback.png', import.meta.url)
+            ).toString(),
+    )
 
     const { value: image, loading: imageLoading } = useAsync(async () => {
         if (!rest.src) return
@@ -74,11 +77,7 @@ export function Image({ fallbackImage, ...rest }: ImageProps) {
 
     return (
         <Box className={classes.imageLoadingBox}>
-            <img
-                {...rest}
-                src={fallbackImageURL.toString()}
-                className={classNames(classes.failImage, classes.fallbackImage)}
-            />
+            <img {...rest} src={fallbackImageURL} className={classNames(classes.failImage, classes.fallbackImage)} />
         </Box>
     )
 }

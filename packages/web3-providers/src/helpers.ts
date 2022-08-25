@@ -1,7 +1,6 @@
 /// <reference types="@masknet/global-types/firefox" />
 /// <reference types="@masknet/global-types/flag" />
 
-import urlcat from 'urlcat'
 import {
     APE,
     BUSD,
@@ -28,12 +27,6 @@ export async function fetchJSON<T = unknown>(
     const fetch = options?.fetch ?? globalThis.fetch
     const res = await fetch(requestInfo, requestInit)
     return res.json()
-}
-
-const CORS_PROXY = 'https://cors.r2d2.to'
-
-export function courier(url: string) {
-    return urlcat(`${CORS_PROXY}?:url`, { url })
 }
 
 export function getAllEVMNativeAssets(): Array<FungibleAsset<ChainId, SchemaType>> {

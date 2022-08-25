@@ -1,9 +1,4 @@
-import {
-    formatEthereumAddress,
-    explorerResolver,
-    resolveIPFSLink,
-    resolveIPFSLinkFromURL,
-} from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, explorerResolver } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import OpenInNew from '@mui/icons-material/OpenInNew'
@@ -15,7 +10,7 @@ import { SnapshotContext } from '../context'
 import { useProposal } from './hooks/useProposal'
 import { SnapshotCard } from './SnapshotCard'
 import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID, resolveIPFSLink } from '@masknet/web3-shared-base'
 
 export interface InformationCardProps {}
 
@@ -84,10 +79,7 @@ export function InformationCard(props: InformationCardProps) {
                                     target="_blank"
                                     rel="noopener"
                                     href={explorerResolver.addressLink(chainId, strategy.params.address)}>
-                                    <Avatar
-                                        src={resolveIPFSLinkFromURL(proposal.space.avatar)}
-                                        className={classes.avatar}
-                                    />
+                                    <Avatar src={resolveIPFSLink(proposal.space.avatar)} className={classes.avatar} />
                                 </Link>
                             ))}
                     </Box>

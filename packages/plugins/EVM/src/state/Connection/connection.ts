@@ -1,6 +1,5 @@
 import { AbiItem, numberToHex, toHex, toNumber } from 'web3-utils'
 import { first } from 'lodash-unified'
-import urlcat from 'urlcat'
 import type { RequestArguments, SignedTransaction, TransactionReceipt } from 'web3-core'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
 import type { ERC20Bytes32 } from '@masknet/web3-contracts/types/ERC20Bytes32'
@@ -34,7 +33,6 @@ import {
     getEthereumConstant,
     isValidAddress,
     isNativeTokenAddress,
-    resolveIPFSLinkFromURL,
     encodeTransaction,
 } from '@masknet/web3-shared-evm'
 import {
@@ -51,6 +49,8 @@ import {
     NonFungibleTokenContract,
     NonFungibleTokenMetadata,
     TransactionStatusType,
+    resolveIPFSLink,
+    resolveCORSLink,
 } from '@masknet/web3-shared-base'
 import type { BaseContract } from '@masknet/web3-contracts/types/types'
 import { createContext, dispatch } from './composer'
@@ -432,10 +432,7 @@ class Connection implements EVM_Connection {
             if (uri.startsWith('https://api.opensea.io/') && tokenId) return uri.replace('0x{id}', tokenId)
 
             // add cors header
-            if (!uri.startsWith('ipfs://'))
-                return urlcat('https://cors.r2d2.to/?:url', {
-                    url: uri,
-                })
+            if (!uri.startsWith('ipfs://')) return resolveCORSLink(resolveIPFSLink(uri))!
 
             return uri
         }
@@ -457,8 +454,8 @@ class Connection implements EVM_Connection {
                 '',
                 response.description,
                 undefined,
-                resolveIPFSLinkFromURL(response.image),
-                resolveIPFSLinkFromURL(response.image),
+                resolveIPFSLink(response.image),
+                resolveIPFSLink(response.image),
             )
         }
 
@@ -475,8 +472,8 @@ class Connection implements EVM_Connection {
             '',
             response.description,
             undefined,
-            resolveIPFSLinkFromURL(response.image),
-            resolveIPFSLinkFromURL(response.image),
+            resolveIPFSLink(response.image),
+            resolveIPFSLink(response.image),
         )
     }
     async getNonFungibleTokenContract(

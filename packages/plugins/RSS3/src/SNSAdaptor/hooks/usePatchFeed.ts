@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { AlchemyEVM, RSS3BaseAPI } from '@masknet/web3-providers'
-import { ChainId, resolveIPFSLinkFromURL } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 export const ChainID = {
     ethereum: ChainId.Mainnet,
@@ -33,12 +33,10 @@ export function usePatchFeed(feed: RSS3BaseAPI.Web3Feed) {
             `#${feed.metadata?.token_id}`
 
         const summary = feed.summary || asset.metadata?.description || asset.collection?.description
-        const imageURL = resolveIPFSLinkFromURL(
+        const imageURL =
             asset.metadata?.imageURL ||
-                feed.attachments?.find((attachment) => attachment?.type === 'preview')?.address ||
-                feed.attachments?.find((attachment) => attachment?.type === 'logo')?.address ||
-                '',
-        )
+            feed.attachments?.find((attachment) => attachment?.type === 'preview')?.address ||
+            feed.attachments?.find((attachment) => attachment?.type === 'logo')?.address
         const traits = asset?.traits
         return {
             ...feed,

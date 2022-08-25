@@ -1,8 +1,8 @@
-import { MEDIA_VIEWER_URL } from '@masknet/shared'
 import urlcat from 'urlcat'
-import { ImageType } from './types'
-import { resolveIPFSLink } from '@masknet/web3-shared-evm'
+import { MEDIA_VIEWER_URL } from '@masknet/shared'
+import { resolveIPFSLink } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { ImageType } from './types'
 
 export const PetsPluginID = 'com.maskbook.pets'
 export const TWITTER = 'twitter.com'
