@@ -69,7 +69,11 @@ export function useCurrentPersona() {
 }
 
 export interface PersonaConnectStatus {
-    action?: (target?: string | undefined, position?: 'center' | 'top-right' | undefined) => void
+    action?: (
+        target?: string | undefined,
+        position?: 'center' | 'top-right' | undefined,
+        enableVerify?: boolean,
+    ) => void
     currentPersona?: PersonaInformation
     connected?: boolean
     hasPersona?: boolean
@@ -93,7 +97,9 @@ export function useCurrentPersonaConnectStatus() {
     const lastRecognized = useLastRecognizedIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
-    const { setDialog: setPersonaListDialog } = useRemoteControlledDialog(PluginNextIDMessages.PersonaListDialogUpdated)
+    const { setDialog: setPersonaSelectPanelDialog } = useRemoteControlledDialog(
+        PluginNextIDMessages.PersonaSelectPanelDialogUpdated,
+    )
     const { setDialog: setCreatePersonaConfirmDialog } = useRemoteControlledDialog(MaskMessages.events.openPageConfirm)
 
     const create = useCallback(
@@ -112,14 +118,15 @@ export function useCurrentPersonaConnectStatus() {
     )
 
     const openPersonListDialog = useCallback(
-        (target?: string, position?: 'center' | 'top-right') => {
-            setPersonaListDialog({
+        (target?: string, position?: 'center' | 'top-right', enableVerify = true) => {
+            setPersonaSelectPanelDialog({
                 open: true,
                 target,
                 position,
+                enableVerify,
             })
         },
-        [setPersonaListDialog],
+        [setPersonaSelectPanelDialog],
     )
 
     const {

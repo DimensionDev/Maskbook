@@ -89,16 +89,21 @@ export const PersonaSelectPanelDialog = () => {
 
     const [finishTarget, setFinishTarget] = useState<string>()
     const [position, setPosition] = useState<PositionOption>('center')
+    const [enableVerify, setEnableVerify] = useState(true)
     const { classes } = useStyles({ positionStyle: positionStyleMap[position] })
 
-    const { open, closeDialog } = useRemoteControlledDialog(PluginNextIDMessages.PersonaListDialogUpdated, (ev) => {
-        if (!ev.open) {
-            setFinishTarget(undefined)
-        } else {
-            setFinishTarget(ev.target)
-            setPosition(ev.position ?? 'center')
-        }
-    })
+    const { open, closeDialog } = useRemoteControlledDialog(
+        PluginNextIDMessages.PersonaSelectPanelDialogUpdated,
+        (ev) => {
+            if (!ev.open) {
+                setFinishTarget(undefined)
+            } else {
+                setFinishTarget(ev.target)
+                setEnableVerify(ev.enableVerify)
+                setPosition(ev.position ?? 'center')
+            }
+        },
+    )
 
     const [selectedPersona, setSelectedPersona] = useState<PersonaNextIDMixture>()
 
@@ -171,7 +176,7 @@ export const PersonaSelectPanelDialog = () => {
             if (!isConnected) {
                 await connect?.(currentProfileIdentify.identifier, selectedPersona.persona.identifier)
             }
-            if (!isVerified) {
+            if (!isVerified && enableVerify) {
                 closeDialog()
                 closeApplicationBoard()
                 await handleVerifyNextID(selectedPersona.persona, currentProfileIdentify.identifier?.userId)
@@ -190,7 +195,7 @@ export const PersonaSelectPanelDialog = () => {
 
         const actionProps = {
             ...(() => {
-                if (!isConnected && !isVerified)
+                if (!isConnected && !isVerified && enableVerify)
                     return {
                         buttonText: t('applications_persona_verify_connect', {
                             nickname: selectedPersona?.persona.nickname,
@@ -227,7 +232,7 @@ export const PersonaSelectPanelDialog = () => {
         }
 
         return <ActionContent {...actionProps} />
-    }, [currentPersonaIdentifier, currentProfileIdentify, selectedPersona])
+    }, [currentPersonaIdentifier, currentProfileIdentify, selectedPersona, enableVerify, finishTarget])
 
     const onSelectPersona = useCallback((x: PersonaNextIDMixture) => {
         setSelectedPersona(x)

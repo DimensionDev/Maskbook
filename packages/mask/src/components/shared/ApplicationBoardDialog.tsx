@@ -62,7 +62,9 @@ export function ApplicationBoardDialog() {
         setFocusPluginId(undefined)
     }, [])
 
-    const { open: openPersonaListDialog } = useRemoteControlledDialog(PluginNextIDMessages.PersonaListDialogUpdated)
+    const { open: openPersonaSelectPanelDialog } = useRemoteControlledDialog(
+        PluginNextIDMessages.PersonaSelectPanelDialogUpdated,
+    )
 
     const closeDialog = useCallback(() => {
         if (openSettings && !quickMode) {
@@ -111,7 +113,7 @@ export function ApplicationBoardDialog() {
                         <ApplicationBoard closeDialog={closeDialog} />
                     )}
                     {/* TODO: remove this*/}
-                    {openPersonaListDialog && <PersonaSelectPanelDialog />}
+                    {openPersonaSelectPanelDialog && <PersonaSelectPanelDialog />}
                 </DialogContent>
             </InjectedDialog>
         </TabContext>

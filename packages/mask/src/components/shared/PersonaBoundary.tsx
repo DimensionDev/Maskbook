@@ -37,11 +37,12 @@ interface PersonaBoundaryProps {
     directTo?: PluginId
     customHint?: boolean
     children: SupportChildren
+    enableVerify?: boolean
     beforeVerify?: () => void | Promise<void>
 }
 
 export const PersonaBoundary = memo<PersonaBoundaryProps>(
-    ({ children, directTo, handlerPosition = 'center', customHint = false, beforeVerify }) => {
+    ({ children, directTo, handlerPosition = 'center', customHint = false, beforeVerify, enableVerify = true }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
 
@@ -79,9 +80,9 @@ export const PersonaBoundary = memo<PersonaBoundaryProps>(
         }, [status, t, statusLoading, customHint])
 
         const handleClick = useCallback(() => {
-            if (!status.verified && status.connected) beforeVerify?.()
-            status.action?.(directTo, handlerPosition)
-        }, [directTo, handlerPosition, JSON.stringify(status)])
+            if (!status.verified && status.connected && enableVerify) beforeVerify?.()
+            status.action?.(directTo, handlerPosition, enableVerify)
+        }, [directTo, handlerPosition, JSON.stringify(status), enableVerify])
 
         return (
             <Stack className={classes.root} display="inline-flex" onClick={handleClick}>
