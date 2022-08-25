@@ -229,7 +229,7 @@ export const resolveNetworkPluginID = createLookupTableResolver<NextIDPlatform, 
 )
 
 const MATCH_IPFS_HASH_RE = /Qm[1-9A-HJ-NP-Za-km-z]{44}/
-const MATCH_IPFS_DATA_RE = /ipfs\/(data.*)$/
+const MATCH_IPFS_DATA_RE = /ipfs\/(data\:.*)$/
 const MATCH_IPFS_PROTOCOL_RE = /ipfs:\/\/(?:ipfs\/)?/
 const CORS_HOST = 'https://cors.r2d2.to'
 const IPFS_IO_HOST = 'https://ipfs.io'
@@ -240,7 +240,7 @@ export function resolveIPFSLink(fragmentOrURL?: string): string | undefined {
 
     // eliminate cors proxy
     if (fragmentOrURL.startsWith(CORS_HOST)) {
-        return resolveIPFSLink(decodeURIComponent(fragmentOrURL.replace(new RegExp(`${CORS_HOST}\??`), '')))
+        return resolveIPFSLink(decodeURIComponent(fragmentOrURL.replace(`${CORS_HOST}?`, '')))
     }
 
     // a ipfs protocol
