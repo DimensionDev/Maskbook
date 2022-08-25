@@ -192,12 +192,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
         }
         try {
             if (!Storage || !accountId) return
-            const storage = Storage.createNextIDStorage(
-                accountId,
-                NextIDPlatform.Twitter,
-                currentPersona.identifier.publicKeyAsHex,
-                currentPersona.identifier,
-            )
+            const storage = Storage.createNextIDStorage(accountId, NextIDPlatform.Twitter, currentPersona.identifier)
 
             await storage.set(PLUGIN_ID, patch)
 

@@ -4,16 +4,24 @@ import { NextIDStorage as NextIDStorageProvider } from '@masknet/web3-providers'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
 
 export class NextIDStorage implements Storage {
+    private publicKeyAsHex = ''
+    private signer: ECKeyIdentifier | null = null
     constructor(
         private proofIdentity: string, // proof identity as key
         private platform: NextIDPlatform, // proof platform
-        private publicKeyAsHex: string, // publicKey, like SocialIdentity publicKey or PersonaIdentifier publicKeyAsHex
-        private signer?: ECKeyIdentifier, // persona identifier
+        private signerOrPublicKey: string | ECKeyIdentifier, // publicKey, like SocialIdentity publicKey or PersonaIdentifier publicKeyAsHex
         private generateSignResult?: (
             signer: ECKeyIdentifier,
             message: string,
         ) => Promise<Plugin.SNSAdaptor.PersonaSignResult>,
-    ) {}
+    ) {
+        if (typeof this.signerOrPublicKey === 'string') {
+            this.publicKeyAsHex = this.signerOrPublicKey
+        } else {
+            this.publicKeyAsHex = this.signerOrPublicKey.publicKeyAsHex
+            this.signer = this.signerOrPublicKey
+        }
+    }
 
     async has(key: string) {
         return !!this.get(key)

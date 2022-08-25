@@ -7,9 +7,8 @@ export class StorageState implements Web3StorageServiceState {
             providerType: StorageProviderType,
             options: {
                 namespace: string
-                publicKeyAsHex?: string
                 platform?: NextIDPlatform
-                signer?: ECKeyIdentifier
+                signerOrPublicKey?: string | ECKeyIdentifier
             },
         ) => Storage,
     ) {}
@@ -22,16 +21,10 @@ export class StorageState implements Web3StorageServiceState {
         return this.createStorage(StorageProviderType.RSS3, { namespace })
     }
 
-    createNextIDStorage(
-        proofIdentity: string,
-        platform: NextIDPlatform,
-        publicKeyAsHex: string,
-        signer?: ECKeyIdentifier,
-    ) {
+    createNextIDStorage(proofIdentity: string, platform: NextIDPlatform, signerOrPublicKey: string | ECKeyIdentifier) {
         return this.createStorage(StorageProviderType.NextID, {
             namespace: proofIdentity,
-            publicKeyAsHex,
-            signer,
+            signerOrPublicKey,
             platform,
         })
     }

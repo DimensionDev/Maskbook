@@ -1160,7 +1160,7 @@ export interface Web3StorageServiceState {
     ) => Storage
     createKVStorage: (namespace: string) => Storage
     createRSS3Storage: (namespace: string) => Storage
-    createNextIDStorage: (proofIdentity: string, platform: NextIDPlatform, publicKeyAsHex: string, signer?: ECKeyIdentifier,) => Storage
+    createNextIDStorage: (proofIdentity: string, platform: NextIDPlatform, signerOrPublicKey: string | ECKeyIdentifier) => Storage
 }
 
 export interface IdentityServiceState {

@@ -178,7 +178,6 @@ const WalletSetting = memo(
                 const storage = Storage.createNextIDStorage(
                     accountId,
                     NextIDPlatform.Twitter,
-                    currentPersona.identifier.publicKeyAsHex,
                     currentPersona.identifier,
                 )
 
