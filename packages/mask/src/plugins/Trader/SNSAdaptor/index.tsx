@@ -40,6 +40,16 @@ const sns: Plugin.SNSAdaptor.Definition<
             },
         },
     },
+    Slots: [
+        {
+            ID: PluginId.Trader,
+            UI: {
+                Content() {
+                    return <p>Content from Trader</p>
+                },
+            },
+        },
+    ],
     GlobalInjection: function Component() {
         return (
             <>

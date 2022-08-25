@@ -410,6 +410,8 @@ export namespace Plugin.SNSAdaptor {
         Web3 = unknown,
         Web3Provider = unknown,
     > extends Shared.DefinitionDeferred<SNSAdaptorContext> {
+        /** Register global slots */
+        Slots?: Slot[]
         /** This UI will be rendered for each post found. */
         PostInspector?: InjectUI<{}>
         /** This UI will be rendered for action of each post found. */
@@ -574,6 +576,13 @@ export namespace Plugin.SNSAdaptor {
         icon?: React.ReactNode
         title?: string
         backgroundGradient?: string
+    }
+
+    export interface Slot {
+        ID: string
+        UI?: {
+            Content?: InjectUI<{}>
+        }
     }
 
     export interface SearchResultBox {
