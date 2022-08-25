@@ -6,6 +6,7 @@ import {
     NonFungibleCollection,
     NonFungibleTokenContract,
     NonFungibleTokenEvent,
+    resolveIPFSLink,
     scale10,
     TokenType,
 } from '@masknet/web3-shared-base'
@@ -39,12 +40,7 @@ export function createNonFungibleAsset(chainId: ChainId, asset: Solana.Asset): N
     const payload = getJSON<Solana.Payload>(asset.metadata_json)
     const name = payload?.name || asset.name || payload?.name || ''
     const description = payload?.description
-    const mediaURL =
-        asset.image_uri ?? asset.content_uri?.startsWith('http')
-            ? asset.image_uri
-            : asset.image_uri
-            ? `ipfs://${asset.image_uri}`
-            : undefined
+    const mediaURL = resolveIPFSLink(asset.image_uri ?? asset.content_uri)
 
     const creator = asset.minter
     const owner = asset.owner

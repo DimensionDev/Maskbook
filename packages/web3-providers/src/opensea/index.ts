@@ -22,6 +22,7 @@ import {
     HubIndicator,
     formatPercentage,
     dividedBy,
+    resolveIPFSLink,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, createNativeToken, createERC20Token } from '@masknet/web3-shared-evm'
 import type { NonFungibleTokenAPI, TrendingAPI } from '../types'
@@ -34,7 +35,7 @@ import {
     OpenSeaAssetResponse,
     EventType,
 } from './types'
-import { getOrderUSDPrice, toImage } from './utils'
+import { getOrderUSDPrice } from './utils'
 import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants'
 import { getPaymentToken } from '../helpers'
 
@@ -96,7 +97,7 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungi
                 asset.image_url ?? asset.image_preview_url ?? asset.image_original_url ?? asset.animation_url ?? '',
             mediaURL:
                 asset?.animation_url ??
-                toImage(asset?.image_original_url ?? asset?.image_preview_url ?? asset?.image_url ?? ''),
+                resolveIPFSLink(asset?.image_original_url ?? asset?.image_preview_url ?? asset?.image_url ?? ''),
         },
         contract: {
             chainId,

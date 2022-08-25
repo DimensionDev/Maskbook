@@ -9,7 +9,6 @@ import { AssetPlayer } from '../AssetPlayer'
 import { useIsImageURL } from '../../../hooks'
 import { ImageIcon } from '../ImageIcon'
 import { Image } from '../Image'
-import { useImageURL } from '../../../hooks/useImageURL'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -90,7 +89,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
             chainId,
         },
     )
-    const urlComputed = useImageURL(url || tokenDetailed?.metadata?.imageURL || tokenDetailed?.metadata?.mediaURL)
+    const urlComputed = url || tokenDetailed?.metadata?.imageURL || tokenDetailed?.metadata?.mediaURL
     const { value: isImageURL } = useIsImageURL(urlComputed)
 
     const fallbackImageURL =
