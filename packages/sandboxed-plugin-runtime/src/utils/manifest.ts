@@ -12,6 +12,7 @@ export function isManifest(manifest: any): manifest is PluginManifest {
 }
 export interface PluginEntries {
     rpc?: string
+    rpcGenerator?: string
     background?: string
     content_script?: string
     popup?: string

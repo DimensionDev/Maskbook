@@ -1,10 +1,11 @@
 import { PluginRuntime } from '../runtime/runtime.js'
 import { getURL } from '../utils/url.js'
 import { addPeerDependencies } from '../peer-dependencies/index.js'
-import { AsyncCall } from 'async-call-rpc'
+import { AsyncCall, AsyncGeneratorCall } from 'async-call-rpc/full'
 import { MessageTarget, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { serializer } from '@masknet/shared-base'
 import { isManifest } from '../utils/manifest.js'
+import type { ExportAllBinding } from '@masknet/compartment'
 
 export async function startBackgroundHost(signal: AbortSignal, includeLocals = false) {
     // TODO: support HMR for plugin list update.
@@ -32,25 +33,36 @@ async function loadPlugin(id: string, isLocal: boolean, signal: AbortSignal) {
     // TODO: provide impl for @masknet/plugin/utils/open (openWindow)
     // TODO: provide impl for @masknet/plugin/worker (taggedStorage, addBackupHandler)
 
-    const { background, rpc } = manifest.entries || {}
+    const { background, rpc, rpcGenerator } = manifest.entries || {}
     if (background) await runtime.imports(getURL(id, background, isLocal))
-    if (rpc) {
-        const channel = new WebExtensionMessage<{ _: any; $: any }>({ domain: `mask-plugin-${id}-rpc` })
-        const rpcFull = getURL(id, rpc, isLocal)
 
-        // TODO: re-export workerGenerator
-        runtime.addReExportModule('@masknet/plugin/utils/rpc', {
-            export: 'worker',
-            from: rpcFull,
-        })
-        AsyncCall(runtime.imports(rpcFull), {
-            channel: channel.events._.bind(MessageTarget.Broadcast),
-            serializer,
-            log: true,
-            thenable: false,
-        })
+    if (rpc || rpcGenerator) {
+        const channel = new WebExtensionMessage<{ f: any; g: any }>({ domain: `mask-plugin-${id}-rpc` })
+
+        const rpcReExports: ExportAllBinding[] = []
+        if (rpc) rpcReExports.push({ exportAllFrom: getURL(id, rpc, isLocal), as: 'worker' })
+        if (rpcGenerator) rpcReExports.push({ exportAllFrom: getURL(id, rpcGenerator, isLocal), as: 'workerGenerator' })
+        runtime.addReExportModule('@masknet/plugin/utils/rpc', ...rpcReExports)
+
+        // TODO: abort rpc when the signal is aborted
+        const rpcReExport = await runtime.imports('@masknet/plugin/utils/rpc')
+        if (rpc) {
+            AsyncCall(rpcReExport.worker, {
+                channel: channel.events.f.bind(MessageTarget.Broadcast),
+                serializer,
+                log: true,
+                thenable: false,
+            })
+        }
+        if (rpcGenerator) {
+            AsyncGeneratorCall(rpcReExport.workerGenerator, {
+                channel: channel.events.f.bind(MessageTarget.Broadcast),
+                serializer,
+                log: true,
+                thenable: false,
+            })
+        }
     }
-    // TODO: support AsyncGeneratorCall
 }
 
 async function fetchManifest(id: string, isLocal: boolean) {
