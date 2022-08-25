@@ -142,7 +142,7 @@ export function NextIdPage() {
 
     const currentProfileIdentifier = useLastRecognizedIdentity()
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
-    const { value: personaConnectStatus } = useCurrentPersonaConnectStatus()
+    const { value: personaConnectStatus, loading: statusLoading } = useCurrentPersonaConnectStatus()
 
     const [openBindDialog, toggleBindDialog] = useState(false)
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
@@ -196,15 +196,42 @@ export function NextIdPage() {
 
         return (
             <PluginEnableBoundary pluginId={PluginId.Web3Profile}>
-                <PersonaBoundary handlerPosition="top-right" beforeVerify={handleBeforeVerify}>
-                    <Button className={classes.button} variant="contained" onClick={handleAddWallets}>
-                        <Icons.WalletUnderTabs size={16} className={classes.walletIcon} />
-                        {t.add_wallet_button()}
-                    </Button>
+                <PersonaBoundary handlerPosition="top-right" customHint beforeVerify={handleBeforeVerify}>
+                    {(s) => {
+                        if (!s.hasPersona)
+                            return (
+                                <Button disabled={statusLoading} className={classes.button}>
+                                    <Icons.Identity size={18} sx={{ marginRight: '8px' }} />
+                                    {t.create_persona()}
+                                </Button>
+                            )
+                        if (!s.connected)
+                            return (
+                                <Button disabled={statusLoading} className={classes.button}>
+                                    <Icons.Connect size={18} sx={{ marginRight: '8px' }} />
+                                    {t.connect_persona()}
+                                </Button>
+                            )
+
+                        if (!s.verified)
+                            return (
+                                <Button disabled={statusLoading} className={classes.button}>
+                                    <Icons.Connect size={18} sx={{ marginRight: '8px' }} />
+                                    {t.verify_Twitter_ID_button()}
+                                </Button>
+                            )
+
+                        return (
+                            <Button className={classes.button} variant="contained" onClick={handleAddWallets}>
+                                <Icons.WalletUnderTabs size={16} className={classes.walletIcon} />
+                                {t.add_wallet_button()}
+                            </Button>
+                        )
+                    }}
                 </PersonaBoundary>
             </PluginEnableBoundary>
         )
-    }, [isOwn, t])
+    }, [isOwn, t, statusLoading, handleBeforeVerify, handleAddWallets])
 
     if (loadingBindings || loadingPersona) {
         return (
