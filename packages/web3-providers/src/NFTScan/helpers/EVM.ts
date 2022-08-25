@@ -11,13 +11,14 @@ import {
     NonFungibleCollection,
     NonFungibleTokenContract,
     NonFungibleTokenEvent,
+    resolveCORSLink,
     scale10,
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, createContract, getRPCConstants, SchemaType, WNATIVE } from '@masknet/web3-shared-evm'
 import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants'
 import type { EVM } from '../types/EVM'
-import { courier, getJSON, getPaymentToken } from '../../helpers'
+import { getJSON, getPaymentToken } from '../../helpers'
 
 type NFTScanChainId = ChainId.Mainnet | ChainId.Matic | ChainId.BSC | ChainId.Arbitrum | ChainId.Optimism
 
@@ -33,7 +34,7 @@ export const resolveHostName = createLookupTableResolver<NFTScanChainId, string>
 )
 
 export async function fetchFromNFTScan<T>(url: string) {
-    const response = await fetch(courier(url), {
+    const response = await fetch(resolveCORSLink(url)!, {
         headers: {
             chain: 'ETH',
         },
