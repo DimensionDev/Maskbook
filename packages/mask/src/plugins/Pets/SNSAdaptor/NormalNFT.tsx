@@ -20,6 +20,10 @@ const useStyles = makeStyles()(() => ({
     },
     imgBox: {
         textAlign: 'center',
+        width: '80%',
+        height: '80%',
+        display: 'flex',
+        justifyContent: 'center',
     },
     close: {
         width: 15,
