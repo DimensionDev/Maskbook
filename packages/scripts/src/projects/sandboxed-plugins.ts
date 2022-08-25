@@ -27,7 +27,7 @@ export async function watchSandboxedPlugin() {
 export async function buildSandboxedPluginConfigurable(distPath: string, isProduction: boolean) {
     distPath = join(distPath, 'sandboxed-modules/')
     await ensureDir(distPath)
-    const { local, formal } = await readCombinedPluginList()
+    const { local, normal } = await readCombinedPluginList()
 
     if (isProduction) local.length = 0
 
@@ -36,7 +36,7 @@ export async function buildSandboxedPluginConfigurable(distPath: string, isProdu
     const id = new Set<string>()
     const localID = new Set<string>()
 
-    for (const spec of formal) {
+    for (const spec of normal) {
         const manifestPath = resolveManifestPath(spec)
         if (builders.has(manifestPath)) {
             throw new TypeError(`Multiple specifier points to the same manifest file. ${manifestPath}`)
@@ -81,10 +81,10 @@ export async function buildSandboxedPluginConfigurable(distPath: string, isProdu
         )
     }
 
-    const internalList: Record<string, { formal?: boolean; local?: boolean }> = {}
+    const internalList: Record<string, { normal?: boolean; local?: boolean }> = {}
     for (const _ of id) {
         internalList[_] ||= {}
-        internalList[_].formal = true
+        internalList[_].normal = true
     }
     for (const _ of localID) {
         internalList[_] ||= {}
@@ -151,14 +151,14 @@ async function readCombinedPluginList() {
     const prodURL = new URL('./plugins.json', sandboxedPlugins)
     const localURL = new URL('./plugins-local.json', sandboxedPlugins)
 
-    const formal = await readFile(prodURL, 'utf8').then(parseJSONc)
+    const normal = await readFile(prodURL, 'utf8').then(parseJSONc)
     const local = await readFile(localURL, 'utf8')
         .then(parseJSONc)
         .catch(() => [])
 
-    assertShape(formal, prodURL)
+    assertShape(normal, prodURL)
     assertShape(local, localURL)
-    return { formal, local }
+    return { normal, local }
 }
 
 function assertShape(data: unknown, file: URL): asserts data is string[] {

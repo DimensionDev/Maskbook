@@ -1,43 +1,52 @@
 import { PluginRuntime } from '../runtime/runtime.js'
+import { BasicHostHooks, PluginRunner } from '../runtime/runner.js'
 import { getURL } from '../utils/url.js'
 import { addPeerDependencies } from '../peer-dependencies/index.js'
 import { AsyncCall, AsyncGeneratorCall } from 'async-call-rpc/full'
-import { MessageTarget, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { serializer } from '@masknet/shared-base'
 import { isManifest } from '../utils/manifest.js'
 import type { ExportAllBinding } from '@masknet/compartment'
 
-export async function startBackgroundHost(signal: AbortSignal, includeLocals = false) {
-    // TODO: support HMR for plugin list update.
-    const plugins = await fetch('/sandboxed-modules/plugins.json').then((x) => x.json())
-
-    for (const [id, states] of Object.entries(plugins) as Iterable<[string, { formal?: boolean; local?: boolean }]>) {
-        if (states.local) {
-            if (includeLocals) {
-                loadPlugin(id, true, signal)
-            }
-            // TODO: setup a module & fetch alias from formal version to local version
-        } else if (states.formal) {
-            loadPlugin(id, false, signal)
-        } else {
-            throw new TypeError('Invalid plugin manifest.')
-        }
-    }
+export interface BackgroundHostHooks extends BasicHostHooks {}
+export interface BackgroundInstance {
+    id: string
+    isLocal: boolean
+    runtime: PluginRuntime
+    backupHandler?: Function
 }
+export class BackgroundPluginHost extends PluginRunner<BackgroundHostHooks, BackgroundInstance> {
+    constructor(
+        hooks: BackgroundHostHooks,
+        allowLocalOverrides: boolean,
+        signal: AbortSignal = new AbortController().signal,
+    ) {
+        super(hooks, allowLocalOverrides, signal)
+    }
 
-async function loadPlugin(id: string, isLocal: boolean, signal: AbortSignal) {
-    const manifest = await fetchManifest(id, isLocal)
+    protected async HostStartPlugin(id: string, isLocal: boolean, signal: AbortSignal): Promise<BackgroundInstance> {
+        const manifest = await this.hooks.fetchManifest(id, isLocal)
+        if (!isManifest(manifest)) throw new TypeError(`${id} does not have a valid manifest.`)
 
-    const runtime = new PluginRuntime(id, {}, signal)
-    addPeerDependencies(runtime)
-    // TODO: provide impl for @masknet/plugin/utils/open (openWindow)
-    // TODO: provide impl for @masknet/plugin/worker (taggedStorage, addBackupHandler)
+        const runtime = new PluginRuntime(id, {}, signal)
+        addPeerDependencies(runtime)
+        // TODO: provide impl for @masknet/plugin/utils/open (openWindow)
+        // TODO: provide impl for @masknet/plugin/worker (taggedStorage, addBackupHandler)
 
-    const { background, rpc, rpcGenerator } = manifest.entries || {}
-    if (background) await runtime.imports(getURL(id, background, isLocal))
+        const { background, rpc, rpcGenerator } = manifest.entries || {}
+        if (background) await runtime.imports(getURL(id, background, isLocal))
 
-    if (rpc || rpcGenerator) {
-        const channel = new WebExtensionMessage<{ f: any; g: any }>({ domain: `mask-plugin-${id}-rpc` })
+        const instance: BackgroundInstance = {
+            id,
+            isLocal,
+            runtime,
+        }
+        await this.startRPC(instance, rpc, rpcGenerator)
+        return instance
+    }
+
+    private async startRPC(instance: BackgroundInstance, rpc: string | undefined, rpcGenerator: string | undefined) {
+        if (!rpc && !rpcGenerator) return
+        const { id, isLocal, runtime } = instance
 
         const rpcReExports: ExportAllBinding[] = []
         if (rpc) rpcReExports.push({ exportAllFrom: getURL(id, rpc, isLocal), as: 'worker' })
@@ -48,7 +57,7 @@ async function loadPlugin(id: string, isLocal: boolean, signal: AbortSignal) {
         const rpcReExport = await runtime.imports('@masknet/plugin/utils/rpc')
         if (rpc) {
             AsyncCall(rpcReExport.worker, {
-                channel: channel.events.f.bind(MessageTarget.Broadcast),
+                channel: this.hooks.createRpcChannel(id, this.signal),
                 serializer,
                 log: true,
                 thenable: false,
@@ -56,23 +65,11 @@ async function loadPlugin(id: string, isLocal: boolean, signal: AbortSignal) {
         }
         if (rpcGenerator) {
             AsyncGeneratorCall(rpcReExport.workerGenerator, {
-                channel: channel.events.f.bind(MessageTarget.Broadcast),
+                channel: this.hooks.createRpcGeneratorChannel(id, this.signal),
                 serializer,
                 log: true,
                 thenable: false,
             })
         }
     }
-}
-
-async function fetchManifest(id: string, isLocal: boolean) {
-    const manifestPath = `/sandboxed-modules/${isLocal ? 'local-plugin' : 'plugin'}-${id}/mask-manifest.json`
-    {
-        const manifestURL = new URL(manifestPath, location.href)
-        if (manifestURL.pathname !== manifestPath) throw new TypeError('Plugin ID is invalid.')
-    }
-
-    const manifest = await fetch(manifestPath).then((x) => x.json())
-    if (!isManifest(manifest)) throw new TypeError(`${manifestPath} is not a valid manifest.`)
-    return manifest
 }
