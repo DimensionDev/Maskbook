@@ -5,10 +5,6 @@ export interface BasicHostHooks {
     createRpcChannel(id: string, signal: AbortSignal): EventBasedChannel
     createRpcGeneratorChannel(id: string, signal: AbortSignal): EventBasedChannel
 }
-export interface Runner<HostPluginInstance> {
-    onPluginListUpdate(): void
-    getPluginInstance(id: string): undefined | HostPluginInstance
-}
 
 export abstract class PluginRunner<HostHooks extends BasicHostHooks, HostPluginInstance> {
     constructor(
@@ -30,6 +26,9 @@ export abstract class PluginRunner<HostHooks extends BasicHostHooks, HostPluginI
 
     init() {
         return this.onPluginListUpdate()
+    }
+    getPluginInstance(id: string) {
+        return this.plugins.get(id)
     }
 
     async onPluginListUpdate() {
