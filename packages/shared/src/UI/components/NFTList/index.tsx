@@ -115,9 +115,6 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
             fontWeight: 700,
             fontSize: 12,
         },
-        tooltip: {
-            marginBottom: `${theme.spacing(0.5)} !important`,
-        },
     }
 })
 
