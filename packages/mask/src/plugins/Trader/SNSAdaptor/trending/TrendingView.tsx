@@ -99,7 +99,7 @@ const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
     }
 })
 
-export interface TraderViewProps {
+export interface TrendingViewProps {
     name: string
     tagType: TagType
     dataProviders: DataProvider[]
@@ -115,7 +115,7 @@ enum ContentTabs {
     NFTItems = 'nft-items',
 }
 
-export function TraderView(props: TraderViewProps) {
+export function TrendingView(props: TrendingViewProps) {
     const { name, tagType, dataProviders, isPopper = true } = props
 
     const { t } = useI18N()
