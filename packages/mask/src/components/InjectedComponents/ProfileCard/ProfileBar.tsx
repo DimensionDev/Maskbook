@@ -15,6 +15,8 @@ import { HTMLProps, memo, useRef, useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../../utils'
 
+const MENU_ITEM_HEIGHT = 40
+const MENU_LIST_PADDING = 8
 const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
@@ -53,21 +55,23 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         columnGap: 2,
     },
-    menuItem: {
-        display: 'flex',
-        alignItems: 'center',
-        flexGrow: 1,
-        justifyContent: 'space-between',
-    },
     linkIcon: {
         color: theme.palette.text.secondary,
         cursor: 'pointer',
         height: 14,
     },
     addressMenu: {
-        maxHeight: 192,
+        maxHeight: MENU_ITEM_HEIGHT * 10 + MENU_LIST_PADDING * 2,
         width: 248,
         backgroundColor: theme.palette.maskColor.bottom,
+    },
+    menuItem: {
+        height: MENU_ITEM_HEIGHT,
+        boxSizing: 'border-box',
+        display: 'flex',
+        alignItems: 'center',
+        flexGrow: 1,
+        justifyContent: 'space-between',
     },
     addressItem: {
         display: 'flex',
@@ -154,16 +158,18 @@ export const ProfileBar = memo<ProfileBarProps>(
                     onClose={() => setWalletMenuOpen(false)}>
                     {socialAddressList.map((x) => {
                         return (
-                            <MenuItem key={x.address} value={x.address} onClick={() => onAddressChange?.(x.address)}>
-                                <div className={classes.menuItem}>
-                                    <div className={classes.addressItem}>
-                                        <AddressItem socialAddress={x} linkIconClassName={classes.secondLinkIcon} />
-                                        {x.type === SocialAddressType.NEXT_ID && <Icons.Verified />}
-                                    </div>
-                                    {isSameAddress(address, x.address) && (
-                                        <Icons.CheckCircle className={classes.selectedIcon} />
-                                    )}
+                            <MenuItem
+                                className={classes.menuItem}
+                                key={x.address}
+                                value={x.address}
+                                onClick={() => onAddressChange?.(x.address)}>
+                                <div className={classes.addressItem}>
+                                    <AddressItem socialAddress={x} linkIconClassName={classes.secondLinkIcon} />
+                                    {x.type === SocialAddressType.NEXT_ID && <Icons.Verified />}
                                 </div>
+                                {isSameAddress(address, x.address) && (
+                                    <Icons.CheckCircle className={classes.selectedIcon} />
+                                )}
                             </MenuItem>
                         )
                     })}
