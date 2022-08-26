@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { first } from 'lodash-unified'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
 import {
     HubOptions,
     NonFungibleAsset,
@@ -11,7 +11,6 @@ import {
     createPageable,
     createIndicator,
     createNextIndicator,
-    createLookupTableResolver,
     CurrencyType,
     scale10,
 } from '@masknet/web3-shared-base'

@@ -7,7 +7,7 @@ import {
     ProviderDescriptor,
     SourceType,
 } from '../specs'
-import { NextIDPlatform } from '@masknet/shared-base'
+import { createLookupTableResolver, NextIDPlatform } from '@masknet/shared-base'
 
 export interface ExplorerRoutes {
     addressPathname?: string
