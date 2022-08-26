@@ -56,6 +56,7 @@ export const ProfileCardTitle: FC<Props> = ({
         setDialog({
             open: true,
             settings: {
+                quickMode: true,
                 switchTab: {
                     focusPluginId: PluginId.Web3ProfileCard,
                 },
