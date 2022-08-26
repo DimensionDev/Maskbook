@@ -16,6 +16,9 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'space-between',
             alignItems: 'center',
         },
+        profileBar: {
+            overflow: 'auto',
+        },
         settingItem: {
             display: 'flex',
             alignItems: 'center',
@@ -70,6 +73,7 @@ export const ProfileCardTitle: FC<Props> = ({
     return (
         <div className={cx(classes.title, className)} {...rest}>
             <ProfileBar
+                className={classes.profileBar}
                 identity={identity}
                 socialAddressList={socialAddressList}
                 address={address}

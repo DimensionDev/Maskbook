@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { Skeleton, Typography } from '@mui/material'
-import type { HTMLProps } from 'react'
+import { forwardRef, HTMLProps } from 'react'
 import { CollectibleCard, CollectibleCardProps } from './CollectibleCard'
 
 const useStyles = makeStyles()((theme) => ({
@@ -32,11 +32,11 @@ const useStyles = makeStyles()((theme) => ({
 
 interface CollectibleItemProps extends HTMLProps<HTMLDivElement>, CollectibleCardProps {}
 
-export function CollectibleItem(props: CollectibleItemProps) {
+export const CollectibleItem = forwardRef<HTMLDivElement, CollectibleItemProps>((props: CollectibleItemProps, ref) => {
     const { provider, asset, readonly, renderOrder, address, className, ...rest } = props
     const { classes, cx } = useStyles()
     return (
-        <div className={cx(classes.card, className)} {...rest}>
+        <div className={cx(classes.card, className)} {...rest} ref={ref}>
             <CollectibleCard
                 className={classes.collectibleCard}
                 asset={asset}
@@ -52,7 +52,7 @@ export function CollectibleItem(props: CollectibleItemProps) {
             </div>
         </div>
     )
-}
+})
 
 interface SkeletonProps extends HTMLProps<HTMLDivElement> {}
 export function CollectibleItemSkeleton({ className, ...rest }: SkeletonProps) {
