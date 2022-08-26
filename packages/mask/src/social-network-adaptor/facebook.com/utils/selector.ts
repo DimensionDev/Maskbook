@@ -68,7 +68,9 @@ export const searchFacebookAvatarContainerSelector = () =>
     querySelector('div[data-pagelet="ProfileActions"] > div > div')
 
 export const searchFacebookProfileSettingButtonSelector = () =>
-    querySelector('[role="button"] [role="img"]').closest(10).querySelector('input[type="file"] ~ div').closest<E>(2)
+    querySelector(
+        '[role="main"] > div > div > div > div > div > div:last-child > div:last-child > div input',
+    ).closest<E>(2)
 
 export const searchFacebookProfileCoverSelector = () =>
     querySelector('[role="button"] [role="img"]')
