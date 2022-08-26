@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
-import { AddressItem, ReversedAddress, useSnackbarCallback } from '@masknet/shared'
+import { AddressItem, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import {
     isSameAddress,
@@ -40,7 +40,7 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.primary,
         fontWeight: 700,
         fontSize: 18,
-        lineHeight: '18px',
+        lineHeight: '22px',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
         whiteSpace: 'nowrap',
@@ -112,6 +112,7 @@ export const ProfileBar = memo<ProfileBarProps>(
 
         const [walletMenuOpen, setWalletMenuOpen] = useState(false)
         const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+        const selectedAddress = socialAddressList.find((x) => isSameAddress(x.address, address))
 
         return (
             <Box className={cx(classes.root, className)} {...rest} ref={containerRef}>
@@ -122,12 +123,10 @@ export const ProfileBar = memo<ProfileBarProps>(
                     </Typography>
                     {address ? (
                         <Typography className={classes.address}>
-                            <ReversedAddress
-                                address={address}
-                                TypographyProps={{
-                                    title: address,
-                                    className: classes.address,
-                                }}
+                            <AddressItem
+                                socialAddress={selectedAddress}
+                                disableLinkIcon
+                                TypographyProps={{ className: classes.address }}
                             />
                             <Icons.PopupCopy onClick={onCopy} size={14} className={classes.linkIcon} />
                             <Link
@@ -154,24 +153,15 @@ export const ProfileBar = memo<ProfileBarProps>(
                     }}
                     onClose={() => setWalletMenuOpen(false)}>
                     {socialAddressList.map((x) => {
-                        const reversible = [
-                            SocialAddressType.KV,
-                            SocialAddressType.ADDRESS,
-                            SocialAddressType.NEXT_ID,
-                        ].includes(x.type)
                         return (
                             <MenuItem key={x.address} value={x.address} onClick={() => onAddressChange?.(x.address)}>
                                 <div className={classes.menuItem}>
                                     <div className={classes.addressItem}>
-                                        <AddressItem
-                                            reverse={reversible}
-                                            identityAddress={x}
-                                            iconProps={classes.secondLinkIcon}
-                                        />
-                                        {x?.type === SocialAddressType.NEXT_ID && <Icons.Verified />}
+                                        <AddressItem socialAddress={x} linkIconClassName={classes.secondLinkIcon} />
+                                        {x.type === SocialAddressType.NEXT_ID && <Icons.Verified />}
                                     </div>
                                     {isSameAddress(address, x.address) && (
-                                        <Icons.Selected className={classes.selectedIcon} />
+                                        <Icons.CheckCircle className={classes.selectedIcon} />
                                     )}
                                 </div>
                             </MenuItem>

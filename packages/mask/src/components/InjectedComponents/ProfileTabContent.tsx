@@ -303,18 +303,13 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                     onClick={onOpen}
                                     className={classes.walletButton}>
                                     <AddressItem
-                                        reverse={
-                                            selectedAddress?.type === SocialAddressType.KV ||
-                                            selectedAddress?.type === SocialAddressType.ADDRESS ||
-                                            selectedAddress?.type === SocialAddressType.NEXT_ID
-                                        }
-                                        iconProps={classes.mainLinkIcon}
+                                        linkIconClassName={classes.mainLinkIcon}
                                         TypographyProps={{
                                             fontSize: '18px',
                                             fontWeight: 700,
                                             color: (theme) => theme.palette.maskColor.dark,
                                         }}
-                                        identityAddress={selectedAddress}
+                                        socialAddress={selectedAddress}
                                     />
                                     <Icons.ArrowDrop className={classes.arrowDropIcon} />
                                 </Button>
@@ -332,13 +327,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                                 <div className={classes.menuItem}>
                                                     <div className={classes.addressItem}>
                                                         <AddressItem
-                                                            reverse={
-                                                                x.type === SocialAddressType.KV ||
-                                                                x.type === SocialAddressType.ADDRESS ||
-                                                                x.type === SocialAddressType.NEXT_ID
-                                                            }
-                                                            identityAddress={x}
-                                                            iconProps={classes.secondLinkIcon}
+                                                            socialAddress={x}
+                                                            linkIconClassName={classes.secondLinkIcon}
                                                         />
                                                         {x?.type === SocialAddressType.NEXT_ID && <Icons.Verified />}
                                                     </div>
