@@ -1832,6 +1832,9 @@ importers:
       '@masknet/typed-message':
         specifier: workspace:*
         version: link:../typed-message
+      async-call-rpc:
+        specifier: ^6.1.2
+        version: 6.1.2
 
   packages/sandboxed-plugins: {}
 
