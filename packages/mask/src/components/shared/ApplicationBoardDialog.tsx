@@ -43,33 +43,46 @@ export function ApplicationBoardDialog() {
     )
 
     const [focusPluginId, setFocusPluginId] = useState<PluginId>()
+    const [quickMode, setQuickMode] = useState(false)
 
     const { open, closeDialog: closeBoard } = useRemoteControlledDialog(
         WalletMessages.events.ApplicationDialogUpdated,
         (evt) => {
             if (!evt.open || !evt.settings?.switchTab) return
             setOpenSettings(true)
+            setQuickMode(evt.settings.quickMode ?? false)
             setTab(ApplicationSettingTabs.pluginSwitch)
             setFocusPluginId(evt.settings?.switchTab?.focusPluginId)
         },
     )
 
+    const reset = useCallback(() => {
+        setQuickMode(false)
+        setTab(ApplicationSettingTabs.pluginList)
+        setFocusPluginId(undefined)
+    }, [])
+
     const { open: openPersonaListDialog } = useRemoteControlledDialog(PluginNextIDMessages.PersonaListDialogUpdated)
 
     const closeDialog = useCallback(() => {
+        if (openSettings && !quickMode) {
+            setOpenSettings(false)
+            return
+        }
         closeBoard()
         CrossIsolationMessages.events.requestComposition.sendToLocal({
             reason: 'timeline',
             open: false,
         })
-    }, [])
+        reset()
+    }, [openSettings, quickMode, reset])
 
     return open ? (
         <TabContext value={currentTab}>
             <InjectedDialog
                 open={open}
                 maxWidth="sm"
-                onClose={openSettings ? () => setOpenSettings(false) : closeDialog}
+                onClose={closeDialog}
                 titleTabs={
                     openSettings ? (
                         <MaskTabList variant="base" onChange={onChange} aria-label="ApplicationBoard">
