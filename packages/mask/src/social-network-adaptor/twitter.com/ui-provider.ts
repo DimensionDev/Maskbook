@@ -1,3 +1,6 @@
+import { EnhanceableSite, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { delay } from '@dimensiondev/kit'
 import { globalUIState, SocialNetworkUI, stateCreator } from '../../social-network'
 import { twitterBase } from './base'
 import getSearchedKeywordAtTwitter from './collecting/getSearchedKeyword'
@@ -24,8 +27,6 @@ import { injectMaskUserBadgeAtTwitter } from './injection/MaskIcon'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector'
 import { injectPostActionsAtTwitter } from './injection/PostActions'
-import { EnhanceableSite, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
 import { injectNFTAvatarInTwitter } from './injection/NFT/NFTAvatarInTwitter'
 import { injectOpenTipButtonOnProfile } from './injection/Tip/index'
 import { injectUserNFTAvatarAtTwitter } from './injection/NFT/Avatar'
@@ -33,6 +34,7 @@ import { injectOpenNFTAvatarEditProfileButton, openNFTAvatarSettingDialog } from
 import { injectUserNFTAvatarAtTweet } from './injection/NFT/TweetNFTAvatar'
 import { injectNFTAvatarClipInTwitter } from './injection/NFT/NFTAvatarClip'
 import { TwitterRenderFragments } from './customization/render-fragments'
+import { postEditorDraftContentSelector } from './utils/selector'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -125,8 +127,12 @@ const twitterUI: SocialNetworkUI.Definition = {
         nativeCommentBox: undefined,
         nativeCompositionDialog: {
             appendText: pasteTextToCompositionTwitter,
-            // TODO: make a better way to detect
-            attachImage: pasteImageToCompositionDefault(() => false),
+            async attachImage(url, options) {
+                postEditorDraftContentSelector().evaluate()?.focus()
+                await delay(200)
+                // TODO: make a better way to detect
+                return pasteImageToCompositionDefault(() => false)(url, options || {})
+            },
         },
         redirect: {
             newsFeed: gotoNewsFeedPageTwitter,
