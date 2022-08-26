@@ -1172,6 +1172,8 @@
     "plugin_tips_not_evm_alert": "The tips feature currently supports only EVM chains. Support for other chains will be added in the future.",
     "plugin_artblocks_description": "Artblocks allow you to pick a style that you like, pay for the work, and a randomly generated version of the content is created by an algorithm and sent to your Ethereum account.",
     "plugin_artblocks_name": "Artblocks",
+    "plugin_ens_description": "Optimize the display of search results about ENS in social media.",
+    "plugin_ens_name": "ENS",
     "plugin_dhedge_description": "Decentralized hedge funds on Ethereum and Polygon (Matic).",
     "plugin_dhedge_name": "dHEDGE",
     "nft_button_set_avatar": "Set NFT Avatar",
