@@ -1,4 +1,4 @@
-import type { Plugin } from '@masknet/plugin-infra'
+import { Plugin, PluginId } from '@masknet/plugin-infra'
 import { base } from '../base'
 import { TraderDialog } from './trader/TraderDialog'
 import { SearchResultInspector } from './trending/SearchResultInspector'
@@ -29,7 +29,17 @@ const sns: Plugin.SNSAdaptor.Definition<
     init(signal, context) {
         setupStorage(context.createKVStorage('persistent', storageDefaultValue))
     },
-    SearchResultBox: SearchResultInspector,
+    SearchResultBox: {
+        ID: PluginId.Trader,
+        UI: {
+            Content: SearchResultInspector,
+        },
+        Utils: {
+            shouldDisplay(keyword: string) {
+                return /[#$]\w+/.test(keyword)
+            },
+        },
+    },
     GlobalInjection: function Component() {
         return (
             <>

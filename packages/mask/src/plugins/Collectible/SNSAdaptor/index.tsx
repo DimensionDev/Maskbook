@@ -11,7 +11,7 @@ import { NFTPage } from './NFTPage'
 import { NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
 import { setupContext } from '../context'
 
-const NFTTab: Plugin.SNSAdaptor.ProfileTab = {
+const NFTTabConfig: Plugin.SNSAdaptor.ProfileTab = {
     ID: `${PLUGIN_ID}_nfts`,
     label: 'NFTs',
     priority: 1,
@@ -68,10 +68,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
         usePluginWrapper(!!asset)
         return asset ? <PostInspector payload={asset} /> : null
     },
-    ProfileTabs: [NFTTab],
+    ProfileTabs: [NFTTabConfig],
     ProfileCardTabs: [
         {
-            ...NFTTab,
+            ...NFTTabConfig,
             priority: 2,
             UI: {
                 TabContent({ socialAddress, identity }) {
@@ -79,7 +79,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 },
             },
             Utils: {
-                ...NFTTab.Utils,
+                ...NFTTabConfig.Utils,
                 shouldDisplay(identity, socialAddress) {
                     return socialAddress?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM
                 },

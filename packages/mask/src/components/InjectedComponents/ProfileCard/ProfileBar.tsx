@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
-import { AddressItem, useSnackbarCallback } from '@masknet/shared'
+import { AddressItem, ReversedAddress, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import {
     isSameAddress,
@@ -11,7 +11,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Link, MenuItem, Typography } from '@mui/material'
-import { memo, useRef, useState } from 'react'
+import { HTMLProps, memo, useRef, useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../../utils'
 
@@ -34,15 +34,16 @@ const useStyles = makeStyles()((theme) => ({
     },
     description: {
         marginLeft: 10,
+        overflow: 'auto',
     },
     nickname: {
-        display: 'flex',
-        alignItems: 'center',
-        columnGap: 4,
         color: theme.palette.text.primary,
         fontWeight: 700,
-        fontSize: 14,
+        fontSize: 18,
         lineHeight: '18px',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
     },
     address: {
         color: theme.palette.text.primary,
@@ -81,11 +82,10 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ProfileBarProps {
+export interface ProfileBarProps extends HTMLProps<HTMLDivElement> {
     identity: SocialIdentity
     socialAddressList: Array<SocialAddress<NetworkPluginID>>
     address?: string
-    onClick?: (ev: React.MouseEvent<HTMLDivElement>) => void
     onAddressChange?: (address: string) => void
 }
 
@@ -95,10 +95,10 @@ export interface ProfileBarProps {
  * - Wallets
  */
 export const ProfileBar = memo<ProfileBarProps>(
-    ({ onClick, socialAddressList, address, identity, onAddressChange }) => {
-        const { classes } = useStyles()
+    ({ socialAddressList, address, identity, onAddressChange, className, ...rest }) => {
+        const { classes, cx } = useStyles()
         const { t } = useI18N()
-        const nicknameRef = useRef<HTMLDivElement>(null)
+        const containerRef = useRef<HTMLDivElement>(null)
 
         const [, copyToClipboard] = useCopyToClipboard()
 
@@ -111,24 +111,27 @@ export const ProfileBar = memo<ProfileBarProps>(
         const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
         const [walletMenuOpen, setWalletMenuOpen] = useState(false)
-
-        const formattedAddress = Others?.formatAddress(address ?? '', 4) ?? ''
         const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-        const addressLink = address && Others?.explorerResolver.addressLink(chainId ?? ChainId.Mainnet, address)
 
         return (
-            <Box onClick={onClick} className={classes.root}>
+            <Box className={cx(classes.root, className)} {...rest} ref={containerRef}>
                 <img src={identity.avatar} alt={identity.nickname} className={classes.avatar} />
-                <Box className={classes.description} ref={nicknameRef}>
-                    <Typography className={classes.nickname}>
-                        <span>{identity.nickname}</span>
+                <Box className={classes.description}>
+                    <Typography className={classes.nickname} title={identity.nickname}>
+                        {identity.nickname}
                     </Typography>
-                    <Typography className={classes.address}>
-                        <span title={address}>{formattedAddress}</span>
-                        {address ? <Icons.PopupCopy onClick={onCopy} size={14} className={classes.linkIcon} /> : null}
-                        {addressLink ? (
+                    {address ? (
+                        <Typography className={classes.address}>
+                            <ReversedAddress
+                                address={address}
+                                TypographyProps={{
+                                    title: address,
+                                    className: classes.address,
+                                }}
+                            />
+                            <Icons.PopupCopy onClick={onCopy} size={14} className={classes.linkIcon} />
                             <Link
-                                href={addressLink}
+                                href={Others?.explorerResolver.addressLink(chainId ?? ChainId.Mainnet, address)}
                                 target="_blank"
                                 title={t('view_on_explorer')}
                                 rel="noopener noreferrer"
@@ -138,12 +141,12 @@ export const ProfileBar = memo<ProfileBarProps>(
                                 className={classes.linkIcon}>
                                 <Icons.LinkOut size={14} className={classes.linkIcon} />
                             </Link>
-                        ) : null}
-                        <Icons.ArrowDrop size={14} onClick={() => setWalletMenuOpen((v) => !v)} />
-                    </Typography>
+                            <Icons.ArrowDrop size={14} onClick={() => setWalletMenuOpen((v) => !v)} />
+                        </Typography>
+                    ) : null}
                 </Box>
                 <ShadowRootMenu
-                    anchorEl={nicknameRef.current}
+                    anchorEl={containerRef.current}
                     open={walletMenuOpen}
                     disablePortal
                     PaperProps={{

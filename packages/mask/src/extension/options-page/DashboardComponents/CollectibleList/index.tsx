@@ -13,7 +13,7 @@ import {
     SocialIdentity,
     SourceType,
 } from '@masknet/web3-shared-base'
-import { Box, Button, Stack, styled, Typography } from '@mui/material'
+import { Box, Button, Stack, styled, Tooltip, Typography } from '@mui/material'
 import { differenceWith, uniqBy } from 'lodash-unified'
 import { createContext, useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../../utils'
@@ -138,6 +138,7 @@ export function CollectibleList(props: CollectibleListProps) {
     const { address, collectibles, columns, loading, retry, error, readonly, hasRetry = true } = props
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles({ columns }), props)
+    const { Others } = useWeb3State()
 
     return (
         <CollectibleContext.Provider value={{ collectiblesRetry: retry }}>
@@ -154,17 +155,33 @@ export function CollectibleList(props: CollectibleListProps) {
                     </Box>
                 ) : (
                     <Box className={classes.root}>
-                        {collectibles.map((token, index) => (
-                            <CollectibleItem
-                                className={classes.collectibleItem}
-                                renderOrder={index}
-                                asset={token}
-                                provider={SourceType.OpenSea}
-                                readonly={readonly}
-                                key={index}
-                                address={address}
-                            />
-                        ))}
+                        {collectibles.map((token, index) => {
+                            const name = token.collection?.name || token.contract?.name
+                            const title = `${name} ${Others?.formatTokenId(token.tokenId, 2)}`
+                            return (
+                                <Tooltip
+                                    key={index}
+                                    title={title}
+                                    placement="top"
+                                    disableInteractive
+                                    PopperProps={{
+                                        disablePortal: true,
+                                        popperOptions: {
+                                            strategy: 'absolute',
+                                        },
+                                    }}
+                                    arrow>
+                                    <CollectibleItem
+                                        className={classes.collectibleItem}
+                                        renderOrder={index}
+                                        asset={token}
+                                        provider={SourceType.OpenSea}
+                                        readonly={readonly}
+                                        address={address}
+                                    />
+                                </Tooltip>
+                            )
+                        })}
                     </Box>
                 )}
             </Box>

@@ -6,5 +6,10 @@
     "tsBuildInfoFile": "../../dist/background.tsbuildinfo"
   },
   "include": ["./"],
-  "references": [{ "path": "../runtime" }]
+  "references": [
+    { "path": "../runtime" },
+    { "path": "../peer-dependencies" },
+    { "path": "../utils" },
+    { "path": "../../../shared-base" }
+  ]
 }
