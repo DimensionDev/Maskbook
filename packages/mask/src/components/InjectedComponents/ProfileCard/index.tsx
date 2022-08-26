@@ -251,6 +251,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
                             span: (
                                 <Typography
                                     fontWeight={700}
+                                    fontSize="inherit"
                                     variant="body1"
                                     component="strong"
                                     color={(theme) => theme.palette.text.primary}
