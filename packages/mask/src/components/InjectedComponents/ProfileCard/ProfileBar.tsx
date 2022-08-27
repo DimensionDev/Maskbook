@@ -35,6 +35,7 @@ const useStyles = makeStyles()((theme) => ({
         backdropFilter: 'blur(16px)',
     },
     description: {
+        height: 40,
         marginLeft: 10,
         overflow: 'auto',
     },
@@ -47,18 +48,24 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
         whiteSpace: 'nowrap',
     },
-    address: {
-        color: theme.palette.text.primary,
+    addressRow: {
         fontSize: 14,
-        lineHeight: '18px',
         display: 'flex',
         alignItems: 'center',
         columnGap: 2,
     },
+    address: {
+        color: theme.palette.text.primary,
+        fontSize: 14,
+        height: 18,
+        lineHeight: '18px',
+    },
     linkIcon: {
+        lineHeight: '14px',
+        height: 14,
+        overflow: 'hidden',
         color: theme.palette.text.secondary,
         cursor: 'pointer',
-        height: 14,
     },
     addressMenu: {
         maxHeight: MENU_ITEM_HEIGHT * 10 + MENU_LIST_PADDING * 2,
@@ -100,7 +107,7 @@ export interface ProfileBarProps extends HTMLProps<HTMLDivElement> {
  */
 export const ProfileBar = memo<ProfileBarProps>(
     ({ socialAddressList, address, identity, onAddressChange, className, ...rest }) => {
-        const { classes, cx } = useStyles()
+        const { classes, theme, cx } = useStyles()
         const { t } = useI18N()
         const containerRef = useRef<HTMLDivElement>(null)
 
@@ -126,7 +133,7 @@ export const ProfileBar = memo<ProfileBarProps>(
                         {identity.nickname}
                     </Typography>
                     {address ? (
-                        <Typography className={classes.address}>
+                        <div className={classes.addressRow}>
                             <AddressItem
                                 socialAddress={selectedAddress}
                                 disableLinkIcon
@@ -142,10 +149,14 @@ export const ProfileBar = memo<ProfileBarProps>(
                                     event.stopPropagation()
                                 }}
                                 className={classes.linkIcon}>
-                                <Icons.LinkOut size={14} className={classes.linkIcon} />
+                                <Icons.LinkOut size={14} />
                             </Link>
-                            <Icons.ArrowDrop size={14} onClick={() => setWalletMenuOpen((v) => !v)} />
-                        </Typography>
+                            <Icons.ArrowDrop
+                                size={14}
+                                color={theme.palette.text.primary}
+                                onClick={() => setWalletMenuOpen((v) => !v)}
+                            />
+                        </div>
                     ) : null}
                 </Box>
                 <ShadowRootMenu

@@ -48,17 +48,17 @@ export function AddressItem({
 
     return (
         <>
-            <Typography>
-                {reversible ? (
+            {reversible ? (
+                <Typography>
                     <ReversedAddress
                         TypographyProps={TypographyProps}
                         address={socialAddress.address}
                         pluginId={socialAddress.networkSupporterPluginID}
                     />
-                ) : (
-                    <Typography {...TypographyProps}>{socialAddress.label}</Typography>
-                )}
-            </Typography>
+                </Typography>
+            ) : (
+                <Typography {...TypographyProps}>{socialAddress.label}</Typography>
+            )}
             {disableLinkIcon ? null : (
                 <Link
                     className={classes.link}

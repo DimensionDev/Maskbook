@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { PluginId } from '@masknet/plugin-infra'
 import { useNonFungibleAssets, useTrustedNonFungibleTokens, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { ElementAnchor, RetryHint } from '@masknet/shared'
-import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
+import { EMPTY_LIST, EMPTY_OBJECT, NextIDPlatform } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { CollectionType } from '@masknet/web3-providers'
 import {
@@ -206,9 +206,9 @@ interface CollectionListProps {
     gridProps?: CollectibleGridProps
 }
 
-export function CollectionList({ addressName, persona, profile, gridProps }: CollectionListProps) {
+export function CollectionList({ addressName, persona, profile, gridProps = EMPTY_OBJECT }: CollectionListProps) {
     const { t } = useI18N()
-    const { classes } = useStyles({})
+    const { classes } = useStyles(gridProps)
     const [selectedCollection, setSelectedCollection] = useState<
         NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | undefined
     >()
