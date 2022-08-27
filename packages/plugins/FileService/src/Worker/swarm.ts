@@ -3,9 +3,9 @@ import { isEmpty, times, sample } from 'lodash-unified'
 import { Attachment } from '@dimensiondev/common-protocols'
 import { encodeText } from '@dimensiondev/kit'
 import { Bee, CollectionEntry } from '@ethersphere/bee-js'
-import { landing } from '../constants'
-import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types'
-import { makeFileKeySigned } from '../helpers'
+import { landing } from '../constants.js'
+import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types.js'
+import { makeFileKeySigned } from '../helpers.js'
 
 const POSTAGE_STAMP = '0'.repeat(64)
 const BEE_HOSTS = times(10, (n) => `https://gateway-proxy-bee-${n}-0.gateway.ethswarm.org`)

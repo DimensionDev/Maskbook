@@ -1,8 +1,8 @@
 import { encode } from '@msgpack/msgpack'
-import type Transaction from 'arweave/web/lib/transaction'
-import { signing } from '../constants'
+import type Transaction from 'arweave/web/lib/transaction.js'
+import { signing } from '../constants.js'
 
-export async function sign(transaction: Transaction) {
+export async function sign(transaction: Transaction.default) {
     const response = await fetch(signing, {
         method: 'POST',
         // Allow workaround based on version
@@ -13,7 +13,7 @@ export async function sign(transaction: Transaction) {
     transaction.setSignature(await response.json())
 }
 
-async function makeRequest(transaction: Transaction) {
+async function makeRequest(transaction: Transaction.default) {
     const encoder = new TextEncoder()
     await transaction.prepareChunks(transaction.data)
     const get = (base: { get: typeof transaction.get }, name: string) => base.get(name, { decode: true, string: false })
