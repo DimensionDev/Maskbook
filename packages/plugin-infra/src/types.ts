@@ -574,6 +574,8 @@ export namespace Plugin.SNSAdaptor {
         icon?: React.ReactNode
         title?: string
         backgroundGradient?: string
+        borderRadius?: string
+        margin?: string
     }
 
     export interface SearchResultBox {

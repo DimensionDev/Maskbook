@@ -44,4 +44,5 @@ export default {
     '/[DimensionDev.Maskbook] develop/packages/plugins/Web3Profile/src/locales/%locale%.json': 'io.mask.web3-profile',
     '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/ProfileCard/locales/%locale%.json':
         'io.mask.web3-profile-card',
+    '/[DimensionDev.Maskbook] develop/packages/mask/src/plugins/ENS/locales/%locale%.json': 'com.maskbook.ens',
 }

@@ -1,15 +1,10 @@
 import { useMemo } from 'react'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useSearchedKeyword } from '../DataSource/useSearchedKeyword'
-import { useDisabledPlugins } from './DisabledPluginSuggestion'
 
 function getSearchResultContent(keyword: string) {
-    return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
-        const disabledPlugins = useDisabledPlugins()
-        const shouldDisplay =
-            (x.SearchResultBox?.Utils?.shouldDisplay?.(keyword) &&
-                !disabledPlugins.map((p) => p.ID).includes(x.SearchResultBox?.ID)) ??
-            true
+    return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode, (x) => {
+        const shouldDisplay = x.SearchResultBox?.Utils?.shouldDisplay?.(keyword) ?? true
         if (!shouldDisplay) return
         return x.SearchResultBox?.UI?.Content
     })
