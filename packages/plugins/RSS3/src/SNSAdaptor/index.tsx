@@ -4,6 +4,7 @@ import { NetworkPluginID, SocialAddress, SocialIdentity } from '@masknet/web3-sh
 import type { BoxProps } from '@mui/material'
 import { base } from '../base'
 import { PLUGIN_ID } from '../constants'
+import type { FootprintsLayoutProps } from './components'
 import { setupContext } from './context'
 import { DonationPage, FeedsPage, FootprintsPage } from './pages'
 
@@ -33,7 +34,7 @@ const DonationsTabConfig: Plugin.SNSAdaptor.ProfileTab = {
     },
 }
 
-const createFootprintsTabConfig = (boxProps: BoxProps): Plugin.SNSAdaptor.ProfileTab => {
+const createFootprintsTabConfig = (props: BoxProps & FootprintsLayoutProps): Plugin.SNSAdaptor.ProfileTab => {
     return {
         ID: `${PLUGIN_ID}_footprints`,
         label: 'Footprints',
@@ -46,7 +47,7 @@ const createFootprintsTabConfig = (boxProps: BoxProps): Plugin.SNSAdaptor.Profil
                             address={socialAddress?.address ?? ''}
                             publicKey={identity?.publicKey}
                             userId={identity?.identifier?.userId ?? ''}
-                            {...boxProps}
+                            {...props}
                         />
                     </PluginIDContextProvider>
                 )
@@ -60,6 +61,7 @@ const createFootprintsTabConfig = (boxProps: BoxProps): Plugin.SNSAdaptor.Profil
 const FootprintsTabConfig: Plugin.SNSAdaptor.ProfileTab = createFootprintsTabConfig({})
 const FootprintsTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createFootprintsTabConfig({
     p: 1.5,
+    layout: 'grid',
 })
 
 const createActivitiesTabConfig = (boxProps: BoxProps): Plugin.SNSAdaptor.ProfileTab => {

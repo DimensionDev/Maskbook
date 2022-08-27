@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import { Card, Typography } from '@mui/material'
 import formatDateTime from 'date-fns/format'
-import { memo } from 'react'
+import { HTMLProps, memo } from 'react'
 import { RSS3_DEFAULT_IMAGE } from '../../constants'
 import { useI18N } from '../../locales'
 
@@ -45,24 +45,24 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface FootprintProps {
-    username: string
+export interface FootprintCardProps extends Omit<HTMLProps<HTMLDivElement>, 'onSelect'> {
     footprint: RSS3BaseAPI.Footprint
     onSelect: (footprint: RSS3BaseAPI.Footprint) => void
+    disableDescription?: boolean
 }
 
-export const FootprintCard = memo(({ footprint, onSelect }: FootprintProps) => {
-    const t = useI18N()
-    const { classes } = useStyles()
+export const FootprintCard = memo(
+    ({ footprint, onSelect, disableDescription, className, ...rest }: FootprintCardProps) => {
+        const t = useI18N()
+        const { classes, cx } = useStyles()
 
-    const date = footprint.timestamp
-        ? formatDateTime(new Date(footprint.timestamp), 'MMM dd, yyyy')
-        : t.no_activity_time()
-    const action = footprint.actions[0]
+        const date = footprint.timestamp
+            ? formatDateTime(new Date(footprint.timestamp), 'MMM dd, yyyy')
+            : t.no_activity_time()
+        const action = footprint.actions[0]
 
-    return (
-        <div className={classes.card} onClick={() => onSelect(footprint)}>
-            <section className="flex flex-row flex-shrink-0 w-max h-max">
+        return (
+            <div className={cx(classes.card, className)} {...rest} onClick={() => onSelect?.(footprint)}>
                 <Card className={classes.img}>
                     <NFTCardStyledAssetPlayer
                         url={action.metadata?.image || RSS3_DEFAULT_IMAGE}
@@ -73,13 +73,15 @@ export const FootprintCard = memo(({ footprint, onSelect }: FootprintProps) => {
                         }}
                     />
                 </Card>
-            </section>
-            <section className={classes.content}>
-                <Typography className={classes.infoRow}>{date}</Typography>
-                {/* TODO location is missed in RSS3 v1 API */}
-                {/* <Typography className={classes.infoRow}>@ {footprint.location}</Typography> */}
-                <Typography className={classes.infoRow}>{action.metadata?.name}</Typography>
-            </section>
-        </div>
-    )
-})
+                {disableDescription ? null : (
+                    <section className={classes.content}>
+                        <Typography className={classes.infoRow}>{date}</Typography>
+                        {/* TODO location is missed in RSS3 v1 API */}
+                        {/* <Typography className={classes.infoRow}>@ {footprint.location}</Typography> */}
+                        <Typography className={classes.infoRow}>{action.metadata?.name}</Typography>
+                    </section>
+                )}
+            </div>
+        )
+    },
+)

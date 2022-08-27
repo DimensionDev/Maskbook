@@ -7,10 +7,10 @@ import { differenceWith } from 'lodash-unified'
 import { memo, useMemo, useState } from 'react'
 import { RSS3_DEFAULT_IMAGE } from '../../constants'
 import { useI18N } from '../../locales'
-import { FootprintCard, StatusBox } from '../components'
-import { useFootprints, useRSS3Profile } from '../hooks'
+import { FootprintList, FootprintsLayoutProps, StatusBox } from '../components'
+import { useFootprints } from '../hooks'
 
-export interface FootprintPageProps extends BoxProps {
+export interface FootprintPageProps extends BoxProps, FootprintsLayoutProps {
     address: string
     publicKey?: string
     userId: string
@@ -20,11 +20,10 @@ export const FootprintsPage = memo(function FootprintsPage({
     address,
     publicKey,
     userId,
+    layout,
     ...rest
 }: FootprintPageProps) {
     const t = useI18N()
-    const { value: profile } = useRSS3Profile(address)
-    const username = profile?.name
 
     const { value: allFootprints = EMPTY_LIST, loading } = useFootprints(address)
 
@@ -60,7 +59,7 @@ export const FootprintsPage = memo(function FootprintsPage({
                 flexDirection="column"
                 alignItems="center"
                 justifyContent="center"
-                height={400}
+                height={300}
                 p={2}
                 boxSizing="border-box"
                 {...rest}>
@@ -76,16 +75,7 @@ export const FootprintsPage = memo(function FootprintsPage({
 
     return (
         <Box p={2} {...rest}>
-            <section className="grid items-center justify-start grid-cols-1 gap-2 py-4 ">
-                {footprints.map((footprint) => (
-                    <FootprintCard
-                        key={footprint.hash}
-                        onSelect={setSelectedFootprint}
-                        username={username ?? ''}
-                        footprint={footprint}
-                    />
-                ))}
-            </section>
+            <FootprintList footprints={footprints} onSelect={setSelectedFootprint} layout={layout} />
             {selectedFootprint ? (
                 <CollectionDetailCard
                     open

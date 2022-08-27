@@ -26,8 +26,8 @@ interface ImageProps
     fallbackImage?: URL
 }
 
-export function Image({ fallbackImage, ...rest }: ImageProps) {
-    const classes = useStylesExtends(useStyles(), rest)
+export function Image({ fallbackImage, classes: externalClasses, ...rest }: ImageProps) {
+    const classes = useStylesExtends(useStyles(), { classes: externalClasses })
     const theme = useTheme()
     const fallbackImageURL = resolveCORSLink(
         resolveIPFSLink(fallbackImage?.toString()) ??
