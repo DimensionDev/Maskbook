@@ -2,10 +2,10 @@ import { Attachment } from '@dimensiondev/common-protocols'
 import { encodeText } from '@dimensiondev/kit'
 import { create, IPFSHTTPClient } from 'ipfs-http-client'
 import { isEmpty } from 'lodash-unified'
-import { landing } from '../constants'
+import { landing } from '../constants.js'
 import urlcat from 'urlcat'
-import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types'
-import { makeFileKeySigned } from '../helpers'
+import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types.js'
+import { makeFileKeySigned } from '../helpers.js'
 
 function createClient(): IPFSHTTPClient {
     return create({

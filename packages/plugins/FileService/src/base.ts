@@ -1,6 +1,6 @@
 import { type Plugin, PluginId } from '@masknet/plugin-infra'
-import { languages } from './locales/languages'
-import { META_KEY_1, META_KEY_2 } from './constants'
+import { languages } from './locales/languages.js'
+import { META_KEY_1, META_KEY_2 } from './constants.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: PluginId.FileService,

@@ -1,8 +1,8 @@
 import { MemoryRouter, Navigate, Route, Routes } from 'react-router-dom'
-import { FileRouter } from '../../constants'
-import { Prepare } from './Prepare'
-import { Uploaded } from './Uploaded'
-import { Uploading } from './Uploading'
+import { FileRouter } from '../../constants.js'
+import { Prepare } from './Prepare.js'
+import { Uploaded } from './Uploaded.js'
+import { Uploading } from './Uploading.js'
 
 export const Entry: React.FC = () => (
     <MemoryRouter>
