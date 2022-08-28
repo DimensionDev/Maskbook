@@ -25,6 +25,9 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
             display: 'flex',
             flexDirection: 'column',
         },
+        mediaBox: {
+            width: 300,
+        },
         contentLayout: {
             width: '100%',
             height: '100%',

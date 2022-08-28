@@ -37,8 +37,8 @@ const supportedProvider = [
     SourceType.OpenSea,
     SourceType.Gem,
     SourceType.Rarible,
+    SourceType.NFTScan,
     // SourceType.X2Y2,
-    // SourceType.NFTScan,
     // SourceType.Zora,
     // SourceType.LooksRare,
 ]
@@ -58,12 +58,15 @@ export function NFTCardDialogUI(props: NFTCardDialogUIProps) {
         <div className={classes.contentWrapper}>
             {(asset.value && (
                 <div className={classes.contentLayout}>
-                    <NFTBasicInfo
-                        providers={supportedProvider}
-                        currentProvider={provider}
-                        asset={asset.value}
-                        onChangeProvider={onChangeProvider}
-                    />
+                    <div className={classes.mediaBox}>
+                        <NFTBasicInfo
+                            timeline
+                            providers={supportedProvider}
+                            currentProvider={provider}
+                            asset={asset.value}
+                            onChangeProvider={onChangeProvider}
+                        />
+                    </div>
 
                     <div className={classes.tabWrapper}>
                         {currentTab === NFTCardDialogTabs.About ? (
