@@ -1,11 +1,4 @@
-import {
-    createIndicator,
-    createPageable,
-    HubOptions,
-    // leftShift,
-    NetworkPluginID,
-    TokenType,
-} from '@masknet/web3-shared-base'
+import { createIndicator, createPageable, HubOptions, NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import RSS3 from 'rss3-next'
 import urlcat from 'urlcat'

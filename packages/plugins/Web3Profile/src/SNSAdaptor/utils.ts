@@ -156,7 +156,7 @@ export const getFootprintList = async (walletList: WalletTypes[]) => {
                     address: metadata?.contract_address ?? ZERO_ADDRESS,
                     platform,
                     iconURL: metadata?.image,
-                    name: metadata?.image,
+                    name: metadata?.name,
                 }
             }),
         }

@@ -17,7 +17,6 @@ export type ChainIdRecord<T> = { [k in ChainId]: T }
 export enum ChainId {
     // Mainnet
     Mainnet = 1,
-    Classic = 61,
     Ropsten = 3,
     Rinkeby = 4,
     Gorli = 5,

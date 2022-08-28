@@ -265,7 +265,8 @@ export namespace RSS3BaseAPI {
 
     export type NETWORK =
         | 'ethereum'
-        | 'ethereum_classic'
+        // Discard
+        // | 'ethereum_classic'
         | 'binance_smart_chain'
         | 'polygon'
         | 'zksync'
@@ -280,7 +281,6 @@ export namespace RSS3BaseAPI {
 
     export const MaskNetworkMap: Record<NETWORK, ChainId> = {
         ethereum: ChainId.Mainnet,
-        ethereum_classic: ChainId.Classic,
         binance_smart_chain: ChainId.BSC,
         polygon: ChainId.Matic,
         zksync: ChainId.ZKSync_Alpha_Testnet,
