@@ -1,9 +1,9 @@
 import { useAsyncRetry } from 'react-use'
 import { asyncIteratorToArray, EMPTY_LIST } from '@masknet/shared-base'
 import {
+    calcBalance,
     CurrencyType,
     currySameAddress,
-    formatBalance,
     HubIndicator,
     isSameAddress,
     minus,
@@ -50,8 +50,8 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
         return filteredAssets
             .filter((x) => !isBlockedToken(x))
             .sort((a, z) => {
-                const aBalance = toZero(formatBalance(a.balance, a.decimals))
-                const zBalance = toZero(formatBalance(z.balance, z.decimals))
+                const aBalance = toZero(calcBalance(a.balance, a.decimals))
+                const zBalance = toZero(calcBalance(z.balance, z.decimals))
 
                 const aUSD = toZero(a.value?.[CurrencyType.USD] ?? '0')
                 const zUSD = toZero(z.value?.[CurrencyType.USD] ?? '0')

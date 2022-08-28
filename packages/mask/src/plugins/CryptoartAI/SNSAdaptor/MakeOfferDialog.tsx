@@ -13,7 +13,7 @@ import { usePlaceBidCallback } from '../hooks/usePlaceBidCallback'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
-import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
+import { calcBalance, formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
 import { resolveAssetLinkOnCryptoartAI, resolvePaymentTokensOnCryptoartAI } from '../pipes'
 
@@ -142,7 +142,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         const balance_ = new BigNumber(balance.value ?? '0')
         if (amount_.isZero()) return t('plugin_collectible_enter_a_price')
         if (amount_.lt(atLeastBidValue)) return t('plugin_collectible_enter_a_price')
-        if (balance_.isZero() || amount_.gt(formatBalance(balance.value, token?.value?.decimals, 4)))
+        if (balance_.isZero() || amount_.gt(calcBalance(balance.value, token?.value?.decimals)))
             return t('plugin_collectible_insufficient_balance')
         if (
             assetSource?.is24Auction &&

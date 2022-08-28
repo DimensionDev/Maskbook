@@ -1,7 +1,6 @@
 import { memo, useCallback, useMemo } from 'react'
-import BigNumber from 'bignumber.js'
 import { Link, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
-import { formatBalance, FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import { calcBalance, FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { TokenIcon } from '../TokenIcon'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskLoadingButton, LoadingBase } from '@masknet/theme'
@@ -167,11 +166,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
             }
             return source !== 'external' || isTrust ? (
                 <Typography className={classes.balance}>
-                    {balance === undefined ? (
-                        <LoadingBase size={24} />
-                    ) : (
-                        Number.parseFloat(new BigNumber(formatBalance(balance ?? 0, decimals, 6)).toFixed(6))
-                    )}
+                    {balance === undefined ? <LoadingBase size={24} /> : calcBalance(balance ?? 0, decimals).toFixed(6)}
                 </Typography>
             ) : (
                 <MaskLoadingButton

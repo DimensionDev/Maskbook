@@ -1,5 +1,4 @@
 import { memo, useMemo } from 'react'
-import BigNumber from 'bignumber.js'
 import { Box, Button, TableCell, TableRow, Tooltip, Typography } from '@mui/material'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { FormattedCurrency, TokenIcon, WalletIcon } from '@masknet/shared'
@@ -10,13 +9,12 @@ import {
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
 import {
+    calcBalance,
     CurrencyType,
-    formatBalance,
     formatCurrency,
     FungibleAsset,
     NetworkPluginID,
     pow10,
-    toFixed,
 } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useDashboardI18N } from '../../../../locales'
@@ -112,8 +110,8 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
             </TableCell>
             <TableCell className={classes.cell} align="center" variant="body">
                 <Typography>
-                    {new BigNumber(formatBalance(asset.balance, asset.decimals)).gt(pow10(-6))
-                        ? Number.parseFloat(toFixed(formatBalance(asset.balance, asset.decimals) ?? '', 6))
+                    {calcBalance(asset.balance, asset.decimals).gt(pow10(-6))
+                        ? calcBalance(asset.balance, asset.decimals).toFixed(6)
                         : '<0.000001'}
                 </Typography>
             </TableCell>

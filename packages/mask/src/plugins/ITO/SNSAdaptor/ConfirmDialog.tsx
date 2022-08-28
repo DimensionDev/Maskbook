@@ -7,7 +7,7 @@ import {
     SchemaType,
     ChainId,
 } from '@masknet/web3-shared-evm'
-import { formatBalance, FungibleToken, NetworkPluginID, ONE } from '@masknet/web3-shared-base'
+import { calcBalance, formatBalance, FungibleToken, NetworkPluginID, ONE } from '@masknet/web3-shared-base'
 import { Grid, IconButton, Link, Paper, Typography, Box } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import LaunchIcon from '@mui/icons-material/Launch'
@@ -39,7 +39,7 @@ function SwapItem(props: SwapItemProps) {
     const { classes } = useSwapItemStyles()
     const { t } = useI18N()
 
-    const amount_ = formatBalance(swapAmount || '0', swap?.decimals)
+    const amount_ = calcBalance(swapAmount || '0', swap?.decimals)
 
     return (
         <div className={classes.root}>

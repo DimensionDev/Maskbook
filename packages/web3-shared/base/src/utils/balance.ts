@@ -27,3 +27,9 @@ export function formatBalance(rawValue: BigNumber.Value = '0', decimals = 0, sig
     const raw = negative ? `-${value}` : value
     return raw.includes('.') ? raw.replace(/0+$/, '').replace(/\.$/, '') : raw
 }
+
+export function calcBalance(rawValue: BigNumber.Value = '0', decimals = 0) {
+    const balance = new BigNumber(rawValue)
+    if (balance.isNaN()) return new BigNumber(0)
+    return balance.div(pow10(decimals))
+}
