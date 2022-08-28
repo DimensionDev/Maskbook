@@ -31,7 +31,7 @@ export function NFTCardDialog() {
             setTokenAddress(address)
         },
     )
-    const { asset, orders, events, rarity } = useNFTCardInfo(tokenAddress, tokenId, sourceType)
+    const { asset, orders, events, rarity, provider } = useNFTCardInfo(tokenAddress, tokenId, sourceType)
 
     const [currentTab, onChange] = useTabs<NFTCardDialogTabs>(
         NFTCardDialogTabs.About,
@@ -59,9 +59,9 @@ export function NFTCardDialog() {
                 }>
                 <DialogContent className={classes.dialogContent}>
                     <NFTCardDialogUI
+                        provider={provider}
                         events={events}
                         orders={orders}
-                        provider={sourceType}
                         onChangeProvider={setSourceType}
                         asset={asset}
                         currentTab={currentTab}

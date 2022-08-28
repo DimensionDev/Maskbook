@@ -20,16 +20,16 @@ import { OffersTab } from './Tabs/OffersTab'
 import { ActivityTab } from './Tabs/ActivityTab'
 import { NFTBasicInfo } from '../../../components/shared/NFTCard/NFTBasicInfo'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import type { AsyncState } from 'react-use/lib/useAsyncFn'
 import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { LoadingBase } from '@masknet/theme'
 interface NFTCardDialogUIProps {
     currentTab: NFTCardDialogTabs
-    asset: AsyncState<Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>>
+    asset: AsyncStateRetry<Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>>
     onChangeProvider: (v: SourceType) => void
+    orders: AsyncStateRetry<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
+    events: AsyncStateRetry<Pageable<NonFungibleTokenEvent<ChainId, SchemaType>>>
     provider: SourceType
-    orders: AsyncState<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
-    events: AsyncState<Pageable<NonFungibleTokenEvent<ChainId, SchemaType>>>
 }
 
 const supportedProvider = [
@@ -70,9 +70,9 @@ export function NFTCardDialogUI(props: NFTCardDialogUIProps) {
 
                     <div className={classes.tabWrapper}>
                         {currentTab === NFTCardDialogTabs.About ? (
-                            <AboutTab asset={asset} />
+                            <AboutTab orders={orders} asset={asset} />
                         ) : currentTab === NFTCardDialogTabs.Offers ? (
-                            <OffersTab offers={orders} />
+                            <OffersTab offers={orders} provider={provider} />
                         ) : (
                             <ActivityTab events={events} />
                         )}

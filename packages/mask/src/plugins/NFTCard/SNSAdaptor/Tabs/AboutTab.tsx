@@ -4,8 +4,11 @@ import { NFTPropertiesCard } from '../../../../components/shared/NFTCard/NFTProp
 import { NFTPriceCard } from '../../../../components/shared/NFTCard/NFTPriceCard'
 import { NFTInfoCard } from '../../../../components/shared/NFTCard/NFTInfoCard'
 import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { AsyncState } from 'react-use/lib/useAsyncFn'
+import type { NetworkPluginID, NonFungibleTokenOrder, Pageable } from '@masknet/web3-shared-base'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import BigNumber from 'bignumber.js'
+import { first } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -17,23 +20,34 @@ const useStyles = makeStyles()((theme) => ({
         gap: 24,
     },
 }))
-
+const resolveTopOffer = (orders?: Array<NonFungibleTokenOrder<ChainId, SchemaType>>) => {
+    if (!orders || !orders.length) return
+    return first(
+        orders.sort((a, b) => {
+            const value_a = new BigNumber(a.priceInToken?.amount ?? 0)
+            const value_b = new BigNumber(b.priceInToken?.amount ?? 0)
+            return Number(value_a.lt(value_b))
+        }),
+    )
+}
 export interface AboutTabProps {
-    asset: AsyncState<Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>>
+    asset: AsyncStateRetry<Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>>
+    orders: AsyncStateRetry<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
 }
 
 export function AboutTab(props: AboutTabProps) {
-    const { asset } = props
+    const { asset, orders } = props
     const { classes } = useStyles()
     const _asset = asset.value
-    console.log(asset, 'asset')
+    const topOffer = resolveTopOffer(orders.value?.data)
+
     if (!_asset) return null
     return (
         <div className={classes.wrapper}>
-            <NFTPriceCard asset={_asset} />
+            <NFTPriceCard topOffer={topOffer} asset={_asset} />
             <NFTInfoCard asset={_asset} />
             <NFTDescription asset={_asset} />
-            <NFTPropertiesCard asset={_asset} />
+            <NFTPropertiesCard timeline asset={_asset} />
         </div>
     )
 }

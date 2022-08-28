@@ -10,7 +10,7 @@ import { ChainId } from '@masknet/web3-shared-evm'
 
 export function useNFTCardInfo(address?: string, tokenId?: string, source?: SourceType) {
     const [provider, setProvider] = useState(source ?? SourceType.Gem)
-
+    console.log(provider, 'hhh')
     const asset = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, address ?? '', tokenId ?? '', {
         sourceType: provider,
         chainId: ChainId.Mainnet,
@@ -29,7 +29,6 @@ export function useNFTCardInfo(address?: string, tokenId?: string, source?: Sour
         sourceType: provider,
         chainId: ChainId.Mainnet,
     })
-    console.log(asset, 'hhh', address, tokenId, provider)
     return {
         asset,
         orders,
