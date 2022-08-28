@@ -29,6 +29,6 @@ export function usePlaceBetCallback(
             azuroContract.methods.betNative(conditionID, outcomeID, deadline, minOdds),
             config,
         )
-        return connection.sendTransaction(tx)
+        return connection?.sendTransaction(tx)
     }, [account, amount, conditionID, outcomeID, deadline, minOdds, chainId, azuroContract, connection])
 }

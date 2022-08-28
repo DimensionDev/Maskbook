@@ -1,7 +1,6 @@
 import { createIcon } from '../../../../../../icons/utils'
-import type { SvgIcon } from '@mui/material'
 
-export const LiveIcon: typeof SvgIcon = createIcon(
+export const LiveIcon = createIcon(
     'Azuro',
     <g>
         <circle cx="8" cy="8" r="3" fill="#FE7C8C" />

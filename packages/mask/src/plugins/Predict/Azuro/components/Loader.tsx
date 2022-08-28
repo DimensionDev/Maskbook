@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { CircleLoadingIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { Typography } from '@mui/material'
 import { useI18N } from '../../../../utils'
 
@@ -38,7 +38,7 @@ export function Loader() {
 
     return (
         <div className={classes.placeholder}>
-            <CircleLoadingIcon className={classes.animated} />
+            <Icons.CircleLoading className={classes.animated} />
             <Typography className={classes.loading}>{t('popups_loading')}</Typography>
         </div>
     )

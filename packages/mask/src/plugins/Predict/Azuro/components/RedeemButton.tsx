@@ -41,7 +41,7 @@ export function RedeemButton(props: RedeemButtonProps) {
             config,
         )
 
-        const hash = await connection.sendTransaction(tx)
+        const hash = await connection?.sendTransaction(tx)
         if (!hash) return
 
         retry()

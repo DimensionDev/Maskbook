@@ -9,6 +9,7 @@ import {
     SelectChangeEvent,
     TextField,
 } from '@mui/material'
+import { Icons } from '@masknet/icons'
 import { useState } from 'react'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { useFetchGames, useLeagueList, useMarketList } from '../hooks'
@@ -17,7 +18,6 @@ import { Sport } from '../types'
 import { DEFAULT_LABEL } from '../../constants'
 import { useI18N } from '../../locales'
 import { useI18N as useBaseI18N } from '../../../../utils'
-import { RefreshIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -178,7 +178,7 @@ export function EventsView(): JSX.Element {
                     color="primary"
                     variant="outlined"
                     onClick={() => retry()}>
-                    <RefreshIcon />
+                    <Icons.Refresh />
                 </Button>
             </Grid>
             <div>

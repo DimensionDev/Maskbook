@@ -1,7 +1,6 @@
 import { createIcon } from '../../../../../../icons/utils/index'
-import type { SvgIcon } from '@mui/material'
 
-export const AzuroIcon: typeof SvgIcon = createIcon(
+export const AzuroIcon = createIcon(
     'Azuro',
     <path
         fillRule="evenodd"
