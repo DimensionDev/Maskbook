@@ -1,5 +1,7 @@
 import { makeStyles } from '@masknet/theme'
-import { NFTCardState } from '../hooks/useNFTCardState'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { NonFungibleTokenEvent, Pageable } from '@masknet/web3-shared-base'
+import type { AsyncState } from 'react-use/lib/useAsyncFn'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -11,10 +13,12 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ActivityTabProps {}
+export interface ActivityTabProps {
+    events: AsyncState<Pageable<NonFungibleTokenEvent<ChainId, SchemaType>>>
+}
 
 export function ActivityTab(props: ActivityTabProps) {
     const { classes } = useStyles()
-    const { events } = NFTCardState.useContainer()
+
     return <div className={classes.wrapper}>events</div>
 }

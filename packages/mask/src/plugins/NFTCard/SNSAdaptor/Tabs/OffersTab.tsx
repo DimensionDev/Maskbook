@@ -1,5 +1,7 @@
 import { makeStyles } from '@masknet/theme'
-import { NFTCardState } from '../hooks/useNFTCardState'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { NonFungibleTokenOrder, Pageable } from '@masknet/web3-shared-base'
+import type { AsyncState } from 'react-use/lib/useAsyncFn'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -11,10 +13,13 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface OffersTabProps {}
+export interface OffersTabProps {
+    offers: AsyncState<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
+}
 
 export function OffersTab(props: OffersTabProps) {
+    const { offers } = props
+    console.log(offers, 'sss')
     const { classes } = useStyles()
-    const { orders } = NFTCardState.useContainer()
     return <div className={classes.wrapper}>orders</div>
 }

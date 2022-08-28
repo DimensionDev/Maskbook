@@ -4,7 +4,13 @@ import { PluginWalletStatusBar, useI18N as useBaseI18n } from '../../../utils'
 import { PluginId } from '@masknet/plugin-infra'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '../../../plugins/Wallet/messages'
-import { NetworkPluginID, NonFungibleAsset, SourceType } from '@masknet/web3-shared-base'
+import {
+    NetworkPluginID,
+    SourceType,
+    NonFungibleTokenOrder,
+    NonFungibleTokenEvent,
+    Pageable,
+} from '@masknet/web3-shared-base'
 import { NFTCardDialogTabs } from './NFTCardDialog'
 import { useStyles } from '../useStyles'
 import { chainResolver, NetworkType } from '@masknet/web3-shared-evm'
@@ -14,11 +20,16 @@ import { OffersTab } from './Tabs/OffersTab'
 import { ActivityTab } from './Tabs/ActivityTab'
 import { NFTBasicInfo } from '../../../components/shared/NFTCard/NFTBasicInfo'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { AsyncState } from 'react-use/lib/useAsyncFn'
+import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
+import { LoadingBase } from '@masknet/theme'
 interface NFTCardDialogUIProps {
     currentTab: NFTCardDialogTabs
-    asset: NonFungibleAsset<ChainId, SchemaType>
+    asset: AsyncState<Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>>
     onChangeProvider: (v: SourceType) => void
     provider: SourceType
+    orders: AsyncState<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
+    events: AsyncState<Pageable<NonFungibleTokenEvent<ChainId, SchemaType>>>
 }
 
 const supportedProvider = [
@@ -33,7 +44,7 @@ const supportedProvider = [
 ]
 
 export function NFTCardDialogUI(props: NFTCardDialogUIProps) {
-    const { currentTab, asset, onChangeProvider, provider } = props
+    const { currentTab, asset, orders, onChangeProvider, provider, events } = props
     const { classes } = useStyles()
     const { t: tb } = useBaseI18n()
     const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
@@ -46,19 +57,22 @@ export function NFTCardDialogUI(props: NFTCardDialogUIProps) {
     return (
         <div className={classes.contentWrapper}>
             <div className={classes.contentLayout}>
-                <NFTBasicInfo
-                    providers={supportedProvider}
-                    currentProvider={provider}
-                    asset={asset}
-                    onChangeProvider={onChangeProvider}
-                />
+                {(asset.value && (
+                    <NFTBasicInfo
+                        providers={supportedProvider}
+                        currentProvider={provider}
+                        asset={asset.value}
+                        onChangeProvider={onChangeProvider}
+                    />
+                )) || <LoadingBase />}
+
                 <div className={classes.tabWrapper}>
                     {currentTab === NFTCardDialogTabs.About ? (
-                        <AboutTab />
+                        <AboutTab asset={asset} />
                     ) : currentTab === NFTCardDialogTabs.Offers ? (
-                        <OffersTab />
+                        <OffersTab offers={orders} />
                     ) : (
-                        <ActivityTab />
+                        <ActivityTab events={events} />
                     )}
                 </div>
             </div>

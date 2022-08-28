@@ -3,7 +3,9 @@ import { NFTDescription } from '../../../../components/shared/NFTCard/NFTDescrip
 import { NFTPropertiesCard } from '../../../../components/shared/NFTCard/NFTPropertiesCard'
 import { NFTPriceCard } from '../../../../components/shared/NFTCard/NFTPriceCard'
 import { NFTInfoCard } from '../../../../components/shared/NFTCard/NFTInfoCard'
-import { NFTCardState } from '../hooks/useNFTCardState'
+import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { AsyncState } from 'react-use/lib/useAsyncFn'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -16,11 +18,13 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface AboutTabProps {}
+export interface AboutTabProps {
+    asset: AsyncState<Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>>
+}
 
 export function AboutTab(props: AboutTabProps) {
+    const { asset } = props
     const { classes } = useStyles()
-    const { asset } = NFTCardState.useContainer()
     const _asset = asset.value
     if (!_asset) return null
     return (

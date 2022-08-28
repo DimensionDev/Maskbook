@@ -9,7 +9,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { NFTCardMessage } from '../messages'
 import { NFTCardDialogUI } from './NFTCardDialogUI'
 import { useStyles } from '../useStyles'
-import { NFTCardState } from './hooks/useNFTCardState'
+import { useNFTCardInfo } from './hooks/useNFTCardInfo'
 
 export enum NFTCardDialogTabs {
     About = 'About',
@@ -35,9 +35,8 @@ export function NFTCardDialog() {
             }
         },
     )
-    const { asset, orders, events, rarity } = NFTCardState.useContainer()
+    const { asset, orders, events, rarity } = useNFTCardInfo(tokenId, tokenAddress, sourceType)
 
-    console.log(asset, 'asset')
     const onClose = useCallback(() => {
         setOpen(false)
     }, [])
@@ -50,7 +49,7 @@ export function NFTCardDialog() {
     useEffect(() => {
         if (!chainIdValid) closeDialog()
     }, [chainIdValid, closeDialog])
-    if (!asset.value) return null
+
     return (
         <TabContext value={currentTab}>
             <InjectedDialog
@@ -67,9 +66,11 @@ export function NFTCardDialog() {
                 }>
                 <DialogContent className={classes.dialogContent}>
                     <NFTCardDialogUI
+                        events={events}
+                        orders={orders}
                         provider={sourceType}
                         onChangeProvider={setSourceType}
-                        asset={asset.value}
+                        asset={asset}
                         currentTab={currentTab}
                     />
                 </DialogContent>

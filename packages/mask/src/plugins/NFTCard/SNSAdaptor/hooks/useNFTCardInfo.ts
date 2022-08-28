@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { createContainer } from 'unstated-next'
 import {
     useNonFungibleAsset,
     useNonFungibleOrders,
@@ -9,7 +8,7 @@ import {
 import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 
-function useNFTCardState(address?: string, tokenId?: string, source?: SourceType) {
+export function useNFTCardInfo(address?: string, tokenId?: string, source?: SourceType) {
     const [provider, setProvider] = useState(source ?? SourceType.Gem)
 
     const asset = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, address ?? '', tokenId ?? '', {
@@ -40,5 +39,3 @@ function useNFTCardState(address?: string, tokenId?: string, source?: SourceType
         setProvider,
     }
 }
-
-export const NFTCardState = createContainer(useNFTCardState)
