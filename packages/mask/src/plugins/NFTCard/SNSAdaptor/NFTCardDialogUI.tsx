@@ -1,5 +1,5 @@
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { Button } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import { PluginWalletStatusBar, useI18N as useBaseI18n } from '../../../utils'
 import { PluginId } from '@masknet/plugin-infra'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
@@ -54,6 +54,7 @@ export function NFTCardDialogUI(props: NFTCardDialogUIProps) {
     const chainIdList =
         useActivatedPlugin(PluginId.NFTCard, 'any')?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]
             ?.supportedChainIds ?? []
+    console.log(asset, 'ggg')
     return (
         <div className={classes.contentWrapper}>
             {(asset.value && (
@@ -78,11 +79,23 @@ export function NFTCardDialogUI(props: NFTCardDialogUIProps) {
                         )}
                     </div>
                 </div>
-            )) || (
-                <div className={classes.contentWrapper}>
-                    <LoadingBase />
-                </div>
-            )}
+            )) ||
+                (asset.loading ? (
+                    <div className={classes.contentWrapper}>
+                        <div className={classes.loadingPlaceholder}>
+                            <LoadingBase />
+                        </div>
+                    </div>
+                ) : (
+                    <div className={classes.contentWrapper}>
+                        <div className={classes.loadingPlaceholder}>
+                            <Typography className={classes.emptyText}>{tb('plugin_furucombo_load_failed')}</Typography>
+                            <Button variant="text" onClick={() => asset.retry()}>
+                                {tb('retry')}
+                            </Button>
+                        </div>
+                    </div>
+                ))}
 
             <PluginWalletStatusBar className={classes.footer}>
                 <Button

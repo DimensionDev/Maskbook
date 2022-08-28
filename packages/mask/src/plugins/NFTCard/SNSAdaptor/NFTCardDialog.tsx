@@ -2,7 +2,7 @@ import { useChainIdValid } from '@masknet/plugin-infra/web3'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { MaskTabList, useTabs } from '@masknet/theme'
-import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
 import { useEffect, useState } from 'react'
@@ -21,7 +21,6 @@ export function NFTCardDialog() {
     const { classes } = useStyles()
     const [tokenId, setTokenId] = useState('')
     const [tokenAddress, setTokenAddress] = useState('')
-    const [sourceType, setSourceType] = useState(SourceType.Gem)
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
     const { open: remoteOpen, closeDialog } = useRemoteControlledDialog(
         NFTCardMessage.events.nftCardDialogUpdated,
@@ -31,7 +30,7 @@ export function NFTCardDialog() {
             setTokenAddress(address)
         },
     )
-    const { asset, orders, events, rarity, provider } = useNFTCardInfo(tokenAddress, tokenId, sourceType)
+    const { asset, orders, events, rarity, provider, setProvider } = useNFTCardInfo(tokenAddress, tokenId)
 
     const [currentTab, onChange] = useTabs<NFTCardDialogTabs>(
         NFTCardDialogTabs.About,
@@ -62,7 +61,7 @@ export function NFTCardDialog() {
                         provider={provider}
                         events={events}
                         orders={orders}
-                        onChangeProvider={setSourceType}
+                        onChangeProvider={setProvider}
                         asset={asset}
                         currentTab={currentTab}
                     />

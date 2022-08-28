@@ -25,9 +25,16 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
             display: 'flex',
             flexDirection: 'column',
         },
+        loadingPlaceholder: {
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%,-50%)',
+        },
         mediaBox: {
             width: 300,
         },
+
         contentLayout: {
             width: '100%',
             height: '100%',
@@ -38,7 +45,8 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
         tabWrapper: {
             width: 'calc( 100% - 336px)',
             marginLeft: 36,
-            height: '100%',
+            height: 'calc( 100% - 64px )',
+            overflowY: 'auto',
         },
         NFTBasicInfoWrapper: {
             width: 300,
