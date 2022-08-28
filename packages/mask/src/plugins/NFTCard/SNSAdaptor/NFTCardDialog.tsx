@@ -21,7 +21,7 @@ export function NFTCardDialog() {
     const { classes } = useStyles()
     const [tokenId, setTokenId] = useState('')
     const [tokenAddress, setTokenAddress] = useState('')
-    const [sourceType, setSourceType] = useState(SourceType.OpenSea)
+    const [sourceType, setSourceType] = useState(SourceType.Gem)
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
     const { open: remoteOpen, closeDialog } = useRemoteControlledDialog(
         NFTCardMessage.events.nftCardDialogUpdated,
@@ -51,7 +51,7 @@ export function NFTCardDialog() {
                 onClose={closeDialog}
                 classes={{ paper: classes.dialogRoot }}
                 titleTabs={
-                    <MaskTabList variant="base" onChange={onChange} aria-label="Savings">
+                    <MaskTabList variant="base" onChange={onChange} aria-label="NFTCard">
                         <Tab label="About" value={NFTCardDialogTabs.About} />
                         <Tab label="Offers" value={NFTCardDialogTabs.Offers} />
                         <Tab label="Activity" value={NFTCardDialogTabs.Activity} />

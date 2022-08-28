@@ -29,7 +29,7 @@ export function useNFTCardInfo(address?: string, tokenId?: string, source?: Sour
         sourceType: provider,
         chainId: ChainId.Mainnet,
     })
-    console.log(asset, orders, events, 'hhh', address, tokenId)
+    console.log(asset, 'hhh', address, tokenId, provider)
     return {
         asset,
         orders,
