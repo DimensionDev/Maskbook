@@ -56,26 +56,31 @@ export function NFTCardDialogUI(props: NFTCardDialogUIProps) {
             ?.supportedChainIds ?? []
     return (
         <div className={classes.contentWrapper}>
-            <div className={classes.contentLayout}>
-                {(asset.value && (
+            {(asset.value && (
+                <div className={classes.contentLayout}>
                     <NFTBasicInfo
                         providers={supportedProvider}
                         currentProvider={provider}
                         asset={asset.value}
                         onChangeProvider={onChangeProvider}
                     />
-                )) || <LoadingBase />}
 
-                <div className={classes.tabWrapper}>
-                    {currentTab === NFTCardDialogTabs.About ? (
-                        <AboutTab asset={asset} />
-                    ) : currentTab === NFTCardDialogTabs.Offers ? (
-                        <OffersTab offers={orders} />
-                    ) : (
-                        <ActivityTab events={events} />
-                    )}
+                    <div className={classes.tabWrapper}>
+                        {currentTab === NFTCardDialogTabs.About ? (
+                            <AboutTab asset={asset} />
+                        ) : currentTab === NFTCardDialogTabs.Offers ? (
+                            <OffersTab offers={orders} />
+                        ) : (
+                            <ActivityTab events={events} />
+                        )}
+                    </div>
                 </div>
-            </div>
+            )) || (
+                <div className={classes.contentWrapper}>
+                    <LoadingBase />
+                </div>
+            )}
+
             <PluginWalletStatusBar className={classes.footer}>
                 <Button
                     variant="contained"

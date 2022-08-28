@@ -26,6 +26,7 @@ export function AboutTab(props: AboutTabProps) {
     const { asset } = props
     const { classes } = useStyles()
     const _asset = asset.value
+    console.log(asset, 'asset')
     if (!_asset) return null
     return (
         <div className={classes.wrapper}>

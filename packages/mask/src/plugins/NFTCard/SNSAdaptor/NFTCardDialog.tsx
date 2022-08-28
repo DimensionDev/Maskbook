@@ -5,7 +5,7 @@ import { MaskTabList, useTabs } from '@masknet/theme'
 import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { NFTCardMessage } from '../messages'
 import { NFTCardDialogUI } from './NFTCardDialogUI'
 import { useStyles } from '../useStyles'
@@ -19,27 +19,20 @@ export enum NFTCardDialogTabs {
 
 export function NFTCardDialog() {
     const { classes } = useStyles()
-    const [open, setOpen] = useState(false)
     const [tokenId, setTokenId] = useState('')
     const [tokenAddress, setTokenAddress] = useState('')
-    const [sourceType, setSourceType] = useState(SourceType.Gem)
+    const [sourceType, setSourceType] = useState(SourceType.OpenSea)
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
     const { open: remoteOpen, closeDialog } = useRemoteControlledDialog(
         NFTCardMessage.events.nftCardDialogUpdated,
         (ev) => {
-            const { tokenId, address, open } = ev
+            const { tokenId, address } = ev
             setTokenId(tokenId)
             setTokenAddress(address)
-            if (open) {
-                setOpen(true)
-            }
         },
     )
     const { asset, orders, events, rarity } = useNFTCardInfo(tokenId, tokenAddress, sourceType)
 
-    const onClose = useCallback(() => {
-        setOpen(false)
-    }, [])
     const [currentTab, onChange] = useTabs<NFTCardDialogTabs>(
         NFTCardDialogTabs.About,
         NFTCardDialogTabs.Offers,
@@ -53,9 +46,9 @@ export function NFTCardDialog() {
     return (
         <TabContext value={currentTab}>
             <InjectedDialog
-                open={open || remoteOpen}
+                open={remoteOpen}
                 title="NFT Details"
-                onClose={onClose}
+                onClose={closeDialog}
                 classes={{ paper: classes.dialogRoot }}
                 titleTabs={
                     <MaskTabList variant="base" onChange={onChange} aria-label="Savings">
