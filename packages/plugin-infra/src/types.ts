@@ -736,7 +736,7 @@ export namespace Plugin.SNSAdaptor {
         priority: number
 
         UI?: {
-            Tab: InjectUI<{ onClose: () => void }>
+            TabContent: InjectUI<{ onClose: () => void }>
         }
     }
 }

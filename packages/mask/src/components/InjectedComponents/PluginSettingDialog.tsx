@@ -1,13 +1,18 @@
 import { useI18N } from '../../utils'
 import { InjectedDialog } from '@masknet/shared'
-import { PluginId, useActivatedPluginsSNSAdaptor, usePluginI18NField } from '@masknet/plugin-infra/content-script'
+import {
+    PluginId,
+    useActivatedPluginsSNSAdaptor,
+    usePluginI18NField,
+    createInjectHooksRenderer,
+} from '@masknet/plugin-infra/content-script'
 import { useAvailablePlugins, useChainId } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST, PopupRoutes, CrossIsolationMessages } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { first } from 'lodash-unified'
 import { TabContext } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import Services from '../../extension/service'
 import { Icons } from '@masknet/icons'
 
@@ -17,6 +22,13 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
     },
 }))
+
+function getTabContent(tabId?: string) {
+    return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
+        const tab = x.SettingTabs?.find((x) => x.ID === tabId)
+        return tab?.UI?.TabContent
+    })
+}
 
 export function PluginSettingDialog() {
     const { t } = useI18N()
@@ -50,6 +62,12 @@ export function PluginSettingDialog() {
         [chainId],
     )
 
+    const component = useMemo(() => {
+        const Component = getTabContent(currentTab)
+        if (!Component) return null
+        return <Component onClose={() => setOpen(false)} />
+    }, [currentTab])
+
     useEffect(() => {
         return CrossIsolationMessages.events.pluginSettingDialogUpdate.on(({ open }) => {
             setOpen(open)
@@ -58,7 +76,7 @@ export function PluginSettingDialog() {
     return (
         <TabContext value={currentTab}>
             <InjectedDialog
-                open
+                open={open}
                 onClose={() => setOpen(false)}
                 title={t('settings')}
                 titleTail={
@@ -71,7 +89,7 @@ export function PluginSettingDialog() {
                         ))}
                     </MaskTabList>
                 }>
-                <DialogContent />
+                <DialogContent>{component}</DialogContent>
             </InjectedDialog>
         </TabContext>
     )
