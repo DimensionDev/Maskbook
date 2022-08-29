@@ -17,7 +17,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { Button, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
+import { Button, Checkbox, FormControlLabel, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 import { useState } from 'react'
 
 export interface ConsoleContentProps {
@@ -47,6 +47,8 @@ export function ConsoleContent(props: ConsoleContentProps) {
 
     const [pluginId, setPluginId] = useState<PluginId>(PluginId.RSS3)
     const plugins = getEnumAsArray(PluginId) as Array<{ key: PluginId; value: string }>
+
+    const [quickMode, setQuickMode] = useState(true)
     const { setDialog } = useRemoteControlledDialog(WalletMessages.events.ApplicationDialogUpdated)
 
     const { showSnackbar } = useCustomSnackbar()
@@ -148,12 +150,23 @@ export function ConsoleContent(props: ConsoleContentProps) {
                             </option>
                         ))}
                     </select>
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={quickMode}
+                                onChange={(event) => setQuickMode(event.currentTarget.checked)}
+                            />
+                        }
+                        label="Settings Quick Mode"
+                    />
+
                     <Button
                         size="small"
                         onClick={() => {
                             setDialog({
                                 open: true,
                                 settings: {
+                                    quickMode,
                                     switchTab: {
                                         focusPluginId: pluginId,
                                     },

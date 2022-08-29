@@ -1,8 +1,8 @@
 import { Icons } from '@masknet/icons'
 import { useNonFungibleAssets, useTrustedNonFungibleTokens, Web3Helper, useWeb3State } from '@masknet/plugin-infra/web3'
 import { ElementAnchor, RetryHint, useWeb3ProfileHiddenSettings } from '@masknet/shared'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
+import { EMPTY_LIST, EMPTY_OBJECT } from '@masknet/shared-base'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { CollectionType } from '@masknet/web3-providers'
 import {
     isSameAddress,
@@ -36,97 +36,104 @@ const AllButton = styled(Button)(({ theme }) => ({
     opacity: 0.5,
 }))
 
-const useStyles = makeStyles<{ columns?: number }>()((theme, { columns = 3 }) => ({
-    root: {
-        width: '100%',
-        display: 'grid',
-        gridTemplateColumns: `repeat(${columns}, 1fr)`,
-        gridGap: theme.spacing(2),
-        padding: theme.spacing(0, 2, 0),
-        boxSizing: 'border-box',
-    },
-    collectibleItem: {
-        overflowX: 'hidden',
-    },
-    container: {
-        boxSizing: 'border-box',
-        paddingTop: theme.spacing(2),
-    },
-    text: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100%',
-    },
-    button: {
-        '&:hover': {
-            border: 'solid 1px transparent',
-        },
-    },
-    list: {
-        height: 'calc(100% - 52px)',
-        overflow: 'auto',
-    },
-    sidebar: {
-        width: 30,
-        flexShrink: 0,
-    },
-    name: {
-        whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis',
-        overflow: 'hidden',
-        lineHeight: '36px',
-        paddingLeft: '8px',
-    },
-    loading: {
-        position: 'absolute',
-        bottom: 6,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-    },
-    collectionWrap: {
-        width: '24px',
-        height: '24px',
-        borderRadius: '50%',
-        background: 'rgba(229,232,235,1)',
-    },
-    collectionImg: {
-        objectFit: 'cover',
-        width: '100%',
-        height: '100%',
-        borderRadius: '50%',
-    },
-    networkSelected: {
-        width: 24,
-        height: 24,
-        minHeight: 24,
-        minWidth: 24,
-        lineHeight: '24px',
-        background: theme.palette.primary.main,
-        color: '#ffffff',
-        fontSize: 10,
-        opacity: 1,
-        '&:hover': {
-            background: theme.palette.primary.main,
-        },
-    },
-    collectionButton: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: '12px',
-        minWidth: 30,
-        maxHeight: 24,
-    },
-}))
+export interface CollectibleGridProps {
+    columns?: number
+    gap?: string | number
+}
 
-export interface CollectibleListProps extends withClasses<'empty' | 'button'> {
+const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 3, gap = 2 }) => {
+    const gapIsNumber = typeof gap === 'number'
+    return {
+        root: {
+            width: '100%',
+            display: 'grid',
+            gridTemplateColumns: `repeat(${columns}, 1fr)`,
+            gridGap: gapIsNumber ? theme.spacing(gap) : gap,
+            padding: gapIsNumber ? theme.spacing(0, gap, 0) : `0 ${gap} 0`,
+            boxSizing: 'border-box',
+        },
+        collectibleItem: {
+            overflowX: 'hidden',
+        },
+        container: {
+            boxSizing: 'border-box',
+            paddingTop: gapIsNumber ? theme.spacing(gap) : gap,
+        },
+        text: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+        },
+        button: {
+            '&:hover': {
+                border: 'solid 1px transparent',
+            },
+        },
+        list: {
+            height: 'calc(100% - 52px)',
+            overflow: 'auto',
+        },
+        sidebar: {
+            width: 30,
+            flexShrink: 0,
+        },
+        name: {
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            lineHeight: '36px',
+            paddingLeft: '8px',
+        },
+        loading: {
+            position: 'absolute',
+            bottom: 6,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+        },
+        collectionWrap: {
+            width: '24px',
+            height: '24px',
+            borderRadius: '50%',
+            background: 'rgba(229,232,235,1)',
+        },
+        collectionImg: {
+            objectFit: 'cover',
+            width: '100%',
+            height: '100%',
+            borderRadius: '50%',
+        },
+        networkSelected: {
+            width: 24,
+            height: 24,
+            minHeight: 24,
+            minWidth: 24,
+            lineHeight: '24px',
+            background: theme.palette.primary.main,
+            color: '#ffffff',
+            fontSize: 10,
+            opacity: 1,
+            '&:hover': {
+                background: theme.palette.primary.main,
+            },
+        },
+        collectionButton: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: '12px',
+            minWidth: 30,
+            maxHeight: 24,
+        },
+    }
+})
+
+export interface CollectibleListProps extends withClasses<'empty' | 'button'>, CollectibleGridProps {
     address: SocialAddress<NetworkPluginID>
     collectibles: Array<NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
-    columns?: number
     error?: string
     loading: boolean
     retry(): void
@@ -135,9 +142,9 @@ export interface CollectibleListProps extends withClasses<'empty' | 'button'> {
 }
 
 export function CollectibleList(props: CollectibleListProps) {
-    const { address, collectibles, columns, loading, retry, error, readonly, hasRetry = true } = props
+    const { address, collectibles, columns, gap, loading, retry, error, readonly, hasRetry = true } = props
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles({ columns }), props)
+    const { classes } = useStyles({ columns, gap }, { props: { classes: props.classes } })
     const { Others } = useWeb3State()
 
     return (
@@ -189,17 +196,16 @@ export function CollectibleList(props: CollectibleListProps) {
     )
 }
 
-export function CollectionList({
-    addressName,
-    persona,
-    profile,
-}: {
+interface CollectionListProps {
     addressName: SocialAddress<NetworkPluginID>
     persona?: string
     profile?: SocialIdentity
-}) {
+    gridProps?: CollectibleGridProps
+}
+
+export function CollectionList({ addressName, persona, profile, gridProps = EMPTY_OBJECT }: CollectionListProps) {
     const { t } = useI18N()
-    const { classes } = useStyles({})
+    const { classes } = useStyles(gridProps)
     const { Storage } = useWeb3State()
     const [selectedCollection, setSelectedCollection] = useState<
         NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | undefined
@@ -268,7 +274,7 @@ export function CollectionList({
     if (!allCollectibles.length && !done && !error && account)
         return (
             <Box className={classes.container}>
-                <Stack spacing={1} direction="row" mt={1.5}>
+                <Stack spacing={1} direction="row" mb={1.5}>
                     <LoadingSkeleton className={classes.root} />
                     <div className={classes.sidebar} />
                 </Stack>
@@ -312,6 +318,7 @@ export function CollectionList({
                             retry={retryFetchCollectible}
                             collectibles={renderCollectibles}
                             loading={renderCollectibles.length === 0}
+                            {...gridProps}
                         />
                     </Box>
                     {error && !done && <RetryHint hint={false} retry={nextPage} />}

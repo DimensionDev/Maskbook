@@ -32,6 +32,8 @@ function getTabContent(tabId?: string) {
     })
 }
 
+const MENU_ITEM_HEIGHT = 40
+const MENU_LIST_PADDING = 8
 const useStyles = makeStyles()((theme) => ({
     root: {},
     container: {
@@ -51,16 +53,18 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 18,
         fontWeight: 700,
     },
+    addressMenu: {
+        maxHeight: MENU_ITEM_HEIGHT * 9 + MENU_LIST_PADDING * 2,
+        width: 248,
+        backgroundColor: theme.palette.maskColor.bottom,
+    },
     menuItem: {
+        height: MENU_ITEM_HEIGHT,
+        boxSizing: 'border-box',
         display: 'flex',
         alignItems: 'center',
         flexGrow: 1,
         justifyContent: 'space-between',
-    },
-    addressMenu: {
-        maxHeight: 192,
-        width: 248,
-        backgroundColor: theme.palette.maskColor.bottom,
     },
     addressItem: {
         display: 'flex',
@@ -303,18 +307,13 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                     onClick={onOpen}
                                     className={classes.walletButton}>
                                     <AddressItem
-                                        reverse={
-                                            selectedAddress?.type === SocialAddressType.KV ||
-                                            selectedAddress?.type === SocialAddressType.ADDRESS ||
-                                            selectedAddress?.type === SocialAddressType.NEXT_ID
-                                        }
-                                        iconProps={classes.mainLinkIcon}
+                                        linkIconClassName={classes.mainLinkIcon}
                                         TypographyProps={{
                                             fontSize: '18px',
                                             fontWeight: 700,
                                             color: (theme) => theme.palette.maskColor.dark,
                                         }}
-                                        identityAddress={selectedAddress}
+                                        socialAddress={selectedAddress}
                                     />
                                     <Icons.ArrowDrop className={classes.arrowDropIcon} />
                                 </Button>
@@ -328,24 +327,21 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                     onClose={() => setAnchorEl(null)}>
                                     {uniqBy(socialAddressList ?? [], (x) => x.address.toLowerCase()).map((x) => {
                                         return (
-                                            <MenuItem key={x.address} value={x.address} onClick={() => onSelect(x)}>
-                                                <div className={classes.menuItem}>
-                                                    <div className={classes.addressItem}>
-                                                        <AddressItem
-                                                            reverse={
-                                                                x.type === SocialAddressType.KV ||
-                                                                x.type === SocialAddressType.ADDRESS ||
-                                                                x.type === SocialAddressType.NEXT_ID
-                                                            }
-                                                            identityAddress={x}
-                                                            iconProps={classes.secondLinkIcon}
-                                                        />
-                                                        {x?.type === SocialAddressType.NEXT_ID && <Icons.Verified />}
-                                                    </div>
-                                                    {isSameAddress(selectedAddress?.address, x.address) && (
-                                                        <Icons.CheckCircle className={classes.selectedIcon} />
-                                                    )}
+                                            <MenuItem
+                                                className={classes.menuItem}
+                                                key={x.address}
+                                                value={x.address}
+                                                onClick={() => onSelect(x)}>
+                                                <div className={classes.addressItem}>
+                                                    <AddressItem
+                                                        socialAddress={x}
+                                                        linkIconClassName={classes.secondLinkIcon}
+                                                    />
+                                                    {x?.type === SocialAddressType.NEXT_ID && <Icons.Verified />}
                                                 </div>
+                                                {isSameAddress(selectedAddress?.address, x.address) && (
+                                                    <Icons.CheckCircle className={classes.selectedIcon} />
+                                                )}
                                             </MenuItem>
                                         )
                                     })}

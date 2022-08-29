@@ -1,14 +1,22 @@
 import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
 import { IconButton, IconButtonProps } from '@mui/material'
 import { FC, useEffect, useRef } from 'react'
+
+const useStyles = makeStyles()((theme) => ({
+    badge: {
+        padding: 0,
+        boxShadow: `0 0 0 1px ${theme.palette.maskColor.bottom}`,
+    },
+}))
 
 interface Props extends IconButtonProps {
     userId: string
 }
-
-export const ProfileAvatarBadge: FC<Props> = ({ userId, ...rest }) => {
+export const ProfileAvatarBadge: FC<Props> = ({ userId, className, ...rest }) => {
     const buttonRef = useRef<HTMLButtonElement>(null)
+    const { classes, cx } = useStyles()
 
     useEffect(() => {
         const enter = () => {
@@ -30,7 +38,7 @@ export const ProfileAvatarBadge: FC<Props> = ({ userId, ...rest }) => {
     }, [])
 
     return (
-        <IconButton disableRipple sx={{ padding: 0 }} {...rest} ref={buttonRef}>
+        <IconButton disableRipple className={cx(classes.badge, className)} {...rest} ref={buttonRef}>
             <Icons.MaskBlue size={16} />
         </IconButton>
     )

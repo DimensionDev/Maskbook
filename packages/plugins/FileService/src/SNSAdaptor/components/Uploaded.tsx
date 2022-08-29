@@ -7,12 +7,12 @@ import { Button, Grid, Typography } from '@mui/material'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import formatDateTime from 'date-fns/format'
-import { useExchange } from '../hooks/Exchange'
-import { useI18N } from '../../locales/i18n_generated'
-import { FileRouter } from '../../constants'
-import type { FileInfo } from '../../types'
-import { FileName } from './FileName'
-import { resolveGatewayAPI } from '../../helpers'
+import { useExchange } from '../hooks/Exchange.js'
+import { useI18N } from '../../locales/i18n_generated.js'
+import { FileRouter } from '../../constants.js'
+import type { FileInfo } from '../../types.js'
+import { FileName } from './FileName.js'
+import { resolveGatewayAPI } from '../../helpers.js'
 
 const useStyles = makeStyles()({
     container: {

@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
     },
     card: {
-        marginTop: 16,
+        marginBottom: 16,
     },
 }))
 
