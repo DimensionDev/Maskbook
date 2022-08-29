@@ -2,7 +2,7 @@ import { ObservableSet } from '@masknet/shared-base'
 import { Emitter } from '@servie/events'
 import { noop } from 'lodash-unified'
 import { BooleanPreference, Plugin } from '../types'
-import { getPluginDefine, registeredPluginIDs, registeredPlugins } from './store'
+import { getPluginDefine, onNewPluginRegistered, registeredPlugins } from './store'
 
 // Plugin state machine
 // not-loaded => loaded
@@ -57,19 +57,31 @@ export function createManager<
 
     function startDaemon(host: Plugin.__Host.Host<Context>, extraCheck?: (id: string) => boolean) {
         _host = host
-        const { signal, addI18NResource, minimalMode } = _host
+        const { signal = new AbortController().signal, addI18NResource, minimalMode } = _host
         const removeListener1 = minimalMode.events.on('enabled', (id) => minimalModePluginIDs.add(id))
         const removeListener2 = minimalMode.events.on('disabled', (id) => minimalModePluginIDs.delete(id))
+        const removeListener3 = onNewPluginRegistered((id, def) => {
+            def.i18n && addI18NResource(id, def.i18n)
+            checkRequirementAndStartOrStop()
+        })
 
-        signal?.addEventListener('abort', () => [...activated.keys()].forEach(stopPlugin))
-        signal?.addEventListener('abort', () => void [removeListener1(), removeListener2()])
+        signal.addEventListener(
+            'abort',
+            () => {
+                ;[...activated.keys()].forEach(stopPlugin)
+                removeListener1()
+                removeListener2()
+                removeListener3()
+            },
+            { once: true },
+        )
 
-        for (const plugin of registeredPlugins) {
+        for (const [, plugin] of registeredPlugins.getCurrentValue()) {
             plugin.i18n && addI18NResource(plugin.ID, plugin.i18n)
         }
         checkRequirementAndStartOrStop().catch(console.error)
         async function checkRequirementAndStartOrStop() {
-            for (const id of registeredPluginIDs) {
+            for (const [id] of registeredPlugins.getCurrentValue()) {
                 if (await meetRequirement(id)) activatePlugin(id).catch(console.error)
                 else stopPlugin(id)
             }
