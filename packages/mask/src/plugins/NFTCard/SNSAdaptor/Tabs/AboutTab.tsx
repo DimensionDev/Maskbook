@@ -13,7 +13,7 @@ import { first } from 'lodash-unified'
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
         width: '100%',
-        maxHeight: 'calc( 100% - 72px)',
+        maxHeight: 'calc(100% - 72px)',
         overflowY: 'auto',
         display: 'flex',
         flexDirection: 'column',

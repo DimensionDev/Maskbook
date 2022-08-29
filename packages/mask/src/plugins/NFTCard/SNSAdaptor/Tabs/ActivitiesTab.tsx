@@ -28,7 +28,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ActivityTabProps {
+export interface ActivitiesTabProps {
     events: AsyncStateRetry<Pageable<NonFungibleTokenEvent<ChainId, SchemaType>>>
 }
 
@@ -42,7 +42,7 @@ const resolveActivityType = (type?: string) => {
     return ActivityType.Transfer
 }
 
-export function ActivityTab(props: ActivityTabProps) {
+export function ActivitiesTab(props: ActivitiesTabProps) {
     const { events } = props
     const { classes } = useStyles()
     const { t } = useI18N()
