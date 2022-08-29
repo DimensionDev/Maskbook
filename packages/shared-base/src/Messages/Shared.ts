@@ -31,6 +31,6 @@ export interface CrossIsolationEvents {
     requestCheckSecurityDialog: CheckSecurityDialogRequest
     requestOpenApplication: OpenApplicationRequestEvent
     swapDialogUpdate: SwapDialogEvent
-    pluginSettingDialogUpdate: SettingDialogEvent
+    PluginSettingsDialogUpdate: SettingDialogEvent
     requestOpenProfileCard: OpenProfileCardEvent
 }

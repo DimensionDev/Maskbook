@@ -30,7 +30,7 @@ function getTabContent(tabId?: string) {
     })
 }
 
-export function PluginSettingDialog() {
+export function PluginSettingsDialog() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const translate = usePluginI18NField()
@@ -69,7 +69,7 @@ export function PluginSettingDialog() {
     }, [currentTab])
 
     useEffect(() => {
-        return CrossIsolationMessages.events.pluginSettingDialogUpdate.on(({ open }) => {
+        return CrossIsolationMessages.events.PluginSettingsDialogUpdate.on(({ open }) => {
             setOpen(open)
         })
     }, [])
