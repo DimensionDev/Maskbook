@@ -8,5 +8,6 @@ import './Cancellable/PopupSSR'
 import './Cancellable/PopupSSR/index.mv3'
 import './Cancellable/SettingsListener'
 import './Cancellable/StartPluginHost'
+import './Cancellable/StartSandboxedPluginHost'
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()

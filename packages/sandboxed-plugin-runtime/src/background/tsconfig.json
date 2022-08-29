@@ -8,6 +8,7 @@
   "include": ["./"],
   "references": [
     { "path": "../runtime" },
+    { "path": "../types" },
     { "path": "../peer-dependencies" },
     { "path": "../utils" },
     { "path": "../../../shared-base" }
