@@ -1,3 +1,6 @@
+import type { ChainId } from '@masknet/web3-shared-evm'
+import type { SecurityMessage } from '../gopluslabs/rules'
+
 export namespace SecurityAPI {
     export interface Holder {
         address?: string
@@ -48,16 +51,25 @@ export namespace SecurityAPI {
         is_airdrop_scam?: '0' | '1'
     }
 
+    export interface SecurityItem {
+        is_high_risk?: boolean
+        risk_item_quantity?: number
+        warn_item_quantity?: number
+        message_list?: SecurityMessage[]
+    }
+
     export interface SupportedChain<ChainId> {
         chainId: ChainId
         name: string
     }
 
+    export type TokenSecurityType = ContractSecurity &
+        TokenSecurity &
+        SecurityItem &
+        TradingSecurity & { contract: string; chainId: ChainId }
+
     export interface Provider<ChainId> {
-        getTokenSecurity(
-            chainId: ChainId,
-            listOfAddress: string[],
-        ): Promise<Record<string, ContractSecurity & TokenSecurity & TradingSecurity> | void>
+        getTokenSecurity(chainId: ChainId, listOfAddress: string[]): Promise<TokenSecurityType | void>
         getSupportedChain(): Promise<Array<SupportedChain<ChainId>>>
     }
 }

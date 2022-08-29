@@ -37,7 +37,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         name: 'mask',
         mode,
         devtool: sourceMapKind,
-        target: ['web', 'es2021'],
+        target: ['web', 'es2022'],
         entry: {},
         experiments: { backCompat: false, asyncWebAssembly: true },
         cache: {
@@ -118,7 +118,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                                 dynamicImport: true,
                                 tsx: true,
                             },
-                            target: 'es2021',
+                            target: 'es2022',
                             externalHelpers: true,
                             transform: {
                                 react: {
@@ -136,6 +136,29 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                         },
                     },
                 },
+                // compress svg files
+                mode === 'production'
+                    ? {
+                          test: /\.svg$/,
+                          loader: 'svgo-loader',
+                          // overrides
+                          options: {
+                              js2svg: {
+                                  pretty: false,
+                              },
+                          },
+                          dependency(data) {
+                              if (data === '') return false
+                              if (data !== 'url')
+                                  throw new TypeError(
+                                      'The only import mode valid for a non-JS file is via new URL(). Current import mode: ' +
+                                          data,
+                                  )
+                              return true
+                          },
+                          type: 'asset/resource',
+                      }
+                    : undefined!,
             ],
         },
         plugins: [
@@ -246,7 +269,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
             liveReload: false,
             client: hmr ? undefined : false,
         } as DevServerConfiguration,
-        stats: process.env.CI ? 'errors-warnings' : undefined,
+        stats: mode === 'production' ? 'errors-only' : undefined,
     }
     baseConfig.module!.rules = baseConfig.module!.rules!.filter(Boolean)
 

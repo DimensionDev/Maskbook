@@ -1,4 +1,4 @@
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
 import {
     FungibleToken,
     isGreaterThan,
@@ -23,7 +23,6 @@ import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants'
 import type { RedPacketSettings } from './hooks/useCreateCallback'
 import { useAccount, useChainId, useFungibleToken, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 // seconds of 1 day

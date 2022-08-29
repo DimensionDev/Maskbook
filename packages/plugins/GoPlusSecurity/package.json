@@ -3,8 +3,21 @@
   "private": true,
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "webpack": "./src/index.ts",
       "default": "./dist/index.js"
+    },
+    "./messages": {
+      "types": "./dist/messages.d.ts",
+      "webpack": "./src/messages.ts",
+      "default": "./dist/messages.d.ts"
+    }
+  },
+  "typesVersions": {
+    "*":{
+      "messages": [
+        "./dist/messages.d.ts"
+      ]
     }
   },
   "types": "./dist/index.d.ts",

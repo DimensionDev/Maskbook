@@ -36,17 +36,15 @@ function getNextIDPlatform() {
     return NextIDPlatform.Twitter
 }
 
-async function getWalletAddressesFromNextID(userId: string) {
-    if (!userId) return EMPTY_LIST
+async function getWalletAddressesFromNextID(userId?: string, publicKey?: string) {
+    if (!userId || !publicKey) return EMPTY_LIST
     const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(getNextIDPlatform(), userId)
 
-    for (const binding of bindings) {
-        const identities = binding.proofs
-            .filter((x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity))
-            .map((y) => y.identity)
-        if (identities.length) return identities
-    }
-    return EMPTY_LIST
+    const binding = bindings.find((binding) => binding.persona.toLowerCase() === publicKey.toLowerCase())
+    return (
+        binding?.proofs.filter((x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity)) ??
+        EMPTY_LIST
+    )
 }
 
 export class IdentityService extends IdentityServiceState {
@@ -71,14 +69,15 @@ export class IdentityService extends IdentityServiceState {
 
     /** Read a social address from bio. */
     private async getSocialAddressFromBio({ bio = '' }: SocialIdentity) {
-        return this.createSocialAddress(SocialAddressType.ADDRESS, getAddress(bio ?? ''))
+        if (!bio) return
+        return this.createSocialAddress(SocialAddressType.ADDRESS, getAddress(bio))
     }
 
     /** Read a social address from NextID. */
-    private async getSocialAddressFromNextID({ identifier }: SocialIdentity) {
-        const listOfAddress = await getWalletAddressesFromNextID(identifier?.userId ?? '')
+    private async getSocialAddressFromNextID({ identifier, publicKey }: SocialIdentity) {
+        const listOfAddress = await getWalletAddressesFromNextID(identifier?.userId, publicKey)
         return listOfAddress
-            .map((x) => this.createSocialAddress(SocialAddressType.NEXT_ID, x))
+            .map((x) => this.createSocialAddress(SocialAddressType.NEXT_ID, x.identity))
             .filter(Boolean) as Array<SocialAddress<NetworkPluginID.PLUGIN_EVM>>
     }
 

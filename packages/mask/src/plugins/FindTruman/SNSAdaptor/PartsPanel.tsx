@@ -21,7 +21,7 @@ import {
     Typography,
 } from '@mui/material'
 import formatDateTime from 'date-fns/format'
-import { InjectedDialog } from '@masknet/shared'
+import { InjectedDialog, Image } from '@masknet/shared'
 import { useContext, useMemo, useState } from 'react'
 import { LoadingButton } from '@mui/lab'
 import getUnixTime from 'date-fns/getUnixTime'
@@ -157,7 +157,7 @@ function PoapLabel(props: PoapLabelProps) {
     return id ? (
         <Chip avatar={<Avatar src={poapImg ?? ''} />} label={`#${id}`} size={size ?? 'small'} variant="filled" />
     ) : (
-        <img
+        <Image
             src={poapImg}
             style={{
                 width: '24px',
@@ -211,7 +211,7 @@ function PartItem(props: { part: Part }) {
                 </Typography>
             </Tooltip>
             <div style={{ position: 'relative' }}>
-                <img className={classes.cover} src={part.img} />
+                <Image className={classes.cover} src={part.img} />
             </div>
 
             <Box display="flex" alignItems="center" justifyContent="space-between" height="30px">
@@ -239,7 +239,7 @@ function QuestItem(props: { quest: Quest }) {
         <div>
             <Box sx={{ height: '24px' }} />
             <div className={classes.ribbonWrapper}>
-                <img className={classes.cover} src={consts?.boxImg} />
+                <Image className={classes.cover} src={consts?.boxImg} />
                 {quest.needPoap && (
                     <Box position="absolute" top="4px" right="4px">
                         <PoapLabel size="medium" poapImg={consts?.poapImg ?? ''} />
@@ -285,7 +285,7 @@ function MysteryBoxItem(props: { account: string; box: MysteryBox; onOpened: () 
         <div>
             <Box sx={{ height: '24px' }} />
             <div className={classes.ribbonWrapper}>
-                <img className={classes.cover} src={box.isOpened ? box.img : consts?.boxImg} />
+                <Image className={classes.cover} src={box.isOpened ? box.img : consts?.boxImg} />
                 {!box.isOpened && box.completedQuest?.needPoap && !!box.completedQuest.tokenId && (
                     <Box position="absolute" top="4px" right="4px">
                         <PoapLabel size="medium" id={box.completedQuest.tokenId} poapImg={consts?.poapImg ?? ''} />
@@ -349,7 +349,7 @@ function QuestDialog(props: QuestDialogProps) {
                     alignItems: 'center',
                     padding: 4,
                 }}>
-                <img
+                <Image
                     className={classes.cover}
                     style={{
                         width: '250px',

@@ -7,7 +7,7 @@ import { useMenu } from '@masknet/shared'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardWalletHideTokenConfirmDialog, DashboardWalletTransferDialogNFT } from '../DashboardDialogs/Wallet'
 import { useChainIdValid, Web3Helper } from '@masknet/plugin-infra/web3'
-import type { NonFungibleToken, Wallet } from '@masknet/web3-shared-base'
+import type { NonFungibleAsset, Wallet } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
@@ -18,11 +18,11 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface ActionsBarNFT_Props extends withClasses<'more'> {
     wallet: Wallet
-    token: NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    asset: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
 }
 
 export function ActionsBarNFT(props: ActionsBarNFT_Props) {
-    const { wallet, token } = props
+    const { wallet, asset } = props
 
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
@@ -32,18 +32,18 @@ export function ActionsBarNFT(props: ActionsBarNFT_Props) {
     const [transferDialog, , openTransferDialogOpen] = useModal(DashboardWalletTransferDialogNFT)
     const [hideTokenConfirmDialog, , openHideTokenConfirmDialog] = useModal(DashboardWalletHideTokenConfirmDialog)
     const [menu, openMenu] = useMenu(
-        token.schema === SchemaType.ERC721 ? (
+        asset.schema === SchemaType.ERC721 ? (
             <MenuItem
                 key="transfer"
                 disabled={!chainIdValid}
-                onClick={() => openTransferDialogOpen({ token: token as NonFungibleToken<ChainId, SchemaType> })}>
+                onClick={() => openTransferDialogOpen({ token: asset as NonFungibleAsset<ChainId, SchemaType> })}>
                 {t('transfer')}
             </MenuItem>
         ) : null,
         <MenuItem
             key="hide"
             onClick={() =>
-                openHideTokenConfirmDialog({ wallet, token: token as NonFungibleToken<ChainId, SchemaType> })
+                openHideTokenConfirmDialog({ wallet, token: asset as NonFungibleAsset<ChainId, SchemaType> })
             }>
             {t('hide')}
         </MenuItem>,

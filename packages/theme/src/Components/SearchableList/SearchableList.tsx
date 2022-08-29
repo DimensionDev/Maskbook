@@ -1,12 +1,12 @@
-import { ReactNode, useMemo, useState } from 'react'
-import { FixedSizeList, FixedSizeListProps } from 'react-window'
+import { ReactNode, useCallback, useMemo, useState } from 'react'
+import { FixedSizeList, FixedSizeListProps, ListChildComponentProps } from 'react-window'
 import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-unified'
-import { Box, InputAdornment } from '@mui/material'
-import { makeStyles } from '../../UIHelper/makeStyles'
-import { MaskSearchableItemInList } from './MaskSearchableItemInList'
+import { Box, InputAdornment, Stack } from '@mui/material'
+import { makeStyles } from '../../UIHelper'
 import { MaskTextField, MaskTextFieldProps } from '../TextField'
 import { Icons } from '@masknet/icons'
+import { EmptyResult } from './EmptyResult'
 
 export interface MaskSearchableListProps<T> {
     /** The list data should be render */
@@ -18,7 +18,7 @@ export interface MaskSearchableListProps<T> {
     /** The key of list item for search */
     searchKey?: string[]
     /** Renderer for each list item */
-    itemRender: React.ComponentType<{ data: T; index: number; onSelect(): void }>
+    itemRender: React.ComponentType<ListChildComponentProps>
     /** The props to react-window */
     FixedSizeListProps?: Partial<FixedSizeListProps>
     /** The callback when clicked someone list item */
@@ -62,7 +62,7 @@ export function SearchableList<T extends {}>({
 }: MaskSearchableListProps<T>) {
     const [keyword, setKeyword] = useState('')
     const { classes } = useStyles()
-    const { height, itemSize, ...rest } = FixedSizeListProps
+    const { height = 300, itemSize, ...rest } = FixedSizeListProps
     const { InputProps, ...textFieldPropsRest } = SearchFieldProps ?? {}
 
     // #region fuse
@@ -70,6 +70,7 @@ export function SearchableList<T extends {}>({
         () =>
             new Fuse(data, {
                 shouldSort: true,
+                isCaseSensitive: false,
                 threshold: 0.45,
                 minMatchCharLength: 1,
                 keys: searchKey ?? Object.keys(data.length > 0 ? data[0] : []),
@@ -83,53 +84,86 @@ export function SearchableList<T extends {}>({
         if (!keyword) return data
         const filtered = fuse.search(keyword).map((x: any) => x.item)
         return itemKey ? uniqBy(filtered, (x) => x[itemKey]) : filtered
-    }, [keyword, fuse, data])
+    }, [keyword, fuse, JSON.stringify(data)])
     // #endregion
 
-    const handleSearch = (word: string) => {
-        setKeyword(word)
-        onSearch?.(word)
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.currentTarget.value
+        setKeyword(value)
+        onSearch?.(value)
+        if (!value) handleClear()
     }
+
+    const handleClear = () => {
+        setKeyword('')
+        onSearch?.('')
+    }
+
+    const getItemKey = useCallback(
+        (index: number, data: { dataSet: T[] }) => {
+            if (!itemKey) return index.toString()
+            return data.dataSet[index][itemKey] as string
+        },
+        [itemKey],
+    )
+
+    const windowHeight = !!textFieldPropsRest.error && typeof height === 'number' ? height - 28 : height
 
     return (
         <div className={classes.container}>
             {!disableSearch && (
-                <Box style={{ padding: '4px 16px 16px' }}>
+                <Box>
                     <MaskTextField
+                        value={keyword}
                         placeholder="Search"
                         autoFocus
                         fullWidth
                         InputProps={{
+                            style: { height: 40 },
                             startAdornment: (
                                 <InputAdornment position="start">
                                     <Icons.Search />
                                 </InputAdornment>
                             ),
+                            endAdornment: keyword ? (
+                                <InputAdornment position="end" className={classes.closeIcon} onClick={handleClear}>
+                                    <Icons.Clear size={18} />
+                                </InputAdornment>
+                            ) : null,
                             ...InputProps,
                         }}
-                        onChange={(e) => handleSearch(e.currentTarget.value)}
+                        onChange={handleChange}
                         {...textFieldPropsRest}
                     />
                 </Box>
             )}
             {placeholder}
-            {!placeholder && (
+            {!placeholder && readyToRenderData.length === 0 && (
+                <Stack
+                    height={windowHeight}
+                    justifyContent="center"
+                    alignContent="center"
+                    marginTop="18px"
+                    marginBottom="48px">
+                    <EmptyResult />
+                </Stack>
+            )}
+            {!placeholder && readyToRenderData.length !== 0 && (
                 <div className={classes.listBox}>
                     <FixedSizeList
                         className={classes.list}
                         width="100%"
-                        height={height ?? 300}
+                        height={windowHeight}
                         overscanCount={25}
                         itemSize={itemSize ?? 100}
                         itemData={{
                             dataSet: readyToRenderData,
                             onSelect,
                         }}
+                        itemKey={(index, data) => getItemKey(index, data)}
                         itemCount={readyToRenderData.length}
                         {...rest}>
-                        {(props) => (
-                            <MaskSearchableItemInList<T> {...props}>{itemRender as any}</MaskSearchableItemInList>
-                        )}
+                        {itemRender}
                     </FixedSizeList>
                 </div>
             )}
@@ -139,14 +173,14 @@ export function SearchableList<T extends {}>({
 
 const useStyles = makeStyles()((theme) => ({
     container: {
-        overflow: 'hidden',
+        overflow: 'visible',
     },
     listBox: {
-        '::-webkit-scrollbar': {
+        '& > div::-webkit-scrollbar': {
             backgroundColor: 'transparent',
-            width: 20,
+            width: 0,
         },
-        '::-webkit-scrollbar-thumb': {
+        '& > div::-webkit-scrollbar-thumb': {
             borderRadius: '20px',
             width: 5,
             border: '7px solid rgba(0, 0, 0, 0)',
@@ -155,12 +189,14 @@ const useStyles = makeStyles()((theme) => ({
         },
         '& > div > div': {
             position: 'relative',
-            width: 'calc(100% - 32px) !important',
             margin: 'auto',
         },
     },
     list: {
         scrollbarWidth: 'thin',
+    },
+    closeIcon: {
+        cursor: 'pointer',
     },
 }))
 

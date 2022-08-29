@@ -1,9 +1,8 @@
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import { explorerResolver, networkResolver } from '@masknet/web3-shared-evm'
 import LaunchIcon from '@mui/icons-material/Launch'
 import { Card, CardHeader, Typography, Link, CardMedia, CardContent, Button, Box, Skeleton } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N as useBaseI18N } from '../../../utils'
 import { useI18N } from '../locales'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
@@ -119,6 +118,11 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
         maxHeight: 180,
+        '& > div': {
+            display: 'flex',
+            justifyContent: 'center',
+            overflow: 'hidden',
+        },
     },
     tokenImg: {
         width: '100%',
@@ -236,7 +240,7 @@ const useStyles = makeStyles()((theme) => ({
     assetPlayerVideoIframe: {
         minWidth: 'fit-content',
     },
-    loadingFailImage: {
+    fallbackImage: {
         height: 160,
         width: 120,
     },
@@ -362,7 +366,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                                     sourceType === 'video' ? classes.assetPlayerVideoIframe : '',
                                 ),
                                 imgWrapper: classes.imgWrapper,
-                                loadingFailImage: classes.loadingFailImage,
+                                fallbackImage: classes.fallbackImage,
                             }}
                             fallbackImage={new URL('./assets/nft-preview.png', import.meta.url)}
                         />

@@ -68,7 +68,16 @@ export const searchFacebookAvatarContainerSelector = () =>
     querySelector('div[data-pagelet="ProfileActions"] > div > div')
 
 export const searchFacebookProfileSettingButtonSelector = () =>
-    querySelector('[role="button"] [role="img"]').closest(10).querySelector('input[type="file"] ~ div').closest<E>(2)
+    querySelector(
+        '[role="main"] > div > div > div > div > div > div:last-child > div:last-child > div input',
+    ).closest<E>(2)
+
+export const searchFacebookProfileCoverSelector = () =>
+    querySelector('[role="button"] [role="img"]')
+        .closest(10)
+        .querySelector('input[type="file"] ~ div')
+        .closest<E>(6)
+        .querySelector('div')
 
 export const searchFacebookEditProfileSelector = () =>
     querySelector('[role="main"] [role="button"] [role="img"]')
@@ -85,6 +94,8 @@ export const searchFacebookSaveAvatarButtonSelector = () =>
 
 export const searchFacebookConfirmAvatarImageSelector = () =>
     querySelector('[role="dialog"] [role="slider"]').closest(7).querySelector('img')
+
+export const inpageAvatarSelector = () => querySelectorAll('[type="nested/pressable"]').closest<HTMLAnchorElement>(2)
 // #region
 
 export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
@@ -120,11 +131,11 @@ export const profileSectionSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="main"]').querySelector('[style]')
 
 export const searchIntroSectionSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-pagelet="ProfileTilesFeed_0"]')
+    querySelector<E>('[role="main"] > div:last-child > div:last-child')
 
-export const searchBioSelector: () => LiveSelector<HTMLSpanElement, true> = () =>
-    querySelector<HTMLSpanElement>(
-        '[data-pagelet="ProfileTilesFeed_0"] > div > div > div > div > div:last-child span[dir="auto"]',
+export const searchBioSelector = () =>
+    searchIntroSectionSelector().querySelector<E>(
+        'div > div > div:last-child > div > div > div > div > div > div > div:nth-child(2) > div span',
     )
 
 export const searchResultHeadingSelector = () => querySelector('[role="article"]')

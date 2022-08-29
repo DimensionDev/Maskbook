@@ -1,28 +1,31 @@
-import { useEffect, useState } from 'react'
-import { useUpdateEffect } from 'react-use'
-import { first } from 'lodash-unified'
+import { Icons } from '@masknet/icons'
 import {
     createInjectHooksRenderer,
     PluginId,
     useActivatedPluginsSNSAdaptor,
+    useIsMinimalMode,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
-import { useSocialAddressListAll, useAvailablePlugins } from '@masknet/plugin-infra/web3'
-import { ConcealableTabs } from '@masknet/shared'
-import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { Box, CircularProgress } from '@mui/material'
-import { Icons } from '@masknet/icons'
-import { SocialAddressType } from '@masknet/web3-shared-base'
+import { useAvailablePlugins, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
+import { AddressItem } from '@masknet/shared'
+import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
+import { makeStyles, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
+import { isSameAddress, NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
+import { TabContext } from '@mui/lab'
+import { Box, Button, CircularProgress, Link, MenuItem, Tab, Typography } from '@mui/material'
+import { first, uniqBy } from 'lodash-unified'
+import { useEffect, useMemo, useState } from 'react'
+import { useUpdateEffect } from 'react-use'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
-import { MaskMessages } from '../../utils'
-import { useLocationChange } from '../../utils/hooks/useLocationChange'
+import { MaskMessages, sorter, useI18N, useLocationChange } from '../../utils'
 import {
     useCurrentVisitingIdentity,
     useCurrentVisitingSocialIdentity,
-    useIsCurrentVisitingOwnerIdentity,
+    useIsOwnerIdentity,
 } from '../DataSource/useActivatedUI'
+import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
+import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary'
 
 function getTabContent(tabId?: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
@@ -31,16 +34,109 @@ function getTabContent(tabId?: string) {
     })
 }
 
+const MENU_ITEM_HEIGHT = 40
+const MENU_LIST_PADDING = 8
 const useStyles = makeStyles()((theme) => ({
     root: {},
+    container: {
+        background:
+            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
+        padding: '16px 16px 0 16px',
+    },
+    title: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '16px',
+    },
+    walletItem: {
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: 18,
+        fontWeight: 700,
+    },
+    addressMenu: {
+        maxHeight: MENU_ITEM_HEIGHT * 9 + MENU_LIST_PADDING * 2,
+        width: 248,
+        backgroundColor: theme.palette.maskColor.bottom,
+    },
+    menuItem: {
+        height: MENU_ITEM_HEIGHT,
+        boxSizing: 'border-box',
+        display: 'flex',
+        alignItems: 'center',
+        flexGrow: 1,
+        justifyContent: 'space-between',
+    },
+    addressItem: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    link: {
+        cursor: 'pointer',
+        marginTop: 2,
+        zIndex: 1,
+        '&:hover': {
+            textDecoration: 'none',
+        },
+    },
+    settingLink: {
+        cursor: 'pointer',
+        marginTop: 4,
+        zIndex: 1,
+        '&:hover': {
+            textDecoration: 'none',
+        },
+    },
+    linkIcon: {
+        color: theme.palette.maskColor.second,
+        fontSize: '20px',
+        margin: '4px 2px 0 2px',
+    },
     content: {
         position: 'relative',
-        padding: theme.spacing(2, 1),
     },
-    settingIcon: {
-        cursor: 'pointer',
-        color: theme.palette.maskColor.main,
-        margin: '0 6px',
+    walletButton: {
+        padding: 0,
+        fontSize: '18px',
+        minWidth: 0,
+        background: 'transparent',
+        '&:hover': {
+            background: 'none',
+        },
+    },
+    settingItem: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+    tabs: {
+        display: 'flex',
+        position: 'relative',
+    },
+    addressLabel: {
+        color: theme.palette.maskColor.dark,
+        fontSize: 18,
+        fontWeight: 700,
+    },
+    arrowDropIcon: {
+        color: theme.palette.maskColor.dark,
+    },
+    selectedIcon: {
+        color: theme.palette.maskColor.primary,
+    },
+    gearIcon: {
+        color: theme.palette.maskColor.dark,
+    },
+    linkOutIcon: {
+        color: theme.palette.maskColor.secondaryDark,
+    },
+    mainLinkIcon: {
+        margin: '0px 2px',
+        color: theme.palette.maskColor.secondaryDark,
+    },
+    secondLinkIcon: {
+        margin: '4px 2px 0 2px',
+        color: theme.palette.maskColor.second,
     },
 }))
 
@@ -49,25 +145,55 @@ export interface ProfileTabContentProps extends withClasses<'text' | 'button' | 
 export function ProfileTabContent(props: ProfileTabContentProps) {
     const classes = useStylesExtends(useStyles(), props)
 
+    const { t } = useI18N()
     const translate = usePluginI18NField()
 
     const [hidden, setHidden] = useState(true)
-    const [selectedTab, setSelectedTab] = useState<string | undefined>()
+    const [selectedAddress, setSelectedAddress] = useState<SocialAddress<NetworkPluginID> | undefined>()
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+    const { value: personaStatus } = useCurrentPersonaConnectStatus()
 
-    const isOwnerIdentity = useIsCurrentVisitingOwnerIdentity()
     const currentVisitingIdentity = useCurrentVisitingIdentity()
     const currentVisitingUserId = currentVisitingIdentity.identifier?.userId
+    const isOwnerIdentity = useIsOwnerIdentity(currentVisitingIdentity)
 
-    const { value: socialAddressList = EMPTY_LIST, loading: loadingSocialAddressList } = useSocialAddressListAll(
-        currentVisitingIdentity,
-        [SocialAddressType.NEXT_ID],
-    )
+    const {
+        value: currentVisitingSocialIdentity,
+        loading: loadingCurrentVisitingSocialIdentity,
+        retry: retryIdentity,
+    } = useCurrentVisitingSocialIdentity()
+
+    const {
+        value: socialAddressList = EMPTY_LIST,
+        loading: loadingSocialAddressList,
+        retry: retrySocialAddress,
+    } = useSocialAddressListAll(currentVisitingSocialIdentity, undefined, sorter)
+
+    useEffect(() => {
+        return MaskMessages.events.ownProofChanged.on(() => {
+            retryIdentity()
+            retrySocialAddress()
+        })
+    }, [retrySocialAddress, retryIdentity])
+
+    useEffect(() => {
+        return MaskMessages.events.ownPersonaChanged.on(() => {
+            retryIdentity()
+        })
+    }, [retryIdentity])
+
+    useEffect(() => {
+        setSelectedAddress(first(socialAddressList))
+    }, [socialAddressList])
 
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
     const displayPlugins = useAvailablePlugins(activatedPlugins, (plugins) => {
         return plugins
             .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
-            .filter((x) => x.Utils?.shouldDisplay?.(currentVisitingIdentity, socialAddressList) ?? true)
+            .filter((x) => {
+                const shouldDisplay = x.Utils?.shouldDisplay?.(currentVisitingIdentity, selectedAddress) ?? true
+                return x.pluginID !== PluginId.NextID && shouldDisplay
+            })
             .sort((a, z) => {
                 // order those tabs from next id first
                 if (a.pluginID === PluginId.NextID) return -1
@@ -93,32 +219,31 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
     }))
 
-    const selectedTabId = selectedTab ?? first(tabs)?.id
+    const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginId.Collectible, ...tabs.map((tab) => tab.id))
 
-    const { value: currentVisitingSocialIdentity, loading: loadingCurrentVisitingSocialIdentity } =
-        useCurrentVisitingSocialIdentity()
+    const isWeb3ProfileDisable = useIsMinimalMode(PluginId.Web3Profile)
 
-    const showNextID = !!(
-        isTwitter(activatedSocialNetworkUI) &&
-        isOwnerIdentity &&
-        (socialAddressList.length === 0 || !currentVisitingSocialIdentity?.hasBinding)
-    )
-    const handleOpenDialog = () => {
-        CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToAll({
-            open: true,
-        })
-    }
-    const Component = getTabContent(
-        showNextID ? displayPlugins?.find((tab) => tab?.pluginID === PluginId.NextID)?.ID : selectedTabId,
-    )
-    const Utils = displayPlugins.find((x) => x.ID === selectedTabId)?.Utils
+    const isTwitterPlatform = isTwitter(activatedSocialNetworkUI)
+    const isOwnerNotHasAddress =
+        isOwnerIdentity && personaStatus.proof?.findIndex((p) => p.platform === NextIDPlatform.Ethereum) === -1
+
+    const showNextID = isTwitterPlatform && (isWeb3ProfileDisable || !personaStatus.verified || isOwnerNotHasAddress)
+
+    const componentTabId = showNextID ? `${PluginId.NextID}_tabContent` : currentTab
+
+    const component = useMemo(() => {
+        const Component = getTabContent(componentTabId)
+        if (!Component) return null
+
+        return <Component identity={currentVisitingSocialIdentity} socialAddress={selectedAddress} />
+    }, [componentTabId, currentVisitingSocialIdentity?.publicKey, selectedAddress])
 
     useLocationChange(() => {
-        setSelectedTab(undefined)
+        onChange(undefined, first(tabs)?.id)
     })
 
     useUpdateEffect(() => {
-        setSelectedTab(undefined)
+        onChange(undefined, first(tabs)?.id)
     }, [currentVisitingUserId])
 
     useEffect(() => {
@@ -133,6 +258,26 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         })
     }, [currentVisitingUserId])
 
+    useEffect(() => {
+        const listener = () => setAnchorEl(null)
+
+        window.addEventListener('scroll', listener, false)
+
+        return () => {
+            window.removeEventListener('scroll', listener, false)
+        }
+    }, [])
+
+    const onOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget)
+    const onSelect = (option: SocialAddress<NetworkPluginID>) => {
+        setSelectedAddress(option)
+        setAnchorEl(null)
+    }
+    const handleOpenDialog = () => {
+        CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToAll({
+            open: true,
+        })
+    }
     if (hidden) return null
 
     if (!currentVisitingUserId || loadingSocialAddressList || loadingCurrentVisitingSocialIdentity)
@@ -150,24 +295,109 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
     return (
         <div className={classes.root}>
-            {tabs.length > 0 && !showNextID && (
-                <div>
-                    <ConcealableTabs<string>
-                        tabs={tabs}
-                        selectedId={selectedTabId}
-                        onChange={setSelectedTab}
-                        tail={
-                            isOwnerIdentity && <Icons.Gear onClick={handleOpenDialog} className={classes.settingIcon} />
-                        }
-                    />
-                </div>
-            )}
-            <div className={classes.content}>
-                <Component
-                    identity={currentVisitingSocialIdentity}
-                    socialAddressList={socialAddressList.filter((x) => Utils?.filter?.(x) ?? true).sort(Utils?.sorter)}
-                />
+            <div>
+                {tabs.length > 0 && !showNextID && (
+                    <div className={classes.container}>
+                        <div className={classes.title}>
+                            <div className={classes.walletItem}>
+                                <Button
+                                    id="demo-positioned-button"
+                                    variant="text"
+                                    size="small"
+                                    onClick={onOpen}
+                                    className={classes.walletButton}>
+                                    <AddressItem
+                                        linkIconClassName={classes.mainLinkIcon}
+                                        TypographyProps={{
+                                            fontSize: '18px',
+                                            fontWeight: 700,
+                                            color: (theme) => theme.palette.maskColor.dark,
+                                        }}
+                                        socialAddress={selectedAddress}
+                                    />
+                                    <Icons.ArrowDrop className={classes.arrowDropIcon} />
+                                </Button>
+                                <ShadowRootMenu
+                                    anchorEl={anchorEl}
+                                    open={Boolean(anchorEl)}
+                                    PaperProps={{
+                                        className: classes.addressMenu,
+                                    }}
+                                    aria-labelledby="demo-positioned-button"
+                                    onClose={() => setAnchorEl(null)}>
+                                    {uniqBy(socialAddressList ?? [], (x) => x.address.toLowerCase()).map((x) => {
+                                        return (
+                                            <MenuItem
+                                                className={classes.menuItem}
+                                                key={x.address}
+                                                value={x.address}
+                                                onClick={() => onSelect(x)}>
+                                                <div className={classes.addressItem}>
+                                                    <AddressItem
+                                                        socialAddress={x}
+                                                        linkIconClassName={classes.secondLinkIcon}
+                                                    />
+                                                    {x?.type === SocialAddressType.NEXT_ID && <Icons.Verified />}
+                                                </div>
+                                                {isSameAddress(selectedAddress?.address, x.address) && (
+                                                    <Icons.CheckCircle className={classes.selectedIcon} />
+                                                )}
+                                            </MenuItem>
+                                        )
+                                    })}
+                                </ShadowRootMenu>
+                            </div>
+                            <div className={classes.settingItem}>
+                                <Typography
+                                    fontSize="14px"
+                                    fontWeight={700}
+                                    marginRight="5px"
+                                    color={(theme) => theme.palette.maskColor.secondaryDark}>
+                                    {t('powered_by')}
+                                </Typography>
+                                <Typography
+                                    fontSize="14px"
+                                    fontWeight={700}
+                                    marginRight="4px"
+                                    color={(theme) => theme.palette.maskColor.dark}>
+                                    {t('mask_network')}
+                                </Typography>
+                                {isOwnerIdentity ? (
+                                    <ConnectPersonaBoundary
+                                        customHint
+                                        handlerPosition="top-right"
+                                        directTo={PluginId.Web3Profile}>
+                                        <Icons.Gear
+                                            variant="light"
+                                            onClick={handleOpenDialog}
+                                            className={classes.gearIcon}
+                                            sx={{ cursor: 'pointer' }}
+                                        />
+                                    </ConnectPersonaBoundary>
+                                ) : (
+                                    <Link
+                                        className={classes.settingLink}
+                                        href="https://mask.io"
+                                        target="_blank"
+                                        rel="noopener noreferrer">
+                                        <Icons.LinkOut className={classes.linkOutIcon} size={20} />
+                                    </Link>
+                                )}
+                            </div>
+                        </div>
+                        <div className={classes.tabs}>
+                            <TabContext value={currentTab}>
+                                <MaskTabList variant="base" onChange={onChange} aria-label="Web3Tabs">
+                                    {tabs.map((tab) => (
+                                        <Tab key={tab.id} label={tab.label} value={tab.id} />
+                                    ))}
+                                </MaskTabList>
+                            </TabContext>
+                        </div>
+                    </div>
+                )}
             </div>
+            <div className={classes.content}>{component}</div>
         </div>
     )
 }

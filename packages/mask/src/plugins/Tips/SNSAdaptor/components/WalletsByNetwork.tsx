@@ -52,13 +52,19 @@ interface WalletsByNetworkProps {
     networkId: NetworkPluginID
     toSetting: () => void
     wallets: BindingProof[]
-    setAsDefault: (idx: number) => void
+    defaultAddress?: string
+    setAsDefault: (address: string) => void
 }
 
-export function WalletsByNetwork({ wallets, networkId, toSetting, setAsDefault }: WalletsByNetworkProps) {
+export function WalletsByNetwork({
+    wallets,
+    networkId,
+    toSetting,
+    defaultAddress,
+    setAsDefault,
+}: WalletsByNetworkProps) {
     const t = useI18N()
     const { classes } = useStyles()
-    const isAllHide = wallets.every((x) => !x.isPublic)
     const network = networkMap[networkId]
     return (
         <div className={classes.container}>
@@ -70,21 +76,18 @@ export function WalletsByNetwork({ wallets, networkId, toSetting, setAsDefault }
                 <Icons.Settings onClick={toSetting} className={classes.settingIcon} />
             </div>
             <div className={classes.content}>
-                {isAllHide ? (
-                    <Typography className={classes.empty}>{t.tip_empty_list()}</Typography>
+                {wallets.length ? (
+                    wallets.map((x) => (
+                        <WalletItem
+                            key={x.identity}
+                            setAsDefault={setAsDefault}
+                            fallbackName={`Wallet ${x.rawIdx}`}
+                            address={x.identity}
+                            isDefault={defaultAddress ? defaultAddress === x.identity : !!x.isDefault}
+                        />
+                    ))
                 ) : (
-                    wallets
-                        .filter((x) => x.isPublic)
-                        .map((x, idx) => (
-                            <WalletItem
-                                key={x.identity}
-                                nowIdx={idx}
-                                setAsDefault={setAsDefault}
-                                fallbackName={`Wallet ${x.rawIdx}`}
-                                address={x.identity}
-                                isDefault={!!x.isDefault}
-                            />
-                        ))
+                    <Typography className={classes.empty}>{t.tip_empty_list()}</Typography>
                 )}
             </div>
         </div>

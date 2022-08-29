@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { InjectedDialog, TokenAmountPanel, useOpenShareTxDialog, useShowConfirm } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import { FungibleToken, leftShift, NetworkPluginID } from '@masknet/web3-shared-base'
 import { SchemaType, useArtBlocksConstants, ChainId } from '@masknet/web3-shared-evm'
 import {
@@ -14,7 +14,6 @@ import {
     Link,
     Typography,
 } from '@mui/material'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'

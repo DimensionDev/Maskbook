@@ -1,17 +1,21 @@
 /// <reference types="@masknet/global-types/firefox" />
 /// <reference types="@masknet/global-types/flag" />
 
-import urlcat from 'urlcat'
-import { ChainId, createNativeToken, NETWORK_DESCRIPTORS, SchemaType } from '@masknet/web3-shared-evm'
-import type { FungibleAsset } from '@masknet/web3-shared-base'
-
-export function isProxyENV() {
-    try {
-        return process.env.PROVIDER_API_ENV === 'proxy'
-    } catch {
-        return false
-    }
-}
+import {
+    APE,
+    BUSD,
+    ChainId,
+    createNativeToken,
+    DAI,
+    HUSD,
+    NETWORK_DESCRIPTORS,
+    SchemaType,
+    USDC,
+    USDT,
+    WBTC,
+    WNATIVE,
+} from '@masknet/web3-shared-evm'
+import { FungibleAsset, isSameAddress } from '@masknet/web3-shared-base'
 
 export async function fetchJSON<T = unknown>(
     requestInfo: string,
@@ -20,14 +24,9 @@ export async function fetchJSON<T = unknown>(
         fetch: typeof globalThis.fetch
     },
 ): Promise<T> {
-    const fetch = options?.fetch ?? globalThis.r2d2Fetch ?? globalThis.fetch
+    const fetch = options?.fetch ?? globalThis.fetch
     const res = await fetch(requestInfo, requestInit)
     return res.json()
-}
-
-const CORS_PROXY = 'https://cors.r2d2.to'
-export function courier(url: string) {
-    return urlcat(`${CORS_PROXY}?:url`, { url })
 }
 
 export function getAllEVMNativeAssets(): Array<FungibleAsset<ChainId, SchemaType>> {
@@ -37,16 +36,25 @@ export function getAllEVMNativeAssets(): Array<FungibleAsset<ChainId, SchemaType
     }))
 }
 
-export function getTraderAllAPICachedFlag(): RequestCache {
-    // TODO: handle flags
-    // cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
-    return 'default'
+export function getJSON<T>(json?: string): T | undefined {
+    if (!json) return
+    try {
+        return JSON.parse(json) as T
+    } catch {
+        return
+    }
 }
 
-export async function contentFetch(url: string, config?: RequestInit) {
-    const fetch =
-        process.env.engine === 'firefox' && process.env.manifest === '2' && typeof content === 'object'
-            ? content.fetch
-            : globalThis.fetch
-    return fetch(url, config)
+export function getPaymentToken(chainId: ChainId, token?: { name?: string; symbol?: string; address?: string }) {
+    if (!token) return
+
+    return [
+        createNativeToken(chainId),
+        ...[APE, USDC, USDT, HUSD, BUSD, DAI, WBTC, WNATIVE].map((x) => x[chainId]),
+    ].find(
+        (x) =>
+            x.name.toLowerCase() === token.name?.toLowerCase() ||
+            x.symbol.toLowerCase() === token.symbol?.toLowerCase() ||
+            isSameAddress(x.address, token.address),
+    )
 }

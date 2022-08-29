@@ -1,11 +1,12 @@
 import { EMPTY_LIST, PartialRequired } from '@masknet/shared-base'
 import {
-    Alchemy_EVM,
+    AlchemyEVM,
     CoinGecko,
     DeBank,
     EthereumWeb3,
     MetaSwap,
-    NFTScan,
+    AstarGas,
+    NFTScanNonFungibleTokenEVM,
     OpenSea,
     Rarible,
     TokenList,
@@ -14,11 +15,14 @@ import {
     NonFungibleTokenAPI,
     FungibleTokenAPI,
     LooksRare,
+    Gem,
+    Zora,
+    ChainbaseNonFungibleToken,
 } from '@masknet/web3-providers'
 import {
     FungibleToken,
     NonFungibleToken,
-    NonFungibleTokenCollection,
+    NonFungibleCollection,
     SourceType,
     FungibleAsset,
     HubOptions,
@@ -39,6 +43,7 @@ import {
     NonFungibleTokenOrder,
     OrderSide,
     NonFungibleTokenContract,
+    NonFungibleTokenRarity,
 } from '@masknet/web3-shared-base'
 import {
     ChainId,
@@ -85,13 +90,48 @@ class Hub implements EVM_Hub {
         return predicate(options.sourceType) ? [providers[options.sourceType]!] : defaultProviders
     }
 
+    private getFungibleProviders(initial?: HubOptions<ChainId>) {
+        const options = this.getOptions(initial)
+
+        // only the first page is available
+        if ((options.indicator ?? 0) > 0) return []
+
+        return this.getProviders<FungibleTokenAPI.Provider<ChainId, SchemaType>>(
+            {
+                [SourceType.DeBank]: DeBank,
+                [SourceType.Zerion]: Zerion,
+            },
+            [DeBank, Zerion],
+            initial,
+        )
+    }
+
+    private getNonFungibleProviders(initial?: HubOptions<ChainId>) {
+        const options = this.getOptions(initial)
+        return this.getProviders<NonFungibleTokenAPI.Provider<ChainId, SchemaType>>(
+            {
+                [SourceType.NFTScan]: NFTScanNonFungibleTokenEVM,
+                [SourceType.Rarible]: Rarible,
+                [SourceType.OpenSea]: OpenSea,
+                [SourceType.Alchemy_EVM]: AlchemyEVM,
+                [SourceType.LooksRare]: LooksRare,
+                [SourceType.Zora]: Zora,
+            },
+            options.chainId === ChainId.Mainnet
+                ? [NFTScanNonFungibleTokenEVM, Rarible, OpenSea, AlchemyEVM, LooksRare, Zora]
+                : [NFTScanNonFungibleTokenEVM, Rarible, AlchemyEVM, OpenSea, LooksRare, Zora],
+            initial,
+        )
+    }
+
     async getGasOptions(chainId: ChainId, initial?: HubOptions<ChainId>) {
         const options = this.getOptions(initial, {
             chainId,
         })
         try {
             const isEIP1559 = chainResolver.isSupport(options.chainId, 'EIP1559')
-            if (isEIP1559) return await MetaSwap.getGasOptions(options.chainId)
+            if (isEIP1559 && chainId !== ChainId.Astar) return await MetaSwap.getGasOptions(options.chainId)
+            if (chainId === ChainId.Astar) return await AstarGas.getGasOptions(options.chainId)
             return await DeBank.getGasOptions(options.chainId)
         } catch (error) {
             return EthereumWeb3.getGasOptions(options.chainId)
@@ -102,7 +142,7 @@ class Hub implements EVM_Hub {
         chainId: ChainId,
         account: string,
         initial?: HubOptions<ChainId>,
-    ): Promise<Array<Transaction<ChainId, SchemaType>>> {
+    ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
         const options = this.getOptions(initial, {
             account,
             chainId,
@@ -114,21 +154,21 @@ class Hub implements EVM_Hub {
         address: string,
         initial?: HubOptions<ChainId>,
     ): Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>> {
-        return NFTScan.getAssetsByCollection(address, initial)
+        throw new Error('Method not implemented.')
     }
 
     async getNonFungibleAssetsByCollection(
         address: string,
         initial?: HubOptions<ChainId>,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
-        return NFTScan.getAssetsByCollection(address, initial)
+        return NFTScanNonFungibleTokenEVM.getAssetsByCollection(address, initial)
     }
 
     async getNonFungibleTokenContract(
         address: string,
         initial?: HubOptions<ChainId, HubIndicator> | undefined,
-    ): Promise<NonFungibleTokenContract<ChainId, SchemaType>> {
-        throw new Error('Method not implemented.')
+    ): Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined> {
+        return NFTScanNonFungibleTokenEVM.getContract(address, initial)
     }
 
     async getFungibleTokenBalance(
@@ -150,19 +190,14 @@ class Hub implements EVM_Hub {
         address: string,
         initial?: HubOptions<ChainId>,
     ): Promise<FungibleTokenSecurity> {
-        const options = this.getOptions(initial, {
-            chainId,
-        })
         throw new Error('Method not implemented.')
     }
+
     async getNonFungibleTokenSecurity(
         chainId: ChainId,
         address: string,
         initial?: HubOptions<ChainId>,
     ): Promise<FungibleTokenSecurity> {
-        const options = this.getOptions(initial, {
-            chainId,
-        })
         throw new Error('Method not implemented.')
     }
 
@@ -174,8 +209,9 @@ class Hub implements EVM_Hub {
             chainId,
         })
         const { FUNGIBLE_TOKEN_LISTS = EMPTY_LIST } = getTokenListConstants(options.chainId)
-        return TokenList.fetchFungibleTokensFromTokenLists(options.chainId, FUNGIBLE_TOKEN_LISTS)
+        return TokenList.getFungibleTokens(options.chainId, FUNGIBLE_TOKEN_LISTS)
     }
+
     async getNonFungibleTokensFromTokenList(
         chainId: ChainId,
         initial?: HubOptions<ChainId>,
@@ -191,19 +227,21 @@ class Hub implements EVM_Hub {
         const options = this.getOptions(initial, {
             chainId,
         })
-        const { TOKEN_ASSET_BASE_URI = EMPTY_LIST } = getTokenAssetBaseURLConstants(options.chainId)
+        const { NATIVE_TOKEN_ASSET_BASE_URI = EMPTY_LIST, ERC20_TOKEN_ASSET_BASE_URI = EMPTY_LIST } =
+            getTokenAssetBaseURLConstants(options.chainId)
         const formattedAddress = formatEthereumAddress(address)
 
         if (isNativeTokenAddress(formattedAddress)) {
-            return TOKEN_ASSET_BASE_URI.map((x) => `${x}/info/logo.png`)
+            return NATIVE_TOKEN_ASSET_BASE_URI?.map((x) => `${x}/info/logo.png`)
         }
 
         const specialIcon = SPECIAL_ICON_LIST.find(currySameAddress(address))
         if (specialIcon) return [specialIcon.logo_url]
 
         // load from remote
-        return TOKEN_ASSET_BASE_URI.map((x) => `${x}/assets/${formattedAddress}/logo.png`)
+        return ERC20_TOKEN_ASSET_BASE_URI.map((x) => `${x}/${formattedAddress}/logo.png/quality=85`)
     }
+
     async getNonFungibleTokenIconURLs(
         chainId: ChainId,
         address: string,
@@ -224,6 +262,7 @@ class Hub implements EVM_Hub {
         }
         return CoinGecko.getTokenPrice(PLATFORM_ID, address, options.currencyType)
     }
+
     async getNonFungibleTokenPrice(
         chainId: ChainId,
         address: string,
@@ -262,30 +301,6 @@ class Hub implements EVM_Hub {
     ): Promise<FungibleAsset<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
-    async getNonFungibleAsset(
-        address: string,
-        tokenId: string,
-        initial?: HubOptions<ChainId>,
-    ): Promise<NonFungibleAsset<ChainId, SchemaType> | undefined> {
-        const options = this.getOptions(initial)
-        const providers = this.getProviders<NonFungibleTokenAPI.Provider<ChainId, SchemaType>>(
-            {
-                [SourceType.OpenSea]: OpenSea,
-                [SourceType.Rarible]: Rarible,
-                [SourceType.NFTScan]: NFTScan,
-                [SourceType.Alchemy_EVM]: Alchemy_EVM,
-                [SourceType.LooksRare]: LooksRare,
-            },
-            options.chainId === ChainId.Mainnet
-                ? [OpenSea, Alchemy_EVM, Rarible, LooksRare]
-                : [Alchemy_EVM, OpenSea, Rarible, LooksRare],
-            initial,
-        )
-        return attemptUntil(
-            providers.map((x) => () => x.getAsset?.(address, tokenId, options)),
-            undefined,
-        )
-    }
 
     async getFungibleAssets(
         account: string,
@@ -294,43 +309,52 @@ class Hub implements EVM_Hub {
         const options = this.getOptions(initial, {
             account,
         })
-
-        // only the first page is available
-        if ((options.indicator ?? 0) > 0) return createPageable(EMPTY_LIST, createIndicator(options.indicator))
-
-        const providers = this.getProviders<FungibleTokenAPI.Provider<ChainId, SchemaType>>(
-            {
-                [SourceType.DeBank]: DeBank,
-                [SourceType.Zerion]: Zerion,
-            },
-            [DeBank, Zerion],
-            initial,
-        )
-
+        const providers = this.getFungibleProviders(initial)
         return attemptUntil(
             providers.map((x) => () => x.getAssets(options.account, options)),
             createPageable(EMPTY_LIST, createIndicator(options.indicator)),
+        )
+    }
+
+    async getNonFungibleAsset(
+        address: string,
+        tokenId: string,
+        initial?: HubOptions<ChainId>,
+    ): Promise<NonFungibleAsset<ChainId, SchemaType> | undefined> {
+        const options = this.getOptions(initial)
+        const providers = this.getNonFungibleProviders(initial)
+        return attemptUntil(
+            providers.map((x) => () => x.getAsset?.(address, tokenId, options)),
+            undefined,
+        )
+    }
+
+    async getNonFungibleRarity(
+        address: string,
+        tokenId: string,
+        initial?: HubOptions<ChainId>,
+    ): Promise<NonFungibleTokenRarity | undefined> {
+        const options = this.getOptions(initial)
+        const providers = this.getProviders<NonFungibleTokenAPI.Provider<ChainId, SchemaType>>(
+            {
+                [SourceType.Gem]: Gem,
+            },
+            [Gem],
+            initial,
+        )
+        return attemptUntil(
+            providers.map((x) => () => x.getRarity?.(address, tokenId, options)),
+            undefined,
         )
     }
     async getNonFungibleAssets(
         account: string,
         initial?: HubOptions<ChainId>,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
-        const options = this.getOptions(initial, {
-            account,
-        })
-        const providers = this.getProviders(
-            {
-                [SourceType.OpenSea]: OpenSea,
-                [SourceType.Rarible]: Rarible,
-                [SourceType.NFTScan]: NFTScan,
-                [SourceType.Alchemy_EVM]: Alchemy_EVM,
-            },
-            options.chainId === ChainId.Mainnet ? [OpenSea, Alchemy_EVM, Rarible] : [Alchemy_EVM, OpenSea, Rarible],
-            initial,
-        )
+        const options = this.getOptions(initial)
+        const providers = this.getNonFungibleProviders(initial)
         return attemptUntil(
-            providers.map((x) => () => x.getAssets(options.account, options)),
+            providers.map((x) => () => x.getAssets?.(options.account, options)),
             createPageable(EMPTY_LIST, createIndicator(options.indicator)),
         )
     }
@@ -341,25 +365,14 @@ class Hub implements EVM_Hub {
     ): Promise<FungibleToken<ChainId, SchemaType> | undefined> {
         throw new Error('Method not implemented.')
     }
+
     async getNonFungibleToken(
         address: string,
         tokenId: string,
         initial?: HubOptions<ChainId>,
     ): Promise<NonFungibleToken<ChainId, SchemaType> | undefined> {
         const options = this.getOptions(initial)
-        const providers = this.getProviders<NonFungibleTokenAPI.Provider<ChainId, SchemaType>>(
-            {
-                [SourceType.OpenSea]: OpenSea,
-                [SourceType.Rarible]: Rarible,
-                [SourceType.NFTScan]: NFTScan,
-                [SourceType.Alchemy_EVM]: Alchemy_EVM,
-                [SourceType.LooksRare]: LooksRare,
-            },
-            options.chainId === ChainId.Mainnet
-                ? [OpenSea, Alchemy_EVM, Rarible, LooksRare]
-                : [Alchemy_EVM, OpenSea, Rarible, LooksRare],
-            initial,
-        )
+        const providers = this.getNonFungibleProviders(initial)
         return attemptUntil(
             providers.map((x) => () => x.getToken?.(address, tokenId, options)),
             undefined,
@@ -372,27 +385,12 @@ class Hub implements EVM_Hub {
     ): Promise<Pageable<Error | FungibleToken<ChainId, SchemaType>>> {
         throw new Error('Method not implemented.')
     }
+
     async getNonFungibleTokens(
         account: string,
         initial?: HubOptions<ChainId>,
     ): Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>> {
-        const options = this.getOptions(initial, {
-            account,
-        })
-        const providers = this.getProviders(
-            {
-                [SourceType.OpenSea]: OpenSea,
-                [SourceType.Rarible]: Rarible,
-                [SourceType.Alchemy_EVM]: Alchemy_EVM,
-            },
-            options.chainId === ChainId.Mainnet ? [OpenSea, Alchemy_EVM, Rarible] : [Alchemy_EVM, OpenSea, Rarible],
-            initial,
-        )
-
-        return attemptUntil(
-            providers.map((x) => () => x.getAssets(options.account, options)),
-            createPageable(EMPTY_LIST, createIndicator(options.indicator)),
-        )
+        throw new Error('Method not implemented.')
     }
 
     async getNonFungibleTokenEvents(
@@ -401,19 +399,7 @@ class Hub implements EVM_Hub {
         initial?: HubOptions<ChainId, HubIndicator> | undefined,
     ): Promise<Pageable<NonFungibleTokenEvent<ChainId, SchemaType>>> {
         const options = this.getOptions(initial)
-        const providers = this.getProviders<NonFungibleTokenAPI.Provider<ChainId, SchemaType>>(
-            {
-                [SourceType.OpenSea]: OpenSea,
-                [SourceType.Rarible]: Rarible,
-                [SourceType.Alchemy_EVM]: Alchemy_EVM,
-                [SourceType.LooksRare]: LooksRare,
-            },
-            options.chainId === ChainId.Mainnet
-                ? [OpenSea, Alchemy_EVM, Rarible, LooksRare]
-                : [Alchemy_EVM, OpenSea, Rarible, LooksRare],
-            initial,
-        )
-
+        const providers = this.getNonFungibleProviders(initial)
         return attemptUntil(
             providers.map((x) => () => x.getEvents?.(address, tokenId, options)),
             createPageable(EMPTY_LIST, createIndicator(options.indicator)),
@@ -426,19 +412,7 @@ class Hub implements EVM_Hub {
         initial?: HubOptions<ChainId, HubIndicator> | undefined,
     ): Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>> {
         const options = this.getOptions(initial)
-        const providers = this.getProviders<NonFungibleTokenAPI.Provider<ChainId, SchemaType>>(
-            {
-                [SourceType.OpenSea]: OpenSea,
-                [SourceType.Rarible]: Rarible,
-                [SourceType.Alchemy_EVM]: Alchemy_EVM,
-                [SourceType.LooksRare]: LooksRare,
-            },
-            options.chainId === ChainId.Mainnet
-                ? [OpenSea, Alchemy_EVM, Rarible, LooksRare]
-                : [Alchemy_EVM, OpenSea, Rarible, LooksRare],
-            initial,
-        )
-
+        const providers = this.getNonFungibleProviders(initial)
         return attemptUntil(
             providers.map((x) => () => x.getListings?.(address, tokenId, options)),
             createPageable(EMPTY_LIST, createIndicator(options.indicator)),
@@ -451,19 +425,7 @@ class Hub implements EVM_Hub {
         initial?: HubOptions<ChainId, HubIndicator> | undefined,
     ): Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>> {
         const options = this.getOptions(initial)
-        const providers = this.getProviders<NonFungibleTokenAPI.Provider<ChainId, SchemaType>>(
-            {
-                [SourceType.OpenSea]: OpenSea,
-                [SourceType.Rarible]: Rarible,
-                [SourceType.Alchemy_EVM]: Alchemy_EVM,
-                [SourceType.LooksRare]: LooksRare,
-            },
-            options.chainId === ChainId.Mainnet
-                ? [OpenSea, Alchemy_EVM, Rarible, LooksRare]
-                : [Alchemy_EVM, OpenSea, Rarible, LooksRare],
-            initial,
-        )
-
+        const providers = this.getNonFungibleProviders(initial)
         return attemptUntil(
             providers.map((x) => () => x.getOffers?.(address, tokenId, options)),
             createPageable(EMPTY_LIST, createIndicator(options.indicator)),
@@ -477,33 +439,52 @@ class Hub implements EVM_Hub {
         initial?: HubOptions<ChainId, HubIndicator> | undefined,
     ): Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>> {
         const options = this.getOptions(initial)
-        const providers = this.getProviders<NonFungibleTokenAPI.Provider<ChainId, SchemaType>>(
-            {
-                [SourceType.OpenSea]: OpenSea,
-                [SourceType.Rarible]: Rarible,
-                [SourceType.Alchemy_EVM]: Alchemy_EVM,
-                [SourceType.LooksRare]: LooksRare,
-            },
-            options.chainId === ChainId.Mainnet
-                ? [OpenSea, Alchemy_EVM, Rarible, LooksRare]
-                : [Alchemy_EVM, OpenSea, Rarible, LooksRare],
-            initial,
-        )
-
+        const providers = this.getNonFungibleProviders(initial)
         return attemptUntil(
             providers.map((x) => () => x.getOrders?.(address, tokenId, side, options)),
             createPageable(EMPTY_LIST, createIndicator(options.indicator)),
         )
     }
 
-    async getNonFungibleCollections(
+    async getNonFungibleCollectionsByOwner(
         account: string,
         initial?: HubOptions<ChainId>,
-    ): Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>>> {
-        const options = this.getOptions(initial, {
-            account,
-        })
-        return OpenSea.getCollections(options.account, options)
+    ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>>> {
+        const options = this.getOptions(initial)
+        const providers = this.getProviders<NonFungibleTokenAPI.Provider<ChainId, SchemaType>>(
+            {
+                [SourceType.NFTScan]: NFTScanNonFungibleTokenEVM,
+                [SourceType.OpenSea]: OpenSea,
+            },
+            [NFTScanNonFungibleTokenEVM, OpenSea],
+            initial,
+        )
+
+        return attemptUntil(
+            providers.map((x) => () => x.getCollectionsByOwner?.(account, options)),
+            createPageable(EMPTY_LIST, createIndicator(options.indicator)),
+        )
+    }
+
+    async getNonFungibleCollectionsByKeyword(
+        keyword: string,
+        initial?: HubOptions<ChainId>,
+    ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>>> {
+        const options = this.getOptions(initial)
+        const providers = this.getProviders<NonFungibleTokenAPI.Provider<ChainId, SchemaType>>(
+            {
+                [SourceType.NFTScan]: NFTScanNonFungibleTokenEVM,
+                [SourceType.Chainbase]: ChainbaseNonFungibleToken,
+                [SourceType.Zora]: Zora,
+            },
+            [NFTScanNonFungibleTokenEVM, ChainbaseNonFungibleToken, Zora],
+            initial,
+        )
+
+        return attemptUntil(
+            providers.map((x) => () => x.getCollectionsByKeyword?.(keyword, options)),
+            createPageable(EMPTY_LIST, createIndicator(options.indicator)),
+        )
     }
 }
 

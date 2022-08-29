@@ -5,11 +5,12 @@ import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '@masknet/shared-base-ui'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { NextIDProof } from '@masknet/web3-providers'
-import type { ProfileInformation } from '@masknet/shared-base'
+import { EMPTY_LIST, ProfileInformation } from '@masknet/shared-base'
 import type { SocialIdentity } from '@masknet/web3-shared-base'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
 import Services from '../../extension/service'
-import { sortPersonaBindings } from '../../utils'
+import { MaskMessages, sortPersonaBindings } from '../../utils'
+import { useEffect } from 'react'
 
 async function queryPersonaFromDB(identityResolved: IdentityResolved) {
     if (!identityResolved.identifier) return
@@ -21,7 +22,7 @@ async function queryPersonasFromNextID(identityResolved: IdentityResolved) {
     if (!activatedSocialNetworkUI.configuration.nextIDConfig?.platform) return
     return NextIDProof.queryAllExistedBindingsByPlatform(
         activatedSocialNetworkUI.configuration.nextIDConfig?.platform,
-        identityResolved.identifier.userId,
+        identityResolved.identifier.userId.toLowerCase(),
     )
 }
 
@@ -52,11 +53,10 @@ export function useCurrentVisitingIdentity() {
     return useValueRef(activatedSocialNetworkUI.collecting.currentVisitingIdentityProvider?.recognized || defaults)
 }
 
-export function useIsCurrentVisitingOwnerIdentity() {
+export function useIsOwnerIdentity(identity: IdentityResolved) {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
-    const currentVisitingIdentity = useCurrentVisitingIdentity()
     const lastRecognizedUserId = lastRecognizedIdentity.identifier?.userId
-    const currentVisitingUserId = currentVisitingIdentity.identifier?.userId
+    const currentVisitingUserId = identity.identifier?.userId
     return !!(
         lastRecognizedUserId &&
         currentVisitingUserId &&
@@ -111,19 +111,36 @@ export function useCurrentVisitingPersonas() {
 }
 
 /**
+ * Get the social identity of the given identity
+ */
+export function useSocialIdentity(identity: IdentityResolved) {
+    const isOwner = useIsOwnerIdentity(identity)
+
+    const result = useAsyncRetry<SocialIdentity>(async () => {
+        const bindings = await queryPersonasFromNextID(identity)
+        const persona = await queryPersonaFromDB(identity)
+        const personaBindings =
+            bindings?.filter((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()) ?? EMPTY_LIST
+        return {
+            ...identity,
+            isOwner,
+            publicKey: persona?.identifier.publicKeyAsHex,
+            hasBinding: personaBindings.length > 0,
+            binding: first(personaBindings),
+        }
+    }, [isOwner, identity.identifier?.toText()])
+
+    useEffect(() => MaskMessages.events.ownProofChanged.on(result.retry), [result.retry])
+
+    return result
+}
+
+/**
  * Get the social identity of the last recognized identity
  */
 export function useLastRecognizedSocialIdentity() {
     const identity = useLastRecognizedIdentity()
-    return useAsyncRetry<SocialIdentity>(async () => {
-        const bindings = await queryPersonasFromNextID(identity)
-        const persona = await queryPersonaFromDB(identity)
-        return {
-            ...identity,
-            publicKey: persona?.identifier.publicKeyAsHex,
-            hasBinding: !!bindings?.find((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()),
-        }
-    }, [identity.identifier?.toText()])
+    return useSocialIdentity(identity)
 }
 
 /**
@@ -131,18 +148,5 @@ export function useLastRecognizedSocialIdentity() {
  */
 export function useCurrentVisitingSocialIdentity() {
     const identity = useCurrentVisitingIdentity()
-    const isOwnerIdentity = useIsCurrentVisitingOwnerIdentity()
-
-    return useAsyncRetry<SocialIdentity>(async () => {
-        const bindings = await queryPersonasFromNextID(identity)
-        const persona = await queryPersonaFromDB(identity)
-        const sortedBindings = bindings?.sort((a, b) =>
-            sortPersonaBindings(a, b, identity.identifier?.userId.toLowerCase()),
-        )
-        return {
-            ...identity,
-            publicKey: isOwnerIdentity ? persona?.identifier.publicKeyAsHex : first(sortedBindings)?.persona,
-            hasBinding: !!bindings?.find((x) => x.persona === persona?.identifier.publicKeyAsHex.toLowerCase()),
-        }
-    }, [isOwnerIdentity, identity.identifier?.toText()])
+    return useSocialIdentity(identity)
 }

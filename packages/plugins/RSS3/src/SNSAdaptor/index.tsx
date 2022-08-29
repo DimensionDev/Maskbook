@@ -1,66 +1,101 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { NetworkPluginID, SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
+import { PluginIDContextProvider } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
+import type { BoxProps } from '@mui/material'
 import { base } from '../base'
 import { PLUGIN_ID } from '../constants'
 import { setupContext } from './context'
-import { TabCard, TabCardType } from './TabCard'
+import { DonationPage, FeedsPage, FootprintsPage } from './pages'
 
-function sorter(a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>) {
-    if (a.type === SocialAddressType.RSS3) return -1
-    if (z.type === SocialAddressType.RSS3) return 1
-    return 0
+function shouldDisplay(identity?: SocialIdentity, addressName?: SocialAddress<NetworkPluginID>) {
+    return addressName?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM
 }
 
-function shouldDisplay(identity?: SocialIdentity, addressNames?: Array<SocialAddress<NetworkPluginID>>) {
-    return !!addressNames?.some((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM)
+const DonationsTabConfig: Plugin.SNSAdaptor.ProfileTab = {
+    ID: `${PLUGIN_ID}_donations`,
+    label: 'Donations',
+    priority: 1,
+    UI: {
+        TabContent: ({ socialAddress, identity }) => {
+            return (
+                <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
+                    <DonationPage
+                        socialAddress={socialAddress}
+                        userId={identity?.identifier?.userId}
+                        publicKey={identity?.publicKey}
+                    />
+                </PluginIDContextProvider>
+            )
+        },
+    },
+    Utils: {
+        shouldDisplay,
+    },
 }
+
+const createFootprintsTabConfig = (boxProps: BoxProps): Plugin.SNSAdaptor.ProfileTab => {
+    return {
+        ID: `${PLUGIN_ID}_footprints`,
+        label: 'Footprints',
+        priority: 2,
+        UI: {
+            TabContent: ({ socialAddress, identity }) => {
+                return (
+                    <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
+                        <FootprintsPage
+                            address={socialAddress?.address ?? ''}
+                            publicKey={identity?.publicKey}
+                            userId={identity?.identifier?.userId ?? ''}
+                            {...boxProps}
+                        />
+                    </PluginIDContextProvider>
+                )
+            },
+        },
+        Utils: {
+            shouldDisplay,
+        },
+    }
+}
+const FootprintsTabConfig: Plugin.SNSAdaptor.ProfileTab = createFootprintsTabConfig({})
+const FootprintsTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createFootprintsTabConfig({
+    p: 1.5,
+})
+
+const createActivitiesTabConfig = (boxProps: BoxProps): Plugin.SNSAdaptor.ProfileTab => {
+    return {
+        ID: `${PLUGIN_ID}_feeds`,
+        label: 'Activities',
+        priority: 3,
+        UI: {
+            TabContent: ({ socialAddress }) => {
+                return (
+                    <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
+                        <FeedsPage address={socialAddress?.address} {...boxProps} />
+                    </PluginIDContextProvider>
+                )
+            },
+        },
+        Utils: {
+            shouldDisplay,
+        },
+    }
+}
+
+const ActivitiesTabConfig: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig({})
+const ActivitiesTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig({
+    p: 1.5,
+})
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal, context) {
         setupContext(context)
     },
-    ProfileTabs: [
-        {
-            ID: `${PLUGIN_ID}_donations`,
-            label: 'Donations',
-            priority: 1,
-            UI: {
-                TabContent: ({ socialAddressList = [], identity }) => {
-                    return (
-                        <TabCard
-                            socialAddressList={socialAddressList}
-                            type={TabCardType.Donation}
-                            persona={identity?.publicKey}
-                        />
-                    )
-                },
-            },
-            Utils: {
-                sorter,
-                shouldDisplay,
-            },
-        },
-        {
-            ID: `${PLUGIN_ID}_footprints`,
-            label: 'Footprints',
-            priority: 2,
-            UI: {
-                TabContent: ({ socialAddressList = [], identity }) => {
-                    return (
-                        <TabCard
-                            socialAddressList={socialAddressList}
-                            type={TabCardType.Footprint}
-                            persona={identity?.publicKey}
-                        />
-                    )
-                },
-            },
-            Utils: {
-                sorter,
-                shouldDisplay,
-            },
-        },
+    ProfileTabs: [DonationsTabConfig, FootprintsTabConfig, ActivitiesTabConfig],
+    ProfileCardTabs: [
+        { ...ActivitiesTabConfigInProfileCard, priority: 1 },
+        { ...FootprintsTabConfigInProfileCard, label: 'POAPs', priority: 3 },
     ],
 }
 

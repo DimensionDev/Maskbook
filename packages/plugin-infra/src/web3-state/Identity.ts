@@ -15,7 +15,13 @@ export class IdentityServiceState implements Web3SocialIdentityState {
 
     private getIdentityID(identity: SocialIdentity) {
         if (!identity.identifier) return ''
-        return [identity.identifier.network, identity.identifier.userId, identity.bio, identity.homepage].join('_')
+        return [
+            identity.identifier.network,
+            identity.identifier.userId,
+            identity.bio,
+            identity.homepage,
+            identity.publicKey ?? '',
+        ].join('_')
     }
 
     protected getFromCache(identity: SocialIdentity) {
@@ -31,10 +37,12 @@ export class IdentityServiceState implements Web3SocialIdentityState {
         if (!ID) return EMPTY_LIST
 
         const fromCache = this.getFromCache(identity)
-        if (fromCache) return fromCache
+        if (fromCache && !identity.isOwner) return fromCache
 
         const fromRemote = this.getFromRemote(identity)
-        this.cache.set(ID, fromRemote)
+        if (!identity.isOwner) {
+            this.cache.set(ID, fromRemote)
+        }
 
         return fromRemote
     }

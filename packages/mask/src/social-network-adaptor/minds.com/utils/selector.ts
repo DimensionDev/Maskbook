@@ -40,6 +40,9 @@ export const selfInfoSelectors = () => ({
     ),
 })
 
+export const inpageAvatarSelector = () =>
+    new LiveSelector().querySelectorAll<HTMLDivElement>('.m-activityOwnerBlock__avatar')
+
 export const composeButtonSelector = () =>
     querySelector(
         [
@@ -74,3 +77,5 @@ export const postContentSelector = () =>
             'm-activity:not(.m-activity--minimalMode) m-activity__content .m-activityContent__mediaDescriptionText',
         ].join(),
     )
+
+export const searchMindsProfileCover = () => querySelector('div[data-cy="data-minds-channel-banner"]')

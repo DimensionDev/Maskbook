@@ -1,37 +1,36 @@
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import BigNumber from 'bignumber.js'
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
+import { Icons } from '@masknet/icons'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { FungibleTokenTableRow } from '../FungibleTokenTableRow'
-import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { DashboardRoutes, EMPTY_LIST, CrossIsolationMessages } from '@masknet/shared-base'
 import {
     CurrencyType,
     formatBalance,
     FungibleAsset,
+    isGreaterThanOrEqualTo,
+    isLessThan,
     minus,
     NetworkPluginID,
-    TokenType,
     toZero,
 } from '@masknet/web3-shared-base'
 import {
     useCurrentWeb3NetworkPluginID,
     useFungibleAssets,
     useNativeToken,
-    useWeb3State,
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
-import { PluginMessages } from '../../../../API'
+import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
-        height: '100%',
     },
     table: {
         paddingLeft: theme.spacing(5),
@@ -67,6 +66,23 @@ const useStyles = makeStyles()((theme) => ({
             },
         },
     },
+    more: {
+        textAlign: 'center',
+    },
+    moreBody: {
+        display: 'inline-flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: theme.spacing(1, 2),
+        gap: 2,
+        fontSize: 14,
+        fontWeight: 600,
+        margin: theme.spacing(2, 'auto', 1),
+        cursor: 'pointer',
+        borderRadius: 20,
+        backgroundColor: theme.palette.maskColor.bg,
+    },
 }))
 
 interface TokenTableProps {
@@ -75,6 +91,7 @@ interface TokenTableProps {
 
 export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
     const navigate = useNavigate()
+    const [isExpand, setIsExpand] = useState(false)
     const { value: nativeToken } = useNativeToken<'all'>(NetworkPluginID.PLUGIN_EVM, {
         chainId: selectedChainId,
     })
@@ -85,8 +102,6 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
     } = useFungibleAssets<'all'>(NetworkPluginID.PLUGIN_EVM, undefined, {
         chainId: selectedChainId,
     })
-    const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
-
     const onSwap = useCallback(
         (
             token: FungibleAsset<
@@ -94,15 +109,13 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
                 Web3Helper.Definition[NetworkPluginID]['SchemaType']
             >,
         ) => {
-            openSwapDialog({
+            return CrossIsolationMessages.events.swapDialogUpdate.sendToLocal({
                 open: true,
                 traderProps: {
                     defaultInputCoin: {
-                        id: token.id,
                         name: token.name || '',
                         symbol: token.symbol || '',
-                        type: TokenType.Fungible,
-                        contract_address: token.address,
+                        address: token.address,
                         decimals: token.decimals,
                     },
                 },
@@ -148,19 +161,78 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
     }, [nativeToken, fungibleAssets, selectedChainId])
 
     return (
-        <TokenTableUI
-            isLoading={fungibleAssetsLoading}
-            isEmpty={!fungibleAssetsLoading && (!!fungibleAssetsError || !fungibleAssets?.length)}
-            dataSource={dataSource}
-            onSwap={onSwap}
-            onSend={onSend}
-        />
+        <>
+            <TokenTableUI
+                isLoading={fungibleAssetsLoading}
+                isEmpty={!fungibleAssetsLoading && (!!fungibleAssetsError || !fungibleAssets?.length)}
+                isExpand={isExpand}
+                dataSource={dataSource}
+                onSwap={onSwap}
+                onSend={onSend}
+            />
+            <MoreBarUI
+                isLoading={fungibleAssetsLoading}
+                isEmpty={!fungibleAssetsLoading && (!!fungibleAssetsError || !fungibleAssets?.length)}
+                isExpand={isExpand}
+                dataSource={dataSource}
+                onSwitch={() => setIsExpand((x) => !x)}
+            />
+        </>
+    )
+})
+
+export interface MoreBarUIProps {
+    isEmpty: boolean
+    isExpand: boolean
+    isLoading: boolean
+    dataSource: Array<
+        FungibleAsset<
+            Web3Helper.Definition[NetworkPluginID]['ChainId'],
+            Web3Helper.Definition[NetworkPluginID]['SchemaType']
+        >
+    >
+    onSwitch: () => void
+}
+
+export const MoreBarUI = memo<MoreBarUIProps>(({ isExpand, isEmpty, isLoading, dataSource, onSwitch }) => {
+    const t = useDashboardI18N()
+    const { classes } = useStyles()
+    const hasLowValueToken = !!dataSource.find(
+        (x) => !isNativeTokenAddress(x.address) && isLessThan(x.value?.usd ?? 0, 1),
+    )
+
+    if (isEmpty || isLoading || !hasLowValueToken || !dataSource.length) return null
+    if (isExpand)
+        return (
+            <Typography className={classes.more}>
+                <span className={classes.moreBody} onClick={onSwitch}>
+                    <span>
+                        {t.wallets_assets_more_collapse({
+                            direction: '<',
+                        })}
+                    </span>
+                    <Icons.ArrowDrop style={{ transform: 'rotate(180deg)' }} />
+                </span>
+            </Typography>
+        )
+    return (
+        <Typography className={classes.more}>
+            <span className={classes.moreBody} onClick={onSwitch}>
+                <span>
+                    {t.wallets_assets_more_expand({
+                        direction: '<',
+                    })}
+                </span>
+                <Icons.ArrowDrop />
+            </span>
+        </Typography>
     )
 })
 
 export interface TokenTableUIProps {
-    isLoading: boolean
     isEmpty: boolean
+    isExpand: boolean
+    isLoading: boolean
     dataSource: Array<
         FungibleAsset<
             Web3Helper.Definition[NetworkPluginID]['ChainId'],
@@ -181,68 +253,78 @@ export interface TokenTableUIProps {
     ): void
 }
 
-export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading, isEmpty, dataSource }) => {
+export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading, isExpand, isEmpty, dataSource }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const currentPluginId = useCurrentWeb3NetworkPluginID()
-    const { Others } = useWeb3State()
 
     return (
-        <TableContainer className={classes.container}>
-            {isLoading || isEmpty ? (
-                <>
-                    {isLoading ? <LoadingPlaceholder /> : null}
-                    {isEmpty ? <EmptyPlaceholder children={t.wallets_empty_tokens_tip()} /> : null}
-                </>
-            ) : (
-                <Table stickyHeader className={classes.table}>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell key="Asset" align="center" variant="head" className={classes.header}>
-                                {t.wallets_assets_asset()}
-                            </TableCell>
-                            <TableCell key="Balance" align="center" variant="head" className={classes.header}>
-                                {t.wallets_assets_balance()}
-                            </TableCell>
-                            <TableCell key="Price" align="center" variant="head" className={classes.header}>
-                                {t.wallets_assets_price()}
-                            </TableCell>
-                            <TableCell key="Value" align="center" variant="head" className={classes.header}>
-                                {t.wallets_assets_value()}
-                            </TableCell>
-                            {currentPluginId === NetworkPluginID.PLUGIN_EVM && (
-                                <TableCell key="Operation" align="center" variant="head" className={classes.header}>
-                                    {t.wallets_assets_operation()}
+        <>
+            <TableContainer className={classes.container}>
+                {isLoading ? (
+                    <LoadingPlaceholder />
+                ) : isEmpty ? (
+                    <EmptyPlaceholder children={t.wallets_empty_tokens_tip()} />
+                ) : (
+                    <Table stickyHeader className={classes.table}>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell key="Asset" align="center" variant="head" className={classes.header}>
+                                    {t.wallets_assets_asset()}
                                 </TableCell>
-                            )}
-                        </TableRow>
-                    </TableHead>
+                                <TableCell key="Balance" align="center" variant="head" className={classes.header}>
+                                    {t.wallets_assets_balance()}
+                                </TableCell>
+                                <TableCell key="Price" align="center" variant="head" className={classes.header}>
+                                    {t.wallets_assets_price()}
+                                </TableCell>
+                                <TableCell key="Value" align="center" variant="head" className={classes.header}>
+                                    {t.wallets_assets_value()}
+                                </TableCell>
+                                {currentPluginId === NetworkPluginID.PLUGIN_EVM && (
+                                    <TableCell key="Operation" align="center" variant="head" className={classes.header}>
+                                        {t.wallets_assets_operation()}
+                                    </TableCell>
+                                )}
+                            </TableRow>
+                        </TableHead>
 
-                    {dataSource.length ? (
-                        <TableBody>
-                            {dataSource
-                                .sort((first, second) => {
-                                    const firstValue = new BigNumber(formatBalance(first.balance, first.decimals) ?? '')
-                                    const secondValue = new BigNumber(
-                                        formatBalance(second.balance, second.decimals) ?? '',
+                        {dataSource.length ? (
+                            <TableBody>
+                                {dataSource
+                                    .sort((first, second) => {
+                                        const firstValue = new BigNumber(
+                                            formatBalance(first.balance, first.decimals) ?? '',
+                                        )
+                                        const secondValue = new BigNumber(
+                                            formatBalance(second.balance, second.decimals) ?? '',
+                                        )
+
+                                        if (firstValue.isEqualTo(secondValue)) return 0
+
+                                        return Number(firstValue.lt(secondValue))
+                                    })
+                                    .filter(
+                                        (asset) =>
+                                            isExpand ||
+                                            isNativeTokenAddress(asset.address) ||
+                                            isGreaterThanOrEqualTo(asset.value?.usd ?? 0, 1),
                                     )
-
-                                    if (firstValue.isEqualTo(secondValue)) return 0
-
-                                    return Number(firstValue.lt(secondValue))
-                                })
-                                .map((asset) => (
-                                    <FungibleTokenTableRow
-                                        onSend={() => onSend(asset)}
-                                        onSwap={() => onSwap(asset)}
-                                        asset={asset}
-                                        key={`${asset.address}_${asset.chainId}`}
-                                    />
-                                ))}
-                        </TableBody>
-                    ) : null}
-                </Table>
-            )}
-        </TableContainer>
+                                    .map((asset) => {
+                                        return (
+                                            <FungibleTokenTableRow
+                                                onSend={() => onSend(asset)}
+                                                onSwap={() => onSwap(asset)}
+                                                asset={asset}
+                                                key={`${asset.address}_${asset.chainId}`}
+                                            />
+                                        )
+                                    })}
+                            </TableBody>
+                        ) : null}
+                    </Table>
+                )}
+            </TableContainer>
+        </>
     )
 })

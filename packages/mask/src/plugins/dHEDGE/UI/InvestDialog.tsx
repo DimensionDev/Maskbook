@@ -1,11 +1,11 @@
 import { InjectedDialog, useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 import { formatBalance, FungibleToken, isZero, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { DialogActions, DialogContent } from '@mui/material'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState, useEffect } from 'react'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
@@ -13,13 +13,11 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { PluginTraderMessages } from '../../Trader/messages'
-import type { Coin } from '../../Trader/types'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useInvestCallback } from '../hooks/useInvestCallback'
 import { PluginDHedgeMessages } from '../messages'
 import type { Pool } from '../types'
 import { PluginWalletStatusBar } from '../../../utils'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -121,32 +119,23 @@ export function InvestDialog() {
     // #endregion
 
     // #region Swap
-    const { setDialog: openSwapDialog } = useRemoteControlledDialog(
-        PluginTraderMessages.swapDialogUpdated,
-        useCallback(
-            (ev: { open: boolean }) => {
-                if (!ev.open) {
-                    retryLoadTokenBalance()
-                }
-            },
-            [retryLoadTokenBalance],
-        ),
+    useEffect(
+        () =>
+            CrossIsolationMessages.events.swapDialogUpdate.on(({ open }) => {
+                if (!open) retryLoadTokenBalance()
+            }),
+        [retryLoadTokenBalance],
     )
+
     const openSwap = useCallback(() => {
         if (!token) return
-        openSwapDialog({
+        CrossIsolationMessages.events.swapDialogUpdate.sendToLocal({
             open: true,
             traderProps: {
-                coin: {
-                    id: token.address,
-                    name: token.name ?? '',
-                    symbol: token.symbol ?? '',
-                    contract_address: token.address,
-                    decimals: token.decimals,
-                } as Coin,
+                defaultInputCoin: token,
             },
         })
-    }, [token, openSwapDialog])
+    }, [token])
     // #endregion
 
     // #region submit button

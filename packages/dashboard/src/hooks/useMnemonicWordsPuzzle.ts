@@ -2,7 +2,7 @@
  * TODO: use @packages/plugin-wallet instead
  */
 
-import { shuffle } from 'lodash-unified'
+import { range, shuffle } from 'lodash-unified'
 import { useCallback, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { WalletRPC } from '../../../mask/src/plugins/Wallet/messages'
@@ -15,23 +15,11 @@ const TOTAL_SIZE = 12
 
 export function useMnemonicWordsPuzzle() {
     const [answerWords, setAnswerWords] = useState<string[]>([])
-    const {
-        value: words = [],
-        loading: wordsLoading,
-        retry: wordsRetry,
-    } = useAsyncRetry(() => WalletRPC.createMnemonicWords(), [])
+    const { value: words = [], retry: wordsRetry } = useAsyncRetry(() => WalletRPC.createMnemonicWords(), [])
 
     // #region generate some mask indexes randomly which should be filled by the user
-    const [seed, setSeed] = useState(0)
-    const indexes = useMemo(
-        () =>
-            shuffle(
-                Array.from({ length: TOTAL_SIZE })
-                    .fill(seed)
-                    .map((_, i) => i),
-            ).slice(0, PUZZLE_SIZE),
-        [seed, words],
-    )
+    const [tick, setTick] = useState(0)
+    const indexes = useMemo(() => shuffle(range(TOTAL_SIZE)).slice(0, PUZZLE_SIZE), [tick, words])
     // #endregion
 
     // #region a serial of words and the user gonna complete those empty ones
@@ -55,7 +43,7 @@ export function useMnemonicWordsPuzzle() {
 
     const resetCallback = useCallback(() => {
         setAnswerWords([])
-        setSeed((x) => (x + 1) % 3)
+        setTick((x) => x + 1)
     }, [])
 
     const refreshCallback = wordsRetry

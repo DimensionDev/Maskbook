@@ -5,18 +5,15 @@ import { makeTypedMessageText } from '@masknet/typed-message'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useWeb3, useAccount } from '@masknet/plugin-infra/web3'
 import type { Web3 } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { TokenIcon } from '@masknet/shared'
 import { Button, Card, Grid, Typography, Box } from '@mui/material'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 import type { ReferralMetaData } from '../types'
-import type { Coin } from '../../Trader/types'
 import { MASK_REFERRER, META_KEY, SWAP_CHAIN_ID } from '../constants'
 import { useI18N } from '../locales'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
-import { PluginTraderMessages } from '../../Trader/messages'
 import { ReferralRPC } from '../messages'
 import {
     singAndPostProofOfRecommendationOrigin,
@@ -70,7 +67,6 @@ export function FarmPost(props: FarmPostProps) {
     const t = useI18N()
     const currentIdentity = useCurrentIdentity()
     const { value: linkedPersona } = useCurrentLinkedPersona()
-    const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
     const { showSnackbar } = useCustomSnackbar()
 
     const { value: rewards = EMPTY_LIST, error } = useAsync(
@@ -124,19 +120,18 @@ export function FarmPost(props: FarmPostProps) {
             return
         }
 
-        openSwapDialog({
+        CrossIsolationMessages.events.swapDialogUpdate.sendToLocal({
             open: true,
             traderProps: {
-                chainId: SWAP_CHAIN_ID,
-                coin: {
-                    id: payload.referral_token,
+                defaultInputCoin: {
                     name: payload.referral_token_name,
                     symbol: payload.referral_token_symbol,
-                    contract_address: payload.referral_token,
-                } as Coin,
+                    address: payload.referral_token,
+                },
+                chainId: SWAP_CHAIN_ID,
             },
         })
-    }, [payload, openSwapDialog])
+    }, [payload])
 
     const onClickBuyToFarm = useCallback(async () => {
         try {

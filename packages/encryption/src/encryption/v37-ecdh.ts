@@ -1,4 +1,4 @@
-import { encryptWithAES } from '../utils'
+import { encryptWithAES } from '../utils/index.js'
 import {
     type EncryptTargetE2E,
     type EncryptIO,
@@ -7,8 +7,8 @@ import {
     EncryptErrorReasons,
     type EncryptionResultE2E,
     EncryptionResultE2EMap,
-} from './EncryptionTypes'
-import { createEphemeralKeysMap, fillIV } from './utils'
+} from './EncryptionTypes.js'
+import { createEphemeralKeysMap, fillIV } from './utils.js'
 
 /** @internal */
 export async function v37_addReceiver(

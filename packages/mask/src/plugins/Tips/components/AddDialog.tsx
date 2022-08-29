@@ -103,7 +103,7 @@ export const AddDialog: FC<Props> = ({ onAdd, onClose, ...rest }) => {
             setMessage(t.tip_add_collectibles_error())
             return
         }
-        await Token?.addToken?.(erc721TokenDetailed)
+        await Token?.addToken?.(account, erc721TokenDetailed)
         onAdd?.(erc721TokenDetailed)
         reset()
     }, [onAdd, t, contractAddress, tokenId, account, chainId])

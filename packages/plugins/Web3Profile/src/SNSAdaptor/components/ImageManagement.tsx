@@ -4,10 +4,10 @@ import { WalletAssetsCard } from './WalletAssets'
 import { PersonaInformation, PopupRoutes } from '@masknet/shared-base'
 import { ImageListDialog } from './ImageList'
 import { useState } from 'react'
-import { InjectedDialog } from '@masknet/shared'
+import { InjectedDialog, WalletTypes } from '@masknet/shared'
 import { Box, Button, DialogContent } from '@mui/material'
 import type { IdentityResolved } from '@masknet/plugin-infra'
-import type { AccountType, WalletTypes } from '../types'
+import type { AccountType } from '../types'
 import WalletSetting from './WalletSetting'
 import { Empty } from './Empty'
 import { context } from '../context'
@@ -34,13 +34,12 @@ const useStyles = makeStyles()((theme) => ({
         width: 568,
         height: 548,
         padding: '0 16px 16px 16px',
-        backgroundColor: theme.palette.background.paper,
         display: 'flex',
         position: 'relative',
         flexDirection: 'column',
         '::-webkit-scrollbar': {
             backgroundColor: 'transparent',
-            width: 20,
+            width: 5,
         },
         '::-webkit-scrollbar-thumb': {
             borderRadius: '20px',
@@ -56,7 +55,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     walletIcon: {
         marginRight: '8px',
-        fontSize: 16,
     },
     emptyItem: {
         marginTop: 'calc(50% - 104px)',
@@ -75,9 +73,22 @@ export interface ImageManagementProps {
     getWalletHiddenRetry: () => void
 }
 const getAddressesByStatus = (status: CURRENT_STATUS, accountList: AccountType) => {
-    if (status === CURRENT_STATUS.Donations_setting) return accountList?.walletList?.donations
-    if (status === CURRENT_STATUS.Footprints_setting) return accountList?.walletList?.footprints
-    return accountList?.walletList?.NFTs
+    let addresses
+    if (status === CURRENT_STATUS.Donations_setting) addresses = accountList?.walletList?.donations
+    if (status === CURRENT_STATUS.Footprints_setting) addresses = accountList?.walletList?.footprints
+    if (status === CURRENT_STATUS.NFT_Setting) addresses = accountList?.walletList?.NFTs
+    return addresses?.sort((a, z) => {
+        const a_hasItems = a?.collections && a.collections.filter?.((collection) => !collection?.hidden)?.length > 0
+        const z_hasItems = z?.collections && z.collections.filter?.((collection) => !collection?.hidden)?.length > 0
+        if (a_hasItems && z_hasItems) {
+            if (!a?.updateTime || !z?.updateTime) return 0
+            if (Number(a.updateTime) > Number(z.updateTime)) return -1
+        }
+        if (z_hasItems) return 1
+        if (a_hasItems) return -1
+
+        return 0
+    })
 }
 export function ImageManagement(props: ImageManagementProps) {
     const t = useI18N()
@@ -117,6 +128,7 @@ export function ImageManagement(props: ImageManagementProps) {
                         addresses.map((address) => (
                             <WalletAssetsCard
                                 key={address.address}
+                                collectionName={CurrentStatusMap[status].title}
                                 onSetting={() => {
                                     setSettingAddress(address)
                                     setImageListOpen(true)
@@ -133,7 +145,7 @@ export function ImageManagement(props: ImageManagementProps) {
                     {!hasConnectedWallets && (
                         <Box className={classes.bottomButton}>
                             <Button onClick={openPopupsWindow} className={classes.button}>
-                                <Icons.WalletUnderTabs className={classes.walletIcon} />
+                                <Icons.WalletUnderTabs size={16} className={classes.walletIcon} />
                                 {t.add_wallet()}
                             </Button>
                         </Box>

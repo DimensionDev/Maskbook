@@ -295,7 +295,6 @@
     "plugin_ito_region_ban": "此池已被您所在區域的建立者禁用",
     "plugin_ito_next": "下一個",
     "plugin_ito_back": "上一個",
-    "plugin_ito_transaction_dialog_summary": "使用 {{amount}} {{symbol}} 建立一個 ITO",
     "plugin_ito_swap": "交換",
     "plugin_ito_send_tip": "你可以在過去分頁中找到你的 ITO",
     "plugin_ito_send_text": "送出 {{total}} {{symbol}}",

@@ -2,7 +2,7 @@ import { Paper, Stack, Table, TableBody, TableCell, TableContainer, TableRow, Ty
 import { makeStyles } from '@masknet/theme'
 import { DataProvider } from '@masknet/public-api'
 import { FormattedCurrency } from '@masknet/shared'
-import { formatCurrency, formatInteger, formatSupply, TokenType } from '@masknet/web3-shared-base'
+import { formatCurrency, formatInteger, formatMarketCap, formatSupply, TokenType } from '@masknet/web3-shared-base'
 import type { Trending } from '../../types'
 import { useI18N } from '../../../../utils'
 
@@ -61,7 +61,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                                     </Typography>
                                 </TableCell>
                                 <TableCell className={classes.cell}>
-                                    {market?.market_cap ? `$${formatSupply(market.market_cap)}` : '--'}
+                                    {market?.market_cap ? formatMarketCap(market.market_cap) : '--'}
                                 </TableCell>
                             </TableRow>
                         ) : null}

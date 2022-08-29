@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
+import { ActionButton } from '@masknet/theme'
 
 export function useSwitcher<T extends string | number>(
     currentOption: T,

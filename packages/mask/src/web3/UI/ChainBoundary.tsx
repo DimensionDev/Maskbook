@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 import { Box, Typography } from '@mui/material'
-import { makeStyles, MaskColorVar, ShadowRootTooltip, useStylesExtends } from '@masknet/theme'
+import { makeStyles, MaskColorVar, ShadowRootTooltip, useStylesExtends, ActionButton } from '@masknet/theme'
 import {
     useCurrentWeb3NetworkPluginID,
     useAccount,
@@ -17,7 +17,7 @@ import {
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { delay } from '@dimensiondev/kit'
-import ActionButton, {
+import {
     ActionButtonPromise,
     ActionButtonPromiseProps,
 } from '../../extension/options-page/DashboardComponents/ActionButton'

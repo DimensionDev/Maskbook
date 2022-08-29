@@ -7,7 +7,7 @@ import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { MaskIconInMinds, MaskSharpIcon } from '../../resources/MaskIcon'
 import { useMount } from 'react-use'
-import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
+import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
 import { useValueRef } from '@masknet/shared-base-ui'
 
@@ -54,7 +54,7 @@ export interface BannerProps extends Partial<BannerUIProps> {}
 
 export function Banner(props: BannerProps) {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
-    const personaConnectStatus = usePersonaConnectStatus()
+    const { value: personaConnectStatus } = useCurrentPersonaConnectStatus()
     const { nextStep } = props
     const networkIdentifier = activatedSocialNetworkUI.networkIdentifier
     const identities = useValueRef(globalUIState.profiles)

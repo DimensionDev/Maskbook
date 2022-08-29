@@ -1,4 +1,4 @@
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import { explorerResolver } from '@masknet/web3-shared-evm'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { Grid, Typography, CircularProgress, Link } from '@mui/material'
@@ -7,8 +7,6 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 import { useI18N } from '../../locales'
 import { TransactionStatus, ChainId } from '../../types'
-
-import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()(() => ({
     confirmation: {

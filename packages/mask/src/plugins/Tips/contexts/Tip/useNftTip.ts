@@ -38,10 +38,10 @@ export function useNftTip<T extends NetworkPluginID>(
             account,
         })
         if (tokenDetailed) {
-            await Token?.removeToken?.(tokenDetailed)
+            await Token?.removeToken?.(account, tokenDetailed)
         }
         return txid
-    }, [tokenId, pluginId, Connection, contractAddress, recipient, JSON.stringify(connectionOptions)])
+    }, [account, tokenId, pluginId, Connection, contractAddress, recipient, JSON.stringify(connectionOptions)])
 
     return [isTransferring, sendTip]
 }

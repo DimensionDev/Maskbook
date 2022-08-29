@@ -10,11 +10,12 @@ function resolveLangNode(node: HTMLElement) {
 export function injectPostReplacerAtTwitter(signal: AbortSignal, current: PostInfo) {
     return injectPostReplacer({
         zipPost(node) {
+            if (node.destroyed) return
             const langNode = resolveLangNode(node.current)
             if (langNode) langNode.style.display = 'none'
         },
         unzipPost(node) {
-            if (!node.current) return
+            if (node.destroyed || !node.current) return
             const langNode = resolveLangNode(node.current)
             if (langNode) langNode.style.display = 'unset'
         },

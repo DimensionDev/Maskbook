@@ -1,5 +1,14 @@
 import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import type { CompositionRequest, Web3ProfileDialogRequest } from './Mask'
+import type {
+    CheckSecurityCloseConfirmDialogRequest,
+    CompositionRequest,
+    Web3ProfileDialogRequest,
+    CheckSecurityDialogRequest,
+    OpenApplicationRequestEvent,
+    SwapDialogEvent,
+    OpenProfileCardEvent,
+    SettingDialogEvent,
+} from './Mask.js'
 
 /**
  * @deprecated
@@ -18,4 +27,10 @@ export const CrossIsolationMessages = new WebExtensionMessage<CrossIsolationEven
 export interface CrossIsolationEvents {
     requestComposition: CompositionRequest
     requestWeb3ProfileDialog: Web3ProfileDialogRequest
+    requestCheckSecurityCloseConfirmDialog: CheckSecurityCloseConfirmDialogRequest
+    requestCheckSecurityDialog: CheckSecurityDialogRequest
+    requestOpenApplication: OpenApplicationRequestEvent
+    swapDialogUpdate: SwapDialogEvent
+    PluginSettingsDialogUpdate: SettingDialogEvent
+    requestOpenProfileCard: OpenProfileCardEvent
 }

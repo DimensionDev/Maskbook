@@ -79,3 +79,6 @@ export const searchInstagramPostAvatarSelector = () =>
     new LiveSelector<HTMLImageElement, false>().querySelectorAll<HTMLImageElement>(
         '[role="button"] > a > img[crossorigin="anonymous"]',
     )
+
+export const inpageAvatarSelector = () =>
+    querySelectorAll<HTMLDivElement>('[role=main] article[role=presentation] header [role=button]')

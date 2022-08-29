@@ -2,9 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { PluginId } from '@masknet/plugin-infra'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useChainId, useChainIdValid } from '@masknet/plugin-infra/web3'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { DialogContent, dialogTitleClasses, IconButton } from '@mui/material'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog, useSelectAdvancedSettings } from '@masknet/shared'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
@@ -14,11 +13,11 @@ import { useI18N } from '../../../../utils'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { NetworkTab } from '../../../../components/shared/NetworkTab'
 import { useUpdateEffect } from 'react-use'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID, createFungibleToken } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
 import { currentSlippageSettings } from '../../settings'
 import { MIN_GAS_LIMIT } from '../../constants'
-import { isDashboardPage } from '@masknet/shared-base'
+import { isDashboardPage, CrossIsolationMessages } from '@masknet/shared-base'
 
 const isDashboard = isDashboardPage()
 
@@ -72,12 +71,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface TraderDialogProps {
-    open?: boolean
-    onClose?: () => void
-}
-
-export function TraderDialog({ open, onClose }: TraderDialogProps) {
+export function TraderDialog() {
     const tradeRef = useRef<TraderRef>(null)
     const traderDefinition = useActivatedPlugin(PluginId.Trader, 'any')
     const chainIdList = traderDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
@@ -87,19 +81,55 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
     const [traderProps, setTraderProps] = useState<TraderProps>()
     const [chainId, setChainId] = useState<ChainId>(currentChainId)
-
-    const { open: remoteOpen, closeDialog } = useRemoteControlledDialog(
-        PluginTraderMessages.swapDialogUpdated,
-        (ev) => {
-            if (ev?.traderProps) setTraderProps(ev.traderProps)
-        },
-    )
+    const chainIdRef = useRef<ChainId>(chainId)
+    const [open, setOpen] = useState(false)
 
     const selectAdvancedSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
 
+    // #region update default input or output token
     useEffect(() => {
-        if (!chainIdValid) closeDialog()
-    }, [chainIdValid, closeDialog])
+        chainIdRef.current = chainId
+    }, [chainId])
+
+    useEffect(() => {
+        return CrossIsolationMessages.events.swapDialogUpdate.on(({ open, traderProps }) => {
+            setOpen(open)
+            if (traderProps) {
+                const { defaultInputCoin, defaultOutputCoin } = traderProps
+                const inputToken = defaultInputCoin
+                    ? createFungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>(
+                          chainIdRef.current,
+                          isNativeTokenAddress(defaultInputCoin.address) ? SchemaType.Native : SchemaType.ERC20,
+                          defaultInputCoin.address,
+                          defaultInputCoin.name,
+                          defaultInputCoin.symbol,
+                          defaultInputCoin.decimals ?? 0,
+                      )
+                    : undefined
+                const outputToken = defaultOutputCoin
+                    ? createFungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>(
+                          chainIdRef.current,
+                          isNativeTokenAddress(defaultOutputCoin.address) ? SchemaType.Native : SchemaType.ERC20,
+                          defaultOutputCoin.address,
+                          defaultOutputCoin.name,
+                          defaultOutputCoin.symbol,
+                          defaultOutputCoin.decimals ?? 0,
+                      )
+                    : undefined
+
+                setTraderProps({
+                    defaultInputCoin: inputToken,
+                    defaultOutputCoin: outputToken,
+                    chainId: traderProps.chainId,
+                })
+            }
+        })
+    }, [chainId])
+    // #endregion
+
+    useEffect(() => {
+        if (!chainIdValid) setOpen(false)
+    }, [chainIdValid])
 
     useUpdateEffect(() => {
         if (currentChainId) {
@@ -111,14 +141,13 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
         <TargetChainIdContext.Provider>
             <AllProviderTradeContext.Provider>
                 <InjectedDialog
-                    open={open || remoteOpen}
+                    open={open}
                     onClose={() => {
-                        onClose?.()
                         if (currentChainId) {
                             setChainId(currentChainId)
                         }
                         setTraderProps(undefined)
-                        closeDialog()
+                        setOpen(false)
                     }}
                     title={t('plugin_trader_swap')}
                     titleBarIconStyle={isDashboard ? 'close' : 'back'}

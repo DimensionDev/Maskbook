@@ -1,10 +1,9 @@
 import { resolve } from 'path'
-import { copy, ensureDir } from 'fs-extra'
-import { prompt } from 'enquirer'
-import { identity, kebabCase, upperFirst } from 'lodash-unified'
-import { task } from '../utils/task'
-import { ROOT_PATH } from '../utils/paths'
-import { awaitChildProcess, changeFile, shell } from '../utils'
+import { camelCase, identity, kebabCase, upperFirst } from 'lodash-unified'
+import { task } from '../utils/task.js'
+import { ROOT_PATH } from '../utils/paths.js'
+import { awaitChildProcess, changeFile, shell } from '../utils/index.js'
+import { fileURLToPath } from 'url'
 
 type PackageOptions = {
     type: 'plugin' | 'package'
@@ -13,6 +12,8 @@ type PackageOptions = {
     pluginID?: string
 }
 export async function createPackageInteractive() {
+    const { default: enquirer } = await import('enquirer')
+    const { prompt } = enquirer
     // Select package type
     const packageDetail: PackageOptions = {
         path: '',
@@ -45,7 +46,6 @@ export async function createPackageInteractive() {
                     message: 'Create a new package at: ' + base,
                 }).then((x) => x.name),
             )
-        packageDetail.path
     }
 
     // Choose npm package name
@@ -68,13 +68,14 @@ task(createPackageInteractive, 'new-pkg', 'Create a new package interactively')
 
 const INSERT_HERE = '// @masknet/scripts: insert-here'
 async function createNewPackage({ path, npmName, type, pluginID }: PackageOptions) {
-    const packagePath = resolve(ROOT_PATH, path)
+    const { copy, ensureDir } = await import('fs-extra')
+    const packagePath = fileURLToPath(new URL(path, ROOT_PATH))
     await ensureDir(packagePath)
 
     // Copy package template
     if (type === 'plugin') {
         // cp -r packages/plugins/template packages/plugins/NEW_PLUGIN
-        await copy(resolve(ROOT_PATH, 'packages/plugins/template'), packagePath, {
+        await copy(fileURLToPath(new URL('packages/plugins/template/', ROOT_PATH)), packagePath, {
             filter: (src) => {
                 if (src.includes('node_modules') || src.includes('dist')) return false
                 return true
@@ -82,7 +83,7 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
         })
     } else {
         // cp -r packages/empty packages/NEW_PACKAGE
-        await copy(resolve(ROOT_PATH, 'packages/empty'), packagePath, {
+        await copy(fileURLToPath(new URL('packages/empty/', ROOT_PATH)), packagePath, {
             filter: (src) => {
                 if (src.includes('node_modules') || src.includes('dist')) return false
                 return true
@@ -96,7 +97,7 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
     })
 
     if (type === 'plugin') {
-        const NormativeName = path.split('/').at(-1)
+        const NormativeName = upperFirst(camelCase(path.split('/').at(-1)))
         await changeFile.typescript(resolve(packagePath, 'src/constants.ts'), (content) =>
             content.replace('PluginId.Example', `PluginId.${NormativeName}`),
         )
@@ -107,7 +108,7 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
          * packages/mask/shared/plugin-infra/register.ts
          * packages/mask/package.json
          */
-        await changeFile.JSON(resolve(ROOT_PATH, '.i18n-codegen.json'), (content) => {
+        await changeFile.JSON(new URL('.i18n-codegen.json', ROOT_PATH), (content) => {
             content.list.push({
                 input: `./${path}/src/locales/en-US.json`,
                 output: `./${path}/src/locales/i18n_generated`,
@@ -120,25 +121,25 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
                 },
             })
         })
-        await changeFile.JSON(resolve(ROOT_PATH, 'packages/plugins/tsconfig.json'), (content) => {
+        await changeFile.JSON(new URL('packages/plugins/tsconfig.json', ROOT_PATH), (content) => {
             content.references.push({ path: `./${NormativeName}/` })
         })
-        await changeFile.typescript(resolve(ROOT_PATH, 'packages/plugin-infra/src/types.ts'), (content) =>
+        await changeFile.typescript(new URL('packages/plugin-infra/src/types.ts', ROOT_PATH), (content) =>
             content.replace(INSERT_HERE, `${NormativeName} = '${pluginID}'\n${INSERT_HERE}`),
         )
         await changeFile.typescript(
-            resolve(ROOT_PATH, `packages/mask/shared/plugin-infra/register.js`),
+            new URL(`packages/mask/shared/plugin-infra/register.js`, ROOT_PATH),
             (content) => `${content}import '${npmName}'`,
         )
         await awaitChildProcess(shell.cwd(ROOT_PATH)`pnpm install --prefer-offline -C packages/mask ${npmName}`)
-        await changeFile(resolve(ROOT_PATH, 'packages/mask/package.json'), (content) =>
+        await changeFile(new URL('packages/mask/package.json', ROOT_PATH), (content) =>
             content.replaceAll(/workspace:\^undefined/g, 'workspace:*'),
         )
-        await changeFile(resolve(ROOT_PATH, 'tsconfig.json'), (content) =>
+        await changeFile(new URL('tsconfig.json', ROOT_PATH), (content) =>
             content.replace(INSERT_HERE + ' 3', `"${npmName}": ["./${path}/src"],\n      ${INSERT_HERE} 3`),
         )
     } else {
-        await changeFile(resolve(ROOT_PATH, 'tsconfig.json'), (content) =>
+        await changeFile(new URL('tsconfig.json', ROOT_PATH), (content) =>
             content
                 .replace(INSERT_HERE + ' 1', `${INSERT_HERE} 1\n    { "path": "./${path}/tsconfig.tests.json" },`)
                 .replace(INSERT_HERE + ' 2', `"${npmName}": ["./${path}/src"],\n      ${INSERT_HERE} 2`),

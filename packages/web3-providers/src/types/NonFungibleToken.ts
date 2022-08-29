@@ -3,7 +3,7 @@ import type {
     NonFungibleAsset,
     Pageable,
     OrderSide,
-    NonFungibleTokenCollection,
+    NonFungibleCollection,
     NonFungibleTokenContract,
     NonFungibleTokenOrder,
     NonFungibleTokenEvent,
@@ -11,6 +11,7 @@ import type {
     HubIndicator,
     NonFungibleTokenRarity,
     NonFungibleTokenStats,
+    PriceInToken,
 } from '@masknet/web3-shared-base'
 
 export namespace NonFungibleTokenAPI {
@@ -23,11 +24,19 @@ export namespace NonFungibleTokenAPI {
             tokenId: string,
             options?: HubOptions<ChainId, Indicator>,
         ) => Promise<NonFungibleTokenRarity | undefined>
+        /** Get owner address. */
+        getOwner?: (address: string, tokenId: string, options?: HubOptions<ChainId, Indicator>) => Promise<string>
         /** Get a non-fungible contract. */
         getContract?: (
             address: string,
             options?: HubOptions<ChainId>,
         ) => Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined>
+        /** Get a non-fungible token floor price. */
+        getFloorPrice?: (
+            address: string,
+            tokenId: string,
+            options?: HubOptions<ChainId>,
+        ) => Promise<PriceInToken<ChainId, SchemaType> | undefined>
         /** Get a non-fungible asset. */
         getAsset?: (
             address: string,
@@ -44,18 +53,27 @@ export namespace NonFungibleTokenAPI {
             address: string,
             options?: HubOptions<ChainId>,
         ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
-        /** Get a non-fungible token. */
+        /**
+         * @deprecated Use getAsset stead
+         * Get a non-fungible token.
+         * */
         getToken?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
         ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
-        /** Get non-fungible tokens owned by the given account. */
+        /**
+         * @deprecated Use getAssets stead
+         * Get non-fungible tokens owned by the given account.
+         * */
         getTokens?: (
             account: string,
             options?: HubOptions<ChainId, Indicator>,
         ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, Indicator>>
-        /** Get non-fungible tokens of the given collection. */
+        /**
+         * @deprecated Use getAssetsByCollection stead
+         * Get non-fungible tokens of the given collection.
+         * */
         getTokensByCollection?: (
             account: string,
             options?: HubOptions<ChainId, Indicator>,
@@ -90,11 +108,21 @@ export namespace NonFungibleTokenAPI {
             side: OrderSide,
             options?: HubOptions<ChainId>,
         ) => Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
+        /** Get non-fungible collection by the given address. */
+        getCollection?: (
+            address: string,
+            options?: HubOptions<ChainId, Indicator>,
+        ) => Promise<NonFungibleCollection<ChainId, SchemaType> | undefined>
         /** Get non-fungible collections owned by the given account. */
-        getCollections?: (
+        getCollectionsByOwner?: (
             account: string,
             options?: HubOptions<ChainId, Indicator>,
-        ) => Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>, Indicator>>
+        ) => Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, Indicator>>
+        /** Get non-fungible collections search by given keyword */
+        getCollectionsByKeyword?: (
+            keyword: string,
+            options?: HubOptions<ChainId, Indicator>,
+        ) => Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, Indicator>>
 
         /** Place a bid on a token. */
         createBuyOrder?: (/** TODO: add parameters */) => Promise<void>

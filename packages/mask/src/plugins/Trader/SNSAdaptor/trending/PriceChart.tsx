@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useWindowSize } from 'react-use'
-import { CircularProgress, Stack, Typography } from '@mui/material'
+import { CircularProgress, Stack, Typography, useTheme } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../../../utils'
 import type { Coin, Currency, Stat } from '../../types'
@@ -13,7 +13,7 @@ const DEFAULT_DIMENSION: Dimension = {
     right: 16,
     bottom: 32,
     left: 16,
-    width: 598,
+    width: 566,
     height: 200,
 }
 
@@ -52,6 +52,7 @@ export interface PriceChartProps extends withClasses<'root'> {
     loading?: boolean
     width?: number
     height?: number
+    amount: number
     retry(): void
     children?: React.ReactNode
 }
@@ -59,6 +60,7 @@ export interface PriceChartProps extends withClasses<'root'> {
 export function PriceChart(props: PriceChartProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(props), props)
+    const colors = useTheme().palette.maskColor
     const rootRef = useRef<HTMLDivElement>(null)
     const svgRef = useRef<SVGSVGElement>(null)
 
@@ -89,7 +91,7 @@ export function PriceChart(props: PriceChartProps) {
         })),
         dimension,
         'x-trader-price-line-chart',
-        { sign: props.currency.name ?? 'USD', color: '#3DC233' },
+        { sign: props.currency.name ?? 'USD', color: props.amount > 0 ? colors.success : colors.danger },
     )
 
     return (

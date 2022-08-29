@@ -11,9 +11,9 @@ import { useSaveToRSS3 } from './useSaveToRSS3'
 export type AvatarInfo = TwitterBaseAPI.AvatarInfo & { avatarId: string }
 
 export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
-    const [, saveToNextID] = useSaveToNextID()
-    const [, saveToRSS3] = useSaveToRSS3()
-    const [, saveToKV] = useSaveKV(pluginId, chainId)
+    const saveToNextID = useSaveToNextID()
+    const saveToRSS3 = useSaveToRSS3()
+    const saveToKV = useSaveKV(pluginId)
 
     return useAsyncFn(
         async (
@@ -37,15 +37,19 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
                 schema: (token.contract?.schema ?? SchemaType.ERC721) as SchemaType,
             }
 
-            switch (pluginId) {
-                case NetworkPluginID.PLUGIN_EVM: {
-                    if (isBindAccount) {
-                        return saveToNextID(info, account, persona, proof)
+            try {
+                switch (pluginId) {
+                    case NetworkPluginID.PLUGIN_EVM: {
+                        if (isBindAccount) {
+                            return saveToNextID(info, account, persona, proof)
+                        }
+                        return saveToRSS3(info, account)
                     }
-                    return saveToRSS3(info, account)
+                    default:
+                        return saveToKV(info, account, persona, proof)
                 }
-                default:
-                    return saveToKV(info, account, persona, proof)
+            } catch {
+                return
             }
         },
         [saveToNextID, saveToRSS3, pluginId],

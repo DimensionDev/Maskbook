@@ -12,10 +12,9 @@ import {
 } from '@masknet/plugin-infra/web3'
 import { chainResolver, explorerResolver, isNativeTokenAddress, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { Grid, Link, Paper, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import LaunchIcon from '@mui/icons-material/Launch'
 import { FormattedBalance, useOpenShareTxDialog } from '@masknet/shared'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../locales'
 import { RedPacketSettings, useCreateCallback, useCreateParams } from './hooks/useCreateCallback'
 import { useTransactionValue } from '@masknet/plugin-infra/web3-evm'
@@ -311,7 +310,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                         onClick={createRedpacket}
                         disabled={isBalanceInsufficient || isWaitGasBeMinus || isCreating}>
                         {!isBalanceInsufficient
-                            ? t.send_symbol({
+                            ? t.token_send_symbol({
                                   amount: formatTotal,
                                   symbol: settings?.token?.symbol ?? '-',
                               })

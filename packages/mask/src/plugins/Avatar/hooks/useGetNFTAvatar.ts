@@ -1,24 +1,28 @@
+import { useWeb3State } from '@masknet/plugin-infra/web3'
 import type { EnhanceableSite } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useAsyncFn } from 'react-use'
-import type { RSS3_KEY_SNS } from '../constants'
-import { PluginNFTAvatarRPC } from '../messages'
-import { getAddress } from '../Services'
+import { useCallback } from 'react'
+import { NFT_AVATAR_METADATA_STORAGE, RSS3_KEY_SNS } from '../constants'
+import type { NextIDAvatarMeta } from '../types'
 import { useGetNFTAvatarFromRSS3 } from './rss3/useGetNFTAvatarFromRSS3'
+import { useGetAddress } from './useGetAddress'
 
 export function useGetNFTAvatar() {
-    const [, getNFTAvatarFromRSS] = useGetNFTAvatarFromRSS3()
-
-    return useAsyncFn(
+    const getNFTAvatarFromRSS = useGetNFTAvatarFromRSS3()
+    const { Storage } = useWeb3State()
+    const getAddress = useGetAddress()
+    return useCallback(
         async (userId?: string, network?: EnhanceableSite, snsKey?: RSS3_KEY_SNS) => {
             if (!userId || !network || !snsKey) return
-            const storage = await getAddress(network, userId)
-            if (!storage?.address) return
-            if (storage?.networkPluginID && storage.networkPluginID !== NetworkPluginID.PLUGIN_EVM) {
-                return PluginNFTAvatarRPC.getAvatar(userId, network)
+            const addressStorage = await getAddress(network, userId)
+            if (!addressStorage?.address) return
+            if (addressStorage?.networkPluginID && addressStorage.networkPluginID !== NetworkPluginID.PLUGIN_EVM) {
+                return Storage?.createKVStorage(`${NFT_AVATAR_METADATA_STORAGE}_${network}`).get<NextIDAvatarMeta>(
+                    userId,
+                )
             }
-            return getNFTAvatarFromRSS(userId, storage.address, snsKey)
+            return getNFTAvatarFromRSS(userId, addressStorage.address, snsKey)
         },
-        [getNFTAvatarFromRSS],
+        [getNFTAvatarFromRSS, getAddress, Storage],
     )
 }

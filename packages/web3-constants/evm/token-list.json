@@ -12,7 +12,9 @@
         "Arbitrum": ["https://tokens.r2d2.to/latest/42161/tokens.json"],
         "Arbitrum_Rinkeby": ["https://tokens.r2d2.to/latest/421611/tokens.json"],
         "xDai": ["https://tokens.r2d2.to/latest/100/tokens.json"],
-        "Sokol": [],
+        "Optimism": ["https://tokens.r2d2.to/latest/10/tokens.json"],
+        "Optimism_Kovan": [],
+        "Optimism_Goerli": [],
         "Avalanche": ["https://tokens.r2d2.to/latest/43114/tokens.json"],
         "Avalanche_Fuji": [],
         "Celo": ["https://tokens.r2d2.to/latest/42220/tokens.json"],
@@ -21,7 +23,8 @@
         "Aurora_Testnet": [],
         "Conflux": ["https://tokens.r2d2.to/latest/1030/tokens.json"],
         "Harmony": ["https://tokens.r2d2.to/latest/1666600000/tokens.json"],
-        "Harmony_Test": ["https://tokens.r2d2.to/latest/1666700000/tokens.json"]
+        "Harmony_Test": ["https://tokens.r2d2.to/latest/1666700000/tokens.json"],
+        "Astar": ["https://tokens.r2d2.to/latest/592/tokens.json"]
     },
     "NON_FUNGIBLE_TOKEN_LISTS": {
         "Mainnet": ["https://tokens.r2d2.to/latest/1/non-fungible-tokens.json"],
@@ -36,7 +39,9 @@
         "Arbitrum": [],
         "Arbitrum_Rinkeby": [],
         "xDai": [],
-        "Sokol": [],
+        "Optimism": [],
+        "Optimism_Kovan": [],
+        "Optimism_Goerli": [],
         "Avalanche": [],
         "Avalanche_Fuji": [],
         "Celo": [],
@@ -45,6 +50,7 @@
         "Aurora_Testnet": [],
         "Conflux": [],
         "Harmony": [],
-        "Harmony_Test": []
+        "Harmony_Test": [],
+        "Astar": ["https://tokens.r2d2.to/latest/592/non-fungible-tokens.json"]
     }
 }

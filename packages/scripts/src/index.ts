@@ -9,17 +9,18 @@ export {
     typescriptWatch,
     resourceCopy,
     resourceCopyWatch,
-} from './codegen'
-export { ciBuild, extensionWatch } from './extension'
-export { buildNetlify } from './netlify'
+} from './codegen/index.js'
+export { ciBuild, extensionWatch } from './extension/index.js'
+export { buildNetlify } from './netlify/index.js'
 
 // Tools
-export { clean, help, createPackageInteractive, fixLockfile, syncDevelop } from './commands'
-export { syncLanguages } from './locale-kit-next'
-export { reorderSpellcheck } from './spellcheck'
+export { clean, help, createPackageInteractive, fixLockfile, syncDevelop } from './commands/index.js'
+export { syncLanguages } from './locale-kit-next/index.js'
+export { reorderSpellcheck } from './spellcheck/index.js'
 
 // Sub-projects build commands
-export { buildInjectedScript, watchInjectedScript } from './projects/injected-scripts'
-export { buildMaskSDK, watchMaskSDK } from './projects/mask-sdk'
-export { buildPolyfill } from './projects/polyfill'
-export { buildGun } from './projects/gun'
+export { buildInjectedScript, watchInjectedScript } from './projects/injected-scripts.js'
+export { buildMaskSDK, watchMaskSDK } from './projects/mask-sdk.js'
+export { buildPolyfill } from './projects/polyfill.js'
+export { buildGun } from './projects/gun.js'
+export { buildSandboxedPlugin, watchSandboxedPlugin } from './projects/sandboxed-plugins.js'

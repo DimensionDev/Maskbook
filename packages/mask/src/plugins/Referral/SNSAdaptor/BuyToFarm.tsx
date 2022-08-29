@@ -1,25 +1,22 @@
 import { useCallback, useState } from 'react'
 import { useAsync } from 'react-use'
 import { useAccount, useChainId, useWeb3 } from '@masknet/plugin-infra/web3'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Typography, Box, Tab, Tabs, Grid, Divider } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { v4 as uuid } from 'uuid'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, CrossIsolationMessages } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 import { useI18N } from '../locales'
 import { PluginReferralMessages, SelectTokenUpdated, ReferralRPC } from '../messages'
-import { PluginTraderMessages } from '../../Trader/messages'
 
 import { getRequiredChainId } from '../helpers'
 import { singAndPostProofOfRecommendationWithReferrer } from './utils/proofOfRecommendation'
 import { MASK_REFERRER, SWAP_CHAIN_ID } from '../constants'
 import { TabsReferAndBuy, TransactionStatus, PageInterface, PagesType, FungibleTokenDetailed } from '../types'
-import type { Coin } from '../../Trader/types'
 
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { MyRewards } from './MyRewards'
@@ -77,7 +74,6 @@ export function BuyToFarm(props: PageInterface) {
             [id, setToken],
         ),
     )
-    const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
     const { value: tokenRewards = EMPTY_LIST, loading } = useAsync(
         async () =>
@@ -99,20 +95,15 @@ export function BuyToFarm(props: PageInterface) {
             showSnackbar(t.error_token_not_select(), { variant: 'error' })
             return
         }
-        openSwapDialog({
+
+        CrossIsolationMessages.events.swapDialogUpdate.sendToLocal({
             open: true,
             traderProps: {
                 chainId: SWAP_CHAIN_ID,
-                coin: {
-                    id: token?.address,
-                    name: token?.name ?? '',
-                    symbol: token?.symbol ?? '',
-                    contract_address: token?.address,
-                    decimals: token?.decimals,
-                } as Coin,
+                defaultInputCoin: token,
             },
         })
-    }, [token, openSwapDialog])
+    }, [token])
 
     const onConfirmReferFarm = useCallback(() => {
         props?.onChangePage?.(PagesType.TRANSACTION, t.transaction(), {

@@ -13,6 +13,7 @@ import {
     useLastRecognizedIdentity,
 } from '../../../components/DataSource/useActivatedUI'
 import { useI18N } from '../locales'
+import { useI18N as useBaseI18N } from '../../../utils'
 import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketMetaKey } from '../constants'
 import { DialogTabs, RedPacketJSONPayload } from '../types'
@@ -33,19 +34,12 @@ const useStyles = makeStyles()((theme) => ({
         borderBottom: `1px solid ${theme.palette.divider}`,
     },
     dialogContent: {
-        minHeight: 305,
         padding: 0,
         '::-webkit-scrollbar': {
             display: 'none',
         },
 
         overflowX: 'hidden',
-    },
-    nftDialogContent: {
-        height: 305,
-    },
-    nftDialogContentLoaded: {
-        height: 620,
     },
     tabPaper: {
         position: 'sticky',
@@ -86,16 +80,23 @@ interface RedPacketDialogProps extends withClasses<never> {
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
     const t = useI18N()
+    const { t: i18n } = useBaseI18N()
     const [showHistory, setShowHistory] = useState(false)
     const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
-    const { cx, classes } = useStyles()
+    const { classes } = useStyles()
     const { attachMetadata, dropMetadata } = useCompositionContext()
     const state = useState(DialogTabs.create)
     const [isNFTRedPacketLoaded, setIsNFTRedPacketLoaded] = useState(false)
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    // #region token lucky drop
     const [settings, setSettings] = useState<RedPacketSettings>()
+    // #endregion
+    // #region nft lucky drop
+    const [openNFTConfirmDialog, setOpenNFTConfirmDialog] = useState(false)
+    const [openSelectNFTDialog, setOpenSelectNFTDialog] = useState(false)
+    // #endregion
 
     const onClose = useCallback(() => {
         setStep(CreateRedPacketPageStep.NewRedPacketPage)
@@ -148,6 +149,15 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const onNext = useCallback(() => {
         if (step === CreateRedPacketPageStep.NewRedPacketPage) setStep(CreateRedPacketPageStep.ConfirmPage)
     }, [step])
+    const onDialogClose = useCallback(() => {
+        openSelectNFTDialog
+            ? setOpenSelectNFTDialog(false)
+            : openNFTConfirmDialog
+            ? setOpenNFTConfirmDialog(false)
+            : showHistory
+            ? setShowHistory(false)
+            : onBack()
+    }, [showHistory, openNFTConfirmDialog, openSelectNFTDialog, onBack])
 
     const _onChange = useCallback((val: Omit<RedPacketSettings, 'password'>) => {
         setSettings(val)
@@ -162,7 +172,13 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     )
 
     const isCreateStep = step === CreateRedPacketPageStep.NewRedPacketPage
-    const title = isCreateStep ? t.display_name() : t.details()
+    const title = openSelectNFTDialog
+        ? t.nft_select_collection()
+        : openNFTConfirmDialog
+        ? i18n('confirm')
+        : isCreateStep
+        ? t.display_name()
+        : t.details()
     const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
 
     return (
@@ -184,18 +200,10 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                         </MaskTabList>
                     ) : null
                 }
-                onClose={() => (showHistory ? setShowHistory(false) : onBack())}
+                onClose={onDialogClose}
                 isOnBack={showHistory || step !== CreateRedPacketPageStep.NewRedPacketPage}
                 disableTitleBorder>
-                <DialogContent
-                    className={cx(
-                        classes.dialogContent,
-                        currentTab === 'collectibles'
-                            ? isNFTRedPacketLoaded
-                                ? classes.nftDialogContentLoaded
-                                : classes.nftDialogContent
-                            : '',
-                    )}>
+                <DialogContent className={classes.dialogContent}>
                     {step === CreateRedPacketPageStep.NewRedPacketPage ? (
                         <>
                             <div
@@ -218,6 +226,10 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                 </TabPanel>
                                 <TabPanel value={tabs.collectibles} style={{ padding: 0 }}>
                                     <RedPacketERC721Form
+                                        openSelectNFTDialog={openSelectNFTDialog}
+                                        setOpenSelectNFTDialog={setOpenSelectNFTDialog}
+                                        setOpenNFTConfirmDialog={setOpenNFTConfirmDialog}
+                                        openNFTConfirmDialog={openNFTConfirmDialog}
                                         onClose={onClose}
                                         setIsNFTRedPacketLoaded={setIsNFTRedPacketLoaded}
                                     />

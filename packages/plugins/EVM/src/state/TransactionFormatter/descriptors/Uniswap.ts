@@ -9,7 +9,6 @@ export class UniswapDescriptor {
             description: `Contract Deployment ${getTokenAmountDescription(
                 context.value,
                 createNativeToken(context.chainId),
-                true,
             )}`,
         })
     }

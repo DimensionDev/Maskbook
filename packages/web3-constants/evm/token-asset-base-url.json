@@ -1,74 +1,56 @@
 {
-    "TOKEN_ASSET_BASE_URI": {
-        "Mainnet": [
-            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/ethereum",
-            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/ethereum"
-        ],
-        "Ropsten": [
-            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/ethereum",
-            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/ethereum"
-        ],
-        "Rinkeby": [
-            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/ethereum",
-            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/ethereum"
-        ],
-        "Kovan": [
-            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/ethereum",
-            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/ethereum"
-        ],
-        "Gorli": [
-            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/ethereum",
-            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/ethereum"
-        ],
-        "BSC": [
-            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/smartchain",
-            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/smartchain"
-        ],
-        "BSCT": [
-            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/smartchain",
-            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/smartchain"
-        ],
-        "Matic": [
-            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/polygon",
-            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/polygon"
-        ],
-        "Mumbai": [
-            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/polygon",
-            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/polygon"
-        ],
-        "Arbitrum": [
-            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/arbitrum",
-            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/arbitrum"
-        ],
+    "NATIVE_TOKEN_ASSET_BASE_URI": {
+        "Mainnet": ["https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/ethereum"],
+        "Ropsten": ["https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/ethereum"],
+        "Rinkeby": ["https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/ethereum"],
+        "Kovan": ["https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/ethereum"],
+        "Gorli": ["https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/ethereum"],
+        "BSC": ["https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/smartchain"],
+        "BSCT": ["https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/smartchain"],
+        "Matic": ["https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/polygon"],
+        "Mumbai": ["https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/polygon"],
+        "Arbitrum": ["https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/arbitrum"],
         "Arbitrum_Rinkeby": [],
-        "xDai": [
-            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/xdai",
-            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/xdai"
-        ],
-        "Sokol": [],
-        "Avalanche": [
-            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/avalanchec",
-            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/avalanchec"
-        ],
+        "xDai": ["https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/xdai"],
+        "Optimism": ["https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/optimism"],
+        "Optimism_Kovan": [],
+        "Optimism_Goerli": [],
+        "Avalanche": ["https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/avalanchec"],
         "Avalanche_Fuji": [],
-        "Celo": [],
-        "Fantom": [
-            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/fantom",
-            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/fantom"
-        ],
-        "Aurora": [
-            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/aurora",
-            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/aurora"
-        ],
+        "Celo": ["https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/celo"],
+        "Fantom": ["https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/fantom"],
+        "Aurora": ["https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/aurora"],
         "Aurora_Testnet": [],
-        "Conflux": [
-            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/conflux",
-            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/conflux"
-        ],
-        "Harmony": [
-            "https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/harmony",
-            "https://rawcdn.githack.com/dimensiondev/assets/master/blockchains/harmony"
-        ],
-        "Harmony_Test": []
+        "Conflux": ["https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/conflux"],
+        "Harmony": ["https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/harmony"],
+        "Harmony_Test": [],
+        "Astar": ["https://raw.githubusercontent.com/dimensiondev/assets/master/blockchains/astar"]
+    },
+    "ERC20_TOKEN_ASSET_BASE_URI": {
+        "Mainnet": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/assets"],
+        "Ropsten": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ropsten/assets"],
+        "Rinkeby": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/rinkeby/assets"],
+        "Kovan": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/kovan/assets"],
+        "Gorli": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/gorli/assets"],
+        "BSC": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/bnb/assets"],
+        "BSCT": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/chapel/assets"],
+        "Matic": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/polygon/assets"],
+        "Mumbai": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/mumbai/assets"],
+        "Arbitrum": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/arbitrum/assets"],
+        "Arbitrum_Rinkeby": [],
+        "xDai": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/xdai/assets"],
+        "Optimism": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/optimism/assets"],
+        "Optimism_Kovan": [],
+        "Optimism_Goerli": [],
+        "Avalanche": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/avalanchec/assets"],
+        "Avalanche_Fuji": [],
+        "Celo": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/celo/assets"],
+        "Fantom": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/fantom/assets"],
+        "Aurora": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/aurora/assets"],
+        "Aurora_Testnet": [],
+        "Conflux": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/conflux/assets"],
+        "Harmony": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/harmony/assets"],
+        "Harmony_Test": [],
+        "Astar": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/astar/assets"]
     }
 }

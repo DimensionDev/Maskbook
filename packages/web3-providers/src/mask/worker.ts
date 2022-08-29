@@ -4,6 +4,7 @@ import type { MaskBaseAPI } from '../types'
 const promise = (async () => {
     const { request, default: init } = await import('@dimensiondev/mask-wallet-core/web')
     const { api } = await import('@dimensiondev/mask-wallet-core/proto')
+    // @ts-ignore
     await init()
     return { request, api }
 })()

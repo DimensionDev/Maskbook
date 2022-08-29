@@ -17,6 +17,7 @@ import type {
     OthersState,
     IdentityServiceState,
     HubState,
+    Web3StorageServiceState,
 } from '@masknet/web3-shared-base'
 import type { Plugin } from './types'
 
@@ -30,6 +31,7 @@ export declare namespace Web3Plugin {
             Signature,
             GasOption,
             Block,
+            Operation,
             Transaction,
             TransactionReceipt,
             TransactionDetailed,
@@ -56,6 +58,7 @@ export declare namespace Web3Plugin {
                 ProviderType,
                 Signature,
                 Block,
+                Operation,
                 Transaction,
                 TransactionReceipt,
                 TransactionDetailed,
@@ -66,6 +69,7 @@ export declare namespace Web3Plugin {
             Provider?: ProviderState<ChainId, ProviderType, NetworkType>
             Wallet?: WalletState
             Others?: OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction>
+            Storage?: Web3StorageServiceState
         }
     }
     export namespace UI {

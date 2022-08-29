@@ -3,9 +3,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { Controller, useForm } from 'react-hook-form'
-import { formatGweiToEther, formatGweiToWei, useTokenConstants } from '@masknet/web3-shared-evm'
+import { ActionButton } from '@masknet/theme'
+import { formatGweiToEther, formatGweiToWei, formatWeiToEther, useTokenConstants } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
-import { LoadingButton } from '@mui/lab'
 import BigNumber from 'bignumber.js'
 import { isEmpty, noop } from 'lodash-unified'
 // import { StyledInput } from '../../../../extension/popups/components/StyledInput'
@@ -23,7 +23,7 @@ import {
     NetworkPluginID,
     toFixed,
 } from '@masknet/web3-shared-base'
-import { useChainId, useFungibleTokenBalance, useGasOptions } from '@masknet/plugin-infra/web3'
+import { useChainId, useFungibleTokenPrice, useGasOptions } from '@masknet/plugin-infra/web3'
 
 const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 
@@ -35,7 +35,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
         const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
 
         const [selectedGasOption, setGasOptionType] = useState<GasOptionType | null>(gasOptionType)
-        const { value: nativeTokenPrice = 0 } = useFungibleTokenBalance(
+        const { value: nativeTokenPrice = 0 } = useFungibleTokenPrice(
             NetworkPluginID.PLUGIN_EVM,
             NATIVE_TOKEN_ADDRESS,
             {
@@ -209,7 +209,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                                     usd: formatGweiToEther(content?.suggestedMaxFeePerGas ?? 0)
                                         .times(nativeTokenPrice)
                                         .times(21000)
-                                        .toPrecision(3),
+                                        .toFixed(2),
                                 })}
                             </Typography>
                         </div>
@@ -245,10 +245,10 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                         </Typography>
                         <Typography component="span" className={classes.price}>
                             {t('popups_wallet_gas_fee_settings_usd', {
-                                usd: formatGweiToEther(Number(maxPriorityFeePerGas) ?? 0)
+                                usd: formatWeiToEther(Number(maxPriorityFeePerGas) ?? 0)
                                     .times(nativeTokenPrice)
                                     .times(inputGasLimit || 1)
-                                    .toPrecision(3),
+                                    .toFixed(2),
                             })}
                         </Typography>
                     </Typography>
@@ -280,10 +280,10 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                         </Typography>
                         <Typography component="span" className={classes.price}>
                             {t('popups_wallet_gas_fee_settings_usd', {
-                                usd: formatGweiToEther(Number(maxFeePerGas) ?? 0)
+                                usd: formatWeiToEther(Number(maxFeePerGas) ?? 0)
                                     .times(nativeTokenPrice)
                                     .times(inputGasLimit || 1)
-                                    .toPrecision(3),
+                                    .toFixed(2),
                             })}
                         </Typography>
                     </Typography>
@@ -309,14 +309,14 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                         name="maxFeePerGas"
                     />
                 </form>
-                <LoadingButton
+                <ActionButton
                     loading={getGasOptionsLoading}
                     fullWidth
                     className={classes.button}
                     disabled={!isEmpty(errors)}
                     onClick={onSubmit}>
                     {t('confirm')}
-                </LoadingButton>
+                </ActionButton>
             </>
         )
     },

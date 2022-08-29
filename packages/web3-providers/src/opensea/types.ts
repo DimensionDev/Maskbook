@@ -1,3 +1,13 @@
+export enum EventType {
+    Successful = 'successful',
+    Cancelled = 'cancelled',
+    BidEntered = 'bid_entered',
+    BidWithdrawn = 'bid_withdrawn',
+    Transfer = 'transfer',
+    OfferEntered = 'offer_entered',
+    Approve = 'approve',
+}
+
 export interface OpenSeaFees {
     opensea_seller_fee_basis_points: number
     opensea_buyer_fee_basis_points: number
@@ -14,15 +24,6 @@ export interface Asset {
     decimals?: number
 }
 
-export interface AssetOwner {
-    address: string
-    profile_img_url?: string
-    user?: {
-        username: string
-    }
-    link: string
-}
-
 export interface AssetToken {
     image_url?: string
     eth_price?: string
@@ -37,8 +38,8 @@ export interface AssetOrder {
     created_time?: string
     current_price?: string
     current_bounty?: string
-    maker_account?: AssetOwner
-    taker_account?: AssetOwner
+    maker_account?: OrderAccount
+    taker_account?: OrderAccount
     payment_token?: string
     payment_token_contract?: AssetToken
     fee_recipient_account?: AssetToken
@@ -71,8 +72,8 @@ export interface OpenSeaAssetContract extends OpenSeaFees {
     address: string
     asset_contract_type: string
     schema_name: string
-    seller_fee_basis_points: number
-    buyer_fee_basis_points: number
+    seller_fee_basis_points: string
+    buyer_fee_basis_points: string
     description: string
     symbol: string
     image_url: string
@@ -122,7 +123,29 @@ export interface OpenSeaCollection extends OpenSeaFees {
     image_url: string
     largeImage_url: string
     featured_image_url: string
-    stats: object
+    stats: {
+        average_price: number
+        count: number
+        floor_price: number
+        market_cap: number
+        num_owners: number
+        num_reports: number
+        one_day_average_price: number
+        one_day_change: number
+        one_day_sales: number
+        one_day_volume: number
+        seven_day_average_price: number
+        seven_day_change: number
+        seven_day_sales: number
+        seven_day_volume: number
+        thirty_day_average_price: number
+        thirty_day_change: number
+        thirty_day_sales: number
+        thirty_day_volume: number
+        total_sales: number
+        total_supply: number
+        total_volume: number
+    }
     display_data: object
     payment_tokens: OpenSeaFungibleToken[]
     payout_address?: string
@@ -139,16 +162,13 @@ export interface OpenSeaCollection extends OpenSeaFees {
     }>
 }
 
-export interface OpenSeaResponse extends Asset {
+export interface OpenSeaAssetResponse extends Asset {
     animation_url: string
     asset_contract: OpenSeaAssetContract
     collection: OpenSeaCollection
     name: string
     description: string
     owner: OpenSeaCustomAccount
-    orders: AssetOrder[] | null
-    buy_orders: AssetOrder[] | null
-    sell_orders: AssetOrder[] | null
     is_presale: boolean
     image_url: string
     image_preview_url: string
@@ -157,8 +177,9 @@ export interface OpenSeaResponse extends Asset {
     opensea_link: string
     external_link: string
     traits: Array<{
-        trait_type: string
         value: string
+        trait_type: string
+        trait_count: number
     }>
     num_sales: number
     last_sale: AssetEvent | null
@@ -172,18 +193,6 @@ export interface OpenSeaResponse extends Asset {
     creator: OpenSeaCustomAccount
     endTime: string
     permalink: string
-}
-
-interface Transaction {
-    from_account: OpenSeaCustomAccount
-    to_account: OpenSeaCustomAccount
-    created_date: string
-    modified_date: string
-    transaction_hash: string
-    transaction_index: string
-    block_number: string
-    block_hash: string
-    timestamp: number
 }
 
 export interface OpenSeaAssetEvent {
@@ -204,7 +213,7 @@ export interface OpenSeaAssetEvent {
         }
         permalink: string
     }
-    payment_token: OpenSeaFungibleToken
+    payment_token?: OpenSeaFungibleToken
     quantity: string
     ending_price: string
     bid_amount?: string
@@ -226,30 +235,69 @@ export interface OpenSeaAssetEvent {
     created_date: string
 }
 
+export interface OrderAccount {
+    user: number
+    address: string
+    profile_img_url?: string
+    config: string
+}
+
+export interface OrderFee {
+    account: OrderAccount
+    basis_points: string
+}
+
+export interface OrderConsideration {
+    itemType: number
+    token: string
+    identifierOrCriteria: string
+    startAmount: string
+    endAmount: string
+    recipient: string
+}
+
+export interface OrderProtocol {
+    parameters: {
+        offerer: string
+        offer: OrderConsideration[]
+        consideration: OrderConsideration[]
+        startTime: string
+        endTime: string
+        orderType: number
+        zone: string
+        zoneHash: string
+        salt: string
+        conduitKey: string
+        totalOriginalConsiderationItems: number
+        counter: number
+    }
+}
+
+export interface OrderAssetBundle {}
+
 export interface OpenSeaAssetOrder {
-    asset: OpenSeaResponse
-    listing_time: number
-    created_time?: string
-
-    base_price?: string
+    created_date?: string
+    closing_data?: string
+    listing_time?: number
+    expiration_time?: number
+    order_hash: string
+    protocol_data: OrderProtocol
+    protocol_address: string
+    maker?: OrderAccount
+    maker_asset_bundle?: OrderAssetBundle
+    taker?: OrderAccount
+    taker_asset_bundle?: OrderAssetBundle
     current_price?: string
-    current_bounty?: string
-    maker: OpenSeaCustomAccount
-    taker: OpenSeaCustomAccount
-
-    payment_token?: string
-    payment_token_contract?: AssetToken
-    fee_recipient?: AssetToken
-
+    maker_fees: OrderFee[]
+    taker_fees: OrderFee[]
+    side: 'bid' | 'sell'
+    order_type: 'criteria'
     cancelled?: boolean
     finalized?: boolean
-
     marked_invalid?: boolean
-
-    side: number
-    quantity: string
-    expiration_time: number
-    order_hash: string
+    client_signature: string
+    relay_id: string
+    criteria_proof?: string
 }
 
 export interface OpenSeaCollectionStats {

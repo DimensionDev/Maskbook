@@ -517,8 +517,6 @@
     "plugin_ito_region_ban": "这个池被禁止对您所在区域开放",
     "plugin_ito_next": "下一步",
     "plugin_ito_back": "返回",
-    "plugin_ito_transaction_dialog_summary_with_no_token": "创建一个ITO。",
-    "plugin_ito_transaction_dialog_summary": "使用 {{amount}} {{symbol}} 创建一个 ITO",
     "plugin_ito_swap": "兑换",
     "plugin_ito_send_tip": "您可以在历史标签页中找到您过去的 ITO。",
     "plugin_ito_send_text": "发送 {{total}} {{symbol}}",

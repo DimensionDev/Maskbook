@@ -1,9 +1,8 @@
 import { Button, ListItemIcon, MenuItem } from '@mui/material'
-import { memo } from 'react'
-import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
+import { memo } from 'react'
 import { useI18N } from '../../i18n-next-ui'
-import { resolveNextIdPlatformPluginId, NetworkPluginID } from '@masknet/web3-shared-base'
+import { resolveNextID_NetworkPluginID, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { NextIDPlatform } from '@masknet/shared-base'
 import { useWalletName } from './hooks/useWalletName'
 import {
@@ -17,14 +16,6 @@ import {
 } from '@masknet/plugin-infra/web3'
 import { WalletDescription, WalletDescriptionProps } from './WalletDescription'
 
-const useStyles = makeStyles()((theme) => ({
-    icon: {
-        fontSize: 24,
-        width: 24,
-        height: 24,
-    },
-}))
-
 interface WalletMenuItemProps {
     onSelect?: (value: WalletDescriptionProps, chainId: Web3Helper.ChainIdAll, pluginId: NetworkPluginID) => void
     address: string
@@ -36,10 +27,9 @@ interface WalletMenuItemProps {
 
 export const WalletMenuItem = memo<WalletMenuItemProps>(
     ({ address, selected, onChangeWallet, platform, onSelect, verified }) => {
-        const { classes } = useStyles()
         const { t } = useI18N()
 
-        const pluginId = useCurrentWeb3NetworkPluginID(platform ? resolveNextIdPlatformPluginId(platform) : undefined)
+        const pluginId = useCurrentWeb3NetworkPluginID(platform ? resolveNextID_NetworkPluginID(platform) : undefined)
         const currentChainId = useChainId()
         const defaultChainId = useDefaultChainId(pluginId)
         const chainId = platform ? defaultChainId : currentChainId
@@ -66,14 +56,15 @@ export const WalletMenuItem = memo<WalletMenuItemProps>(
 
         return (
             <MenuItem value={address} onClick={() => onSelect?.(descriptionProps, chainId, pluginId)}>
+                {/* TODO: replace to radio */}
                 <ListItemIcon>
                     {selected ? (
-                        <Icons.Checked
-                            className={classes.icon}
+                        <Icons.RadioButtonChecked
+                            size={24}
                             style={{ filter: 'drop-shadow(0px 0px 6px rgba(28, 104, 243, 0.6))' }}
                         />
                     ) : (
-                        <Icons.Unchecked className={classes.icon} />
+                        <Icons.RadioButtonUnChecked size={24} />
                     )}
                 </ListItemIcon>
                 <WalletDescription {...descriptionProps} />

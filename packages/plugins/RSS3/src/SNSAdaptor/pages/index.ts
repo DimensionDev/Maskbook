@@ -1,2 +1,3 @@
 export * from './DonationsPage'
-export * from './FootprintPage'
+export * from './FeedsPage'
+export * from './FootprintsPage'

@@ -1,17 +1,19 @@
-import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { Typography } from '@mui/material'
+import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
+import { NFTCardStyledAssetPlayer } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
+import type { RSS3BaseAPI } from '@masknet/web3-providers'
+import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
+import { Card, Typography } from '@mui/material'
 import classnames from 'classnames'
-import { HTMLProps, Fragment } from 'react'
+import formatDateTime from 'date-fns/format'
+import { HTMLProps, memo } from 'react'
+import { RSS3_DEFAULT_IMAGE } from '../../constants'
 import { useI18N } from '../../locales'
 
-export interface DonationCardProps extends HTMLProps<HTMLDivElement> {
-    imageUrl: string
-    name: string
-    contribCount: number
-    contribDetails: Array<{
-        token: string
-        amount: string
-    }>
+export interface DonationCardProps extends Omit<HTMLProps<HTMLDivElement>, 'onSelect'> {
+    donation: RSS3BaseAPI.Collection
+    socialAddress: SocialAddress<NetworkPluginID>
+    onSelect: (donation: RSS3BaseAPI.Collection) => void
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -19,85 +21,105 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 8,
         display: 'flex',
         flexDirection: 'row',
-        backgroundColor: MaskColorVar.twitterBg,
-        padding: theme.spacing(1),
         flexGrow: 1,
         alignItems: 'stretch',
+        padding: 3,
+        cursor: 'pointer',
     },
     cover: {
         flexShrink: 1,
-        height: 90,
-        width: 90,
+        height: 126,
+        width: 126,
         borderRadius: 8,
         objectFit: 'cover',
     },
-    title: {
-        color: theme.palette.text.primary,
-        fontSize: 16,
+    date: {
+        color: theme.palette.maskColor.main,
+        fontSize: 14,
+        fontWeight: 400,
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
     },
     info: {
-        flexGrow: 1,
-        marginLeft: theme.spacing(1),
+        marginTop: 15,
+        marginLeft: '12px',
         fontSize: 16,
-        display: 'flex',
-        overflow: 'hidden',
-        flexDirection: 'column',
-        justifyContent: 'space-around',
-        fontFamily: '-apple-system,system-ui,sans-serif',
     },
     infoRow: {
-        whiteSpace: 'nowrap',
+        marginBottom: 8,
         overflow: 'hidden',
         textOverflow: 'ellipsis',
     },
-    infoLabel: {
-        color: theme.palette.text.primary,
+    activity: {
+        fontSize: 14,
+        fontWeight: 400,
+        fontColor: theme.palette.maskColor.main,
     },
-    infoValue: {
-        color: theme.palette.text.secondary,
+    fontColor: {
+        color: theme.palette.maskColor.primary,
+    },
+    tokenInfoColor: {
+        color: theme.palette.maskColor.main,
+    },
+    img: {
+        width: '126px !important',
+        height: '126px !important',
+        borderRadius: '8px',
+        objectFit: 'cover',
+    },
+    fallbackImage: {
+        minHeight: '0 !important',
+        maxWidth: 'none',
+        width: 64,
+        height: 64,
     },
 }))
 
-export const DonationCard = ({
-    imageUrl,
-    name,
-    contribCount,
-    contribDetails,
-    className,
-    ...rest
-}: DonationCardProps) => {
+export const DonationCard = memo(({ donation, socialAddress, onSelect, className, ...rest }: DonationCardProps) => {
     const { classes } = useStyles()
     const t = useI18N()
+    const { value: domain } = useReverseAddress(socialAddress.networkSupporterPluginID, socialAddress.address)
+    const { Others } = useWeb3State(socialAddress.networkSupporterPluginID)
+    const reversedAddress =
+        !domain || !Others?.formatDomainName
+            ? Others?.formatAddress?.(socialAddress.address, 5) ?? socialAddress.address
+            : Others.formatDomainName(domain)
+
+    const date = donation.timestamp ? formatDateTime(new Date(donation.timestamp), 'MMM dd, yyyy') : '--'
+
     return (
-        <div className={classnames(classes.card, className)} {...rest}>
-            <img className={classes.cover} src={imageUrl} alt={name} />
-            <dl className={classes.info}>
-                <dt className={classes.infoRow}>
-                    <Typography
-                        variant="h6"
-                        color="textPrimary"
-                        fontWeight={600}
-                        className={classes.title}
-                        title={name}>
-                        {name}
+        <div onClick={() => onSelect(donation)} className={classnames(classes.card, className)} {...rest}>
+            <section className="flex flex-row flex-shrink-0 w-max h-max">
+                <Card className={classes.img}>
+                    <NFTCardStyledAssetPlayer
+                        url={donation.imageURL || RSS3_DEFAULT_IMAGE}
+                        classes={{
+                            fallbackImage: classes.fallbackImage,
+                            wrapper: classes.img,
+                            iframe: classes.img,
+                        }}
+                    />
+                </Card>
+            </section>
+
+            <div className={classes.info}>
+                <div className={classes.infoRow}>
+                    <Typography className={classes.date} title={date}>
+                        {date}
                     </Typography>
-                </dt>
-                <dd className={classes.infoRow}>
-                    <span className={classes.infoLabel}>{contribCount}</span>
-                    <span className={classes.infoValue}> {t.contribution({ count: contribCount })}</span>
-                </dd>
-                <dd className={classes.infoRow}>
-                    {contribDetails.map((contrib, i) => (
-                        <Fragment key={i}>
-                            <span className={classes.infoLabel}>{contrib.amount}</span>
-                            <span className={classes.infoValue}> {contrib.token} </span>
-                        </Fragment>
-                    ))}
-                </dd>
-            </dl>
+                </div>
+                <div className={classes.infoRow}>
+                    <Typography className={classes.activity}>
+                        <span className={classes.fontColor}>{reversedAddress}</span>{' '}
+                        <span className={classes.fontColor}>{t.contributed()}</span>{' '}
+                        <span className={classes.tokenInfoColor}>{donation.tokenAmount?.toString()}</span>
+                        <span className={classes.tokenInfoColor}>{donation.tokenSymbol ?? 'ETH'}</span>{' '}
+                        <span className={classes.fontColor}>{t.to()}</span>{' '}
+                        <span className={classes.tokenInfoColor}>{donation.title}</span>
+                    </Typography>
+                </div>
+            </div>
         </div>
     )
-}
+})

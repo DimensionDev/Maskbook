@@ -1,12 +1,12 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { useState, useEffect, useCallback } from 'react'
-import { useNextIDConnectStatus } from '../../../../components/DataSource/useNextIDConnectStatus'
-import { usePersonaConnectStatus } from '../../../../components/DataSource/usePersonaConnectStatus'
-import { NFTAvatarDialog } from '../../../../plugins/Avatar/Application/NFTAvatarsDialog'
+import { useState, useEffect } from 'react'
 import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
 import { startWatch, createReactRootShadowed, useLocationChange } from '../../../../utils'
 import { searchEditProfileSelector } from '../../utils/selector'
+import { ConnectPersonaBoundary } from '../../../../components/shared/ConnectPersonaBoundary'
+import { PluginId } from '@masknet/plugin-infra'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchEditProfileSelector())
@@ -50,25 +50,6 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
         border: 'none',
         color: '',
     })
-    const [open, setOpen] = useState(false)
-
-    const personaConnectStatus = usePersonaConnectStatus()
-    const nextIDConnectStatus = useNextIDConnectStatus()
-
-    const createOrConnectPersona = useCallback(() => {
-        personaConnectStatus.action?.()
-    }, [personaConnectStatus])
-
-    const verifyPersona = useCallback(() => {
-        nextIDConnectStatus.reset()
-    }, [nextIDConnectStatus])
-
-    const clickHandler = () => {
-        if (!personaConnectStatus.hasPersona || !personaConnectStatus.connected) return createOrConnectPersona()
-        if (!nextIDConnectStatus.isVerified) return verifyPersona()
-        setOpen(true)
-        return
-    }
 
     const setStyleFromEditProfileSelector = () => {
         const editDom = searchEditProfileSelector().evaluate()
@@ -89,11 +70,17 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
 
     useLocationChange(() => setStyleFromEditProfileSelector())
 
+    const clickHandler = () => {
+        CrossIsolationMessages.events.requestOpenApplication.sendToLocal({
+            open: true,
+            application: PluginId.Avatar,
+        })
+    }
+
     const { classes } = useStyles(style)
     return (
-        <>
+        <ConnectPersonaBoundary handlerPosition="top-right" customHint directTo={PluginId.Avatar}>
             <NFTAvatarButton classes={{ root: classes.root, text: classes.text }} onClick={clickHandler} />
-            <NFTAvatarDialog open={open} onClose={() => setOpen(false)} />
-        </>
+        </ConnectPersonaBoundary>
     )
 }

@@ -18,10 +18,11 @@ import type { FungibleTokenDetailed } from '../types'
 import { FungibleTokenList } from './shared-ui/FungibleTokenList'
 
 import { useSharedStyles } from './styles'
+import { useRowSize } from '../../../../../shared/src/contexts/components/useRowSize'
 
 const DISABLED_NATIVE_TOKEN = true
 
-const useStyles = makeStyles()(() => ({
+const useStyles = makeStyles()((theme) => ({
     dialog: {
         maxWidth: 600,
         boxShadow: 'none',
@@ -32,6 +33,10 @@ const useStyles = makeStyles()(() => ({
             overflow: 'inherit!important',
         },
     },
+    wrapper: {
+        paddingTop: theme.spacing(2),
+        paddingBottom: theme.spacing(6),
+    },
 }))
 
 export function SelectToken() {
@@ -39,6 +44,7 @@ export function SelectToken() {
     const t = useI18N()
     const { classes: sharedClasses } = useSharedStyles()
     const { classes } = useStyles()
+    const rowSize = useRowSize()
 
     const [title, setTitle] = useState('')
     const [id, setId] = useState('')
@@ -104,7 +110,7 @@ export function SelectToken() {
                         whitelist={onlyFarmTokens ? referredTokens : undefined}
                         loading={loading}
                         referredTokensDefn={referredTokensDefn}
-                        FixedSizeListProps={{ height: 340, itemSize: 54 }}
+                        FixedSizeListProps={{ itemSize: rowSize + 22, height: 428, className: classes.wrapper }}
                         onSelect={onSubmit}
                         blacklist={DISABLED_NATIVE_TOKEN ? [NATIVE_TOKEN] : []}
                     />

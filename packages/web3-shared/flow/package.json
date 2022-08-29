@@ -3,11 +3,12 @@
   "private": true,
   "exports": {
     ".": {
-      "webpack": "./index.ts",
-      "default": "../dist/flow/index.js"
+      "types": "./dist/index.d.js",
+      "webpack": "./src/index.ts",
+      "default": "./dist/index.js"
     }
   },
-  "types": "./dist/index.d.ts",
+  "types": "./dist/index.d.js",
   "dependencies": {
     "@blocto/fcl": "^0.0.78-alpha.10",
     "@masknet/shared-base": "workspace:*",

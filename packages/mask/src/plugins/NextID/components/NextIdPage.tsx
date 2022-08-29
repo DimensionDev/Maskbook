@@ -1,21 +1,21 @@
-import { Icons } from '@masknet/icons'
 import { PluginId, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import { useChainId } from '@masknet/plugin-infra/web3'
 import { NextIDPlatform, PopupRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
 import { Box, Button, Link, Skeleton, Stack, Typography } from '@mui/material'
 import { useMemo, useState } from 'react'
-import { useAsync, useAsyncRetry } from 'react-use'
+import { useAsyncRetry } from 'react-use'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
-import { useNextIDConnectStatus } from '../../../components/DataSource/useNextIDConnectStatus'
-import { usePersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
+import { useCurrentPersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
 import Services from '../../../extension/service'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { useI18N } from '../locales'
 import { BindDialog } from './BindDialog'
 import type { LiveSelector } from '@dimensiondev/holoflows-kit'
 import { searchAllProfileTabSelector } from '../../../social-network-adaptor/twitter.com/utils/selector'
+import { Icons } from '@masknet/icons'
+import { PluginEnableBoundary } from '../../../components/shared/PluginEnableBoundary'
+import { ConnectPersonaBoundary } from '../../../components/shared/ConnectPersonaBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     tip: {
@@ -60,9 +60,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     container: {
         background:
-            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(249, 55, 55, 0.2) 100%), #FFFFFF;',
-        borderRadius: '16px',
-        padding: '14px',
+            'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(45, 41, 253, 0.2) 100%), #FFFFFF;',
+        padding: '14px 14px 16px 14px ',
+        height: '166px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
     },
     verifyIntro: {
         fontSize: '14px',
@@ -80,39 +83,48 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.grey[700],
     },
     skeleton: {
-        borderRadius: 8,
-        margin: theme.spacing(1),
         marginTop: 0,
         backgroundColor: theme.palette.background.default,
         height: '196px',
-    },
-    walletIcon: {
-        fontSize: 18,
-        marginRight: 8,
     },
     web3Icon: {
         marginRight: 6,
         marginTop: 2,
     },
+    walletIcon: {
+        marginRight: 8,
+        color: theme.palette.maskColor.white,
+    },
     item1: {
-        color: '#767f8d',
-        fontSize: '14',
+        color: theme.palette.maskColor.secondaryDark,
+        fontSize: '14px',
         fontWeight: 400,
     },
     item2: {
-        color: '#07101B',
-        fontSize: '14',
+        color: theme.palette.maskColor.dark,
+        fontSize: '14px',
         fontWeight: 500,
         marginLeft: '2px',
     },
     button: {
         borderRadius: '99px',
-        backgroundColor: '#07101b',
-        color: '#fff',
+        backgroundColor: theme.palette.maskColor.dark,
+        color: theme.palette.maskColor.white,
+        marginTop: 'auto',
         ':hover': {
-            color: 'fff',
-            backgroundColor: '#07101b',
+            color: theme.palette.maskColor.white,
+            backgroundColor: theme.palette.maskColor.dark,
         },
+    },
+    content: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontSize: '14px',
+        fontWeight: 400,
+    },
+    linkOutIcon: {
+        color: theme.palette.maskColor.secondaryDark,
     },
 }))
 
@@ -124,28 +136,17 @@ export const TAB_SELECTOR: { [key: string]: LiveSelector<HTMLElement, true> } = 
     twitter: searchAllProfileTabSelector(),
 }
 
-export function NextIdPage({ persona }: NextIdPageProps) {
+export function NextIdPage() {
     const t = useI18N()
     const { classes } = useStyles()
+
     const currentProfileIdentifier = useLastRecognizedIdentity()
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
-    const personaConnectStatus = usePersonaConnectStatus()
-    const { reset, isVerified } = useNextIDConnectStatus()
-    const chainId = useChainId()
+    const { value: personaConnectStatus, loading: statusLoading } = useCurrentPersonaConnectStatus()
 
     const [openBindDialog, toggleBindDialog] = useState(false)
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
     const isOwn = currentProfileIdentifier.identifier === visitingPersonaIdentifier.identifier
-
-    const personaActionButton = useMemo(() => {
-        if (!personaConnectStatus.action) return null
-        const button = personaConnectStatus.hasPersona ? t.connect_persona() : t.create_persona()
-        return (
-            <Button className={classes.button} onClick={personaConnectStatus.action}>
-                {button}
-            </Button>
-        )
-    }, [personaConnectStatus, t])
 
     const { value: currentPersona, loading: loadingPersona } = useAsyncRetry(async () => {
         if (!visitingPersonaIdentifier?.identifier) return
@@ -153,17 +154,21 @@ export function NextIdPage({ persona }: NextIdPageProps) {
     }, [visitingPersonaIdentifier, personaConnectStatus.hasPersona])
     const publicKeyAsHex = currentPersona?.identifier.publicKeyAsHex
 
-    const { value: isAccountVerified, loading: loadingVerifyInfo } = useAsync(async () => {
-        if (!publicKeyAsHex) return
-        if (!visitingPersonaIdentifier.identifier) return
-        return NextIDProof.queryIsBound(
-            publicKeyAsHex,
-            platform,
-            visitingPersonaIdentifier.identifier.userId?.toLowerCase(),
-        )
-    }, [publicKeyAsHex, visitingPersonaIdentifier, isVerified])
-
     const isWeb3ProfileDisable = useIsMinimalMode(PluginId.Web3Profile)
+
+    const description = useMemo(() => {
+        if (!isOwn) {
+            return t.others_lack_wallet()
+        }
+        if (isWeb3ProfileDisable) return ''
+        if (!personaConnectStatus.hasPersona) {
+            return t.create_persona_intro()
+        }
+        if (personaConnectStatus.verified) {
+            return t.add_wallet_intro()
+        }
+        return ''
+    }, [personaConnectStatus, isOwn, t, isWeb3ProfileDisable])
 
     const {
         value: bindings,
@@ -174,63 +179,65 @@ export function NextIdPage({ persona }: NextIdPageProps) {
         return NextIDProof.queryExistedBindingByPersona(publicKeyAsHex)
     }, [publicKeyAsHex])
 
-    const onVerify = async () => {
-        reset()
+    const handleBeforeVerify = async () => {
         const firstTab = TAB_SELECTOR?.[platform]?.evaluate()?.querySelector('div')?.parentNode
             ?.firstChild as HTMLElement
         firstTab.click()
     }
 
-    const onEnablePlugin = async () => {
-        await Services.Settings.setPluginMinimalModeEnabled(PluginId.Web3Profile, false)
-    }
-
     const handleAddWallets = () => {
         Services.Helper.openPopupWindow(PopupRoutes.ConnectedWallets, {
-            chainId,
             internal: true,
         })
     }
 
-    const getButton = () => {
-        if (isWeb3ProfileDisable) {
-            return (
-                <Button className={classes.button} variant="contained" onClick={onEnablePlugin}>
-                    <Icons.Plugin />
-                    <Typography marginLeft="9px">{t.enable_plugin()}</Typography>
-                </Button>
-            )
-        }
-        if (personaActionButton && isOwn) {
-            return personaActionButton
-        }
-        if (!isAccountVerified) {
-            return (
-                <Button className={classes.button} variant="contained" onClick={onVerify}>
-                    <Icons.Verified />
-                    {t.verify_Twitter_ID_button()}
-                </Button>
-            )
-        }
-        return (
-            <Button className={classes.button} variant="contained" onClick={handleAddWallets}>
-                <Icons.WalletUnderTabs className={classes.walletIcon} />
-                {t.add_wallet_button()}
-            </Button>
-        )
-    }
+    const getButton = useMemo(() => {
+        if (!isOwn) return null
 
-    if (loadingBindings || loadingPersona || loadingVerifyInfo) {
         return (
-            <>
-                {Array.from({ length: 2 })
-                    .fill(0)
-                    .map((_, i) => (
-                        <div key={i}>
-                            <Skeleton className={classes.skeleton} animation="wave" variant="rectangular" />
-                        </div>
-                    ))}
-            </>
+            <PluginEnableBoundary pluginId={PluginId.Web3Profile}>
+                <ConnectPersonaBoundary handlerPosition="top-right" customHint beforeVerify={handleBeforeVerify}>
+                    {(s) => {
+                        if (!s.hasPersona)
+                            return (
+                                <Button disabled={statusLoading} className={classes.button}>
+                                    <Icons.Identity size={18} sx={{ marginRight: '8px' }} />
+                                    {t.create_persona()}
+                                </Button>
+                            )
+                        if (!s.connected)
+                            return (
+                                <Button disabled={statusLoading} className={classes.button}>
+                                    <Icons.Connect size={18} sx={{ marginRight: '8px' }} />
+                                    {t.connect_persona()}
+                                </Button>
+                            )
+
+                        if (!s.verified)
+                            return (
+                                <Button disabled={statusLoading} className={classes.button}>
+                                    <Icons.Connect size={18} sx={{ marginRight: '8px' }} />
+                                    {t.verify_Twitter_ID_button()}
+                                </Button>
+                            )
+
+                        return (
+                            <Button className={classes.button} variant="contained" onClick={handleAddWallets}>
+                                <Icons.WalletUnderTabs size={16} className={classes.walletIcon} />
+                                {t.add_wallet_button()}
+                            </Button>
+                        )
+                    }}
+                </ConnectPersonaBoundary>
+            </PluginEnableBoundary>
+        )
+    }, [isOwn, t, statusLoading, handleBeforeVerify, handleAddWallets])
+
+    if (loadingBindings || loadingPersona) {
+        return (
+            <div>
+                <Skeleton className={classes.skeleton} animation="wave" variant="rectangular" />
+            </div>
         )
     }
 
@@ -255,18 +262,14 @@ export function NextIdPage({ persona }: NextIdPageProps) {
                             href="https://mask.io/"
                             width="22px"
                             height="22px"
-                            style={{ alignSelf: 'center' }}>
-                            <Icons.NewLinkOut />
+                            style={{ alignSelf: 'center', marginLeft: '4px' }}>
+                            <Icons.LinkOut size={16} className={classes.linkOutIcon} />
                         </Link>
                     </div>
                 </Box>
-                <div style={{ marginTop: '24px' }}>
-                    <div className={classes.longBar} />
-                    <div className={classes.middleBar} />
-                    <div className={classes.shortBar} />
-                </div>
-                <Stack justifyContent="center" direction="row" mt="24px">
-                    {getButton()}
+                <Typography className={classes.content}>{description}</Typography>
+                <Stack justifyContent="center" direction="row">
+                    {getButton}
                 </Stack>
             </Box>
             {openBindDialog && currentPersona && isOwn && (

@@ -25,7 +25,7 @@ import { WalletDescription } from './WalletDescription'
 import {
     isSameAddress,
     NetworkPluginID,
-    resolveNextIdPlatformPluginId,
+    resolveNextID_NetworkPluginID,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
 import { WalletMenuItem } from './WalletMenuItem'
@@ -37,10 +37,11 @@ interface PluginVerifiedWalletStatusBarProps extends PropsWithChildren<{}> {
     verifiedWallets: BindingProof[]
     className?: string
     onChange?: (address: string, pluginId: NetworkPluginID, chainId: Web3Helper.ChainIdAll) => void
+    expectedAddress: string
 }
 
 export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarProps>(
-    ({ className, children, verifiedWallets, onChange }) => {
+    ({ className, children, verifiedWallets, onChange, expectedAddress }) => {
         const { t } = useI18N()
 
         const account = useAccount()
@@ -66,20 +67,25 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
 
         const currentPluginId = useCurrentWeb3NetworkPluginID()
 
-        const defaultVerifiedWallet = first(wallets)
+        const selectedWallet = wallets.find((x) => isSameAddress(x.identity, expectedAddress))
+
+        const defaultVerifiedWallet = selectedWallet ?? first(wallets)
 
         // Whether the current account is verified
         const isVerifiedAccount = verifiedWallets.some((x) => isSameAddress(x.identity, account))
 
         const pluginIdByDefaultVerifiedWallet = defaultVerifiedWallet
-            ? resolveNextIdPlatformPluginId(defaultVerifiedWallet?.platform)
+            ? resolveNextID_NetworkPluginID(defaultVerifiedWallet?.platform)
             : undefined
 
-        const defaultPluginId = account ? currentPluginId : pluginIdByDefaultVerifiedWallet
+        const isNextIdWallet = !account || !isSameAddress(account, expectedAddress)
+
+        const defaultPluginId = isNextIdWallet ? pluginIdByDefaultVerifiedWallet : currentPluginId
+
         const defaultWalletName = useWalletName(
-            account ? account : defaultVerifiedWallet?.identity,
+            isNextIdWallet ? defaultVerifiedWallet?.identity : account,
             defaultPluginId,
-            !account,
+            isNextIdWallet,
         )
 
         const { Others } = useWeb3State(defaultPluginId)
@@ -91,19 +97,21 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
 
         const pendingTransactions = useRecentTransactions(currentPluginId, TransactionStatusType.NOT_DEPEND)
 
+        // actual address
+        const walletIdentity = !isNextIdWallet ? account : defaultVerifiedWallet?.identity
+
         const description = useMemo(
             () => ({
                 name: defaultWalletName,
                 networkIcon: networkDescriptor?.icon,
-                providerIcon: account ? providerDescriptor?.icon : undefined,
-                iconFilterColor: account ? providerDescriptor?.iconFilterColor : '',
-                formattedAddress: Others?.formatAddress(account || (defaultVerifiedWallet?.identity ?? ''), 4),
-                addressLink: Others?.explorerResolver.addressLink?.(
-                    account ? chainId : defaultChainId,
-                    account || (defaultVerifiedWallet?.identity ?? ''),
-                ),
-                address: account || defaultVerifiedWallet?.identity,
-                verified: account ? isVerifiedAccount : true,
+                providerIcon: !isNextIdWallet ? providerDescriptor?.icon : undefined,
+                iconFilterColor: !isNextIdWallet ? providerDescriptor?.iconFilterColor : '',
+                formattedAddress: walletIdentity ? Others?.formatAddress(walletIdentity, 4) : '',
+                addressLink: walletIdentity
+                    ? Others?.explorerResolver.addressLink?.(!isNextIdWallet ? chainId : defaultChainId, walletIdentity)
+                    : '',
+                address: walletIdentity,
+                verified: !isNextIdWallet ? isVerifiedAccount : true,
             }),
             [
                 account,
@@ -113,6 +121,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                 defaultVerifiedWallet,
                 defaultChainId,
                 chainId,
+                walletIdentity,
             ],
         )
 
@@ -174,7 +183,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
             setDescriptionProps(description)
         }, [description])
 
-        if (!account && !verifiedWallets) {
+        if (!account && verifiedWallets.length === 0) {
             return (
                 <Box className={cx(classes.root, className)}>
                     <Button fullWidth onClick={openSelectProviderDialog}>

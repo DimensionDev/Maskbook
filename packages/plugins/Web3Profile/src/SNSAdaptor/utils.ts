@@ -1,17 +1,11 @@
-import {
-    BindingProof,
-    fromHex,
-    NextIDPlatform,
-    NextIDStoragePayload,
-    PersonaInformation,
-    toBase64,
-} from '@masknet/shared-base'
-import { Alchemy_EVM, NextIDStorage, RSS3 } from '@masknet/web3-providers'
+import { BindingProof, EMPTY_LIST, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
+import { AlchemyEVM, NextIDStorage, RSS3 } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '../../../../web3-shared/base/src/utils'
 import { PLUGIN_ID } from '../constants'
-import type { AccountType, Collection, CollectionTypes, PersonaKV, WalletsCollection, WalletTypes } from './types'
+import type { AccountType, PersonaKV, Collection } from './types'
+import type { CollectionTypes, WalletTypes, WalletsCollection } from '@masknet/shared'
 
 export const formatPublicKey = (publicKey?: string) => {
     return `${publicKey?.slice(0, 6)}...${publicKey?.slice(-6)}`
@@ -180,26 +174,22 @@ export const getFootprintList = async (walletList: WalletTypes[]) => {
 }
 
 export const getNFTList = async (walletList: WalletTypes[]) => {
-    const promises = walletList.map(({ address, platform }) => {
-        return Alchemy_EVM.getAssets(formatEthereumAddress(address), { chainId: ChainId.Mainnet }).then((result) => {
-            if (result) {
-                return {
-                    address,
-                    collections: result?.data?.map((asset) => ({
-                        key: `${asset?.contract?.address}+${asset.tokenId}`,
-                        address: asset?.address,
-                        platform: platform ?? NetworkPluginID.PLUGIN_EVM,
-                        tokenId: asset.tokenId,
-                        iconURL: asset?.metadata?.imageURL,
-                        name: asset?.metadata?.name,
-                    })),
-                }
-            } else {
-                return {
-                    address,
-                }
-            }
+    const promises = walletList.map(async ({ address, platform }) => {
+        const { data: assets = EMPTY_LIST } = await AlchemyEVM.getAssets(formatEthereumAddress(address), {
+            chainId: ChainId.Mainnet,
         })
+        return {
+            address,
+            collections: assets.map((asset) => ({
+                key: `${asset?.contract?.address}_${asset.tokenId}`,
+                address: asset?.address,
+                platform: platform ?? NetworkPluginID.PLUGIN_EVM,
+                tokenId: asset.tokenId,
+                iconURL: asset?.metadata?.imageURL,
+                name: asset?.metadata?.name,
+                chainId: ChainId.Mainnet,
+            })),
+        }
     })
     const collections = await Promise.all(promises)
     return collections
@@ -207,17 +197,18 @@ export const getNFTList = async (walletList: WalletTypes[]) => {
 
 export const getNFTList_Polygon = async (walletList: WalletTypes[]) => {
     const promises = walletList.map(({ address, platform }) => {
-        return Alchemy_EVM.getAssets(formatEthereumAddress(address), { chainId: ChainId.Matic }).then((result) => {
+        return AlchemyEVM.getAssets(formatEthereumAddress(address), { chainId: ChainId.Matic }).then((result) => {
             if (result) {
                 return {
                     address,
                     collections: result?.data?.map((asset) => ({
-                        key: `${asset?.contract?.address}+${asset.tokenId}`,
+                        key: `${asset?.contract?.address}_${asset.tokenId}`,
                         address: asset?.address,
                         platform: platform ?? NetworkPluginID.PLUGIN_EVM,
                         tokenId: asset.tokenId,
                         iconURL: asset?.metadata?.imageURL,
                         name: asset?.metadata?.name,
+                        chainId: ChainId.Matic,
                     })),
                 }
             } else {
@@ -260,39 +251,4 @@ export const getWalletHiddenList = async (publicKey: string) => {
         return hiddenObj
     }
     return
-}
-
-export const getKvPayload = async (patchData: unknown, publicHexKey: string, accountId: string) => {
-    try {
-        const data = JSON.parse(JSON.stringify(patchData))
-        const payload = await NextIDStorage.getPayload(publicHexKey, NextIDPlatform.Twitter, accountId, data, PLUGIN_ID)
-        return payload
-    } catch (error) {
-        console.error(error)
-        return null
-    }
-}
-
-export const setKvPatchData = async (
-    payload: NextIDStoragePayload,
-    signature: string,
-    patchData: unknown,
-    publicHexKey: string,
-    accountId: string,
-) => {
-    try {
-        const base64Sig = toBase64(fromHex(signature))
-        await NextIDStorage.set(
-            payload?.uuid,
-            publicHexKey,
-            base64Sig,
-            NextIDPlatform.Twitter,
-            accountId,
-            payload?.createdAt,
-            patchData,
-            PLUGIN_ID,
-        )
-    } catch (error) {
-        console.error(error)
-    }
 }

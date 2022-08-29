@@ -1,6 +1,4 @@
-import type { KVStorageBackend } from './types'
-// This package is used in jest. Import from the esm version will fail the test.
-// eslint-disable-next-line no-restricted-imports
+import type { KVStorageBackend } from './types.js'
 import { IDBPDatabase, openDB } from 'idb'
 import { None, Some } from 'ts-results'
 

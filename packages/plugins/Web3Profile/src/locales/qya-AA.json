@@ -48,10 +48,12 @@
     "wallets_add_collectible": "crwdns18100:0crwdne18100:0",
     "add_collectible": "crwdns18102:0crwdne18102:0",
     "nft_add_dialog_title": "crwdns18104:0crwdne18104:0",
-    "no_collection_item": "crwdns18106:0crwdne18106:0",
+    "no_collection_item": "crwdns18106:0{{collection}}crwdne18106:0",
+    "all_collection_hidden": "crwdns18540:0{{collection}}crwdne18540:0",
     "no_unlisted_collection": "crwdns18108:0{{collection}}crwdne18108:0",
     "wallet_setting_hint": "crwdns18110:0crwdne18110:0",
     "no_authenticated_wallet": "crwdns18112:0crwdne18112:0",
     "no_items_found": "crwdns18114:0crwdne18114:0",
-    "account_empty": "crwdns18200:0crwdne18200:0"
+    "account_empty": "crwdns18200:0crwdne18200:0",
+    "load_more": "crwdns18308:0crwdne18308:0"
 }

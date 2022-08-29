@@ -1,10 +1,13 @@
+import { useMemo } from 'react'
 import classNames from 'classnames'
-import { CircularProgress, useTheme } from '@mui/material'
+import { useTheme } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
+import { useNetworkDescriptor, useNonFungibleToken, Web3Helper } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
 import { AssetPlayer } from '../AssetPlayer'
-import { useNonFungibleToken, Web3Helper } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useImageChecker } from '../../../hooks'
+import { useIsImageURL } from '../../../hooks'
+import { ImageIcon } from '../ImageIcon'
 import { Image } from '../Image'
 
 const useStyles = makeStyles()((theme) => ({
@@ -20,9 +23,13 @@ const useStyles = makeStyles()((theme) => ({
         height: 160,
         width: 120,
     },
+    fallbackImage: {
+        height: '64px !important',
+        width: '64px !important',
+    },
     loadingIcon: {
-        width: 36,
-        height: 52,
+        width: 30,
+        height: 30,
     },
     imgWrapper: {
         width: '100%',
@@ -31,9 +38,14 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    networkIcon: {
+        position: 'absolute',
+        top: 6,
+        right: 6,
+    },
 }))
 
-interface Props extends withClasses<'loadingFailImage' | 'iframe' | 'wrapper' | 'loadingPlaceholder' | 'imgWrapper'> {
+interface Props extends withClasses<'fallbackImage' | 'iframe' | 'wrapper' | 'loadingPlaceholder' | 'imgWrapper'> {
     chainId?: Web3Helper.ChainIdAll
     tokenId?: string
     contractAddress?: string
@@ -41,9 +53,11 @@ interface Props extends withClasses<'loadingFailImage' | 'iframe' | 'wrapper' | 
     fallbackImage?: URL
     fallbackResourceLoader?: JSX.Element
     renderOrder?: number
-    isNative?: boolean
+    isImageOnly?: boolean
     setERC721TokenName?: (name: string) => void
     setSourceType?: (type: string) => void
+    showNetwork?: boolean
+    address?: SocialAddress<NetworkPluginID>
 }
 
 const assetPlayerFallbackImageDark = new URL('./nft_token_fallback_dark.png', import.meta.url)
@@ -54,13 +68,15 @@ export function NFTCardStyledAssetPlayer(props: Props) {
         chainId,
         contractAddress = '',
         tokenId = '',
-        isNative = false,
+        isImageOnly = false,
         fallbackImage,
         fallbackResourceLoader,
         url,
+        address,
         setERC721TokenName,
         renderOrder,
         setSourceType,
+        showNetwork = false,
     } = props
     const classes = useStylesExtends(useStyles(), props)
     const theme = useTheme()
@@ -73,22 +89,41 @@ export function NFTCardStyledAssetPlayer(props: Props) {
             chainId,
         },
     )
-    const { value: isImageToken } = useImageChecker(
-        url || tokenDetailed?.metadata?.imageURL || tokenDetailed?.metadata?.mediaURL,
-    )
+    const urlComputed = url || tokenDetailed?.metadata?.imageURL || tokenDetailed?.metadata?.mediaURL
+    const { value: isImageURL } = useIsImageURL(urlComputed)
 
     const fallbackImageURL =
-        theme.palette.mode === 'dark' ? assetPlayerFallbackImageDark : assetPlayerFallbackImageLight
+        fallbackImage ?? (theme.palette.mode === 'dark' ? assetPlayerFallbackImageDark : assetPlayerFallbackImageLight)
 
-    return isImageToken || isNative ? (
-        <div className={classes.imgWrapper}>
-            <Image
-                width="100%"
-                style={{ objectFit: 'cover' }}
-                src={url || tokenDetailed?.metadata?.imageURL || tokenDetailed?.metadata?.mediaURL}
-            />
-        </div>
-    ) : (
+    const networkDescriptor = useNetworkDescriptor(address?.networkSupporterPluginID)
+
+    const networkIcon = useMemo(() => {
+        if (address?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM) {
+            return NETWORK_DESCRIPTORS.find((network) => network?.chainId === chainId)?.icon
+        }
+        return networkDescriptor?.icon
+    }, [networkDescriptor])
+
+    if (isImageURL || isImageOnly) {
+        return (
+            <div className={classes.imgWrapper}>
+                <Image
+                    classes={{
+                        fallbackImage: classes.fallbackImage,
+                    }}
+                    width="100%"
+                    height="100%"
+                    style={{ objectFit: 'cover' }}
+                    src={urlComputed}
+                />
+                {showNetwork && <ImageIcon icon={networkIcon} size={20} classes={{ icon: classes.networkIcon }} />}
+            </div>
+        )
+    }
+
+    if (typeof isImageURL === 'undefined') return null
+
+    return (
         <AssetPlayer
             showIframeFromInit
             erc721Token={{
@@ -106,15 +141,17 @@ export function NFTCardStyledAssetPlayer(props: Props) {
             setSourceType={setSourceType}
             // It would fail to render as loading too many(>200) iframe at once.
             renderTimeout={renderOrder ? 20000 * Math.floor(renderOrder / 100) : undefined}
-            fallbackImage={fallbackImage ?? fallbackImageURL}
-            loadingIcon={<CircularProgress size={20} />}
+            fallbackImage={fallbackImageURL}
             classes={{
                 iframe: classNames(classes.wrapper, classes.iframe),
                 errorPlaceholder: classes.wrapper,
                 loadingPlaceholder: classes.wrapper,
-                loadingFailImage: classes.loadingFailImage,
+                fallbackImage: classes.fallbackImage,
                 loadingIcon: classes.loadingIcon,
+                errorIcon: classes.fallbackImage,
             }}
+            showNetwork={showNetwork}
+            networkIcon={networkIcon}
             fallbackResourceLoader={fallbackResourceLoader}
         />
     )

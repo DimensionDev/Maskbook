@@ -18,7 +18,6 @@
                     { "name": "lodash-es", "message": "Please use lodash-unified instead." },
                     { "name": "date-fns", "message": "Please use date-fns/{submodule} instead." },
                     { "name": "date-fns/esm", "message": "Please use date-fns/{submodule} instead." },
-                    { "name": "idb", "message": "Please use idb/with-async-ittr instead." },
                     { "name": "idb/with-async-ittr-cjs", "message": "Please use idb/with-async-ittr instead." },
                     { "name": "@masknet/typed-message/base", "message": "Please use @masknet/typed-message instead." },
                     {
@@ -71,7 +70,7 @@
         "@dimensiondev/array/no-implicit-sort": "error",
         "@dimensiondev/browser/prefer-location-assign": "error",
         "@dimensiondev/jsx/no-class-component": "error",
-        "@dimensiondev/jsx/no-template-literal": "error",
+        "@dimensiondev/jsx/no-template-literal": "off",
         "@dimensiondev/no-for-in": "error",
         "@dimensiondev/no-number-constructor": "off",
         "@dimensiondev/prefer-early-return": "error",

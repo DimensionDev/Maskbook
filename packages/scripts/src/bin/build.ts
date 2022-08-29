@@ -1,23 +1,29 @@
 #!/usr/bin/env ts-node
 import { spawn } from 'child_process'
-import { codegen } from '../codegen'
-import { awaitChildProcess } from '../utils'
+import { codegen } from '../codegen/index.js'
+import { awaitChildProcess, awaitTask, ROOT_PATH } from '../utils/index.js'
 import { promisify } from 'util'
-import { extension } from '../extension'
-import { extensionArgsParser } from './args'
+import { buildExtensionFlag } from '../extension/index.js'
+import { extensionArgsParser } from './args.js'
+import { series } from 'gulp'
+import { buildSandboxedPluginConfigurable } from '../projects/sandboxed-plugins.js'
+import { fileURLToPath } from 'url'
 
-async function main() {
-    await promisify(codegen)()
-    // \\-- is used for debug
-    if (process.argv[2] === '--' || process.argv[2] === '\\--') {
-        return spawn(process.argv[3], process.argv.slice(4), {
-            stdio: 'inherit',
-            shell: true,
-        })
-    }
-    return extension(extensionArgsParser())
+await promisify(codegen)()
+// \\-- is used for debug
+if (process.argv[2] === '--' || process.argv[2] === '\\--') {
+    const child = spawn(process.argv[3], process.argv.slice(4), {
+        stdio: 'inherit',
+        shell: true,
+    })
+    process.exit(await awaitChildProcess(child))
+} else {
+    const task = series(
+        //
+        buildExtensionFlag('build', extensionArgsParser()),
+        function buildSandboxedPlugin() {
+            return buildSandboxedPluginConfigurable(fileURLToPath(new URL('./build/', ROOT_PATH)), true)
+        },
+    )
+    await awaitTask(task)
 }
-
-main().then(async (child) => {
-    typeof child === 'number' ? process.exit(child) : process.exit(await awaitChildProcess(child))
-})

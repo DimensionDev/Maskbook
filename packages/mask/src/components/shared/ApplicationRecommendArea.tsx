@@ -18,6 +18,7 @@ const useStyles = makeStyles()(() => {
         },
         carousel: {
             position: 'relative',
+            height: 138,
             zIndex: 100,
             overflowX: 'scroll',
             scrollbarColor: 'transparent transparent',
@@ -36,6 +37,9 @@ const useStyles = makeStyles()(() => {
                 display: 'none',
             },
             overflow: 'hidden',
+            '& .carousel__slide-focus-ring': {
+                display: 'none',
+            },
         },
         isHoveringCarousel: {
             height: 270,

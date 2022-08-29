@@ -1,17 +1,19 @@
-import type { Plugin } from '@masknet/plugin-infra/content-script'
 import { Icons } from '@masknet/icons'
+import { Plugin, PluginId, PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
-import { useState } from 'react'
+import { CrossIsolationMessages } from '@masknet/shared-base'
+import { Trans } from 'react-i18next'
 import { NFTAvatarDialog } from '../Application/NFTAvatarsDialog'
 import { base } from '../base'
 import { setupContext } from '../context'
-import { Trans } from 'react-i18next'
-import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal, context) {
         setupContext(context)
+    },
+    GlobalInjection: function Component() {
+        return <NFTAvatarDialog />
     },
     ApplicationEntries: [
         (() => {
@@ -23,8 +25,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
             return {
                 RenderEntryComponent(EntryComponentProps) {
-                    const [open, setOpen] = useState(false)
-                    const clickHandler = () => setOpen(true)
+                    const clickHandler = () => {
+                        CrossIsolationMessages.events.requestOpenApplication.sendToLocal({
+                            open: true,
+                            application: PluginId.Avatar,
+                        })
+                    }
                     return (
                         <>
                             <ApplicationEntry
@@ -42,8 +48,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                     (EntryComponentProps.disabled ? undefined : <Trans i18nKey="application_hint" />)
                                 }
                             />
-
-                            <NFTAvatarDialog open={open} onClose={() => setOpen(false)} />
                         </>
                     )
                 },

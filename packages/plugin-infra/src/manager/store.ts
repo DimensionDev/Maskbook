@@ -2,11 +2,25 @@
 import type { Plugin } from '../types'
 import { memoize } from 'lodash-unified'
 import type { Web3Helper } from '../web3-helpers'
+import type { Subscription } from 'use-subscription'
 
 const __registered = new Map<string, Plugin.DeferredDefinition>()
+const listeners = new Set<onNewPluginRegisteredListener>()
 
-export const registeredPlugins: Iterable<Plugin.DeferredDefinition> = { [Symbol.iterator]: () => __registered.values() }
-export const registeredPluginIDs: Iterable<string> = { [Symbol.iterator]: () => __registered.keys() }
+export type onNewPluginRegisteredListener = (id: string, def: Plugin.DeferredDefinition) => void
+export function onNewPluginRegistered(f: onNewPluginRegisteredListener) {
+    listeners.add(f)
+    return () => listeners.delete(f)
+}
+
+export const registeredPlugins: Subscription<Array<[string, Plugin.DeferredDefinition]>> = {
+    getCurrentValue() {
+        return Array.from(__registered.entries())
+    },
+    subscribe(callback) {
+        return onNewPluginRegistered(callback)
+    },
+}
 
 export function getPluginDefine(id: string) {
     return __registered.get(id)
@@ -20,6 +34,7 @@ export function registerPlugin<
     Signature = unknown,
     GasOption = unknown,
     Block = unknown,
+    Operation = unknown,
     Transaction = unknown,
     TransactionReceipt = unknown,
     TransactionDetailed = unknown,
@@ -35,6 +50,7 @@ export function registerPlugin<
         Signature,
         GasOption,
         Block,
+        Operation,
         Transaction,
         TransactionReceipt,
         TransactionDetailed,
@@ -45,8 +61,8 @@ export function registerPlugin<
 ) {
     if (__registered.has(def.ID)) return
     if (!__meetRegisterRequirement(def)) return
-    // @ts-ignore
-    __registered.set(def.ID, def)
+    __registered.set(def.ID, def as any)
+    listeners.forEach((f) => f(def.ID, def as any))
     getRegisteredWeb3Networks_memo.cache.clear?.()
     getRegisteredWeb3Providers_memo.cache.clear?.()
 }

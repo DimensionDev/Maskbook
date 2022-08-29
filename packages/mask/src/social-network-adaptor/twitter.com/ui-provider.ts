@@ -33,6 +33,10 @@ import { injectOpenNFTAvatarEditProfileButton, openNFTAvatarSettingDialog } from
 import { injectUserNFTAvatarAtTweet } from './injection/NFT/TweetNFTAvatar'
 import { injectNFTAvatarClipInTwitter } from './injection/NFT/NFTAvatarClip'
 import { TwitterRenderFragments } from './customization/render-fragments'
+import { injectProfileCover } from './injection/ProfileCover'
+import { injectProfileCardHolder } from './injection/ProfileCard'
+import { injectAvatar } from './injection/Avatar'
+import { injectPluginSettingsDialogAtTwitter } from './injection/PluginSettingsDialog'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -161,6 +165,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         toolbox: injectToolboxHintAtTwitter,
         searchResult: injectSearchResultBoxAtTwitter,
         profileTab: injectProfileTabAtTwitter,
+        profileCover: injectProfileCover,
         profileTabContent: injectProfileTabContentAtTwitter,
         enhancedPostRenderer: injectPostReplacerAtTwitter,
         pageInspector: injectPageInspectorDefault(),
@@ -188,6 +193,9 @@ const twitterUI: SocialNetworkUI.Definition = {
         postAndReplyNFTAvatar: injectUserNFTAvatarAtTweet,
         avatarClipNFT: injectNFTAvatarClipInTwitter,
         openNFTAvatarSettingDialog,
+        avatar: injectAvatar,
+        profileCard: injectProfileCardHolder,
+        PluginSettingsDialog: injectPluginSettingsDialogAtTwitter,
     },
     configuration: {
         nextIDConfig: {

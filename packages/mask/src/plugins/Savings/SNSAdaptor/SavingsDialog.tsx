@@ -3,21 +3,12 @@ import { useAsync, useUpdateEffect } from 'react-use'
 import { DialogActions, DialogContent, Tab } from '@mui/material'
 import { isDashboardPage, EMPTY_LIST } from '@masknet/shared-base'
 import { MaskTabList, useTabs } from '@masknet/theme'
-import {
-    createContract,
-    ChainId,
-    SchemaType,
-    getAaveConstants,
-    ZERO_ADDRESS,
-    networkResolver,
-    NetworkType,
-} from '@masknet/web3-shared-evm'
+import { createContract, ChainId, SchemaType, getAaveConstants, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { PluginWalletStatusBar, useI18N } from '../../../utils'
 import { InjectedDialog } from '@masknet/shared'
 import { AllProviderTradeContext } from '../../Trader/trader/useAllProviderTradeContext'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
-import { WalletRPC } from '../../Wallet/messages'
 import { SavingsProtocol, TabType } from '../types'
 import { useStyles } from './SavingsDialogStyles'
 import { SavingsTable } from './SavingsTable'
@@ -38,22 +29,19 @@ export interface SavingsDialogProps {
     onClose?: () => void
 }
 
+const chains = [ChainId.Mainnet]
+
 export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     const { t } = useI18N()
     const isDashboard = isDashboardPage()
     const { classes } = useStyles({ isDashboard })
 
     const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const [chainId, setChainId] = useState<ChainId>(currentChainId)
+    const [chainId, setChainId] = useState<ChainId>(ChainId.Mainnet)
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     const [tab, setTab] = useState<TabType>(TabType.Deposit)
     const [selectedProtocol, setSelectedProtocol] = useState<SavingsProtocol | null>(null)
-
-    const { value: chains = EMPTY_LIST } = useAsync(async () => {
-        const networks = await WalletRPC.getSupportedNetworks()
-        return networks.map((network: NetworkType) => networkResolver.networkChainId(network))
-    }, [])
 
     const { value: aaveTokens } = useAsync(async () => {
         if (!open || chainId !== ChainId.Mainnet) {
@@ -97,7 +85,11 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
     )
 
     useUpdateEffect(() => {
-        setChainId(currentChainId)
+        if (chains.includes(currentChainId)) {
+            setChainId(currentChainId)
+        } else {
+            setChainId(ChainId.Mainnet)
+        }
     }, [currentChainId])
 
     const [currentTab, onChange, tabs] = useTabs('Deposit', 'Withdraw')

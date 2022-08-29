@@ -12,9 +12,7 @@ import { Instagram } from '@masknet/web3-providers'
 import { useAccount, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import type { SelectTokenInfo } from '../../../../plugins/Avatar/types'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
-import { activatedSocialNetworkUI } from '../../../../social-network'
 import { useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks'
-import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
 import type { EnhanceableSite } from '@masknet/shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
@@ -29,7 +27,7 @@ export function NFTAvatarSettingDialog() {
     const account = useAccount()
     const identity = useCurrentVisitingIdentity()
     const pluginId = useCurrentWeb3NetworkPluginID()
-    const [, saveNFTAvatar] = useSaveNFTAvatar()
+    const saveNFTAvatar = useSaveNFTAvatar()
 
     const onChange = useCallback(
         async (info: SelectTokenInfo) => {
@@ -61,12 +59,6 @@ export function NFTAvatarSettingDialog() {
                     setOpen(false)
                     return
                 }
-
-                await PluginNFTAvatarRPC.clearCache(
-                    identity.identifier.userId,
-                    activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
-                    RSS3_KEY_SNS.INSTAGRAM,
-                )
 
                 // If the avatar is set successfully, reload the page
                 window.location.reload()

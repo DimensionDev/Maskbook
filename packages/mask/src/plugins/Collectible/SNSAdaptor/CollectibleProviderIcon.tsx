@@ -1,54 +1,64 @@
 import { makeStyles } from '@masknet/theme'
-import { OpenSeaIcon } from '../../../resources/OpenSeaIcon'
-import { RaribleIcon } from '../../../resources/RaribleIcon'
-import { ZoraIcon } from '../../../resources/ZoraIcon'
-import { RSS3Icon } from '../../../resources/RSS3Icon'
-import { DebankIcon } from '../../../resources/DebankIcon'
 import { SourceType } from '@masknet/web3-shared-base'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()({
-    opensea: {
-        width: 16,
-        height: 16,
+    provider: {
+        position: 'relative',
+        width: 24,
+        height: 24,
         verticalAlign: 'bottom',
     },
-    rarible: {
-        width: 16,
-        height: 16,
-        verticalAlign: 'bottom',
-    },
-    NFTScan: {
-        width: 16,
-        height: 16,
-        verticalAlign: 'bottom',
+    activeIcon: {
+        position: 'absolute',
+        width: 12,
+        height: 12,
+        right: 0,
+        bottom: 0,
     },
 })
 
-const NftScan = new URL('../../../resources/NFTScanIcon.png', import.meta.url).toString()
-const ZerionIcon = new URL('../../../resources/zerion.png', import.meta.url).toString()
-
 export interface CollectibleProviderIconProps {
+    active: boolean
     provider: SourceType
+    overrideClasses?: string
 }
 
-export function CollectibleProviderIcon(props: CollectibleProviderIconProps) {
-    const { classes } = useStyles()
-    switch (props.provider) {
+const renderProviderIcon = (provider: SourceType) => {
+    switch (provider) {
         case SourceType.NFTScan:
-            return <img src={NftScan} className={classes.NFTScan} />
+            return <Icons.NFTScan />
         case SourceType.Zerion:
-            return <img src={ZerionIcon} className={classes.NFTScan} />
+            return <Icons.Zerion />
         case SourceType.OpenSea:
-            return <OpenSeaIcon classes={{ root: classes.opensea }} viewBox="0 0 16 16" />
+            return <Icons.OpenSea />
         case SourceType.Rarible:
-            return <RaribleIcon classes={{ root: classes.rarible }} viewBox="0 0 16 16" />
+            return <Icons.Rarible />
         case SourceType.Zora:
-            return <ZoraIcon classes={{ root: classes.rarible }} viewBox="0 0 16 16" />
+            return <Icons.Zora />
         case SourceType.RSS3:
-            return <RSS3Icon classes={{ root: classes.rarible }} viewBox="0 0 16 16" />
+            return <Icons.RSS3 />
         case SourceType.DeBank:
-            return <DebankIcon classes={{ root: classes.rarible }} viewBox="0 0 16 16" />
+            return <Icons.Debank />
+        case SourceType.Gem:
+            return <Icons.Gem />
+        case SourceType.LooksRare:
+            return <Icons.LooksRare />
+        case SourceType.X2Y2:
+            return <Icons.X2Y2 />
         default:
             return <></>
     }
+}
+
+export function CollectibleProviderIcon(props: CollectibleProviderIconProps) {
+    const { provider, overrideClasses, active } = props
+    const { classes, cx } = useStyles()
+    const className = cx(classes.provider, overrideClasses)
+    return (
+        <div className={className}>
+            {renderProviderIcon(provider)}
+            {active && <Icons.FillSuccess className={classes.activeIcon} />}
+        </div>
+    )
 }

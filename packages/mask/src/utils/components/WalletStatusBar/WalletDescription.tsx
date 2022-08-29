@@ -50,6 +50,7 @@ const useStyles = makeStyles()((theme) => ({
     linkIcon: {
         color: theme.palette.maskColor.second,
         cursor: 'pointer',
+        height: 14,
     },
 }))
 

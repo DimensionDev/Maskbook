@@ -63,7 +63,7 @@ export function ArticleTab(props: ArticleTabProps) {
         return (
             <CollectibleTab>
                 <div className={classes.body}>
-                    <NFTCardStyledAssetPlayer url={resourceUrl} classes={classes} isNative={hasNativeAPI} />
+                    <NFTCardStyledAssetPlayer url={resourceUrl} classes={classes} isImageOnly={hasNativeAPI} />
                 </div>
             </CollectibleTab>
         )

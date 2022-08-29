@@ -1,6 +1,5 @@
 import { AbiItem, numberToHex, toHex, toNumber } from 'web3-utils'
 import { first } from 'lodash-unified'
-import urlcat from 'urlcat'
 import type { RequestArguments, SignedTransaction, TransactionReceipt } from 'web3-core'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
 import type { ERC20Bytes32 } from '@masknet/web3-contracts/types/ERC20Bytes32'
@@ -34,8 +33,8 @@ import {
     getEthereumConstant,
     isValidAddress,
     isNativeTokenAddress,
-    resolveIPFSLinkFromURL,
     encodeTransaction,
+    Operation,
 } from '@masknet/web3-shared-evm'
 import {
     Account,
@@ -47,10 +46,12 @@ import {
     FungibleToken,
     isSameAddress,
     NonFungibleToken,
-    NonFungibleTokenCollection,
+    NonFungibleCollection,
     NonFungibleTokenContract,
     NonFungibleTokenMetadata,
     TransactionStatusType,
+    resolveIPFSLink,
+    resolveCORSLink,
 } from '@masknet/web3-shared-base'
 import type { BaseContract } from '@masknet/web3-contracts/types/types'
 import { createContext, dispatch } from './composer'
@@ -381,6 +382,23 @@ class Connection implements EVM_Connection {
         )
     }
 
+    async getNonFungibleTokenOwner(
+        address: string,
+        tokenId: string,
+        schema?: SchemaType,
+        initial?: EVM_Web3ConnectionOptions,
+    ) {
+        const options = this.getOptions(initial)
+        const actualSchema = schema ?? (await this.getTokenSchema(address, options))
+
+        // ERC1155
+        if (actualSchema === SchemaType.ERC1155) return ''
+
+        // ERC721
+        const contract = await this.getERC721Contract(address, options)
+        return (await contract?.methods.ownerOf(tokenId).call()) ?? ''
+    }
+
     async getNonFungibleTokenOwnership(
         address: string,
         tokenId: string,
@@ -415,10 +433,7 @@ class Connection implements EVM_Connection {
             if (uri.startsWith('https://api.opensea.io/') && tokenId) return uri.replace('0x{id}', tokenId)
 
             // add cors header
-            if (!uri.startsWith('ipfs://'))
-                return urlcat('https://cors.r2d2.to/?:url', {
-                    url: uri,
-                })
+            if (!uri.startsWith('ipfs://')) return resolveCORSLink(resolveIPFSLink(uri))!
 
             return uri
         }
@@ -440,8 +455,8 @@ class Connection implements EVM_Connection {
                 '',
                 response.description,
                 undefined,
-                resolveIPFSLinkFromURL(response.image),
-                resolveIPFSLinkFromURL(response.image),
+                resolveIPFSLink(response.image),
+                resolveIPFSLink(response.image),
             )
         }
 
@@ -458,8 +473,8 @@ class Connection implements EVM_Connection {
             '',
             response.description,
             undefined,
-            resolveIPFSLinkFromURL(response.image),
-            resolveIPFSLinkFromURL(response.image),
+            resolveIPFSLink(response.image),
+            resolveIPFSLink(response.image),
         )
     }
     async getNonFungibleTokenContract(
@@ -512,7 +527,7 @@ class Connection implements EVM_Connection {
         address: string,
         schema?: SchemaType,
         initial?: EVM_Web3ConnectionOptions,
-    ): Promise<NonFungibleTokenCollection<ChainId, SchemaType>> {
+    ): Promise<NonFungibleCollection<ChainId, SchemaType>> {
         const options = this.getOptions(initial)
         const actualSchema = schema ?? (await this.getTokenSchema(address, options))
 
@@ -591,7 +606,7 @@ class Connection implements EVM_Connection {
             const balances = await contract?.methods.balances([options.account], listOfNonNativeAddress).call({
                 // cannot check the sender's balance in the same contract
                 from: undefined,
-                chainId: numberToHex(options.account),
+                chainId: numberToHex(options.chainId),
             })
 
             listOfNonNativeAddress.forEach((x, i) => {
@@ -875,6 +890,63 @@ class Connection implements EVM_Connection {
 
     signTransactions(transactions: Transaction[], initial?: EVM_Web3ConnectionOptions) {
         return Promise.all(transactions.map((x) => this.signTransaction(x, initial)))
+    }
+
+    supportedEntryPoints(initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) {
+        const options = this.getOptions(initial)
+        return this.hijackedRequest<string[]>(
+            {
+                method: EthereumMethodType.ETH_SUPPORTED_ENTRY_POINTS,
+                params: [],
+            },
+            options,
+        )
+    }
+
+    async callOperation(
+        operation: Operation,
+        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ) {
+        const options = this.getOptions(initial)
+        const entryPoint = first(await this.supportedEntryPoints(initial))
+        if (!isValidAddress(entryPoint)) throw new Error('No entry point.')
+
+        return this.hijackedRequest<string>(
+            {
+                method: EthereumMethodType.ETH_CALL_USER_OPERATION,
+                params: [
+                    {
+                        ...operation,
+                        sender: options.account,
+                    },
+                ],
+                entryPoint,
+            },
+            options,
+        )
+    }
+
+    async sendOperation(
+        operation: Operation,
+        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ) {
+        const options = this.getOptions(initial)
+        const entryPoint = first(await this.supportedEntryPoints(initial))
+        if (!isValidAddress(entryPoint)) throw new Error('No entry point.')
+
+        return this.hijackedRequest<string>(
+            {
+                method: EthereumMethodType.ETH_SEND_USER_OPERATION,
+                params: [
+                    {
+                        ...operation,
+                        sender: options.account,
+                    },
+                ],
+                entryPoint,
+            },
+            options,
+        )
     }
 
     callTransaction(transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {

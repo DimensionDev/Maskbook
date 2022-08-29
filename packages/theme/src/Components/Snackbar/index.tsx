@@ -29,32 +29,36 @@ interface StyleProps {
 }
 
 const useStyles = makeStyles<StyleProps, 'title' | 'message'>()((theme, { offsetY }, refs) => {
-    const { palette } = theme
-    const isDark = palette.mode === 'dark'
     const spinningAnimationKeyFrames = keyframes`
-to {
-  transform: rotate(360deg)
-}`
+        to {
+          transform: rotate(360deg)
+        }
+    `
     const title = {
-        color: MaskColorVar.textPrimary,
+        color: theme.palette.maskColor.main,
         fontWeight: 700,
         fontSize: 14,
-        lineHeight: '20px',
+        lineHeight: '18px',
     } as const
     const message = {
-        color: MaskColorVar.textPrimary,
+        color: theme.palette.maskColor.main,
         fontWeight: 400,
         display: 'flex',
         alignItems: 'center',
         fontSize: 14,
+        lineHeight: '18px',
         '& > a': {
             display: 'flex',
             alignItems: 'center',
         },
     } as const
     const defaultVariant = {
-        background: '#F7F9FA',
-        color: '#0F1419',
+        background: theme.palette.maskColor.bottom,
+        color: theme.palette.maskColor.main,
+        boxShadow:
+            theme.palette.mode === 'dark'
+                ? '0px 4px 30px rgba(255, 255, 255, 0.15)'
+                : '0px 4px 30px rgba(0, 0, 0, 0.1)',
         [`& .${refs.title}`]: {
             color: 'inherit',
         },
@@ -65,7 +69,9 @@ to {
     }
     const success = {
         backgroundColor: theme.palette.maskColor.success,
-        color: '#ffffff',
+        color: theme.palette.maskColor.white,
+        boxShadow: `0px 6px 20px ${alpha(theme.palette.maskColor.success, 0.15)}`,
+        backdropFilter: 'blur(16px)',
         [`& .${refs.title}`]: {
             color: 'inherit',
         },
@@ -78,35 +84,52 @@ to {
     } as const
 
     const error = {
-        background: '#FF5F5F',
-        color: '#ffffff',
+        background: theme.palette.maskColor.danger,
+        color: theme.palette.maskColor.white,
+        boxShadow: `0px 6px 20px ${alpha(theme.palette.maskColor.danger, 0.15)}`,
+        backdropFilter: 'blur(16px)',
         [`& .${refs.title}`]: {
             color: 'inherit',
         },
         [`& .${refs.message}`]: {
-            color: 'inherit',
+            color: alpha(theme.palette.maskColor.white, 0.8),
+            '& svg': {
+                color: theme.palette.maskColor.white,
+            },
         },
     } as const
 
     const info = {
-        background: '#8CA3C7',
-        color: '#ffffff',
+        background: theme.palette.maskColor.primary,
+        color: theme.palette.maskColor.white,
+        boxShadow:
+            theme.palette.mode === 'dark'
+                ? '0px 4px 30px rgba(255, 255, 255, 0.15)'
+                : '0px 4px 30px rgba(0, 0, 0, 0.1)',
         [`& .${refs.title}`]: {
             color: 'inherit',
         },
         [`& .${refs.message}`]: {
-            color: 'inherit',
+            color: alpha(theme.palette.maskColor.white, 0.8),
+            '& svg': {
+                color: theme.palette.maskColor.white,
+            },
         },
     }
 
     const warning = {
-        backgroundColor: '#FFB915',
-        color: '#ffffff',
+        backgroundColor: theme.palette.maskColor.warn,
+        color: theme.palette.maskColor.white,
+        boxShadow: `0px 6px 20px ${alpha(theme.palette.maskColor.warn, 0.15)}`,
+        backdropFilter: 'blur(16px)',
         [`& .${refs.title}`]: {
             color: 'inherit',
         },
         [`& .${refs.message}`]: {
-            color: 'inherit',
+            color: alpha(theme.palette.maskColor.white, 0.8),
+            '& svg': {
+                color: theme.palette.maskColor.white,
+            },
         },
     } as const
 

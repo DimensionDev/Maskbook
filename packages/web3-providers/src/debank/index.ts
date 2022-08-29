@@ -1,5 +1,12 @@
 import urlcat from 'urlcat'
-import { GasOptionType, Transaction, createPageable, HubOptions, createIndicator } from '@masknet/web3-shared-base'
+import {
+    GasOptionType,
+    Transaction,
+    createPageable,
+    HubOptions,
+    createIndicator,
+    Pageable,
+} from '@masknet/web3-shared-base'
 import {
     ChainId,
     formatGweiToWei,
@@ -13,6 +20,7 @@ import type { WalletTokenRecord, HistoryResponse, GasPriceDictResponse } from '.
 import type { FungibleTokenAPI, HistoryAPI, GasOptionAPI } from '../types'
 import { getAllEVMNativeAssets } from '../helpers'
 import { unionWith } from 'lodash-unified'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 const DEBANK_API = 'https://api.debank.com'
 const DEBANK_OPEN_API = 'https://openapi.debank.com'
@@ -70,7 +78,7 @@ export class DeBankAPI
         const response = await global.r2d2Fetch(
             urlcat(DEBANK_OPEN_API, '/v1/user/token_list', {
                 id: address.toLowerCase(),
-                is_all: true,
+                is_all: false,
                 has_balance: true,
             }),
         )
@@ -79,7 +87,6 @@ export class DeBankAPI
             return createPageable(
                 unionWith(
                     formatAssets(
-                        options?.chainId ?? ChainId.Mainnet,
                         (result ?? []).map((x) => ({
                             ...x,
 
@@ -106,10 +113,10 @@ export class DeBankAPI
 
     async getTransactions(
         address: string,
-        { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
-    ): Promise<Array<Transaction<ChainId, SchemaType>>> {
+        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {},
+    ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
         const { CHAIN_ID = '' } = getDeBankConstants(chainId)
-        if (!CHAIN_ID) return []
+        if (!CHAIN_ID) return createPageable(EMPTY_LIST, createIndicator(indicator))
 
         const response = await global.r2d2Fetch(
             `${DEBANK_API}/history/list?user_addr=${address.toLowerCase()}&chain=${CHAIN_ID}`,
@@ -117,6 +124,7 @@ export class DeBankAPI
         const { data, error_code } = (await response.json()) as HistoryResponse
         if (error_code !== 0) throw new Error('Fail to load transactions.')
 
-        return formatTransactions(chainId, data)
+        const transactions = formatTransactions(chainId, data)
+        return createPageable(transactions, createIndicator(indicator))
     }
 }

@@ -1,3 +1,3 @@
-export * from './Decryption'
-export * from './Encryption'
-export * from './AppendEncryption'
+export * from './Decryption.js'
+export * from './Encryption.js'
+export * from './AppendEncryption.js'

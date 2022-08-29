@@ -24,7 +24,7 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
     schemaType?: Web3Helper.SchemaTypeScope<S, T>,
     options?: Web3Helper.Web3HubOptionsScope<S, T>,
 ) {
-    const account = useAccount(pluginID)
+    const account = useAccount(pluginID, options?.account)
     const chainId = useChainId(pluginID, options?.chainId)
     const hub = useWeb3Hub(pluginID, options)
     const trustedTokens = useTrustedFungibleTokens(pluginID)

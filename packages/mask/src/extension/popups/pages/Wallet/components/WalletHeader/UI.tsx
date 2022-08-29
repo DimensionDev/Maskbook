@@ -61,6 +61,7 @@ const useStyles = makeStyles()((theme) => ({
     arrow: {
         fontSize: 20,
         transition: 'all 300ms',
+        color: theme.palette.maskColor.secondaryDark,
     },
     colorChainICon: {
         borderRadius: '999px!important',
@@ -107,6 +108,7 @@ interface WalletHeaderUIProps {
     isSwitchWallet: boolean
     disabled?: boolean
     connected?: boolean
+    hiddenConnected?: boolean
 }
 
 export const WalletHeaderUI = memo<WalletHeaderUIProps>(
@@ -119,6 +121,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
         isSwitchWallet,
         disabled,
         connected,
+        hiddenConnected,
     }) => {
         const { t } = useI18N()
         const { classes, cx } = useStyles()
@@ -150,16 +153,21 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(
                                 />
                             ) : null}
                         </Typography>
-                        <Typography className={classes.connected}>
-                            <div
-                                className={cx(classes.dot, connected ? classes.connectedDot : classes.unconnectedDot)}
-                            />
-                            <span>
-                                {t('popups_wallet_connected_status', {
-                                    context: connected ? 'connected' : 'unconnected',
-                                })}
-                            </span>
-                        </Typography>
+                        {!hiddenConnected ? (
+                            <Typography className={classes.connected}>
+                                <div
+                                    className={cx(
+                                        classes.dot,
+                                        connected ? classes.connectedDot : classes.unconnectedDot,
+                                    )}
+                                />
+                                <span>
+                                    {t('popups_wallet_connected_status', {
+                                        context: connected ? 'connected' : 'unconnected',
+                                    })}
+                                </span>
+                            </Typography>
+                        ) : null}
                     </div>
                 </div>
                 <div

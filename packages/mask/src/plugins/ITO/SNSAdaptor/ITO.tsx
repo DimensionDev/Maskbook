@@ -16,9 +16,8 @@ import {
     formatBalance,
     FungibleToken,
 } from '@masknet/web3-shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Box, Card, Link, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { BigNumber } from 'bignumber.js'
 import classNames from 'classnames'
@@ -26,11 +25,9 @@ import formatDateTime from 'date-fns/format'
 import { startCase } from 'lodash-unified'
 import { EnhanceableSite } from '@masknet/shared-base'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { getAssetAsBlobURL, getTextUILength, useI18N } from '../../../utils'
-import { WalletMessages } from '../../Wallet/messages'
 import { ITO_EXCHANGE_RATION_MAX, MSG_DELIMITER, TIME_WAIT_BLOCKCHAIN } from '../constants'
 import { sortTokens } from './helpers'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
@@ -214,6 +211,7 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
                 address={exchangeToken.address}
                 logoURL={exchangeToken.logoURL}
                 chainId={token.chainId}
+                name={exchangeToken.symbol}
             />
             <Typography component="span">
                 <strong>{price}</strong>{' '}
@@ -295,12 +293,6 @@ export function ITO(props: ITO_Props) {
 
     const isAccountSeller = isSameAddress(payload.seller.address, account) && chainId === payload.chain_id
     const noRemain = total_remaining.isZero()
-
-    // #region remote controlled select provider dialog
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
-    // #endregion
 
     // #region buy info
     const { value: tradeInfo, loading: loadingTradeInfo, retry: retryPoolTradeInfo } = usePoolTradeInfo(pid, account)
@@ -713,7 +705,7 @@ export function ITO(props: ITO_Props) {
                     ) {
                         return (
                             <>
-                                <Box style={{ padding: 12, flex: 1 }}>
+                                <Box style={{ padding: '12px 5px', flex: 1 }}>
                                     <ActionButton
                                         startIcon={<Icons.Shared size={18} />}
                                         onClick={onShareSuccess}
@@ -722,7 +714,7 @@ export function ITO(props: ITO_Props) {
                                         {t('plugin_ito_share')}
                                     </ActionButton>
                                 </Box>
-                                <Box style={{ padding: 12, flex: 1 }}>
+                                <Box style={{ padding: '12px 5px', flex: 1 }}>
                                     <ChainBoundary
                                         expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                                         expectedChainId={payload.chain_id}
@@ -757,7 +749,7 @@ export function ITO(props: ITO_Props) {
                     if (listOfStatus.includes(ITO_Status.waited)) {
                         return (
                             <>
-                                <Box style={{ padding: 12, flex: 1 }}>
+                                <Box style={{ padding: '12px 5px', flex: 1 }}>
                                     <ActionButton
                                         onClick={onUnlock}
                                         className={classes.actionButton}
@@ -766,7 +758,7 @@ export function ITO(props: ITO_Props) {
                                     </ActionButton>
                                 </Box>
                                 {shareText ? (
-                                    <Box style={{ flex: 1, padding: 12 }}>
+                                    <Box style={{ flex: 1, padding: '12px 5px' }}>
                                         <ActionButton
                                             startIcon={<Icons.Shared size={18} />}
                                             onClick={onShare}
@@ -783,7 +775,7 @@ export function ITO(props: ITO_Props) {
                     if (listOfStatus.includes(ITO_Status.started)) {
                         return (
                             <>
-                                <Box style={{ flex: 1, padding: 12 }}>
+                                <Box style={{ flex: 1, padding: '12px 5px' }}>
                                     <ActionButton
                                         onClick={onClaim}
                                         className={classes.actionButton}
@@ -791,7 +783,7 @@ export function ITO(props: ITO_Props) {
                                         {t('plugin_ito_enter')}
                                     </ActionButton>
                                 </Box>
-                                <Box style={{ flex: 1, padding: 12 }}>
+                                <Box style={{ flex: 1, padding: '12px 5px' }}>
                                     <ActionButton
                                         startIcon={<Icons.Shared size={18} />}
                                         onClick={onShareSuccess}

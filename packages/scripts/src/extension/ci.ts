@@ -1,23 +1,27 @@
 #!/usr/bin/env ts-node
-import git from '@nice-labs/git-rev'
-import zip from 'gulp-zip'
-import { extension as buildBaseVersion, ExtensionBuildArgs } from './normal'
-import { dest, src, series, parallel, TaskFunction } from 'gulp'
-import { BUILD_PATH, ROOT_PATH, task } from '../utils'
-import { codegen } from '../codegen'
-import path from 'path'
+import { buildBaseExtension, ExtensionBuildArgs, buildWebpackFlag } from './normal.js'
+import { series, parallel, TaskFunction, src, dest } from 'gulp'
+import { ROOT_PATH, task } from '../utils/index.js'
+import { codegen } from '../codegen/index.js'
+import { fileURLToPath } from 'url'
+import { buildSandboxedPluginConfigurable } from '../projects/sandboxed-plugins.js'
+import { join } from 'path'
 
-export const ciBuild = series(
-    printBranchName,
+const BUILD_PATH = new URL('build/', ROOT_PATH)
+export const ciBuild: TaskFunction = series(
     codegen,
     // The base version need to be build in serial in order to prepare webpack cache.
-    buildBaseVersion,
-    // If we build parallel on CI, it will be slower eventually
-    (process.env.CI ? series : parallel)(
-        // zip base version to zip
-        zipTo(BUILD_PATH, 'MaskNetwork.base.zip'),
-        // Chrome version is the same with base version
-        zipTo(BUILD_PATH, 'MaskNetwork.chromium.zip'),
+    buildBaseExtension,
+    function buildSandboxedPlugin() {
+        return buildSandboxedPluginConfigurable(fileURLToPath(BUILD_PATH), true)
+    },
+    parallel(
+        parallel(
+            // zip base version to zip
+            zipTo(BUILD_PATH, 'MaskNetwork.base.zip'),
+            // Chrome version is the same with base version
+            zipTo(BUILD_PATH, 'MaskNetwork.chromium.zip'),
+        ),
         buildTarget('Firefox', { firefox: true, 'output-path': 'build-firefox' }, 'MaskNetwork.firefox.zip'),
         buildTarget('Android', { android: true, 'output-path': 'build-android' }, 'MaskNetwork.gecko.zip'),
         buildTarget('iOS', { iOS: true, 'output-path': 'build-iOS' }, 'MaskNetwork.iOS.zip'),
@@ -36,23 +40,27 @@ export const ciBuild = series(
 task(ciBuild, 'build-ci', 'Build the extension on CI')
 function buildTarget(name: string, options: ExtensionBuildArgs, outFile: string) {
     options.readonlyCache = true
-    options['output-path'] = path.join(ROOT_PATH, options['output-path']!)
-    return series(buildWith(name, options), zipTo(options['output-path']!, outFile))
-}
-function zipTo(absBuildDir: string, fileName: string): TaskFunction {
-    const f: TaskFunction = () =>
-        src(`./**/*`, { cwd: absBuildDir })
-            .pipe(zip(fileName))
-            .pipe(dest('./', { cwd: ROOT_PATH }))
-    f.displayName = `zip ${absBuildDir} into ${fileName}`
-    return f
-}
-function buildWith(name: string, buildArgs: ExtensionBuildArgs) {
-    const f: TaskFunction = () => buildBaseVersion(buildArgs)
-    f.displayName = `Build target ${name}`
-    return f
-}
+    const output = new URL(options['output-path']!, ROOT_PATH)
+    const outputFolder = (options['output-path'] = fileURLToPath(output))
 
-async function printBranchName() {
-    console.log('Building on branch: ', git.branchName())
+    const copySandboxModules: TaskFunction = () =>
+        src('sandboxed-modules/**/*', {
+            cwd: fileURLToPath(BUILD_PATH),
+        }).pipe(dest(join(outputFolder, 'sandboxed-modules/')))
+    copySandboxModules.displayName = `Copy sandboxed modules to ${outputFolder}`
+
+    return series(buildWebpackFlag(name, options), copySandboxModules, zipTo(output, outFile))
+}
+function zipTo(absBuildDir: URL, fileName: string): TaskFunction {
+    const f: TaskFunction = async () => {
+        const { cmd } = await import('web-ext')
+        await cmd.build({
+            sourceDir: fileURLToPath(absBuildDir),
+            artifactsDir: fileURLToPath(ROOT_PATH),
+            filename: fileName,
+            overwriteDest: true,
+        })
+    }
+    f.displayName = `Build extension zip at ${fileName}`
+    return f
 }

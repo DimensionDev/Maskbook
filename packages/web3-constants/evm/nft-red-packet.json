@@ -12,7 +12,9 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
-        "Sokol": "",
+        "Optimism": "0xC86e48D8FE6E8b999840927859290F4e41bDa779",
+        "Optimism_Kovan": "0x2690906609A9AF3bF08B8384CD9A0F97A88A7E9c",
+        "Optimism_Goerli": "",
         "Avalanche": "0x96c7D011cdFD467f551605f0f5Fce279F86F4186",
         "Avalanche_Fuji": "0x5de932BD252DD79231C9eDB5F2e30D488B785109",
         "Celo": "",
@@ -21,7 +23,8 @@
         "Aurora_Testnet": "0x97369fEE7db34E0BfE47861f2ec44b4378d13eB4",
         "Conflux": "0x5b966f3a32db9c180843bcb40267a66b73e4f022",
         "Harmony": "0x83d6b366f21e413f214eb077d5378478e71a5ed2",
-        "Harmony_Test": "0x981be454a930479d92c91a0092d204b64845a5d6"
+        "Harmony_Test": "0x981be454a930479d92c91a0092d204b64845a5d6",
+        "Astar": "0xc3e62b2CC70439C32a381Bfc056aCEd1d7162cef"
     },
     "SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-nft-red-packet-mainnet",
@@ -36,7 +39,9 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
-        "Sokol": "",
+        "Optimism": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-nft-red-packet-op",
+        "Optimism_Kovan": "",
+        "Optimism_Goerli": "",
         "Avalanche": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-nft-red-packet-avalanche",
         "Avalanche_Fuji": "",
         "Celo": "",
@@ -45,6 +50,7 @@
         "Aurora_Testnet": "",
         "Conflux": "",
         "Harmony": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-nft-red-packet-harmony",
-        "Harmony_Test": ""
+        "Harmony_Test": "",
+        "Astar": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-nft-red-packet-astar"
     }
 }

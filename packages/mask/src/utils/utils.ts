@@ -65,6 +65,6 @@ export const sortPersonaBindings = (a: NextIDPersonaBindings, b: NextIDPersonaBi
     const p_b = first(b.proofs.filter((x) => x.identity === userId.toLowerCase()))
 
     if (!p_a || !p_b) return 0
-    if (p_a.created_at > p_b.created_at) return -1
+    if (p_a.last_checked_at > p_b.last_checked_at) return -1
     return 1
 }

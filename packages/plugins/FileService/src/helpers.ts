@@ -1,7 +1,7 @@
 import type { TypedMessage } from '@masknet/typed-message'
 import { createTypedMessageMetadataReader } from '@masknet/typed-message/dom'
-import { META_KEY_1, META_KEY_2 } from './constants'
-import { FileInfo, FileInfoV1, Provider } from './types'
+import { META_KEY_1, META_KEY_2 } from './constants.js'
+import { FileInfo, FileInfoV1, Provider } from './types.js'
 import schemaV1 from './schema-v1.json'
 import schemaV2 from './schema-v2.json'
 import type { Result } from 'ts-results'
@@ -36,8 +36,8 @@ export async function makeFileKeySigned(fileKey: string | undefined | null) {
 export const resolveGatewayAPI = createLookupTableResolver<Provider, string>(
     {
         [Provider.arweave]: 'https://arweave.net',
-        [Provider.ipfs]: 'https://infura-ipfs.io/ipfs',
-        [Provider.swarm]: 'https://bee-2.gateway.ethswarm.org/bzz',
+        [Provider.ipfs]: 'https://mask.infura-ipfs.io/ipfs',
+        [Provider.swarm]: 'https://gateway-proxy-bee-6-0.gateway.ethswarm.org/bzz',
     },
     () => 'Unknown provider',
 )

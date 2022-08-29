@@ -4,13 +4,14 @@ import type { Constant } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import { DialogContent } from '@mui/material'
-import { PluginPetMessages, PluginPetRPC } from '../messages'
+import { PluginPetMessages } from '../messages'
 import { useI18N } from '../locales'
 import { PetShareDialog } from './PetShareDialog'
 import { PetSetDialog } from './PetSetDialog'
-import { useWeb3Connection } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { usePetConstants } from '@masknet/web3-shared-evm'
+import type { ConfigRSSNode } from '../types'
 
 enum PetFriendNFTStep {
     SetFriendNFT = 'set',
@@ -19,16 +20,18 @@ enum PetFriendNFTStep {
 
 export function PetDialog() {
     const t = useI18N()
-    const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const { Storage } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { open, closeDialog } = useRemoteControlledDialog(PluginPetMessages.events.essayDialogUpdated, () => {})
     const [step, setStep] = useState(PetFriendNFTStep.SetFriendNFT)
     const [configNFTs, setConfigNFTs] = useState<Record<string, Constant> | undefined>(undefined)
     const [isReady, cancel] = useTimeout(500)
     const { NFTS_BLOCK_ADDRESS = '' } = usePetConstants()
     useAsync(async () => {
-        if (!connection) return
-        setConfigNFTs(await PluginPetRPC.getConfigNFTsFromRSS(connection, NFTS_BLOCK_ADDRESS))
-    }, [connection, NFTS_BLOCK_ADDRESS])
+        if (!Storage) return
+        const storage = Storage.createRSS3Storage(NFTS_BLOCK_ADDRESS)
+        const data = await storage.get<ConfigRSSNode>('_pet_nfts')
+        setConfigNFTs(data?.essay)
+    }, [Storage, NFTS_BLOCK_ADDRESS])
 
     const handleSetDialogClose = () => setStep(PetFriendNFTStep.ShareFriendNFT)
 

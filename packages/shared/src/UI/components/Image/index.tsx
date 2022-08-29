@@ -1,43 +1,83 @@
-import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { CircularProgress, useTheme } from '@mui/material'
 import type { ImgHTMLAttributes } from 'react'
 import { useAsync } from 'react-use'
+import classNames from 'classnames'
+import { makeStyles, parseColor, useStylesExtends } from '@masknet/theme'
+import { Box, CircularProgress, useTheme } from '@mui/material'
+import { resolveCORSLink, resolveIPFSLink } from '@masknet/web3-shared-base'
 
-const useStyles = makeStyles()(() => ({}))
+const useStyles = makeStyles()((theme) => ({
+    circle: {
+        color: parseColor(theme.palette.maskColor.main).setAlpha(0.5).toRgbString(),
+    },
+    failImage: {
+        width: 30,
+        height: 30,
+    },
+    spinContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        position: 'relative',
+    },
+}))
 
-interface ImageProps extends ImgHTMLAttributes<HTMLImageElement>, withClasses<'loadingFailImage'> {
+interface ImageProps
+    extends ImgHTMLAttributes<HTMLImageElement>,
+        withClasses<'fallbackImage' | 'imageLoading' | 'imageLoadingBox'> {
     fallbackImage?: URL
 }
 
-export function Image(props: ImageProps) {
-    const classes = useStylesExtends(useStyles(), props)
+export function Image({ fallbackImage, ...rest }: ImageProps) {
+    const classes = useStylesExtends(useStyles(), rest)
     const theme = useTheme()
-    const maskImageURL =
-        theme.palette.mode === 'dark'
-            ? new URL('./mask_dark.png', import.meta.url)
-            : new URL('./mask_light.png', import.meta.url)
+    const fallbackImageURL = resolveCORSLink(
+        resolveIPFSLink(fallbackImage?.toString()) ??
+            (theme.palette.mode === 'dark'
+                ? new URL('./nft_token_fallback_dark.png', import.meta.url).toString()
+                : new URL('./nft_token_fallback.png', import.meta.url)
+            ).toString(),
+    )
 
-    const { loading, value } = useAsync(async () => {
-        if (!props.src) return
-        const data = await globalThis.r2d2Fetch(props.src)
-        return URL.createObjectURL(await data.blob())
-    }, [props.src])
+    const { value: image, loading: imageLoading } = useAsync(async () => {
+        if (!rest.src) return
+        // base64 image
+        if (rest.src.startsWith('data')) return rest.src
+        const response = await fetch(rest.src, {
+            cache: 'force-cache',
+        })
+        return URL.createObjectURL(await response.blob())
+    }, [rest.src])
+
+    if (imageLoading) {
+        return (
+            <Box className={classes.imageLoadingBox}>
+                <Box className={classes.spinContainer}>
+                    <CircularProgress
+                        variant="determinate"
+                        value={100}
+                        className={classNames(classes.imageLoading, classes.circle)}
+                    />
+                    <CircularProgress
+                        variant="indeterminate"
+                        disableShrink
+                        className={classes.imageLoading}
+                        sx={{ position: 'absolute', left: 0 }}
+                    />
+                </Box>
+            </Box>
+        )
+    }
+
+    if (image) {
+        return (
+            <Box className={classes.imageLoadingBox}>
+                <img crossOrigin="anonymous" {...rest} src={image} />
+            </Box>
+        )
+    }
 
     return (
-        <>
-            {loading ? (
-                <CircularProgress size="small" />
-            ) : (
-                <img
-                    {...props}
-                    src={value ?? props.src}
-                    onError={(event) => {
-                        const target = event.currentTarget as HTMLImageElement
-                        target.src = (props.fallbackImage ?? maskImageURL).toString()
-                        target.classList.add(classes.loadingFailImage ?? '')
-                    }}
-                />
-            )}
-        </>
+        <Box className={classes.imageLoadingBox}>
+            <img {...rest} src={fallbackImageURL} className={classNames(classes.failImage, classes.fallbackImage)} />
+        </Box>
     )
 }

@@ -1,4 +1,4 @@
-import type { Plugin } from '@masknet/plugin-infra'
+import { Plugin, PluginId } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { base } from '../base'
@@ -7,6 +7,7 @@ import { setupContext } from './context'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { Trans } from 'react-i18next'
 import { CrossIsolationMessages } from '@masknet/shared-base'
+import { useEffect } from 'react'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -26,6 +27,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
             return {
                 RenderEntryComponent(EntryComponentProps) {
+                    useEffect(() => {
+                        return CrossIsolationMessages.events.requestOpenApplication.on(({ open, application }) => {
+                            if (application !== PluginId.Web3Profile) return
+                            CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToLocal({ open })
+                        })
+                    }, [])
+
                     return (
                         <>
                             <ApplicationEntry
@@ -36,7 +44,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 onClick={() =>
                                     EntryComponentProps?.onClick
                                         ? EntryComponentProps?.onClick()
-                                        : CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToAll({
+                                        : CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToLocal({
                                               open: true,
                                           })
                                 }
@@ -58,6 +66,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 },
             }
         })(),
+    ],
+    SettingTabs: [
+        {
+            ID: PluginId.Web3Profile,
+            label: 'Web3Profile',
+            priority: 2,
+        },
     ],
 }
 

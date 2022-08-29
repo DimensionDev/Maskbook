@@ -13,7 +13,7 @@ import {
     queryRemoteI18NBundle,
 } from '@masknet/shared-base'
 import { Environment, assertNotEnvironment, ValueRef } from '@dimensiondev/holoflows-kit'
-import { IdentityResolved, Plugin, PluginId, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { IdentityResolved, Plugin, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { getCurrentIdentifier, getCurrentSNSNetwork } from '../social-network-adaptor/utils'
 import { createPluginHost, createPartialSharedUIContext } from '../../shared/plugin-infra/host'
 import { definedSocialNetworkUIs } from './define'
@@ -93,6 +93,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.injection.profileTab?.(signal)
     ui.injection.profileTabContent?.(signal)
 
+    ui.injection.profileCover?.(signal)
     ui.injection.userAvatar?.(signal)
     ui.injection.profileAvatar?.(signal)
     ui.injection.profileTip?.(signal)
@@ -101,6 +102,11 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.injection.openNFTAvatar?.(signal)
     ui.injection.postAndReplyNFTAvatar?.(signal)
     ui.injection.avatarClipNFT?.(signal)
+
+    ui.injection.avatar?.(signal)
+    ui.injection.profileCard?.(signal)
+
+    ui.injection.PluginSettingsDialog?.(signal)
 
     // Update user avatar
     ui.collecting.currentVisitingIdentityProvider?.recognized.addListener((ref) => {
@@ -115,7 +121,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     const allPersonaSub = createSubscriptionFromAsync(
         () => {
-            console.log('DEBUG: currentPersonaIdentifier')
             return Services.Identity.queryOwnedPersonaInformation(true)
         },
         [],
@@ -143,13 +148,9 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                     lastRecognizedProfile: lastRecognizedSub,
                     currentVisitingProfile: currentVisitingSub,
                     allPersonas: allPersonaSub,
-                    privileged_silentSign: () => {
-                        if (pluginID !== PluginId.Web3Profile)
-                            throw new TypeError("current plugin doesn't support silent sign function")
-                        return Services.Identity.generateSignResult
-                    },
                     getPersonaAvatar: Services.Identity.getPersonaAvatar,
                     ownProofChanged: MaskMessages.events.ownProofChanged,
+                    setMinimalMode: Services.Settings.setPluginMinimalModeEnabled,
                 }
             },
             Services.Settings.getPluginMinimalModeEnabled,
