@@ -452,6 +452,8 @@ export namespace Plugin.SNSAdaptor {
         ProfileCardTabs?: ProfileTab[]
         /** This UI will be rendered as cover on the profile page */
         ProfileCover?: ProfileCover[]
+        /** This UI will be rendered as tab on the setting dialog */
+        SettingTabs?: SettingTab[]
         /** This UI will be rendered components on the avatar realm */
         AvatarRealm?: AvatarRealm
         /** This UI will be rendered as plugin wrapper page */
@@ -719,6 +721,23 @@ export namespace Plugin.SNSAdaptor {
              * Sort social address in expected order
              */
             sortSocialAddress?(a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>): number
+        }
+    }
+
+    export interface SettingTab {
+        ID: string
+        /**
+         * The name of setting tab
+         */
+        label: I18NStringField | string
+
+        /**
+         * Used to order the tabs
+         */
+        priority: number
+
+        UI?: {
+            TabContent: InjectUI<{ onClose: () => void }>
         }
     }
 }

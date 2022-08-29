@@ -165,6 +165,10 @@ export interface SwapDialogEvent {
     }
 }
 
+export interface SettingDialogEvent {
+    open: boolean
+}
+
 /** This is a subset of browser.permissions.Permission */
 export type PossiblyUsedWebExtensionPermission = 'clipboardRead'
 
