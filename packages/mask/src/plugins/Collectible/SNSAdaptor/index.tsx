@@ -10,6 +10,7 @@ import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { NFTPage } from './NFTPage'
 import { NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
 import { setupContext } from '../context'
+import { Box } from '@mui/material'
 
 const NFTTabConfig: Plugin.SNSAdaptor.ProfileTab = {
     ID: `${PLUGIN_ID}_nfts`,
@@ -75,7 +76,17 @@ const sns: Plugin.SNSAdaptor.Definition = {
             priority: 2,
             UI: {
                 TabContent({ socialAddress, identity }) {
-                    return <NFTPage socialAddress={socialAddress} identity={identity} />
+                    return (
+                        <Box pr={1.5}>
+                            <NFTPage
+                                socialAddress={socialAddress}
+                                identity={identity}
+                                gridProps={{
+                                    gap: 1.5,
+                                }}
+                            />
+                        </Box>
+                    )
                 },
             },
             Utils: {

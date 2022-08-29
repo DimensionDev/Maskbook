@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { Link, Typography, TypographyProps } from '@mui/material'
-import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
+import { NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { ReversedAddress } from '../../..'
 import { Icons } from '@masknet/icons'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
@@ -21,43 +21,53 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface AddressItemProps {
-    identityAddress?: SocialAddress<NetworkPluginID>
-    reverse?: boolean
+    socialAddress?: SocialAddress<NetworkPluginID>
     TypographyProps?: TypographyProps
-    iconProps?: string
+    linkIconClassName?: string
+    disableLinkIcon?: boolean
+}
+
+const isReversible = (type?: SocialAddressType) => {
+    if (!type) return false
+    const reversible = [SocialAddressType.KV, SocialAddressType.ADDRESS, SocialAddressType.NEXT_ID].includes(type)
+    return reversible
 }
 
 export function AddressItem({
-    identityAddress,
-    reverse = true,
+    socialAddress,
     TypographyProps = { fontSize: '14px', fontWeight: 700 },
-    iconProps,
+    linkIconClassName,
+    disableLinkIcon,
 }: AddressItemProps) {
     const { classes } = useStyles()
-    const { Others } = useWeb3State(identityAddress?.networkSupporterPluginID)
+    const { Others } = useWeb3State(socialAddress?.networkSupporterPluginID)
 
-    if (!identityAddress) return null
+    if (!socialAddress) return null
+
+    const reversible = isReversible(socialAddress.type)
 
     return (
         <>
-            <Typography>
-                {reverse ? (
+            {reversible ? (
+                <Typography>
                     <ReversedAddress
                         TypographyProps={TypographyProps}
-                        address={identityAddress.address}
-                        pluginId={identityAddress.networkSupporterPluginID}
+                        address={socialAddress.address}
+                        pluginId={socialAddress.networkSupporterPluginID}
                     />
-                ) : (
-                    <Typography {...TypographyProps}>{identityAddress.label}</Typography>
-                )}
-            </Typography>
-            <Link
-                className={classes.link}
-                href={Others?.explorerResolver.addressLink(Others?.getDefaultChainId(), identityAddress.address)}
-                target="_blank"
-                rel="noopener noreferrer">
-                <Icons.LinkOut size={20} className={iconProps} />
-            </Link>
+                </Typography>
+            ) : (
+                <Typography {...TypographyProps}>{socialAddress.label}</Typography>
+            )}
+            {disableLinkIcon ? null : (
+                <Link
+                    className={classes.link}
+                    href={Others?.explorerResolver.addressLink(Others?.getDefaultChainId(), socialAddress.address)}
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    <Icons.LinkOut size={20} className={linkIconClassName} />
+                </Link>
+            )}
         </>
     )
 }
