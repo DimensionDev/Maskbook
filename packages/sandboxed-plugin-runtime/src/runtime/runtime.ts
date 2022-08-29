@@ -40,6 +40,9 @@ export class PluginRuntime {
         if (this.#moduleMap.has(moduleName)) throw new TypeError('Module is already defined.')
         this.#moduleMap.set(moduleName, { bindings })
     }
+    addReExportAllModule(moduleName: string, from: string[]) {
+        this.#moduleMap.set(moduleName, { bindings: from.map((x) => ({ exportAllFrom: x })) })
+    }
     addNamespaceModule(moduleName: string, blueNamespace: object) {
         if (this.#moduleMap.has(moduleName)) throw new TypeError('Module is already defined.')
         const keys = Object.keys(blueNamespace)

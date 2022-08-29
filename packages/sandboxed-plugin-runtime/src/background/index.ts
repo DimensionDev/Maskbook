@@ -8,7 +8,10 @@ import { isManifest } from '../utils/manifest.js'
 import type { ExportAllBinding } from '@masknet/compartment'
 import type { BackupHandler } from '../types/worker-api.js'
 
-export interface BackgroundHostHooks extends BasicHostHooks {}
+export interface BackgroundHostHooks extends BasicHostHooks {
+    // TODO: return type should be Plugin.Worker.DatabaseStorage
+    createTaggedStorage(id: string, signal: AbortSignal): unknown
+}
 export interface BackgroundInstance extends BasicHostInstance {
     backupHandler?: BackupHandler
 }
@@ -36,9 +39,8 @@ export class BackgroundPluginHost extends PluginRunner<BackgroundHostHooks, Back
                 instance.backupHandler = { onBackup, onRestore }
                 console.debug(`${id} attached a backup handler.`)
             },
+            taggedStorage: this.hooks.createTaggedStorage(id, signal),
         })
-        // TODO: provide impl for @masknet/plugin/utils/open (openWindow)
-        // TODO: provide impl for @masknet/plugin/worker (taggedStorage)
 
         const { background, rpc, rpcGenerator } = manifest.entries || {}
         const instance: BackgroundInstance = {
@@ -60,7 +62,6 @@ export class BackgroundPluginHost extends PluginRunner<BackgroundHostHooks, Back
         if (rpcGenerator) rpcReExports.push({ exportAllFrom: getURL(id, rpcGenerator, isLocal), as: 'workerGenerator' })
         runtime.addReExportModule('@masknet/plugin/utils/rpc', ...rpcReExports)
 
-        // TODO: abort rpc when the signal is aborted
         const rpcReExport = await runtime.imports('@masknet/plugin/utils/rpc')
         if (rpc) {
             AsyncCall(rpcReExport.worker, {
