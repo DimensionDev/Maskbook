@@ -24,9 +24,11 @@ export async function fetchEvents(chainId: ChainId) {
             resolved: false,
             canceled: false,
         },
-        from: 26746224,
-        rangeWide: 50000,
+        // from: 1,
+        // rangeWide: 200000,
     })
+
+    console.log('events: ', events)
 
     return events
 }

@@ -3,7 +3,7 @@
   "private": true,
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "@azuro-protocol/sdk": "^0.4.4",
+    "@azuro-protocol/sdk": "^0.4.6",
     "@balancer-labs/sor": "^1.0.0",
     "@dimensiondev/holoflows-kit": "^0.9.0-20220520093249-0870919",
     "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
