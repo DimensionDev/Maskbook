@@ -236,16 +236,13 @@ function NFTAvatarInTwitter() {
         }
     }, [nftAvatar, showAvatar, nftInfo])
 
-    const handler = () => {
-        location.reload()
-    }
-
     useEffect(() => {
+        const handle = () => location.reload()
         const profileSave = searchProfileSaveSelector().evaluate()
         if (!profileSave) return
-        profileSave.addEventListener('click', handler)
-        return () => profileSave.removeEventListener('click', handler)
-    }, [handler, _location.pathname])
+        profileSave.addEventListener('click', handle)
+        return () => profileSave.removeEventListener('click', handle)
+    }, [_location.pathname])
 
     if (!nftAvatar || !size || loadingWallet || loadingNFTInfo || !showAvatar) return null
 
