@@ -164,7 +164,7 @@ export interface SwapDialogEvent {
     }
 }
 
-export interface SettingDialodEvent {
+export interface SettingDialogEvent {
     open: boolean
 }
 

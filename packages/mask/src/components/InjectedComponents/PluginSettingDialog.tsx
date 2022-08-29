@@ -58,7 +58,7 @@ export function PluginSettingDialog() {
     return (
         <TabContext value={currentTab}>
             <InjectedDialog
-                open={open}
+                open
                 onClose={() => setOpen(false)}
                 title={t('settings')}
                 titleTail={

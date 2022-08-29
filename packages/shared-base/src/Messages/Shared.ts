@@ -7,7 +7,7 @@ import type {
     OpenApplicationRequestEvent,
     SwapDialogEvent,
     OpenProfileCardEvent,
-    SettingDialodEvent,
+    SettingDialogEvent,
 } from './Mask.js'
 
 /**
@@ -31,6 +31,6 @@ export interface CrossIsolationEvents {
     requestCheckSecurityDialog: CheckSecurityDialogRequest
     requestOpenApplication: OpenApplicationRequestEvent
     swapDialogUpdate: SwapDialogEvent
-    pluginSettingDialogUpdate: SettingDialodEvent
+    pluginSettingDialogUpdate: SettingDialogEvent
     requestOpenProfileCard: OpenProfileCardEvent
 }

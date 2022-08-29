@@ -3,7 +3,7 @@ import { PluginSettingDialog } from '../../../components/InjectedComponents/Plug
 import { createReactRootShadowed, startWatch } from '../../../utils'
 import { rootSelector } from '../utils/selector'
 
-export function inbjectPluginSettingDialogAtTwitter(signal: AbortSignal) {
+export function injectPluginSettingDialogAtTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(rootSelector())
     startWatch(watcher, signal)
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<PluginSettingDialog />)
