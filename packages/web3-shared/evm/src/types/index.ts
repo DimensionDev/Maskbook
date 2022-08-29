@@ -74,6 +74,10 @@ export enum ChainId {
 
     // Astar
     Astar = 592,
+
+    ZKSync_Alpha_Testnet = 280,
+
+    Crossbell = 3737,
 }
 
 /**

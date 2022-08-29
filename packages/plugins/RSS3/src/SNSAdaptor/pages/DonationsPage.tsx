@@ -4,7 +4,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { CollectionType, RSS3BaseAPI } from '@masknet/web3-providers'
 import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
-import { formatEthereumAddress, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Box, List, ListItem, Typography } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { differenceWith } from 'lodash-unified'
@@ -52,9 +52,7 @@ export interface DonationPageProps {
 export function DonationPage({ socialAddress, publicKey, userId }: DonationPageProps) {
     const { classes } = useStyles()
     const t = useI18N()
-    const { value: allDonations = EMPTY_LIST, loading } = useDonations(
-        formatEthereumAddress(socialAddress?.address ?? ZERO_ADDRESS),
-    )
+    const { value: allDonations = EMPTY_LIST, loading } = useDonations(socialAddress?.address ?? ZERO_ADDRESS)
 
     const { isHiddenAddress, hiddenList } = useWeb3ProfileHiddenSettings(userId, publicKey, {
         address: socialAddress?.address,
@@ -64,10 +62,10 @@ export function DonationPage({ socialAddress, publicKey, userId }: DonationPageP
 
     const donations = useMemo(() => {
         if (!hiddenList.length) return allDonations
-        return differenceWith(allDonations, hiddenList, (donation, id) => donation.id === id)
+        return differenceWith(allDonations, hiddenList, (donation, id) => donation.actions[0].index.toString() === id)
     }, [hiddenList, allDonations])
 
-    const [selectedDonation, setSelectedDonation] = useState<RSS3BaseAPI.Collection | undefined>()
+    const [selectedDonation, setSelectedDonation] = useState<RSS3BaseAPI.Donation>()
 
     if (loading || !donations.length) {
         return (
@@ -87,11 +85,12 @@ export function DonationPage({ socialAddress, publicKey, userId }: DonationPageP
             </Box>
         )
     }
+    const action = selectedDonation ? selectedDonation.actions[0] : null
     return (
         <Box p={2}>
             <List className={classes.list}>
                 {donations.map((donation) => (
-                    <ListItem key={donation.id} className={classes.listItem}>
+                    <ListItem key={donation.actions[0].index.toString()} className={classes.listItem}>
                         <DonationCard
                             onSelect={setSelectedDonation}
                             className={classes.donationCard}
@@ -101,19 +100,19 @@ export function DonationPage({ socialAddress, publicKey, userId }: DonationPageP
                     </ListItem>
                 ))}
             </List>
-            {selectedDonation ? (
+            {selectedDonation && action ? (
                 <CollectionDetailCard
                     open
                     onClose={() => setSelectedDonation(undefined)}
-                    img={selectedDonation?.imageURL}
-                    title={selectedDonation?.title}
-                    referenceURL={selectedDonation?.actions?.[0]?.related_urls?.[0]}
-                    description={selectedDonation?.description}
+                    img={action.metadata?.logo}
+                    title={action.metadata?.title}
+                    referenceURL={action.related_urls?.[0]}
+                    description={action.metadata?.description}
                     type={CollectionType.Donations}
-                    time={selectedDonation?.timestamp}
-                    tokenSymbol={selectedDonation?.tokenSymbol}
-                    tokenAmount={selectedDonation?.tokenAmount?.toString()}
-                    hash={selectedDonation?.hash}
+                    time={selectedDonation.timestamp}
+                    tokenSymbol={action.metadata?.token.symbol}
+                    tokenAmount={action.metadata?.token.value_display}
+                    hash={selectedDonation.hash}
                 />
             ) : null}
         </Box>
