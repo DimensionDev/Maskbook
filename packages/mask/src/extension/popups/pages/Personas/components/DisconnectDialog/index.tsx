@@ -71,7 +71,7 @@ export const DisconnectDialog = memo<DisconnectDialogProps>(
                         {t('popups_persona_disconnect_confirmation_description')}
                     </Typography>
                     <Typography className={classes.content}>
-                        {t('popups_persona')}:{' '}
+                        {`${t('popups_persona')}: `}
                         {formatPersonaFingerprint(currentPersona?.identifier.rawPublicKey ?? '', 10)}
                         <br />
                         {t('popups_twitter_id')}: @{unbundledIdentity.userId}

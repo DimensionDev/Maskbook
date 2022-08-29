@@ -220,6 +220,34 @@ export function useAllTradeComputed(
         traderEstimateGas: mdexEstimateGas,
     } = useUniswapV2Like(tradeProviders, TradeProvider.MDEX, inputAmount_, inputToken, outputToken)
 
+    // Arthswap
+    const {
+        trader_: arthswap_,
+        trader: arthswap,
+        traderEstimateGas: arthswapEstimateGas,
+    } = useUniswapV2Like(tradeProviders, TradeProvider.ARTHSWAP, inputAmount_, inputToken, outputToken)
+
+    // Versa Finance
+    const {
+        trader_: versa_,
+        trader: versa,
+        traderEstimateGas: versaEstimateGas,
+    } = useUniswapV2Like(tradeProviders, TradeProvider.VERSA, inputAmount_, inputToken, outputToken)
+
+    // Astar Exchange
+    const {
+        trader_: astarexchange_,
+        trader: astarexchange,
+        traderEstimateGas: astarexchangeEstimateGas,
+    } = useUniswapV2Like(tradeProviders, TradeProvider.ASTAREXCHANGE, inputAmount_, inputToken, outputToken)
+
+    // Yumi Swap
+    const {
+        trader_: yumiswap_,
+        trader: yumiswap,
+        traderEstimateGas: yumiswapEstimateGas,
+    } = useUniswapV2Like(tradeProviders, TradeProvider.YUMISWAP, inputAmount_, inputToken, outputToken)
+
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
         { provider: TradeProvider.SUSHISWAP, ...sushiSwap_, value: sushiSwap, gas: sushiSwapEstimateGas },
@@ -238,6 +266,20 @@ export function useAllTradeComputed(
         { provider: TradeProvider.VENOMSWAP, ...venomswap_, value: venomswap, gas: venomswapEstimateGas },
         { provider: TradeProvider.OPENSWAP, ...openswap_, value: openswap, gas: openswapEstimateGas },
         { provider: TradeProvider.MDEX, ...mdex_, value: mdex, gas: mdexEstimateGas },
+        { provider: TradeProvider.ARTHSWAP, ...arthswap_, value: arthswap, gas: arthswapEstimateGas },
+        { provider: TradeProvider.VERSA, ...versa_, value: versa, gas: versaEstimateGas },
+        {
+            provider: TradeProvider.ASTAREXCHANGE,
+            ...astarexchange_,
+            value: astarexchange,
+            gas: astarexchangeEstimateGas,
+        },
+        {
+            provider: TradeProvider.YUMISWAP,
+            ...yumiswap_,
+            value: yumiswap,
+            gas: yumiswapEstimateGas,
+        },
     ]
 
     return nativeToken_.value

@@ -1,13 +1,14 @@
-import { first } from 'lodash-unified'
 import { memo, useRef, useCallback, useState, useEffect, useMemo } from 'react'
-import { getRPCConstants } from '@masknet/web3-shared-evm'
-import IframeResizer, { IFrameComponent } from 'iframe-resizer-react'
-import { mediaViewerUrl } from '../../../constants'
 import { useUpdateEffect } from 'react-use'
+import { first } from 'lodash-unified'
+import IframeResizer, { IFrameComponent } from 'iframe-resizer-react'
+import { getRPCConstants } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box } from '@mui/material'
-import { AssetLoadingIcon, GeneratedIconProps, MaskPlaceholder } from '@masknet/icons'
+import { ImageIcon } from '@masknet/shared'
+import { GeneratedIconProps, Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import { MEDIA_VIEWER_URL } from '../../../constants'
 
 interface ERC721TokenQuery {
     contractAddress: string
@@ -17,7 +18,7 @@ interface ERC721TokenQuery {
 
 interface AssetPlayerProps
     extends withClasses<
-        'errorPlaceholder' | 'errorIcon' | 'loadingPlaceholder' | 'loadingIcon' | 'loadingFailImage' | 'iframe'
+        'errorPlaceholder' | 'errorIcon' | 'loadingPlaceholder' | 'loadingIcon' | 'fallbackImage' | 'iframe'
     > {
     url?: string
     type?: string
@@ -38,11 +39,18 @@ interface AssetPlayerProps
     fallbackResourceLoader?: JSX.Element
     setERC721TokenName?: (name: string) => void
     setSourceType?: (type: string) => void
+    showNetwork?: boolean
+    networkIcon?: URL | string
 }
 const useStyles = makeStyles()({
     hidden: {
         position: 'absolute',
         visibility: 'hidden',
+    },
+    networkIcon: {
+        position: 'absolute',
+        top: 6,
+        right: 6,
     },
 })
 
@@ -55,7 +63,7 @@ enum AssetPlayerState {
 
 export const AssetPlayer = memo<AssetPlayerProps>((props) => {
     const ref = useRef<IFrameComponent | null>(null)
-    const { url, type, options, iconProps, isFixedIframeSize = true } = props
+    const { url, type, options, iconProps, isFixedIframeSize = true, showNetwork = false, networkIcon } = props
     const classes = useStylesExtends(useStyles(), props)
     const [hidden, setHidden] = useState(Boolean(props.renderTimeout))
     const { RPC_URLS } = getRPCConstants(props.erc721Token?.chainId)
@@ -157,7 +165,7 @@ export const AssetPlayer = memo<AssetPlayerProps>((props) => {
         () =>
             hidden ? null : (
                 <IframeResizer
-                    src={mediaViewerUrl}
+                    src={MEDIA_VIEWER_URL}
                     onInit={(iframe: IFrameComponent) => {
                         ref.current = iframe
                         setPlayerState(AssetPlayerState.INIT)
@@ -184,11 +192,11 @@ export const AssetPlayer = memo<AssetPlayerProps>((props) => {
                     allowFullScreen
                 />
             ),
-        [hidden, playerState, classes.hidden, classes.iframe, mediaViewerUrl],
+        [hidden, playerState, classes.hidden, classes.iframe, MEDIA_VIEWER_URL],
     )
 
     return (
-        <>
+        <Box width="100%" height="100%">
             <Box
                 className={
                     playerState === AssetPlayerState.ERROR ? classes.errorPlaceholder : classes.loadingPlaceholder
@@ -201,13 +209,17 @@ export const AssetPlayer = memo<AssetPlayerProps>((props) => {
                 {playerState === AssetPlayerState.ERROR
                     ? props.fallbackResourceLoader ??
                       (props.fallbackImage ? (
-                          <img className={classes.loadingFailImage} src={props.fallbackImage.toString()} />
+                          <img className={classes.fallbackImage} src={props.fallbackImage.toString()} />
                       ) : (
-                          <MaskPlaceholder className={classes.errorIcon} {...iconProps} />
+                          <Icons.MaskPlaceholder className={classes.errorIcon} {...iconProps} />
                       ))
-                    : props.loadingIcon ?? <AssetLoadingIcon className={classes.loadingIcon} />}
+                    : props.loadingIcon ??
+                      (props.fallbackImage && (
+                          <img className={classes.fallbackImage} src={props.fallbackImage.toString()} />
+                      )) ?? <Icons.AssetLoading className={classes.loadingIcon} />}
             </Box>
             {IframeResizerMemo}
-        </>
+            {showNetwork && <ImageIcon icon={networkIcon} size={20} classes={{ icon: classes.networkIcon }} />}
+        </Box>
     )
 })

@@ -21,7 +21,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { Box, Button, Chip, Collapse, MenuItem, Popover, Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput'
-import { UserIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { FormattedAddress, FormattedBalance, TokenIcon, useMenuConfig } from '@masknet/shared'
 import { ChevronDown } from 'react-feather'
 import { noop } from 'lodash-unified'
@@ -62,9 +62,7 @@ const useStyles = makeStyles()({
         color: '#15181B',
     },
     user: {
-        stroke: '#15181B',
-        fill: 'none',
-        fontSize: 20,
+        color: '#15181B',
         cursor: 'pointer',
     },
     title: {
@@ -439,7 +437,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                                 InputProps={{
                                     endAdornment: (
                                         <div onClick={openAccountMenu} style={{ marginLeft: 12 }}>
-                                            <UserIcon className={classes.user} />
+                                            <Icons.User size={20} className={classes.user} />
                                         </div>
                                     ),
                                     onClick: (event) => {

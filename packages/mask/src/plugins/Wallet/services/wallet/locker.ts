@@ -1,6 +1,5 @@
-import { currentMaskWalletLockStatusSettings } from '../../settings'
+import { currentMaskWalletLockStatusSettings, LockStatus } from '../../../../../shared/legacy-settings/wallet-settings'
 import * as password from './password'
-import { LockStatus } from '../../types'
 import { WalletMessages } from '../../messages'
 
 export async function isLocked() {

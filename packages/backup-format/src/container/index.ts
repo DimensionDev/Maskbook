@@ -1,5 +1,5 @@
 import { unreachable, concatArrayBuffer } from '@dimensiondev/kit'
-import { BackupErrors } from '../BackupErrors'
+import { BackupErrors } from '../BackupErrors.js'
 
 const MAGIC_HEADER_Version0 = new TextEncoder().encode('MASK-BACKUP-V000')
 const CHECKSUM_LENGTH = 32

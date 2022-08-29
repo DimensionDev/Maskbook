@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, Wallet } from '@masknet/web3-shared-base'
 import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
-import { EditIcon, MaskWalletIcon, SettingIcon, SuccessIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { ListItem, ListItemText, Typography } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
 import { CopyIconButton } from '../../../components/CopyIconButton'
@@ -47,17 +47,17 @@ const useStyles = makeStyles()({
         marginLeft: 4,
     },
     edit: {
-        fontSize: 16,
-        stroke: '#1C68F3',
-        fill: 'none',
+        width: 16,
+        height: 16,
+        color: '#1C68F3',
         marginLeft: 10,
         cursor: 'pointer',
     },
     setting: {
-        fontSize: 12,
+        width: 12,
+        height: 12,
         cursor: 'pointer',
-        fill: 'none',
-        stroke: '#1C68F3',
+        color: '#1C68F3',
         marginLeft: 4,
     },
 })
@@ -95,7 +95,7 @@ export const WalletItem = memo<WalletItemProps>(({ wallet, onClick, isSelected }
 
     const [element] = useHover((isHovering) => (
         <ListItem className={classes.item} onClick={onClick} style={{ paddingRight: isSelected ? 10 : 42 }}>
-            <MaskWalletIcon />
+            <Icons.MaskWallet />
             <ListItemText className={classes.text}>
                 <Typography className={classes.name}>
                     <Typography component="span" display="flex" alignItems="center">
@@ -105,16 +105,16 @@ export const WalletItem = memo<WalletItemProps>(({ wallet, onClick, isSelected }
                                 ({Others.formatDomainName(domain)})
                             </Typography>
                         ) : null}
-                        {isHovering ? <EditIcon className={classes.edit} onClick={handleRename} /> : null}
+                        {isHovering ? <Icons.Edit className={classes.edit} onClick={handleRename} /> : null}
                     </Typography>
                 </Typography>
                 <Typography className={classes.address}>
                     <FormattedAddress address={wallet.address} size={4} formatter={formatEthereumAddress} />
                     <CopyIconButton className={classes.copy} text={wallet.address} />
-                    <SettingIcon className={classes.setting} onClick={handleEdit} />
+                    <Icons.Setting className={classes.setting} onClick={handleEdit} />
                 </Typography>
             </ListItemText>
-            {isSelected ? <SuccessIcon style={{ marginLeft: 8, fontSize: 18 }} /> : null}
+            {isSelected ? <Icons.Success style={{ marginLeft: 8, fontSize: 18 }} /> : null}
         </ListItem>
     ))
 

@@ -11,14 +11,17 @@ import Services from '../../extension/service'
 import MaskPostExtraInfoWrapper from '../../plugins/MaskPluginWrapper'
 import { HTMLProps, useCallback } from 'react'
 import { Button, Skeleton, useTheme } from '@mui/material'
-import { PluginIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../utils'
+import { useSubscription } from 'use-subscription'
 
 function useDisabledPlugins() {
     const activated = new Set(useActivatedPluginsSNSAdaptor('any').map((x) => x.ID))
     const minimalMode = new Set(useActivatedPluginsSNSAdaptor(true).map((x) => x.ID))
-    const disabledPlugins = [...registeredPlugins].filter((x) => !activated.has(x.ID) || minimalMode.has(x.ID))
+    const disabledPlugins = useSubscription(registeredPlugins)
+        .filter((plugin) => !activated.has(plugin[0]) || minimalMode.has(plugin[0]))
+        .map((x) => x[1])
     return disabledPlugins
 }
 
@@ -79,7 +82,7 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
                     action={
                         <Button
                             size="small"
-                            startIcon={<PluginIcon style={{ width: 18, height: 18 }} />}
+                            startIcon={<Icons.Plugin size={18} />}
                             variant="roundedDark"
                             onClick={() => onClick(x)}
                             sx={{

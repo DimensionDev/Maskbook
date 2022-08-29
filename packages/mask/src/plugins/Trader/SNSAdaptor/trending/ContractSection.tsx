@@ -1,10 +1,9 @@
-import { PopupCopyIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { useNetworkDescriptor } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, TokenIcon, useSnackbarCallback, WalletIcon } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { Box, IconButton, Stack, Typography } from '@mui/material'
+import { Box, IconButton, Stack, Typography, useTheme } from '@mui/material'
 import { useCopyToClipboard } from 'react-use'
 
 export interface ContractSectionProps {
@@ -13,19 +12,8 @@ export interface ContractSectionProps {
     iconURL?: string
 }
 
-const useStyles = makeStyles()((theme) => ({
-    icon: {
-        width: 16,
-        height: 16,
-    },
-    copy: {
-        color: theme.palette.maskColor?.second,
-        fontSize: 16,
-    },
-}))
-
 export const ContractSection = ({ address, chainId, iconURL }: ContractSectionProps) => {
-    const { classes } = useStyles()
+    const theme = useTheme()
     const [, copyToClipboard] = useCopyToClipboard()
     const chain = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
 
@@ -47,7 +35,7 @@ export const ContractSection = ({ address, chainId, iconURL }: ContractSectionPr
                 <FormattedAddress address={address} size={4} formatter={formatEthereumAddress} />
             </Typography>
             <IconButton sx={{ padding: 0 }} color="primary" size="small" onClick={onCopyAddress}>
-                <PopupCopyIcon className={classes.copy} />
+                <Icons.PopupCopy size={16} color={theme.palette.maskColor?.second} />
             </IconButton>
         </Stack>
     )

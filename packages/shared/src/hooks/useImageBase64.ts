@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import LRUCache from 'lru-cache'
 import { useAsyncRetry } from 'react-use'
+import LRUCache from 'lru-cache'
 
 function readAsDataURL(blob: Blob) {
     return new Promise<string>((resolve, reject) => {
@@ -21,14 +21,7 @@ const responseToBase64 = async (response: Response) => {
     return dataURL
 }
 
-export function useAccessibleUrl(
-    key = '',
-    url?: string,
-    options?: {
-        fetch: typeof globalThis.fetch
-    },
-) {
-    const fetch = options?.fetch ?? globalThis.fetch
+export function useAccessibleUrl(key = '', url?: string) {
     const [availableUrl, setAvailableUrl] = useState(() => {
         const hit = cache.get(key)
         return typeof hit === 'string' ? hit : ''
@@ -41,16 +34,29 @@ export function useAccessibleUrl(
             setAvailableUrl(hit)
             return
         } else if (hit instanceof Promise) {
-            setAvailableUrl(await responseToBase64((await hit).clone()))
-            return
+            try {
+                const response = await hit
+                const result = await responseToBase64(response.clone())
+                setAvailableUrl(result)
+                return
+            } catch {
+                setAvailableUrl('')
+            }
         }
 
-        if (!url || !fetch) return
-        const fetchingTask = fetch(`https://cors.r2d2.to/?${url}`)
+        if (!url) return
+        const fetchingTask = fetch(url, {
+            headers: {
+                accept: url.includes('imagedelivery.net')
+                    ? 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8'
+                    : '',
+            },
+        })
         cache.set(key, fetchingTask)
         const response = await fetchingTask
         if (!response.ok) {
             cache.delete(key)
+            setAvailableUrl('')
             return
         }
 

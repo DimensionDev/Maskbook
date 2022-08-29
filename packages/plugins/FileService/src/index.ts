@@ -1,20 +1,22 @@
 import { registerPlugin } from '@masknet/plugin-infra'
-import { base } from './base'
+import { base } from './base.js'
 
-export { FileInfoMetadataReader } from './helpers'
+// TODO: avoid export things from this file
+export { FileInfoMetadataReader } from './helpers.js'
 
 registerPlugin({
     ...base,
     SNSAdaptor: {
-        load: () => import('./SNSAdaptor'),
+        load: () => import('./SNSAdaptor/index.js'),
         hotModuleReload: (hot) => {
-            import.meta.webpackHot && import.meta.webpackHot.accept('./SNSAdaptor', () => hot(import('./SNSAdaptor')))
+            import.meta.webpackHot &&
+                import.meta.webpackHot.accept('./SNSAdaptor', () => hot(import('./SNSAdaptor/index.js')))
         },
     },
     Worker: {
-        load: () => import('./Worker'),
+        load: () => import('./Worker/index.js'),
         hotModuleReload: (hot) => {
-            import.meta.webpackHot && import.meta.webpackHot.accept('./Worker', () => hot(import('./Worker')))
+            import.meta.webpackHot && import.meta.webpackHot.accept('./Worker', () => hot(import('./Worker/index.js')))
         },
     },
 })

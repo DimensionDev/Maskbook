@@ -89,7 +89,7 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
         inactive: {
             opacity: 0.5,
         },
-        loadingFailImage: {
+        fallbackImage: {
             width: 64,
             height: 64,
         },
@@ -115,9 +115,6 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
             fontWeight: 700,
             fontSize: 12,
         },
-        tooltip: {
-            marginBottom: `${theme.spacing(0.5)} !important`,
-        },
     }
 })
 
@@ -135,7 +132,7 @@ export const NFTItem: FC<NFTItemProps> = ({ token }) => {
                 url={token.metadata?.imageURL ?? token.metadata?.imageURL}
                 tokenId={token.tokenId}
                 classes={{
-                    loadingFailImage: classes.loadingFailImage,
+                    fallbackImage: classes.fallbackImage,
                     iframe: classes.assetPlayerIframe,
                     imgWrapper: classes.imgWrapper,
                     wrapper: classes.wrapper,
@@ -233,11 +230,11 @@ export const NFTList: FC<Props> = ({
                     )
                 })}
             </List>
-            {hasError && !finished && tokens.length && (
+            {hasError && !finished && tokens.length ? (
                 <Stack py={1}>
                     <RetryHint hint={false} retry={onNextPage} />
                 </Stack>
-            )}
+            ) : null}
             <Stack py={1}>
                 <ElementAnchor callback={onNextPage}>{!finished && <LoadingBase />}</ElementAnchor>
             </Stack>

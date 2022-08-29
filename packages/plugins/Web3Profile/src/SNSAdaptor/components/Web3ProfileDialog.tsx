@@ -1,7 +1,7 @@
 import { DialogActions, DialogContent } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useEffect, useState } from 'react'
-import { InjectedDialog } from '@masknet/shared'
+import { InjectedDialog, PersonaAction } from '@masknet/shared'
 import { useAllPersonas, useCurrentPersona, useLastRecognizedProfile } from '../hooks/usePersona'
 import { Main } from './Main'
 import { CrossIsolationMessages, NextIDPlatform, PersonaInformation, PopupRoutes } from '@masknet/shared-base'
@@ -18,9 +18,8 @@ import {
     mergeList,
     placeFirst,
 } from '../utils'
-import { WalletUnderTabsIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { context } from '../context'
-import { PersonaAction } from './PersonaAction'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { CurrentStatusMap, CURRENT_STATUS } from '../../constants'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
@@ -83,11 +82,9 @@ export function Web3ProfileDialog() {
         if (!currentPersona) return
         return NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex!)
     }, [currentPersona])
-    useEffect(() => {
-        return context?.MaskMessages.events.ownProofChanged.on(() => {
-            retryQueryBinding()
-        })
-    }, [retryQueryBinding])
+    useEffect(() => context?.ownProofChanged.on(retryQueryBinding), [retryQueryBinding])
+
+    const { value: avatar } = useAsyncRetry(async () => context.getPersonaAvatar(currentPersona?.identifier), [])
 
     const wallets =
         bindings?.proofs
@@ -95,6 +92,7 @@ export function Web3ProfileDialog() {
             ?.map((address) => ({
                 address: address?.identity,
                 platform: NetworkPluginID.PLUGIN_EVM,
+                updateTime: address.last_checked_at ?? address.created_at,
             })) || []
 
     const accounts = bindings?.proofs?.filter((proof) => proof?.platform === NextIDPlatform.Twitter) || []
@@ -145,7 +143,9 @@ export function Web3ProfileDialog() {
             fullWidth={false}
             open={open}
             isOnBack
-            titleTail={<WalletUnderTabsIcon size={24} onClick={openPopupsWindow} className={classes.titleTailButton} />}
+            titleTail={
+                <Icons.WalletUnderTabs size={24} onClick={openPopupsWindow} className={classes.titleTailButton} />
+            }
             onClose={() => setOpen(false)}>
             <DialogContent className={classes.content}>
                 <Main
@@ -173,9 +173,15 @@ export function Web3ProfileDialog() {
                     getWalletHiddenRetry={retryGetWalletHiddenList}
                 />
             </DialogContent>
-            <DialogActions className={classes.actions}>
-                <PersonaAction currentPersona={currentPersona} currentVisitingProfile={currentVisitingProfile} />
-            </DialogActions>
+            {currentPersona ? (
+                <DialogActions className={classes.actions}>
+                    <PersonaAction
+                        avatar={avatar === null ? undefined : avatar}
+                        currentPersona={currentPersona}
+                        currentVisitingProfile={currentVisitingProfile}
+                    />
+                </DialogActions>
+            ) : null}
         </InjectedDialog>
     )
 }

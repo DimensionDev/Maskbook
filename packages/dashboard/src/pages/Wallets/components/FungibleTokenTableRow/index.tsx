@@ -7,7 +7,6 @@ import {
     useChainId,
     useNetworkDescriptors,
     useCurrentWeb3NetworkPluginID,
-    useWeb3State,
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
 import {
@@ -84,7 +83,6 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const currentChainId = useChainId()
-    const { Others } = useWeb3State()
     const networkDescriptors = useNetworkDescriptors()
     const currentPluginId = useCurrentWeb3NetworkPluginID()
     const isOnCurrentChain = useMemo(() => currentChainId === asset.chainId, [asset, currentChainId])
@@ -113,21 +111,23 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                 </Box>
             </TableCell>
             <TableCell className={classes.cell} align="center" variant="body">
-                <Typography>{toFixed(formatBalance(asset.balance, asset.decimals) ?? '', 6)}</Typography>
+                <Typography>
+                    {new BigNumber(formatBalance(asset.balance, asset.decimals)).gt(pow10(-6))
+                        ? Number.parseFloat(toFixed(formatBalance(asset.balance, asset.decimals) ?? '', 6))
+                        : '<0.000001'}
+                </Typography>
             </TableCell>
             <TableCell className={classes.cell} align="center" variant="body">
                 <Typography>
                     {asset.price?.[CurrencyType.USD]
-                        ? new BigNumber(asset.price[CurrencyType.USD] ?? '').gt(pow10(-6))
-                            ? formatCurrency(Number.parseFloat(asset.price[CurrencyType.USD] ?? ''))
-                            : '<0.000001'
+                        ? formatCurrency(Number.parseFloat(asset.price[CurrencyType.USD] ?? ''))
                         : '-'}
                 </Typography>
             </TableCell>
             <TableCell className={classes.cell} align="center">
                 <Typography>
                     {getTokenUSDValue(asset.value) < 0.01 ? (
-                        '<0.01'
+                        '<$0.01'
                     ) : (
                         <FormattedCurrency
                             value={getTokenUSDValue(asset.value).toFixed(2)}

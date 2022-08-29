@@ -1,48 +1,83 @@
 import { useAsyncRetry } from 'react-use'
-import type { ChainId } from '@masknet/web3-shared-evm'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useWeb3Hub } from '@masknet/plugin-infra/web3'
+import { isValidAddress, SchemaType } from '@masknet/web3-shared-evm'
+import { useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { usePersonas } from './usePersonas'
-import { PluginNFTAvatarRPC } from '../messages'
-import type { EnhanceableSite } from '@masknet/shared-base'
+import { EMPTY_LIST, EnhanceableSite, NextIDPlatform } from '@masknet/shared-base'
+import type { NetworkPluginID, SocialIdentity } from '@masknet/web3-shared-base'
+import { NextIDProof } from '@masknet/web3-providers'
+import type { IdentityResolved } from '@masknet/plugin-infra'
+import Services from '../../../extension/service'
+import { useGetAddress } from './useGetAddress'
 
-export function useTokenOwner(
-    address: string,
-    tokenId: string,
-    pluginId: NetworkPluginID,
-    chainId?: ChainId,
-    account?: string,
-) {
-    const hub = useWeb3Hub<'all'>(pluginId, {
-        chainId,
-        account,
-    })
-
-    return useAsyncRetry(async () => {
-        if (!address || !tokenId || !hub?.getNonFungibleAsset) return
-        const token = await hub.getNonFungibleAsset(address, tokenId, { chainId })
-        return {
-            owner: token?.owner?.address ?? token?.ownerId,
-            name: token?.contract?.name,
-            symbol: token?.contract?.symbol,
-        }
-    }, [hub, tokenId, address, account, chainId])
+async function queryCurrentPersona(identityResolved: IdentityResolved) {
+    if (!identityResolved.identifier) return
+    const personaInformation = await Services.Identity.queryPersonaByProfile(identityResolved.identifier)
+    if (!personaInformation?.identifier.publicKeyAsHex) return
+    return NextIDProof.queryExistedBindingByPersona(personaInformation?.identifier.publicKeyAsHex)
 }
 
-export function useCheckTokenOwner(pluginId: NetworkPluginID, userId: string, owner: string) {
-    const { value: persona, loading } = usePersonas(userId)
-    const { value: storage, loading: loadingAddress } = useAsyncRetry(
-        async () =>
-            PluginNFTAvatarRPC.getAddress(activatedSocialNetworkUI.networkIdentifier as EnhanceableSite, userId),
-        [userId],
-    )
+export function useCheckTokenOwner(
+    pluginId: NetworkPluginID,
+    address: string,
+    tokenId: string,
+    schemaType: SchemaType,
+    socialIdentity?: SocialIdentity,
+) {
+    const connection = useWeb3Connection(pluginId)
 
-    return {
-        loading: loading || loadingAddress,
-        isOwner: Boolean(
-            (storage?.address && isSameAddress(storage.address, owner) && pluginId === storage.networkPluginID) ||
-                persona?.wallets.some((x) => isSameAddress(x.identity, owner)),
-        ),
-    }
+    const getAddress = useGetAddress()
+
+    return useAsyncRetry(async () => {
+        if (!socialIdentity?.identifier?.userId || socialIdentity?.identifier.userId === '$unknown') return
+        if (!address || !tokenId) return
+
+        const token = await connection?.getNonFungibleToken(address, tokenId)
+
+        const wallets =
+            socialIdentity.binding?.proofs.filter(
+                (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),
+            ) ?? EMPTY_LIST
+
+        const storage = await getAddress(
+            activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
+            socialIdentity.identifier?.userId ?? '',
+        )
+        if (storage?.address) {
+            const isOwner = await connection?.getNonFungibleTokenOwnership(
+                address,
+                tokenId,
+                storage.address,
+                schemaType,
+            )
+            if (isOwner)
+                return {
+                    isOwner,
+                    name: token?.contract?.name ?? token?.metadata?.name ?? '',
+                    symbol: token?.contract?.symbol ?? 'ETH',
+                    schema: token?.schema,
+                }
+        }
+
+        for (const wallet of wallets) {
+            const isOwner = await connection?.getNonFungibleTokenOwnership(
+                address,
+                tokenId,
+                wallet.identity,
+                schemaType,
+            )
+            if (isOwner)
+                return {
+                    isOwner,
+                    name: token?.contract?.name ?? token?.metadata?.name ?? '',
+                    symbol: token?.contract?.symbol ?? 'ETH',
+                    schema: token?.schema,
+                }
+        }
+        return {
+            isOwner: false,
+            name: token?.contract?.name ?? token?.metadata?.name ?? '',
+            symbol: token?.contract?.symbol ?? 'ETH',
+            schema: token?.schema,
+        }
+    }, [address, tokenId, schemaType, connection, socialIdentity])
 }

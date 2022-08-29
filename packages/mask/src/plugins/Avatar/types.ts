@@ -40,14 +40,22 @@ export interface NFTRSSNode {
     nft: AvatarMetaDB
 }
 
-export const RSS3Cache = new Map<string, [Promise<NFTRSSNode | undefined>, number]>()
-
 export interface NFTInfo {
     amount: string
     name: string
     symbol: string
-    image: string
-    owner: string
-    slug: string
-    permalink: string
+    image?: string
+    owner?: string
+    slug?: string
+    permalink?: string
 }
+
+export enum PFP_TYPE {
+    BACKGROUND = 'background',
+    PFP = 'pfp',
+}
+
+export type AvatarMeta = NextIDAvatarMeta & { sign: string }
+
+export type AddressStorageV1 = { address: string; networkPluginID: NetworkPluginID }
+export type AddressStorageV2 = Record<string, AddressStorageV1> & Record<NetworkPluginID, string>

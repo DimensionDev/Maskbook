@@ -4,11 +4,10 @@ import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { Box, Card, CircularProgress, Typography, Paper, Link } from '@mui/material'
-import { useStylesExtends, makeStyles, MaskColorVar } from '@masknet/theme'
+import { useStylesExtends, makeStyles, MaskColorVar, ActionButton } from '@masknet/theme'
 import { useProviderDescriptor, useNetworkDescriptor, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
-import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
-import { WarningTriangleIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { isDashboardPage } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{ contentBackground?: string }>()((theme, props) => ({
@@ -134,7 +133,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
             </Paper>
             {providerDescriptor?.type === ProviderType.WalletConnect ? null : (
                 <Card className={classes.tipContent} elevation={0}>
-                    <WarningTriangleIcon className={classes.warningTriangleIcon} />
+                    <Icons.WarningTriangle className={classes.warningTriangleIcon} />
                     <Typography className={classes.tipContentText} variant="body2">
                         <Trans
                             i18nKey="plugin_wallet_connect_tip"

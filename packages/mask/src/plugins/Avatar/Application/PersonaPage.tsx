@@ -1,16 +1,19 @@
-import { BindingProof, NextIDPlatform } from '@masknet/shared-base'
+import { BindingProof, EMPTY_LIST, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { Box, CircularProgress, DialogContent, Stack, Typography } from '@mui/material'
+import { Box, CircularProgress, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { useSubscription } from 'use-subscription'
 import { CloseIcon } from '../assets/close'
 import { context } from '../context'
-import { usePersonas } from '../hooks/usePersonas'
-import { useI18N } from '../locales/i18n_generated'
+import { useI18N } from '../locales'
 import { PersonaItem } from './PersonaItem'
 import { InfoIcon } from '../assets/info'
-import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
+import { usePersonasFromDB } from '../../../components/DataSource/usePersonasFromDB'
 import type { AllChainsNonFungibleToken } from '../types'
+import { PersonaAction } from '@masknet/shared'
+import { useAsyncRetry } from 'react-use'
+import { isValidAddress } from '@masknet/web3-shared-evm'
+import { useLastRecognizedSocialIdentity } from '../../../components/DataSource/useActivatedUI'
 
 const useStyles = makeStyles()((theme) => ({
     messageBox: {
@@ -34,78 +37,118 @@ interface PersonaPageProps {
 export function PersonaPage(props: PersonaPageProps) {
     const { onNext, onChange, onClose } = props
     const [visible, setVisible] = useState(true)
-    const currentIdentity = useSubscription(context.lastRecognizedProfile)
     const { classes } = useStyles()
-    const { loading, value: persona } = usePersonas()
-    const myPersonas = useMyPersonas()
+    const { loading, value: socialIdentity } = useLastRecognizedSocialIdentity()
+
+    const myPersonas = usePersonasFromDB()
+    const _persona = useSubscription(context.currentPersona)
+
+    const currentPersona = myPersonas?.find(
+        (x: PersonaInformation) => x.identifier.rawPublicKey.toLowerCase() === _persona?.rawPublicKey.toLowerCase(),
+    )
+
     const t = useI18N()
 
     const onSelect = useCallback(
         (proof: BindingProof, tokenInfo?: AllChainsNonFungibleToken) => {
-            onChange(proof, persona?.wallets, tokenInfo)
+            onChange(
+                proof,
+                socialIdentity?.binding?.proofs.filter(
+                    (x) => x.platform === NextIDPlatform.Ethereum && isValidAddress(x.identity),
+                ) ?? EMPTY_LIST,
+                tokenInfo,
+            )
             onNext()
         },
-        [persona?.wallets],
+        [socialIdentity?.binding],
     )
+    const { value: avatar } = useAsyncRetry(async () => context.getPersonaAvatar(currentPersona?.identifier), [])
 
     return (
-        <DialogContent sx={{ height: 612, padding: 2 }}>
-            {loading ? (
-                <Stack justifyContent="center" alignItems="center">
-                    <CircularProgress />
-                </Stack>
-            ) : (
-                <>
-                    {visible ? (
-                        <Box className={classes.messageBox}>
-                            <InfoIcon style={{ width: 20, height: 20 }} />
-                            <Typography color="currentColor" fontSize={14} fontFamily="Helvetica">
-                                {t.persona_hint()}
-                            </Typography>
-                            <CloseIcon
-                                sx={{ cursor: 'pointer', width: 20, height: 20 }}
-                                onClick={() => setVisible(false)}
-                            />
-                        </Box>
-                    ) : null}
-                    {persona?.binds?.proofs
-                        .filter((proof) => proof.platform === NextIDPlatform.Twitter)
-                        .filter((x) => x.identity.toLowerCase() === currentIdentity?.identifier?.userId.toLowerCase())
-                        .map((x, i) => (
-                            <PersonaItem
-                                key="avatar"
-                                avatar={currentIdentity?.avatar ?? ''}
-                                owner
-                                nickname={currentIdentity?.nickname}
-                                proof={x}
-                                userId={currentIdentity?.identifier?.userId ?? x.identity}
-                                onSelect={onSelect}
-                            />
-                        ))}
+        <>
+            <DialogContent sx={{ flex: 1, height: 450, padding: 2 }}>
+                {loading ? (
+                    <Stack justifyContent="center" alignItems="center">
+                        <CircularProgress />
+                    </Stack>
+                ) : (
+                    <>
+                        {visible ? (
+                            <Box className={classes.messageBox}>
+                                <InfoIcon style={{ width: 20, height: 20 }} />
+                                <Typography color="currentColor" fontSize={14} fontFamily="Helvetica">
+                                    {t.persona_hint()}
+                                </Typography>
+                                <CloseIcon
+                                    sx={{ cursor: 'pointer', width: 20, height: 20 }}
+                                    onClick={() => setVisible(false)}
+                                />
+                            </Box>
+                        ) : null}
+                        {socialIdentity?.binding?.proofs
+                            .filter(
+                                (proof) => proof.platform === socialIdentity.identifier?.network.replace('.com', ''),
+                            )
+                            .filter((x) => x.identity.toLowerCase() === socialIdentity.identifier?.userId.toLowerCase())
+                            .map((x, i) => (
+                                <PersonaItem
+                                    persona={socialIdentity.binding?.persona}
+                                    key={`avatar${i}`}
+                                    avatar={socialIdentity?.avatar ?? ''}
+                                    owner
+                                    nickname={socialIdentity?.nickname}
+                                    proof={x}
+                                    userId={socialIdentity?.identifier?.userId ?? x.identity}
+                                    onSelect={onSelect}
+                                />
+                            ))}
 
-                    {myPersonas?.[0] &&
-                        myPersonas[0].linkedProfiles
-                            .filter((x) => x.identifier.network === currentIdentity?.identifier?.network)
-                            .map((x, i) =>
-                                persona?.binds.proofs.some(
-                                    (y) => y.identity === x.identifier.userId.toLowerCase(),
-                                ) ? null : (
-                                    <PersonaItem
-                                        avatar=""
-                                        key={`persona${i}`}
-                                        owner={false}
-                                        userId={x.identifier.userId}
-                                    />
-                                ),
-                            )}
-                    {persona?.binds?.proofs
-                        .filter((proof) => proof.platform === NextIDPlatform.Twitter)
-                        .filter((x) => x.identity.toLowerCase() !== currentIdentity?.identifier?.userId.toLowerCase())
-                        .map((x, i) => (
-                            <PersonaItem avatar="" key={i} owner={false} userId={x.identity} proof={x} />
-                        ))}
-                </>
-            )}
-        </DialogContent>
+                        {myPersonas?.[0] &&
+                            myPersonas[0].linkedProfiles
+                                .filter(
+                                    (x) =>
+                                        x.identifier.network ===
+                                        socialIdentity?.identifier?.network.replace('.com', ''),
+                                )
+                                .map((x, i) =>
+                                    socialIdentity?.binding?.proofs.some(
+                                        (y) => y.identity.toLowerCase() === x.identifier.userId.toLowerCase(),
+                                    ) ? null : (
+                                        <PersonaItem
+                                            avatar=""
+                                            key={`persona${i}`}
+                                            owner={false}
+                                            userId={x.identifier.userId}
+                                        />
+                                    ),
+                                )}
+                        {socialIdentity?.binding?.proofs
+                            .filter(
+                                (proof) => proof.platform === socialIdentity?.identifier?.network.replace('.com', ''),
+                            )
+                            .filter(
+                                (x) => x.identity.toLowerCase() !== socialIdentity?.identifier?.userId.toLowerCase(),
+                            )
+                            .map((x, i) => (
+                                <PersonaItem
+                                    persona={socialIdentity.binding?.persona}
+                                    avatar=""
+                                    key={i}
+                                    owner={false}
+                                    userId={x.identity}
+                                    proof={x}
+                                />
+                            ))}
+                    </>
+                )}
+            </DialogContent>
+            <DialogActions style={{ padding: 0, margin: 0 }}>
+                <PersonaAction
+                    avatar={avatar === null ? undefined : avatar}
+                    currentPersona={currentPersona}
+                    currentVisitingProfile={socialIdentity}
+                />
+            </DialogActions>
+        </>
     )
 }

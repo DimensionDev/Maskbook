@@ -1,3 +1,5 @@
+import { Image } from '@masknet/shared'
+
 export interface ImageProps {
     url: string
     title?: string
@@ -14,7 +16,7 @@ export const ImageHolder = ({ url, title, isFullRound, size }: ImageProps) => {
 
     return (
         <div className={`flex justify-around relative ${roundedClass}`} style={containerStyles}>
-            <img className={`object-cover w-full h-full ${roundedClass}`} src={url} alt={title} />
+            <Image className={`object-cover w-full h-full ${roundedClass}`} src={url} alt={title} />
         </div>
     )
 }

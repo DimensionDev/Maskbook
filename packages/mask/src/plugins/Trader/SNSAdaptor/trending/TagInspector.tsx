@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { TrendingPopper } from './TrendingPopper'
 import { TagType } from '../../types'
 import type { DataProvider } from '@masknet/public-api'
-import { TraderView } from './TraderView'
+import { TrendingView } from './TrendingView'
 import { useAvailableDataProviders } from '../../trending/useAvailableDataProviders'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 
@@ -14,7 +14,7 @@ export function TagInspector(props: TagInspectorProps) {
 
     const createTrendingView = useCallback(
         (name: string, type: TagType, dataProviders: DataProvider[], reposition?: () => void) => {
-            return <TraderView name={name} tagType={type} dataProviders={dataProviders} onUpdate={reposition} />
+            return <TrendingView name={name} tagType={type} dataProviders={dataProviders} onUpdate={reposition} />
         },
         [],
     )

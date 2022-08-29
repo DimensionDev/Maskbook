@@ -1,9 +1,11 @@
 import { Environment, isEnvironment, MessageTarget, UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 import { AsyncCall, AsyncCallLogLevel, AsyncGeneratorCall } from 'async-call-rpc/full'
 import { serializer, getLocalImplementation, getLocalImplementationExotic } from '@masknet/shared-base'
+
 const log: AsyncCallLogLevel = {
-    requestReplay: true,
     type: 'pretty',
+    requestReplay: process.env.NODE_ENV === 'development',
+    sendLocalStack: process.env.NODE_ENV === 'development',
 }
 export function createPluginRPC<T extends Record<string, (...args: any) => Promise<any>>>(
     key: string,

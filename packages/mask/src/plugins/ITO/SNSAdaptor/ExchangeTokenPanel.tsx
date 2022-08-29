@@ -18,6 +18,7 @@ const useStyles = makeStyles()((theme) => ({
     line: {
         margin: theme.spacing(1),
         display: 'flex',
+        backgroundColor: theme.palette.maskColor.bottom,
     },
     input: {
         flex: 1,

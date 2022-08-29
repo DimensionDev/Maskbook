@@ -143,7 +143,8 @@ export function PersonalView(props: PersonalViewProps) {
                     </Grid>
                     <Grid item>
                         <Typography variant="body1" color="textSecondary">
-                            {Number.parseInt(props.info.currentPlayer.mostRecentSegmentPaid, 10) + 1} /{' '}
+                            {Number.parseInt(props.info.currentPlayer.mostRecentSegmentPaid, 10) + 1}
+                            {' / '}
                             {props.info.lastSegment}
                         </Typography>
                     </Grid>

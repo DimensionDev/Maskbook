@@ -1,19 +1,17 @@
 import { memo, useCallback, useEffect, useState } from 'react'
 import { Alert, Box, Button, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { InfoIcon, RefreshIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { useDashboardI18N } from '../../../../locales'
 import { MnemonicReveal } from '../../../../components/Mnemonic'
 import { VerifyMnemonicDialog } from '../VerifyMnemonicDialog'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
-import { PluginServices, Services } from '../../../../API'
+import { PluginServices } from '../../../../API'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useMnemonicWordsPuzzle } from '../../../../hooks/useMnemonicWordsPuzzle'
-
-// Private key at m/purpose'/coin_type'/account'/change
-export const HD_PATH_WITHOUT_INDEX_ETHEREUM = "m/44'/60'/0'/0"
+import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -110,15 +108,7 @@ const CreateMnemonic = memo(() => {
         )
 
         await PluginServices.Wallet.updateMaskAccount({ account: address_ })
-
-        const account = await Services.Settings.getSelectedWalletAddress()
-
-        if (!account) {
-            await PluginServices.Wallet.updateMaskAccount({
-                account: address_,
-            })
-            await PluginServices.Wallet.resolveMaskAccount([address_])
-        }
+        await PluginServices.Wallet.resolveMaskAccount([address_])
 
         return address_
     }, [location.search, words, resetCallback, hasPassword, searchParams])
@@ -168,7 +158,7 @@ export const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, onRefreshW
             <Typography className={classes.title}>Create a wallet</Typography>
             <div className={classes.refresh}>
                 <Box style={{ display: 'flex', cursor: 'pointer' }} onClick={onRefreshWords}>
-                    <RefreshIcon style={{ fill: '#1C68F3' }} />
+                    <Icons.Refresh color="#1C68F3" />
                     <Typography>{t.wallets_create_wallet_refresh()}</Typography>
                 </Box>
             </div>
@@ -184,7 +174,7 @@ export const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, onRefreshW
                 </Button>
             </Box>
             {open ? (
-                <Alert icon={<InfoIcon />} severity="error" onClose={() => setOpen(false)} className={classes.alert}>
+                <Alert icon={<Icons.Info />} severity="error" onClose={() => setOpen(false)} className={classes.alert}>
                     {t.create_wallet_mnemonic_tip()}
                 </Alert>
             ) : null}

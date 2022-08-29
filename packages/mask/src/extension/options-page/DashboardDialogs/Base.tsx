@@ -14,7 +14,7 @@ import { Theme, ThemeOptions, ThemeProvider } from '@mui/material/styles'
 import CloseIcon from '@mui/icons-material/Close'
 import { useMatchXS } from '../../../utils'
 import { useClassicMaskFullPageTheme } from '../../../utils/theme/useClassicMaskFullPageTheme'
-import { appearanceSettings, languageSettings } from '../../../settings/settings'
+import { appearanceSettings, languageSettings } from '../../../../shared/legacy-settings/settings'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { cloneDeep, merge } from 'lodash-unified'
 

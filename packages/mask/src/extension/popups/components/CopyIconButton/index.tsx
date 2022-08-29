@@ -3,7 +3,7 @@
 import { memo, useCallback, useState } from 'react'
 import { IconProps, Tooltip } from '@mui/material'
 import { useI18N } from '../../../../utils/i18n-next-ui'
-import { PopupCopyIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
 
 export interface CopyIconButtonProps extends IconProps {
@@ -36,7 +36,7 @@ export const CopyIconButton = memo<CopyIconButtonProps>(({ text, ...props }) => 
             onMouseLeave={() => setOpen(false)}
             disableFocusListener
             disableTouchListener>
-            <PopupCopyIcon onClick={onCopy} className={props.className} />
+            <Icons.PopupCopy onClick={onCopy} className={props.className} />
         </Tooltip>
     )
 })

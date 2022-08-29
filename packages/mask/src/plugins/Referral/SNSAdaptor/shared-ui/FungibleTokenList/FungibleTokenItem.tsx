@@ -2,10 +2,9 @@ import { useCallback, useMemo } from 'react'
 import classNames from 'classnames'
 import { ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import type { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
-import { CircleLoadingIcon } from '@masknet/icons'
-import type { MaskSearchableListItemProps } from '@masknet/theme'
-import { makeStyles, MaskLoadingButton } from '@masknet/theme'
-import { LoadingAnimation, TokenIcon, useSharedI18N } from '@masknet/shared'
+import { Icons } from '@masknet/icons'
+import { makeStyles, MaskLoadingButton, LoadingBase } from '@masknet/theme'
+import { TokenIcon, useSharedI18N } from '@masknet/shared'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { Box } from '@mui/system'
 
@@ -20,8 +19,16 @@ const useStyles = makeStyles()((theme) => ({
     },
     list: {
         maxHeight: '100%',
+        height: 'calc(100% - 16px)',
         padding: theme.spacing(1.5),
+        marginBottom: theme.spacing(2),
         borderRadius: theme.spacing(1),
+        boxShadow:
+            theme.palette.mode === 'dark' ? '0px 0px 20px rgba(255, 255, 255, 0.12)' : '0 0 20px rgba(0, 0, 0, 0.05)',
+        backdropFilter: 'blur(16px)',
+        '&:hover': {
+            background: theme.palette.maskColor.bg,
+        },
     },
     text: {
         display: 'flex',
@@ -36,11 +43,12 @@ const useStyles = makeStyles()((theme) => ({
         paddingRight: theme.spacing(1),
     },
     name: {
-        display: 'block',
+        display: 'flex',
+        gap: theme.spacing(0.5),
+        alignItems: 'center',
         lineHeight: '20px',
-        fontSize: 16,
-        // TODO: Should align dashboard and twitter theme in common component, depend twitter theme
-        color: theme.palette.mode === 'dark' ? '#6E767D' : '#536471',
+        fontSize: 14,
+        color: theme.palette.maskColor.second,
     },
     symbol: {
         lineHeight: '20px',
@@ -72,6 +80,11 @@ const useStyles = makeStyles()((theme) => ({
     typeIcon: {
         marginLeft: '5px',
     },
+    action: {
+        display: 'inline-flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 }))
 
 export const getFungibleTokenItem =
@@ -86,17 +99,13 @@ export const getFungibleTokenItem =
         ) => Promise<void>,
         referredTokensDefn: ChainAddress[],
     ) =>
-    ({
-        data: token,
-        onSelect,
-    }: MaskSearchableListItemProps<
-        FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>
-    >) => {
+    ({ data, index, style }: any) => {
         const t = useSharedI18N()
         const { classes } = useStyles()
 
-        if (!token) return null
-        const { address, name, symbol, decimals, logoURL, chainId } = token
+        const token = data.dataSet[index]
+        const onSelect = data.onSelect
+        const { address, name, symbol, decimals, logoURL, chainId } = token!
 
         const { source, balance, selected, loading } = useMemo(() => {
             return {
@@ -125,7 +134,7 @@ export const getFungibleTokenItem =
 
         const action = useMemo(() => {
             return source !== 'external' ? (
-                <span>{loading ? <LoadingAnimation /> : null}</span>
+                <span>{loading ? <LoadingBase /> : null}</span>
             ) : (
                 <MaskLoadingButton
                     color="primary"
@@ -133,44 +142,50 @@ export const getFungibleTokenItem =
                     size="small"
                     className={classes.importButton}
                     soloLoading
-                    loadingIndicator={<CircleLoadingIcon sx={{ fontSize: 14 }} />}>
+                    loadingIndicator={<Icons.CircleLoading size={14} />}>
                     {t.import()}
                 </MaskLoadingButton>
             )
         }, [balance, decimals, loading])
 
         return (
-            <ListItem
-                key={address}
-                button
-                className={`${classes.list} dashboard token-list`}
-                onClick={handleTokenSelect}
-                disabled={selected}>
-                <ListItemIcon>
-                    <TokenIcon classes={{ icon: classes.icon }} address={address} name={name} logoURL={logoURL} />
-                </ListItemIcon>
-                <ListItemText classes={{ primary: classes.text }}>
-                    <Typography
-                        className={classNames(classes.primary, source === 'external' ? classes.import : '')}
-                        color="textPrimary"
-                        component="span">
-                        <div className={classes.metaInfo}>
-                            <span className={classes.symbol}>{symbol}</span>{' '}
-                            {tokenHasFarm && (
-                                <Box className={classes.typeIcon}>
-                                    <SponsoredFarmIcon />
-                                </Box>
-                            )}
-                        </div>
-                        <span className={`${classes.name} dashboard token-list-symbol`}>
-                            {name}
-                            {source === 'personal' && <span> &bull; Added By User</span>}
-                        </span>
-                    </Typography>
-                    <Typography sx={{ fontSize: 16 }} color="textSecondary" component="span">
-                        {action}
-                    </Typography>
-                </ListItemText>
-            </ListItem>
+            <div style={style}>
+                <ListItem
+                    key={address}
+                    button
+                    className={`${classes.list} dashboard token-list`}
+                    onClick={handleTokenSelect}
+                    disabled={selected}>
+                    <ListItemIcon>
+                        <TokenIcon classes={{ icon: classes.icon }} address={address} name={name} logoURL={logoURL} />
+                    </ListItemIcon>
+                    <ListItemText classes={{ primary: classes.text }}>
+                        <Typography
+                            className={classNames(classes.primary, source === 'external' ? classes.import : '')}
+                            color="textPrimary"
+                            component="span">
+                            <div className={classes.metaInfo}>
+                                <span className={classes.symbol}>{symbol}</span>{' '}
+                                {tokenHasFarm && (
+                                    <Box className={classes.typeIcon}>
+                                        <SponsoredFarmIcon />
+                                    </Box>
+                                )}
+                            </div>
+                            <span className={`${classes.name} dashboard token-list-symbol`}>
+                                {name}
+                                {source === 'personal' && <span> &bull; Added By User</span>}
+                            </span>
+                        </Typography>
+                        <Typography
+                            className={classes.action}
+                            sx={{ fontSize: 16 }}
+                            color="textSecondary"
+                            component="span">
+                            {action}
+                        </Typography>
+                    </ListItemText>
+                </ListItem>
+            </div>
         )
     }

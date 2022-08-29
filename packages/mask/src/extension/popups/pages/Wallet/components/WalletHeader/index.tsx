@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { useMatch, useNavigate } from 'react-router-dom'
+import { useLocation, useMatch, useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
 import { WalletHeaderUI } from './UI'
@@ -14,10 +14,12 @@ import {
 import { Flags } from '../../../../../../../shared'
 import { MenuItem, Typography } from '@mui/material'
 import { useMenuConfig, WalletIcon, ChainIcon } from '@masknet/shared'
-import { currentMaskWalletAccountSettings } from '../../../../../../plugins/Wallet/settings'
+import { currentMaskWalletAccountSettings } from '../../../../../../../shared/legacy-settings/wallet-settings'
 import { WalletRPC } from '../../../../../../plugins/Wallet/messages'
 import { NormalHeader } from '../../../../components/NormalHeader'
 import { NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-base'
+import Services from '../../../../../service'
+import { useConnected } from '../../hooks/useConnected'
 
 const useStyles = makeStyles()({
     menu: {
@@ -30,7 +32,7 @@ const useStyles = makeStyles()({
 
 export const WalletHeader = memo(() => {
     const { classes } = useStyles()
-
+    const location = useLocation()
     const navigate = useNavigate()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
@@ -45,7 +47,7 @@ export const WalletHeader = memo(() => {
         () => networks.find((x) => x.chainId === chainId) ?? networks[0],
         [networks, chainId],
     )
-
+    const { connected, url } = useConnected()
     const matchWallet = useMatch(PopupRoutes.Wallet)
     const matchSwitchWallet = useMatch(PopupRoutes.SwitchWallet)
     const matchContractInteraction = useMatch(PopupRoutes.ContractInteraction)
@@ -87,7 +89,7 @@ export const WalletHeader = memo(() => {
         },
     )
 
-    if (!wallet) return <NormalHeader onlyTitle={!!matchWalletRecovered} />
+    if (!wallet) return <NormalHeader onlyTitle={!!matchWalletRecovered} onClose={Services.Helper.removePopupWindow} />
 
     if (matchContractInteraction && wallet) {
         return (
@@ -100,6 +102,8 @@ export const WalletHeader = memo(() => {
                     wallet={wallet}
                     isSwitchWallet={!!matchSwitchWallet}
                     disabled
+                    connected={connected}
+                    hiddenConnected={!url}
                 />
                 {menu}
             </>
@@ -109,16 +113,18 @@ export const WalletHeader = memo(() => {
     return (matchSwitchWallet || matchWallet) && wallet ? (
         <>
             <WalletHeaderUI
+                connected={connected}
                 currentNetwork={currentNetwork}
                 chainId={chainId}
                 onOpenNetworkSelector={openMenu}
                 onActionClick={() => navigate(matchSwitchWallet ? PopupRoutes.Wallet : PopupRoutes.SwitchWallet)}
                 wallet={wallet}
                 isSwitchWallet={!!matchSwitchWallet}
+                hiddenConnected={!url}
             />
             {menu}
         </>
     ) : (
-        <NormalHeader />
+        <NormalHeader onClose={() => Services.Helper.removePopupWindow()} />
     )
 })

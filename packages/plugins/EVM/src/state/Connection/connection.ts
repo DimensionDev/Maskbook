@@ -1,6 +1,5 @@
 import { AbiItem, numberToHex, toHex, toNumber } from 'web3-utils'
 import { first } from 'lodash-unified'
-import urlcat from 'urlcat'
 import type { RequestArguments, SignedTransaction, TransactionReceipt } from 'web3-core'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
 import type { ERC20Bytes32 } from '@masknet/web3-contracts/types/ERC20Bytes32'
@@ -25,15 +24,15 @@ import {
     TransactionDetailed,
     createNativeToken,
     createContract,
-    getTokenConstants,
+    getTokenConstant,
     sendTransaction,
     createERC20Token,
     parseStringOrBytes32,
     createWeb3,
     createWeb3Provider,
-    getEthereumConstants,
+    getEthereumConstant,
     isValidAddress,
-    resolveIPFSLinkFromURL,
+    isNativeTokenAddress,
     encodeTransaction,
     Operation,
 } from '@masknet/web3-shared-evm'
@@ -44,14 +43,15 @@ import {
     createNonFungibleTokenCollection,
     createNonFungibleTokenContract,
     createNonFungibleTokenMetadata,
-    currySameAddress,
     FungibleToken,
     isSameAddress,
     NonFungibleToken,
-    NonFungibleTokenCollection,
+    NonFungibleCollection,
     NonFungibleTokenContract,
     NonFungibleTokenMetadata,
     TransactionStatusType,
+    resolveIPFSLink,
+    resolveCORSLink,
 } from '@masknet/web3-shared-base'
 import type { BaseContract } from '@masknet/web3-contracts/types/types'
 import { createContext, dispatch } from './composer'
@@ -83,11 +83,6 @@ export function isReadOnlyMethod(method: EthereumMethodType) {
     ].includes(method)
 }
 
-function isNativeTokenAddress(chainId: ChainId, address: string) {
-    if (!address) return false
-    return isSameAddress(address, getTokenConstants(chainId).NATIVE_TOKEN_ADDRESS)
-}
-
 async function fetchJSON<T extends unknown>(
     input: RequestInfo,
     init?: RequestInit | undefined,
@@ -106,7 +101,7 @@ class Connection implements EVM_Connection {
         private chainId: ChainId,
         private account: string,
         private providerType: ProviderType,
-        private context?: Plugin.Shared.SharedContext,
+        private context?: Plugin.Shared.SharedUIContext,
     ) {}
 
     // Hijack RPC requests and process them with koa like middleware
@@ -222,7 +217,7 @@ class Connection implements EVM_Connection {
         const options = this.getOptions(initial)
 
         // Native
-        if (!address || isNativeTokenAddress(options.chainId, address)) throw new Error('Invalid token address.')
+        if (!address || isNativeTokenAddress(address)) throw new Error('Invalid token address.')
 
         // ERC20
         const contract = await this.getERC20Contract(address, options)
@@ -250,7 +245,7 @@ class Connection implements EVM_Connection {
         const options = this.getOptions(initial)
 
         // Native
-        if (!address || isNativeTokenAddress(options.chainId, address)) throw new Error('Invalid token address.')
+        if (!address || isNativeTokenAddress(address)) throw new Error('Invalid token address.')
 
         // ERC721 & ERC1155
         const contract = await this.getERC721Contract(address, options)
@@ -266,7 +261,7 @@ class Connection implements EVM_Connection {
     ): Promise<string> {
         const options = this.getOptions(initial)
         // Native
-        if (!address || isNativeTokenAddress(options.chainId, address)) {
+        if (!address || isNativeTokenAddress(address)) {
             const tx: Transaction = {
                 from: options.account,
                 to: recipient,
@@ -387,6 +382,23 @@ class Connection implements EVM_Connection {
         )
     }
 
+    async getNonFungibleTokenOwner(
+        address: string,
+        tokenId: string,
+        schema?: SchemaType,
+        initial?: EVM_Web3ConnectionOptions,
+    ) {
+        const options = this.getOptions(initial)
+        const actualSchema = schema ?? (await this.getTokenSchema(address, options))
+
+        // ERC1155
+        if (actualSchema === SchemaType.ERC1155) return ''
+
+        // ERC721
+        const contract = await this.getERC721Contract(address, options)
+        return (await contract?.methods.ownerOf(tokenId).call()) ?? ''
+    }
+
     async getNonFungibleTokenOwnership(
         address: string,
         tokenId: string,
@@ -421,10 +433,7 @@ class Connection implements EVM_Connection {
             if (uri.startsWith('https://api.opensea.io/') && tokenId) return uri.replace('0x{id}', tokenId)
 
             // add cors header
-            if (!uri.startsWith('ipfs://'))
-                return urlcat('https://cors.r2d2.to/?:url', {
-                    url: uri,
-                })
+            if (!uri.startsWith('ipfs://')) return resolveCORSLink(resolveIPFSLink(uri))!
 
             return uri
         }
@@ -446,8 +455,8 @@ class Connection implements EVM_Connection {
                 '',
                 response.description,
                 undefined,
-                resolveIPFSLinkFromURL(response.image),
-                resolveIPFSLinkFromURL(response.image),
+                resolveIPFSLink(response.image),
+                resolveIPFSLink(response.image),
             )
         }
 
@@ -464,8 +473,8 @@ class Connection implements EVM_Connection {
             '',
             response.description,
             undefined,
-            resolveIPFSLinkFromURL(response.image),
-            resolveIPFSLinkFromURL(response.image),
+            resolveIPFSLink(response.image),
+            resolveIPFSLink(response.image),
         )
     }
     async getNonFungibleTokenContract(
@@ -518,7 +527,7 @@ class Connection implements EVM_Connection {
         address: string,
         schema?: SchemaType,
         initial?: EVM_Web3ConnectionOptions,
-    ): Promise<NonFungibleTokenCollection<ChainId>> {
+    ): Promise<NonFungibleCollection<ChainId, SchemaType>> {
         const options = this.getOptions(initial)
         const actualSchema = schema ?? (await this.getTokenSchema(address, options))
 
@@ -546,7 +555,7 @@ class Connection implements EVM_Connection {
         const options = this.getOptions(initial)
 
         // Native
-        if (!address || isNativeTokenAddress(options.chainId, address)) return this.getNativeTokenBalance(options)
+        if (!address || isNativeTokenAddress(address)) return this.getNativeTokenBalance(options)
 
         // ERC20
         const contract = await this.getERC20Contract(address, options)
@@ -578,15 +587,15 @@ class Connection implements EVM_Connection {
         if (!listOfAddress.length) return {}
 
         const options = this.getOptions(initial)
-        const { NATIVE_TOKEN_ADDRESS = '' } = getTokenConstants(options.chainId)
-        const { BALANCE_CHECKER_ADDRESS } = getEthereumConstants(options.chainId)
+        const NATIVE_TOKEN_ADDRESS = getTokenConstant(options.chainId, 'NATIVE_TOKEN_ADDRESS')
+        const BALANCE_CHECKER_ADDRESS = getEthereumConstant(options.chainId, 'BALANCE_CHECKER_ADDRESS')
         const entities: Array<[string, string]> = []
 
-        if (listOfAddress.some(currySameAddress(NATIVE_TOKEN_ADDRESS))) {
-            entities.push([NATIVE_TOKEN_ADDRESS, await this.getBalance(options.account, options)])
+        if (listOfAddress.some(isNativeTokenAddress)) {
+            entities.push([NATIVE_TOKEN_ADDRESS ?? '', await this.getBalance(options.account, options)])
         }
 
-        const listOfNonNativeAddress = listOfAddress.filter((x) => !isSameAddress(NATIVE_TOKEN_ADDRESS, x))
+        const listOfNonNativeAddress = listOfAddress.filter((x) => !isNativeTokenAddress(x))
 
         if (listOfNonNativeAddress.length) {
             const contract = await this.getWeb3Contract<BalanceChecker>(
@@ -597,7 +606,7 @@ class Connection implements EVM_Connection {
             const balances = await contract?.methods.balances([options.account], listOfNonNativeAddress).call({
                 // cannot check the sender's balance in the same contract
                 from: undefined,
-                chainId: numberToHex(options.account),
+                chainId: numberToHex(options.chainId),
             })
 
             listOfNonNativeAddress.forEach((x, i) => {
@@ -614,7 +623,7 @@ class Connection implements EVM_Connection {
         if (!listOfAddress.length) return {}
 
         const options = this.getOptions(initial)
-        const { BALANCE_CHECKER_ADDRESS } = getEthereumConstants(options.chainId)
+        const BALANCE_CHECKER_ADDRESS = getEthereumConstant(options.chainId, 'BALANCE_CHECKER_ADDRESS')
         const contract = await this.getWeb3Contract<BalanceChecker>(
             BALANCE_CHECKER_ADDRESS ?? '',
             BalanceCheckerABI as AbiItem[],
@@ -644,7 +653,7 @@ class Connection implements EVM_Connection {
         const options = this.getOptions(initial)
 
         // Native
-        if (!address || isNativeTokenAddress(options.chainId, address)) return this.getNativeToken(options)
+        if (!address || isNativeTokenAddress(address)) return this.getNativeToken(options)
 
         // ERC20
         const contract = await this.getERC20Contract(address, options)
@@ -1037,7 +1046,7 @@ class Connection implements EVM_Connection {
  * @returns
  */
 export function createConnection(
-    context?: Plugin.Shared.SharedContext,
+    context?: Plugin.Shared.SharedUIContext,
     options?: {
         chainId?: ChainId
         account?: string

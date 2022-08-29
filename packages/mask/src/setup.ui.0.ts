@@ -1,6 +1,7 @@
 import type { KVStorageBackend } from '@masknet/shared-base'
 import { setupMaskKVStorageBackend } from '../shared/kv-storage'
 import Services from './extension/service'
+import { contentFetch } from './utils/fetcher'
 
 const memory: KVStorageBackend = {
     beforeAutoSync: Promise.resolve(),
@@ -23,4 +24,12 @@ const indexedDB: KVStorageBackend = {
 setupMaskKVStorageBackend(indexedDB, memory)
 
 // Temporary, will be removed when the Mask SDK is ready
-Reflect.set(globalThis, 'r2d2Fetch', Services.Helper.r2d2Fetch)
+Reflect.set(globalThis, 'r2d2Fetch', (req: RequestInfo, init?: RequestInit) => {
+    const signal = init?.signal
+    if (init) delete init.signal
+    return Services.Helper.r2d2Fetch(req, init).then((response) => {
+        signal?.throwIfAborted()
+        return response
+    })
+})
+Reflect.set(globalThis, 'fetch', contentFetch)

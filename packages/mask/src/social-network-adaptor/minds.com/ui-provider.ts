@@ -25,6 +25,8 @@ import { mindsShared } from './shared'
 import { makeStyles } from '@masknet/theme'
 import { MindsRenderFragments } from './customization/render-fragments'
 import { enableFbStyleTextPayloadReplace } from '../../../shared-ui/TypedMessageRender/transformer'
+import { injectMindsProfileCover } from './injection/ProfileCover'
+import { injectAvatar } from './injection/Avatar'
 
 const useInjectedDialogClassesOverwriteMinds = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -141,6 +143,7 @@ const mindsUI: SocialNetworkUI.Definition = {
     },
     injection: {
         toolbox: injectToolboxHintAtMinds,
+        profileCover: injectMindsProfileCover,
         pageInspector: injectPageInspectorDefault(),
         postInspector: injectPostInspectorAtMinds,
         enhancedPostRenderer: injectPostReplacerAtMinds,
@@ -164,6 +167,7 @@ const mindsUI: SocialNetworkUI.Definition = {
         },
         // NOT SUPPORTED YET
         userBadge: undefined,
+        avatar: injectAvatar,
     },
     configuration: {
         steganography: {

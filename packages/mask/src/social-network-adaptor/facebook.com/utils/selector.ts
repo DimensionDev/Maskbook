@@ -68,7 +68,16 @@ export const searchFacebookAvatarContainerSelector = () =>
     querySelector('div[data-pagelet="ProfileActions"] > div > div')
 
 export const searchFacebookProfileSettingButtonSelector = () =>
-    querySelector('[role="button"] [role="img"]').closest(10).querySelector('input[type="file"] ~ div').closest<E>(2)
+    querySelector(
+        '[role="main"] > div > div > div > div > div > div:last-child > div:last-child > div input',
+    ).closest<E>(2)
+
+export const searchFacebookProfileCoverSelector = () =>
+    querySelector('[role="button"] [role="img"]')
+        .closest(10)
+        .querySelector('input[type="file"] ~ div')
+        .closest<E>(6)
+        .querySelector('div')
 
 export const searchFacebookEditProfileSelector = () =>
     querySelector('[role="main"] [role="button"] [role="img"]')
@@ -85,6 +94,8 @@ export const searchFacebookSaveAvatarButtonSelector = () =>
 
 export const searchFacebookConfirmAvatarImageSelector = () =>
     querySelector('[role="dialog"] [role="slider"]').closest(7).querySelector('img')
+
+export const inpageAvatarSelector = () => querySelectorAll('[type="nested/pressable"]').closest<HTMLAnchorElement>(2)
 // #region
 
 export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
@@ -97,36 +108,34 @@ export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
 
 // for getting normal tab style
 export const profileTabUnselectedSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-pagelet="ProfileTabs"] a[aria-selected="false"]')
+    querySelector<E>('[role="main"] a[aria-selected="false"]')
 
 // for getting activated tab style
 export const profileTabSelectedSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-pagelet="ProfileTabs"] [aria-selected="true"]')
+    querySelector<E>('[role="main"] [aria-selected="true"]')
 
 // for inserting web3 tab
 export const searchProfileTabSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-pagelet="ProfileTabs"] a:nth-child(7)')
+    querySelector<E>('[role="main"] a:nth-child(7)')
 
 // for getting the inserted web3 tab
 export const web3TabSelector: () => LiveSelector<HTMLSpanElement, true> = () =>
-    querySelector<HTMLSpanElement>('[data-pagelet="ProfileTabs"] a:nth-child(7)+span')
+    querySelector<HTMLSpanElement>('[role="main"] a:nth-child(7)+span')
 
 // for inserting web3 tab content
 export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-pagelet="ProfileAppSection_0"], [data-pagelet="ProfileTimeline"]')
-        .closest(1)
-        .querySelector('div:first-of-type')
+    querySelector<E>('[role="main"] > div:last-child > div')
 
 // for getting profile section style
 export const profileSectionSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-pagelet="ProfileAppSection_0"], [data-pagelet="ProfileTimeline"]').querySelector('[style]')
+    querySelector<E>('[role="main"]').querySelector('[style]')
 
 export const searchIntroSectionSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-pagelet="ProfileTilesFeed_0"]')
+    querySelector<E>('[role="main"] > div:last-child > div:last-child')
 
-export const searchBioSelector: () => LiveSelector<HTMLSpanElement, true> = () =>
-    querySelector<HTMLSpanElement>(
-        '[data-pagelet="ProfileTilesFeed_0"] > div > div > div > div > div:last-child span[dir="auto"]',
+export const searchBioSelector = () =>
+    searchIntroSectionSelector().querySelector<E>(
+        'div > div > div:last-child > div > div > div > div > div > div > div:nth-child(2) > div span',
     )
 
 export const searchResultHeadingSelector = () => querySelector('[role="article"]')

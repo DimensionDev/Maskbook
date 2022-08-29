@@ -1,11 +1,13 @@
+import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { Box, CircularProgress, Typography } from '@mui/material'
+import { Box, Skeleton, Typography } from '@mui/material'
+import { range } from 'lodash-unified'
 import type { FC } from 'react'
-import { useI18N } from '../../locales'
 
 interface Props {
     loading?: boolean
     empty?: boolean
+    description?: string
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -13,25 +15,35 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: theme.spacing(6),
+        height: 300,
+        flexDirection: 'column',
+    },
+    card: {
+        marginBottom: 16,
     },
 }))
 
-export const StatusBox: FC<Props> = ({ loading, empty }) => {
+export const StatusBox: FC<Props> = ({ loading, empty, description }) => {
     const { classes } = useStyles()
-    const t = useI18N()
     if (loading) {
         return (
-            <Box className={classes.statusBox}>
-                <CircularProgress />
-            </Box>
+            <>
+                {range(3).map((i) => (
+                    <Box className={classes.card} key={i}>
+                        <Skeleton animation="wave" variant="rectangular" height={125} />
+                    </Box>
+                ))}
+            </>
         )
     }
 
     if (empty) {
         return (
             <Box className={classes.statusBox}>
-                <Typography color="textPrimary">{t.no_data()}</Typography>
+                <Icons.EmptySimple size={32} />
+                <Typography color={(theme) => theme.palette.maskColor.second} fontSize="14px" fontWeight={400}>
+                    {description}
+                </Typography>
             </Box>
         )
     }

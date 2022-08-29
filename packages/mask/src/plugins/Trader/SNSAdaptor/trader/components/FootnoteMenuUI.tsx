@@ -1,9 +1,9 @@
-import { Typography, MenuItem, Link, Stack, useTheme } from '@mui/material'
+import { Typography, MenuItem, Link, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useMenuConfig } from '@masknet/shared'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
-import { CheckCircleIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -15,6 +15,9 @@ const useStyles = makeStyles()((theme) => ({
         display: 'inline-flex',
         alignItems: 'center',
         fontSize: 10,
+        color: theme.palette.maskColor.dark,
+    },
+    icon: {
         color: theme.palette.maskColor.dark,
     },
 }))
@@ -34,9 +37,8 @@ export interface FootnoteMenuProps {
 
 export function FootnoteMenuUI(props: FootnoteMenuProps) {
     const { children, options, selectedIndex = -1, onChange } = props
-    const theme = useTheme()
 
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
     const onSelect = (option: FootnoteMenuOption) => {
         onChange?.(option)
     }
@@ -48,9 +50,9 @@ export function FootnoteMenuUI(props: FootnoteMenuProps) {
                         {x.name}
                     </Stack>
                     {selectedIndex === i ? (
-                        <CheckCircleIcon
+                        <Icons.CheckCircle
+                            size={20}
                             style={{
-                                fontSize: 20,
                                 color: theme.palette.maskColor.primary,
                                 boxShadow: '0px 4px 10px rgba(28, 104, 243, 0.2)',
                             }}
@@ -84,9 +86,7 @@ export function FootnoteMenuUI(props: FootnoteMenuProps) {
             <Link className={classes.link} color="inherit" underline="none" onClick={openMenu}>
                 <Typography className={classes.title} variant="subtitle2">
                     {options[selectedIndex]?.name}
-                    <ArrowDropDownIcon
-                        style={{ fontSize: 16, color: theme.palette.maskColor.dark, cursor: 'pointer' }}
-                    />
+                    <ArrowDropDownIcon style={{ fontSize: 16, cursor: 'pointer' }} className={classes.icon} />
                 </Typography>
                 {children}
             </Link>

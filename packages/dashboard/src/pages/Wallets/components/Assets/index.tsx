@@ -86,6 +86,7 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
                                             whitelist: [],
                                             title: t.wallets_add_token(),
                                             chainId: network?.chainId,
+                                            enableManage: false,
                                         })
                                     } else {
                                         setAddCollectibleOpen(true)

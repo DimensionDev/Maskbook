@@ -1,9 +1,8 @@
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import { explorerResolver, networkResolver } from '@masknet/web3-shared-evm'
 import LaunchIcon from '@mui/icons-material/Launch'
 import { Card, CardHeader, Typography, Link, CardMedia, CardContent, Button, Box, Skeleton } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N as useBaseI18N } from '../../../utils'
 import { useI18N } from '../locales'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
@@ -19,7 +18,7 @@ import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { openWindow } from '@masknet/shared-base-ui'
 import { useAccount, useNetworkType, useWeb3 } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { WalletConnect, SharedIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
@@ -119,6 +118,11 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
         maxHeight: 180,
+        '& > div': {
+            display: 'flex',
+            justifyContent: 'center',
+            overflow: 'hidden',
+        },
     },
     tokenImg: {
         width: '100%',
@@ -236,7 +240,7 @@ const useStyles = makeStyles()((theme) => ({
     assetPlayerVideoIframe: {
         minWidth: 'fit-content',
     },
-    loadingFailImage: {
+    fallbackImage: {
         height: 160,
         width: 120,
     },
@@ -362,7 +366,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                                     sourceType === 'video' ? classes.assetPlayerVideoIframe : '',
                                 ),
                                 imgWrapper: classes.imgWrapper,
-                                loadingFailImage: classes.loadingFailImage,
+                                fallbackImage: classes.fallbackImage,
                             }}
                             fallbackImage={new URL('./assets/nft-preview.png', import.meta.url)}
                         />
@@ -418,7 +422,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                     <Box sx={{ flex: 1, padding: 1.5 }}>
                         <Button
                             variant="roundedDark"
-                            startIcon={<SharedIcon style={{ fontSize: 18 }} />}
+                            startIcon={<Icons.Shared size={18} />}
                             className={classes.button}
                             fullWidth
                             onClick={onShare}>
@@ -432,7 +436,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                                 ActionButtonPromiseProps={{ variant: 'roundedDark' }}
                                 expectedChainId={payload.chainId}>
                                 <WalletConnectedBoundary
-                                    startIcon={<WalletConnect style={{ fontSize: 18 }} />}
+                                    startIcon={<Icons.ConnectWallet size={18} />}
                                     classes={{
                                         connectWallet: classes.button,
                                         unlockMetaMask: classes.button,

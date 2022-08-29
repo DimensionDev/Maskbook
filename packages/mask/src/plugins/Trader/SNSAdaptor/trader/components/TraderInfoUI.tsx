@@ -1,12 +1,12 @@
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { isDashboardPage } from '@masknet/shared-base'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
 import { formatBalance, FungibleToken } from '@masknet/web3-shared-base'
 import { memo } from 'react'
 import { useI18N } from '../../../../../utils'
 import { Box, TextField, Typography } from '@mui/material'
-import { CircleLoadingAnimation, FormattedBalance } from '@masknet/shared'
-import { BestTradeIcon, CircleWarningIcon } from '@masknet/icons'
+import { FormattedBalance } from '@masknet/shared'
+import { Icons } from '@masknet/icons'
 import classNames from 'classnames'
 
 // TODO: remove isDashboard after remove Dashboard page
@@ -116,7 +116,7 @@ export const TraderInfoUI = memo<TraderInfoUIProps>(
         if (loading)
             return (
                 <Box className={classes.loading}>
-                    <CircleLoadingAnimation />
+                    <LoadingBase />
                 </Box>
             )
 
@@ -166,10 +166,10 @@ export const TraderInfoUI = memo<TraderInfoUIProps>(
                     ),
                     endAdornment: (
                         <>
-                            {isBest ? <BestTradeIcon className={classes.best} /> : null}
+                            {isBest ? <Icons.BestTrade className={classes.best} /> : null}
                             {isGreatThanSlippageSetting ? (
                                 <Typography className={classes.warningText}>
-                                    <CircleWarningIcon style={{ width: 18, height: 18 }} />
+                                    <Icons.CircleWarning size={18} />
                                     {t('plugin_trader_price_image_value', {
                                         percent: priceImpact,
                                     })}

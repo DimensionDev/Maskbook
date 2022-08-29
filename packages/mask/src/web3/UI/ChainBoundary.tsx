@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 import { Box, Typography } from '@mui/material'
-import { makeStyles, MaskColorVar, ShadowRootTooltip, useStylesExtends } from '@masknet/theme'
+import { makeStyles, MaskColorVar, ShadowRootTooltip, useStylesExtends, ActionButton } from '@masknet/theme'
 import {
     useCurrentWeb3NetworkPluginID,
     useAccount,
@@ -17,14 +17,14 @@ import {
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { delay } from '@dimensiondev/kit'
-import ActionButton, {
+import {
     ActionButtonPromise,
     ActionButtonPromiseProps,
 } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../utils'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { WalletIcon } from '@masknet/shared'
-import { WalletConnect } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 
@@ -70,7 +70,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         expectedPluginID,
         expectedChainId,
         expectedChainIdSwitchedCallback,
-        switchChainWithoutPopup = false,
+        switchChainWithoutPopup = true,
         predicate = (actualPluginID, actualChainId) =>
             actualPluginID === expectedPluginID && actualChainId === expectedChainId,
     } = props
@@ -157,7 +157,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                 {!props.hiddenConnectButton ? (
                     <ActionButton
                         fullWidth
-                        startIcon={<WalletConnect style={{ fontSize: 18 }} />}
+                        startIcon={<Icons.ConnectWallet size={18} />}
                         onClick={openSelectProviderDialog}
                         {...props.ActionButtonPromiseProps}>
                         {t('plugin_wallet_wrong_network')}
@@ -172,7 +172,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                 {!props.hiddenConnectButton ? (
                     <ActionButton
                         fullWidth
-                        startIcon={<WalletConnect style={{ fontSize: 18 }} />}
+                        startIcon={<Icons.ConnectWallet size={18} />}
                         onClick={openSelectProviderDialog}
                         {...props.ActionButtonPromiseProps}>
                         {t('plugin_wallet_connect_wallet')}

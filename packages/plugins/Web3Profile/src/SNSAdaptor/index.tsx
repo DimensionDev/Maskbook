@@ -1,12 +1,13 @@
-import type { Plugin } from '@masknet/plugin-infra'
+import { Plugin, PluginId } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
-import { Web3ProfileIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { base } from '../base'
 import { Web3ProfileDialog } from './components/Web3ProfileDialog'
 import { setupContext } from './context'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { Trans } from 'react-i18next'
 import { CrossIsolationMessages } from '@masknet/shared-base'
+import { useEffect } from 'react'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -18,7 +19,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ApplicationEntries: [
         (() => {
-            const icon = <Web3ProfileIcon />
+            const icon = <Icons.Web3Profile size={36} />
             const name = { i18nKey: '__plugin_name', fallback: 'Web3 Profile' }
             const recommendFeature = {
                 description: <Trans i18nKey="plugin_web3_profile_recommend_feature_description" />,
@@ -26,6 +27,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
             return {
                 RenderEntryComponent(EntryComponentProps) {
+                    useEffect(() => {
+                        return CrossIsolationMessages.events.requestOpenApplication.on(({ open, application }) => {
+                            if (application !== PluginId.Web3Profile) return
+                            CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToLocal({ open })
+                        })
+                    }, [])
+
                     return (
                         <>
                             <ApplicationEntry
@@ -36,7 +44,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 onClick={() =>
                                     EntryComponentProps?.onClick
                                         ? EntryComponentProps?.onClick()
-                                        : CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToAll({
+                                        : CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToLocal({
                                               open: true,
                                           })
                                 }

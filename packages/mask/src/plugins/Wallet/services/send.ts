@@ -1,7 +1,7 @@
 import Web3 from 'web3'
 import type { HttpProvider } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import { isNil } from 'lodash-unified'
+import { isNil, omit } from 'lodash-unified'
 import { defer } from '@dimensiondev/kit'
 import {
     ChainId,
@@ -118,7 +118,7 @@ export async function send(
     payload: JsonRpcPayload,
     callback: (error: Error | null, response?: JsonRpcResponse) => void,
     options?: Options,
-) {
+): Promise<void> {
     const provider = await createProvider(options?.chainId)
 
     switch (payload.method) {
@@ -200,6 +200,22 @@ export async function sendPayload(payload: JsonRpcPayload, options?: Options) {
                 await WalletRPC.pushUnconfirmedRequest(payload_)
                 UNCONFIRMED_CALLBACK_MAP.set(payload_.id, callback)
                 if (options?.popupsWindow) openPopupWindow()
+                return
+            }
+
+            if (options?.chainId === ChainId.Astar) {
+                await send(
+                    {
+                        ...payload,
+                        params: payload.params?.map((x) => {
+                            if (x?.chainId) return omit(x, 'chainId')
+                            return x
+                        }),
+                    },
+                    callback,
+                    options,
+                )
+
                 return
             }
             send(payload, callback, options)

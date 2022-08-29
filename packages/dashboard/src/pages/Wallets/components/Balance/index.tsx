@@ -1,10 +1,10 @@
 import { memo } from 'react'
 import { noop } from 'lodash-unified'
-import { CardIcon, DownloadIcon, MaskWalletIcon, SendIcon, SwapIcon } from '@masknet/icons'
-import { MiniNetworkSelector } from '@masknet/shared'
+import { Icons } from '@masknet/icons'
+import { FormattedCurrency, MiniNetworkSelector } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { MaskColorVar } from '@masknet/theme'
-import type { NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatCurrency, NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-base'
 import { Box, Button, buttonClasses, styled, Typography } from '@mui/material'
 import { useDashboardI18N } from '../../../../locales'
 import { useIsMatched } from '../../hooks'
@@ -63,8 +63,7 @@ const ButtonGroup = styled('div')`
         font-size: 12px;
         white-space: nowrap;
         & .${buttonClasses.endIcon} > *:nth-of-type(1) {
-            font-size: 16px;
-            fill: none;
+            font-size: 0;
         }
     }
 `
@@ -108,19 +107,14 @@ export const Balance = memo<BalanceCardProps>(
             <BalanceContainer>
                 <Box display="flex" alignItems="center">
                     <IconContainer>
-                        <MaskWalletIcon size={48} />
+                        <Icons.MaskWallet size={48} />
                     </IconContainer>
                     <BalanceDisplayContainer>
                         <BalanceTitle>
                             {t.wallets_balance()} {selectedNetwork?.name ?? t.wallets_balance_all_chain()}
                         </BalanceTitle>
                         <BalanceContent sx={{ py: 1.5 }}>
-                            {Number.isNaN(balance)
-                                ? '$0'
-                                : balance.toLocaleString('en', {
-                                      style: 'currency',
-                                      currency: 'USD',
-                                  })}
+                            <FormattedCurrency value={balance} formatter={formatCurrency} />
                         </BalanceContent>
                         <MiniNetworkSelector
                             hideAllNetworkButton={isHiddenAllButton}
@@ -138,20 +132,20 @@ export const Balance = memo<BalanceCardProps>(
                 </Box>
                 {showOperations && (
                     <ButtonGroup>
-                        <Button size="small" onClick={onSend} endIcon={<SendIcon size={12} />}>
+                        <Button size="small" onClick={onSend} endIcon={<Icons.Send size={12} />}>
                             {t.wallets_balance_Send()}
                         </Button>
-                        <Button size="small" onClick={onBuy} endIcon={<CardIcon size={12} />}>
+                        <Button size="small" onClick={onBuy} endIcon={<Icons.Card size={12} />}>
                             {t.wallets_balance_Buy()}
                         </Button>
-                        <Button size="small" onClick={onSwap} endIcon={<SwapIcon size={12} />}>
+                        <Button size="small" onClick={onSwap} endIcon={<Icons.Swap size={12} />}>
                             {t.wallets_balance_Swap()}
                         </Button>
                         <Button
                             size="small"
                             color="secondary"
                             onClick={onReceive}
-                            endIcon={<DownloadIcon size={12} color={MaskColorVar.textLink} />}>
+                            endIcon={<Icons.Download size={12} color={MaskColorVar.textLink} />}>
                             {t.wallets_balance_Receive()}
                         </Button>
                     </ButtonGroup>

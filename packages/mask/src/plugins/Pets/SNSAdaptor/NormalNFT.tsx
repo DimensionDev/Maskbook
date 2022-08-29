@@ -7,6 +7,7 @@ import Drag from './Drag'
 import type { ShowMeta } from '../types'
 import { CloseIcon } from '../constants'
 import RightMenu from './RightMenu'
+import { Image } from '@masknet/shared'
 
 const useStyles = makeStyles()(() => ({
     imgContent: {
@@ -18,9 +19,11 @@ const useStyles = makeStyles()(() => ({
         justifyContent: 'center',
     },
     imgBox: {
+        textAlign: 'center',
         width: '80%',
         height: '80%',
-        textAlign: 'center',
+        display: 'flex',
+        justifyContent: 'center',
     },
     close: {
         width: 15,
@@ -95,8 +98,8 @@ export function NormalNFT(props: NormalNFTProps) {
             ) : null}
             <Box className={classes.imgContent} onContextMenu={handleMenuShow}>
                 <div className={classes.imgBox}>
-                    <img
-                        src={showMeta?.image}
+                    <Image
+                        src={showMeta?.image ?? ''}
                         style={{
                             objectFit: 'contain',
                             maxWidth: '100%',

@@ -1,6 +1,6 @@
 import type { InternalEvents } from '../../shared/index.js'
-import { $, $NoXRay } from '../intrinsic.js'
-import { clone_into } from '../utils.js'
+import { $, $Content } from '../intrinsic.js'
+import { cloneIntoContent } from '../utils.js'
 import { dispatchEventRaw } from './capture.js'
 
 export function dispatchInput(text: InternalEvents['input'][0]) {
@@ -12,5 +12,8 @@ export function dispatchInput(text: InternalEvents['input'][0]) {
     try {
         $.HTMLTextAreaElement_value_setter(element as HTMLTextAreaElement, text)
     } catch {}
-    dispatchEventRaw(element, new $NoXRay.InputEvent('input', clone_into({ inputType: 'insertText', data: text })))
+    dispatchEventRaw(
+        element,
+        new $Content.InputEvent('input', cloneIntoContent({ inputType: 'insertText', data: text })),
+    )
 }

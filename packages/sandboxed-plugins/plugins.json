@@ -1,0 +1,18 @@
+// The list of sandboxed plugins
+
+// To locally develop a sandboxed plugin without commit it, create a "plugins-local.json" beside this file.
+// To start the sandbox compiler, run "npx gulp sbp-watch" (watch mode) or "npx gulp sbp" (build mode)
+
+// Supported specifiers:
+//     npm package: "npm:<package-name>"
+//         Example:
+//         "npm:@masknet/example-plugin"
+//     local folder: "file:<path>"
+//         Example:
+//         "file:../../my-plugin/"
+
+// Requirement:
+//     The sandbox plugin from npm should be installed in ./package.json.
+//     The sandbox plugin should has a valid <package-name>/mask-manifest.json available.
+//     If a local folder points outside of this repo, it must be in the plugins-local.json
+["file:./example/"]

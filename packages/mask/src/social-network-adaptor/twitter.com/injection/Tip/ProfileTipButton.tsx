@@ -1,4 +1,5 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { PluginId, useActivatedPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useState } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
@@ -12,7 +13,7 @@ import {
 export function injectOpenTipButtonOnProfile(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(selector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.beforeShadow, { signal }).render(<OpenTipDialog />)
+    createReactRootShadowed(watcher.firstDOMProxy.beforeShadow, { signal }).render(<ProfileTipButton />)
 }
 
 interface StyleProps {
@@ -45,7 +46,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
 }))
 
-function OpenTipDialog() {
+function ProfileTipButton() {
     const [style, setStyle] = useState<StyleProps>({ size: 34, fontSize: 14, marginBottom: 11 })
     const visitingPersona = useCurrentVisitingIdentity()
 
@@ -64,6 +65,10 @@ function OpenTipDialog() {
 
     useLocationChange(setStyleFromEditProfileSelector)
 
+    const tipsPlugin = useActivatedPluginSNSAdaptor(PluginId.Tips, false)
+
     const { classes } = useStyles(style)
+    if (!tipsPlugin) return null
+
     return <TipButton className={classes.button} receiver={visitingPersona.identifier} />
 }

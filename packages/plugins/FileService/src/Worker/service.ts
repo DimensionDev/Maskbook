@@ -1,7 +1,7 @@
-import { AttachmentOptions, LandingPageMetadata, Provider, ProviderAgent } from '../types'
-import arweave from './arweave'
-import ipfs from './ipfs'
-import swarm from './swarm'
+import { AttachmentOptions, LandingPageMetadata, Provider, ProviderAgent } from '../types.js'
+import arweave from './arweave.js'
+import ipfs from './ipfs.js'
+import swarm from './swarm.js'
 
 const allProviders: Record<Provider, ProviderAgent> = {
     [Provider.arweave]: arweave,
@@ -23,4 +23,4 @@ export async function uploadLandingPage(provider: Provider, metadata: LandingPag
     return allProviders[provider]?.uploadLandingPage(metadata)
 }
 
-export * from './database'
+export * from './database.js'

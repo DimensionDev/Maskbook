@@ -1,17 +1,16 @@
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { ChainId, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { useEffect, useState } from 'react'
 import { useI18N } from '../../locales'
-import { InjectedDialog } from '@masknet/shared'
-import type { PersonaInformation, NextIDStoragePayload } from '@masknet/shared-base'
-import type { CollectionTypes, WalletTypes } from '../types'
-import { context } from '../context'
+import { PLUGIN_ID } from '../../constants'
+import { InjectedDialog, CollectionTypes, WalletTypes } from '@masknet/shared'
+import { PersonaInformation, NextIDPlatform } from '@masknet/shared-base'
 import { NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 import { AddNFT } from './AddCollectibles'
 import classNames from 'classnames'
 import { CollectionList } from './CollectionList'
-import { getKvPayload, setKvPatchData } from '../utils'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -147,6 +146,7 @@ export function ImageListDialog(props: ImageListDialogProps) {
         collectionList,
     } = props
     const t = useI18N()
+    const { Storage } = useWeb3State()
     const classes = useStylesExtends(useStyles(), props)
     const [unListedCollections, setUnListedCollections] = useState<CollectionTypes[]>([])
     const [listedCollections, setListedCollections] = useState<CollectionTypes[]>([])
@@ -191,19 +191,11 @@ export function ImageListDialog(props: ImageListDialogProps) {
             },
         }
         try {
-            const payload = await getKvPayload(patch, currentPersona.identifier.publicKeyAsHex, accountId!)
-            if (!payload) throw new Error('get payload failed')
-            const signature = await context.privileged_silentSign()?.(
-                currentPersona.identifier,
-                (payload.val as NextIDStoragePayload)?.signPayload,
-            )
-            const res = await setKvPatchData(
-                payload.val as NextIDStoragePayload,
-                signature?.signature?.signature,
-                patch,
-                currentPersona.identifier.publicKeyAsHex?.replace(/^0x/, ''),
-                accountId!,
-            )
+            if (!Storage || !accountId) return
+            const storage = Storage.createNextIDStorage(accountId, NextIDPlatform.Twitter, currentPersona.identifier)
+
+            await storage.set(PLUGIN_ID, patch)
+
             onClose()
             retryData()
         } catch (err) {
@@ -242,9 +234,11 @@ export function ImageListDialog(props: ImageListDialogProps) {
                                 collections={listedCollections}
                             />
                         ) : (
-                            (!collectionList || collectionList?.length === 0) && (
-                                <Typography className={classes.unListedEmpty}>{t.no_items_found()}</Typography>
-                            )
+                            <Typography className={classes.unListedEmpty}>
+                                {!collectionList || collectionList?.length === 0
+                                    ? t.no_items_found()
+                                    : t.no_listed_collection({ collection: title })}
+                            </Typography>
                         )}
                     </Box>
                     <Box>

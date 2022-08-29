@@ -1,4 +1,4 @@
-import { CheckCircleIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { TokenType } from '@masknet/web3-shared-base'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
@@ -52,7 +52,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     checkedIcon: {
         filter: 'drop-shadow(0px 4px 10px rgba(28, 104, 243, 0.2))',
-        fontSize: 20,
         color: theme.palette.maskColor.primary,
     },
 }))
@@ -100,7 +99,7 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, type, value, onSelect 
                                 <span className={classes.symbol}>({x.coin.symbol})</span>
                             </Typography>
                             {selected ? (
-                                <CheckCircleIcon className={classes.checkedIcon} />
+                                <Icons.CheckCircle size={20} className={classes.checkedIcon} />
                             ) : (
                                 <RadioButtonUncheckedIcon
                                     style={{ fontSize: 20, color: theme.palette.maskColor.secondaryLine }}

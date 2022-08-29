@@ -1,6 +1,6 @@
 import { FC, forwardRef, useCallback, useMemo, useState, useEffect } from 'react'
 import { useAsync } from 'react-use'
-import { LinkOutIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { useChainId, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { isSameAddress, RecentTransactionComputed, TransactionStatusType, Transaction } from '@masknet/web3-shared-base'
@@ -54,7 +54,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     link: {
         display: 'flex',
-        fill: 'none',
     },
     linkIcon: {
         // TODO: replace with theme color
@@ -146,7 +145,7 @@ const Transaction: FC<TransactionProps> = ({ chainId, transaction: tx, onClear =
                     href={Others?.explorerResolver.transactionLink?.(chainId, tx.id)}
                     target="_blank"
                     rel="noopener noreferrer">
-                    <LinkOutIcon className={classes.linkIcon} />
+                    <Icons.LinkOut className={classes.linkIcon} />
                 </Link>
             </Grid>
             <Grid item className={classes.cell} md={2} justifyContent="center">

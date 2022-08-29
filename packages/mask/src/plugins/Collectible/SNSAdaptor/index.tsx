@@ -1,15 +1,53 @@
 import { uniq } from 'lodash-unified'
 import { Trans } from 'react-i18next'
-import { CollectiblesIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { PostInspector } from './PostInspector'
 import { base } from '../base'
 import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils'
-import { PLUGIN_ID } from '../constants'
+import { PLUGIN_ID, PLUGIN_WRAPPER_TITLE } from '../constants'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { NFTPage } from './NFTPage'
-import { SocialAddressType } from '@masknet/web3-shared-base'
+import { NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
 import { setupContext } from '../context'
+import { Box } from '@mui/material'
+
+const NFTTabConfig: Plugin.SNSAdaptor.ProfileTab = {
+    ID: `${PLUGIN_ID}_nfts`,
+    label: 'NFTs',
+    priority: 1,
+    UI: {
+        TabContent({ socialAddress, identity }) {
+            return <NFTPage socialAddress={socialAddress} identity={identity} />
+        },
+    },
+    Utils: {
+        sorter: (a, z) => {
+            if (a.type === SocialAddressType.ENS) return -1
+            if (z.type === SocialAddressType.ENS) return 1
+
+            if (a.type === SocialAddressType.UNS) return -1
+            if (z.type === SocialAddressType.UNS) return 1
+
+            if (a.type === SocialAddressType.DNS) return -1
+            if (z.type === SocialAddressType.DNS) return 1
+
+            if (a.type === SocialAddressType.RSS3) return -1
+            if (z.type === SocialAddressType.RSS3) return 1
+
+            if (a.type === SocialAddressType.ADDRESS) return -1
+            if (z.type === SocialAddressType.ADDRESS) return 1
+
+            if (a.type === SocialAddressType.GUN) return -1
+            if (z.type === SocialAddressType.GUN) return 1
+
+            if (a.type === SocialAddressType.THE_GRAPH) return -1
+            if (z.type === SocialAddressType.THE_GRAPH) return 1
+
+            return 0
+        },
+    },
+}
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -31,41 +69,30 @@ const sns: Plugin.SNSAdaptor.Definition = {
         usePluginWrapper(!!asset)
         return asset ? <PostInspector payload={asset} /> : null
     },
-    ProfileTabs: [
+    ProfileTabs: [NFTTabConfig],
+    ProfileCardTabs: [
         {
-            ID: `${PLUGIN_ID}_nfts`,
-            label: 'NFTs',
-            priority: 1,
+            ...NFTTabConfig,
+            priority: 2,
             UI: {
-                TabContent: NFTPage,
+                TabContent({ socialAddress, identity }) {
+                    return (
+                        <Box pr={1.5}>
+                            <NFTPage
+                                socialAddress={socialAddress}
+                                identity={identity}
+                                gridProps={{
+                                    gap: 1.5,
+                                }}
+                            />
+                        </Box>
+                    )
+                },
             },
             Utils: {
-                shouldDisplay: (identity, socialAddressList) => {
-                    return !!socialAddressList?.length
-                },
-                sorter: (a, z) => {
-                    if (a.type === SocialAddressType.ENS) return -1
-                    if (z.type === SocialAddressType.ENS) return 1
-
-                    if (a.type === SocialAddressType.UNS) return -1
-                    if (z.type === SocialAddressType.UNS) return 1
-
-                    if (a.type === SocialAddressType.DNS) return -1
-                    if (z.type === SocialAddressType.DNS) return 1
-
-                    if (a.type === SocialAddressType.RSS3) return -1
-                    if (z.type === SocialAddressType.RSS3) return 1
-
-                    if (a.type === SocialAddressType.ADDRESS) return -1
-                    if (z.type === SocialAddressType.ADDRESS) return 1
-
-                    if (a.type === SocialAddressType.GUN) return -1
-                    if (z.type === SocialAddressType.GUN) return 1
-
-                    if (a.type === SocialAddressType.THE_GRAPH) return -1
-                    if (z.type === SocialAddressType.THE_GRAPH) return 1
-
-                    return 0
+                ...NFTTabConfig.Utils,
+                shouldDisplay(identity, socialAddress) {
+                    return socialAddress?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM
                 },
             },
         },
@@ -76,11 +103,15 @@ const sns: Plugin.SNSAdaptor.Definition = {
             category: 'dapp',
             description: <Trans i18nKey="plugin_collectibles_description" />,
             name: <Trans i18nKey="plugin_collectibles_name" />,
-            icon: <CollectiblesIcon />,
+            icon: <Icons.Collectibles size={36} />,
             marketListSortingPriority: 7,
             tutorialLink: 'https://realmasknetwork.notion.site/c388746f11774ecfa17914c900d3ed97',
         },
     ],
+    wrapperProps: {
+        title: PLUGIN_WRAPPER_TITLE,
+        icon: <Icons.ApplicationNFT size={24} />,
+    },
 }
 
 export default sns

@@ -16,28 +16,33 @@ import { isDashboardPage } from '@masknet/shared-base'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import { Button, Link, Typography } from '@mui/material'
+import { Button, Link, Typography, useTheme } from '@mui/material'
 import classNames from 'classnames'
-import { LinkOutIcon, CopyIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
 import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { useI18N } from '../../../utils'
 import { usePendingTransactions } from './usePendingTransactions'
 
-const useStyles = makeStyles<{ contentBackground?: string }>()((theme, { contentBackground }) => ({
+const useStyles = makeStyles<{
+    contentBackground?: string
+    disableChange?: boolean
+    withinRiskWarningDialog?: boolean
+    textColor?: string
+}>()((theme, { contentBackground, disableChange, withinRiskWarningDialog, textColor }) => ({
     content: {
         padding: theme.spacing(2, 3, 3),
     },
     currentAccount: {
         padding: theme.spacing(0, 1.5),
-        marginBottom: theme.spacing(2),
+        marginBottom: withinRiskWarningDialog ? '7px' : theme.spacing(2),
         display: 'flex',
         background:
             contentBackground ??
             (isDashboardPage() ? getMaskColor(theme).primaryBackground2 : theme.palette.background.default),
         borderRadius: 8,
         alignItems: 'center',
-        height: 82,
+        height: disableChange ? 60 : 82,
     },
     dashboardBackground: {
         background: theme.palette.background.default,
@@ -48,14 +53,14 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, { content
         marginLeft: theme.spacing(1.5),
     },
     accountName: {
-        color: theme.palette.maskColor.dark,
+        color: !isDashboardPage() ? theme.palette.maskColor.dark : textColor,
         fontWeight: 700,
         fontSize: 14,
         marginRight: 5,
         lineHeight: '18px',
     },
     balance: {
-        color: theme.palette.maskColor.dark,
+        color: !isDashboardPage() ? theme.palette.maskColor.dark : textColor,
         fontSize: 14,
         paddingTop: 2,
         lineHeight: '18px',
@@ -100,10 +105,10 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, { content
         marginRight: theme.spacing(0.5),
     },
     copyIcon: {
-        fill: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor.dark,
+        color: isDashboardPage() ? textColor : theme.palette.maskColor.dark,
     },
     linkIcon: {
-        color: isDashboardPage() ? theme.palette.text.primary : theme.palette.maskColor?.dark,
+        color: isDashboardPage() ? textColor : theme.palette.maskColor?.dark,
     },
     statusBox: {
         position: 'relative',
@@ -111,6 +116,7 @@ const useStyles = makeStyles<{ contentBackground?: string }>()((theme, { content
 }))
 interface WalletStatusBox {
     disableChange?: boolean
+    withinRiskWarningDialog?: boolean
     showPendingTransaction?: boolean
     closeDialog?: () => void
 }
@@ -118,9 +124,17 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const { t } = useI18N()
 
     const providerDescriptor = useProviderDescriptor<'all'>()
+    const theme = useTheme()
     const { classes } = useStyles({
         contentBackground: providerDescriptor?.backgroundGradient,
+        disableChange: props.disableChange,
+        withinRiskWarningDialog: props.withinRiskWarningDialog,
+        textColor:
+            providerDescriptor?.type === ProviderType.MaskWallet
+                ? theme.palette.text.primary
+                : theme.palette.maskColor.dark,
     })
+
     const connection = useWeb3Connection()
     const chainId = useChainId()
     const account = useAccount()
@@ -190,7 +204,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             component="button"
                             title={t('wallet_status_button_copy_address')}
                             onClick={onCopy}>
-                            <CopyIcon className={classNames(classes.icon, classes.copyIcon)} />
+                            <Icons.Copy className={classNames(classes.icon, classes.copyIcon)} />
                         </Link>
                         <Link
                             className={classes.link}
@@ -198,17 +212,19 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             target="_blank"
                             title={t('plugin_wallet_view_on_explorer')}
                             rel="noopener noreferrer">
-                            <LinkOutIcon className={classNames(classes.icon, classes.linkIcon)} />
+                            <Icons.LinkOut className={classNames(classes.icon, classes.linkIcon)} />
                         </Link>
                     </div>
 
-                    <div className={classes.infoRow}>
-                        <Typography className={classes.balance}>
-                            {loadingNativeToken || loadingBalance
-                                ? '-'
-                                : `${formatBalance(balance, nativeToken?.decimals, 3)} ${nativeToken?.symbol}`}
-                        </Typography>
-                    </div>
+                    {props.withinRiskWarningDialog ? null : (
+                        <div className={classes.infoRow}>
+                            <Typography className={classes.balance}>
+                                {loadingNativeToken || loadingBalance
+                                    ? '-'
+                                    : `${formatBalance(balance, nativeToken?.decimals, 3)} ${nativeToken?.symbol}`}
+                            </Typography>
+                        </div>
+                    )}
                 </div>
 
                 {!props.disableChange && (

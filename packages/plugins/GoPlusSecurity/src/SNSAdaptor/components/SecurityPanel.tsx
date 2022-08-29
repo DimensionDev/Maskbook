@@ -2,20 +2,21 @@ import { Collapse, Link, Stack, Typography } from '@mui/material'
 import { useI18N } from '../../locales'
 import { makeStyles } from '@masknet/theme'
 import { memo, useMemo, useState } from 'react'
-import { DefineMapping, SecurityMessageLevel, TokenSecurity } from './Common'
 import { RiskCard, RiskCardUI } from './RiskCard'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { useTheme } from '@mui/system'
 import { resolveGoLabLink } from '../../utils/helper'
 import { TokenPanel } from './TokenPanel'
-import { getMessageList, TokenIcon } from '@masknet/shared'
-import type { TokenAPI } from '@masknet/web3-providers'
-import { DefaultTokenIcon, LinkOutIcon } from '@masknet/icons'
+import { TokenIcon } from '@masknet/shared'
+import type { SecurityAPI, TokenAPI } from '@masknet/web3-providers'
+import { Icons } from '@masknet/icons'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { formatCurrency, FungibleToken } from '@masknet/web3-shared-base'
+import { DefineMapping, SecurityMessageLevel } from '../constants'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 interface TokenCardProps {
-    tokenSecurity: TokenSecurity
+    tokenSecurity: SecurityAPI.TokenSecurityType
     tokenInfo?: FungibleToken<ChainId, SchemaType>
     tokenPrice?: number
     tokenMarketCap?: TokenAPI.TokenInfo
@@ -70,14 +71,11 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
 
     const price = tokenPrice ?? tokenMarketCap?.price
     const [isCollapse, setCollapse] = useState(false)
-
-    const { riskyFactors, attentionFactors, makeMessageList } = useMemo(() => {
-        const makeMessageList = getMessageList(tokenSecurity)
-
-        const riskyFactors = makeMessageList.filter((x) => x.level === SecurityMessageLevel.High).length
-        const attentionFactors = makeMessageList.filter((x) => x.level === SecurityMessageLevel.Medium).length
-        return { riskyFactors, attentionFactors, makeMessageList }
-    }, [tokenSecurity])
+    const {
+        risk_item_quantity: riskyFactors = 0,
+        warn_item_quantity: attentionFactors = 0,
+        message_list: makeMessageList = EMPTY_LIST,
+    } = tokenSecurity
 
     const hasWarningFactor = riskyFactors !== 0 || attentionFactors !== 0
 
@@ -110,7 +108,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                             chainId={tokenSecurity?.chainId}
                         />
                     ) : (
-                        <DefaultTokenIcon sx={{ fontSize: '48px' }} />
+                        <Icons.DefaultToken size={48} />
                     )}
                     <Stack>
                         <Typography className={classes.tokenName}>
@@ -169,7 +167,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                             href={resolveGoLabLink(tokenSecurity.chainId, tokenSecurity.contract)}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <LinkOutIcon
+                            <Icons.LinkOut
                                 style={{ color: theme.palette.text.strong, width: 18, height: 18, marginTop: 2 }}
                             />
                         </Link>

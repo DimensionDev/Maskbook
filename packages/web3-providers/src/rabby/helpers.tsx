@@ -7,7 +7,7 @@ import {
     NetworkType,
 } from '@masknet/web3-shared-evm'
 import { createLookupTableResolver } from '@masknet/web3-shared-base'
-import { RedPacketIcon, Ito as ITOIcon, MaskBoxIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 
 export function getAllMaskDappContractInfo(chainId: ChainId, type: 'token' | 'nft') {
     const {
@@ -24,44 +24,44 @@ export function getAllMaskDappContractInfo(chainId: ChainId, type: 'token' | 'nf
               {
                   address: HAPPY_RED_PACKET_ADDRESS_V1,
                   name: 'Lucky Drop V1',
-                  logo: <RedPacketIcon />,
+                  logo: <Icons.RedPacket />,
               },
               {
                   address: HAPPY_RED_PACKET_ADDRESS_V2,
                   name: 'Lucky Drop V2',
-                  logo: <RedPacketIcon />,
+                  logo: <Icons.RedPacket />,
               },
               {
                   address: HAPPY_RED_PACKET_ADDRESS_V3,
                   name: 'Lucky Drop V3',
-                  logo: <RedPacketIcon />,
+                  logo: <Icons.RedPacket />,
               },
               {
                   address: HAPPY_RED_PACKET_ADDRESS_V4,
                   name: 'Lucky Drop V4',
-                  logo: <RedPacketIcon />,
+                  logo: <Icons.RedPacket />,
               },
               {
                   address: ITO_CONTRACT_ADDRESS,
                   name: 'ITO V1',
-                  logo: <ITOIcon />,
+                  logo: <Icons.ITO />,
               },
               {
                   address: ITO2_CONTRACT_ADDRESS,
                   name: 'ITO V2',
-                  logo: <ITOIcon />,
+                  logo: <Icons.ITO />,
               },
           ]
         : [
               {
                   address: MASK_BOX_CONTRACT_ADDRESS,
                   name: 'Mask Box',
-                  logo: <MaskBoxIcon />,
+                  logo: <Icons.MaskBox />,
               },
               {
                   address: RED_PACKET_NFT_ADDRESS,
                   name: 'NFT Lucky Drop',
-                  logo: <RedPacketIcon />,
+                  logo: <Icons.RedPacket />,
               },
           ]
 }
@@ -80,9 +80,10 @@ export const resolveNetworkOnRabby = createLookupTableResolver<NetworkType, stri
         [NetworkType.Fuse]: '',
         [NetworkType.Metis]: '',
         [NetworkType.Boba]: '',
-        [NetworkType.Optimistic]: '',
+        [NetworkType.Optimism]: '',
         [NetworkType.Celo]: '',
         [NetworkType.Conflux]: '',
+        [NetworkType.Astar]: '',
     },
     'eth',
 )

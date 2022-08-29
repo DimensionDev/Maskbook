@@ -1,65 +1,51 @@
-import { ReactElement, useCallback } from 'react'
-import {
-    Box,
-    Button,
-    CardActions,
-    CardContent,
-    CardHeader,
-    Link,
-    Paper,
-    Stack,
-    Tab,
-    Tabs,
-    Typography,
-} from '@mui/material'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { Trans } from 'react-i18next'
+import { Icons } from '@masknet/icons'
+import { LoadingBase, makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
+import { resolveSourceName, SourceType } from '@masknet/web3-shared-base'
+import { TabContext } from '@mui/lab'
+import { Box, Button, CardContent, CardHeader, Paper, Tab, Typography } from '@mui/material'
 import formatDateTime from 'date-fns/format'
-import isValidDate from 'date-fns/isValid'
 import isAfter from 'date-fns/isAfter'
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
+import isValidDate from 'date-fns/isValid'
+import { useCallback } from 'react'
 import { useI18N, useSwitcher } from '../../../utils'
-import { ArticleTab } from './ArticleTab'
-import { TokenTab } from './TokenTab'
-import { OfferTab } from './OfferTab'
-import { ListingTab } from './ListingTab'
-import { HistoryTab } from './HistoryTab'
-import { LinkingAvatar } from './LinkingAvatar'
-import { CollectibleState } from '../hooks/useCollectibleState'
-import { CollectibleCard } from './CollectibleCard'
-import { CollectibleTab } from '../types'
-import { resolveAssetLinkOnCurrentProvider } from '../pipes'
-import { ActionBar } from './OpenSea/ActionBar'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { CurrencyType, NetworkPluginID, resolveSourceName, SourceType } from '@masknet/web3-shared-base'
-import { FootnoteMenuUI, FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/components/FootnoteMenuUI'
-import { CollectibleProviderIcon } from './CollectibleProviderIcon'
-import { getEnumAsArray } from '@dimensiondev/kit'
-import { findIndex } from 'lodash-unified'
+import { CollectibleState } from '../hooks/useCollectibleState'
+import { CollectiblePaper } from './CollectiblePaper'
+import { LinkingAvatar } from './LinkingAvatar'
+import { ActionBar } from './OpenSea/ActionBar'
+import { AboutTab } from './Tabs/AboutTab'
+import { ActivityTab } from './Tabs/ActivityTab'
+import { DetailTab } from './Tabs/DetailTab'
+import { OffersTab } from './Tabs/OffersTab'
 
 const useStyles = makeStyles()((theme) => {
     return {
         root: {
             width: '100%',
             padding: 0,
+            backgroundColor: 'unset',
         },
         content: {
-            width: '100%',
             height: 'var(--contentHeight)',
             display: 'flex',
             flexDirection: 'column',
             padding: '0 !important',
+            margin: '0 12px',
+        },
+        header: {
+            alignItems: 'unset',
         },
         body: {
             flex: 1,
+            backgroundColor: theme.palette.maskColor.white,
             overflow: 'auto',
-            maxHeight: 350,
-            borderRadius: 0,
+            maxHeight: 800,
+            borderRadius: '0 0 12px 12px',
             scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
+            background: '#fff !important',
         },
         footer: {
             marginTop: -1, // merge duplicate borders
@@ -76,17 +62,27 @@ const useStyles = makeStyles()((theme) => {
             borderBottom: `solid 1px ${theme.palette.divider}`,
         },
         tab: {
-            height: 'var(--tabHeight)',
-            minHeight: 'unset',
-            minWidth: 'unset',
             whiteSpace: 'nowrap',
+            background: 'transparent',
+            color: theme.palette.maskColor.publicMain,
+            '&:hover': {
+                background: 'transparent',
+            },
+        },
+        tabActive: {
+            background: '#fff',
+            color: theme.palette.maskColor.publicMain,
+            '&:hover': {
+                background: '#fff',
+            },
         },
         subtitle: {
-            fontSize: 12,
+            fontSize: 14,
             marginRight: theme.spacing(0.5),
             maxHeight: '3.5rem',
             overflow: 'hidden',
             wordBreak: 'break-word',
+            color: theme.palette.maskColor.publicSecond,
         },
         description: {
             fontSize: 12,
@@ -123,36 +119,66 @@ const useStyles = makeStyles()((theme) => {
         },
         markdown: {
             textOverflow: 'ellipsis',
-            display: '-webkit-box',
             webkitBoxOrient: 'vertical',
             webkitLineClamp: '3',
+            '& > p': {
+                color: `${theme.palette.maskColor.publicSecond} !important`,
+            },
+            '& a': {
+                color: theme.palette.maskColor.publicMain,
+            },
+        },
+        cardTitle: {
+            fontSize: 16,
+            lineHeight: '20px',
+            fontWeight: 700,
+            color: theme.palette.maskColor.publicMain,
         },
     }
 })
 
-const supportedProvider = [SourceType.OpenSea, SourceType.Rarible, SourceType.NFTScan]
+const supportedProvider = [
+    // to add providers, temp hide some providers
+    SourceType.OpenSea,
+    SourceType.Gem,
+    SourceType.Rarible,
+    // SourceType.X2Y2,
+    // SourceType.NFTScan,
+    // SourceType.Zora,
+    // SourceType.LooksRare,
+]
 
 export interface CollectibleProps {}
 
 export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const { token, asset, provider, setProvider, tabIndex, setTabIndex } = CollectibleState.useContainer()
+    const { asset, provider, setProvider } = CollectibleState.useContainer()
 
-    // #region sync with settings
-    const collectibleProviderOptions = getEnumAsArray(SourceType).filter((x) => supportedProvider.includes(x.value))
-
-    const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
-        setProvider(option.value as SourceType)
+    const onDataProviderChange = useCallback((v: SourceType) => {
+        setProvider(v)
     }, [])
-    // #endregion
 
     // #region provider switcher
     const CollectibleProviderSwitcher = useSwitcher(provider, setProvider, supportedProvider, resolveSourceName, true)
     // #endregion
-
-    if (!asset.value || !token)
+    const [currentTab, onChange, tabs] = useTabs('about', 'details', 'offers', 'activity')
+    if (asset.loading)
+        return (
+            <Box
+                flex={1}
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                gap={1}
+                padding={1}
+                minHeight={148}>
+                <LoadingBase />
+                <Typography>{t('loading')}</Typography>
+            </Box>
+        )
+    if (!asset.value)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
                 <Typography color={MaskColorVar.textPluginColor} sx={{ marginTop: 8, marginBottom: 8 }}>
@@ -168,32 +194,38 @@ export function Collectible(props: CollectibleProps) {
                 </Box>
             </Box>
         )
-    const tabs = [
-        <Tab className={classes.tab} key="article" label={t('plugin_collectible_article')} />,
-        <Tab className={classes.tab} key="details" label={t('plugin_collectible_details')} />,
-        <Tab className={classes.tab} key="offers" label={t('plugin_collectible_offers')} />,
-        <Tab className={classes.tab} key="listing" label={t('plugin_collectible_listing')} />,
-        <Tab className={classes.tab} key="history" label={t('plugin_collectible_history')} />,
-    ]
-
-    const renderTab = (tabIndex: CollectibleTab) => {
-        const tabMap: Record<CollectibleTab, ReactElement> = {
-            [CollectibleTab.ARTICLE]: <ArticleTab />,
-            [CollectibleTab.TOKEN]: <TokenTab />,
-            [CollectibleTab.OFFER]: <OfferTab />,
-            [CollectibleTab.LISTING]: <ListingTab />,
-            [CollectibleTab.HISTORY]: <HistoryTab />,
-        }
-
-        return tabMap[tabIndex] || null
-    }
 
     const _asset = asset.value
     const endDate = _asset.auction?.endAt
+    const renderTab = () => {
+        const tabMap = {
+            [tabs.about]: (
+                <AboutTab
+                    currentProvider={provider}
+                    providers={supportedProvider}
+                    onChangeProvider={onDataProviderChange}
+                    asset={asset}
+                />
+            ),
+            [tabs.details]: <DetailTab asset={asset} />,
+            [tabs.offers]: <OffersTab />,
+            [tabs.activity]: <ActivityTab />,
+        }
+
+        return tabMap[currentTab] || null
+    }
+    const Tabs = [
+        { value: tabs.about, label: t('plugin_collectible_about') },
+        { value: tabs.details, label: t('plugin_collectible_details') },
+        { value: tabs.offers, label: t('plugin_collectible_offers') },
+        { value: tabs.activity, label: t('plugin_collectible_activity') },
+    ]
+
     return (
         <>
-            <CollectibleCard classes={{ root: classes.root }}>
+            <CollectiblePaper classes={{ root: classes.root }}>
                 <CardHeader
+                    className={classes.header}
                     avatar={
                         <LinkingAvatar
                             href={_asset.link ?? ''}
@@ -205,25 +237,8 @@ export function Collectible(props: CollectibleProps) {
                     }
                     title={
                         <Typography style={{ display: 'flex', alignItems: 'center' }}>
-                            {token ? (
-                                <Link
-                                    color="primary"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    href={resolveAssetLinkOnCurrentProvider(
-                                        chainId,
-                                        token.contractAddress,
-                                        token.tokenId,
-                                        provider,
-                                    )}>
-                                    {_asset.metadata?.name ?? ''}
-                                </Link>
-                            ) : (
-                                _asset.metadata?.name ?? ''
-                            )}
-                            {_asset.collection?.verified ? (
-                                <VerifiedUserIcon color="primary" fontSize="small" sx={{ marginLeft: 0.5 }} />
-                            ) : null}
+                            <Typography className={classes.cardTitle}>{_asset.metadata?.name || '-'}</Typography>
+                            {_asset.collection?.verified ? <Icons.VerifiedCollection sx={{ marginLeft: 0.5 }} /> : null}
                         </Typography>
                     }
                     subheader={
@@ -238,60 +253,25 @@ export function Collectible(props: CollectibleProps) {
                                     </Typography>
                                 </Box>
                             ) : null}
-
-                            {_asset?.price?.[CurrencyType.USD] ? (
-                                <Box display="flex" alignItems="center" sx={{ marginTop: 1 }}>
-                                    <Typography className={classes.description} component="span">
-                                        <Trans
-                                            i18nKey="plugin_collectible_description"
-                                            values={{
-                                                price: _asset.price[CurrencyType.USD],
-                                                symbol: CurrencyType.USD,
-                                            }}
-                                        />
-                                    </Typography>
-                                </Box>
-                            ) : null}
                         </>
                     }
                 />
                 <CardContent className={classes.content}>
-                    <Tabs
-                        className={classes.tabs}
-                        indicatorColor="primary"
-                        textColor="primary"
-                        variant="fullWidth"
-                        value={tabIndex}
-                        onChange={(ev: React.ChangeEvent<{}>, newValue: number) => setTabIndex(newValue)}
-                        TabIndicatorProps={{
-                            style: {
-                                display: 'none',
-                            },
-                        }}>
-                        {tabs}
-                    </Tabs>
-                    <Paper className={classes.body}>{renderTab(tabIndex)}</Paper>
+                    <TabContext value={currentTab}>
+                        <MaskTabList variant="base" aria-label="collectible" onChange={onChange}>
+                            {Tabs.map((x) => (
+                                <Tab
+                                    key={x.value}
+                                    className={x.value === currentTab ? classes.tabActive : classes.tab}
+                                    value={x.value}
+                                    label={x.label}
+                                />
+                            ))}
+                        </MaskTabList>
+                    </TabContext>
+                    <Paper className={classes.body}>{renderTab()}</Paper>
                 </CardContent>
-                <CardActions className={classes.footer}>
-                    {/* flex to make foot menu right */}
-                    <div />
-                    <div className={classes.footMenu}>
-                        <FootnoteMenuUI
-                            options={collectibleProviderOptions.map((x) => ({
-                                name: (
-                                    <Stack direction="row" alignItems="center" gap={1}>
-                                        <CollectibleProviderIcon provider={x.value} />
-                                        <span className={classes.footName}>{resolveSourceName(x.value)}</span>
-                                    </Stack>
-                                ),
-                                value: x.value,
-                            }))}
-                            selectedIndex={findIndex(collectibleProviderOptions, (x) => x.value === provider)}
-                            onChange={onDataProviderChange}
-                        />
-                    </div>
-                </CardActions>
-            </CollectibleCard>
+            </CollectiblePaper>
             {endDate && isValidDate(endDate) && isAfter(endDate, Date.now()) && (
                 <Box sx={{ marginTop: 1 }}>
                     <Typography className={classes.countdown}>
@@ -301,7 +281,7 @@ export function Collectible(props: CollectibleProps) {
                     </Typography>
                 </Box>
             )}
-            {provider === SourceType.OpenSea ? <ActionBar /> : null}
+            <ActionBar />
         </>
     )
 }

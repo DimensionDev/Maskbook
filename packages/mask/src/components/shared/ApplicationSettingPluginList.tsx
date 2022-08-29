@@ -1,7 +1,7 @@
-import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra/content-script'
+import { useActivatedPluginsSNSAdaptor, Plugin, PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { useMemo, useState, useCallback } from 'react'
 import { List, ListItem, Typography } from '@mui/material'
-import { makeStyles, getMaskColor } from '@masknet/theme'
+import { makeStyles, getMaskColor, ShadowRootTooltip } from '@masknet/theme'
 import { useI18N } from '../../utils'
 import { PersistentStorages } from '../../../shared'
 
@@ -32,22 +32,25 @@ export function getUnlistedApp(app: Application): boolean {
 const useStyles = makeStyles<{ iconFilterColor?: string }>()((theme, { iconFilterColor }) => ({
     list: {
         display: 'grid',
-        gap: theme.spacing(2, 1),
+        gap: theme.spacing(1.5),
         gridTemplateColumns: 'repeat(6, 1fr)',
         gridTemplateRows: 'repeat(3, 1fr)',
         width: '100%',
-        paddingTop: '8px',
+        padding: theme.spacing(2, 0),
         '&::-webkit-scrollbar': {
             display: 'none',
         },
         overflowY: 'scroll',
-        height: 238,
+        height: 210,
     },
     listItem: {
         width: 84,
         height: 56,
         padding: 0,
-        background: theme.palette.background.default,
+        background: theme.palette.maskColor.bottom,
+        boxShadow: `0px 0px 20px ${
+            theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.05)'
+        }`,
         justifyContent: 'center',
         alignItems: 'center',
         cursor: 'pointer',
@@ -116,6 +119,7 @@ export function ApplicationSettingPluginList() {
 
     return (
         <div>
+            <Typography className={classes.unlisted}>{t('application_settings_tab_plug_app-list-listed')}</Typography>
             <AppList appList={listedAppList} setUnlistedApp={setAppList} isListed />
             <Typography className={classes.unlisted}>{t('application_settings_tab_plug_app-list-unlisted')}</Typography>
             <AppList appList={unlistedAppList} setUnlistedApp={setAppList} isListed={false} />
@@ -166,8 +170,21 @@ function AppListItem(props: AppListItemProps) {
     const { application, setUnlistedApp, isListed } = props
     const { classes } = useStyles({ iconFilterColor: application.entry.iconFilterColor })
     return (
-        <ListItem className={classes.listItem} onClick={() => setUnlistedApp(application, isListed)}>
-            <div className={classes.iconWrapper}>{application.entry.icon}</div>
-        </ListItem>
+        <ShadowRootTooltip
+            PopperProps={{
+                disablePortal: true,
+                placement: 'top',
+            }}
+            title={
+                <Typography>
+                    <PluginI18NFieldRender field={application.entry.name} pluginID={application.pluginId} />
+                </Typography>
+            }
+            placement="top"
+            arrow>
+            <ListItem className={classes.listItem} onClick={() => setUnlistedApp(application, isListed)}>
+                <div className={classes.iconWrapper}>{application.entry.icon}</div>
+            </ListItem>
+        </ShadowRootTooltip>
     )
 }

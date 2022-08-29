@@ -1,21 +1,20 @@
 import { Box, DialogActions, DialogContent, Stack } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../locales'
 import { SearchBox } from './components/SearchBox'
 import { useAsync, useAsyncFn } from 'react-use'
-import { GoPlusLabs, TokenView } from '@masknet/web3-providers'
+import { GoPlusLabs, SecurityAPI, TokenView } from '@masknet/web3-providers'
 import { Searching } from './components/Searching'
 import { SecurityPanel } from './components/SecurityPanel'
 import { Footer } from './components/Footer'
-import { Center, TokenSecurity } from './components/Common'
 import { DefaultPlaceholder } from './components/DefaultPlaceholder'
 import { NotFound } from './components/NotFound'
 import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '@masknet/shared'
-import { first, isEmpty } from 'lodash-unified'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useFungibleToken, useFungibleTokenPrice } from '@masknet/plugin-infra/web3'
-import { useState } from 'react'
+import { memo, ReactNode, useEffect, useState } from 'react'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -36,27 +35,35 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface BuyTokenDialogProps extends withClasses<never | 'root'> {
-    open: boolean
-    onClose(): void
-}
+export const Center = memo(({ children }: { children: ReactNode }) => (
+    <Stack height="100%" justifyContent="center" alignItems="center">
+        {children}
+    </Stack>
+))
 
-export function CheckSecurityDialog(props: BuyTokenDialogProps) {
+export function CheckSecurityDialog() {
     const t = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
-    const { open, onClose } = props
+    const { classes } = useStyles()
     const [chainId, setChainId] = useState<ChainId>()
+    const [open, setOpen] = useState(false)
+    const [searchHidden, setSearchHidden] = useState(false)
+
+    useEffect(() => {
+        return CrossIsolationMessages.events.requestCheckSecurityDialog.on((env) => {
+            if (!env.open) return
+            setOpen(env.open)
+            setSearchHidden(env.searchHidden)
+            onSearch(env.chainId ?? ChainId.Mainnet, env.tokenAddress ?? ZERO_ADDRESS)
+        })
+    }, [])
 
     const [{ value, loading: searching, error }, onSearch] = useAsyncFn(
-        async (chainId: ChainId, content: string): Promise<TokenSecurity | undefined> => {
+        async (chainId: ChainId, content: string): Promise<SecurityAPI.TokenSecurityType | undefined> => {
             if (!content || isSameAddress(content.trim(), ZERO_ADDRESS)) return
             setChainId(chainId)
-            let values = await GoPlusLabs.getTokenSecurity(chainId, [content.trim()])
-            values ??= {}
-            if (isEmpty(values)) throw new Error(t.contract_not_found())
-            const entity = first(Object.entries(values ?? {}))
-            if (!entity) return
-            return { ...entity[1], contract: entity[0], chainId }
+            const values = await GoPlusLabs.getTokenSecurity(chainId, [content.trim()])
+            if (!values) throw new Error(t.contract_not_found())
+            return values
         },
         [],
     )
@@ -71,13 +78,17 @@ export function CheckSecurityDialog(props: BuyTokenDialogProps) {
         return TokenView.getTokenInfo(value.token_symbol)
     }, [value])
 
+    const onClose = () => setOpen(false)
+
     return (
         <InjectedDialog title={t.__plugin_name()} open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
                 <Stack height="100%" spacing={2}>
-                    <Box>
-                        <SearchBox onSearch={onSearch} />
-                    </Box>
+                    {!searchHidden && (
+                        <Box>
+                            <SearchBox onSearch={onSearch} />
+                        </Box>
+                    )}
                     <Stack flex={1}>
                         {(searching || loadingToken) && (
                             <Center>

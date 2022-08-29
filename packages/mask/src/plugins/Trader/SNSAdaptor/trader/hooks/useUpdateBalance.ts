@@ -1,13 +1,11 @@
 import { useEffect } from 'react'
 import { useAccount, useBalance } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, useTokenConstants } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext'
 
 export function useUpdateBalance(chainId: ChainId) {
-    const currentAccount = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
-
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const {
         tradeState: [{ inputToken, outputToken }, dispatchTradeStore],
     } = AllProviderTradeContext.useContainer()
@@ -16,7 +14,7 @@ export function useUpdateBalance(chainId: ChainId) {
     })
 
     useEffect(() => {
-        if (currentAccount) return
+        if (account) return
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
             balance: '0',
@@ -27,26 +25,27 @@ export function useUpdateBalance(chainId: ChainId) {
             balance: '0',
         })
         return
-    }, [currentAccount])
+    }, [account])
 
     useEffect(() => {
-        if (!currentAccount) return
-        const value = inputToken?.schema === SchemaType.Native ? balance.value : '0'
-        dispatchTradeStore({
-            type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
-            balance: value || '0',
-        })
-    }, [currentAccount, inputToken?.schema, balance.value])
+        if (!account) return
+        if (inputToken?.schema === SchemaType.Native) {
+            dispatchTradeStore({
+                type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
+                balance: balance.value || '0',
+            })
+        }
+    }, [account, inputToken?.schema, balance.value])
 
     useEffect(() => {
-        if (!currentAccount) return
+        if (!account) return
         const value =
-            outputToken?.schema === SchemaType.Native || isSameAddress(outputToken?.address, NATIVE_TOKEN_ADDRESS)
+            outputToken?.schema === SchemaType.Native || isNativeTokenAddress(outputToken?.address)
                 ? balance.value
                 : '0'
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
             balance: value || '0',
         })
-    }, [currentAccount, outputToken?.schema, outputToken?.address, balance.value])
+    }, [account, outputToken?.schema, outputToken?.address, balance.value])
 }

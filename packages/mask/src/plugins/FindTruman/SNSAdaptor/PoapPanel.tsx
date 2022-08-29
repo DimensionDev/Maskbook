@@ -6,6 +6,7 @@ import { useContext } from 'react'
 import { FindTrumanContext } from '../context'
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { Image } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme, props) => ({
     skeleton: {
@@ -56,7 +57,7 @@ export default function PoapPanel(props: PoapPanelProps) {
                 <Grid container spacing={2} justifyContent="center">
                     {poaps.map((poap) => (
                         <Grid key={poap.id} item xs={3}>
-                            <img className={classes.poap} src={poap.img} />
+                            <Image className={classes.poap} src={poap.img} />
                             <Typography variant="body2" textAlign="center">
                                 {poap.name}
                             </Typography>
@@ -68,7 +69,7 @@ export default function PoapPanel(props: PoapPanelProps) {
                     <Typography textAlign="center" variant="body1" color="text.secondary" gutterBottom>
                         {t('plugin_find_truman_dialog_no_poap_tip')}
                     </Typography>
-                    <img src={consts?.poapImg} className={classes.poapCover} />
+                    <Image src={consts?.poapImg} className={classes.poapCover} />
                     <Button
                         component="a"
                         href={consts?.getPoapUrl}

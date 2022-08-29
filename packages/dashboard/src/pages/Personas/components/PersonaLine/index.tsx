@@ -1,6 +1,6 @@
 import { memo, MouseEvent, useState } from 'react'
 import { Box, Button, Link, Stack, Typography } from '@mui/material'
-import { getMaskColor, MaskColorVar, makeStyles } from '@masknet/theme'
+import { getMaskColor, MaskColorVar, makeStyles, LoadingBase } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { DisconnectProfileDialog } from '../DisconnectProfileDialog'
 import {
@@ -11,9 +11,9 @@ import {
     NextIDPlatform,
     EnhanceableSite,
 } from '@masknet/shared-base'
-import { LoadingAnimation, SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
+import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { PersonaContext } from '../../hooks/usePersonaContext'
-import { NextIdPersonaWarningIcon, NextIdPersonaVerifiedIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -141,11 +141,11 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                             className={classes.proofIconBox}
                             onClick={(e: MouseEvent) => handleProofIconClick(e, isProved, profile)}>
                             {proof.loading ? (
-                                <LoadingAnimation />
+                                <LoadingBase />
                             ) : isProved?.is_valid ? (
-                                <NextIdPersonaVerifiedIcon size={18} />
+                                <Icons.NextIdPersonaVerified size={18} />
                             ) : (
-                                <NextIdPersonaWarningIcon size={18} />
+                                <Icons.NextIdPersonaWarning size={18} />
                             )}
                         </Typography>
                     )}

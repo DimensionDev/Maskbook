@@ -11,7 +11,8 @@ import type {
     PopupRoutes,
     PersonaInformation,
     ECKeyIdentifier,
-    MaskEvents,
+    EnhanceableSite,
+    ExtensionSite,
 } from '@masknet/shared-base'
 import type {
     ChainDescriptor,
@@ -26,7 +27,7 @@ import type {
 import type { ChainId, SchemaType, Transaction } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
-import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
+import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 
 export declare namespace Plugin {
     /**
@@ -135,6 +136,8 @@ export namespace Plugin.Shared {
          * A lightweight K/V storage used to store some simple data.
          */
         createKVStorage<T extends object>(type: 'memory' | 'persistent', defaultValues: T): ScopedStorage<T>
+    }
+    export interface SharedUIContext extends SharedContext {
         /** The selected account of Mask Wallet */
         account: Subscription<string>
         /** The selected chainId of Mask Wallet */
@@ -183,9 +186,14 @@ export namespace Plugin.Shared {
         }): Promise<void>
         /** Reset Mask Wallet account */
         resetAccount(): Promise<void>
+        /** Record which sites are connected to the Mask wallet  */
+        recordConnectedSites(site: EnhanceableSite | ExtensionSite, connected: boolean): void
 
         /** Sign a message with persona */
         personaSignMessage(payload: PersonaSignRequest): Promise<PersonaSignResult>
+
+        /** Generate sign message with persona */
+        generateSignResult(signer: ECKeyIdentifier, message: string): Promise<PersonaSignResult>
 
         /** Sign transaction */
         signTransaction(address: string, transaction: Transaction): Promise<string>
@@ -238,6 +246,10 @@ export namespace Plugin.Shared {
          * This does not affect if the plugin enable or not.
          */
         experimentalMark?: boolean
+        /**
+         * If the plugin is in the minimal mode by default.
+         */
+        inMinimalModeByDefault?: boolean
         /** i18n resources of this plugin */
         i18n?: I18NResource
         /** Introduce sub-network information. */
@@ -349,13 +361,13 @@ export namespace Plugin.Shared {
 
 /** This part runs in the SNSAdaptor */
 export namespace Plugin.SNSAdaptor {
-    export interface SNSAdaptorContext extends Shared.SharedContext {
+    export interface SNSAdaptorContext extends Shared.SharedUIContext {
         lastRecognizedProfile: Subscription<IdentityResolved | undefined>
         currentVisitingProfile: Subscription<IdentityResolved | undefined>
         allPersonas?: Subscription<PersonaInformation[]>
-        privileged_silentSign: () => (signer: ECKeyIdentifier, message: string) => Promise<PersonaSignResult>
         getPersonaAvatar: (identifier: ECKeyIdentifier | null | undefined) => Promise<string | null | undefined>
-        MaskMessages: WebExtensionMessage<MaskEvents>
+        ownProofChanged: UnboundedRegistry<void>
+        setMinimalMode: (id: string, enabled: boolean) => Promise<void>
     }
 
     export type SelectProviderDialogEvent =
@@ -404,10 +416,10 @@ export namespace Plugin.SNSAdaptor {
         PostActions?: InjectUI<{}>
         /** This UI will be rendered for each decrypted post. */
         DecryptedInspector?: InjectUI<{ message: TypedMessage }>
-        /** This UI will be rendered under the Search of the SNS. */
-        SearchResultBox?: InjectUI<{}>
         /** This UI will be rendered into the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
+        /** This UI will be rendered under the Search of the SNS. */
+        SearchResultBox?: SearchResultBox
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
         Web3UI?: Web3Plugin.UI.UI<ChainId, ProviderType, NetworkType>
         /** This is the context of the currently chosen network. */
@@ -436,6 +448,12 @@ export namespace Plugin.SNSAdaptor {
         ApplicationEntries?: ApplicationEntry[]
         /** This UI will be rendered as tabs on the profile page */
         ProfileTabs?: ProfileTab[]
+        /** This UI will be rendered as tabs on the profile card */
+        ProfileCardTabs?: ProfileTab[]
+        /** This UI will be rendered as cover on the profile page */
+        ProfileCover?: ProfileCover[]
+        /** This UI will be rendered components on the avatar realm */
+        AvatarRealm?: AvatarRealm
         /** This UI will be rendered as plugin wrapper page */
         wrapperProps?: PluginWrapperProps
         /**
@@ -558,6 +576,60 @@ export namespace Plugin.SNSAdaptor {
         title?: string
         backgroundGradient?: string
     }
+
+    export interface SearchResultBox {
+        ID: string
+        UI?: {
+            Content?: InjectUI<{
+                keyword: string
+            }>
+        }
+        Utils?: {
+            shouldDisplay?(keyword: string): boolean
+        }
+    }
+
+    export enum AvatarRealmSourceType {
+        ProfilePage = 'ProfilePage',
+        ProfileCard = 'ProfileCard',
+        Post = 'Post',
+        Editor = 'Editor',
+        Menu = 'Menu',
+        Suggestion = 'Suggestion',
+    }
+    export interface AvatarRealm {
+        ID: string
+        priority: number
+        label: I18NStringField | string
+        UI?: {
+            /**
+             * The injected avatar decorator component
+             */
+            Decorator: InjectUI<{
+                identity?: SocialIdentity
+                persona?: string
+                socialAddressList?: Array<SocialAddress<NetworkPluginID>>
+            }>
+            /**
+             * The injected avatar settings button component
+             */
+            Settings?: InjectUI<{
+                identity?: SocialIdentity
+                persona?: string
+                socialAddressList?: Array<SocialAddress<NetworkPluginID>>
+            }>
+        }
+        Utils?: {
+            /**
+             * If it returns false, this cover will not be displayed.
+             */
+            shouldDisplay?(
+                identity?: SocialIdentity,
+                addressNames?: Array<SocialAddress<NetworkPluginID>>,
+                sourceType?: AvatarRealmSourceType,
+            ): boolean
+        }
+    }
     export interface ProfileSlider {
         ID: string
 
@@ -594,15 +666,14 @@ export namespace Plugin.SNSAdaptor {
              */
             TabContent: InjectUI<{
                 identity?: SocialIdentity
-                persona?: string
-                socialAddressList?: Array<SocialAddress<NetworkPluginID>>
+                socialAddress?: SocialAddress<NetworkPluginID>
             }>
         }
         Utils?: {
             /**
              * If it returns false, this tab will not be displayed.
              */
-            shouldDisplay?(identity?: SocialIdentity, addressNames?: Array<SocialAddress<NetworkPluginID>>): boolean
+            shouldDisplay?(identity?: SocialIdentity, addressName?: SocialAddress<NetworkPluginID>): boolean
             /**
              * Filter social address.
              */
@@ -613,11 +684,48 @@ export namespace Plugin.SNSAdaptor {
             sorter?: (a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>) => number
         }
     }
+    export interface ProfileCover {
+        ID: string
+
+        /**
+         * The name of the cover
+         */
+        label: I18NStringField | string
+
+        /**
+         * Used to order the sliders
+         */
+        priority: number
+
+        UI?: {
+            /**
+             * The injected cover component
+             */
+            Cover: InjectUI<{
+                identity?: SocialIdentity
+                socialAddressList?: Array<SocialAddress<NetworkPluginID>>
+            }>
+        }
+        Utils: {
+            /**
+             * If it returns false, this cover will not be displayed
+             */
+            shouldDisplay?(identity?: SocialIdentity, addressNames?: Array<SocialAddress<NetworkPluginID>>): boolean
+            /**
+             * Filter social address
+             */
+            filterSocialAddress?(x: SocialAddress<NetworkPluginID>): boolean
+            /**
+             * Sort social address in expected order
+             */
+            sortSocialAddress?(a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>): number
+        }
+    }
 }
 
 /** This part runs in the dashboard */
 export namespace Plugin.Dashboard {
-    export interface DashboardContext extends Shared.SharedContext {}
+    export interface DashboardContext extends Shared.SharedUIContext {}
     // As you can see we currently don't have so much use case for an API here.
     export interface Definition<
         ChainId = unknown,
@@ -911,11 +1019,11 @@ export enum CurrentSNSNetwork {
 }
 
 export interface IdentityResolved {
-    identifier?: ProfileIdentifier
     nickname?: string
     avatar?: string
     bio?: string
     homepage?: string
+    identifier?: ProfileIdentifier
 }
 
 /**
@@ -963,6 +1071,7 @@ export enum PluginId {
     CrossChainBridge = 'io.mask.cross-chain-bridge',
     Referral = 'com.maskbook.referral',
     Web3Profile = 'io.mask.web3-profile',
+    Web3ProfileCard = 'io.mask.web3-profile-card',
     ScamSniffer = 'io.scamsniffer.mask-plugin',
     // @masknet/scripts: insert-here
 }
@@ -983,7 +1092,13 @@ export namespace Plugin.__Host {
         signal?: AbortSignal
     }
     export interface EnabledStatusReporter {
-        isEnabled(id: string): boolean | Promise<boolean>
+        isEnabled(id: string): BooleanPreference | Promise<BooleanPreference>
         events: Emitter<{ enabled: [id: string]; disabled: [id: string] }>
     }
+}
+
+export enum BooleanPreference {
+    False = 0,
+    Default = 1,
+    True = 2,
 }

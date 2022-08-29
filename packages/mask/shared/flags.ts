@@ -13,6 +13,7 @@ export const Flags = {
     mask_SDK_ready: betaOrInsiderOnly,
     /** Don't inject injected script in this mode. Native side will do the job. */
     support_declarative_user_script: is_iOSApp,
+    use_register_content_script: true,
     /** Don't show welcome page in this mode. Native side will do the job. */
     has_native_welcome_ui: appOnly,
     /** Firefox has a special API that can inject to the document with a higher permission. */
@@ -30,10 +31,12 @@ export const Flags = {
     polygon_enabled: true,
     arbitrum_enabled: true,
     xdai_enabled: true,
+    optimism_enabled: true,
     avalanche_enabled: true,
     fantom_enabled: true,
     celo_enabled: true,
     aurora_enabled: true,
+    astar_enabled: true,
     harmony_enabled: true,
     nft_airdrop_enabled: false,
     post_actions_enabled: true,
@@ -50,6 +53,8 @@ export const Flags = {
 
     // we still need to handle image encoding
     v37PayloadDefaultEnabled: false, // new Date() > new Date('2022-07-01'),
+    i18nTranslationHotUpdate: true,
+    sandboxedPluginRuntime: insiderOnly,
 } as const
 
 if (process.env.NODE_ENV === 'development') {

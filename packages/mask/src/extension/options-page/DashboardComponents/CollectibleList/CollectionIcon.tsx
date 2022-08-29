@@ -4,7 +4,7 @@ import { Image } from '../../../../components/shared/Image'
 import { makeStyles } from '@masknet/theme'
 import { TokenIcon } from '@masknet/shared'
 import classNames from 'classnames'
-import { isSameAddress, NonFungibleTokenCollection } from '@masknet/web3-shared-base'
+import { isSameAddress, NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/plugin-infra/src/entry-web3'
 
 const useStyles = makeStyles()((theme) => ({
@@ -31,9 +31,9 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface CollectionIconProps {
+export interface CollectionIconProps {
     selectedCollection?: string
-    collection?: NonFungibleTokenCollection<Web3Helper.ChainIdAll>
+    collection?: NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     onClick?(): void
 }
 

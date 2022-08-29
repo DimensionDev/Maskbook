@@ -11,7 +11,7 @@ import {
     dialogTitleClasses,
     Typography,
 } from '@mui/material'
-import { CircleWarningIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { isDashboardPage } from '@masknet/shared-base'
 import { formatPercentage } from '@masknet/web3-shared-evm'
 import type BigNumber from 'bignumber.js'
@@ -93,7 +93,7 @@ export const PriceImpactDialogUI = memo<PriceImpactDialogProps>(
         return (
             <InjectedDialog open={open} onClose={onClose} title={t.impact_warning()} className={classes.dialog}>
                 <DialogContent className={classes.content}>
-                    <CircleWarningIcon className={classes.icon} />
+                    <Icons.CircleWarning className={classes.icon} />
                     <Typography className={classes.title}>{t.risk_warning()}</Typography>
                     <Typography className={classes.description}>
                         <Translate.risk_warning_description

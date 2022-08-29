@@ -15,9 +15,10 @@ export const resolveNetworkOnRabby = createLookupTableResolver<NetworkType, stri
         [NetworkType.Fuse]: '',
         [NetworkType.Metis]: '',
         [NetworkType.Boba]: '',
-        [NetworkType.Optimistic]: '',
+        [NetworkType.Optimism]: '',
         [NetworkType.Celo]: '',
         [NetworkType.Conflux]: '',
+        [NetworkType.Astar]: '',
     },
     'eth',
 )

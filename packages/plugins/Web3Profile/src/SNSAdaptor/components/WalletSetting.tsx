@@ -1,18 +1,18 @@
-import { InjectedDialog } from '@masknet/shared'
+import { InjectedDialog, WalletTypes } from '@masknet/shared'
 import { context } from '../context'
-import { NextIDStoragePayload, PersonaInformation, PopupRoutes } from '@masknet/shared-base'
+import { PersonaInformation, PopupRoutes, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { Box, Button, DialogActions, DialogContent, Tab, Typography } from '@mui/material'
 import { memo, useEffect, useState } from 'react'
-import type { AccountType, WalletTypes } from '../types'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import type { AccountType } from '../types'
+import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
 import { TabContext } from '@mui/lab'
 import { Close as CloseIcon } from '@mui/icons-material'
-import { SettingInfoIcon, WalletUnderTabsIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { useI18N } from '../../locales'
+import { PLUGIN_ID } from '../../constants'
 import { Empty } from './Empty'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { getKvPayload, setKvPatchData } from '../utils'
 import { WalletTab } from './WalletTab'
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -20,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 440,
         position: 'relative',
         padding: '16px 16px 0 16px',
-        backgroundColor: theme.palette.background.paper,
+        backgroundColor: theme.palette.maskColor.bottom,
         '::-webkit-scrollbar': {
             display: 'none',
         },
@@ -102,7 +102,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     walletIcon: {
         marginRight: '8px',
-        fontSize: 16,
     },
 }))
 
@@ -122,7 +121,7 @@ const WalletSetting = memo(
         const { classes } = useStyles()
 
         const t = useI18N()
-
+        const { Storage } = useWeb3State()
         const [confirmButtonDisabled, setConfirmButtonDisabled] = useState(true)
         const [visible, setVisible] = useState(!localStorage.getItem('web3_profile_wallet_setting_hint_visible'))
 
@@ -175,19 +174,14 @@ const WalletSetting = memo(
                 },
             }
             try {
-                const payload = await getKvPayload(patch, currentPersona.identifier.publicKeyAsHex, accountId!)
-                const signature = await context.privileged_silentSign()?.(
-                    currentPersona?.identifier,
-                    (payload?.val as NextIDStoragePayload)?.signPayload,
+                if (!Storage || !accountId) return
+                const storage = Storage.createNextIDStorage(
+                    accountId,
+                    NextIDPlatform.Twitter,
+                    currentPersona.identifier,
                 )
 
-                await setKvPatchData(
-                    payload?.val as NextIDStoragePayload,
-                    signature?.signature?.signature,
-                    patch,
-                    currentPersona.identifier.publicKeyAsHex,
-                    accountId!,
-                )
+                await storage.set(PLUGIN_ID, patch)
                 retryData()
                 onClose()
             } catch (err) {
@@ -214,7 +208,11 @@ const WalletSetting = memo(
                     fullWidth={false}
                     open={open}
                     titleTail={
-                        <WalletUnderTabsIcon size={24} onClick={openPopupsWindow} className={classes.titleTailButton} />
+                        <Icons.WalletUnderTabs
+                            size={24}
+                            onClick={openPopupsWindow}
+                            className={classes.titleTailButton}
+                        />
                     }
                     titleTabs={
                         <MaskTabList variant="base" onChange={onChange} aria-label="Web3ProfileWalletSetting">
@@ -230,7 +228,7 @@ const WalletSetting = memo(
                                 {visible && (
                                     <Box className={classes.messageBox}>
                                         <Box display="flex" flexDirection="row" gap={1} alignItems="center">
-                                            <SettingInfoIcon className={classes.infoIcon} />
+                                            <Icons.SettingInfo className={classes.infoIcon} />
                                             <Typography color="currentColor" fontSize={14}>
                                                 {t.wallet_setting_hint()}
                                             </Typography>
@@ -275,7 +273,7 @@ const WalletSetting = memo(
                         ) : (
                             <Box className={classes.bottomButton}>
                                 <Button onClick={openPopupsWindow} fullWidth>
-                                    <WalletUnderTabsIcon className={classes.walletIcon} />
+                                    <Icons.WalletUnderTabs size={16} className={classes.walletIcon} />
                                     {t.add_wallet()}
                                 </Button>
                             </Box>

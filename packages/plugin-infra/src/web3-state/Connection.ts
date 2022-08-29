@@ -38,9 +38,9 @@ export class ConnectionState<
         >
 {
     constructor(
-        protected context: Plugin.Shared.SharedContext,
+        protected context: Plugin.Shared.SharedUIContext,
         protected createConnection: (
-            context: Plugin.Shared.SharedContext,
+            context: Plugin.Shared.SharedUIContext,
             options?: {
                 chainId?: ChainId
                 account?: string

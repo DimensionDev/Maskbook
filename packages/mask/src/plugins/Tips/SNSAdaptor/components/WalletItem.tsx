@@ -1,3 +1,4 @@
+import { Icons } from '@masknet/icons'
 import { useReverseAddress, useWallets, useWeb3State } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
@@ -42,19 +43,11 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         display: 'flex',
         alignItems: 'center',
+        marginRight: theme.spacing(0.5),
     },
-    linkIcon: {
-        width: 16,
-        height: 16,
-        marginRight: theme.spacing(1),
-    },
-    defaultBtn: {
+    actionBtn: {
         fontSize: 14,
         fontWeight: 'bold',
-        cursor: 'pointer',
-    },
-    delIcon: {
-        width: 20,
         cursor: 'pointer',
     },
     defaultBadge: {
@@ -80,22 +73,13 @@ const useStyles = makeStyles()((theme) => ({
 interface WalletItemProps {
     address: string
     isDefault?: boolean
-    canDelete?: boolean
-    onDelete?: any
+    deletable?: boolean
+    onDelete?: () => void
     fallbackName?: string
-    nowIdx: number
-    setAsDefault?: (idx: number) => void
+    setAsDefault?: (address: string) => void
 }
 
-export function WalletItem({
-    address,
-    isDefault,
-    canDelete,
-    fallbackName,
-    setAsDefault,
-    onDelete,
-    nowIdx,
-}: WalletItemProps) {
+export function WalletItem({ address, isDefault, deletable, fallbackName, setAsDefault, onDelete }: WalletItemProps) {
     const { classes } = useStyles()
     const t = useI18N()
     const [, copyToClipboard] = useCopyToClipboard()
@@ -124,25 +108,17 @@ export function WalletItem({
     }, [address, domain, fallbackName])
 
     const getActionRender = () => {
-        if (!canDelete && !isDefault)
+        if (!deletable && !isDefault)
             return (
                 <Typography
-                    className={classes.defaultBtn}
+                    className={classes.actionBtn}
                     onClick={() => {
-                        if (!setAsDefault) return
-                        setAsDefault(nowIdx ?? 0)
+                        setAsDefault?.(address)
                     }}>
                     {t.tip_set_as_default()}
                 </Typography>
             )
-        if (canDelete)
-            return (
-                <img
-                    onClick={onDelete}
-                    className={classes.delIcon}
-                    src={new URL('../../assets/del.png', import.meta.url).toString()}
-                />
-            )
+        if (deletable) return <Icons.Trash onClick={onDelete} size={24} className={classes.actionBtn} />
         return null
     }
     return (
@@ -162,10 +138,7 @@ export function WalletItem({
                         component="button"
                         title={t.copy_address()}
                         onClick={onCopy}>
-                        <img
-                            src={new URL('../../assets/copy.png', import.meta.url).toString()}
-                            className={classes.linkIcon}
-                        />
+                        <Icons.Copy size={16} />
                     </Link>
                     <Link
                         className={classes.link}
@@ -173,10 +146,7 @@ export function WalletItem({
                         target="_blank"
                         title={t.view_on_explorer()}
                         rel="noopener noreferrer">
-                        <img
-                            src={new URL('../../assets/link.png', import.meta.url).toString()}
-                            className={classes.linkIcon}
-                        />
+                        <Icons.LinkOut size={16} />
                     </Link>
                 </div>
             </div>

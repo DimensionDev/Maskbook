@@ -1,6 +1,6 @@
 import { openWindow } from '@masknet/shared-base-ui'
 import { useSelectFungibleToken, useOpenShareTxDialog } from '@masknet/shared'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
 import {
     leftShift,
     NetworkPluginID,
@@ -20,7 +20,6 @@ import {
 import { CircularProgress, Slider, Typography } from '@mui/material'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
@@ -135,7 +134,7 @@ export function SwapDialog(props: SwapDialogProps) {
     const selectFungibleToken = useSelectFungibleToken(NetworkPluginID.PLUGIN_EVM)
     const onSelectTokenChipClick = useCallback(async () => {
         const picked = await selectFungibleToken({
-            disableNativeToken: !exchangeTokens.some(isNativeTokenAddress),
+            disableNativeToken: !exchangeTokens.some((x) => isNativeTokenAddress(x.address)),
             disableSearchBar: true,
             whitelist: exchangeTokens.map((x) => x.address),
         })
@@ -199,8 +198,8 @@ export function SwapDialog(props: SwapDialogProps) {
             }, 2000)
         }
         if (payload.token.schema !== SchemaType.ERC20) return
-        await Token?.addToken?.(payload.token)
-    }, [swapCallback, payload.token, Token])
+        await Token?.addToken?.(account, payload.token)
+    }, [swapCallback, payload.token, Token, account])
 
     const validationMessage = useMemo(() => {
         if (swapAmount.isZero() || tokenAmount.isZero() || swapAmount.dividedBy(ratio).isLessThan(1))

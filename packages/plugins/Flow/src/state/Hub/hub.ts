@@ -1,5 +1,5 @@
 import type { PartialRequired } from '@masknet/shared-base'
-import { Alchemy_FLOW } from '@masknet/web3-providers'
+import { AlchemyFlow } from '@masknet/web3-providers'
 import type {
     FungibleToken,
     NonFungibleToken,
@@ -103,7 +103,7 @@ class Hub implements FlowHub {
         contractName?: string,
     ): Promise<NonFungibleAsset<ChainId, SchemaType> | undefined> {
         const options = this.getOptions(initial)
-        return Alchemy_FLOW.getAsset(address, tokenId, options, ownerAddress, contractName)
+        return AlchemyFlow.getAsset(address, tokenId, options, ownerAddress, contractName)
     }
     getNonFungibleTokens(
         account: string,
@@ -112,7 +112,7 @@ class Hub implements FlowHub {
         const options = this.getOptions(initial, {
             account,
         })
-        return Alchemy_FLOW.getAssets(options.account, options)
+        return AlchemyFlow.getAssets(options.account, options)
     }
     getFungibleTokenPrice(chainId: ChainId, address: string, initial?: HubOptions<ChainId>): Promise<number> {
         // The Flow chain is unlisted in CoinGecko.
@@ -145,7 +145,7 @@ class Hub implements FlowHub {
         chainId: ChainId,
         account: string,
         initial?: HubOptions<ChainId>,
-    ): Promise<Array<Transaction<ChainId, SchemaType>>> {
+    ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
         throw new Error('Method not implemented.')
     }
 }

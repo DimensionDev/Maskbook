@@ -1,6 +1,6 @@
 import { uniqBy } from 'lodash-unified'
 import type { Subscription } from 'use-subscription'
-import { mapSubscription, mergeSubscription, StorageObject } from '@masknet/shared-base'
+import { mapSubscription, mergeSubscription, safeEmptyList, StorageObject } from '@masknet/shared-base'
 import {
     FungibleToken,
     NonFungibleToken,
@@ -11,8 +11,8 @@ import {
 import type { Plugin } from '../types'
 
 export interface TokenStorage<ChainId, SchemaType> {
-    fungibleTokens: Array<FungibleToken<ChainId, SchemaType>>
-    nonFungibleTokens: Array<NonFungibleToken<ChainId, SchemaType>>
+    fungibleTokenList: Record<string, Array<FungibleToken<ChainId, SchemaType>>>
+    nonFungibleTokenList: Record<string, Array<NonFungibleToken<ChainId, SchemaType>>>
     fungibleTokenBlockedBy: Record<string, string[]>
     nonFungibleTokenBlockedBy: Record<string, string[]>
 }
@@ -44,70 +44,102 @@ export class TokenState<ChainId, SchemaType> implements Web3TokenState<ChainId, 
             this.trustedFungibleTokens = mapSubscription(
                 mergeSubscription(
                     this.subscriptions.account,
-                    this.storage.fungibleTokens.subscription,
+                    this.storage.fungibleTokenList.subscription,
                     this.storage.fungibleTokenBlockedBy.subscription,
                 ),
-                ([account, tokens, blockedBy]) => tokens.filter((x) => !blockedBy[account]?.includes(x.address)),
+                ([account, tokens, blockedBy]) =>
+                    safeEmptyList(
+                        tokens[account.toLowerCase()]?.filter(
+                            (x) => !blockedBy[account.toLowerCase()]?.includes(x.address),
+                        ),
+                    ),
             )
             this.trustedNonFungibleTokens = mapSubscription(
                 mergeSubscription(
                     this.subscriptions.account,
-                    this.storage.nonFungibleTokens.subscription,
+                    this.storage.nonFungibleTokenList.subscription,
                     this.storage.nonFungibleTokenBlockedBy.subscription,
                 ),
-                ([account, tokens, blockedBy]) => tokens.filter((x) => !blockedBy[account]?.includes(x.address)),
+                ([account, tokens, blockedBy]) =>
+                    safeEmptyList(
+                        tokens[account.toLowerCase()]?.filter(
+                            (x) => !blockedBy[account.toLowerCase()]?.includes(x.address),
+                        ),
+                    ),
             )
             this.blockedFungibleTokens = mapSubscription(
                 mergeSubscription(
                     this.subscriptions.account,
-                    this.storage.fungibleTokens.subscription,
+                    this.storage.fungibleTokenList.subscription,
                     this.storage.fungibleTokenBlockedBy.subscription,
                 ),
-                ([account, tokens, blockedBy]) => tokens.filter((x) => blockedBy[account]?.includes(x.address)),
+                ([account, tokens, blockedBy]) =>
+                    safeEmptyList(
+                        tokens[account.toLowerCase()]?.filter((x) =>
+                            blockedBy[account.toLowerCase()]?.includes(x.address),
+                        ),
+                    ),
             )
             this.blockedNonFungibleTokens = mapSubscription(
                 mergeSubscription(
                     this.subscriptions.account,
-                    this.storage.nonFungibleTokens.subscription,
+                    this.storage.nonFungibleTokenList.subscription,
                     this.storage.nonFungibleTokenBlockedBy.subscription,
                 ),
-                ([account, tokens, blockedBy]) => tokens.filter((x) => blockedBy[account]?.includes(x.address)),
+                ([account, tokens, blockedBy]) =>
+                    safeEmptyList(
+                        tokens[account.toLowerCase()]?.filter((x) =>
+                            blockedBy[account.toLowerCase()]?.includes(x.address),
+                        ),
+                    ),
             )
         }
     }
 
-    private async addOrRemoveToken(token: Token<ChainId, SchemaType>, strategy: 'add' | 'remove') {
+    // add or remove by contract address from user
+    private async addOrRemoveToken(address: string, token: Token<ChainId, SchemaType>, strategy: 'add' | 'remove') {
         if (!this.options.isValidAddress(token.address)) throw new Error('Not a valid token.')
 
-        const address = this.options.formatAddress(token.address)
-        const tokens: Array<Token<ChainId, SchemaType>> =
-            token.type === TokenType.Fungible ? this.storage.fungibleTokens.value : this.storage.nonFungibleTokens.value
+        const account = this.options.formatAddress(address).toLowerCase()
+        const tokenAddress = this.options.formatAddress(token.address)
+        const tokens: Record<string, Array<Token<ChainId, SchemaType>>> = token.type === TokenType.Fungible
+            ? this.storage.fungibleTokenList.value
+            : this.storage.nonFungibleTokenList.value
+
+        const addedTokens: Array<Token<ChainId, SchemaType>> = tokens[account] ?? []
         const tokensUpdated =
             strategy === 'add'
                 ? uniqBy(
                       [
                           {
                               ...token,
-                              id: address,
-                              address,
+                              id: tokenAddress,
+                              address: tokenAddress,
                           },
-                          ...tokens,
+                          ...addedTokens,
                       ],
                       (x) => x.id,
                   )
-                : tokens.filter((x) => !this.options.isSameAddress(x.address, address))
+                : addedTokens.filter((x) => !this.options.isSameAddress(x.address, tokenAddress))
+
+        const updatedValue = { ...tokens, [account]: tokensUpdated }
 
         if (token.type === TokenType.Fungible) {
-            await this.storage.fungibleTokens.setValue(tokensUpdated as Array<FungibleToken<ChainId, SchemaType>>)
+            await this.storage.fungibleTokenList.setValue(
+                updatedValue as Record<string, Array<FungibleToken<ChainId, SchemaType>>>,
+            )
         } else {
-            await this.storage.nonFungibleTokens.setValue(tokensUpdated as Array<NonFungibleToken<ChainId, SchemaType>>)
+            await this.storage.nonFungibleTokenList.setValue(
+                updatedValue as Record<string, Array<NonFungibleToken<ChainId, SchemaType>>>,
+            )
         }
     }
 
+    // trust or block exist token in token list
     private async blockOrUnblockToken(address: string, token: Token<ChainId, SchemaType>, strategy: 'trust' | 'block') {
         if (!this.options.isValidAddress(token.address)) throw new Error('Not a valid token.')
 
-        const address_ = this.options.formatAddress(address)
+        const address_ = this.options.formatAddress(address).toLowerCase()
         const blocked =
             token.type === TokenType.Fungible
                 ? this.storage.fungibleTokenBlockedBy.value
@@ -129,16 +161,18 @@ export class TokenState<ChainId, SchemaType> implements Web3TokenState<ChainId, 
         }
     }
 
-    async addToken(token: Token<ChainId, SchemaType>) {
-        this.addOrRemoveToken(token, 'add')
+    async addToken(address: string, token: Token<ChainId, SchemaType>) {
+        this.addOrRemoveToken(address, token, 'add')
     }
-    async removeToken(token: Token<ChainId, SchemaType>) {
-        this.addOrRemoveToken(token, 'remove')
+    async removeToken(address: string, token: Token<ChainId, SchemaType>) {
+        this.addOrRemoveToken(address, token, 'remove')
     }
     async trustToken(address: string, token: Token<ChainId, SchemaType>) {
+        this.addOrRemoveToken(address, token, 'remove')
         this.blockOrUnblockToken(address, token, 'trust')
     }
     async blockToken(address: string, token: Token<ChainId, SchemaType>) {
         this.blockOrUnblockToken(address, token, 'block')
+        this.addOrRemoveToken(address, token, 'add')
     }
 }

@@ -4,10 +4,10 @@ import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Avatar, Box, Typography } from '@mui/material'
 import { CopyIconButton } from '../../../../components/CopyIconButton'
-import { ArrowDropIcon, Mask, MasksIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { formatPersonaFingerprint, formatPersonaName } from '@masknet/shared-base'
 
-const useStyles = makeStyles()(() => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
         background:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(98, 126, 234, 0.2) 0%, rgba(59, 153, 252, 0.2) 100%)',
@@ -57,6 +57,7 @@ const useStyles = makeStyles()(() => ({
     arrow: {
         fontSize: 20,
         transition: 'all 300ms',
+        color: theme.palette.maskColor.secondaryDark,
     },
 }))
 
@@ -73,12 +74,12 @@ export const PersonaHeaderUI = memo<PersonaHeaderUIProps>(
         const { classes } = useStyles()
         return (
             <Box className={classes.container}>
-                <Mask className={classes.logo} />
+                <Icons.Mask className={classes.logo} />
                 <div className={classes.action} onClick={onActionClick}>
                     {avatar ? (
                         <Avatar src={avatar} className={classes.avatar} />
                     ) : (
-                        <MasksIcon className={classes.avatar} />
+                        <Icons.Masks className={classes.avatar} />
                     )}
                     <div>
                         <Typography className={classes.nickname}>{formatPersonaName(nickname)}</Typography>
@@ -87,7 +88,7 @@ export const PersonaHeaderUI = memo<PersonaHeaderUIProps>(
                             <CopyIconButton text={fingerprint} className={classes.icon} />
                         </Typography>
                     </div>
-                    <ArrowDropIcon
+                    <Icons.ArrowDrop
                         className={classes.arrow}
                         style={{ transform: isSelectPersonaPage ? 'rotate(-180deg)' : undefined }}
                     />

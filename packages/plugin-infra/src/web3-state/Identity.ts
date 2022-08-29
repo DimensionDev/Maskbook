@@ -5,20 +5,27 @@ import type {
     IdentityServiceState as Web3SocialIdentityState,
     NetworkPluginID,
 } from '@masknet/web3-shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 
 export class IdentityServiceState implements Web3SocialIdentityState {
-    protected cache = new LRU<string, Array<SocialAddress<NetworkPluginID>>>({
+    protected cache = new LRU<string, Promise<Array<SocialAddress<NetworkPluginID>>>>({
         max: 20,
         ttl: Number.MAX_SAFE_INTEGER,
     })
 
     private getIdentityID(identity: SocialIdentity) {
         if (!identity.identifier) return ''
-        return `${identity.identifier.network}_${identity.identifier.userId}_${identity.bio}_${identity.homepage}`
+        return [
+            identity.identifier.network,
+            identity.identifier.userId,
+            identity.bio,
+            identity.homepage,
+            identity.publicKey ?? '',
+        ].join('_')
     }
 
-    protected getFromCache(identity: SocialIdentity): Promise<Array<SocialAddress<NetworkPluginID>>> {
-        return Promise.resolve(this.cache.get(this.getIdentityID(identity)) ?? [])
+    protected getFromCache(identity: SocialIdentity) {
+        return this.cache.get(this.getIdentityID(identity))
     }
 
     protected getFromRemote(identity: SocialIdentity): Promise<Array<SocialAddress<NetworkPluginID>>> {
@@ -27,13 +34,15 @@ export class IdentityServiceState implements Web3SocialIdentityState {
 
     async lookup(identity: SocialIdentity): Promise<Array<SocialAddress<NetworkPluginID>>> {
         const ID = this.getIdentityID(identity)
-        if (!ID) return []
+        if (!ID) return EMPTY_LIST
 
-        const fromCache = await this.getFromCache(identity)
-        if (fromCache.length) return fromCache
+        const fromCache = this.getFromCache(identity)
+        if (fromCache && !identity.isOwner) return fromCache
 
-        const fromRemote = await this.getFromRemote(identity)
-        if (fromRemote.length) this.cache.set(ID, fromRemote)
+        const fromRemote = this.getFromRemote(identity)
+        if (!identity.isOwner) {
+            this.cache.set(ID, fromRemote)
+        }
 
         return fromRemote
     }

@@ -9,8 +9,9 @@ import { Wallet } from './Wallet'
 import { Others } from './Others'
 import type { FlowWeb3State } from './Connection/types'
 import { IdentityService } from './IdentityService'
+import { Storage } from './Storage'
 
-export function createWeb3State(context: Plugin.Shared.SharedContext): FlowWeb3State {
+export function createWeb3State(context: Plugin.Shared.SharedUIContext): FlowWeb3State {
     const Provider_ = new Provider(context)
     return {
         AddressBook: new AddressBook(context, {
@@ -34,5 +35,6 @@ export function createWeb3State(context: Plugin.Shared.SharedContext): FlowWeb3S
         }),
         Wallet: new Wallet(context),
         Others: new Others(context),
+        Storage: new Storage(),
     }
 }

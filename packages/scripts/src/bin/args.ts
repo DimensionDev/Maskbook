@@ -1,14 +1,13 @@
 import yargs from 'yargs'
-import type { ExtensionBuildArgs } from '../extension'
+import type { ExtensionBuildArgs } from '../extension/index.js'
+import { hideBin } from 'yargs/helpers'
 
-const { hideBin } = require('yargs/helpers')
 const presets = ['chromium', 'firefox', 'android', 'iOS', 'base'] as const
 export function extensionArgsParser() {
     const opts = yargs(hideBin(process.argv))
-        .options<'preset', { choices: typeof presets[number][] }>('preset', {
-            // @ts-ignore
+        .options('preset', {
             type: 'string',
-            choices: [...presets],
+            choices: [...presets] as typeof presets[number][],
             description: 'Select which preset to build',
         })
         .conflicts('beta', 'insider')
@@ -30,6 +29,8 @@ export function extensionArgsParser() {
         })
         .hide('version')
         .strict().argv
+
+    if (opts instanceof Promise) throw new TypeError()
     const extensionOpts: ExtensionBuildArgs = {
         mv3: opts.mv3,
         android: opts.preset === 'android',
@@ -44,7 +45,7 @@ export function extensionArgsParser() {
         progress: opts.progress,
     }
     for (const i in extensionOpts) {
-        if (!extensionOpts[i]) delete extensionOpts[i]
+        if (!(extensionOpts as any)[i]) delete (extensionOpts as any)[i]
     }
     return extensionOpts
 }

@@ -1,4 +1,4 @@
-import { TipCoin } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { useCurrentWeb3NetworkPluginID, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
@@ -74,8 +74,9 @@ export const TipButton: FC<Props> = ({
     const t = useI18N()
 
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
-    const { value: personaPubkey, loading: loadingPersona } = useProfilePublicKey(receiver)
+    const { value: persona, loading: loadingPersona } = useProfilePublicKey(receiver)
     const receiverUserId = receiver?.userId
+    const personaPubkey = persona?.publicKeyAsHex
 
     const pluginId = useCurrentWeb3NetworkPluginID()
     const {
@@ -104,7 +105,7 @@ export const TipButton: FC<Props> = ({
         return MaskMessages.events.ownProofChanged.on(retryLoadVerifyInfo)
     }, [])
 
-    const publicWallets = usePublicWallets(personaPubkey)
+    const publicWallets = usePublicWallets(persona)
     const { value: socialAddressList = EMPTY_LIST } = useSocialAddressListAll(visitingIdentity)
     const allAddresses = useMemo(() => {
         switch (pluginId) {
@@ -159,7 +160,7 @@ export const TipButton: FC<Props> = ({
             {...rest}
             role="button"
             onClick={createTipTask}>
-            <TipCoin />
+            <Icons.TipCoin />
             {children}
         </div>
     )

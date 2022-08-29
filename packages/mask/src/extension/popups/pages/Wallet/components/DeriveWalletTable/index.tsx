@@ -13,11 +13,12 @@ import {
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { FormattedAddress, FormattedBalance } from '@masknet/shared'
-import { CheckboxBorder, Checkbox as CheckboxIcon } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../../../utils'
 import { useWeb3 } from '@masknet/plugin-infra/web3'
 import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
+import { range } from 'lodash-unified'
 
 const useStyles = makeStyles()({
     header: {
@@ -78,21 +79,19 @@ export const DeriveWalletTable = memo<DeriveWalletTableProps>(({ loading, dataSo
                               confirmLoading={confirmLoading}
                           />
                       ))
-                    : Array.from({ length: 10 })
-                          .fill(0)
-                          .map((_, index) => (
-                              <TableRow key={index}>
-                                  <TableCell align="center" variant="body" className={classes.cell}>
-                                      <Skeleton animation="wave" variant="rectangular" width="90%" height={24} />
-                                  </TableCell>
-                                  <TableCell align="center" variant="body" className={classes.cell}>
-                                      <Skeleton animation="wave" variant="rectangular" width="90%" height={24} />
-                                  </TableCell>
-                                  <TableCell align="center" variant="body" className={classes.cell}>
-                                      <Skeleton animation="wave" variant="rectangular" width="90%" height={24} />
-                                  </TableCell>
-                              </TableRow>
-                          ))}
+                    : range(10).map((index) => (
+                          <TableRow key={index}>
+                              <TableCell align="center" variant="body" className={classes.cell}>
+                                  <Skeleton animation="wave" variant="rectangular" width="90%" height={24} />
+                              </TableCell>
+                              <TableCell align="center" variant="body" className={classes.cell}>
+                                  <Skeleton animation="wave" variant="rectangular" width="90%" height={24} />
+                              </TableCell>
+                              <TableCell align="center" variant="body" className={classes.cell}>
+                                  <Skeleton animation="wave" variant="rectangular" width="90%" height={24} />
+                              </TableCell>
+                          </TableRow>
+                      ))}
             </TableBody>
         </Table>
     )
@@ -135,8 +134,8 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(({ address, 
                 <Checkbox
                     disabled={added}
                     defaultChecked={selected || added}
-                    icon={<CheckboxBorder size={16} color="#1C68F3" />}
-                    checkedIcon={<CheckboxIcon size={16} />}
+                    icon={<Icons.CheckboxBorder size={16} color="#1C68F3" />}
+                    checkedIcon={<Icons.Checkbox size={16} />}
                     sx={{
                         color: '#1C68F3',
                         padding: 0,

@@ -5,7 +5,7 @@ import { head } from 'lodash-unified'
 import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import Services from '../../../extension/service'
-import { currentPersonaIdentifier } from '../../../settings/settings'
+import { currentPersonaIdentifier } from '../../../../shared/legacy-settings/settings'
 import { MaskMessages } from '../../../utils'
 
 export function useProvedWallets() {
@@ -14,9 +14,11 @@ export function useProvedWallets() {
         async () => Services.Identity.queryOwnedPersonaInformation(false),
         [currentIdentifier],
     )
+
     useEffect(() => {
         return MaskMessages.events.ownPersonaChanged.on(retry)
     }, [retry])
+
     const res = useAsyncRetry(async () => {
         if (!currentIdentifier) return EMPTY_LIST
         const currentPersona = personas?.find(

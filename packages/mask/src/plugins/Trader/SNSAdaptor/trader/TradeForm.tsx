@@ -1,9 +1,9 @@
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { PluginWalletStatusBar, useI18N } from '../../../../utils'
-import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
+import { makeStyles, MaskColorVar, useStylesExtends, ActionButton } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
 import { alpha, Box, chipClasses, Collapse, IconButton, lighten, Typography } from '@mui/material'
-import { ChainId, formatWeiToEther, GasOptionConfig, SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, formatWeiToEther, GasOptionConfig, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import {
     FungibleToken,
     isLessThan,
@@ -11,20 +11,13 @@ import {
     NetworkPluginID,
     rightShift,
     multipliedBy,
-    formatPercentage,
 } from '@masknet/web3-shared-base'
 import TuneIcon from '@mui/icons-material/Tune'
 import { TokenPanelType, TradeInfo } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
-import {
-    isHighRisk,
-    SelectTokenChip,
-    TokenSecurityBar,
-    useSelectAdvancedSettings,
-    useTokenSecurity,
-} from '@masknet/shared'
-import { ChevronUpIcon, Drop, RefreshIcon, ArrowDownward } from '@masknet/icons'
+import { SelectTokenChip, TokenSecurityBar, useSelectAdvancedSettings, useTokenSecurity } from '@masknet/shared'
+import { Icons } from '@masknet/icons'
 import classnames from 'classnames'
 import { isNativeTokenWrapper } from '../../helpers'
 import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo'
@@ -37,14 +30,13 @@ import { useUpdateEffect } from 'react-use'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { isDashboardPage, isPopupPage, PopupRoutes } from '@masknet/shared-base'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
-import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
+import { TokenSecurityBoundary } from '../../../../web3/UI/TokenSecurityBoundary'
 import { currentSlippageSettings } from '../../settings'
 import { PluginTraderMessages } from '../../messages'
 import Services from '../../../../extension/service'
 import { PluginId, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
-import { RiskWarningDialog } from './RiskWarningDialog'
 
 const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((theme, { isDashboard, isPopup }) => {
     return {
@@ -96,11 +88,9 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             zIndex: 1,
         },
         chevron: {
-            fill: 'none',
-            stroke: isDashboard ? theme.palette.text.primary : theme.palette.text.strong,
+            color: isDashboard ? theme.palette.text.primary : theme.palette.text.strong,
             transition: 'all 300ms',
             cursor: 'pointer',
-            color: theme.palette.text.primary,
         },
         reverseChevron: {
             transform: 'rotate(-180deg)',
@@ -187,6 +177,9 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             height: 24,
             color: `${isDashboard ? theme.palette.text.primary : theme.palette.maskColor.main}!important`,
         },
+        whiteDrop: {
+            color: '#ffffff !important',
+        },
         connectWallet: {
             marginTop: 0,
         },
@@ -261,11 +254,11 @@ export const TradeForm = memo<AllTradeFormProps>(
         const isDashboard = isDashboardPage()
         const isPopup = isPopupPage()
         const { t } = useI18N()
-        const classes = useStylesExtends(useStyles({ isDashboard, isPopup }), props)
+        const styles = useStyles({ isDashboard, isPopup })
+        const classes = useStylesExtends(styles, props)
         const { targetChainId: chainId } = TargetChainIdContext.useContainer()
         const { isSwapping, allTradeComputed } = AllProviderTradeContext.useContainer()
         const [isExpand, setExpand] = useState(false)
-        const [isWarningOpen, setIsWarningOpen] = useState(false)
 
         const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
         const isSNSClosed = snsAdaptorMinimalPlugins?.map((x) => x.ID).includes(PluginId.GoPlusSecurity)
@@ -278,7 +271,7 @@ export const TradeForm = memo<AllTradeFormProps>(
             isTokenSecurityEnable,
         )
 
-        const isRisky = isHighRisk(tokenSecurityInfo)
+        const isRisky = tokenSecurityInfo?.is_high_risk
 
         // #region approve token
         const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(
@@ -472,14 +465,16 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 onClick: () => onTokenChipClick(TokenPanelType.Input),
                                 onDelete: () => onTokenChipClick(TokenPanelType.Input),
                                 deleteIcon: (
-                                    <Drop className={classes.dropIcon} color={!inputToken ? '#ffffff' : undefined} />
+                                    <Icons.Drop
+                                        className={styles.cx(classes.dropIcon, !inputToken ? classes.whiteDrop : null)}
+                                    />
                                 ),
                             },
                         }}
                     />
                     <Box className={classes.reverseWrapper}>
                         <Box className={classes.reverse}>
-                            <ArrowDownward className={classes.reverseIcon} onClick={onSwitch} />
+                            <Icons.ArrowDownward className={classes.reverseIcon} onClick={onSwitch} />
                         </Box>
                     </Box>
                     <Box className={classes.section} marginBottom={2.5}>
@@ -497,9 +492,11 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     onClick: () => onTokenChipClick(TokenPanelType.Output),
                                     onDelete: () => onTokenChipClick(TokenPanelType.Output),
                                     deleteIcon: (
-                                        <Drop
-                                            className={classes.dropIcon}
-                                            color={!outputToken ? '#ffffff' : undefined}
+                                        <Icons.Drop
+                                            className={styles.cx(
+                                                classes.dropIcon,
+                                                !outputToken ? classes.whiteDrop : null,
+                                            )}
                                         />
                                     ),
                                 }}
@@ -533,7 +530,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 </Collapse>
                                 {trades.filter((x) => !!x.value).length > 1 ? (
                                     <Box width="100%" display="flex" justifyContent="center" marginTop={1.5}>
-                                        <ChevronUpIcon
+                                        <Icons.ChevronUp
                                             className={classnames(
                                                 classes.chevron,
                                                 isExpand ? classes.reverseChevron : null,
@@ -558,7 +555,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         className={classes.icon}
                                         size="small"
                                         onClick={() => allTradeComputed.forEach((x) => x.retry())}>
-                                        <RefreshIcon />
+                                        <Icons.Refresh />
                                     </IconButton>
                                     <IconButton className={classes.icon} size="small" onClick={openSwapSettingDialog}>
                                         <TuneIcon fontSize="small" />
@@ -604,19 +601,20 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         style: { borderRadius: 8 },
                                         size: 'medium',
                                     }}>
-                                    {isTokenSecurityEnable && isRisky ? (
-                                        <ActionButton
-                                            fullWidth
-                                            variant="contained"
-                                            color="error"
-                                            disabled={focusedTrade?.loading || !focusedTrade?.value}
-                                            classes={{ root: classes.button, disabled: classes.disabledButton }}
-                                            onClick={() => setIsWarningOpen(true)}>
-                                            {t('plugin_trader_risk_warning', {
-                                                percent: formatPercentage(focusedTrade?.value?.priceImpact ?? 0),
-                                            })}
-                                        </ActionButton>
-                                    ) : (
+                                    <TokenSecurityBoundary
+                                        tokenInfo={{
+                                            name: tokenSecurityInfo?.token_name ?? '--',
+                                            chainId: tokenSecurityInfo?.chainId ?? ChainId.Mainnet,
+                                            contract: tokenSecurityInfo?.contract ?? ZERO_ADDRESS,
+                                        }}
+                                        disabled={
+                                            focusedTrade?.loading ||
+                                            !focusedTrade?.value ||
+                                            !!validationMessage ||
+                                            isSwapping
+                                        }
+                                        onSwap={onSwap}
+                                        showTokenSecurity={isTokenSecurityEnable && isRisky}>
                                         <ActionButton
                                             fullWidth
                                             loading={isSwapping}
@@ -632,22 +630,11 @@ export const TradeForm = memo<AllTradeFormProps>(
                                             onClick={onSwap}>
                                             {validationMessage || nativeWrapMessage}
                                         </ActionButton>
-                                    )}
+                                    </TokenSecurityBoundary>
                                 </EthereumERC20TokenApprovedBoundary>
                             </WalletConnectedBoundary>
                         </ChainBoundary>
                     </PluginWalletStatusBar>
-                    {isTokenSecurityEnable && tokenSecurityInfo && (
-                        <RiskWarningDialog
-                            open={isWarningOpen}
-                            onClose={() => setIsWarningOpen(false)}
-                            onConfirm={() => {
-                                onSwap()
-                                setIsWarningOpen(false)
-                            }}
-                            tokenInfo={tokenSecurityInfo}
-                        />
-                    )}
                 </Box>
             </>
         )

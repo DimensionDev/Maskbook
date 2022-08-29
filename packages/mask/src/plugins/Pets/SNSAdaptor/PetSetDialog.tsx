@@ -1,9 +1,8 @@
 import { useState, useMemo, ReactNode, Fragment } from 'react'
 import { useTimeout } from 'react-use'
-import classNames from 'classnames'
 import { Constant, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { makeStyles, useStylesExtends, useCustomSnackbar, ShadowRootPopper } from '@masknet/theme'
+import { makeStyles, useStylesExtends, useCustomSnackbar, ShadowRootPopper, ActionButton } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
 import {
     TextField,
@@ -16,9 +15,10 @@ import {
     FormControlLabel,
     Checkbox,
     CircularProgress,
+    useTheme,
 } from '@mui/material'
-import { PluginPetMessages, PluginPetRPC } from '../messages'
-import { initMeta, initCollection, GLB3DIcon } from '../constants'
+import { PluginPetMessages } from '../messages'
+import { initMeta, initCollection, GLB3DIcon, PetsPluginID } from '../constants'
 import { PreviewBox } from './PreviewBox'
 import { PetMetaDB, FilterContract, OwnerERC721TokenInfo, ImageType } from '../types'
 import { useUser, useNFTs } from '../hooks'
@@ -27,10 +27,8 @@ import { useI18N } from '../locales'
 import { ImageLoader } from './ImageLoader'
 import { petShowSettings } from '../settings'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import { useWeb3Connection } from '@masknet/plugin-infra/web3'
-import { saveCustomEssayToRSS } from '../Services/rss3'
-import { RSS3Icon } from '../assets/rss3'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { useWeb3Connection, useWeb3State } from '@masknet/plugin-infra/web3'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     desBox: {
@@ -109,11 +107,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     icon: {
         margin: theme.spacing(0, 1),
-        width: 21,
-        height: 15,
-    },
-    logo: {
-        height: 21,
     },
     RSS3Icon: {
         color: theme.palette.mode === 'light' ? '#000' : '#fff',
@@ -128,13 +121,14 @@ interface PetSetDialogProps {
 export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const t = useI18N()
     const classes = useStylesExtends(useStyles(), {})
+    const theme = useTheme()
     const { showSnackbar } = useCustomSnackbar()
     const [loading, setLoading] = useState(false)
     const checked = useValueRef<boolean>(petShowSettings)
     const [isReady, cancel] = useTimeout(2000)
 
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
-
+    const { Storage } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const user = useUser()
     const { nfts, state } = useNFTs(user)
     const blacklist = Object.values(configNFTs ?? {}).map((v) => v.Mainnet)
@@ -175,11 +169,12 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
             chainId: chosenToken?.chainId,
         }
         try {
-            await PluginPetRPC.setUserAddress(user)
+            if (!Storage) return
+            const kvStorage = Storage.createKVStorage(PetsPluginID)
+            await kvStorage.set(user.userId, user.address)
             const signature = await connection?.signMessage(user.userId, 'personalSign', { account: user.address })
-            if (signature && connection) {
-                await saveCustomEssayToRSS(user.address, meta, signature, connection)
-            }
+            const storage = Storage.createRSS3Storage(user.address)
+            storage.set('_pet', { address: user.address, signature, essay: meta })
             closeDialogHandle()
         } catch {
             showSnackbar(t.pets_dialog_fail(), { variant: 'error' })
@@ -366,17 +361,14 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     <Typography color="textPrimary" fontSize={14} fontWeight={700}>
                         MintTeam
                     </Typography>
-                    <img
-                        className={classNames(classes.icon, classes.logo)}
-                        src={new URL('../assets/pets.png', import.meta.url).toString()}
-                    />
+                    <Icons.Pets className={classes.icon} />
                     <Typography fontSize={14} color="textSecondary" fontWeight={700} className={classes.des}>
                         &
                     </Typography>
                     <Typography fontSize={14} color="textSecondary" fontWeight={700} className={classes.des}>
                         RSS3
                     </Typography>
-                    <RSS3Icon className={classes.RSS3Icon} />
+                    <Icons.RSS3 color={theme.palette.mode === 'light' ? '#000' : '#fff'} />
                 </Box>
             </Box>
 

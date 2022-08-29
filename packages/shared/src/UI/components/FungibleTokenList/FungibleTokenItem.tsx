@@ -1,15 +1,15 @@
-import { useCallback, useMemo } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import classNames from 'classnames'
-import { ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
+import { Link, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import { formatBalance, FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { TokenIcon } from '../TokenIcon'
-import { CircleLoadingIcon } from '@masknet/icons'
-import type { MaskSearchableListItemProps } from '@masknet/theme'
-import { makeStyles, MaskLoadingButton } from '@masknet/theme'
+import { Icons } from '@masknet/icons'
+import { makeStyles, MaskLoadingButton, LoadingBase } from '@masknet/theme'
 import { useSharedI18N } from '../../../locales'
-import { LoadingAnimation } from '../LoadingAnimation'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import { useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
+import { TokenListMode } from './type'
+import { SettingSwitch } from '../SettingSwitch'
+import { useTokenBlocked, useTokenTrusted } from './useTokenBlocked'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -18,8 +18,16 @@ const useStyles = makeStyles()((theme) => ({
     },
     list: {
         maxHeight: '100%',
+        height: 'calc(100% - 16px)',
         padding: theme.spacing(1.5),
+        marginBottom: theme.spacing(2),
         borderRadius: theme.spacing(1),
+        boxShadow:
+            theme.palette.mode === 'dark' ? '0px 0px 20px rgba(255, 255, 255, 0.12)' : '0 0 20px rgba(0, 0, 0, 0.05)',
+        backdropFilter: 'blur(16px)',
+        '&:hover': {
+            background: theme.palette.maskColor.bg,
+        },
     },
     text: {
         display: 'flex',
@@ -34,27 +42,21 @@ const useStyles = makeStyles()((theme) => ({
         paddingRight: theme.spacing(1),
     },
     name: {
-        display: 'block',
+        display: 'flex',
+        gap: theme.spacing(0.5),
+        alignItems: 'center',
         lineHeight: '20px',
-        fontSize: 16,
-        // TODO: Should align dashboard and twitter theme in common component, depend twitter theme
-        color: theme.palette.mode === 'dark' ? '#6E767D' : '#536471',
+        fontSize: 14,
+        color: theme.palette.maskColor.second,
     },
     symbol: {
         lineHeight: '20px',
         fontSize: 16,
     },
-    import: {
-        '&:before': {
-            content: '""',
-            display: 'inline-block',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            background: 'transparent',
-        },
+    balance: {
+        fontSize: 16,
+        fontWeight: 700,
+        color: theme.palette.maskColor.main,
     },
     importButton: {
         padding: '3px 0',
@@ -63,107 +65,177 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 500,
         lineHeight: '20px',
     },
+    action: {
+        display: 'inline-flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    switch: {
+        position: 'relative',
+        left: theme.spacing(1),
+    },
+    byUser: {
+        position: 'relative',
+        left: theme.spacing(-0.5),
+    },
+    bull: {
+        display: 'inline-block',
+        width: 21,
+        lineHeight: '18px',
+        textAlign: 'center',
+    },
 }))
 
-export const getFungibleTokenItem =
-    <T extends NetworkPluginID>(
-        getSource: (address: string) => 'personal' | 'official' | 'external',
-        getBalance: (address: string) => string,
-        isSelected: (address: string) => boolean,
-        isLoading: (address: string) => boolean,
-        importToken: (
-            token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
-        ) => Promise<void>,
-    ) =>
-    ({
-        data: token,
-        onSelect,
-    }: MaskSearchableListItemProps<
-        FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>
-    >) => {
+export const getFungibleTokenItem = <T extends NetworkPluginID>(
+    getSource: (address: string) => 'personal' | 'official' | 'external' | 'official-native',
+    isSelected: (address: string) => boolean,
+    mode: TokenListMode,
+    addOrRemoveTokenToLocal: (
+        token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
+        strategy: 'add' | 'remove',
+    ) => Promise<void>,
+    trustOrBlockTokenToLocal: (
+        token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
+        strategy: 'trust' | 'block',
+    ) => Promise<void>,
+) => {
+    return memo(({ data, index, style }: any) => {
         const t = useSharedI18N()
         const { classes } = useStyles()
+        const { Others } = useWeb3State()
 
-        if (!token) return null
-        const { chainId, address, name, symbol, decimals, logoURL } = token
+        const token = data.dataSet[index]
+        const onSelect = data.onSelect
 
-        const { source, balance, selected, loading } = useMemo(() => {
+        const { chainId, address, name, symbol, decimals, logoURL, balance } = token!
+
+        const isBlocked = useTokenBlocked(address)
+        const isTrust = useTokenTrusted(address, token.chainId)
+
+        const { source, selected } = useMemo(() => {
             return {
                 source: getSource(address),
-                balance: getBalance(address),
                 selected: isSelected(address),
-                loading: isLoading(address),
             }
-        }, [address, getSource, getBalance, isSelected, isLoading])
+        }, [address, getSource, isSelected])
 
-        const onImport = useCallback(
-            async (event: React.MouseEvent<HTMLButtonElement>) => {
+        const onAddOrRemoveTokenToLocal = useCallback(
+            async (event: React.MouseEvent<HTMLButtonElement | HTMLElement>, strategy: 'add' | 'remove') => {
                 event.stopPropagation()
-                if (token) importToken(token)
+                if (token) addOrRemoveTokenToLocal(token, strategy)
             },
-            [token, importToken],
+            [token, addOrRemoveTokenToLocal],
+        )
+
+        const onTrustOrBlockTokenToLocal = useCallback(
+            async (event: React.ChangeEvent<HTMLInputElement>) => {
+                event.stopPropagation()
+                if (token) trustOrBlockTokenToLocal(token, event.target.checked ? 'trust' : 'block')
+            },
+            [token, trustOrBlockTokenToLocal],
         )
 
         const handleTokenSelect = (e: React.MouseEvent<HTMLElement>) => {
             e.stopPropagation()
-            onSelect(token)
+            e.preventDefault()
+            if (mode === TokenListMode.List) {
+                onSelect(token)
+            }
         }
 
+        const explorerLink = useMemo(() => {
+            return Others?.explorerResolver.fungibleTokenLink(token.chainId, token.address)
+        }, [token.address, token.chainId, Others?.explorerResolver.fungibleTokenLink])
+
         const action = useMemo(() => {
-            return source !== 'external' ? (
-                <span>
-                    {loading ? (
-                        <LoadingAnimation size={16} />
+            if (mode === TokenListMode.Manage) {
+                if (source === 'personal')
+                    return <Icons.TrashLine onClick={(e) => onAddOrRemoveTokenToLocal(e, 'remove')} size={24} />
+                return (
+                    <SettingSwitch
+                        disabled={source === 'official-native' && mode === TokenListMode.Manage}
+                        classes={{ root: classes.switch }}
+                        onClick={async (event) => {
+                            event.stopPropagation()
+                            event.preventDefault()
+                            onTrustOrBlockTokenToLocal(event as any)
+                        }}
+                        size="small"
+                        checked={!isBlocked}
+                    />
+                )
+            }
+            return source !== 'external' || isTrust ? (
+                <Typography className={classes.balance}>
+                    {balance === undefined ? (
+                        <LoadingBase size={24} />
                     ) : (
                         Number.parseFloat(new BigNumber(formatBalance(balance ?? 0, decimals, 6)).toFixed(6))
                     )}
-                </span>
+                </Typography>
             ) : (
                 <MaskLoadingButton
                     variant="contained"
                     color="primary"
-                    onClick={onImport}
+                    onClick={(e) => onAddOrRemoveTokenToLocal(e, 'add')}
                     size="small"
                     className={classes.importButton}
                     soloLoading
-                    loadingIndicator={<CircleLoadingIcon size={14} />}>
+                    loadingIndicator={<Icons.CircleLoading size={14} />}>
                     {t.import()}
                 </MaskLoadingButton>
             )
-        }, [balance, decimals, loading])
+        }, [balance, decimals, isBlocked, source, mode, isTrust])
 
         return (
-            <ListItem
-                title={address}
-                key={address}
-                button
-                className={`${classes.list} dashboard token-list`}
-                onClick={handleTokenSelect}
-                disabled={selected}>
-                <ListItemIcon>
-                    <TokenIcon
-                        classes={{ icon: classes.icon }}
-                        chainId={chainId}
-                        address={address}
-                        name={name}
-                        logoURL={logoURL}
-                    />
-                </ListItemIcon>
-                <ListItemText classes={{ primary: classes.text }}>
-                    <Typography
-                        className={classNames(classes.primary, source === 'external' ? classes.import : '')}
-                        color="textPrimary"
-                        component="span">
-                        <span className={classes.symbol}>{symbol}</span>
-                        <span className={`${classes.name} dashboard token-list-symbol`}>
-                            {name}
-                            {source === 'personal' && <span> &bull; Added By User</span>}
-                        </span>
-                    </Typography>
-                    <Typography sx={{ fontSize: 16 }} color="textSecondary" component="span">
-                        {action}
-                    </Typography>
-                </ListItemText>
-            </ListItem>
+            <div style={style}>
+                <ListItem
+                    title={address}
+                    key={address}
+                    button
+                    className={`${classes.list} dashboard token-list`}
+                    onClick={handleTokenSelect}
+                    disabled={selected && mode === TokenListMode.List}>
+                    <ListItemIcon>
+                        <TokenIcon
+                            classes={{ icon: classes.icon }}
+                            chainId={chainId}
+                            address={address}
+                            name={name}
+                            logoURL={logoURL}
+                        />
+                    </ListItemIcon>
+                    <ListItemText classes={{ primary: classes.text }}>
+                        <Typography className={classes.primary} color="textPrimary" component="span">
+                            <span className={classes.symbol}>{symbol}</span>
+                            <span className={`${classes.name} dashboard token-list-symbol`}>
+                                {name}
+                                <Link
+                                    onClick={(event) => event.stopPropagation()}
+                                    href={explorerLink}
+                                    style={{ width: 18, height: 18 }}
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    <Icons.PopupLink size={18} />
+                                </Link>
+                                {isTrust && (
+                                    <span className={classes.byUser}>
+                                        <span className={classes.bull}>&bull;</span>
+                                        {t.erc20_token_add_by_user()}
+                                    </span>
+                                )}
+                            </span>
+                        </Typography>
+                        <Typography
+                            className={classes.action}
+                            sx={{ fontSize: 16 }}
+                            color="textSecondary"
+                            component="span">
+                            {action}
+                        </Typography>
+                    </ListItemText>
+                </ListItem>
+            </div>
         )
-    }
+    })
+}

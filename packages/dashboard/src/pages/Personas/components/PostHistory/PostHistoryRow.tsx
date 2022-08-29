@@ -1,6 +1,6 @@
 import { Box, Button, Link, Stack, Typography } from '@mui/material'
 import { memo, ReactNode, useCallback, useMemo } from 'react'
-import { FileMessageIcon, Ito, MessageIcon, PollIcon, RedPacketIcon, NftRedPacket } from '@masknet/icons'
+import { Icons } from '@masknet/icons'
 import { getMaskColor, MaskColorVar, makeStyles } from '@masknet/theme'
 import { Services } from '../../../../API'
 import type { PostInformation } from '@masknet/shared-base'
@@ -39,42 +39,42 @@ const SUPPORT_PLUGIN: Record<
 > = {
     text: {
         pluginId: null,
-        icon: <MessageIcon />,
+        icon: <Icons.Message />,
         messageParse: () => null,
     },
     'com.maskbook.fileservice:1': {
         pluginId: null,
-        icon: <FileMessageIcon />,
+        icon: <Icons.FileMessage />,
         messageParse: parseFileServiceMessage,
     },
     'com.maskbook.fileservice:2': {
         pluginId: null,
-        icon: <FileMessageIcon />,
+        icon: <Icons.FileMessage />,
         messageParse: parseFileServiceMessage,
     },
     'com.maskbook.red_packet:1': {
         pluginId: PluginId.RedPacket,
-        icon: <RedPacketIcon />,
+        icon: <Icons.RedPacket />,
         messageParse: (body: any) => body.sender.message,
     },
     'com.maskbook.red_packet_nft:1': {
         pluginId: PluginId.RedPacket,
-        icon: <NftRedPacket />,
+        icon: <Icons.NFTRedPacket />,
         messageParse: (body: { message: string }) => body.message,
     },
     'com.maskbook.ito:1': {
         pluginId: PluginId.ITO,
-        icon: <Ito />,
+        icon: <Icons.ITO />,
         messageParse: (body: any) => body.message.split(MSG_DELIMITER)[1],
     },
     'com.maskbook.ito:2': {
         pluginId: PluginId.ITO,
-        icon: <Ito />,
+        icon: <Icons.ITO />,
         messageParse: (body: any) => body.message.split(MSG_DELIMITER)[1],
     },
     'com.maskbook.poll:1': {
         pluginId: PluginId.Poll,
-        icon: <PollIcon />,
+        icon: <Icons.Poll />,
         messageParse: (body: any) => body.question,
     },
 }
@@ -103,7 +103,7 @@ export const PostHistoryRow = memo(({ post, network }: PostHistoryRowProps) => {
         const { interestedMeta } = post
         const plugin = interestedMeta?.keys().next().value ?? 'text'
 
-        return SUPPORT_PLUGIN[plugin]?.icon ?? <MessageIcon />
+        return SUPPORT_PLUGIN[plugin]?.icon ?? <Icons.Message />
     }, [post.interestedMeta])
 
     const postMessage = useMemo(() => {

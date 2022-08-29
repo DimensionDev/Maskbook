@@ -1,3 +1,4 @@
+import { noop } from 'lodash-unified'
 import type { Trade as V2Trade } from '@uniswap/v2-sdk'
 import type { Trade as V3Trade } from '@uniswap/v3-sdk'
 import type { Currency, TradeType } from '@uniswap/sdk-core'
@@ -24,7 +25,6 @@ import { isNativeTokenWrapper } from '../helpers'
 import { useGetTradeContext } from './useGetTradeContext'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import type { GasOptionConfig } from '@masknet/web3-shared-evm'
-import { noop } from 'lodash-unified'
 import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn'
 
 export function useTradeCallback(
@@ -81,6 +81,7 @@ export function useTradeCallback(
     const nativeTokenWrapper = useNativeTokenWrapperCallback(
         tradeComputed as TradeComputed<NativeTokenWrapper>,
         gasConfig,
+        targetChainId,
     )
     if (isNativeTokenWrapper_) return nativeTokenWrapper
 
@@ -105,6 +106,14 @@ export function useTradeCallback(
         case TradeProvider.OPENSWAP:
             return uniswapV2Like
         case TradeProvider.MDEX:
+            return uniswapV2Like
+        case TradeProvider.ARTHSWAP:
+            return uniswapV2Like
+        case TradeProvider.VERSA:
+            return uniswapV2Like
+        case TradeProvider.ASTAREXCHANGE:
+            return uniswapV2Like
+        case TradeProvider.YUMISWAP:
             return uniswapV2Like
         case TradeProvider.DEFIKINGDOMS:
             return uniswapV2Like

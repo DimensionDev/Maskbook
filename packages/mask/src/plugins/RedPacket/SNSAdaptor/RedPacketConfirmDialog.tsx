@@ -12,10 +12,9 @@ import {
 } from '@masknet/plugin-infra/web3'
 import { chainResolver, explorerResolver, isNativeTokenAddress, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { Grid, Link, Paper, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import LaunchIcon from '@mui/icons-material/Launch'
 import { FormattedBalance, useOpenShareTxDialog } from '@masknet/shared'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../locales'
 import { RedPacketSettings, useCreateCallback, useCreateParams } from './hooks/useCreateCallback'
 import { useTransactionValue } from '@masknet/plugin-infra/web3-evm'
@@ -210,7 +209,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                 <Grid item xs={6}>
                     <Typography variant="body1" color="textPrimary" align="right" className={classes.token}>
                         <span>{settings?.token?.symbol}</span>
-                        {isNativeTokenAddress(settings?.token) ? null : (
+                        {isNativeTokenAddress(settings?.token?.address) ? null : (
                             <Link
                                 color="textPrimary"
                                 className={classes.link}
@@ -311,7 +310,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                         onClick={createRedpacket}
                         disabled={isBalanceInsufficient || isWaitGasBeMinus || isCreating}>
                         {!isBalanceInsufficient
-                            ? t.send_symbol({
+                            ? t.token_send_symbol({
                                   amount: formatTotal,
                                   symbol: settings?.token?.symbol ?? '-',
                               })

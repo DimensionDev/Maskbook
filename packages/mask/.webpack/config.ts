@@ -15,13 +15,12 @@ import { isAbsolute, join } from 'path'
 import { readFileSync } from 'fs'
 import { nonNullable, EntryDescription, normalizeEntryDescription, joinEntryItem } from './utils'
 import { BuildFlags, normalizeBuildFlags, computedBuildFlags } from './flags'
-import ResolveTypeScriptPlugin from 'resolve-typescript-plugin'
 
 import './clean-hmr'
 
 export function createConfiguration(rawFlags: BuildFlags): Configuration {
     const normalizedFlags = normalizeBuildFlags(rawFlags)
-    const { sourceMapKind, supportWebAssembly, lockdown } = computedBuildFlags(normalizedFlags)
+    const { sourceMapKind, lockdown } = computedBuildFlags(normalizedFlags)
     const { hmr, mode, profiling, reactRefresh, readonlyCache, reproducibleBuild, runtime, outputPath } =
         normalizedFlags
 
@@ -38,9 +37,9 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         name: 'mask',
         mode,
         devtool: sourceMapKind,
-        target: ['web', 'es2021'],
+        target: ['web', 'es2022'],
         entry: {},
-        experiments: { backCompat: false, asyncWebAssembly: supportWebAssembly },
+        experiments: { backCompat: false, asyncWebAssembly: true },
         cache: {
             type: 'filesystem',
             buildDependencies: { config: [__filename] },
@@ -53,7 +52,10 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
             })(),
         },
         resolve: {
-            plugins: [new ResolveTypeScriptPlugin()],
+            extensionAlias: {
+                '.js': ['.tsx', '.ts', '.js'],
+                '.mjs': ['.mts', '.mjs'],
+            },
             extensions: ['.js', '.ts', '.tsx'],
             alias: (() => {
                 const alias = {
@@ -94,14 +96,6 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
             rules: [
                 // Opt in source map
                 { test: /(async-call|webextension).+\.js$/, enforce: 'pre', use: ['source-map-loader'] },
-                // Manifest v3 does not support
-                !supportWebAssembly
-                    ? {
-                          test: /\.wasm?$/,
-                          loader: require.resolve('./wasm-to-asm.ts'),
-                          type: 'javascript/auto',
-                      }
-                    : undefined!,
                 // Patch regenerator-runtime
                 lockdown
                     ? {
@@ -124,7 +118,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                                 dynamicImport: true,
                                 tsx: true,
                             },
-                            target: 'es2021',
+                            target: 'es2022',
                             externalHelpers: true,
                             transform: {
                                 react: {
@@ -142,6 +136,29 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                         },
                     },
                 },
+                // compress svg files
+                mode === 'production'
+                    ? {
+                          test: /\.svg$/,
+                          loader: 'svgo-loader',
+                          // overrides
+                          options: {
+                              js2svg: {
+                                  pretty: false,
+                              },
+                          },
+                          dependency(data) {
+                              if (data === '') return false
+                              if (data !== 'url')
+                                  throw new TypeError(
+                                      'The only import mode valid for a non-JS file is via new URL(). Current import mode: ' +
+                                          data,
+                                  )
+                              return true
+                          },
+                          type: 'asset/resource',
+                      }
+                    : undefined!,
             ],
         },
         plugins: [
@@ -252,7 +269,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
             liveReload: false,
             client: hmr ? undefined : false,
         } as DevServerConfiguration,
-        stats: process.env.CI ? 'errors-warnings' : undefined,
+        stats: mode === 'production' ? 'errors-only' : undefined,
     }
     baseConfig.module!.rules = baseConfig.module!.rules!.filter(Boolean)
 
@@ -281,7 +298,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         }
         plugins.push(new WebExtensionPlugin({ background: { entry: 'background', manifest: 3 } }))
     } else {
-        entries.background = normalizeEntryDescription(join(__dirname, '../src/background-service.ts'))
+        entries.background = normalizeEntryDescription(join(__dirname, '../background/mv2-entry.ts'))
         plugins.push(new WebExtensionPlugin({ background: { entry: 'background', manifest: 2 } }))
         plugins.push(
             addHTMLEntry({
@@ -293,7 +310,9 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         )
     }
     for (const entry in entries) {
-        withReactDevTools(entries[entry])
+        if (entry !== 'background') {
+            withReactDevTools(entries[entry])
+        }
         with_iOSPatch(entries[entry])
     }
 

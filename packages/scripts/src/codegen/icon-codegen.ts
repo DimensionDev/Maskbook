@@ -1,32 +1,24 @@
 import { readFile, writeFile } from 'fs/promises'
-import glob from 'glob-promise'
 import { watch } from 'gulp'
 import { camelCase, snakeCase, upperFirst } from 'lodash-unified'
-import { parse as parsePath, join, resolve } from 'path'
-import { pathToFileURL } from 'url'
-import { ROOT_PATH, watchTask } from '../utils'
-import { transform } from '@swc/core'
-import { Position, SourceMapGenerator } from 'source-map'
+import { parse as parsePath } from 'path'
+import { PKG_PATH, ROOT_PATH, watchTask } from '../utils/index.js'
+import type { Position } from 'source-map'
+import { fileURLToPath } from 'url'
 
 const pattern = 'packages/icons/**/*.@(svg|jpe?g|png)'
-const iconRoot = resolve(__dirname, '../../../icons')
-const CODE_FILE = resolve(iconRoot, 'icon-generated-as')
+const iconRoot = new URL('icons/', PKG_PATH)
+const CODE_FILE = fileURLToPath(new URL('icon-generated-as', iconRoot))
 
 const currentColorRe = /\w=('|")currentColor\1/
 
 function svg2jsx(code: string) {
-    return (
-        code
-            .trim()
-            // set height and width to 100%, let the container <Icon /> of svg decide the size.
-            // Don't use the g flag here, because we only want to change the first attribute of each
-            .replace(/\b(height)=('|")\d+\2/, '')
-            .replace(/\b(width)=('|")\d+\2/, '')
-            .replace(/(\w+-\w+)=('|").*?\2/g, (p: string, m1: string) => {
-                return p.replace(m1, camelCase(m1))
-            })
-            .replaceAll('xlink:href', 'xlinkHref')
-    )
+    return code
+        .trim()
+        .replace(/(\w+-\w+)=('|").*?\2/g, (p: string, m1: string) => {
+            return p.replace(m1, camelCase(m1))
+        })
+        .replaceAll('xlink:href', 'xlinkHref')
 }
 function getIntrinsicSize(data: string | Buffer): [number, number] | undefined {
     if (typeof data === 'string') {
@@ -52,6 +44,9 @@ const exportConst = 'export const '.length
 const SOURCEMAP_HEAD = '//# sourceMappingURL='
 
 async function generateIcons() {
+    const { SourceMapGenerator } = await import('source-map')
+    const { transform } = await import('@swc/core')
+    const glob = await import('glob-promise')
     const asJSX = {
         js: [
             //
@@ -70,9 +65,9 @@ async function generateIcons() {
         dtsMap: new SourceMapGenerator({ file: 'icon-generated-as-url.d.ts' }),
     }
 
-    const relativePrefix = pathToFileURL(iconRoot).toString().length + 1
+    const relativePrefix = iconRoot.toString().length
     /* cspell:disable-next-line */
-    const filePaths = await glob.promise(pattern, { cwd: ROOT_PATH, nodir: true })
+    const filePaths = await glob.promise(pattern, { cwd: fileURLToPath(ROOT_PATH), nodir: true })
 
     const variants: Record<
         string,
@@ -91,10 +86,10 @@ async function generateIcons() {
             variants[base] ??= []
 
             // cross platform, use URL to calculate relative path
-            const importPath = './' + pathToFileURL(join(ROOT_PATH, path)).toString().slice(relativePrefix)
+            const importPath = './' + new URL(path, ROOT_PATH).toString().slice(relativePrefix)
             const identifier = snakeCase(parsedPath.name)
 
-            const url = ` /*#__PURE__*/ (new URL(${JSON.stringify(importPath)}, import.meta.url).href)`
+            const url = ` /*#__PURE__*/ new URL(${JSON.stringify(importPath)}, import.meta.url)`
             asURL.js.push(`export const ${identifier}_url = ${url}`)
 
             let currentLine = `/** ${createImage(importPath)} */ export const `
@@ -115,7 +110,7 @@ async function generateIcons() {
     )
 
     for (const [icon, variant] of Object.entries(variants)) {
-        const Ident = upperFirst(camelCase(icon))
+        const Ident = upperFirst(icon.replace(/\.(\w)/, (_, c: string) => c.toUpperCase()))
         const nameField = JSON.stringify(icon)
         const variantsField = variant
             .sort((a, b) => a.args[0].length - b.args[0].length)
@@ -131,7 +126,6 @@ async function generateIcons() {
         const notSquare = intrinsicSize && intrinsicSize[0] !== intrinsicSize[1]
         if (notSquare) args.push(`[${intrinsicSize[0]}, ${intrinsicSize[1]}]`)
         asJSX.js.push(`export const ${Ident} = /*#__PURE__*/ __createIcon(${args.join(', ')})`)
-        if (!Ident.endsWith('Icon')) asJSX.js.push(`export const ${Ident}Icon = ${Ident}`)
 
         const variantNames = [...new Set(variant.flatMap((x) => x.args[0]))].map((x) => JSON.stringify(x))
 
@@ -162,23 +156,6 @@ async function generateIcons() {
             original: voidMapping,
             source: 'null',
         })
-
-        // export const TIcon: ...
-        if (!Ident.endsWith('Icon')) {
-            jsdoc.push(`@deprecated use \`${Ident}\` instead`)
-            attachJSDoc(jsdoc, asJSX.dts)
-            asJSX.dts.push(`export const ${Ident}Icon: typeof ${Ident}`)
-            asJSX.dtsMap.addMapping({
-                generated: { line: asJSX.dts.length, column: exportConst },
-                original: voidMapping,
-                source: variant[0].assetPath,
-            })
-            asJSX.dtsMap.addMapping({
-                generated: { line: asJSX.dts.length, column: exportConst + Ident.length + 4 },
-                original: voidMapping,
-                source: 'null',
-            })
-        }
     }
     asURL.dts.push(SOURCEMAP_HEAD + 'icon-generated-as-url.d.ts.map')
     asJSX.dts.push(SOURCEMAP_HEAD + 'icon-generated-as-jsx.d.ts.map')
@@ -192,7 +169,7 @@ async function generateIcons() {
             jsc: {
                 parser: { jsx: true, syntax: 'ecmascript' },
                 transform: { react: { useBuiltins: true, runtime: 'automatic' } },
-                target: 'es2021',
+                target: 'es2022',
             },
         }).then(({ code }) => writeFile(CODE_FILE + '-jsx.js', code)),
         writeFile(CODE_FILE + '-jsx.d.ts', asJSX.dts.join('\n')),
@@ -206,7 +183,7 @@ function createImage(x: string) {
     // Cannot render images in JSDoc in VSCode by relative path
     // Blocked by: https://github.com/microsoft/TypeScript/issues/47718
     //             https://github.com/microsoft/vscode/issues/86564
-    const absolutePath = pathToFileURL(join(ROOT_PATH, './packages/icons/', x))
+    const absolutePath = new URL(x, iconRoot)
     return `[${x}](${absolutePath}) ![${x}](${absolutePath})`
 }
 

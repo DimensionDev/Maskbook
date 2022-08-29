@@ -1,5 +1,5 @@
 declare const Gun: typeof import('gun')
-import { gunServers } from './server'
+import { gunServers } from './server.js'
 
 export type GunRoot = ReturnType<typeof createGun>
 let gun: GunRoot | undefined
