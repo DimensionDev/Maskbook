@@ -21,10 +21,10 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         borderRadius: '99px',
         backgroundColor: theme.palette.maskColor.dark,
-        color: '#fff',
+        color: theme.palette.maskColor.white,
         marginTop: 'auto',
         ':hover': {
-            color: 'fff',
+            color: theme.palette.maskColor.white,
             backgroundColor: theme.palette.maskColor.dark,
         },
     },
@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
 
 type SupportChildren = ((status: PersonaConnectStatus) => ReactNode) | ReactNode
 
-interface PersonaBoundaryProps {
+interface ConnectPersonaBoundaryProps {
     handlerPosition?: 'center' | 'top-right'
     directTo?: PluginId
     customHint?: boolean
@@ -41,7 +41,7 @@ interface PersonaBoundaryProps {
     beforeVerify?: () => void | Promise<void>
 }
 
-export const PersonaBoundary = memo<PersonaBoundaryProps>(
+export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
     ({ children, directTo, handlerPosition = 'center', customHint = false, beforeVerify, enableVerify = true }) => {
         const { t } = useI18N()
         const { classes } = useStyles()

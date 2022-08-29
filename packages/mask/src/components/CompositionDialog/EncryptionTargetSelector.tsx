@@ -8,7 +8,7 @@ import { E2EUnavailableReason } from './CompositionUI'
 import { Icons } from '@masknet/icons'
 import { EncryptionTargetType } from '@masknet/shared-base'
 import { unreachable } from '@dimensiondev/kit'
-import { PersonaBoundary } from '../shared/PersonaBoundary'
+import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     optionTitle: {
@@ -92,7 +92,7 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
         props.e2eDisabled && props.e2eDisabled !== E2EUnavailableReason.NoLocalKey ? (
             <div className={classes.flex}>
                 <Typography className={classes.mainTitle}>{t('persona_required')}</Typography>
-                <PersonaBoundary customHint handlerPosition="top-right" enableVerify={false}>
+                <ConnectPersonaBoundary customHint handlerPosition="top-right" enableVerify={false}>
                     {(s) => {
                         if (!s.hasPersona) return <Typography className={classes.create}>{t('create')}</Typography>
                         // TODO: how to handle verified
@@ -101,7 +101,7 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
 
                         return null
                     }}
-                </PersonaBoundary>
+                </ConnectPersonaBoundary>
             </div>
         ) : null
     const noLocalKeyMessage = props.e2eDisabled === E2EUnavailableReason.NoLocalKey && (

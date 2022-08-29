@@ -15,7 +15,7 @@ import type { LiveSelector } from '@dimensiondev/holoflows-kit'
 import { searchAllProfileTabSelector } from '../../../social-network-adaptor/twitter.com/utils/selector'
 import { Icons } from '@masknet/icons'
 import { PluginEnableBoundary } from '../../../components/shared/PluginEnableBoundary'
-import { PersonaBoundary } from '../../../components/shared/PersonaBoundary'
+import { ConnectPersonaBoundary } from '../../../components/shared/ConnectPersonaBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     tip: {
@@ -109,10 +109,10 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         borderRadius: '99px',
         backgroundColor: theme.palette.maskColor.dark,
-        color: '#fff',
+        color: theme.palette.maskColor.white,
         marginTop: 'auto',
         ':hover': {
-            color: 'fff',
+            color: theme.palette.maskColor.white,
             backgroundColor: theme.palette.maskColor.dark,
         },
     },
@@ -196,7 +196,7 @@ export function NextIdPage() {
 
         return (
             <PluginEnableBoundary pluginId={PluginId.Web3Profile}>
-                <PersonaBoundary handlerPosition="top-right" customHint beforeVerify={handleBeforeVerify}>
+                <ConnectPersonaBoundary handlerPosition="top-right" customHint beforeVerify={handleBeforeVerify}>
                     {(s) => {
                         if (!s.hasPersona)
                             return (
@@ -228,7 +228,7 @@ export function NextIdPage() {
                             </Button>
                         )
                     }}
-                </PersonaBoundary>
+                </ConnectPersonaBoundary>
             </PluginEnableBoundary>
         )
     }, [isOwn, t, statusLoading, handleBeforeVerify, handleAddWallets])

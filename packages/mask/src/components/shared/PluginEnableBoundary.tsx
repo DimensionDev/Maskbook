@@ -11,10 +11,10 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         borderRadius: '99px',
         backgroundColor: theme.palette.maskColor.dark,
-        color: '#fff',
+        color: theme.palette.maskColor.white,
         marginTop: 'auto',
         ':hover': {
-            color: 'fff',
+            color: theme.palette.maskColor.white,
             backgroundColor: theme.palette.maskColor.dark,
         },
     },

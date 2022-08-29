@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
 import { startWatch, createReactRootShadowed, useLocationChange } from '../../../../utils'
 import { searchEditProfileSelector } from '../../utils/selector'
-import { PersonaBoundary } from '../../../../components/shared/PersonaBoundary'
+import { ConnectPersonaBoundary } from '../../../../components/shared/ConnectPersonaBoundary'
 import { PluginId } from '@masknet/plugin-infra'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 
@@ -79,8 +79,8 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
 
     const { classes } = useStyles(style)
     return (
-        <PersonaBoundary handlerPosition="top-right" customHint directTo={PluginId.Avatar}>
+        <ConnectPersonaBoundary handlerPosition="top-right" customHint directTo={PluginId.Avatar}>
             <NFTAvatarButton classes={{ root: classes.root, text: classes.text }} onClick={clickHandler} />
-        </PersonaBoundary>
+        </ConnectPersonaBoundary>
     )
 }

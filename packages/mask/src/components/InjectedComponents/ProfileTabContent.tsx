@@ -25,7 +25,7 @@ import {
     useIsOwnerIdentity,
 } from '../DataSource/useActivatedUI'
 import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
-import { PersonaBoundary } from '../shared/PersonaBoundary'
+import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary'
 
 function getTabContent(tabId?: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
@@ -367,7 +367,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                     {t('mask_network')}
                                 </Typography>
                                 {isOwnerIdentity ? (
-                                    <PersonaBoundary
+                                    <ConnectPersonaBoundary
                                         customHint
                                         handlerPosition="top-right"
                                         directTo={PluginId.Web3Profile}>
@@ -377,7 +377,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                             className={classes.gearIcon}
                                             sx={{ cursor: 'pointer' }}
                                         />
-                                    </PersonaBoundary>
+                                    </ConnectPersonaBoundary>
                                 ) : (
                                     <Link
                                         className={classes.settingLink}
