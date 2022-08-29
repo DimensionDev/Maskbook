@@ -106,6 +106,8 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.injection.avatar?.(signal)
     ui.injection.profileCard?.(signal)
 
+    ui.injection.pluginSettingDialog?.(signal)
+
     // Update user avatar
     ui.collecting.currentVisitingIdentityProvider?.recognized.addListener((ref) => {
         if (!(ref.avatar && ref.identifier)) return
