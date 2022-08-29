@@ -62,7 +62,7 @@ export function DonationPage({ socialAddress, publicKey, userId }: DonationPageP
 
     const donations = useMemo(() => {
         if (!hiddenList.length) return allDonations
-        return differenceWith(allDonations, hiddenList, (donation, id) => donation.id === id)
+        return differenceWith(allDonations, hiddenList, (donation, id) => donation.actions[0].index.toString() === id)
     }, [hiddenList, allDonations])
 
     const [selectedDonation, setSelectedDonation] = useState<RSS3BaseAPI.Donation>()

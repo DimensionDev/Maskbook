@@ -6,9 +6,9 @@ import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Box, Card, Typography } from '@mui/material'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { memo, useMemo } from 'react'
-import { RSS3_DEFAULT_IMAGE } from '../../constants'
 import { useI18N } from '../../locales'
 import type { RSS3Feed } from '../../types'
+import { useNormalizeFeed } from '../hooks'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -169,53 +169,7 @@ export const FeedCard = memo(({ feed, address, onSelect }: FeedCardProps) => {
         return null
     }, [feed])
 
-    const normalizedFeed: RSS3Feed = useMemo(() => {
-        if (feed.tag === Tag.Collectible) {
-            const action = feed.actions[0]
-            const metadata = action.metadata
-            return {
-                image: metadata?.image || RSS3_DEFAULT_IMAGE,
-                title: metadata?.name,
-                relatedURLs: action.related_urls,
-                description: metadata?.description ?? metadata?.name,
-                network: feed.network,
-                attributes: metadata && 'attributes' in metadata ? metadata.attributes : [],
-                metadata: {
-                    collection_address: metadata?.contract_address,
-                    network: feed.network,
-                },
-                tokenId: metadata?.id,
-            }
-        }
-        if (feed.tag === Tag.Donation) {
-            const action = feed.actions[0]
-            const metadata = action.metadata
-            return {
-                image: metadata?.logo || RSS3_DEFAULT_IMAGE,
-                title: metadata?.title,
-                relatedURLs: action.related_urls,
-                description: metadata?.description,
-                network: feed.network,
-                attributes: [],
-                metadata: undefined,
-            }
-        } else {
-            const action = feed.actions[0]
-            const metadata = action.metadata
-            return {
-                image: metadata?.image || RSS3_DEFAULT_IMAGE,
-                title: action.type,
-                relatedURLs: action.related_urls,
-                description: metadata?.description,
-                network: feed.network,
-                attributes: [],
-                metadata: {
-                    collection_address: metadata?.contract_address,
-                    network: feed.network,
-                },
-            }
-        }
-    }, [feed])
+    const normalizedFeed = useNormalizeFeed(feed)
 
     return (
         <Box className={classes.wrapper} onClick={() => onSelect(normalizedFeed)}>

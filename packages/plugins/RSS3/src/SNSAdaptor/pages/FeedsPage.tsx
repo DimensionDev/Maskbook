@@ -18,7 +18,8 @@ export const FeedsPage = memo(function FeedsPage({ address, ...rest }: FeedPageP
     const [selectedFeed, setSelectedFeed] = useState<RSS3Feed>()
     const { value: feeds = EMPTY_LIST, loading } = useAsyncRetry(async () => {
         if (!address) return EMPTY_LIST
-        return RSS3.getWeb3Feeds(address)
+        const { data } = await RSS3.getWeb3Feeds(address)
+        return data
     }, [address])
 
     if (loading || !feeds.length) {

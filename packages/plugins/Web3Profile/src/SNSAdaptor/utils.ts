@@ -131,7 +131,7 @@ export const getDonationList = async (walletList: WalletTypes[]) => {
             collections: donations.map((donation) => {
                 const action = donation.actions[0]
                 return {
-                    key: `${donation.timestamp}-${action.index}`,
+                    key: action.index.toString(),
                     address: donation.address_to ?? action.metadata?.token.contract_address ?? ZERO_ADDRESS,
                     platform: platform ?? NetworkPluginID.PLUGIN_EVM,
                     iconURL: action.metadata?.logo,
@@ -150,9 +150,9 @@ export const getFootprintList = async (walletList: WalletTypes[]) => {
         return {
             address,
             collections: footprints.map((footprint) => {
-                const { metadata } = footprint.actions[0]
+                const { metadata, index } = footprint.actions[0]
                 return {
-                    key: footprint.timestamp,
+                    key: index.toString(),
                     address: metadata?.contract_address ?? ZERO_ADDRESS,
                     platform,
                     iconURL: metadata?.image,

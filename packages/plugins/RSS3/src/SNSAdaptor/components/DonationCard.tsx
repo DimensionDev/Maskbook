@@ -115,7 +115,9 @@ export const DonationCard = memo(({ donation, socialAddress, onSelect, className
                         <span className={classes.fontColor}>{reversedAddress}</span>{' '}
                         <span className={classes.fontColor}>{t.contributed()}</span>{' '}
                         <span className={classes.tokenInfoColor}>{action.metadata?.token.value_display}</span>
-                        <span className={classes.tokenInfoColor}>{action.metadata?.token.symbol ?? 'ETH'}</span>{' '}
+                        {action.metadata?.token.symbol ? (
+                            <span className={classes.tokenInfoColor}>{`${action.metadata?.token.symbol} `}</span>
+                        ) : null}
                         <span className={classes.fontColor}>{t.to()}</span>{' '}
                         <span className={classes.tokenInfoColor}>{action.metadata?.title}</span>
                     </Typography>

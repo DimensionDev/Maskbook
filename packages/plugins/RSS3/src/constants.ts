@@ -7,4 +7,4 @@ export const PLUGIN_DESCRIPTION =
 export const PLUGIN_NAME = 'RSS3'
 
 /* cspell:disable-next-line */
-export const RSS3_DEFAULT_IMAGE = resolveIPFSLink('QmVFq9qimnudPcs6QkQv8ZVEsvwD3aqETHWtS5yXgdbYY5') as string
+export const RSS3_DEFAULT_IMAGE = resolveIPFSLink('QmVFq9qimnudPcs6QkQv8ZVEsvwD3aqETHWtS5yXgdbYY5')!

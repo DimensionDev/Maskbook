@@ -46,14 +46,12 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
         })
         const { result: donations } = await fetchJSON<{ result: RSS3BaseAPI.Donation[] }>(collectionURL)
         // A donation Feed contains multiple donation Actions. Let's flatten them.
-        const result = donations
-            .map((donation) => {
-                return donation.actions.map((action) => ({
-                    ...donation,
-                    actions: [action],
-                }))
-            })
-            .flat()
+        const result = donations.flatMap((donation) => {
+            return donation.actions.map((action) => ({
+                ...donation,
+                actions: [action],
+            }))
+        })
         return result
     }
     async getFootprints(address: string): Promise<RSS3BaseAPI.Footprint[]> {
@@ -118,16 +116,21 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
     /**
      * Get feeds in tags of donation, collectible and transaction
      */
-    async getWeb3Feeds(address: string, networkPluginId = NetworkPluginID.PLUGIN_EVM) {
-        if (!address) return []
+    async getWeb3Feeds(
+        address: string,
+        networkPluginId = NetworkPluginID.PLUGIN_EVM,
+        { indicator, size = 100 }: HubOptions<ChainId> = {},
+    ) {
+        if (!address) return createPageable([], createIndicator(indicator))
         const tags = [RSS3BaseAPI.Tag.Donation, RSS3BaseAPI.Tag.Collectible]
         const url = urlcat(NEW_RSS3_ENDPOINT, `/:address?tag=${tags.join('&tag=')}`, {
             address,
+            limit: size,
+            cursor: indicator?.id,
             network: NETWORK_PLUGIN[networkPluginId],
-            limit: 100,
             include_poap: true,
         })
-        const res = await fetchJSON<{ result: RSS3BaseAPI.Activity[] }>(url)
-        return res.result
+        const res = await fetchJSON<{ result: RSS3BaseAPI.Activity[]; cursor?: string }>(url)
+        return createPageable(res.result, createIndicator(indicator, res.cursor))
     }
 }

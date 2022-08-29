@@ -1,14 +1,14 @@
-import { memo, useState, useMemo } from 'react'
+import { Icons } from '@masknet/icons'
 import { CollectionDetailCard, useWeb3ProfileHiddenSettings } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { CollectionType, RSS3BaseAPI } from '@masknet/web3-providers'
-import { Box, BoxProps, Typography, Box, Typography } from '@mui/material'
-import { useI18N, useI18N } from '../../locales'
+import { Box, BoxProps, Typography } from '@mui/material'
+import { differenceWith } from 'lodash-unified'
+import { memo, useMemo, useState } from 'react'
+import { RSS3_DEFAULT_IMAGE } from '../../constants'
+import { useI18N } from '../../locales'
 import { FootprintCard, StatusBox } from '../components'
 import { useFootprints, useRSS3Profile } from '../hooks'
-import { Icons } from '@masknet/icons'
-import { differenceWith } from 'lodash-unified'
-import { RSS3_DEFAULT_IMAGE } from '../../constants'
 
 export interface FootprintPageProps extends BoxProps {
     address: string
@@ -36,7 +36,11 @@ export const FootprintsPage = memo(function FootprintsPage({
 
     const footprints = useMemo(() => {
         if (!hiddenList.length) return allFootprints
-        return differenceWith(allFootprints, hiddenList, (footprint, id) => footprint.hash === id)
+        return differenceWith(
+            allFootprints,
+            hiddenList,
+            (footprint, id) => footprint.actions[0].index.toString() === id,
+        )
     }, [allFootprints, hiddenList])
 
     const [selectedFootprint, setSelectedFootprint] = useState<RSS3BaseAPI.Footprint | undefined>()

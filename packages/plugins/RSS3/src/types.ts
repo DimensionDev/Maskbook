@@ -54,7 +54,7 @@ export interface RSS3Feed {
     title?: string
     relatedURLs?: string[]
     description?: string
-    network: RSS3BaseAPI.NETWORK
+    network: RSS3BaseAPI.Network
     metadata?: RSS3BaseAPI.Metadata
     attributes?: RSS3BaseAPI.Attribute[]
     tokenId?: string
