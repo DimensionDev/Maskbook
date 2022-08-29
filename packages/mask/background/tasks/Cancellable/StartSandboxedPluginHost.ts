@@ -4,6 +4,7 @@ import { Flags } from '../../../shared/flags'
 import { MessageTarget, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { Plugin, registerPlugin } from '@masknet/plugin-infra'
 import { None, Result, Some } from 'ts-results'
+import { createPluginDatabase } from '../../database/plugin-db'
 
 const { signal } = hmr(import.meta.webpackHot)
 let hot: Map<string, (hot: Promise<{ default: Plugin.Worker.Definition }>) => void> | undefined
@@ -26,22 +27,24 @@ if (Flags.sandboxedPluginRuntime) {
                 if (manifestURL.pathname !== manifestPath) throw new TypeError('Plugin ID is invalid.')
                 return fetch(manifestPath).then((x) => x.json())
             },
+            // TODO: support signal
             createRpcChannel(id) {
                 return new WebExtensionMessage<{ f: any }>({ domain: `mask-plugin-${id}-rpc` }).events.f.bind(
                     MessageTarget.Broadcast,
                 )
             },
+            // TODO: support signal
             createRpcGeneratorChannel(id) {
                 return new WebExtensionMessage<{ g: any }>({ domain: `mask-plugin-${id}-rpc` }).events.g.bind(
                     MessageTarget.Broadcast,
                 )
             },
+            createTaggedStorage: createPluginDatabase,
         },
         process.env.NODE_ENV === 'development',
         signal,
     )
     host.__builtInPluginInfraBridgeCallback__ = __builtInPluginInfraBridgeCallback__
-
     host.onPluginListUpdate()
 }
 function __builtInPluginInfraBridgeCallback__(this: BackgroundPluginHost, id: string) {
