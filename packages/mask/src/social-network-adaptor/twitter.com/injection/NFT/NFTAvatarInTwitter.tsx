@@ -1,5 +1,9 @@
 import { createReactRootShadowed, MaskMessages, startWatch, useI18N } from '../../../../utils'
-import { searchTwitterAvatarLinkSelector, searchTwitterAvatarSelector } from '../../utils/selector'
+import {
+    searchProfileSaveSelector,
+    searchTwitterAvatarLinkSelector,
+    searchTwitterAvatarSelector,
+} from '../../utils/selector'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -75,7 +79,7 @@ function NFTAvatarInTwitter() {
     )
 
     const windowSize = useWindowSize()
-    const location = useLocation()
+    const _location = useLocation()
 
     const showAvatar = useMemo(
         () => !!nftAvatar?.avatarId && getAvatarId(identity.avatar) === nftAvatar.avatarId,
@@ -89,7 +93,7 @@ function NFTAvatarInTwitter() {
             return Number.parseInt(style.width.replace('px', '') ?? 0, 10)
         }
         return 0
-    }, [windowSize, location])
+    }, [windowSize, _location])
 
     const { classes } = useStyles()
 
@@ -231,6 +235,17 @@ function NFTAvatarInTwitter() {
             linkParentDom.removeEventListener('click', handler)
         }
     }, [nftAvatar, showAvatar, nftInfo])
+
+    const handler = () => {
+        location.reload()
+    }
+
+    useEffect(() => {
+        const profileSave = searchProfileSaveSelector().evaluate()
+        if (!profileSave) return
+        profileSave.addEventListener('click', handler)
+        return () => profileSave.removeEventListener('click', handler)
+    }, [handler, _location.pathname])
 
     if (!nftAvatar || !size || loadingWallet || loadingNFTInfo || !showAvatar) return null
 
