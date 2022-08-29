@@ -70,7 +70,7 @@
         "@dimensiondev/array/no-implicit-sort": "error",
         "@dimensiondev/browser/prefer-location-assign": "error",
         "@dimensiondev/jsx/no-class-component": "error",
-        "@dimensiondev/jsx/no-template-literal": "error",
+        "@dimensiondev/jsx/no-template-literal": "off",
         "@dimensiondev/no-for-in": "error",
         "@dimensiondev/no-number-constructor": "off",
         "@dimensiondev/prefer-early-return": "error",
