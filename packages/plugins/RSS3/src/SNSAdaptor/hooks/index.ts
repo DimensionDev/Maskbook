@@ -1,4 +1,3 @@
-export * from './useAvailableCollections'
 export * from './useDonations'
 export * from './useFootprints'
 export * from './usePatchFeed'

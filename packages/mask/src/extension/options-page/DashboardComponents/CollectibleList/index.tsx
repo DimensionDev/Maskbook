@@ -1,8 +1,7 @@
 import { Icons } from '@masknet/icons'
-import { PluginId } from '@masknet/plugin-infra'
-import { useNonFungibleAssets, useTrustedNonFungibleTokens, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
-import { ElementAnchor, RetryHint } from '@masknet/shared'
-import { EMPTY_LIST, EMPTY_OBJECT, NextIDPlatform } from '@masknet/shared-base'
+import { useNonFungibleAssets, useTrustedNonFungibleTokens, Web3Helper, useWeb3State } from '@masknet/plugin-infra/web3'
+import { ElementAnchor, RetryHint, useWeb3ProfileHiddenSettings } from '@masknet/shared'
+import { EMPTY_LIST, EMPTY_OBJECT } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { CollectionType } from '@masknet/web3-providers'
 import {
@@ -15,11 +14,9 @@ import {
     SourceType,
 } from '@masknet/web3-shared-base'
 import { Box, Button, Stack, styled, Tooltip, Typography } from '@mui/material'
-import { uniqBy } from 'lodash-unified'
+import { differenceWith, uniqBy } from 'lodash-unified'
 import { createContext, useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../../utils'
-import { useAvailableCollections } from '../../hooks'
-import { useKV } from '../../hooks/useKV'
 import { CollectibleItem } from './CollectibleItem'
 import { CollectionIcon } from './CollectionIcon'
 import { LoadingSkeleton } from './LoadingSkeleton'
@@ -209,6 +206,7 @@ interface CollectionListProps {
 export function CollectionList({ addressName, persona, profile, gridProps = EMPTY_OBJECT }: CollectionListProps) {
     const { t } = useI18N()
     const { classes } = useStyles(gridProps)
+    const { Storage } = useWeb3State()
     const [selectedCollection, setSelectedCollection] = useState<
         NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | undefined
     >()
@@ -230,23 +228,23 @@ export function CollectionList({ addressName, persona, profile, gridProps = EMPT
         retry: retryFetchCollectible,
     } = useNonFungibleAssets(addressName.networkSupporterPluginID, undefined, { account })
 
-    const { value: kvValue } = useKV(persona)
     const userId = profile?.identifier?.userId.toLowerCase()
-    const isHiddenAddress = useMemo(() => {
-        return kvValue?.proofs
-            .find((proof) => proof?.platform === NextIDPlatform.Twitter && proof?.identity === userId)
-            ?.content?.[PluginId.Web3Profile]?.hiddenAddresses?.NFTs?.some((x) =>
-                isSameAddress(x.address, addressName.address),
-            )
-    }, [userId, addressName.address, kvValue?.proofs])
 
-    const unHiddenCollectibles = useAvailableCollections(
-        kvValue?.proofs ?? EMPTY_LIST,
-        collectibles,
-        CollectionType.NFTs,
-        userId,
-        account?.toLowerCase(),
-    )
+    const { isHiddenAddress, hiddenList } = useWeb3ProfileHiddenSettings(userId, persona, {
+        address: account,
+        hiddenAddressesKey: 'NFTs',
+        collectionKey: CollectionType.NFTs,
+    })
+
+    const unHiddenCollectibles = useMemo(() => {
+        if (!hiddenList.length) return collectibles
+
+        return differenceWith(
+            collectibles,
+            hiddenList,
+            (collection, id) => `${collection.id}_${collection.tokenId}`.toLowerCase() === id.toLowerCase(),
+        )
+    }, [hiddenList, collectibles])
 
     const allCollectibles = [
         ...trustedNonFungibleTokens.filter((x) => isSameAddress(x.contract?.owner, account)),

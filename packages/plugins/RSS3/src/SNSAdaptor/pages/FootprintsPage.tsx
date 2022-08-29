@@ -1,16 +1,14 @@
-import { memo, useMemo, useState } from 'react'
-import { CollectionDetailCard } from '@masknet/shared'
-import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
+import { memo, useState, useMemo } from 'react'
+import { CollectionDetailCard, useWeb3ProfileHiddenSettings } from '@masknet/shared'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { CollectionType, RSS3BaseAPI } from '@masknet/web3-providers'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, BoxProps, Typography } from '@mui/material'
-import { useI18N } from '../../locales'
 import { FootprintCard, StatusBox } from '../components'
-import { useFootprints, useRSS3Profile, useAvailableCollections } from '../hooks'
-import { useKV } from '../hooks/useKV'
-import { PluginId } from '@masknet/plugin-infra'
+import { useFootprints, useRSS3Profile } from '../hooks'
 import { Icons } from '@masknet/icons'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { differenceWith } from 'lodash-unified'
+import { useI18N } from '../../locales'
 
 export interface FootprintPageProps extends BoxProps {
     address: string
@@ -24,28 +22,22 @@ export const FootprintsPage = memo(function FootprintsPage({
     userId,
     ...rest
 }: FootprintPageProps) {
+    const t = useI18N()
     const { value: profile } = useRSS3Profile(address)
     const username = profile?.name
 
-    const { value: kvValue } = useKV(publicKey)
     const { value: allFootprints = EMPTY_LIST, loading } = useFootprints(formatEthereumAddress(address))
 
-    const footprints = useAvailableCollections(
-        kvValue?.proofs ?? EMPTY_LIST,
-        allFootprints,
-        CollectionType.Footprints,
-        userId,
+    const { isHiddenAddress, hiddenList } = useWeb3ProfileHiddenSettings(userId, publicKey, {
         address,
-    )
+        hiddenAddressesKey: 'footprints',
+        collectionKey: CollectionType.Footprints,
+    })
 
-    const isHiddenAddress = useMemo(() => {
-        return kvValue?.proofs
-            .find((proof) => proof?.platform === NextIDPlatform.Twitter && proof?.identity === userId?.toLowerCase())
-            ?.content?.[PluginId.Web3Profile]?.hiddenAddresses?.footprints?.some((x) =>
-                isSameAddress(x.address, address),
-            )
-    }, [userId, address, kvValue?.proofs])
-    const t = useI18N()
+    const footprints = useMemo(() => {
+        if (!hiddenList.length) return allFootprints
+        return differenceWith(allFootprints, hiddenList, (footprint, id) => footprint.id === id)
+    }, [allFootprints, hiddenList])
 
     const [selectedFootprint, setSelectedFootprint] = useState<RSS3BaseAPI.Collection | undefined>()
 
