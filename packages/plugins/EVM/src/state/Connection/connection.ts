@@ -34,6 +34,7 @@ import {
     isValidAddress,
     isNativeTokenAddress,
     encodeTransaction,
+    Operation,
 } from '@masknet/web3-shared-evm'
 import {
     Account,
@@ -889,6 +890,63 @@ class Connection implements EVM_Connection {
 
     signTransactions(transactions: Transaction[], initial?: EVM_Web3ConnectionOptions) {
         return Promise.all(transactions.map((x) => this.signTransaction(x, initial)))
+    }
+
+    supportedEntryPoints(initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined) {
+        const options = this.getOptions(initial)
+        return this.hijackedRequest<string[]>(
+            {
+                method: EthereumMethodType.ETH_SUPPORTED_ENTRY_POINTS,
+                params: [],
+            },
+            options,
+        )
+    }
+
+    async callOperation(
+        operation: Operation,
+        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ) {
+        const options = this.getOptions(initial)
+        const entryPoint = first(await this.supportedEntryPoints(initial))
+        if (!isValidAddress(entryPoint)) throw new Error('No entry point.')
+
+        return this.hijackedRequest<string>(
+            {
+                method: EthereumMethodType.ETH_CALL_USER_OPERATION,
+                params: [
+                    {
+                        ...operation,
+                        sender: options.account,
+                    },
+                ],
+                entryPoint,
+            },
+            options,
+        )
+    }
+
+    async sendOperation(
+        operation: Operation,
+        initial?: ConnectionOptions<ChainId, ProviderType, Transaction> | undefined,
+    ) {
+        const options = this.getOptions(initial)
+        const entryPoint = first(await this.supportedEntryPoints(initial))
+        if (!isValidAddress(entryPoint)) throw new Error('No entry point.')
+
+        return this.hijackedRequest<string>(
+            {
+                method: EthereumMethodType.ETH_SEND_USER_OPERATION,
+                params: [
+                    {
+                        ...operation,
+                        sender: options.account,
+                    },
+                ],
+                entryPoint,
+            },
+            options,
+        )
     }
 
     callTransaction(transaction: Transaction, initial?: EVM_Web3ConnectionOptions) {

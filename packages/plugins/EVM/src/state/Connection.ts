@@ -4,6 +4,7 @@ import { ConnectionState } from '@masknet/plugin-infra/web3'
 import type {
     Block,
     ChainId,
+    Operation,
     ProviderType,
     SchemaType,
     Signature,
@@ -22,6 +23,7 @@ export class Connection extends ConnectionState<
     ProviderType,
     Signature,
     Block,
+    Operation,
     Transaction,
     TransactionReceipt,
     TransactionDetailed,
