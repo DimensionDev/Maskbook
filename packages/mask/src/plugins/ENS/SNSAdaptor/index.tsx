@@ -12,7 +12,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     SearchResultBox: {
         ID: PluginId.ENS,
         UI: {
-            Content: () => (
+            Content: ({ keyword }) => (
                 <MaskPostExtraInfoWrapper
                     open
                     wrapperProps={{
@@ -28,13 +28,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         ) : undefined
                     }
                     publisherLink={base.publisher?.link}>
-                    <SearchResultInspector />
+                    <SearchResultInspector domain={keyword} />
                 </MaskPostExtraInfoWrapper>
             ),
         },
         Utils: {
             shouldDisplay(keyword: string) {
-                return keyword.includes('vitalik.eth')
+                return keyword.endsWith('.eth')
             },
         },
     },

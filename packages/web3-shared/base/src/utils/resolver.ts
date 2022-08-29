@@ -8,6 +8,9 @@ import {
     SourceType,
 } from '../specs'
 import { NextIDPlatform } from '@masknet/shared-base'
+import { keccak256 } from '@ethersproject/keccak256'
+import { toUtf8Bytes } from '@ethersproject/strings'
+import BigNumber from 'bignumber.js'
 
 export interface ExplorerRoutes {
     addressPathname?: string
@@ -280,4 +283,10 @@ export function resolveCORSLink(url?: string): string | undefined {
     if (!url) return url
     if (url.startsWith(CORS_HOST)) return url
     return `${CORS_HOST}?${encodeURIComponent(url)}`
+}
+
+export function resolveNonFungibleTokenIdFromEnsDomain(domain: string): string {
+    return new BigNumber(
+        keccak256(toUtf8Bytes(domain.endsWith('.ens') ? domain.replace('.eth', '') : domain)),
+    ).toFixed()
 }

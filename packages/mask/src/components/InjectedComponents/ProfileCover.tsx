@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { useAvailablePlugins, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
+import { useSocialAddressListAll } from '@masknet/plugin-infra/web3'
 import {
     useActivatedPluginsSNSAdaptor,
     createInjectHooksRenderer,
@@ -36,13 +36,6 @@ export function ProfileCover(props: ProfileCoverProps) {
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(reloadSocialAddress)
     }, [reloadSocialAddress])
-
-    const displayPlugins = useAvailablePlugins(activatedPlugins, (plugins) => {
-        return plugins
-            .flatMap((x) => x.ProfileCover?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
-            .filter((x) => x.Utils.shouldDisplay?.(currentVisitingIdentity, socialAddressList) ?? true)
-            .sort((a, z) => a.priority - z.priority)
-    })
 
     // TODO: Multi-plugin rendering support
     const component = useMemo(() => {
