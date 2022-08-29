@@ -9,7 +9,7 @@ import {
     formatBalance,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
-import { FormControl, InputLabel, MenuItem, Select, TextField, Box } from '@mui/material'
+import { MenuItem, Select, TextField, Box, InputBase } from '@mui/material'
 import BigNumber from 'bignumber.js'
 import { omit } from 'lodash-unified'
 import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -208,7 +208,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     return (
         <>
             <div className={classes.field}>
-                <FormControl className={classes.input} variant="outlined">
+                {/* <FormControl className={classes.input} variant="outlined">
                     <InputLabel className={classes.selectShrinkLabel}>{t.split_mode()}</InputLabel>
                     <Select
                         ref={selectRef}
@@ -230,8 +230,29 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                         <MenuItem value={0}>{t.average()}</MenuItem>
                         <MenuItem value={1}>{t.random()}</MenuItem>
                     </Select>
-                </FormControl>
-                <TextField
+                </FormControl> */}
+                <Select
+                    className={classes.input}
+                    ref={selectRef}
+                    value={isRandom ? 1 : 0}
+                    onChange={(e) => {
+                        // foolproof, reset amount since the meaning of amount changed:
+                        // 'total amount' <=> 'amount per share'
+                        setRawAmount('0')
+                        setRandom(e.target.value as number)
+                    }}
+                    MenuProps={{
+                        anchorOrigin: {
+                            vertical: 'bottom',
+                            horizontal: 'center',
+                        },
+                        container: selectRef.current,
+                        anchorEl: selectRef.current,
+                    }}>
+                    <MenuItem value={0}>{t.average()}</MenuItem>
+                    <MenuItem value={1}>{t.random()}</MenuItem>
+                </Select>
+                {/* <TextField
                     className={classes.input}
                     InputProps={{
                         inputProps: {
@@ -252,7 +273,8 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                     label={t.shares()}
                     value={shares}
                     onChange={onShareChange}
-                />
+                /> */}
+                <InputBase className={classes.input} value={shares} onChange={onShareChange} />
             </div>
             <div className={classes.field}>
                 <TokenAmountPanel
