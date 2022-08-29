@@ -8,26 +8,26 @@ import {
 import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 
-export function useNFTCardInfo(address?: string, tokenId?: string, source?: SourceType) {
+export function useNFTCardInfo(address?: string, tokenId?: string, source?: SourceType, chainId?: ChainId) {
     const [provider, setProvider] = useState(source ?? SourceType.Gem)
-
+    const _chainId = chainId ?? ChainId.Mainnet
     const asset = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, address ?? '', tokenId ?? '', {
         sourceType: provider,
-        chainId: ChainId.Mainnet,
+        chainId: _chainId,
     })
 
     const orders = useNonFungibleOrders(NetworkPluginID.PLUGIN_EVM, address ?? '', tokenId ?? '', {
         sourceType: provider,
-        chainId: ChainId.Mainnet,
+        chainId: _chainId,
     })
 
     const events = useNonFungibleEvents(NetworkPluginID.PLUGIN_EVM, address ?? '', tokenId ?? '', {
         sourceType: provider,
-        chainId: ChainId.Mainnet,
+        chainId: _chainId,
     })
     const rarity = useNonFungibleRarity(NetworkPluginID.PLUGIN_EVM, address ?? '', tokenId ?? '', {
         sourceType: provider,
-        chainId: ChainId.Mainnet,
+        chainId: _chainId,
     })
     return {
         asset,

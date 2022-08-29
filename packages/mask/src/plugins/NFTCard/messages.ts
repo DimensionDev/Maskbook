@@ -4,11 +4,15 @@ import { PLUGIN_ID } from '@masknet/plugin-wallet'
 export { WalletMessages } from '@masknet/plugin-wallet'
 export type { SelectNftContractDialogEvent } from '@masknet/plugin-wallet'
 
-export type NFTCardDialogUpdateEvent = {
-    open: boolean
-    tokenId: string
-    address: string
-}
+export type NFTCardDialogUpdateEvent =
+    | {
+          open: true
+          tokenId: string
+          address: string
+      }
+    | {
+          open: false
+      }
 
 export interface NFTCardDialogMessage {
     nftCardDialogUpdated: NFTCardDialogUpdateEvent

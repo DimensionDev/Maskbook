@@ -25,9 +25,9 @@ export function NFTCardDialog() {
     const { open: remoteOpen, closeDialog } = useRemoteControlledDialog(
         NFTCardMessage.events.nftCardDialogUpdated,
         (ev) => {
-            const { tokenId, address } = ev
-            setTokenId(tokenId)
-            setTokenAddress(address)
+            if (!ev.open) return
+            setTokenId(ev.tokenId)
+            setTokenAddress(ev.address)
         },
     )
     const { asset, orders, events, rarity, provider, setProvider } = useNFTCardInfo(tokenAddress, tokenId)
@@ -39,7 +39,7 @@ export function NFTCardDialog() {
     )
 
     useEffect(() => {
-        if (!chainIdValid) closeDialog()
+        if (!chainIdValid) closeDialog
     }, [chainIdValid, closeDialog])
 
     return (
