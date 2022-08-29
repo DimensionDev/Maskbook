@@ -1,10 +1,19 @@
-import { createIndicator, createPageable, HubOptions, NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
+import {
+    createIndicator,
+    createNextIndicator,
+    createPageable,
+    HubOptions,
+    NetworkPluginID,
+    TokenType,
+} from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import RSS3 from 'rss3-next'
 import urlcat from 'urlcat'
 import { fetchJSON } from '../helpers'
 import { NonFungibleTokenAPI, RSS3BaseAPI } from '../types'
 import { NETWORK_PLUGIN, NEW_RSS3_ENDPOINT, RSS3_ENDPOINT, TAG, TYPE } from './constants'
+
+type RSS3Result<T> = { cursor?: string; total: number; result: T[] }
 
 export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     createRSS3(
@@ -37,14 +46,16 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
         await rss3.files.sync()
         return value as T
     }
-    async getDonations(address: string): Promise<RSS3BaseAPI.Donation[]> {
-        if (!address) return []
+    async getDonations(address: string, { indicator, size = 100 }: HubOptions<ChainId> = {}) {
+        if (!address) return createPageable([], createIndicator(indicator))
         const collectionURL = urlcat(NEW_RSS3_ENDPOINT, address, {
             tag: TAG.donation,
             type: TYPE.donate,
+            limit: size,
+            cursor: indicator?.id,
             include_poap: true,
         })
-        const { result: donations } = await fetchJSON<{ result: RSS3BaseAPI.Donation[] }>(collectionURL)
+        const { result: donations, cursor } = await fetchJSON<RSS3Result<RSS3BaseAPI.Donation>>(collectionURL)
         // A donation Feed contains multiple donation Actions. Let's flatten them.
         const result = donations.flatMap((donation) => {
             return donation.actions.map((action) => ({
@@ -52,17 +63,19 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
                 actions: [action],
             }))
         })
-        return result
+        return createPageable(result, createIndicator(indicator), createNextIndicator(indicator, cursor))
     }
-    async getFootprints(address: string): Promise<RSS3BaseAPI.Footprint[]> {
-        if (!address) return []
+    async getFootprints(address: string, { indicator, size = 100 }: HubOptions<ChainId> = {}) {
+        if (!address) return createPageable([], createIndicator(indicator))
         const collectionURL = urlcat(NEW_RSS3_ENDPOINT, address, {
             tag: TAG.collectible,
             type: TYPE.poap,
+            limit: size,
+            cursor: indicator?.id,
             include_poap: true,
         })
-        const res = await fetchJSON<{ result: RSS3BaseAPI.Footprint[] }>(collectionURL)
-        return res.result
+        const { result, cursor } = await fetchJSON<RSS3Result<RSS3BaseAPI.Footprint>>(collectionURL)
+        return createPageable(result, createIndicator(indicator), createNextIndicator(indicator, cursor))
     }
     async getNameInfo(id: string) {
         if (!id) return
@@ -130,7 +143,7 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
             network: NETWORK_PLUGIN[networkPluginId],
             include_poap: true,
         })
-        const res = await fetchJSON<{ result: RSS3BaseAPI.Activity[]; cursor?: string }>(url)
-        return createPageable(res.result, createIndicator(indicator, res.cursor))
+        const { result, cursor } = await fetchJSON<{ result: RSS3BaseAPI.Activity[]; cursor?: string }>(url)
+        return createPageable(result, createIndicator(indicator), createNextIndicator(indicator, cursor))
     }
 }

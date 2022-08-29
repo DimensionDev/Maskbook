@@ -426,8 +426,8 @@ export namespace RSS3BaseAPI {
         createRSS3(address: string): RSS3
         getFileData<T>(rss3: RSS3, address: string, key: string): Promise<T | undefined>
         setFileData<T>(rss3: RSS3, address: string, key: string, data: T): Promise<T>
-        getDonations(address: string): Promise<Donation[]>
-        getFootprints(address: string): Promise<Footprint[] | undefined>
+        getDonations(address: string): Promise<Pageable<Donation>>
+        getFootprints(address: string): Promise<Pageable<Footprint>>
         getNameInfo(id: string): Promise<NameInfo | undefined>
         getProfileInfo(address: string): Promise<ProfileInfo | undefined>
         getWeb3Feeds(

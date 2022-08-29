@@ -3,6 +3,7 @@ import { useAsync } from 'react-use'
 
 export function useDonations(address: string) {
     return useAsync(async () => {
-        return RSS3.getDonations(address)
+        const { data } = await RSS3.getDonations(address)
+        return data
     }, [address])
 }

@@ -3,7 +3,7 @@ import { useAsync } from 'react-use'
 
 export function useFootprints(address: string) {
     return useAsync(async () => {
-        const response = await RSS3.getFootprints(address)
-        return response
+        const { data } = await RSS3.getFootprints(address)
+        return data
     }, [address])
 }

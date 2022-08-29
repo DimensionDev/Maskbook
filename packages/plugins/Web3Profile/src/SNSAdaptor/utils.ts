@@ -125,7 +125,7 @@ export const placeFirst = (userId?: string, accountList?: AccountType[]) => {
 
 export const getDonationList = async (walletList: WalletTypes[]) => {
     const promises = walletList.map(async ({ address, platform }) => {
-        const donations = await RSS3.getDonations(address)
+        const { data: donations } = await RSS3.getDonations(address)
         return {
             address,
             collections: donations.map((donation) => {
@@ -146,7 +146,7 @@ export const getDonationList = async (walletList: WalletTypes[]) => {
 
 export const getFootprintList = async (walletList: WalletTypes[]) => {
     const promises = walletList.map(async ({ address, platform = NetworkPluginID.PLUGIN_EVM }) => {
-        const footprints = await RSS3.getFootprints(address)
+        const { data: footprints } = await RSS3.getFootprints(address)
         return {
             address,
             collections: footprints.map((footprint) => {
