@@ -5,7 +5,7 @@ import {
     EMPTY_LIST,
     isSamePersona,
     isSameProfile,
-    NextIDPlatform,
+    nextIDIdentityToProfile,
     PersonaIdentifier,
     ProfileIdentifier,
 } from '@masknet/shared-base'
@@ -20,20 +20,35 @@ import { MaskMessages, useI18N } from '../../utils'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { activatedSocialNetworkUI } from '../../social-network'
 import { PluginNextIDMessages } from '../../plugins/NextID/messages'
 import type { PersonaNextIDMixture } from './PersonaListUI/PersonaItemUI'
 import { PersonaItemUI } from './PersonaListUI/PersonaItemUI'
 import { useCurrentPersona } from '../DataSource/usePersonaConnectStatus'
 import { delay } from '@dimensiondev/kit'
 
-const useStyles = makeStyles()((theme) => {
+type PositionOption = 'center' | 'top-right'
+type PositionStyle = {
+    top?: number
+    right?: number
+    position?: 'absolute'
+}
+
+const useStyles = makeStyles<{
+    positionStyle: {
+        top?: number
+        right?: number
+        position?: 'absolute'
+    }
+}>()((theme, props) => {
     return {
         root: {
             width: 384,
             height: 386,
             padding: theme.spacing(1),
             background: theme.palette.maskColor.bottom,
+            position: props.positionStyle.position,
+            top: props.positionStyle.top,
+            right: props.positionStyle.right,
         },
         content: {
             padding: theme.spacing(0, 2, 2, 2),
@@ -43,7 +58,7 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         header: {
-            background: theme.palette.maskColor.bottom,
+            background: `${theme.palette.maskColor.bottom} !important`,
         },
         items: {
             overflow: 'auto',
@@ -55,23 +70,40 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export const PersonaListDialog = () => {
+const positionStyleMap: Record<PositionOption, PositionStyle> = {
+    center: {},
+    'top-right': {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+    },
+}
+
+export const PersonaSelectPanelDialog = () => {
     const { t } = useI18N()
-    const { classes } = useStyles()
     const [, copyToClipboard] = useCopyToClipboard()
     const { showSnackbar } = useCustomSnackbar()
-    const currentPlatform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform | undefined
+
     const currentPersona = useCurrentPersona()
     const currentPersonaIdentifier = currentPersona?.identifier
-    const [finishTarget, setFinishTarget] = useState<string>()
 
-    const { open, closeDialog } = useRemoteControlledDialog(PluginNextIDMessages.PersonaListDialogUpdated, (ev) => {
-        if (!ev.open) {
-            setFinishTarget(undefined)
-        } else {
-            setFinishTarget(ev.target)
-        }
-    })
+    const [finishTarget, setFinishTarget] = useState<string>()
+    const [position, setPosition] = useState<PositionOption>('center')
+    const [enableVerify, setEnableVerify] = useState(true)
+    const { classes } = useStyles({ positionStyle: positionStyleMap[position] })
+
+    const { open, closeDialog } = useRemoteControlledDialog(
+        PluginNextIDMessages.PersonaSelectPanelDialogUpdated,
+        (ev) => {
+            if (!ev.open) {
+                setFinishTarget(undefined)
+            } else {
+                setFinishTarget(ev.target)
+                setEnableVerify(ev.enableVerify)
+                setPosition(ev.position ?? 'center')
+            }
+        },
+    )
 
     const [selectedPersona, setSelectedPersona] = useState<PersonaNextIDMixture>()
 
@@ -133,10 +165,8 @@ export const PersonaListDialog = () => {
 
         if (!isSamePersona(selectedPersona.persona, currentPersonaIdentifier)) isConnected = false
 
-        const verifiedSns = selectedPersona.proof.find(
-            (x) =>
-                x.identity.toLowerCase() === currentProfileIdentify.identifier?.userId.toLowerCase() &&
-                x.platform === currentPlatform,
+        const verifiedSns = selectedPersona.proof.find((x) =>
+            isSameProfile(nextIDIdentityToProfile(x.identity, x.platform), currentProfileIdentify.identifier),
         )
         if (!verifiedSns) {
             isVerified = false
@@ -146,7 +176,7 @@ export const PersonaListDialog = () => {
             if (!isConnected) {
                 await connect?.(currentProfileIdentify.identifier, selectedPersona.persona.identifier)
             }
-            if (!isVerified) {
+            if (!isVerified && enableVerify) {
                 closeDialog()
                 closeApplicationBoard()
                 await handleVerifyNextID(selectedPersona.persona, currentProfileIdentify.identifier?.userId)
@@ -165,7 +195,7 @@ export const PersonaListDialog = () => {
 
         const actionProps = {
             ...(() => {
-                if (!isConnected && !isVerified)
+                if (!isConnected && !isVerified && enableVerify)
                     return {
                         buttonText: t('applications_persona_verify_connect', {
                             nickname: selectedPersona?.persona.nickname,
@@ -202,7 +232,7 @@ export const PersonaListDialog = () => {
         }
 
         return <ActionContent {...actionProps} />
-    }, [currentPersonaIdentifier, currentProfileIdentify, selectedPersona])
+    }, [currentPersonaIdentifier, currentProfileIdentify, selectedPersona, enableVerify, finishTarget])
 
     const onSelectPersona = useCallback((x: PersonaNextIDMixture) => {
         setSelectedPersona(x)

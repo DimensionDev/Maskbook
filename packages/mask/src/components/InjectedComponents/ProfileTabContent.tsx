@@ -8,7 +8,7 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { useAvailablePlugins, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
 import { AddressItem } from '@masknet/shared'
-import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
@@ -24,6 +24,8 @@ import {
     useCurrentVisitingSocialIdentity,
     useIsOwnerIdentity,
 } from '../DataSource/useActivatedUI'
+import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
+import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary'
 
 function getTabContent(tabId?: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
@@ -149,6 +151,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const [hidden, setHidden] = useState(true)
     const [selectedAddress, setSelectedAddress] = useState<SocialAddress<NetworkPluginID> | undefined>()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+    const { value: personaStatus } = useCurrentPersonaConnectStatus()
 
     const currentVisitingIdentity = useCurrentVisitingIdentity()
     const currentVisitingUserId = currentVisitingIdentity.identifier?.userId
@@ -221,13 +224,10 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const isWeb3ProfileDisable = useIsMinimalMode(PluginId.Web3Profile)
 
     const isTwitterPlatform = isTwitter(activatedSocialNetworkUI)
-    const isOwnerNotHasBinding = isOwnerIdentity && !currentVisitingSocialIdentity?.hasBinding
     const isOwnerNotHasAddress =
-        isOwnerIdentity && socialAddressList.findIndex((address) => address.type === SocialAddressType.NEXT_ID) === -1
+        isOwnerIdentity && personaStatus.proof?.findIndex((p) => p.platform === NextIDPlatform.Ethereum) === -1
 
-    const showNextID =
-        isTwitterPlatform &&
-        (isWeb3ProfileDisable || isOwnerNotHasBinding || isOwnerNotHasAddress || socialAddressList.length === 0)
+    const showNextID = isTwitterPlatform && (isWeb3ProfileDisable || !personaStatus.verified || isOwnerNotHasAddress)
 
     const componentTabId = showNextID ? `${PluginId.NextID}_tabContent` : currentTab
 
@@ -363,12 +363,17 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                     {t('mask_network')}
                                 </Typography>
                                 {isOwnerIdentity ? (
-                                    <Icons.Gear
-                                        variant="light"
-                                        onClick={handleOpenDialog}
-                                        className={classes.gearIcon}
-                                        sx={{ cursor: 'pointer' }}
-                                    />
+                                    <ConnectPersonaBoundary
+                                        customHint
+                                        handlerPosition="top-right"
+                                        directTo={PluginId.Web3Profile}>
+                                        <Icons.Gear
+                                            variant="light"
+                                            onClick={handleOpenDialog}
+                                            className={classes.gearIcon}
+                                            sx={{ cursor: 'pointer' }}
+                                        />
+                                    </ConnectPersonaBoundary>
                                 ) : (
                                     <Link
                                         className={classes.settingLink}
