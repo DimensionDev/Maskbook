@@ -94,6 +94,9 @@ const useStyles = makeStyles()((theme) => ({
     fallbackImage: {
         position: 'absolute',
     },
+    unset: {
+        color: 'unset',
+    },
 }))
 
 interface NFTBasicInfoProps {
@@ -102,11 +105,12 @@ interface NFTBasicInfoProps {
     onChangeProvider: (v: SourceType) => void
     providers: SourceType[]
     currentProvider: SourceType
+    timeline?: boolean
 }
 
 export function NFTBasicInfo(props: NFTBasicInfoProps) {
-    const { asset, hideSubTitle, onChangeProvider, providers, currentProvider } = props
-    const { classes } = useStyles()
+    const { asset, hideSubTitle, onChangeProvider, providers, currentProvider, timeline } = props
+    const { classes, cx } = useStyles()
 
     const collectibleProviderOptions = getEnumAsArray(SourceType).filter((x) => providers.includes(x.value))
     const fallbackImgURL = new URL('../assets/fallbackImg.svg', import.meta.url)
@@ -136,7 +140,9 @@ export function NFTBasicInfo(props: NFTBasicInfoProps) {
                     isImageOnly={false}
                 />
             </div>
-            <Typography className={classes.nameSm}>{asset.metadata?.name ?? '-'}</Typography>
+            <Typography className={timeline ? cx(classes.nameSm, classes.unset) : classes.nameSm}>
+                {asset.metadata?.name ?? '-'}
+            </Typography>
             {!hideSubTitle && (
                 <div className={classes.nameLgBox}>
                     <Typography className={classes.nameLg}>{asset.metadata?.name}</Typography>

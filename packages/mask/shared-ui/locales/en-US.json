@@ -691,6 +691,7 @@
     "plugin_infra_descriptor_mask_box_purchase_success": "Purchase Maskbox NFT with {{tokenAmountDescription}} successfully.",
     "plugin_infra_descriptor_mask_box_purchase": "Purchase Maskbox NFT.",
     "plugin_infra_descriptor_mask_box_purchase_fail": "Failed to purchase Maskbox NFT.",
+    "plugin_collectible_nft_detail": "NFT Details",
     "plugin_collectible_description_title": "Description",
     "plugin_collectible_top_offer": "Top offer",
     "plugin_collectible_time_left": "Time left",

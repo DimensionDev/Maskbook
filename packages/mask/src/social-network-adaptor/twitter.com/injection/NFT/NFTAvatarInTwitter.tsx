@@ -14,7 +14,6 @@ import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
 import { useAsync, useLocation, useUpdateEffect, useWindowSize } from 'react-use'
 import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/RainbowBox'
 import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
-import { openWindow } from '@masknet/shared-base-ui'
 import { usePersonaNFTAvatar } from '../../../../plugins/Avatar/hooks/usePersonaNFTAvatar'
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
@@ -22,7 +21,7 @@ import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet'
 import { useNFT, useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks'
 import { NFTCardStyledAssetPlayer, useShowConfirm } from '@masknet/shared'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
-import type { EnhanceableSite, NFTAvatarEvent } from '@masknet/shared-base'
+import { EnhanceableSite, NFTAvatarEvent, CrossIsolationMessages } from '@masknet/shared-base'
 import { Box, Typography } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
@@ -223,10 +222,15 @@ function NFTAvatarInTwitter() {
         if (!nftAvatar || !linkParentDom || !showAvatar) return
 
         const handler = (event: MouseEvent) => {
-            if (!nftInfo?.permalink) return
+            if (!nftAvatar.tokenId || !nftAvatar.address) return
+            CrossIsolationMessages.events.requestNFTCardDialog.sendToLocal({
+                open: true,
+                address: nftAvatar.address,
+                tokenId: nftAvatar.tokenId,
+            })
+
             event.stopPropagation()
             event.preventDefault()
-            openWindow(nftInfo?.permalink)
         }
 
         linkParentDom.addEventListener('click', handler, true)
