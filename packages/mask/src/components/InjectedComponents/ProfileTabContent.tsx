@@ -227,7 +227,16 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const isOwnerNotHasAddress =
         isOwnerIdentity && personaStatus.proof?.findIndex((p) => p.platform === NextIDPlatform.Ethereum) === -1
 
-    const showNextID = isTwitterPlatform && (isWeb3ProfileDisable || !personaStatus.verified || isOwnerNotHasAddress)
+    const showNextID =
+        isTwitterPlatform &&
+        // enabled the plugin
+        (isWeb3ProfileDisable ||
+            // the owner persona and sns not verify on next ID
+            (isOwnerIdentity && !personaStatus.verified) ||
+            // the owner persona and sns verified on next ID but not verify the wallet
+            isOwnerNotHasAddress ||
+            // the visiting persona not have social address list
+            (!isOwnerIdentity && !socialAddressList.length))
 
     const componentTabId = showNextID ? `${PluginId.NextID}_tabContent` : currentTab
 

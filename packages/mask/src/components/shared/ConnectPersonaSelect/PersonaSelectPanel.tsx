@@ -40,11 +40,11 @@ export type PositionOption = 'center' | 'top-right'
 
 interface PersonaSelectPanelProps {
     finishTarget?: string
-    enableVerify: boolean
-    onClose(): void
+    enableVerify?: boolean
+    onClose?: () => void
 }
 
-export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(({ finishTarget, enableVerify, onClose }) => {
+export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(({ finishTarget, enableVerify = true, onClose }) => {
     const { t } = useI18N()
     const [, copyToClipboard] = useCopyToClipboard()
     const { showSnackbar } = useCustomSnackbar()
@@ -90,7 +90,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(({ finishTarget,
     useEffect(() => {
         if (personas.length || !finishTarget || loading) return
 
-        onClose()
+        onClose?.()
         setCreatePersonaConfirmDialog({
             open: true,
             target: 'dashboard',
@@ -130,7 +130,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(({ finishTarget,
                 await connect?.(currentProfileIdentify.identifier, selectedPersona.persona.identifier)
             }
             if (!isVerified && enableVerify) {
-                onClose()
+                onClose?.()
                 closeApplicationBoard()
                 await handleVerifyNextID(selectedPersona.persona, currentProfileIdentify.identifier?.userId)
             }
@@ -143,7 +143,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(({ finishTarget,
             }
 
             await delay(100)
-            onClose()
+            onClose?.()
         }
 
         const actionProps = {
