@@ -8,6 +8,7 @@ import { useAccountBalance } from '../hooks/useAccountBalances'
 import type { Pool } from '../types'
 import { AccountPool } from './AccountPool'
 import { sumBy } from 'lodash-unified'
+import { leftShift } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
