@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react'
 import { NFTCardDialogUI } from './NFTCardDialogUI'
 import { useStyles } from '../useStyles'
 import { useNFTCardInfo } from './hooks/useNFTCardInfo'
+import { useI18N } from '../../../utils'
 
 export enum NFTCardDialogTabs {
     About = 'About',
@@ -18,6 +19,7 @@ export enum NFTCardDialogTabs {
 
 export function NFTCardDialog() {
     const { classes } = useStyles()
+    const { t } = useI18N()
     const [tokenId, setTokenId] = useState('')
     const [tokenAddress, setTokenAddress] = useState('')
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
@@ -43,7 +45,7 @@ export function NFTCardDialog() {
         <TabContext value={currentTab}>
             <InjectedDialog
                 open={open}
-                title="NFT Details"
+                title={t('plugin_collectible_nft_detail')}
                 onClose={() => setOpen(false)}
                 classes={{ paper: classes.dialogRoot }}
                 titleTabs={

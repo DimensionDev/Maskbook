@@ -24,8 +24,8 @@ const resolveTopOffer = (orders?: Array<NonFungibleTokenOrder<ChainId, SchemaTyp
     if (!orders?.length) return
     return first(
         orders.sort((a, b) => {
-            const value_a = new BigNumber(a.priceInToken?.amount ?? 0)
-            const value_b = new BigNumber(b.priceInToken?.amount ?? 0)
+            const value_a = new BigNumber(a.price?.usd ?? 0)
+            const value_b = new BigNumber(b.price?.usd ?? 0)
             return Number(value_a.lt(value_b))
         }),
     )
