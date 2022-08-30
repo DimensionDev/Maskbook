@@ -87,11 +87,12 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const windowSize = useWindowSize()
     const _location = useLocation()
 
-    const [showAvatar, setShowAvatar] = useState(false)
+    const [updatedAvatar, setUpdatedAvatar] = useState(false)
 
-    useEffect(() => {
-        setShowAvatar(!!nftAvatar?.avatarId && getAvatarId(identity.avatar) === nftAvatar.avatarId)
-    }, [nftAvatar?.avatarId, identity.avatar])
+    const showAvatar = useMemo(
+        () => !!nftAvatar?.avatarId && getAvatarId(identity.avatar) === nftAvatar.avatarId,
+        [nftAvatar?.avatarId, identity.avatar],
+    )
 
     const size = useMemo(() => {
         const ele = searchTwitterAvatarSelector().evaluate()?.querySelector('img')
@@ -181,7 +182,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     }, [])
 
     useEffect(() => {
-        if (!showAvatar) return
+        if (!showAvatar || !updatedAvatar) return
         const linkDom = searchTwitterAvatarLinkSelector().evaluate()
 
         if (linkDom?.firstElementChild && linkDom.childNodes.length === 4) {
@@ -223,7 +224,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
                 rainBowElement.current.classList.remove('rainbowBorder')
             }
         }
-    }, [location.pathname, showAvatar])
+    }, [location.pathname, showAvatar, updatedAvatar])
 
     useUpdateEffect(() => {
         const linkParentDom = searchTwitterAvatarLinkSelector().evaluate()?.closest('div')
@@ -251,7 +252,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const handler = () => {
         const avatar = searchAvatarSelector().evaluate()?.getAttribute('src')
         if (!avatar || !nftAvatar?.avatarId) return
-        setShowAvatar(!!nftAvatar?.avatarId && getAvatarId(avatar ?? '') === nftAvatar.avatarId)
+        setUpdatedAvatar(!!nftAvatar?.avatarId && getAvatarId(avatar ?? '') === nftAvatar.avatarId)
     }
 
     new MutationObserverWatcher(searchAvatarMetaSelector())
@@ -267,7 +268,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
             props.signal,
         )
 
-    if (!nftAvatar || !size || loadingWallet || loadingNFTInfo || !showAvatar) return null
+    if (!nftAvatar || !size || loadingWallet || loadingNFTInfo || !showAvatar || !updatedAvatar) return null
 
     return (
         <NFTBadge
