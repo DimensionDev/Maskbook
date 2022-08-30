@@ -3,7 +3,7 @@ import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { useGameConstants } from '@masknet/web3-shared-evm'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { GameRSSNode } from '../types'
+import type { GameRSSNode, GameInfo } from '../types'
 
 export function useGameList() {
     const { Storage } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
@@ -15,7 +15,7 @@ export function useGameList() {
         const config = await storage.get<GameRSSNode>('_nff_game_list')
         if (!config) return EMPTY_LIST
 
-        return Object.values(config)
+        return Object.values(config.games) as GameInfo[]
     }, [GAME_CONFIG_ADDRESS, Storage])
 
     return value
