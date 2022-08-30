@@ -6,6 +6,11 @@ import { Box, CircularProgress, useTheme } from '@mui/material'
 import { resolveCORSLink, resolveIPFSLink } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
+    container: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     circle: {
         color: parseColor(theme.palette.maskColor.main).setAlpha(0.5).toRgbString(),
     },
@@ -22,12 +27,12 @@ const useStyles = makeStyles()((theme) => ({
 
 interface ImageProps
     extends ImgHTMLAttributes<HTMLImageElement>,
-        withClasses<'fallbackImage' | 'imageLoading' | 'imageLoadingBox'> {
+        withClasses<'container' | 'fallbackImage' | 'imageLoading'> {
     fallbackImage?: URL
 }
 
-export function Image({ fallbackImage, ...rest }: ImageProps) {
-    const classes = useStylesExtends(useStyles(), rest)
+export function Image({ fallbackImage, classes: externalClasses, ...rest }: ImageProps) {
+    const classes = useStylesExtends(useStyles(), { classes: externalClasses })
     const theme = useTheme()
     const fallbackImageURL = resolveCORSLink(
         resolveIPFSLink(fallbackImage?.toString()) ??
@@ -49,7 +54,7 @@ export function Image({ fallbackImage, ...rest }: ImageProps) {
 
     if (imageLoading) {
         return (
-            <Box className={classes.imageLoadingBox}>
+            <Box className={classes.container}>
                 <Box className={classes.spinContainer}>
                     <CircularProgress
                         variant="determinate"
@@ -69,14 +74,14 @@ export function Image({ fallbackImage, ...rest }: ImageProps) {
 
     if (image) {
         return (
-            <Box className={classes.imageLoadingBox}>
+            <Box className={classes.container}>
                 <img crossOrigin="anonymous" {...rest} src={image} />
             </Box>
         )
     }
 
     return (
-        <Box className={classes.imageLoadingBox}>
+        <Box className={classes.container}>
             <img {...rest} src={fallbackImageURL} className={classNames(classes.failImage, classes.fallbackImage)} />
         </Box>
     )

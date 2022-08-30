@@ -78,7 +78,7 @@ export function NFTImage(props: NFTImageProps) {
                 fallbackImage={theme.palette.mode === 'dark' ? mask_avatar_dark : mask_avatar_light}
                 classes={{
                     imageLoading: classes.imageLoading,
-                    imageLoadingBox: classes.imageLoadingBox,
+                    container: classes.imageLoadingBox,
                 }}
                 onClick={() => onChange(token)}
                 src={token.metadata?.imageURL ?? ''}
