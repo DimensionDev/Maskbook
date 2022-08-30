@@ -1,4 +1,4 @@
-import { resolveCORSLink, resolveIPFSLink } from '@masknet/web3-shared-base'
+import { isIpfsFragment, resolveCORSLink, resolveIPFSLink } from '@masknet/web3-shared-base'
 
 const R2D2_ROOT_URL = 'r2d2.to'
 
@@ -47,7 +47,8 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
     const u = new URL(url, location.href)
 
     // ipfs
-    if (url.startsWith('ipfs://')) return originalFetch(resolveCORSLink(resolveIPFSLink(url))!, info)
+    if (url.startsWith('ipfs://') || isIpfsFragment(url))
+        return originalFetch(resolveCORSLink(resolveIPFSLink(url))!, info)
 
     // r2d2
     if (url.includes('r2d2.to')) return originalFetch(info, init)

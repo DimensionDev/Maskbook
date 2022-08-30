@@ -3,7 +3,7 @@ import { useAsync } from 'react-use'
 import classNames from 'classnames'
 import { makeStyles, parseColor, useStylesExtends } from '@masknet/theme'
 import { Box, CircularProgress, useTheme } from '@mui/material'
-import { resolveCORSLink, resolveIPFSLink } from '@masknet/web3-shared-base'
+import { isLocaleResource, resolveCORSLink, resolveIPFSLink } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -44,12 +44,12 @@ export function Image({ fallbackImage, classes: externalClasses, ...rest }: Imag
 
     const { value: image, loading: imageLoading } = useAsync(async () => {
         if (!rest.src) return
-        // base64 image
-        if (rest.src.startsWith('data')) return rest.src
+        if (isLocaleResource(rest.src)) return rest.src
         const response = await fetch(rest.src, {
             cache: 'force-cache',
         })
-        return URL.createObjectURL(await response.blob())
+        if (response.ok) return URL.createObjectURL(await response.blob())
+        return
     }, [rest.src])
 
     if (imageLoading) {
@@ -74,7 +74,7 @@ export function Image({ fallbackImage, classes: externalClasses, ...rest }: Imag
 
     if (image) {
         return (
-            <Box className={classes.container}>
+            <Box className={classes.container} data-url={rest.src}>
                 <img crossOrigin="anonymous" {...rest} src={image} />
             </Box>
         )

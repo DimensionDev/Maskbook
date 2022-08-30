@@ -228,12 +228,21 @@ export const resolveNextID_NetworkPluginID = createLookupTableResolver<NextIDPla
     },
 )
 
-const MATCH_IPFS_HASH_RE = /Qm[1-9A-HJ-NP-Za-km-z]{44}/
+const MATCH_IPFS_HASH_RE = /^[1-9A-HJ-NP-Za-km-z]{46}/
 const MATCH_IPFS_DATA_RE = /ipfs\/(data:.*)$/
 const MATCH_IPFS_PROTOCOL_RE = /ipfs:\/\/(?:ipfs\/)?/
 const CORS_HOST = 'https://cors.r2d2.to'
 const IPFS_IO_HOST = 'https://ipfs.io'
 const IPFS_PROTOCOL_PREFIX = 'ipfs://'
+
+export const isIpfsFragment = (fragment: string) => {
+    return MATCH_IPFS_HASH_RE.test(fragment)
+}
+
+export const isLocaleResource = (url: string): boolean => {
+    // base64 image
+    return /^data|blob:|(chrome|moz)-extension:\/\//.test(url)
+}
 
 export function resolveIPFSLink(fragmentOrURL?: string): string | undefined {
     if (!fragmentOrURL) return fragmentOrURL
@@ -261,7 +270,7 @@ export function resolveIPFSLink(fragmentOrURL?: string): string | undefined {
     }
 
     // a ipfs hash fragment
-    if (MATCH_IPFS_HASH_RE.test(fragmentOrURL)) {
+    if (isIpfsFragment(fragmentOrURL)) {
         return urlcat(`${IPFS_IO_HOST}/ipfs/:hash`, {
             hash: fragmentOrURL,
         })
@@ -277,7 +286,7 @@ export function resolveARLink(str?: string): string {
 }
 
 export function resolveCORSLink(url?: string): string | undefined {
-    if (!url) return url
+    if (!url || isLocaleResource(url)) return url
     if (url.startsWith(CORS_HOST)) return url
     return `${CORS_HOST}?${encodeURIComponent(url)}`
 }
