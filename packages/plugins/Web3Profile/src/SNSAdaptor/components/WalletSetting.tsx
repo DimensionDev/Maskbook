@@ -1,18 +1,18 @@
-import { InjectedDialog } from '@masknet/shared'
+import { InjectedDialog, WalletTypes } from '@masknet/shared'
 import { context } from '../context'
-import { NextIDStoragePayload, PersonaInformation, PopupRoutes } from '@masknet/shared-base'
+import { PersonaInformation, PopupRoutes, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { Box, Button, DialogActions, DialogContent, Tab, Typography } from '@mui/material'
 import { memo, useEffect, useState } from 'react'
-import type { AccountType, WalletTypes } from '../types'
-import { useChainId } from '@masknet/plugin-infra/web3'
+import type { AccountType } from '../types'
+import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
 import { TabContext } from '@mui/lab'
 import { Close as CloseIcon } from '@mui/icons-material'
 import { Icons } from '@masknet/icons'
 import { useI18N } from '../../locales'
+import { PLUGIN_ID } from '../../constants'
 import { Empty } from './Empty'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { getKvPayload, setKvPatchData } from '../utils'
 import { WalletTab } from './WalletTab'
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -121,7 +121,7 @@ const WalletSetting = memo(
         const { classes } = useStyles()
 
         const t = useI18N()
-
+        const { Storage } = useWeb3State()
         const [confirmButtonDisabled, setConfirmButtonDisabled] = useState(true)
         const [visible, setVisible] = useState(!localStorage.getItem('web3_profile_wallet_setting_hint_visible'))
 
@@ -174,19 +174,14 @@ const WalletSetting = memo(
                 },
             }
             try {
-                const payload = await getKvPayload(patch, currentPersona.identifier.publicKeyAsHex, accountId!)
-                const signature = await context.privileged_silentSign()?.(
-                    currentPersona?.identifier,
-                    (payload?.val as NextIDStoragePayload)?.signPayload,
+                if (!Storage || !accountId) return
+                const storage = Storage.createNextIDStorage(
+                    accountId,
+                    NextIDPlatform.Twitter,
+                    currentPersona.identifier,
                 )
 
-                await setKvPatchData(
-                    payload?.val as NextIDStoragePayload,
-                    signature?.signature?.signature,
-                    patch,
-                    currentPersona.identifier.publicKeyAsHex,
-                    accountId!,
-                )
+                await storage.set(PLUGIN_ID, patch)
                 retryData()
                 onClose()
             } catch (err) {

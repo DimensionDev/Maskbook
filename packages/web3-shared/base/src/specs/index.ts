@@ -298,9 +298,11 @@ export interface NonFungibleTokenMetadata<ChainId> {
     mediaURL?: string
     /** source media type */
     mediaType?: string
+    /** project url */
+    projectURL?: string
 }
 
-export interface NonFungibleTokenCollection<ChainId, SchemaType> {
+export interface NonFungibleCollection<ChainId, SchemaType> {
     chainId: ChainId
     name: string
     slug: string
@@ -308,8 +310,11 @@ export interface NonFungibleTokenCollection<ChainId, SchemaType> {
     description?: string
     address?: string
     schema?: SchemaType
-    balance?: number
     iconURL?: string
+    /** the amount of mint tokens */
+    tokensTotal?: number
+    /** the amount of holders */
+    ownersTotal?: number
     /** verified by provider */
     verified?: boolean
     /** unix timestamp */
@@ -326,7 +331,7 @@ export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, Sc
     /** the media metadata */
     metadata?: NonFungibleTokenMetadata<ChainId>
     /** the collection info */
-    collection?: NonFungibleTokenCollection<ChainId, SchemaType>
+    collection?: NonFungibleCollection<ChainId, SchemaType>
 }
 
 export interface NonFungibleTokenTrait {
@@ -712,6 +717,7 @@ export interface Connection<
     ProviderType,
     Signature,
     Block,
+    Operation,
     Transaction,
     TransactionReceipt,
     TransactionDetailed,
@@ -765,7 +771,7 @@ export interface Connection<
         address: string,
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,
-    ): Promise<NonFungibleTokenCollection<ChainId, SchemaType>>
+    ): Promise<NonFungibleCollection<ChainId, SchemaType>>
     /** Get native fungible token balance. */
     getNativeTokenBalance(initial?: Web3ConnectionOptions): Promise<string>
     /** Get fungible token balance. */
@@ -857,6 +863,10 @@ export interface Connection<
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,
     ): Promise<string>
+    /** Call a operation */
+    callOperation?: (operation: Operation, initial?: Web3ConnectionOptions) => Promise<string>
+    /** Send a operation */
+    sendOperation?: (operation: Operation, initial?: Web3ConnectionOptions) => Promise<TransactionSignature>
     /** Sign a transaction */
     signTransaction(transaction: Transaction, initial?: Web3ConnectionOptions): Promise<TransactionSignature>
     /** Sign multiple transactions */
@@ -1070,12 +1080,12 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
     getNonFungibleCollectionsByOwner?: (
         account: string,
         initial?: Web3HubOptions,
-    ) => Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>>>
+    ) => Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>>>
     /** Get non-fungible tokens search by the give keyword. */
     getNonFungibleCollectionsByKeyword?: (
         keyword: string,
         initial?: Web3HubOptions,
-    ) => Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>>>
+    ) => Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>>>
     getNonFungibleRarity?:(
         address: string,
         tokenId: string,
@@ -1155,7 +1165,7 @@ export interface Web3StorageServiceState {
     ) => Storage
     createKVStorage: (namespace: string) => Storage
     createRSS3Storage: (namespace: string) => Storage
-    createNextIDStorage: (proofIdentity: string, platform: NextIDPlatform,personaIdentifier: ECKeyIdentifier,) => Storage
+    createNextIDStorage: (proofIdentity: string, platform: NextIDPlatform, signerOrPublicKey: string | ECKeyIdentifier) => Storage
 }
 
 export interface IdentityServiceState {
@@ -1271,6 +1281,7 @@ export interface ConnectionState<
     ProviderType,
     Signature,
     Block,
+    Operation,
     Transaction,
     TransactionReceipt,
     TransactionDetailed,
@@ -1284,6 +1295,7 @@ export interface ConnectionState<
         ProviderType,
         Signature,
         Block,
+    Operation,
         Transaction,
         TransactionReceipt,
         TransactionDetailed,

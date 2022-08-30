@@ -46,6 +46,7 @@ export type Web3Provider = {}
 export type Signature = string
 export type GasOption = never
 export type Block = BlockObject
+export type Operation = never
 export type Transaction = MutateOptions
 export type TransactionReceipt = never
 export type TransactionDetailed = TransactionObject

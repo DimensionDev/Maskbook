@@ -9,9 +9,10 @@ import {
     NonFungibleTokenContract,
     OrderSide,
     TokenType,
+    resolveIPFSLink,
+    resolveCORSLink,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-solana'
-import { courier } from '../helpers'
 import type { NonFungibleTokenAPI } from '../types'
 import { MAGIC_EDEN_API_URL } from './constants'
 import type {
@@ -22,12 +23,11 @@ import type {
     TokenActivity,
     WalletOffer,
 } from './types'
-import { toImage } from './utils'
 
 async function fetchFromMagicEden<T>(chainId: ChainId, path: string) {
     if (chainId !== ChainId.Mainnet) return
     try {
-        const url = courier(urlcat(MAGIC_EDEN_API_URL, path))
+        const url = resolveCORSLink(urlcat(MAGIC_EDEN_API_URL, path))!
         const response = await fetch(url, {
             method: 'GET',
             headers: { Accept: 'application/json' },
@@ -168,8 +168,8 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                     chainId,
                     name: token?.title,
                     symbol: '',
-                    imageURL: toImage(token.img),
-                    mediaURL: toImage(token.img),
+                    imageURL: resolveIPFSLink(token.img),
+                    mediaURL: resolveIPFSLink(token.img),
                     owner: token.owner,
                 },
                 contract: {
@@ -294,7 +294,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
             slug: collection.symbol,
             address: '',
             symbol: collection.symbol,
-            iconURL: toImage(collection.image),
+            iconURL: resolveIPFSLink(collection.image),
         }))
 
         return createPageable(

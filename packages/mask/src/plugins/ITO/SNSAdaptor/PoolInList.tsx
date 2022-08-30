@@ -205,7 +205,7 @@ export function PoolInList(props: PoolInListProps) {
                         disabled={destructing}
                         fullWidth
                         size="small"
-                        onClick={() => destructCallback(pool.pid)}>
+                        onClick={() => destruct(pool.pid)}>
                         {t('plugin_ito_withdraw')}
                     </ActionButton>
                 ) : canSend ? (

@@ -36,6 +36,7 @@ import { TwitterRenderFragments } from './customization/render-fragments'
 import { injectProfileCover } from './injection/ProfileCover'
 import { injectProfileCardHolder } from './injection/ProfileCard'
 import { injectAvatar } from './injection/Avatar'
+import { injectPluginSettingsDialogAtTwitter } from './injection/PluginSettingsDialog'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -194,6 +195,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         openNFTAvatarSettingDialog,
         avatar: injectAvatar,
         profileCard: injectProfileCardHolder,
+        PluginSettingsDialog: injectPluginSettingsDialogAtTwitter,
     },
     configuration: {
         nextIDConfig: {

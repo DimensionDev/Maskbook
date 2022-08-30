@@ -1,13 +1,14 @@
-import { memo, useMemo } from 'react'
-import formatDistanceToNow from 'date-fns/formatDistanceToNow'
-import { NFTCardStyledAssetPlayer, ReversedAddress, TokenIcon } from '@masknet/shared'
+import { NFTCardStyledAssetPlayer, ReversedAddress } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import type { RSS3BaseAPI } from '@masknet/web3-providers'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { formatTokenId, isZeroAddress, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { RSS3BaseAPI } from '@masknet/web3-providers'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Box, Card, Typography } from '@mui/material'
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import { memo, useMemo } from 'react'
 import { useI18N } from '../../locales'
-import { ChainID, usePatchFeed } from '../hooks/usePatchFeed'
+import type { RSS3Feed } from '../../types'
+import { useNormalizeFeed } from '../hooks'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -66,102 +67,91 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-enum TAG {
-    NFT = 'NFT',
-    Token = 'Token',
-    POAP = 'POAP',
-    Gitcoin = 'Gitcoin',
-    Mirror = 'Mirror Entry',
-    ETH = 'ETH',
-}
-
+const { Tag, Type, MaskNetworkMap } = RSS3BaseAPI
 export interface FeedCardProps {
-    feed: RSS3BaseAPI.Web3Feed
+    feed: RSS3BaseAPI.Activity
     address?: string
-    onSelect: (feed: RSS3BaseAPI.Web3Feed) => void
+    onSelect: (feed: RSS3Feed) => void
 }
 
 export const FeedCard = memo(({ feed, address, onSelect }: FeedCardProps) => {
     const { classes } = useStyles()
     const t = useI18N()
-    const patchedFeed = usePatchFeed(feed)
 
-    const action = useMemo(() => {
+    const action = feed.actions[0]
+    const feedAction = useMemo(() => {
         if (!feed) return
-        if (feed.tags?.includes(TAG.NFT)) {
-            if (isSameAddress(feed.metadata?.from, address)) {
+        if (feed.tag === Tag.Collectible) {
+            if (feed.type === Type.Transfer) {
                 return (
                     <span>
-                        {t.sent_an_NFT_to()}{' '}
+                        {`${t.sent_an_NFT_to()} `}
                         <ReversedAddress
                             TypographyProps={{ display: 'inline' }}
-                            address={feed.metadata?.to ?? ZERO_ADDRESS}
+                            address={action.address_to ?? ZERO_ADDRESS}
                         />
                     </span>
                 )
             }
-            if (isZeroAddress(feed.metadata?.from)) {
-                return t.minted_an_NFT()
-            }
-            if (isSameAddress(feed.metadata?.to, address)) {
+            if (feed.type === Type.Mint) return t.minted_an_NFT()
+            if (feed.type === Type.Trade && isSameAddress(action.address_to, address)) {
                 return (
                     <span>
-                        {t.acquired_an_NFT_from()}{' '}
+                        {`${t.acquired_an_NFT_from()} `}
                         <ReversedAddress
                             TypographyProps={{ display: 'inline' }}
-                            address={feed.metadata?.from ?? ZERO_ADDRESS}
-                        />
-                    </span>
-                )
-            }
-        }
-        if (feed.tags?.includes(TAG.Token) || feed.tags?.includes(TAG.ETH)) {
-            if (isSameAddress(feed.metadata?.from, address)) {
-                return (
-                    <span>
-                        {t.sent_to()}{' '}
-                        <ReversedAddress
-                            TypographyProps={{ display: 'inline' }}
-                            address={feed.metadata?.to ?? ZERO_ADDRESS}
-                        />
-                    </span>
-                )
-            }
-            if (isSameAddress(feed.metadata?.to, address)) {
-                return (
-                    <span>
-                        {t.received_from()}{' '}
-                        <ReversedAddress
-                            TypographyProps={{ display: 'inline' }}
-                            address={feed.metadata?.from ?? ZERO_ADDRESS}
+                            address={action.address_from ?? ZERO_ADDRESS}
                         />
                     </span>
                 )
             }
         }
-        if (feed.tags?.includes(TAG.Gitcoin)) {
-            if (isSameAddress(feed.metadata?.from, address)) {
+        if (feed.tag === Tag.Transaction && feed.type === Type.Transfer) {
+            if (isSameAddress(action.address_from, address)) {
+                return (
+                    <span>
+                        {`${t.sent_to()} `}
+                        <ReversedAddress
+                            TypographyProps={{ display: 'inline' }}
+                            address={action.address_to ?? ZERO_ADDRESS}
+                        />
+                    </span>
+                )
+            }
+            if (isSameAddress(action.address_from, address)) {
+                return (
+                    <span>
+                        {`${t.received_from()} `}
+                        <ReversedAddress
+                            TypographyProps={{ display: 'inline' }}
+                            address={action.address_from ?? ZERO_ADDRESS}
+                        />
+                    </span>
+                )
+            }
+        }
+        if (feed.type === Type.Donate) {
+            if (isSameAddress(action.address_from, address)) {
                 return t.donated()
             }
-            if (isSameAddress(feed.metadata?.to, address)) {
+            if (isSameAddress(action.address_to, address)) {
                 return t.received_donation_from()
             }
         }
-        if (isSameAddress(feed.metadata?.from, address)) {
-            return t.received()
-        }
-        return t.sent()
-    }, [address, feed])
+        return isSameAddress(action.address_to, address) ? t.received() : t.sent()
+    }, [address, feed, t])
 
     const logo = useMemo(() => {
-        if (feed.tags?.includes(TAG.NFT)) {
+        if (feed.tag === Tag.Collectible) {
+            const action = feed.actions[0] as RSS3BaseAPI.ActionGeneric<RSS3BaseAPI.Tag.Collectible>
+            if (action.metadata && !('value' in action.metadata)) return
             return (
                 <Card className={classes.img}>
                     <NFTCardStyledAssetPlayer
-                        contractAddress={feed.metadata?.collection_address}
-                        chainId={ChainID[feed.metadata?.network ?? 'ethereum']}
-                        url={patchedFeed.imageURL}
-                        tokenId={feed.metadata?.token_id}
+                        contractAddress={action.metadata?.contract_address}
+                        chainId={MaskNetworkMap[feed.network ?? 'ethereum']}
+                        url={action.metadata?.image}
+                        tokenId={action.metadata?.value}
                         classes={{
                             fallbackImage: classes.fallbackImage,
                             wrapper: classes.img,
@@ -171,45 +161,32 @@ export const FeedCard = memo(({ feed, address, onSelect }: FeedCardProps) => {
                 </Card>
             )
         }
-        if (feed.tags.includes(TAG.Token) || feed.tags.includes(TAG.ETH)) {
-            return (
-                <TokenIcon
-                    pluginID={NetworkPluginID.PLUGIN_EVM}
-                    chainId={ChainID[feed.metadata?.network ?? 'ethereum']}
-                    address={feed.metadata?.token_address ?? ZERO_ADDRESS}
-                />
-            )
-        }
-        if (feed.tags.includes(TAG.Gitcoin)) {
-            return (
-                <img
-                    className={classes.img}
-                    src={feed.attachments?.find((attachment) => attachment?.type === 'logo')?.address}
-                />
-            )
+        if (feed.tag === Tag.Donation) {
+            const action = feed.actions[0] as RSS3BaseAPI.ActionGeneric<RSS3BaseAPI.Tag.Donation>
+            const logo = action.metadata?.logo
+            return <img className={classes.img} src={logo} />
         }
         return null
     }, [feed])
 
+    const normalizedFeed = useNormalizeFeed(feed)
+
     return (
-        <Box className={classes.wrapper} onClick={() => onSelect(patchedFeed)}>
+        <Box className={classes.wrapper} onClick={() => onSelect(normalizedFeed)}>
             <div className={classes.texts}>
                 <Typography>
                     <span className={classes.action}>
-                        <ReversedAddress TypographyProps={{ display: 'inline' }} address={address!} /> {action}
+                        <ReversedAddress TypographyProps={{ display: 'inline' }} address={address!} /> {feedAction}
                     </span>{' '}
                     <span className={classes.time}>
-                        {formatDistanceToNow(new Date(feed.date_updated))} {t.ago()}
+                        {formatDistanceToNow(new Date(feed.timestamp))} {t.ago()}
                     </span>
                 </Typography>
                 <Box className={classes.collection}>
                     <Typography fontWeight={700} className={classes.summary}>
-                        {patchedFeed.title}
+                        {normalizedFeed.title}
                     </Typography>
-                    <Typography className={classes.summary}>
-                        {patchedFeed.summary}
-                        {formatTokenId(feed.metadata?.token_id ?? '0x00')}
-                    </Typography>
+                    <Typography className={classes.summary}>{normalizedFeed.description}</Typography>
                 </Box>
             </div>
             <Box className={classes.media}>{logo}</Box>

@@ -1,6 +1,4 @@
-import type { NextIDPlatform } from '@masknet/shared-base'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import type { RSS3BaseAPI } from '@masknet/web3-providers'
 
 export enum PageTags {
     WalletTag = 'Wallets',
@@ -38,10 +36,6 @@ export interface GeneralAsset {
     }
 }
 
-export interface GeneralAssetWithTags extends GeneralAsset {
-    tags?: string[]
-}
-
 export interface RSS3Profile {
     avatar: string[]
     bio: string
@@ -52,49 +46,16 @@ export enum AssetType {
     GitcoinDonation = 'Gitcoin-Donation',
     POAP = 'POAP',
 }
-
-export interface CollectionKeys {
-    NFTs: string[]
-    Donations: string[]
-    Footprints: string[]
-    Feeds: string[]
-}
-
-export interface Patch {
-    unListedCollections: Record<string, CollectionKeys>
-    hiddenAddresses: WalletsCollection
-}
-
-export interface WalletsCollection {
-    NFTs?: WalletTypes[]
-    donations?: WalletTypes[]
-    footprints?: WalletTypes[]
-}
-
-export interface CollectionTypes {
-    platform: NetworkPluginID
-    address: string // take id as address if collection is a poap
-    key: string // address + tokenId as unique key of NFT, id as unique key of poap
+/**
+ * Normalized RSS3BaseAPI.Activity
+ */
+export interface RSS3Feed {
+    image: string
+    title?: string
+    relatedURLs?: string[]
+    description?: string
+    network: RSS3BaseAPI.Network
+    metadata?: RSS3BaseAPI.Metadata
+    attributes?: RSS3BaseAPI.Attribute[]
     tokenId?: string
-    iconURL?: string
-    hidden?: boolean
-    name?: string
-    chainId?: ChainId
-}
-export interface WalletTypes {
-    address: string
-    platform?: NetworkPluginID
-    updateTime?: string
-    collections?: CollectionTypes[]
-}
-
-export interface KVType {
-    persona: string
-    proofs: Proof[]
-    hiddenAddresses: WalletsCollection
-}
-export interface Proof {
-    platform: NextIDPlatform
-    identity: string
-    content?: Record<string, Patch>
 }

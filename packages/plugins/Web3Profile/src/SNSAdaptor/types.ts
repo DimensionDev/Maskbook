@@ -1,6 +1,5 @@
 import type { BindingProof, NextIDPlatform, ProfileInformation } from '@masknet/shared-base'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import type { Web3ProfileStorage, WalletsCollection, CollectionTypes } from '@masknet/shared'
 
 export interface GeneralAsset {
     platform: string
@@ -30,33 +29,11 @@ export interface PersonaKV {
     persona: string
     proofs?: Proof[]
 }
-export interface Patch {
-    hiddenAddresses: WalletsCollection
-    unListedCollections: Record<
-        string,
-        {
-            NFTs: string[]
-            Donations: string[]
-            Footprints: string[]
-        }
-    >
-}
 export interface Proof {
     platform: NextIDPlatform
     identity: string
-    content?: Record<string, Patch>
+    content?: Record<string, Web3ProfileStorage>
 }
-export interface CollectionTypes {
-    platform: NetworkPluginID
-    address: string // take id as address if collection is a poap
-    key: string // address + tokenId as unique key of NFT, id as unique key of poap
-    tokenId?: string
-    iconURL?: string
-    hidden?: boolean
-    name?: string
-    chainId?: ChainId
-}
-
 export interface Collection {
     address: string
     collections?: CollectionTypes[]
@@ -68,19 +45,6 @@ export enum AssetType {
 export interface Response {
     status: boolean
     assets: GeneralAsset[]
-}
-
-export interface WalletsCollection {
-    NFTs?: WalletTypes[]
-    donations?: WalletTypes[]
-    footprints?: WalletTypes[]
-}
-
-export interface WalletTypes {
-    address: string
-    platform?: NetworkPluginID
-    updateTime?: string
-    collections?: CollectionTypes[]
 }
 
 export interface AccountType extends BindingProof {

@@ -9,7 +9,7 @@ import {
     isSameAddress,
     NonFungibleAsset,
     NonFungibleToken,
-    NonFungibleTokenCollection,
+    NonFungibleCollection,
     Pageable,
     SourceType,
     Transaction,
@@ -97,7 +97,7 @@ class Hub implements SolanaHub {
     getNonFungibleCollectionsByOwner(
         account: string,
         initial?: HubOptions<ChainId>,
-    ): Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>>> {
+    ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>>> {
         const options = this.getOptions(initial, {
             account,
         })

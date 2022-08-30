@@ -1,25 +1,30 @@
-diff --git a/dist/module.mjs b/dist/module.mjs
+diff --git a/dist/index.js b/dist/index.cjs
+similarity index 100%
+rename from dist/index.js
+rename to dist/index.cjs
+diff --git a/dist/module.js b/dist/module.js
 new file mode 100644
-index 0000000000000000000000000000000000000000..112301f0bcf85de93809b4e5b709fc58bc86d450
+index 0000000000000000000000000000000000000000..b9963190bf91ba384973efc17f5b4f55d6d6ef95
 --- /dev/null
-+++ b/dist/module.mjs
++++ b/dist/module.js
 @@ -0,0 +1,3 @@
-+import lib from "./index.js"
++import lib from "./index.cjs"
 +export const { join, subst, query } = lib;
 +export default lib.default;
 diff --git a/package.json b/package.json
-index 83ab937ed57b6825a43848f62007eebf22c62fae..e64ca94a0ba757ba646bda86d6282f5bb3154aaf 100644
+index 83ab937ed57b6825a43848f62007eebf22c62fae..56c8207c1706a43bf3a31a8422d29fe7dd231d61 100644
 --- a/package.json
 +++ b/package.json
-@@ -1,6 +1,13 @@
+@@ -1,6 +1,14 @@
  {
    "name": "urlcat",
    "version": "2.0.4",
++  "type": "module",
 +  "exports": {
 +    ".": {
 +      "types": "./dist/index.d.ts",
-+      "require": "./dist/index.js",
-+      "import": "./dist/module.mjs"
++      "require": "./dist/index.cjs",
++      "import": "./dist/module.js"
 +    }
 +  },
    "description": "A library for concatenating URL's.",

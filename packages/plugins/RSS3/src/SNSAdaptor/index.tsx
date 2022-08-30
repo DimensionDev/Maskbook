@@ -1,8 +1,10 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { PluginIDContextProvider } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
+import type { BoxProps } from '@mui/material'
 import { base } from '../base'
 import { PLUGIN_ID } from '../constants'
+import type { FootprintsLayoutProps } from './components'
 import { setupContext } from './context'
 import { DonationPage, FeedsPage, FootprintsPage } from './pages'
 
@@ -31,44 +33,61 @@ const DonationsTabConfig: Plugin.SNSAdaptor.ProfileTab = {
         shouldDisplay,
     },
 }
-const FootprintsTabConfig: Plugin.SNSAdaptor.ProfileTab = {
-    ID: `${PLUGIN_ID}_footprints`,
-    label: 'Footprints',
-    priority: 2,
-    UI: {
-        TabContent: ({ socialAddress, identity }) => {
-            return (
-                <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
-                    <FootprintsPage
-                        address={socialAddress?.address ?? ''}
-                        publicKey={identity?.publicKey}
-                        userId={identity?.identifier?.userId ?? ''}
-                    />
-                </PluginIDContextProvider>
-            )
+
+const createFootprintsTabConfig = (props: BoxProps & FootprintsLayoutProps): Plugin.SNSAdaptor.ProfileTab => {
+    return {
+        ID: `${PLUGIN_ID}_footprints`,
+        label: 'Footprints',
+        priority: 2,
+        UI: {
+            TabContent: ({ socialAddress, identity }) => {
+                return (
+                    <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
+                        <FootprintsPage
+                            address={socialAddress?.address ?? ''}
+                            publicKey={identity?.publicKey}
+                            userId={identity?.identifier?.userId ?? ''}
+                            {...props}
+                        />
+                    </PluginIDContextProvider>
+                )
+            },
         },
-    },
-    Utils: {
-        shouldDisplay,
-    },
-}
-const ActivitiesTabConfig: Plugin.SNSAdaptor.ProfileTab = {
-    ID: `${PLUGIN_ID}_feeds`,
-    label: 'Activities',
-    priority: 3,
-    UI: {
-        TabContent: ({ socialAddress }) => {
-            return (
-                <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
-                    <FeedsPage address={socialAddress?.address} />
-                </PluginIDContextProvider>
-            )
+        Utils: {
+            shouldDisplay,
         },
-    },
-    Utils: {
-        shouldDisplay,
-    },
+    }
 }
+const FootprintsTabConfig: Plugin.SNSAdaptor.ProfileTab = createFootprintsTabConfig({})
+const FootprintsTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createFootprintsTabConfig({
+    p: 1.5,
+    layout: 'grid',
+})
+
+const createActivitiesTabConfig = (boxProps: BoxProps): Plugin.SNSAdaptor.ProfileTab => {
+    return {
+        ID: `${PLUGIN_ID}_feeds`,
+        label: 'Activities',
+        priority: 3,
+        UI: {
+            TabContent: ({ socialAddress }) => {
+                return (
+                    <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
+                        <FeedsPage address={socialAddress?.address} {...boxProps} />
+                    </PluginIDContextProvider>
+                )
+            },
+        },
+        Utils: {
+            shouldDisplay,
+        },
+    }
+}
+
+const ActivitiesTabConfig: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig({})
+const ActivitiesTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig({
+    p: 1.5,
+})
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -77,8 +96,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ProfileTabs: [DonationsTabConfig, FootprintsTabConfig, ActivitiesTabConfig],
     ProfileCardTabs: [
-        { ...ActivitiesTabConfig, priority: 1 },
-        { ...FootprintsTabConfig, label: 'POAPs', priority: 3 },
+        { ...ActivitiesTabConfigInProfileCard, priority: 1 },
+        { ...FootprintsTabConfigInProfileCard, label: 'POAPs', priority: 3 },
     ],
 }
 

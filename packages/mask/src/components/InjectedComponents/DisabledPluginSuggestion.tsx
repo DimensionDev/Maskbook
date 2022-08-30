@@ -14,11 +14,14 @@ import { Button, Skeleton, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../utils'
+import { useSubscription } from 'use-subscription'
 
 function useDisabledPlugins() {
     const activated = new Set(useActivatedPluginsSNSAdaptor('any').map((x) => x.ID))
     const minimalMode = new Set(useActivatedPluginsSNSAdaptor(true).map((x) => x.ID))
-    const disabledPlugins = [...registeredPlugins].filter((x) => !activated.has(x.ID) || minimalMode.has(x.ID))
+    const disabledPlugins = useSubscription(registeredPlugins)
+        .filter((plugin) => !activated.has(plugin[0]) || minimalMode.has(plugin[0]))
+        .map((x) => x[1])
     return disabledPlugins
 }
 

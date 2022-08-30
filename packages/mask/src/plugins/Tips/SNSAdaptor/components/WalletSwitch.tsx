@@ -5,7 +5,7 @@ import { useI18N } from '../../../../utils'
 import { ExternalLink } from 'react-feather'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, resolveNextIdWalletName } from '@masknet/web3-shared-base'
+import { NetworkPluginID, resolveNetworkWalletName } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
@@ -66,7 +66,7 @@ export function WalletSwitch({ type, address, isPublic, chainId, onChange }: Wal
         <div className={classes.currentAccount}>
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
-                    <Typography className={classes.accountName}>{resolveNextIdWalletName(type)}</Typography>
+                    <Typography className={classes.accountName}>{resolveNetworkWalletName(type)}</Typography>
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.address} variant="body2" title={address}>

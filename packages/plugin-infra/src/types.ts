@@ -365,7 +365,6 @@ export namespace Plugin.SNSAdaptor {
         lastRecognizedProfile: Subscription<IdentityResolved | undefined>
         currentVisitingProfile: Subscription<IdentityResolved | undefined>
         allPersonas?: Subscription<PersonaInformation[]>
-        privileged_silentSign: () => (signer: ECKeyIdentifier, message: string) => Promise<PersonaSignResult>
         getPersonaAvatar: (identifier: ECKeyIdentifier | null | undefined) => Promise<string | null | undefined>
         ownProofChanged: UnboundedRegistry<void>
         setMinimalMode: (id: string, enabled: boolean) => Promise<void>
@@ -402,6 +401,7 @@ export namespace Plugin.SNSAdaptor {
         Signature = unknown,
         GasOption = unknown,
         Block = unknown,
+        Operation = unknown,
         Transaction = unknown,
         TransactionReceipt = unknown,
         TransactionDetailed = unknown,
@@ -416,10 +416,10 @@ export namespace Plugin.SNSAdaptor {
         PostActions?: InjectUI<{}>
         /** This UI will be rendered for each decrypted post. */
         DecryptedInspector?: InjectUI<{ message: TypedMessage }>
-        /** This UI will be rendered under the Search of the SNS. */
-        SearchResultBox?: InjectUI<{}>
         /** This UI will be rendered into the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
+        /** This UI will be rendered under the Search of the SNS. */
+        SearchResultBox?: SearchResultBox
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
         Web3UI?: Web3Plugin.UI.UI<ChainId, ProviderType, NetworkType>
         /** This is the context of the currently chosen network. */
@@ -431,6 +431,7 @@ export namespace Plugin.SNSAdaptor {
             Signature,
             GasOption,
             Block,
+            Operation,
             Transaction,
             TransactionReceipt,
             TransactionDetailed,
@@ -451,7 +452,9 @@ export namespace Plugin.SNSAdaptor {
         ProfileCardTabs?: ProfileTab[]
         /** This UI will be rendered as cover on the profile page */
         ProfileCover?: ProfileCover[]
-        /** This UI will be rendered as tabs on the profile card */
+        /** This UI will be rendered as tab on the setting dialog */
+        SettingTabs?: SettingTab[]
+        /** This UI will be rendered components on the avatar realm */
         AvatarRealm?: AvatarRealm
         /** This UI will be rendered as plugin wrapper page */
         wrapperProps?: PluginWrapperProps
@@ -575,6 +578,19 @@ export namespace Plugin.SNSAdaptor {
         title?: string
         backgroundGradient?: string
     }
+
+    export interface SearchResultBox {
+        ID: string
+        UI?: {
+            Content?: InjectUI<{
+                keyword: string
+            }>
+        }
+        Utils?: {
+            shouldDisplay?(keyword: string): boolean
+        }
+    }
+
     export enum AvatarRealmSourceType {
         ProfilePage = 'ProfilePage',
         ProfileCard = 'ProfileCard',
@@ -707,6 +723,23 @@ export namespace Plugin.SNSAdaptor {
             sortSocialAddress?(a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>): number
         }
     }
+
+    export interface SettingTab {
+        ID: string
+        /**
+         * The name of setting tab
+         */
+        label: I18NStringField | string
+
+        /**
+         * Used to order the tabs
+         */
+        priority: number
+
+        UI?: {
+            TabContent: InjectUI<{ onClose: () => void }>
+        }
+    }
 }
 
 /** This part runs in the dashboard */
@@ -721,6 +754,7 @@ export namespace Plugin.Dashboard {
         Signature = unknown,
         GasOption = unknown,
         Block = unknown,
+        Operation = unknown,
         Transaction = unknown,
         TransactionReceipt = unknown,
         TransactionDetailed = unknown,
@@ -742,6 +776,7 @@ export namespace Plugin.Dashboard {
             Signature,
             GasOption,
             Block,
+            Operation,
             Transaction,
             TransactionReceipt,
             TransactionDetailed,

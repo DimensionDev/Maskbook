@@ -1,5 +1,5 @@
-import { first } from 'lodash-unified'
 import urlcat from 'urlcat'
+import { first } from 'lodash-unified'
 import {
     createIndicator,
     createNextIndicator,
@@ -8,12 +8,7 @@ import {
     NonFungibleAsset,
     TokenType,
 } from '@masknet/web3-shared-base'
-import {
-    ChainId as ChainId_EVM,
-    resolveIPFSLinkFromURL,
-    resolveOpenSeaLink,
-    SchemaType as SchemaType_EVM,
-} from '@masknet/web3-shared-evm'
+import { ChainId, ChainId as ChainId_EVM, SchemaType as SchemaType_EVM } from '@masknet/web3-shared-evm'
 import type { NonFungibleTokenAPI } from '../../types'
 import { fetchJSON } from '../../helpers'
 import { Alchemy_EVM_NetworkMap } from '../constants'
@@ -25,6 +20,19 @@ import type {
     AlchemyResponse_EVM_Owners,
 } from '../types'
 import { formatAlchemyTokenId } from '../helpers'
+
+function createNonFungibleTokenLink(chainId: ChainId, address: string, tokenId: string) {
+    if (chainId === ChainId.Matic) {
+        return urlcat('https://opensea.io/assets/matic/:address/:tokenId', {
+            address,
+            tokenId,
+        })
+    }
+    return urlcat('https://opensea.io/assets/:address/:tokenId', {
+        address,
+        tokenId,
+    })
+}
 
 function createNonFungibleToken(
     chainId: ChainId_EVM,
@@ -39,21 +47,18 @@ function createNonFungibleToken(
         schema: asset.id?.tokenMetadata?.tokenType === 'ERC721' ? SchemaType_EVM.ERC721 : SchemaType_EVM.ERC1155,
         tokenId,
         address: contractAddress,
-        link: resolveOpenSeaLink(contractAddress, tokenId, chainId),
+        link: createNonFungibleTokenLink(chainId, contractAddress, tokenId),
         metadata: {
             chainId,
             name: asset.metadata.name ?? asset.title,
             description: asset.metadata.description || asset.description,
-            imageURL: resolveIPFSLinkFromURL(
+            imageURL:
                 asset.metadata.image ||
-                    asset.metadata.image_url ||
-                    asset.media?.[0]?.gateway ||
-                    asset.metadata.animation_url ||
-                    '',
-            ),
-            mediaURL: resolveIPFSLinkFromURL(
+                asset.metadata.image_url ||
+                asset.media?.[0]?.gateway ||
+                asset.metadata.animation_url,
+            mediaURL:
                 asset.media?.[0]?.gateway ?? asset.media?.[0]?.raw ?? asset.metadata.image_url ?? asset.metadata.image,
-            ),
         },
         contract: {
             chainId,
@@ -95,13 +100,11 @@ function createNonFungibleAsset(
                 metaDataResponse.title,
             symbol: contractMetadataResponse?.contractMetadata?.symbol ?? '',
             description: metaDataResponse.description,
-            imageURL: resolveIPFSLinkFromURL(
+            imageURL:
                 metaDataResponse.metadata?.image ||
-                    metaDataResponse.media?.[0]?.gateway ||
-                    metaDataResponse.media?.[0]?.raw ||
-                    '',
-            ),
-            mediaURL: resolveIPFSLinkFromURL(metaDataResponse.media?.[0]?.gateway),
+                metaDataResponse.media?.[0]?.gateway ||
+                metaDataResponse.media?.[0]?.raw,
+            mediaURL: metaDataResponse.media?.[0]?.gateway,
         },
         contract: {
             chainId,
@@ -125,7 +128,7 @@ function createNonFungibleAsset(
             slug: contractMetadataResponse?.contractMetadata?.symbol ?? '',
             description: metaDataResponse.description,
         },
-        link: resolveOpenSeaLink(metaDataResponse.contract?.address, metaDataResponse.id?.tokenId, chainId),
+        link: createNonFungibleTokenLink(chainId, metaDataResponse.contract?.address, metaDataResponse.id?.tokenId),
         owner: {
             address: first(ownersResponse?.owners),
         },

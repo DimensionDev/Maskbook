@@ -3,8 +3,14 @@ import { useAsync } from 'react-use'
 import classNames from 'classnames'
 import { makeStyles, parseColor, useStylesExtends } from '@masknet/theme'
 import { Box, CircularProgress, useTheme } from '@mui/material'
+import { resolveCORSLink, resolveIPFSLink } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
+    container: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     circle: {
         color: parseColor(theme.palette.maskColor.main).setAlpha(0.5).toRgbString(),
     },
@@ -15,25 +21,26 @@ const useStyles = makeStyles()((theme) => ({
     spinContainer: {
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
         position: 'relative',
     },
 }))
 
 interface ImageProps
     extends ImgHTMLAttributes<HTMLImageElement>,
-        withClasses<'fallbackImage' | 'imageLoading' | 'imageLoadingBox'> {
+        withClasses<'container' | 'fallbackImage' | 'imageLoading'> {
     fallbackImage?: URL
 }
 
-export function Image({ fallbackImage, ...rest }: ImageProps) {
-    const classes = useStylesExtends(useStyles(), rest)
+export function Image({ fallbackImage, classes: externalClasses, ...rest }: ImageProps) {
+    const classes = useStylesExtends(useStyles(), { classes: externalClasses })
     const theme = useTheme()
-    const fallbackImageURL =
-        fallbackImage ??
-        (theme.palette.mode === 'dark'
-            ? new URL('./nft_token_fallback_dark.png', import.meta.url)
-            : new URL('./nft_token_fallback.png', import.meta.url))
+    const fallbackImageURL = resolveCORSLink(
+        resolveIPFSLink(fallbackImage?.toString()) ??
+            (theme.palette.mode === 'dark'
+                ? new URL('./nft_token_fallback_dark.png', import.meta.url).toString()
+                : new URL('./nft_token_fallback.png', import.meta.url)
+            ).toString(),
+    )
 
     const { value: image, loading: imageLoading } = useAsync(async () => {
         if (!rest.src) return
@@ -47,7 +54,7 @@ export function Image({ fallbackImage, ...rest }: ImageProps) {
 
     if (imageLoading) {
         return (
-            <Box className={classes.imageLoadingBox}>
+            <Box className={classes.container}>
                 <Box className={classes.spinContainer}>
                     <CircularProgress
                         variant="determinate"
@@ -67,19 +74,15 @@ export function Image({ fallbackImage, ...rest }: ImageProps) {
 
     if (image) {
         return (
-            <Box className={classes.imageLoadingBox}>
+            <Box className={classes.container}>
                 <img crossOrigin="anonymous" {...rest} src={image} />
             </Box>
         )
     }
 
     return (
-        <Box className={classes.imageLoadingBox}>
-            <img
-                {...rest}
-                src={fallbackImageURL.toString()}
-                className={classNames(classes.failImage, classes.fallbackImage)}
-            />
+        <Box className={classes.container}>
+            <img {...rest} src={fallbackImageURL} className={classNames(classes.failImage, classes.fallbackImage)} />
         </Box>
     )
 }

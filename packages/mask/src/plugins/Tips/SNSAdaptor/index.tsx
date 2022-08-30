@@ -79,6 +79,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
         })(),
     ],
+    SettingTabs: [
+        {
+            ID: PluginId.Tips,
+            label: 'Tips',
+            priority: 1,
+        },
+    ],
     GlobalInjection() {
         return (
             <RootContext>

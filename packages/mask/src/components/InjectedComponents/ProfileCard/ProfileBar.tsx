@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
 import { AddressItem, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import {
@@ -9,11 +9,14 @@ import {
     SocialAddressType,
     SocialIdentity,
 } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Link, MenuItem, Typography } from '@mui/material'
-import { memo, useRef, useState } from 'react'
+import { HTMLProps, memo, useRef, useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { useI18N } from '../../../utils'
 
+const MENU_ITEM_HEIGHT = 40
+const MENU_LIST_PADDING = 8
 const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
@@ -32,40 +35,50 @@ const useStyles = makeStyles()((theme) => ({
         backdropFilter: 'blur(16px)',
     },
     description: {
+        height: 40,
         marginLeft: 10,
+        overflow: 'auto',
     },
     nickname: {
-        display: 'flex',
-        alignItems: 'center',
-        columnGap: 4,
         color: theme.palette.text.primary,
         fontWeight: 700,
-        fontSize: 14,
-        lineHeight: '18px',
+        fontSize: 18,
+        lineHeight: '22px',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
     },
-    address: {
-        color: theme.palette.text.primary,
+    addressRow: {
         fontSize: 14,
-        lineHeight: '18px',
         display: 'flex',
         alignItems: 'center',
         columnGap: 2,
     },
+    address: {
+        color: theme.palette.text.primary,
+        fontSize: 14,
+        height: 18,
+        lineHeight: '18px',
+    },
+    linkIcon: {
+        lineHeight: '14px',
+        height: 14,
+        overflow: 'hidden',
+        color: theme.palette.text.secondary,
+        cursor: 'pointer',
+    },
+    addressMenu: {
+        maxHeight: MENU_ITEM_HEIGHT * 10 + MENU_LIST_PADDING * 2,
+        width: 248,
+        backgroundColor: theme.palette.maskColor.bottom,
+    },
     menuItem: {
+        height: MENU_ITEM_HEIGHT,
+        boxSizing: 'border-box',
         display: 'flex',
         alignItems: 'center',
         flexGrow: 1,
         justifyContent: 'space-between',
-    },
-    linkIcon: {
-        color: theme.palette.text.secondary,
-        cursor: 'pointer',
-        height: 14,
-    },
-    addressMenu: {
-        maxHeight: 192,
-        width: 248,
-        backgroundColor: theme.palette.maskColor.bottom,
     },
     addressItem: {
         display: 'flex',
@@ -80,13 +93,11 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ProfileBarProps {
+export interface ProfileBarProps extends HTMLProps<HTMLDivElement> {
     identity: SocialIdentity
     socialAddressList: Array<SocialAddress<NetworkPluginID>>
     address?: string
-    onClick?: (ev: React.MouseEvent<HTMLDivElement>) => void
     onAddressChange?: (address: string) => void
-    addressLink?: string
 }
 
 /**
@@ -95,10 +106,10 @@ export interface ProfileBarProps {
  * - Wallets
  */
 export const ProfileBar = memo<ProfileBarProps>(
-    ({ onClick, socialAddressList, address, identity, addressLink, onAddressChange }) => {
-        const { classes } = useStyles()
+    ({ socialAddressList, address, identity, onAddressChange, className, ...rest }) => {
+        const { classes, theme, cx } = useStyles()
         const { t } = useI18N()
-        const nicknameRef = useRef<HTMLDivElement>(null)
+        const containerRef = useRef<HTMLDivElement>(null)
 
         const [, copyToClipboard] = useCopyToClipboard()
 
@@ -111,35 +122,45 @@ export const ProfileBar = memo<ProfileBarProps>(
         const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
         const [walletMenuOpen, setWalletMenuOpen] = useState(false)
-
-        const formattedAddress = Others?.formatAddress(address ?? '', 4) ?? ''
+        const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+        const selectedAddress = socialAddressList.find((x) => isSameAddress(x.address, address))
 
         return (
-            <Box onClick={onClick} className={classes.root}>
+            <Box className={cx(classes.root, className)} {...rest} ref={containerRef}>
                 <img src={identity.avatar} alt={identity.nickname} className={classes.avatar} />
-                <Box className={classes.description} ref={nicknameRef}>
-                    <Typography className={classes.nickname}>
-                        <span>{identity.nickname}</span>
+                <Box className={classes.description}>
+                    <Typography className={classes.nickname} title={identity.nickname}>
+                        {identity.nickname}
                     </Typography>
-                    <Typography className={classes.address}>
-                        <span title={address}>{formattedAddress}</span>
-                        {address ? <Icons.PopupCopy onClick={onCopy} size={14} className={classes.linkIcon} /> : null}
-                        <Link
-                            href={addressLink}
-                            target="_blank"
-                            title="View on Explorer"
-                            rel="noopener noreferrer"
-                            onClick={(event) => {
-                                event.stopPropagation()
-                            }}
-                            className={classes.linkIcon}>
-                            <Icons.LinkOut size={14} className={classes.linkIcon} />
-                        </Link>
-                        <Icons.ArrowDrop size={14} onClick={() => setWalletMenuOpen((v) => !v)} />
-                    </Typography>
+                    {address ? (
+                        <div className={classes.addressRow}>
+                            <AddressItem
+                                socialAddress={selectedAddress}
+                                disableLinkIcon
+                                TypographyProps={{ className: classes.address }}
+                            />
+                            <Icons.PopupCopy onClick={onCopy} size={14} className={classes.linkIcon} />
+                            <Link
+                                href={Others?.explorerResolver.addressLink(chainId ?? ChainId.Mainnet, address)}
+                                target="_blank"
+                                title={t('view_on_explorer')}
+                                rel="noopener noreferrer"
+                                onClick={(event) => {
+                                    event.stopPropagation()
+                                }}
+                                className={classes.linkIcon}>
+                                <Icons.LinkOut size={14} />
+                            </Link>
+                            <Icons.ArrowDrop
+                                size={14}
+                                color={theme.palette.text.primary}
+                                onClick={() => setWalletMenuOpen((v) => !v)}
+                            />
+                        </div>
+                    ) : null}
                 </Box>
                 <ShadowRootMenu
-                    anchorEl={nicknameRef.current}
+                    anchorEl={containerRef.current}
                     open={walletMenuOpen}
                     disablePortal
                     PaperProps={{
@@ -147,26 +168,19 @@ export const ProfileBar = memo<ProfileBarProps>(
                     }}
                     onClose={() => setWalletMenuOpen(false)}>
                     {socialAddressList.map((x) => {
-                        const reversible = [
-                            SocialAddressType.KV,
-                            SocialAddressType.ADDRESS,
-                            SocialAddressType.NEXT_ID,
-                        ].includes(x.type)
                         return (
-                            <MenuItem key={x.address} value={x.address} onClick={() => onAddressChange?.(x.address)}>
-                                <div className={classes.menuItem}>
-                                    <div className={classes.addressItem}>
-                                        <AddressItem
-                                            reverse={reversible}
-                                            identityAddress={x}
-                                            iconProps={classes.secondLinkIcon}
-                                        />
-                                        {x?.type === SocialAddressType.NEXT_ID && <Icons.Verified />}
-                                    </div>
-                                    {isSameAddress(address, x.address) && (
-                                        <Icons.Selected className={classes.selectedIcon} />
-                                    )}
+                            <MenuItem
+                                className={classes.menuItem}
+                                key={x.address}
+                                value={x.address}
+                                onClick={() => onAddressChange?.(x.address)}>
+                                <div className={classes.addressItem}>
+                                    <AddressItem socialAddress={x} linkIconClassName={classes.secondLinkIcon} />
+                                    {x.type === SocialAddressType.NEXT_ID && <Icons.Verified />}
                                 </div>
+                                {isSameAddress(address, x.address) && (
+                                    <Icons.CheckCircle className={classes.selectedIcon} />
+                                )}
                             </MenuItem>
                         )
                     })}

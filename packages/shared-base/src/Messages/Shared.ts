@@ -7,6 +7,7 @@ import type {
     OpenApplicationRequestEvent,
     SwapDialogEvent,
     OpenProfileCardEvent,
+    SettingDialogEvent,
     OpenNFTDialogEvent,
 } from './Mask.js'
 
@@ -30,7 +31,8 @@ export interface CrossIsolationEvents {
     requestCheckSecurityCloseConfirmDialog: CheckSecurityCloseConfirmDialogRequest
     requestCheckSecurityDialog: CheckSecurityDialogRequest
     requestOpenApplication: OpenApplicationRequestEvent
-    requestNFTCardDialog: OpenNFTDialogEvent
     swapDialogUpdate: SwapDialogEvent
+    PluginSettingsDialogUpdate: SettingDialogEvent
     requestOpenProfileCard: OpenProfileCardEvent
+    requestNFTCardDialog: OpenNFTDialogEvent
 }

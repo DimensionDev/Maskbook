@@ -4,14 +4,14 @@ import.meta.webpackHot && import.meta.webpackHot.accept()
 
 const PluginFileServiceMessage = createPluginMessage<{ _: unknown; _2: unknown }>(PluginId.FileService)
 
-export const PluginFileServiceRPC = createPluginRPC<Omit<typeof import('./service'), 'upload' | 'setupDatabase'>>(
+export const PluginFileServiceRPC = createPluginRPC<Omit<typeof import('./service.js'), 'upload' | 'setupDatabase'>>(
     PluginId.FileService,
-    () => import('./service').then(({ upload, setupDatabase, ...rest }) => rest),
+    () => import('./service.js').then(({ upload, setupDatabase, ...rest }) => rest),
     PluginFileServiceMessage._,
 )
 
 export const PluginFileServiceRPCGenerator = createPluginRPCGenerator(
     PluginId.FileService,
-    () => import('./service').then(({ upload }) => ({ upload })),
+    () => import('./service.js').then(({ upload }) => ({ upload })),
     PluginFileServiceMessage._2,
 )

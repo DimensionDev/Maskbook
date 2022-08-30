@@ -10,8 +10,8 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, SocialIdentity } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
-import { Box, CircularProgress, Tab, Typography } from '@mui/material'
-import { first } from 'lodash-unified'
+import { CircularProgress, Tab, Typography } from '@mui/material'
+import { first, uniqBy } from 'lodash-unified'
 import { FC, useEffect, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { useUpdateEffect } from 'react-use'
@@ -37,6 +37,11 @@ const useStyles = makeStyles()((theme) => {
             flexDirection: 'column',
             overflow: 'auto',
             height: '100%',
+        },
+        loading: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
         },
         header: {
             background: isDark
@@ -136,18 +141,19 @@ const useStyles = makeStyles()((theme) => {
             backdropFilter: 'blur(10px)',
             padding: theme.spacing(1.5),
             boxSizing: 'border-box',
-            fontSize: 14,
             fontWeight: 700,
             zIndex: 2,
         },
         powerBy: {
             color: theme.palette.text.secondary,
+            fontSize: 14,
+            fontWeight: 700,
         },
     }
 })
 
 export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
-    const { classes } = useStyles(undefined, { props: { classes: rest.classes } })
+    const { classes, cx } = useStyles(undefined, { props: { classes: rest.classes } })
 
     const translate = usePluginI18NField()
     const {
@@ -157,7 +163,10 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
     } = useSocialAddressListAll(identity, undefined, sorter)
 
     const availableSocialAddressList = useMemo(() => {
-        return socialAddressList.filter((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM)
+        return uniqBy(
+            socialAddressList.filter((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM),
+            (x) => x.address.toLowerCase(),
+        )
     }, [socialAddressList])
 
     const [selectedAddress, setSelectedAddress] = useState<string>()
@@ -209,14 +218,8 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
 
     if (!userId || loadingSocialAddressList)
         return (
-            <div className={classes.root}>
-                <Box
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    sx={{ paddingTop: 4, paddingBottom: 4 }}>
-                    <CircularProgress />
-                </Box>
+            <div className={cx(classes.root, classes.loading)}>
+                <CircularProgress />
             </div>
         )
 
@@ -250,8 +253,10 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
                         components={{
                             span: (
                                 <Typography
+                                    fontWeight={700}
+                                    fontSize="inherit"
                                     variant="body1"
-                                    component="span"
+                                    component="strong"
                                     color={(theme) => theme.palette.text.primary}
                                 />
                             ),

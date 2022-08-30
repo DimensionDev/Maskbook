@@ -8,14 +8,13 @@ import { PLUGIN_ID } from './constants'
 export type ApplicationDialogEvent = {
     open: boolean
     settings?: {
+        // When quickMode is enabled,
+        // closing the Setting dialog will not return to ApplicationBoard normal dialog
+        quickMode?: boolean
         switchTab?: {
             focusPluginId?: PluginId
         }
     }
-}
-
-export type ApplicationPersonaListDialogEvent = {
-    open: boolean
 }
 
 export type SelectProviderDialogEvent =

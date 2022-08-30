@@ -68,7 +68,9 @@ export const searchFacebookAvatarContainerSelector = () =>
     querySelector('div[data-pagelet="ProfileActions"] > div > div')
 
 export const searchFacebookProfileSettingButtonSelector = () =>
-    querySelector('[role="button"] [role="img"]').closest(10).querySelector('input[type="file"] ~ div').closest<E>(2)
+    querySelector(
+        '[role="main"] > div > div > div > div > div > div:last-child > div:last-child > div input',
+    ).closest<E>(2)
 
 export const searchFacebookProfileCoverSelector = () =>
     querySelector('[role="button"] [role="img"]')
@@ -129,11 +131,11 @@ export const profileSectionSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="main"]').querySelector('[style]')
 
 export const searchIntroSectionSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-pagelet="ProfileTilesFeed_0"]')
+    querySelector<E>('[role="main"] > div:last-child > div:last-child')
 
-export const searchBioSelector: () => LiveSelector<HTMLSpanElement, true> = () =>
-    querySelector<HTMLSpanElement>(
-        '[data-pagelet="ProfileTilesFeed_0"] > div > div > div > div > div:last-child span[dir="auto"]',
+export const searchBioSelector = () =>
+    searchIntroSectionSelector().querySelector<E>(
+        'div > div > div:last-child > div > div > div > div > div > div > div:nth-child(2) > div span',
     )
 
 export const searchResultHeadingSelector = () => querySelector('[role="article"]')
