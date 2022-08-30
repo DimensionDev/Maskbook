@@ -16,7 +16,6 @@ const useStyles = makeStyles<{}, 'listItem' | 'card' | 'cardImage'>()((theme, _,
             padding: 0,
             gridTemplateColumns: 'repeat(3, 1fr)',
             [`& .${refs.listItem}`]: {
-                borderRadius: '100%',
                 aspectRatio: '1 / 1',
                 padding: 0,
                 display: 'flex',
@@ -31,6 +30,8 @@ const useStyles = makeStyles<{}, 'listItem' | 'card' | 'cardImage'>()((theme, _,
                 backgroundColor: 'transparent',
                 height: 120,
                 width: 120,
+                overflow: 'hidden',
+                borderRadius: '100%',
             },
         },
         listItem: {},
@@ -49,7 +50,7 @@ export const FootprintList: FC<Props> = ({ className, footprints, onSelect, layo
     return (
         <List {...rest} className={isGrid ? classes.grid : classes.list}>
             {footprints.map((footprint) => (
-                <ListItem className={classes.listItem} key={footprint.index}>
+                <ListItem className={classes.listItem} key={footprint.timestamp}>
                     {isGrid ? (
                         <Tooltip
                             title={footprint.actions[0].metadata?.name ?? ''}
