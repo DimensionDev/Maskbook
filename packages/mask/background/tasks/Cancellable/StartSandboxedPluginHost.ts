@@ -1,10 +1,10 @@
 import { hmr } from '../../../utils-pure'
 import { BackgroundInstance, BackgroundPluginHost } from '@masknet/sandboxed-plugin-runtime/background'
 import { Flags } from '../../../shared/flags'
-import { MessageTarget, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { Plugin, registerPlugin } from '@masknet/plugin-infra'
 import { None, Result, Some } from 'ts-results'
 import { createPluginDatabase } from '../../database/plugin-db'
+import { createHostAPIs } from '../../../shared/sandboxed-plugin/host-api'
 
 const { signal } = hmr(import.meta.webpackHot)
 let hot: Map<string, (hot: Promise<{ default: Plugin.Worker.Definition }>) => void> | undefined
@@ -16,29 +16,7 @@ if (process.env.NODE_ENV === 'development') {
 if (Flags.sandboxedPluginRuntime) {
     const host = new BackgroundPluginHost(
         {
-            async getPluginList() {
-                const plugins = await fetch('/sandboxed-modules/plugins.json').then((x) => x.json())
-                return Object.entries(plugins)
-            },
-            async fetchManifest(id, isLocal) {
-                const prefix: string = isLocal ? 'local-plugin' : 'plugin'
-                const manifestPath = `/sandboxed-modules/${prefix}-${id}/mask-manifest.json`
-                const manifestURL = new URL(manifestPath, location.href)
-                if (manifestURL.pathname !== manifestPath) throw new TypeError('Plugin ID is invalid.')
-                return fetch(manifestPath).then((x) => x.json())
-            },
-            // TODO: support signal
-            createRpcChannel(id) {
-                return new WebExtensionMessage<{ f: any }>({ domain: `mask-plugin-${id}-rpc` }).events.f.bind(
-                    MessageTarget.Broadcast,
-                )
-            },
-            // TODO: support signal
-            createRpcGeneratorChannel(id) {
-                return new WebExtensionMessage<{ g: any }>({ domain: `mask-plugin-${id}-rpc` }).events.g.bind(
-                    MessageTarget.Broadcast,
-                )
-            },
+            ...createHostAPIs(),
             createTaggedStorage: createPluginDatabase,
         },
         process.env.NODE_ENV === 'development',
