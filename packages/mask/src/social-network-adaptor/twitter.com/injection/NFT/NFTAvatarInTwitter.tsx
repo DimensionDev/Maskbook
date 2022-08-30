@@ -17,12 +17,10 @@ import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet'
 import { useNFT, useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks'
 import { NFTCardStyledAssetPlayer, useShowConfirm } from '@masknet/shared'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
-import type { EnhanceableSite, NFTAvatarEvent } from '@masknet/shared-base'
+import { EnhanceableSite, NFTAvatarEvent, CrossIsolationMessages } from '@masknet/shared-base'
 import { Box, Typography } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { NFTCardMessage } from '../../../../plugins/NFTCard/messages'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -66,7 +64,6 @@ function NFTAvatarInTwitter() {
         RSS3_KEY_SNS.TWITTER,
     )
     const account = useAccount()
-    const { setDialog: setNFTCardDialog } = useRemoteControlledDialog(NFTCardMessage.events.nftCardDialogUpdated)
     const { loading: loadingWallet, value: storage } = useWallet(nftAvatar?.userId)
     const { value: nftInfo, loading: loadingNFTInfo } = useNFT(
         storage?.address ?? account,
@@ -222,11 +219,12 @@ function NFTAvatarInTwitter() {
 
         const handler = (event: MouseEvent) => {
             if (!nftAvatar.tokenId || !nftAvatar.address) return
-            setNFTCardDialog({
+            CrossIsolationMessages.events.requestNFTCardDialog.sendToLocal({
                 open: true,
                 address: nftAvatar.address,
                 tokenId: nftAvatar.tokenId,
             })
+
             event.stopPropagation()
             event.preventDefault()
         }

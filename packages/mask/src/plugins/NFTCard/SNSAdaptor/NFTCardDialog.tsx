@@ -1,12 +1,11 @@
 import { useChainIdValid } from '@masknet/plugin-infra/web3'
 import { InjectedDialog } from '@masknet/shared'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { MaskTabList, useTabs } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { TabContext } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { NFTCardMessage } from '../messages'
 import { NFTCardDialogUI } from './NFTCardDialogUI'
 import { useStyles } from '../useStyles'
 import { useNFTCardInfo } from './hooks/useNFTCardInfo'
@@ -22,14 +21,7 @@ export function NFTCardDialog() {
     const [tokenId, setTokenId] = useState('')
     const [tokenAddress, setTokenAddress] = useState('')
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
-    const { open: remoteOpen, closeDialog } = useRemoteControlledDialog(
-        NFTCardMessage.events.nftCardDialogUpdated,
-        (ev) => {
-            if (!ev.open) return
-            setTokenId(ev.tokenId)
-            setTokenAddress(ev.address)
-        },
-    )
+    const [open, setOpen] = useState(false)
     const { asset, orders, events, rarity, provider, setProvider } = useNFTCardInfo(tokenAddress, tokenId)
 
     const [currentTab, onChange] = useTabs<NFTCardDialogTabs>(
@@ -39,15 +31,20 @@ export function NFTCardDialog() {
     )
 
     useEffect(() => {
-        if (!chainIdValid) closeDialog
-    }, [chainIdValid, closeDialog])
+        if (!chainIdValid) setOpen(false)
+        return CrossIsolationMessages.events.requestNFTCardDialog.on(({ open, address, tokenId }) => {
+            setOpen(open)
+            setTokenAddress(address)
+            setTokenId(tokenId)
+        })
+    }, [chainIdValid])
 
     return (
         <TabContext value={currentTab}>
             <InjectedDialog
-                open={remoteOpen}
+                open={open}
                 title="NFT Details"
-                onClose={closeDialog}
+                onClose={() => setOpen(false)}
                 classes={{ paper: classes.dialogRoot }}
                 titleTabs={
                     <MaskTabList variant="base" onChange={onChange} aria-label="NFTCard">

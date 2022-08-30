@@ -89,7 +89,11 @@ export enum EncryptionTargetType {
 export interface NFTAvatarSettingDialogEvent {
     open: boolean
 }
-
+export interface OpenNFTDialogEvent {
+    open: boolean
+    tokenId: string
+    address: string
+}
 export interface SettingsUpdateEvent {
     id: number
     key: string
