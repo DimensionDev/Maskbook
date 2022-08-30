@@ -6,7 +6,7 @@ import {
     isSameProfile,
     BindingProof,
     PersonaInformation,
-    convertNextIDIdentityToProfile,
+    resolveNextIDIdentityToProfile,
 } from '@masknet/shared-base'
 import Services from '../../extension/service'
 import { currentPersonaIdentifier, currentSetupGuideStatus } from '../../../shared/legacy-settings/settings'
@@ -168,7 +168,7 @@ export function useCurrentPersonaConnectStatus() {
             const verifiedProfile = nextIDInfo?.proofs.find(
                 (x) =>
                     // TODO: should move to next id api center, link the MF-1845
-                    isSameProfile(convertNextIDIdentityToProfile(x.identity, x.platform), currentProfile?.identifier) &&
+                    isSameProfile(resolveNextIDIdentityToProfile(x.identity, x.platform), currentProfile?.identifier) &&
                     x.is_valid,
             )
 

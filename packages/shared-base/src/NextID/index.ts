@@ -2,7 +2,7 @@ import { NextIDPlatform, ProfileIdentifier } from '../index.js'
 import { EnhanceableSite } from '../Site/type.js'
 import { createLookupTableResolver } from '../utils/index.js'
 
-export const convertNextIDPlatformToNetwork = createLookupTableResolver<NextIDPlatform, EnhanceableSite | undefined>(
+export const resolveNextIDPlatformToNetwork = createLookupTableResolver<NextIDPlatform, EnhanceableSite | undefined>(
     {
         [NextIDPlatform.Ethereum]: undefined,
         [NextIDPlatform.GitHub]: undefined,
@@ -12,7 +12,7 @@ export const convertNextIDPlatformToNetwork = createLookupTableResolver<NextIDPl
     undefined,
 )
 
-export const convertNetworkToNextIDPlatform = createLookupTableResolver<EnhanceableSite, NextIDPlatform | undefined>(
+export const resolveNetworkToNextIDPlatform = createLookupTableResolver<EnhanceableSite, NextIDPlatform | undefined>(
     {
         [EnhanceableSite.Facebook]: undefined,
         [EnhanceableSite.Instagram]: undefined,
@@ -24,8 +24,8 @@ export const convertNetworkToNextIDPlatform = createLookupTableResolver<Enhancea
     undefined,
 )
 
-export function convertNextIDIdentityToProfile(nextIDIdentity: string, platform: NextIDPlatform) {
-    const network = convertNextIDPlatformToNetwork(platform)
+export function resolveNextIDIdentityToProfile(nextIDIdentity: string, platform: NextIDPlatform) {
+    const network = resolveNextIDPlatformToNetwork(platform)
     if (!network) return
 
     return ProfileIdentifier.of(network, nextIDIdentity).unwrap()

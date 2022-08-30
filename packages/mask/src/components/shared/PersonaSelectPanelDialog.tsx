@@ -1,6 +1,6 @@
 import { Button, DialogContent, Stack, Typography } from '@mui/material'
 import {
-    convertNextIDIdentityToProfile,
+    resolveNextIDIdentityToProfile,
     CrossIsolationMessages,
     DashboardRoutes,
     EMPTY_LIST,
@@ -166,7 +166,7 @@ export const PersonaSelectPanelDialog = () => {
         if (!isSamePersona(selectedPersona.persona, currentPersonaIdentifier)) isConnected = false
 
         const verifiedSns = selectedPersona.proof.find((x) =>
-            isSameProfile(convertNextIDIdentityToProfile(x.identity, x.platform), currentProfileIdentify.identifier),
+            isSameProfile(resolveNextIDIdentityToProfile(x.identity, x.platform), currentProfileIdentify.identifier),
         )
         if (!verifiedSns) {
             isVerified = false
