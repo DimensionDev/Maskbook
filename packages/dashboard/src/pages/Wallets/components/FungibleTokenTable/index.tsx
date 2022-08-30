@@ -9,11 +9,11 @@ import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { FungibleTokenTableRow } from '../FungibleTokenTableRow'
 import { DashboardRoutes, EMPTY_LIST, CrossIsolationMessages } from '@masknet/shared-base'
 import {
-    calcBalance,
     CurrencyType,
     FungibleAsset,
     isGreaterThanOrEqualTo,
     isLessThan,
+    leftShift,
     minus,
     NetworkPluginID,
     toZero,
@@ -292,8 +292,8 @@ export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading
                             <TableBody>
                                 {dataSource
                                     .sort((first, second) => {
-                                        const firstValue = calcBalance(first.balance, first.decimals)
-                                        const secondValue = calcBalance(second.balance, second.decimals)
+                                        const firstValue = leftShift(first.balance, first.decimals)
+                                        const secondValue = leftShift(second.balance, second.decimals)
                                         if (firstValue.isEqualTo(secondValue)) return 0
                                         return Number(firstValue.lt(secondValue))
                                     })

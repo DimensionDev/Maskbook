@@ -27,7 +27,6 @@ import {
     useWeb3State,
 } from '@masknet/plugin-infra/web3'
 import {
-    calcBalance,
     formatBalance,
     formatCurrency,
     isGreaterThan,
@@ -363,7 +362,7 @@ const ContractInteraction = memo(() => {
                         {tokenDecimals !== undefined ? (
                             <>
                                 <Typography className={classes.amount}>
-                                    {calcBalance(tokenAmount, tokenDecimals).gt(pow10(9)) ? (
+                                    {leftShift(tokenAmount, tokenDecimals).gt(pow10(9)) ? (
                                         t('popups_wallet_token_infinite_unlock')
                                     ) : (
                                         <FormattedBalance

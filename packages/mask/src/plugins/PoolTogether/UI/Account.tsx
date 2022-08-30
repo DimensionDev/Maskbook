@@ -8,7 +8,6 @@ import { useAccountBalance } from '../hooks/useAccountBalances'
 import type { Pool } from '../types'
 import { AccountPool } from './AccountPool'
 import { sumBy } from 'lodash-unified'
-import { calcBalance } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -79,7 +78,7 @@ export function Account(props: AccountProps) {
     const noZeroBalances = balances.filter((balance) => Number.parseInt(balance.account.ticketBalance, 10) !== 0)
     const totalUsdBalance = sumBy(noZeroBalances, (balance) => {
         const decimals = Number.parseInt(balance.pool.tokens.ticket.decimals, 10)
-        const ticketBalance = calcBalance(balance.account.ticketBalance, decimals)
+        const ticketBalance = leftShift(balance.account.ticketBalance, decimals)
         const ticketUsdRate = balance.pool.tokens.ticket.usd
         if (!ticketUsdRate) return 0
         return ticketBalance.multipliedBy(ticketUsdRate).toNumber()

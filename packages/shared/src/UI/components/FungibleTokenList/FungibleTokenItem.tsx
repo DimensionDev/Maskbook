@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo } from 'react'
 import { Link, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
-import { calcBalance, FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
+import { FungibleToken, leftShift, NetworkPluginID } from '@masknet/web3-shared-base'
 import { TokenIcon } from '../TokenIcon'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskLoadingButton, LoadingBase } from '@masknet/theme'
@@ -166,7 +166,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
             }
             return source !== 'external' || isTrust ? (
                 <Typography className={classes.balance}>
-                    {balance === undefined ? <LoadingBase size={24} /> : calcBalance(balance ?? 0, decimals).toFixed(6)}
+                    {balance === undefined ? <LoadingBase size={24} /> : leftShift(balance ?? 0, decimals).toFixed(6)}
                 </Typography>
             ) : (
                 <MaskLoadingButton

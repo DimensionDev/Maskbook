@@ -1,6 +1,6 @@
 import type { TradeInfo } from '../../../types'
 import { useMemo } from 'react'
-import { isGreaterThan, isLessThan, multipliedBy, NetworkPluginID, calcBalance } from '@masknet/web3-shared-base'
+import { isGreaterThan, isLessThan, multipliedBy, NetworkPluginID, leftShift } from '@masknet/web3-shared-base'
 import { MINIMUM_AMOUNT } from '../../../constants'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext'
@@ -34,9 +34,9 @@ export function useSortedTrades(traders: TradeInfo[], chainId: ChainId, gasPrice
                     ) {
                         const gasFee = multipliedBy(gasPrice, trade.gas.value).integerValue().toFixed()
 
-                        const gasFeeUSD = calcBalance(gasFee ?? 0, nativeToken?.decimals).times(nativeTokenPrice)
+                        const gasFeeUSD = leftShift(gasFee ?? 0, nativeToken?.decimals).times(nativeTokenPrice)
 
-                        const finalPrice = calcBalance(trade.value.outputAmount, outputToken.decimals)
+                        const finalPrice = leftShift(trade.value.outputAmount, outputToken.decimals)
                             .times(outputToken.schema !== SchemaType.Native ? outputTokenPrice : nativeTokenPrice)
                             .minus(gasFeeUSD)
 

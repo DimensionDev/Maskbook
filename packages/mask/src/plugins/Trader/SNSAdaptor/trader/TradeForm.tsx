@@ -10,7 +10,7 @@ import {
     NetworkPluginID,
     rightShift,
     multipliedBy,
-    calcBalance,
+    leftShift,
 } from '@masknet/web3-shared-base'
 import TuneIcon from '@mui/icons-material/Tune'
 import { TokenPanelType, TradeInfo } from '../../types'
@@ -297,7 +297,7 @@ export const TradeForm = memo<AllTradeFormProps>(
             const gasFee = multipliedBy(marginGasPrice, focusedTrade?.gas.value ?? MIN_GAS_LIMIT)
             let amount_ = new BigNumber(inputTokenBalanceAmount.toFixed() ?? 0)
             amount_ = inputToken?.schema === SchemaType.Native ? amount_.minus(gasFee) : amount_
-            return calcBalance(BigNumber.max(0, amount_), inputToken?.decimals)
+            return leftShift(BigNumber.max(0, amount_), inputToken?.decimals)
         }, [focusedTrade, gasPrice, inputTokenTradeAmount, inputToken])
 
         // #region UI logic

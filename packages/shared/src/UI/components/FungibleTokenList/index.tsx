@@ -28,11 +28,11 @@ import {
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
 import {
-    calcBalance,
     CurrencyType,
     currySameAddress,
     FungibleToken,
     isSameAddress,
+    leftShift,
     minus,
     NetworkPluginID,
     toZero,
@@ -222,8 +222,8 @@ export const FungibleTokenList = forwardRef(
             return filteredFungibleTokens
                 .filter((x) => !isBlockedToken(x))
                 .sort((a, z) => {
-                    const aBalance = toZero(calcBalance(fungibleTokensBalance[a.address] ?? '0', a.decimals))
-                    const zBalance = toZero(calcBalance(fungibleTokensBalance[z.address] ?? '0', z.decimals))
+                    const aBalance = toZero(leftShift(fungibleTokensBalance[a.address] ?? '0', a.decimals))
+                    const zBalance = toZero(leftShift(fungibleTokensBalance[z.address] ?? '0', z.decimals))
 
                     const aUSD = toZero(fungibleAssetsTable[a.address]?.value?.[CurrencyType.USD] ?? '0')
                     const zUSD = toZero(fungibleAssetsTable[z.address]?.value?.[CurrencyType.USD] ?? '0')

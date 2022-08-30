@@ -9,10 +9,11 @@ import {
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
 import {
-    calcBalance,
     CurrencyType,
+    formatBalance,
     formatCurrency,
     FungibleAsset,
+    leftShift,
     NetworkPluginID,
     pow10,
 } from '@masknet/web3-shared-base'
@@ -110,8 +111,8 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
             </TableCell>
             <TableCell className={classes.cell} align="center" variant="body">
                 <Typography>
-                    {calcBalance(asset.balance, asset.decimals).gt(pow10(-6))
-                        ? calcBalance(asset.balance, asset.decimals).toFixed(6)
+                    {leftShift(asset.balance, asset.decimals).gt(pow10(-6))
+                        ? formatBalance(asset.balance, asset.decimals, 6)
                         : '<0.000001'}
                 </Typography>
             </TableCell>
