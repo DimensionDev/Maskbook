@@ -91,18 +91,16 @@ export const DonationCard = memo(({ donation, socialAddress, onSelect, className
 
     return (
         <div onClick={() => onSelect(donation)} className={classnames(classes.card, className)} {...rest}>
-            <section className="flex flex-row flex-shrink-0 w-max h-max">
-                <Card className={classes.img}>
-                    <NFTCardStyledAssetPlayer
-                        url={action.metadata?.logo || RSS3_DEFAULT_IMAGE}
-                        classes={{
-                            fallbackImage: classes.fallbackImage,
-                            wrapper: classes.img,
-                            iframe: classes.img,
-                        }}
-                    />
-                </Card>
-            </section>
+            <Card className={classes.img}>
+                <NFTCardStyledAssetPlayer
+                    url={action.metadata?.logo || RSS3_DEFAULT_IMAGE}
+                    classes={{
+                        fallbackImage: classes.fallbackImage,
+                        wrapper: classes.img,
+                        iframe: classes.img,
+                    }}
+                />
+            </Card>
 
             <div className={classes.info}>
                 <div className={classes.infoRow}>
