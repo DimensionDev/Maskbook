@@ -1,9 +1,10 @@
+import { makeStyles, parseColor, useStylesExtends } from '@masknet/theme'
+import { resolveCORSLink, resolveIPFSLink } from '@masknet/web3-shared-base'
+import { Box, CircularProgress, useTheme } from '@mui/material'
+import classNames from 'classnames'
 import type { ImgHTMLAttributes } from 'react'
 import { useAsync } from 'react-use'
-import classNames from 'classnames'
-import { makeStyles, parseColor, useStylesExtends } from '@masknet/theme'
-import { Box, CircularProgress, useTheme } from '@mui/material'
-import { isLocaleResource, resolveCORSLink, resolveIPFSLink } from '@masknet/web3-shared-base'
+import { loadImage } from './loadImage'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -28,31 +29,20 @@ const useStyles = makeStyles()((theme) => ({
 interface ImageProps
     extends ImgHTMLAttributes<HTMLImageElement>,
         withClasses<'container' | 'fallbackImage' | 'imageLoading'> {
-    fallbackImage?: URL
+    fallback?: URL | string | JSX.Element
+    disableSpinner?: boolean
 }
 
-export function Image({ fallbackImage, classes: externalClasses, ...rest }: ImageProps) {
+export function Image({ fallback, disableSpinner, classes: externalClasses, ...rest }: ImageProps) {
     const classes = useStylesExtends(useStyles(), { classes: externalClasses })
     const theme = useTheme()
-    const fallbackImageURL = resolveCORSLink(
-        resolveIPFSLink(fallbackImage?.toString()) ??
-            (theme.palette.mode === 'dark'
-                ? new URL('./nft_token_fallback_dark.png', import.meta.url).toString()
-                : new URL('./nft_token_fallback.png', import.meta.url)
-            ).toString(),
-    )
 
     const { value: image, loading: imageLoading } = useAsync(async () => {
         if (!rest.src) return
-        if (isLocaleResource(rest.src)) return rest.src
-        const response = await fetch(rest.src, {
-            cache: 'force-cache',
-        })
-        if (response.ok) return URL.createObjectURL(await response.blob())
-        return
+        return loadImage(rest.src)
     }, [rest.src])
 
-    if (imageLoading) {
+    if (imageLoading && !disableSpinner) {
         return (
             <Box className={classes.container}>
                 <Box className={classes.spinContainer}>
@@ -74,11 +64,22 @@ export function Image({ fallbackImage, classes: externalClasses, ...rest }: Imag
 
     if (image) {
         return (
-            <Box className={classes.container} data-url={rest.src}>
-                <img crossOrigin="anonymous" {...rest} src={image} />
+            <Box className={classes.container}>
+                <img {...rest} src={image} />
             </Box>
         )
     }
+    if (fallback && !(fallback instanceof URL) && typeof fallback !== 'string') {
+        return fallback
+    }
+
+    const fallbackImageURL = resolveCORSLink(
+        resolveIPFSLink(fallback?.toString()) ??
+            (theme.palette.mode === 'dark'
+                ? new URL('./nft_token_fallback_dark.png', import.meta.url).toString()
+                : new URL('./nft_token_fallback.png', import.meta.url)
+            ).toString(),
+    )
 
     return (
         <Box className={classes.container}>

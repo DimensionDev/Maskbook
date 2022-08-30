@@ -11,6 +11,7 @@ describe('resolveCORSLink', () => {
         { give: MASK_URL, expected: `https://cors.r2d2.to?${encodeURIComponent(MASK_URL)}` },
         { give: MASK_URL, expected: `https://cors.r2d2.to?${encodeURIComponent(MASK_URL)}` },
         {
+            // cspell:ignore jkoeaghipilijlahjplgbfiocjhldnap
             give: 'chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/logo.png',
             expected: 'chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/logo.png',
         },

@@ -45,7 +45,6 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
     const info = new Request(input, init)
     const url = info.url
     const u = new URL(url, location.href)
-
     // ipfs
     if (url.startsWith('ipfs://') || isIpfsFragment(url))
         return originalFetch(resolveCORSLink(resolveIPFSLink(url))!, info)

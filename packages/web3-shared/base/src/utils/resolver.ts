@@ -254,9 +254,7 @@ export function resolveIPFSLink(fragmentOrURL?: string): string | undefined {
 
     // a ipfs protocol
     if (fragmentOrURL.startsWith(IPFS_PROTOCOL_PREFIX)) {
-        return urlcat(`${IPFS_IO_HOST}/ipfs/:hash`, {
-            hash: fragmentOrURL.replace(MATCH_IPFS_PROTOCOL_RE, ''),
-        })
+        return `${IPFS_IO_HOST}/ipfs/${fragmentOrURL.replace(MATCH_IPFS_PROTOCOL_RE, '')}`
     }
 
     // a ipfs.io host
@@ -271,9 +269,7 @@ export function resolveIPFSLink(fragmentOrURL?: string): string | undefined {
 
     // a ipfs hash fragment
     if (isIpfsFragment(fragmentOrURL)) {
-        return urlcat(`${IPFS_IO_HOST}/ipfs/:hash`, {
-            hash: fragmentOrURL,
-        })
+        return `${IPFS_IO_HOST}/ipfs/${fragmentOrURL}`
     }
 
     return fragmentOrURL
