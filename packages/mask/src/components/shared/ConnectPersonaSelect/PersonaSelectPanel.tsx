@@ -1,4 +1,4 @@
-import { Button, DialogContent, Stack, Typography } from '@mui/material'
+import { Button, Stack, Typography } from '@mui/material'
 import {
     resolveNextIDIdentityToProfile,
     CrossIsolationMessages,
@@ -10,56 +10,22 @@ import {
     ProfileIdentifier,
 } from '@masknet/shared-base'
 import { useAsyncFn, useCopyToClipboard } from 'react-use'
-import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
-import { useConnectedPersonas } from '../DataSource/useConnectedPersonas'
-import Services from '../../extension/service'
-import { InjectedDialog } from '@masknet/shared'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useNextIDVerify } from '../DataSource/useNextIDVerify'
-import { MaskMessages, useI18N } from '../../utils'
-import { WalletMessages } from '../../plugins/Wallet/messages'
+import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI'
+import { useConnectedPersonas } from '../../DataSource/useConnectedPersonas'
+import Services from '../../../extension/service'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { useNextIDVerify } from '../../DataSource/useNextIDVerify'
+import { MaskMessages, useI18N } from '../../../utils'
+import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { PluginNextIDMessages } from '../../plugins/NextID/messages'
-import type { PersonaNextIDMixture } from './PersonaListUI/PersonaItemUI'
-import { PersonaItemUI } from './PersonaListUI/PersonaItemUI'
-import { useCurrentPersona } from '../DataSource/usePersonaConnectStatus'
+import type { PersonaNextIDMixture } from './PersonaItemUI'
+import { PersonaItemUI } from './PersonaItemUI'
+import { useCurrentPersona } from '../../DataSource/usePersonaConnectStatus'
 import { delay } from '@dimensiondev/kit'
 
-type PositionOption = 'center' | 'top-right'
-type PositionStyle = {
-    top?: number
-    right?: number
-    position?: 'absolute'
-}
-
-const useStyles = makeStyles<{
-    positionStyle: {
-        top?: number
-        right?: number
-        position?: 'absolute'
-    }
-}>()((theme, props) => {
+const useStyles = makeStyles()((theme) => {
     return {
-        root: {
-            width: 384,
-            height: 386,
-            padding: theme.spacing(1),
-            background: theme.palette.maskColor.bottom,
-            position: props.positionStyle.position,
-            top: props.positionStyle.top,
-            right: props.positionStyle.right,
-        },
-        content: {
-            padding: theme.spacing(0, 2, 2, 2),
-            scrollbarWidth: 'none',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
-        header: {
-            background: `${theme.palette.maskColor.bottom} !important`,
-        },
         items: {
             overflow: 'auto',
             scrollbarWidth: 'none',
@@ -70,16 +36,15 @@ const useStyles = makeStyles<{
     }
 })
 
-const positionStyleMap: Record<PositionOption, PositionStyle> = {
-    center: {},
-    'top-right': {
-        position: 'absolute',
-        top: 0,
-        right: 0,
-    },
+export type PositionOption = 'center' | 'top-right'
+
+interface PersonaSelectPanelProps {
+    finishTarget?: string
+    enableVerify: boolean
+    onClose(): void
 }
 
-export const PersonaSelectPanelDialog = () => {
+export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(({ finishTarget, enableVerify, onClose }) => {
     const { t } = useI18N()
     const [, copyToClipboard] = useCopyToClipboard()
     const { showSnackbar } = useCustomSnackbar()
@@ -87,29 +52,13 @@ export const PersonaSelectPanelDialog = () => {
     const currentPersona = useCurrentPersona()
     const currentPersonaIdentifier = currentPersona?.identifier
 
-    const [finishTarget, setFinishTarget] = useState<string>()
-    const [position, setPosition] = useState<PositionOption>('center')
-    const [enableVerify, setEnableVerify] = useState(true)
-    const { classes } = useStyles({ positionStyle: positionStyleMap[position] })
-
-    const { open, closeDialog } = useRemoteControlledDialog(
-        PluginNextIDMessages.PersonaSelectPanelDialogUpdated,
-        (ev) => {
-            if (!ev.open) {
-                setFinishTarget(undefined)
-            } else {
-                setFinishTarget(ev.target)
-                setEnableVerify(ev.enableVerify)
-                setPosition(ev.position ?? 'center')
-            }
-        },
-    )
+    const { classes } = useStyles()
 
     const [selectedPersona, setSelectedPersona] = useState<PersonaNextIDMixture>()
 
     const [, handleVerifyNextID] = useNextIDVerify()
     const currentProfileIdentify = useLastRecognizedIdentity()
-    const { value: personas = EMPTY_LIST, loading } = useConnectedPersonas()
+    const { value: personas = EMPTY_LIST, loading, error } = useConnectedPersonas()
 
     const { closeDialog: closeApplicationBoard } = useRemoteControlledDialog(
         WalletMessages.events.ApplicationDialogUpdated,
@@ -139,9 +88,9 @@ export const PersonaSelectPanelDialog = () => {
     const { setDialog: setCreatePersonaConfirmDialog } = useRemoteControlledDialog(MaskMessages.events.openPageConfirm)
 
     useEffect(() => {
-        if (personas.length || !finishTarget) return
+        if (personas.length || !finishTarget || loading) return
 
-        closeDialog()
+        onClose()
         setCreatePersonaConfirmDialog({
             open: true,
             target: 'dashboard',
@@ -150,7 +99,7 @@ export const PersonaSelectPanelDialog = () => {
             title: t('applications_create_persona_title'),
             actionHint: t('applications_create_persona_action'),
         })
-    }, [personas.length, finishTarget])
+    }, [personas.length, finishTarget, loading])
 
     const actionButton = useMemo(() => {
         let isConnected = true
@@ -177,7 +126,7 @@ export const PersonaSelectPanelDialog = () => {
                 await connect?.(currentProfileIdentify.identifier, selectedPersona.persona.identifier)
             }
             if (!isVerified && enableVerify) {
-                closeDialog()
+                onClose()
                 closeApplicationBoard()
                 await handleVerifyNextID(selectedPersona.persona, currentProfileIdentify.identifier?.userId)
             }
@@ -190,7 +139,7 @@ export const PersonaSelectPanelDialog = () => {
             }
 
             await delay(100)
-            closeDialog()
+            onClose()
         }
 
         const actionProps = {
@@ -245,47 +194,35 @@ export const PersonaSelectPanelDialog = () => {
         showSnackbar(t('applications_persona_copy'), { variant: 'success' })
     }
 
-    return open ? (
-        <InjectedDialog
-            disableTitleBorder
-            open={open}
-            classes={{
-                paper: classes.root,
-                dialogTitle: classes.header,
-            }}
-            maxWidth="sm"
-            onClose={closeDialog}
-            title={t('applications_persona_title')}
-            titleBarIconStyle="close">
-            <DialogContent classes={{ root: classes.content }}>
-                {loading ? (
-                    <Stack justifyContent="center" alignItems="center" height="100%">
-                        <LoadingBase width={24} height={24} />
+    return (
+        <>
+            {loading ? (
+                <Stack justifyContent="center" alignItems="center" height="100%">
+                    <LoadingBase width={24} height={24} />
+                </Stack>
+            ) : (
+                <Stack height="100%" justifyContent="space-between">
+                    <Stack gap={1.5} className={classes.items}>
+                        {personas.map((x) => {
+                            return (
+                                <PersonaItemUI
+                                    key={x.persona.identifier.toText()}
+                                    data={x}
+                                    onCopy={(e) => onCopyPersons(e, x)}
+                                    onClick={() => onSelectPersona(x)}
+                                    currentPersona={selectedPersona}
+                                    currentPersonaIdentifier={currentPersonaIdentifier}
+                                    currentProfileIdentify={currentProfileIdentify}
+                                />
+                            )
+                        })}
                     </Stack>
-                ) : (
-                    <Stack height="100%" justifyContent="space-between">
-                        <Stack gap={1.5} className={classes.items}>
-                            {personas.map((x) => {
-                                return (
-                                    <PersonaItemUI
-                                        key={x.persona.identifier.toText()}
-                                        data={x}
-                                        onCopy={(e) => onCopyPersons(e, x)}
-                                        onClick={() => onSelectPersona(x)}
-                                        currentPersona={selectedPersona}
-                                        currentPersonaIdentifier={currentPersonaIdentifier}
-                                        currentProfileIdentify={currentProfileIdentify}
-                                    />
-                                )
-                            })}
-                        </Stack>
-                        <Stack>{actionButton}</Stack>
-                    </Stack>
-                )}
-            </DialogContent>
-        </InjectedDialog>
-    ) : null
-}
+                    <Stack>{actionButton}</Stack>
+                </Stack>
+            )}
+        </>
+    )
+})
 
 interface ActionContentProps {
     buttonText?: string
