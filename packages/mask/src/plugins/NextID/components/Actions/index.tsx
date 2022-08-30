@@ -1,6 +1,6 @@
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskLightTheme } from '@masknet/theme'
 import { memo } from 'react'
-import { Button, Stack, Typography } from '@mui/material'
+import { Button, Stack, ThemeProvider, Typography } from '@mui/material'
 import { useI18N } from '../../locales'
 import { Icons } from '@masknet/icons'
 import { PersonaSelectPanel } from '../../../../components/shared/ConnectPersonaSelect/PersonaSelectPanel'
@@ -11,6 +11,9 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(1),
         minWidth: 254,
         borderRadius: '50px',
+    },
+    unchecked: {
+        color: theme.palette.maskColor.white,
     },
 }))
 
@@ -24,14 +27,14 @@ export const CreatePersonaAction = memo<CreatePersonaActionProps>(({ disabled, o
     const { classes } = useStyles()
     return (
         <>
-            <Stack>
+            <Stack flex={1}>
                 <Typography fontWeight={400} fontSize={14}>
                     {t.create_persona_intro()}
                 </Typography>
             </Stack>
             <Stack direction="row" justifyContent="center">
-                <Button disabled={disabled} className={classes.button}>
-                    <Icons.Identity size={18} sx={{ marginRight: '8px' }} />
+                <Button disabled={disabled} className={classes.button} onClick={onCreate}>
+                    <Icons.Identity size={18} />
                     {t.create_persona()}
                 </Button>
             </Stack>
@@ -40,10 +43,13 @@ export const CreatePersonaAction = memo<CreatePersonaActionProps>(({ disabled, o
 })
 
 export const SelectConnectPersonaAction = memo(() => {
+    const { classes } = useStyles()
     return (
-        <Stack p={1.25} pb={0}>
-            <PersonaSelectPanel />
-        </Stack>
+        <ThemeProvider theme={MaskLightTheme}>
+            <Stack p={1.25} pb={0}>
+                <PersonaSelectPanel classes={{ unchecked: classes.unchecked }} />
+            </Stack>
+        </ThemeProvider>
     )
 })
 

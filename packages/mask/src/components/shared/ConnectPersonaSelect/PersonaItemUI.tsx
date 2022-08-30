@@ -10,7 +10,7 @@ import {
     PersonaInformation,
 } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 
 /* cspell:disable-next-line */
@@ -21,7 +21,7 @@ export interface PersonaNextIDMixture {
     avatar?: string
 }
 
-interface PersonaItemProps {
+interface PersonaItemProps extends withClasses<never | 'checked' | 'unchecked'> {
     data: PersonaNextIDMixture
     onCopy: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void
     onClick: () => void
@@ -61,61 +61,60 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export const PersonaItemUI = memo<PersonaItemProps>(
-    ({ data, onCopy, onClick, currentPersona, currentPersonaIdentifier, currentProfileIdentify }) => {
-        const { classes } = useStyles()
-        return (
-            <Stack
-                key={data.persona.identifier.toText()}
-                direction="row"
-                alignItems="center"
-                gap={1}
-                onClick={() => onClick()}>
-                <Box flexGrow={0} position="relative">
-                    {data.avatar && (
-                        <Avatar
-                            src={data.avatar}
-                            sx={{
-                                width: 30,
-                                height: 30,
-                                display: 'inline-block',
-                                borderRadius: '50%',
-                            }}
-                        />
-                    )}
-                    {!data.avatar && <Icons.MenuPersonasActive size={30} />}
-                    {isSamePersona(currentPersonaIdentifier, data.persona) && <Box className={classes.dot} />}
-                </Box>
-                <Stack flexGrow={1}>
-                    <Typography className={classes.nickname}>
-                        <Stack component="span" display="inline-flex" direction="row" alignItems="center" gap={0.25}>
-                            {data.persona.nickname}
-                            <>
-                                {!!data.proof.find(
-                                    (p) =>
-                                        isSameProfile(
-                                            resolveNextIDIdentityToProfile(p.identity, p.platform),
-                                            currentProfileIdentify.identifier,
-                                        ) && p.is_valid,
-                                ) && <Icons.NextIDMini width={32} height={18} />}
-                            </>
-                        </Stack>
-                    </Typography>
-                    <Typography className={classes.fingerprint}>
-                        <Stack component="span" display="inline-flex" direction="row" alignItems="center" gap={0.25}>
-                            {formatPersonaFingerprint(data.persona.identifier.rawPublicKey, 4)}
-                            <Icons.Copy style={{ cursor: 'pointer' }} size={14} onClick={onCopy} />
-                        </Stack>
-                    </Typography>
-                </Stack>
-                <Stack flexGrow={0}>
-                    {isSamePersona(currentPersona?.persona, data.persona) ? (
-                        <Icons.CheckCircle size={20} />
-                    ) : (
-                        <Icons.RadioNo size={20} />
-                    )}
-                </Stack>
+export const PersonaItemUI = memo<PersonaItemProps>((props) => {
+    const { data, onCopy, onClick, currentPersona, currentPersonaIdentifier, currentProfileIdentify } = props
+    const classes = useStylesExtends(useStyles(), props)
+    return (
+        <Stack
+            key={data.persona.identifier.toText()}
+            direction="row"
+            alignItems="center"
+            gap={1}
+            onClick={() => onClick()}>
+            <Box flexGrow={0} position="relative">
+                {data.avatar && (
+                    <Avatar
+                        src={data.avatar}
+                        sx={{
+                            width: 30,
+                            height: 30,
+                            display: 'inline-block',
+                            borderRadius: '50%',
+                        }}
+                    />
+                )}
+                {!data.avatar && <Icons.MenuPersonasActive size={30} />}
+                {isSamePersona(currentPersonaIdentifier, data.persona) && <Box className={classes.dot} />}
+            </Box>
+            <Stack flexGrow={1}>
+                <Typography className={classes.nickname}>
+                    <Stack component="span" display="inline-flex" direction="row" alignItems="center" gap={0.25}>
+                        {data.persona.nickname}
+                        <>
+                            {!!data.proof.find(
+                                (p) =>
+                                    isSameProfile(
+                                        resolveNextIDIdentityToProfile(p.identity, p.platform),
+                                        currentProfileIdentify.identifier,
+                                    ) && p.is_valid,
+                            ) && <Icons.NextIDMini width={32} height={18} />}
+                        </>
+                    </Stack>
+                </Typography>
+                <Typography className={classes.fingerprint}>
+                    <Stack component="span" display="inline-flex" direction="row" alignItems="center" gap={0.25}>
+                        {formatPersonaFingerprint(data.persona.identifier.rawPublicKey, 4)}
+                        <Icons.Copy style={{ cursor: 'pointer' }} size={14} onClick={onCopy} />
+                    </Stack>
+                </Typography>
             </Stack>
-        )
-    },
-)
+            <Stack flexGrow={0}>
+                {isSamePersona(currentPersona?.persona, data.persona) ? (
+                    <Icons.CheckCircle size={20} className={classes.checked} />
+                ) : (
+                    <Icons.RadioNo size={20} className={classes.unchecked} />
+                )}
+            </Stack>
+        </Stack>
+    )
+})

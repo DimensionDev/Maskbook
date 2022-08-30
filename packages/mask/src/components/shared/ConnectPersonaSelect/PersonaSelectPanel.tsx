@@ -18,7 +18,7 @@ import { useNextIDVerify } from '../../DataSource/useNextIDVerify'
 import { MaskMessages, useI18N } from '../../../utils'
 import { WalletMessages } from '../../../plugins/Wallet/messages'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { LoadingBase, makeStyles, useCustomSnackbar, useStylesExtends } from '@masknet/theme'
 import type { PersonaNextIDMixture } from './PersonaItemUI'
 import { PersonaItemUI } from './PersonaItemUI'
 import { useCurrentPersona } from '../../DataSource/usePersonaConnectStatus'
@@ -38,13 +38,14 @@ const useStyles = makeStyles()((theme) => {
 
 export type PositionOption = 'center' | 'top-right'
 
-interface PersonaSelectPanelProps {
+interface PersonaSelectPanelProps extends withClasses<never | 'checked' | 'unchecked'> {
     finishTarget?: string
     enableVerify?: boolean
     onClose?: () => void
 }
 
-export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(({ finishTarget, enableVerify = true, onClose }) => {
+export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
+    const { finishTarget, enableVerify = true, onClose } = props
     const { t } = useI18N()
     const [, copyToClipboard] = useCopyToClipboard()
     const { showSnackbar } = useCustomSnackbar()
@@ -52,7 +53,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(({ finishTarget,
     const currentPersona = useCurrentPersona()
     const currentPersonaIdentifier = currentPersona?.identifier
 
-    const { classes } = useStyles()
+    const classes = useStylesExtends(useStyles(), props)
 
     const [selectedPersona, setSelectedPersona] = useState<PersonaNextIDMixture>()
 
@@ -217,6 +218,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(({ finishTarget,
                                     currentPersona={selectedPersona}
                                     currentPersonaIdentifier={currentPersonaIdentifier}
                                     currentProfileIdentify={currentProfileIdentify}
+                                    classes={{ unchecked: props.classes?.unchecked }}
                                 />
                             )
                         })}
