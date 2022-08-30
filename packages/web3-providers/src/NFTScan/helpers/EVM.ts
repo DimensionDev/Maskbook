@@ -82,7 +82,8 @@ export function createPermalink(chainId: ChainId, address: string, tokenId: stri
 
 export function createNonFungibleAsset(chainId: ChainId, asset: EVM.Asset): NonFungibleAsset<ChainId, SchemaType> {
     const payload = getJSON<EVM.Payload>(asset.metadata_json)
-    const name = payload?.name || asset.name || asset.contract_name || ''
+    const contractName = asset.contract_name
+    const name = payload?.name || asset.name || ''
     const description = payload?.description
     const mediaURL = resolveIPFSLink(asset.nftscan_uri ?? asset.image_uri)
 
@@ -134,12 +135,12 @@ export function createNonFungibleAsset(chainId: ChainId, asset: EVM.Asset): NonF
             chainId,
             schema,
             address: asset.contract_address,
-            name,
+            name: contractName,
             symbol,
         },
         collection: {
             chainId,
-            name,
+            name: contractName,
             slug: name,
             description,
             address: asset.contract_address,

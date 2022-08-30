@@ -35,6 +35,9 @@ interface CollectibleItemProps extends HTMLProps<HTMLDivElement>, CollectibleCar
 export const CollectibleItem = forwardRef<HTMLDivElement, CollectibleItemProps>((props: CollectibleItemProps, ref) => {
     const { provider, asset, readonly, renderOrder, address, className, ...rest } = props
     const { classes, cx } = useStyles()
+
+    const name = asset.collection?.name || asset.contract?.name
+    const title = name ? `${name} #${asset.tokenId}` : asset.metadata?.name ?? ''
     return (
         <div className={cx(classes.card, className)} {...rest} ref={ref}>
             <CollectibleCard
@@ -47,7 +50,7 @@ export const CollectibleItem = forwardRef<HTMLDivElement, CollectibleItemProps>(
             />
             <div className={classes.description}>
                 <Typography className={classes.name} color="textPrimary" variant="body2">
-                    {asset.metadata?.name}
+                    {title}
                 </Typography>
             </div>
         </div>

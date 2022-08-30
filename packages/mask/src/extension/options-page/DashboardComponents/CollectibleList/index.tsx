@@ -164,7 +164,7 @@ export function CollectibleList(props: CollectibleListProps) {
                     <Box className={classes.root}>
                         {collectibles.map((token, index) => {
                             const name = token.collection?.name || token.contract?.name
-                            const title = `${name} ${Others?.formatTokenId(token.tokenId, 2)}`
+                            const title = name ? `${name} #${token.tokenId}` : token.metadata?.name ?? ''
                             return (
                                 <Tooltip
                                     key={index}
