@@ -1,6 +1,7 @@
 import { createReactRootShadowed, MaskMessages, startWatch, useI18N } from '../../../../utils'
 import {
-    searchProfileSaveSelector,
+    searchAvatarMetaSelector,
+    searchAvatarSelector,
     searchTwitterAvatarLinkSelector,
     searchTwitterAvatarSelector,
 } from '../../utils/selector'
@@ -29,7 +30,9 @@ import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarInTwitter />)
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
+        <NFTAvatarInTwitter signal={signal} />,
+    )
 }
 
 const useStyles = makeStyles()(() => ({
@@ -56,7 +59,11 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
-function NFTAvatarInTwitter() {
+interface NFTAvatarInTwitterProps {
+    signal: AbortSignal
+}
+
+function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const { t } = useI18N()
     const rainBowElement = useRef<Element | null>()
     const borderElement = useRef<Element | null>()
@@ -79,6 +86,8 @@ function NFTAvatarInTwitter() {
 
     const windowSize = useWindowSize()
     const _location = useLocation()
+
+    const [updatedAvatar, setUpdatedAvatar] = useState(false)
 
     const showAvatar = useMemo(
         () => !!nftAvatar?.avatarId && getAvatarId(identity.avatar) === nftAvatar.avatarId,
@@ -173,7 +182,7 @@ function NFTAvatarInTwitter() {
     }, [])
 
     useEffect(() => {
-        if (!showAvatar) return
+        if (!showAvatar || !updatedAvatar) return
         const linkDom = searchTwitterAvatarLinkSelector().evaluate()
 
         if (linkDom?.firstElementChild && linkDom.childNodes.length === 4) {
@@ -215,7 +224,7 @@ function NFTAvatarInTwitter() {
                 rainBowElement.current.classList.remove('rainbowBorder')
             }
         }
-    }, [location.pathname, showAvatar])
+    }, [location.pathname, showAvatar, updatedAvatar])
 
     useUpdateEffect(() => {
         const linkParentDom = searchTwitterAvatarLinkSelector().evaluate()?.closest('div')
@@ -240,15 +249,26 @@ function NFTAvatarInTwitter() {
         }
     }, [nftAvatar, showAvatar, nftInfo])
 
-    useEffect(() => {
-        const handle = () => location.reload()
-        const profileSave = searchProfileSaveSelector().evaluate()
-        if (!profileSave) return
-        profileSave.addEventListener('click', handle)
-        return () => profileSave.removeEventListener('click', handle)
-    }, [_location.pathname])
+    const handler = () => {
+        const avatar = searchAvatarSelector().evaluate()?.getAttribute('src')
+        if (!avatar || !nftAvatar?.avatarId) return
+        setUpdatedAvatar(!!nftAvatar?.avatarId && getAvatarId(avatar ?? '') === nftAvatar.avatarId)
+    }
 
-    if (!nftAvatar || !size || loadingWallet || loadingNFTInfo || !showAvatar) return null
+    new MutationObserverWatcher(searchAvatarMetaSelector())
+        .addListener('onAdd', handler)
+        .addListener('onChange', handler)
+        .startWatch(
+            {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['src'],
+            },
+            props.signal,
+        )
+
+    if (!nftAvatar || !size || loadingWallet || loadingNFTInfo || !showAvatar || !updatedAvatar) return null
 
     return (
         <NFTBadge
