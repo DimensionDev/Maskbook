@@ -173,7 +173,10 @@ export const ProfileBar = memo<ProfileBarProps>(
                                 className={classes.menuItem}
                                 key={x.address}
                                 value={x.address}
-                                onClick={() => onAddressChange?.(x.address)}>
+                                onClick={() => {
+                                    setWalletMenuOpen(false)
+                                    onAddressChange?.(x.address)
+                                }}>
                                 <div className={classes.addressItem}>
                                     <AddressItem socialAddress={x} linkIconClassName={classes.secondLinkIcon} />
                                     {x.type === SocialAddressType.NEXT_ID && <Icons.Verified />}
