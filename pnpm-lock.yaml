@@ -1835,6 +1835,9 @@ importers:
       '@masknet/typed-message':
         specifier: workspace:*
         version: link:../typed-message
+      '@masknet/web-endowments':
+        specifier: ^0.1.0
+        version: 0.1.0
       async-call-rpc:
         specifier: ^6.1.2
         version: 6.1.2
@@ -8312,6 +8315,10 @@ packages:
 
   /@masknet/static-module-record-swc/0.3.2:
     resolution: {integrity: sha512-6TMvfwZFtLOA9nMn3iHgETq+EjVIJyj2mbBW4CR3ic/hrTC2Raa1CD4eGDcSl6zZBAZQHHmSEXB86hJzSBcDHw==}
+    dev: false
+
+  /@masknet/web-endowments/0.1.0:
+    resolution: {integrity: sha512-A1fCnxr/DsouaBOC2T0rMpgl36nKYDB8M07MZZemg1bVl6g/sy7oW4w8nsJstPWbfk6P3Reg1LiZI/Vysxaz0Q==}
     dev: false
 
   /@mdn/browser-compat-data/5.1.2:

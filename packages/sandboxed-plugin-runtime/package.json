@@ -41,6 +41,7 @@
     "@masknet/shared-base": "workspace:*",
     "@masknet/theme": "workspace:*",
     "@masknet/typed-message": "workspace:*",
+    "@masknet/web-endowments": "^0.1.0",
     "async-call-rpc": "^6.1.2"
   }
 }
