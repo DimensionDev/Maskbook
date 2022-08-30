@@ -10,10 +10,14 @@ describe('resolveCORSLink', () => {
         { give: '', expected: '' },
         { give: MASK_URL, expected: `https://cors.r2d2.to?${encodeURIComponent(MASK_URL)}` },
         { give: MASK_URL, expected: `https://cors.r2d2.to?${encodeURIComponent(MASK_URL)}` },
+        // cspell:ignore jkoeaghipilijlahjplgbfiocjhldnap
         {
-            // cspell:ignore jkoeaghipilijlahjplgbfiocjhldnap
             give: 'chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/logo.png',
             expected: 'chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/logo.png',
+        },
+        {
+            give: 'moz-extension://jkoeaghipilijlahjplgbfiocjhldnap/logo.png',
+            expected: 'moz-extension://jkoeaghipilijlahjplgbfiocjhldnap/logo.png',
         },
     ])('.resolveCORSLink', ({ give, expected }) => {
         expect(resolveCORSLink(give)).toBe(expected)
@@ -26,6 +30,12 @@ describe('resolveIPFSLink', () => {
             { give: '', expected: '' },
             { give: HASH, expected: `https://ipfs.io/ipfs/${HASH}` },
             { give: `${HASH}/image`, expected: `https://ipfs.io/ipfs/${HASH}/image` },
+            // cspell:disable
+            {
+                give: 'bafkreiewefwtzgekhxv5r5hnvjisypqq5jwd2lqbex4a33ahhz3663qngy',
+                expected: 'https://ipfs.io/ipfs/bafkreiewefwtzgekhxv5r5hnvjisypqq5jwd2lqbex4a33ahhz3663qngy',
+            },
+            // cspell:disable
             { give: `ipfs://${HASH}`, expected: `https://ipfs.io/ipfs/${HASH}` },
             { give: `ipfs://ipfs/${HASH}`, expected: `https://ipfs.io/ipfs/${HASH}` },
             { give: `https://ipfs.io/ipfs/${IMAGE_DATA_PARTIAL}`, expected: IMAGE_DATA_PARTIAL },

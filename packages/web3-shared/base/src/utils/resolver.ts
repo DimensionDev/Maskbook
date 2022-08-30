@@ -228,15 +228,17 @@ export const resolveNextID_NetworkPluginID = createLookupTableResolver<NextIDPla
     },
 )
 
-const MATCH_IPFS_HASH_RE = /^[1-9A-HJ-NP-Za-km-z]{46}/
+// https://stackoverflow.com/a/67176726
+const MATCH_IPFS_CID_RE =
+    /^Qm[1-9A-HJ-NP-Za-km-z]{44,}|b[2-7A-Za-z]{58,}|B[2-7A-Z]{58,}|z[1-9A-HJ-NP-Za-km-z]{48,}|F[\dA-F]{50,}/
 const MATCH_IPFS_DATA_RE = /ipfs\/(data:.*)$/
 const MATCH_IPFS_PROTOCOL_RE = /ipfs:\/\/(?:ipfs\/)?/
 const CORS_HOST = 'https://cors.r2d2.to'
 const IPFS_IO_HOST = 'https://ipfs.io'
 const IPFS_PROTOCOL_PREFIX = 'ipfs://'
 
-export const isIpfsFragment = (fragment: string) => {
-    return MATCH_IPFS_HASH_RE.test(fragment)
+export const isIpfsCid = (cid: string) => {
+    return MATCH_IPFS_CID_RE.test(cid)
 }
 
 export const isLocaleResource = (url: string): boolean => {
@@ -244,35 +246,35 @@ export const isLocaleResource = (url: string): boolean => {
     return /^data|blob:|(chrome|moz)-extension:\/\//.test(url)
 }
 
-export function resolveIPFSLink(fragmentOrURL?: string): string | undefined {
-    if (!fragmentOrURL) return fragmentOrURL
+export function resolveIPFSLink(cidOrURL?: string): string | undefined {
+    if (!cidOrURL) return cidOrURL
 
     // eliminate cors proxy
-    if (fragmentOrURL.startsWith(CORS_HOST)) {
-        return resolveIPFSLink(decodeURIComponent(fragmentOrURL.replace(`${CORS_HOST}?`, '')))
+    if (cidOrURL.startsWith(CORS_HOST)) {
+        return resolveIPFSLink(decodeURIComponent(cidOrURL.replace(`${CORS_HOST}?`, '')))
     }
 
     // a ipfs protocol
-    if (fragmentOrURL.startsWith(IPFS_PROTOCOL_PREFIX)) {
-        return `${IPFS_IO_HOST}/ipfs/${fragmentOrURL.replace(MATCH_IPFS_PROTOCOL_RE, '')}`
+    if (cidOrURL.startsWith(IPFS_PROTOCOL_PREFIX)) {
+        return `${IPFS_IO_HOST}/ipfs/${cidOrURL.replace(MATCH_IPFS_PROTOCOL_RE, '')}`
     }
 
     // a ipfs.io host
-    if (fragmentOrURL.startsWith(IPFS_IO_HOST)) {
+    if (cidOrURL.startsWith(IPFS_IO_HOST)) {
         // base64 data string
-        const [_, data] = fragmentOrURL.match(MATCH_IPFS_DATA_RE) ?? []
+        const [_, data] = cidOrURL.match(MATCH_IPFS_DATA_RE) ?? []
         if (data) return decodeURIComponent(data)
 
         // plain
-        return decodeURIComponent(fragmentOrURL)
+        return decodeURIComponent(cidOrURL)
     }
 
     // a ipfs hash fragment
-    if (isIpfsFragment(fragmentOrURL)) {
-        return `${IPFS_IO_HOST}/ipfs/${fragmentOrURL}`
+    if (isIpfsCid(cidOrURL)) {
+        return `${IPFS_IO_HOST}/ipfs/${cidOrURL}`
     }
 
-    return fragmentOrURL
+    return cidOrURL
 }
 
 export function resolveARLink(str?: string): string {
