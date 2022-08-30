@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Avatar, Box, Stack, Typography } from '@mui/material'
 import {
     BindingProof,
-    convertNextIDIdentityToProfile,
+    resolveNextIDIdentityToProfile,
     ECKeyIdentifier,
     formatPersonaFingerprint,
     isSamePersona,
@@ -94,7 +94,7 @@ export const PersonaItemUI = memo<PersonaItemProps>(
                                 {!!data.proof.find(
                                     (p) =>
                                         isSameProfile(
-                                            convertNextIDIdentityToProfile(p.identity, p.platform),
+                                            resolveNextIDIdentityToProfile(p.identity, p.platform),
                                             currentProfileIdentify.identifier,
                                         ) && p.is_valid,
                                 ) && <Icons.NextIDMini width={32} height={18} />}
