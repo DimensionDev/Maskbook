@@ -2,9 +2,11 @@ import { memo } from 'react'
 import { Avatar, Box, Stack, Typography } from '@mui/material'
 import {
     BindingProof,
+    convertNextIDIdentityToProfile,
     ECKeyIdentifier,
     formatPersonaFingerprint,
     isSamePersona,
+    isSameProfile,
     PersonaInformation,
 } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
@@ -91,8 +93,10 @@ export const PersonaItemUI = memo<PersonaItemProps>(
                             <>
                                 {!!data.proof.find(
                                     (p) =>
-                                        p.identity.toLowerCase() ===
-                                        currentProfileIdentify.identifier?.userId.toLowerCase(),
+                                        isSameProfile(
+                                            convertNextIDIdentityToProfile(p.identity, p.platform),
+                                            currentProfileIdentify.identifier,
+                                        ) && p.is_valid,
                                 ) && <Icons.NextIDMini width={32} height={18} />}
                             </>
                         </Stack>

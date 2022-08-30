@@ -114,8 +114,12 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(({ finishTarget,
 
         if (!isSamePersona(selectedPersona.persona, currentPersonaIdentifier)) isConnected = false
 
-        const verifiedSns = selectedPersona.proof.find((x) =>
-            isSameProfile(resolveNextIDIdentityToProfile(x.identity, x.platform), currentProfileIdentify.identifier),
+        const verifiedSns = selectedPersona.proof.find(
+            (x) =>
+                isSameProfile(
+                    resolveNextIDIdentityToProfile(x.identity, x.platform),
+                    currentProfileIdentify.identifier,
+                ) && x.is_valid,
         )
         if (!verifiedSns) {
             isVerified = false
