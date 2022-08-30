@@ -106,6 +106,10 @@ export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
         .closest(1)
         .querySelector('div > div > div > :nth-child(2) > ul > li:nth-child(2)')
 
+export const toolBoxInSideBarSelectorWithNoLeftRailStart: () => LiveSelector<E, true> = () =>
+    /* cspell:disable-next-line */
+    querySelector<E>('#ssrb_top_nav_start ~ [role="banner"] ~ div [href="/gaming/?ref=games_tab"]').closest(2)
+
 // for getting normal tab style
 export const profileTabUnselectedSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="main"] a[aria-selected="false"]')
