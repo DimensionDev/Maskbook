@@ -12,6 +12,7 @@ import { RootContext } from '../contexts'
 import { setupStorage, storageDefaultValue } from '../storage'
 import { TipsEntranceDialog } from './TipsEntranceDialog'
 import { CrossIsolationMessages } from '@masknet/shared-base'
+import { TipsSetting } from './TipsSetting'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -75,7 +76,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 name,
                 iconFilterColor,
                 appBoardSortingDefaultPriority: 9,
-                nextIdRequired: true,
+                // nextIdRequired: true,
             }
         })(),
     ],
@@ -84,6 +85,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
             ID: PluginId.Tips,
             label: 'Tips',
             priority: 1,
+            UI: {
+                TabContent: TipsSetting,
+            },
         },
     ],
     GlobalInjection() {

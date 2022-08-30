@@ -167,6 +167,7 @@ export interface SwapDialogEvent {
 
 export interface SettingDialogEvent {
     open: boolean
+    targetTab?: string
 }
 
 /** This is a subset of browser.permissions.Permission */

@@ -21,6 +21,12 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
         color: theme.palette.maskColor.main,
     },
+    content: {
+        position: 'relative',
+        minHeight: 528,
+        padding: 0,
+        boxSizing: 'border-box',
+    },
 }))
 
 function getTabContent(tabId?: string) {
@@ -51,7 +57,7 @@ export function PluginSettingsDialog() {
         label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
     }))
 
-    const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginId.Tips, ...tabs.map((tab) => tab.id))
+    const [currentTab, onChange, , setTab] = useTabs(first(tabs)?.id ?? PluginId.Tips, ...tabs.map((tab) => tab.id))
 
     const openPopupWindow = useCallback(
         () =>
@@ -69,8 +75,10 @@ export function PluginSettingsDialog() {
     }, [currentTab])
 
     useEffect(() => {
-        return CrossIsolationMessages.events.PluginSettingsDialogUpdate.on(({ open }) => {
+        return CrossIsolationMessages.events.PluginSettingsDialogUpdate.on(({ open, targetTab }) => {
             setOpen(open)
+
+            if (targetTab) setTab(targetTab)
         })
     }, [])
     return (
@@ -88,8 +96,9 @@ export function PluginSettingsDialog() {
                             <Tab key={tab.id} label={tab.label} value={tab.id} />
                         ))}
                     </MaskTabList>
-                }>
-                <DialogContent>{component}</DialogContent>
+                }
+                titleBarIconStyle="back">
+                <DialogContent className={classes.content}>{component}</DialogContent>
             </InjectedDialog>
         </TabContext>
     )

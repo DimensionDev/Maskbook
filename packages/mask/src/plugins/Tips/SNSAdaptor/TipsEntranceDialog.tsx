@@ -2,7 +2,7 @@ import { useAccount, useWeb3State } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { InjectedDialog } from '@masknet/shared'
 import { PluginId } from '@masknet/plugin-infra'
-import { BindingProof, NextIDAction, NextIDPlatform } from '@masknet/shared-base'
+import { BindingProof, NextIDAction, NextIDPlatform, CrossIsolationMessages } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ActionButton, LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
@@ -22,6 +22,7 @@ import WalletsView from './bodyViews/Wallets'
 import { EmptyStatus } from './components/EmptyStatus'
 import { VerifyAlertLine } from './components/VerifyAlertLine'
 import { WalletsByNetwork } from './components/WalletsByNetwork'
+import { Icons } from '@masknet/icons'
 
 export interface TipsEntranceDialogProps {
     open: boolean
@@ -58,6 +59,10 @@ const useStyles = makeStyles()((theme) => ({
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
+    },
+    titleTailIcon: {
+        cursor: 'pointer',
+        color: theme.palette.maskColor.main,
     },
 }))
 
@@ -270,21 +275,22 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         }
     }, [modifiedWallets, t])
 
+    const handleOpenSettingDialog = useCallback(
+        () =>
+            CrossIsolationMessages.events.PluginSettingsDialogUpdate.sendToLocal({
+                open: true,
+                targetTab: PluginId.Tips,
+            }),
+        [],
+    )
+
     return (
         <InjectedDialog
             open={open}
             onClose={clickBack}
             isOnBack={step !== Step.Main}
             title={step}
-            titleTail={
-                <WalletButton
-                    className={classes.walletBtn}
-                    step={step}
-                    onClick={() => {
-                        setStep(step === Step.Wallets ? Step.AddWallet : Step.Wallets)
-                    }}
-                />
-            }>
+            titleTail={<Icons.Gear size={24} onClick={handleOpenSettingDialog} className={classes.titleTailIcon} />}>
             {loading ? (
                 <DialogContent className={classes.dialogContent}>
                     <div className={classes.loading}>
