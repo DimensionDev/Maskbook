@@ -1,11 +1,11 @@
 import { Button, DialogContent, Stack, Typography } from '@mui/material'
 import {
+    resolveNextIDIdentityToProfile,
     CrossIsolationMessages,
     DashboardRoutes,
     EMPTY_LIST,
     isSamePersona,
     isSameProfile,
-    nextIDIdentityToProfile,
     PersonaIdentifier,
     ProfileIdentifier,
 } from '@masknet/shared-base'
@@ -166,7 +166,7 @@ export const PersonaSelectPanelDialog = () => {
         if (!isSamePersona(selectedPersona.persona, currentPersonaIdentifier)) isConnected = false
 
         const verifiedSns = selectedPersona.proof.find((x) =>
-            isSameProfile(nextIDIdentityToProfile(x.identity, x.platform), currentProfileIdentify.identifier),
+            isSameProfile(resolveNextIDIdentityToProfile(x.identity, x.platform), currentProfileIdentify.identifier),
         )
         if (!verifiedSns) {
             isVerified = false

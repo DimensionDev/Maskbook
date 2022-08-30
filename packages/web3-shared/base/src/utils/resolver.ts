@@ -7,7 +7,7 @@ import {
     ProviderDescriptor,
     SourceType,
 } from '../specs'
-import { NextIDPlatform } from '@masknet/shared-base'
+import { createLookupTableResolver, NextIDPlatform } from '@masknet/shared-base'
 
 export interface ExplorerRoutes {
     addressPathname?: string
@@ -50,14 +50,6 @@ export type ReturnNetworkResolver<ChainId, NetworkType> = ReturnType<
 export type ReturnProviderResolver<ChainId, ProviderType> = ReturnType<
     Wrapper<ChainId, never, ProviderType, never>['createProviderResolver']
 >
-
-export function createLookupTableResolver<K extends keyof any, T>(map: Record<K, T>, fallback: T | ((key: K) => T)) {
-    function resolveFallback(key: K) {
-        if (typeof fallback === 'function') return (fallback as (key: K) => T)(key)
-        return fallback
-    }
-    return (key: K) => map[key] ?? resolveFallback(key)
-}
 
 export function createChainResolver<ChainId, SchemaType, NetworkType>(
     descriptors: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>>,

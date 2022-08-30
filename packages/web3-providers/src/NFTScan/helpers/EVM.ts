@@ -2,11 +2,10 @@ import urlcat from 'urlcat'
 import Web3SDK from 'web3'
 import type { AbiItem } from 'web3-utils'
 import { first } from 'lodash-unified'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 import {
-    createLookupTableResolver,
     NonFungibleAsset,
     NonFungibleCollection,
     NonFungibleTokenContract,
