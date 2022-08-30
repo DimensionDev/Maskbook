@@ -37,7 +37,9 @@ function getTabContent(tabId?: string) {
 const MENU_ITEM_HEIGHT = 40
 const MENU_LIST_PADDING = 8
 const useStyles = makeStyles()((theme) => ({
-    root: {},
+    root: {
+        width: isTwitter(activatedSocialNetworkUI) ? 'auto' : 876,
+    },
     container: {
         background:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
@@ -362,7 +364,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                     color={(theme) => theme.palette.maskColor.dark}>
                                     {t('mask_network')}
                                 </Typography>
-                                {isOwnerIdentity ? (
+                                {isOwnerIdentity && isTwitter(activatedSocialNetworkUI) ? (
                                     <ConnectPersonaBoundary
                                         customHint
                                         handlerPosition="top-right"

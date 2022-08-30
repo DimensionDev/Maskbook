@@ -13,6 +13,7 @@ const useStyles = makeStyles()((theme) => ({
         '&:hover': {
             textDecoration: 'none',
         },
+        lineHeight: 0,
     },
     linkIcon: {
         color: theme.palette.maskColor.second,
