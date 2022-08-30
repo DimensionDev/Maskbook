@@ -14,6 +14,7 @@ import {
     CreatePersonaAction,
     OtherLackWalletAction,
     SelectConnectPersonaAction,
+    ShowWalletSettingAction,
 } from './Actions/index.js'
 import { PluginCardFrameMini } from '@masknet/shared'
 import { ThemeProvider } from '@mui/material'
@@ -60,24 +61,28 @@ export function NextIdPage() {
     const getActionComponent = useMemo(() => {
         if (!isOwn) return <OtherLackWalletAction />
 
-        return (
-            <PluginEnableBoundary pluginId={PluginID.Web3Profile} classes={{ root: classes.enablePluginRoot }}>
-                {(() => {
-                    if (!personaConnectStatus.hasPersona)
-                        return (
-                            <CreatePersonaAction
-                                disabled={statusLoading}
-                                onCreate={() => personaConnectStatus.action?.(undefined, undefined, undefined, true)}
-                            />
-                        )
-                    if (!personaConnectStatus.connected || !personaConnectStatus.verified)
-                        return <SelectConnectPersonaAction />
+        if (!personaConnectStatus.hasPersona || !personaConnectStatus.connected || !personaConnectStatus.verified) {
+            return (
+                <PluginEnableBoundary pluginId={PluginID.Web3Profile} classes={{ root: classes.enablePluginRoot }}>
+                    {(() => {
+                        if (!personaConnectStatus.hasPersona)
+                            return (
+                                <CreatePersonaAction
+                                    disabled={statusLoading}
+                                    onCreate={() => personaConnectStatus.action?.(undefined, undefined, undefined, true)}
+                                />
+                            )
+                        if (!personaConnectStatus.connected || !personaConnectStatus.verified)
+                            return <SelectConnectPersonaAction />
 
-                    return <AddWalletPersonaAction disabled={statusLoading} onAddWallet={handleAddWallets} />
-                })()}
-            </PluginEnableBoundary>
-        )
-    }, [isOwn, t, statusLoading, handleAddWallets])
+                        return <AddWalletPersonaAction disabled={statusLoading} onAddWallet={handleAddWallets} />
+                    })()}
+                </PluginEnableBoundary>
+            )
+        }
+
+        return <ShowWalletSettingAction onSetting={() => {}} />
+    }, [isOwn, t, statusLoading, handleAddWallets, personaConnectStatus])
 
     if (loadingBindings || loadingPersona) {
         return <PluginCardFrameMini />

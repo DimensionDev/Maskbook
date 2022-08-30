@@ -91,3 +91,27 @@ export const OtherLackWalletAction = memo(() => {
         </Stack>
     )
 })
+
+interface ShowWalletSettingActionProps {
+    onSetting(): void
+}
+
+export const ShowWalletSettingAction = memo<ShowWalletSettingActionProps>(({ onSetting }) => {
+    const t = useI18N()
+    const { classes } = useStyles()
+    return (
+        <>
+            <Stack flex={1}>
+                <Typography fontWeight={400} fontSize={14}>
+                    {t.show_wallet_setting_intro()}
+                </Typography>
+            </Stack>
+            <Stack direction="row" justifyContent="center">
+                <Button className={classes.button} onClick={onSetting}>
+                    <Icons.Settings size={18} />
+                    {t.show_wallet_setting_button()}
+                </Button>
+            </Stack>
+        </>
+    )
+})
