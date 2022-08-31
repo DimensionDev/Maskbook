@@ -90,7 +90,7 @@ export namespace EVM {
     export interface AssetsGroup {
         contract_address: string
         contract_name: string
-        logo_url: string
+        logo_url: string | null
         owns_total: number
         items_total: number
         description: string
