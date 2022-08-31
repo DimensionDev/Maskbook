@@ -45,8 +45,10 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
         if (!ev.open) return
         setWalletConnectedCallback(() => ev.walletConnectedCallback)
         setSupportedNetworkList(ev.supportedNetworkList)
-        setUndeterminedNetworkID(ev.network?.ID)
-        setUndeterminedPluginID(ev.network?.networkSupporterPluginID)
+        if (ev.network) {
+            setUndeterminedNetworkID(ev.network.ID)
+            setUndeterminedPluginID(ev.network.networkSupporterPluginID)
+        }
     })
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.connectWalletDialogUpdated,
