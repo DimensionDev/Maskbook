@@ -107,7 +107,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
         const token = data.dataSet[index]
         const onSelect = data.onSelect
 
-        const { chainId, address, name, symbol, decimals, logoURL, balance } = token!
+        const { chainId, address, name, symbol, decimals, logoURL, balance, account } = token!
 
         const isBlocked = useTokenBlocked(address)
         const isTrust = useTokenTrusted(address, token.chainId)
@@ -148,6 +148,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
         }, [token.address, token.chainId, Others?.explorerResolver.fungibleTokenLink])
 
         const action = useMemo(() => {
+            if (!account) return null
             if (mode === TokenListMode.Manage) {
                 if (source === 'personal')
                     return <Icons.TrashLine onClick={(e) => onAddOrRemoveTokenToLocal(e, 'remove')} size={24} />
@@ -185,7 +186,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                     {t.import()}
                 </MaskLoadingButton>
             )
-        }, [balance, decimals, isBlocked, source, mode, isTrust])
+        }, [balance, decimals, isBlocked, source, mode, isTrust, account])
 
         return (
             <div style={style}>
