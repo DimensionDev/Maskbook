@@ -19,21 +19,35 @@ export const ProfileAvatarBadge: FC<Props> = ({ userId, className, ...rest }) =>
     const { classes, cx } = useStyles()
 
     useEffect(() => {
+        const button = buttonRef.current
+        if (!button) return
+        let timer: NodeJS.Timeout
         const enter = () => {
+            clearTimeout(timer)
             const button = buttonRef.current
             if (!button) return
             const boundingRect = button.getBoundingClientRect()
             const x = boundingRect.left + boundingRect.width / 2
             const y = boundingRect.top + boundingRect.height + (document.scrollingElement?.scrollTop || 0)
-            CrossIsolationMessages.events.requestOpenProfileCard.sendToLocal({
+            CrossIsolationMessages.events.requestProfileCard.sendToLocal({
+                open: true,
                 userId,
                 x,
                 y,
             })
         }
-        buttonRef.current?.addEventListener('mouseenter', enter)
+        const leave = () => {
+            timer = setTimeout(() => {
+                CrossIsolationMessages.events.requestProfileCard.sendToLocal({
+                    open: false,
+                })
+            }, 2000)
+        }
+        button.addEventListener('mouseenter', enter)
+        button.addEventListener('mouseleave', leave)
         return () => {
-            buttonRef.current?.removeEventListener('mouseenter', enter)
+            button.removeEventListener('mouseenter', enter)
+            button.removeEventListener('mouseleave', leave)
         }
     }, [])
 

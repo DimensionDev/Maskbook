@@ -19,6 +19,9 @@ const useStyles = makeStyles()((theme) => ({
         width: 120,
         overflow: 'hidden',
     },
+    imageContainer: {
+        height: '100%',
+    },
     loadingPlaceholder: {
         height: 160,
         width: 120,
@@ -110,6 +113,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
                 <Image
                     classes={{
                         fallbackImage: classes.fallbackImage,
+                        container: classes.imageContainer,
                     }}
                     width="100%"
                     height="100%"
