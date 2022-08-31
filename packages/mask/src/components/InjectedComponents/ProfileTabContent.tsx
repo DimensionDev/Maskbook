@@ -226,10 +226,19 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const isWeb3ProfileDisable = useIsMinimalMode(PluginId.Web3Profile)
 
     const isTwitterPlatform = isTwitter(activatedSocialNetworkUI)
-    const isOwnerNotHasAddress =
+    const doesOwnerHaveNoAddress =
         isOwnerIdentity && personaStatus.proof?.findIndex((p) => p.platform === NextIDPlatform.Ethereum) === -1
 
-    const showNextID = isTwitterPlatform && (isWeb3ProfileDisable || !personaStatus.verified || isOwnerNotHasAddress)
+    const showNextID =
+        isTwitterPlatform &&
+        // enabled the plugin
+        (isWeb3ProfileDisable ||
+            // the owner persona and sns not verify on next ID
+            (isOwnerIdentity && !personaStatus.verified) ||
+            // the owner persona and sns verified on next ID but not verify the wallet
+            doesOwnerHaveNoAddress ||
+            // the visiting persona not have social address list
+            (!isOwnerIdentity && !socialAddressList.length))
 
     const componentTabId = showNextID ? `${PluginId.NextID}_tabContent` : currentTab
 
