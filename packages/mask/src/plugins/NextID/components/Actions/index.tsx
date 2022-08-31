@@ -3,7 +3,7 @@ import { memo } from 'react'
 import { Button, Stack, ThemeProvider, Typography } from '@mui/material'
 import { useI18N } from '../../locales'
 import { Icons } from '@masknet/icons'
-import { PersonaSelectPanel } from '../../../../components/shared/ConnectPersonaSelect/PersonaSelectPanel'
+import { PersonaSelectPanel } from '../../../../components/shared/PersonaSelectPanel/PersonaSelectPanel'
 
 const useStyles = makeStyles()((theme) => ({
     button: {

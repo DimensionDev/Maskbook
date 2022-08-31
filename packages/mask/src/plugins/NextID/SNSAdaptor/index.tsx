@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { PersonaSelectPanelDialog } from '../../../components/shared/ConnectPersonaSelect/PersonaSelectPanelDialog'
+import { PersonaSelectPanelDialog } from '../../../components/shared/PersonaSelectPanel/PersonaSelectPanelDialog'
 import { base } from '../base'
 import { NextIdPage } from '../components/NextIdPage'
 import { PLUGIN_ID } from '../constants'
