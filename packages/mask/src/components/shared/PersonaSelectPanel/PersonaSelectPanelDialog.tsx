@@ -13,13 +13,7 @@ type PositionStyle = {
     position?: 'absolute'
 }
 
-const useStyles = makeStyles<{
-    positionStyle: {
-        top?: number
-        right?: number
-        position?: 'absolute'
-    }
-}>()((theme, props) => {
+const useStyles = makeStyles<{ positionStyle: PositionStyle }>()((theme, props) => {
     return {
         root: {
             width: 384,
