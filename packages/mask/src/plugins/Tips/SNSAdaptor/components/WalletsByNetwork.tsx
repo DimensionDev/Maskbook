@@ -1,11 +1,10 @@
-import { Icons } from '@masknet/icons'
 import type { BindingProof } from '@masknet/shared-base'
 import { networkMap } from '../../hooks/useSupportedNetworks'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useI18N } from '../../locales'
 import { WalletItem } from './WalletItem'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -73,7 +72,6 @@ export function WalletsByNetwork({
                     <network.icon className={classes.networkIcon} />
                     {network.name}
                 </Typography>
-                <Icons.Settings onClick={toSetting} className={classes.settingIcon} />
             </div>
             <div className={classes.content}>
                 {wallets.length ? (
@@ -83,7 +81,7 @@ export function WalletsByNetwork({
                             setAsDefault={setAsDefault}
                             fallbackName={`Wallet ${x.rawIdx}`}
                             address={x.identity}
-                            isDefault={defaultAddress ? defaultAddress === x.identity : !!x.isDefault}
+                            isDefault={isSameAddress(defaultAddress, x.identity)}
                         />
                     ))
                 ) : (
