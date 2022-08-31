@@ -10,7 +10,9 @@ const useStyles = makeStyles()((theme) => ({
         display: 'inline-flex',
         gap: theme.spacing(1),
         minWidth: 254,
-        borderRadius: '50px',
+        borderRadius: '20px',
+        background: theme.palette.maskColor.publicMain,
+        color: theme.palette.maskColor.white,
     },
     unchecked: {
         color: theme.palette.maskColor.white,

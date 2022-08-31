@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { useMemo } from 'react'
 import { Avatar, Box, Stack, Typography } from '@mui/material'
 import {
     BindingProof,
@@ -61,9 +61,20 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export const PersonaItemUI = memo<PersonaItemProps>((props) => {
+export const PersonaItemUI = (props: PersonaItemProps) => {
     const { data, onCopy, onClick, currentPersona, currentPersonaIdentifier, currentProfileIdentify } = props
     const classes = useStylesExtends(useStyles(), props)
+
+    const isVerified = useMemo(() => {
+        return data.proof.some(
+            (p) =>
+                isSameProfile(
+                    resolveNextIDIdentityToProfile(p.identity, p.platform),
+                    currentProfileIdentify.identifier,
+                ) && p.is_valid,
+        )
+    }, [data])
+
     return (
         <Stack
             key={data.persona.identifier.toText()}
@@ -90,21 +101,13 @@ export const PersonaItemUI = memo<PersonaItemProps>((props) => {
                 <Typography className={classes.nickname}>
                     <Stack component="span" display="inline-flex" direction="row" alignItems="center" gap={0.25}>
                         {data.persona.nickname}
-                        <>
-                            {!!data.proof.find(
-                                (p) =>
-                                    isSameProfile(
-                                        resolveNextIDIdentityToProfile(p.identity, p.platform),
-                                        currentProfileIdentify.identifier,
-                                    ) && p.is_valid,
-                            ) && <Icons.NextIDMini width={32} height={18} />}
-                        </>
+                        <>{isVerified && <Icons.NextIDMini width={32} height={18} />}</>
                     </Stack>
                 </Typography>
                 <Typography className={classes.fingerprint}>
                     <Stack component="span" display="inline-flex" direction="row" alignItems="center" gap={0.25}>
                         {formatPersonaFingerprint(data.persona.identifier.rawPublicKey, 4)}
-                        <Icons.Copy style={{ cursor: 'pointer' }} size={14} onClick={onCopy} />
+                        <Icons.Copy role="button" size={14} onClick={onCopy} />
                     </Stack>
                 </Typography>
             </Stack>
@@ -117,4 +120,4 @@ export const PersonaItemUI = memo<PersonaItemProps>((props) => {
             </Stack>
         </Stack>
     )
-})
+}

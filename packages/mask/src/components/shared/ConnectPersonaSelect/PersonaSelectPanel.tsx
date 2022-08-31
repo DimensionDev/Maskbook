@@ -192,7 +192,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
         setSelectedPersona(x)
     }, [])
 
-    const onCopyPersons = (e: React.MouseEvent<HTMLElement>, p: PersonaNextIDMixture) => {
+    const onCopyPerson = (e: React.MouseEvent<HTMLElement>, p: PersonaNextIDMixture) => {
         e.preventDefault()
         e.stopPropagation()
         copyToClipboard(p.persona.identifier.rawPublicKey)
@@ -213,7 +213,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
                                 <PersonaItemUI
                                     key={x.persona.identifier.toText()}
                                     data={x}
-                                    onCopy={(e) => onCopyPersons(e, x)}
+                                    onCopy={(e) => onCopyPerson(e, x)}
                                     onClick={() => onSelectPersona(x)}
                                     currentPersona={selectedPersona}
                                     currentPersonaIdentifier={currentPersonaIdentifier}
