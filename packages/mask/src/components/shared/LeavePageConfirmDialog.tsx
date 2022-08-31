@@ -1,18 +1,27 @@
 import { Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
-import { MaskMessages, useI18N } from '../../utils'
+import { MaskMessages } from '../../utils'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useCallback, useEffect, useState } from 'react'
 import Services from '../../extension/service'
-import { DashboardRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, OpenPageConfirmEvent } from '@masknet/shared-base'
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles<{
+    positionStyle: {
+        top?: number
+        right?: number
+        position?: 'absolute'
+    }
+}>()((theme, props) => {
     return {
         root: {
             width: 384,
             padding: theme.spacing(1),
             background: theme.palette.maskColor.bottom,
+            position: props.positionStyle.position,
+            top: props.positionStyle.top,
+            right: props.positionStyle.right,
         },
         content: {
             padding: theme.spacing(1, 2, 2, 2),
@@ -30,18 +39,26 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export const LeavePageConfirmDialog = () => {
-    const { t } = useI18N()
-    const { classes } = useStyles()
-    const [open, setOpen] = useState(false)
+type PositionOption = 'center' | 'top-right'
+type PositionStyle = {
+    top?: number
+    right?: number
+    position?: 'absolute'
+}
 
-    const [info, setInfo] = useState<{
-        target: 'dashboard' | 'other'
-        url: string
-        title: string
-        text: string
-        actionHint: string
-    }>()
+const positionStyleMap: Record<PositionOption, PositionStyle> = {
+    center: {},
+    'top-right': {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+    },
+}
+
+export const LeavePageConfirmDialog = () => {
+    const [open, setOpen] = useState(false)
+    const [info, setInfo] = useState<OpenPageConfirmEvent>()
+    const { classes } = useStyles({ positionStyle: positionStyleMap[info?.position ?? 'center'] })
 
     const { closeDialog } = useRemoteControlledDialog(MaskMessages.events.openPageConfirm)
 

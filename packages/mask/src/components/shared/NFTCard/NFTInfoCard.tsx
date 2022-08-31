@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.publicSecond,
     },
     listItemContent: {
-        maxWidth: '30%',
+        maxWidth: '40%',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',

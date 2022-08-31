@@ -17,10 +17,6 @@ export type ApplicationDialogEvent = {
     }
 }
 
-export type ApplicationPersonaListDialogEvent = {
-    open: boolean
-}
-
 export type SelectProviderDialogEvent =
     | {
           open: true

@@ -16,12 +16,13 @@ export function addPeerDependencies(runtime: PluginRuntime) {
         PostIVIdentifier,
     })
 
-    runtime.addReExportModule('@masknet/plugin', { exportAllFrom: '@masknet/plugin/utils' })
-    runtime.addReExportModule(
-        '@masknet/plugin/utils',
-        { exportAllFrom: '@masknet/plugin/utils/open' },
-        { exportAllFrom: '@masknet/plugin/utils/rpc' },
-    )
+    runtime.addReExportAllModule('@masknet/plugin', ['@masknet/plugin/utils'])
+    runtime.addReExportAllModule('@masknet/plugin/utils', ['@masknet/plugin/utils/rpc'])
+    runtime.addReExportAllModule('@masknet/plugin/ui', [
+        //
+        '@masknet/plugin/ui/showSnackbar',
+        '@masknet/plugin/ui/open',
+    ])
 }
 
 export function addCompatibilityModuleAlias(runtime: PluginRuntime) {

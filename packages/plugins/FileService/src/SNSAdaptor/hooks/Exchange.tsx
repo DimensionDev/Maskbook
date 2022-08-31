@@ -1,6 +1,6 @@
 import { noop, omit } from 'lodash-unified'
 import { createContext, useContext } from 'react'
-import type { FileInfo, DialogCloseCallback } from '../../types'
+import type { FileInfo, DialogCloseCallback } from '../../types.js'
 
 export interface Props extends React.PropsWithChildren<{}> {
     onInsert(info: FileInfo | null): void

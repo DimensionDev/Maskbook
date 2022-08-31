@@ -18,9 +18,6 @@ const useStyles = makeStyles()((theme) => ({
         height: 300,
         flexDirection: 'column',
     },
-    card: {
-        marginTop: 16,
-    },
 }))
 
 export const StatusBox: FC<Props> = ({ loading, empty, description }) => {
@@ -29,7 +26,7 @@ export const StatusBox: FC<Props> = ({ loading, empty, description }) => {
         return (
             <>
                 {range(3).map((i) => (
-                    <Box className={classes.card} key={i}>
+                    <Box mb={2} key={i}>
                         <Skeleton animation="wave" variant="rectangular" height={125} />
                     </Box>
                 ))}

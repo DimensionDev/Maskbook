@@ -61,7 +61,7 @@ export const searchAvatarSelector = () =>
 export const searchNFTAvatarSelector = () =>
     querySelector<HTMLImageElement>('[data-testid="primaryColumn"] a[href$="/nft"] img[src*="profile_images"]')
 export const searchAvatarMetaSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('head > meta[property="og:image"]:last-child')
+    querySelector<E>('head meta[property="og:image"]')
 
 export const profileFollowButtonSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(

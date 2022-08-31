@@ -717,6 +717,7 @@ export interface Connection<
     ProviderType,
     Signature,
     Block,
+    Operation,
     Transaction,
     TransactionReceipt,
     TransactionDetailed,
@@ -862,6 +863,10 @@ export interface Connection<
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,
     ): Promise<string>
+    /** Call a operation */
+    callOperation?: (operation: Operation, initial?: Web3ConnectionOptions) => Promise<string>
+    /** Send a operation */
+    sendOperation?: (operation: Operation, initial?: Web3ConnectionOptions) => Promise<TransactionSignature>
     /** Sign a transaction */
     signTransaction(transaction: Transaction, initial?: Web3ConnectionOptions): Promise<TransactionSignature>
     /** Sign multiple transactions */
@@ -1160,7 +1165,7 @@ export interface Web3StorageServiceState {
     ) => Storage
     createKVStorage: (namespace: string) => Storage
     createRSS3Storage: (namespace: string) => Storage
-    createNextIDStorage: (proofIdentity: string, platform: NextIDPlatform,personaIdentifier: ECKeyIdentifier,) => Storage
+    createNextIDStorage: (proofIdentity: string, platform: NextIDPlatform, signerOrPublicKey: string | ECKeyIdentifier) => Storage
 }
 
 export interface IdentityServiceState {
@@ -1276,6 +1281,7 @@ export interface ConnectionState<
     ProviderType,
     Signature,
     Block,
+    Operation,
     Transaction,
     TransactionReceipt,
     TransactionDetailed,
@@ -1289,6 +1295,7 @@ export interface ConnectionState<
         ProviderType,
         Signature,
         Block,
+    Operation,
         Transaction,
         TransactionReceipt,
         TransactionDetailed,

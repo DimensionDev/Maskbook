@@ -6,7 +6,7 @@ import {
     getNftRedPacketConstants,
     NetworkType,
 } from '@masknet/web3-shared-evm'
-import { createLookupTableResolver } from '@masknet/web3-shared-base'
+import { createLookupTableResolver } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 
 export function getAllMaskDappContractInfo(chainId: ChainId, type: 'token' | 'nft') {

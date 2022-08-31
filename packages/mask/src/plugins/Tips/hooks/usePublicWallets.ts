@@ -26,7 +26,11 @@ export function usePublicWallets(persona: ECKeyIdentifier | undefined): TipAccou
 
     const { value: walletsFromCloud } = useAsync(async () => {
         if (!Storage || !persona) return null
-        const storage = Storage.createNextIDStorage(persona.publicKeyAsHex, NextIDPlatform.NextID, persona)
+        const storage = Storage.createNextIDStorage(
+            persona.publicKeyAsHex,
+            NextIDPlatform.NextID,
+            persona.publicKeyAsHex,
+        )
         const wallets = (await storage.get<BindingProof[]>(PluginId.Tips))?.filter(
             (x) => x.platform === NextIDPlatform.Ethereum,
         )

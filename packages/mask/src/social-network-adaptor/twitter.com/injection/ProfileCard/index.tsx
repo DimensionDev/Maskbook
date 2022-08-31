@@ -71,7 +71,7 @@ function ProfileCardHolder() {
         const onClick = (event: MouseEvent) => {
             // @ts-ignore
             // `NODE.contains(other)` doesn't work for cross multiple layer of Shadow DOM
-            if (!event.path.includes(holderRef.current)) {
+            if (!event.path?.includes(holderRef.current)) {
                 setStyle((old) => {
                     if (old.visibility === 'hidden') return old
                     return {

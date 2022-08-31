@@ -74,6 +74,10 @@ export enum ChainId {
 
     // Astar
     Astar = 592,
+
+    ZKSync_Alpha_Testnet = 280,
+
+    Crossbell = 3737,
 }
 
 /**
@@ -152,6 +156,11 @@ export enum EthereumMethodType {
     ETH_SIGN_TRANSACTION = 'eth_signTransaction',
     ETH_GET_LOGS = 'eth_getLogs',
     ETH_GET_ENCRYPTION_PUBLIC_KEY = 'eth_getEncryptionPublicKey',
+
+    // EIP-4337
+    ETH_SEND_USER_OPERATION = 'eth_sendUserOperation',
+    ETH_CALL_USER_OPERATION = 'eth_callUserOperation',
+    ETH_SUPPORTED_ENTRY_POINTS = 'eth_supportedEntryPoints',
 
     // only for mask
     MASK_LOGIN = 'MASK_LOGIN',
@@ -375,6 +384,20 @@ export type Transaction = TransactionConfig_ & {
     feeCurrency?: string // address of the ERC20 contract to use to pay for gas and the gateway fee
     gatewayFeeRecipient?: string // coinbase address of the full serving the light client's transactions
     gatewayFee?: string // value paid to the gateway fee recipient, denominated in the fee currency
+}
+export type Operation = {
+    sender: string
+    nonce: number
+    initCode?: string
+    callData?: string
+    callGas: string
+    verificationGas: string
+    preVerificationGas: string
+    maxFeePerGas: string
+    maxPriorityFeePerGas: string
+    paymaster?: string
+    paymasterData?: string
+    signature: string
 }
 export type TransactionReceipt = Web3TransactionReceipt
 export type TransactionDetailed = Web3Transaction

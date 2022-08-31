@@ -89,7 +89,11 @@ export enum EncryptionTargetType {
 export interface NFTAvatarSettingDialogEvent {
     open: boolean
 }
-
+export interface OpenNFTDialogEvent {
+    open: boolean
+    tokenId: string
+    address: string
+}
 export interface SettingsUpdateEvent {
     id: number
     key: string
@@ -108,6 +112,7 @@ export interface OpenPageConfirmEvent {
     title: string
     text: string
     actionHint: string
+    position?: 'center' | 'top-right'
 }
 
 export interface Web3ProfileDialogRequest {
@@ -162,6 +167,10 @@ export interface SwapDialogEvent {
         defaultOutputCoin?: TokenType
         chainId?: number
     }
+}
+
+export interface SettingDialogEvent {
+    open: boolean
 }
 
 /** This is a subset of browser.permissions.Permission */

@@ -114,7 +114,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         const storage = Storage.createNextIDStorage(
             currentPersonaIdentifier.publicKeyAsHex,
             NextIDPlatform.NextID,
-            currentPersonaIdentifier,
+            currentPersonaIdentifier.publicKeyAsHex,
         )
 
         return storage.get<BindingProof[]>(PluginId.Tips)
