@@ -1,20 +1,20 @@
 import { useContext } from 'react'
 import { Box } from '@mui/material'
 import useStyles from './useStyles'
-import { ENSEmptyContent } from './ENSEmptyContent'
-import { ENSLoadingContent } from './ENSLoadingContent'
-import { ENSLoadFailedContent } from './ENSLoadFailedContent'
-import { ENSProvider, ENSContext, SearchResultInspectorProps } from './ENSContext'
+import { EmptyContent } from './EmptyContent'
+import { LoadingContent } from './LoadingContent'
+import { LoadFailedContent } from './LoadFailedContent'
+import { ENSProvider, ENSContext, SearchResultInspectorProps } from './context'
 
 export function SearchResultInspectorContent() {
     const { classes } = useStyles()
     const { isLoading, isNoResult, isError, reversedAddress, retry, tokenId } = useContext(ENSContext)
 
-    if (isError) return <ENSLoadFailedContent isLoading={isLoading} retry={retry} />
+    if (isError) return <LoadFailedContent isLoading={isLoading} retry={retry} />
 
-    if (isLoading) return <ENSLoadingContent />
+    if (isLoading) return <LoadingContent />
 
-    if (isNoResult) return <ENSEmptyContent />
+    if (isNoResult) return <EmptyContent />
 
     return <Box className={classes.root}>234</Box>
 }

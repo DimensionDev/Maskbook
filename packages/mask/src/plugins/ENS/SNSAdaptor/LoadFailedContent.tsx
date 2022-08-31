@@ -3,7 +3,7 @@ import { ActionButton } from '@masknet/theme'
 import useStyles from './useStyles'
 import { useI18N } from '../locales'
 
-export function ENSLoadFailedContent({
+export function LoadFailedContent({
     retry,
     isLoading = false,
 }: {

@@ -3,7 +3,7 @@ import { Typography, Box } from '@mui/material'
 import useStyles from './useStyles'
 import { useI18N } from '../locales'
 
-export function ENSLoadingContent() {
+export function LoadingContent() {
     const { classes, cx } = useStyles()
 
     const t = useI18N()
