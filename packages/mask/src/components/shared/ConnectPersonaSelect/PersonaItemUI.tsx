@@ -55,7 +55,7 @@ const useStyles = makeStyles()((theme) => {
             left: '77.62%',
             right: '5.84%',
             top: '5.84%',
-            bottom: '77.62',
+            bottom: '77.62%',
             border: `1px solid ${theme.palette.maskColor.bottom}`,
         },
     }
