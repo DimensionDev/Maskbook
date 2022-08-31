@@ -38,11 +38,15 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const [supportedNetworkList, setSupportedNetworkList] = useState<
         Array<Web3Helper.NetworkDescriptorAll['type']> | undefined
     >()
+    const network = useNetworkDescriptor()
+    const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(network?.ID)
     // #region remote controlled dialog logic
     const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated, (ev) => {
         if (!ev.open) return
         setWalletConnectedCallback(() => ev.walletConnectedCallback)
         setSupportedNetworkList(ev.supportedNetworkList)
+        setUndeterminedNetworkID(ev.network?.ID)
+        setUndeterminedPluginID(ev.network?.networkSupporterPluginID)
     })
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.connectWalletDialogUpdated,
@@ -60,9 +64,7 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const networks = getRegisteredWeb3Networks()
     const providers = getRegisteredWeb3Providers()
     const pluginIDs = useValueRef(pluginIDSettings)
-    const network = useNetworkDescriptor()
     const [undeterminedPluginID, setUndeterminedPluginID] = useState(site ? pluginIDs[site] : undefined)
-    const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(network?.ID)
 
     const Web3State = useWeb3State(undeterminedPluginID)
     const { Others, Provider } = Web3State

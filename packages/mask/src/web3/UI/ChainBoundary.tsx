@@ -101,7 +101,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     const isPluginIDMatched = actualPluginID === expectedPluginID
     const isMatched = predicate(actualPluginID, actualChainId)
 
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
+    const { openDialog: openSelectProviderDialog, setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
 
@@ -112,7 +112,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         if (!expectedChainAllowed) return 'init'
 
         if (!isPluginIDMatched || actualProviderType === ProviderType.WalletConnect) {
-            openSelectProviderDialog()
+            setSelectProviderDialog({ open: true, network: expectedNetworkDescriptor })
             return 'init'
         }
         if (!isMatched) {
