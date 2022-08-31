@@ -456,6 +456,8 @@ export namespace Plugin.SNSAdaptor {
         SettingTabs?: SettingTab[]
         /** This UI will be rendered components on the avatar realm */
         AvatarRealm?: AvatarRealm
+        /** This UI will be rendered components on the tips realm */
+        TipsRealm?: TipsRealm
         /** This UI will be rendered as plugin wrapper page */
         wrapperProps?: PluginWrapperProps
         /**
@@ -630,6 +632,26 @@ export namespace Plugin.SNSAdaptor {
                 addressNames?: Array<SocialAddress<NetworkPluginID>>,
                 sourceType?: AvatarRealmSourceType,
             ): boolean
+        }
+    }
+    export enum TipsSlot {
+        FollowButton = 'follow',
+        FocusingPost = 'focusing-post',
+        Post = 'post',
+        Profile = 'profile',
+    }
+    export interface TipsRealmOptions {
+        identity?: ProfileIdentifier
+        slot: TipsSlot
+    }
+    export interface TipsRealm {
+        ID: string
+        priority: number
+        UI?: {
+            /**
+             * The injected Tips Content component
+             */
+            Content: InjectUI<TipsRealmOptions>
         }
     }
     export interface ProfileSlider {

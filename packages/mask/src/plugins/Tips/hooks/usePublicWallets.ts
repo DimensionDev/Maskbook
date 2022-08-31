@@ -1,18 +1,17 @@
 import { PluginId } from '@masknet/plugin-infra'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
-import { EMPTY_LIST, NextIDPlatform, ECKeyIdentifier, BindingProof } from '@masknet/shared-base'
+import { EMPTY_LIST, NextIDPlatform, BindingProof } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { uniqBy } from 'lodash-unified'
 import { useEffect, useMemo } from 'react'
 import { useAsync, useAsyncRetry } from 'react-use'
 import { MaskMessages } from '../../../utils'
-import type { TipAccount } from '../types'
+import type { TipsAccount } from '../types'
 
-export function usePublicWallets(persona: ECKeyIdentifier | undefined): TipAccount[] {
-    const personaPubkey = persona?.publicKeyAsHex
+export function usePublicWallets(personaPubkey?: string): TipsAccount[] {
     const { Storage } = useWeb3State()
-    const { value: nextIdWallets, retry: queryWallets } = useAsyncRetry(async (): Promise<TipAccount[]> => {
+    const { value: nextIdWallets, retry: queryWallets } = useAsyncRetry(async (): Promise<TipsAccount[]> => {
         if (!personaPubkey) return EMPTY_LIST
 
         const bindings = await NextIDProof.queryExistedBindingByPersona(personaPubkey, true)
@@ -25,12 +24,8 @@ export function usePublicWallets(persona: ECKeyIdentifier | undefined): TipAccou
     }, [personaPubkey])
 
     const { value: walletsFromCloud } = useAsync(async () => {
-        if (!Storage || !persona) return null
-        const storage = Storage.createNextIDStorage(
-            persona.publicKeyAsHex,
-            NextIDPlatform.NextID,
-            persona.publicKeyAsHex,
-        )
+        if (!Storage || !personaPubkey) return null
+        const storage = Storage.createNextIDStorage(personaPubkey, NextIDPlatform.NextID, personaPubkey)
         const wallets = (await storage.get<BindingProof[]>(PluginId.Tips))?.filter(
             (x) => x.platform === NextIDPlatform.Ethereum,
         )
@@ -47,7 +42,7 @@ export function usePublicWallets(persona: ECKeyIdentifier | undefined): TipAccou
             })
             .sort((x) => (x.isDefault ? -1 : 0))
             .map((x) => ({ address: x.identity, verified: true }))
-    }, [persona, Storage, nextIdWallets])
+    }, [personaPubkey, Storage, nextIdWallets])
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {

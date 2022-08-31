@@ -7,11 +7,12 @@ import { Link } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { base } from '../base'
-import { PostTipButton, TipTaskManager } from '../components'
+import { TipTaskManager } from '../components'
 import { RootContext } from '../contexts'
 import { setupStorage, storageDefaultValue } from '../storage'
 import { TipsEntranceDialog } from './TipsEntranceDialog'
 import { CrossIsolationMessages } from '@masknet/shared-base'
+import { TipsRealmContent } from './components/TipsRealmContent'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -93,12 +94,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
             </RootContext>
         )
     },
-    PostActions() {
-        return (
-            <RootContext>
-                <PostTipButton />
-            </RootContext>
-        )
+    TipsRealm: {
+        ID: `${base.ID}_tips`,
+        priority: 1,
+        UI: {
+            Content: TipsRealmContent,
+        },
     },
 }
 
