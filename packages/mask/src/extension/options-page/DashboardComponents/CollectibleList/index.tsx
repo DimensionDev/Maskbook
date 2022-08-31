@@ -264,10 +264,8 @@ export function CollectionList({ addressName, persona, profile, gridProps = EMPT
     const collectionsWithName = useMemo(() => {
         const collections = uniqBy(allCollectibles, (x) => x?.contract?.address.toLowerCase())
             .map((x) => x?.collection)
-            .filter((x) => x?.name.length) as Array<
-            NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-        >
-        return collections
+            .filter((x) => x?.name?.length)
+        return collections as Array<NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     }, [allCollectibles.length])
 
     if (!allCollectibles.length && !done && !error && account)
