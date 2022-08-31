@@ -16,7 +16,7 @@ if (process.env.NODE_ENV === 'development') {
 if (Flags.sandboxedPluginRuntime) {
     const host = new BackgroundPluginHost(
         {
-            ...createHostAPIs(),
+            ...createHostAPIs(true),
             createTaggedStorage: createPluginDatabase,
         },
         process.env.NODE_ENV === 'development',

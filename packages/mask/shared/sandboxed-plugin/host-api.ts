@@ -1,6 +1,6 @@
-import { MessageTarget, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
+import { Environment, MessageTarget, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 
-export function createHostAPIs() {
+export function createHostAPIs(isBackground: boolean) {
     return {
         async getPluginList() {
             const plugins = await fetch(browser.runtime.getURL('/sandboxed-modules/plugins.json')).then((x) => x.json())
@@ -17,13 +17,13 @@ export function createHostAPIs() {
         // TODO: support signal
         createRpcChannel(id: string) {
             return new WebExtensionMessage<{ f: any }>({ domain: `mask-plugin-${id}-rpc` }).events.f.bind(
-                MessageTarget.Broadcast,
+                isBackground ? MessageTarget.Broadcast : Environment.ManifestBackground,
             )
         },
         // TODO: support signal
         createRpcGeneratorChannel(id: string) {
             return new WebExtensionMessage<{ g: any }>({ domain: `mask-plugin-${id}-rpc` }).events.g.bind(
-                MessageTarget.Broadcast,
+                isBackground ? MessageTarget.Broadcast : Environment.ManifestBackground,
             )
         },
     }
