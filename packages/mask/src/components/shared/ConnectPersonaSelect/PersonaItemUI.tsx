@@ -45,7 +45,7 @@ const useStyles = makeStyles()((theme) => {
             lineHeight: '16px',
             color: theme.palette.maskColor.second,
         },
-        dot: {
+        indicator: {
             display: 'inline-block',
             background: '#2DDF00',
             borderRadius: '50%',
@@ -95,7 +95,7 @@ export const PersonaItemUI = (props: PersonaItemProps) => {
                     />
                 )}
                 {!data.avatar && <Icons.MenuPersonasActive size={30} />}
-                {isSamePersona(currentPersonaIdentifier, data.persona) && <Box className={classes.dot} />}
+                {isSamePersona(currentPersonaIdentifier, data.persona) && <Box className={classes.indicator} />}
             </Box>
             <Stack flexGrow={1}>
                 <Typography className={classes.nickname}>
