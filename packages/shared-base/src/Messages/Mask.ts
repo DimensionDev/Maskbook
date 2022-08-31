@@ -127,11 +127,16 @@ export type OpenApplicationRequestEvent = {
     application: string
 }
 
-export type OpenProfileCardEvent = {
-    userId: string
-    x: number
-    y: number
-}
+export type ProfileCardEvent =
+    | {
+          open: false
+      }
+    | {
+          open: true
+          userId: string
+          x: number
+          y: number
+      }
 
 export type CheckSecurityDialogRequest =
     | {
