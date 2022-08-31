@@ -310,7 +310,7 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
     description?: string
     address?: string
     schema?: SchemaType
-    iconURL?: string
+    iconURL?: string | null
     /** the amount of mint tokens */
     tokensTotal?: number
     /** the amount of holders */
