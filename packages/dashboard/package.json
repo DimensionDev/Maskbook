@@ -39,7 +39,7 @@
     "@servie/events": "^3.0.0",
     "@types/color": "^3.0.3",
     "@types/react-avatar-editor": "^13.0.0",
-    "async-call-rpc": "^6.1.2",
+    "async-call-rpc": "^6.1.5",
     "bignumber.js": "^9.0.2",
     "classnames": "^2.3.1",
     "color": "^4.2.3",

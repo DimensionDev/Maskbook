@@ -137,8 +137,9 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         signal,
     )
 
+    const currentSNS = getCurrentSNSNetwork(ui.networkIdentifier)
     startPluginSNSAdaptor(
-        getCurrentSNSNetwork(ui.networkIdentifier),
+        currentSNS,
         createPluginHost(
             signal,
             (pluginID, signal): Plugin.SNSAdaptor.SNSAdaptorContext => {
@@ -156,6 +157,9 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             Services.Settings.getPluginMinimalModeEnabled,
         ),
     )
+
+    // TODO: receive the signal
+    if (Flags.sandboxedPluginRuntime) import('./sandboxed-plugin')
 
     setupShadowRootPortal()
 

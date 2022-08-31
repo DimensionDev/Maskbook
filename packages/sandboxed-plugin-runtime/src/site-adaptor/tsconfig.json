@@ -1,10 +1,16 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../../../tsconfig.json",
   "compilerOptions": {
     "rootDir": "./",
     "outDir": "../../dist/site-adaptor/",
     "tsBuildInfoFile": "../../dist/site-adaptor.tsbuildinfo"
   },
   "include": ["./"],
-  "references": []
+  "references": [
+    { "path": "../runtime" },
+    { "path": "../types" },
+    { "path": "../peer-dependencies" },
+    { "path": "../utils" },
+    { "path": "../../../shared-base" }
+  ]
 }
