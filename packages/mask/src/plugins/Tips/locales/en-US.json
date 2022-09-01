@@ -25,6 +25,8 @@
     "search": "Search",
     "tip_type_token": "Token",
     "tip_type_nft": "NFT",
+    "tips_tab_tokens": "Tokens",
+    "tips_tab_colletibles": "Collectibles",
     "tip_wallets_missed": "Wallets not found.",
     "tip_contracts": "Contracts",
     "tip_mask_promote": "Install https://mask.io/download-links to send your first tip.",
@@ -53,5 +55,12 @@
     "tip_set_as_default": "Set as default",
     "tip_copy_success_of_wallet_addr": "Copy wallet address successfully!",
     "copy_address": "Copy Address",
-    "view_on_explorer": "View on Explorer"
+    "view_on_explorer": "View on Explorer",
+    "source_tooltip": "Data source is retrieved from <Link>{{source}}<Link>",
+    "source_tooltip$twitter": "Data source is retrieved from Twitter profile and <Link>{{source}}<Link>",
+    "source_tooltip_only$twitter": "Data source is retrieved from Twitter profile",
+    "source_tooltip$facebook": "Data source is retrieved from Facebook profile and <Link>{{source}}<Link>",
+    "source_tooltip_only$facebook": "Data source is retrieved from Facebook",
+    "source_tooltip$next_id": "Data source is retrieved from <Link>NEXT.ID<Link>",
+    "nft_amount": "NFT Amount: <strong>{{count}}</strong>"
 }

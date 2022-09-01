@@ -148,7 +148,6 @@ export function CollectionList({ addressName, persona, profile, gridProps = EMPT
                             </Box>
                         )}
                         <CollectibleList
-                            address={addressName}
                             retry={retryFetchCollectible}
                             collectibles={renderCollectibles}
                             loading={renderCollectibles.length === 0}

@@ -3,14 +3,15 @@ import type { FungibleToken, NonFungibleToken, NonFungibleTokenContract } from '
 import type { GasConfig } from '@masknet/web3-shared-evm'
 import { noop } from 'lodash-unified'
 import { createContext, Dispatch, SetStateAction } from 'react'
-import { TipsAccount, TipType } from '../../types/index.js'
+import { TipsAccount, TipsType } from '../../types/index.js'
 
 export interface ContextOptions {
-    recipient: string
+    recipient: TipsAccount | undefined
     recipientSnsId: string
+    recipientAddress: string
     setRecipient: Dispatch<SetStateAction<string>>
-    tipType: TipType
-    setTipType: Dispatch<SetStateAction<TipType>>
+    tipType: TipsType
+    setTipType: Dispatch<SetStateAction<TipsType>>
     recipients: TipsAccount[]
     token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
     setToken: Dispatch<SetStateAction<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null>>
@@ -30,10 +31,11 @@ export interface ContextOptions {
 }
 
 export const TipContext = createContext<ContextOptions>({
-    recipient: '',
+    recipient: undefined,
+    recipientAddress: '',
     recipientSnsId: '',
     setRecipient: noop,
-    tipType: TipType.NFT,
+    tipType: TipsType.Collectibles,
     setTipType: noop,
     recipients: [],
     token: null,

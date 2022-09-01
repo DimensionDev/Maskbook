@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
 import { openWindow, useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
@@ -101,22 +101,26 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     )
 
     // not available for the native app
+
+    const isDashboard = isDashboardPage()
+    const selectedNetworks = useMemo(
+        () =>
+            isDashboard ? networks.filter((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM) : networks,
+        [isDashboard, networks],
+    )
+    const selectedProviders = useMemo(
+        () =>
+            isDashboard ? providers.filter((x) => x.providerAdaptorPluginID === NetworkPluginID.PLUGIN_EVM) : providers,
+        [isDashboard, networks],
+    )
     if (hasNativeAPI) return null
 
     return (
         <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={closeDialog}>
             <DialogContent className={classes.content}>
                 <PluginProviderRender
-                    networks={
-                        isDashboardPage()
-                            ? networks.filter((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM)
-                            : networks
-                    }
-                    providers={
-                        isDashboardPage()
-                            ? providers.filter((x) => x.providerAdaptorPluginID === NetworkPluginID.PLUGIN_EVM)
-                            : providers
-                    }
+                    networks={selectedNetworks}
+                    providers={selectedProviders}
                     undeterminedPluginID={undeterminedPluginID}
                     supportedNetworkList={supportedNetworkList}
                     undeterminedNetworkID={undeterminedNetworkID}

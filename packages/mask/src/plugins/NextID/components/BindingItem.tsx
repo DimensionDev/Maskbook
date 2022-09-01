@@ -12,6 +12,7 @@ import { useI18N } from '../locales/index.js'
 import { ImageIcon } from '@masknet/shared'
 import { TipButton } from '../../../plugins/Tips/components/index.js'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI.js'
+import type { TipsAccount } from '../../Tips/types/tip.js'
 
 const useStyles = makeStyles()((theme) => ({
     item: {
@@ -70,7 +71,10 @@ export const BindingItem = memo<Item>(({ platform, identity, tipable, deletable,
     const { classes } = useStyles()
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, ChainId.Mainnet)
     const visitingPersona = useCurrentVisitingIdentity()
-    const addressConfigs = useMemo(() => [{ address: identity, verified: true }], [identity])
+    const addressConfigs = useMemo(
+        (): TipsAccount[] => [{ pluginId: NetworkPluginID.PLUGIN_EVM, address: identity, verified: true }],
+        [identity],
+    )
 
     if (platform === NextIDPlatform.Ethereum) {
         return (

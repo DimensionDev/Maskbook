@@ -35,7 +35,7 @@ const useStyles = makeStyles()((theme) => ({
 interface CollectibleItemProps extends HTMLProps<HTMLDivElement>, CollectibleCardProps {}
 
 export const CollectibleItem = forwardRef<HTMLDivElement, CollectibleItemProps>((props: CollectibleItemProps, ref) => {
-    const { provider, asset, readonly, renderOrder, address, className, ...rest } = props
+    const { provider, asset, renderOrder, className, ...rest } = props
     const { classes, cx } = useStyles()
     const { Others } = useWeb3State()
 
@@ -47,9 +47,7 @@ export const CollectibleItem = forwardRef<HTMLDivElement, CollectibleItemProps>(
                 className={classes.collectibleCard}
                 asset={asset}
                 provider={provider}
-                readonly={readonly}
                 renderOrder={renderOrder}
-                address={address}
             />
             <div className={classes.description}>
                 <Typography className={classes.name} color="textPrimary" variant="body2">

@@ -24,6 +24,19 @@ const useStyles = makeStyles<{}, 'postTipsButton'>()((theme, _, refs) => ({
         },
     },
     postTipsButton: {},
+    roundButton: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderStyle: 'solid',
+        borderColor: theme.palette.mode === 'dark' ? '#536471' : '#d2dbe0',
+        verticalAlign: 'top',
+        color: theme.palette.text.primary,
+        '&:hover': {
+            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(239,243,244,0.1)' : 'rgba(15,20,25,0.1)',
+        },
+    },
     followTipsButton: {
         position: 'absolute',
         width: '100%',
@@ -42,16 +55,21 @@ const useStyles = makeStyles<{}, 'postTipsButton'>()((theme, _, refs) => ({
     },
 }))
 
-export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOptions> = ({ identity, slot }) => {
+export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOptions> = ({
+    identity,
+    slot,
+    onStatusUpdate,
+}) => {
     const { classes, cx } = useStyles({})
     if (!identity) return null
 
     const buttonClassMap: Record<Plugin.SNSAdaptor.TipsSlot, string> = {
-        [Plugin.SNSAdaptor.TipsSlot.FollowButton]: classes.followTipsButton,
+        [Plugin.SNSAdaptor.TipsSlot.FollowButton]: cx(classes.followTipsButton, classes.roundButton),
         [Plugin.SNSAdaptor.TipsSlot.FocusingPost]: classes.postTipsButton,
         [Plugin.SNSAdaptor.TipsSlot.Post]: classes.postTipsButton,
-        [Plugin.SNSAdaptor.TipsSlot.Profile]: classes.profileTipsButton,
+        [Plugin.SNSAdaptor.TipsSlot.Profile]: cx(classes.profileTipsButton, classes.roundButton),
     }
+    const button = <TipButton className={buttonClassMap[slot]} receiver={identity} onStatusUpdate={onStatusUpdate} />
     if (slot === Plugin.SNSAdaptor.TipsSlot.Post || slot === Plugin.SNSAdaptor.TipsSlot.FocusingPost) {
         return (
             <div
@@ -59,9 +77,9 @@ export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOption
                     classes.postButtonWrapper,
                     slot === Plugin.SNSAdaptor.TipsSlot.FocusingPost ? classes.focusingPostButtonWrapper : undefined,
                 )}>
-                <TipButton className={buttonClassMap[slot]} receiver={identity} />
+                {button}
             </div>
         )
     }
-    return <TipButton className={buttonClassMap[slot]} receiver={identity} />
+    return button
 }

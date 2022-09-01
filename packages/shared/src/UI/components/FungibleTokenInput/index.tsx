@@ -40,7 +40,6 @@ export const FungibleTokenInput = memo<FungibleTokenInputProps>(
         maxAmount,
         balance,
         maxAmountSignificant,
-        loadingBalance,
         placeholder = '0.0',
         maxAmountShares = 1,
     }) => {

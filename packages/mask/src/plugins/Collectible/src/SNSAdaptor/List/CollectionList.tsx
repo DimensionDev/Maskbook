@@ -150,7 +150,7 @@ export function CollectionList({ addressName, persona, profile, gridProps = EMPT
                             </Box>
                         )}
                         <CollectibleList
-                            address={addressName}
+                            pluginID={addressName.networkSupporterPluginID}
                             retry={retryFetchCollectible}
                             collectibles={renderCollectibles}
                             loading={renderCollectibles.length === 0}

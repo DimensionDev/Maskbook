@@ -4,6 +4,7 @@ import {
     useActivatedPluginsSNSAdaptor,
     usePostInfoDetails,
 } from '@masknet/plugin-infra/content-script'
+import { useState } from 'react'
 
 const ActionsRenderer = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
@@ -12,6 +13,7 @@ const ActionsRenderer = createInjectHooksRenderer(
 
 export function PostActions({ isFocusing }: { isFocusing?: boolean }) {
     const identifier = usePostInfoDetails.author()
+    const [disabled, setDisabled] = useState(false)
     if (!identifier) return null
     return (
         <ActionsRenderer

@@ -658,6 +658,7 @@ export namespace Plugin.SNSAdaptor {
     export interface TipsRealmOptions {
         identity?: ProfileIdentifier
         slot: TipsSlot
+        onStatusUpdate?(disabled: boolean): void
     }
     export interface TipsRealm {
         ID: string

@@ -4,7 +4,7 @@ import type { GasConfig } from '@masknet/web3-shared-evm'
 import { FC, useContext, useEffect, useMemo, useState } from 'react'
 import { useSubscription } from 'use-subscription'
 import { getStorage } from '../../storage/index.js'
-import { TipTask, TipType } from '../../types/index.js'
+import { TipTask, TipsType } from '../../types/index.js'
 import { TargetRuntimeContext } from '../TargetRuntimeContext.js'
 import { ContextOptions, TipContext } from './TipContext.js'
 import { useTipAccountsCompletion } from './useTipAccountsCompletion.js'
@@ -16,10 +16,10 @@ interface Props {
 }
 
 export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, task }) => {
-    const { targetChainId, pluginId } = TargetRuntimeContext.useContainer()
-    const [recipient, setRecipient] = useState(task.recipient ?? '')
+    const { targetChainId, pluginId, setPluginId } = TargetRuntimeContext.useContainer()
+    const [recipientAddress, setRecipient] = useState<string>(task.recipient ?? '')
     const recipients = useTipAccountsCompletion(task.addresses)
-    const [tipType, setTipType] = useState<TipType>(TipType.Token)
+    const [tipType, setTipType] = useState<TipsType>(TipsType.Tokens)
     const [amount, setAmount] = useState('')
     const chainId = useChainId()
     const [nonFungibleTokenAddress, setNonFungibleTokenAddress] = useState<string>('')
@@ -27,25 +27,16 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
         chainId: targetChainId,
     })
     const [token, setToken] = useState<ContextOptions['token']>(nativeTokenDetailed)
+    const selectedToken = token ?? nativeTokenDetailed
     const [nonFungibleTokenId, setNonFungibleTokenId] = useState<ContextOptions['nonFungibleTokenId']>(null)
     const storedTokens = useSubscription(getStorage().addedTokens.subscription)
 
     const { value: nonFungibleTokenContract } = useNonFungibleTokenContract(pluginId, nonFungibleTokenAddress)
 
     useEffect(() => {
-        setTipType(TipType.Token)
+        setTipType(TipsType.Tokens)
     }, [targetChainId])
 
-    useEffect(() => {
-        const selected = recipient && recipients.find((x) => x.address === recipient)
-        if (selected || recipients.length === 0) return
-        setRecipient(recipients[0].address)
-    }, [recipient, recipients])
-
-    useEffect(() => {
-        if (!nativeTokenDetailed) return
-        setToken(nativeTokenDetailed)
-    }, [nativeTokenDetailed])
     const [gasConfig, setGasConfig] = useState<GasConfig | undefined>()
     const connectionOptions =
         pluginId === NetworkPluginID.PLUGIN_EVM
@@ -53,12 +44,20 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
                   overrides: gasConfig,
               }
             : undefined
-    const tokenTipTuple = useTokenTip(pluginId, recipient, token, amount, connectionOptions)
-    const nftTipTuple = useNftTip(pluginId, recipient, nonFungibleTokenId, nonFungibleTokenAddress, connectionOptions)
+    const selectedRecipientAddress = recipientAddress || task.recipient || recipients[0]?.address
+    const tokenTipTuple = useTokenTip(pluginId, selectedRecipientAddress, token, amount, connectionOptions)
+    const nftTipTuple = useNftTip(
+        pluginId,
+        selectedRecipientAddress,
+        nonFungibleTokenId,
+        nonFungibleTokenAddress,
+        connectionOptions,
+    )
 
-    const sendTipTuple = tipType === TipType.Token ? tokenTipTuple : nftTipTuple
+    const sendTipTuple = tipType === TipsType.Tokens ? tokenTipTuple : nftTipTuple
     const isSending = sendTipTuple[0]
     const sendTip = sendTipTuple[1]
+    const recipient = recipients.find((x) => x.address === selectedRecipientAddress)
 
     const contextValue = useMemo(() => {
         const reset = () => {
@@ -70,11 +69,12 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
         return {
             recipient,
             recipientSnsId: task.recipientSnsId || '',
+            recipientAddress: selectedRecipientAddress,
             setRecipient,
             recipients,
             tipType,
             setTipType,
-            token,
+            token: selectedToken,
             setToken,
             amount,
             setAmount,
@@ -93,6 +93,8 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
     }, [
         chainId,
         recipient,
+        selectedRecipientAddress,
+        task.recipient,
         task.recipientSnsId,
         recipients,
         tipType,
@@ -100,12 +102,20 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
         nonFungibleTokenId,
         nonFungibleTokenContract,
         nonFungibleTokenAddress,
-        token,
+        selectedToken,
         sendTip,
         isSending,
         gasConfig,
         storedTokens,
     ])
+
+    useEffect(() => {
+        if (recipient?.pluginId) {
+            setPluginId(recipient.pluginId)
+        } else {
+            setPluginId(NetworkPluginID.PLUGIN_EVM)
+        }
+    }, [recipient?.pluginId])
     return <TipContext.Provider value={contextValue}>{children}</TipContext.Provider>
 }
 

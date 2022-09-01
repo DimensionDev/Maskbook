@@ -3,7 +3,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, NFTCardStyledAssetPlayer, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
-import { Checkbox, List, ListItem, Radio, Stack, Tooltip } from '@mui/material'
+import { Box, Checkbox, List, ListItem, Radio, Stack, Tooltip } from '@mui/material'
 import classnames from 'classnames'
 import { FC, useCallback } from 'react'
 import type { TipNFTKeyPair } from '../../types/index.js'
@@ -28,7 +28,7 @@ const useStyles = makeStyles()((theme) => ({
     list: {
         gridGap: 13,
         display: 'grid',
-        gridTemplateColumns: 'repeat(5, 1fr)',
+        gridTemplateColumns: 'repeat(4, 1fr)',
     },
     nftItem: {
         position: 'relative',
@@ -39,9 +39,8 @@ const useStyles = makeStyles()((theme) => ({
         padding: 0,
         flexDirection: 'column',
         borderRadius: 12,
-        height: 96,
         userSelect: 'none',
-        width: 96,
+        width: '100%',
         justifyContent: 'center',
     },
     disabled: {
@@ -75,12 +74,14 @@ const useStyles = makeStyles()((theme) => ({
         width: 96,
     },
     wrapper: {
-        height: '96px !important',
-        width: '96px !important',
+        width: '100% !important',
+        height: 'auto !important',
+        aspectRatio: '1/1',
     },
     imgWrapper: {
-        height: '96px !important',
-        width: '96px !important',
+        width: '100% !important',
+        height: 'auto !important',
+        aspectRatio: '1 / 1',
         img: {
             height: '100%',
             width: '100%',
@@ -98,19 +99,23 @@ interface NFTItemProps {
 export const NFTItem: FC<NFTItemProps> = ({ token }) => {
     const { classes } = useStyles()
     const chainId = useChainId()
+    const { Others } = useWeb3State()
     return (
-        <NFTCardStyledAssetPlayer
-            chainId={chainId}
-            contractAddress={token.contract?.address}
-            url={token.metadata?.imageURL ?? token.metadata?.mediaURL}
-            tokenId={token.tokenId}
-            classes={{
-                fallbackImage: classes.fallbackImage,
-                iframe: classes.assetPlayerIframe,
-                wrapper: classes.wrapper,
-                imgWrapper: classes.imgWrapper,
-            }}
-        />
+        <div>
+            <NFTCardStyledAssetPlayer
+                chainId={chainId}
+                contractAddress={token.contract?.address}
+                url={token.metadata?.imageURL ?? token.metadata?.mediaURL}
+                tokenId={token.tokenId}
+                classes={{
+                    fallbackImage: classes.fallbackImage,
+                    iframe: classes.assetPlayerIframe,
+                    wrapper: classes.wrapper,
+                    imgWrapper: classes.imgWrapper,
+                }}
+            />
+            <div>#{Others?.formatAddress(token.tokenId)}</div>
+        </div>
     )
 }
 
@@ -133,7 +138,7 @@ export const NFTList: FC<Props> = ({
         (currentId: string | null, contractAddress?: string) => {
             onChange?.(currentId, contractAddress)
         },
-        [onChange, isRadio, reachedLimit],
+        [onChange],
     )
     const pluginId = useCurrentWeb3NetworkPluginID()
     const includes =
@@ -149,51 +154,53 @@ export const NFTList: FC<Props> = ({
     const { Others } = useWeb3State()
 
     return (
-        <List className={classnames(classes.list, className)}>
-            {tokens.map((token) => {
-                const selected = includes(selectedPairs, [token.contract?.address!, token.tokenId])
-                const disabled = !isRadio && reachedLimit && !selected
-                const name = token.collection?.name || token.contract?.name
-                const title = `${name} ${Others?.formatTokenId(token.tokenId, 2)}`
-                return (
-                    <Tooltip
-                        classes={{ tooltip: classes.tooltip }}
-                        key={`${token.address}/${token.tokenId}/${token.id}`}
-                        title={title}
-                        placement="top"
-                        disableInteractive
-                        PopperProps={{
-                            disablePortal: true,
-                            popperOptions: {
-                                strategy: 'absolute',
-                            },
-                        }}
-                        arrow>
-                        <ListItem
-                            className={classnames(classes.nftItem, {
-                                [classes.disabled]: disabled,
-                                [classes.selected]: selected,
-                                [classes.unselected]: selectedPairs.length > 0 && !selected,
-                            })}
-                            onClick={() => {
-                                if (disabled) return
-                                if (selected) {
-                                    toggleItem(null, '')
-                                } else {
-                                    toggleItem(token.tokenId, token.contract?.address)
-                                }
-                            }}>
-                            <NFTItem token={token} />
-                            <SelectComponent
-                                size="small"
-                                disabled={disabled}
-                                className={classes.checkbox}
-                                checked={selected}
-                            />
-                        </ListItem>
-                    </Tooltip>
-                )
-            })}
+        <Box>
+            <List className={classnames(classes.list, className)}>
+                {tokens.map((token) => {
+                    const selected = includes(selectedPairs, [token.contract?.address!, token.tokenId])
+                    const disabled = !isRadio && reachedLimit && !selected
+                    const name = token.collection?.name || token.contract?.name
+                    const title = `${name} ${Others?.formatTokenId(token.tokenId, 2)}`
+                    return (
+                        <Tooltip
+                            classes={{ tooltip: classes.tooltip }}
+                            key={`${token.address}/${token.tokenId}/${token.id}`}
+                            title={title}
+                            placement="top"
+                            disableInteractive
+                            PopperProps={{
+                                disablePortal: true,
+                                popperOptions: {
+                                    strategy: 'absolute',
+                                },
+                            }}
+                            arrow>
+                            <ListItem
+                                className={classnames(classes.nftItem, {
+                                    [classes.disabled]: disabled,
+                                    [classes.selected]: selected,
+                                    [classes.unselected]: selectedPairs.length > 0 && !selected,
+                                })}
+                                onClick={() => {
+                                    if (disabled) return
+                                    if (selected) {
+                                        toggleItem(null, '')
+                                    } else {
+                                        toggleItem(token.tokenId, token.contract?.address)
+                                    }
+                                }}>
+                                <NFTItem token={token} />
+                                <SelectComponent
+                                    size="small"
+                                    disabled={disabled}
+                                    className={classes.checkbox}
+                                    checked={selected}
+                                />
+                            </ListItem>
+                        </Tooltip>
+                    )
+                })}
+            </List>
             {loadError && !loadFinish && tokens.length && (
                 <Stack py={1} style={{ gridColumnStart: 1, gridColumnEnd: 6 }}>
                     <RetryHint hint={false} retry={nextPage} />
@@ -207,6 +214,6 @@ export const NFTList: FC<Props> = ({
                     {!loadFinish && <LoadingBase />}
                 </ElementAnchor>
             </Stack>
-        </List>
+        </Box>
     )
 }
