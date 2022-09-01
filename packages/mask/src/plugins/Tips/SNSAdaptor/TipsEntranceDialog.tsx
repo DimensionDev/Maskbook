@@ -7,6 +7,7 @@ import {
     CrossIsolationMessages,
     EMPTY_LIST,
     formatPersonaFingerprint,
+    PopupRoutes,
 } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
 import { NetworkPluginID, isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
@@ -120,31 +121,31 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     // Sort By `last_checked_at`
     const bindingWallets = useMemo(() => {
         if (!proofRes?.length) return EMPTY_LIST
-        return sortBy(proofRes, (x) => -Number.parseInt(x.last_checked_at, 10))
-            .map(
-                (wallet, index, list): BindingProof => ({
-                    ...wallet,
-                    rawIdx: list.length - index - 1,
-                }),
-            )
-            .filter((x) => !TipsSetting?.hiddenAddresses?.includes(x.identity))
-    }, [proofRes, TipsSetting?.hiddenAddresses])
+        return sortBy(proofRes, (x) => -Number.parseInt(x.last_checked_at, 10)).map(
+            (wallet, index, list): BindingProof => ({
+                ...wallet,
+                rawIdx: list.length - index - 1,
+            }),
+        )
+    }, [proofRes])
 
     // if the defaultAddress isn't exist, The first checked is default
     const defaultAddress = TipsSetting?.defaultAddress ?? last(bindingWallets)?.identity
 
     // The default wallet must be in the first
-    const sortedWallet = useMemo(() => {
-        return bindingWallets.sort((a, z) => {
-            if (isGreaterThan(a.last_checked_at, z.last_checked_at)) {
-                if (isSameAddress(z.identity, defaultAddress)) return 1
-                return -1
-            }
+    const sortedWallets = useMemo(() => {
+        return bindingWallets
+            .filter((x) => !TipsSetting?.hiddenAddresses?.includes(x.identity))
+            .sort((a, z) => {
+                if (isGreaterThan(a.last_checked_at, z.last_checked_at)) {
+                    if (isSameAddress(z.identity, defaultAddress)) return 1
+                    return -1
+                }
 
-            if (isSameAddress(a.identity, defaultAddress)) return -1
-            return 1
-        })
-    }, [defaultAddress, bindingWallets])
+                if (isSameAddress(a.identity, defaultAddress)) return -1
+                return 1
+            })
+    }, [defaultAddress, bindingWallets, TipsSetting?.hiddenAddresses])
 
     const [{ loading: confirmLoading }, onConfirm] = useAsyncFn(async () => {
         if (!Storage || !currentPersonaIdentifier || !pendingDefault) return
@@ -195,6 +196,8 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         successText: t.copy_success(),
     })
 
+    const openConnectWallet = useCallback(() => Services.Helper.openPopupWindow(PopupRoutes.ConnectWallet), [])
+
     useEffect(() => {
         return PluginNextIDMessages.tipsSettingUpdate.on(retrySetting)
     }, [retrySetting])
@@ -225,12 +228,14 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                         {supportedNetworkIds?.map((x, idx) => {
                             return (
                                 <WalletsByNetwork
-                                    wallets={sortedWallet}
-                                    toSetting={handleOpenSettingDialog}
+                                    wallets={sortedWallets}
                                     key={idx}
+                                    toSetting={handleOpenSettingDialog}
+                                    notEmpty={!!bindingWallets.length}
                                     networkId={x}
                                     defaultAddress={pendingDefault || defaultAddress}
                                     setAsDefault={(address: string) => setPendingDefault(address)}
+                                    openConnectWallet={openConnectWallet}
                                 />
                             )
                         })}
@@ -257,12 +262,14 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                         </Typography>
                     </div>
                 </div>
-                <ActionButton
-                    loading={confirmLoading}
-                    disabled={!pendingDefault || isSameAddress(pendingDefault, defaultAddress)}
-                    onClick={onConfirm}>
-                    {t.confirm()}
-                </ActionButton>
+                {!!bindingWallets.length && sortedWallets.length ? (
+                    <ActionButton
+                        loading={confirmLoading}
+                        disabled={!pendingDefault || isSameAddress(pendingDefault, defaultAddress)}
+                        onClick={onConfirm}>
+                        {t.confirm()}
+                    </ActionButton>
+                ) : null}
             </DialogActions>
         </InjectedDialog>
     )

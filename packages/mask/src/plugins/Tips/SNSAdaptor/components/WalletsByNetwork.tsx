@@ -45,14 +45,23 @@ const useStyles = makeStyles()((theme) => ({
         width: 'auto',
         height: 18,
     },
+    link: {
+        color: theme.palette.maskColor.main,
+        fontWeight: 700,
+        fontSize: 14,
+        lineHeight: '18px',
+        cursor: 'pointer',
+    },
 }))
 
 interface WalletsByNetworkProps {
     networkId: NetworkPluginID
     toSetting: () => void
     wallets: BindingProof[]
+    notEmpty: boolean
     defaultAddress?: string
     setAsDefault: (address: string) => void
+    openConnectWallet: () => void
 }
 
 export function WalletsByNetwork({
@@ -61,6 +70,8 @@ export function WalletsByNetwork({
     toSetting,
     defaultAddress,
     setAsDefault,
+    openConnectWallet,
+    notEmpty,
 }: WalletsByNetworkProps) {
     const t = useI18N()
     const { classes } = useStyles()
@@ -84,8 +95,20 @@ export function WalletsByNetwork({
                             isDefault={isSameAddress(defaultAddress, x.identity)}
                         />
                     ))
+                ) : notEmpty ? (
+                    <Typography className={classes.empty}>
+                        {t.tip_empty_manage_list()}
+                        <Typography component="span" className={classes.link} onClick={toSetting}>
+                            {t.manage_wallet()}
+                        </Typography>
+                    </Typography>
                 ) : (
-                    <Typography className={classes.empty}>{t.tip_empty_list()}</Typography>
+                    <Typography className={classes.empty}>
+                        {t.tip_empty_list()}
+                        <Typography component="span" className={classes.link} onClick={openConnectWallet}>
+                            {t.add_wallet()}
+                        </Typography>
+                    </Typography>
                 )}
             </div>
         </div>

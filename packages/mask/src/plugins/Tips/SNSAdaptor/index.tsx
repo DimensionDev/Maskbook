@@ -76,7 +76,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 name,
                 iconFilterColor,
                 appBoardSortingDefaultPriority: 9,
-                // nextIdRequired: true,
+                nextIdRequired: true,
             }
         })(),
     ],
