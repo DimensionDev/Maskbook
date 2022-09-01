@@ -90,7 +90,6 @@ export const TipButton: FC<Props> = ({
     }, [pluginId, personaPubkey, platform, receiverUserId])
     const visitingIdentity = useCurrentVisitingIdentity()
     const { value: identity } = useSocialIdentityByUseId(receiver?.userId)
-    console.log('identity.bio', receiver?.userId, identity?.bio)
 
     const isVisitingUser = visitingIdentity.identifier?.userId === receiverUserId
     const isRuntimeAvailable = useMemo(() => {

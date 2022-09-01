@@ -53,7 +53,7 @@ export function useCurrentVisitingIdentity() {
     return useValueRef(activatedSocialNetworkUI.collecting.currentVisitingIdentityProvider?.recognized || defaults)
 }
 
-export function useIsOwnerIdentity(identity?: IdentityResolved) {
+export function useIsOwnerIdentity(identity: IdentityResolved | undefined) {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
     const lastRecognizedUserId = lastRecognizedIdentity.identifier?.userId
     const currentVisitingUserId = identity?.identifier?.userId
