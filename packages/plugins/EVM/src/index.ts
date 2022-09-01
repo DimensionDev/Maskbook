@@ -53,4 +53,4 @@ registerPlugin<
     },
 })
 
-export { TransactionFormatterType } from './state'
+export { TransactionFormatter } from './state'
