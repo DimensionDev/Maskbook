@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { LoadingBase, makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
-import { resolveSourceName, SourceType } from '@masknet/web3-shared-base'
+import { resolveSourceName } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { Box, Button, CardContent, CardHeader, Paper, Tab, Typography } from '@mui/material'
 import formatDateTime from 'date-fns/format'
@@ -8,6 +8,7 @@ import isAfter from 'date-fns/isAfter'
 import isValidDate from 'date-fns/isValid'
 import { useI18N, useSwitcher } from '../../../utils'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
+import { SupportedProvider } from '../constants'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectiblePaper } from './CollectiblePaper'
 import { LinkingAvatar } from './LinkingAvatar'
@@ -136,17 +137,6 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-const supportedProvider = [
-    // to add providers, temp hide some providers
-    SourceType.OpenSea,
-    SourceType.Gem,
-    SourceType.Rarible,
-    // SourceType.X2Y2,
-    // SourceType.NFTScan,
-    // SourceType.Zora,
-    // SourceType.LooksRare,
-]
-
 export interface CollectibleProps {}
 
 export function Collectible(props: CollectibleProps) {
@@ -155,7 +145,7 @@ export function Collectible(props: CollectibleProps) {
     const { asset, provider, setProvider } = CollectibleState.useContainer()
 
     // #region provider switcher
-    const CollectibleProviderSwitcher = useSwitcher(provider, setProvider, supportedProvider, resolveSourceName, true)
+    const CollectibleProviderSwitcher = useSwitcher(provider, setProvider, SupportedProvider, resolveSourceName, true)
     // #endregion
     const [currentTab, onChange, tabs] = useTabs('about', 'details', 'offers', 'activity')
     if (asset.loading)
