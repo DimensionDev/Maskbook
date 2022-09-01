@@ -11,7 +11,7 @@ import { uniqBy } from 'lodash-unified'
 import { FC, HTMLProps, MouseEventHandler, useCallback, useEffect, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { MaskMessages } from '../../../../shared'
-import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
+import { useCurrentVisitingIdentity, useSocialIdentityByUseId } from '../../../components/DataSource/useActivatedUI'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { useProfilePublicKey } from '../hooks/useProfilePublicKey'
 import { usePublicWallets } from '../hooks/usePublicWallets'
@@ -22,7 +22,7 @@ import type { TipAccount } from '../types'
 interface Props extends HTMLProps<HTMLDivElement> {
     addresses?: TipAccount[]
     recipient?: TipAccount['address']
-    receiver?: ProfileIdentifier | null
+    receiver?: ProfileIdentifier
     tooltipProps?: Partial<TooltipProps>
 }
 
@@ -89,6 +89,8 @@ export const TipButton: FC<Props> = ({
         return NextIDProof.queryIsBound(personaPubkey, platform, receiverUserId, true)
     }, [pluginId, personaPubkey, platform, receiverUserId])
     const visitingIdentity = useCurrentVisitingIdentity()
+    const { value: identity } = useSocialIdentityByUseId(receiver?.userId)
+    console.log('identity.bio', receiver?.userId, identity?.bio)
 
     const isVisitingUser = visitingIdentity.identifier?.userId === receiverUserId
     const isRuntimeAvailable = useMemo(() => {
@@ -106,7 +108,7 @@ export const TipButton: FC<Props> = ({
     }, [])
 
     const publicWallets = usePublicWallets(persona)
-    const { value: socialAddressList = EMPTY_LIST } = useSocialAddressListAll(visitingIdentity)
+    const { value: socialAddressList = EMPTY_LIST } = useSocialAddressListAll(identity)
     const allAddresses = useMemo(() => {
         switch (pluginId) {
             case NetworkPluginID.PLUGIN_EVM:
@@ -182,6 +184,7 @@ export const TipButton: FC<Props> = ({
 export const PostTipButton: FC<Props> = ({ className, ...rest }) => {
     const identifier = usePostInfoDetails.author()
     const { classes } = useStyles()
+    if (!identifier) return null
     return (
         <div className={classes.buttonWrapper}>
             <TipButton className={classnames(classes.postTipButton, className)} {...rest} receiver={identifier} />

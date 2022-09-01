@@ -1,27 +1,27 @@
-import '../utils/debug/general'
-import Services from '../extension/service'
-import { Flags } from '../../shared'
-import type { SocialNetworkUI } from './types'
-import { currentSetupGuideStatus } from '../../shared/legacy-settings/settings'
-import type { SetupGuideContext } from '../../shared/legacy-settings/types'
+import { assertNotEnvironment, Environment, ValueRef } from '@dimensiondev/holoflows-kit'
+import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
+import { SocialNetworkEnum } from '@masknet/encryption'
+import { IdentityResolved, Plugin, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '@masknet/shared'
 import {
+    createSubscriptionFromAsync,
+    createSubscriptionFromValueRef,
     ECKeyIdentifier,
     EnhanceableSite,
     i18NextInstance,
-    createSubscriptionFromValueRef,
-    createSubscriptionFromAsync,
     queryRemoteI18NBundle,
 } from '@masknet/shared-base'
-import { Environment, assertNotEnvironment, ValueRef } from '@dimensiondev/holoflows-kit'
-import { IdentityResolved, Plugin, startPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { Flags } from '../../shared'
+import { currentSetupGuideStatus } from '../../shared/legacy-settings/settings'
+import type { SetupGuideContext } from '../../shared/legacy-settings/types'
+import { createPartialSharedUIContext, createPluginHost } from '../../shared/plugin-infra/host'
+import Services from '../extension/service'
 import { getCurrentIdentifier, getCurrentSNSNetwork } from '../social-network-adaptor/utils'
-import { createPluginHost, createPartialSharedUIContext } from '../../shared/plugin-infra/host'
-import { definedSocialNetworkUIs } from './define'
-import { setupShadowRootPortal, MaskMessages } from '../utils'
-import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
-import { sharedUINetworkIdentifier, sharedUIComponentOverwrite } from '@masknet/shared'
-import { SocialNetworkEnum } from '@masknet/encryption'
+import { MaskMessages, setupShadowRootPortal } from '../utils'
+import '../utils/debug/general'
 import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui'
+import { definedSocialNetworkUIs } from './define'
+import type { SocialNetworkUI } from './types'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {

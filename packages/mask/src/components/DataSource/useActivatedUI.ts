@@ -53,15 +53,13 @@ export function useCurrentVisitingIdentity() {
     return useValueRef(activatedSocialNetworkUI.collecting.currentVisitingIdentityProvider?.recognized || defaults)
 }
 
-export function useIsOwnerIdentity(identity: IdentityResolved) {
+export function useIsOwnerIdentity(identity?: IdentityResolved) {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
     const lastRecognizedUserId = lastRecognizedIdentity.identifier?.userId
-    const currentVisitingUserId = identity.identifier?.userId
-    return !!(
-        lastRecognizedUserId &&
-        currentVisitingUserId &&
-        lastRecognizedUserId.toLowerCase() === currentVisitingUserId.toLowerCase()
-    )
+    const currentVisitingUserId = identity?.identifier?.userId
+
+    if (!lastRecognizedUserId || !currentVisitingUserId) return false
+    return lastRecognizedUserId.toLowerCase() === currentVisitingUserId.toLowerCase()
 }
 
 export function useCurrentLinkedPersona() {
@@ -113,10 +111,11 @@ export function useCurrentVisitingPersonas() {
 /**
  * Get the social identity of the given identity
  */
-export function useSocialIdentity(identity: IdentityResolved) {
+export function useSocialIdentity(identity: IdentityResolved | undefined) {
     const isOwner = useIsOwnerIdentity(identity)
 
-    const result = useAsyncRetry<SocialIdentity>(async () => {
+    const result = useAsyncRetry<SocialIdentity | undefined>(async () => {
+        if (!identity) return
         const bindings = await queryPersonasFromNextID(identity)
         const persona = await queryPersonaFromDB(identity)
         const personaBindings =
@@ -128,11 +127,19 @@ export function useSocialIdentity(identity: IdentityResolved) {
             hasBinding: personaBindings.length > 0,
             binding: first(personaBindings),
         }
-    }, [isOwner, identity.identifier?.toText()])
+    }, [isOwner, identity?.identifier?.toText()])
 
     useEffect(() => MaskMessages.events.ownProofChanged.on(result.retry), [result.retry])
 
     return result
+}
+
+export function useSocialIdentityByUseId(userId?: string) {
+    const { value: identity } = useAsync(async () => {
+        if (!userId) return
+        return activatedSocialNetworkUI.utils.getUserIdentity?.(userId)
+    }, [userId])
+    return useSocialIdentity(identity)
 }
 
 /**
