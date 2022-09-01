@@ -16,6 +16,8 @@ import {
     SelectConnectPersonaAction,
 } from './Actions'
 import { PluginCardFrameMini } from '@masknet/shared'
+import { ThemeProvider } from '@mui/material'
+import { MaskLightTheme } from '@masknet/theme'
 
 export function NextIdPage() {
     const t = useI18N()
@@ -76,7 +78,9 @@ export function NextIdPage() {
 
     return (
         <>
-            <PluginCardFrameMini>{getActionComponent}</PluginCardFrameMini>
+            <PluginCardFrameMini>
+                <ThemeProvider theme={MaskLightTheme}>{getActionComponent}</ThemeProvider>
+            </PluginCardFrameMini>
             {openBindDialog && currentPersona && isOwn && (
                 <BindDialog
                     open={openBindDialog}
