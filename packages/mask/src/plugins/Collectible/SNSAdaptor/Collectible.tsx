@@ -215,7 +215,7 @@ export function Collectible(props: CollectibleProps) {
                     }
                     title={
                         <Typography style={{ display: 'flex', alignItems: 'center' }}>
-                            <Typography className={classes.cardTitle}>{_asset.metadata?.name || '-'}</Typography>
+                            <span className={classes.cardTitle}>{_asset.metadata?.name || '-'}</span>
                             {_asset.collection?.verified ? <Icons.VerifiedCollection sx={{ marginLeft: 0.5 }} /> : null}
                         </Typography>
                     }
