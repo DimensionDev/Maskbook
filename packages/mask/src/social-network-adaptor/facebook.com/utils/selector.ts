@@ -98,13 +98,17 @@ export const searchFacebookConfirmAvatarImageSelector = () =>
 export const inpageAvatarSelector = () => querySelectorAll('[type="nested/pressable"]').closest<HTMLAnchorElement>(2)
 // #region
 
-export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
+export const toolboxInSidebarSelector: () => LiveSelector<E, true> = () =>
     /* cspell:disable-next-line */
     querySelector<E>('#ssrb_left_rail_start')
         .closest(1)
         .querySelector('h2')
         .closest(1)
         .querySelector('div > div > div > :nth-child(2) > ul > li:nth-child(2)')
+
+export const toolboxInSidebarSelectorWithNoLeftRailStart: () => LiveSelector<E, true> = () =>
+    /* cspell:disable-next-line */
+    querySelector<E>('#ssrb_top_nav_start ~ [role="banner"] ~ div [href="/gaming/?ref=games_tab"]').closest(2)
 
 // for getting normal tab style
 export const profileTabUnselectedSelector: () => LiveSelector<E, true> = () =>

@@ -90,6 +90,7 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
 function ToolboxHintForApplication(props: ToolboxHintProps) {
     const {
         ListItemButton = MuiListItemButton,
+        ListItemIcon = MuiListItemIcon,
         Container = 'div',
         Typography = MuiTypography,
         iconSize = 24,
@@ -103,7 +104,9 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
         <GuideStep step={1} total={4} tip={t('user_guide_tip_1')}>
             <Container>
                 <ListItemButton onClick={openDialog}>
-                    <MaskIcon style={{ width: iconSize, height: iconSize }} />
+                    <ListItemIcon>
+                        <MaskIcon style={{ width: iconSize, height: iconSize }} />
+                    </ListItemIcon>
                     {mini ? null : (
                         <ListItemText
                             primary={

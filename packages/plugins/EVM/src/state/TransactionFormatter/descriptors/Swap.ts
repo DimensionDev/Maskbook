@@ -26,6 +26,8 @@ export class SwapDescriptor implements TransactionDescriptor {
                 return {
                     chainId: context.chainId,
                     title: 'Swap Token',
+                    tokenInAddress: nativeToken?.address,
+                    tokenInAmount: context.value,
                     description: `Swap ${getTokenAmountDescription(context.value, nativeToken)} for ${
                         outputToken?.symbol ?? ''
                     }.`,
@@ -37,20 +39,27 @@ export class SwapDescriptor implements TransactionDescriptor {
                 }
             }
 
-            if (method.name === 'swapExactTokensForETH' && parameters?.path && parameters?.amountOutMin) {
+            if (
+                method.name === 'swapExactTokensForETH' &&
+                parameters?.path &&
+                parameters?.amountOutMin &&
+                parameters?.amountInMin
+            ) {
                 const outputToken = await connection?.getFungibleToken(last(parameters!.path) ?? '')
 
                 return {
                     chainId: context.chainId,
                     title: 'Swap Token',
-                    description: `Swap ${getTokenAmountDescription(context.value, nativeToken)} for ${
-                        outputToken?.symbol ?? ''
+                    tokenInAddress: outputToken?.address,
+                    tokenInAmount: parameters?.amountInMin,
+                    description: `Swap ${getTokenAmountDescription(parameters!.amountInMin, outputToken)} for ${
+                        nativeToken?.symbol ?? ''
                     }.`,
                     successfulDescription: `Swap ${getTokenAmountDescription(
-                        context.value,
-                        nativeToken,
-                    )} for ${getTokenAmountDescription(parameters!.amountOutMin, outputToken)} successfully.`,
-                    failedDescription: `Failed to swap ${outputToken?.symbol ?? ''}.`,
+                        parameters!.amountInMin,
+                        outputToken,
+                    )} for ${getTokenAmountDescription(parameters!.amountOutMin, nativeToken)} successfully.`,
+                    failedDescription: `Failed to swap ${nativeToken?.symbol ?? ''}.`,
                 }
             }
 
@@ -66,6 +75,8 @@ export class SwapDescriptor implements TransactionDescriptor {
                 return {
                     chainId: context.chainId,
                     title: 'Swap Token',
+                    tokenInAddress: tokenIn?.address,
+                    tokenInAmount: parameters!.amountIn,
                     description: `Swap ${getTokenAmountDescription(parameters!.amountIn, tokenIn)} for ${
                         tokenOut?.symbol ?? ''
                     }.`,
@@ -94,6 +105,8 @@ export class SwapDescriptor implements TransactionDescriptor {
                 return {
                     chainId: context.chainId,
                     title: 'Swap Token',
+                    tokenInAddress: tokenIn?.address,
+                    tokenInAmount: parameters!.fromTokenAmount,
                     description: `Swap ${getTokenAmountDescription(parameters!.fromTokenAmount, tokenIn)} for ${
                         tokenOut?.symbol ?? ''
                     }.`,
@@ -128,6 +141,8 @@ export class SwapDescriptor implements TransactionDescriptor {
                 return {
                     chainId: context.chainId,
                     title: 'Swap Token',
+                    tokenInAddress: tokenIn?.address,
+                    tokenInAmount: _parameters[1].amount,
                     description: `Swap ${getTokenAmountDescription(_parameters[1].amount, tokenIn)} for ${
                         tokenOut?.symbol ?? ''
                     }.`,
@@ -158,6 +173,8 @@ export class SwapDescriptor implements TransactionDescriptor {
                     description: `Swap ${getTokenAmountDescription(parameters.inputTokenAmount, tokenIn)} for ${
                         tokenOut?.symbol ?? ''
                     }.`,
+                    tokenInAddress: tokenIn?.address,
+                    tokenInAmount: parameters.inputTokenAmount,
                     successfulDescription: `Swap ${getTokenAmountDescription(
                         parameters.inputTokenAmount,
                         tokenIn,
