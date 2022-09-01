@@ -158,8 +158,9 @@ const ContractInteraction = memo(() => {
     const [transferError, setTransferError] = useState(false)
     const { value: request, loading: requestLoading } = useUnconfirmedRequest()
     const { value: transactionDescription } = useAsync(async () => {
-        return TransactionFormatter?.formatTransaction?.(request?.transactionContext?.chainId!, {
-            ...request?.transactionContext!,
+        if (!request?.transactionContext?.chainId) return
+        return TransactionFormatter?.formatTransaction?.(request?.transactionContext?.chainId, {
+            ...request?.transactionContext,
             data: request?.computedPayload?.data,
         })
     }, [TransactionFormatter, request])
