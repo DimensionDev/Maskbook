@@ -2,11 +2,8 @@ import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
-import { SourceType } from '@masknet/web3-shared-base'
-import { CollectibleProviderIcon } from '../../../plugins/Collectible/SNSAdaptor/CollectibleProviderIcon'
 import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import { getEnumAsArray } from '@dimensiondev/kit'
 
 const useStyles = makeStyles()((theme) => ({
     layout: {
@@ -99,34 +96,21 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface NFTBasicInfoProps {
+export interface NFTBasicInfoProps {
     hideSubTitle?: boolean
     asset: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
-    onChangeProvider: (v: SourceType) => void
-    providers: SourceType[]
-    currentProvider: SourceType
     timeline?: boolean
 }
 
 export function NFTBasicInfo(props: NFTBasicInfoProps) {
-    const { asset, hideSubTitle, onChangeProvider, providers, currentProvider, timeline } = props
+    const { asset, hideSubTitle, timeline } = props
     const { classes, cx } = useStyles()
 
-    const collectibleProviderOptions = getEnumAsArray(SourceType).filter((x) => providers.includes(x.value))
     const fallbackImgURL = new URL('../assets/fallbackImg.svg', import.meta.url)
     const resourceUrl = asset.metadata?.imageURL ?? asset.metadata?.mediaURL
     return (
         <div className={classes.layout}>
             <div className={classes.body}>
-                <div className={classes.absoluteProvider}>
-                    {collectibleProviderOptions.map((x) => {
-                        return (
-                            <div className={classes.providerIcon} key={x.key} onClick={() => onChangeProvider(x.value)}>
-                                <CollectibleProviderIcon active={currentProvider === x.value} provider={x.value} />
-                            </div>
-                        )
-                    })}
-                </div>
                 <NFTCardStyledAssetPlayer
                     fallbackImage={fallbackImgURL}
                     url={resourceUrl}

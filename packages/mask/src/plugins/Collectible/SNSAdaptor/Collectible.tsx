@@ -1,14 +1,14 @@
 import { Icons } from '@masknet/icons'
 import { LoadingBase, makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
-import { resolveSourceName, SourceType } from '@masknet/web3-shared-base'
+import { resolveSourceName } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { Box, Button, CardContent, CardHeader, Paper, Tab, Typography } from '@mui/material'
 import formatDateTime from 'date-fns/format'
 import isAfter from 'date-fns/isAfter'
 import isValidDate from 'date-fns/isValid'
-import { useCallback } from 'react'
 import { useI18N, useSwitcher } from '../../../utils'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
+import { SupportedProvider } from '../constants'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectiblePaper } from './CollectiblePaper'
 import { LinkingAvatar } from './LinkingAvatar'
@@ -137,17 +137,6 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-const supportedProvider = [
-    // to add providers, temp hide some providers
-    SourceType.OpenSea,
-    SourceType.Gem,
-    SourceType.Rarible,
-    // SourceType.X2Y2,
-    // SourceType.NFTScan,
-    // SourceType.Zora,
-    // SourceType.LooksRare,
-]
-
 export interface CollectibleProps {}
 
 export function Collectible(props: CollectibleProps) {
@@ -155,12 +144,8 @@ export function Collectible(props: CollectibleProps) {
     const { classes } = useStyles()
     const { asset, provider, setProvider } = CollectibleState.useContainer()
 
-    const onDataProviderChange = useCallback((v: SourceType) => {
-        setProvider(v)
-    }, [])
-
     // #region provider switcher
-    const CollectibleProviderSwitcher = useSwitcher(provider, setProvider, supportedProvider, resolveSourceName, true)
+    const CollectibleProviderSwitcher = useSwitcher(provider, setProvider, SupportedProvider, resolveSourceName, true)
     // #endregion
     const [currentTab, onChange, tabs] = useTabs('about', 'details', 'offers', 'activity')
     if (asset.loading)
@@ -188,7 +173,7 @@ export function Collectible(props: CollectibleProps) {
                     <Box sx={{ flex: 1, padding: 1 }}> {CollectibleProviderSwitcher}</Box>
                     <Box sx={{ flex: 1, padding: 1 }}>
                         <Button fullWidth onClick={() => asset.retry()} variant="roundedDark">
-                            Refresh
+                            {t('plugin_collectible_refresh')}
                         </Button>
                     </Box>
                 </Box>
@@ -199,14 +184,7 @@ export function Collectible(props: CollectibleProps) {
     const endDate = _asset.auction?.endAt
     const renderTab = () => {
         const tabMap = {
-            [tabs.about]: (
-                <AboutTab
-                    currentProvider={provider}
-                    providers={supportedProvider}
-                    onChangeProvider={onDataProviderChange}
-                    asset={asset}
-                />
-            ),
+            [tabs.about]: <AboutTab asset={asset} />,
             [tabs.details]: <DetailTab asset={asset} />,
             [tabs.offers]: <OffersTab />,
             [tabs.activity]: <ActivityTab />,
@@ -237,7 +215,7 @@ export function Collectible(props: CollectibleProps) {
                     }
                     title={
                         <Typography style={{ display: 'flex', alignItems: 'center' }}>
-                            <Typography className={classes.cardTitle}>{_asset.metadata?.name || '-'}</Typography>
+                            <span className={classes.cardTitle}>{_asset.metadata?.name || '-'}</span>
                             {_asset.collection?.verified ? <Icons.VerifiedCollection sx={{ marginLeft: 0.5 }} /> : null}
                         </Typography>
                     }
