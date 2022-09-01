@@ -10,7 +10,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ContributedView: {
         example: {
-            component: function () {
+            component() {
                 return <h1>Test</h1>
             },
         },
