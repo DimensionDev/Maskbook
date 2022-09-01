@@ -173,7 +173,7 @@ export function Collectible(props: CollectibleProps) {
                     <Box sx={{ flex: 1, padding: 1 }}> {CollectibleProviderSwitcher}</Box>
                     <Box sx={{ flex: 1, padding: 1 }}>
                         <Button fullWidth onClick={() => asset.retry()} variant="roundedDark">
-                            Refresh
+                            {t('refresh')}
                         </Button>
                     </Box>
                 </Box>

@@ -747,6 +747,7 @@
     "plugin_collectible_total": "Total",
     "plugin_collectible_subtotal": "Subtotal",
     "plugin_collectible_item": "Item",
+    "plugin_collectible_refresh": "Refresh",
     "plugin_collectible_approved_tips": "By checking this box, I acknowledge that this item has not been reviewed\n                                                or approved by OpenSea.",
     "plugin_collectible_agree_terms": "By checking this box, I agree to OpenSea's <terms>Terms of Service</terms>.",
     "plugin_collectible_convert_eth": "Convert ETH",
