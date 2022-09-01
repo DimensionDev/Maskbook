@@ -11,7 +11,7 @@ import {
     ChainId,
     Transaction,
 } from '@masknet/web3-shared-evm'
-import type { TransactionFormatter as TransactionFormatterType } from '@masknet/plugin-evm'
+import type { TransactionFormatterType } from '@masknet/plugin-evm'
 import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { Link, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
