@@ -48,7 +48,7 @@ export const SelectConnectPersonaAction = memo(() => {
     const { classes } = useStyles()
     return (
         <ThemeProvider theme={MaskLightTheme}>
-            <Stack p={1.25} pb={0}>
+            <Stack p={1.25} pb={0} width="100%">
                 <PersonaSelectPanel classes={{ unchecked: classes.unchecked }} />
             </Stack>
         </ThemeProvider>

@@ -132,6 +132,7 @@ export function useCurrentPersonaConnectStatus() {
     const {
         value = defaultStatus,
         loading,
+        error,
         retry,
     } = useAsyncRetry<PersonaConnectStatus>(async () => {
         const currentPersona = personas.find((x) => isSamePersona(x, currentIdentifier))
@@ -200,5 +201,5 @@ export function useCurrentPersonaConnectStatus() {
     useEffect(() => MaskMessages.events.ownProofChanged.on(retry), [retry])
     useEffect(() => MaskMessages.events.ownPersonaChanged.on(retry), [retry])
 
-    return { value, loading, retry }
+    return { value, loading, retry, error }
 }

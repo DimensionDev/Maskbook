@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => {
         button: {
             display: 'inline-flex',
             gap: theme.spacing(1),
-            borderRadius: 10,
+            borderRadius: 20,
         },
     }
 })
