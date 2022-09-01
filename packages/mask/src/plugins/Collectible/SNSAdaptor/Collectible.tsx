@@ -125,7 +125,7 @@ const useStyles = makeStyles()((theme) => {
                 color: `${theme.palette.maskColor.publicSecond} !important`,
             },
             '& a': {
-                color: theme.palette.maskColor.publicMain,
+                color: `${theme.palette.maskColor.publicMain} !important`,
             },
         },
         cardTitle: {
