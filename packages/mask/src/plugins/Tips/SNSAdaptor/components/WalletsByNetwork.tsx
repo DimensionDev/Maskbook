@@ -57,7 +57,7 @@ const useStyles = makeStyles()((theme) => ({
 interface WalletsByNetworkProps {
     networkId: NetworkPluginID
     toSetting: () => void
-    wallets: BindingProof[]
+    wallets: Array<BindingProof & { fallbackName: string }>
     notEmpty: boolean
     defaultAddress?: string
     setAsDefault: (address: string) => void
@@ -90,7 +90,7 @@ export function WalletsByNetwork({
                         <WalletItem
                             key={x.identity}
                             setAsDefault={setAsDefault}
-                            fallbackName={`Wallet ${x.rawIdx}`}
+                            fallbackName={x.fallbackName}
                             address={x.identity}
                             isDefault={isSameAddress(defaultAddress, x.identity)}
                         />

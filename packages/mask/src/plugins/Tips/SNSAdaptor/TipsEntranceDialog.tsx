@@ -2,7 +2,6 @@ import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { InjectedDialog, useSnackbarCallback } from '@masknet/shared'
 import { PluginId } from '@masknet/plugin-infra'
 import {
-    BindingProof,
     NextIDPlatform,
     CrossIsolationMessages,
     EMPTY_LIST,
@@ -121,12 +120,10 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     // Sort By `last_checked_at`
     const bindingWallets = useMemo(() => {
         if (!proofRes?.length) return EMPTY_LIST
-        return sortBy(proofRes, (x) => -Number.parseInt(x.last_checked_at, 10)).map(
-            (wallet, index, list): BindingProof => ({
-                ...wallet,
-                rawIdx: list.length - index - 1,
-            }),
-        )
+        return sortBy(proofRes, (x) => -Number.parseInt(x.last_checked_at, 10)).map((wallet, index, list) => ({
+            ...wallet,
+            fallbackName: `Wallet ${list.length - index - 1}`,
+        }))
     }, [proofRes])
 
     // if the defaultAddress isn't exist, The first checked is default

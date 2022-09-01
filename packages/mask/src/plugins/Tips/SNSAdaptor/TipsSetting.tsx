@@ -6,7 +6,6 @@ import { BindingProof, ECKeyIdentifier, NextIDPlatform } from '@masknet/shared-b
 import { useHiddenAddressSetting, useWeb3State } from '@masknet/plugin-infra/web3'
 import { PluginId } from '@masknet/plugin-infra'
 import { WalletSettingCard } from '@masknet/shared'
-import { isSameAddress } from '@masknet/web3-shared-base'
 import { useAsyncFn, useUpdateEffect } from 'react-use'
 
 import type { TipsSettingType } from '../types'
@@ -78,7 +77,7 @@ export const TipsSetting = memo<TipsSettingProps>(({ onClose, bindingWallets, cu
 
     const onSwitchChange = useCallback((address: string) => {
         setAddresses((prev) => {
-            return prev.includes(address) ? prev.filter((x) => !isSameAddress(address, x)) : [...prev, address]
+            return prev.some((x) => address === x) ? prev.filter((x) => address !== x) : [...prev, address]
         })
     }, [])
 
@@ -148,7 +147,7 @@ export const TipsSetting = memo<TipsSettingProps>(({ onClose, bindingWallets, cu
                     </div>
                 ) : (
                     <div className={classes.placeholder}>
-                        <Icons.Direct size={36} className={classes.placeholderIcon} />
+                        <Icons.EmptySimple size={36} className={classes.placeholderIcon} />
                         <Typography className={classes.placeholderText}>{t.add_wallet_tips()}</Typography>
                     </div>
                 )}
