@@ -3,15 +3,7 @@ import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
-import {
-    formatGweiToWei,
-    formatWeiToEther,
-    SchemaType,
-    isNativeTokenAddress,
-    ChainId,
-    Transaction,
-} from '@masknet/web3-shared-evm'
-import type { TransactionFormatter as TransactionFormatterType } from '@masknet/plugin-evm'
+import { formatGweiToWei, formatWeiToEther, SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { Link, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
@@ -165,16 +157,12 @@ const ContractInteraction = memo(() => {
     const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
     const [transferError, setTransferError] = useState(false)
     const { value: request, loading: requestLoading } = useUnconfirmedRequest()
-    const { value: transactionDescriptionForSwap } = useAsync(async () => {
+    const { value: transactionDescription } = useAsync(async () => {
         if (!request?.transactionContext?.chainId) return
-        const description = (await TransactionFormatter?.formatTransaction?.(request?.transactionContext?.chainId, {
+        return TransactionFormatter?.formatTransaction?.(request?.transactionContext?.chainId, {
             ...request?.transactionContext,
             data: request?.computedPayload?.data,
-        })) as TransactionFormatterType.SwapDescriptor<ChainId, Transaction> | undefined
-
-        if (!description?.tokenInAddress) return
-
-        return description
+        })
     }, [TransactionFormatter, request])
 
     const {
@@ -235,17 +223,17 @@ const ContractInteraction = memo(() => {
                     }
                 }
                 return {
-                    isNativeTokenInteraction: transactionDescriptionForSwap?.tokenInAddress
-                        ? isNativeTokenAddress(transactionDescriptionForSwap?.tokenInAddress)
+                    isNativeTokenInteraction: transactionDescription?.tokenInAddress
+                        ? isNativeTokenAddress(transactionDescription?.tokenInAddress)
                         : true,
                     typeName: t('popups_wallet_contract_interaction'),
-                    tokenAddress: transactionDescriptionForSwap?.tokenInAddress ?? request.computedPayload?.to,
+                    tokenAddress: transactionDescription?.tokenInAddress ?? request.computedPayload?.to,
                     to: request.computedPayload?.to,
                     gas: request.computedPayload?.gas,
                     gasPrice: request.computedPayload?.gasPrice,
                     maxFeePerGas: request.computedPayload?.maxFeePerGas,
                     maxPriorityFeePerGas: request.computedPayload?.maxPriorityFeePerGas,
-                    amount: transactionDescriptionForSwap?.tokenInAmount ?? request.computedPayload?.value,
+                    amount: transactionDescription?.tokenInAmount ?? request.computedPayload?.value,
                 }
             case TransactionDescriptorType.TRANSFER:
                 return {
@@ -266,7 +254,7 @@ const ContractInteraction = memo(() => {
             default:
                 unreachable(type)
         }
-    }, [request, t, transactionDescriptionForSwap])
+    }, [request, t, transactionDescription])
 
     const { value: contractType } = useTokenSchema(NetworkPluginID.PLUGIN_EVM, contractAddress)
 
