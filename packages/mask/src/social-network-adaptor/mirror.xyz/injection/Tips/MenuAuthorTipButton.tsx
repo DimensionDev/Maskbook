@@ -6,9 +6,12 @@ import {
     useActivatedPluginsSNSAdaptor,
     useIsMinimalMode,
 } from '@masknet/plugin-infra/content-script'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useMemo } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
+import type { TipsAccount } from '../../../../plugins/Tips/types/tip.js'
 import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { menuAuthorSelector as selector } from '../../utils/selectors.js'
 
@@ -41,10 +44,11 @@ function AuthorTipsButtonWrapper() {
     const isMinimal = useIsMinimalMode(PluginID.Tips)
     const { classes } = useStyles()
 
-    const tipsAccounts = useMemo(() => {
-        if (!visitingPersona?.identifier) return []
+    const tipsAccounts = useMemo((): TipsAccount[] => {
+        if (!visitingPersona?.identifier) return EMPTY_LIST
         return [
             {
+                pluginId: NetworkPluginID.PLUGIN_EVM,
                 address: visitingPersona.identifier.userId,
                 name: visitingPersona.nickname,
             },

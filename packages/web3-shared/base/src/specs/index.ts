@@ -724,6 +724,8 @@ export interface TransactionChecker<ChainId, Transaction> {
 }
 
 export interface ConnectionOptions<ChainId, ProviderType, Transaction> {
+    /** Designate the plugin id of the transaction. */
+    pluginId?: NetworkPluginID
     /** Designate the sub-network id of the transaction. */
     chainId?: ChainId
     /** Designate the signer of the transaction. */

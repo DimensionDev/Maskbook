@@ -2,7 +2,7 @@ import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 import { isGreaterThan, isLessThanOrEqualTo, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import { useContext, useMemo } from 'react'
 import { useI18N } from '../../locales/index.js'
-import { TipType } from '../../types/index.js'
+import { TipsType } from '../../types'
 import { TargetRuntimeContext } from '../TargetRuntimeContext.js'
 import { TipContext } from './TipContext.js'
 
@@ -22,7 +22,7 @@ export function useTipValidate(): ValidationTuple {
     const t = useI18N()
 
     const result: ValidationTuple = useMemo(() => {
-        if (tipType === TipType.Token) {
+        if (tipType === TipsType.Tokens) {
             if (!amount || isLessThanOrEqualTo(amount, 0)) return [false]
             if (isGreaterThan(rightShift(amount, token?.decimals), balance))
                 return [false, t.token_insufficient_balance()]
@@ -32,7 +32,7 @@ export function useTipValidate(): ValidationTuple {
             return [false]
         }
         return [true]
-    }, [tipType, amount, token?.decimals, balance, tokenId, tokenAddress, t])
+    }, [tipType, amount, token?.decimals, balance, pluginId, tokenId, tokenAddress, t])
 
     return result
 }

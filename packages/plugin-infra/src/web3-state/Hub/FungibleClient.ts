@@ -72,7 +72,14 @@ export class HubStateFungibleClient<ChainId, SchemaType> extends HubStateBaseCli
     }
 
     async getFungibleTokenPrice(chainId: ChainId, address: string, initial?: HubOptions<ChainId>): Promise<number> {
-        throw new Error('Method not implemented.')
+        const options = this.getOptions(initial, {
+            chainId,
+        })
+        const providers = this.getProviders(initial)
+        return attemptUntil(
+            providers.map((x) => () => x.getFungibleTokenPrice?.(options.chainId, address)),
+            0,
+        )
     }
 
     async getFungibleTokenSpenders(

@@ -22,6 +22,7 @@ const responseToBase64 = async (response: Response) => {
 }
 
 export function useImageBase64(key = '', url?: string) {
+    key = key || (url ?? '')
     const [availableUrl, setAvailableUrl] = useState(() => {
         const hit = cache.get(key)
         return typeof hit === 'string' ? hit : ''
@@ -37,6 +38,7 @@ export function useImageBase64(key = '', url?: string) {
             try {
                 const response = await hit
                 const result = await responseToBase64(response.clone())
+                cache.set(key, result)
                 setAvailableUrl(result)
                 return
             } catch {
@@ -64,6 +66,8 @@ export function useImageBase64(key = '', url?: string) {
         cache.set(key, dataURL)
         setAvailableUrl(dataURL)
     }, [key, url])
+
+    if (!key) return ''
 
     return availableUrl
 }

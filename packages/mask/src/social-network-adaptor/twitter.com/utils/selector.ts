@@ -69,8 +69,8 @@ export const profileFollowButtonSelector: () => LiveSelector<E, true> = () =>
     )
 
 export const normalFollowButtonSelector = () =>
-    // Including [data-testid$="-follow"] and [data-testid$="-unfollow"]
-    querySelectorAll('[role="button"][data-testid="UserCell"] [data-testid$="follow"]')
+    // Follow button and unfollow button in following and followers list
+    querySelectorAll('[data-testid="primaryColumn"] [role="button"][data-testid="UserCell"] [data-testid$="follow"]')
 
 export const searchProfileCoverSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(

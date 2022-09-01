@@ -150,7 +150,7 @@ export function CollectionList({ socialAddress, persona, profile, gridProps = EM
                             </Box>
                         )}
                         <CollectibleList
-                            address={socialAddress}
+                            pluginID={socialAddress.networkSupporterPluginID}
                             retry={retryFetchCollectible}
                             collectibles={renderCollectibles}
                             loading={renderCollectibles.length === 0}

@@ -30,10 +30,12 @@ export function PostActions() {
             // In Mirror, then profile identifier is wallet address
             tipsAccounts={[
                 {
+                    pluginId: NetworkPluginID.PLUGIN_EVM,
                     address: identifier.userId,
                     name: nickname ? `(${nickname}) ${Others?.formatAddress(identifier.userId, 4)}` : identifier.userId,
                 },
                 ...(coAuthors?.map((x) => ({
+                    pluginId: NetworkPluginID.PLUGIN_EVM,
                     address: x.author.userId,
                     name: x.nickname ? `(${x.nickname}) ${Others?.formatAddress(x.author.userId, 4)}` : x.author.userId,
                 })) ?? []),
