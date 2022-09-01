@@ -271,7 +271,6 @@ export const FungibleTokenList = forwardRef(
                     ...x,
                     // To avoid reduce re-render, merge balance into token, when value is `undefined` to represent loading
                     balance: fungibleTokensBalance[x.address],
-                    account,
                 }))
         }, [
             chainId,
@@ -412,7 +411,7 @@ export const FungibleTokenList = forwardRef(
                     FixedSizeListProps={FixedSizeListProps}
                     SearchFieldProps={SearchFieldProps}
                 />
-                {mode === TokenListMode.List && enableManage && account && (
+                {mode === TokenListMode.List && enableManage && (
                     <Box className={classes.bar}>
                         <ManageTokenListBar onClick={() => setMode(TokenListMode.Manage)} />
                     </Box>
