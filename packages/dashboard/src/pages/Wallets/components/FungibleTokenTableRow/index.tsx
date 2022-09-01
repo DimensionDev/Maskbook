@@ -78,6 +78,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
     const currentPluginId = useCurrentWeb3NetworkPluginID()
     const isOnCurrentChain = useMemo(() => currentChainId === asset.chainId, [asset, currentChainId])
 
+    console.log('format', formatBalance(123456789, 9, 1))
     return (
         <TableRow className={classes.row}>
             <TableCell className={classes.cell} align="center" variant="body">
