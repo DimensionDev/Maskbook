@@ -101,6 +101,9 @@ function registerPostCollectorInner(
                 comments: undefined,
                 rootElement: proxy,
                 actionsElement: actionsElementProxy,
+                isFocusing:
+                    location.pathname.includes('/status/') &&
+                    !!tweetNode.querySelector(`a[role="link"][href="${location.pathname}"]`),
                 suggestedInjectionPoint: tweetNode,
                 ...refs.subscriptions,
             })

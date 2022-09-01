@@ -27,7 +27,7 @@ import { injectPostActionsAtTwitter } from './injection/PostActions'
 import { EnhanceableSite, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { injectNFTAvatarInTwitter } from './injection/NFT/NFTAvatarInTwitter'
-import { injectOpenTipButtonOnProfile } from './injection/Tip/index'
+import { injectTips } from './injection/Tips'
 import { injectUserNFTAvatarAtTwitter } from './injection/NFT/Avatar'
 import { injectOpenNFTAvatarEditProfileButton, openNFTAvatarSettingDialog } from './injection/NFT/NFTAvatarEditProfile'
 import { injectUserNFTAvatarAtTweet } from './injection/NFT/TweetNFTAvatar'
@@ -188,12 +188,12 @@ const twitterUI: SocialNetworkUI.Definition = {
         commentComposition: undefined,
         userAvatar: injectUserNFTAvatarAtTwitter,
         profileAvatar: injectNFTAvatarInTwitter,
-        profileTip: injectOpenTipButtonOnProfile,
         openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
         postAndReplyNFTAvatar: injectUserNFTAvatarAtTweet,
         avatarClipNFT: injectNFTAvatarClipInTwitter,
         openNFTAvatarSettingDialog,
         avatar: injectAvatar,
+        tips: injectTips,
         profileCard: injectProfileCardHolder,
         PluginSettingsDialog: injectPluginSettingsDialogAtTwitter,
     },

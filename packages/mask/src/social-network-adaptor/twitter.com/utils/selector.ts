@@ -68,6 +68,10 @@ export const profileFollowButtonSelector: () => LiveSelector<E, true> = () =>
         '[data-testid="primaryColumn"] [aria-haspopup="menu"][data-testid="userActions"] ~ [data-testid="placementTracking"]',
     )
 
+export const normalFollowButtonSelector = () =>
+    // Including [data-testid$="-follow"] and [data-testid$="-unfollow"]
+    querySelectorAll('[role="button"][data-testid="UserCell"] [data-testid$="follow"]')
+
 export const searchProfileCoverSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
         '[data-testid="primaryColumn"] > div > div:last-child > div > div > div > div > div > div[style], [data-testid="primaryColumn"] > div > div:last-child > div > div > div > a > div > div[style]',
