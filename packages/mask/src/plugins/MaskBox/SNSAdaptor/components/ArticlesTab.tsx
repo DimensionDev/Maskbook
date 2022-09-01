@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { BoxInfo, BoxMetadata, MediaType } from '../../type'
 import { MaskSharpIconOfSize } from '../../../../resources/MaskIcon'
@@ -6,8 +6,7 @@ import { Video } from '../../../../components/shared/Video'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
-        paddingLeft: 16,
-        paddingRight: 16,
+        padding: 16,
     },
     body: {
         width: '100%',
@@ -74,14 +73,6 @@ export function ArticlesTab(props: ArticlesTabProps) {
                             return <img className={classes.hero} src={boxMetadata.mediaUrl} />
                     }
                 })()}
-            </Box>
-            <Box className={classes.footer} display="flex" alignItems="center" justifyContent="space-between">
-                <Typography className={classes.name} color="textPrimary">
-                    {boxInfo.name}
-                </Typography>
-                <Typography color="textPrimary">
-                    {boxInfo.sold}/{boxInfo.total}
-                </Typography>
             </Box>
         </Box>
     )

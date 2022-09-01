@@ -1,5 +1,11 @@
 {
     "insufficient_balance": "Insufficient balance",
     "drawing": "Drawing",
-    "draw": "Draw"
+    "draw": "Draw",
+    "active": "Active",
+    "sold": "Solid:",
+    "by": "by",
+    "limit": "Limit:",
+    "articles": "Articles",
+    "details": "Details"
 }
