@@ -8,15 +8,7 @@ import {
     useCurrentWeb3NetworkPluginID,
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
-import {
-    CurrencyType,
-    formatBalance,
-    formatCurrency,
-    FungibleAsset,
-    leftShift,
-    NetworkPluginID,
-    pow10,
-} from '@masknet/web3-shared-base'
+import { CurrencyType, formatBalance, formatCurrency, FungibleAsset, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useDashboardI18N } from '../../../../locales'
 import { ChangeNetworkTip } from './ChangeNetworkTip'
@@ -110,11 +102,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                 </Box>
             </TableCell>
             <TableCell className={classes.cell} align="center" variant="body">
-                <Typography>
-                    {leftShift(asset.balance, asset.decimals).gt(pow10(-6))
-                        ? formatBalance(asset.balance, asset.decimals, 6)
-                        : '<0.000001'}
-                </Typography>
+                <Typography>{formatBalance(asset.balance, asset.decimals, 6)}</Typography>
             </TableCell>
             <TableCell className={classes.cell} align="center" variant="body">
                 <Typography>
