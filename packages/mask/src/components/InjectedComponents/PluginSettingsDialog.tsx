@@ -1,4 +1,4 @@
-import { useI18N } from '../../utils'
+import { useI18N, MaskMessages } from '../../utils'
 import { InjectedDialog } from '@masknet/shared'
 import {
     PluginId,
@@ -6,15 +6,17 @@ import {
     usePluginI18NField,
     createInjectHooksRenderer,
 } from '@masknet/plugin-infra/content-script'
-import { useAvailablePlugins, useChainId } from '@masknet/plugin-infra/web3'
-import { EMPTY_LIST, PopupRoutes, CrossIsolationMessages } from '@masknet/shared-base'
+import { NextIDPlatform, EMPTY_LIST, PopupRoutes, CrossIsolationMessages } from '@masknet/shared-base'
+import { useAvailablePlugins } from '@masknet/plugin-infra/web3'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { first } from 'lodash-unified'
 import { TabContext } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import Services from '../../extension/service'
 import { Icons } from '@masknet/icons'
+import { NextIDProof } from '@masknet/web3-providers'
+import { useAsyncRetry } from 'react-use'
+import Services from '../../extension/service'
 
 const useStyles = makeStyles()((theme) => ({
     titleTailButton: {
@@ -40,7 +42,6 @@ export function PluginSettingsDialog() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const translate = usePluginI18NField()
-    const chainId = useChainId()
 
     const [open, setOpen] = useState(false)
     const activatedPlugins = useActivatedPluginsSNSAdaptor('any')
@@ -62,17 +63,32 @@ export function PluginSettingsDialog() {
     const openPopupWindow = useCallback(
         () =>
             Services.Helper.openPopupWindow(PopupRoutes.ConnectedWallets, {
-                chainId,
                 internal: true,
             }),
-        [chainId],
+        [],
     )
+
+    const { value: currentPersona, retry } = useAsyncRetry(Services.Settings.getCurrentPersonaIdentifier, [])
+
+    const { value: bindingWallets } = useAsyncRetry(async () => {
+        if (!currentPersona) return EMPTY_LIST
+        const response = await NextIDProof.queryExistedBindingByPersona(currentPersona.publicKeyAsHex)
+        if (!response) return EMPTY_LIST
+        const { proofs } = response
+        return proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
+    }, [currentPersona])
+
+    useEffect(() => {
+        return MaskMessages.events.ownPersonaChanged.on(retry)
+    }, [retry])
 
     const component = useMemo(() => {
         const Component = getTabContent(currentTab)
         if (!Component) return null
-        return <Component onClose={() => setOpen(false)} />
-    }, [currentTab])
+        return (
+            <Component onClose={() => setOpen(false)} bindingWallets={bindingWallets} currentPersona={currentPersona} />
+        )
+    }, [currentTab, bindingWallets, currentPersona])
 
     useEffect(() => {
         return CrossIsolationMessages.events.PluginSettingsDialogUpdate.on(({ open, targetTab }) => {
@@ -81,6 +97,7 @@ export function PluginSettingsDialog() {
             if (targetTab) setTab(targetTab)
         })
     }, [])
+
     return (
         <TabContext value={currentTab}>
             <InjectedDialog

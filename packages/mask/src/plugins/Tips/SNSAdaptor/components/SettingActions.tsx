@@ -1,7 +1,6 @@
 import { Icons } from '@masknet/icons'
-import { useAccount } from '@masknet/plugin-infra/web3'
 import { PopupRoutes } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ActionButton } from '@masknet/theme'
 import { alpha, Button } from '@mui/material'
 import { memo, useCallback } from 'react'
 import Services from '../../../../extension/service'
@@ -21,35 +20,59 @@ const useStyles = makeStyles()((theme) => ({
                 ? '0px 0px 20px rgba(0, 0, 0, 0.05)'
                 : '0px 0px 20px rgba(255, 255, 255, 0.12)',
     },
+    buttons: {
+        display: 'flex',
+        columnGap: 16,
+    },
 }))
 
-interface SettingActionsProps {}
+interface SettingActionsProps {
+    hasWallet: boolean
+    onClose: () => void
+    onConfirm: () => void
+    disableConfirm: boolean
+    confirmLoading: boolean
+}
 
-export const SettingActions = memo(() => {
-    const account = useAccount()
+export const SettingActions = memo<SettingActionsProps>((props) => {
+    const onOpenConnectWallet = useCallback(
+        () =>
+            Services.Helper.openPopupWindow(PopupRoutes.ConnectedWallets, {
+                internal: true,
+            }),
+        [],
+    )
 
-    const onOpenConnectWallet = useCallback(() => Services.Helper.openPopupWindow(PopupRoutes.ConnectWallet), [])
-
-    return <SettingActionsUI hasWallet={!!account} onOpenConnectWallet={onOpenConnectWallet} />
+    return <SettingActionsUI onOpenConnectWallet={onOpenConnectWallet} {...props} />
 })
 
-interface SettingActionsUIProps {
-    hasWallet: boolean
+interface SettingActionsUIProps extends SettingActionsProps {
     onOpenConnectWallet: () => void
 }
 
-export const SettingActionsUI = memo<SettingActionsUIProps>(({ hasWallet, onOpenConnectWallet }) => {
-    const { classes } = useStyles()
-    const t = useI18N()
-    if (!hasWallet) {
+export const SettingActionsUI = memo<SettingActionsUIProps>(
+    ({ hasWallet, onOpenConnectWallet, onClose, disableConfirm, confirmLoading, onConfirm }) => {
+        const { classes, cx } = useStyles()
+        const t = useI18N()
+        if (!hasWallet) {
+            return (
+                <div className={classes.actions}>
+                    <Button fullWidth startIcon={<Icons.ConnectWallet size={18} />} onClick={onOpenConnectWallet}>
+                        {t.add_wallet()}
+                    </Button>
+                </div>
+            )
+        }
+
         return (
-            <div className={classes.actions}>
-                <Button fullWidth startIcon={<Icons.ConnectWallet size={18} />} onClick={onOpenConnectWallet}>
-                    {t.add_wallet()}
-                </Button>
+            <div className={cx(classes.actions, classes.buttons)}>
+                <ActionButton variant="outlined" fullWidth onClick={onClose}>
+                    {t.cancel()}
+                </ActionButton>
+                <ActionButton fullWidth disabled={disableConfirm} loading={confirmLoading} onClick={onConfirm}>
+                    {t.save()}
+                </ActionButton>
             </div>
         )
-    }
-
-    return <div className={classes.actions}>test</div>
-})
+    },
+)

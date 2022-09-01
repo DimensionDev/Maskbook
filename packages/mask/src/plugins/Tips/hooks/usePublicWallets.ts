@@ -36,7 +36,6 @@ export function usePublicWallets(persona: ECKeyIdentifier | undefined): TipAccou
         )
     }, [persona, Storage, nextIdWallets, TipsSetting])
 
-    console.log(TipsSetting)
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
             queryWallets()

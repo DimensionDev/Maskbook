@@ -14,7 +14,7 @@ import { DialogContent, DialogActions, Avatar, Typography } from '@mui/material'
 import { delay } from '@dimensiondev/kit'
 import { sortBy, last } from 'lodash-unified'
 import { useCopyToClipboard, useAsyncFn, useAsyncRetry } from 'react-use'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState, useEffect } from 'react'
 import Services from '../../../extension/service'
 import { useProvedWallets } from '../hooks/useProvedWallets'
 import { useI18N } from '../locales'
@@ -24,6 +24,7 @@ import { WalletsByNetwork } from './components/WalletsByNetwork'
 import { Icons } from '@masknet/icons'
 import { useTipsSetting } from '../hooks/useTipsSetting'
 import type { TipsSettingType } from '../types'
+import { PluginNextIDMessages } from '../messages'
 
 export interface TipsEntranceDialogProps {
     open: boolean
@@ -119,13 +120,15 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     // Sort By `last_checked_at`
     const bindingWallets = useMemo(() => {
         if (!proofRes?.length) return EMPTY_LIST
-        return sortBy(proofRes, (x) => -Number.parseInt(x.last_checked_at, 10)).map(
-            (wallet, index, list): BindingProof => ({
-                ...wallet,
-                rawIdx: list.length - index - 1,
-            }),
-        )
-    }, [proofRes])
+        return sortBy(proofRes, (x) => -Number.parseInt(x.last_checked_at, 10))
+            .map(
+                (wallet, index, list): BindingProof => ({
+                    ...wallet,
+                    rawIdx: list.length - index - 1,
+                }),
+            )
+            .filter((x) => !TipsSetting?.hiddenAddresses?.includes(x.identity))
+    }, [proofRes, TipsSetting?.hiddenAddresses])
 
     // if the defaultAddress isn't exist, The first checked is default
     const defaultAddress = TipsSetting?.defaultAddress ?? last(bindingWallets)?.identity
@@ -191,6 +194,10 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         deps: [currentPersona?.identifier.rawPublicKey],
         successText: t.copy_success(),
     })
+
+    useEffect(() => {
+        return PluginNextIDMessages.tipsSettingUpdate.on(retrySetting)
+    }, [retrySetting])
 
     // TODO: Listens for event messages added by the bound wallet and refreshes the proof data
 
