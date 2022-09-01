@@ -277,7 +277,7 @@ export function PreviewCard(props: PreviewCardProps) {
                                     color={theme.palette.maskColor.second}
                                     fontSize={14}
                                     fontWeight={400}>
-                                    {t.solid()}
+                                    {t.sold()}
                                 </Typography>
                                 <Typography color="textPrimary" fontSize={14} fontWeight="bold">
                                     {boxInfo.sold}/{boxInfo.total}
