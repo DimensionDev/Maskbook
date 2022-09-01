@@ -7,13 +7,13 @@ import { useCallback, useEffect, useState } from 'react'
 import Services from '../../extension/service'
 import { DashboardRoutes, OpenPageConfirmEvent } from '@masknet/shared-base'
 
-const useStyles = makeStyles<{
-    positionStyle: {
-        top?: number
-        right?: number
-        position?: 'absolute'
-    }
-}>()((theme, props) => {
+type PositionStyle = {
+    top?: number
+    right?: number
+    position?: 'absolute'
+}
+
+const useStyles = makeStyles<{ positionStyle: PositionStyle }>()((theme, props) => {
     return {
         root: {
             width: 384,
@@ -40,11 +40,6 @@ const useStyles = makeStyles<{
 })
 
 type PositionOption = 'center' | 'top-right'
-type PositionStyle = {
-    top?: number
-    right?: number
-    position?: 'absolute'
-}
 
 const positionStyleMap: Record<PositionOption, PositionStyle> = {
     center: {},

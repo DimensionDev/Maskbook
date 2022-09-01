@@ -14,6 +14,7 @@ export interface FootprintPageProps extends BoxProps, FootprintsLayoutProps {
     address: string
     publicKey?: string
     userId: string
+    collectionName?: string
 }
 
 export const FootprintsPage = memo(function FootprintsPage({
@@ -21,6 +22,7 @@ export const FootprintsPage = memo(function FootprintsPage({
     publicKey,
     userId,
     layout,
+    collectionName,
     ...rest
 }: FootprintPageProps) {
     const t = useI18N()
@@ -43,11 +45,12 @@ export const FootprintsPage = memo(function FootprintsPage({
     }, [allFootprints, hiddenList])
 
     const [selectedFootprint, setSelectedFootprint] = useState<RSS3BaseAPI.Footprint | undefined>()
+    const collection = collectionName ?? CollectionType.Footprints
 
     if (loading || !footprints.length) {
         return (
             <Box p={2} {...rest}>
-                <StatusBox loading={loading} description={t.no_Footprint_found()} empty={!footprints.length} />
+                <StatusBox loading={loading} description={t.no_data({ collection })} empty={!footprints.length} />
             </Box>
         )
     }
@@ -65,7 +68,7 @@ export const FootprintsPage = memo(function FootprintsPage({
                 {...rest}>
                 <Icons.EmptySimple size={32} />
                 <Typography color={(theme) => theme.palette.maskColor.second} fontSize="14px" marginTop="12px">
-                    {t.no_data({ collection: CollectionType.Footprints })}
+                    {t.no_data({ collection })}
                 </Typography>
             </Box>
         )

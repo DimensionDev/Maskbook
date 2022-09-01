@@ -310,7 +310,7 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
     description?: string
     address?: string
     schema?: SchemaType
-    iconURL?: string
+    iconURL?: string | null
     /** the amount of mint tokens */
     tokensTotal?: number
     /** the amount of holders */
@@ -522,6 +522,10 @@ export interface TransactionDescriptor<ChainId, Transaction> {
     successfulDescription?: string
     /** a human-readable description for failed transaction. */
     failedDescription?: string
+    /** The address of the token leveraged to swap other tokens */
+    tokenInAddress?: string
+    /** The amount of the token leveraged to swap other tokens */
+    tokenInAmount?: string
     /** The original transaction object */
     _tx: Transaction
 }

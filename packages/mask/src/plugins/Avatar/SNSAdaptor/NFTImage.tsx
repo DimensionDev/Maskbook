@@ -75,7 +75,7 @@ export function NFTImage(props: NFTImageProps) {
     return (
         <Box className={classes.root}>
             <Image
-                fallbackImage={theme.palette.mode === 'dark' ? mask_avatar_dark : mask_avatar_light}
+                fallback={theme.palette.mode === 'dark' ? mask_avatar_dark : mask_avatar_light}
                 classes={{
                     imageLoading: classes.imageLoading,
                     container: classes.imageLoadingBox,

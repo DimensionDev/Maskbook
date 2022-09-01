@@ -164,7 +164,8 @@ export function CollectibleList(props: CollectibleListProps) {
                     <Box className={classes.root}>
                         {collectibles.map((token, index) => {
                             const name = token.collection?.name || token.contract?.name
-                            const title = `${name} ${Others?.formatTokenId(token.tokenId, 2)}`
+                            const uiTokenId = Others?.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
+                            const title = name ? `${name} ${uiTokenId}` : token.metadata?.name ?? ''
                             return (
                                 <Tooltip
                                     key={index}
@@ -264,10 +265,8 @@ export function CollectionList({ addressName, persona, profile, gridProps = EMPT
     const collectionsWithName = useMemo(() => {
         const collections = uniqBy(allCollectibles, (x) => x?.contract?.address.toLowerCase())
             .map((x) => x?.collection)
-            .filter((x) => x?.name.length) as Array<
-            NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-        >
-        return collections
+            .filter((x) => x?.name?.length)
+        return collections as Array<NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     }, [allCollectibles.length])
 
     if (!allCollectibles.length && !done && !error && account)

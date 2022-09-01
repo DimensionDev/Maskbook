@@ -42,6 +42,7 @@ async function getNFTAvatarForCache(
     if (avatarMetaFromPersona) return avatarMetaFromPersona
     const avatarMeta = await fn(userId, activatedSocialNetworkUI.networkIdentifier as EnhanceableSite, snsKey)
     if (!avatarMeta) return
+    if (avatarId && avatarId !== avatarMeta.avatarId) return
     if (avatarMeta.pluginId === NetworkPluginID.PLUGIN_SOLANA) {
         return { imageUrl: '', nickname: '', ...avatarMeta, address: avatarMeta.tokenId }
     }

@@ -2,11 +2,10 @@ import urlcat from 'urlcat'
 import Web3SDK from 'web3'
 import type { AbiItem } from 'web3-utils'
 import { first } from 'lodash-unified'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 import {
-    createLookupTableResolver,
     NonFungibleAsset,
     NonFungibleCollection,
     NonFungibleTokenContract,
@@ -81,9 +80,14 @@ export function createPermalink(chainId: ChainId, address: string, tokenId: stri
     })
 }
 
-export function createNonFungibleAsset(chainId: ChainId, asset: EVM.Asset): NonFungibleAsset<ChainId, SchemaType> {
+export function createNonFungibleAsset(
+    chainId: ChainId,
+    asset: EVM.Asset,
+    collection?: EVM.AssetsGroup,
+): NonFungibleAsset<ChainId, SchemaType> {
     const payload = getJSON<EVM.Payload>(asset.metadata_json)
-    const name = payload?.name || asset.name || asset.contract_name || ''
+    const contractName = asset.contract_name
+    const name = payload?.name || asset.name || ''
     const description = payload?.description
     const mediaURL = resolveIPFSLink(asset.nftscan_uri ?? asset.image_uri)
 
@@ -135,16 +139,20 @@ export function createNonFungibleAsset(chainId: ChainId, asset: EVM.Asset): NonF
             chainId,
             schema,
             address: asset.contract_address,
-            name,
+            name: contractName,
             symbol,
         },
         collection: {
             chainId,
-            name,
+            name: contractName,
             slug: name,
             description,
             address: asset.contract_address,
-            iconURL: urlcat(NFTSCAN_LOGO_BASE + '/:id', { id: asset.contract_address + '.png' }),
+            // If collectionContext.logo_url is null, we will directly render a fallback logo instead.
+            // So do not fallback to the constructed NFTScan logo url
+            iconURL: collection
+                ? collection.logo_url
+                : urlcat(NFTSCAN_LOGO_BASE + '/:id', { id: asset.contract_address + '.png' }),
             // TODO fetch via `collections` API
             verified: false,
             createdAt: asset.mint_timestamp,

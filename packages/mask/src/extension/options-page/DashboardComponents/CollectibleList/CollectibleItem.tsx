@@ -1,3 +1,4 @@
+import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
 import { Skeleton, Typography } from '@mui/material'
 import { forwardRef, HTMLProps } from 'react'
@@ -35,6 +36,10 @@ interface CollectibleItemProps extends HTMLProps<HTMLDivElement>, CollectibleCar
 export const CollectibleItem = forwardRef<HTMLDivElement, CollectibleItemProps>((props: CollectibleItemProps, ref) => {
     const { provider, asset, readonly, renderOrder, address, className, ...rest } = props
     const { classes, cx } = useStyles()
+    const { Others } = useWeb3State()
+
+    const uiTokenId = Others?.formatTokenId(asset.tokenId, 4) ?? `#${asset.tokenId}`
+
     return (
         <div className={cx(classes.card, className)} {...rest} ref={ref}>
             <CollectibleCard
@@ -47,7 +52,7 @@ export const CollectibleItem = forwardRef<HTMLDivElement, CollectibleItemProps>(
             />
             <div className={classes.description}>
                 <Typography className={classes.name} color="textPrimary" variant="body2">
-                    {asset.metadata?.name}
+                    {uiTokenId}
                 </Typography>
             </div>
         </div>

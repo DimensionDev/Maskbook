@@ -37,7 +37,9 @@ function getTabContent(tabId?: string) {
 const MENU_ITEM_HEIGHT = 40
 const MENU_LIST_PADDING = 8
 const useStyles = makeStyles()((theme) => ({
-    root: {},
+    root: {
+        width: isTwitter(activatedSocialNetworkUI) ? 'auto' : 876,
+    },
     container: {
         background:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
@@ -224,10 +226,19 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const isWeb3ProfileDisable = useIsMinimalMode(PluginId.Web3Profile)
 
     const isTwitterPlatform = isTwitter(activatedSocialNetworkUI)
-    const isOwnerNotHasAddress =
+    const doesOwnerHaveNoAddress =
         isOwnerIdentity && personaStatus.proof?.findIndex((p) => p.platform === NextIDPlatform.Ethereum) === -1
 
-    const showNextID = isTwitterPlatform && (isWeb3ProfileDisable || !personaStatus.verified || isOwnerNotHasAddress)
+    const showNextID =
+        isTwitterPlatform &&
+        // enabled the plugin
+        (isWeb3ProfileDisable ||
+            // the owner persona and sns not verify on next ID
+            (isOwnerIdentity && !personaStatus.verified) ||
+            // the owner persona and sns verified on next ID but not verify the wallet
+            doesOwnerHaveNoAddress ||
+            // the visiting persona not have social address list
+            (!isOwnerIdentity && !socialAddressList.length))
 
     const componentTabId = showNextID ? `${PluginId.NextID}_tabContent` : currentTab
 
@@ -362,7 +373,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                     color={(theme) => theme.palette.maskColor.dark}>
                                     {t('mask_network')}
                                 </Typography>
-                                {isOwnerIdentity ? (
+                                {isOwnerIdentity && isTwitter(activatedSocialNetworkUI) ? (
                                     <ConnectPersonaBoundary
                                         customHint
                                         handlerPosition="top-right"

@@ -11,7 +11,7 @@ import { ApplicationBoard } from './ApplicationBoard'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
 import { Icons } from '@masknet/icons'
-import { PersonaSelectPanelDialog } from './PersonaSelectPanelDialog'
+import { PersonaSelectPanelDialog } from './PersonaSelectPanel/PersonaSelectPanelDialog'
 import { PluginNextIDMessages } from '../../plugins/NextID/messages'
 import type { PluginId } from '@masknet/plugin-infra'
 

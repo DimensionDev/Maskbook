@@ -370,7 +370,7 @@ export namespace RSS3BaseAPI {
         /**
          * The on-chain log index.
          */
-        index: number
+        index?: number
         /**
          * The transaction initiator.
          */

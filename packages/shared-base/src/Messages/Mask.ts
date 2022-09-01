@@ -89,7 +89,11 @@ export enum EncryptionTargetType {
 export interface NFTAvatarSettingDialogEvent {
     open: boolean
 }
-
+export interface OpenNFTDialogEvent {
+    open: boolean
+    tokenId: string
+    address: string
+}
 export interface SettingsUpdateEvent {
     id: number
     key: string
@@ -123,11 +127,16 @@ export type OpenApplicationRequestEvent = {
     application: string
 }
 
-export type OpenProfileCardEvent = {
-    userId: string
-    x: number
-    y: number
-}
+export type ProfileCardEvent =
+    | {
+          open: false
+      }
+    | {
+          open: true
+          userId: string
+          x: number
+          y: number
+      }
 
 export type CheckSecurityDialogRequest =
     | {
