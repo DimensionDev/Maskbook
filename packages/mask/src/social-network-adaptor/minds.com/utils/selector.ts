@@ -23,7 +23,7 @@ export const postEditorInDialogSelector: () => LiveSelector<E, true> = () =>
 export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('m-newsfeed m-composer', true)
 
-export const toolboxInSideBarSelector: () => LiveSelector<E, true> = () =>
+export const toolboxInSidebarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('.m-sidebarNavigation__list li:nth-child(7)')
 
 export const postEditorDraftContentSelector = () => {

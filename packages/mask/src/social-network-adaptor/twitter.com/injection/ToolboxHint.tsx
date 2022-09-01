@@ -1,7 +1,7 @@
 import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { sideBarProfileSelector, toolboxInSideBarSelector } from '../utils/selector'
+import { sideBarProfileSelector, toolboxInSidebarSelector } from '../utils/selector'
 import { startWatch } from '../../../utils/watcher'
 import { ProfileLinkAtTwitter, ToolboxHintAtTwitter } from './ToolboxHint_UI'
 
@@ -10,7 +10,7 @@ const SideBarNativeItemIconSize = new ValueRef('24px')
 const SideBarNativeItemPaddingRef = new ValueRef('11px')
 
 export function injectToolboxHintAtTwitter(signal: AbortSignal, category: 'wallet' | 'application') {
-    const watcher = new MutationObserverWatcher(toolboxInSideBarSelector())
+    const watcher = new MutationObserverWatcher(toolboxInSidebarSelector())
         .addListener('onAdd', updateStyle)
         .addListener('onChange', updateStyle)
         .startWatch(
