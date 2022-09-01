@@ -33,3 +33,5 @@ export interface TransactionDescriptor {
         context: TransactionContext<ChainId, TransactionParameter>,
     ) => Promise<Omit<TransactionDescriptorBase<ChainId, Transaction>, 'type' | '_tx'> | undefined>
 }
+
+export type { SwapDescriptorBase as SwapDescriptor } from './descriptors/Swap'

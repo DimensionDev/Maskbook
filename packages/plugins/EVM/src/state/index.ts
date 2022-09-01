@@ -67,3 +67,4 @@ export function createWeb3State(context: Plugin.Shared.SharedUIContext): EVM_Web
 }
 
 export * from './Connection/types'
+export * as TransactionFormatter from './TransactionFormatter/types'

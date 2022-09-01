@@ -1,11 +1,27 @@
 import { first, last } from 'lodash-unified'
-import { TransactionContext, isSameAddress } from '@masknet/web3-shared-base'
-import { ChainId, TransactionParameter, getTraderConstants } from '@masknet/web3-shared-evm'
-import type { TransactionDescriptor } from '../types'
+import {
+    TransactionContext,
+    isSameAddress,
+    TransactionDescriptor as TransactionDescriptorBase,
+} from '@masknet/web3-shared-base'
+import { ChainId, TransactionParameter, getTraderConstants, Transaction } from '@masknet/web3-shared-evm'
 import { Web3StateSettings } from '../../../settings'
 import { getTokenAmountDescription } from '../utils'
 
-export class SwapDescriptor implements TransactionDescriptor {
+export interface SwapDescriptorBase<ChainId, Transaction> extends TransactionDescriptorBase<ChainId, Transaction> {
+    /** The address of the token leveraged to swap other tokens */
+    tokenInAddress?: string
+    /** The amount of the token leveraged to swap other tokens */
+    tokenInAmount?: string
+}
+
+export interface SwapDescriptorInterface {
+    compute: (
+        context: TransactionContext<ChainId, TransactionParameter>,
+    ) => Promise<Omit<SwapDescriptorBase<ChainId, Transaction>, 'type' | '_tx'> | undefined>
+}
+
+export class SwapDescriptor implements SwapDescriptorInterface {
     async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
         const context = context_ as TransactionContext<ChainId, string | undefined>
         const { DODO_ETH_ADDRESS, OPENOCEAN_ETH_ADDRESS, ZERO_X_ETH_ADDRESS } = getTraderConstants(context.chainId)

@@ -522,10 +522,6 @@ export interface TransactionDescriptor<ChainId, Transaction> {
     successfulDescription?: string
     /** a human-readable description for failed transaction. */
     failedDescription?: string
-    /** The address of the token leveraged to swap other tokens */
-    tokenInAddress?: string
-    /** The amount of the token leveraged to swap other tokens */
-    tokenInAmount?: string
     /** The original transaction object */
     _tx: Transaction
 }
