@@ -70,7 +70,8 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
         const signature = getFunctionSignature(transaction)
         const parameters = getFunctionParameters(transaction)
 
-        const context = {
+        const context: TransactionContext<ChainId, string | undefined> = {
+            type: TransactionDescriptorType.INTERACTION,
             chainId,
             from,
             to,

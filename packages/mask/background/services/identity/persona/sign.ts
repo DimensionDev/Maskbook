@@ -35,6 +35,9 @@ export interface SignRequestResult {
     messageHex: string
 }
 
+/**
+ * Generate a signature with confirmation from user
+ */
 export async function signWithPersona({ message, method, identifier }: SignRequest): Promise<SignRequestResult> {
     if (method !== 'eth') throw new Error('Unknown sign method')
     const requestID = Math.random().toString(16).slice(3)
@@ -52,6 +55,9 @@ export async function signWithPersona({ message, method, identifier }: SignReque
     return generateSignResult(signer, message)
 }
 
+/**
+ * Generate a signature without confirmation from user
+ */
 export async function generateSignResult(signer: ECKeyIdentifier, message: string) {
     const persona = (await queryPersonasWithPrivateKey()).find((x) => x.identifier === signer)
     if (!persona) throw new Error('Persona not found')
