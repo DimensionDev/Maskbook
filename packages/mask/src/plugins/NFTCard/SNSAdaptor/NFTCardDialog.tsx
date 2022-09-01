@@ -24,7 +24,7 @@ export function NFTCardDialog() {
     const [tokenAddress, setTokenAddress] = useState('')
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
     const [open, setOpen] = useState(false)
-    const { asset, orders, events, rarity, provider, setProvider } = useNFTCardInfo(tokenAddress, tokenId)
+    const { asset, orders, events, provider } = useNFTCardInfo(tokenAddress, tokenId)
 
     const [currentTab, onChange] = useTabs<NFTCardDialogTabs>(
         NFTCardDialogTabs.About,
@@ -60,7 +60,6 @@ export function NFTCardDialog() {
                         provider={provider}
                         events={events}
                         orders={orders}
-                        onChangeProvider={setProvider}
                         asset={asset}
                         currentTab={currentTab}
                     />

@@ -6,7 +6,6 @@ import { Box, Button, CardContent, CardHeader, Paper, Tab, Typography } from '@m
 import formatDateTime from 'date-fns/format'
 import isAfter from 'date-fns/isAfter'
 import isValidDate from 'date-fns/isValid'
-import { useCallback } from 'react'
 import { useI18N, useSwitcher } from '../../../utils'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { CollectibleState } from '../hooks/useCollectibleState'
@@ -155,10 +154,6 @@ export function Collectible(props: CollectibleProps) {
     const { classes } = useStyles()
     const { asset, provider, setProvider } = CollectibleState.useContainer()
 
-    const onDataProviderChange = useCallback((v: SourceType) => {
-        setProvider(v)
-    }, [])
-
     // #region provider switcher
     const CollectibleProviderSwitcher = useSwitcher(provider, setProvider, supportedProvider, resolveSourceName, true)
     // #endregion
@@ -199,14 +194,7 @@ export function Collectible(props: CollectibleProps) {
     const endDate = _asset.auction?.endAt
     const renderTab = () => {
         const tabMap = {
-            [tabs.about]: (
-                <AboutTab
-                    currentProvider={provider}
-                    providers={supportedProvider}
-                    onChangeProvider={onDataProviderChange}
-                    asset={asset}
-                />
-            ),
+            [tabs.about]: <AboutTab asset={asset} />,
             [tabs.details]: <DetailTab asset={asset} />,
             [tabs.offers]: <OffersTab />,
             [tabs.activity]: <ActivityTab />,

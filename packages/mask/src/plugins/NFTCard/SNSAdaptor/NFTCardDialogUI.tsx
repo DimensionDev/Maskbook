@@ -22,19 +22,17 @@ import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { LoadingBase } from '@masknet/theme'
 import { base as pluginDefinition } from '../base'
-interface NFTCardDialogUIProps {
+
+export interface NFTCardDialogUIProps {
     currentTab: NFTCardDialogTabs
     asset: AsyncStateRetry<Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>>
-    onChangeProvider: (v: SourceType) => void
     orders: AsyncStateRetry<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
     events: AsyncStateRetry<Pageable<NonFungibleTokenEvent<ChainId, SchemaType>>>
     provider: SourceType
 }
 
-const supportedProvider = [SourceType.OpenSea, SourceType.Gem, SourceType.Rarible, SourceType.NFTScan]
-
 export function NFTCardDialogUI(props: NFTCardDialogUIProps) {
-    const { currentTab, asset, orders, onChangeProvider, provider, events } = props
+    const { currentTab, asset, orders, provider, events } = props
     const { classes } = useStyles()
     const { t: tb } = useBaseI18n()
     const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
@@ -66,13 +64,7 @@ export function NFTCardDialogUI(props: NFTCardDialogUIProps) {
         <div className={classes.contentWrapper}>
             <div className={classes.contentLayout}>
                 <div className={classes.mediaBox}>
-                    <NFTBasicInfo
-                        timeline
-                        providers={supportedProvider}
-                        currentProvider={provider}
-                        asset={asset.value}
-                        onChangeProvider={onChangeProvider}
-                    />
+                    <NFTBasicInfo timeline asset={asset.value} />
                 </div>
 
                 <div className={classes.tabWrapper}>
