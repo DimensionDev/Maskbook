@@ -129,7 +129,7 @@ export function createNonFungibleAsset(
             : undefined,
         metadata: {
             chainId,
-            name,
+            name: contractName,
             symbol,
             description,
             imageURL: mediaURL,
