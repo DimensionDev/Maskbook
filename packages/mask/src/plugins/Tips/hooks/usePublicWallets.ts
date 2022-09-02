@@ -1,16 +1,15 @@
-import { EMPTY_LIST, NextIDPlatform, ECKeyIdentifier } from '@masknet/shared-base'
+import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { uniqBy } from 'lodash-unified'
 import { useEffect, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { MaskMessages } from '../../../utils'
-import type { TipAccount } from '../types'
+import type { TipsAccount } from '../types'
 import { useTipsSetting } from './useTipsSetting'
 
-export function usePublicWallets(persona: ECKeyIdentifier | undefined): TipAccount[] {
-    const personaPubkey = persona?.publicKeyAsHex
-    const { value: nextIdWallets, retry: queryWallets } = useAsyncRetry(async (): Promise<TipAccount[]> => {
+export function usePublicWallets(personaPubkey?: string): TipsAccount[] {
+    const { value: nextIdWallets, retry: queryWallets } = useAsyncRetry(async (): Promise<TipsAccount[]> => {
         if (!personaPubkey) return EMPTY_LIST
 
         const bindings = await NextIDProof.queryExistedBindingByPersona(personaPubkey, true)
@@ -22,7 +21,7 @@ export function usePublicWallets(persona: ECKeyIdentifier | undefined): TipAccou
         return wallets
     }, [personaPubkey])
 
-    const { value: TipsSetting } = useTipsSetting(persona)
+    const { value: TipsSetting } = useTipsSetting(personaPubkey)
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {

@@ -1,28 +1,27 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { PluginId, useActivatedPluginSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { createInjectHooksRenderer, Plugin, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
-import { TipButton } from '../../../../plugins/Tips/components'
 import { createReactRootShadowed, startWatch, useLocationChange } from '../../../../utils'
 import {
     profileFollowButtonSelector as selector,
     profileMenuButtonSelector as menuButtonSelector,
 } from '../../utils/selector'
 
-export function injectOpenTipButtonOnProfile(signal: AbortSignal) {
+export function injectOpenTipsButtonOnProfile(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(selector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.beforeShadow, { signal }).render(<ProfileTipButton />)
+    createReactRootShadowed(watcher.firstDOMProxy.beforeShadow, { signal }).render(<ProfileTipsSlot />)
 }
 
 interface StyleProps {
     size: number
-    fontSize: number
     marginBottom: number
 }
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
-    button: {
+    slot: {
+        position: 'relative',
         height: props.size,
         width: props.size,
         display: 'flex',
@@ -40,35 +39,38 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
             backgroundColor: theme.palette.mode === 'dark' ? 'rgba(239,243,244,0.1)' : 'rgba(15,20,25,0.1)',
         },
     },
-    label: {
-        fontSize: 14,
-        marginLeft: theme.spacing(0.5),
-    },
 }))
 
-function ProfileTipButton() {
-    const [style, setStyle] = useState<StyleProps>({ size: 34, fontSize: 14, marginBottom: 11 })
-    const visitingPersona = useCurrentVisitingIdentity()
-
+function useTipsSlotStyles() {
+    const [style, setStyle] = useState<StyleProps>({ size: 34, marginBottom: 11 })
     const setStyleFromEditProfileSelector = () => {
         const menuButton = menuButtonSelector().evaluate()
         if (!menuButton) return
         const css = window.getComputedStyle(menuButton)
         setStyle({
             size: Number.parseFloat(css.height.replace('px', '')),
-            fontSize: Number.parseFloat(css.fontSize.replace('px', '')),
             marginBottom: Number.parseFloat(css.marginBottom.replace('px', '')),
         })
     }
-
     useEffect(setStyleFromEditProfileSelector, [])
 
     useLocationChange(setStyleFromEditProfileSelector)
+    return useStyles(style)
+}
 
-    const tipsPlugin = useActivatedPluginSNSAdaptor(PluginId.Tips, false)
+function ProfileTipsSlot() {
+    const visitingPersona = useCurrentVisitingIdentity()
+    const { classes } = useTipsSlotStyles()
+    const component = useMemo(() => {
+        const Component = createInjectHooksRenderer(
+            useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
+            (plugin) => plugin.TipsRealm?.UI?.Content,
+        )
 
-    const { classes } = useStyles(style)
-    if (!tipsPlugin) return null
+        return <Component identity={visitingPersona.identifier} slot={Plugin.SNSAdaptor.TipsSlot.Profile} />
+    }, [visitingPersona.identifier])
 
-    return <TipButton className={classes.button} receiver={visitingPersona.identifier} />
+    if (!component || !visitingPersona.identifier) return null
+
+    return <span className={classes.slot}>{component}</span>
 }

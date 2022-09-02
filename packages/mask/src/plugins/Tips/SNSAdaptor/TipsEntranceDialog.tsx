@@ -115,7 +115,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
 
     const { loading, value: proofRes } = useProvedWallets()
 
-    const { value: TipsSetting, retry: retrySetting } = useTipsSetting(currentPersonaIdentifier)
+    const { value: TipsSetting, retry: retrySetting } = useTipsSetting(currentPersonaIdentifier?.publicKeyAsHex)
 
     // Sort By `last_checked_at`
     const bindingWallets = useMemo(() => {

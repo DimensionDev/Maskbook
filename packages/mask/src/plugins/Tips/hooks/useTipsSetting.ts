@@ -1,19 +1,15 @@
 import { PluginId } from '@masknet/plugin-infra'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
-import { BindingProof, ECKeyIdentifier, NextIDPlatform } from '@masknet/shared-base'
+import { BindingProof, NextIDPlatform } from '@masknet/shared-base'
 import { useAsyncRetry } from 'react-use'
 import type { TipsSettingType } from '../types'
 
-export function useTipsSetting(identifier?: ECKeyIdentifier) {
+export function useTipsSetting(publicKeyAsHex?: string) {
     const { Storage } = useWeb3State()
 
     return useAsyncRetry(async () => {
-        if (!Storage || !identifier) return
-        const storage = Storage.createNextIDStorage(
-            identifier.publicKeyAsHex,
-            NextIDPlatform.NextID,
-            identifier.publicKeyAsHex,
-        )
+        if (!Storage || !publicKeyAsHex) return
+        const storage = Storage.createNextIDStorage(publicKeyAsHex, NextIDPlatform.NextID, publicKeyAsHex)
 
         const settings = await storage.get<BindingProof[] | TipsSettingType>(PluginId.Tips)
 
@@ -27,5 +23,5 @@ export function useTipsSetting(identifier?: ECKeyIdentifier) {
             hiddenAddresses,
             defaultAddress,
         }
-    }, [Storage, identifier])
+    }, [Storage, publicKeyAsHex])
 }
