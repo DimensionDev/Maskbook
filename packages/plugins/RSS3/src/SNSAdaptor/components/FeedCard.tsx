@@ -1,4 +1,4 @@
-import { NFTCardStyledAssetPlayer, ReversedAddress } from '@masknet/shared'
+import { Image, NFTCardStyledAssetPlayer, ReversedAddress } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
@@ -164,7 +164,7 @@ export const FeedCard = memo(({ feed, address, onSelect }: FeedCardProps) => {
         if (feed.tag === Tag.Donation) {
             const action = feed.actions[0] as RSS3BaseAPI.ActionGeneric<RSS3BaseAPI.Tag.Donation>
             const logo = action.metadata?.logo
-            return logo ? <img className={classes.img} src={logo} /> : null
+            return logo ? <Image className={classes.img} src={logo} /> : null
         }
         if (feed.tag === Tag.Transaction && feed.type === Type.Transfer) {
             const action = feed.actions[0] as RSS3BaseAPI.ActionGeneric<
@@ -172,7 +172,7 @@ export const FeedCard = memo(({ feed, address, onSelect }: FeedCardProps) => {
                 RSS3BaseAPI.Type.Transfer
             >
             const logo = action.metadata?.image
-            return logo ? <img className={classes.img} src={logo} /> : null
+            return logo ? <Image className={classes.img} src={logo} /> : null
         }
         return null
     }, [feed])

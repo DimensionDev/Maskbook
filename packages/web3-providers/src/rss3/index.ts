@@ -124,7 +124,8 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
      */
     async getWeb3Feeds(address: string, { indicator, size = 100 }: HubOptions<ChainId> = {}) {
         if (!address) return createPageable([], createIndicator(indicator))
-        const url = urlcat(NEW_RSS3_ENDPOINT, '/:address', {
+        const tags = [RSS3BaseAPI.Tag.Donation, RSS3BaseAPI.Tag.Collectible, RSS3BaseAPI.Tag.Transaction]
+        const url = urlcat(NEW_RSS3_ENDPOINT, `/:address?tag=${tags.join('&tag=')}`, {
             address,
             limit: size,
             cursor: indicator?.id,
