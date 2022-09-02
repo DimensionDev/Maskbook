@@ -23,15 +23,22 @@ import type { PersonaNextIDMixture } from './PersonaItemUI'
 import { PersonaItemUI } from './PersonaItemUI'
 import { useCurrentPersona } from '../../DataSource/usePersonaConnectStatus'
 import { delay } from '@dimensiondev/kit'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => {
     return {
         items: {
             overflow: 'auto',
+            maxHeight: 225,
             scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
+        },
+        button: {
+            display: 'inline-flex',
+            gap: theme.spacing(1),
+            borderRadius: 20,
         },
     }
 })
@@ -237,6 +244,7 @@ interface ActionContentProps {
 }
 
 function ActionContent({ buttonText, hint, onClick }: ActionContentProps) {
+    const { classes } = useStyles()
     if (!buttonText) return null
     return (
         <Stack gap={1.5} mt={1.5}>
@@ -245,7 +253,8 @@ function ActionContent({ buttonText, hint, onClick }: ActionContentProps) {
                     {hint}
                 </Typography>
             )}
-            <Button color="primary" style={{ borderRadius: 20 }} onClick={onClick}>
+            <Button color="primary" className={classes.button} onClick={onClick}>
+                <Icons.Identity size={18} />
                 {buttonText}
             </Button>
         </Stack>

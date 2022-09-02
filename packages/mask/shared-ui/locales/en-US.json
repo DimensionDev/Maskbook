@@ -25,6 +25,7 @@
     "gas_price": "Gas Price",
     "redirect_to": "Redirect to",
     "sign": "Sign",
+    "load_failed": "Load failed",
     "powered_by": "Powered by",
     "powered_by_whom": "Powered by <span>{{whom}}</span>",
     "reload": "Reload",

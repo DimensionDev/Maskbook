@@ -1,6 +1,6 @@
-import { makeStyles, MaskLightTheme } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
-import { Button, Stack, ThemeProvider, Typography } from '@mui/material'
+import { Button, Stack, Typography } from '@mui/material'
 import { useI18N } from '../../locales'
 import { Icons } from '@masknet/icons'
 import { PersonaSelectPanel } from '../../../../components/shared/PersonaSelectPanel/PersonaSelectPanel'
@@ -11,11 +11,11 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(1),
         minWidth: 254,
         borderRadius: '20px',
-        background: theme.palette.maskColor.publicMain,
-        color: theme.palette.maskColor.white,
     },
     unchecked: {
-        color: theme.palette.maskColor.white,
+        '& circle': {
+            stroke: theme.palette.maskColor.white,
+        },
     },
 }))
 
@@ -35,7 +35,7 @@ export const CreatePersonaAction = memo<CreatePersonaActionProps>(({ disabled, o
                 </Typography>
             </Stack>
             <Stack direction="row" justifyContent="center">
-                <Button disabled={disabled} className={classes.button} onClick={onCreate}>
+                <Button color="primary" disabled={disabled} className={classes.button} onClick={onCreate}>
                     <Icons.Identity size={18} />
                     {t.create_persona()}
                 </Button>
@@ -47,11 +47,11 @@ export const CreatePersonaAction = memo<CreatePersonaActionProps>(({ disabled, o
 export const SelectConnectPersonaAction = memo(() => {
     const { classes } = useStyles()
     return (
-        <ThemeProvider theme={MaskLightTheme}>
-            <Stack p={1.25} pb={0}>
+        <>
+            <Stack p={1.25} pb={0} width="100%">
                 <PersonaSelectPanel classes={{ unchecked: classes.unchecked }} />
             </Stack>
-        </ThemeProvider>
+        </>
     )
 })
 
@@ -71,7 +71,7 @@ export const AddWalletPersonaAction = memo<AddWalletPersonaActionProps>(({ disab
                 </Typography>
             </Stack>
             <Stack direction="row" justifyContent="center">
-                <Button variant="contained" onClick={onAddWallet} className={classes.button}>
+                <Button color="primary" variant="contained" onClick={onAddWallet} className={classes.button}>
                     <Icons.WalletUnderTabs size={16} />
                     {t.add_wallet_button()}
                 </Button>
