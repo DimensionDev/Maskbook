@@ -37,6 +37,7 @@ const useStyles = makeStyles()((theme) => {
             flexDirection: 'column',
             overflow: 'auto',
             height: '100%',
+            overscrollBehavior: 'contain',
         },
         loading: {
             display: 'flex',

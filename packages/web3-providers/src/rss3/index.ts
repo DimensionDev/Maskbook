@@ -1,17 +1,10 @@
-import {
-    createIndicator,
-    createNextIndicator,
-    createPageable,
-    HubOptions,
-    NetworkPluginID,
-    TokenType,
-} from '@masknet/web3-shared-base'
+import { createIndicator, createNextIndicator, createPageable, HubOptions, TokenType } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import RSS3 from 'rss3-next'
 import urlcat from 'urlcat'
 import { fetchJSON } from '../helpers'
 import { NonFungibleTokenAPI, RSS3BaseAPI } from '../types'
-import { NETWORK_PLUGIN, NEW_RSS3_ENDPOINT, RSS3_ENDPOINT, TAG, TYPE } from './constants'
+import { NEW_RSS3_ENDPOINT, RSS3_ENDPOINT, TAG, TYPE } from './constants'
 
 type RSS3Result<T> = { cursor?: string; total: number; result: T[] }
 
@@ -129,18 +122,12 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
     /**
      * Get feeds in tags of donation, collectible and transaction
      */
-    async getWeb3Feeds(
-        address: string,
-        networkPluginId = NetworkPluginID.PLUGIN_EVM,
-        { indicator, size = 100 }: HubOptions<ChainId> = {},
-    ) {
+    async getWeb3Feeds(address: string, { indicator, size = 100 }: HubOptions<ChainId> = {}) {
         if (!address) return createPageable([], createIndicator(indicator))
-        const tags = [RSS3BaseAPI.Tag.Donation, RSS3BaseAPI.Tag.Collectible]
-        const url = urlcat(NEW_RSS3_ENDPOINT, `/:address?tag=${tags.join('&tag=')}`, {
+        const url = urlcat(NEW_RSS3_ENDPOINT, '/:address', {
             address,
             limit: size,
             cursor: indicator?.id,
-            network: NETWORK_PLUGIN[networkPluginId],
             include_poap: true,
         })
         const { result, cursor } = await fetchJSON<{ result: RSS3BaseAPI.Activity[]; cursor?: string }>(url)

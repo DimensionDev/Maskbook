@@ -164,7 +164,15 @@ export const FeedCard = memo(({ feed, address, onSelect }: FeedCardProps) => {
         if (feed.tag === Tag.Donation) {
             const action = feed.actions[0] as RSS3BaseAPI.ActionGeneric<RSS3BaseAPI.Tag.Donation>
             const logo = action.metadata?.logo
-            return <img className={classes.img} src={logo} />
+            return logo ? <img className={classes.img} src={logo} /> : null
+        }
+        if (feed.tag === Tag.Transaction && feed.type === Type.Transfer) {
+            const action = feed.actions[0] as RSS3BaseAPI.ActionGeneric<
+                RSS3BaseAPI.Tag.Transaction,
+                RSS3BaseAPI.Type.Transfer
+            >
+            const logo = action.metadata?.image
+            return logo ? <img className={classes.img} src={logo} /> : null
         }
         return null
     }, [feed])
@@ -174,14 +182,14 @@ export const FeedCard = memo(({ feed, address, onSelect }: FeedCardProps) => {
     return (
         <Box className={classes.wrapper} onClick={() => onSelect(normalizedFeed)}>
             <div className={classes.texts}>
-                <Typography>
+                <div>
                     <span className={classes.action}>
                         <ReversedAddress TypographyProps={{ display: 'inline' }} address={address!} /> {feedAction}
                     </span>{' '}
                     <span className={classes.time}>
                         {formatDistanceToNow(new Date(feed.timestamp))} {t.ago()}
                     </span>
-                </Typography>
+                </div>
                 <Box className={classes.collection}>
                     <Typography fontWeight={700} className={classes.summary}>
                         {normalizedFeed.title}

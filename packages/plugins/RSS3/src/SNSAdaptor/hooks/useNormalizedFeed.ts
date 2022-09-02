@@ -42,7 +42,7 @@ export function useNormalizeFeed(feed: RSS3BaseAPI.Activity): RSS3Feed {
                 image: metadata?.image || RSS3_DEFAULT_IMAGE,
                 title: action.type,
                 relatedURLs: action.related_urls,
-                description: metadata?.description,
+                description: metadata?.value_display ? `${metadata?.value_display} ${metadata?.symbol}` : '',
                 network: feed.network,
                 attributes: [],
                 metadata: {
