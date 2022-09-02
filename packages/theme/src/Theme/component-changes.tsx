@@ -6,7 +6,6 @@ import {
     checkboxClasses,
     inputBaseClasses,
     menuItemClasses,
-    selectClasses,
     popoverClasses,
     menuClasses,
     PaletteMode,
@@ -714,6 +713,7 @@ export const Checkbox = (mode: PaletteMode, colors: MaskColor) => ({
     },
 })
 
+console.log(inputBaseClasses.error)
 export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
     components: {
         MuiInputBase: {
@@ -726,22 +726,10 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                         size: 'small',
                     },
                     style: {
-                        [`&.${inputBaseClasses.focused} > .${inputBaseClasses.input}`]: {
-                            padding: 7,
-                            [`&.${selectClasses.select}`]: {
-                                padding: 7,
-                                height: 16,
-                                minHeight: 'unset',
-                            },
-                        },
+                        height: 32,
                         [`& .${inputBaseClasses.input}`]: {
                             padding: 8,
                             height: 16,
-                            [`&.${selectClasses.select}`]: {
-                                padding: 8,
-                                height: 16,
-                                minHeight: 'unset',
-                            },
                         },
                     },
                 },
@@ -750,22 +738,10 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                         size: 'medium',
                     },
                     style: {
-                        [`&.${inputBaseClasses.focused} > .${inputBaseClasses.input}`]: {
-                            padding: 10,
-                            [`&.${selectClasses.select}`]: {
-                                padding: 10,
-                                height: 18,
-                                minHeight: 'unset',
-                            },
-                        },
+                        height: 40,
                         [`& .${inputBaseClasses.input}`]: {
                             padding: 11,
                             height: 18,
-                            [`&.${selectClasses.select}`]: {
-                                padding: 11,
-                                height: 18,
-                                minHeight: 'unset',
-                            },
                         },
                     },
                 },
@@ -774,22 +750,10 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                         size: 'large',
                     },
                     style: {
-                        [`&.${inputBaseClasses.focused} > .${inputBaseClasses.input}`]: {
-                            padding: 13,
-                            [`&.${selectClasses.select}`]: {
-                                padding: 13,
-                                height: 20,
-                                minHeight: 'unset',
-                            },
-                        },
+                        height: 48,
                         [`& .${inputBaseClasses.input}`]: {
                             padding: 14,
                             height: 20,
-                            [`&.${selectClasses.select}`]: {
-                                padding: 14,
-                                height: 20,
-                                minHeight: 'unset',
-                            },
                         },
                     },
                 },
@@ -798,11 +762,9 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                         color: 'error',
                     },
                     style: {
-                        [`&.${inputBaseClasses.focused} > .${inputBaseClasses.input}`]: {
-                            outline: `2px solid ${alpha(colors.maskColor.danger, 0.2)}`,
-                            border: `1px solid ${alpha(colors.maskColor.danger, 0.5)}`,
-                        },
-                        [`& .${inputBaseClasses.input}`]: {
+                        outline: `2px solid ${alpha(colors.maskColor.danger, 0.2)}`,
+                        border: `1px solid ${alpha(colors.maskColor.danger, 0.5)}`,
+                        [`&.${inputBaseClasses.focused}`]: {
                             outline: `2px solid ${alpha(colors.maskColor.danger, 0.2)}`,
                             border: `1px solid ${alpha(colors.maskColor.danger, 0.5)}`,
                         },
@@ -813,11 +775,9 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                         color: 'warning',
                     },
                     style: {
-                        [`&.${inputBaseClasses.focused} > .${inputBaseClasses.input}`]: {
-                            outline: `2px solid ${alpha(colors.maskColor.warn, 0.2)}`,
-                            border: `1px solid ${alpha(colors.maskColor.warn, 0.5)}`,
-                        },
-                        [`& .${inputBaseClasses.input}`]: {
+                        outline: `2px solid ${alpha(colors.maskColor.warn, 0.2)}`,
+                        border: `1px solid ${alpha(colors.maskColor.warn, 0.5)}`,
+                        [`&.${inputBaseClasses.focused}`]: {
                             outline: `2px solid ${alpha(colors.maskColor.warn, 0.2)}`,
                             border: `1px solid ${alpha(colors.maskColor.warn, 0.5)}`,
                         },
@@ -826,21 +786,12 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
             ],
             styleOverrides: {
                 root: {
-                    borderRadius: 8,
                     overflow: 'unset!important',
-                    [`&.${inputBaseClasses.focused} > .${inputBaseClasses.input}`]: {
+                    borderRadius: 8,
+                    backgroundColor: colors.maskColor.input,
+                    [`&.${inputBaseClasses.focused}`]: {
                         outline: `2px solid ${alpha(colors.maskColor.primary, 0.2)}`,
                         border: `1px solid ${alpha(colors.maskColor.primary, 0.5)}`,
-                    },
-                    [`&.${inputBaseClasses.error} > .${inputBaseClasses.input}`]: {
-                        outline: `2px solid ${alpha(colors.maskColor.danger, 0.2)}`,
-                        border: `1px solid ${alpha(colors.maskColor.danger, 0.5)}`,
-                    },
-                    [`&.${inputBaseClasses.disabled} > .${inputBaseClasses.input}`]: {
-                        WebkitTextFillColor: 'unset',
-                        '&::placeholder': {
-                            opacity: '0.5',
-                        },
                     },
                     // For Select Menu
                     [`& .${popoverClasses.paper}`]: {
@@ -861,8 +812,6 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                     },
                 },
                 input: {
-                    borderRadius: 8,
-                    backgroundColor: colors.maskColor.input,
                     '&::placeholder': {
                         color: colors.maskColor.third,
                     },
@@ -884,20 +833,6 @@ export const Select = (mode: PaletteMode, colors: MaskColor) => ({
         },
     },
 })
-
-// export const MenuItem = (mode: PaletteMode, colors: MaskColor) => ({
-//     components: {
-//         MuiMenuItem: {
-//             styleOverrides: {
-//                 root: {
-//                     [`&.${menuItemClasses.selected}`]: {
-//                         backgroundColor: `${colors.maskColor.bg}!important`,
-//                     },
-//                 },
-//             },
-//         },
-//     },
-// })
 
 export const Slider = (mode: PaletteMode, colors: MaskColor) => ({
     components: {

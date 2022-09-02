@@ -338,6 +338,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     loadingOwnerList ? (
                         <CircularProgress size={24} className={classes.loadingOwnerList} />
                     ) : (
+                        // TODO: replace to radio
                         <Box className={classes.selectWrapper}>
                             <div
                                 className={classNames(

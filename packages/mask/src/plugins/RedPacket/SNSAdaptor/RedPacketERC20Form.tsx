@@ -9,17 +9,16 @@ import {
     formatBalance,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
-import { MenuItem, Select, TextField, Box, InputBase } from '@mui/material'
+import { MenuItem, Select, Box, InputBase, Typography } from '@mui/material'
 import BigNumber from 'bignumber.js'
 import { omit } from 'lodash-unified'
 import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useSelectFungibleToken } from '@masknet/shared'
+import { useSelectFungibleToken, ERC20Input } from '@masknet/shared'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
 import { useI18N } from '../locales'
 import { PluginWalletStatusBar, useI18N as useBaseI18n } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants'
 import type { RedPacketSettings } from './hooks/useCreateCallback'
 import { useAccount, useChainId, useFungibleToken, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
@@ -208,9 +207,11 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     return (
         <>
             <div className={classes.field}>
-                {/* <FormControl className={classes.input} variant="outlined">
-                    <InputLabel className={classes.selectShrinkLabel}>{t.split_mode()}</InputLabel>
+                <Box className={classes.input}>
+                    <Typography>{t.split_mode()}</Typography>
                     <Select
+                        fullWidth
+                        className={classes.input}
                         ref={selectRef}
                         value={isRandom ? 1 : 0}
                         onChange={(e) => {
@@ -230,85 +231,45 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                         <MenuItem value={0}>{t.average()}</MenuItem>
                         <MenuItem value={1}>{t.random()}</MenuItem>
                     </Select>
-                </FormControl> */}
-                <Select
-                    className={classes.input}
-                    ref={selectRef}
-                    value={isRandom ? 1 : 0}
-                    onChange={(e) => {
-                        // foolproof, reset amount since the meaning of amount changed:
-                        // 'total amount' <=> 'amount per share'
-                        setRawAmount('0')
-                        setRandom(e.target.value as number)
-                    }}
-                    MenuProps={{
-                        anchorOrigin: {
-                            vertical: 'bottom',
-                            horizontal: 'center',
-                        },
-                        container: selectRef.current,
-                        anchorEl: selectRef.current,
-                    }}>
-                    <MenuItem value={0}>{t.average()}</MenuItem>
-                    <MenuItem value={1}>{t.random()}</MenuItem>
-                </Select>
-                {/* <TextField
-                    className={classes.input}
-                    InputProps={{
-                        inputProps: {
+                </Box>
+                <Box className={classes.input}>
+                    <Typography>{t.shares()}</Typography>
+                    <InputBase
+                        fullWidth
+                        value={shares}
+                        onChange={onShareChange}
+                        inputProps={{
                             autoComplete: 'off',
                             autoCorrect: 'off',
                             inputMode: 'decimal',
                             placeholder: '0',
                             pattern: '^[0-9]$',
                             spellCheck: false,
-                        },
-                    }}
-                    InputLabelProps={{
-                        shrink: true,
-                        classes: {
-                            shrink: classes.inputShrinkLabel,
-                        },
-                    }}
-                    label={t.shares()}
-                    value={shares}
-                    onChange={onShareChange}
-                /> */}
-                <InputBase className={classes.input} value={shares} onChange={onShareChange} />
+                        }}
+                    />
+                </Box>
             </div>
             <div className={classes.field}>
-                <TokenAmountPanel
-                    classes={{ root: classes.input }}
+                <ERC20Input
                     label={isRandom ? 'Total Amount' : t.amount_per_share()}
+                    token={token}
+                    onSelectToken={onSelectTokenChipClick}
+                    onAmountChange={setRawAmount}
                     amount={rawAmount}
                     balance={tokenBalance}
-                    token={token}
                     maxAmountShares={isRandom || shares === '' ? 1 : shares}
-                    onAmountChange={setRawAmount}
-                    SelectTokenChip={{
-                        loading: loadingTokenBalance,
-                        ChipProps: {
-                            onClick: onSelectTokenChipClick,
-                        },
-                    }}
                 />
             </div>
-            <div className={classes.field}>
-                <TextField
-                    className={classes.input}
+            <Box margin={2}>
+                <Typography>{t.attached_message()}</Typography>
+                <InputBase
+                    fullWidth
                     onChange={(e) => setMessage(e.target.value)}
-                    InputLabelProps={{
-                        shrink: true,
-                        classes: {
-                            shrink: classes.inputShrinkLabel,
-                        },
-                    }}
-                    inputProps={{ placeholder: t.best_wishes() }}
-                    label={t.attached_message()}
+                    placeholder={t.best_wishes()}
                     value={message}
                 />
-            </div>
-            <Box style={{ position: 'absolute', bottom: 0, width: '100%' }}>
+            </Box>
+            <Box style={{ width: '100%' }}>
                 <PluginWalletStatusBar>
                     <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
                         <WalletConnectedBoundary>
