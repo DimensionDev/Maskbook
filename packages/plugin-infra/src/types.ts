@@ -13,6 +13,7 @@ import type {
     ECKeyIdentifier,
     EnhanceableSite,
     ExtensionSite,
+    BindingProof,
 } from '@masknet/shared-base'
 import type {
     ChainDescriptor,
@@ -759,7 +760,11 @@ export namespace Plugin.SNSAdaptor {
         priority: number
 
         UI?: {
-            TabContent: InjectUI<{ onClose: () => void }>
+            TabContent: InjectUI<{
+                onClose: () => void
+                bindingWallets?: BindingProof[]
+                currentPersona?: ECKeyIdentifier
+            }>
         }
     }
 }

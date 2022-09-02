@@ -95,7 +95,6 @@ const GameList = (props: Props) => {
     const t = useI18N()
     const classes = useStylesExtends(useStyles(), {})
     const gameList = useGameList()
-
     const [descTypes, setDescTypes] = useState<boolean[]>([])
     useEffect(() => {
         if (!gameList?.length) {

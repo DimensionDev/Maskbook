@@ -15,3 +15,8 @@ export interface TipTask {
 }
 
 export type TipNFTKeyPair = [address: string, tokenId: string]
+
+export type TipsSettingType = {
+    hiddenAddresses?: string[]
+    defaultAddress?: string
+}
