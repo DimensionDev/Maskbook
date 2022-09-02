@@ -317,7 +317,9 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         )
 
     if (
-        (loadCurrentVisitingSocialIdentityError || loadPersonaStatusError || loadSocialAddressListError) &&
+        (loadCurrentVisitingSocialIdentityError ||
+            (isOwnerIdentity && loadPersonaStatusError) ||
+            loadSocialAddressListError) &&
         socialAddressList.length === 0
     ) {
         const handleClick = () => {
