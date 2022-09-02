@@ -13,7 +13,9 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '20px',
     },
     unchecked: {
-        color: theme.palette.maskColor.white,
+        '& circle': {
+            stroke: theme.palette.maskColor.white,
+        },
     },
 }))
 
