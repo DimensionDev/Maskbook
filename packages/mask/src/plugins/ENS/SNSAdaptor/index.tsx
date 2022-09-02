@@ -3,7 +3,7 @@ import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { base } from '../base'
-import MaskPostExtraInfoWrapper from '../../MaskPluginWrapper'
+import { MaskPostExtraInfoWrapper } from '@masknet/shared'
 import { SearchResultInspector } from './SearchResultInspector'
 
 const sns: Plugin.SNSAdaptor.Definition = {

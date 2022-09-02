@@ -8,7 +8,7 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import Services from '../../extension/service'
-import MaskPostExtraInfoWrapper from '../../plugins/MaskPluginWrapper'
+import { MaskPostExtraInfoWrapper } from '@masknet/shared'
 import { HTMLProps, useCallback } from 'react'
 import { Button, Skeleton, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'

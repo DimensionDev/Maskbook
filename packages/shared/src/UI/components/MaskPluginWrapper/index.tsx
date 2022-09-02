@@ -1,8 +1,8 @@
 import { Typography, SnackbarContent, Link } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { MaskIcon } from '../resources/MaskIcon'
+import { MaskIcon } from './MaskIcon'
 import { Suspense, ReactNode, useMemo, forwardRef, useImperativeHandle, useState } from 'react'
-import { useI18N } from '../utils'
+import { useSharedI18N } from '@masknet/shared'
 import { Box } from '@mui/system'
 import {
     usePluginI18NField,
@@ -83,14 +83,14 @@ const useStyles = makeStyles<{ backgroundGradient?: string; borderRadius?: strin
     },
 )
 
-export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
+export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
     const { open, title, children, action, publisher, publisherLink, content, wrapperProps } = props
     const { classes } = useStyles({
         backgroundGradient: wrapperProps?.backgroundGradient,
         borderRadius: wrapperProps?.borderRadius,
         margin: wrapperProps?.margin,
     })
-    const { t } = useI18N()
+    const t = useSharedI18N()
 
     const publisherInfo = useMemo(() => {
         if (!publisher) return
@@ -102,7 +102,7 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
         return (
             <Box className={classes.provider}>
                 <Typography variant="body1" fontSize={14} fontWeight="400" className={classes.providerBy}>
-                    {t('plugin_provider_by')}
+                    {t.plugin_provider_by()}
                 </Typography>
                 {main}
                 {publisherLink ? (
@@ -131,7 +131,7 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
                     fontSize={16}
                     fontWeight={700}
                     color={MaskColorVar.textPluginColor}>
-                    {wrapperProps?.title ?? title ?? t('plugin_default_title')}
+                    {wrapperProps?.title ?? title ?? t.plugin_default_title()}
                 </Typography>
                 <div className={classes.publish}>{publisherInfo}</div>
             </div>

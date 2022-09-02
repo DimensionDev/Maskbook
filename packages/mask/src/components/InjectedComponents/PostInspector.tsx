@@ -6,7 +6,7 @@ import {
     useActivatedPluginsSNSAdaptor,
 } from '@masknet/plugin-infra/content-script'
 import { PossiblePluginSuggestionPostInspector } from './DisabledPluginSuggestion'
-import { MaskPostExtraPluginWrapper } from '../../plugins/MaskPluginWrapper'
+import { MaskPostExtraPluginWrapper } from '@masknet/shared'
 import { useSubscription } from 'use-subscription'
 import { PersistentStorages } from '../../../shared'
 
