@@ -5,7 +5,7 @@ import { useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
 import { NetworkPluginID, FungibleToken, formatBalance } from '@masknet/web3-shared-base'
 import { ChainId, createNativeToken, GasOptionConfig, SchemaType } from '@masknet/web3-shared-evm'
 import { useGasConfig, TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { useChainId, useChainIdValid, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useChainIdValid, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
@@ -19,6 +19,8 @@ import { ConfirmDialog } from './ConfirmDialog'
 import { useSortedTrades } from './hooks/useSortedTrades'
 import { useUpdateBalance } from './hooks/useUpdateBalance'
 import { TradeForm } from './TradeForm'
+import { WalletMessages } from '../../../Wallet/messages'
+import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 
 export interface TraderProps extends withClasses<'root'> {
     defaultInputCoin?: FungibleToken<ChainId, SchemaType.Native | SchemaType.ERC20>
@@ -38,9 +40,14 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
     const currentChainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const chainId = targetChainId ?? currentChainId
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
     const t = useI18N()
     const { setTargetChainId } = TargetChainIdContext.useContainer()
+
+    const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
 
     // #region trade state
     const {
@@ -145,6 +152,10 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     const selectFungibleToken = useSelectFungibleToken()
     const onTokenChipClick = useCallback(
         async (panelType: TokenPanelType) => {
+            if (!account) {
+                openConnectWalletDialog()
+                return
+            }
             const picked = await selectFungibleToken({
                 chainId,
                 disableNativeToken: false,

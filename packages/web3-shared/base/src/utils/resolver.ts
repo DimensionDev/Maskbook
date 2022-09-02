@@ -234,8 +234,7 @@ export const isIpfsCid = (cid: string) => {
 }
 
 export const isLocaleResource = (url: string): boolean => {
-    // base64 image
-    return /^data|blob:|(chrome|moz)-extension:\/\//.test(url)
+    return /^data|blob:|(chrome|moz)-extension:\/\/|<svg\s/.test(url)
 }
 
 export function resolveIPFSLink(cidOrURL?: string): string | undefined {
@@ -243,7 +242,7 @@ export function resolveIPFSLink(cidOrURL?: string): string | undefined {
 
     // eliminate cors proxy
     if (cidOrURL.startsWith(CORS_HOST)) {
-        return resolveIPFSLink(decodeURIComponent(cidOrURL.replace(`${CORS_HOST}?`, '')))
+        return resolveIPFSLink(decodeURIComponent(cidOrURL.replace(new RegExp(`^${CORS_HOST}\??`), '')))
     }
 
     // a ipfs protocol

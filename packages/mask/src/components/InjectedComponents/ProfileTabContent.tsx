@@ -7,12 +7,12 @@ import {
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
 import { useAvailablePlugins, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
-import { AddressItem } from '@masknet/shared'
+import { AddressItem, PluginCardFrameMini } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
-import { Box, Button, CircularProgress, Link, MenuItem, Tab, Typography } from '@mui/material'
+import { Button, Link, MenuItem, Stack, Tab, Typography } from '@mui/material'
 import { first, uniqBy } from 'lodash-unified'
 import { useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
@@ -140,6 +140,10 @@ const useStyles = makeStyles()((theme) => ({
         margin: '4px 2px 0 2px',
         color: theme.palette.maskColor.second,
     },
+    reload: {
+        borderRadius: 20,
+        minWidth: 254,
+    },
 }))
 
 export interface ProfileTabContentProps extends withClasses<'text' | 'button' | 'root'> {}
@@ -153,7 +157,12 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const [hidden, setHidden] = useState(true)
     const [selectedAddress, setSelectedAddress] = useState<SocialAddress<NetworkPluginID> | undefined>()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-    const { value: personaStatus } = useCurrentPersonaConnectStatus()
+    const {
+        value: personaStatus,
+        loading: loadingPersonaStatus,
+        error: loadPersonaStatusError,
+        retry: retryLoadPersonaStatus,
+    } = useCurrentPersonaConnectStatus()
 
     const currentVisitingIdentity = useCurrentVisitingIdentity()
     const currentVisitingUserId = currentVisitingIdentity.identifier?.userId
@@ -162,12 +171,14 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const {
         value: currentVisitingSocialIdentity,
         loading: loadingCurrentVisitingSocialIdentity,
+        error: loadCurrentVisitingSocialIdentityError,
         retry: retryIdentity,
     } = useCurrentVisitingSocialIdentity()
 
     const {
         value: socialAddressList = EMPTY_LIST,
         loading: loadingSocialAddressList,
+        error: loadSocialAddressListError,
         retry: retrySocialAddress,
     } = useSocialAddressListAll(currentVisitingSocialIdentity, undefined, sorter)
 
@@ -291,18 +302,43 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }
     if (hidden) return null
 
-    if (!currentVisitingUserId || loadingSocialAddressList || loadingCurrentVisitingSocialIdentity)
+    if (
+        !currentVisitingUserId ||
+        loadingSocialAddressList ||
+        loadingCurrentVisitingSocialIdentity ||
+        loadingPersonaStatus
+    )
         return (
             <div className={classes.root}>
-                <Box
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    sx={{ paddingTop: 4, paddingBottom: 4 }}>
-                    <CircularProgress />
-                </Box>
+                <PluginCardFrameMini />
             </div>
         )
+
+    if (loadCurrentVisitingSocialIdentityError || loadPersonaStatusError || loadSocialAddressListError) {
+        const handleClick = () => {
+            if (loadPersonaStatusError) retryLoadPersonaStatus()
+            if (loadCurrentVisitingSocialIdentityError) retryIdentity()
+            if (loadSocialAddressListError) retrySocialAddress()
+        }
+        return (
+            <div className={classes.root}>
+                <PluginCardFrameMini>
+                    <Stack display="inline-flex" gap={3} justifyContent="center" alignItems="center">
+                        <Typography
+                            fontSize={14}
+                            fontWeight={400}
+                            lineHeight="18px"
+                            color={(t) => t.palette.maskColor.danger}>
+                            {t('load_failed')}
+                        </Typography>
+                        <Button color="primary" className={classes.reload} onClick={handleClick}>
+                            {t('reload')}
+                        </Button>
+                    </Stack>
+                </PluginCardFrameMini>
+            </div>
+        )
+    }
 
     return (
         <div className={classes.root}>
