@@ -245,11 +245,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                     {currentPersona?.avatar ? (
                         <Avatar src={currentPersona.avatar} className={classes.avatar} />
                     ) : (
-                        <Icons.MenuPersonasActive
-                            color="#f9fafa"
-                            size={30}
-                            style={{ backgroundColor: '#F9FAFA', borderRadius: 99 }}
-                        />
+                        <Icons.MenuPersonasActive size={30} style={{ borderRadius: 99 }} />
                     )}
                     <div>
                         <Typography className={classes.nickname}>{currentPersona?.nickname}</Typography>
