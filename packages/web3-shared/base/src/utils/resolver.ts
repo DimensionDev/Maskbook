@@ -234,8 +234,7 @@ export const isIpfsCid = (cid: string) => {
 }
 
 export const isLocaleResource = (url: string): boolean => {
-    // base64 image
-    return /^data|blob:|(chrome|moz)-extension:\/\//.test(url)
+    return /^data|blob:|(chrome|moz)-extension:\/\/|<svg\s/.test(url)
 }
 
 export function resolveIPFSLink(cidOrURL?: string): string | undefined {
