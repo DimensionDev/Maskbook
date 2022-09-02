@@ -6,7 +6,6 @@ import { makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { v4 as uuid } from 'uuid'
-import { blue } from '@mui/material/colors'
 import { Typography, Box, Tab, Tabs, Grid, Divider } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
@@ -38,11 +37,6 @@ import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { useTabStyles } from './styles'
 
 const useStyles = makeStyles()((theme) => ({
-    walletStatusBox: {
-        width: 535,
-        margin: '24px auto',
-    },
-
     container: {
         flex: 1,
         height: '100%',
@@ -52,25 +46,6 @@ const useStyles = makeStyles()((theme) => ({
         height: '100%',
         overflow: 'auto',
         padding: `${theme.spacing(3)} 0`,
-    },
-    tabs: {
-        width: '288px',
-    },
-    chip: {
-        width: '150px',
-        height: '40px',
-        flexDirection: 'row',
-    },
-    linkText: {
-        color: blue[50],
-    },
-    heading: {
-        fontSize: '20px',
-        fontWeight: 'bold',
-    },
-    icon: {
-        maxWidth: '20px',
-        maxHeight: '20px',
     },
 }))
 

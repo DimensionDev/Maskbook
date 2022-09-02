@@ -32,12 +32,7 @@ const useStyles = makeStyles()((theme) => {
                 cursor: 'default',
             },
         },
-        arrowIcon: {
-            alignSelf: 'center',
-            color: theme.palette.maskColor.second,
-            width: 24,
-            height: 24,
-        },
+
         currentTag: {
             width: '46px',
             height: '16px',

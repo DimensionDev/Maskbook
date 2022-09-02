@@ -16,17 +16,6 @@ import { encodeText } from '@dimensiondev/kit'
 import { MimeTypes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
-    header: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '16px 10px',
-    },
-    title: {
-        color: '#15181B',
-        fontSize: 12,
-        fontHeight: '16px',
-    },
     content: {
         flex: 1,
         backgroundColor: '#F7F9FA',

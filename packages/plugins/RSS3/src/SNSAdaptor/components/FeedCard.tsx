@@ -41,13 +41,6 @@ const useStyles = makeStyles()((theme) => ({
         whiteSpace: 'nowrap',
         color: theme.palette.maskColor.main,
     },
-    defaultImage: {
-        background: theme.palette.maskColor.modalTitleBg,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 12,
-    },
     fallbackImage: {
         minHeight: '0 !important',
         maxWidth: 'none',

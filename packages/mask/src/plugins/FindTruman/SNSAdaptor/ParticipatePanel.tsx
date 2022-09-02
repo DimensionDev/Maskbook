@@ -32,9 +32,6 @@ const useStyles = makeStyles()((theme, props) => ({
         marginBottom: theme.spacing(2),
         borderRadius: '8px',
     },
-    title: {
-        marginBottom: theme.spacing(2),
-    },
     buttons: {
         padding: theme.spacing(2),
     },

@@ -36,23 +36,6 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
         color: theme.palette.maskColor.main,
     },
-    labelWrapper: {
-        display: 'flex',
-    },
-    tabItem: {
-        fontSize: '16px',
-        fontWeight: 700,
-        color: theme.palette.maskColor.second,
-    },
-    walletSwitchBox: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        gap: 12,
-    },
-    switchContainer: {
-        width: 'calc(50% - 6px)',
-        borderRadius: '8px',
-    },
     buttonWrapper: {
         padding: '16px',
         width: '100%',

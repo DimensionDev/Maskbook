@@ -23,9 +23,6 @@ const useStyle = makeStyles()((theme) => ({
         whiteSpace: 'nowrap',
         overflow: 'hidden',
     },
-    networkHint: {
-        color: theme.palette.grey[500],
-    },
 }))
 /**
  * Item in the list

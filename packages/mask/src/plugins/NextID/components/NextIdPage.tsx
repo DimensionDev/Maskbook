@@ -18,13 +18,6 @@ import { PluginEnableBoundary } from '../../../components/shared/PluginEnableBou
 import { ConnectPersonaBoundary } from '../../../components/shared/ConnectPersonaBoundary'
 
 const useStyles = makeStyles()((theme) => ({
-    tip: {
-        padding: theme.spacing(1.5),
-        marginBottom: theme.spacing(2),
-        borderRadius: 8,
-        alignItems: 'center',
-        color: theme.palette.text.primary,
-    },
     header: {
         display: 'flex',
         justifyContent: 'space-between',
@@ -34,30 +27,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    longBar: {
-        width: '103px',
-        height: '8px',
-        background: 'rgba(255, 255, 255, 0.5)',
-        borderRadius: '8px',
-        marginBottom: '4px',
-        boxShadow: '0px 6px 6px rgba(0, 0, 0, 0.05)',
-    },
-    middleBar: {
-        width: '68px',
-        height: '8px',
-        background: 'rgba(255, 255, 255, 0.5)',
-        borderRadius: '8px',
-        marginBottom: '4px',
-        boxShadow: '0px 6px 6px rgba(0, 0, 0, 0.05)',
-    },
-    shortBar: {
-        width: '49px',
-        height: '8px',
-        background: 'rgba(255, 255, 255, 0.5)',
-        borderRadius: '8px',
-        marginBottom: '4px',
-        boxShadow: '0px 6px 6px rgba(0, 0, 0, 0.05)',
-    },
     container: {
         background:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(45, 41, 253, 0.2) 100%), #FFFFFF;',
@@ -66,21 +35,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-    },
-    verifyIntro: {
-        fontSize: '14px',
-        fontWeight: 500,
-        marginBottom: '12px',
-    },
-    verifyDetail: {
-        fontSize: '14px',
-        fontWeight: 400,
-        color: theme.palette.grey[700],
-    },
-    verifyInstruction: {
-        fontSize: '14px',
-        fontWeight: 400,
-        color: theme.palette.grey[700],
     },
     skeleton: {
         marginTop: 0,

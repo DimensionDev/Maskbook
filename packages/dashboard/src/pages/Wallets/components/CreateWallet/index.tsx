@@ -67,14 +67,7 @@ const PrivateKeyInput = styled(FilledInput)(
 `,
 )
 
-const useTabPanelStyles = makeStyles()({
-    root: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: 0,
-    },
-})
+const useTabPanelStyles = makeStyles()({})
 
 export const CreateWallet = memo(() => {
     const t = useDashboardI18N()

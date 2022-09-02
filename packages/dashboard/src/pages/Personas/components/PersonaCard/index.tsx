@@ -45,15 +45,6 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(1.25),
         paddingRight: theme.spacing(1.25),
     },
-    line: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        fontSize: theme.typography.caption.fontSize,
-    },
-    setting: {
-        fontSize: theme.typography.caption.fontSize,
-        padding: 0,
-    },
 }))
 
 export interface PersonaCardProps {

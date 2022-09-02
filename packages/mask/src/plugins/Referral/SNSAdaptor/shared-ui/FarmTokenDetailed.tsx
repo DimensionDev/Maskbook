@@ -12,11 +12,6 @@ const useStyles = makeStyles()((theme) => ({
         marginLeft: '16px',
         fontWeight: 500,
     },
-    icon: {
-        marginLeft: '7px',
-        height: '16px',
-        width: '16px',
-    },
     farmName: {
         '& svg': {
             marginLeft: 7,

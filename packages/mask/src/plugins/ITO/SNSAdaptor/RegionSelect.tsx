@@ -55,9 +55,6 @@ const useStyles = makeStyles()((theme) => ({
         maxHeight: 140,
         overflow: 'auto',
     },
-    display: {
-        padding: `${theme.spacing(0.5)} ${theme.spacing(2)}`,
-    },
     item: {
         padding: `0 ${theme.spacing(2)}`,
     },

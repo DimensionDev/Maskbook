@@ -40,10 +40,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
             backgroundColor: theme.palette.mode === 'dark' ? 'rgba(239,243,244,0.1)' : 'rgba(15,20,25,0.1)',
         },
     },
-    label: {
-        fontSize: 14,
-        marginLeft: theme.spacing(0.5),
-    },
 }))
 
 function ProfileTipButton() {

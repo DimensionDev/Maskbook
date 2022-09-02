@@ -32,9 +32,6 @@ const useStyles = makeStyles()((theme) => ({
         whiteSpace: 'nowrap',
         marginBottom: theme.spacing(1),
     },
-    description: {
-        color: theme.palette.text.secondary,
-    },
 }))
 
 export interface ProviderIconProps extends CardProps {

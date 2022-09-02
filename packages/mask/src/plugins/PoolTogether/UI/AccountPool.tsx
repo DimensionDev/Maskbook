@@ -21,15 +21,6 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: theme.spacing(1),
         marginBottom: theme.spacing(1),
     },
-    progress: {
-        bottom: theme.spacing(1),
-        right: theme.spacing(1),
-    },
-    refresh: {
-        bottom: theme.spacing(1),
-        right: theme.spacing(1),
-        fontSize: 15,
-    },
     token: {
         padding: theme.spacing(1, 2),
         borderRight: '#290b5a dashed',
@@ -78,12 +69,6 @@ const useStyles = makeStyles()((theme) => ({
         '&:hover': {
             color: '#ffffff',
         },
-    },
-    countdown: {
-        alignSelf: 'center',
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
     },
     countdownDigit: {
         backgroundColor: 'transparent',

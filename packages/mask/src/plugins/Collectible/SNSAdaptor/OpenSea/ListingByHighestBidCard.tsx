@@ -28,7 +28,6 @@ const useStyles = makeStyles()((theme) => ({
             marginTop: 0,
         },
     },
-    label: {},
     button: {
         margin: 0,
         padding: 0,

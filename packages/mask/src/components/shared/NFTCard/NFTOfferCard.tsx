@@ -45,10 +45,6 @@ const useStyles = makeStyles()((theme) => ({
             color: theme.palette.maskColor.publicMain,
         },
     },
-    currencyIcon: {
-        width: 24,
-        height: 24,
-    },
     fallbackSymbol: {
         color: theme.palette.maskColor.publicMain,
         fontWeight: 700,

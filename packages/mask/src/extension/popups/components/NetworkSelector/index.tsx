@@ -40,9 +40,6 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '16px',
         marginLeft: 4,
     },
-    networkName: {
-        marginLeft: 10,
-    },
     menu: {
         maxHeight: 466,
         '&::-webkit-scrollbar': {

@@ -12,9 +12,6 @@ import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
-        width: '100%',
-    },
     line: {
         margin: theme.spacing(1),
         display: 'flex',
@@ -24,10 +21,6 @@ const useStyles = makeStyles()((theme) => ({
         flex: 1,
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(1),
-    },
-    flow: {
-        margin: theme.spacing(1),
-        textAlign: 'center',
     },
     button: {
         margin: theme.spacing(1),

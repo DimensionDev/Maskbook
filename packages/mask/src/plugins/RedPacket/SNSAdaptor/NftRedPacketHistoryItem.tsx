@@ -31,14 +31,6 @@ const useStyles = makeStyles()((theme) => {
                 padding: theme.spacing(2, 1.5),
             },
         },
-        primary: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-        },
-        secondary: {
-            fontSize: 12,
-        },
         message: {
             whiteSpace: 'nowrap',
             overflow: 'hidden',
@@ -46,18 +38,6 @@ const useStyles = makeStyles()((theme) => {
             [smallQuery]: {
                 whiteSpace: 'normal',
             },
-        },
-        strong: {
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-        },
-        span: {
-            maxWidth: 350,
-            display: 'inline-flex',
-        },
-        time: {
-            fontSize: 12,
-            color: theme.palette.text.secondary,
         },
         box: {
             display: 'flex',

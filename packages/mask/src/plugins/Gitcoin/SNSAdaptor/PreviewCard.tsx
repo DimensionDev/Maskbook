@@ -59,13 +59,6 @@ const useStyles = makeStyles()((theme) => ({
         height: theme.spacing(2),
         margin: theme.spacing(0, 1),
     },
-    buttons: {
-        width: '100%',
-        margin: 0,
-    },
-    verified: {
-        borderRadius: 50,
-    },
     text: {
         overflow: 'hidden',
         textOverflow: 'ellipsis',

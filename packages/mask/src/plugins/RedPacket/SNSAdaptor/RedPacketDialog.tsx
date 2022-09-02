@@ -26,13 +26,6 @@ import { RedPacketERC20Form } from './RedPacketERC20Form'
 import { RedPacketERC721Form } from './RedPacketERC721Form'
 
 const useStyles = makeStyles()((theme) => ({
-    content: {
-        position: 'relative',
-        paddingTop: 50,
-    },
-    tabs: {
-        borderBottom: `1px solid ${theme.palette.divider}`,
-    },
     dialogContent: {
         padding: 0,
         '::-webkit-scrollbar': {
@@ -40,30 +33,6 @@ const useStyles = makeStyles()((theme) => ({
         },
 
         overflowX: 'hidden',
-    },
-    tabPaper: {
-        position: 'sticky',
-        top: 0,
-        zIndex: 5000,
-    },
-    indicator: {
-        display: 'none',
-    },
-    tab: {
-        maxWidth: 120,
-    },
-    focusTab: {
-        borderBottom: `2px solid ${theme.palette.primary.main}`,
-    },
-    flexContainer: {
-        justifyContent: 'space-around',
-    },
-    labelWrapper: {
-        display: 'flex',
-    },
-    img: {
-        width: 20,
-        marginRight: 4,
     },
 }))
 

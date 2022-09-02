@@ -38,11 +38,6 @@ const useStyles = makeStyles()((theme) => {
             padding: 0,
             borderRadius: 0,
         },
-        footer: {
-            display: 'flex',
-            justifyContent: 'flex-end',
-            padding: 0,
-        },
         panel: {
             marginTop: theme.spacing(2),
             '&:first-child': {

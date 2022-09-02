@@ -16,17 +16,6 @@ interface Props extends InjectedDialogProps {
 
 const useStyles = makeStyles()((theme) => {
     return {
-        actions: {
-            alignSelf: 'center',
-        },
-        button: {
-            borderRadius: 26,
-            marginTop: 24,
-            fontSize: 16,
-            lineHeight: 2.5,
-            paddingLeft: 35,
-            paddingRight: 35,
-        },
         card: {
             borderRadius: '6px',
             marginBottom: '16px',

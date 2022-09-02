@@ -72,24 +72,11 @@ const useStyles = makeStyles()((theme) => ({
     linkIcon: {
         marginRight: theme.spacing(1),
     },
-    twitterProviderBorder: {
-        width: 14,
-        height: 14,
-    },
     connectButtonWrapper: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         margin: theme.spacing(2, 0),
-    },
-    domain: {
-        fontSize: 16,
-        lineHeight: '18px',
-        marginLeft: 6,
-        padding: 4,
-        borderRadius: 8,
-        backgroundColor: '#ffffff',
-        color: theme.palette.common.black,
     },
 }))
 interface CurrentWalletBox {

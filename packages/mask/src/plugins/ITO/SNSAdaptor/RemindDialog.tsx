@@ -21,21 +21,6 @@ const useStyles = makeStyles()((theme) => ({
     reminderTextLast: {
         marginBottom: 0,
     },
-    docBox: {
-        overflow: 'scroll',
-    },
-    center: {
-        textAlign: 'center',
-        fontWeight: 'bold',
-        fontSize: '1.2rem',
-    },
-    bigCenter: {
-        fontSize: '1.5rem',
-    },
-    bold: {
-        fontWeight: 'bold',
-        fontSize: '1.1rem',
-    },
     wrapper: {
         padding: theme.spacing(2),
         background: theme.palette.background.default,
@@ -77,32 +62,6 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(1),
         display: 'flex',
         alignItems: 'center',
-    },
-    confirmText: {
-        color: '#6F767C',
-    },
-    table: {
-        border: '1px solid #FF5555',
-        color: '#FF5555',
-    },
-    cell: {
-        width: '50%',
-        border: '1px solid #FF5555',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        textAlign: 'center',
-    },
-    moreCell: {
-        flexDirection: 'column',
-    },
-    column: {
-        width: '100%',
-        display: 'flex',
-    },
-    lowSpacing: {
-        marginTop: 4,
-        marginBottom: 4,
     },
 }))
 

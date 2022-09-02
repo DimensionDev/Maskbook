@@ -32,7 +32,6 @@ import { useChainId, useFungibleToken, useFungibleTokenBalance, useWeb3State } f
 
 const useStyles = makeStyles()((theme) => ({
     button: {},
-    providerBar: {},
     swapLimitWrap: {
         display: 'flex',
         justifyContent: 'space-between',

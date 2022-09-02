@@ -44,20 +44,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    avatar: {
-        width: 64,
-        height: 64,
-        backgroundColor: 'rgba(255, 95, 95, 0.2)',
-    },
-    wallet: {
-        backgroundColor: theme.palette.background.default,
-        marginTop: theme.spacing(2),
-        padding: theme.spacing(2),
-        borderRadius: theme.spacing(1),
-    },
-    texts: {
-        paddingBottom: theme.spacing(1),
-    },
+
     article: {
         fontSize: 14,
         lineHeight: '18px',

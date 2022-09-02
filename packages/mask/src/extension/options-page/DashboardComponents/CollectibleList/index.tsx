@@ -86,26 +86,6 @@ const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 3, gap 
             lineHeight: '36px',
             paddingLeft: '8px',
         },
-        loading: {
-            position: 'absolute',
-            bottom: 6,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '100%',
-        },
-        collectionWrap: {
-            width: '24px',
-            height: '24px',
-            borderRadius: '50%',
-            background: 'rgba(229,232,235,1)',
-        },
-        collectionImg: {
-            objectFit: 'cover',
-            width: '100%',
-            height: '100%',
-            borderRadius: '50%',
-        },
         networkSelected: {
             width: 24,
             height: 24,

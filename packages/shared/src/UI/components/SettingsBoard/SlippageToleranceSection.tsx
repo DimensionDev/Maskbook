@@ -9,26 +9,10 @@ import { SettingsContext } from './Context'
 const useStyles = makeStyles()((theme) => {
     return {
         root: {},
-        paper: {
-            boxShadow: `0px 0px 20px 0px ${theme.palette.mode === 'dark' ? '#FFFFFF1F' : '#0000000D'}`,
-            backdropFilter: 'blur(16px)',
-            marginTop: theme.spacing(1),
-        },
         additions: {
             fontWeight: 700,
         },
         percentage: {},
-        warning: {
-            display: 'flex',
-            alignItems: 'center',
-            padding: theme.spacing(1.5),
-            backgroundColor: 'rgba(255, 177, 0, 0.1)',
-        },
-        warningMessage: {
-            fontWeight: 400,
-            color: '#FFB100',
-            padding: 0,
-        },
     }
 })
 

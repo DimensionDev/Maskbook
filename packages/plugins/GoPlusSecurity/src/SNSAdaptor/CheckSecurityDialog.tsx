@@ -17,9 +17,6 @@ import { memo, ReactNode, useEffect, useState } from 'react'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
-        width: 600,
-    },
     content: {
         height: 510,
         maxHeight: 510,

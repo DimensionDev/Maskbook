@@ -41,12 +41,6 @@ const useStyles = makeStyles()({
         lineHeight: '16px',
         color: '#1C68F3',
     },
-    tips: {
-        color: '#7B8192',
-        fontSize: 12,
-        lineHeight: '16px',
-        marginTop: 10,
-    },
     tabs: {
         marginTop: 20,
         minHeight: 'unset',
@@ -69,22 +63,6 @@ const useStyles = makeStyles()({
         padding: '16px 0 0 0',
         flex: 1,
         position: 'relative',
-    },
-    multiline: {
-        width: '100%',
-        height: '100%',
-        position: 'absolute',
-    },
-    multilineInput: {
-        padding: 6,
-        borderRadius: 6,
-        backgroundColor: '#F7F9FA',
-        height: '100%',
-    },
-    textArea: {
-        padding: 0,
-        fontSize: 12,
-        height: '100%!important',
     },
     button: {
         fontWeight: 600,

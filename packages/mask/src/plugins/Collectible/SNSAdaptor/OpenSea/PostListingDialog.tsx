@@ -15,14 +15,6 @@ const useStyles = makeStyles()((theme) => {
             padding: 0,
             borderRadius: 0,
         },
-        footer: {
-            display: 'flex',
-            justifyContent: 'flex-end',
-            padding: theme.spacing(0, 2, 2),
-        },
-        button: {
-            marginTop: theme.spacing(1.5),
-        },
         labelWrapper: {
             display: 'flex',
         },

@@ -10,9 +10,6 @@ const useStyles = makeStyles()((theme) => {
         root: {
             flex: 1,
         },
-        content: {
-            padding: theme.spacing(0),
-        },
     }
 })
 

@@ -18,12 +18,6 @@ const useStyles = makeStyles()((theme) => {
         content: {
             flex: 1,
         },
-        title: {
-            fontSize: '16px',
-            fontWeight: 'bold',
-            color: '#fff',
-            textTransform: 'uppercase',
-        },
     }
 })
 

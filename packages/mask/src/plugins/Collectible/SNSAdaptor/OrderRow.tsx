@@ -31,9 +31,6 @@ const useStyles = makeStyles()((theme) => {
             fontSize: 14,
             lineHeight: 1,
         },
-        relativeTime: {
-            whiteSpace: 'nowrap',
-        },
         token: {
             objectFit: 'contain',
             width: 18,

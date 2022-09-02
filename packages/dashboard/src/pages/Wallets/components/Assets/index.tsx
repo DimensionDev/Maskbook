@@ -22,12 +22,6 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: Number(theme.shape.borderRadius) * 3.5,
         fontSize: theme.typography.caption.fontSize,
     },
-    tab: {
-        flex: 1,
-        padding: 0,
-        display: 'flex',
-        flexDirection: 'column',
-    },
 }))
 
 export enum AssetTab {

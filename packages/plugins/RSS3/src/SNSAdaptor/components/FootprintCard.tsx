@@ -14,13 +14,6 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: 16,
         cursor: 'pointer',
     },
-    cover: {
-        flexShrink: 1,
-        height: 126,
-        width: 126,
-        borderRadius: 8,
-        objectFit: 'cover',
-    },
     content: {
         marginLeft: 12,
         marginTop: 15,

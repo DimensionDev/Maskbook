@@ -12,17 +12,6 @@ import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm'
 import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
-    header: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '16px 10px',
-    },
-    title: {
-        color: '#15181B',
-        fontSize: 12,
-        fontHeight: '16px',
-    },
     content: {
         padding: '16px',
         flex: 1,

@@ -2,7 +2,7 @@ import { Dispatch, memo, SetStateAction, useEffect, useMemo, useState } from 're
 import { useContacts } from '../../hooks/useContacts'
 import type { RelationProfile } from '@masknet/shared-base'
 import { TableContainer, Box, TablePagination, Stack, Table, TableBody } from '@mui/material'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { EmptyContactPlaceholder } from '../EmptyContactPlaceholder'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { sortBy } from 'lodash-unified'
@@ -20,29 +20,10 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         height: '100%',
     },
-    header: {
-        color: MaskColorVar.normalText,
-        fontWeight: theme.typography.fontWeightRegular as any,
-        padding: '24px 28px',
-        backgroundColor: MaskColorVar.primaryBackground,
-    },
     footer: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    paginationItem: {
-        borderRadius: 4,
-        border: `1px solid ${MaskColorVar.lineLight}`,
-        color: MaskColorVar.textPrimary,
-        '&.Mui-selected': {
-            backgroundColor: MaskColorVar.blue,
-            color: '#ffffff',
-            border: 'none',
-            '&:hover': {
-                backgroundColor: MaskColorVar.blue,
-            },
-        },
     },
 }))
 

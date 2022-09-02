@@ -24,23 +24,6 @@ const useStyles = makeStyles()((theme) => {
         markdown: {
             margin: theme.spacing(1, 0),
         },
-        description: {
-            fontSize: 14,
-            wordBreak: 'break-all',
-        },
-        trait_content: {
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2,1fr)',
-            gap: theme.spacing(2),
-        },
-        trait: {
-            padding: theme.spacing(2),
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            fontSize: 14,
-            fontWeight: 600,
-        },
         chain_row: {
             display: 'flex',
             justifyContent: 'space-between',

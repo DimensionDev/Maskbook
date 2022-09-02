@@ -29,15 +29,6 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 
 const useStyles = makeStyles()((theme) => ({
-    action: {
-        textAlign: 'center',
-        margin: theme.spacing(1),
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 48,
-    },
     tooltip: {
         background: theme.palette.common.black,
         color: theme.palette.common.white,

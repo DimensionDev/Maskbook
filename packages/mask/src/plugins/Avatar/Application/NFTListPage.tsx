@@ -12,15 +12,6 @@ const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, pro
     root: {
         paddingTop: props.networkPluginID === NetworkPluginID.PLUGIN_EVM ? 60 : 16,
     },
-
-    button: {
-        textAlign: 'center',
-        paddingTop: theme.spacing(1),
-        display: 'flex',
-        justifyContent: 'space-around',
-        flexDirection: 'row',
-        color: '#1D9BF0',
-    },
     list: {
         gridGap: '12px 17px',
         display: 'grid',
@@ -39,26 +30,6 @@ const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, pro
         userSelect: 'none',
         justifyContent: 'center',
         lineHeight: 0,
-    },
-    skeleton: {
-        width: 100,
-        height: 100,
-        objectFit: 'cover',
-        boxSizing: 'border-box',
-    },
-    skeletonBox: {
-        marginLeft: 'auto',
-        marginRight: 'auto',
-    },
-    image: {
-        width: 100,
-        height: 100,
-        objectFit: 'cover',
-        boxSizing: 'border-box',
-        '&:hover': {
-            border: `1px solid ${theme.palette.primary.main}`,
-        },
-        borderRadius: 8,
     },
 }))
 

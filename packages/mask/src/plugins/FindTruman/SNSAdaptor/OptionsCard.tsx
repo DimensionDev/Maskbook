@@ -40,29 +40,6 @@ const useOptionsStyles = makeStyles()((theme) => {
                 backgroundColor: theme.palette.primary.main,
             },
         },
-        checkIcon: {},
-        horizontalScrollBar: {
-            '::-webkit-scrollbar': {
-                backgroundColor: 'transparent',
-                height: '8px',
-            },
-            '::-webkit-scrollbar-thumb:horizontal': {
-                backgroundColor: theme.palette.divider,
-                borderRadius: '16px',
-                border: `6px solid ${theme.palette.divider}`,
-            },
-        },
-        verticalScrollBar: {
-            '::-webkit-scrollbar': {
-                backgroundColor: 'transparent',
-                width: '6px',
-            },
-            '::-webkit-scrollbar-thumb:vertical': {
-                backgroundColor: theme.palette.divider,
-                borderRadius: '16px',
-                border: `6px solid ${theme.palette.divider}`,
-            },
-        },
     }
 })
 interface OptionsViewProps {

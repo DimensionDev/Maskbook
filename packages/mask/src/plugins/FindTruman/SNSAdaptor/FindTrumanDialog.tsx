@@ -29,18 +29,6 @@ const useStyles = makeStyles()((theme, props) => ({
             backgroundClip: 'padding-box',
         },
     },
-    walletStatusBox: {
-        width: 535,
-        margin: '24px auto',
-    },
-    abstractTabWrapper: {
-        position: 'sticky',
-        top: 0,
-        width: '100%',
-        zIndex: 2,
-        paddingBottom: theme.spacing(2),
-        backgroundColor: theme.palette.background.paper,
-    },
     tabPaneWrapper: {
         width: '100%',
         marginBottom: '24px',
@@ -149,38 +137,7 @@ interface TabProps {
     columns: string
 }
 
-export const useTabsStyles = makeStyles<TabProps>()((theme, props) => ({
-    tab: {
-        height: 36,
-        minHeight: 36,
-        fontWeight: 300,
-        backgroundColor: `${theme.palette.background.default}!important`,
-        marginRight: 1,
-        '&:last-child': {
-            marginRight: 0,
-        },
-    },
-    tabs: {
-        width: 535,
-        height: 36,
-        minHeight: 36,
-        margin: '0 auto',
-        borderRadius: 4,
-        backgroundColor: theme.palette.background.paper,
-        '& .Mui-selected': {
-            color: theme.palette.primary.contrastText,
-            backgroundColor: `${theme.palette.primary.main}!important`,
-        },
-        '& .MuiTabs-flexContainer': {
-            display: 'grid',
-            gridTemplateColumns: props.columns,
-            backgroundColor: theme.palette.background.paper,
-        },
-    },
-    indicator: {
-        display: 'none',
-    },
-}))
+export const useTabsStyles = makeStyles<TabProps>()((theme, props) => ({}))
 
 enum FindTrumanDialogTab {
     Introduction = 'introduction',

@@ -19,10 +19,6 @@ const useStyles = makeStyles()((theme) => ({
         width: 120,
         overflow: 'hidden',
     },
-    loadingPlaceholder: {
-        height: 160,
-        width: 120,
-    },
     fallbackImage: {
         height: '64px !important',
         width: '64px !important',

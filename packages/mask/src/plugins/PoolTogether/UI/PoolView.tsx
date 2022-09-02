@@ -36,11 +36,6 @@ const useStyles = makeStyles()((theme) => ({
         marginRight: theme.spacing(1),
         backgroundColor: 'transparent',
     },
-    button: {
-        marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(1),
-        fontWeight: 500,
-    },
     progress: {
         bottom: theme.spacing(1),
         right: theme.spacing(1),
@@ -50,21 +45,6 @@ const useStyles = makeStyles()((theme) => ({
         right: theme.spacing(1),
         fontSize: 15,
     },
-    poolLink: {
-        cursor: 'pointer',
-        color: 'inherit',
-        textDecoration: 'inherit',
-        marginRight: theme.spacing(0.5),
-        '&:last-child': {
-            marginRight: 0,
-        },
-    },
-    networkIcon: {
-        width: '1em',
-        height: '1em',
-        backgroundColor: 'transparent',
-        marginRight: theme.spacing(0.5),
-    },
     metaTitle: {
         marginBottom: theme.spacing(1),
         justifyContent: 'inherit',
@@ -73,10 +53,6 @@ const useStyles = makeStyles()((theme) => ({
     metaFooter: {
         justifyContent: 'inherit',
         alignItems: 'center',
-    },
-    metaText: {
-        marginTop: theme.spacing(1),
-        justifyContent: 'inherit',
     },
     metaTextPrize: {
         color: '#55f1d7',
@@ -109,14 +85,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: '1.2rem',
         '@media (min-width:600px)': {
             fontSize: '2rem',
-        },
-    },
-    '@keyframes rainbow_animation': {
-        '0%': {
-            backgroundPosition: '100% 0%',
-        },
-        '100%': {
-            backgroundPosition: '0 100%',
         },
     },
     countdown: {

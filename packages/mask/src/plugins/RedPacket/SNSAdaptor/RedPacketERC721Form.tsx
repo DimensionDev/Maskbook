@@ -50,20 +50,6 @@ const useStyles = makeStyles()((theme) => {
             overflow: 'hidden',
             textOverflow: 'ellipsis',
         },
-        inputShrinkLabel: {
-            transform: 'translate(17px, -3px) scale(0.75) !important',
-        },
-        input: {
-            flex: 1,
-            padding: theme.spacing(0.5),
-        },
-        tip: {
-            fontSize: 17,
-            marginBottom: theme.spacing(2),
-        },
-        nftImg: {
-            maxWidth: '100%',
-        },
         tokenSelector: {
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
@@ -188,9 +174,6 @@ const useStyles = makeStyles()((theme) => {
         approveAllTip: {
             color: '#FF5F5F',
             margin: '16px 4px 24px 4px',
-        },
-        unapprovedTip: {
-            color: theme.palette.grey[500],
         },
         disabledSelector: {
             opacity: 0.5,

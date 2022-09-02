@@ -44,10 +44,6 @@ const useStyles = makeStyles()(() => ({
         maxWidth: 150,
         bottom: 150,
     },
-    dragImg: {
-        width: 15,
-        height: 15,
-    },
 }))
 
 interface NormalNFTProps {

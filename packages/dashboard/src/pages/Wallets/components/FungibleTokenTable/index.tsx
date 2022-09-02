@@ -47,25 +47,7 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: MaskColorVar.primaryBackground,
         border: 'none',
     },
-    footer: {
-        flex: 1,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    paginationItem: {
-        borderRadius: 4,
-        border: `1px solid ${MaskColorVar.lineLight}`,
-        color: MaskColorVar.textPrimary,
-        '&.Mui-selected': {
-            backgroundColor: MaskColorVar.blue,
-            color: '#ffffff',
-            border: 'none',
-            '&:hover': {
-                backgroundColor: MaskColorVar.blue,
-            },
-        },
-    },
+
     more: {
         textAlign: 'center',
     },

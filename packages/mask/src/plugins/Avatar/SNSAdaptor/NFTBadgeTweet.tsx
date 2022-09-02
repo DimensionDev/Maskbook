@@ -3,9 +3,7 @@ import { useLastRecognizedIdentity } from '../../../components/DataSource/useAct
 import { NFTBadgeTimeline } from './NFTBadgeTimeline'
 import type { RSS3_KEY_SNS } from '../constants'
 
-const useStyles = makeStyles()((theme) => ({
-    root: {},
-}))
+const useStyles = makeStyles()((theme) => ({}))
 
 interface NFTBadgeTweetProps {
     avatarId: string

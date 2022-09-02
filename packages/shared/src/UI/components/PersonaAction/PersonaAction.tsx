@@ -16,13 +16,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         padding: 16,
     },
-    link: {
-        color: theme.palette.text.primary,
-        fontSize: 14,
-        display: 'flex',
-        alignItems: 'center',
-        marginLeft: '4px',
-    },
     linkIcon: {
         marginRight: theme.spacing(1),
         color: theme.palette.maskColor.second,

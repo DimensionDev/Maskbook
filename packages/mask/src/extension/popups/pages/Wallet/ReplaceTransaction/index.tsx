@@ -28,9 +28,6 @@ import {
 import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
-    container: {
-        padding: 16,
-    },
     label: {
         color: '#1C68F3',
         fontSize: 12,

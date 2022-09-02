@@ -13,9 +13,6 @@ import type { Pool } from '../types'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
-        padding: theme.spacing(2),
-    },
     title: {
         padding: theme.spacing(1, 0),
         display: 'flex',
@@ -47,10 +44,6 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(1),
         fontWeight: 500,
-    },
-    chip: {
-        width: '100%',
-        fontSize: 'x-small',
     },
 }))
 

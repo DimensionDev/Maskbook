@@ -62,11 +62,7 @@ const useStyles = makeStyles()((theme) => {
             color: theme.palette.maskColor.second,
             cursor: 'pointer',
         },
-        fallbackImage: {
-            minHeight: '0 !important',
-            maxWidth: '126px',
-            transform: 'translateY(10px)',
-        },
+
         list: {
             gridRowGap: 16,
             gridColumnGap: 20,

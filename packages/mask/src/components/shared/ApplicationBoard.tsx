@@ -56,19 +56,6 @@ const useStyles = makeStyles<{ shouldScroll: boolean; isCarouselReady: boolean }
             zIndex: 50,
             top: '-132px',
         },
-        subTitle: {
-            cursor: 'default',
-            fontSize: 18,
-            lineHeight: '24px',
-            fontWeight: 600,
-            color: theme.palette.text.primary,
-        },
-        loadingWrapper: {
-            display: 'flex',
-            height: 324,
-            justifyContent: 'center',
-            alignItems: 'center',
-        },
         placeholderWrapper: {
             display: 'flex',
             justifyContent: 'center',
@@ -78,28 +65,6 @@ const useStyles = makeStyles<{ shouldScroll: boolean; isCarouselReady: boolean }
         },
         placeholder: {
             color: getMaskColor(theme).textLight,
-        },
-        recommendFeatureAppListWrapper: {
-            display: 'flex',
-            overflowX: 'scroll',
-            margin: '0 2px 4px 2px',
-            padding: '8px 2px 0 2px',
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
-        carousel: {
-            height: 130,
-            overflowX: 'scroll',
-            overscrollBehavior: 'contain',
-            '& .carousel__slider': {
-                padding: '8px 2px 0',
-                overscrollBehavior: 'contain',
-                overflowX: 'scroll',
-                '&::-webkit-scrollbar': {
-                    display: 'none',
-                },
-            },
         },
     }
 })

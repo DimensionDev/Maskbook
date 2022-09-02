@@ -38,15 +38,6 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
         position: 'absolute',
     },
-
-    loadingIcon: {
-        width: 36,
-        height: 52,
-    },
-    errorIcon: {
-        width: 36,
-        height: 36,
-    },
     iframe: {
         minWidth: 300,
         minHeight: 300,

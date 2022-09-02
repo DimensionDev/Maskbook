@@ -78,10 +78,6 @@ const useStyles = makeStyles()((theme) => ({
         color: '#1C68F3',
         fontSize: 14,
     },
-    disableBtn: {
-        pointerEvents: 'none',
-        opacity: 0.5,
-    },
     hasBound: {
         fontSize: 14,
         width: '100%',

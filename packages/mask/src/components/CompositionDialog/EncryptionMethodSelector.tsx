@@ -19,9 +19,6 @@ const useStyles = makeStyles()((theme) => ({
         background: theme.palette.divider,
         margin: '8px 0',
     },
-    rightIcon: {
-        marginLeft: 'auto',
-    },
 }))
 
 export interface EncryptionMethodSelectorProps extends PropsWithChildren<{}> {

@@ -63,14 +63,7 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
             borderRadius: 12,
             padding: 12,
         },
-        balance: {
-            fontSize: 14,
-            lineHeight: '20px',
-            color: theme.palette.text.primary,
-        },
-        amount: {
-            marginLeft: 10,
-        },
+
         reverse: {
             backgroundColor: isDashboard ? MaskColorVar.lightBackground : theme.palette.background.default,
             width: 32,
@@ -180,14 +173,7 @@ const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((them
         whiteDrop: {
             color: '#ffffff !important',
         },
-        connectWallet: {
-            marginTop: 0,
-        },
-        slippageValue: {
-            fontSize: 12,
-            lineHeight: '16px',
-            color: theme.palette.text.secondary,
-        },
+
         stateBar: {
             position: 'sticky',
             bottom: 0,

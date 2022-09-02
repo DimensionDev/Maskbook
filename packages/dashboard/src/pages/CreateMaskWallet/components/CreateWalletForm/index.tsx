@@ -76,12 +76,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 18,
         background: theme.palette.mode === 'dark' ? '#1A1D20' : '#F7F9FA',
     },
-    alert: {
-        marginTop: 24,
-        padding: 24,
-        backgroundColor: MaskColorVar.errorBackground,
-        color: MaskColorVar.redMain,
-    },
 }))
 
 const CreateWalletForm = memo(() => {

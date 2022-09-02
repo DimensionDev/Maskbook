@@ -18,13 +18,6 @@ import { useNavigate } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
-    tabPanel: {
-        padding: 0,
-        flex: 1,
-    },
-    label: {
-        width: 'auto',
-    },
     tab: {
         flex: 1,
         display: 'flex',

@@ -27,9 +27,6 @@ const useStyles = makeStyles()((theme) => {
             flex: 1,
             padding: theme.spacing(0.5),
         },
-        inputShrinkLabel: {
-            transform: 'translate(17px, -3px) scale(0.75) !important',
-        },
     }
 })
 

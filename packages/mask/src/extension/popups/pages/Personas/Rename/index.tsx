@@ -11,15 +11,6 @@ import { PopupRoutes } from '@masknet/shared-base'
 import { useTitle } from '../../../hook/useTitle'
 
 const useStyles = makeStyles()({
-    header: {
-        padding: '10px 16px',
-        backgroundColor: '#EFF5FF',
-        color: '#1C68F3',
-    },
-    title: {
-        fontSize: 14,
-        lineHeight: '20px',
-    },
     content: {
         flex: 1,
         display: 'flex',

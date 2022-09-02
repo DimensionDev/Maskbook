@@ -19,7 +19,6 @@ import { ActionButtonPromise } from '../../../../extension/options-page/Dashboar
 
 const useStyles = makeStyles()((theme) => {
     return {
-        content: {},
         footer: {
             display: 'flex',
             justifyContent: 'flex-end',

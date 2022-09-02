@@ -10,24 +10,8 @@ import { HelpOutline } from '@mui/icons-material'
 import React, { useCallback } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
-    container: {},
     button: {
         whiteSpace: 'nowrap',
-    },
-    buttonLabel: {
-        display: 'block',
-        fontWeight: 'inherit',
-        transform: 'translateY(-4px)',
-    },
-    buttonAmount: {
-        fontSize: 10,
-        fontWeight: 300,
-        transform: 'translateY(12px)',
-        position: 'absolute',
-    },
-    children: {
-        marginTop: 8,
-        width: '100%',
     },
     icon: {
         width: 18,

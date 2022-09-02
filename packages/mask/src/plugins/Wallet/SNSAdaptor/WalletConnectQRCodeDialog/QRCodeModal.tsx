@@ -13,7 +13,6 @@ const useStyles = makeStyles()((theme) => ({
         backdropFilter: 'blur(20px)',
     },
     tip: { fontSize: 12, marginTop: '10px' },
-    onCopy: { marginTop: theme.spacing(1) },
 }))
 
 export const QRCodeModal: React.FC<{

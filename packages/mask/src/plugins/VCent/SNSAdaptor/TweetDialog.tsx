@@ -64,14 +64,6 @@ const useStyle = makeStyles()((theme) => ({
         borderWidth: 2,
         marginBottom: 5.5,
     },
-
-    typography: {
-        padding: theme.spacing(2),
-    },
-
-    paper: {
-        padding: theme.spacing(1),
-    },
 }))
 
 export default function VCentDialog({ tweetAddress }: { tweetAddress: string }) {

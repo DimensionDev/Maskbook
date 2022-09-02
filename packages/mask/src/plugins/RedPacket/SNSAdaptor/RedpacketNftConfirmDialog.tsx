@@ -42,10 +42,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'flex-end',
     },
-    message: {
-        borderLeft: '2px solid red',
-        paddingLeft: theme.spacing(0.5),
-    },
     text: {
         fontSize: 16,
     },
@@ -88,9 +84,6 @@ const useStyles = makeStyles()((theme) => ({
         height: 195,
         overflow: 'hidden',
     },
-    nftImg: {
-        maxWidth: '100%',
-    },
     nftNameWrapper: {
         width: '100%',
         background: theme.palette.background.paper,
@@ -106,33 +99,11 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
         textOverflow: 'ellipsis',
     },
-    buttonWrapper: {
-        marginTop: 0,
-    },
     button: {
         minHeight: 36,
         height: 36,
     },
-    cancelButton: {},
     sendButton: {},
-    snackBarText: {
-        fontSize: 14,
-    },
-    snackBarLink: {
-        color: 'white',
-    },
-    openIcon: {
-        display: 'flex',
-        width: 18,
-        height: 18,
-        marginLeft: 2,
-    },
-    snackBar: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        transform: 'translateY(1px)',
-    },
     fallbackImage: {
         minHeight: '0 !important',
         maxWidth: 'none',

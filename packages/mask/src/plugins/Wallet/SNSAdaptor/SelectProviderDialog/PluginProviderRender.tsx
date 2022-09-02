@@ -72,12 +72,6 @@ const useStyles = makeStyles()((theme) => {
             borderRadius: '50%',
             color: theme.palette.maskColor.success,
         },
-        alert: {
-            fontSize: 12,
-            display: 'flex',
-            alignItems: 'center',
-            marginTop: theme.spacing(1),
-        },
         wallets: {
             width: '100%',
             display: 'grid',

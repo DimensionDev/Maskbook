@@ -20,13 +20,6 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
         padding: theme.spacing(2),
     },
-    icon: {
-        color: MaskColorVar.redMain,
-        width: '24px',
-        height: '24px',
-        verticalAlign: '-6px',
-        marginRight: '12px',
-    },
     list: {
         padding: 0,
         borderTop: '1px solid rgb(109 157 231 / 15%)',

@@ -35,11 +35,6 @@ const useStyles = makeStyles()({
         padding: '8px 0',
         borderBottom: 'none',
     },
-    button: {
-        fontWeight: 600,
-        minWidth: 0,
-        padding: '0 5px',
-    },
 })
 
 export interface DeriveWalletTableProps {

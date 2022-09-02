@@ -8,19 +8,7 @@ import { useEffect } from 'react'
 import { useAsync } from 'react-use'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 
-const useStyle = makeStyles()({
-    root: {
-        height: 'auto',
-        width: 'calc(98% - 10px)',
-        padding: '6px',
-    },
-    label: {
-        width: '90%',
-        overflowWrap: 'break-word',
-        whiteSpace: 'normal',
-        textOverflow: 'clip',
-    },
-})
+const useStyle = makeStyles()({})
 export type PostCommentDecryptedProps = React.PropsWithChildren<{ ChipProps?: ChipProps }>
 export function PostCommentDecrypted(props: PostCommentDecryptedProps) {
     const chipClasses = useStylesExtends(useStyle(), props.ChipProps || {})

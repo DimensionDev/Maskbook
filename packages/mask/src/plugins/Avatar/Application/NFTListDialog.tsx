@@ -22,12 +22,6 @@ import { PluginVerifiedWalletStatusBar } from '../../../utils/components/WalletS
 import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
-    AddressNames: {
-        position: 'absolute',
-        top: 10,
-        right: 10,
-    },
-
     button: {
         width: 88,
         height: 32,
@@ -72,28 +66,6 @@ const useStyles = makeStyles()((theme) => ({
         margin: 'auto',
         flex: 1,
     },
-    skeleton: {
-        width: 97,
-        height: 97,
-        objectFit: 'cover',
-        borderRadius: '100%',
-        boxSizing: 'border-box',
-        padding: 6,
-        margin: theme.spacing(0.5, 1),
-    },
-    skeletonBox: {
-        marginLeft: 'auto',
-        marginRight: 'auto',
-    },
-    gallery: {
-        display: 'flex',
-        flexFlow: 'row wrap',
-        overflowY: 'auto',
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
-    },
-
     abstractTabWrapper: {
         width: '100%',
         flex: 1,

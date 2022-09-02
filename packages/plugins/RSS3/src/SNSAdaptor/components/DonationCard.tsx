@@ -26,13 +26,6 @@ const useStyles = makeStyles()((theme) => ({
         padding: 3,
         cursor: 'pointer',
     },
-    cover: {
-        flexShrink: 1,
-        height: 126,
-        width: 126,
-        borderRadius: 8,
-        objectFit: 'cover',
-    },
     date: {
         color: theme.palette.maskColor.main,
         fontSize: 14,

@@ -107,13 +107,6 @@ export const useStyles = makeStyles()((theme) => ({
         fontSize: '12px',
         textAlign: 'center',
     },
-    glbTransfer: {
-        position: 'absolute',
-        width: 45,
-        height: 20,
-        bottom: '-10px',
-        cursor: 'pointer',
-    },
     glbView: {
         width: '100%',
         height: 150,

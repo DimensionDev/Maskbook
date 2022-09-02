@@ -35,12 +35,6 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'flex-end',
             padding: theme.spacing(0, 2, 2),
         },
-        panel: {
-            marginTop: theme.spacing(2),
-            '&:first-child': {
-                marginTop: 0,
-            },
-        },
         label: {},
         buttons: {
             width: '100%',

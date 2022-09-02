@@ -117,11 +117,6 @@ const useStyles = makeStyles()({
         width: 20,
         height: 20,
     },
-    gasInput: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(2, 1fr)',
-        gap: 10,
-    },
     unit: {
         color: '#7B8192',
         fontSize: 12,

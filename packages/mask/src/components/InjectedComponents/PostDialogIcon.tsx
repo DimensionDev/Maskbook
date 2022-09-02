@@ -2,9 +2,7 @@ import type { SvgIconClassKey } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { MaskSharpIcon } from '../../resources/MaskIcon'
 
-const useStyles = makeStyles()({
-    root: { verticalAlign: 'middle' },
-})
+const useStyles = makeStyles()({})
 
 export interface PostDialogIconProps extends withClasses<SvgIconClassKey> {
     onClick: () => void

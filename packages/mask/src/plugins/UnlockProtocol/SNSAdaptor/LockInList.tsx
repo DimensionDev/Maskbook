@@ -17,11 +17,6 @@ const useStyle = makeStyles()({
         whiteSpace: 'nowrap',
         overflow: 'hidden',
     },
-    highlighted: {
-        backgroundColor: 'inherit',
-        color: 'inherit',
-        fontWeight: 'bold',
-    },
 })
 export interface LockInListProps {
     item: UnlockLocks

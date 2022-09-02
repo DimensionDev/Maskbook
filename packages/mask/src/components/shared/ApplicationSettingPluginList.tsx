@@ -66,12 +66,6 @@ const useStyles = makeStyles<{ iconFilterColor?: string }>()((theme, { iconFilte
             ? { filter: `drop-shadow(0px 6px 12px ${iconFilterColor})`, backdropFilter: 'blur(16px)' }
             : {}),
     },
-    loadingWrapper: {
-        display: 'flex',
-        height: 400,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     unlisted: {
         fontSize: 18,
         fontWeight: 600,

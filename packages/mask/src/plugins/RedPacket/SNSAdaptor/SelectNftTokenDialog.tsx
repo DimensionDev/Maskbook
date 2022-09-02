@@ -52,18 +52,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         margin: '14px auto',
         padding: 10,
     },
-    ownerList: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: '16px 0',
-        width: 528,
-        height: 188,
-        overflowY: 'auto',
-        borderRadius: 12,
-        marginTop: theme.spacing(1.5),
-        marginBottom: theme.spacing(1.5),
-        padding: theme.spacing(1, 1.5, 1, 1),
-    },
     noResultBox: {
         width: 540,
         height: 180,
@@ -101,41 +89,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     textField: {
         width: 394,
     },
-    wrapper: {
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'column',
-        borderRadius: 8,
-        padding: 0,
-        marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(2.5),
-        background: theme.palette.background.paper,
-        width: 120,
-        height: 180,
-        minHeight: 153,
-        overflow: 'hidden',
-    },
     iframe: {
         minHeight: 147,
-    },
-    nftNameWrapper: {
-        width: '100%',
-        background: theme.palette.mode === 'light' ? 'none' : '#2F3336',
-        borderBottomRightRadius: 8,
-        borderBottomLeftRadius: 8,
-    },
-    nftImg: {
-        margin: '0 auto',
-        height: 160,
-        width: 'auto',
-        minWidth: 120,
-    },
-    nftName: {
-        marginLeft: 8,
-        minHeight: 30,
-    },
-    nftWrapper: {
-        justifyContent: 'center',
     },
     confirmButton: {
         width: '100%',
@@ -168,9 +123,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         width: 120,
         height: 180,
         overflow: 'hidden',
-    },
-    hide: {
-        display: 'none !important',
     },
     loadingWrapper: {
         display: 'flex',

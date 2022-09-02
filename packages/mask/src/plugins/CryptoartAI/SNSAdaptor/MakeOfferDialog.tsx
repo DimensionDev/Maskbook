@@ -32,13 +32,6 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'flex-end',
             padding: theme.spacing(0, 2, 2),
         },
-        panel: {
-            marginTop: theme.spacing(2),
-            '&:first-child': {
-                marginTop: 0,
-            },
-        },
-        label: {},
         buttons: {
             width: '100%',
             margin: `0 ${theme.spacing(-0.5)}`,
@@ -46,9 +39,6 @@ const useStyles = makeStyles()((theme) => {
         button: {
             flex: 1,
             margin: `${theme.spacing(1.5)} ${theme.spacing(0.5)} 0`,
-        },
-        markdown: {
-            margin: theme.spacing(1, 0),
         },
         mediaContent: {
             display: 'flex',

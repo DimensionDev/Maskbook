@@ -13,12 +13,6 @@ import { DonationCard, StatusBox } from '../components'
 import { useDonations } from '../hooks'
 
 const useStyles = makeStyles()((theme) => ({
-    statusBox: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: theme.spacing(6),
-    },
     list: {
         display: 'grid',
         gridTemplateColumns: 'repeat(1, 1fr)',
@@ -31,15 +25,6 @@ const useStyles = makeStyles()((theme) => ({
     donationCard: {
         width: '100%',
         overflow: 'auto',
-    },
-    address: {
-        color: theme.palette.primary.main,
-    },
-    link: {
-        width: '100%',
-        '&:hover': {
-            textDecoration: 'none',
-        },
     },
 }))
 

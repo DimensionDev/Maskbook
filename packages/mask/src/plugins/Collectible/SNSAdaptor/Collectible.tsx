@@ -47,20 +47,6 @@ const useStyles = makeStyles()((theme) => {
             },
             background: '#fff !important',
         },
-        footer: {
-            marginTop: -1, // merge duplicate borders
-            zIndex: 1,
-            position: 'relative',
-            borderTop: `solid 1px ${theme.palette.divider}`,
-            justifyContent: 'space-between',
-        },
-        tabs: {
-            height: 'var(--tabHeight)',
-            width: '100%',
-            minHeight: 'unset',
-            borderTop: `solid 1px ${theme.palette.divider}`,
-            borderBottom: `solid 1px ${theme.palette.divider}`,
-        },
         tab: {
             whiteSpace: 'nowrap',
             background: 'transparent',
@@ -84,23 +70,6 @@ const useStyles = makeStyles()((theme) => {
             wordBreak: 'break-word',
             color: theme.palette.maskColor.publicSecond,
         },
-        description: {
-            fontSize: 12,
-            '& > strong': {
-                color: theme.palette.text.primary,
-                fontWeight: 300,
-            },
-        },
-        footMenu: {
-            color: theme.palette.text.secondary,
-            fontSize: 10,
-            display: 'flex',
-            alignItems: 'center',
-        },
-        footName: {
-            color: theme.palette.text.primary,
-            marginLeft: theme.spacing(0.5),
-        },
         countdown: {
             fontSize: 12,
             borderRadius: 8,
@@ -109,13 +78,6 @@ const useStyles = makeStyles()((theme) => {
             color: theme.palette.common.white,
             backgroundColor: '#eb5757',
             padding: theme.spacing(0.5, 2),
-        },
-        loading: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100%',
-            padding: theme.spacing(8, 0),
         },
         markdown: {
             textOverflow: 'ellipsis',

@@ -22,19 +22,6 @@ const useStyles = makeStyles()((theme) => {
             fontSize: 14,
             lineHeight: 1,
         },
-        relativeTime: {
-            whiteSpace: 'nowrap',
-        },
-        token: {
-            objectFit: 'contain',
-            width: 18,
-            height: 18,
-            marginRight: theme.spacing(0.5),
-        },
-        tokenLink: {
-            display: 'flex',
-            alignItems: 'center',
-        },
         content: {
             display: 'flex',
             alignItems: 'center',

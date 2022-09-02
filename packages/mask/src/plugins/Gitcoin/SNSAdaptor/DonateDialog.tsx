@@ -18,9 +18,6 @@ import { useDonateCallback } from '../hooks/useDonateCallback'
 import { PluginGitcoinMessages } from '../messages'
 
 const useStyles = makeStyles()((theme) => ({
-    paper: {
-        width: '450px !important',
-    },
     form: {
         '& > *': {
             margin: theme.spacing(1, 0),

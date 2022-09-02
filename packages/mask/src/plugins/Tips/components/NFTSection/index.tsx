@@ -44,12 +44,6 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'auto',
         borderRadius: 4,
     },
-    errorMessage: {
-        marginTop: theme.spacing(3),
-        fontSize: 12,
-        color: theme.palette.error.main,
-        marginBottom: theme.spacing(3),
-    },
 }))
 
 interface Props extends HTMLProps<HTMLDivElement> {

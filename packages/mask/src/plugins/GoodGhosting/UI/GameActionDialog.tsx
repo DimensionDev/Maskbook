@@ -11,12 +11,6 @@ import { formatBalance, FungibleToken, isGreaterThanOrEqualTo, NetworkPluginID }
 import { useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
-    content: {
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        boxSizing: 'border-box',
-    },
     button: {
         width: '60%',
         minHeight: 39,

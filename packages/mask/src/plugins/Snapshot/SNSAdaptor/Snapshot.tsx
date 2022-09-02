@@ -45,28 +45,6 @@ const useStyles = makeStyles()((theme) => {
             minHeight: 'unset',
             minWidth: 'unset',
         },
-        subtitle: {
-            fontSize: 12,
-            marginRight: theme.spacing(0.5),
-        },
-        button: {
-            width: '100%',
-            minHeight: 39,
-            margin: `${theme.spacing(1)} auto`,
-        },
-        choiceButton: {
-            color: theme.palette.mode === 'dark' ? 'white' : 'black',
-            transitionDuration: '0s !important',
-            '&:hover': {
-                border: '2px solid rgb(29, 161, 242) !important',
-                backgroundColor: 'transparent !important',
-            },
-        },
-        buttonActive: {
-            border: '2px solid rgb(29, 161, 242)',
-            backgroundColor: 'transparent',
-            color: theme.palette.mode === 'dark' ? 'white' : 'black',
-        },
     }
 })
 

@@ -72,14 +72,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
-    link: {
-        cursor: 'pointer',
-        marginTop: 2,
-        zIndex: 1,
-        '&:hover': {
-            textDecoration: 'none',
-        },
-    },
     settingLink: {
         cursor: 'pointer',
         marginTop: 4,
@@ -87,11 +79,6 @@ const useStyles = makeStyles()((theme) => ({
         '&:hover': {
             textDecoration: 'none',
         },
-    },
-    linkIcon: {
-        color: theme.palette.maskColor.second,
-        fontSize: '20px',
-        margin: '4px 2px 0 2px',
     },
     content: {
         position: 'relative',
@@ -112,11 +99,6 @@ const useStyles = makeStyles()((theme) => ({
     tabs: {
         display: 'flex',
         position: 'relative',
-    },
-    addressLabel: {
-        color: theme.palette.maskColor.dark,
-        fontSize: 18,
-        fontWeight: 700,
     },
     arrowDropIcon: {
         color: theme.palette.maskColor.dark,

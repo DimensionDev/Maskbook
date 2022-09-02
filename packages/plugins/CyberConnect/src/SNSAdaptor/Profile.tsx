@@ -42,20 +42,6 @@ const useStyles = makeStyles()((theme) => ({
         color: 'black',
     },
     address: { marginTop: '20px', opacity: 0.6, color: 'black' },
-    socialMedia: {
-        width: '100%',
-        display: 'flex',
-        alignContent: 'center',
-        justifyContent: 'center',
-        marginTop: '20px',
-    },
-    icon: {
-        display: 'block',
-        width: '30px',
-        height: '30px',
-        marginLeft: '15px',
-        cursor: 'pointer',
-    },
 }))
 const Profile = ({ url }: { url: string }) => {
     const { classes } = useStyles()

@@ -8,9 +8,6 @@ import { SlippageToleranceSection } from './SlippageToleranceSection'
 const useStyles = makeStyles()((theme) => {
     return {
         root: {},
-        button: {
-            marginTop: theme.spacing(2),
-        },
     }
 })
 

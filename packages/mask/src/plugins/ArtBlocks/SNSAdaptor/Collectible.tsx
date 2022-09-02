@@ -29,28 +29,6 @@ const useStyles = makeStyles()((theme) => {
         content: {
             padding: '0 !important',
         },
-        footer: {
-            marginTop: -1, // merge duplicate borders
-            zIndex: 1,
-            position: 'relative',
-            borderTop: `solid 1px ${theme.palette.divider}`,
-            justifyContent: 'space-between',
-        },
-        sourceNote: {
-            fontSize: 10,
-            marginRight: theme.spacing(1),
-        },
-        footLink: {
-            cursor: 'pointer',
-            marginRight: theme.spacing(0.5),
-            '&:last-child': {
-                marginRight: 0,
-            },
-        },
-        mask: {
-            width: 40,
-            height: 10,
-        },
     }
 })
 

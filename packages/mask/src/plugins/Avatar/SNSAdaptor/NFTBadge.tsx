@@ -12,10 +12,6 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    image: {
-        position: 'absolute',
-        bottom: 0,
-    },
 }))
 
 interface NFTBadgeProps extends withClasses<'root' | 'text' | 'icon'> {

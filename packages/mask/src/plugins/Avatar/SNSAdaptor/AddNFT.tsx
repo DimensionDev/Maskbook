@@ -15,7 +15,6 @@ import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { AllChainsNonFungibleToken } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {},
     addNFT: {
         position: 'absolute',
         right: 20,

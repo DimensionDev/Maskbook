@@ -17,24 +17,6 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.secondary,
         marginRight: 12,
     },
-    popper: {
-        overflow: 'visible',
-        boxShadow: '0px 0px 16px 0px rgba(101, 119, 134, 0.2)',
-        borderRadius: 4,
-    },
-    popperText: {
-        fontSize: 14,
-        fontWeight: 700,
-        lineHeight: '18px',
-        display: 'flex',
-        alignItems: 'center',
-        gap: 4,
-        cursor: 'pointer',
-    },
-    item: {
-        display: 'flex',
-        alignItems: 'center',
-    },
     divider: {
         width: '100%',
         height: 1,
@@ -45,16 +27,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         color: theme.palette.text.primary,
         fontWeight: 700,
-    },
-    subTitle: {
-        fontSize: 14,
-        color: theme.palette.text.secondary,
-        whiteSpace: 'nowrap',
-    },
-    paper: {
-        width: 280,
-        padding: 12,
-        boxSizing: 'border-box',
     },
     flex: {
         width: '100%',
@@ -72,9 +44,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     rightIcon: {
         marginLeft: 'auto',
-    },
-    pointer: {
-        cursor: 'pointer',
     },
 }))
 
