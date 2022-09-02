@@ -242,7 +242,7 @@ export function resolveIPFSLink(cidOrURL?: string): string | undefined {
 
     // eliminate cors proxy
     if (cidOrURL.startsWith(CORS_HOST)) {
-        return resolveIPFSLink(decodeURIComponent(cidOrURL.replace(`${CORS_HOST}?`, '')))
+        return resolveIPFSLink(decodeURIComponent(cidOrURL.replace(new RegExp(`^${CORS_HOST}\??`), '')))
     }
 
     // a ipfs protocol
