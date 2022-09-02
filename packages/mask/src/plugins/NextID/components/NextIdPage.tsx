@@ -17,10 +17,17 @@ import {
 } from './Actions'
 import { PluginCardFrameMini } from '@masknet/shared'
 import { ThemeProvider } from '@mui/material'
-import { MaskLightTheme } from '@masknet/theme'
+import { makeStyles, MaskLightTheme } from '@masknet/theme'
+
+const useStyles = makeStyles()((theme) => ({
+    enablePluginRoot: {
+        marginTop: 80,
+    },
+}))
 
 export function NextIdPage() {
     const t = useI18N()
+    const { classes } = useStyles()
 
     const currentProfileIdentifier = useLastRecognizedIdentity()
     const visitingPersonaIdentifier = useCurrentVisitingIdentity()
@@ -54,7 +61,7 @@ export function NextIdPage() {
         if (!isOwn) return <OtherLackWalletAction />
 
         return (
-            <PluginEnableBoundary pluginId={PluginId.Web3Profile}>
+            <PluginEnableBoundary pluginId={PluginId.Web3Profile} classes={{ root: classes.enablePluginRoot }}>
                 {(() => {
                     if (!personaConnectStatus.hasPersona)
                         return (

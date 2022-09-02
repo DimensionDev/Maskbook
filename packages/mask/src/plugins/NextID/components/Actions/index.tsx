@@ -11,6 +11,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(1),
         minWidth: 254,
         borderRadius: '20px',
+        width: 'fit-content !important',
     },
     unchecked: {
         '& circle': {
@@ -34,7 +35,7 @@ export const CreatePersonaAction = memo<CreatePersonaActionProps>(({ disabled, o
                     {t.create_persona_intro()}
                 </Typography>
             </Stack>
-            <Stack direction="row" justifyContent="center">
+            <Stack direction="row" justifyContent="center" alignItems="center">
                 <Button color="primary" disabled={disabled} className={classes.button} onClick={onCreate}>
                     <Icons.Identity size={18} />
                     {t.create_persona()}
@@ -48,8 +49,8 @@ export const SelectConnectPersonaAction = memo(() => {
     const { classes } = useStyles()
     return (
         <>
-            <Stack p={1.25} pb={0} width="100%">
-                <PersonaSelectPanel classes={{ unchecked: classes.unchecked }} />
+            <Stack p={1.25} pb={0} width="100%" boxSizing="border-box">
+                <PersonaSelectPanel classes={{ unchecked: classes.unchecked, button: classes.button }} />
             </Stack>
         </>
     )
