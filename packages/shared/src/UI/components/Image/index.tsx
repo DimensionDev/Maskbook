@@ -64,7 +64,7 @@ export function Image({ fallback, disableSpinner, classes: externalClasses, ...r
 
     if (image) {
         return (
-            <Box className={classes.container} data-url={rest.src}>
+            <Box className={classes.container}>
                 <img {...rest} src={image} />
             </Box>
         )
@@ -82,7 +82,7 @@ export function Image({ fallback, disableSpinner, classes: externalClasses, ...r
     )
 
     return (
-        <Box className={classes.container} data-url={rest.src}>
+        <Box className={classes.container}>
             <img {...rest} src={fallbackImageURL} className={classNames(classes.failImage, classes.fallbackImage)} />
         </Box>
     )

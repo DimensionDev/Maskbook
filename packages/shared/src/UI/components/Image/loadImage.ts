@@ -1,6 +1,7 @@
 import { isLocaleResource } from '@masknet/web3-shared-base'
 
 export async function loadImage(url: string) {
+    if (url.startsWith('<svg ')) return `data:image/svg+xml;base64,${btoa(url)}`
     if (isLocaleResource(url)) return url
     return new Promise<string>((resolve, reject) => {
         const img = document.createElement('img')

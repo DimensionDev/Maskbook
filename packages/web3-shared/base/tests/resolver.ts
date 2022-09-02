@@ -17,6 +17,7 @@ describe('resolveCORSLink', () => {
         { give: CHROME_EXTENSION_URL, expected: CHROME_EXTENSION_URL },
         { give: MOZ_EXTENSION_URL, expected: MOZ_EXTENSION_URL },
         { give: IMAGE_DATA_PARTIAL, expected: IMAGE_DATA_PARTIAL },
+        { give: '<svg xmlns></svg>', expected: '<svg xmlns></svg>' },
     ])('.resolveCORSLink', ({ give, expected }) => {
         expect(resolveCORSLink(give)).toBe(expected)
     })
