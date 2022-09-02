@@ -4,7 +4,7 @@ import { Typography } from '@mui/material'
 import { PopoverListTrigger } from './PopoverListTrigger.js'
 import { useState } from 'react'
 import { PopoverListItem } from './PopoverListItem.js'
-import { E2EUnavailableReason } from './CompositionUI.js'
+import type { E2EUnavailableReason } from './CompositionUI.js'
 import { Icons } from '@masknet/icons'
 import { EncryptionTargetType } from '@masknet/shared-base'
 import { unreachable } from '@dimensiondev/kit'
@@ -55,31 +55,21 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-    const e2eDisabledMessage =
-        props.e2eDisabled && props.e2eDisabled !== E2EUnavailableReason.NoLocalKey ? (
-            <div className={classes.flex}>
-                <Typography className={classes.mainTitle}>{t('persona_required')}</Typography>
-                <ConnectPersonaBoundary
-                    customHint
-                    handlerPosition="top-right"
-                    enableVerify={false}
-                    createConfirm={false}>
-                    {(s) => {
-                        if (!s.hasPersona) return <Typography className={classes.create}>{t('create')}</Typography>
-                        // TODO: how to handle verified
-                        if (!s.connected || !s.verified)
-                            return <Typography className={classes.create}>{t('connect')}</Typography>
-
-                        return null
-                    }}
-                </ConnectPersonaBoundary>
-            </div>
-        ) : null
-    const noLocalKeyMessage = props.e2eDisabled === E2EUnavailableReason.NoLocalKey && (
+    const e2eDisabledMessage = props.e2eDisabled ? (
         <div className={classes.flex}>
-            <Typography className={classes.mainTitle}>{t('compose_no_local_key')}</Typography>
+            <Typography className={classes.mainTitle}>{t('persona_required')}</Typography>
+            <ConnectPersonaBoundary customHint handlerPosition="top-right" enableVerify={false} createConfirm={false}>
+                {(s) => {
+                    if (!s.hasPersona) return <Typography className={classes.create}>{t('create')}</Typography>
+                    // TODO: how to handle verified
+                    if (!s.connected || !s.verified)
+                        return <Typography className={classes.create}>{t('connect')}</Typography>
+
+                    return null
+                }}
+            </ConnectPersonaBoundary>
         </div>
-    )
+    ) : null
 
     const selectedTitle = () => {
         const selected = props.target
@@ -116,7 +106,6 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                     subTitle={t('compose_encrypt_visible_to_private_sub')}
                 />
                 {e2eDisabledMessage}
-                {noLocalKeyMessage}
                 <div className={classes.divider} />
                 <PopoverListItem
                     onItemClick={() => {
@@ -130,7 +119,6 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                     subTitle={t('compose_encrypt_visible_to_share_sub')}
                 />
                 {e2eDisabledMessage}
-                {noLocalKeyMessage}
             </PopoverListTrigger>
         </>
     )

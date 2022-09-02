@@ -14,12 +14,8 @@ import { encryptByLocalKey, deriveAESByECDH, queryPublicKey } from '../../databa
 import { savePostKeyToDB } from '../../database/post/helper.js'
 import { noop } from 'lodash-unified'
 import { queryProfileDB } from '../../database/persona/db.js'
-import {
-    publishPostAESKey_version39Or38,
-    publishPostAESKey_version37,
-} from '../../network/gun/encryption/queryPostKey.js'
+import { publishPostAESKey_version37 } from '../../network/gun/encryption/queryPostKey.js'
 export async function encryptTo(
-    version: -37 | -38,
     content: SerializableTypedMessages,
     target: EncryptTargetPublic | EncryptTargetE2E,
     whoAmI: ProfileIdentifier | undefined,
@@ -31,7 +27,7 @@ export async function encryptTo(
             author: whoAmI,
             message: content,
             target,
-            version,
+            version: -37,
         },
         {
             async deriveAESKey(pub) {
@@ -61,11 +57,7 @@ export async function encryptTo(
     })().catch((error) => console.error('[@masknet/encryption] Failed to save post key to DB', error))
 
     if (target.type === 'E2E') {
-        if (version === -37) {
-            publishPostAESKey_version37(identifier.toIV(), network, e2e!)
-        } else {
-            publishPostAESKey_version39Or38(-38, identifier.toIV(), network, e2e!)
-        }
+        publishPostAESKey_version37(identifier.toIV(), network, e2e!)
     }
     return output
 }

@@ -13,7 +13,6 @@ import { useSubmit } from './useSubmit.js'
 import { useAsync } from 'react-use'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
 import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
-import { Flags } from '../../../shared/index.js'
 
 const useStyles = makeStyles()({
     dialogRoot: {
@@ -47,7 +46,6 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     )
 
     const [reason, setReason] = useState<'timeline' | 'popup' | 'reply'>('timeline')
-    const [version, setVersion] = useState<-38 | -37>(Flags.v37PayloadDefaultEnabled ? -37 : -38)
     // #region Open
     const [open, setOpen] = useState(false)
     const [isOpenFromApplicationBoard, setIsOpenFromApplicationBoard] = useState(false)
@@ -108,7 +106,6 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const isE2E_Disabled = (() => {
         if (!connectStatus.currentPersona && !connectStatus.hasPersona) return E2EUnavailableReason.NoPersona
         if (!connectStatus.connected && connectStatus.hasPersona) return E2EUnavailableReason.NoConnection
-        if (!hasLocalKey && version === -38) return E2EUnavailableReason.NoLocalKey
         return
     })()
 
@@ -122,8 +119,6 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                 title={t('post_dialog__title')}>
                 <DialogContent classes={{ root: classes.dialogContent }}>
                     <CompositionDialogUI
-                        version={version}
-                        setVersion={setVersion}
                         ref={UI}
                         hasClipboardPermission={hasClipboardPermission}
                         onRequestClipboardPermission={onRequestClipboardPermission}

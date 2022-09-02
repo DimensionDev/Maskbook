@@ -94,7 +94,6 @@
     "compose_encrypt_method_text_sub_title": "使用文本加密",
     "compose_encrypt_method_image": "图片",
     "compose_encrypt_method_image_sub_title": "使用图片加密信息",
-    "compose_no_local_key": "缺失本地密钥",
     "compose_encrypt_visible_to_all": "所有人",
     "compose_encrypt_visible_to_all_sub": "任何用户可见",
     "compose_encrypt_visible_to_private": "私密",

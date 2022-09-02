@@ -22,7 +22,6 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
             if (encode === 'image' && !lastRecognizedIdentity) throw new Error('No Current Profile')
 
             const rawEncrypted = await Services.Crypto.encryptTo(
-                info.version,
                 content,
                 target,
                 lastRecognizedIdentity?.identifier ?? fallbackProfile,
