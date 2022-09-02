@@ -33,6 +33,8 @@ describe('resolveIPFSLink', () => {
             { give: `ipfs://ipfs/${cid}`, expected: `https://ipfs.io/ipfs/${cid}` },
             { give: `https://ipfs.io/ipfs/${IMAGE_DATA_PARTIAL}`, expected: IMAGE_DATA_PARTIAL },
             { give: `https://ipfs.io/ipfs/${cid}`, expected: `https://ipfs.io/ipfs/${cid}` },
+            { give: `https://ipfs.altava.com/ipfs/${cid}`, expected: `https://ipfs.io/ipfs/${cid}` },
+            { give: `https://ipfs.altava.com/ipfs/${cid}/image`, expected: `https://ipfs.io/ipfs/${cid}/image` },
             { give: MASK_URL, expected: MASK_URL },
         ].map(({ give, expected }) => [
             { give, expected },
