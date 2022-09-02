@@ -92,13 +92,9 @@ export abstract class PluginRunner<HostHooks extends BasicHostHooks, HostPluginI
     protected async startPluginInner(id: string, isLocal: boolean, signal: AbortSignal, abortFunction: () => void) {
         this.signal.throwIfAborted()
 
-        try {
-            // TODO: setup a module & fetch alias from normal version to local version
-            const instance = await this.HostStartPlugin(id, isLocal, signal)
-            this.plugins.set(id, [instance, isLocal, abortFunction])
-        } catch (error) {
-            console.error(`[Sandboxed-plugin] Plugin ${id} stopped due to an error when starting.`, error)
-        }
+        // TODO: setup a module & fetch alias from normal version to local version
+        const instance = await this.HostStartPlugin(id, isLocal, signal)
+        this.plugins.set(id, [instance, isLocal, abortFunction])
     }
 
     protected stopPlugin(id: string) {

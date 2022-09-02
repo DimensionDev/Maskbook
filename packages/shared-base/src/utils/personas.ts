@@ -38,7 +38,7 @@ export function isSameIdentity<T extends Identifier>(
                 ? currentIdentity.toText()
                 : currentIdentity.identifier.toText()
 
-        return previousValue && i1IdentifierText === i2IdentifierText
+        return previousValue && i1IdentifierText.toLowerCase() === i2IdentifierText.toLowerCase()
     }, false)
 }
 

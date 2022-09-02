@@ -16,6 +16,7 @@ import type { SharedComponentOverwrite } from '@masknet/shared'
 import type { PaletteMode, Theme } from '@mui/material'
 import type { Subscription } from 'use-subscription'
 import type { createSNSAdaptorSpecializedPostContext } from './utils/create-post-context'
+import type { SocialIdentity } from '@masknet/web3-shared-base'
 
 export declare namespace SocialNetwork {
     export interface Utils {
@@ -26,6 +27,7 @@ export declare namespace SocialNetwork {
         /** Handle share */
         share?(text: string): void
         createPostContext: ReturnType<typeof createSNSAdaptorSpecializedPostContext>
+        getUserIdentity?(useId: string): Promise<SocialIdentity | undefined>
     }
     export interface Shared {
         utils: Utils

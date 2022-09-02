@@ -48,32 +48,37 @@ export class BackgroundPluginHost extends PluginRunner<BackgroundHostHooks, Back
             isLocal,
             runtime,
         }
+        await this.bindRPC(instance, rpc, rpcGenerator)
         if (background) await runtime.imports(getURL(id, background, isLocal))
-        await this.startRPC(instance, rpc, rpcGenerator)
+        await this.startRPC(instance, !!rpc, !!rpcGenerator)
         return instance
     }
 
-    private async startRPC(instance: BackgroundInstance, rpc: string | undefined, rpcGenerator: string | undefined) {
+    private async bindRPC(instance: BackgroundInstance, rpc: string | undefined, rpcGenerator: string | undefined) {
         if (!rpc && !rpcGenerator) return
-        const { id, isLocal, runtime } = instance
 
         const rpcReExports: ExportAllBinding[] = []
-        if (rpc) rpcReExports.push({ exportAllFrom: getURL(id, rpc, isLocal), as: 'worker' })
-        if (rpcGenerator) rpcReExports.push({ exportAllFrom: getURL(id, rpcGenerator, isLocal), as: 'workerGenerator' })
-        runtime.addReExportModule('@masknet/plugin/utils/rpc', ...rpcReExports)
-
-        const rpcReExport = await runtime.imports('@masknet/plugin/utils/rpc')
-        if (rpc) {
+        if (rpc) rpcReExports.push({ exportAllFrom: getURL(instance.id, rpc, instance.isLocal), as: 'worker' })
+        if (rpcGenerator)
+            rpcReExports.push({
+                exportAllFrom: getURL(instance.id, rpcGenerator, instance.isLocal),
+                as: 'workerGenerator',
+            })
+        instance.runtime.addReExportModule('@masknet/plugin/utils/rpc', ...rpcReExports)
+    }
+    private async startRPC(instance: BackgroundInstance, hasRPC: boolean, hasRPCGenerator: boolean) {
+        const rpcReExport = await instance.runtime.imports('@masknet/plugin/utils/rpc')
+        if (hasRPC) {
             AsyncCall(rpcReExport.worker, {
-                channel: this.hooks.createRpcChannel(id, this.signal),
+                channel: this.hooks.createRpcChannel(instance.id, this.signal),
                 serializer,
                 log: true,
                 thenable: false,
             })
         }
-        if (rpcGenerator) {
+        if (hasRPCGenerator) {
             AsyncGeneratorCall(rpcReExport.workerGenerator, {
-                channel: this.hooks.createRpcGeneratorChannel(id, this.signal),
+                channel: this.hooks.createRpcGeneratorChannel(instance.id, this.signal),
                 serializer,
                 log: true,
                 thenable: false,
