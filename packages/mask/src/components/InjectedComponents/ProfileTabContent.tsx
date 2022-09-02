@@ -9,10 +9,10 @@ import {
 import { useAvailablePlugins, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
 import { AddressItem, PluginCardFrameMini } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
-import { makeStyles, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
+import { makeStyles, MaskLightTheme, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
-import { Button, Link, MenuItem, Stack, Tab, Typography } from '@mui/material'
+import { Button, Link, MenuItem, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import { first, uniqBy } from 'lodash-unified'
 import { useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
@@ -309,34 +309,43 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         loadingPersonaStatus
     )
         return (
-            <div className={classes.root}>
-                <PluginCardFrameMini />
-            </div>
+            <ThemeProvider theme={MaskLightTheme}>
+                <div className={classes.root}>
+                    <PluginCardFrameMini />
+                </div>
+            </ThemeProvider>
         )
 
-    if (loadCurrentVisitingSocialIdentityError || loadPersonaStatusError || loadSocialAddressListError) {
+    if (
+        (loadCurrentVisitingSocialIdentityError ||
+            (isOwnerIdentity && loadPersonaStatusError) ||
+            loadSocialAddressListError) &&
+        socialAddressList.length === 0
+    ) {
         const handleClick = () => {
             if (loadPersonaStatusError) retryLoadPersonaStatus()
             if (loadCurrentVisitingSocialIdentityError) retryIdentity()
             if (loadSocialAddressListError) retrySocialAddress()
         }
         return (
-            <div className={classes.root}>
-                <PluginCardFrameMini>
-                    <Stack display="inline-flex" gap={3} justifyContent="center" alignItems="center">
-                        <Typography
-                            fontSize={14}
-                            fontWeight={400}
-                            lineHeight="18px"
-                            color={(t) => t.palette.maskColor.danger}>
-                            {t('load_failed')}
-                        </Typography>
-                        <Button color="primary" className={classes.reload} onClick={handleClick}>
-                            {t('reload')}
-                        </Button>
-                    </Stack>
-                </PluginCardFrameMini>
-            </div>
+            <ThemeProvider theme={MaskLightTheme}>
+                <div className={classes.root}>
+                    <PluginCardFrameMini>
+                        <Stack display="inline-flex" gap={3} justifyContent="center" alignItems="center">
+                            <Typography
+                                fontSize={14}
+                                fontWeight={400}
+                                lineHeight="18px"
+                                color={(t) => t.palette.maskColor.danger}>
+                                {t('load_failed')}
+                            </Typography>
+                            <Button color="primary" className={classes.reload} onClick={handleClick}>
+                                {t('reload')}
+                            </Button>
+                        </Stack>
+                    </PluginCardFrameMini>
+                </div>
+            </ThemeProvider>
         )
     }
 

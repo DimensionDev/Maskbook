@@ -39,13 +39,14 @@ const useStyles = makeStyles()((theme) => {
             display: 'inline-flex',
             gap: theme.spacing(1),
             borderRadius: 20,
+            width: '100%',
         },
     }
 })
 
 export type PositionOption = 'center' | 'top-right'
 
-interface PersonaSelectPanelProps extends withClasses<never | 'checked' | 'unchecked'> {
+interface PersonaSelectPanelProps extends withClasses<never | 'checked' | 'unchecked' | 'button'> {
     finishTarget?: string
     enableVerify?: boolean
     onClose?: () => void
@@ -192,7 +193,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
             onClick: handleClick,
         }
 
-        return <ActionContent {...actionProps} />
+        return <ActionContent {...actionProps} classes={{ button: props.classes?.button }} />
     }, [currentPersonaIdentifier, currentProfileIdentify, selectedPersona, enableVerify, finishTarget])
 
     const onSelectPersona = useCallback((x: PersonaNextIDMixture) => {
@@ -237,14 +238,15 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>((props) => {
     )
 })
 
-interface ActionContentProps {
+interface ActionContentProps extends withClasses<never | 'button'> {
     buttonText?: string
     hint?: string
     onClick(): Promise<void>
 }
 
-function ActionContent({ buttonText, hint, onClick }: ActionContentProps) {
-    const { classes } = useStyles()
+function ActionContent(props: ActionContentProps) {
+    const { buttonText, hint, onClick } = props
+    const classes = useStylesExtends(useStyles(), props)
     if (!buttonText) return null
     return (
         <Stack gap={1.5} mt={1.5}>
@@ -253,10 +255,12 @@ function ActionContent({ buttonText, hint, onClick }: ActionContentProps) {
                     {hint}
                 </Typography>
             )}
-            <Button color="primary" className={classes.button} onClick={onClick}>
-                <Icons.Identity size={18} />
-                {buttonText}
-            </Button>
+            <Stack direction="row" justifyContent="center">
+                <Button color="primary" className={classes.button} onClick={onClick}>
+                    <Icons.Identity size={18} />
+                    {buttonText}
+                </Button>
+            </Stack>
         </Stack>
     )
 }
