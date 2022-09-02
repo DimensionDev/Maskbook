@@ -60,7 +60,7 @@ export function NextIdPage() {
                         return (
                             <CreatePersonaAction
                                 disabled={statusLoading}
-                                onCreate={() => personaConnectStatus.action?.()}
+                                onCreate={() => personaConnectStatus.action?.(undefined, undefined, undefined, true)}
                             />
                         )
                     if (!personaConnectStatus.connected || !personaConnectStatus.verified)
