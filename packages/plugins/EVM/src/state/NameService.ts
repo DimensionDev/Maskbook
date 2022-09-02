@@ -59,6 +59,7 @@ export class NameService extends NameServiceState<ChainId> {
 
             const ens = await this.createENS()
             const name = await ens.reverse(address)
+            if (!name.endsWith('.eth')) return
             await super.addName(chainId, address, name)
             return super.reverse(chainId, address)
         } catch {
