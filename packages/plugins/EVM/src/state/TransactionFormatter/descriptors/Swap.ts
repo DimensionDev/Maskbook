@@ -1,6 +1,8 @@
 import { first, last } from 'lodash-unified'
+import UniswapV3MulticallFirstCallABI from '@masknet/web3-contracts/abis/UniswapV3MulticallFirstCall.json'
+import Web3 from 'Web3'
 import { TransactionContext, isSameAddress } from '@masknet/web3-shared-base'
-import { ChainId, TransactionParameter, getTraderConstants } from '@masknet/web3-shared-evm'
+import { ChainId, TransactionParameter, getTraderConstants, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import type { TransactionDescriptor } from '../types'
 import { Web3StateSettings } from '../../../settings'
 import { getTokenAmountDescription } from '../utils'
@@ -8,7 +10,9 @@ import { getTokenAmountDescription } from '../utils'
 export class SwapDescriptor implements TransactionDescriptor {
     async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
         const context = context_ as TransactionContext<ChainId, string | undefined>
-        const { DODO_ETH_ADDRESS, OPENOCEAN_ETH_ADDRESS, ZERO_X_ETH_ADDRESS } = getTraderConstants(context.chainId)
+        const { DODO_ETH_ADDRESS, OPENOCEAN_ETH_ADDRESS, ZERO_X_ETH_ADDRESS, BANCOR_ETH_ADDRESS } = getTraderConstants(
+            context.chainId,
+        )
         if (!context.methods?.find((x) => x.name)) return
 
         const connection = await Web3StateSettings.value.Connection?.getConnection?.({
@@ -43,20 +47,19 @@ export class SwapDescriptor implements TransactionDescriptor {
                 method.name === 'swapExactTokensForETH' &&
                 parameters?.path &&
                 parameters?.amountOutMin &&
-                parameters?.amountInMin
+                parameters?.amountIn
             ) {
-                const outputToken = await connection?.getFungibleToken(last(parameters!.path) ?? '')
-
+                const outputToken = await connection?.getFungibleToken(first(parameters!.path) ?? '')
                 return {
                     chainId: context.chainId,
                     title: 'Swap Token',
                     tokenInAddress: outputToken?.address,
-                    tokenInAmount: parameters?.amountInMin,
-                    description: `Swap ${getTokenAmountDescription(parameters!.amountInMin, outputToken)} for ${
+                    tokenInAmount: parameters?.amountIn,
+                    description: `Swap ${getTokenAmountDescription(parameters!.amountIn, outputToken)} for ${
                         nativeToken?.symbol ?? ''
                     }.`,
                     successfulDescription: `Swap ${getTokenAmountDescription(
-                        parameters!.amountInMin,
+                        parameters!.amountIn,
                         outputToken,
                     )} for ${getTokenAmountDescription(parameters!.amountOutMin, nativeToken)} successfully.`,
                     failedDescription: `Failed to swap ${nativeToken?.symbol ?? ''}.`,
@@ -182,11 +185,75 @@ export class SwapDescriptor implements TransactionDescriptor {
                     failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
                 }
             }
-            if (method.name === 'multicall') {
+            // Bancor
+            if (
+                method.name === 'convertByPath' &&
+                parameters?._amount &&
+                parameters?._beneficiary &&
+                parameters?._minReturn &&
+                parameters?._path
+            ) {
+                const tokenInAddress = first(parameters._path)
+                const tokenOutAddress = last(parameters._path)
+                const tokenIn = isSameAddress(tokenInAddress, BANCOR_ETH_ADDRESS)
+                    ? nativeToken
+                    : await connection?.getFungibleToken(tokenInAddress ?? '')
+                const tokenOut = isSameAddress(tokenOutAddress, ZERO_X_ETH_ADDRESS)
+                    ? nativeToken
+                    : await connection?.getFungibleToken(tokenOutAddress ?? '')
                 return {
                     chainId: context.chainId,
                     title: 'Swap Token',
-                    description: 'Swap with UniSwap V3',
+                    description: `Swap ${getTokenAmountDescription(parameters._amount, tokenIn)} for ${
+                        tokenOut?.symbol ?? ''
+                    }.`,
+                    tokenInAddress: tokenIn?.address,
+                    tokenInAmount: parameters._amount,
+                    successfulDescription: `Swap ${getTokenAmountDescription(
+                        parameters._amount,
+                        tokenIn,
+                    )} for ${getTokenAmountDescription(parameters!._minReturn, tokenOut)} successfully.`,
+                    failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                }
+            }
+            // Uniswap V3
+            if (method.name === 'multicall' && method.parameters?.[0]?.[0]) {
+                try {
+                    const web3 = new Web3()
+                    const results = web3.eth.abi.decodeParameters(
+                        UniswapV3MulticallFirstCallABI,
+                        method.parameters[0][0].slice(10),
+                    ) as { [key: string]: string[] }
+
+                    const [path, tokenOutAddress, _, amountIn, amountOutMinimum] = results['0']
+
+                    const tokenInAddress = path.slice(0, 42)
+                    const tokenIn = isNativeTokenAddress(tokenInAddress)
+                        ? nativeToken
+                        : await connection?.getFungibleToken(tokenInAddress ?? '')
+                    const tokenOut = isNativeTokenAddress(tokenOutAddress)
+                        ? nativeToken
+                        : await connection?.getFungibleToken(tokenOutAddress ?? '')
+                    return {
+                        chainId: context.chainId,
+                        title: 'Swap Token',
+                        description: `Swap ${getTokenAmountDescription(amountIn, tokenIn)} for ${
+                            tokenOut?.symbol ?? ''
+                        }.`,
+                        tokenInAddress: tokenIn?.address,
+                        tokenInAmount: amountIn,
+                        successfulDescription: `Swap ${getTokenAmountDescription(
+                            amountIn,
+                            tokenIn,
+                        )} for ${getTokenAmountDescription(amountOutMinimum, tokenOut)} successfully.`,
+                        failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                    }
+                } catch {
+                    return {
+                        chainId: context.chainId,
+                        title: 'Swap Token',
+                        description: 'Swap with UniSwap V3',
+                    }
                 }
             }
         }
