@@ -79,6 +79,7 @@ export enum SourceType {
     Alchemy_FLOW = 'Alchemy_FLOW',
     Chainbase = 'Chainbase',
     X2Y2 = 'X2Y2',
+    MagicEden = 'MagicEden',
 
     // Rarity
     RaritySniper = 'RaritySniper',
@@ -268,10 +269,13 @@ export interface NonFungibleTokenStats {
     floorPrice: number
 }
 
-export interface NonFungibleTokenRarity {
+export interface NonFungibleTokenRarity<ChainId> {
+    chainId: ChainId
     rank: number
     url: string
     status?: 'verified' | 'unverified'
+    /** source type */
+    source?: SourceType
 }
 
 export interface NonFungibleTokenContract<ChainId, SchemaType> {
@@ -284,6 +288,8 @@ export interface NonFungibleTokenContract<ChainId, SchemaType> {
     logoURL?: string
     iconURL?: string
     creatorEarning?: string
+    /** source type */
+    source?: SourceType
 }
 
 export interface NonFungibleTokenMetadata<ChainId> {
@@ -300,6 +306,8 @@ export interface NonFungibleTokenMetadata<ChainId> {
     mediaType?: string
     /** project url */
     projectURL?: string
+    /** source type */
+    source?: SourceType
 }
 
 export interface NonFungibleCollection<ChainId, SchemaType> {
@@ -319,6 +327,8 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
     verified?: boolean
     /** unix timestamp */
     createdAt?: number
+    /** source type */
+    source?: SourceType
 }
 
 export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, SchemaType> {
@@ -378,6 +388,8 @@ export interface NonFungibleTokenOrder<ChainId, SchemaType> {
     price?: Price
     /** the payment token and corresponding price */
     priceInToken?: PriceInToken<ChainId, SchemaType>
+    /** source type */
+    source?: SourceType
 }
 
 export interface NonFungibleTokenEvent<ChainId, SchemaType> {
@@ -408,6 +420,8 @@ export interface NonFungibleTokenEvent<ChainId, SchemaType> {
     priceInToken?: PriceInToken<ChainId, SchemaType>
     /** the payment token */
     paymentToken?: FungibleToken<ChainId, SchemaType>
+    /** source type */
+    source?: SourceType
 }
 
 /**
@@ -440,7 +454,7 @@ export interface NonFungibleAsset<ChainId, SchemaType> extends NonFungibleToken<
     /** estimated price */
     price?: Price
     /** rarity */
-    rarity?: Record<SourceType, NonFungibleTokenRarity>
+    rarity?: Record<SourceType, NonFungibleTokenRarity<ChainId>>
     /** traits of the digital asset */
     traits?: NonFungibleTokenTrait[]
     /** token on auction */
@@ -453,6 +467,8 @@ export interface NonFungibleAsset<ChainId, SchemaType> extends NonFungibleToken<
     paymentTokens?: Array<FungibleToken<ChainId, SchemaType>>
     /** the payment token and corresponding price */
     priceInToken?: PriceInToken<ChainId, SchemaType>
+    /** source type */
+    source?: SourceType
 }
 
 /**
@@ -1094,7 +1110,7 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         address: string,
         tokenId: string,
         initial?: Web3HubOptions,
-    )=>Promise<NonFungibleTokenRarity | undefined>
+    )=>Promise<NonFungibleTokenRarity<ChainId> | undefined>
     /** Place a bid on a token. */
     createBuyOrder?: (/** TODO: add parameters */) => Promise<void>
     /** List a token for public sell. */

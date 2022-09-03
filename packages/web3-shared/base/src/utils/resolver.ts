@@ -179,6 +179,7 @@ export const resolveSourceName = createLookupTableResolver<SourceType, string>(
         [SourceType.TraitSniper]: 'TraitSniper',
         [SourceType.Chainbase]: 'Chainbase',
         [SourceType.X2Y2]: 'X2Y2',
+        [SourceType.MagicEden]: 'MagicEden',
     },
     (providerType) => {
         throw new Error(`Unknown provider type: ${providerType}.`)
@@ -221,16 +222,26 @@ export const resolveNextID_NetworkPluginID = createLookupTableResolver<NextIDPla
 )
 
 // https://stackoverflow.com/a/67176726
-const MATCH_IPFS_CID_RE =
-    /^Qm[1-9A-HJ-NP-Za-km-z]{44,}|b[2-7A-Za-z]{58,}|B[2-7A-Z]{58,}|z[1-9A-HJ-NP-Za-km-z]{48,}|F[\dA-F]{50,}/
+const MATCH_IPFS_CID_RAW =
+    'Qm[1-9A-HJ-NP-Za-km-z]{44,}|b[2-7A-Za-z]{58,}|B[2-7A-Z]{58,}|z[1-9A-HJ-NP-Za-km-z]{48,}|F[\\dA-F]{50,}'
 const MATCH_IPFS_DATA_RE = /ipfs\/(data:.*)$/
-const MATCH_IPFS_PROTOCOL_RE = /ipfs:\/\/(?:ipfs\/)?/
 const CORS_HOST = 'https://cors.r2d2.to'
 const IPFS_IO_HOST = 'https://ipfs.io'
-const IPFS_PROTOCOL_PREFIX = 'ipfs://'
 
 export const isIpfsCid = (cid: string) => {
-    return MATCH_IPFS_CID_RE.test(cid)
+    const re = new RegExp(`^${MATCH_IPFS_CID_RAW}$`)
+    return re.test(cid)
+}
+
+export const hasIpfsCid = (str: string) => {
+    const re = new RegExp(MATCH_IPFS_CID_RAW)
+    return re.test(str)
+}
+
+export const getIpfsCidPathname = (str: string) => {
+    const re = new RegExp(`(?:${MATCH_IPFS_CID_RAW})\\/?.*`)
+    const matched = str.match(re) ?? []
+    return matched[0]
 }
 
 export const isLocaleResource = (url: string): boolean => {
@@ -245,11 +256,6 @@ export function resolveIPFSLink(cidOrURL?: string): string | undefined {
         return resolveIPFSLink(decodeURIComponent(cidOrURL.replace(new RegExp(`^${CORS_HOST}\??`), '')))
     }
 
-    // a ipfs protocol
-    if (cidOrURL.startsWith(IPFS_PROTOCOL_PREFIX)) {
-        return `${IPFS_IO_HOST}/ipfs/${cidOrURL.replace(MATCH_IPFS_PROTOCOL_RE, '')}`
-    }
-
     // a ipfs.io host
     if (cidOrURL.startsWith(IPFS_IO_HOST)) {
         // base64 data string
@@ -261,8 +267,8 @@ export function resolveIPFSLink(cidOrURL?: string): string | undefined {
     }
 
     // a ipfs hash fragment
-    if (isIpfsCid(cidOrURL)) {
-        return `${IPFS_IO_HOST}/ipfs/${cidOrURL}`
+    if (hasIpfsCid(cidOrURL)) {
+        return `${IPFS_IO_HOST}/ipfs/${getIpfsCidPathname(cidOrURL)}`
     }
 
     return cidOrURL

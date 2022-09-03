@@ -1,4 +1,4 @@
-import type { HubOptions, NetworkPluginID, Pageable } from '@masknet/web3-shared-base'
+import type { HubOptions, Pageable } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import type RSS3 from 'rss3-next'
 
@@ -430,10 +430,6 @@ export namespace RSS3BaseAPI {
         getFootprints(address: string): Promise<Pageable<Footprint>>
         getNameInfo(id: string): Promise<NameInfo | undefined>
         getProfileInfo(address: string): Promise<ProfileInfo | undefined>
-        getWeb3Feeds(
-            address: string,
-            networkPluginId?: NetworkPluginID,
-            HubOptions?: HubOptions<ChainId>,
-        ): Promise<Pageable<Activity>>
+        getWeb3Feeds(address: string, HubOptions?: HubOptions<ChainId>): Promise<Pageable<Activity>>
     }
 }
