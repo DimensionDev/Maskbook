@@ -1,6 +1,6 @@
 import { first, last } from 'lodash-unified'
 import UniswapV3MulticallFirstCallABI from '@masknet/web3-contracts/abis/UniswapV3MulticallFirstCall.json'
-import Web3 from 'Web3'
+import Web3 from 'web3'
 import { TransactionContext, isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, TransactionParameter, getTraderConstants, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import type { TransactionDescriptor } from '../types'
