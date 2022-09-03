@@ -12,6 +12,7 @@ import {
     NonFungibleTokenStats,
     OrderSide,
     Pageable,
+    SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
@@ -119,6 +120,7 @@ function createNonFungibleEventFromEvent(chainId: ChainId, event: Event): NonFun
             address: event.to,
         },
         timestamp: Number.parseInt(event.createdAt, 10) * 1000,
+        source: SourceType.LooksRare,
     }
 }
 
@@ -145,6 +147,7 @@ function createNonFungibleTokenOrderFromOrder(
             amount: order.price,
             token: createERC20Token(chainId, order.currencyAddress),
         },
+        source: SourceType.LooksRare,
     }
 }
 

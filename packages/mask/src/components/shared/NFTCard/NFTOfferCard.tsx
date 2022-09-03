@@ -3,7 +3,6 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { Typography } from '@mui/material'
 import {
     NonFungibleTokenOrder,
-    SourceType,
     formatBalance,
     formatCurrency,
     NetworkPluginID,
@@ -49,6 +48,9 @@ const useStyles = makeStyles()((theme) => ({
         width: 24,
         height: 24,
     },
+    symbol: {
+        marginLeft: theme.spacing(0.2),
+    },
     fallbackSymbol: {
         color: theme.palette.maskColor.publicMain,
         fontWeight: 700,
@@ -59,20 +61,19 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface NFTOfferCardProps {
+export interface NFTOfferCardProps {
     offer: NonFungibleTokenOrder<ChainId, SchemaType>
-    provider: SourceType
 }
 
 export function NFTOfferCard(props: NFTOfferCardProps) {
-    const { offer, provider } = props
+    const { offer } = props
     const { classes } = useStyles()
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { t } = useI18N()
 
     return (
         <div className={classes.wrapper}>
-            <CollectibleProviderIcon active={false} provider={provider} />
+            {offer.source ? <CollectibleProviderIcon active={false} provider={offer.source} /> : null}
             <div className={classes.offerDetail}>
                 <div className={classes.flex}>
                     {(offer.priceInToken?.token.logoURL && (
@@ -90,6 +91,9 @@ export function NFTOfferCard(props: NFTOfferCardProps) {
                             <strong style={{ fontSize: 14 }}>
                                 {formatBalance(offer.priceInToken?.amount, offer.priceInToken?.token.decimals || 18, 6)}
                             </strong>
+                            {offer.priceInToken ? (
+                                <span className={classes.symbol}>{offer.priceInToken?.token.symbol}</span>
+                            ) : null}
                         </Typography>
                         {offer.price?.usd && (
                             <Typography className={classes.textBase} fontSize={12}>

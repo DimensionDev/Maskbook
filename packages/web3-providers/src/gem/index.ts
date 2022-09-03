@@ -27,7 +27,7 @@ async function fetchFromGem<T>(pathname: string, init?: RequestInit) {
 
 export class GemAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getRarity(address: string, tokenId: string, options?: HubOptions<ChainId, HubIndicator>) {
-        const response = await fetchFromGem<Record<string, NonFungibleTokenRarity>>(
+        const response = await fetchFromGem<Record<string, NonFungibleTokenRarity<ChainId>>>(
             urlcat('/rarity/:address/:tokenId', {
                 address: address.toLowerCase(),
                 tokenId: tokenId.toLowerCase(),

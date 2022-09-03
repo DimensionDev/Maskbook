@@ -1,6 +1,6 @@
 import { makeStyles, LoadingBase } from '@masknet/theme'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import type { NonFungibleTokenOrder, Pageable, SourceType } from '@masknet/web3-shared-base'
+import type { NonFungibleTokenOrder, Pageable } from '@masknet/web3-shared-base'
 import { Typography, Button } from '@mui/material'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
@@ -30,11 +30,10 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface OffersTabProps {
     offers: AsyncStateRetry<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
-    provider: SourceType
 }
 
 export function OffersTab(props: OffersTabProps) {
-    const { offers, provider } = props
+    const { offers } = props
     const { classes } = useStyles()
     const { t } = useI18N()
 
@@ -64,7 +63,7 @@ export function OffersTab(props: OffersTabProps) {
     return (
         <div className={classes.wrapper} style={{ justifyContent: 'unset' }}>
             {_offers?.map((x, idx) => (
-                <NFTOfferCard provider={provider} key={idx} offer={x} />
+                <NFTOfferCard key={idx} offer={x} />
             ))}
         </div>
     )
