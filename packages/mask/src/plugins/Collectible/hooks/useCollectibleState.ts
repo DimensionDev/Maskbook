@@ -22,7 +22,6 @@ function useCollectibleState(token?: CollectibleToken) {
         token?.contractAddress ?? '',
         token?.tokenId ?? '',
         {
-            sourceType: provider,
             chainId: ChainId.Mainnet,
         },
     )

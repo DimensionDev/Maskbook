@@ -11,6 +11,7 @@ import {
     TokenType,
     resolveIPFSLink,
     resolveCORSLink,
+    SourceType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-solana'
 import type { NonFungibleTokenAPI } from '../types'
@@ -234,6 +235,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                 },
                 quantity: '1',
                 type: '',
+                source: SourceType.MagicEden,
             }
         })
         return createPageable(
@@ -267,6 +269,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                 quantity: '1',
                 // TODO's
                 assetPermalink: '',
+                source: SourceType.MagicEden,
             }
         })
         return createPageable(
