@@ -245,7 +245,7 @@ export const getIpfsCidPathname = (str: string) => {
 }
 
 export const isLocaleResource = (url: string): boolean => {
-    return /^data|blob:|(chrome|moz)-extension:\/\/|<svg\s/.test(url)
+    return /^data|blob:|\w+-extension:\/\/|<svg\s/.test(url)
 }
 
 export function resolveIPFSLink(cidOrURL?: string): string | undefined {
