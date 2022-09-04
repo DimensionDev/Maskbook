@@ -1,5 +1,5 @@
 import { first, last } from 'lodash-unified'
-import UniswapV3MulticallFirstCallABI from '@masknet/web3-contracts/abis/UniswapV3MulticallFirstCall.json'
+import UniswapV3MulticallFunctionExactInputABI from '@masknet/web3-contracts/abis/UniswapV3MulticallFunctionExactInput.json'
 import Web3 from 'web3'
 import { TransactionContext, isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, TransactionParameter, getTraderConstants, isNativeTokenAddress } from '@masknet/web3-shared-evm'
@@ -221,7 +221,7 @@ export class SwapDescriptor implements TransactionDescriptor {
                 try {
                     const web3 = new Web3()
                     const results = web3.eth.abi.decodeParameters(
-                        UniswapV3MulticallFirstCallABI,
+                        UniswapV3MulticallFunctionExactInputABI,
                         method.parameters[0][0].slice(10),
                     ) as { [key: string]: string[] }
 
