@@ -7,11 +7,12 @@ import {
     HubIndicator,
     HubOptions,
     NonFungibleAsset,
-    NonFungibleTokenCollection,
+    NonFungibleCollection,
     NonFungibleTokenContract,
     NonFungibleTokenEvent,
     Pageable,
     scale10,
+    SourceType,
     TokenType,
     Transaction,
 } from '@masknet/web3-shared-base'
@@ -188,7 +189,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
         }
     }
 
-    createNonFungibleCollectionFromNFT(chainId: ChainId, nft: NFT): NonFungibleTokenCollection<ChainId, SchemaType> {
+    createNonFungibleCollectionFromNFT(chainId: ChainId, nft: NFT): NonFungibleCollection<ChainId, SchemaType> {
         return {
             chainId,
             schema: nft.contract_type === 'ERC1155' ? SchemaType.ERC1155 : SchemaType.ERC721,
@@ -218,6 +219,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
             to: {
                 address: event.to_address,
             },
+            source: SourceType.Chainbase,
         }
     }
 

@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { first } from 'lodash-unified'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
 import {
     HubOptions,
     NonFungibleAsset,
@@ -11,9 +11,9 @@ import {
     createPageable,
     createIndicator,
     createNextIndicator,
-    createLookupTableResolver,
     CurrencyType,
     scale10,
+    SourceType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { RaribleEventType, RaribleOrder, RaribleHistory, RaribleNFTItemMapResponse } from './types'
@@ -109,6 +109,7 @@ function createOrder(chainId: ChainId, order: RaribleOrder): NonFungibleTokenOrd
             : undefined,
         side: OrderSide.Buy,
         quantity: order.fill,
+        source: SourceType.Rarible,
     }
 }
 
@@ -143,6 +144,7 @@ function createEvent(chainId: ChainId, history: RaribleHistory): NonFungibleToke
               }
             : undefined,
         paymentToken,
+        source: SourceType.Rarible,
     }
 }
 

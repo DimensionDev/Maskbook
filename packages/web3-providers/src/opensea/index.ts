@@ -7,7 +7,7 @@ import {
     createPageable,
     CurrencyType,
     NonFungibleToken,
-    NonFungibleTokenCollection,
+    NonFungibleCollection,
     NonFungibleTokenEvent,
     NonFungibleTokenOrder,
     OrderSide,
@@ -22,6 +22,8 @@ import {
     HubIndicator,
     formatPercentage,
     dividedBy,
+    resolveIPFSLink,
+    SourceType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, createNativeToken, createERC20Token } from '@masknet/web3-shared-evm'
 import type { NonFungibleTokenAPI, TrendingAPI } from '../types'
@@ -34,7 +36,7 @@ import {
     OpenSeaAssetResponse,
     EventType,
 } from './types'
-import { getOrderUSDPrice, toImage } from './utils'
+import { getOrderUSDPrice } from './utils'
 import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants'
 import { getPaymentToken } from '../helpers'
 
@@ -96,7 +98,7 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungi
                 asset.image_url ?? asset.image_preview_url ?? asset.image_original_url ?? asset.animation_url ?? '',
             mediaURL:
                 asset?.animation_url ??
-                toImage(asset?.image_original_url ?? asset?.image_preview_url ?? asset?.image_url ?? ''),
+                resolveIPFSLink(asset?.image_original_url ?? asset?.image_preview_url ?? asset?.image_url ?? ''),
         },
         contract: {
             chainId,
@@ -223,6 +225,7 @@ function createEvent(chainId: ChainId, event: OpenSeaAssetEvent): NonFungibleTok
               }
             : undefined,
         paymentToken,
+        source: SourceType.OpenSea,
     }
 }
 
@@ -257,6 +260,7 @@ function createOrder(chainId: ChainId, event: OpenSeaAssetEvent): NonFungibleTok
                   ),
               }
             : undefined,
+        source: SourceType.OpenSea,
     }
 }
 
@@ -391,7 +395,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         )
         if (!response) return createPageable(EMPTY_LIST, createIndicator(indicator))
 
-        const collections: Array<NonFungibleTokenCollection<ChainId, SchemaType>> =
+        const collections: Array<NonFungibleCollection<ChainId, SchemaType>> =
             response
                 ?.map((x) => ({
                     chainId,

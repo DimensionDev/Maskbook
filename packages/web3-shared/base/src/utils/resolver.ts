@@ -7,15 +7,49 @@ import {
     ProviderDescriptor,
     SourceType,
 } from '../specs'
-import { NextIDPlatform } from '@masknet/shared-base'
+import { createLookupTableResolver, NextIDPlatform } from '@masknet/shared-base'
 
-export function createLookupTableResolver<K extends keyof any, T>(map: Record<K, T>, fallback: T | ((key: K) => T)) {
-    function resolveFallback(key: K) {
-        if (typeof fallback === 'function') return (fallback as (key: K) => T)(key)
-        return fallback
-    }
-    return (key: K) => map[key] ?? resolveFallback(key)
+export interface ExplorerRoutes {
+    addressPathname?: string
+    blockPathname?: string
+    transactionPathname?: string
+    domainPathname?: string
+    fungibleTokenPathname?: string
+    nonFungibleTokenPathname?: string
 }
+
+// A workaround for extracting un-exported internal types.
+// Learn more https://stackoverflow.com/questions/50321419/typescript-returntype-of-generic-function
+export class Wrapper<ChainId, SchemaType, ProviderType, NetworkType> {
+    createChainResolver(descriptors: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>>) {
+        return createChainResolver(descriptors)
+    }
+    createExplorerResolver(
+        descriptors: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>>,
+        routes?: ExplorerRoutes,
+    ) {
+        return createExplorerResolver(descriptors, routes)
+    }
+    createNetworkResolver(descriptors: Array<NetworkDescriptor<ChainId, NetworkType>>) {
+        return createNetworkResolver(descriptors)
+    }
+    createProviderResolver(descriptors: Array<ProviderDescriptor<ChainId, ProviderType>>) {
+        return createProviderResolver(descriptors)
+    }
+}
+
+export type ReturnChainResolver<ChainId, SchemaType, NetworkType> = ReturnType<
+    Wrapper<ChainId, SchemaType, never, NetworkType>['createChainResolver']
+>
+export type ReturnExplorerResolver<ChainId, SchemaType, NetworkType> = ReturnType<
+    Wrapper<ChainId, SchemaType, never, NetworkType>['createExplorerResolver']
+>
+export type ReturnNetworkResolver<ChainId, NetworkType> = ReturnType<
+    Wrapper<ChainId, never, never, NetworkType>['createNetworkResolver']
+>
+export type ReturnProviderResolver<ChainId, ProviderType> = ReturnType<
+    Wrapper<ChainId, never, ProviderType, never>['createProviderResolver']
+>
 
 export function createChainResolver<ChainId, SchemaType, NetworkType>(
     descriptors: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>>,
@@ -51,15 +85,6 @@ export function createChainResolver<ChainId, SchemaType, NetworkType>(
         isSupport: (chainId?: ChainId, feature?: string) =>
             !!(feature && getChainDescriptor(chainId)?.features?.includes(feature)),
     }
-}
-
-interface ExplorerRoutes {
-    addressPathname?: string
-    blockPathname?: string
-    transactionPathname?: string
-    domainPathname?: string
-    fungibleTokenPathname?: string
-    nonFungibleTokenPathname?: string
 }
 
 export function createExplorerResolver<ChainId, SchemaType, NetworkType>(
@@ -137,39 +162,6 @@ export function createProviderResolver<ChainId, ProviderType>(
     }
 }
 
-// A workaround for extracting un-exported internal types.
-// Learn more https://stackoverflow.com/questions/50321419/typescript-returntype-of-generic-function
-class Wrapper<ChainId, SchemaType, ProviderType, NetworkType> {
-    createChainResolver(descriptors: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>>) {
-        return createChainResolver(descriptors)
-    }
-    createExplorerResolver(
-        descriptors: Array<ChainDescriptor<ChainId, SchemaType, NetworkType>>,
-        routes?: ExplorerRoutes,
-    ) {
-        return createExplorerResolver(descriptors, routes)
-    }
-    createNetworkResolver(descriptors: Array<NetworkDescriptor<ChainId, NetworkType>>) {
-        return createNetworkResolver(descriptors)
-    }
-    createProviderResolver(descriptors: Array<ProviderDescriptor<ChainId, ProviderType>>) {
-        return createProviderResolver(descriptors)
-    }
-}
-
-export type ReturnChainResolver<ChainId, SchemaType, NetworkType> = ReturnType<
-    Wrapper<ChainId, SchemaType, never, NetworkType>['createChainResolver']
->
-export type ReturnExplorerResolver<ChainId, SchemaType, NetworkType> = ReturnType<
-    Wrapper<ChainId, SchemaType, never, NetworkType>['createExplorerResolver']
->
-export type ReturnNetworkResolver<ChainId, NetworkType> = ReturnType<
-    Wrapper<ChainId, never, never, NetworkType>['createNetworkResolver']
->
-export type ReturnProviderResolver<ChainId, ProviderType> = ReturnType<
-    Wrapper<ChainId, never, ProviderType, never>['createProviderResolver']
->
-
 export const resolveSourceName = createLookupTableResolver<SourceType, string>(
     {
         [SourceType.DeBank]: 'DeBank',
@@ -187,6 +179,7 @@ export const resolveSourceName = createLookupTableResolver<SourceType, string>(
         [SourceType.TraitSniper]: 'TraitSniper',
         [SourceType.Chainbase]: 'Chainbase',
         [SourceType.X2Y2]: 'X2Y2',
+        [SourceType.MagicEden]: 'MagicEden',
     },
     (providerType) => {
         throw new Error(`Unknown provider type: ${providerType}.`)
@@ -204,7 +197,7 @@ export const resolveCurrencyName = createLookupTableResolver<CurrencyType, strin
     },
 )
 
-export const resolveNextIdWalletName = createLookupTableResolver<NetworkPluginID, string>(
+export const resolveNetworkWalletName = createLookupTableResolver<NetworkPluginID, string>(
     {
         [NetworkPluginID.PLUGIN_EVM]: 'EVM wallet',
         [NetworkPluginID.PLUGIN_SOLANA]: 'Solana wallet',
@@ -215,7 +208,7 @@ export const resolveNextIdWalletName = createLookupTableResolver<NetworkPluginID
     },
 )
 
-export const resolveNextIdPlatformPluginId = createLookupTableResolver<NextIDPlatform, NetworkPluginID | undefined>(
+export const resolveNextID_NetworkPluginID = createLookupTableResolver<NextIDPlatform, NetworkPluginID | undefined>(
     {
         [NextIDPlatform.Ethereum]: NetworkPluginID.PLUGIN_EVM,
         [NextIDPlatform.NextID]: undefined,
@@ -227,3 +220,68 @@ export const resolveNextIdPlatformPluginId = createLookupTableResolver<NextIDPla
         throw new Error(`Unknown next id platform: ${platform}`)
     },
 )
+
+// https://stackoverflow.com/a/67176726
+const MATCH_IPFS_CID_RAW =
+    'Qm[1-9A-HJ-NP-Za-km-z]{44,}|b[2-7A-Za-z]{58,}|B[2-7A-Z]{58,}|z[1-9A-HJ-NP-Za-km-z]{48,}|F[\\dA-F]{50,}'
+const MATCH_IPFS_DATA_RE = /ipfs\/(data:.*)$/
+const CORS_HOST = 'https://cors.r2d2.to'
+const IPFS_IO_HOST = 'https://ipfs.io'
+
+export const isIpfsCid = (cid: string) => {
+    const re = new RegExp(`^${MATCH_IPFS_CID_RAW}$`)
+    return re.test(cid)
+}
+
+export const hasIpfsCid = (str: string) => {
+    const re = new RegExp(MATCH_IPFS_CID_RAW)
+    return re.test(str)
+}
+
+export const getIpfsCidPathname = (str: string) => {
+    const re = new RegExp(`(?:${MATCH_IPFS_CID_RAW})\\/?.*`)
+    const matched = str.match(re) ?? []
+    return matched[0]
+}
+
+export const isLocaleResource = (url: string): boolean => {
+    return /^data|blob:|(chrome|moz)-extension:\/\/|<svg\s/.test(url)
+}
+
+export function resolveIPFSLink(cidOrURL?: string): string | undefined {
+    if (!cidOrURL) return cidOrURL
+
+    // eliminate cors proxy
+    if (cidOrURL.startsWith(CORS_HOST)) {
+        return resolveIPFSLink(decodeURIComponent(cidOrURL.replace(new RegExp(`^${CORS_HOST}\??`), '')))
+    }
+
+    // a ipfs.io host
+    if (cidOrURL.startsWith(IPFS_IO_HOST)) {
+        // base64 data string
+        const [_, data] = cidOrURL.match(MATCH_IPFS_DATA_RE) ?? []
+        if (data) return decodeURIComponent(data)
+
+        // plain
+        return decodeURIComponent(cidOrURL)
+    }
+
+    // a ipfs hash fragment
+    if (hasIpfsCid(cidOrURL)) {
+        return `${IPFS_IO_HOST}/ipfs/${getIpfsCidPathname(cidOrURL)}`
+    }
+
+    return cidOrURL
+}
+
+export function resolveARLink(str?: string): string {
+    if (!str) return ''
+    if (str.startsWith('https://')) return str
+    return urlcat('https://arweave.net/:str', { str })
+}
+
+export function resolveCORSLink(url?: string): string | undefined {
+    if (!url || isLocaleResource(url)) return url
+    if (url.startsWith(CORS_HOST)) return url
+    return `${CORS_HOST}?${encodeURIComponent(url)}`
+}

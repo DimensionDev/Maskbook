@@ -1,6 +1,5 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import BigNumber from 'bignumber.js'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
@@ -8,17 +7,15 @@ import { useDashboardI18N } from '../../../../locales'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { FungibleTokenTableRow } from '../FungibleTokenTableRow'
-import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { DashboardRoutes, EMPTY_LIST, CrossIsolationMessages } from '@masknet/shared-base'
 import {
     CurrencyType,
-    formatBalance,
     FungibleAsset,
     isGreaterThanOrEqualTo,
     isLessThan,
+    leftShift,
     minus,
     NetworkPluginID,
-    TokenType,
     toZero,
 } from '@masknet/web3-shared-base'
 import {
@@ -27,7 +24,6 @@ import {
     useNativeToken,
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
-import { PluginMessages } from '../../../../API'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
@@ -105,8 +101,6 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
     } = useFungibleAssets<'all'>(NetworkPluginID.PLUGIN_EVM, undefined, {
         chainId: selectedChainId,
     })
-    const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
-
     const onSwap = useCallback(
         (
             token: FungibleAsset<
@@ -114,21 +108,19 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
                 Web3Helper.Definition[NetworkPluginID]['SchemaType']
             >,
         ) => {
-            openSwapDialog({
+            return CrossIsolationMessages.events.swapDialogUpdate.sendToLocal({
                 open: true,
                 traderProps: {
                     defaultInputCoin: {
-                        id: token.id,
                         name: token.name || '',
                         symbol: token.symbol || '',
-                        type: TokenType.Fungible,
-                        contract_address: token.address,
+                        address: token.address,
                         decimals: token.decimals,
                     },
                 },
             })
         },
-        [openSwapDialog],
+        [],
     )
 
     const onSend = useCallback(
@@ -300,15 +292,9 @@ export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading
                             <TableBody>
                                 {dataSource
                                     .sort((first, second) => {
-                                        const firstValue = new BigNumber(
-                                            formatBalance(first.balance, first.decimals) ?? '',
-                                        )
-                                        const secondValue = new BigNumber(
-                                            formatBalance(second.balance, second.decimals) ?? '',
-                                        )
-
+                                        const firstValue = leftShift(first.balance, first.decimals)
+                                        const secondValue = leftShift(second.balance, second.decimals)
                                         if (firstValue.isEqualTo(secondValue)) return 0
-
                                         return Number(firstValue.lt(secondValue))
                                     })
                                     .filter(

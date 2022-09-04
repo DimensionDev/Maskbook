@@ -1,26 +1,22 @@
 import { Icons } from '@masknet/icons'
-import { PluginId } from '@masknet/plugin-infra'
-import { useNonFungibleAssets, useTrustedNonFungibleTokens, Web3Helper } from '@masknet/plugin-infra/web3'
-import { ElementAnchor, RetryHint } from '@masknet/shared'
-import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
-import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
+import { useNonFungibleAssets, useTrustedNonFungibleTokens, Web3Helper, useWeb3State } from '@masknet/plugin-infra/web3'
+import { ElementAnchor, RetryHint, useWeb3ProfileHiddenSettings } from '@masknet/shared'
+import { EMPTY_LIST, EMPTY_OBJECT } from '@masknet/shared-base'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { CollectionType } from '@masknet/web3-providers'
 import {
     isSameAddress,
     NetworkPluginID,
     NonFungibleAsset,
-    NonFungibleTokenCollection,
+    NonFungibleCollection,
     SocialAddress,
     SocialIdentity,
     SourceType,
-    Wallet,
 } from '@masknet/web3-shared-base'
-import { Box, Button, Stack, styled, Typography } from '@mui/material'
-import { uniqBy } from 'lodash-unified'
+import { Box, Button, Stack, styled, Tooltip, Typography } from '@mui/material'
+import { differenceWith, uniqBy } from 'lodash-unified'
 import { createContext, useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../../utils'
-import { useAvailableCollections } from '../../hooks'
-import { useKV } from '../../hooks/useKV'
 import { CollectibleItem } from './CollectibleItem'
 import { CollectionIcon } from './CollectionIcon'
 import { LoadingSkeleton } from './LoadingSkeleton'
@@ -40,141 +36,160 @@ const AllButton = styled(Button)(({ theme }) => ({
     opacity: 0.5,
 }))
 
-const useStyles = makeStyles()((theme) => ({
-    root: {
-        width: '100%',
-        display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
-        gridGap: theme.spacing(2),
-    },
-    collectibleItem: {
-        overflowX: 'hidden',
-    },
-    container: {
-        paddingLeft: theme.spacing(1),
-        boxSizing: 'border-box',
-    },
-    text: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100%',
-    },
-    button: {
-        '&:hover': {
-            border: 'solid 1px transparent',
-        },
-    },
-    list: {
-        height: 'calc(100% - 52px)',
-        overflow: 'auto',
-    },
-    name: {
-        whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis',
-        overflow: 'hidden',
-        lineHeight: '36px',
-        paddingLeft: '8px',
-    },
-    loading: {
-        position: 'absolute',
-        bottom: 6,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-    },
-    collectionWrap: {
-        width: '24px',
-        height: '24px',
-        borderRadius: '50%',
-        background: 'rgba(229,232,235,1)',
-    },
-    collectionImg: {
-        objectFit: 'cover',
-        width: '100%',
-        height: '100%',
-        borderRadius: '50%',
-    },
-    networkSelected: {
-        width: 24,
-        height: 24,
-        minHeight: 24,
-        minWidth: 24,
-        lineHeight: '24px',
-        background: theme.palette.primary.main,
-        color: '#ffffff',
-        fontSize: 10,
-        opacity: 1,
-        '&:hover': {
-            background: theme.palette.primary.main,
-        },
-    },
-    collectionButton: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: '8px',
-        marginBottom: '12px',
-        minWidth: 30,
-        maxHeight: 24,
-    },
-}))
+export interface CollectibleGridProps {
+    columns?: number
+    gap?: string | number
+}
 
-interface CollectibleListUIProps extends withClasses<'empty' | 'button' | 'text'> {
-    provider: SourceType
-    wallet?: Wallet
+const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 3, gap = 2 }) => {
+    const gapIsNumber = typeof gap === 'number'
+    return {
+        root: {
+            width: '100%',
+            display: 'grid',
+            gridTemplateColumns: `repeat(${columns}, 1fr)`,
+            gridGap: gapIsNumber ? theme.spacing(gap) : gap,
+            padding: gapIsNumber ? theme.spacing(0, gap, 0) : `0 ${gap} 0`,
+            boxSizing: 'border-box',
+        },
+        collectibleItem: {
+            overflowX: 'hidden',
+        },
+        container: {
+            boxSizing: 'border-box',
+            paddingTop: gapIsNumber ? theme.spacing(gap) : gap,
+        },
+        text: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+        },
+        button: {
+            '&:hover': {
+                border: 'solid 1px transparent',
+            },
+        },
+        list: {
+            height: 'calc(100% - 52px)',
+            overflow: 'auto',
+        },
+        sidebar: {
+            width: 30,
+            flexShrink: 0,
+        },
+        name: {
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            lineHeight: '36px',
+            paddingLeft: '8px',
+        },
+        loading: {
+            position: 'absolute',
+            bottom: 6,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+        },
+        collectionWrap: {
+            width: '24px',
+            height: '24px',
+            borderRadius: '50%',
+            background: 'rgba(229,232,235,1)',
+        },
+        collectionImg: {
+            objectFit: 'cover',
+            width: '100%',
+            height: '100%',
+            borderRadius: '50%',
+        },
+        networkSelected: {
+            width: 24,
+            height: 24,
+            minHeight: 24,
+            minWidth: 24,
+            lineHeight: '24px',
+            background: theme.palette.primary.main,
+            color: '#ffffff',
+            fontSize: 10,
+            opacity: 1,
+            '&:hover': {
+                background: theme.palette.primary.main,
+            },
+        },
+        collectionButton: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: '12px',
+            minWidth: 30,
+            maxHeight: 24,
+        },
+    }
+})
+
+export interface CollectibleListProps extends withClasses<'empty' | 'button'>, CollectibleGridProps {
+    address: SocialAddress<NetworkPluginID>
     collectibles: Array<NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+    error?: string
     loading: boolean
-    collectiblesRetry: () => void
-    error: string | undefined
+    retry(): void
     readonly?: boolean
     hasRetry?: boolean
-    address?: SocialAddress<NetworkPluginID>
 }
-function CollectibleListUI(props: CollectibleListUIProps) {
-    const {
-        provider,
-        wallet,
-        collectibles,
-        loading,
-        collectiblesRetry,
-        error,
-        readonly,
-        hasRetry = true,
-        address,
-    } = props
+
+export function CollectibleList(props: CollectibleListProps) {
+    const { address, collectibles, columns, gap, loading, retry, error, readonly, hasRetry = true } = props
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles({ columns, gap }, { props: { classes: props.classes } })
+    const { Others } = useWeb3State()
 
     return (
-        <CollectibleContext.Provider value={{ collectiblesRetry }}>
+        <CollectibleContext.Provider value={{ collectiblesRetry: retry }}>
             <Box className={classes.list}>
                 {loading && <LoadingSkeleton className={classes.root} />}
                 {error || (collectibles.length === 0 && !loading) ? (
                     <Box className={classes.text}>
                         <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
                         {hasRetry ? (
-                            <Button className={classes.button} variant="text" onClick={() => collectiblesRetry()}>
+                            <Button className={classes.button} variant="text" onClick={retry}>
                                 {t('plugin_collectible_retry')}
                             </Button>
                         ) : null}
                     </Box>
                 ) : (
                     <Box className={classes.root}>
-                        {collectibles.map((token, index) => (
-                            <CollectibleItem
-                                className={classes.collectibleItem}
-                                renderOrder={index}
-                                asset={token}
-                                provider={provider}
-                                wallet={wallet}
-                                readonly={readonly}
-                                key={index}
-                                address={address}
-                            />
-                        ))}
+                        {collectibles.map((token, index) => {
+                            const name = token.collection?.name || token.contract?.name
+                            const uiTokenId = Others?.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
+                            const title = name ? `${name} ${uiTokenId}` : token.metadata?.name ?? ''
+                            return (
+                                <Tooltip
+                                    key={index}
+                                    title={title}
+                                    placement="top"
+                                    disableInteractive
+                                    PopperProps={{
+                                        disablePortal: true,
+                                        popperOptions: {
+                                            strategy: 'absolute',
+                                        },
+                                    }}
+                                    arrow>
+                                    <CollectibleItem
+                                        className={classes.collectibleItem}
+                                        renderOrder={index}
+                                        asset={token}
+                                        provider={SourceType.OpenSea}
+                                        readonly={readonly}
+                                        address={address}
+                                    />
+                                </Tooltip>
+                            )
+                        })}
                     </Box>
                 )}
             </Box>
@@ -182,46 +197,18 @@ function CollectibleListUI(props: CollectibleListUIProps) {
     )
 }
 
-export interface CollectibleListProps extends withClasses<'empty' | 'button'> {
-    address: SocialAddress<NetworkPluginID>
-    collectibles: Array<NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
-    error?: string
-    loading: boolean
-    retry(): void
-}
-
-export function CollectibleList(props: CollectibleListProps) {
-    const { address, collectibles, error, loading, retry } = props
-    const classes = props.classes ?? {}
-
-    return (
-        <CollectibleListUI
-            provider={SourceType.OpenSea}
-            classes={classes}
-            collectibles={collectibles}
-            loading={loading}
-            collectiblesRetry={retry}
-            error={error}
-            readonly
-            address={address}
-            hasRetry={!!address}
-        />
-    )
-}
-
-export function CollectionList({
-    addressName,
-    persona,
-    profile,
-}: {
+interface CollectionListProps {
     addressName: SocialAddress<NetworkPluginID>
     persona?: string
     profile?: SocialIdentity
-}) {
+    gridProps?: CollectibleGridProps
+}
+
+export function CollectionList({ addressName, persona, profile, gridProps = EMPTY_OBJECT }: CollectionListProps) {
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const { classes } = useStyles(gridProps)
     const [selectedCollection, setSelectedCollection] = useState<
-        NonFungibleTokenCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | undefined
+        NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | undefined
     >()
     const { address: account } = addressName
 
@@ -241,23 +228,23 @@ export function CollectionList({
         retry: retryFetchCollectible,
     } = useNonFungibleAssets(addressName.networkSupporterPluginID, undefined, { account })
 
-    const { value: kvValue } = useKV(persona)
     const userId = profile?.identifier?.userId.toLowerCase()
-    const isHiddenAddress = useMemo(() => {
-        return kvValue?.proofs
-            .find((proof) => proof?.platform === NextIDPlatform.Twitter && proof?.identity === userId)
-            ?.content?.[PluginId.Web3Profile]?.hiddenAddresses?.NFTs?.some((x) =>
-                isSameAddress(x.address, addressName.address),
-            )
-    }, [userId, addressName.address, kvValue?.proofs])
 
-    const unHiddenCollectibles = useAvailableCollections(
-        kvValue?.proofs ?? EMPTY_LIST,
-        collectibles,
-        CollectionType.NFTs,
-        userId,
-        account?.toLowerCase(),
-    )
+    const { isHiddenAddress, hiddenList } = useWeb3ProfileHiddenSettings(userId, persona, {
+        address: account,
+        hiddenAddressesKey: 'NFTs',
+        collectionKey: CollectionType.NFTs,
+    })
+
+    const unHiddenCollectibles = useMemo(() => {
+        if (!hiddenList.length) return collectibles
+
+        return differenceWith(
+            collectibles,
+            hiddenList,
+            (collection, id) => `${collection.id}_${collection.tokenId}`.toLowerCase() === id.toLowerCase(),
+        )
+    }, [hiddenList, collectibles])
 
     const allCollectibles = [
         ...trustedNonFungibleTokens.filter((x) => isSameAddress(x.contract?.owner, account)),
@@ -278,18 +265,16 @@ export function CollectionList({
     const collectionsWithName = useMemo(() => {
         const collections = uniqBy(allCollectibles, (x) => x?.contract?.address.toLowerCase())
             .map((x) => x?.collection)
-            .filter((x) => x?.name.length) as Array<
-            NonFungibleTokenCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-        >
-        return collections
+            .filter((x) => x?.name?.length)
+        return collections as Array<NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     }, [allCollectibles.length])
 
     if (!allCollectibles.length && !done && !error && account)
         return (
             <Box className={classes.container}>
-                <Stack spacing={1} direction="row" mt={1.5}>
+                <Stack spacing={1} direction="row" mb={1.5}>
                     <LoadingSkeleton className={classes.root} />
-                    <Box width="30px" />
+                    <div className={classes.sidebar} />
                 </Stack>
             </Box>
         )
@@ -306,13 +291,15 @@ export function CollectionList({
             </Box>
         )
 
+    const showSidebar = collectionsWithName.length > 0
+
     return (
         <Box className={classes.container}>
-            <Stack spacing={1} direction="row" mt={1.5}>
+            <Stack direction="row">
                 <Box sx={{ flexGrow: 1 }}>
                     <Box>
                         {selectedCollection && (
-                            <Box display="flex" alignItems="center">
+                            <Box display="flex" alignItems="center" ml={2}>
                                 <CollectionIcon collection={selectedCollection} />
                                 <Typography
                                     className={classes.name}
@@ -329,6 +316,7 @@ export function CollectionList({
                             retry={retryFetchCollectible}
                             collectibles={renderCollectibles}
                             loading={renderCollectibles.length === 0}
+                            {...gridProps}
                         />
                     </Box>
                     {error && !done && <RetryHint hint={false} retry={nextPage} />}
@@ -339,30 +327,28 @@ export function CollectionList({
                         {!done && <LoadingBase />}
                     </ElementAnchor>
                 </Box>
-                <Box width="30px">
-                    {collectionsWithName.length ? (
-                        <Box>
-                            <Box className={classes.collectionButton}>
-                                <AllButton
-                                    className={classes.networkSelected}
-                                    onClick={() => setSelectedCollection(undefined)}>
-                                    ALL
-                                </AllButton>
-                            </Box>
-                            {collectionsWithName.map((x, i) => (
-                                <Box key={i} className={classes.collectionButton}>
-                                    <CollectionIcon
-                                        selectedCollection={selectedCollection?.address}
-                                        collection={x}
-                                        onClick={() => {
-                                            setSelectedCollection(x)
-                                        }}
-                                    />
-                                </Box>
-                            ))}
+                {showSidebar ? (
+                    <div className={classes.sidebar}>
+                        <Box className={classes.collectionButton}>
+                            <AllButton
+                                className={classes.networkSelected}
+                                onClick={() => setSelectedCollection(undefined)}>
+                                ALL
+                            </AllButton>
                         </Box>
-                    ) : null}
-                </Box>
+                        {collectionsWithName.map((x, i) => (
+                            <Box key={i} className={classes.collectionButton}>
+                                <CollectionIcon
+                                    selectedCollection={selectedCollection?.address}
+                                    collection={x}
+                                    onClick={() => {
+                                        setSelectedCollection(x)
+                                    }}
+                                />
+                            </Box>
+                        ))}
+                    </div>
+                ) : null}
             </Stack>
         </Box>
     )

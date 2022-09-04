@@ -3,14 +3,13 @@ import { Icons } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../locales'
 import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
-import type { CollectionTypes, WalletTypes } from '../types'
 import { ChainId, explorerResolver, NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Empty } from './Empty'
 import { CollectionList } from './CollectionList'
 import { useMemo, useState } from 'react'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { PersonaImageIcon } from '@masknet/shared'
+import { PersonaImageIcon, CollectionTypes, WalletTypes } from '@masknet/shared'
 import { CurrentStatusMap, CURRENT_STATUS } from '../../constants'
 
 const useStyles = makeStyles()((theme) => {
@@ -63,7 +62,7 @@ const useStyles = makeStyles()((theme) => {
             color: theme.palette.maskColor.second,
             cursor: 'pointer',
         },
-        loadingFailImage: {
+        fallbackImage: {
             minHeight: '0 !important',
             maxWidth: '126px',
             transform: 'translateY(10px)',

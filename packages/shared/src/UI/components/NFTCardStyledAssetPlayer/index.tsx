@@ -9,7 +9,6 @@ import { AssetPlayer } from '../AssetPlayer'
 import { useIsImageURL } from '../../../hooks'
 import { ImageIcon } from '../ImageIcon'
 import { Image } from '../Image'
-import { useImageURL } from '../../../hooks/useImageURL'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -20,9 +19,16 @@ const useStyles = makeStyles()((theme) => ({
         width: 120,
         overflow: 'hidden',
     },
+    imageContainer: {
+        height: '100%',
+    },
     loadingPlaceholder: {
         height: 160,
         width: 120,
+    },
+    fallbackImage: {
+        height: '64px !important',
+        width: '64px !important',
     },
     loadingIcon: {
         width: 30,
@@ -42,7 +48,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface Props extends withClasses<'loadingFailImage' | 'iframe' | 'wrapper' | 'loadingPlaceholder' | 'imgWrapper'> {
+interface Props extends withClasses<'fallbackImage' | 'iframe' | 'wrapper' | 'loadingPlaceholder' | 'imgWrapper'> {
     chainId?: Web3Helper.ChainIdAll
     tokenId?: string
     contractAddress?: string
@@ -86,7 +92,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
             chainId,
         },
     )
-    const urlComputed = useImageURL(url || tokenDetailed?.metadata?.imageURL || tokenDetailed?.metadata?.mediaURL)
+    const urlComputed = url || tokenDetailed?.metadata?.imageURL || tokenDetailed?.metadata?.mediaURL
     const { value: isImageURL } = useIsImageURL(urlComputed)
 
     const fallbackImageURL =
@@ -104,7 +110,16 @@ export function NFTCardStyledAssetPlayer(props: Props) {
     if (isImageURL || isImageOnly) {
         return (
             <div className={classes.imgWrapper}>
-                <Image width="100%" height="100%" style={{ objectFit: 'cover' }} src={urlComputed} />
+                <Image
+                    classes={{
+                        fallbackImage: classes.fallbackImage,
+                        container: classes.imageContainer,
+                    }}
+                    width="100%"
+                    height="100%"
+                    style={{ objectFit: 'cover' }}
+                    src={urlComputed}
+                />
                 {showNetwork && <ImageIcon icon={networkIcon} size={20} classes={{ icon: classes.networkIcon }} />}
             </div>
         )
@@ -135,9 +150,9 @@ export function NFTCardStyledAssetPlayer(props: Props) {
                 iframe: classNames(classes.wrapper, classes.iframe),
                 errorPlaceholder: classes.wrapper,
                 loadingPlaceholder: classes.wrapper,
-                loadingFailImage: classes.loadingFailImage,
+                fallbackImage: classes.fallbackImage,
                 loadingIcon: classes.loadingIcon,
-                errorIcon: classes.loadingFailImage,
+                errorIcon: classes.fallbackImage,
             }}
             showNetwork={showNetwork}
             networkIcon={networkIcon}

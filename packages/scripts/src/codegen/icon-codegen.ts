@@ -169,7 +169,7 @@ async function generateIcons() {
             jsc: {
                 parser: { jsx: true, syntax: 'ecmascript' },
                 transform: { react: { useBuiltins: true, runtime: 'automatic' } },
-                target: 'es2021',
+                target: 'es2022',
             },
         }).then(({ code }) => writeFile(CODE_FILE + '-jsx.js', code)),
         writeFile(CODE_FILE + '-jsx.d.ts', asJSX.dts.join('\n')),

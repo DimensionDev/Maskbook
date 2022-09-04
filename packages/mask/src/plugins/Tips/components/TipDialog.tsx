@@ -77,7 +77,7 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(3),
         lineHeight: '30px',
     },
-    loadingFailImage: {
+    fallbackImage: {
         width: 64,
         height: 64,
     },

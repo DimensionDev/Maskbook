@@ -1,5 +1,5 @@
-import type { WalletTypes } from '../types'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
+import type { WalletTypes } from '@masknet/shared'
 import { TabPanel } from '@mui/lab'
 import { WalletSwitch } from './WalletSwitch'
 import { isSameAddress } from '@masknet/web3-shared-base'

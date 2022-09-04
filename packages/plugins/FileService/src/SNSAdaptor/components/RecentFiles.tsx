@@ -3,9 +3,9 @@ import { makeStyles } from '@masknet/theme'
 import formatDateTime from 'date-fns/format'
 import { File } from 'react-feather'
 import { useNavigate } from 'react-router-dom'
-import { useI18N } from '../../locales/i18n_generated'
-import { FileRouter } from '../../constants'
-import type { FileInfo } from '../../types'
+import { useI18N } from '../../locales/i18n_generated.js'
+import { FileRouter } from '../../constants.js'
+import type { FileInfo } from '../../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

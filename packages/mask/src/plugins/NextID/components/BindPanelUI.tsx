@@ -113,8 +113,7 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                                     1
                                 </Typography>
                                 <Typography variant="body2" component="span">
-                                    {' '}
-                                    / 2{' '}
+                                    {' / 2 '}
                                 </Typography>
                             </Typography>
                         </Stack>
@@ -149,8 +148,7 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                                     2
                                 </Typography>
                                 <Typography component="span" variant="body2">
-                                    {' '}
-                                    / 2{' '}
+                                    {' / 2 '}
                                 </Typography>
                             </Typography>
                         </Stack>

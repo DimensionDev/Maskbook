@@ -1,4 +1,4 @@
-import { formatEthereumAddress, explorerResolver, resolveIPFSLink, formatPercentage } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, explorerResolver, formatPercentage } from '@masknet/web3-shared-evm'
 import { Avatar, Badge, Box, Link, List, ListItem, Typography } from '@mui/material'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import classNames from 'classnames'
@@ -13,7 +13,7 @@ import { LoadingCard } from './LoadingCard'
 import { LoadingFailCard } from './LoadingFailCard'
 import { SnapshotCard } from './SnapshotCard'
 import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID, resolveIPFSLink } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {

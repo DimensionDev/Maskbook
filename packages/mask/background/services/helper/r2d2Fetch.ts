@@ -1,4 +1,4 @@
-import urlcat from 'urlcat'
+import { isIpfsCid, resolveCORSLink, resolveIPFSLink } from '@masknet/web3-shared-base'
 
 const R2D2_ROOT_URL = 'r2d2.to'
 
@@ -45,15 +45,8 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
     const info = new Request(input, init)
     const url = info.url
     const u = new URL(url, location.href)
-
     // ipfs
-    if (url.startsWith('ipfs://'))
-        return originalFetch(
-            urlcat('https://cors.r2d2.to?https://pz-tpsfpq.meson.network/ipfs/:ipfs', {
-                ipfs: url.replace('ipfs://', ''),
-            }),
-            info,
-        )
+    if (url.startsWith('ipfs://') || isIpfsCid(url)) return originalFetch(resolveCORSLink(resolveIPFSLink(url))!, info)
 
     // r2d2
     if (url.includes('r2d2.to')) return originalFetch(info, init)

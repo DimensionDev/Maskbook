@@ -62,7 +62,7 @@
     "@masknet/cli": "workspace:*",
     "@masknet/serializer": "workspace:*",
     "@nice-labs/git-rev": "^3.5.0",
-    "@swc/core": "1.2.223",
+    "@swc/core": "1.2.245",
     "@types/lodash-es": "^4.17.6",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/experimental-utils": "^5.33.0",
@@ -124,10 +124,11 @@
       "arweave@1.11.4": "patches/arweave@1.11.4.patch",
       "@snapshot-labs/snapshot.js@0.4.12": "patches/@snapshot-labs__snapshot.js@0.4.12.patch",
       "@ceramicnetwork/rpc-transport@0.3.1": "patches/@ceramicnetwork__rpc-transport@0.3.1.patch",
-      "cross-blob@3.0.1": "patches/cross-blob@3.0.1.patch",
       "web3-providers-http@1.7.4": "patches/web3-providers-http@1.7.4.patch",
       "gulp@4.0.2": "patches/gulp@4.0.2.patch",
-      "urlcat@2.0.4": "patches/urlcat@2.0.4.patch"
+      "urlcat@2.0.4": "patches/urlcat@2.0.4.patch",
+      "ipfs-http-client@57.0.3": "patches/ipfs-http-client@57.0.3.patch",
+      "@ethersphere/bee-js@5.0.0": "patches/@ethersphere__bee-js@5.0.0.patch"
     }
   }
 }

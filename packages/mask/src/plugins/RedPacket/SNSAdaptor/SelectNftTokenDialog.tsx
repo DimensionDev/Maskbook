@@ -214,7 +214,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         height: 15,
         color: '#1C68F3',
     },
-    loadingFailImage: {
+    fallbackImage: {
         minHeight: '0 !important',
         maxWidth: 'none',
         transform: 'translateY(10px)',
@@ -723,7 +723,7 @@ function NFTCard(props: NFTCardProps) {
                 renderOrder={renderOrder}
                 chainId={token.contract?.chainId}
                 classes={{
-                    loadingFailImage: classes.loadingFailImage,
+                    fallbackImage: classes.fallbackImage,
                     iframe: classes.iframe,
                     imgWrapper: classes.assetImgWrapper,
                 }}

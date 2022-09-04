@@ -1,6 +1,7 @@
+import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
 import { Skeleton, Typography } from '@mui/material'
-import type { HTMLProps } from 'react'
+import { forwardRef, HTMLProps } from 'react'
 import { CollectibleCard, CollectibleCardProps } from './CollectibleCard'
 
 const useStyles = makeStyles()((theme) => ({
@@ -9,7 +10,6 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
         position: 'relative',
-        padding: theme.spacing(1, 0),
     },
     collectibleCard: {
         width: '100%',
@@ -33,28 +33,31 @@ const useStyles = makeStyles()((theme) => ({
 
 interface CollectibleItemProps extends HTMLProps<HTMLDivElement>, CollectibleCardProps {}
 
-export function CollectibleItem(props: CollectibleItemProps) {
-    const { provider, wallet, asset, readonly, renderOrder, address, className, ...rest } = props
+export const CollectibleItem = forwardRef<HTMLDivElement, CollectibleItemProps>((props: CollectibleItemProps, ref) => {
+    const { provider, asset, readonly, renderOrder, address, className, ...rest } = props
     const { classes, cx } = useStyles()
+    const { Others } = useWeb3State()
+
+    const uiTokenId = Others?.formatTokenId(asset.tokenId, 4) ?? `#${asset.tokenId}`
+
     return (
-        <div className={cx(classes.card, className)} {...rest}>
+        <div className={cx(classes.card, className)} {...rest} ref={ref}>
             <CollectibleCard
                 className={classes.collectibleCard}
                 asset={asset}
                 provider={provider}
-                wallet={wallet}
                 readonly={readonly}
                 renderOrder={renderOrder}
                 address={address}
             />
             <div className={classes.description}>
                 <Typography className={classes.name} color="textPrimary" variant="body2">
-                    {asset.metadata?.name}
+                    {uiTokenId}
                 </Typography>
             </div>
         </div>
     )
-}
+})
 
 interface SkeletonProps extends HTMLProps<HTMLDivElement> {}
 export function CollectibleItemSkeleton({ className, ...rest }: SkeletonProps) {

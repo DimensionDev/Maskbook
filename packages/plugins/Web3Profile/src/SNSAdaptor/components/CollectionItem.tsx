@@ -41,7 +41,7 @@ export function CollectionItem(props: CollectionItemProps) {
             <div>
                 <Typography style={{ fontWeight: '700' }}>{title}</Typography>
                 <Typography>
-                    <span style={{ fontWeight: '700' }}>{walletsNum}</span> {t.wallets()}{' '}
+                    <span style={{ fontWeight: '700' }}>{walletsNum}</span> {`${t.wallets()} `}
                     <span style={{ fontWeight: '700' }}>{collectionNum}</span> {title}
                 </Typography>
             </div>

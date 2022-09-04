@@ -3,15 +3,14 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Button, Grid, Typography } from '@mui/material'
 import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { formatBalance, isSameAddress, isZero, NetworkPluginID, rightShift, TokenType } from '@masknet/web3-shared-base'
+import { formatBalance, isSameAddress, isZero, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import type { ChainId, Web3 } from '@masknet/web3-shared-evm'
 import { ProviderIconURLs } from './IconURL'
 import { useI18N } from '../../../utils'
 import { ProtocolType, SavingsProtocol, TabType } from '../types'
 import { useAccount, useFungibleAssets, useWeb3 } from '@masknet/plugin-infra/web3'
-import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useCallback, useMemo } from 'react'
-import { PluginTraderMessages } from '../../Trader/messages'
 import { LDO_PAIRS } from '../constants'
 
 const useStyles = makeStyles()((theme, props) => ({
@@ -109,7 +108,7 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
     const { value: assets, loading: getAssetsLoading } = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
         chainId,
     })
-    const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
+
     // Only fetch protocol APR and Balance on chainId change
     const { loading } = useAsync(async () => {
         await Promise.all(
@@ -123,28 +122,14 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
     const onConvertClick = useCallback(() => {
         const ETH = LDO_PAIRS[0][0]
         const sETH = LDO_PAIRS[0][1]
-        openSwapDialog({
+        CrossIsolationMessages.events.swapDialogUpdate.sendToLocal({
             open: true,
             traderProps: {
-                defaultInputCoin: {
-                    id: sETH.address,
-                    name: sETH.name ?? '',
-                    symbol: sETH.symbol ?? '',
-                    contract_address: sETH.address,
-                    decimals: sETH.decimals,
-                    type: TokenType.Fungible,
-                },
-                defaultOutputCoin: {
-                    id: ETH.address,
-                    name: ETH.name ?? '',
-                    symbol: ETH.symbol ?? '',
-                    contract_address: ETH.address,
-                    decimals: ETH.decimals,
-                    type: TokenType.Fungible,
-                },
+                defaultInputCoin: sETH,
+                defaultOutputCoin: ETH,
             },
         })
-    }, [openSwapDialog])
+    }, [LDO_PAIRS])
 
     const renderProtocols = useMemo(() => {
         if (tab === TabType.Deposit) return protocols
@@ -239,7 +224,7 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
                 </div>
             ) : (
                 <div className={classes.placeholder}>
-                    <Icons.Direct size={36} className={classes.direct} />
+                    <Icons.EmptySimple size={36} className={classes.direct} />
                 </div>
             )}
         </Box>

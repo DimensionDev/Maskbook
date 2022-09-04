@@ -8,6 +8,7 @@ import { E2EUnavailableReason } from './CompositionUI'
 import { Icons } from '@masknet/icons'
 import { EncryptionTargetType } from '@masknet/shared-base'
 import { unreachable } from '@dimensiondev/kit'
+import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     optionTitle: {
@@ -80,8 +81,6 @@ const useStyles = makeStyles()((theme) => ({
 export interface EncryptionTargetSelectorProps {
     target: EncryptionTargetType
     e2eDisabled: E2EUnavailableReason | undefined
-    onCreatePersona(): void
-    onConnectPersona(): void
     onChange(v: EncryptionTargetType): void
     selectedRecipientLength: number
 }
@@ -93,16 +92,20 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
         props.e2eDisabled && props.e2eDisabled !== E2EUnavailableReason.NoLocalKey ? (
             <div className={classes.flex}>
                 <Typography className={classes.mainTitle}>{t('persona_required')}</Typography>
-                <Typography
-                    className={classes.create}
-                    onClick={() => {
-                        if (props.e2eDisabled === E2EUnavailableReason.NoLocalKey) return
-                        props.e2eDisabled === E2EUnavailableReason.NoPersona
-                            ? props.onCreatePersona()
-                            : props.onConnectPersona()
-                    }}>
-                    {props.e2eDisabled === E2EUnavailableReason.NoPersona ? t('create') : t('connect')}
-                </Typography>
+                <ConnectPersonaBoundary
+                    customHint
+                    handlerPosition="top-right"
+                    enableVerify={false}
+                    createConfirm={false}>
+                    {(s) => {
+                        if (!s.hasPersona) return <Typography className={classes.create}>{t('create')}</Typography>
+                        // TODO: how to handle verified
+                        if (!s.connected || !s.verified)
+                            return <Typography className={classes.create}>{t('connect')}</Typography>
+
+                        return null
+                    }}
+                </ConnectPersonaBoundary>
             </div>
         ) : null
     const noLocalKeyMessage = props.e2eDisabled === E2EUnavailableReason.NoLocalKey && (

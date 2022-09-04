@@ -54,21 +54,27 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 400,
         color: theme.palette.maskColor.publicMain,
     },
+    unset: {
+        color: 'unset',
+    },
 }))
 interface NFTPropertiesCardProps {
     asset: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
     rank?: number
+    timeline?: boolean
 }
 
 export function NFTPropertiesCard(props: NFTPropertiesCardProps) {
-    const { asset, rank } = props
-    const { classes } = useStyles()
+    const { asset, rank, timeline } = props
+    const { classes, cx } = useStyles()
     const { t } = useI18N()
 
     return (
         <div className={classes.wrapper}>
             <div className={classes.titleBox}>
-                <Typography className={classes.title}>{t('plugin_collectible_properties')}</Typography>
+                <Typography className={timeline ? cx(classes.title, classes.unset) : classes.title}>
+                    {t('plugin_collectible_properties')}
+                </Typography>
                 <div className={classes.rankBox}>
                     {/* gem rank */}
                     <NFTRank rank={rank} />

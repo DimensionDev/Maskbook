@@ -15,12 +15,8 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: theme.spacing(6),
-        height: 380,
+        height: 300,
         flexDirection: 'column',
-    },
-    card: {
-        marginTop: 16,
     },
 }))
 
@@ -28,13 +24,13 @@ export const StatusBox: FC<Props> = ({ loading, empty, description }) => {
     const { classes } = useStyles()
     if (loading) {
         return (
-            <Box margin="16px 0 0 16px">
+            <>
                 {range(3).map((i) => (
-                    <Box className={classes.card} key={i}>
-                        <Skeleton animation="wave" variant="rectangular" width={565} height={125} />
+                    <Box mb={2} key={i}>
+                        <Skeleton animation="wave" variant="rectangular" height={125} />
                     </Box>
                 ))}
-            </Box>
+            </>
         )
     }
 
@@ -42,11 +38,7 @@ export const StatusBox: FC<Props> = ({ loading, empty, description }) => {
         return (
             <Box className={classes.statusBox}>
                 <Icons.EmptySimple size={32} />
-                <Typography
-                    marginTop="10px"
-                    color={(theme) => theme.palette.maskColor.second}
-                    fontSize="14px"
-                    fontWeight={400}>
+                <Typography color={(theme) => theme.palette.maskColor.second} fontSize="14px" fontWeight={400}>
                     {description}
                 </Typography>
             </Box>

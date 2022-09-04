@@ -1,7 +1,6 @@
 /// <reference types="@masknet/global-types/firefox" />
 /// <reference types="@masknet/global-types/flag" />
 
-import urlcat from 'urlcat'
 import {
     APE,
     BUSD,
@@ -25,15 +24,9 @@ export async function fetchJSON<T = unknown>(
         fetch: typeof globalThis.fetch
     },
 ): Promise<T> {
-    const fetch = options?.fetch ?? globalThis.r2d2Fetch ?? globalThis.fetch
+    const fetch = options?.fetch ?? globalThis.fetch
     const res = await fetch(requestInfo, requestInit)
     return res.json()
-}
-
-const CORS_PROXY = 'https://cors.r2d2.to'
-
-export function courier(url: string) {
-    return urlcat(`${CORS_PROXY}?:url`, { url })
 }
 
 export function getAllEVMNativeAssets(): Array<FungibleAsset<ChainId, SchemaType>> {
@@ -41,6 +34,15 @@ export function getAllEVMNativeAssets(): Array<FungibleAsset<ChainId, SchemaType
         ...createNativeToken(x.chainId),
         balance: '0',
     }))
+}
+
+export function getJSON<T>(json?: string): T | undefined {
+    if (!json) return
+    try {
+        return JSON.parse(json) as T
+    } catch {
+        return
+    }
 }
 
 export function getPaymentToken(chainId: ChainId, token?: { name?: string; symbol?: string; address?: string }) {

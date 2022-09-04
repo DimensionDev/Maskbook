@@ -25,7 +25,7 @@ import { WalletDescription } from './WalletDescription'
 import {
     isSameAddress,
     NetworkPluginID,
-    resolveNextIdPlatformPluginId,
+    resolveNextID_NetworkPluginID,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
 import { WalletMenuItem } from './WalletMenuItem'
@@ -75,7 +75,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         const isVerifiedAccount = verifiedWallets.some((x) => isSameAddress(x.identity, account))
 
         const pluginIdByDefaultVerifiedWallet = defaultVerifiedWallet
-            ? resolveNextIdPlatformPluginId(defaultVerifiedWallet?.platform)
+            ? resolveNextID_NetworkPluginID(defaultVerifiedWallet?.platform)
             : undefined
 
         const isNextIdWallet = !account || !isSameAddress(account, expectedAddress)

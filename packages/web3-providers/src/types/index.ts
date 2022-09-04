@@ -13,11 +13,6 @@ export * from './RiskWarning'
 export * from './Security'
 export * from './Storage'
 export * from './Token'
+export * from './TokenList'
 export * from './Trending'
 export * from './Twitter'
-export * from './index'
-
-export enum NonFungibleMarketplace {
-    OpenSea = 'OpenSea',
-    LooksRare = 'LooksRare',
-}

@@ -67,6 +67,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
             }
         })(),
     ],
+    SettingTabs: [
+        {
+            ID: PluginId.Web3Profile,
+            label: 'Web3Profile',
+            priority: 2,
+        },
+    ],
 }
 
 export default sns

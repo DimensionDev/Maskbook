@@ -1,7 +1,7 @@
 import { formatFileSize } from '@dimensiondev/kit'
 import { Typography, LinearProgress, Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../locales/i18n_generated'
+import { useI18N } from '../../locales/i18n_generated.js'
 
 const useStyles = makeStyles()({
     container: {

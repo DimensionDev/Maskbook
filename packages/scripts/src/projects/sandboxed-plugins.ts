@@ -27,7 +27,7 @@ export async function watchSandboxedPlugin() {
 export async function buildSandboxedPluginConfigurable(distPath: string, isProduction: boolean) {
     distPath = join(distPath, 'sandboxed-modules/')
     await ensureDir(distPath)
-    const { local, formal } = await readCombinedPluginList()
+    const { local, normal } = await readCombinedPluginList()
 
     if (isProduction) local.length = 0
 
@@ -36,7 +36,7 @@ export async function buildSandboxedPluginConfigurable(distPath: string, isProdu
     const id = new Set<string>()
     const localID = new Set<string>()
 
-    for (const spec of formal) {
+    for (const spec of normal) {
         const manifestPath = resolveManifestPath(spec)
         if (builders.has(manifestPath)) {
             throw new TypeError(`Multiple specifier points to the same manifest file. ${manifestPath}`)
@@ -54,7 +54,7 @@ export async function buildSandboxedPluginConfigurable(distPath: string, isProdu
                 id: json.id,
                 manifestRoot: manifestPath.slice(0, -'/mask-manifest.json'.length),
                 distPath,
-                prefix: 'plugin-',
+                origin: 'plugin-' + json.id,
                 onJS: (id, relative) => mv3PreloadList.add(removeMJSSuffix(`${id}/${relative}`)),
             }),
         )
@@ -74,17 +74,17 @@ export async function buildSandboxedPluginConfigurable(distPath: string, isProdu
             createBuilder({
                 id: json.id,
                 manifestRoot: manifestPath.slice(0, -'/mask-manifest.json'.length),
-                prefix: 'local-plugin-',
+                origin: 'local-plugin-' + json.id,
                 distPath,
                 onJS: (id, relative) => mv3PreloadList.add(removeMJSSuffix(`local-${id}/${relative}`)),
             }),
         )
     }
 
-    const internalList: Record<string, { formal?: boolean; local?: boolean }> = {}
+    const internalList: Record<string, { normal?: boolean; local?: boolean }> = {}
     for (const _ of id) {
         internalList[_] ||= {}
-        internalList[_].formal = true
+        internalList[_].normal = true
     }
     for (const _ of localID) {
         internalList[_] ||= {}
@@ -126,19 +126,19 @@ watchTask(buildSandboxedPlugin, watchSandboxedPlugin, 'sbp', 'Build sandboxed pl
 interface BuilderOptions {
     id: string
     manifestRoot: string
-    prefix: string
+    origin: string
     distPath: string
     onJS(id: string, relative: string): void
 }
-function createBuilder({ id, manifestRoot, prefix, distPath, onJS }: BuilderOptions) {
+function createBuilder({ id, manifestRoot, distPath, onJS, origin }: BuilderOptions) {
     if (id.includes('..') || id.includes('/')) throw new TypeError(`Invalid plugin: ${id}`)
     function compile() {
         return src(['./**/*'], {
             since: lastRun(compile),
             cwd: manifestRoot,
         })
-            .pipe(new TransformStream(id, onJS))
-            .pipe(dest(prefix + id, { cwd: distPath }))
+            .pipe(new TransformStream(origin, onJS))
+            .pipe(dest(origin, { cwd: distPath }))
     }
     return compile
 }
@@ -151,14 +151,14 @@ async function readCombinedPluginList() {
     const prodURL = new URL('./plugins.json', sandboxedPlugins)
     const localURL = new URL('./plugins-local.json', sandboxedPlugins)
 
-    const formal = await readFile(prodURL, 'utf8').then(parseJSONc)
+    const normal = await readFile(prodURL, 'utf8').then(parseJSONc)
     const local = await readFile(localURL, 'utf8')
         .then(parseJSONc)
         .catch(() => [])
 
-    assertShape(formal, prodURL)
+    assertShape(normal, prodURL)
     assertShape(local, localURL)
-    return { formal, local }
+    return { normal, local }
 }
 
 function assertShape(data: unknown, file: URL): asserts data is string[] {
@@ -183,7 +183,7 @@ function resolveManifestPath(spec: string) {
     }
 }
 class TransformStream extends Transform {
-    constructor(public id: string, public onJS: (id: string, relative: string) => void) {
+    constructor(public origin: string, public onJS: (id: string, relative: string) => void) {
         super({ objectMode: true, defaultEncoding: 'utf-8' })
     }
     wasm = require.resolve('@masknet/static-module-record-swc')
@@ -196,8 +196,8 @@ class TransformStream extends Transform {
             return callback(null, file)
         }
         const relative = file.relative.replace(/\\/g, '/')
-        this.onJS(this.id, file.relative)
-        const sandboxedPath = 'mask-modules://' + this.id + '/' + relative
+        this.onJS(this.origin, file.relative)
+        const sandboxedPath = 'mask-modules://' + this.origin + '/' + relative
         const options = {
             template: {
                 type: 'callback',
