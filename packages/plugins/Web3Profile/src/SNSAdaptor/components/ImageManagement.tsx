@@ -1,12 +1,12 @@
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../locales/index.js'
 import { WalletAssetsCard } from './WalletAssets.js'
-import { EMPTY_LIST, PersonaInformation, PopupRoutes } from '@masknet/shared-base'
+import {CrossIsolationMessages, EMPTY_LIST, PersonaInformation, PopupRoutes } from '@masknet/shared-base'
 import { ImageListDialog } from './ImageList.js'
-import { useState } from 'react'
+import {useCallback, useState } from 'react'
 import { InjectedDialog, WalletTypes } from '@masknet/shared'
 import { Box, Button, DialogContent } from '@mui/material'
-import type { IdentityResolved } from '@masknet/plugin-infra'
+import type { IdentityResolved, PluginID } from '@masknet/plugin-infra'
 import type { AccountType } from '../types.js'
 import WalletSetting from './WalletSetting.js'
 import { Empty } from './Empty.js'
@@ -108,8 +108,16 @@ export function ImageManagement(props: ImageManagementProps) {
     } = props
     const [settingAddress, setSettingAddress] = useState<WalletTypes>()
     const [imageListOpen, setImageListOpen] = useState(false)
-    const [walletSettingOpen, setWalletSettingOpen] = useState(false)
     const addresses = getAddressesByStatus(accountList, status)
+
+    const handleOpenSettingDialog = useCallback(
+        () =>
+            CrossIsolationMessages.events.PluginSettingsDialogUpdate.sendToLocal({
+                open: true,
+                targetTab: PluginId.Web3Profile,
+            }),
+        [],
+    )
 
     const hasConnectedWallets = allWallets.length > 0
 
@@ -122,7 +130,7 @@ export function ImageManagement(props: ImageManagementProps) {
             classes={{ dialogContent: classes.content }}
             fullWidth={false}
             open={open}
-            titleTail={<Icons.Gear className={classes.settingIcon} onClick={() => setWalletSettingOpen(true)} />}
+            titleTail={<Icons.Gear className={classes.settingIcon} onClick={handleOpenSettingDialog} />}
             onClose={onClose}>
             <DialogContent className={classes.content}>
                 <div>
@@ -165,16 +173,6 @@ export function ImageManagement(props: ImageManagementProps) {
                         addresses?.find((address) => isSameAddress(address?.address, settingAddress?.address))
                             ?.collections
                     }
-                />
-                <WalletSetting
-                    wallets={allWallets}
-                    accountList={accountList}
-                    open={walletSettingOpen}
-                    title={CurrentStatusMap[status].title}
-                    accountId={accountId}
-                    onClose={() => setWalletSettingOpen(false)}
-                    currentPersona={currentPersona}
-                    retryData={getWalletHiddenRetry}
                 />
             </DialogContent>
         </InjectedDialog>

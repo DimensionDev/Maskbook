@@ -15,7 +15,7 @@ import {
 import { activatedSocialNetworkUI } from '../../../../social-network/index.js'
 import { useProfilePublicKey } from '../../hooks/useProfilePublicKey.js'
 import { useI18N } from '../../locales/index.js'
-import { PluginNextIDMessages } from '../../messages.js'
+import { PluginTipsMessages } from '../../messages.js'
 import type { TipsAccount } from '../../types/index.js'
 import { useTipsAccounts } from './useTipsAccounts.js'
 
@@ -101,7 +101,7 @@ export const TipButton: FC<Props> = ({
             evt.preventDefault()
             if (disabled) return
             if (!tipsAccounts.length || !receiverUserId) return
-            PluginNextIDMessages.tipTask.sendToLocal({
+            PluginTipsMessages.tipTask.sendToLocal({
                 recipient,
                 recipientSnsId: receiverUserId,
                 addresses: tipsAccounts,
@@ -111,7 +111,7 @@ export const TipButton: FC<Props> = ({
     )
 
     useEffect(() => {
-        PluginNextIDMessages.tipTaskUpdate.sendToLocal({
+        PluginTipsMessages.tipTaskUpdate.sendToLocal({
             recipient,
             recipientSnsId: receiverUserId,
             addresses: tipsAccounts,

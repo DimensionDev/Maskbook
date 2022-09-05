@@ -1,25 +1,27 @@
 import { Icons } from '@masknet/icons'
 import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { Typography, Box } from '@mui/material'
-import { memo, useCallback, useMemo, useState } from 'react'
-import { BindingProof, ECKeyIdentifier, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
-import { PluginID } from '@masknet/plugin-infra'
+import { Typography } from '@mui/material'
+import { memo, useCallback, useState } from 'react'
+import { BindingProof, ECKeyIdentifier, NextIDPlatform } from '@masknet/shared-base'
+import { useHiddenAddressSetting, useWeb3State } from '@masknet/plugin-infra/web3'
+import { PluginId } from '@masknet/plugin-infra'
 import { WalletSettingCard } from '@masknet/shared'
 import { useAsyncFn, useUpdateEffect } from 'react-use'
 
-import { useTipsSetting } from '../hooks/useTipsSetting.js'
-import type { TipsSettingType } from '../types/index.js'
-import { useI18N } from '../locales/index.js'
-import { SettingActions } from './components/SettingActions.js'
-import { PluginTipsMessages } from '../messages.js'
-import { differenceWith } from 'lodash-unified'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { SettingActions } from './SettingActions'
+import { useI18N } from '../../../locales'
+// import { PluginNextIDMessages } from '../messages'
+
+// TODO: move to shared
+export type PublicWalletSettingType = {
+    hiddenAddresses?: string[]
+    defaultAddress?: string
+}
 
 const useStyles = makeStyles()((theme) => ({
     container: {
         padding: 16,
-        minHeight: 460,
+        minHeight: 424,
         display: 'flex',
         flexDirection: 'column',
     },
@@ -27,9 +29,9 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1.5),
         background: theme.palette.maskColor.bg,
         display: 'flex',
-        justifyContent: 'space-between',
         alignItems: 'center',
         borderRadius: 4,
+        columnGap: 6,
     },
     alertTitle: {
         fontSize: 14,
@@ -58,42 +60,34 @@ const useStyles = makeStyles()((theme) => ({
         gap: 12,
         '& > *': {
             flex: 1,
-            maxWidth: 'calc(50% - 22px)',
         },
     },
 }))
-interface TipsSettingProps {
+interface PublicWalletSettingProps {
     onClose: () => void
     bindingWallets?: BindingProof[]
     currentPersona?: ECKeyIdentifier
 }
 
-export const TipsSetting = memo<TipsSettingProps>(({ onClose, bindingWallets, currentPersona }) => {
+export const PublicWalletSetting = memo<PublicWalletSettingProps>(({ onClose, bindingWallets, currentPersona }) => {
     const { classes } = useStyles()
     const t = useI18N()
     const { Storage } = useWeb3State()
 
     const [addresses, setAddresses] = useState<string[]>([])
-    const [showAlert, setShowAlert] = useState(true)
+
     const { showSnackbar } = useCustomSnackbar()
 
-    const { value: TipsSetting, loading } = useTipsSetting(currentPersona?.publicKeyAsHex)
+    const { value: hiddenAddress, loading } = useHiddenAddressSetting(
+        PluginId.Web3Profile,
+        currentPersona?.publicKeyAsHex,
+    )
 
     const onSwitchChange = useCallback((address: string) => {
         setAddresses((prev) => {
             return prev.some((x) => address === x) ? prev.filter((x) => address !== x) : [...prev, address]
         })
     }, [])
-
-    const disabled = useMemo(() => {
-        // If `hiddenAddresses` setting length is different from `addresses`
-        if (TipsSetting?.hiddenAddresses?.length !== addresses.length) return false
-
-        // If `addresses` is different from setting
-        if (differenceWith(TipsSetting?.hiddenAddresses ?? EMPTY_LIST, addresses, isSameAddress).length) return false
-
-        return true
-    }, [addresses, TipsSetting?.hiddenAddresses])
 
     const [{ loading: confirmLoading }, onConfirm] = useAsyncFn(async () => {
         try {
@@ -103,9 +97,9 @@ export const TipsSetting = memo<TipsSettingProps>(({ onClose, bindingWallets, cu
                 NextIDPlatform.NextID,
                 currentPersona,
             )
-            const prevResult = storage.get<TipsSettingType>(PluginID.Tips)
+            const prevResult = storage.get<PublicWalletSettingType>(PluginId.Web3Profile)
 
-            await storage.set<TipsSettingType>(PluginID.Tips, {
+            await storage.set<PublicWalletSettingType>(PluginId.Web3Profile, {
                 ...prevResult,
                 hiddenAddresses: addresses,
             })
@@ -115,7 +109,7 @@ export const TipsSetting = memo<TipsSettingProps>(({ onClose, bindingWallets, cu
                 message: t.wallet_set_up_successfully(),
                 autoHideDuration: 2000,
             })
-            PluginTipsMessages.tipsSettingUpdate.sendToAll()
+            // PluginNextIDMessages.tipsSettingUpdate.sendToAll()
             onClose()
         } catch {
             showSnackbar(t.save_failed(), {
@@ -127,9 +121,9 @@ export const TipsSetting = memo<TipsSettingProps>(({ onClose, bindingWallets, cu
     }, [Storage, currentPersona, addresses])
 
     useUpdateEffect(() => {
-        if (!TipsSetting?.hiddenAddresses) return
-        setAddresses(TipsSetting.hiddenAddresses)
-    }, [TipsSetting?.hiddenAddresses])
+        if (!hiddenAddress) return
+        setAddresses(hiddenAddress)
+    }, [hiddenAddress])
 
     if (loading) {
         return (
@@ -144,15 +138,10 @@ export const TipsSetting = memo<TipsSettingProps>(({ onClose, bindingWallets, cu
     return (
         <>
             <div className={classes.container}>
-                {showAlert ? (
-                    <div className={classes.alert}>
-                        <Box display="flex" alignItems="center" columnGap="6px">
-                            <Icons.Info />
-                            <Typography className={classes.alertTitle}>{t.setting_alert_title()}</Typography>
-                        </Box>
-                        <Icons.Close onClick={() => setShowAlert(false)} size={20} />
-                    </div>
-                ) : null}
+                <div className={classes.alert}>
+                    <Icons.Info />
+                    <Typography className={classes.alertTitle}>{t.wallet_setting_hint()}</Typography>
+                </div>
                 {bindingWallets?.length ? (
                     <div className={classes.content}>
                         {bindingWallets.map((wallet, index) => (
@@ -174,7 +163,7 @@ export const TipsSetting = memo<TipsSettingProps>(({ onClose, bindingWallets, cu
             <SettingActions
                 hasWallet={!!bindingWallets?.length}
                 onClose={onClose}
-                disableConfirm={disabled}
+                disableConfirm={addresses.length === hiddenAddress?.length}
                 confirmLoading={confirmLoading}
                 onConfirm={onConfirm}
             />

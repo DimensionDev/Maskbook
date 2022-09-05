@@ -8,6 +8,7 @@ import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { Trans } from 'react-i18next'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useEffect } from 'react'
+import { PublicWalletSetting } from './components/PublicWalletSetting'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -72,6 +73,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
             ID: PluginID.Web3Profile,
             label: 'Web3Profile',
             priority: 2,
+            UI: {
+                TabContent: PublicWalletSetting,
+            },
         },
     ],
 }

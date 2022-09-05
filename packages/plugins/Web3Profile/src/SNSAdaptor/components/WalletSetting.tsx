@@ -116,6 +116,7 @@ interface WalletSettingProp {
     retryData: () => void
 }
 
+// TODO: should remove this component
 const WalletSetting = memo(
     ({ wallets, accountList, title, open, onClose, accountId, currentPersona, retryData }: WalletSettingProp) => {
         const { classes } = useStyles()
