@@ -1,6 +1,7 @@
 import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra/content-script'
 import type { EnhanceableSite } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Box } from '@mui/material'
 import { Trans } from 'react-i18next'
 import { base } from '../base'
@@ -41,8 +42,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
             },
         },
         Utils: {
-            shouldDisplay(_, socialAddressList) {
-                return !!socialAddressList?.length
+            shouldDisplay(_, socialAddresses) {
+                if (!socialAddresses?.length) return false
+                return !!socialAddresses.filter((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM).length
             },
         },
     },
