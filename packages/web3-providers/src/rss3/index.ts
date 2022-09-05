@@ -1,4 +1,11 @@
-import { createIndicator, createNextIndicator, createPageable, HubOptions, TokenType } from '@masknet/web3-shared-base'
+import {
+    createIndicator,
+    createNextIndicator,
+    createPageable,
+    HubOptions,
+    resolveIPFSLink,
+    TokenType,
+} from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import RSS3 from 'rss3-next'
 import urlcat from 'urlcat'
@@ -132,6 +139,18 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
             include_poap: true,
         })
         const { result, cursor } = await fetchJSON<{ result: RSS3BaseAPI.Activity[]; cursor?: string }>(url)
+        result.forEach((activity) => {
+            activity.actions.forEach((action) => {
+                if (!action.metadata) return
+                if ('image' in action.metadata) {
+                    action.metadata.image = resolveIPFSLink(action.metadata.image)!
+                } else if ('token' in action.metadata) {
+                    action.metadata.token.image = resolveIPFSLink(action.metadata.token.image)!
+                } else if ('logo' in action.metadata) {
+                    action.metadata.logo = resolveIPFSLink(action.metadata.logo)!
+                }
+            })
+        })
         return createPageable(result, createIndicator(indicator), createNextIndicator(indicator, cursor))
     }
 }
