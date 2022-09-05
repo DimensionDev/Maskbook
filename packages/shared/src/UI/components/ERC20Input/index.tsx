@@ -14,6 +14,9 @@ export interface ERC20InputProps {
     maxAmountSignificant?: number
     balance: string
     label: string
+    disabled?: boolean
+    displayMax?: boolean
+    placeholder?: string
     token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     onSelectToken: () => void
     onAmountChange: (amount: string) => void
@@ -23,13 +26,16 @@ export const ERC20Input = memo<ERC20InputProps>(
     ({
         label,
         token,
+        disabled,
+        displayMax,
         onSelectToken,
         onAmountChange,
         amount,
         maxAmount,
         balance,
-        maxAmountShares = 1,
         maxAmountSignificant,
+        placeholder = '0.0',
+        maxAmountShares = 1,
     }) => {
         const { Others } = useWeb3State()
 
@@ -72,7 +78,7 @@ export const ERC20Input = memo<ERC20InputProps>(
                     pattern: '^[0-9]*[.,]?[0-9]*$',
                     spellCheck: false,
                 }}
-                placeholder="0.0"
+                placeholder={placeholder}
                 onKeyDown={(ev) => {
                     if (ev.key === 'Enter') ev.preventDefault()
                 }}
@@ -83,6 +89,8 @@ export const ERC20Input = memo<ERC20InputProps>(
                 }}
                 balance={balance}
                 required
+                disabled={disabled}
+                displayMax={displayMax}
             />
         )
     },

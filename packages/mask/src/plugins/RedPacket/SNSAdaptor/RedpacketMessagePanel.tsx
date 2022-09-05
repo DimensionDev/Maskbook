@@ -6,16 +6,11 @@ import { useI18N } from '../locales'
 const useStyles = makeStyles()((theme) => {
     return {
         root: {
-            height: 52,
-            border: `1px solid ${theme.palette.mode === 'light' ? '#EBEEF0' : '#2F3336'}`,
-            borderRadius: 12,
-            padding: theme.spacing(0.8, 1.2, 1),
             display: 'flex',
             justifyContent: 'space-between',
             flexDirection: 'column',
             width: '100%',
         },
-        title: {},
         wrapper: {
             display: 'flex',
             justifyContent: 'space-between',
@@ -45,9 +40,7 @@ export function RedpacketMessagePanel(props: RedpacketMessagePanelProps) {
     return (
         <Box className={classes.root}>
             <div className={classes.wrapper}>
-                <Typography className={classes.title} color="textSecondary" variant="body2" component="span">
-                    {t.message_label()}
-                </Typography>
+                <Typography>{t.message_label()}</Typography>
             </div>
             <div className={classNames(classes.wrapper)}>
                 <InputBase

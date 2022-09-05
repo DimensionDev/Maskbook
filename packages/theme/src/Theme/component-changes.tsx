@@ -688,7 +688,7 @@ export const Checkbox = (mode: PaletteMode, colors: MaskColor) => ({
         MuiCheckbox: {
             defaultProps: {
                 size: 'medium',
-                checkedIcon: <Icons.Checkbox />,
+                checkedIcon: <Icons.Checkbox color="#1C68F3" />,
                 icon: <Icons.CheckboxBlank />,
                 disableRipple: true,
             },
@@ -713,7 +713,6 @@ export const Checkbox = (mode: PaletteMode, colors: MaskColor) => ({
     },
 })
 
-console.log(inputBaseClasses.error)
 export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
     components: {
         MuiInputBase: {

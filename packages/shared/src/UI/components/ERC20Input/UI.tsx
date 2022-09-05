@@ -36,6 +36,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 13,
         lineHeight: '18px',
         color: theme.palette.maskColor.second,
+        whiteSpace: 'nowrap',
     },
     control: {
         height: '100%',
@@ -67,7 +68,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        width: 102,
         borderRadius: 99,
         cursor: 'pointer',
         ['&:hover']: {
@@ -101,6 +101,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface ERC20InputUIProps extends InputBaseProps {
     label: string
+    displayMax?: boolean
     isNative?: boolean
     token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     onSelectToken: () => void
@@ -110,7 +111,17 @@ interface ERC20InputUIProps extends InputBaseProps {
 }
 
 export const ERC20InputUI = memo<ERC20InputUIProps>(
-    ({ label, isNative, token, onSelectToken, onMaxClick, balance, maxAmountSignificant = 4, ...props }) => {
+    ({
+        label,
+        isNative,
+        token,
+        onSelectToken,
+        onMaxClick,
+        balance,
+        maxAmountSignificant = 4,
+        displayMax = true,
+        ...props
+    }) => {
         const { classes, cx } = useStyles()
         const t = useSharedI18N()
         return (
@@ -137,7 +148,14 @@ export const ERC20InputUI = memo<ERC20InputUIProps>(
                         <Box display="flex" alignItems="center" columnGap="12px">
                             {token ? (
                                 <>
-                                    <Chip className={classes.maxChip} label="MAX" size="small" onClick={onMaxClick} />
+                                    {displayMax ? (
+                                        <Chip
+                                            className={classes.maxChip}
+                                            label="MAX"
+                                            size="small"
+                                            onClick={onMaxClick}
+                                        />
+                                    ) : null}
                                     <Chip
                                         size="small"
                                         onClick={onSelectToken}

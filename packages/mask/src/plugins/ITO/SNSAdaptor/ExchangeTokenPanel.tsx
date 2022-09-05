@@ -4,10 +4,8 @@ import AddIcon from '@mui/icons-material/AddOutlined'
 import RemoveIcon from '@mui/icons-material/RemoveOutlined'
 import { IconButton, Paper } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
-import { useSelectFungibleToken } from '@masknet/shared'
+import { ERC20Input, useSelectFungibleToken } from '@masknet/shared'
 import { useI18N } from '../../../utils'
-import type { TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
-import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 
@@ -60,7 +58,8 @@ export interface ExchangeTokenPanelProps {
     label: string
     excludeTokensAddress?: string[]
     selectedTokensAddress?: string[]
-    TokenAmountPanelProps: Partial<TokenAmountPanelProps>
+    placeholder?: string
+    // TokenAmountPanelProps: Partial<TokenAmountPanelProps>
 }
 
 export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
@@ -80,6 +79,7 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
         chainId,
         onRemove,
         onAdd,
+        placeholder,
     } = props
     const { t } = useI18N()
     const { classes } = useStyles()
@@ -125,25 +125,16 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
 
     return (
         <Paper className={classes.line}>
-            <TokenAmountPanel
-                classes={{ root: classes.input }}
+            <ERC20Input
                 label={label}
                 amount={inputAmountForUI}
-                disableBalance={disableBalance}
                 balance={disableBalance || loadingTokenBalance ? '0' : tokenBalance}
                 token={exchangeToken}
                 onAmountChange={onAmountChangeForUI}
-                SelectTokenChip={{
-                    loading: false,
-                    ChipProps: {
-                        onClick: onSelectTokenChipClick,
-                    },
-                }}
-                TextFieldProps={{
-                    disabled: !exchangeToken,
-                    placeholder: !exchangeToken ? t('plugin_ito_placeholder_when_token_unselected') : '0.0',
-                }}
-                {...props.TokenAmountPanelProps}
+                onSelectToken={onSelectTokenChipClick}
+                disabled={!exchangeToken}
+                placeholder={!exchangeToken ? t('plugin_ito_placeholder_when_token_unselected') : placeholder || '0.0'}
+                displayMax={false}
             />
             {showAdd ? (
                 <IconButton size="large" onClick={onAdd} className={classes.button}>

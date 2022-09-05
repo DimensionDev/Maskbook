@@ -1,5 +1,4 @@
 import { Fragment, useCallback, useEffect, useState } from 'react'
-import { InputAdornment } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { v4 as uuid } from 'uuid'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
@@ -106,19 +105,7 @@ export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
                                 })
                             }
                             onAdd={onAdd}
-                            TokenAmountPanelProps={{
-                                InputProps: idx
-                                    ? {
-                                          startAdornment: props.token ? (
-                                              <InputAdornment position="start" className={classes.adornment}>
-                                                  1{props.token?.symbol}=
-                                              </InputAdornment>
-                                          ) : (
-                                              ''
-                                          ),
-                                      }
-                                    : {},
-                            }}
+                            placeholder={idx ? `1${props.token?.symbol}=` : undefined}
                         />
                         {idx === 0 ? (
                             <div className={classes.arrow}>
