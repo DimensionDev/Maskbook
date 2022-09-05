@@ -49,13 +49,13 @@ export class NameServiceState<
     private async addName(chainId: ChainId, address: string, name: string) {
         if (!this.options.isValidAddress(address)) return
         const all = this.storage.value
-        const formatedAddress = this.options.formatAddress(address)
+        const formattedAddress = this.options.formatAddress(address)
         await this.storage.setValue({
             ...all,
             [chainId]: {
                 ...all[chainId],
-                [formatedAddress]: name,
-                [name]: formatedAddress,
+                [formattedAddress]: name,
+                [name]: formattedAddress,
             },
         })
     }
@@ -63,13 +63,13 @@ export class NameServiceState<
     private async addAddress(chainId: ChainId, name: string, address: string) {
         if (!this.options.isValidAddress(address)) return
         const all = this.storage.value
-        const formatedAddress = this.options.formatAddress(address)
+        const formattedAddress = this.options.formatAddress(address)
         await this.storage.setValue({
             ...all,
             [chainId]: {
                 ...all[chainId],
-                [name]: formatedAddress,
-                [formatedAddress]: name,
+                [name]: formattedAddress,
+                [formattedAddress]: name,
             },
         })
     }
@@ -80,9 +80,9 @@ export class NameServiceState<
         const address = this.storage.value[chainId][name] || (await this.resolver.lookup?.(chainId, name))
 
         if (address && this.options.isValidAddress(address)) {
-            const formatedAddress = this.options.formatAddress(address)
-            await this.addAddress(chainId, name, formatedAddress)
-            return formatedAddress
+            const formattedAddress = this.options.formatAddress(address)
+            await this.addAddress(chainId, name, formattedAddress)
+            return formattedAddress
         }
         return
     }
