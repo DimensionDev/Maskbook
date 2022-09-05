@@ -3,11 +3,12 @@ import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Typography, Box } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
 import { BindingProof, ECKeyIdentifier, NextIDPlatform } from '@masknet/shared-base'
-import { useHiddenAddressSetting, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { PluginId } from '@masknet/plugin-infra'
 import { WalletSettingCard } from '@masknet/shared'
 import { useAsyncFn, useUpdateEffect } from 'react-use'
 
+import { useTipsSetting } from '../hooks/useTipsSetting'
 import type { TipsSettingType } from '../types'
 import { useI18N } from '../locales'
 import { SettingActions } from './components/SettingActions'
@@ -74,7 +75,7 @@ export const TipsSetting = memo<TipsSettingProps>(({ onClose, bindingWallets, cu
     const [showAlert, setShowAlert] = useState(true)
     const { showSnackbar } = useCustomSnackbar()
 
-    const { value: hiddenAddress, loading } = useHiddenAddressSetting(PluginId.Tips, currentPersona?.publicKeyAsHex)
+    const { value: TipsSetting, loading } = useTipsSetting(currentPersona?.publicKeyAsHex)
 
     const onSwitchChange = useCallback((address: string) => {
         setAddresses((prev) => {
@@ -114,9 +115,9 @@ export const TipsSetting = memo<TipsSettingProps>(({ onClose, bindingWallets, cu
     }, [Storage, currentPersona, addresses])
 
     useUpdateEffect(() => {
-        if (!hiddenAddress) return
-        setAddresses(hiddenAddress)
-    }, [hiddenAddress])
+        if (!TipsSetting?.hiddenAddresses) return
+        setAddresses(TipsSetting.hiddenAddresses)
+    }, [TipsSetting?.hiddenAddresses])
 
     if (loading) {
         return (
@@ -161,7 +162,7 @@ export const TipsSetting = memo<TipsSettingProps>(({ onClose, bindingWallets, cu
             <SettingActions
                 hasWallet={!!bindingWallets?.length}
                 onClose={onClose}
-                disableConfirm={addresses.length === hiddenAddress?.length}
+                disableConfirm={addresses.length === TipsSetting?.hiddenAddresses?.length}
                 confirmLoading={confirmLoading}
                 onConfirm={onConfirm}
             />

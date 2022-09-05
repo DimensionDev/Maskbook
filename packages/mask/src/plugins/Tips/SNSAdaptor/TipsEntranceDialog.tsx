@@ -136,12 +136,10 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             .filter((x) => !TipsSetting?.hiddenAddresses?.includes(x.identity))
             .sort((a, z) => {
                 if (isGreaterThan(a.last_checked_at, z.last_checked_at)) {
-                    if (isSameAddress(z.identity, defaultAddress)) return 1
-                    return -1
+                    return isSameAddress(z.identity, defaultAddress) ? -1 : 1
                 }
 
-                if (isSameAddress(a.identity, defaultAddress)) return -1
-                return 1
+                return isSameAddress(a.identity, defaultAddress) ? -1 : 1
             })
     }, [defaultAddress, bindingWallets, TipsSetting?.hiddenAddresses])
 
@@ -203,8 +201,6 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     useEffect(() => {
         return MaskMessages.events.ownPersonaChanged.on(retryCurrentPersona)
     }, [retryCurrentPersona])
-
-    // TODO: Listens for event messages added by the bound wallet and refreshes the proof data
 
     return (
         <InjectedDialog
