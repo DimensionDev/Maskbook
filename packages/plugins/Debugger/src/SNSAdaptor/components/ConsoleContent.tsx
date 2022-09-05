@@ -19,7 +19,6 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { useSelectAdvancedSettings, useSelectFungibleToken } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 
 export interface ConsoleContentProps {

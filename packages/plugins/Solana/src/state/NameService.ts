@@ -1,9 +1,9 @@
+import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
 import { NameServiceState } from '@masknet/plugin-infra/web3'
 import { ChainId, formatAddress, isValidAddress, isValidDomain, isZeroAddress } from '@masknet/web3-shared-solana'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import type { Subscription } from 'use-subscription'
-import { lookup, reverse } from '../apis'
+import { BonfidaResolver } from './NameService/Bonfida'
 
 export class NameService extends NameServiceState<ChainId> {
     constructor(
@@ -14,6 +14,7 @@ export class NameService extends NameServiceState<ChainId> {
     ) {
         super(
             context!,
+            new BonfidaResolver(),
             getEnumAsArray(ChainId).map((x) => x.value),
             subscriptions!,
             {
@@ -23,7 +24,4 @@ export class NameService extends NameServiceState<ChainId> {
             },
         )
     }
-
-    override lookup = lookup
-    override reverse = reverse
 }
