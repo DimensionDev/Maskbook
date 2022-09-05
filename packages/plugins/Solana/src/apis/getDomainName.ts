@@ -1,4 +1,10 @@
-import { performReverseLookup, getHashedName, getNameAccountKey, NameRegistryState } from '@bonfida/spl-name-service'
+import {
+    performReverseLookup,
+    getHashedName,
+    getNameAccountKey,
+    NameRegistryState,
+    getAllDomains,
+} from '@bonfida/spl-name-service'
 import { ChainId, createClient } from '@masknet/web3-shared-solana'
 import { PublicKey } from '@solana/web3.js'
 
@@ -22,7 +28,12 @@ export async function lookup(chainId: ChainId, name: string) {
 }
 
 export async function reverse(chainId: ChainId, owner: string) {
-    const accountKey = new PublicKey(owner)
-    const name = await performReverseLookup(createClient(chainId), accountKey)
-    return name
+    const domainKey = new PublicKey(owner)
+    const keys = await getAllDomains(createClient(chainId), domainKey)
+    // resolve the first domain
+    const key = keys[0]
+    if (!key) return
+
+    const domain = await performReverseLookup(createClient(chainId), key)
+    return `${domain}.sol`
 }
