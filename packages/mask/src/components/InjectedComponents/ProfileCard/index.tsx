@@ -11,7 +11,7 @@ import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, SocialIdentity } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { CircularProgress, Tab, Typography } from '@mui/material'
-import { first } from 'lodash-unified'
+import { first, uniqBy } from 'lodash-unified'
 import { FC, useEffect, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { useUpdateEffect } from 'react-use'
@@ -37,6 +37,7 @@ const useStyles = makeStyles()((theme) => {
             flexDirection: 'column',
             overflow: 'auto',
             height: '100%',
+            overscrollBehavior: 'contain',
         },
         loading: {
             display: 'flex',
@@ -163,7 +164,10 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
     } = useSocialAddressListAll(identity, undefined, sorter)
 
     const availableSocialAddressList = useMemo(() => {
-        return socialAddressList.filter((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM)
+        return uniqBy(
+            socialAddressList.filter((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM),
+            (x) => x.address.toLowerCase(),
+        )
     }, [socialAddressList])
 
     const [selectedAddress, setSelectedAddress] = useState<string>()
@@ -251,6 +255,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
                             span: (
                                 <Typography
                                     fontWeight={700}
+                                    fontSize="inherit"
                                     variant="body1"
                                     component="strong"
                                     color={(theme) => theme.palette.text.primary}

@@ -406,7 +406,7 @@ class Connection implements BaseConnection {
             return this.getNativeToken()
         }
         const tokens = await SolanaFungible.getFungibleTokens(options.chainId, [])
-        const token = tokens.find((x) => x.address === address)
+        const token = tokens.find((x) => isSameAddress(x.address, address))
         return (
             token ??
             ({

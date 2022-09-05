@@ -35,12 +35,13 @@
   },
   "dependencies": {
     "@dimensiondev/holoflows-kit": "0.9.0-20220807034934-68f04f1",
-    "@masknet/compartment": "^0.3.0",
+    "@masknet/compartment": "^0.3.4",
     "@masknet/icons": "workspace:*",
     "@masknet/membrane": "^0.1.0",
     "@masknet/shared-base": "workspace:*",
     "@masknet/theme": "workspace:*",
     "@masknet/typed-message": "workspace:*",
-    "async-call-rpc": "^6.1.2"
+    "@masknet/web-endowments": "^0.1.1",
+    "async-call-rpc": "^6.1.5"
   }
 }

@@ -13,6 +13,7 @@ import type {
     TransactionDetailed,
     TransactionSignature,
     Web3Provider,
+    Operation,
 } from '@masknet/web3-shared-solana'
 import { createConnection } from './Connection/connection'
 
@@ -22,6 +23,7 @@ export class Connection extends ConnectionState<
     ProviderType,
     Signature,
     Block,
+    Operation,
     Transaction,
     TransactionReceipt,
     TransactionDetailed,

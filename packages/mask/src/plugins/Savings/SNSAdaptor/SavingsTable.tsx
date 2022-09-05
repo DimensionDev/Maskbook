@@ -224,7 +224,7 @@ export function SavingsTable({ chainId, tab, protocols, setTab, setSelectedProto
                 </div>
             ) : (
                 <div className={classes.placeholder}>
-                    <Icons.Direct size={36} className={classes.direct} />
+                    <Icons.EmptySimple size={36} className={classes.direct} />
                 </div>
             )}
         </Box>

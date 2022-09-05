@@ -12,6 +12,7 @@ import {
     NonFungibleTokenEvent,
     Pageable,
     scale10,
+    SourceType,
     TokenType,
     Transaction,
 } from '@masknet/web3-shared-base'
@@ -218,6 +219,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
             to: {
                 address: event.to_address,
             },
+            source: SourceType.Chainbase,
         }
     }
 

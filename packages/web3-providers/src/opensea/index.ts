@@ -23,6 +23,7 @@ import {
     formatPercentage,
     dividedBy,
     resolveIPFSLink,
+    SourceType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, createNativeToken, createERC20Token } from '@masknet/web3-shared-evm'
 import type { NonFungibleTokenAPI, TrendingAPI } from '../types'
@@ -224,6 +225,7 @@ function createEvent(chainId: ChainId, event: OpenSeaAssetEvent): NonFungibleTok
               }
             : undefined,
         paymentToken,
+        source: SourceType.OpenSea,
     }
 }
 
@@ -258,6 +260,7 @@ function createOrder(chainId: ChainId, event: OpenSeaAssetEvent): NonFungibleTok
                   ),
               }
             : undefined,
+        source: SourceType.OpenSea,
     }
 }
 

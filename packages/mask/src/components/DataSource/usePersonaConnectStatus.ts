@@ -1,14 +1,24 @@
-import { useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import stringify from 'json-stable-stringify'
-import { DashboardRoutes, isSamePersona, isSameProfile } from '@masknet/shared-base'
+import {
+    DashboardRoutes,
+    isSamePersona,
+    isSameProfile,
+    BindingProof,
+    PersonaInformation,
+    resolveNextIDIdentityToProfile,
+} from '@masknet/shared-base'
 import Services from '../../extension/service'
 import { currentPersonaIdentifier, currentSetupGuideStatus } from '../../../shared/legacy-settings/settings'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { SetupGuideStep } from '../../../shared/legacy-settings/types'
 import { useLastRecognizedIdentity } from './useActivatedUI'
 import { usePersonasFromDB } from './usePersonasFromDB'
-import { useValueRef } from '@masknet/shared-base-ui'
-import { useAsync } from 'react-use'
+import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
+import { useAsync, useAsyncRetry } from 'react-use'
+import { PluginNextIDMessages } from '../../plugins/NextID/messages'
+import { NextIDProof } from '@masknet/web3-providers'
+import { MaskMessages, useI18N } from '../../utils'
 
 const createPersona = () => {
     Services.Helper.openDashboard(DashboardRoutes.Setup)
@@ -58,22 +68,143 @@ export function useCurrentPersona() {
     return value
 }
 
+export interface PersonaConnectStatus {
+    action?: (
+        target?: string | undefined,
+        position?: 'center' | 'top-right' | undefined,
+        enableVerify?: boolean,
+        direct?: boolean,
+    ) => void
+    currentPersona?: PersonaInformation
+    connected?: boolean
+    hasPersona?: boolean
+    verified?: boolean
+    proof?: BindingProof[]
+}
+
+const defaultStatus: PersonaConnectStatus = {
+    action: undefined,
+    currentPersona: undefined,
+    connected: false,
+    hasPersona: false,
+    verified: false,
+    proof: undefined,
+}
+
 export function useCurrentPersonaConnectStatus() {
+    const { t } = useI18N()
+
     const personas = usePersonasFromDB()
     const lastRecognized = useLastRecognizedIdentity()
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
 
-    return useMemo(() => {
+    const { setDialog: setPersonaSelectPanelDialog } = useRemoteControlledDialog(
+        PluginNextIDMessages.PersonaSelectPanelDialogUpdated,
+    )
+    const { setDialog: setCreatePersonaConfirmDialog } = useRemoteControlledDialog(MaskMessages.events.openPageConfirm)
+
+    const create = useCallback(
+        (target?: string, position?: 'center' | 'top-right', enableVerify?: boolean, direct = false) => {
+            if (direct) {
+                Services.Helper.openDashboard(DashboardRoutes.Setup)
+            } else {
+                setCreatePersonaConfirmDialog({
+                    open: true,
+                    target: 'dashboard',
+                    url: target ?? DashboardRoutes.Setup,
+                    text: t('applications_create_persona_hint'),
+                    title: t('applications_create_persona_title'),
+                    actionHint: t('applications_create_persona_action'),
+                    position,
+                })
+            }
+        },
+        [setCreatePersonaConfirmDialog],
+    )
+
+    const openPersonListDialog = useCallback(
+        (target?: string, position?: 'center' | 'top-right', enableVerify = true) => {
+            setPersonaSelectPanelDialog({
+                open: true,
+                target,
+                position,
+                enableVerify,
+            })
+        },
+        [setPersonaSelectPanelDialog],
+    )
+
+    const {
+        value = defaultStatus,
+        loading,
+        error,
+        retry,
+    } = useAsyncRetry<PersonaConnectStatus>(async () => {
         const currentPersona = personas.find((x) => isSamePersona(x, currentIdentifier))
         const currentProfile = currentPersona?.linkedProfiles.find((x) =>
             isSameProfile(x.identifier, lastRecognized.identifier),
         )
 
-        return {
-            action: !personas.length ? createPersona : !currentProfile ? connectPersona : undefined,
-            currentPersona,
-            connected: !!currentProfile,
-            hasPersona: !!personas.length,
+        // handle not have persona
+        if (!currentPersona || !personas.length) {
+            return {
+                action: create,
+                currentPersona: undefined,
+                connected: false,
+                hasPersona: false,
+            }
         }
-    }, [currentIdentifier, personas, lastRecognized.identifier?.toText(), activatedSocialNetworkUI])
+
+        // handle had persona but not connect current sns
+        if (!currentProfile) {
+            return {
+                action: openPersonListDialog,
+                currentPersona,
+                connected: false,
+                hasPersona: true,
+            }
+        }
+
+        // handle had persona and connected current sns, then check the nextID
+        try {
+            const nextIDInfo = await NextIDProof.queryExistedBindingByPersona(
+                currentPersona?.identifier.publicKeyAsHex,
+                false,
+            )
+            const verifiedProfile = nextIDInfo?.proofs.find(
+                (x) =>
+                    // TODO: should move to next id api center, link the MF-1845
+                    isSameProfile(resolveNextIDIdentityToProfile(x.identity, x.platform), currentProfile?.identifier) &&
+                    x.is_valid,
+            )
+
+            return {
+                action: verifiedProfile ? undefined : openPersonListDialog,
+                currentPersona,
+                connected: true,
+                hasPersona: true,
+                verified: !!verifiedProfile,
+                proof: nextIDInfo?.proofs,
+            }
+        } catch {
+            return {
+                action: openPersonListDialog,
+                currentPersona,
+                connected: false,
+                hasPersona: true,
+            }
+        }
+    }, [
+        currentIdentifier,
+        personas,
+        lastRecognized.identifier?.toText(),
+        activatedSocialNetworkUI,
+        create,
+        openPersonListDialog,
+    ])
+
+    useEffect(() => MaskMessages.events.ownProofChanged.on(retry), [retry])
+    useEffect(() => MaskMessages.events.ownPersonaChanged.on(retry), [retry])
+
+    return { value, loading, retry, error }
 }

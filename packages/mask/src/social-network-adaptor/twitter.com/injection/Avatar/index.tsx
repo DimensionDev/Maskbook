@@ -1,11 +1,9 @@
 import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { Plugin } from '@masknet/plugin-infra'
-import { Twitter } from '@masknet/web3-providers'
-import { ProfileIdentifier } from '@masknet/shared-base'
 import { Avatar } from '../../../../components/InjectedComponents/Avatar'
 import { createReactRootShadowed, startWatch } from '../../../../utils'
 import { inpageAvatarSelector } from '../../utils/selector'
-import { twitterBase } from '../../base'
+import { getUserIdentity } from '../../utils/user'
 
 function getTwitterId(ele: HTMLElement) {
     const profileLink = ele.querySelector('a[role="link"]') as HTMLAnchorElement
@@ -57,23 +55,4 @@ export async function injectAvatar(signal: AbortSignal) {
         }),
         signal,
     )
-}
-
-async function getUserIdentity(twitterId: string) {
-    const user = await Twitter.getUserByScreenName(twitterId)
-    if (!user?.legacy) return null
-
-    const nickname = user.legacy.name
-    const handle = user.legacy.screen_name
-    const avatar = user.legacy.profile_image_url_https.replace(/_normal(\.\w+)$/, '_400x400$1')
-    const bio = user.legacy.description
-    const homepage = user.legacy.entities.url?.urls[0]?.expanded_url ?? ''
-
-    return {
-        identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
-        nickname,
-        avatar,
-        bio,
-        homepage,
-    }
 }

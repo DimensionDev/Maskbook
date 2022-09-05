@@ -62,7 +62,7 @@ export class ERC20Descriptor implements TransactionDescriptor {
                     chainId: context.chainId,
                     title: i18NextInstance.t('plugin_infra_descriptor_token_transfer_title'),
                     description: i18NextInstance.t('plugin_infra_descriptor_token_transfer', {
-                        symbol: token?.symbol,
+                        tokenAmountDescription: getTokenAmountDescription(parameters?.value, token),
                     }),
                     successfulDescription: i18NextInstance.t('plugin_infra_descriptor_token_transfer_success', {
                         tokenAmountDescription: getTokenAmountDescription(parameters?.value, token),

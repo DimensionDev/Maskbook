@@ -2,7 +2,7 @@ import { CrossIsolationMessages, EMPTY_OBJECT, ProfileIdentifier } from '@maskne
 import { makeStyles } from '@masknet/theme'
 import { Twitter } from '@masknet/web3-providers'
 import { CircularProgress } from '@mui/material'
-import { CSSProperties, useEffect, useRef, useState } from 'react'
+import { CSSProperties, useCallback, useEffect, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
 import { useSocialIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { ProfileCard } from '../../../../components/InjectedComponents/ProfileCard'
@@ -21,6 +21,7 @@ export function injectProfileCardHolder(signal: AbortSignal) {
 
 const CARD_WIDTH = 450
 const CARD_HEIGHT = 500
+const DISMISS_TIMEOUT = process.env.NODE_ENV === 'production' ? 2000 : 120_000
 const useStyles = makeStyles()((theme) => ({
     root: {
         position: 'absolute',
@@ -46,11 +47,48 @@ function ProfileCardHolder() {
         visibility: 'hidden',
         borderRadius: 10,
     })
+    const activeRef = useRef(false)
     const holderRef = useRef<HTMLDivElement>(null)
     const [twitterId, setTwitterId] = useState('')
 
+    const hideProfileCard = useCallback(() => {
+        setStyle((old) => {
+            if (old.visibility === 'hidden') return old
+            return {
+                ...old,
+                visibility: 'hidden',
+            }
+        })
+    }, [])
+
     useEffect(() => {
-        return CrossIsolationMessages.events.requestOpenProfileCard.on(({ userId, x, y }) => {
+        const holder = holderRef.current
+        if (!holder) return
+        let timer: NodeJS.Timeout
+        const enter = () => {
+            activeRef.current = true
+            clearTimeout(timer)
+        }
+        const leave = () => {
+            activeRef.current = false
+            timer = setTimeout(hideProfileCard, DISMISS_TIMEOUT)
+        }
+        holder.addEventListener('mouseenter', enter)
+        holder.addEventListener('mouseleave', leave)
+        return () => {
+            holder.removeEventListener('mouseenter', enter)
+            holder.removeEventListener('mouseleave', leave)
+        }
+    }, [hideProfileCard])
+
+    useEffect(() => {
+        return CrossIsolationMessages.events.requestProfileCard.on((event) => {
+            if (!event.open) {
+                if (activeRef.current) return
+                hideProfileCard()
+                return
+            }
+            const { userId, x, y } = event
             setTwitterId(userId)
             setStyle((old) => {
                 const newLeft = x - CARD_WIDTH / 2
@@ -65,27 +103,21 @@ function ProfileCardHolder() {
                 }
             })
         })
-    }, [])
+    }, [hideProfileCard])
 
     useEffect(() => {
         const onClick = (event: MouseEvent) => {
             // @ts-ignore
             // `NODE.contains(other)` doesn't work for cross multiple layer of Shadow DOM
-            if (!event.path.includes(holderRef.current)) {
-                setStyle((old) => {
-                    if (old.visibility === 'hidden') return old
-                    return {
-                        ...old,
-                        visibility: 'hidden',
-                    }
-                })
+            if (!event.path?.includes(holderRef.current)) {
+                hideProfileCard()
             }
         }
         document.body.addEventListener('click', onClick)
         return () => {
             document.body.removeEventListener('click', onClick)
         }
-    }, [])
+    }, [hideProfileCard])
 
     const { value: identity, loading } = useAsync(async () => {
         if (!twitterId) return null

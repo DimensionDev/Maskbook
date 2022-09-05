@@ -89,8 +89,6 @@ export interface CompositionProps {
     maxLength?: number
     onSubmit(data: SubmitComposition): Promise<void>
     onChange?(message: TypedMessage): void
-    onConnectPersona(): void
-    onCreatePersona(): void
     isOpenFromApplicationBoard: boolean
     e2eEncryptionDisabled: E2EUnavailableReason | undefined
     recipients: LazyRecipients
@@ -214,8 +212,6 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                 <div className={cx(classes.flex, classes.between)}>
                     <EncryptionTargetSelector
                         target={encryptionKind}
-                        onConnectPersona={props.onConnectPersona}
-                        onCreatePersona={props.onCreatePersona}
                         e2eDisabled={props.e2eEncryptionDisabled}
                         selectedRecipientLength={recipients.length}
                         onChange={(target) => {

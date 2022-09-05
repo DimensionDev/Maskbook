@@ -1,16 +1,28 @@
 import type { EventBasedChannel } from 'async-call-rpc'
+import type { PluginRuntime } from './runtime.js'
+import { combineAbortSignal } from '@dimensiondev/kit'
+
+export interface PluginListItem {
+    normal?: boolean
+    local?: boolean
+}
 export interface BasicHostHooks {
-    getPluginList(): Promise<Iterable<[string, { normal?: boolean; local?: boolean }]>>
+    getPluginList(): Promise<Iterable<[string, PluginListItem]>>
     fetchManifest(id: string, isLocal: boolean): Promise<object>
     createRpcChannel(id: string, signal: AbortSignal): EventBasedChannel
     createRpcGeneratorChannel(id: string, signal: AbortSignal): EventBasedChannel
 }
+export interface BasicHostInstance {
+    id: string
+    isLocal: boolean
+    runtime: PluginRuntime
+}
 
-export abstract class PluginRunner<HostHooks extends BasicHostHooks, HostPluginInstance> {
+export abstract class PluginRunner<HostHooks extends BasicHostHooks, HostPluginInstance extends BasicHostInstance> {
     constructor(
-        protected hooks: HostHooks,
-        protected allowLocalOverrides: boolean,
-        protected signal: AbortSignal = new AbortController().signal,
+        protected readonly hooks: HostHooks,
+        protected readonly allowLocalOverrides: boolean,
+        protected readonly signal: AbortSignal = new AbortController().signal,
     ) {
         signal.throwIfAborted()
         signal.addEventListener(
@@ -22,18 +34,27 @@ export abstract class PluginRunner<HostHooks extends BasicHostHooks, HostPluginI
         )
     }
     protected abstract HostStartPlugin(id: string, isLocal: boolean, signal: AbortSignal): Promise<HostPluginInstance>
-    protected plugins = new Map<string, [instance: HostPluginInstance, isLocal: boolean, abort: () => void]>()
+    protected readonly plugins = new Map<string, [instance: HostPluginInstance, isLocal: boolean, abort: () => void]>()
+    protected pluginList: ReadonlyMap<string, PluginListItem> = new Map()
 
-    init() {
-        return this.onPluginListUpdate()
-    }
     getPluginInstance(id: string) {
         return this.plugins.get(id)
     }
 
+    __builtInPluginInfraBridgeCallback__: ((this: this, id: string) => void) | undefined = undefined;
+    *iteratePluginInstance() {
+        for (const [instance] of this.plugins.values()) yield instance
+    }
+
     async onPluginListUpdate() {
         const list = new Map(await this.hooks.getPluginList())
-        this.signal.throwIfAborted()
+        this.pluginList = list
+
+        for (const [id] of list) this.__builtInPluginInfraBridgeCallback__?.(id)
+    }
+
+    async init_unbridged() {
+        const list = this.pluginList
 
         for (const [id, [, isLocal]] of this.plugins) {
             // Stop plugin if they disappeared from the new list.
@@ -43,25 +64,37 @@ export abstract class PluginRunner<HostHooks extends BasicHostHooks, HostPluginI
         }
 
         // start new plugin
+        // TODO: check plugin start condition before call start
         // TODO: start plugin in dependency DFS order?
         for (const [id, data] of list) {
             if (this.plugins.has(id)) continue
 
-            if (data.local && !this.allowLocalOverrides) continue
-            this.startPlugin(id, !!data.local)
+            const abort = new AbortController()
+            this.startPluginInner(
+                id,
+                Boolean(data.local && this.allowLocalOverrides),
+                abort.signal,
+                abort.abort.bind(abort),
+            )
         }
     }
-    protected async startPlugin(id: string, isLocal: boolean) {
+    async startPlugin_bridged(id: string, signal: AbortSignal) {
+        const abort = new AbortController()
+        await this.startPluginInner(
+            id,
+            Boolean(this.pluginList.get(id)!.local && this.allowLocalOverrides),
+            combineAbortSignal(abort.signal, signal),
+            abort.abort.bind(abort),
+        )
+        return this.plugins.get(id)!
+    }
+
+    protected async startPluginInner(id: string, isLocal: boolean, signal: AbortSignal, abortFunction: () => void) {
         this.signal.throwIfAborted()
 
-        const abort = new AbortController()
-        try {
-            // TODO: setup a module & fetch alias from normal version to local version
-            const instance = await this.HostStartPlugin(id, isLocal, abort.signal)
-            this.plugins.set(id, [instance, isLocal, abort.abort.bind(abort)])
-        } catch (error) {
-            console.error(`[Sandboxed-plugin] Plugin ${id} stopped due to an error when starting.`, error)
-        }
+        // TODO: setup a module & fetch alias from normal version to local version
+        const instance = await this.HostStartPlugin(id, isLocal, signal)
+        this.plugins.set(id, [instance, isLocal, abortFunction])
     }
 
     protected stopPlugin(id: string) {

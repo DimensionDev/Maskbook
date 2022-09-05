@@ -9,8 +9,8 @@ function createStorage(
     providerType: StorageProviderType,
     options: {
         namespace: string
-        personaIdentifier?: ECKeyIdentifier
         platform?: NextIDPlatform
+        signerOrPublicKey?: string | ECKeyIdentifier
     },
 ) {
     switch (providerType) {
@@ -19,12 +19,11 @@ function createStorage(
         case StorageProviderType.RSS3:
             return new RSS3Storage(options.namespace, () => Web3StateSettings.value.Connection?.getConnection?.())
         case StorageProviderType.NextID:
-            if (!options?.platform || !options.personaIdentifier)
-                throw new Error('platform and personaIdentifier is required When providerType is NextID')
+            if (!options?.platform || !options.signerOrPublicKey) throw new Error('Instantiation parameter error.')
             return new NextIDStorage(
                 options.namespace,
                 options.platform,
-                options.personaIdentifier,
+                options.signerOrPublicKey,
                 SharedContextSettings.value.generateSignResult,
             )
         default:

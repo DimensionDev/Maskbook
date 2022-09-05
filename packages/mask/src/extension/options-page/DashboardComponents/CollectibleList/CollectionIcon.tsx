@@ -1,11 +1,11 @@
 import { memo } from 'react'
 import { Box, Tooltip } from '@mui/material'
-import { Image } from '../../../../components/shared/Image'
 import { makeStyles } from '@masknet/theme'
-import { TokenIcon } from '@masknet/shared'
+import { Image, TokenIcon } from '@masknet/shared'
 import classNames from 'classnames'
 import { isSameAddress, NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/plugin-infra/src/entry-web3'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     collectionWrap: {
@@ -28,6 +28,10 @@ const useStyles = makeStyles()((theme) => ({
     selected: {
         border: '2px solid #1D9BF0',
         borderRadius: '50%',
+    },
+    imageLoading: {
+        width: 24,
+        height: 24,
     },
 }))
 
@@ -61,9 +65,10 @@ export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, 
                     <Image
                         width={24}
                         height={24}
-                        component="img"
                         className={classes.collectionImg}
                         src={collection?.iconURL}
+                        fallback={<Icons.MaskPlaceholder size={24} />}
+                        disableSpinner
                     />
                 ) : (
                     <TokenIcon

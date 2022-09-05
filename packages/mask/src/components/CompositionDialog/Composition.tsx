@@ -3,7 +3,7 @@ import { DialogActions, DialogContent } from '@mui/material'
 import { DialogStackingProvider, makeStyles } from '@masknet/theme'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { MaskMessages, useI18N } from '../../utils'
-import { CrossIsolationMessages, DashboardRoutes } from '@masknet/shared-base'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useRecipientsList } from './useRecipientsList'
 import { InjectedDialog } from '@masknet/shared'
 import { CompositionDialogUI, CompositionRef, E2EUnavailableReason } from './CompositionUI'
@@ -12,7 +12,7 @@ import Services from '../../extension/service'
 import { useSubmit } from './useSubmit'
 import { useAsync } from 'react-use'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI'
-import { usePersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
+import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { Flags } from '../../../shared'
 
 const useStyles = makeStyles()({
@@ -39,7 +39,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const { t } = useI18N()
     const { classes, cx } = useStyles()
     const currentIdentity = useCurrentIdentity()?.identifier
-    const connectStatus = usePersonaConnectStatus()
+    const { value: connectStatus } = useCurrentPersonaConnectStatus()
     /** @deprecated */
     const { value: hasLocalKey } = useAsync(
         async () => (currentIdentity ? Services.Identity.hasLocalKey(currentIdentity) : false),
@@ -121,14 +121,6 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                     <CompositionDialogUI
                         version={version}
                         setVersion={setVersion}
-                        onConnectPersona={() => {
-                            if (connectStatus.action) connectStatus.action()
-                            setOpen(false)
-                        }}
-                        onCreatePersona={() => {
-                            Services.Helper.openDashboard(DashboardRoutes.Setup)
-                            setOpen(false)
-                        }}
                         ref={UI}
                         hasClipboardPermission={hasClipboardPermission}
                         onRequestClipboardPermission={onRequestClipboardPermission}

@@ -13,6 +13,7 @@ import type {
     ECKeyIdentifier,
     EnhanceableSite,
     ExtensionSite,
+    BindingProof,
 } from '@masknet/shared-base'
 import type {
     ChainDescriptor,
@@ -365,7 +366,6 @@ export namespace Plugin.SNSAdaptor {
         lastRecognizedProfile: Subscription<IdentityResolved | undefined>
         currentVisitingProfile: Subscription<IdentityResolved | undefined>
         allPersonas?: Subscription<PersonaInformation[]>
-        privileged_silentSign: () => (signer: ECKeyIdentifier, message: string) => Promise<PersonaSignResult>
         getPersonaAvatar: (identifier: ECKeyIdentifier | null | undefined) => Promise<string | null | undefined>
         ownProofChanged: UnboundedRegistry<void>
         setMinimalMode: (id: string, enabled: boolean) => Promise<void>
@@ -402,6 +402,7 @@ export namespace Plugin.SNSAdaptor {
         Signature = unknown,
         GasOption = unknown,
         Block = unknown,
+        Operation = unknown,
         Transaction = unknown,
         TransactionReceipt = unknown,
         TransactionDetailed = unknown,
@@ -431,6 +432,7 @@ export namespace Plugin.SNSAdaptor {
             Signature,
             GasOption,
             Block,
+            Operation,
             Transaction,
             TransactionReceipt,
             TransactionDetailed,
@@ -451,8 +453,12 @@ export namespace Plugin.SNSAdaptor {
         ProfileCardTabs?: ProfileTab[]
         /** This UI will be rendered as cover on the profile page */
         ProfileCover?: ProfileCover[]
+        /** This UI will be rendered as tab on the setting dialog */
+        SettingTabs?: SettingTab[]
         /** This UI will be rendered components on the avatar realm */
         AvatarRealm?: AvatarRealm
+        /** This UI will be rendered components on the tips realm */
+        TipsRealm?: TipsRealm
         /** This UI will be rendered as plugin wrapper page */
         wrapperProps?: PluginWrapperProps
         /**
@@ -629,6 +635,26 @@ export namespace Plugin.SNSAdaptor {
             ): boolean
         }
     }
+    export enum TipsSlot {
+        FollowButton = 'follow',
+        FocusingPost = 'focusing-post',
+        Post = 'post',
+        Profile = 'profile',
+    }
+    export interface TipsRealmOptions {
+        identity?: ProfileIdentifier
+        slot: TipsSlot
+    }
+    export interface TipsRealm {
+        ID: string
+        priority: number
+        UI?: {
+            /**
+             * The injected Tips Content component
+             */
+            Content: InjectUI<TipsRealmOptions>
+        }
+    }
     export interface ProfileSlider {
         ID: string
 
@@ -720,6 +746,27 @@ export namespace Plugin.SNSAdaptor {
             sortSocialAddress?(a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>): number
         }
     }
+
+    export interface SettingTab {
+        ID: string
+        /**
+         * The name of setting tab
+         */
+        label: I18NStringField | string
+
+        /**
+         * Used to order the tabs
+         */
+        priority: number
+
+        UI?: {
+            TabContent: InjectUI<{
+                onClose: () => void
+                bindingWallets?: BindingProof[]
+                currentPersona?: ECKeyIdentifier
+            }>
+        }
+    }
 }
 
 /** This part runs in the dashboard */
@@ -734,6 +781,7 @@ export namespace Plugin.Dashboard {
         Signature = unknown,
         GasOption = unknown,
         Block = unknown,
+        Operation = unknown,
         Transaction = unknown,
         TransactionReceipt = unknown,
         TransactionDetailed = unknown,
@@ -755,6 +803,7 @@ export namespace Plugin.Dashboard {
             Signature,
             GasOption,
             Block,
+            Operation,
             Transaction,
             TransactionReceipt,
             TransactionDetailed,
@@ -1070,6 +1119,7 @@ export enum PluginId {
     Web3Profile = 'io.mask.web3-profile',
     Web3ProfileCard = 'io.mask.web3-profile-card',
     ScamSniffer = 'io.scamsniffer.mask-plugin',
+    NFTCard = 'com.maskbook.nft-card',
     // @masknet/scripts: insert-here
 }
 /**

@@ -12,7 +12,7 @@ export function useSaveToNextID() {
     const saveAddress = useSaveAddress()
     return useCallback(
         async (info: NextIDAvatarMeta, account: string, persona?: ECKeyIdentifier, proof?: BindingProof) => {
-            if (!proof?.identity || !persona?.publicKeyAsHex || !Storage) return
+            if (!proof?.identity || !persona || !Storage) return
             const storage = Storage.createNextIDStorage(proof.identity, proof.platform, persona)
 
             await storage.set(PLUGIN_ID, info)

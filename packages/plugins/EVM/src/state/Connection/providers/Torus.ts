@@ -1,5 +1,5 @@
 import { first } from 'lodash-unified'
-import { createLookupTableResolver } from '@masknet/web3-shared-base'
+import { createLookupTableResolver } from '@masknet/shared-base'
 import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
 import * as Torus from '@toruslabs/torus-embed'
 import type { RequestArguments } from 'web3-core'
