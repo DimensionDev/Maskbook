@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { Box, Card, Typography } from '@mui/material'
+import { Box, BoxProps, Card, Typography } from '@mui/material'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { memo, useMemo } from 'react'
 import { useI18N } from '../../locales'
@@ -68,14 +68,14 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const { Tag, Type, MaskNetworkMap } = RSS3BaseAPI
-export interface FeedCardProps {
+export interface FeedCardProps extends Omit<BoxProps, 'onSelect'> {
     feed: RSS3BaseAPI.Activity
     address?: string
     onSelect: (feed: RSS3Feed) => void
 }
 
-export const FeedCard = memo(({ feed, address, onSelect }: FeedCardProps) => {
-    const { classes } = useStyles()
+export const FeedCard = memo(({ feed, address, onSelect, className, ...rest }: FeedCardProps) => {
+    const { classes, cx } = useStyles()
     const t = useI18N()
 
     const action = feed.actions[0]
@@ -179,7 +179,7 @@ export const FeedCard = memo(({ feed, address, onSelect }: FeedCardProps) => {
     const normalizedFeed = useNormalizeFeed(feed)
 
     return (
-        <Box className={classes.wrapper} onClick={() => onSelect(normalizedFeed)}>
+        <Box className={cx(classes.wrapper, className)} {...rest} onClick={() => onSelect(normalizedFeed)}>
             <div className={classes.texts}>
                 <div>
                     <span className={classes.action}>
