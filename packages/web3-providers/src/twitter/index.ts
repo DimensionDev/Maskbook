@@ -227,6 +227,9 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
                 withSafetyModeUserFields: true,
                 withSuperFollowsUserFields: true,
             }),
+            features: JSON.stringify({
+                responsive_web_graphql_timeline_navigation_enabled: false,
+            }),
         })
         const cacheKey = `${bearerToken}/${csrfToken}/${url}`
         const fetchingTask: Promise<Response> =
