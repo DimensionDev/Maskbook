@@ -19,11 +19,7 @@ import { useUpdateEffect } from 'react-use'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 import { MaskMessages, sorter, useI18N, useLocationChange } from '../../utils'
-import {
-    useCurrentVisitingIdentity,
-    useCurrentVisitingSocialIdentity,
-    useIsOwnerIdentity,
-} from '../DataSource/useActivatedUI'
+import { useCurrentVisitingSocialIdentity } from '../DataSource/useActivatedUI'
 import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary'
 
@@ -164,16 +160,15 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         retry: retryLoadPersonaStatus,
     } = useCurrentPersonaConnectStatus()
 
-    const currentVisitingIdentity = useCurrentVisitingIdentity()
-    const currentVisitingUserId = currentVisitingIdentity.identifier?.userId
-    const isOwnerIdentity = useIsOwnerIdentity(currentVisitingIdentity)
-
     const {
         value: currentVisitingSocialIdentity,
         loading: loadingCurrentVisitingSocialIdentity,
         error: loadCurrentVisitingSocialIdentityError,
         retry: retryIdentity,
     } = useCurrentVisitingSocialIdentity()
+
+    const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId
+    const isOwnerIdentity = currentVisitingSocialIdentity?.isOwner
 
     const {
         value: socialAddressList = EMPTY_LIST,
@@ -204,7 +199,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         return plugins
             .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
             .filter((x) => {
-                const shouldDisplay = x.Utils?.shouldDisplay?.(currentVisitingIdentity, selectedAddress) ?? true
+                const shouldDisplay = x.Utils?.shouldDisplay?.(currentVisitingSocialIdentity, selectedAddress) ?? true
                 return x.pluginID !== PluginId.NextID && shouldDisplay
             })
             .sort((a, z) => {
