@@ -25,6 +25,7 @@ import { Icons } from '@masknet/icons'
 import { useTipsSetting } from '../hooks/useTipsSetting'
 import type { TipsSettingType } from '../types'
 import { PluginNextIDMessages } from '../messages'
+import { MaskMessages } from '../../../utils'
 
 export interface TipsEntranceDialogProps {
     open: boolean
@@ -104,7 +105,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
 
     const { showSnackbar } = useCustomSnackbar()
 
-    const { value: currentPersonaIdentifier } = useAsyncRetry(() => {
+    const { value: currentPersonaIdentifier, retry: retryCurrentPersona } = useAsyncRetry(() => {
         setShowAlert(true)
         return Services.Settings.getCurrentPersonaIdentifier()
     }, [open])
@@ -198,6 +199,10 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     useEffect(() => {
         return PluginNextIDMessages.tipsSettingUpdate.on(retrySetting)
     }, [retrySetting])
+
+    useEffect(() => {
+        return MaskMessages.events.ownPersonaChanged.on(retryCurrentPersona)
+    }, [retryCurrentPersona])
 
     // TODO: Listens for event messages added by the bound wallet and refreshes the proof data
 

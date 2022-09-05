@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { Typography } from '@mui/material'
+import { Typography, Box } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
 import { BindingProof, ECKeyIdentifier, NextIDPlatform } from '@masknet/shared-base'
 import { useHiddenAddressSetting, useWeb3State } from '@masknet/plugin-infra/web3'
@@ -24,9 +24,9 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1.5),
         background: theme.palette.maskColor.bg,
         display: 'flex',
+        justifyContent: 'space-between',
         alignItems: 'center',
         borderRadius: 4,
-        columnGap: 6,
     },
     alertTitle: {
         fontSize: 14,
@@ -70,7 +70,7 @@ export const TipsSetting = memo<TipsSettingProps>(({ onClose, bindingWallets, cu
     const { Storage } = useWeb3State()
 
     const [addresses, setAddresses] = useState<string[]>([])
-
+    const [showAlert, setShowAlert] = useState(true)
     const { showSnackbar } = useCustomSnackbar()
 
     const { value: hiddenAddress, loading } = useHiddenAddressSetting(PluginId.Tips, currentPersona?.publicKeyAsHex)
@@ -130,10 +130,15 @@ export const TipsSetting = memo<TipsSettingProps>(({ onClose, bindingWallets, cu
     return (
         <>
             <div className={classes.container}>
-                <div className={classes.alert}>
-                    <Icons.Info />
-                    <Typography className={classes.alertTitle}>{t.setting_alert_title()}</Typography>
-                </div>
+                {showAlert ? (
+                    <div className={classes.alert}>
+                        <Box display="flex" alignItems="center" columnGap="6px">
+                            <Icons.Info />
+                            <Typography className={classes.alertTitle}>{t.setting_alert_title()}</Typography>
+                        </Box>
+                        <Icons.Close onClick={() => setShowAlert(false)} size={20} />
+                    </div>
+                ) : null}
                 {bindingWallets?.length ? (
                     <div className={classes.content}>
                         {bindingWallets.map((wallet, index) => (

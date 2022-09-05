@@ -51,6 +51,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '18px',
         cursor: 'pointer',
+        marginLeft: theme.spacing(1.25),
     },
 }))
 
