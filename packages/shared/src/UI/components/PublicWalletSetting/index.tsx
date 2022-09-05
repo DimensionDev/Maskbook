@@ -17,7 +17,6 @@ import { useAsyncFn, useUpdateEffect } from 'react-use'
 import { SettingActions } from './SettingActions'
 import { useSharedI18N } from '../../../locales'
 
-// TODO: move to shared
 export type PublicWalletSettingType = {
     hiddenAddresses?: string[]
     defaultAddress?: string

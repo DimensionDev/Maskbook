@@ -14,7 +14,6 @@ import {
     CreatePersonaAction,
     OtherLackWalletAction,
     SelectConnectPersonaAction,
-    ShowWalletSettingAction,
 } from './Actions/index.js'
 import { PluginCardFrameMini } from '@masknet/shared'
 import { ThemeProvider } from '@mui/material'
@@ -69,7 +68,9 @@ export function NextIdPage() {
                             return (
                                 <CreatePersonaAction
                                     disabled={statusLoading}
-                                    onCreate={() => personaConnectStatus.action?.(undefined, undefined, undefined, true)}
+                                    onCreate={() =>
+                                        personaConnectStatus.action?.(undefined, undefined, undefined, true)
+                                    }
                                 />
                             )
                         if (!personaConnectStatus.connected || !personaConnectStatus.verified)
@@ -81,7 +82,7 @@ export function NextIdPage() {
             )
         }
 
-        return <ShowWalletSettingAction onSetting={() => {}} />
+        return null
     }, [isOwn, t, statusLoading, handleAddWallets, personaConnectStatus])
 
     if (loadingBindings || loadingPersona) {

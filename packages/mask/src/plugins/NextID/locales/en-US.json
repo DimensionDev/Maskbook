@@ -57,7 +57,5 @@
     "mask_network": "Mask Network",
     "create_persona_intro": "Please create your persona to use Web3 Profile.",
     "add_wallet_intro": "In the Web3 tab, you can show your wallet addresses for NFT collections, donation records, and other on-chain feeds to friends who have also installed the Mask extension.",
-    "others_lack_wallet": "The user has not set this.",
-    "show_wallet_setting_intro": "Please select the wallet to active after saving.",
-    "show_wallet_setting_button": "Go Settings"
+    "others_lack_wallet": "The user has not set this."
 }
