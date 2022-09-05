@@ -1,6 +1,5 @@
-import { performReverseLookup } from '@bonfida/spl-name-service'
+import { performReverseLookup, getHashedName, getNameAccountKey, NameRegistryState } from '@bonfida/spl-name-service'
 import { ChainId, createClient } from '@masknet/web3-shared-solana'
-import { getHashedName, getNameAccountKey, NameRegistryState } from '@solana/spl-name-service'
 import { PublicKey } from '@solana/web3.js'
 
 const SOL_TLD_AUTHORITY = new PublicKey('58PwtjSDuFHuUkYjH9BYnnQKHfwo9reZhC2zMJv9JPkx')
@@ -15,7 +14,8 @@ export async function lookup(chainId: ChainId, name: string) {
     try {
         const { domainKey } = await getKey(name.replace('.sol', ''))
         const registry = await NameRegistryState.retrieve(createClient(chainId), domainKey)
-        return registry.owner.toBase58()
+        const owner = registry.registry.owner.toBase58()
+        return owner
     } catch {
         return ''
     }
@@ -23,5 +23,6 @@ export async function lookup(chainId: ChainId, name: string) {
 
 export async function reverse(chainId: ChainId, owner: string) {
     const accountKey = new PublicKey(owner)
-    return performReverseLookup(createClient(chainId), accountKey)
+    const name = await performReverseLookup(createClient(chainId), accountKey)
+    return name
 }

@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import { Button, Checkbox, FormControlLabel, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { PluginId } from '@masknet/plugin-infra'
 import {
@@ -9,6 +11,8 @@ import {
     useCurrentWeb3NetworkPluginID,
     useNetworkType,
     useProviderType,
+    useReverseAddress,
+    useLookupAddress,
     useWeb3State,
 } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
@@ -17,8 +21,6 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { Button, Checkbox, FormControlLabel, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
-import { useState } from 'react'
 
 export interface ConsoleContentProps {
     onClose?: () => void
@@ -43,13 +45,15 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const { value: blockTimestamp = 0 } = useBlockTimestamp()
 
     const onSelectFungibleToken = useSelectFungibleToken()
-    const onSelectGasSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
+    const onSelectGasSettings = useSelectAdvancedSettings(pluginID)
 
     const [pluginId, setPluginId] = useState<PluginId>(PluginId.RSS3)
     const plugins = getEnumAsArray(PluginId) as Array<{ key: PluginId; value: string }>
 
     const [quickMode, setQuickMode] = useState(true)
     const { setDialog } = useRemoteControlledDialog(WalletMessages.events.ApplicationDialogUpdated)
+    const { value: reversedName, retry: retryReversedName } = useReverseAddress(pluginID, account)
+    const { value: lookedAddress, retry: retryLookedAddress } = useLookupAddress(pluginID, reversedName)
 
     const { showSnackbar } = useCustomSnackbar()
     const table: Array<{ name: string; content: JSX.Element }> = [
@@ -86,16 +90,33 @@ export function ConsoleContent(props: ConsoleContentProps) {
             content: <Typography variant="body2">{blockTimestamp}</Typography>,
         },
         {
-            name: 'Token List',
+            name: 'Lookup Address',
             content: (
-                <Button
-                    size="small"
-                    onClick={async () => {
-                        const token = await onSelectFungibleToken()
-                        console.log(token)
-                    }}>
-                    Select Fungible Token
-                </Button>
+                <Typography variant="body2">
+                    <span>{lookedAddress}</span>
+                    <Button
+                        size="small"
+                        onClick={() => {
+                            retryLookedAddress()
+                        }}>
+                        Lookup Address
+                    </Button>
+                </Typography>
+            ),
+        },
+        {
+            name: 'Reversed Name',
+            content: (
+                <Typography variant="body2">
+                    <span>{reversedName}</span>
+                    <Button
+                        size="small"
+                        onClick={() => {
+                            retryReversedName()
+                        }}>
+                        Reversed Name
+                    </Button>
+                </Typography>
             ),
         },
         {
