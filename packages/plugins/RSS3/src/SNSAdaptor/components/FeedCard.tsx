@@ -86,10 +86,9 @@ export const FeedCard = memo(({ feed, address, onSelect }: FeedCardProps) => {
                 return (
                     <span>
                         {`${t.sent_an_NFT_to()} `}
-                        <ReversedAddress
-                            TypographyProps={{ display: 'inline' }}
-                            address={action.address_to ?? ZERO_ADDRESS}
-                        />
+                        {action.address_to ? (
+                            <ReversedAddress TypographyProps={{ display: 'inline' }} address={action.address_to} />
+                        ) : null}
                     </span>
                 )
             }
@@ -139,7 +138,7 @@ export const FeedCard = memo(({ feed, address, onSelect }: FeedCardProps) => {
             }
         }
         return isSameAddress(action.address_to, address) ? t.received() : t.sent()
-    }, [address, feed, t])
+    }, [address, feed, action, t])
 
     const logo = useMemo(() => {
         if (feed.tag === Tag.Collectible) {
