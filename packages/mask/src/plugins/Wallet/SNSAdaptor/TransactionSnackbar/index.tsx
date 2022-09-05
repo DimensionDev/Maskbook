@@ -60,6 +60,7 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
     }, [TransactionWatcher, chainId, pluginID])
 
     useEffect(() => {
+        setProgress(undefined)
         setErrorInfo(undefined)
     }, [chainId])
 
@@ -141,6 +142,7 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
             ...snackbarConfig,
             message: message ?? snackbarConfig.message,
         })
+        setErrorInfo(undefined)
     }, [JSON.stringify(errorInfo), chainId])
 
     return null
