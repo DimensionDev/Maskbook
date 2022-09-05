@@ -1,10 +1,8 @@
 import { Icons } from '@masknet/icons'
-import { PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { alpha, Button } from '@mui/material'
-import { memo, useCallback } from 'react'
-import Services from '../../../../extension/service.js'
-import { useI18N } from '../../locales/index.js'
+import { memo } from 'react'
+import { useSharedI18N } from '../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -29,31 +27,16 @@ const useStyles = makeStyles()((theme) => ({
 interface SettingActionsProps {
     hasWallet: boolean
     onClose: () => void
+    onOpenConnectWallet: () => void
     onConfirm: () => void
     disableConfirm: boolean
     confirmLoading: boolean
 }
 
-export const SettingActions = memo<SettingActionsProps>((props) => {
-    const onOpenConnectWallet = useCallback(
-        () =>
-            Services.Helper.openPopupWindow(PopupRoutes.ConnectedWallets, {
-                internal: true,
-            }),
-        [],
-    )
-
-    return <SettingActionsUI onOpenConnectWallet={onOpenConnectWallet} {...props} />
-})
-
-interface SettingActionsUIProps extends SettingActionsProps {
-    onOpenConnectWallet: () => void
-}
-
-export const SettingActionsUI = memo<SettingActionsUIProps>(
+export const SettingActions = memo<SettingActionsProps>(
     ({ hasWallet, onOpenConnectWallet, onClose, disableConfirm, confirmLoading, onConfirm }) => {
         const { classes, cx } = useStyles()
-        const t = useI18N()
+        const t = useSharedI18N()
         if (!hasWallet) {
             return (
                 <div className={classes.actions}>

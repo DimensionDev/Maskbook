@@ -184,6 +184,10 @@ export interface SettingDialogEvent {
     targetTab?: string
 }
 
+export interface PluginPublicWalletUpdateEvent {
+    pluginId?: string
+}
+
 /** This is a subset of browser.permissions.Permission */
 export type PossiblyUsedWebExtensionPermission = 'clipboardRead'
 

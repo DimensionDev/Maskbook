@@ -58,7 +58,10 @@ export function PluginSettingsDialog() {
         label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
     }))
 
-    const [currentTab, onChange, , setTab] = useTabs(first(tabs)?.id ?? PluginID.Tips, ...tabs.map((tab) => tab.id))
+    const [currentTab, onChange, , setTab] = useTabs<PluginId>(
+        first(tabs)?.id ?? PluginID.Tips,
+        ...tabs.map((tab) => tab.id),
+    )
 
     const openPopupWindow = useCallback(
         () =>
@@ -82,11 +85,19 @@ export function PluginSettingsDialog() {
 
     useEffect(() => MaskMessages.events.ownPersonaChanged.on(retry), [retry])
 
+    const onOpenPopup = useCallback(Services.Helper.openPopupWindow, [])
+
     const component = useMemo(() => {
         const Component = getTabContent(currentTab)
         if (!Component) return null
         return (
-            <Component onClose={() => setOpen(false)} bindingWallets={bindingWallets} currentPersona={currentPersona} />
+            <Component
+                onClose={() => setOpen(false)}
+                bindingWallets={bindingWallets}
+                currentPersona={currentPersona}
+                pluginId={currentTab}
+                onOpenPopup={onOpenPopup}
+            />
         )
     }, [currentTab, bindingWallets, currentPersona])
 
@@ -94,7 +105,7 @@ export function PluginSettingsDialog() {
         return CrossIsolationMessages.events.PluginSettingsDialogUpdate.on(({ open, targetTab }) => {
             setOpen(open)
 
-            if (targetTab) setTab(targetTab)
+            if (targetTab) setTab(targetTab as PluginId)
         })
     }, [])
 
