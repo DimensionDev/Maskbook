@@ -25,6 +25,7 @@ import { Icons } from '@masknet/icons'
 import { useTipsSetting } from '../hooks/useTipsSetting'
 import type { TipsSettingType } from '../types'
 import { PluginNextIDMessages } from '../messages'
+import { MaskMessages } from '../../../utils'
 
 export interface TipsEntranceDialogProps {
     open: boolean
@@ -104,7 +105,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
 
     const { showSnackbar } = useCustomSnackbar()
 
-    const { value: currentPersonaIdentifier } = useAsyncRetry(() => {
+    const { value: currentPersonaIdentifier, retry: retryCurrentPersona } = useAsyncRetry(() => {
         setShowAlert(true)
         return Services.Settings.getCurrentPersonaIdentifier()
     }, [open])
@@ -135,12 +136,10 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             .filter((x) => !TipsSetting?.hiddenAddresses?.includes(x.identity))
             .sort((a, z) => {
                 if (isGreaterThan(a.last_checked_at, z.last_checked_at)) {
-                    if (isSameAddress(z.identity, defaultAddress)) return 1
-                    return -1
+                    return isSameAddress(z.identity, defaultAddress) ? -1 : 1
                 }
 
-                if (isSameAddress(a.identity, defaultAddress)) return -1
-                return 1
+                return isSameAddress(a.identity, defaultAddress) ? -1 : 1
             })
     }, [defaultAddress, bindingWallets, TipsSetting?.hiddenAddresses])
 
@@ -199,7 +198,9 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         return PluginNextIDMessages.tipsSettingUpdate.on(retrySetting)
     }, [retrySetting])
 
-    // TODO: Listens for event messages added by the bound wallet and refreshes the proof data
+    useEffect(() => {
+        return MaskMessages.events.ownPersonaChanged.on(retryCurrentPersona)
+    }, [retryCurrentPersona])
 
     return (
         <InjectedDialog

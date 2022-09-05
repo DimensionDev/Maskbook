@@ -70,7 +70,7 @@ export function PluginSettingsDialog() {
 
     const { value: currentPersona, retry } = useAsyncRetry(Services.Settings.getCurrentPersonaIdentifier, [])
 
-    const { value: bindingWallets } = useAsyncRetry(async () => {
+    const { value: bindingWallets, retry: retryBindingWallets } = useAsyncRetry(async () => {
         if (!currentPersona) return EMPTY_LIST
         const response = await NextIDProof.queryExistedBindingByPersona(currentPersona.publicKeyAsHex)
         if (!response) return EMPTY_LIST
@@ -78,9 +78,9 @@ export function PluginSettingsDialog() {
         return proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
     }, [currentPersona])
 
-    useEffect(() => {
-        return MaskMessages.events.ownPersonaChanged.on(retry)
-    }, [retry])
+    useEffect(() => MaskMessages.events.ownProofChanged.on(retryBindingWallets), [retryBindingWallets])
+
+    useEffect(() => MaskMessages.events.ownPersonaChanged.on(retry), [retry])
 
     const component = useMemo(() => {
         const Component = getTabContent(currentTab)
