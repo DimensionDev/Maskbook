@@ -3,6 +3,13 @@ import { mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared
 import type { NameServiceState as Web3NameServiceState } from '@masknet/web3-shared-base'
 import type { Plugin } from '../types'
 
+export interface NameServiceResolver<ChainId> {
+    /** get address of domain name */
+    lookup?: (chainId: ChainId, domain: string) => Promise<string | undefined>
+    /** get domain name of address */
+    reverse?: (chainId: ChainId, address: string) => Promise<string | undefined>
+}
+
 export class NameServiceState<
     ChainId extends number,
     DomainBook extends Record<string, string> = Record<string, string>,
@@ -14,6 +21,7 @@ export class NameServiceState<
 
     constructor(
         protected context: Plugin.Shared.SharedContext,
+        protected resolver: NameServiceResolver<ChainId>,
         protected chainIds: ChainId[],
         protected subscriptions: {
             chainId?: Subscription<ChainId>
@@ -38,38 +46,58 @@ export class NameServiceState<
         }
     }
 
-    async addName(chainId: ChainId, address: string, name: string) {
+    private async addName(chainId: ChainId, address: string, name: string) {
         if (!this.options.isValidAddress(address)) return
         const all = this.storage.value
+        const formatedAddress = this.options.formatAddress(address)
         await this.storage.setValue({
             ...all,
             [chainId]: {
                 ...all[chainId],
-                [this.options.formatAddress(address)]: name,
+                [formatedAddress]: name,
+                [name]: formatedAddress,
             },
         })
     }
 
-    async addAddress(chainId: ChainId, name: string, address: string) {
+    private async addAddress(chainId: ChainId, name: string, address: string) {
         if (!this.options.isValidAddress(address)) return
         const all = this.storage.value
+        const formatedAddress = this.options.formatAddress(address)
         await this.storage.setValue({
             ...all,
             [chainId]: {
                 ...all[chainId],
-                [name]: this.options.formatAddress(address),
+                [name]: formatedAddress,
+                [formatedAddress]: name,
             },
         })
     }
 
     async lookup(chainId: ChainId, name: string) {
-        const address = this.storage.value[chainId][name]
-        if (!this.options.isValidAddress(address)) return
-        return address
+        if (!name) return
+
+        const address = this.storage.value[chainId][name] || (await this.resolver.lookup?.(chainId, name))
+
+        if (address && this.options.isValidAddress(address)) {
+            const formatedAddress = this.options.formatAddress(address)
+            await this.addAddress(chainId, name, formatedAddress)
+            return formatedAddress
+        }
+        return
     }
 
     async reverse(chainId: ChainId, address: string) {
         if (!this.options.isValidAddress(address)) return
-        return this.storage.value[chainId][this.options.formatAddress(address)]
+
+        const name =
+            this.storage.value[chainId][this.options.formatAddress(address)] ||
+            (await this.resolver.reverse?.(chainId, address))
+
+        if (name) {
+            await this.addName(chainId, address, name)
+            return name
+        }
+        return
     }
 }
