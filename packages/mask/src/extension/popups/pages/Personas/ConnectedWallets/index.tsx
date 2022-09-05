@@ -57,7 +57,7 @@ const ConnectedWallets = memo(() => {
             }),
         )
 
-        return sortBy(compact(results), (x) => Number(x.created_at))
+        return sortBy(compact(results), (x) => Number(x.last_checked_at))
             .map((x, index) => {
                 if (!x.name)
                     return {

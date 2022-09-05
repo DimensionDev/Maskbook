@@ -29,5 +29,7 @@ export function useProvedWallets() {
         return proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
     }, [currentPersonaIdentifier, personas])
 
+    useEffect(() => MaskMessages.events.ownProofChanged.on(res.retry), [res.retry])
+
     return res
 }
