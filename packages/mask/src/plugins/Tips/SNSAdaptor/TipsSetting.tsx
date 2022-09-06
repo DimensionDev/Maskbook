@@ -56,7 +56,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: 12,
         '& > *': {
             flex: 1,
-            maxWidth: 'calc(50% - 6px)',
+            maxWidth: 'calc(50% - 22px)',
         },
     },
 }))

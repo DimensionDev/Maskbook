@@ -9,7 +9,7 @@
     "description": "Gift crypto or NFTs tips to any <Link>Next.ID</Link> verified users on social media.",
     "default": "Default",
     "token_insufficient_balance": "Insufficient balance",
-    "manage_wallet": "Manage walelt",
+    "manage_wallet": "Manage wallet",
     "save": "Save",
     "save_successfully": "Save successfully",
     "save_failed": "Save failed",
