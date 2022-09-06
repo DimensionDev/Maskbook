@@ -828,6 +828,15 @@ export const Select = (mode: PaletteMode, colors: MaskColor) => ({
         MuiSelect: {
             defaultProps: {
                 input: <MuiInputBase />,
+                IconComponent: Icons.ArrowDrop,
+            },
+            styleOverrides: {
+                icon: {
+                    width: 22.5,
+                    height: 22.5,
+                    top: 'calc(50% - 11.25px)',
+                    color: colors.maskColor.second,
+                },
             },
         },
     },

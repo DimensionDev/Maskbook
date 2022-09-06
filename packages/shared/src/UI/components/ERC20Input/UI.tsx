@@ -97,6 +97,9 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         marginLeft: 4,
     },
+    arrowIcon: {
+        color: `${theme.palette.maskColor.second}!important`,
+    },
 }))
 
 interface ERC20InputUIProps extends InputBaseProps {
@@ -169,7 +172,7 @@ export const ERC20InputUI = memo<ERC20InputUIProps>(
                                                 logoURL={token.logoURL}
                                             />
                                         }
-                                        deleteIcon={<Icons.ArrowDrop size={24} />}
+                                        deleteIcon={<Icons.ArrowDrop className={classes.arrowIcon} size={24} />}
                                         onDelete={noop}
                                         label={token.symbol}
                                     />
