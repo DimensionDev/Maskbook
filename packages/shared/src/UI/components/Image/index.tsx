@@ -2,7 +2,7 @@ import { makeStyles, parseColor, useStylesExtends } from '@masknet/theme'
 import { resolveCORSLink, resolveIPFSLink } from '@masknet/web3-shared-base'
 import { Box, CircularProgress, useTheme } from '@mui/material'
 import classNames from 'classnames'
-import type { ImgHTMLAttributes } from 'react'
+import { ImgHTMLAttributes, useState } from 'react'
 import { useAsync } from 'react-use'
 import { loadImage } from './loadImage'
 
@@ -36,6 +36,7 @@ interface ImageProps
 export function Image({ fallback, disableSpinner, classes: externalClasses, ...rest }: ImageProps) {
     const classes = useStylesExtends(useStyles(), { classes: externalClasses })
     const theme = useTheme()
+    const [failed, setFailed] = useState(false)
 
     const { value: image, loading: imageLoading } = useAsync(async () => {
         if (!rest.src) return
@@ -62,10 +63,10 @@ export function Image({ fallback, disableSpinner, classes: externalClasses, ...r
         )
     }
 
-    if (image) {
+    if (image && !failed) {
         return (
             <Box className={classes.container}>
-                <img {...rest} src={image} />
+                <img loading="lazy" decoding="async" {...rest} src={image} onError={() => setFailed(true)} />
             </Box>
         )
     }
@@ -83,7 +84,13 @@ export function Image({ fallback, disableSpinner, classes: externalClasses, ...r
 
     return (
         <Box className={classes.container}>
-            <img {...rest} src={fallbackImageURL} className={classNames(classes.failImage, classes.fallbackImage)} />
+            <img
+                loading="lazy"
+                decoding="async"
+                {...rest}
+                src={fallbackImageURL}
+                className={classNames(classes.failImage, classes.fallbackImage)}
+            />
         </Box>
     )
 }
