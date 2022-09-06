@@ -25,8 +25,6 @@ async function Suspender(identifier: ProposalIdentifier) {
         proposal.strategies,
     )
     const strategies = proposal.strategies
-    const profiles = await PluginSnapshotRPC.fetch3BoxProfiles(voters)
-    const profileEntries = Object.fromEntries(profiles.map((p) => [p.eth_address, p]))
     return proposal.votes
         .map((v) => {
             const choices =
@@ -58,8 +56,6 @@ async function Suspender(identifier: ProposalIdentifier) {
                 balance: sumBy(scores, (score) => score[v.voter.toLowerCase()] ?? 0),
                 scores: strategies.map((_strategy, i) => scores[i][v.voter] || 0),
                 strategySymbol: proposal.space.symbol ?? strategies[0].params.symbol,
-                authorName: profileEntries[v.voter.toLowerCase()]?.name,
-                authorAvatar: profileEntries[v.voter.toLowerCase()]?.image,
                 timestamp: v.created,
             }
         })
