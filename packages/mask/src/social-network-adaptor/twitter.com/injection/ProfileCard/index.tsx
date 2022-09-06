@@ -88,11 +88,19 @@ function ProfileCardHolder() {
                 hideProfileCard()
                 return
             }
-            const { userId, x, y } = event
+            const { userId, badgeBounding: bounding } = event
             setTwitterId(userId)
             setStyle((old) => {
-                const newLeft = x - CARD_WIDTH / 2
-                const newTop = y
+                const reachedBottomBoundary = bounding.top + bounding.height + CARD_HEIGHT > window.innerHeight
+                const reachedLeftBoundary = bounding.left - CARD_WIDTH / 2 < 0
+                const pageOffset = document.scrollingElement?.scrollTop || 0
+                const x = reachedLeftBoundary ? 0 : bounding.left + bounding.width / 2 - CARD_WIDTH / 2
+                const y = reachedBottomBoundary
+                    ? bounding.top - CARD_HEIGHT - bounding.height
+                    : bounding.top + bounding.height
+
+                const newLeft = x
+                const newTop = y + pageOffset
                 const { visibility, left, top } = old
                 if (visibility === 'visible' && left === newLeft && top === newTop) return old
                 return {

@@ -21,23 +21,23 @@ export const ProfileAvatarBadge: FC<Props> = ({ userId, className, ...rest }) =>
     useEffect(() => {
         const button = buttonRef.current
         if (!button) return
-        let timer: NodeJS.Timeout
+        let closeTimer: NodeJS.Timeout
+        let openTimer: NodeJS.Timeout
         const enter = () => {
-            clearTimeout(timer)
+            clearTimeout(closeTimer)
             const button = buttonRef.current
             if (!button) return
-            const boundingRect = button.getBoundingClientRect()
-            const x = boundingRect.left + boundingRect.width / 2
-            const y = boundingRect.top + boundingRect.height + (document.scrollingElement?.scrollTop || 0)
-            CrossIsolationMessages.events.requestProfileCard.sendToLocal({
-                open: true,
-                userId,
-                x,
-                y,
-            })
+            openTimer = setTimeout(() => {
+                CrossIsolationMessages.events.requestProfileCard.sendToLocal({
+                    open: true,
+                    userId,
+                    badgeBounding: button.getBoundingClientRect(),
+                })
+            }, 200)
         }
         const leave = () => {
-            timer = setTimeout(() => {
+            clearTimeout(openTimer)
+            closeTimer = setTimeout(() => {
                 CrossIsolationMessages.events.requestProfileCard.sendToLocal({
                     open: false,
                 })
@@ -46,6 +46,8 @@ export const ProfileAvatarBadge: FC<Props> = ({ userId, className, ...rest }) =>
         button.addEventListener('mouseenter', enter)
         button.addEventListener('mouseleave', leave)
         return () => {
+            clearTimeout(closeTimer)
+            clearTimeout(openTimer)
             button.removeEventListener('mouseenter', enter)
             button.removeEventListener('mouseleave', leave)
         }
