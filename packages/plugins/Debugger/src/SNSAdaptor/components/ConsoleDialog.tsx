@@ -1,6 +1,6 @@
 import { InjectedDialog } from '@masknet/shared'
 import { DialogContent } from '@mui/material'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-solana'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { PluginIDContextProvider, PluginWeb3ContextProvider } from '@masknet/plugin-infra/web3'
 import { ConsoleContent } from './ConsoleContent'
@@ -14,9 +14,9 @@ export function ConsoleDialog(props: ConsoleDialogProps) {
     return (
         <InjectedDialog title="Debugger" fullWidth open={open} onClose={closeDialog}>
             <DialogContent>
-                <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
+                <PluginIDContextProvider value={NetworkPluginID.PLUGIN_SOLANA}>
                     <PluginWeb3ContextProvider
-                        pluginID={NetworkPluginID.PLUGIN_EVM}
+                        pluginID={NetworkPluginID.PLUGIN_SOLANA}
                         value={{
                             chainId: ChainId.Mainnet,
                         }}>
