@@ -14,6 +14,8 @@ const useStyles = makeStyles()((theme) => ({
 interface Props extends IconButtonProps {
     userId: string
 }
+let closeTimer: NodeJS.Timeout
+let openTimer: NodeJS.Timeout
 export const ProfileAvatarBadge: FC<Props> = ({ userId, className, ...rest }) => {
     const buttonRef = useRef<HTMLButtonElement>(null)
     const { classes, cx } = useStyles()
@@ -21,9 +23,8 @@ export const ProfileAvatarBadge: FC<Props> = ({ userId, className, ...rest }) =>
     useEffect(() => {
         const button = buttonRef.current
         if (!button) return
-        let closeTimer: NodeJS.Timeout
-        let openTimer: NodeJS.Timeout
         const enter = () => {
+            clearTimeout(openTimer)
             clearTimeout(closeTimer)
             const button = buttonRef.current
             if (!button) return
@@ -37,6 +38,7 @@ export const ProfileAvatarBadge: FC<Props> = ({ userId, className, ...rest }) =>
         }
         const leave = () => {
             clearTimeout(openTimer)
+            clearTimeout(closeTimer)
             closeTimer = setTimeout(() => {
                 CrossIsolationMessages.events.requestProfileCard.sendToLocal({
                     open: false,

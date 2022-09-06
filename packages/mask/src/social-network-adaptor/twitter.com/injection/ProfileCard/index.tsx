@@ -64,14 +64,15 @@ function ProfileCardHolder() {
     useEffect(() => {
         const holder = holderRef.current
         if (!holder) return
-        let timer: NodeJS.Timeout
+        let closeTimer: NodeJS.Timeout
         const enter = () => {
             activeRef.current = true
-            clearTimeout(timer)
+            clearTimeout(closeTimer)
         }
         const leave = () => {
             activeRef.current = false
-            timer = setTimeout(hideProfileCard, DISMISS_TIMEOUT)
+            clearTimeout(closeTimer)
+            closeTimer = setTimeout(hideProfileCard, DISMISS_TIMEOUT)
         }
         holder.addEventListener('mouseenter', enter)
         holder.addEventListener('mouseleave', leave)
