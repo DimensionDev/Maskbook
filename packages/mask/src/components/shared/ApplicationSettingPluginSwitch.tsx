@@ -83,7 +83,7 @@ export const ApplicationSettingPluginSwitch = memo(({ focusPluginId }: Props) =>
     useEffect(() => {
         if (!focusPluginId || noAvailablePlugins || !targetPluginRef.current) return
         targetPluginRef.current.scrollIntoView()
-    }, [focusPluginId, noAvailablePlugins, targetPluginRef])
+    }, [focusPluginId, noAvailablePlugins])
 
     async function onSwitch(id: string, checked: boolean) {
         if (id === PluginId.GoPlusSecurity && checked === false)
