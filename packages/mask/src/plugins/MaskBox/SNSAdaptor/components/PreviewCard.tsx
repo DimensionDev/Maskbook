@@ -341,15 +341,16 @@ export function PreviewCard(props: PreviewCardProps) {
                                 disabled={boxState !== BoxState.READY || isOpening}
                                 onClick={() => setOpenDrawDialog(true)}>
                                 {(() => {
-                                    return boxState === BoxState.READY && paymentTokenAddress ? (
-                                        <>
-                                            {boxStateMessage} (
-                                            {formatBalance(paymentTokenPrice, paymentTokenDetailed?.decimals ?? 0)}{' '}
-                                            {paymentTokenDetailed?.symbol}/Time)
-                                        </>
-                                    ) : (
-                                        boxStateMessage
-                                    )
+                                    return boxState === BoxState.READY && paymentTokenAddress
+                                        ? t.action_title({
+                                              title: boxStateMessage,
+                                              price: formatBalance(
+                                                  paymentTokenPrice,
+                                                  paymentTokenDetailed?.decimals ?? 0,
+                                              ),
+                                              symbol: paymentTokenDetailed?.symbol ?? '',
+                                          })
+                                        : boxStateMessage
                                 })()}
                             </ActionButton>
                         </WalletConnectedBoundary>

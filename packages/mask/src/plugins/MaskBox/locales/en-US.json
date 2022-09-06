@@ -7,5 +7,6 @@
     "by": "by",
     "limit": "Limit:",
     "articles": "Articles",
-    "details": "Details"
+    "details": "Details",
+    "action_title": "{{title}} ({{price}} {{symbol}}/Time)"
 }
