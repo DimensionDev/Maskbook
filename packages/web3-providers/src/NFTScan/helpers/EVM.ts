@@ -6,6 +6,7 @@ import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 import {
+    isLocaleResource,
     NonFungibleAsset,
     NonFungibleCollection,
     NonFungibleTokenContract,
@@ -90,7 +91,8 @@ export function createNonFungibleAsset(
     const contractName = asset.contract_name
     const name = payload?.name || asset.name || ''
     const description = payload?.description
-    const mediaURL = resolveIPFSLink(asset.nftscan_uri ?? asset.image_uri)
+    const uri = asset.nftscan_uri ?? asset.image_uri
+    const mediaURL = uri && isLocaleResource(uri) ? uri : resolveIPFSLink(uri)
 
     const creator = asset.minter
     const owner = asset.owner

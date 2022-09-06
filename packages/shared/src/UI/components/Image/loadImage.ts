@@ -1,12 +1,15 @@
-import { isLocaleResource } from '@masknet/web3-shared-base'
+import { hasIpfsCid, isLocaleResource, resolveIPFSLink, resolveLocalResource } from '@masknet/web3-shared-base'
 
 export async function loadImage(url: string) {
-    if (url.startsWith('<svg ')) return `data:image/svg+xml;base64,${btoa(url)}`
-    if (isLocaleResource(url)) return url
+    if (isLocaleResource(url)) return resolveLocalResource(url)
     return new Promise<string>((resolve, reject) => {
+        let fixedUrl = url
         if (!/^https?:\/\//.test(url)) {
-            // May be IPFS, let fetch, aka r2d2Fetch, handle it.
-            throw new TypeError('Invalid url.')
+            if (!hasIpfsCid(url)) {
+                // Unknown type, fallback to fetch, aka r2d2Fetch.
+                throw new TypeError('Invalid url.')
+            }
+            fixedUrl = resolveIPFSLink(fixedUrl)!
         }
         const img = document.createElement('img')
         const cleanup = () => {
@@ -21,9 +24,10 @@ export async function loadImage(url: string) {
             reject()
             cleanup()
         }
+        img.decoding = 'async'
         img.addEventListener('load', onload)
         img.addEventListener('error', onerror)
-        img.src = url
+        img.src = fixedUrl
     }).catch(async () => {
         const response = await fetch(url, {
             cache: 'force-cache',

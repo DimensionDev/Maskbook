@@ -245,7 +245,14 @@ export const getIpfsCidPathname = (str: string) => {
 }
 
 export const isLocaleResource = (url: string): boolean => {
-    return /^data|blob:|\w+-extension:\/\/|<svg\s/.test(url)
+    return /^(data|blob:|\w+-extension:\/\/|<svg\s)/.test(url)
+}
+
+export const resolveLocalResource = (url: string): string => {
+    if (/^<svg\s/.test(url)) {
+        return `data:image/svg+xml;base64,${btoa(url)}`
+    }
+    return url
 }
 
 export function resolveIPFSLink(cidOrURL?: string): string | undefined {
