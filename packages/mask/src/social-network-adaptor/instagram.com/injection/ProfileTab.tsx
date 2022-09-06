@@ -156,7 +156,7 @@ export function ProfileTabAtInstagram() {
         const style = getStyleProps({ activeColor, color })
         const activeTab = searchProfileActiveTabSelector().evaluate()
         if (activeTab?.style) {
-            activeTab.style.borderTop = 'none'
+            activeTab.style.setProperty('border-top', 'none', 'important')
             activeTab.style.color = style.color
         }
 
