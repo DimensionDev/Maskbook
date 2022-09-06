@@ -583,6 +583,9 @@ importers:
       '@masknet/plugin-debugger':
         specifier: workspace:*
         version: link:../plugins/Debugger
+      '@masknet/plugin-ens':
+        specifier: workspace:*
+        version: link:../plugins/ENS
       '@masknet/plugin-evm':
         specifier: workspace:*
         version: link:../plugins/EVM
@@ -1215,6 +1218,36 @@ importers:
       urlcat:
         specifier: ^2.0.4
         version: 2.0.4_fggwetex7eobhq3hztj4obsulu
+
+  packages/plugins/ENS:
+    dependencies:
+      '@masknet/icons':
+        specifier: workspace:*
+        version: link:../../icons
+      '@masknet/plugin-infra':
+        specifier: workspace:*
+        version: link:../../plugin-infra
+      '@masknet/shared':
+        specifier: workspace:*
+        version: link:../../shared
+      '@masknet/shared-base':
+        specifier: workspace:*
+        version: link:../../shared-base
+      '@masknet/shared-base-ui':
+        specifier: workspace:*
+        version: link:../../shared-base-ui
+      '@masknet/theme':
+        specifier: workspace:*
+        version: link:../../theme
+      '@masknet/web3-shared-base':
+        specifier: workspace:*
+        version: link:../../web3-shared/base
+      '@masknet/web3-shared-evm':
+        specifier: workspace:*
+        version: link:../../web3-shared/evm
+      react-use:
+        specifier: ^17.4.0
+        version: 17.4.0
 
   packages/plugins/EVM:
     dependencies:

@@ -1,0 +1,23 @@
+{
+  "name": "@masknet/plugin-ens",
+  "private": true,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "webpack": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@masknet/icons": "workspace:*",
+    "@masknet/plugin-infra": "workspace:*",
+    "@masknet/shared": "workspace:*",
+    "@masknet/shared-base": "workspace:*",
+    "@masknet/shared-base-ui": "workspace:*",
+    "@masknet/web3-shared-evm": "workspace:*",
+    "@masknet/web3-shared-base": "workspace:*",
+    "@masknet/theme": "workspace:*",
+    "react-use": "^17.4.0"
+  }
+}
