@@ -21,6 +21,7 @@ export function injectProfileCardHolder(signal: AbortSignal) {
 
 const CARD_WIDTH = 450
 const CARD_HEIGHT = 500
+const DISMISS_TIMEOUT = process.env.NODE_ENV === 'production' ? 2000 : 120_000
 const useStyles = makeStyles()((theme) => ({
     root: {
         position: 'absolute',
@@ -70,7 +71,7 @@ function ProfileCardHolder() {
         }
         const leave = () => {
             activeRef.current = false
-            timer = setTimeout(hideProfileCard, 2000)
+            timer = setTimeout(hideProfileCard, DISMISS_TIMEOUT)
         }
         holder.addEventListener('mouseenter', enter)
         holder.addEventListener('mouseleave', leave)

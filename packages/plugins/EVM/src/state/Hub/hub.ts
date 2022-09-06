@@ -333,7 +333,7 @@ class Hub implements EVM_Hub {
         address: string,
         tokenId: string,
         initial?: HubOptions<ChainId>,
-    ): Promise<NonFungibleTokenRarity | undefined> {
+    ): Promise<NonFungibleTokenRarity<ChainId> | undefined> {
         const options = this.getOptions(initial)
         const providers = this.getProviders<NonFungibleTokenAPI.Provider<ChainId, SchemaType>>(
             {

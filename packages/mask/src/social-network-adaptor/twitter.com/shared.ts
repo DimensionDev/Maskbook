@@ -5,7 +5,7 @@ import { createSNSAdaptorSpecializedPostContext } from '../../social-network/uti
 import { hasPayloadLike } from '../../utils'
 import { twitterBase } from './base'
 import { TwitterDecoder } from '@masknet/encryption'
-import { usernameValidator } from './utils/user'
+import { getUserIdentity, usernameValidator } from './utils/user'
 import { TwitterAdaptor } from '../../../shared/site-adaptors/implementations/twitter.com'
 
 const getPostURL = (post: PostIdentifier): URL | null => {
@@ -45,5 +45,6 @@ export const twitterShared: SocialNetwork.Shared & SocialNetwork.Base = {
             },
             getURLFromPostIdentifier: getPostURL,
         }),
+        getUserIdentity,
     },
 }

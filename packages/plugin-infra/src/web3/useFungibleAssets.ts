@@ -3,9 +3,9 @@ import { asyncIteratorToArray, EMPTY_LIST } from '@masknet/shared-base'
 import {
     CurrencyType,
     currySameAddress,
-    formatBalance,
     HubIndicator,
     isSameAddress,
+    leftShift,
     minus,
     NetworkPluginID,
     pageableToIterator,
@@ -50,8 +50,8 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
         return filteredAssets
             .filter((x) => !isBlockedToken(x))
             .sort((a, z) => {
-                const aBalance = toZero(formatBalance(a.balance, a.decimals))
-                const zBalance = toZero(formatBalance(z.balance, z.decimals))
+                const aBalance = toZero(leftShift(a.balance, a.decimals))
+                const zBalance = toZero(leftShift(z.balance, z.decimals))
 
                 const aUSD = toZero(a.value?.[CurrencyType.USD] ?? '0')
                 const zUSD = toZero(z.value?.[CurrencyType.USD] ?? '0')

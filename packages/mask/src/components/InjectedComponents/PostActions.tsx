@@ -1,11 +1,22 @@
-import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import {
+    createInjectHooksRenderer,
+    Plugin,
+    useActivatedPluginsSNSAdaptor,
+    usePostInfoDetails,
+} from '@masknet/plugin-infra/content-script'
 
 const ActionsRenderer = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
-    (plugin) => plugin.PostActions,
+    (plugin) => plugin.TipsRealm?.UI?.Content,
 )
 
-export interface PostActionsProps {}
-export function PostActions() {
-    return <ActionsRenderer />
+export function PostActions({ isFocusing }: { isFocusing?: boolean }) {
+    const identifier = usePostInfoDetails.author()
+    if (!identifier) return null
+    return (
+        <ActionsRenderer
+            identity={identifier}
+            slot={isFocusing ? Plugin.SNSAdaptor.TipsSlot.FocusingPost : Plugin.SNSAdaptor.TipsSlot.Post}
+        />
+    )
 }

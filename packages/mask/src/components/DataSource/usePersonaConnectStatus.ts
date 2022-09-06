@@ -73,6 +73,7 @@ export interface PersonaConnectStatus {
         target?: string | undefined,
         position?: 'center' | 'top-right' | undefined,
         enableVerify?: boolean,
+        direct?: boolean,
     ) => void
     currentPersona?: PersonaInformation
     connected?: boolean
@@ -103,16 +104,20 @@ export function useCurrentPersonaConnectStatus() {
     const { setDialog: setCreatePersonaConfirmDialog } = useRemoteControlledDialog(MaskMessages.events.openPageConfirm)
 
     const create = useCallback(
-        (target?: string, position?: 'center' | 'top-right') => {
-            setCreatePersonaConfirmDialog({
-                open: true,
-                target: 'dashboard',
-                url: target ?? DashboardRoutes.Setup,
-                text: t('applications_create_persona_hint'),
-                title: t('applications_create_persona_title'),
-                actionHint: t('applications_create_persona_action'),
-                position,
-            })
+        (target?: string, position?: 'center' | 'top-right', enableVerify?: boolean, direct = false) => {
+            if (direct) {
+                Services.Helper.openDashboard(DashboardRoutes.Setup)
+            } else {
+                setCreatePersonaConfirmDialog({
+                    open: true,
+                    target: 'dashboard',
+                    url: target ?? DashboardRoutes.Setup,
+                    text: t('applications_create_persona_hint'),
+                    title: t('applications_create_persona_title'),
+                    actionHint: t('applications_create_persona_action'),
+                    position,
+                })
+            }
         },
         [setCreatePersonaConfirmDialog],
     )
@@ -132,6 +137,7 @@ export function useCurrentPersonaConnectStatus() {
     const {
         value = defaultStatus,
         loading,
+        error,
         retry,
     } = useAsyncRetry<PersonaConnectStatus>(async () => {
         const currentPersona = personas.find((x) => isSamePersona(x, currentIdentifier))
@@ -200,5 +206,5 @@ export function useCurrentPersonaConnectStatus() {
     useEffect(() => MaskMessages.events.ownProofChanged.on(retry), [retry])
     useEffect(() => MaskMessages.events.ownPersonaChanged.on(retry), [retry])
 
-    return { value, loading, retry }
+    return { value, loading, retry, error }
 }

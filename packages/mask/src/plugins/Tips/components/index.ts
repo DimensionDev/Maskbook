@@ -1,3 +1,3 @@
 export * from './TipDialog'
-export * from './TipButton'
+export * from './TipsButton'
 export * from './TipTaskManager'

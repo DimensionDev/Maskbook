@@ -13,6 +13,7 @@ import type {
     ECKeyIdentifier,
     EnhanceableSite,
     ExtensionSite,
+    BindingProof,
 } from '@masknet/shared-base'
 import type {
     ChainDescriptor,
@@ -459,6 +460,8 @@ export namespace Plugin.SNSAdaptor {
         ContributedView?: {
             [key in keyof ContributedViewRegistry]: ContributedView<ContributedViewRegistry[key]>
         }
+        /** This UI will be rendered components on the tips realm */
+        TipsRealm?: TipsRealm
         /** This UI will be rendered as plugin wrapper page */
         wrapperProps?: PluginWrapperProps
         /**
@@ -635,6 +638,26 @@ export namespace Plugin.SNSAdaptor {
             ): boolean
         }
     }
+    export enum TipsSlot {
+        FollowButton = 'follow',
+        FocusingPost = 'focusing-post',
+        Post = 'post',
+        Profile = 'profile',
+    }
+    export interface TipsRealmOptions {
+        identity?: ProfileIdentifier
+        slot: TipsSlot
+    }
+    export interface TipsRealm {
+        ID: string
+        priority: number
+        UI?: {
+            /**
+             * The injected Tips Content component
+             */
+            Content: InjectUI<TipsRealmOptions>
+        }
+    }
     export interface ProfileSlider {
         ID: string
 
@@ -740,7 +763,11 @@ export namespace Plugin.SNSAdaptor {
         priority: number
 
         UI?: {
-            TabContent: InjectUI<{ onClose: () => void }>
+            TabContent: InjectUI<{
+                onClose: () => void
+                bindingWallets?: BindingProof[]
+                currentPersona?: ECKeyIdentifier
+            }>
         }
     }
 

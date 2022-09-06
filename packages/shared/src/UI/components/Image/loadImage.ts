@@ -1,8 +1,13 @@
 import { isLocaleResource } from '@masknet/web3-shared-base'
 
 export async function loadImage(url: string) {
+    if (url.startsWith('<svg ')) return `data:image/svg+xml;base64,${btoa(url)}`
     if (isLocaleResource(url)) return url
     return new Promise<string>((resolve, reject) => {
+        if (!/^https?:\/\//.test(url)) {
+            // May be IPFS, let fetch, aka r2d2Fetch, handle it.
+            throw new TypeError('Invalid url.')
+        }
         const img = document.createElement('img')
         const cleanup = () => {
             img.removeEventListener('load', onload)

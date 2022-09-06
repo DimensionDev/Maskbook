@@ -50,13 +50,11 @@ export function AddressItem({
     return (
         <>
             {reversible ? (
-                <Typography>
-                    <ReversedAddress
-                        TypographyProps={TypographyProps}
-                        address={socialAddress.address}
-                        pluginId={socialAddress.networkSupporterPluginID}
-                    />
-                </Typography>
+                <ReversedAddress
+                    TypographyProps={TypographyProps}
+                    address={socialAddress.address}
+                    pluginId={socialAddress.networkSupporterPluginID}
+                />
             ) : (
                 <Typography {...TypographyProps}>{socialAddress.label}</Typography>
             )}

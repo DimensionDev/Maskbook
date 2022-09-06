@@ -13,6 +13,7 @@ import {
     resolveCORSLink,
     resolveIPFSLink,
     scale10,
+    SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, createContract, getRPCConstants, SchemaType, WNATIVE } from '@masknet/web3-shared-evm'
@@ -129,7 +130,7 @@ export function createNonFungibleAsset(
             : undefined,
         metadata: {
             chainId,
-            name,
+            name: contractName,
             symbol,
             description,
             imageURL: mediaURL,
@@ -238,5 +239,6 @@ export function createNonFungibleTokenEvent(
               }
             : undefined,
         paymentToken,
+        source: SourceType.NFTScan,
     }
 }

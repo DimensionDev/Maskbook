@@ -6,7 +6,7 @@ import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID, SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
 import { FC, HTMLProps, useMemo } from 'react'
 import { TipButton } from '../../../plugins/Tips/components'
-import type { TipAccount } from '../../../plugins/Tips/types'
+import type { TipsAccount } from '../../../plugins/Tips/types'
 import { ProfileBar } from './ProfileBar'
 
 const useStyles = makeStyles()((theme) => {
@@ -63,7 +63,7 @@ export const ProfileCardTitle: FC<Props> = ({
             },
         })
     }
-    const tipAccounts: TipAccount[] = useMemo(() => {
+    const tipAccounts: TipsAccount[] = useMemo(() => {
         return socialAddressList.map((x) => ({
             address: x.address,
             name: x.label,

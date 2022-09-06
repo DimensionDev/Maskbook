@@ -18,6 +18,7 @@ interface StyleProps {
     fontSize: number
     marginTop: number
     backgroundColor?: string
+    color?: string
 }
 
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
@@ -25,12 +26,12 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         minHeight: props.minHeight,
         fontSize: props.fontSize,
         marginTop: props.marginTop,
-        backgroundColor: '#fff!important',
+        backgroundColor: theme.palette.maskColor.main,
         marginRight: theme.spacing(0.5),
         marginLeft: theme.spacing(1.25),
         borderRadius: '6px !important',
         border: 'none !important',
-        color: '#050505!important',
+        color: props.color,
     },
 }))
 
@@ -44,11 +45,9 @@ function OpenNFTAvatarEditProfileButtonInFaceBook() {
 
     const setStyleWithSelector = () => {
         const editDom = searchFacebookProfileSettingButtonSelector().evaluate()
-
         if (!editDom) return
 
-        const buttonDom = editDom.querySelector<HTMLDivElement>('a > div')
-
+        const buttonDom = editDom.querySelector<HTMLDivElement>('div > div[role="button"]')
         if (!buttonDom) return
 
         const editCss = window.getComputedStyle(editDom)
@@ -59,6 +58,7 @@ function OpenNFTAvatarEditProfileButtonInFaceBook() {
             marginTop: Number(editCss.paddingTop.replace('px', '')),
             minHeight: 36,
             backgroundColor: buttonCss.backgroundColor,
+            color: buttonCss.color,
         })
     }
 

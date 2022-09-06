@@ -9,6 +9,7 @@ import {
     createNextIndicator,
     NonFungibleTokenEvent,
     NonFungibleTokenContract,
+    SourceType,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, createERC20Token, createNativeToken, isZeroAddress, SchemaType } from '@masknet/web3-shared-evm'
@@ -62,6 +63,7 @@ export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
                     ? createNativeToken(ChainId.Mainnet)
                     : createERC20Token(ChainId.Mainnet, order.currency),
             },
+            source: SourceType.X2Y2,
         }
     }
 
@@ -83,6 +85,7 @@ export class X2Y2API implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             paymentToken: isZeroAddress(event.order.currency)
                 ? createNativeToken(ChainId.Mainnet)
                 : createERC20Token(ChainId.Mainnet, event.order.currency),
+            source: SourceType.X2Y2,
         }
     }
 

@@ -1,6 +1,5 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import BigNumber from 'bignumber.js'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
@@ -11,10 +10,10 @@ import { FungibleTokenTableRow } from '../FungibleTokenTableRow'
 import { DashboardRoutes, EMPTY_LIST, CrossIsolationMessages } from '@masknet/shared-base'
 import {
     CurrencyType,
-    formatBalance,
     FungibleAsset,
     isGreaterThanOrEqualTo,
     isLessThan,
+    leftShift,
     minus,
     NetworkPluginID,
     toZero,
@@ -293,15 +292,9 @@ export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading
                             <TableBody>
                                 {dataSource
                                     .sort((first, second) => {
-                                        const firstValue = new BigNumber(
-                                            formatBalance(first.balance, first.decimals) ?? '',
-                                        )
-                                        const secondValue = new BigNumber(
-                                            formatBalance(second.balance, second.decimals) ?? '',
-                                        )
-
+                                        const firstValue = leftShift(first.balance, first.decimals)
+                                        const secondValue = leftShift(second.balance, second.decimals)
                                         if (firstValue.isEqualTo(secondValue)) return 0
-
                                         return Number(firstValue.lt(secondValue))
                                     })
                                     .filter(

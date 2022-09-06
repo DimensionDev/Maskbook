@@ -23,7 +23,7 @@ export namespace NonFungibleTokenAPI {
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId, Indicator>,
-        ) => Promise<NonFungibleTokenRarity | undefined>
+        ) => Promise<NonFungibleTokenRarity<ChainId> | undefined>
         /** Get owner address. */
         getOwner?: (address: string, tokenId: string, options?: HubOptions<ChainId, Indicator>) => Promise<string>
         /** Get a non-fungible contract. */

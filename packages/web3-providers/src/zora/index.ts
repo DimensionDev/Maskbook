@@ -14,6 +14,7 @@ import {
     NonFungibleTokenOrder,
     OrderSide,
     Pageable,
+    SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, createNativeToken, SchemaType } from '@masknet/web3-shared-evm'
@@ -182,6 +183,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
             timestamp: new Date(event.transactionInfo.blockTimestamp).getTime(),
             hash: event.transactionInfo.transactionHash,
             ...price,
+            source: SourceType.Zora,
         }
     }
 
@@ -198,6 +200,7 @@ export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType
                     : '',
             quantity: '1',
             hash: event.transactionInfo.transactionHash,
+            source: SourceType.Zora,
         }
 
         switch (event.eventType) {
