@@ -20,7 +20,7 @@ import {
     useNativeToken,
     useWeb3,
 } from '@masknet/plugin-infra/web3'
-import { FormattedCurrency, InjectedDialog, TokenAmountPanel, TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
+import { ERC20Input, FormattedCurrency, InjectedDialog, TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
 import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider'
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
 import { PluginWalletStatusBar, useI18N } from '../../../utils'
@@ -247,16 +247,13 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                     {needsSwap ? null : (
                         <>
                             <div className={classes.inputWrap}>
-                                <TokenAmountPanel
+                                <ERC20Input
                                     amount={inputAmount}
                                     maxAmount={balanceAsBN.minus(estimatedGas).toString()}
                                     balance={balanceAsBN.toString()}
                                     label={t('plugin_savings_amount')}
                                     token={protocol.bareToken}
                                     onAmountChange={setInputAmount}
-                                    InputProps={{ classes: { root: classes.inputTextField } }}
-                                    MaxChipProps={{ classes: { root: classes.maxChip } }}
-                                    SelectTokenChip={{ ChipProps: { classes: { root: classes.selectTokenChip } } }}
                                 />
                             </div>
 
@@ -279,7 +276,13 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
 
                     <div className={classes.infoRow}>
                         <Typography variant="body2" className={classes.infoRowLeft}>
-                            <TokenIcon address={protocol.bareToken.address} classes={{ icon: classes.rowImage }} />
+                            <TokenIcon
+                                address={protocol.bareToken.address}
+                                logoURL={protocol.bareToken.logoURL}
+                                classes={{ icon: classes.rowImage }}
+                                chainId={protocol.bareToken.chainId}
+                                name={protocol.bareToken.name}
+                            />
                             {protocol.bareToken.name} {t('plugin_savings_apr')}%
                         </Typography>
                         <Typography variant="body2" className={classes.infoRowRight}>

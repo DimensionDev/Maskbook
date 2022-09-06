@@ -1,4 +1,4 @@
-import { InjectedDialog, useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
+import { InjectedDialog, useOpenShareTxDialog, useSelectFungibleToken, ERC20Input } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
@@ -12,7 +12,6 @@ import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useInvestCallback } from '../hooks/useInvestCallback'
 import { PluginDHedgeMessages } from '../messages'
@@ -156,18 +155,13 @@ export function InvestDialog() {
             <InjectedDialog open={open} onClose={onClose} title={pool.name} maxWidth="xs">
                 <DialogContent style={{ padding: 16 }}>
                     <form className={classes.form} noValidate autoComplete="off">
-                        <TokenAmountPanel
+                        <ERC20Input
                             label="Amount"
                             amount={rawAmount}
                             balance={tokenBalance ?? '0'}
                             token={token}
                             onAmountChange={setRawAmount}
-                            SelectTokenChip={{
-                                loading: loadingTokenBalance,
-                                ChipProps: {
-                                    onClick: onSelectTokenChipClick,
-                                },
-                            }}
+                            onSelectToken={onSelectTokenChipClick}
                         />
                     </form>
                 </DialogContent>

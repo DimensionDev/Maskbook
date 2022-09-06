@@ -1,4 +1,4 @@
-import { InjectedDialog, useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
+import { InjectedDialog, useOpenShareTxDialog, useSelectFungibleToken, ERC20Input } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { keyframes, makeStyles, ActionButton } from '@masknet/theme'
 import { FungibleToken, isZero, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
@@ -11,7 +11,6 @@ import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useDepositCallback } from '../hooks/useDepositCallback'
 import { PluginPoolTogetherMessages } from '../messages'
 import type { Pool } from '../types'
@@ -212,18 +211,13 @@ export function DepositDialog() {
                 maxWidth="xs">
                 <DialogContent>
                     <form className={classes.form} noValidate autoComplete="off">
-                        <TokenAmountPanel
+                        <ERC20Input
                             label="Amount"
                             amount={rawAmount}
                             balance={tokenBalance ?? '0'}
                             token={token}
                             onAmountChange={setRawAmount}
-                            SelectTokenChip={{
-                                loading: loadingTokenBalance,
-                                ChipProps: {
-                                    onClick: onSelectTokenChipClick,
-                                },
-                            }}
+                            onSelectToken={onSelectTokenChipClick}
                         />
                     </form>
                     <WalletConnectedBoundary>

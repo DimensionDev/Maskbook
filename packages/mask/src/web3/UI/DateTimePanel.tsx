@@ -39,7 +39,7 @@ const useStyles = makeStyles()((theme) => ({
 export function DateTimePanel(props: DateTimePanelProps) {
     const { label, date, onChange, min, max, inputProps, ...rest } = props
     const GMT = (new Date().getTimezoneOffset() / 60) * -1
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
 
     return (
         <InputBase
@@ -55,7 +55,7 @@ export function DateTimePanel(props: DateTimePanelProps) {
             }
             inputProps={{ className: classes.datetime, ...inputProps, min, max }}
             type="datetime-local"
-            className={classes.root}
+            className={cx(classes.root, rest.className)}
         />
     )
 }

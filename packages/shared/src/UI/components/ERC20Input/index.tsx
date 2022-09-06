@@ -15,10 +15,12 @@ export interface ERC20InputProps {
     balance: string
     label: string
     disabled?: boolean
-    displayMax?: boolean
+    disableMax?: boolean
+    disableToken?: boolean
+    disableBalance?: boolean
     placeholder?: string
-    token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    onSelectToken: () => void
+    token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
+    onSelectToken?: () => void
     onAmountChange: (amount: string) => void
 }
 
@@ -27,7 +29,9 @@ export const ERC20Input = memo<ERC20InputProps>(
         label,
         token,
         disabled,
-        displayMax,
+        disableMax,
+        disableBalance,
+        disableToken,
         onSelectToken,
         onAmountChange,
         amount,
@@ -90,7 +94,9 @@ export const ERC20Input = memo<ERC20InputProps>(
                 balance={balance}
                 required
                 disabled={disabled}
-                displayMax={displayMax}
+                disableMax={disableMax}
+                disableBalance={disableBalance}
+                disableToken={disableToken}
             />
         )
     },

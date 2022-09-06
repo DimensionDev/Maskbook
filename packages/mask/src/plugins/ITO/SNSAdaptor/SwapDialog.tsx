@@ -1,5 +1,5 @@
 import { openWindow } from '@masknet/shared-base-ui'
-import { useSelectFungibleToken, useOpenShareTxDialog } from '@masknet/shared'
+import { useSelectFungibleToken, useOpenShareTxDialog, ERC20Input } from '@masknet/shared'
 import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
 import {
     leftShift,
@@ -23,7 +23,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import type { JSON_PayloadInMask } from '../types'
 import { useQualificationVerify } from './hooks/useQualificationVerify'
 import { useSwapCallback } from './hooks/useSwapCallback'
@@ -48,17 +47,6 @@ const useStyles = makeStyles()((theme) => ({
         flexGrow: 1,
         width: 'auto !important',
         margin: theme.spacing(0, 3),
-        '& .MuiSlider-thumb': {
-            width: 28,
-            height: 28,
-            background: theme.palette.mode === 'dark' ? '#fff' : '2CA4EF, 100%',
-        },
-        '& .MuiSlider-rail': {
-            height: 5,
-        },
-        '& .MuiSlider-track': {
-            height: 5,
-        },
     },
     exchangeText: {
         textAlign: 'right',
@@ -237,7 +225,8 @@ export function SwapDialog(props: SwapDialogProps) {
                 <span className={classes.exchangeAmountText}>{formatBalance(tokenAmount, token.decimals)}</span>{' '}
                 {token.symbol}.
             </Typography>
-            <TokenAmountPanel
+            <ERC20Input
+                label="Amount"
                 amount={inputAmountForUI}
                 maxAmount={maxAmount}
                 balance={tokenBalance}
@@ -253,12 +242,7 @@ export function SwapDialog(props: SwapDialogProps) {
                     setTokenAmount(tokenAmount.dp(0))
                     setSwapAmount(swapAmount)
                 }}
-                label={t('plugin_ito_dialog_swap_panel_title')}
-                SelectTokenChip={{
-                    ChipProps: {
-                        onClick: onSelectTokenChipClick,
-                    },
-                }}
+                onSelectToken={onSelectTokenChipClick}
             />
             <Typography className={classes.remindText} variant="body1" color="textSecondary">
                 {t('plugin_ito_swap_only_once_remind')}

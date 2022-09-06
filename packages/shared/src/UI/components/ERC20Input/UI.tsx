@@ -104,13 +104,15 @@ const useStyles = makeStyles()((theme) => ({
 
 interface ERC20InputUIProps extends InputBaseProps {
     label: string
-    displayMax?: boolean
+    disableMax?: boolean
     isNative?: boolean
-    token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    onSelectToken: () => void
+    token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
+    onSelectToken?: () => void
     onMaxClick: () => void
     balance: string
     maxAmountSignificant?: number
+    disableBalance?: boolean
+    disableToken?: boolean
 }
 
 export const ERC20InputUI = memo<ERC20InputUIProps>(
@@ -122,7 +124,9 @@ export const ERC20InputUI = memo<ERC20InputUIProps>(
         onMaxClick,
         balance,
         maxAmountSignificant = 4,
-        displayMax = true,
+        disableMax = false,
+        disableToken = false,
+        disableBalance = false,
         ...props
     }) => {
         const { classes, cx } = useStyles()
@@ -133,57 +137,61 @@ export const ERC20InputUI = memo<ERC20InputUIProps>(
                 startAdornment={<Typography className={cx(classes.label, classes.title)}>{label}</Typography>}
                 endAdornment={
                     <Box className={classes.control}>
-                        <Typography className={classes.label} display="flex" alignItems="center">
-                            {isNative ? t.available_balance() : t.balance()}:
-                            <Typography className={classes.balance} component="span">
-                                {token ? (
-                                    <FormattedBalance
-                                        value={balance}
-                                        decimals={token?.decimals}
-                                        significant={maxAmountSignificant}
-                                        formatter={formatBalance}
-                                    />
-                                ) : (
-                                    '--'
-                                )}
-                            </Typography>
-                        </Typography>
-                        <Box display="flex" alignItems="center" columnGap="12px">
-                            {token ? (
-                                <>
-                                    {displayMax ? (
-                                        <Chip
-                                            className={classes.maxChip}
-                                            label="MAX"
-                                            size="small"
-                                            onClick={onMaxClick}
+                        {!disableBalance ? (
+                            <Typography className={classes.label} display="flex" alignItems="center">
+                                {isNative ? t.available_balance() : t.balance()}:
+                                <Typography className={classes.balance} component="span">
+                                    {token ? (
+                                        <FormattedBalance
+                                            value={balance}
+                                            decimals={token?.decimals}
+                                            significant={maxAmountSignificant}
+                                            formatter={formatBalance}
                                         />
-                                    ) : null}
-                                    <Chip
-                                        size="small"
-                                        onClick={onSelectToken}
-                                        className={classes.chip}
-                                        icon={
-                                            <TokenIcon
-                                                classes={{ icon: classes.tokenIcon }}
-                                                address={token.address}
-                                                name={token.name}
-                                                chainId={token.chainId}
-                                                logoURL={token.logoURL}
+                                    ) : (
+                                        '--'
+                                    )}
+                                </Typography>
+                            </Typography>
+                        ) : null}
+                        {!disableToken ? (
+                            <Box display="flex" alignItems="center" columnGap="12px">
+                                {token ? (
+                                    <>
+                                        {!disableMax ? (
+                                            <Chip
+                                                className={classes.maxChip}
+                                                label="MAX"
+                                                size="small"
+                                                onClick={onMaxClick}
                                             />
-                                        }
-                                        deleteIcon={<Icons.ArrowDrop className={classes.arrowIcon} size={24} />}
-                                        onDelete={noop}
-                                        label={token.symbol}
-                                    />
-                                </>
-                            ) : (
-                                <Box className={classes.selectToken} onClick={onSelectToken}>
-                                    {t.select_a_token()}
-                                    <Icons.ArrowDrop size={16} />
-                                </Box>
-                            )}
-                        </Box>
+                                        ) : null}
+                                        <Chip
+                                            size="small"
+                                            onClick={onSelectToken}
+                                            className={classes.chip}
+                                            icon={
+                                                <TokenIcon
+                                                    classes={{ icon: classes.tokenIcon }}
+                                                    address={token.address}
+                                                    name={token.name}
+                                                    chainId={token.chainId}
+                                                    logoURL={token.logoURL}
+                                                />
+                                            }
+                                            deleteIcon={<Icons.ArrowDrop className={classes.arrowIcon} size={24} />}
+                                            onDelete={noop}
+                                            label={token.symbol}
+                                        />
+                                    </>
+                                ) : (
+                                    <Box className={classes.selectToken} onClick={onSelectToken}>
+                                        {t.select_a_token()}
+                                        <Icons.ArrowDrop size={16} />
+                                    </Box>
+                                )}
+                            </Box>
+                        ) : null}
                     </Box>
                 }
                 className={classes.root}

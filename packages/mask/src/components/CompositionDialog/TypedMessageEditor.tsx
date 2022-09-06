@@ -18,10 +18,30 @@ const useStyles = makeStyles()((theme) => ({
     },
     input: {
         fontSize: 15,
-        minHeight: 300,
+        height: 338,
+        position: 'relative',
+    },
+    badgeInput: {
+        paddingTop: 48,
+    },
+    textarea: {
+        padding: '0 14px!important',
+        '::-webkit-scrollbar': {
+            backgroundColor: 'transparent',
+            width: 20,
+        },
+        '::-webkit-scrollbar-thumb': {
+            borderRadius: '20px',
+            width: 5,
+            border: '7px solid rgba(0, 0, 0, 0)',
+            backgroundColor: theme.palette.maskColor.secondaryLine,
+            backgroundClip: 'padding-box',
+        },
     },
     badge: {
-        marginBottom: 12,
+        position: 'absolute',
+        top: 14,
+        left: 14,
     },
 }))
 export interface TypedMessageEditorProps {
@@ -51,7 +71,7 @@ const emptyMessage = makeTypedMessageText('')
 export const TypedMessageEditor = memo(
     forwardRef<TypedMessageEditorRef, TypedMessageEditorProps>((props, ref) => {
         const { onChange, readonly } = props
-        const { classes } = useStyles()
+        const { classes, cx } = useStyles()
         const { t } = useI18N()
 
         const [value, setValue] = useState(props.defaultValue ?? emptyMessage)
@@ -120,23 +140,27 @@ export const TypedMessageEditor = memo(
         }
         return (
             <>
-                {value.meta && (
-                    <div className={classes.badge}>
-                        <BadgeRenderer readonly={!!readonly} meta={value.meta} onDeleteMeta={deleteMetaID} />
-                    </div>
-                )}
                 <InputBase
+                    startAdornment={
+                        value.meta && (
+                            <div className={classes.badge}>
+                                <BadgeRenderer readonly={!!readonly} meta={value.meta} onDeleteMeta={deleteMetaID} />
+                            </div>
+                        )
+                    }
                     readOnly={readonly}
                     classes={{
                         root: classes.root,
-                        input: classes.input,
+                        input: classes.textarea,
                     }}
+                    className={cx(classes.input, value.meta ? classes.badgeInput : undefined)}
                     autoFocus={props.autoFocus}
                     value={value.content}
                     onChange={setAsText}
                     fullWidth
                     multiline
                     placeholder={t('post_dialog__placeholder')}
+                    rows={value.meta ? 12 : 14}
                 />
             </>
         )

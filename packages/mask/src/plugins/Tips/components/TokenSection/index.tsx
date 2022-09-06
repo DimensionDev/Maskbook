@@ -2,10 +2,9 @@ import { FC, useCallback, useEffect, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import { useAccount, useFungibleTokenBalance, useGasPrice, useWeb3State } from '@masknet/plugin-infra/web3'
 import { useGasConfig } from '@masknet/plugin-infra/web3-evm'
-import { useSelectFungibleToken } from '@masknet/shared'
+import { useSelectFungibleToken, ERC20Input } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
-import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import { TargetRuntimeContext, useTip } from '../../contexts'
 
 const GAS_LIMIT = 21000
@@ -17,11 +16,10 @@ export const TokenSection: FC = () => {
     const account = useAccount()
 
     // balance
-    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
-        pluginId,
-        token?.address,
-        { chainId, account },
-    )
+    const { value: tokenBalance = '0' } = useFungibleTokenBalance(pluginId, token?.address, {
+        chainId,
+        account,
+    })
     const { gasPrice, gasConfig } = useGasConfig(chainId)
     const { value: defaultGasPrice = '1' } = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
     const isNativeToken = useMemo(() => isNativeTokenAddress(token?.address), [token?.address])
@@ -65,7 +63,7 @@ export const TokenSection: FC = () => {
     }, [selectFungibleToken, token?.address, pluginId, chainId])
     // #endregion
     return (
-        <TokenAmountPanel
+        <ERC20Input
             label=""
             token={token}
             amount={amount}
@@ -73,15 +71,8 @@ export const TokenSection: FC = () => {
             maxAmountSignificant={6}
             onAmountChange={setAmount}
             balance={tokenBalance}
-            InputProps={{
-                disabled: isSending,
-            }}
-            SelectTokenChip={{
-                loading: loadingTokenBalance,
-                ChipProps: {
-                    onClick: onSelectTokenChipClick,
-                },
-            }}
+            disabled={isSending}
+            onSelectToken={onSelectTokenChipClick}
         />
     )
 }

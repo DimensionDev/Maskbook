@@ -1,9 +1,8 @@
 import { useCallback } from 'react'
 import type { MaskFixedSizeListProps, MaskTextFieldProps } from '@masknet/theme'
-import { useSelectFungibleToken } from '@masknet/shared'
+import { useSelectFungibleToken, ERC20Input, ERC20InputProps } from '@masknet/shared'
 import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { TokenAmountPanel, TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
 
 interface ERC20TokenListProps extends withClasses<'list' | 'placeholder'> {
     targetChainId?: ChainId
@@ -26,7 +25,7 @@ export interface SelectTokenAmountPanelProps {
     onAmountChange: (amount: string) => void
     onTokenChange: (token: FungibleToken<ChainId, SchemaType>) => void
     FungibleTokenListProps?: Partial<ERC20TokenListProps>
-    TokenAmountPanelProps?: Partial<TokenAmountPanelProps>
+    ERC20InputProps?: Partial<ERC20InputProps>
 }
 
 export function SelectTokenAmountPanel(props: SelectTokenAmountPanelProps) {
@@ -39,7 +38,7 @@ export function SelectTokenAmountPanel(props: SelectTokenAmountPanelProps) {
         onAmountChange,
         onTokenChange,
         FungibleTokenListProps,
-        TokenAmountPanelProps,
+        ERC20InputProps,
     } = props
 
     // #region select token
@@ -55,20 +54,14 @@ export function SelectTokenAmountPanel(props: SelectTokenAmountPanelProps) {
     // #endregion
 
     return (
-        <TokenAmountPanel
+        <ERC20Input
             amount={amount}
             balance={balance}
             token={token}
             label="Amount"
             onAmountChange={onAmountChange}
-            {...TokenAmountPanelProps}
-            SelectTokenChip={{
-                ...TokenAmountPanelProps?.SelectTokenChip,
-                ChipProps: {
-                    ...TokenAmountPanelProps?.SelectTokenChip?.ChipProps,
-                    onClick: onSelectTokenChipClick,
-                },
-            }}
+            {...ERC20InputProps}
+            onSelectToken={onSelectTokenChipClick}
         />
     )
 }

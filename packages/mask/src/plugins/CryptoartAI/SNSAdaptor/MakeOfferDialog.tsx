@@ -192,7 +192,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                             disableNativeToken={!paymentTokens.some((x) => isNativeTokenAddress(x.address))}
                             onAmountChange={setAmount}
                             onTokenChange={(x) => setAddress(x.address)}
-                            TokenAmountPanelProps={{
+                            ERC20InputProps={{
                                 label: t('plugin_collectible_price'),
                             }}
                             FungibleTokenListProps={{

@@ -59,7 +59,6 @@ export interface ExchangeTokenPanelProps {
     excludeTokensAddress?: string[]
     selectedTokensAddress?: string[]
     placeholder?: string
-    // TokenAmountPanelProps: Partial<TokenAmountPanelProps>
 }
 
 export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
@@ -134,7 +133,7 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
                 onSelectToken={onSelectTokenChipClick}
                 disabled={!exchangeToken}
                 placeholder={!exchangeToken ? t('plugin_ito_placeholder_when_token_unselected') : placeholder || '0.0'}
-                displayMax={false}
+                disableMax
             />
             {showAdd ? (
                 <IconButton size="large" onClick={onAdd} className={classes.button}>

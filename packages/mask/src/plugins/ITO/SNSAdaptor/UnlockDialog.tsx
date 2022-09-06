@@ -4,11 +4,10 @@ import { useCallback, useState } from 'react'
 import { SchemaType, formatEthereumAddress, explorerResolver, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
 import { Link, Typography } from '@mui/material'
 import { Trans } from 'react-i18next'
-import { useSelectFungibleToken } from '@masknet/shared'
+import { useSelectFungibleToken, ERC20Input } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useChainId, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 
 function isMoreThanMillion(allowance: string, decimals: number) {
@@ -53,26 +52,18 @@ export function UnlockDialog(props: UnlockDialogProps) {
     // #region amount
     const [rawAmount, setRawAmount] = useState('')
     const amount = rightShift(rawAmount || '0', token?.decimals)
-    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
-        NetworkPluginID.PLUGIN_EVM,
-        token?.address ?? '',
-    )
+    const { value: tokenBalance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address ?? '')
     // #endregion
     if (!tokens.length) return <Typography>{t('plugin_ito_empty_token')}</Typography>
     return (
         <div className={classes.root}>
-            <TokenAmountPanel
+            <ERC20Input
                 label="Amount"
                 amount={rawAmount}
                 balance={tokenBalance ?? '0'}
                 token={token}
                 onAmountChange={setRawAmount}
-                SelectTokenChip={{
-                    loading: loadingTokenBalance,
-                    ChipProps: {
-                        onClick: onSelectTokenChipClick,
-                    },
-                }}
+                onSelectToken={onSelectTokenChipClick}
             />
             {ITO2_CONTRACT_ADDRESS ? (
                 <Typography className={classes.tip} variant="body2" color="textSecondary">
