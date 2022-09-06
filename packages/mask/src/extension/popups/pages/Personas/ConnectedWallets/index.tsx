@@ -4,10 +4,10 @@ import { useI18N } from '../../../../../utils'
 import { ConnectedWalletsUI } from './UI'
 import { PersonaContext } from '../hooks/usePersonaContext'
 import { useChainId, useWallets, useWeb3State } from '@masknet/plugin-infra/web3'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { isSameAddress, NetworkPluginID, isGreaterThan } from '@masknet/web3-shared-base'
 import { NextIDAction, NextIDPlatform, PopupRoutes } from '@masknet/shared-base'
 import { useAsync, useAsyncFn } from 'react-use'
-import { compact, sortBy } from 'lodash-unified'
+import { compact } from 'lodash-unified'
 import type { ConnectedWalletInfo } from '../type'
 import { NextIDProof } from '@masknet/web3-providers'
 import Service from '../../../../service'
@@ -30,7 +30,7 @@ const ConnectedWallets = memo(() => {
         if (!proofs) return []
 
         const results = await Promise.all(
-            proofs.map(async (x, index) => {
+            proofs.map(async (x) => {
                 if (x.platform === NextIDPlatform.Ethereum) {
                     const domain = await NameService?.reverse?.(chainId, x.identity)
 
@@ -57,17 +57,19 @@ const ConnectedWallets = memo(() => {
             }),
         )
 
-        return sortBy(compact(results), (x) => Number(x.last_checked_at))
-            .map((x, index) => {
+        return compact(results)
+            .sort((a, z) => {
+                return isGreaterThan(a.last_checked_at, z.last_checked_at) ? -1 : 1
+            })
+            .map((x, index, list) => {
                 if (!x.name)
                     return {
                         ...x,
-                        name: `${x.platform} wallet ${index + 1}`,
+                        name: `${x.platform} wallet ${list.length - index}`,
                     }
 
                 return x
             })
-            .reverse()
     }, [wallets, NameService, proofs, chainId])
 
     const [confirmState, onConfirmRelease] = useAsyncFn(

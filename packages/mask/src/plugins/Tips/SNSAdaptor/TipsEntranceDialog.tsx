@@ -123,7 +123,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         if (!proofRes?.length) return EMPTY_LIST
         return sortBy(proofRes, (x) => -Number.parseInt(x.last_checked_at, 10)).map((wallet, index, list) => ({
             ...wallet,
-            fallbackName: `Wallet ${list.length - index - 1}`,
+            fallbackName: `Wallet ${list.length - index}`,
         }))
     }, [proofRes])
 
@@ -136,7 +136,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             .filter((x) => !TipsSetting?.hiddenAddresses?.includes(x.identity))
             .sort((a, z) => {
                 if (isGreaterThan(a.last_checked_at, z.last_checked_at)) {
-                    return isSameAddress(z.identity, defaultAddress) ? -1 : 1
+                    return isSameAddress(z.identity, defaultAddress) ? 1 : -1
                 }
 
                 return isSameAddress(a.identity, defaultAddress) ? -1 : 1
