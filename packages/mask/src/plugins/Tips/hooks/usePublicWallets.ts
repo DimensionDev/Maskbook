@@ -1,6 +1,6 @@
 import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
 import { uniqBy } from 'lodash-unified'
 import { useEffect, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
@@ -17,7 +17,7 @@ export function usePublicWallets(personaPubkey?: string): TipsAccount[] {
 
         const wallets = bindings.proofs
             .filter((p) => p.platform === NextIDPlatform.Ethereum)
-            .map((p) => ({ address: p.identity, verified: true }))
+            .map((p) => ({ address: p.identity, verified: true, last_checked_at: p.last_checked_at }))
         return wallets
     }, [personaPubkey])
 
@@ -33,7 +33,14 @@ export function usePublicWallets(personaPubkey?: string): TipsAccount[] {
         const result =
             nextIdWallets
                 ?.filter((x) => !TipsSetting?.hiddenAddresses?.some((y) => isSameAddress(y, x.address)) ?? true)
-                .sort((x) => (isSameAddress(x.address, TipsSetting?.defaultAddress) ? -1 : 0))
+                .sort((a, z) => {
+                    if (!a.last_checked_at || !z.last_checked_at) return 1
+                    if (isGreaterThan(a.last_checked_at, z.last_checked_at)) {
+                        return isSameAddress(z.address, TipsSetting?.defaultAddress) ? 1 : -1
+                    }
+
+                    return isSameAddress(a.address, TipsSetting?.defaultAddress) ? -1 : 1
+                })
                 .map((x) => ({ address: x.address, verified: true })) ?? EMPTY_LIST
 
         return uniqBy(result, (x) => x.address)

@@ -1,11 +1,10 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { PluginIDContextProvider } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
-import type { BoxProps } from '@mui/material'
 import { base } from '../base'
 import { PLUGIN_ID } from '../constants'
 import { setupContext } from './context'
-import { DonationPage, FeedsPage, FootprintPageProps, FootprintsPage } from './pages'
+import { DonationPage, FeedsPage, FeedPageProps, FootprintPageProps, FootprintsPage } from './pages'
 
 function shouldDisplay(identity?: SocialIdentity, addressName?: SocialAddress<NetworkPluginID>) {
     return addressName?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM
@@ -66,7 +65,7 @@ const FootprintsTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createFoo
     collectionName: 'POAPs',
 })
 
-const createActivitiesTabConfig = (boxProps: BoxProps): Plugin.SNSAdaptor.ProfileTab => {
+const createActivitiesTabConfig = (props: FeedPageProps): Plugin.SNSAdaptor.ProfileTab => {
     return {
         ID: `${PLUGIN_ID}_feeds`,
         label: 'Activities',
@@ -75,7 +74,7 @@ const createActivitiesTabConfig = (boxProps: BoxProps): Plugin.SNSAdaptor.Profil
             TabContent: ({ socialAddress }) => {
                 return (
                     <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
-                        <FeedsPage address={socialAddress?.address} {...boxProps} />
+                        <FeedsPage address={socialAddress?.address} {...props} />
                     </PluginIDContextProvider>
                 )
             },
@@ -89,6 +88,7 @@ const createActivitiesTabConfig = (boxProps: BoxProps): Plugin.SNSAdaptor.Profil
 const ActivitiesTabConfig: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig({})
 const ActivitiesTabConfigInProfileCard: Plugin.SNSAdaptor.ProfileTab = createActivitiesTabConfig({
     p: 1.5,
+    disableViewDetails: true,
 })
 
 const sns: Plugin.SNSAdaptor.Definition = {

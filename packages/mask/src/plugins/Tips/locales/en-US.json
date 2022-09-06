@@ -1,6 +1,6 @@
 {
     "add_wallet": "Add Wallet",
-    "add_wallet_tips": "Please add wallets to receive tips",
+    "add_wallet_tips": "Please add wallets to receive tips.",
     "tips": "Tips",
     "tip_to": "To",
     "cancel": "Cancel",
@@ -44,7 +44,7 @@
     "tip_wallet_sign_error": "Wallet connection failed.",
     "tip_wallet_add": "Please add wallet",
     "tip_connect_your_wallet": "Connect your wallet",
-    "tip_verify_line_intro": "Please add and verify your wallet to get it prepared for receiving tips.",
+    "tips_wallet_alert": "Add and manage verified wallet addresses for receiving tips.",
     "tip_empty_list": "Please connect and verify your wallet.",
     "tip_empty_manage_list": "Please manage wallets to receive tips.",
     "tip_set_as_default": "Set as default",
