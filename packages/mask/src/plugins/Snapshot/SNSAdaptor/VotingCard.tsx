@@ -115,33 +115,32 @@ export function VotingCard() {
         setOpen(false)
     }, [account, power, setOpen])
 
-    return (
+    return account && networkPluginId === NetworkPluginID.PLUGIN_EVM ? (
         <SnapshotCard title={t('plugin_snapshot_vote_title')}>
-            {account && networkPluginId === NetworkPluginID.PLUGIN_EVM ? (
-                <>
-                    {choices.map((choiceText, i) => (
-                        <Button
-                            key={i}
-                            onClick={() => setChoice(i + 1)}
-                            className={classNames([
-                                classes.button,
-                                classes.choiceButton,
-                                ...(choice === i + 1 ? [classes.buttonActive] : []),
-                            ])}
-                            variant="outlined">
-                            {choiceText}
-                        </Button>
-                    ))}
-
+            <>
+                {choices.map((choiceText, i) => (
                     <Button
-                        color="primary"
-                        className={classes.button}
-                        disabled={choice === 0 || !account || !power}
-                        onClick={() => setOpen(true)}>
-                        {power && account ? t('plugin_snapshot_vote') : t('plugin_snapshot_no_power')}
+                        key={i}
+                        onClick={() => setChoice(i + 1)}
+                        className={classNames([
+                            classes.button,
+                            classes.choiceButton,
+                            ...(choice === i + 1 ? [classes.buttonActive] : []),
+                        ])}
+                        variant="outlined">
+                        {choiceText}
                     </Button>
-                </>
-            ) : null}
+                ))}
+
+                <Button
+                    color="primary"
+                    className={classes.button}
+                    disabled={choice === 0 || !account || !power}
+                    onClick={() => setOpen(true)}>
+                    {power && account ? t('plugin_snapshot_vote') : t('plugin_snapshot_no_power')}
+                </Button>
+            </>
+
             <VoteConfirmDialog
                 open={open}
                 loading={loading}
@@ -153,5 +152,5 @@ export function VotingCard() {
                 onVoteConfirm={onVoteConfirm}
             />
         </SnapshotCard>
-    )
+    ) : null
 }
