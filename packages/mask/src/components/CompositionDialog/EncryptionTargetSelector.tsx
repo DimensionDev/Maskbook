@@ -92,7 +92,11 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
         props.e2eDisabled && props.e2eDisabled !== E2EUnavailableReason.NoLocalKey ? (
             <div className={classes.flex}>
                 <Typography className={classes.mainTitle}>{t('persona_required')}</Typography>
-                <ConnectPersonaBoundary customHint handlerPosition="top-right" enableVerify={false}>
+                <ConnectPersonaBoundary
+                    customHint
+                    handlerPosition="top-right"
+                    enableVerify={false}
+                    createConfirm={false}>
                     {(s) => {
                         if (!s.hasPersona) return <Typography className={classes.create}>{t('create')}</Typography>
                         // TODO: how to handle verified

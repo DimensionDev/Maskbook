@@ -1,27 +1,24 @@
 import { Icons } from '@masknet/icons'
-import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
-import { useCurrentWeb3NetworkPluginID, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST, NextIDPlatform, ProfileIdentifier } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { NextIDProof } from '@masknet/web3-providers'
-import { NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { TooltipProps } from '@mui/material'
-import classnames from 'classnames'
-import { uniqBy } from 'lodash-unified'
 import { FC, HTMLProps, MouseEventHandler, useCallback, useEffect, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { MaskMessages } from '../../../../shared'
-import { useCurrentVisitingIdentity, useSocialIdentityByUseId } from '../../../components/DataSource/useActivatedUI'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { useProfilePublicKey } from '../hooks/useProfilePublicKey'
-import { usePublicWallets } from '../hooks/usePublicWallets'
-import { useI18N } from '../locales'
-import { PluginNextIDMessages } from '../messages'
-import type { TipAccount } from '../types'
+import { MaskMessages } from '../../../../../shared'
+import { useCurrentVisitingIdentity, useSocialIdentityByUseId } from '../../../../components/DataSource/useActivatedUI'
+import { activatedSocialNetworkUI } from '../../../../social-network'
+import { useProfilePublicKey } from '../../hooks/useProfilePublicKey'
+import { useI18N } from '../../locales'
+import { PluginNextIDMessages } from '../../messages'
+import type { TipsAccount } from '../../types'
+import { useTipsAccounts } from './useTipsAccounts'
 
 interface Props extends HTMLProps<HTMLDivElement> {
-    addresses?: TipAccount[]
-    recipient?: TipAccount['address']
+    addresses?: TipsAccount[]
+    recipient?: TipsAccount['address']
     receiver?: ProfileIdentifier
     tooltipProps?: Partial<TooltipProps>
 }
@@ -33,22 +30,6 @@ const useStyles = makeStyles()({
         justifyContent: 'center',
         alignItems: 'center',
         fontFamily: '-apple-system, system-ui, sans-serif',
-    },
-    buttonWrapper: {
-        // temporarily hard code
-        height: 46,
-        display: 'flex',
-        alignItems: 'center',
-        color: '#8899a6',
-    },
-    postTipButton: {
-        cursor: 'pointer',
-        width: 34,
-        height: 34,
-        borderRadius: '100%',
-        '&:hover': {
-            backgroundColor: 'rgba(20,155,240,0.1)',
-        },
     },
     tooltip: {
         backgroundColor: 'rgb(102,102,102)',
@@ -70,7 +51,7 @@ export const TipButton: FC<Props> = ({
     tooltipProps,
     ...rest
 }) => {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const t = useI18N()
 
     const platform = activatedSocialNetworkUI.configuration.nextIDConfig?.platform as NextIDPlatform
@@ -106,58 +87,37 @@ export const TipButton: FC<Props> = ({
         return MaskMessages.events.ownProofChanged.on(retryLoadVerifyInfo)
     }, [])
 
-    const publicWallets = usePublicWallets(persona)
-    const { value: socialAddressList = EMPTY_LIST } = useSocialAddressListAll(identity)
-    const allAddresses = useMemo(() => {
-        switch (pluginId) {
-            case NetworkPluginID.PLUGIN_EVM:
-                const evmAddresses = socialAddressList
-                    .filter((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM)
-                    .map((x) => ({
-                        address: x.address,
-                        name: x.type === SocialAddressType.ENS ? x.label : undefined,
-                    }))
-                return uniqBy([...publicWallets, ...addresses, ...evmAddresses], (v) => v.address.toLowerCase())
-            case NetworkPluginID.PLUGIN_SOLANA:
-                return socialAddressList
-                    .filter((x) => x.networkSupporterPluginID === pluginId)
-                    .map((x) => ({
-                        address: x.address,
-                        name: x.type === SocialAddressType.SOL ? x.label : undefined,
-                    }))
-        }
-        return EMPTY_LIST
-    }, [pluginId, publicWallets, addresses, socialAddressList])
+    const tipsAccounts = useTipsAccounts(identity, personaPubkey, addresses)
 
     const isChecking = loadingPersona || loadingVerifyInfo
-    const disabled = isChecking || !isAccountVerified || allAddresses.length === 0 || !isRuntimeAvailable
+    const disabled = isChecking || !isAccountVerified || tipsAccounts.length === 0 || !isRuntimeAvailable
 
     const createTipTask: MouseEventHandler<HTMLDivElement> = useCallback(
         async (evt) => {
             evt.stopPropagation()
             evt.preventDefault()
             if (disabled) return
-            if (!allAddresses.length || !receiverUserId) return
+            if (!tipsAccounts.length || !receiverUserId) return
             PluginNextIDMessages.tipTask.sendToLocal({
                 recipient,
                 recipientSnsId: receiverUserId,
-                addresses: allAddresses,
+                addresses: tipsAccounts,
             })
         },
-        [disabled, recipient, allAddresses, receiverUserId],
+        [disabled, recipient, tipsAccounts, receiverUserId],
     )
 
     useEffect(() => {
         PluginNextIDMessages.tipTaskUpdate.sendToLocal({
             recipient,
             recipientSnsId: receiverUserId,
-            addresses: allAddresses,
+            addresses: tipsAccounts,
         })
-    }, [recipient, receiverUserId, allAddresses])
+    }, [recipient, receiverUserId, tipsAccounts])
 
     const dom = (
         <div
-            className={classnames(className, classes.tipButton, disabled ? classes.disabled : null)}
+            className={cx(className, classes.tipButton, disabled ? classes.disabled : null)}
             {...rest}
             role="button"
             onClick={createTipTask}>
@@ -178,15 +138,4 @@ export const TipButton: FC<Props> = ({
             </ShadowRootTooltip>
         )
     return dom
-}
-
-export const PostTipButton: FC<Props> = ({ className, ...rest }) => {
-    const identifier = usePostInfoDetails.author()
-    const { classes } = useStyles()
-    if (!identifier) return null
-    return (
-        <div className={classes.buttonWrapper}>
-            <TipButton className={classnames(classes.postTipButton, className)} {...rest} receiver={identifier} />
-        </div>
-    )
 }

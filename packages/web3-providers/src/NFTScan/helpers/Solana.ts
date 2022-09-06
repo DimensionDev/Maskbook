@@ -8,6 +8,7 @@ import {
     NonFungibleTokenEvent,
     resolveIPFSLink,
     scale10,
+    SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
 import { NFTSCAN_BASE_SOLANA, NFTSCAN_URL } from '../constants'
@@ -173,5 +174,6 @@ export function createNonFungibleTokenEvent(
                   }
                 : undefined,
         paymentToken,
+        source: SourceType.NFTScan,
     }
 }

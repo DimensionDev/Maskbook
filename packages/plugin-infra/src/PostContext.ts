@@ -30,6 +30,7 @@ export interface PostContextComment {
 export interface PostContextCreation extends PostContextAuthor {
     readonly rootElement: DOMProxy
     readonly actionsElement?: DOMProxy
+    readonly isFocusing?: boolean
     readonly suggestedInjectionPoint: HTMLElement
     readonly comments?: PostContextComment
     /**
@@ -51,6 +52,7 @@ export interface PostContext extends PostContextAuthor {
     get rootNode(): HTMLElement | null
     readonly rootElement: DOMProxy
     readonly actionsElement?: DOMProxy
+    readonly isFocusing?: boolean
     readonly suggestedInjectionPoint: HTMLElement
     // #endregion
     readonly comment: undefined | PostContextComment

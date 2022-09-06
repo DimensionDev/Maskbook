@@ -26,8 +26,8 @@ export function useSocialAddressListAll(
 
     return useAsyncRetry(async () => {
         const userId = identity?.identifier?.userId
-        if (!userId || userId === '$unknown' || !identity.publicKey) return EMPTY_LIST
-        const cacheKey = `${userId}_${identity.publicKey}`
+        if (!userId || userId === '$unknown') return EMPTY_LIST
+        const cacheKey = `${userId}_${identity.publicKey ?? ''}`
         let cached = addressCache.get(cacheKey)
 
         if (!cached || identity.isOwner) {

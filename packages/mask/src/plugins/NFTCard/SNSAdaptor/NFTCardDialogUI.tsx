@@ -32,7 +32,7 @@ export interface NFTCardDialogUIProps {
 }
 
 export function NFTCardDialogUI(props: NFTCardDialogUIProps) {
-    const { currentTab, asset, orders, provider, events } = props
+    const { currentTab, asset, orders, events } = props
     const { classes } = useStyles()
     const { t: tb } = useBaseI18n()
     const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
@@ -71,7 +71,7 @@ export function NFTCardDialogUI(props: NFTCardDialogUIProps) {
                     {currentTab === NFTCardDialogTabs.About ? (
                         <AboutTab orders={orders} asset={asset} />
                     ) : currentTab === NFTCardDialogTabs.Offers ? (
-                        <OffersTab offers={orders} provider={provider} />
+                        <OffersTab offers={orders} />
                     ) : (
                         <ActivitiesTab events={events} />
                     )}

@@ -126,14 +126,13 @@ export namespace SocialNetworkUI {
             /** @deprecated same reason as userAvatar */
             profileAvatar?(signal: AbortSignal): void
             /** @deprecated same reason as userAvatar */
-            profileTip?(signal: AbortSignal): void
-            /** @deprecated same reason as userAvatar */
             openNFTAvatar?(signal: AbortSignal): void
             /** @deprecated same reason as userAvatar */
             postAndReplyNFTAvatar?(signal: AbortSignal): void
             /** @deprecated same reason as useAvatar */
             avatarClipNFT?(signal: AbortSignal): void
             avatar?(signal: AbortSignal): void
+            tips?(signal: AbortSignal): void
             profileCard?(signal: AbortSignal): void
         }
         export interface NewPostComposition {

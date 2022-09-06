@@ -1,11 +1,10 @@
-import { Icons } from '@masknet/icons'
 import type { BindingProof } from '@masknet/shared-base'
 import { networkMap } from '../../hooks/useSupportedNetworks'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { useI18N } from '../../locales'
 import { WalletItem } from './WalletItem'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -46,14 +45,24 @@ const useStyles = makeStyles()((theme) => ({
         width: 'auto',
         height: 18,
     },
+    link: {
+        color: theme.palette.maskColor.main,
+        fontWeight: 700,
+        fontSize: 14,
+        lineHeight: '18px',
+        cursor: 'pointer',
+        marginLeft: theme.spacing(1.25),
+    },
 }))
 
 interface WalletsByNetworkProps {
     networkId: NetworkPluginID
     toSetting: () => void
-    wallets: BindingProof[]
+    wallets: Array<BindingProof & { fallbackName: string }>
+    notEmpty: boolean
     defaultAddress?: string
     setAsDefault: (address: string) => void
+    openConnectWallet: () => void
 }
 
 export function WalletsByNetwork({
@@ -62,6 +71,8 @@ export function WalletsByNetwork({
     toSetting,
     defaultAddress,
     setAsDefault,
+    openConnectWallet,
+    notEmpty,
 }: WalletsByNetworkProps) {
     const t = useI18N()
     const { classes } = useStyles()
@@ -73,7 +84,6 @@ export function WalletsByNetwork({
                     <network.icon className={classes.networkIcon} />
                     {network.name}
                 </Typography>
-                <Icons.Settings onClick={toSetting} className={classes.settingIcon} />
             </div>
             <div className={classes.content}>
                 {wallets.length ? (
@@ -81,13 +91,25 @@ export function WalletsByNetwork({
                         <WalletItem
                             key={x.identity}
                             setAsDefault={setAsDefault}
-                            fallbackName={`Wallet ${x.rawIdx}`}
+                            fallbackName={x.fallbackName}
                             address={x.identity}
-                            isDefault={defaultAddress ? defaultAddress === x.identity : !!x.isDefault}
+                            isDefault={isSameAddress(defaultAddress, x.identity)}
                         />
                     ))
+                ) : notEmpty ? (
+                    <Typography className={classes.empty}>
+                        {t.tip_empty_manage_list()}
+                        <Typography component="span" className={classes.link} onClick={toSetting}>
+                            {t.manage_wallet()}
+                        </Typography>
+                    </Typography>
                 ) : (
-                    <Typography className={classes.empty}>{t.tip_empty_list()}</Typography>
+                    <Typography className={classes.empty}>
+                        {t.tip_empty_list()}
+                        <Typography component="span" className={classes.link} onClick={openConnectWallet}>
+                            {t.add_wallet()}
+                        </Typography>
+                    </Typography>
                 )}
             </div>
         </div>

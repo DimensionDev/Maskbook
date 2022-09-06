@@ -102,5 +102,9 @@
     "gas_settings_error_max_priority_gas_fee_too_high": "Max priority fee is higher than necessary. You may pay more than needed.",
     "gas_settings_error_max_priority_gas_fee_imbalance": "Max fee cannot be lower than max priority fee.",
     "plugin_default_title": "Default",
-    "plugin_provider_by": "Provided by"
+    "plugin_provider_by": "Provided by",
+    "plugin_card_frame_default_title": "Web3 Profile",
+    "plugin_card_frame_default_provided_by": "Powered by",
+    "plugin_card_frame_default_provided_by_value": "Mask Network",
+    "plugin_card_frame_loading": "Loading...."
 }

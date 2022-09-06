@@ -7,23 +7,19 @@ import {
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
 import { useAvailablePlugins, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
-import { AddressItem } from '@masknet/shared'
+import { AddressItem, PluginCardFrameMini } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
-import { makeStyles, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
+import { makeStyles, MaskLightTheme, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
-import { Box, Button, CircularProgress, Link, MenuItem, Tab, Typography } from '@mui/material'
+import { Button, Link, MenuItem, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import { first, uniqBy } from 'lodash-unified'
 import { useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 import { MaskMessages, sorter, useI18N, useLocationChange } from '../../utils'
-import {
-    useCurrentVisitingIdentity,
-    useCurrentVisitingSocialIdentity,
-    useIsOwnerIdentity,
-} from '../DataSource/useActivatedUI'
+import { useCurrentVisitingSocialIdentity } from '../DataSource/useActivatedUI'
 import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
 import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary'
 
@@ -140,6 +136,10 @@ const useStyles = makeStyles()((theme) => ({
         margin: '4px 2px 0 2px',
         color: theme.palette.maskColor.second,
     },
+    reload: {
+        borderRadius: 20,
+        minWidth: 254,
+    },
 }))
 
 export interface ProfileTabContentProps extends withClasses<'text' | 'button' | 'root'> {}
@@ -153,21 +153,27 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const [hidden, setHidden] = useState(true)
     const [selectedAddress, setSelectedAddress] = useState<SocialAddress<NetworkPluginID> | undefined>()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-    const { value: personaStatus } = useCurrentPersonaConnectStatus()
-
-    const currentVisitingIdentity = useCurrentVisitingIdentity()
-    const currentVisitingUserId = currentVisitingIdentity.identifier?.userId
-    const isOwnerIdentity = useIsOwnerIdentity(currentVisitingIdentity)
+    const {
+        value: personaStatus,
+        loading: loadingPersonaStatus,
+        error: loadPersonaStatusError,
+        retry: retryLoadPersonaStatus,
+    } = useCurrentPersonaConnectStatus()
 
     const {
         value: currentVisitingSocialIdentity,
         loading: loadingCurrentVisitingSocialIdentity,
+        error: loadCurrentVisitingSocialIdentityError,
         retry: retryIdentity,
     } = useCurrentVisitingSocialIdentity()
+
+    const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId
+    const isOwnerIdentity = currentVisitingSocialIdentity?.isOwner
 
     const {
         value: socialAddressList = EMPTY_LIST,
         loading: loadingSocialAddressList,
+        error: loadSocialAddressListError,
         retry: retrySocialAddress,
     } = useSocialAddressListAll(currentVisitingSocialIdentity, undefined, sorter)
 
@@ -193,7 +199,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         return plugins
             .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
             .filter((x) => {
-                const shouldDisplay = x.Utils?.shouldDisplay?.(currentVisitingIdentity, selectedAddress) ?? true
+                const shouldDisplay = x.Utils?.shouldDisplay?.(currentVisitingSocialIdentity, selectedAddress) ?? true
                 return x.pluginID !== PluginId.NextID && shouldDisplay
             })
             .sort((a, z) => {
@@ -291,18 +297,52 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }
     if (hidden) return null
 
-    if (!currentVisitingUserId || loadingSocialAddressList || loadingCurrentVisitingSocialIdentity)
+    if (
+        !currentVisitingUserId ||
+        loadingSocialAddressList ||
+        loadingCurrentVisitingSocialIdentity ||
+        loadingPersonaStatus
+    )
         return (
-            <div className={classes.root}>
-                <Box
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    sx={{ paddingTop: 4, paddingBottom: 4 }}>
-                    <CircularProgress />
-                </Box>
-            </div>
+            <ThemeProvider theme={MaskLightTheme}>
+                <div className={classes.root}>
+                    <PluginCardFrameMini />
+                </div>
+            </ThemeProvider>
         )
+
+    if (
+        (loadCurrentVisitingSocialIdentityError ||
+            (isOwnerIdentity && loadPersonaStatusError) ||
+            loadSocialAddressListError) &&
+        socialAddressList.length === 0
+    ) {
+        const handleClick = () => {
+            if (loadPersonaStatusError) retryLoadPersonaStatus()
+            if (loadCurrentVisitingSocialIdentityError) retryIdentity()
+            if (loadSocialAddressListError) retrySocialAddress()
+        }
+        return (
+            <ThemeProvider theme={MaskLightTheme}>
+                <div className={classes.root}>
+                    <PluginCardFrameMini>
+                        <Stack display="inline-flex" gap={3} justifyContent="center" alignItems="center">
+                            <Typography
+                                fontSize={14}
+                                fontWeight={400}
+                                lineHeight="18px"
+                                color={(t) => t.palette.maskColor.danger}>
+                                {t('load_failed')}
+                            </Typography>
+                            <Button color="primary" className={classes.reload} onClick={handleClick}>
+                                {t('reload')}
+                            </Button>
+                        </Stack>
+                    </PluginCardFrameMini>
+                </div>
+            </ThemeProvider>
+        )
+    }
 
     return (
         <div className={classes.root}>
