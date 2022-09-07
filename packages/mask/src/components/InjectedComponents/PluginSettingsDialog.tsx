@@ -25,7 +25,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     content: {
         position: 'relative',
-        minHeight: 528,
+        minHeight: 564,
         padding: 0,
         boxSizing: 'border-box',
     },

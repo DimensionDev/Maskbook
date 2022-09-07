@@ -19,7 +19,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 const useStyles = makeStyles()((theme) => ({
     container: {
         padding: 16,
-        minHeight: 424,
+        minHeight: 460,
         display: 'flex',
         flexDirection: 'column',
     },
