@@ -15,7 +15,7 @@ import { ChainId, SchemaType, createNativeToken } from '@masknet/web3-shared-sol
 import { memoizePromise } from '@dimensiondev/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { CoinGeckoAPI } from '../../coingecko'
-import type { FungibleTokenAPI, TokenListBaseAPI } from '../../types'
+import type { FungibleTokenAPI, TokenListAPI } from '../../types'
 import { RAYDIUM_TOKEN_LIST, SPL_TOKEN_PROGRAM_ID } from '../constants'
 import { createFungibleAsset, createFungibleToken, requestRPC } from '../helpers'
 import type { GetAccountInfoResponse, GetProgramAccountsResponse, RaydiumTokenList } from '../types'
@@ -47,7 +47,7 @@ const fetchTokenList = memoizePromise(
 )
 
 export class SolanaFungibleAPI
-    implements TokenListBaseAPI.Provider<ChainId, SchemaType>, FungibleTokenAPI.Provider<ChainId, SchemaType>
+    implements TokenListAPI.Provider<ChainId, SchemaType>, FungibleTokenAPI.Provider<ChainId, SchemaType>
 {
     private coingecko = new CoinGeckoAPI()
 
@@ -73,7 +73,7 @@ export class SolanaFungibleAPI
             ],
         })
         if (!data.result?.length) return []
-        const tokenList = await this.getFungibleTokens(chainId, [])
+        const tokenList = await this.getFungibleTokenList(chainId, [])
         const splTokens: Array<FungibleAsset<ChainId, SchemaType>> = []
         data.result.forEach((x) => {
             const info = x.account.data.parsed.info
@@ -121,14 +121,14 @@ export class SolanaFungibleAPI
         return createPageable(assets as Array<FungibleAsset<ChainId, SchemaType>>, createIndicator(indicator))
     }
 
-    async getFungibleTokens(chainId: ChainId, urls: string[]): Promise<Array<FungibleToken<ChainId, SchemaType>>> {
+    async getFungibleTokenList(chainId: ChainId, urls?: string[]): Promise<Array<FungibleToken<ChainId, SchemaType>>> {
         if (chainId !== ChainId.Mainnet) return EMPTY_LIST
         return fetchTokenList(RAYDIUM_TOKEN_LIST)
     }
 
-    async getNonFungibleTokens(
+    async getNonFungibleTokenList(
         chainId: ChainId,
-        urls: string[],
+        urls?: string[],
     ): Promise<Array<NonFungibleToken<ChainId, SchemaType>>> {
         return EMPTY_LIST
     }

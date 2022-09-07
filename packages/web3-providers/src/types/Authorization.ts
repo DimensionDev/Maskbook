@@ -6,14 +6,14 @@ import type { SchemaType } from '@masknet/web3-shared-evm'
 
 export namespace AuthorizationAPI {
     export interface Provider<ChainId> {
-        getApprovedNonFungibleContracts(
+        getNonFungibleTokenSpenders?: (
             chainId: ChainId,
             account: string,
-        ): Promise<Array<NonFungibleContractSpenderAuthorization<ChainId, SchemaType>>>
+        ) => Promise<Array<NonFungibleContractSpenderAuthorization<ChainId, SchemaType>>>
 
-        getApprovedFungibleTokenSpenders(
+        getFungibleTokenSpenders?: (
             chainId: ChainId,
             account: string,
-        ): Promise<Array<FungibleTokenSpenderAuthorization<ChainId, SchemaType>>>
+        ) => Promise<Array<FungibleTokenSpenderAuthorization<ChainId, SchemaType>>>
     }
 }

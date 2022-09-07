@@ -29,7 +29,7 @@ export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM)
     const { value: spenderList, loading } = useAsync(
-        async () => hub?.getApprovedNonFungibleContracts?.(chainId, account),
+        async () => hub?.getNonFungibleApprovedContracts?.(chainId, account),
         [chainId, account, hub],
     )
 

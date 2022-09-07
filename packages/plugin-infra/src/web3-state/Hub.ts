@@ -9,6 +9,9 @@ import {
     createPredicate,
 } from '@masknet/web3-shared-base'
 
+export * from './Hub/FungibleClient'
+export * from './Hub/NonFungibleClient'
+
 const SIZE_PER_PAGE = 50
 const MAX_PAGE_SIZE = 25
 
@@ -34,7 +37,7 @@ export class HubStateClient<ChainId> {
         }
     }
 
-    protected getProviders<T extends unknown>(
+    protected getPredicateProviders<T extends unknown>(
         providers: Partial<Record<SourceType, T>>,
         defaultProviders: T[],
         initial?: HubOptions<ChainId>,

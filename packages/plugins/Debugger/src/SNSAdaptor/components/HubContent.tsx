@@ -38,8 +38,6 @@ export function HubContent(props: HubContentProps) {
         ['getTransactions', [chainId, account]],
 
         // fungible tokens
-        ['getFungibleToken', [address]],
-        ['getFungibleTokens', [account]],
         ['getFungibleAsset', [address]],
         ['getFungibleAssets', [account]],
         ['getFungibleTokenBalance', [address]],
@@ -51,13 +49,13 @@ export function HubContent(props: HubContentProps) {
 
         ['getFungibleTokenStats', [address]],
         ['getFungibleTokensFromTokenList', [chainId]],
-        ['getApprovedFungibleTokenSpenders', [chainId, account]],
+        ['getFungibleTokenApprovedSpenders', [chainId, account]],
 
         // non-fungible tokens
         ['getNonFungibleTokenOwner', [address, tokenId]],
         ['getNonFungibleTokenPrice', [chainId, address, tokenId]],
         ['getNonFungibleTokensFromTokenList', [chainId]],
-        ['getApprovedNonFungibleContracts', [chainId, address]],
+        ['getNonFungibleApprovedContracts', [chainId, address]],
         ['getNonFungibleTokenBalance', [address]],
         ['getNonFungibleTokenStats', [address]],
         ['getNonFungibleTokenSecurity', [chainId, address]],
@@ -72,7 +70,6 @@ export function HubContent(props: HubContentProps) {
         ['getNonFungibleAssets', [account]],
         ['getNonFungibleRarity', [address, tokenId]],
         ['getNonFungibleTokenFloorPrice', [address, tokenId]],
-        ['getNonFungibleTokensByCollection', [address]],
         ['getNonFungibleAssetsByCollection', [address]],
     ]
 

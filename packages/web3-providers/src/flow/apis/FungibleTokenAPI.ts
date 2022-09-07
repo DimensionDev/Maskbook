@@ -1,14 +1,24 @@
-import { ChainId, createClient, getTokenConstants, SchemaType } from '@masknet/web3-shared-flow'
+import {
+    ChainId,
+    createClient,
+    createFungibleAsset,
+    createFungibleToken,
+    getTokenConstants,
+    SchemaType,
+} from '@masknet/web3-shared-flow'
 import {
     FungibleAsset,
     CurrencyType,
     Pageable,
     rightShift,
-    HubOptions,
     createPageable,
+    HubOptions,
+    HubIndicator,
+    createIndicator,
+    TokenList,
 } from '@masknet/web3-shared-base'
 import { CoinGecko } from '@masknet/web3-providers'
-import { createFungibleAsset, createFungibleToken } from '../helpers'
+import type { FungibleTokenAPI, TokenListAPI } from '../../types'
 
 async function getTokenBalance(
     chainId: ChainId,
@@ -128,19 +138,52 @@ async function getAssetTether(chainId: ChainId, account: string) {
     )
 }
 
-export async function getFungibleAssets(
-    chainId: ChainId,
-    address: string,
-    options?: HubOptions<ChainId>,
-): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
-    const allSettled = await Promise.allSettled([
-        getAssetFLOW(chainId, address),
-        getAssetFUSD(chainId, address),
-        getAssetTether(chainId, address),
-    ])
+export class FlowFungibleAPI
+    implements FungibleTokenAPI.Provider<ChainId, SchemaType>, TokenListAPI.Provider<ChainId, SchemaType>
+{
+    async getAssets(
+        account: string,
+        { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
+    ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>, HubIndicator>> {
+        const allSettled = await Promise.allSettled([
+            getAssetFLOW(chainId, account),
+            getAssetFUSD(chainId, account),
+            getAssetTether(chainId, account),
+        ])
 
-    const items = allSettled.map((x) => (x.status === 'fulfilled' ? x.value : null)).filter(Boolean) as Array<
-        FungibleAsset<ChainId, SchemaType>
-    >
-    return createPageable(items, 0)
+        const items = allSettled.map((x) => (x.status === 'fulfilled' ? x.value : null)).filter(Boolean) as Array<
+            FungibleAsset<ChainId, SchemaType>
+        >
+        return createPageable(items, createIndicator(indicator))
+    }
+
+    async getFungibleTokenList(chainId: ChainId, urls?: string[]) {
+        const { FLOW_ADDRESS = '', FUSD_ADDRESS = '', TETHER_ADDRESS = '' } = getTokenConstants(chainId)
+        return [
+            createFungibleToken(
+                chainId,
+                FLOW_ADDRESS,
+                'Flow',
+                'FLOW',
+                8,
+                new URL('../assets/flow.png', import.meta.url).toString(),
+            ),
+            createFungibleToken(
+                chainId,
+                FUSD_ADDRESS,
+                'Flow USD',
+                'FUSD',
+                8,
+                new URL('../assets/FUSD.png', import.meta.url).toString(),
+            ),
+            createFungibleToken(
+                chainId,
+                TETHER_ADDRESS,
+                'Tether USD',
+                'tUSD',
+                8,
+                new URL('../assets/tUSD.png', import.meta.url).toString(),
+            ),
+        ]
+    }
 }

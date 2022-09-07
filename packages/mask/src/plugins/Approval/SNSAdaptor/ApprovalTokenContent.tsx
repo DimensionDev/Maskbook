@@ -23,7 +23,7 @@ export function ApprovalTokenContent({ chainId }: { chainId: ChainId }) {
     const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM)
 
     const { value: spenders, loading } = useAsync(
-        async () => hub?.getApprovedFungibleTokenSpenders?.(chainId, account),
+        async () => hub?.getFungibleTokenApprovedSpenders?.(chainId, account),
         [chainId, account, hub],
     )
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)

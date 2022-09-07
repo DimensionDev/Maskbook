@@ -12,7 +12,7 @@ import { NON_FUNGIBLE_TOKEN_API_URL, FUNGIBLE_TOKEN_API_URL } from './constants'
 import type { NFTInfo, RawTokenInfo, TokenSpender } from './types'
 
 export class RabbyAPI implements AuthorizationAPI.Provider<ChainId> {
-    async getApprovedNonFungibleContracts(chainId: ChainId, account: string) {
+    async getNonFungibleTokenSpenders(chainId: ChainId, account: string) {
         const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'nft')
         const networkType = chainResolver.chainNetworkType(chainId)
 
@@ -61,7 +61,7 @@ export class RabbyAPI implements AuthorizationAPI.Provider<ChainId> {
             }) as Array<NonFungibleContractSpenderAuthorization<ChainId, SchemaType>>
     }
 
-    async getApprovedFungibleTokenSpenders(chainId: ChainId, account: string) {
+    async getFungibleTokenSpenders(chainId: ChainId, account: string) {
         const maskDappContractInfoList = getAllMaskDappContractInfo(chainId, 'token')
         const networkType = chainResolver.chainNetworkType(chainId)
 
