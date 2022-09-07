@@ -2,11 +2,11 @@ import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { ChainId, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { isSameAddress, NetworkPluginID, isGreaterThan } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
-import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react'
 import { AddNFT } from '../SNSAdaptor/AddNFT'
 import { BindingProof, EMPTY_LIST } from '@masknet/shared-base'
 import { AllChainsNonFungibleToken, PFP_TYPE, SelectTokenInfo } from '../types'
-import { uniqBy } from 'lodash-unified'
+import { first, uniqBy } from 'lodash-unified'
 import { useI18N } from '../locales'
 import {
     useAccount,
@@ -299,6 +299,13 @@ export function NFTListDialog(props: NFTListDialogProps) {
         return isGreaterThan(a.last_checked_at, z.last_checked_at) ? -1 : 1
     })
 
+    // Set eth to the default chain
+    const actualChainId = useMemo(() => {
+        const defaultChain = first(chains)
+        if (!chains.includes(chainId) && defaultChain) return defaultChain
+        return chainId
+    }, [chains, chainId])
+
     return (
         <>
             <DialogContent className={classes.content}>
@@ -308,7 +315,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                             <div className={classes.abstractTabWrapper}>
                                 <NetworkTab
                                     chains={chains.filter(Boolean) as ChainId[]}
-                                    chainId={chainId}
+                                    chainId={actualChainId}
                                     setChainId={setChainId}
                                     classes={classes}
                                     networkId={selectedPluginId}
@@ -410,7 +417,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
             </DialogActions>
             <AddNFT
                 account={selectedAccount}
-                chainId={chainId as ChainId}
+                chainId={actualChainId as ChainId}
                 title={t.add_collectible()}
                 open={open_}
                 onClose={() => setOpen_(false)}
