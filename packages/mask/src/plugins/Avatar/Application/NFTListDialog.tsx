@@ -6,7 +6,7 @@ import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'reac
 import { AddNFT } from '../SNSAdaptor/AddNFT'
 import { BindingProof, EMPTY_LIST } from '@masknet/shared-base'
 import { AllChainsNonFungibleToken, PFP_TYPE, SelectTokenInfo } from '../types'
-import { uniqBy } from 'lodash-unified'
+import { first, uniqBy } from 'lodash-unified'
 import { useI18N } from '../locales'
 import {
     useAccount,
@@ -298,6 +298,12 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const walletItems = wallets.sort((a, z) => {
         return isGreaterThan(a.last_checked_at, z.last_checked_at) ? -1 : 1
     })
+
+    // Set eth to the default chain
+    useEffect(() => {
+        const defaultChain = first(chains)
+        if (!chains.includes(chainId) && defaultChain) setChainId(defaultChain)
+    }, [chains, chainId])
 
     return (
         <>
