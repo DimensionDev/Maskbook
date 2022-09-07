@@ -43,6 +43,11 @@ describe('resolveIPFSLink', () => {
                 give: `https://gateway.ipfscdn.io/ipfs/${cid}?id=67874`,
                 expected: `https://gateway.ipfscdn.io/ipfs/${cid}`,
             },
+            // should not trim query from non-IPFS url
+            {
+                give: 'https://www.companioninabox.art/api/companion.png?id=726&iteration=0',
+                expected: 'https://www.companioninabox.art/api/companion.png?id=726&iteration=0',
+            },
         ].map(({ give, expected }) => [
             { give, expected },
             { give: `https://cors.r2d2.to?${encodeURIComponent(give)}`, expected },
