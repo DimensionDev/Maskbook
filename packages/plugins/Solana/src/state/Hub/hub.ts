@@ -33,7 +33,6 @@ class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
 
 class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType> {
     protected override getProviders(initial?: HubOptions<ChainId>) {
-        const options = this.getOptions(initial)
         return this.getPredicateProviders<NonFungibleTokenAPI.Provider<ChainId, SchemaType>>(
             {
                 [SourceType.MagicEden]: MagicEden,

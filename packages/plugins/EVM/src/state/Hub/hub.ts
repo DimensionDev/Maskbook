@@ -15,32 +15,17 @@ import {
     FungibleTokenAPI,
     NonFungibleTokenAPI,
     TokenListAPI,
+    TokenIconAPI,
     LooksRare,
     Gem,
     Zora,
     R2D2,
-    CoinGeckoPriceEVM,
     PriceAPI,
+    CF,
 } from '@masknet/web3-providers'
-import {
-    SourceType,
-    HubOptions,
-    Pageable,
-    CurrencyType,
-    Transaction,
-    currySameAddress,
-} from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    chainResolver,
-    formatEthereumAddress,
-    getTokenAssetBaseURLConstants,
-    isNativeTokenAddress,
-    SchemaType,
-} from '@masknet/web3-shared-evm'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { SourceType, HubOptions, Pageable, CurrencyType, Transaction } from '@masknet/web3-shared-base'
+import { ChainId, chainResolver, SchemaType } from '@masknet/web3-shared-evm'
 import type { EVM_Hub } from './types'
-import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
 
 class Hub extends HubStateClient<ChainId> implements EVM_Hub {
     async getGasOptions(chainId: ChainId, initial?: HubOptions<ChainId>) {
@@ -81,6 +66,7 @@ class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
             AuthorizationAPI.Provider<ChainId> &
                 FungibleTokenAPI.Provider<ChainId, SchemaType> &
                 TokenListAPI.Provider<ChainId, SchemaType> &
+                TokenIconAPI.Provider<ChainId> &
                 PriceAPI.Provider<ChainId>
         >(
             {
@@ -88,34 +74,11 @@ class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
                 [SourceType.Zerion]: Zerion,
                 [SourceType.Rabby]: Rabby,
                 [SourceType.R2D2]: R2D2,
-                [SourceType.CoinGecko]: CoinGeckoPriceEVM,
+                [SourceType.CF]: CF,
             },
             [DeBank, Zerion, Rabby, R2D2],
             initial,
         )
-    }
-
-    override async getFungibleTokenIconURLs(
-        chainId: ChainId,
-        address: string,
-        initial?: HubOptions<ChainId>,
-    ): Promise<string[]> {
-        const options = this.getOptions(initial, {
-            chainId,
-        })
-        const { NATIVE_TOKEN_ASSET_BASE_URI = EMPTY_LIST, ERC20_TOKEN_ASSET_BASE_URI = EMPTY_LIST } =
-            getTokenAssetBaseURLConstants(options.chainId)
-        const formattedAddress = formatEthereumAddress(address)
-
-        if (isNativeTokenAddress(formattedAddress)) {
-            return NATIVE_TOKEN_ASSET_BASE_URI?.map((x) => `${x}/info/logo.png`)
-        }
-
-        const specialIcon = SPECIAL_ICON_LIST.find(currySameAddress(address))
-        if (specialIcon) return [specialIcon.logo_url]
-
-        // load from remote
-        return ERC20_TOKEN_ASSET_BASE_URI.map((x) => `${x}/${formattedAddress}/logo.png/quality=85`)
     }
 }
 
