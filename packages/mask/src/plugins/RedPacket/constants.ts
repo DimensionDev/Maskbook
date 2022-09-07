@@ -1,5 +1,6 @@
 import { PluginId } from '@masknet/plugin-infra'
 
+// Note: if the latest version has been changed, please update packages/mask/src/components/CompositionDialog/useSubmit.ts
 /**
  * !! Change this key cause a breaking change in the red packet plugin.
  * !! Please make sure it also be able to recognize the old key.

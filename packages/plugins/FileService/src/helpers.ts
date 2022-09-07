@@ -9,6 +9,7 @@ import { isNil } from 'lodash-unified'
 import { encodeArrayBuffer, encodeText } from '@dimensiondev/kit'
 import { createLookupTableResolver } from '@masknet/shared-base'
 
+// Note: if the latest version has been changed, please update packages/mask/src/components/CompositionDialog/useSubmit.ts
 const reader_v1 = createTypedMessageMetadataReader<FileInfoV1>(META_KEY_1, schemaV1)
 const reader_v2 = createTypedMessageMetadataReader<FileInfo>(META_KEY_2, schemaV2)
 
