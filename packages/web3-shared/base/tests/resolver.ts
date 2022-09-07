@@ -27,15 +27,22 @@ describe('resolveIPFSLink', () => {
     const cases = [CIDv0, CIDv1].flatMap((cid) => {
         return [
             { give: '', expected: '' },
-            { give: cid, expected: `https://ipfs.io/ipfs/${cid}` },
-            { give: `${cid}/image`, expected: `https://ipfs.io/ipfs/${cid}/image` },
-            { give: `ipfs://${cid}`, expected: `https://ipfs.io/ipfs/${cid}` },
-            { give: `ipfs://ipfs/${cid}`, expected: `https://ipfs.io/ipfs/${cid}` },
-            { give: `https://ipfs.io/ipfs/${IMAGE_DATA_PARTIAL}`, expected: IMAGE_DATA_PARTIAL },
-            { give: `https://ipfs.io/ipfs/${cid}`, expected: `https://ipfs.io/ipfs/${cid}` },
-            { give: `https://ipfs.altava.com/ipfs/${cid}`, expected: `https://ipfs.io/ipfs/${cid}` },
-            { give: `https://ipfs.altava.com/ipfs/${cid}/image`, expected: `https://ipfs.io/ipfs/${cid}/image` },
+            { give: cid, expected: `https://gateway.ipfscdn.io/ipfs/${cid}` },
+            { give: `${cid}/image`, expected: `https://gateway.ipfscdn.io/ipfs/${cid}/image` },
+            { give: `ipfs://${cid}`, expected: `https://gateway.ipfscdn.io/ipfs/${cid}` },
+            { give: `ipfs://ipfs/${cid}`, expected: `https://gateway.ipfscdn.io/ipfs/${cid}` },
+            { give: `https://gateway.ipfscdn.io/ipfs/${IMAGE_DATA_PARTIAL}`, expected: IMAGE_DATA_PARTIAL },
+            { give: `https://gateway.ipfscdn.io/ipfs/${cid}`, expected: `https://gateway.ipfscdn.io/ipfs/${cid}` },
+            { give: `https://ipfs.altava.com/ipfs/${cid}`, expected: `https://gateway.ipfscdn.io/ipfs/${cid}` },
+            {
+                give: `https://ipfs.altava.com/ipfs/${cid}/image`,
+                expected: `https://gateway.ipfscdn.io/ipfs/${cid}/image`,
+            },
             { give: MASK_URL, expected: MASK_URL },
+            {
+                give: `https://gateway.ipfscdn.io/ipfs/${cid}?id=67874`,
+                expected: `https://gateway.ipfscdn.io/ipfs/${cid}`,
+            },
         ].map(({ give, expected }) => [
             { give, expected },
             { give: `https://cors.r2d2.to?${encodeURIComponent(give)}`, expected },
