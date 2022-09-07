@@ -5,7 +5,6 @@ import { useI18N } from '../../utils/index.js'
 import { isMobileFacebook } from '../../social-network-adaptor/facebook.com/utils/isMobile.js'
 import { MaskSharpIcon, MaskIconInMinds } from '@masknet/shared'
 import classNames from 'classnames'
-import GuideStep from '../GuideStep/index.js'
 
 interface TooltipConfigProps {
     placement?: 'bottom' | 'top'
@@ -70,13 +69,7 @@ const EntryIconButton = memo((props: PostDialogHintUIProps) => {
         </Tooltip>
     )
 
-    return disableGuideTip ? (
-        getEntry()
-    ) : (
-        <GuideStep step={4} total={4} tip={t('user_guide_tip_4')} onComplete={props.onHintButtonClicked}>
-            {getEntry()}
-        </GuideStep>
-    )
+    return disableGuideTip ? getEntry() : null
 })
 
 export const PostDialogHint = memo(function PostDialogHintUI(props: PostDialogHintUIProps) {
