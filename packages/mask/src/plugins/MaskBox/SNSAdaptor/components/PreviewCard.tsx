@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useContainer } from 'unstated-next'
-import { makeStyles, ActionButton } from '@masknet/theme'
-import { Box, Button, CircularProgress, Typography, useTheme } from '@mui/material'
+import { makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
+import { Box, Button, Typography, useTheme } from '@mui/material'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
 import { Context } from '../../hooks/useContext'
 import { BoxState, CardTab } from '../../type'
@@ -127,7 +127,7 @@ export function PreviewCard(props: PreviewCardProps) {
     if (boxState === BoxState.UNKNOWN)
         return (
             <Box sx={{ display: 'flex', padding: 2, justifyContent: 'center', alignItems: 'center' }}>
-                <CircularProgress />
+                <LoadingBase />
             </Box>
         )
     if (boxState === BoxState.ERROR)

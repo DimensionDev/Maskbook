@@ -2,8 +2,8 @@ import { Icons } from '@masknet/icons'
 import { DarkColor } from '@masknet/theme/base'
 import { ChainId, usePoolTogetherConstants } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { Box, Card, CardContent, CircularProgress, Paper, Tab, Tabs, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { Box, Card, CardContent, Paper, Tab, Tabs, Typography } from '@mui/material'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import React, { useState, useEffect } from 'react'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { usePool, usePools } from '../hooks/usePools'
@@ -106,7 +106,7 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
     if (loading || loadingMask) {
         return (
             <Box className={classes.progress}>
-                <CircularProgress />
+                <LoadingBase />
             </Box>
         )
     }

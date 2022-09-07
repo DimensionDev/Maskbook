@@ -20,7 +20,7 @@ import {
     useNativeToken,
     useWeb3,
 } from '@masknet/plugin-infra/web3'
-import { ERC20Input, FormattedCurrency, InjectedDialog, TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
+import { FungibleTokenInput, FormattedCurrency, InjectedDialog, TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
 import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider'
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
 import { PluginWalletStatusBar, useI18N } from '../../../utils'
@@ -247,7 +247,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                     {needsSwap ? null : (
                         <>
                             <div className={classes.inputWrap}>
-                                <ERC20Input
+                                <FungibleTokenInput
                                     amount={inputAmount}
                                     maxAmount={balanceAsBN.minus(estimatedGas).toString()}
                                     balance={balanceAsBN.toString()}

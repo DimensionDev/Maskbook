@@ -1,4 +1,4 @@
-import { InjectedDialog, useOpenShareTxDialog, useSelectFungibleToken, ERC20Input } from '@masknet/shared'
+import { InjectedDialog, useOpenShareTxDialog, useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { keyframes, makeStyles, ActionButton } from '@masknet/theme'
 import { FungibleToken, isZero, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
@@ -211,7 +211,7 @@ export function DepositDialog() {
                 maxWidth="xs">
                 <DialogContent>
                     <form className={classes.form} noValidate autoComplete="off">
-                        <ERC20Input
+                        <FungibleTokenInput
                             label="Amount"
                             amount={rawAmount}
                             balance={tokenBalance ?? '0'}

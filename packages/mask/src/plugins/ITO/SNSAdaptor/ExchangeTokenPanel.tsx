@@ -4,7 +4,7 @@ import AddIcon from '@mui/icons-material/AddOutlined'
 import RemoveIcon from '@mui/icons-material/RemoveOutlined'
 import { IconButton, Paper } from '@mui/material'
 import { useCallback, useEffect, useState } from 'react'
-import { ERC20Input, useSelectFungibleToken } from '@masknet/shared'
+import { FungibleTokenInput, useSelectFungibleToken } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
@@ -124,7 +124,7 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
 
     return (
         <Paper className={classes.line}>
-            <ERC20Input
+            <FungibleTokenInput
                 label={label}
                 amount={inputAmountForUI}
                 balance={disableBalance || loadingTokenBalance ? '0' : tokenBalance}

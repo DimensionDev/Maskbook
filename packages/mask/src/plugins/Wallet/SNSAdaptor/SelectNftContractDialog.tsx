@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
-import { makeStyles } from '@masknet/theme'
-import { Avatar, Box, DialogContent, Link, List, ListItem, Typography, CircularProgress } from '@mui/material'
+import { LoadingBase, makeStyles } from '@masknet/theme'
+import { Avatar, Box, DialogContent, Link, List, ListItem, Typography } from '@mui/material'
 import { SchemaType, explorerResolver, ChainId } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
@@ -205,7 +205,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
                         alignItems="center"
                         justifyContent="center"
                         sx={{ paddingTop: 4, paddingBottom: 4 }}>
-                        <CircularProgress size={24} />
+                        <LoadingBase size={24} />
                     </Box>
                 ) : (
                     <SearchResultBox

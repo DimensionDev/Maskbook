@@ -1,7 +1,7 @@
 import { useAsync } from 'react-use'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
-import { Grid, Typography, CircularProgress } from '@mui/material'
+import { Grid, Typography } from '@mui/material'
 
 import { useI18N } from '../../locales'
 import { getRequiredChainId } from '../../helpers'
@@ -13,6 +13,7 @@ import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
 import { Rewards } from './Rewards'
 
 import { useSharedStyles, useMyFarmsStyles } from '../styles'
+import { LoadingBase } from '@masknet/theme'
 
 export function MyRewards(props: PageInterface) {
     const t = useI18N()
@@ -49,7 +50,7 @@ export function MyRewards(props: PageInterface) {
                     </Grid>
                     <div className={myFarmsClasses.content}>
                         {loading ? (
-                            <CircularProgress size={50} />
+                            <LoadingBase size={50} />
                         ) : (
                             <>
                                 {!accountRewards || !Object.keys(accountRewards).length || error ? (

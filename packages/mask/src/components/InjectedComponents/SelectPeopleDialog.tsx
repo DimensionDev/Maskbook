@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { Button, CircularProgress, DialogActions, DialogContent } from '@mui/material'
+import { ActionButton, makeStyles } from '@masknet/theme'
+import { Button, DialogActions, DialogContent } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { useI18N } from '../../utils'
 import { SelectProfileUI } from '../shared/SelectProfileUI'
@@ -61,12 +61,9 @@ export function SelectProfileDialog(props: SelectProfileDialogProps) {
                 <Button size="large" onClick={onClose}>
                     {t('cancel')}
                 </Button>
-                <Button size="large" color="inherit" disabled={canCommit} onClick={share}>
-                    {committed && (
-                        <CircularProgress aria-busy className={classes.progress} size={16} variant="indeterminate" />
-                    )}
+                <ActionButton loading={committed} size="large" color="inherit" disabled={canCommit} onClick={share}>
                     {t(committed ? 'sharing' : 'share')}
-                </Button>
+                </ActionButton>
             </DialogActions>
         </InjectedDialog>
     )

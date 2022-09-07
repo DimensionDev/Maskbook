@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import type { MaskFixedSizeListProps, MaskTextFieldProps } from '@masknet/theme'
-import { useSelectFungibleToken, ERC20Input, ERC20InputProps } from '@masknet/shared'
+import { useSelectFungibleToken, FungibleTokenInput, ERC20InputProps } from '@masknet/shared'
 import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
@@ -54,7 +54,7 @@ export function SelectTokenAmountPanel(props: SelectTokenAmountPanelProps) {
     // #endregion
 
     return (
-        <ERC20Input
+        <FungibleTokenInput
             amount={amount}
             balance={balance}
             token={token}

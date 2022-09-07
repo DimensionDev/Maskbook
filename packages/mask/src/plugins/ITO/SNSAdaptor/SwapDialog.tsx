@@ -1,5 +1,5 @@
 import { openWindow } from '@masknet/shared-base-ui'
-import { useSelectFungibleToken, useOpenShareTxDialog, ERC20Input } from '@masknet/shared'
+import { useSelectFungibleToken, useOpenShareTxDialog, FungibleTokenInput } from '@masknet/shared'
 import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
 import {
     leftShift,
@@ -17,7 +17,7 @@ import {
     useTokenConstants,
     explorerResolver,
 } from '@masknet/web3-shared-evm'
-import { CircularProgress, Slider, Typography } from '@mui/material'
+import { Slider, Typography } from '@mui/material'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../utils'
@@ -225,7 +225,7 @@ export function SwapDialog(props: SwapDialogProps) {
                 <span className={classes.exchangeAmountText}>{formatBalance(tokenAmount, token.decimals)}</span>{' '}
                 {token.symbol}.
             </Typography>
-            <ERC20Input
+            <FungibleTokenInput
                 label="Amount"
                 amount={inputAmountForUI}
                 maxAmount={maxAmount}
@@ -255,17 +255,13 @@ export function SwapDialog(props: SwapDialogProps) {
                         spender={payload.contract_address}
                         token={swapToken.schema === SchemaType.ERC20 ? swapToken : undefined}>
                         <ActionButton
-                            loading={isSwapping}
+                            loading={isSwapping || loadingQualification}
                             className={classes.button}
                             fullWidth
                             size="large"
                             disabled={!!validationMessage || loadingQualification || isSwapping}
                             onClick={onSwap}>
-                            {loadingQualification ? (
-                                <CircularProgress size={16} className={classes.loading} />
-                            ) : (
-                                validationMessage || t('plugin_ito_swap')
-                            )}
+                            {validationMessage || t('plugin_ito_swap')}
                         </ActionButton>
                     </EthereumERC20TokenApprovedBoundary>
                 </WalletConnectedBoundary>

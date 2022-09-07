@@ -1,6 +1,6 @@
 import { BindingProof, EMPTY_LIST, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
-import { Box, CircularProgress, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
+import { LoadingBase, makeStyles } from '@masknet/theme'
+import { Box, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { useSubscription } from 'use-subscription'
 import { CloseIcon } from '../assets/close'
@@ -69,7 +69,7 @@ export function PersonaPage(props: PersonaPageProps) {
             <DialogContent sx={{ flex: 1, height: 450, padding: 2 }}>
                 {loading ? (
                     <Stack justifyContent="center" alignItems="center">
-                        <CircularProgress />
+                        <LoadingBase />
                     </Stack>
                 ) : (
                     <>

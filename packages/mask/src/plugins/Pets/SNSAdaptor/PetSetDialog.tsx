@@ -1,11 +1,17 @@
-import { useState, useMemo, ReactNode, Fragment } from 'react'
+import { useState, useMemo, ReactNode } from 'react'
 import { useTimeout } from 'react-use'
 import { Constant, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { makeStyles, useStylesExtends, useCustomSnackbar, ShadowRootPopper, ActionButton } from '@masknet/theme'
+import {
+    makeStyles,
+    useStylesExtends,
+    useCustomSnackbar,
+    ShadowRootPopper,
+    ActionButton,
+    LoadingBase,
+} from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
 import {
-    TextField,
     Typography,
     Box,
     Grid,
@@ -14,8 +20,8 @@ import {
     Autocomplete,
     FormControlLabel,
     Checkbox,
-    CircularProgress,
     useTheme,
+    InputBase,
 } from '@mui/material'
 import { PluginPetMessages } from '../messages'
 import { initMeta, initCollection, GLB3DIcon, PetsPluginID } from '../constants'
@@ -110,6 +116,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     RSS3Icon: {
         color: theme.palette.mode === 'light' ? '#000' : '#fff',
+    },
+    arrowIcon: {
+        width: 22.5,
+        height: 22.5,
+        top: 'calc(50% - 11.25px)',
+        color: theme.palette.maskColor.second,
     },
 }))
 
@@ -261,22 +273,18 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     </MenuItem>
                 )}
                 renderInput={(params) => (
-                    <TextField
-                        {...params}
-                        label={t.pets_dialog_contract()}
+                    <InputBase
+                        {...params.InputProps}
+                        fullWidth
+                        placeholder={t.pets_dialog_contract()}
                         error={isCollectionsError}
                         className={classes.input}
                         inputProps={{ ...params.inputProps }}
-                        InputProps={{
-                            ...params.InputProps,
-                            classes: { root: classes.inputBorder },
-                            endAdornment: (
-                                <Fragment>
-                                    {state ? <CircularProgress color="inherit" size={20} /> : null}
-                                    {params.InputProps.endAdornment}
-                                </Fragment>
-                            ),
-                        }}
+                        endAdornment={
+                            <Box pr={2} display="flex" alignItems="center">
+                                {state ? <LoadingBase size={20} /> : <Icons.ArrowDrop className={classes.arrowIcon} />}
+                            </Box>
+                        }
                     />
                 )}
             />
@@ -304,13 +312,18 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     </Box>
                 )}
                 renderInput={(params) => (
-                    <TextField
-                        {...params}
-                        label={t.pets_dialog_token()}
+                    <InputBase
+                        {...params.InputProps}
+                        fullWidth
+                        placeholder={t.pets_dialog_token()}
                         error={isImageError}
                         className={classes.input}
                         inputProps={{ ...params.inputProps }}
-                        InputProps={{ ...params.InputProps, classes: { root: classes.inputBorder } }}
+                        endAdornment={
+                            <Box pr={2} display="flex" alignItems="center">
+                                <Icons.ArrowDrop className={classes.arrowIcon} />
+                            </Box>
+                        }
                     />
                 )}
             />
@@ -332,10 +345,9 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     <Grid item xs={8}>
                         {nftsRender}
                         {tokensRender}
-                        <TextField
+                        <InputBase
                             className={classes.inputOption}
-                            InputProps={{ classes: { root: classes.inputArea } }}
-                            label={holderChange ? t.pets_dialog_msg_optional() : t.pets_dialog_msg()}
+                            placeholder={holderChange ? t.pets_dialog_msg_optional() : t.pets_dialog_msg()}
                             fullWidth
                             multiline
                             rows={3}

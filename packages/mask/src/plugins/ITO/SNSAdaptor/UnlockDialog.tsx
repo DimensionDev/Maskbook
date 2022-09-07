@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react'
 import { SchemaType, formatEthereumAddress, explorerResolver, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
 import { Link, Typography } from '@mui/material'
 import { Trans } from 'react-i18next'
-import { useSelectFungibleToken, ERC20Input } from '@masknet/shared'
+import { useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
@@ -57,7 +57,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
     if (!tokens.length) return <Typography>{t('plugin_ito_empty_token')}</Typography>
     return (
         <div className={classes.root}>
-            <ERC20Input
+            <FungibleTokenInput
                 label="Amount"
                 amount={rawAmount}
                 balance={tokenBalance ?? '0'}

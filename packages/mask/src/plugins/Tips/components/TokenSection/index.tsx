@@ -2,7 +2,7 @@ import { FC, useCallback, useEffect, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import { useAccount, useFungibleTokenBalance, useGasPrice, useWeb3State } from '@masknet/plugin-infra/web3'
 import { useGasConfig } from '@masknet/plugin-infra/web3-evm'
-import { useSelectFungibleToken, ERC20Input } from '@masknet/shared'
+import { useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { TargetRuntimeContext, useTip } from '../../contexts'
@@ -63,7 +63,7 @@ export const TokenSection: FC = () => {
     }, [selectFungibleToken, token?.address, pluginId, chainId])
     // #endregion
     return (
-        <ERC20Input
+        <FungibleTokenInput
             label=""
             token={token}
             amount={amount}

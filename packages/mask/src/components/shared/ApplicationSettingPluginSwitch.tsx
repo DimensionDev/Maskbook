@@ -1,10 +1,9 @@
 import { Icons } from '@masknet/icons'
 import { PluginI18NFieldRender, PluginId, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import { SettingSwitch } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { Avatar, Box, List, ListItem, ListItemAvatar, Typography } from '@mui/material'
+import { Avatar, Box, List, ListItem, ListItemAvatar, Switch, Typography } from '@mui/material'
 import { memo, useLayoutEffect, useMemo, useRef } from 'react'
 import { Services } from '../../extension/service'
 
@@ -123,8 +122,7 @@ export const ApplicationSettingPluginSwitch = memo(({ focusPluginId }: Props) =>
                         </div>
                     </section>
 
-                    <SettingSwitch
-                        size="small"
+                    <Switch
                         checked={!snsAdaptorMinimalPlugins.map((x) => x.ID).includes(x.pluginId)}
                         onChange={(event) => onSwitch(x.pluginId, event.target.checked)}
                     />

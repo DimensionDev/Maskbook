@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
-import { InjectedDialog, useOpenShareTxDialog, useSelectFungibleToken, ERC20Input } from '@masknet/shared'
+import { InjectedDialog, useOpenShareTxDialog, useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
 import { formatBalance, FungibleToken, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
@@ -149,7 +149,7 @@ export function DonateDialog(props: DonateDialogProps) {
             <InjectedDialog open={open} onClose={closeDonationDialog} title={title} maxWidth="xs">
                 <DialogContent style={{ padding: 16 }}>
                     <form className={classes.form} noValidate autoComplete="off">
-                        <ERC20Input
+                        <FungibleTokenInput
                             label="Amount"
                             amount={rawAmount}
                             balance={tokenBalance.value ?? '0'}

@@ -1,5 +1,5 @@
-import { Card, Typography, CircularProgress, List, ListItem } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { Card, Typography, List, ListItem } from '@mui/material'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import isValid from 'date-fns/isValid'
 import formatDistance from 'date-fns/formatDistance'
 import { zhTW, enUS, ja, zhCN, ko } from 'date-fns/locale'
@@ -112,7 +112,7 @@ export function PollCardUI(props: PollCardProps) {
                 <div style={{ fontSize: '16px' }}>{poll.question}</div>
                 {!status || status === PollStatus.Inactive ? null : (
                     <div className={classes.status}>
-                        {status === PollStatus.Voting ? <CircularProgress size={18} /> : null}
+                        {status === PollStatus.Voting ? <LoadingBase size={18} /> : null}
                         <span className={classes.statusText}>{renderPollStatusI18n(status)}</span>
                     </div>
                 )}

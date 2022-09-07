@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useWindowSize } from 'react-use'
-import { CircularProgress, Stack, Typography, useTheme } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { Stack, Typography, useTheme } from '@mui/material'
+import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../../../utils'
 import type { Coin, Currency, Stat } from '../../types'
 import { useDimension, Dimension } from '../../../hooks/useDimension'
@@ -96,7 +96,7 @@ export function PriceChart(props: PriceChartProps) {
 
     return (
         <div className={classes.root} ref={rootRef}>
-            {props.loading && <CircularProgress className={classes.progress} color="primary" size={15} />}
+            {props.loading && <LoadingBase className={classes.progress} color="primary" size={15} />}
             {props.stats.length ? (
                 <Stack gap={2}>
                     <svg

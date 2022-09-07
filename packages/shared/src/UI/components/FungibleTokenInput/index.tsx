@@ -1,7 +1,7 @@
 import { ChangeEvent, memo, useCallback, useMemo } from 'react'
 import { useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { formatBalance, FungibleToken } from '@masknet/web3-shared-base'
-import { ERC20InputUI } from './UI'
+import { FungibleTokenInputUI } from './UI'
 import BigNumber from 'bignumber.js'
 
 const MIN_AMOUNT_LENGTH = 1
@@ -24,7 +24,7 @@ export interface ERC20InputProps {
     onAmountChange: (amount: string) => void
 }
 
-export const ERC20Input = memo<ERC20InputProps>(
+export const FungibleTokenInput = memo<ERC20InputProps>(
     ({
         label,
         token,
@@ -64,7 +64,7 @@ export const ERC20Input = memo<ERC20InputProps>(
         // #endregion
 
         return (
-            <ERC20InputUI
+            <FungibleTokenInputUI
                 label={label}
                 isNative={isNative}
                 token={token}

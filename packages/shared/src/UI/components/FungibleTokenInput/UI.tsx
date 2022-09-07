@@ -15,7 +15,7 @@ import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { formatBalance, FungibleToken } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
 import { noop } from 'lodash-unified'
-import { FormattedBalance, TokenIcon, useSharedI18N } from '../../..'
+import { FormattedBalance, TokenIcon, useSharedI18N } from '../../../index'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -23,7 +23,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 66,
         padding: theme.spacing(1.25, 1.5),
         [`& > .${inputBaseClasses.input}`]: {
-            padding: theme.spacing(2.75, 0, 0, 0),
+            paddingTop: `${theme.spacing(2.75)}!important`,
             flex: 2,
         },
     },
@@ -102,7 +102,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface ERC20InputUIProps extends InputBaseProps {
+interface FungibleTokenInputUIProps extends InputBaseProps {
     label: string
     disableMax?: boolean
     isNative?: boolean
@@ -115,7 +115,7 @@ interface ERC20InputUIProps extends InputBaseProps {
     disableToken?: boolean
 }
 
-export const ERC20InputUI = memo<ERC20InputUIProps>(
+export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
     ({
         label,
         isNative,

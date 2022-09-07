@@ -1,6 +1,6 @@
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, LoadingBase } from '@masknet/theme'
 import { memo } from 'react'
-import { alpha, Box, CircularProgress, Link, Typography } from '@mui/material'
+import { alpha, Box, Link, Typography } from '@mui/material'
 import { WalletIcon, useSnackbarCallback } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
@@ -130,7 +130,7 @@ export const WalletDescription = memo<WalletDescriptionProps>(
                                     onPendingClick?.()
                                 }}>
                                 {t('recent_transaction_pending')}
-                                <CircularProgress thickness={6} size={12} className={classes.progress} />
+                                <LoadingBase size={12} className={classes.progress} />
                             </span>
                         ) : null}
                     </Typography>

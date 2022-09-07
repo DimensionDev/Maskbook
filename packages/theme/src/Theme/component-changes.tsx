@@ -15,6 +15,7 @@ import {
     tooltipClasses,
     alertClasses,
     linearProgressClasses,
+    selectClasses,
 } from '@mui/material'
 import type { MaskColor } from './colors'
 
@@ -725,10 +726,22 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                         size: 'small',
                     },
                     style: {
-                        height: 32,
+                        [`&.${inputBaseClasses.focused} > .${inputBaseClasses.input}`]: {
+                            padding: 7,
+                            [`&.${selectClasses.select}`]: {
+                                padding: 7,
+                                height: 16,
+                                minHeight: 'unset',
+                            },
+                        },
                         [`& .${inputBaseClasses.input}`]: {
                             padding: 8,
                             height: 16,
+                            [`&.${selectClasses.select}`]: {
+                                padding: 8,
+                                height: 16,
+                                minHeight: 'unset',
+                            },
                         },
                     },
                 },
@@ -737,10 +750,22 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                         size: 'medium',
                     },
                     style: {
-                        height: 40,
+                        [`&.${inputBaseClasses.focused} > .${inputBaseClasses.input}`]: {
+                            padding: 10,
+                            [`&.${selectClasses.select}`]: {
+                                padding: 10,
+                                height: 18,
+                                minHeight: 'unset',
+                            },
+                        },
                         [`& .${inputBaseClasses.input}`]: {
                             padding: 11,
                             height: 18,
+                            [`&.${selectClasses.select}`]: {
+                                padding: 11,
+                                height: 18,
+                                minHeight: 'unset',
+                            },
                         },
                     },
                 },
@@ -749,10 +774,22 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                         size: 'large',
                     },
                     style: {
-                        height: 48,
+                        [`&.${inputBaseClasses.focused} > .${inputBaseClasses.input}`]: {
+                            padding: 13,
+                            [`&.${selectClasses.select}`]: {
+                                padding: 13,
+                                height: 20,
+                                minHeight: 'unset',
+                            },
+                        },
                         [`& .${inputBaseClasses.input}`]: {
                             padding: 14,
                             height: 20,
+                            [`&.${selectClasses.select}`]: {
+                                padding: 14,
+                                height: 20,
+                                minHeight: 'unset',
+                            },
                         },
                     },
                 },

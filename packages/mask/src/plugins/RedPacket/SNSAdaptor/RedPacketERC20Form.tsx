@@ -13,7 +13,7 @@ import { MenuItem, Select, Box, InputBase, Typography } from '@mui/material'
 import BigNumber from 'bignumber.js'
 import { omit } from 'lodash-unified'
 import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useSelectFungibleToken, ERC20Input } from '@masknet/shared'
+import { useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
 import { useI18N } from '../locales'
 import { PluginWalletStatusBar, useI18N as useBaseI18n } from '../../../utils'
@@ -250,7 +250,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                 </Box>
             </div>
             <div className={classes.field}>
-                <ERC20Input
+                <FungibleTokenInput
                     label={isRandom ? 'Total Amount' : t.amount_per_share()}
                     token={token}
                     onSelectToken={onSelectTokenChipClick}

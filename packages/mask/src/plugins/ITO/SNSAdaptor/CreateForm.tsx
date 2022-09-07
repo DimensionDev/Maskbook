@@ -1,8 +1,8 @@
 import { SchemaType, formatAmount, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
 import { isGreaterThan, isZero, NetworkPluginID, FungibleToken, leftShift } from '@masknet/web3-shared-base'
 import { TokenIcon } from '@masknet/shared'
-import { Box, Stack, Typography, InputBase, inputBaseClasses, CircularProgress } from '@mui/material'
-import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
+import { Box, Stack, Typography, InputBase, inputBaseClasses } from '@mui/material'
+import { makeStyles, useStylesExtends, ActionButton, LoadingBase } from '@masknet/theme'
 import CheckIcon from '@mui/icons-material/Check'
 import UnCheckIcon from '@mui/icons-material/Close'
 import classNames from 'classnames'
@@ -462,7 +462,7 @@ export function CreateForm(props: CreateFormProps) {
                                     <CheckIcon fontSize="small" style={{ color: '#77E0B5' }} />
                                 </Box>
                             ) : qualification?.loadingERC165 || loadingQualification ? (
-                                <CircularProgress size={16} />
+                                <LoadingBase size={16} />
                             ) : qualificationAddress.length > 0 ? (
                                 <Box className={classNames(classes.iconWrapper, classes.fail)}>
                                     <UnCheckIcon fontSize="small" style={{ color: '#ff4e59' }} />

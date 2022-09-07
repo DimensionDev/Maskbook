@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
-import { InjectedDialog, ERC20Input, useOpenShareTxDialog, useShowConfirm } from '@masknet/shared'
+import { InjectedDialog, FungibleTokenInput, useOpenShareTxDialog, useShowConfirm } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { FungibleToken, leftShift, NetworkPluginID } from '@masknet/web3-shared-base'
 import { SchemaType, useArtBlocksConstants, ChainId } from '@masknet/web3-shared-evm'
@@ -133,7 +133,7 @@ export function PurchaseDialog(props: ActionBarProps) {
             <DialogContent className={classes.content}>
                 <Card elevation={0}>
                     <CardContent>
-                        <ERC20Input
+                        <FungibleTokenInput
                             label={t('plugin_artblocks_price_per_mint')}
                             amount={price.toString()}
                             balance={balance.value ?? '0'}

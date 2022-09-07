@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import urlcat from 'urlcat'
-import { Box, Card, Typography, Button, Avatar, CircularProgress, useTheme } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { Box, Card, Typography, Button, Avatar, useTheme } from '@mui/material'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import QueryBuilderIcon from '@mui/icons-material/QueryBuilder'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -106,7 +106,7 @@ export function PreviewCard(props: PreviewCardProps) {
     if (loading)
         return (
             <Typography color="textPrimary" textAlign="center" sx={{ padding: 2 }}>
-                <CircularProgress />
+                <LoadingBase />
             </Typography>
         )
     if (error)

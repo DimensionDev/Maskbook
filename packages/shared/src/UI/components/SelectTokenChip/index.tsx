@@ -1,6 +1,6 @@
 import classNames from 'classnames'
-import { Chip, ChipProps, CircularProgress } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { Chip, ChipProps } from '@mui/material'
+import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ErrorIcon from '@mui/icons-material/Error'
 import { noop } from 'lodash-unified'
@@ -51,7 +51,7 @@ export function SelectTokenChip(props: SelectTokenChipProps) {
         return (
             <Chip
                 className={classNames(classes.chip, classes.loadingChip)}
-                icon={<CircularProgress size={16} />}
+                icon={<LoadingBase size={16} />}
                 size="small"
                 clickable={false}
                 variant="outlined"

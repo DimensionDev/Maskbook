@@ -1,6 +1,6 @@
-import { makeStyles, parseColor, useStylesExtends } from '@masknet/theme'
+import { LoadingBase, makeStyles, parseColor, useStylesExtends } from '@masknet/theme'
 import { resolveCORSLink, resolveIPFSLink } from '@masknet/web3-shared-base'
-import { Box, CircularProgress, useTheme } from '@mui/material'
+import { Box, useTheme } from '@mui/material'
 import classNames from 'classnames'
 import { ImgHTMLAttributes, useState } from 'react'
 import { useAsync } from 'react-use'
@@ -47,17 +47,7 @@ export function Image({ fallback, disableSpinner, classes: externalClasses, ...r
         return (
             <Box className={classes.container}>
                 <Box className={classes.spinContainer}>
-                    <CircularProgress
-                        variant="determinate"
-                        value={100}
-                        className={classNames(classes.imageLoading, classes.circle)}
-                    />
-                    <CircularProgress
-                        variant="indeterminate"
-                        disableShrink
-                        className={classes.imageLoading}
-                        sx={{ position: 'absolute', left: 0 }}
-                    />
+                    <LoadingBase />
                 </Box>
             </Box>
         )

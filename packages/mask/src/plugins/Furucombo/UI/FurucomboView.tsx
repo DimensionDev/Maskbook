@@ -1,7 +1,7 @@
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { Card, CardContent, Tabs, Tab, Typography, Paper, CircularProgress, Button, Stack } from '@mui/material'
+import { LoadingBase, makeStyles, MaskColorVar } from '@masknet/theme'
+import { Card, CardContent, Tabs, Tab, Typography, Paper, Button, Stack } from '@mui/material'
 import { useState } from 'react'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { useFetchPools } from '../hooks/usePool'
@@ -60,7 +60,7 @@ export function FurucomboView(props: PoolViewProps) {
     if (loading)
         return (
             <Stack sx={{ alignItems: 'center' }}>
-                <CircularProgress size="small" />
+                <LoadingBase />
             </Stack>
         )
 
