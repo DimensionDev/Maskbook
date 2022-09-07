@@ -51,7 +51,7 @@ export function createI18nHooksAndTranslate(id: string) {
     return {
         useI18N() {
             const { t } = useTranslation(id)
-            return react.useMemo(() => createProxy((key) => t.bind(key)), [t])
+            return react.useMemo(() => createProxy((key) => t.bind(null, key)), [t])
         },
         Translate: createProxy(
             (key: string) => (props: any) => react.createElement(Trans, { i18nKey: key, ns: id, ...props }),

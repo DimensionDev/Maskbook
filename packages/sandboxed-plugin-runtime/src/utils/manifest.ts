@@ -9,6 +9,7 @@ export interface Manifest {
     id: string
     entries?: Entries
     contributes?: Contributes
+    locales?: string
 }
 export interface Entries {
     rpc?: string

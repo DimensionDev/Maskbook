@@ -3,7 +3,11 @@
   "private": true,
   "type": "module",
   "sideEffects": false,
+  "types": "./dist/runtime/export.d.ts",
   "exports": {
+    ".": {
+      "types": "./dist/runtime/export.d.ts"
+    },
     "./background": {
       "types": "./dist/background/index.d.ts",
       "webpack": "./src/background/index.ts",

@@ -7,6 +7,8 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { Children, createElement } from 'react'
 
 const { signal } = hmr(import.meta.webpackHot)
+if (import.meta.webpackHot) import.meta.webpackHot.accept()
+
 let hot: Map<string, (hot: Promise<{ default: Plugin.SNSAdaptor.Definition }>) => void> | undefined
 if (process.env.NODE_ENV === 'development') {
     const sym = Symbol.for('sandboxed plugin bridge hot map')
