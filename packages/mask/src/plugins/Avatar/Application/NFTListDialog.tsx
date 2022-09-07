@@ -2,7 +2,7 @@ import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { ChainId, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { isSameAddress, NetworkPluginID, isGreaterThan } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
-import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react'
 import { AddNFT } from '../SNSAdaptor/AddNFT'
 import { BindingProof, EMPTY_LIST } from '@masknet/shared-base'
 import { AllChainsNonFungibleToken, PFP_TYPE, SelectTokenInfo } from '../types'
@@ -300,9 +300,10 @@ export function NFTListDialog(props: NFTListDialogProps) {
     })
 
     // Set eth to the default chain
-    useEffect(() => {
+    const actualChainId = useMemo(() => {
         const defaultChain = first(chains)
-        if (!chains.includes(chainId) && defaultChain) setChainId(defaultChain)
+        if (!chains.includes(chainId) && defaultChain) return defaultChain
+        return chainId
     }, [chains, chainId])
 
     return (
@@ -314,7 +315,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                             <div className={classes.abstractTabWrapper}>
                                 <NetworkTab
                                     chains={chains.filter(Boolean) as ChainId[]}
-                                    chainId={chainId}
+                                    chainId={actualChainId}
                                     setChainId={setChainId}
                                     classes={classes}
                                     networkId={selectedPluginId}
@@ -416,7 +417,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
             </DialogActions>
             <AddNFT
                 account={selectedAccount}
-                chainId={chainId as ChainId}
+                chainId={actualChainId as ChainId}
                 title={t.add_collectible()}
                 open={open_}
                 onClose={() => setOpen_(false)}
