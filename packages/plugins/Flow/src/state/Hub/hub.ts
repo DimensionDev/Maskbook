@@ -1,5 +1,5 @@
 import { assignIn } from 'lodash-unified'
-import { HubStateClient, HubStateFungibleClient, HubStateNonFungibleClient } from '@masknet/plugin-infra/web3'
+import { HubStateBaseClient, HubStateFungibleClient, HubStateNonFungibleClient } from '@masknet/plugin-infra/web3'
 import { AlchemyFlow, FlowFungible, FungibleTokenAPI, NonFungibleTokenAPI } from '@masknet/web3-providers'
 import { SourceType, CurrencyType, HubOptions, Pageable, Transaction } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-flow'
@@ -29,7 +29,7 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
     }
 }
 
-class Hub extends HubStateClient<ChainId> implements FlowHub {
+class Hub extends HubStateBaseClient<ChainId> implements FlowHub {
     getTransactions(
         chainId: ChainId,
         account: string,

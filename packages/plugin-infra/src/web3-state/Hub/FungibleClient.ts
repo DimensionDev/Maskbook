@@ -12,9 +12,9 @@ import {
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { AuthorizationAPI, FungibleTokenAPI, TokenListAPI } from '@masknet/web3-providers'
-import { HubStateClient } from '../Hub'
+import { HubStateBaseClient } from '../Hub'
 
-export class HubStateFungibleClient<ChainId, SchemaType> extends HubStateClient<ChainId> {
+export class HubStateFungibleClient<ChainId, SchemaType> extends HubStateBaseClient<ChainId> {
     protected getProviders(
         initial?: HubOptions<ChainId>,
     ): Array<

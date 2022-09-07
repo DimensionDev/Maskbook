@@ -1,5 +1,5 @@
 import { assignIn } from 'lodash-unified'
-import { HubStateClient, HubStateFungibleClient, HubStateNonFungibleClient } from '@masknet/plugin-infra/web3'
+import { HubStateBaseClient, HubStateFungibleClient, HubStateNonFungibleClient } from '@masknet/plugin-infra/web3'
 import {
     CoinGeckoPriceSolana,
     MagicEden,
@@ -44,7 +44,7 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
     }
 }
 
-class Hub extends HubStateClient<ChainId> implements SolanaHub {
+class Hub extends HubStateBaseClient<ChainId> implements SolanaHub {
     getGasOptions(chainId: ChainId, initial?: HubOptions<ChainId>): Promise<Record<GasOptionType, GasOption>> {
         throw new Error('Method not implemented.')
     }

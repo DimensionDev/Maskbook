@@ -1,5 +1,5 @@
 import { assignIn } from 'lodash-unified'
-import { HubStateClient, HubStateFungibleClient, HubStateNonFungibleClient } from '@masknet/plugin-infra/web3'
+import { HubStateBaseClient, HubStateFungibleClient, HubStateNonFungibleClient } from '@masknet/plugin-infra/web3'
 import {
     AlchemyEVM,
     DeBank,
@@ -27,7 +27,7 @@ import { SourceType, HubOptions, Pageable, CurrencyType, Transaction } from '@ma
 import { ChainId, chainResolver, SchemaType } from '@masknet/web3-shared-evm'
 import type { EVM_Hub } from './types'
 
-class Hub extends HubStateClient<ChainId> implements EVM_Hub {
+class Hub extends HubStateBaseClient<ChainId> implements EVM_Hub {
     async getGasOptions(chainId: ChainId, initial?: HubOptions<ChainId>) {
         const options = this.getOptions(initial, {
             chainId,

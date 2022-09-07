@@ -1,54 +1,15 @@
 import { memoize } from 'lodash-unified'
 import type { Subscription } from 'use-subscription'
-import {
-    HubState as Web3HubState,
-    Hub,
-    HubOptions,
-    SourceType,
-    CurrencyType,
-    createPredicate,
-} from '@masknet/web3-shared-base'
+import type { HubState as Web3HubState, Hub, HubOptions, SourceType, CurrencyType } from '@masknet/web3-shared-base'
 
+export * from './Hub/BaseClient'
 export * from './Hub/FungibleClient'
 export * from './Hub/NonFungibleClient'
 
-const SIZE_PER_PAGE = 50
-const MAX_PAGE_SIZE = 25
-
-export class HubStateClient<ChainId> {
-    constructor(
-        protected chainId: ChainId,
-        protected account: string,
-        protected sourceType?: SourceType,
-        protected currencyType?: CurrencyType,
-    ) {}
-
-    protected getOptions(
-        initial?: HubOptions<ChainId>,
-        overrides?: Partial<HubOptions<ChainId>>,
-    ): PartialRequired<Required<HubOptions<ChainId>>, 'chainId' | 'account'> {
-        return {
-            chainId: this.chainId,
-            account: this.account,
-            sourceType: this.sourceType,
-            currencyType: this.currencyType,
-            ...initial,
-            ...overrides,
-        }
-    }
-
-    protected getPredicateProviders<T extends unknown>(
-        providers: Partial<Record<SourceType, T>>,
-        defaultProviders: T[],
-        initial?: HubOptions<ChainId>,
-    ) {
-        const options = this.getOptions(initial)
-        const predicate = createPredicate(Object.keys(providers) as Array<keyof typeof providers>)
-        return predicate(options.sourceType) ? [providers[options.sourceType]!] : defaultProviders
-    }
-}
-
 export class HubState<ChainId, SchemaType, GasOption> implements Web3HubState<ChainId, SchemaType, GasOption> {
+    static SIZE_PER_PAGE = 50
+    static MAX_PAGE_SIZE = 25
+
     private createHubCached: (ReturnType<typeof memoize> & typeof this.createHub) | undefined
 
     constructor(
@@ -98,8 +59,8 @@ export class HubState<ChainId, SchemaType, GasOption> implements Web3HubState<Ch
                 options?.account ?? this.subscription.account?.getCurrentValue(),
                 options?.sourceType ?? this.subscription.sourceType?.getCurrentValue(),
                 options?.currencyType ?? this.subscription.currencyType?.getCurrentValue(),
-                SIZE_PER_PAGE,
-                MAX_PAGE_SIZE,
+                HubState.SIZE_PER_PAGE,
+                HubState.MAX_PAGE_SIZE,
             ),
         )
     }
