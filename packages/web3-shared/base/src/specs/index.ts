@@ -66,6 +66,7 @@ export enum SourceType {
     // FT assets
     DeBank = 'DeBank',
     Zerion = 'Zerion',
+    Solana = 'Solana',
 
     // NFT assets
     Gem = 'Gem',

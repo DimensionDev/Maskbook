@@ -1,4 +1,4 @@
-import type { PartialRequired } from '@masknet/shared-base'
+import { HubStateClient } from '@masknet/plugin-infra/web3'
 import { AlchemyFlow } from '@masknet/web3-providers'
 import type {
     FungibleToken,
@@ -17,28 +17,7 @@ import { createFungibleToken } from '../../helpers'
 import { FlowRPC } from '../../messages'
 import type { FlowHub } from './types'
 
-class Hub implements FlowHub {
-    constructor(
-        private chainId: ChainId,
-        private account: string,
-        private sourceType?: SourceType,
-        private currencyType?: CurrencyType,
-    ) {}
-
-    private getOptions(
-        initial?: HubOptions<ChainId>,
-        overrides?: Partial<HubOptions<ChainId>>,
-    ): PartialRequired<HubOptions<ChainId>, 'chainId' | 'account'> {
-        return {
-            chainId: this.chainId,
-            account: this.account,
-            sourceType: this.sourceType,
-            currencyType: this.currencyType,
-            ...initial,
-            ...overrides,
-        }
-    }
-
+class Hub extends HubStateClient<ChainId> implements FlowHub {
     async getFungibleTokensFromTokenList(
         chainId: ChainId,
         initial?: HubOptions<ChainId>,

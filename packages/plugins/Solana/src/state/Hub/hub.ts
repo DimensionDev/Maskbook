@@ -1,5 +1,12 @@
-import type { PartialRequired } from '@masknet/shared-base'
-import { CoinGecko, MagicEden, SolanaFungible, SolanaNonFungible } from '@masknet/web3-providers'
+import { HubStateClient } from '@masknet/plugin-infra/web3'
+import {
+    CoinGecko,
+    FungibleTokenAPI,
+    MagicEden,
+    NonFungibleTokenAPI,
+    SolanaFungible,
+    SolanaNonFungible,
+} from '@masknet/web3-providers'
 import {
     CurrencyType,
     FungibleAsset,
@@ -13,30 +20,37 @@ import {
     Pageable,
     SourceType,
     Transaction,
+    attemptUntil,
 } from '@masknet/web3-shared-base'
 import { ChainId, GasOption, getCoinGeckoConstants, getTokenConstants, SchemaType } from '@masknet/web3-shared-solana'
 import type { SolanaHub } from './types'
 
-class Hub implements SolanaHub {
-    constructor(
-        private chainId: ChainId,
-        private account: string,
-        private sourceType?: SourceType,
-        private currencyType?: CurrencyType,
-    ) {}
+class Hub extends HubStateClient<ChainId> implements SolanaHub {
+    private getFungibleProviders(initial?: HubOptions<ChainId>) {
+        const options = this.getOptions(initial)
 
-    private getOptions(
-        initial?: HubOptions<ChainId>,
-        overrides?: Partial<HubOptions<ChainId>>,
-    ): PartialRequired<HubOptions<ChainId>, 'chainId' | 'account'> {
-        return {
-            chainId: this.chainId,
-            account: this.account,
-            sourceType: this.sourceType,
-            currencyType: this.currencyType,
-            ...initial,
-            ...overrides,
-        }
+        // only the first page is available
+        if ((options.indicator ?? 0) > 0) return []
+
+        return this.getProviders<FungibleTokenAPI.Provider<ChainId, SchemaType>>(
+            {
+                [SourceType.Solana]: SolanaFungible,
+            },
+            [SolanaFungible],
+            initial,
+        )
+    }
+
+    private getNonFungibleProviders(initial?: HubOptions<ChainId>) {
+        const options = this.getOptions(initial)
+        return this.getProviders<NonFungibleTokenAPI.Provider<ChainId, SchemaType>>(
+            {
+                [SourceType.MagicEden]: MagicEden,
+                [SourceType.Solana]: SolanaNonFungible,
+            },
+            [MagicEden, SolanaNonFungible],
+            initial,
+        )
     }
 
     async getFungibleTokensFromTokenList(
@@ -63,7 +77,11 @@ class Hub implements SolanaHub {
         initial?: HubOptions<ChainId>,
     ): Promise<NonFungibleAsset<ChainId, SchemaType> | undefined> {
         const options = this.getOptions(initial)
-        return MagicEden.getAsset(address, tokenId, options)
+        const providers = this.getNonFungibleProviders(initial)
+        return attemptUntil(
+            providers.map((x) => () => x.getAsset?.(address, tokenId, options)),
+            undefined,
+        )
     }
     async getFungibleAssets(
         account: string,

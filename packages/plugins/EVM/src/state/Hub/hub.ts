@@ -1,4 +1,5 @@
-import { EMPTY_LIST, PartialRequired } from '@masknet/shared-base'
+import { HubStateClient } from '@masknet/plugin-infra/web3'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     AlchemyEVM,
     CoinGecko,
@@ -33,7 +34,6 @@ import {
     CurrencyType,
     Transaction,
     attemptUntil,
-    createPredicate,
     createIndicator,
     FungibleTokenSecurity,
     FungibleTokenSpenderAuthorization,
@@ -58,38 +58,7 @@ import {
 import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
 import type { EVM_Hub } from './types'
 
-class Hub implements EVM_Hub {
-    constructor(
-        private chainId: ChainId,
-        private account: string,
-        private sourceType?: SourceType,
-        private currencyType?: CurrencyType,
-    ) {}
-
-    private getOptions(
-        initial?: HubOptions<ChainId>,
-        overrides?: Partial<HubOptions<ChainId>>,
-    ): PartialRequired<HubOptions<ChainId>, 'chainId' | 'account'> {
-        return {
-            chainId: this.chainId,
-            account: this.account,
-            sourceType: this.sourceType,
-            currencyType: this.currencyType,
-            ...initial,
-            ...overrides,
-        }
-    }
-
-    private getProviders<T extends unknown>(
-        providers: Partial<Record<SourceType, T>>,
-        defaultProviders: T[],
-        initial?: HubOptions<ChainId>,
-    ) {
-        const options = this.getOptions(initial)
-        const predicate = createPredicate(Object.keys(providers) as Array<keyof typeof providers>)
-        return predicate(options.sourceType) ? [providers[options.sourceType]!] : defaultProviders
-    }
-
+class Hub extends HubStateClient<ChainId> implements EVM_Hub {
     private getFungibleProviders(initial?: HubOptions<ChainId>) {
         const options = this.getOptions(initial)
 
