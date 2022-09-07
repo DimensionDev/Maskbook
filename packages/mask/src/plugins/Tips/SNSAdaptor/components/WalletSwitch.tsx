@@ -5,7 +5,7 @@ import { useI18N } from '../../../../utils'
 import { ExternalLink } from 'react-feather'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { NetworkPluginID, resolveNextIdWalletName } from '@masknet/web3-shared-base'
+import { NetworkPluginID, resolveNetworkWalletName } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     currentAccount: {
@@ -51,23 +51,22 @@ interface WalletSwitchProps {
     type: NetworkPluginID
     address: string
     isPublic: boolean
-    onChange: (idx: number, v: boolean) => void
-    index: number
+    onChange: (address: string, v: boolean) => void
 }
 
-export function WalletSwitch({ type, address, isPublic, chainId, index, onChange }: WalletSwitchProps) {
+export function WalletSwitch({ type, address, isPublic, chainId, onChange }: WalletSwitchProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     const onSwitch = (e: React.ChangeEvent<HTMLInputElement>) => {
-        onChange(index, e.target.checked)
+        onChange(address, e.target.checked)
     }
     return (
         <div className={classes.currentAccount}>
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
-                    <Typography className={classes.accountName}>{resolveNextIdWalletName(type)}</Typography>
+                    <Typography className={classes.accountName}>{resolveNetworkWalletName(type)}</Typography>
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.address} variant="body2" title={address}>

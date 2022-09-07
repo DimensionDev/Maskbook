@@ -25,7 +25,7 @@ const useStyles = makeStyles()((theme) => {
         sourceName: {
             fontSize: 14,
             fontWeight: 700,
-            color: theme.palette.maskColor.publicMain,
+            color: theme.palette.mode === 'dark' ? '' : theme.palette.maskColor.publicMain,
         },
     }
 })

@@ -1,5 +1,5 @@
 import ss from '@snapshot-labs/snapshot.js'
-import type { Proposal, Profile3Box, VoteSuccess, RawVote, Strategy } from '../../types'
+import type { Proposal, VoteSuccess, RawVote, Strategy } from '../../types'
 import { transform } from 'lodash-unified'
 import { SNAPSHOT_GET_SCORE_API } from '../../constants'
 
@@ -90,21 +90,6 @@ async function fetchProposalFromGraphql(id: string) {
 
     const { data }: Res = await response.json()
     return data
-}
-
-export async function fetch3BoxProfiles(addresses: string[]): Promise<Profile3Box[]> {
-    const { profiles } = await ss.utils.subgraphRequest('https://api.3box.io/graph', {
-        profiles: {
-            __args: {
-                ids: addresses,
-            },
-            name: true,
-            eth_address: true,
-            image: true,
-        },
-    })
-
-    return profiles ?? []
 }
 
 export async function getScores(

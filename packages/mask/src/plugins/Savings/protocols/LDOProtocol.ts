@@ -41,7 +41,7 @@ export class LidoProtocol implements SavingsProtocol {
     async updateApr(chainId: ChainId, web3: Web3): Promise<void> {
         try {
             const response = await fetch('https://cors.r2d2.to/?https://stake.lido.fi/api/steth-apr')
-            this._apr = await response.text()
+            this._apr = (await response.text()).replace(/"/g, '')
         } catch {
             // the default APR is 5.30%
             this._apr = '5.30'

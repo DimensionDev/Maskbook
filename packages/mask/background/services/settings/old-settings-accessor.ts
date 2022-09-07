@@ -42,6 +42,7 @@ export async function getCurrentPersonaIdentifier(): Promise<PersonaIdentifier |
 export async function setCurrentPersonaIdentifier(x: PersonaIdentifier) {
     await currentPersonaIdentifier.readyPromise
     currentPersonaIdentifier.value = x.toText()
+    MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
 }
 export async function getPluginMinimalModeEnabled(id: string): Promise<BooleanPreference> {
     return getCurrentPluginMinimalMode(id)

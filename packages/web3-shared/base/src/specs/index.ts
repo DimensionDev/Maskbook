@@ -1,7 +1,14 @@
 import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Emitter } from '@servie/events'
-import type { EnhanceableSite, ExtensionSite, NextIDPersonaBindings, ProfileIdentifier } from '@masknet/shared-base'
+import type {
+    EnhanceableSite,
+    ExtensionSite,
+    ProfileIdentifier,
+    ECKeyIdentifier,
+    NextIDPersonaBindings,
+    NextIDPlatform,
+} from '@masknet/shared-base'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type {
     ReturnChainResolver,
@@ -9,6 +16,7 @@ import type {
     ReturnNetworkResolver,
     ReturnProviderResolver,
 } from '../utils'
+
 
 export interface Pageable<Item, Indicator = unknown> {
     /** the indicator of the current page */
@@ -71,6 +79,7 @@ export enum SourceType {
     Alchemy_FLOW = 'Alchemy_FLOW',
     Chainbase = 'Chainbase',
     X2Y2 = 'X2Y2',
+    MagicEden = 'MagicEden',
 
     // Rarity
     RaritySniper = 'RaritySniper',
@@ -108,6 +117,14 @@ export enum SocialAddressType {
     TWITTER_BLUE = 'TWITTER_BLUE',
     NEXT_ID = 'NEXT_ID',
     SOL = 'SOL',
+}
+
+export enum StorageProviderType {
+    NextID = 'NextID',
+    // RSS3 File API
+    RSS3 = 'RSS3',
+    // KV storage powered by CloudFlare
+    KV = 'kv',
 }
 
 export interface Identity {
@@ -252,29 +269,34 @@ export interface NonFungibleTokenStats {
     floorPrice: number
 }
 
-export interface NonFungibleTokenRarity {
+export interface NonFungibleTokenRarity<ChainId> {
+    chainId: ChainId
     rank: number
     url: string
     status?: 'verified' | 'unverified'
+    /** source type */
+    source?: SourceType
 }
 
 export interface NonFungibleTokenContract<ChainId, SchemaType> {
     chainId: ChainId
     name: string
-    symbol: string
+    symbol?: string
     address: string
     schema: SchemaType
     owner?: string
     logoURL?: string
     iconURL?: string
     creatorEarning?: string
+    /** source type */
+    source?: SourceType
 }
 
 export interface NonFungibleTokenMetadata<ChainId> {
     chainId: ChainId
     /** Might be the format `TheName #42` */
     name: string
-    symbol: string
+    symbol?: string
     description?: string
     /** preview image url */
     imageURL?: string
@@ -282,22 +304,31 @@ export interface NonFungibleTokenMetadata<ChainId> {
     mediaURL?: string
     /** source media type */
     mediaType?: string
+    /** project url */
+    projectURL?: string
+    /** source type */
+    source?: SourceType
 }
 
-export interface NonFungibleTokenCollection<ChainId, SchemaType> {
+export interface NonFungibleCollection<ChainId, SchemaType> {
     chainId: ChainId
     name: string
     slug: string
-    address?: string
     symbol?: string
-    schema?: SchemaType
-    balance?: number
     description?: string
-    iconURL?: string
+    address?: string
+    schema?: SchemaType
+    iconURL?: string | null
+    /** the amount of mint tokens */
+    tokensTotal?: number
+    /** the amount of holders */
+    ownersTotal?: number
     /** verified by provider */
     verified?: boolean
     /** unix timestamp */
     createdAt?: number
+    /** source type */
+    source?: SourceType
 }
 
 export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, SchemaType> {
@@ -310,7 +341,7 @@ export interface NonFungibleToken<ChainId, SchemaType> extends Token<ChainId, Sc
     /** the media metadata */
     metadata?: NonFungibleTokenMetadata<ChainId>
     /** the collection info */
-    collection?: NonFungibleTokenCollection<ChainId, SchemaType>
+    collection?: NonFungibleCollection<ChainId, SchemaType>
 }
 
 export interface NonFungibleTokenTrait {
@@ -357,6 +388,8 @@ export interface NonFungibleTokenOrder<ChainId, SchemaType> {
     price?: Price
     /** the payment token and corresponding price */
     priceInToken?: PriceInToken<ChainId, SchemaType>
+    /** source type */
+    source?: SourceType
 }
 
 export interface NonFungibleTokenEvent<ChainId, SchemaType> {
@@ -367,6 +400,8 @@ export interface NonFungibleTokenEvent<ChainId, SchemaType> {
     type: string
     /** permalink of asset */
     assetPermalink?: string
+    /** name of asset */
+    assetName?: string
     /** symbol of asset */
     assetSymbol?: string
     /** token amount */
@@ -374,14 +409,19 @@ export interface NonFungibleTokenEvent<ChainId, SchemaType> {
     /** transaction hash */
     hash?: string
     /** the account make the order */
-    from: Identity
+    from?: Identity
     /** the account fullfil the order */
-    to: Identity
+    to?: Identity
     /** unix timestamp */
     timestamp: number
     /** relate token price */
     price?: Price
+    /** the payment token and corresponding price */
+    priceInToken?: PriceInToken<ChainId, SchemaType>
+    /** the payment token */
     paymentToken?: FungibleToken<ChainId, SchemaType>
+    /** source type */
+    source?: SourceType
 }
 
 /**
@@ -414,7 +454,7 @@ export interface NonFungibleAsset<ChainId, SchemaType> extends NonFungibleToken<
     /** estimated price */
     price?: Price
     /** rarity */
-    rarity?: Record<SourceType, NonFungibleTokenRarity>
+    rarity?: Record<SourceType, NonFungibleTokenRarity<ChainId>>
     /** traits of the digital asset */
     traits?: NonFungibleTokenTrait[]
     /** token on auction */
@@ -427,6 +467,8 @@ export interface NonFungibleAsset<ChainId, SchemaType> extends NonFungibleToken<
     paymentTokens?: Array<FungibleToken<ChainId, SchemaType>>
     /** the payment token and corresponding price */
     priceInToken?: PriceInToken<ChainId, SchemaType>
+    /** source type */
+    source?: SourceType
 }
 
 /**
@@ -496,6 +538,10 @@ export interface TransactionDescriptor<ChainId, Transaction> {
     successfulDescription?: string
     /** a human-readable description for failed transaction. */
     failedDescription?: string
+    /** The address of the token leveraged to swap other tokens */
+    tokenInAddress?: string
+    /** The amount of the token leveraged to swap other tokens */
+    tokenInAmount?: string
     /** The original transaction object */
     _tx: Transaction
 }
@@ -691,6 +737,7 @@ export interface Connection<
     ProviderType,
     Signature,
     Block,
+    Operation,
     Transaction,
     TransactionReceipt,
     TransactionDetailed,
@@ -718,6 +765,8 @@ export interface Connection<
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>>
+    getNonFungibleTokenOwner(address: string, tokenId: string, schema?: SchemaType,
+        initial?: Web3ConnectionOptions,): Promise<string>
     getNonFungibleTokenOwnership(
         address: string,
         tokenId: string,
@@ -742,7 +791,7 @@ export interface Connection<
         address: string,
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,
-    ): Promise<NonFungibleTokenCollection<ChainId, SchemaType>>
+    ): Promise<NonFungibleCollection<ChainId, SchemaType>>
     /** Get native fungible token balance. */
     getNativeTokenBalance(initial?: Web3ConnectionOptions): Promise<string>
     /** Get fungible token balance. */
@@ -834,6 +883,10 @@ export interface Connection<
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,
     ): Promise<string>
+    /** Call a operation */
+    callOperation?: (operation: Operation, initial?: Web3ConnectionOptions) => Promise<string>
+    /** Send a operation */
+    sendOperation?: (operation: Operation, initial?: Web3ConnectionOptions) => Promise<TransactionSignature>
     /** Sign a transaction */
     signTransaction(transaction: Transaction, initial?: Web3ConnectionOptions): Promise<TransactionSignature>
     /** Sign multiple transactions */
@@ -904,11 +957,7 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
     /** Get a non-fungible token owner address. */
-    getNonFungibleTokenOwner?: (
-        address: string,
-        tokenId: string,
-        initial?: Web3HubOptions,
-    ) => Promise<string>
+    getNonFungibleTokenOwner?: (address: string, tokenId: string, initial?: Web3HubOptions) => Promise<string>
     /** Get a non-fungible token floor price. */
     getNonFungibleTokenFloorPrice?: (
         address: string,
@@ -919,7 +968,7 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
     getNonFungibleTokenContract?: (
         address: string,
         initial?: Web3HubOptions,
-    ) => Promise<NonFungibleTokenContract<ChainId, SchemaType>>
+    ) => Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined>
     /** Get balance of a fungible token owned by the given account. */
     getFungibleTokenBalance?: (address: string, initial?: Web3HubOptions) => Promise<number>
     /** Get balance of non-fungible tokens in a collection owned by the given account. */
@@ -1048,20 +1097,20 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
     /** Get non-fungible collections owned by the given account. */
-    getNonFungibleCollections?: (
+    getNonFungibleCollectionsByOwner?: (
         account: string,
         initial?: Web3HubOptions,
-    ) => Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>>>
+    ) => Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>>>
     /** Get non-fungible tokens search by the give keyword. */
     getNonFungibleCollectionsByKeyword?: (
         keyword: string,
         initial?: Web3HubOptions,
-    ) => Promise<Pageable<NonFungibleTokenCollection<ChainId, SchemaType>>>
+    ) => Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>>>
     getNonFungibleRarity?:(
         address: string,
         tokenId: string,
         initial?: Web3HubOptions,
-    )=>Promise<NonFungibleTokenRarity | undefined>
+    )=>Promise<NonFungibleTokenRarity<ChainId> | undefined>
     /** Place a bid on a token. */
     createBuyOrder?: (/** TODO: add parameters */) => Promise<void>
     /** List a token for public sell. */
@@ -1070,6 +1119,15 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
     fulfillOrder?: (/** TODO: add parameters */) => Promise<void>
     /** Cancel an order. */
     cancelOrder?: (/** TODO: add parameters */) => Promise<void>
+}
+
+export interface Storage {
+    has(key: string): Promise<boolean>
+    get<T>(key: string): Promise<T | undefined>
+    getAll?<T>(key: string): Promise<T[] | undefined>
+    set<T>(key: string, value: T): Promise<void>
+    delete?(key: string): Promise<void>
+    clearAll?(): Promise<void>
 }
 
 export interface SettingsState {
@@ -1114,6 +1172,20 @@ export interface HubState<
 > {
     /** Get external data hub */
     getHub?: (options: Web3HubOptions) => Promise<Web3Hub>
+}
+
+export interface Web3StorageServiceState {
+    createStorage: (
+        providerType: StorageProviderType,
+        options: {
+            namespace: string
+            personaIdentifier?: ECKeyIdentifier
+            platform?: NextIDPlatform
+        },
+    ) => Storage
+    createKVStorage: (namespace: string) => Storage
+    createRSS3Storage: (namespace: string) => Storage
+    createNextIDStorage: (proofIdentity: string, platform: NextIDPlatform, signerOrPublicKey: string | ECKeyIdentifier) => Storage
 }
 
 export interface IdentityServiceState {
@@ -1184,7 +1256,7 @@ export interface TransactionFormatterState<ChainId, Parameters, Transaction> {
     formatTransaction: (
         chainId: ChainId,
         transaction: Transaction,
-        txHash?: string
+        txHash?: string,
     ) => Promise<TransactionDescriptor<ChainId, Transaction>>
 }
 export interface TransactionWatcherState<ChainId, Transaction> {
@@ -1229,6 +1301,7 @@ export interface ConnectionState<
     ProviderType,
     Signature,
     Block,
+    Operation,
     Transaction,
     TransactionReceipt,
     TransactionDetailed,
@@ -1242,6 +1315,7 @@ export interface ConnectionState<
         ProviderType,
         Signature,
         Block,
+    Operation,
         Transaction,
         TransactionReceipt,
         TransactionDetailed,

@@ -1,0 +1,16 @@
+{
+  "extends": "../../../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "../../dist/background/",
+    "tsBuildInfoFile": "../../dist/background.tsbuildinfo"
+  },
+  "include": ["./"],
+  "references": [
+    { "path": "../runtime" },
+    { "path": "../types" },
+    { "path": "../peer-dependencies" },
+    { "path": "../utils" },
+    { "path": "../../../shared-base" }
+  ]
+}

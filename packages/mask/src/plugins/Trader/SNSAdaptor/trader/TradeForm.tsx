@@ -7,10 +7,10 @@ import { ChainId, formatWeiToEther, GasOptionConfig, SchemaType, ZERO_ADDRESS } 
 import {
     FungibleToken,
     isLessThan,
-    formatBalance,
     NetworkPluginID,
     rightShift,
     multipliedBy,
+    leftShift,
 } from '@masknet/web3-shared-base'
 import TuneIcon from '@mui/icons-material/Tune'
 import { TokenPanelType, TradeInfo } from '../../types'
@@ -259,7 +259,6 @@ export const TradeForm = memo<AllTradeFormProps>(
         const { targetChainId: chainId } = TargetChainIdContext.useContainer()
         const { isSwapping, allTradeComputed } = AllProviderTradeContext.useContainer()
         const [isExpand, setExpand] = useState(false)
-        const [isWarningOpen, setIsWarningOpen] = useState(false)
 
         const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
         const isSNSClosed = snsAdaptorMinimalPlugins?.map((x) => x.ID).includes(PluginId.GoPlusSecurity)
@@ -298,7 +297,7 @@ export const TradeForm = memo<AllTradeFormProps>(
             const gasFee = multipliedBy(marginGasPrice, focusedTrade?.gas.value ?? MIN_GAS_LIMIT)
             let amount_ = new BigNumber(inputTokenBalanceAmount.toFixed() ?? 0)
             amount_ = inputToken?.schema === SchemaType.Native ? amount_.minus(gasFee) : amount_
-            return formatBalance(BigNumber.max(0, amount_).toFixed(), inputToken?.decimals, 6)
+            return leftShift(BigNumber.max(0, amount_), inputToken?.decimals)
         }, [focusedTrade, gasPrice, inputTokenTradeAmount, inputToken])
 
         // #region UI logic
@@ -347,7 +346,7 @@ export const TradeForm = memo<AllTradeFormProps>(
 
         const handleAmountChange = useCallback(
             (amount: string) => {
-                maxAmountTrade.current = amount === maxAmount && focusedTrade ? focusedTrade : null
+                maxAmountTrade.current = maxAmount.isEqualTo(amount) && focusedTrade ? focusedTrade : null
                 onInputAmountChange(amount)
             },
             [onInputAmountChange, maxAmount, focusedTrade],
@@ -460,7 +459,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                         balance={inputTokenBalanceAmount.toFixed()}
                         token={inputToken}
                         onAmountChange={handleAmountChange}
-                        maxAmount={maxAmount}
+                        maxAmount={maxAmount.toFixed()}
                         SelectTokenChip={{
                             ChipProps: {
                                 onClick: () => onTokenChipClick(TokenPanelType.Input),

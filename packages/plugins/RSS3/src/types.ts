@@ -1,4 +1,4 @@
-import type { NextIDPlatform } from '@masknet/shared-base'
+import type { RSS3BaseAPI } from '@masknet/web3-providers'
 
 export enum PageTags {
     WalletTag = 'Wallets',
@@ -36,10 +36,6 @@ export interface GeneralAsset {
     }
 }
 
-export interface GeneralAssetWithTags extends GeneralAsset {
-    tags?: string[]
-}
-
 export interface RSS3Profile {
     avatar: string[]
     bio: string
@@ -50,23 +46,16 @@ export enum AssetType {
     GitcoinDonation = 'Gitcoin-Donation',
     POAP = 'POAP',
 }
-
-export interface CollectionKeys {
-    NFTs: string[]
-    Donations: string[]
-    Footprints: string[]
-    Feeds: string[]
-}
-
-export interface Patch {
-    unListedCollections: Record<string, CollectionKeys>
-}
-export interface KVType {
-    persona: string
-    proofs: Proof[]
-}
-export interface Proof {
-    platform: NextIDPlatform
-    identity: string
-    content?: Record<string, Patch>
+/**
+ * Normalized RSS3BaseAPI.Activity
+ */
+export interface RSS3Feed {
+    image: string
+    title?: string
+    relatedURLs?: string[]
+    description?: string
+    network: RSS3BaseAPI.Network
+    metadata?: RSS3BaseAPI.Metadata
+    attributes?: RSS3BaseAPI.Attribute[]
+    tokenId?: string
 }

@@ -15,7 +15,13 @@ export class IdentityServiceState implements Web3SocialIdentityState {
 
     private getIdentityID(identity: SocialIdentity) {
         if (!identity.identifier) return ''
-        return [identity.identifier.network, identity.identifier.userId, identity.bio, identity.homepage].join('_')
+        return [
+            identity.identifier.network,
+            identity.identifier.userId,
+            identity.bio,
+            identity.homepage,
+            identity.publicKey ?? '',
+        ].join('_')
     }
 
     protected getFromCache(identity: SocialIdentity) {

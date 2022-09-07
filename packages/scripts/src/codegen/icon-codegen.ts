@@ -13,18 +13,12 @@ const CODE_FILE = fileURLToPath(new URL('icon-generated-as', iconRoot))
 const currentColorRe = /\w=('|")currentColor\1/
 
 function svg2jsx(code: string) {
-    return (
-        code
-            .trim()
-            // set height and width to 100%, let the container <Icon /> of svg decide the size.
-            // Don't use the g flag here, because we only want to change the first attribute of each
-            .replace(/\b(height)=('|")\d+\2/, '')
-            .replace(/\b(width)=('|")\d+\2/, '')
-            .replace(/(\w+-\w+)=('|").*?\2/g, (p: string, m1: string) => {
-                return p.replace(m1, camelCase(m1))
-            })
-            .replaceAll('xlink:href', 'xlinkHref')
-    )
+    return code
+        .trim()
+        .replace(/(\w+-\w+)=('|").*?\2/g, (p: string, m1: string) => {
+            return p.replace(m1, camelCase(m1))
+        })
+        .replaceAll('xlink:href', 'xlinkHref')
 }
 function getIntrinsicSize(data: string | Buffer): [number, number] | undefined {
     if (typeof data === 'string') {
@@ -175,7 +169,7 @@ async function generateIcons() {
             jsc: {
                 parser: { jsx: true, syntax: 'ecmascript' },
                 transform: { react: { useBuiltins: true, runtime: 'automatic' } },
-                target: 'es2021',
+                target: 'es2022',
             },
         }).then(({ code }) => writeFile(CODE_FILE + '-jsx.js', code)),
         writeFile(CODE_FILE + '-jsx.d.ts', asJSX.dts.join('\n')),

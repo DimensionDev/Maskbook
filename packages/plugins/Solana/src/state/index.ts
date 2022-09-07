@@ -10,6 +10,7 @@ import { Others } from './Others'
 import type { SolanaWeb3State } from './Connection/types'
 import { IdentityService } from './IdentityService'
 import { NameService } from './NameService'
+import { Storage } from './Storage'
 
 export function createWeb3State(context: Plugin.Shared.SharedUIContext): SolanaWeb3State {
     const Provider_ = new Provider(context)
@@ -41,5 +42,6 @@ export function createWeb3State(context: Plugin.Shared.SharedUIContext): SolanaW
         }),
         Wallet: new Wallet(context),
         Others: new Others(context),
+        Storage: new Storage(),
     }
 }

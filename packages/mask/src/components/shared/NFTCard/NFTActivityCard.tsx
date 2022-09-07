@@ -1,11 +1,16 @@
 import { makeStyles } from '@masknet/theme'
-import { Typography } from '@mui/material'
-import { ExternalLink } from 'react-feather'
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import { Typography, Link } from '@mui/material'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
-import formatDateTime from 'date-fns/format'
-import fromUnixTime from 'date-fns/fromUnixTime'
-import type { NonFungibleTokenEvent } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import {
+    NonFungibleTokenEvent,
+    formatBalance,
+    isZero,
+    NetworkPluginID,
+    isValidTimestamp,
+} from '@masknet/web3-shared-base'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { Icons } from '@masknet/icons'
 import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
@@ -17,7 +22,8 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
         gap: 12,
         borderRadius: 8,
-        background: theme.palette.maskColor.bottom,
+        // there is no public bg have to hardcode
+        background: '#fff',
         boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
     },
     flex: {
@@ -30,10 +36,11 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 20,
         lineHeight: '24px',
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.palette.maskColor.publicMain,
     },
     highlight: {
-        color: theme.palette.maskColor.highlight,
+        // there is no public highlight color, temp hardcode
+        color: '#1C68F3',
     },
     salePrice: {
         display: 'flex',
@@ -44,18 +51,34 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 18,
         lineHeight: '22px',
         fontWeight: 700,
-        color: theme.palette.maskColor.main,
+        color: theme.palette.maskColor.publicMain,
     },
     textBase: {
         display: 'flex',
         alignItems: 'center',
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.text.secondary,
+        color: theme.palette.maskColor.publicSecond,
         '& > strong': {
-            color: theme.palette.text.primary,
-            margin: '0 4px',
+            color: theme.palette.maskColor.publicMain,
+            margin: '0px 8px',
         },
+    },
+    link: {
+        color: theme.palette.maskColor.publicMain,
+        fontSize: 14,
+        display: 'flex',
+        alignItems: 'center',
+        cursor: 'pointer',
+        marginLeft: 4,
+    },
+    fallbackSymbol: {
+        color: theme.palette.maskColor.publicMain,
+        fontWeight: 700,
+        fontSize: 12,
+        lineHeight: '14px',
+        display: 'flex',
+        alignItems: 'flex-end',
     },
 }))
 
@@ -63,6 +86,9 @@ export enum ActivityType {
     Transfer = 'Transfer',
     Mint = 'Mint',
     Sale = 'Sale',
+    Offer = 'Offer',
+    List = 'List',
+    CancelOffer = 'Cancel Offer',
 }
 interface NFTActivityCardProps {
     type: ActivityType
@@ -72,8 +98,9 @@ interface NFTActivityCardProps {
 export function NFTActivityCard(props: NFTActivityCardProps) {
     const { activity, type } = props
     const { classes, cx } = useStyles()
-    const { Others } = useWeb3State()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { t } = useI18N()
+
     return (
         <div className={classes.wrapper}>
             <div className={classes.flex}>
@@ -81,26 +108,63 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
                     className={type === ActivityType.Sale ? cx(classes.title, classes.highlight) : classes.title}>
                     {type}
                 </Typography>
-                {type === ActivityType.Sale && (
-                    <div className={classes.salePrice}>
-                        <img src={activity.paymentToken?.logoURL} width={24} height={24} />
-                        <Typography className={classes.salePriceText}>{activity.price?.usd ?? '-'}</Typography>
-                    </div>
-                )}
+                {![ActivityType.Mint, ActivityType.CancelOffer].includes(type) &&
+                    activity.priceInToken &&
+                    !isZero(activity.priceInToken.amount) && (
+                        <div className={classes.salePrice}>
+                            {(activity.paymentToken?.logoURL && (
+                                <img width={24} height={24} src={activity.priceInToken.token.logoURL} alt="" />
+                            )) || (
+                                <Typography className={classes.fallbackSymbol}>
+                                    {activity.priceInToken.token.symbol || activity.priceInToken.token.name}
+                                </Typography>
+                            )}
+                            <Typography className={classes.salePriceText}>
+                                {formatBalance(
+                                    activity.priceInToken.amount,
+                                    activity.priceInToken.token.decimals || 18,
+                                    2,
+                                )}
+                            </Typography>
+                        </div>
+                    )}
             </div>
             <div className={classes.flex}>
                 <Typography className={classes.textBase}>
-                    {t('plugin_collectible_from')}
-                    <strong> {activity.from.address ? Others?.formatAddress(activity.from.address, 4) : '-'}</strong>
+                    {activity.from && (
+                        <>
+                            {t('plugin_collectible_from')}
+                            <strong>
+                                {activity.from.nickname ||
+                                    (activity.from.address ? Others?.formatAddress(activity.from.address, 4) : '-')}
+                            </strong>
+                        </>
+                    )}
                 </Typography>
+
                 <Typography className={classes.textBase}>
-                    {t('plugin_collectible_to')}
-                    <strong>
-                        {activity.to.nickname ||
-                            (activity.to.address ? Others?.formatAddress(activity.to.address, 4) : '-')}
-                    </strong>
-                    {formatDateTime(fromUnixTime(activity.timestamp / 1000), 'yyyy-MM-dd HH:mm')}
-                    <ExternalLink size={14} style={{ marginLeft: 4 }} />
+                    {activity.to && (
+                        <>
+                            {t('plugin_collectible_to')}
+                            <strong>
+                                {activity.to.nickname ||
+                                    (activity.to.address ? Others?.formatAddress(activity.to.address, 4) : '-')}
+                            </strong>
+                        </>
+                    )}
+
+                    {isValidTimestamp(activity.timestamp) &&
+                        formatDistanceToNow(new Date(activity.timestamp!), {
+                            addSuffix: true,
+                        })}
+                    {activity.hash && (
+                        <Link
+                            className={classes.link}
+                            href={Others?.explorerResolver.transactionLink?.(ChainId.Mainnet, activity.hash) ?? ''}
+                            target="_blank">
+                            <Icons.LinkOut size={16} />
+                        </Link>
+                    )}
                 </Typography>
             </div>
         </div>

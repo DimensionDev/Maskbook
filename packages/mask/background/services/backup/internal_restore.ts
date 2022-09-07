@@ -1,6 +1,6 @@
 import { delay } from '@dimensiondev/kit'
 import type { NormalizedBackup } from '@masknet/backup-format'
-import { activatedPluginsWorker, registeredPluginIDs } from '@masknet/plugin-infra/background-worker'
+import { activatedPluginsWorker, registeredPlugins } from '@masknet/plugin-infra/background-worker'
 import { ProfileIdentifier, RelationFavor } from '@masknet/shared-base'
 import { MaskMessages } from '../../../shared/messages'
 import {
@@ -176,7 +176,7 @@ async function restorePlugins(backup: NormalizedBackup.Data['plugins']) {
         const plugin = plugins.find((x) => x.ID === pluginID)
         // should we warn user here?
         if (!plugin) {
-            if ([...registeredPluginIDs].includes(pluginID))
+            if ([...registeredPlugins.getCurrentValue().map((x) => x[0])].includes(pluginID))
                 console.warn(`[@masknet/plugin-infra] Found a backup of a not enabled plugin ${plugin}`, item)
             else console.warn(`[@masknet/plugin-infra] Found an unknown plugin backup of ${plugin}`, item)
             continue

@@ -1,5 +1,5 @@
 import type BigNumber from 'bignumber.js'
-import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
+import { createPluginMessage, PluginId, PluginMessageEmitter } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import type { GasOptionType, NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -7,10 +7,14 @@ import { PLUGIN_ID } from './constants'
 
 export type ApplicationDialogEvent = {
     open: boolean
-}
-
-export type ApplicationPersonaListDialogEvent = {
-    open: boolean
+    settings?: {
+        // When quickMode is enabled,
+        // closing the Setting dialog will not return to ApplicationBoard normal dialog
+        quickMode?: boolean
+        switchTab?: {
+            focusPluginId?: PluginId
+        }
+    }
 }
 
 export type SelectProviderDialogEvent =
@@ -18,6 +22,7 @@ export type SelectProviderDialogEvent =
           open: true
           walletConnectedCallback?: () => void
           supportedNetworkList?: Array<Web3Helper.NetworkDescriptorAll['type']>
+          network?: Web3Helper.NetworkDescriptorAll
       }
     | {
           open: false

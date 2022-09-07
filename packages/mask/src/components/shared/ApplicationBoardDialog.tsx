@@ -11,8 +11,9 @@ import { ApplicationBoard } from './ApplicationBoard'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
 import { Icons } from '@masknet/icons'
-import { PersonaListDialog } from './PersonaListDialog'
+import { PersonaSelectPanelDialog } from './PersonaSelectPanel/PersonaSelectPanelDialog'
 import { PluginNextIDMessages } from '../../plugins/NextID/messages'
+import type { PluginId } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles<{ openSettings: boolean }>()((theme, { openSettings }) => {
     return {
@@ -36,30 +37,54 @@ export function ApplicationBoardDialog() {
     const [openSettings, setOpenSettings] = useState(false)
     const { classes } = useStyles({ openSettings })
     const { t } = useI18N()
-    const [currentTab, onChange, tabs] = useTabs(ApplicationSettingTabs.pluginList, ApplicationSettingTabs.pluginSwitch)
-
-    const { open, closeDialog: _closeDialog } = useRemoteControlledDialog(
-        WalletMessages.events.ApplicationDialogUpdated,
+    const [currentTab, onChange, tabs, setTab] = useTabs(
+        ApplicationSettingTabs.pluginList,
+        ApplicationSettingTabs.pluginSwitch,
     )
 
-    const { open: openPersonaListDialog, closeDialog: _closePersonaListDialog } = useRemoteControlledDialog(
-        PluginNextIDMessages.PersonaListDialogUpdated,
+    const [focusPluginId, setFocusPluginId] = useState<PluginId>()
+    const [quickMode, setQuickMode] = useState(false)
+
+    const { open, closeDialog: closeBoard } = useRemoteControlledDialog(
+        WalletMessages.events.ApplicationDialogUpdated,
+        (evt) => {
+            if (!evt.open || !evt.settings?.switchTab) return
+            setOpenSettings(true)
+            setQuickMode(evt.settings.quickMode ?? false)
+            setTab(ApplicationSettingTabs.pluginSwitch)
+            setFocusPluginId(evt.settings?.switchTab?.focusPluginId)
+        },
+    )
+
+    const reset = useCallback(() => {
+        setQuickMode(false)
+        setTab(ApplicationSettingTabs.pluginList)
+        setFocusPluginId(undefined)
+    }, [])
+
+    const { open: openPersonaSelectPanelDialog } = useRemoteControlledDialog(
+        PluginNextIDMessages.PersonaSelectPanelDialogUpdated,
     )
 
     const closeDialog = useCallback(() => {
-        _closeDialog()
+        if (openSettings && !quickMode) {
+            setOpenSettings(false)
+            return
+        }
+        closeBoard()
         CrossIsolationMessages.events.requestComposition.sendToLocal({
             reason: 'timeline',
             open: false,
         })
-    }, [])
+        reset()
+    }, [openSettings, quickMode, reset])
 
     return open ? (
         <TabContext value={currentTab}>
             <InjectedDialog
                 open={open}
                 maxWidth="sm"
-                onClose={openSettings ? () => setOpenSettings(false) : closeDialog}
+                onClose={closeDialog}
                 titleTabs={
                     openSettings ? (
                         <MaskTabList variant="base" onChange={onChange} aria-label="ApplicationBoard">
@@ -81,13 +106,14 @@ export function ApplicationBoardDialog() {
                                 <ApplicationSettingPluginList />
                             </TabPanel>
                             <TabPanel value={tabs.pluginSwitch} style={{ padding: 0 }}>
-                                <ApplicationSettingPluginSwitch />
+                                <ApplicationSettingPluginSwitch focusPluginId={focusPluginId} />
                             </TabPanel>
                         </>
                     ) : (
                         <ApplicationBoard closeDialog={closeDialog} />
                     )}
-                    <PersonaListDialog />
+                    {/* TODO: remove this*/}
+                    {openPersonaSelectPanelDialog && <PersonaSelectPanelDialog />}
                 </DialogContent>
             </InjectedDialog>
         </TabContext>

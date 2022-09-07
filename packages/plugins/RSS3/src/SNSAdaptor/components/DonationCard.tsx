@@ -6,14 +6,14 @@ import type { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
 import { Card, Typography } from '@mui/material'
 import classnames from 'classnames'
 import formatDateTime from 'date-fns/format'
-import type { HTMLProps } from 'react'
+import { HTMLProps, memo } from 'react'
 import { RSS3_DEFAULT_IMAGE } from '../../constants'
 import { useI18N } from '../../locales'
 
-export interface DonationCardProps extends HTMLProps<HTMLDivElement> {
-    donation: RSS3BaseAPI.Collection
+export interface DonationCardProps extends Omit<HTMLProps<HTMLDivElement>, 'onSelect'> {
+    donation: RSS3BaseAPI.Donation
     socialAddress: SocialAddress<NetworkPluginID>
-    onSelect: () => void
+    onSelect: (donation: RSS3BaseAPI.Donation) => void
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -68,7 +68,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '8px',
         objectFit: 'cover',
     },
-    loadingFailImage: {
+    fallbackImage: {
         minHeight: '0 !important',
         maxWidth: 'none',
         width: 64,
@@ -76,7 +76,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const DonationCard = ({ donation, socialAddress, onSelect, className, ...rest }: DonationCardProps) => {
+export const DonationCard = memo(({ donation, socialAddress, onSelect, className, ...rest }: DonationCardProps) => {
     const { classes } = useStyles()
     const t = useI18N()
     const { value: domain } = useReverseAddress(socialAddress.networkSupporterPluginID, socialAddress.address)
@@ -87,21 +87,20 @@ export const DonationCard = ({ donation, socialAddress, onSelect, className, ...
             : Others.formatDomainName(domain)
 
     const date = donation.timestamp ? formatDateTime(new Date(donation.timestamp), 'MMM dd, yyyy') : '--'
+    const action = donation.actions[0]
 
     return (
-        <div onClick={onSelect} className={classnames(classes.card, className)} {...rest}>
-            <section className="flex flex-row flex-shrink-0 w-max h-max">
-                <Card className={classes.img}>
-                    <NFTCardStyledAssetPlayer
-                        url={donation.imageURL || RSS3_DEFAULT_IMAGE}
-                        classes={{
-                            loadingFailImage: classes.loadingFailImage,
-                            wrapper: classes.img,
-                            iframe: classes.img,
-                        }}
-                    />
-                </Card>
-            </section>
+        <div onClick={() => onSelect(donation)} className={classnames(classes.card, className)} {...rest}>
+            <Card className={classes.img}>
+                <NFTCardStyledAssetPlayer
+                    url={action.metadata?.logo || RSS3_DEFAULT_IMAGE}
+                    classes={{
+                        fallbackImage: classes.fallbackImage,
+                        wrapper: classes.img,
+                        iframe: classes.img,
+                    }}
+                />
+            </Card>
 
             <div className={classes.info}>
                 <div className={classes.infoRow}>
@@ -113,13 +112,15 @@ export const DonationCard = ({ donation, socialAddress, onSelect, className, ...
                     <Typography className={classes.activity}>
                         <span className={classes.fontColor}>{reversedAddress}</span>{' '}
                         <span className={classes.fontColor}>{t.contributed()}</span>{' '}
-                        <span className={classes.tokenInfoColor}>{donation.tokenAmount?.toString()}</span>
-                        <span className={classes.tokenInfoColor}>{donation.tokenSymbol ?? 'ETH'}</span>{' '}
+                        <span className={classes.tokenInfoColor}>{action.metadata?.token.value_display}</span>
+                        {action.metadata?.token.symbol ? (
+                            <span className={classes.tokenInfoColor}>{`${action.metadata?.token.symbol} `}</span>
+                        ) : null}
                         <span className={classes.fontColor}>{t.to()}</span>{' '}
-                        <span className={classes.tokenInfoColor}>{donation.title}</span>
+                        <span className={classes.tokenInfoColor}>{action.metadata?.title}</span>
                     </Typography>
                 </div>
             </div>
         </div>
     )
-}
+})

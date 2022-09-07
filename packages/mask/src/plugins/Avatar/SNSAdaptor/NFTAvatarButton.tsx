@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import { useI18N } from '../../../utils'
 import { ApplicationSmallIcon } from '../assets/application'
 
@@ -16,6 +16,7 @@ const useStyles = makeStyles()((theme) => ({
         border: `1px solid ${theme.palette.mode === 'dark' ? '#2F3336' : '#EFF3F4'}`,
         color: theme.palette.text.primary,
         cursor: 'pointer',
+        background: theme.palette.maskColor.main,
     },
     setIcon: {
         width: 14,
@@ -27,9 +28,12 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         marginLeft: 4,
     },
+    icon: {
+        color: theme.palette.text.buttonText,
+    },
 }))
 
-interface NFTAvatarButtonProps extends withClasses<'root' | 'text' | 'icon'> {
+interface NFTAvatarButtonProps extends withClasses<'root' | 'text'> {
     onClick: () => void
     showSetting?: boolean
 }
@@ -42,10 +46,16 @@ export function NFTAvatarButton(props: NFTAvatarButtonProps) {
     return (
         <div className={classes.root} onClick={onClick}>
             <ApplicationSmallIcon className={classes.icon} />
-            <Typography variant="body1" className={classes.text}>
-                <span style={{ marginLeft: 4, fontWeight: 600 }}>{t('nft_avatar')}</span>
+            <Stack display="inline-flex" gap={1}>
+                <Typography
+                    fontSize={14}
+                    style={{ marginLeft: 4 }}
+                    fontWeight={500}
+                    color={(t) => t.palette.text.buttonText}>
+                    {t('nft_avatar')}
+                </Typography>
                 {props.showSetting ? <Icons.GearSettings className={classes.setIcon} /> : null}
-            </Typography>
+            </Stack>
         </div>
     )
 }

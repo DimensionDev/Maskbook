@@ -61,12 +61,16 @@ export const searchAvatarSelector = () =>
 export const searchNFTAvatarSelector = () =>
     querySelector<HTMLImageElement>('[data-testid="primaryColumn"] a[href$="/nft"] img[src*="profile_images"]')
 export const searchAvatarMetaSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('head > meta[property="og:image"]:last-child')
+    querySelector<E>('head meta[property="og:image"]')
 
 export const profileFollowButtonSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
         '[data-testid="primaryColumn"] [aria-haspopup="menu"][data-testid="userActions"] ~ [data-testid="placementTracking"]',
     )
+
+export const normalFollowButtonSelector = () =>
+    // Including [data-testid$="-follow"] and [data-testid$="-unfollow"]
+    querySelectorAll('[role="button"][data-testid="UserCell"] [data-testid$="follow"]')
 
 export const searchProfileCoverSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
@@ -114,7 +118,7 @@ export const postEditorContentInPopupSelector: () => LiveSelector<E, true> = () 
     )
 export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-labelledby="modal-header"]  div[data-testid="toolBar"] div[data-testid="geoButton"]')
-export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
+export const toolboxInSidebarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="banner"] [role="navigation"] > div')
 export const sideBarProfileSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="banner"] [role="navigation"] [data-testid="AppTabBar_Profile_Link"] > div')

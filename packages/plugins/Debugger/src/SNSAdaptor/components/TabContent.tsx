@@ -4,7 +4,7 @@ import { List, ListItem, ListItemText, Table, TableBody, TableCell, TableRow, Ty
 
 export interface TabContentProps {
     identity?: SocialIdentity
-    socialAddressList?: Array<SocialAddress<NetworkPluginID>>
+    socialAddress?: SocialAddress<NetworkPluginID>
 }
 
 const useStyles = makeStyles()({
@@ -13,7 +13,7 @@ const useStyles = makeStyles()({
     },
 })
 
-export function TabContent({ identity, socialAddressList }: TabContentProps) {
+export function TabContent({ identity, socialAddress }: TabContentProps) {
     const { classes } = useStyles()
 
     const renderIdentity = () => {
@@ -50,14 +50,15 @@ export function TabContent({ identity, socialAddressList }: TabContentProps) {
     const renderAddressNames = () => {
         return (
             <List dense>
-                {socialAddressList?.map((x) => (
-                    <ListItem key={`${x.type}_${x.address}`}>
-                        <ListItemText
-                            primary={<Typography color="textPrimary">{x.type}</Typography>}
-                            secondary={x.address}
-                        />
-                    </ListItem>
-                ))}
+                {socialAddress &&
+                    [socialAddress].map((x) => (
+                        <ListItem key={`${x.type}_${x.address}`}>
+                            <ListItemText
+                                primary={<Typography color="textPrimary">{x.type}</Typography>}
+                                secondary={x.address}
+                            />
+                        </ListItem>
+                    ))}
             </List>
         )
     }

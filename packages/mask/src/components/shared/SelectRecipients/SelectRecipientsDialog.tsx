@@ -146,7 +146,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                 />
                 {props.loading ? (
                     <div className={cx(classes.empty, classes.mainText)}>
-                        <LoadingBase style={{ fontSize: '2rem' }} />
+                        <LoadingBase />
                         <Typography>{t('loading')}</Typography>
                     </div>
                 ) : (

@@ -73,22 +73,13 @@ const useStyles = makeStyles()((theme) => ({
 interface WalletItemProps {
     address: string
     isDefault?: boolean
-    canDelete?: boolean
+    deletable?: boolean
     onDelete?: () => void
     fallbackName?: string
-    nowIdx: number
-    setAsDefault?: (idx: number) => void
+    setAsDefault?: (address: string) => void
 }
 
-export function WalletItem({
-    address,
-    isDefault,
-    canDelete,
-    fallbackName,
-    setAsDefault,
-    nowIdx,
-    onDelete,
-}: WalletItemProps) {
+export function WalletItem({ address, isDefault, deletable, fallbackName, setAsDefault, onDelete }: WalletItemProps) {
     const { classes } = useStyles()
     const t = useI18N()
     const [, copyToClipboard] = useCopyToClipboard()
@@ -117,18 +108,17 @@ export function WalletItem({
     }, [address, domain, fallbackName])
 
     const getActionRender = () => {
-        if (!canDelete && !isDefault)
+        if (!deletable && !isDefault)
             return (
                 <Typography
                     className={classes.actionBtn}
                     onClick={() => {
-                        if (!setAsDefault) return
-                        setAsDefault(nowIdx ?? 0)
+                        setAsDefault?.(address)
                     }}>
                     {t.tip_set_as_default()}
                 </Typography>
             )
-        if (canDelete) return <Icons.Trash onClick={onDelete} size={24} className={classes.actionBtn} />
+        if (deletable) return <Icons.Trash onClick={onDelete} size={24} className={classes.actionBtn} />
         return null
     }
     return (

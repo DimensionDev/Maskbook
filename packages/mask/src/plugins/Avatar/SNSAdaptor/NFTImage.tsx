@@ -25,6 +25,7 @@ const useStyles = makeStyles()((theme) => ({
         objectFit: 'cover',
         boxSizing: 'border-box',
         borderRadius: 8,
+        border: '1px solid transparent',
     },
     selected: {
         border: `1px solid ${theme.palette.primary.main}`,
@@ -74,10 +75,10 @@ export function NFTImage(props: NFTImageProps) {
     return (
         <Box className={classes.root}>
             <Image
-                fallbackImage={theme.palette.mode === 'dark' ? mask_avatar_dark : mask_avatar_light}
+                fallback={theme.palette.mode === 'dark' ? mask_avatar_dark : mask_avatar_light}
                 classes={{
                     imageLoading: classes.imageLoading,
-                    imageLoadingBox: classes.imageLoadingBox,
+                    container: classes.imageLoadingBox,
                 }}
                 onClick={() => onChange(token)}
                 src={token.metadata?.imageURL ?? ''}

@@ -1,0 +1,10 @@
+{
+  "extends": "../../../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "../../dist/extension-page/",
+    "tsBuildInfoFile": "../../dist/extension-page.tsbuildinfo"
+  },
+  "include": ["./"],
+  "references": []
+}

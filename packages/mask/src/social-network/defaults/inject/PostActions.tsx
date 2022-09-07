@@ -4,19 +4,19 @@ import { PostActions } from '../../../components/InjectedComponents/PostActions'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 
 export function createPostActionsInjector() {
-    return function injectPostActions(current: PostInfo, signal: AbortSignal) {
+    return function injectPostActions(postInfo: PostInfo, signal: AbortSignal) {
         const jsx = (
-            <PostInfoProvider post={current}>
-                <PostActions />
+            <PostInfoProvider post={postInfo}>
+                <PostActions isFocusing={postInfo.isFocusing} />
             </PostInfoProvider>
         )
-        if (current.actionsElement) {
-            const root = createReactRootShadowed(current.actionsElement.afterShadow, {
+        if (postInfo.actionsElement) {
+            const root = createReactRootShadowed(postInfo.actionsElement.afterShadow, {
                 key: 'post-actions',
                 signal,
             })
-            if (current.actionsElement?.realCurrent?.parentNode) {
-                const actionsContainer = current.actionsElement.realCurrent.parentNode as HTMLDivElement
+            if (postInfo.actionsElement?.realCurrent?.parentNode) {
+                const actionsContainer = postInfo.actionsElement.realCurrent.parentNode as HTMLDivElement
                 actionsContainer.style.maxWidth = '100%'
             }
             root.render(jsx)

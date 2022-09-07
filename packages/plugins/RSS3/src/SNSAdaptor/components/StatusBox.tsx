@@ -1,6 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { Box, CircularProgress, Typography } from '@mui/material'
+import { Box, Skeleton, Typography } from '@mui/material'
+import { range } from 'lodash-unified'
 import type { FC } from 'react'
 
 interface Props {
@@ -14,8 +15,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: theme.spacing(6),
-        height: 380,
+        height: 300,
         flexDirection: 'column',
     },
 }))
@@ -24,9 +24,13 @@ export const StatusBox: FC<Props> = ({ loading, empty, description }) => {
     const { classes } = useStyles()
     if (loading) {
         return (
-            <Box className={classes.statusBox}>
-                <CircularProgress />
-            </Box>
+            <>
+                {range(3).map((i) => (
+                    <Box mb={2} key={i}>
+                        <Skeleton animation="wave" variant="rectangular" height={125} />
+                    </Box>
+                ))}
+            </>
         )
     }
 
@@ -34,11 +38,7 @@ export const StatusBox: FC<Props> = ({ loading, empty, description }) => {
         return (
             <Box className={classes.statusBox}>
                 <Icons.EmptySimple size={32} />
-                <Typography
-                    marginTop="10px"
-                    color={(theme) => theme.palette.maskColor.second}
-                    fontSize="14px"
-                    fontWeight={400}>
+                <Typography color={(theme) => theme.palette.maskColor.second} fontSize="14px" fontWeight={400}>
                     {description}
                 </Typography>
             </Box>

@@ -1,13 +1,17 @@
+import { ProfileIdentifier } from '@masknet/shared-base'
+import { Twitter } from '@masknet/web3-providers'
+import type { SocialIdentity } from '@masknet/web3-shared-base'
 import { isNull } from 'lodash-unified'
 import type { SocialNetwork } from '../../../social-network'
+import { collectNodeText } from '../../../utils'
+import { twitterBase } from '../base'
 import {
+    personalHomepageSelector,
     profileBioSelector,
     searchAvatarSelector,
-    searchNickNameSelector,
-    personalHomepageSelector,
     searchNFTAvatarSelector,
+    searchNickNameSelector,
 } from './selector'
-import { collectNodeText } from '../../../utils'
 
 /**
  * @link https://help.twitter.com/en/managing-your-account/twitter-username-rules
@@ -63,11 +67,30 @@ export const getAvatar = () => {
 }
 
 const TWITTER_AVATAR_ID_MATCH = /^\/profile_images\/(\d+)/
-export const getAvatarId = (avatarURL: string) => {
+export const getAvatarId = (avatarURL?: string) => {
     if (!avatarURL) return ''
     const _url = new URL(avatarURL)
     const match = _url.pathname.match(TWITTER_AVATAR_ID_MATCH)
     if (!match) return ''
 
     return match[1]
+}
+
+export async function getUserIdentity(twitterId: string): Promise<SocialIdentity | undefined> {
+    const user = await Twitter.getUserByScreenName(twitterId)
+    if (!user?.legacy) return
+
+    const nickname = user.legacy.name
+    const handle = user.legacy.screen_name
+    const avatar = user.legacy.profile_image_url_https.replace(/_normal(\.\w+)$/, '_400x400$1')
+    const bio = user.legacy.description
+    const homepage = user.legacy.entities.url?.urls[0]?.expanded_url ?? ''
+
+    return {
+        identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
+        nickname,
+        avatar,
+        bio,
+        homepage,
+    }
 }

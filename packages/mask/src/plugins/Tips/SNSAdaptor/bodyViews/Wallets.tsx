@@ -23,33 +23,33 @@ const useStyles = makeStyles()((theme) => ({
 }))
 interface WalletsPageProp {
     wallets: BindingProof[]
+    defaultAddress?: string
     releaseLoading: boolean
-    onRelease(wallet?: BindingProof): Promise<void>
+    onDelete(address?: BindingProof): Promise<void>
     personaName: string | undefined
 }
 
-const WalletsPage = memo(({ wallets, releaseLoading, onRelease, personaName }: WalletsPageProp) => {
+const WalletsPage = memo(({ wallets, defaultAddress, releaseLoading, onDelete, personaName }: WalletsPageProp) => {
     const t = useI18N()
     const [open, setOpen] = useState(false)
     const { classes } = useStyles()
-    const [walletToDel, setWalletToDel] = useState<BindingProof>()
-    const deleteWallet = useCallback((wallet: BindingProof) => {
-        setWalletToDel(wallet)
+    const [deletingWallet, setDeletingWallet] = useState<BindingProof>()
+    const requestConfirm = useCallback((wallet: BindingProof) => {
+        setDeletingWallet(wallet)
         setOpen(true)
     }, [])
 
     return (
         <>
-            {wallets.map((x, idx) => {
+            {wallets.map((x) => {
                 return (
                     <WalletItem
-                        key={idx}
-                        nowIdx={idx}
-                        onDelete={() => deleteWallet(x)}
-                        canDelete
+                        key={x.identity}
+                        onDelete={() => requestConfirm(x)}
+                        deletable
                         fallbackName={`Wallet ${x.rawIdx ?? 0 + 1}`}
                         address={x.identity}
-                        isDefault={!!x.isDefault}
+                        isDefault={x.identity === defaultAddress}
                     />
                 )
             })}
@@ -62,8 +62,8 @@ const WalletsPage = memo(({ wallets, releaseLoading, onRelease, personaName }: W
             <DisconnectWalletDialog
                 personaName={personaName}
                 confirmLoading={releaseLoading}
-                onConfirmDisconnect={() => onRelease(walletToDel)}
-                address={walletToDel?.identity}
+                onConfirmDisconnect={() => onDelete(deletingWallet)}
+                address={deletingWallet?.identity}
                 onClose={() => setOpen(false)}
                 open={open}
             />

@@ -164,7 +164,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
                     symbol: x.symbol,
                     baseURI: x.iconURL,
                     iconURL: x.iconURL,
-                    balance: x.balance,
+                    balance: x.tokensTotal,
                 } as NonFungibleTokenContract<ChainId, SchemaType>),
         )
 

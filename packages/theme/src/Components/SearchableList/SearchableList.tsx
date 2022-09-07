@@ -1,10 +1,9 @@
-import { ReactNode, useMemo, useState } from 'react'
-import { FixedSizeList, FixedSizeListProps } from 'react-window'
+import { ReactNode, useCallback, useMemo, useState } from 'react'
+import { FixedSizeList, FixedSizeListProps, ListChildComponentProps } from 'react-window'
 import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-unified'
 import { Box, InputAdornment, Stack } from '@mui/material'
 import { makeStyles } from '../../UIHelper'
-import { MaskSearchableItemInList } from './MaskSearchableItemInList'
 import { MaskTextField, MaskTextFieldProps } from '../TextField'
 import { Icons } from '@masknet/icons'
 import { EmptyResult } from './EmptyResult'
@@ -19,7 +18,7 @@ export interface MaskSearchableListProps<T> {
     /** The key of list item for search */
     searchKey?: string[]
     /** Renderer for each list item */
-    itemRender: React.ComponentType<{ data: T; index: number; onSelect(): void }>
+    itemRender: React.ComponentType<ListChildComponentProps>
     /** The props to react-window */
     FixedSizeListProps?: Partial<FixedSizeListProps>
     /** The callback when clicked someone list item */
@@ -65,7 +64,6 @@ export function SearchableList<T extends {}>({
     const { classes } = useStyles()
     const { height = 300, itemSize, ...rest } = FixedSizeListProps
     const { InputProps, ...textFieldPropsRest } = SearchFieldProps ?? {}
-    const [inputValue, setInputValue] = useState<string>('')
 
     // #region fuse
     const fuse = useMemo(
@@ -89,10 +87,25 @@ export function SearchableList<T extends {}>({
     }, [keyword, fuse, JSON.stringify(data)])
     // #endregion
 
-    const handleSearch = () => {
-        setKeyword(inputValue)
-        onSearch?.(inputValue)
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.currentTarget.value
+        setKeyword(value)
+        onSearch?.(value)
+        if (!value) handleClear()
     }
+
+    const handleClear = () => {
+        setKeyword('')
+        onSearch?.('')
+    }
+
+    const getItemKey = useCallback(
+        (index: number, data: { dataSet: T[] }) => {
+            if (!itemKey) return index.toString()
+            return data.dataSet[index][itemKey] as string
+        },
+        [itemKey],
+    )
 
     const windowHeight = !!textFieldPropsRest.error && typeof height === 'number' ? height - 28 : height
 
@@ -101,7 +114,7 @@ export function SearchableList<T extends {}>({
             {!disableSearch && (
                 <Box>
                     <MaskTextField
-                        value={inputValue}
+                        value={keyword}
                         placeholder="Search"
                         autoFocus
                         fullWidth
@@ -112,24 +125,14 @@ export function SearchableList<T extends {}>({
                                     <Icons.Search />
                                 </InputAdornment>
                             ),
-                            endAdornment: inputValue ? (
-                                <InputAdornment
-                                    position="end"
-                                    className={classes.closeIcon}
-                                    onClick={() => {
-                                        setKeyword('')
-                                        setInputValue('')
-                                    }}>
+                            endAdornment: keyword ? (
+                                <InputAdornment position="end" className={classes.closeIcon} onClick={handleClear}>
                                     <Icons.Clear size={18} />
                                 </InputAdornment>
                             ) : null,
                             ...InputProps,
                         }}
-                        onBlur={(e) => handleSearch()}
-                        onKeyDown={(ev) => {
-                            if (ev.key === 'Enter') handleSearch()
-                        }}
-                        onChange={(e) => setInputValue(e.currentTarget.value)}
+                        onChange={handleChange}
                         {...textFieldPropsRest}
                     />
                 </Box>
@@ -157,11 +160,10 @@ export function SearchableList<T extends {}>({
                             dataSet: readyToRenderData,
                             onSelect,
                         }}
+                        itemKey={(index, data) => getItemKey(index, data)}
                         itemCount={readyToRenderData.length}
                         {...rest}>
-                        {(props) => (
-                            <MaskSearchableItemInList<T> {...props}>{itemRender as any}</MaskSearchableItemInList>
-                        )}
+                        {itemRender}
                     </FixedSizeList>
                 </div>
             )}

@@ -1,5 +1,4 @@
 import { memo, useContext } from 'react'
-import { useLocation } from 'react-router-dom'
 import {
     AppBar,
     Box,
@@ -17,19 +16,12 @@ import {
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Close as CloseIcon, Menu as MenuIcon } from '@mui/icons-material'
 import Color from 'color'
+import { FollowUs } from '../FollowUs'
 import { DashboardContext } from '../DashboardFrame/context'
 import { Navigation } from '../DashboardFrame/Navigation'
 import { Icons } from '@masknet/icons'
-import { FeaturePromotions } from './FeaturePromotions'
-import { DashboardRoutes } from '@masknet/shared-base'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { NavigationVersionFooter } from '../NavigationVersionFooter'
-
-const featurePromotionsEnabled = [
-    DashboardRoutes.Wallets,
-    DashboardRoutes.WalletsTransfer,
-    DashboardRoutes.WalletsHistory,
-]
 
 const MaskLogo = styled(Grid)`
     flex-basis: 212px;
@@ -127,12 +119,10 @@ export interface PageFrameProps extends React.PropsWithChildren<{}> {
 }
 
 export const PageFrame = memo((props: PageFrameProps) => {
-    const location = useLocation()
     const left = typeof props.title === 'string' ? <Typography variant="h6">{props.title}</Typography> : props.title
     const right = props.primaryAction
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const { drawerOpen, toggleDrawer } = useContext(DashboardContext)
-    const showFeaturePromotions = featurePromotionsEnabled.some((path: string) => path === location.pathname)
     const isDark = useTheme().palette.mode === 'dark'
     const { classes } = useStyle()
 
@@ -173,7 +163,10 @@ export const PageFrame = memo((props: PageFrameProps) => {
                         variant="temporary"
                         elevation={0}>
                         <Navigation onClose={toggleDrawer} />
-                        <NavigationVersionFooter />
+                        <div>
+                            <FollowUs />
+                            <NavigationVersionFooter />
+                        </div>
                     </NavigationDrawer>
                 )}
                 <ShapeHelper>
@@ -181,7 +174,6 @@ export const PageFrame = memo((props: PageFrameProps) => {
                         <ErrorBoundary>{props.children}</ErrorBoundary>
                     </ContentContainer>
                 </ShapeHelper>
-                {showFeaturePromotions ? <FeaturePromotions /> : null}
             </Containment>
         </>
     )

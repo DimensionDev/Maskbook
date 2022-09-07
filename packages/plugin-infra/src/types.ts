@@ -13,6 +13,7 @@ import type {
     ECKeyIdentifier,
     EnhanceableSite,
     ExtensionSite,
+    BindingProof,
 } from '@masknet/shared-base'
 import type {
     ChainDescriptor,
@@ -192,6 +193,9 @@ export namespace Plugin.Shared {
         /** Sign a message with persona */
         personaSignMessage(payload: PersonaSignRequest): Promise<PersonaSignResult>
 
+        /** Generate sign message with persona */
+        generateSignResult(signer: ECKeyIdentifier, message: string): Promise<PersonaSignResult>
+
         /** Sign transaction */
         signTransaction(address: string, transaction: Transaction): Promise<string>
         /** Sign personal message, aka. eth.personal.sign() */
@@ -362,7 +366,6 @@ export namespace Plugin.SNSAdaptor {
         lastRecognizedProfile: Subscription<IdentityResolved | undefined>
         currentVisitingProfile: Subscription<IdentityResolved | undefined>
         allPersonas?: Subscription<PersonaInformation[]>
-        privileged_silentSign: () => (signer: ECKeyIdentifier, message: string) => Promise<PersonaSignResult>
         getPersonaAvatar: (identifier: ECKeyIdentifier | null | undefined) => Promise<string | null | undefined>
         ownProofChanged: UnboundedRegistry<void>
         setMinimalMode: (id: string, enabled: boolean) => Promise<void>
@@ -399,6 +402,7 @@ export namespace Plugin.SNSAdaptor {
         Signature = unknown,
         GasOption = unknown,
         Block = unknown,
+        Operation = unknown,
         Transaction = unknown,
         TransactionReceipt = unknown,
         TransactionDetailed = unknown,
@@ -413,10 +417,10 @@ export namespace Plugin.SNSAdaptor {
         PostActions?: InjectUI<{}>
         /** This UI will be rendered for each decrypted post. */
         DecryptedInspector?: InjectUI<{ message: TypedMessage }>
-        /** This UI will be rendered under the Search of the SNS. */
-        SearchResultBox?: InjectUI<{}>
         /** This UI will be rendered into the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
+        /** This UI will be rendered under the Search of the SNS. */
+        SearchResultBox?: SearchResultBox
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
         Web3UI?: Web3Plugin.UI.UI<ChainId, ProviderType, NetworkType>
         /** This is the context of the currently chosen network. */
@@ -428,6 +432,7 @@ export namespace Plugin.SNSAdaptor {
             Signature,
             GasOption,
             Block,
+            Operation,
             Transaction,
             TransactionReceipt,
             TransactionDetailed,
@@ -444,10 +449,16 @@ export namespace Plugin.SNSAdaptor {
         ApplicationEntries?: ApplicationEntry[]
         /** This UI will be rendered as tabs on the profile page */
         ProfileTabs?: ProfileTab[]
+        /** This UI will be rendered as tabs on the profile card */
+        ProfileCardTabs?: ProfileTab[]
         /** This UI will be rendered as cover on the profile page */
         ProfileCover?: ProfileCover[]
-        /** This UI will be rendered as tabs on the profile card */
+        /** This UI will be rendered as tab on the setting dialog */
+        SettingTabs?: SettingTab[]
+        /** This UI will be rendered components on the avatar realm */
         AvatarRealm?: AvatarRealm
+        /** This UI will be rendered components on the tips realm */
+        TipsRealm?: TipsRealm
         /** This UI will be rendered as plugin wrapper page */
         wrapperProps?: PluginWrapperProps
         /**
@@ -570,6 +581,19 @@ export namespace Plugin.SNSAdaptor {
         title?: string
         backgroundGradient?: string
     }
+
+    export interface SearchResultBox {
+        ID: string
+        UI?: {
+            Content?: InjectUI<{
+                keyword: string
+            }>
+        }
+        Utils?: {
+            shouldDisplay?(keyword: string): boolean
+        }
+    }
+
     export enum AvatarRealmSourceType {
         ProfilePage = 'ProfilePage',
         ProfileCard = 'ProfileCard',
@@ -609,6 +633,26 @@ export namespace Plugin.SNSAdaptor {
                 addressNames?: Array<SocialAddress<NetworkPluginID>>,
                 sourceType?: AvatarRealmSourceType,
             ): boolean
+        }
+    }
+    export enum TipsSlot {
+        FollowButton = 'follow',
+        FocusingPost = 'focusing-post',
+        Post = 'post',
+        Profile = 'profile',
+    }
+    export interface TipsRealmOptions {
+        identity?: ProfileIdentifier
+        slot: TipsSlot
+    }
+    export interface TipsRealm {
+        ID: string
+        priority: number
+        UI?: {
+            /**
+             * The injected Tips Content component
+             */
+            Content: InjectUI<TipsRealmOptions>
         }
     }
     export interface ProfileSlider {
@@ -702,6 +746,27 @@ export namespace Plugin.SNSAdaptor {
             sortSocialAddress?(a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>): number
         }
     }
+
+    export interface SettingTab {
+        ID: string
+        /**
+         * The name of setting tab
+         */
+        label: I18NStringField | string
+
+        /**
+         * Used to order the tabs
+         */
+        priority: number
+
+        UI?: {
+            TabContent: InjectUI<{
+                onClose: () => void
+                bindingWallets?: BindingProof[]
+                currentPersona?: ECKeyIdentifier
+            }>
+        }
+    }
 }
 
 /** This part runs in the dashboard */
@@ -716,6 +781,7 @@ export namespace Plugin.Dashboard {
         Signature = unknown,
         GasOption = unknown,
         Block = unknown,
+        Operation = unknown,
         Transaction = unknown,
         TransactionReceipt = unknown,
         TransactionDetailed = unknown,
@@ -737,6 +803,7 @@ export namespace Plugin.Dashboard {
             Signature,
             GasOption,
             Block,
+            Operation,
             Transaction,
             TransactionReceipt,
             TransactionDetailed,
@@ -1050,7 +1117,9 @@ export enum PluginId {
     CrossChainBridge = 'io.mask.cross-chain-bridge',
     Referral = 'com.maskbook.referral',
     Web3Profile = 'io.mask.web3-profile',
+    Web3ProfileCard = 'io.mask.web3-profile-card',
     ScamSniffer = 'io.scamsniffer.mask-plugin',
+    NFTCard = 'com.maskbook.nft-card',
     // @masknet/scripts: insert-here
 }
 /**

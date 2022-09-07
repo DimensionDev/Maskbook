@@ -78,8 +78,15 @@ export interface AlchemyNFT_FLOW {
 }
 
 export interface AlchemyResponse_EVM_Metadata {
-    contract: { address: string }
-    id: { tokenId: string; tokenMetadata: { tokenType: 'ERC721' | 'ERC1155' } }
+    contract: {
+        address: string
+    }
+    id: {
+        tokenId: string
+        tokenMetadata: {
+            tokenType: 'ERC721' | 'ERC1155'
+        }
+    }
     title: string
     description: string
     tokenUri: {

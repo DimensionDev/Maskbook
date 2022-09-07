@@ -3,7 +3,7 @@ import { creator, SocialNetworkUI } from '../../../social-network'
 import { getProfileIdentifierAtFacebook, getUserID } from '../utils/getProfileIdentifier'
 import { isMobileFacebook } from '../utils/isMobile'
 import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
-import { searchAvatarSelector, searchUserIdOnMobileSelector } from '../utils/selector'
+import { searchFacebookAvatarSelector, searchUserIdOnMobileSelector } from '../utils/selector'
 import { getAvatar, getBioDescription, getFacebookId, getNickName, getPersonalHomepage } from '../utils/user'
 import { delay } from '@dimensiondev/kit'
 import type { IdentityResolved } from '@masknet/plugin-infra'
@@ -42,10 +42,10 @@ function resolveCurrentVisitingIdentityInner(
     ref: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,
 ) {
-    const selector = isMobileFacebook ? searchUserIdOnMobileSelector() : searchAvatarSelector()
+    const selector = isMobileFacebook ? searchUserIdOnMobileSelector() : searchFacebookAvatarSelector()
 
     const assign = async () => {
-        await delay(500)
+        await delay(3000)
         const nickname = getNickName()
         const bio = getBioDescription()
         const handle = getFacebookId()

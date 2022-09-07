@@ -19,9 +19,11 @@ const useStyles = makeStyles()(() => ({
         justifyContent: 'center',
     },
     imgBox: {
+        textAlign: 'center',
         width: '80%',
         height: '80%',
-        textAlign: 'center',
+        display: 'flex',
+        justifyContent: 'center',
     },
     close: {
         width: 15,

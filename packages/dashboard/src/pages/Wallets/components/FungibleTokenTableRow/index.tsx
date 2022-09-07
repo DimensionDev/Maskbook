@@ -1,5 +1,4 @@
 import { memo, useMemo } from 'react'
-import BigNumber from 'bignumber.js'
 import { Box, Button, TableCell, TableRow, Tooltip, Typography } from '@mui/material'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { FormattedCurrency, TokenIcon, WalletIcon } from '@masknet/shared'
@@ -9,15 +8,7 @@ import {
     useCurrentWeb3NetworkPluginID,
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
-import {
-    CurrencyType,
-    formatBalance,
-    formatCurrency,
-    FungibleAsset,
-    NetworkPluginID,
-    pow10,
-    toFixed,
-} from '@masknet/web3-shared-base'
+import { CurrencyType, formatBalance, formatCurrency, FungibleAsset, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useDashboardI18N } from '../../../../locales'
 import { ChangeNetworkTip } from './ChangeNetworkTip'
@@ -111,11 +102,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
                 </Box>
             </TableCell>
             <TableCell className={classes.cell} align="center" variant="body">
-                <Typography>
-                    {new BigNumber(formatBalance(asset.balance, asset.decimals)).gt(pow10(-6))
-                        ? Number.parseFloat(toFixed(formatBalance(asset.balance, asset.decimals) ?? '', 6))
-                        : '<0.000001'}
-                </Typography>
+                <Typography>{formatBalance(asset.balance, asset.decimals, 6)}</Typography>
             </TableCell>
             <TableCell className={classes.cell} align="center" variant="body">
                 <Typography>
@@ -127,7 +114,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
             <TableCell className={classes.cell} align="center">
                 <Typography>
                     {getTokenUSDValue(asset.value) < 0.01 ? (
-                        '<0.01'
+                        '<$0.01'
                     ) : (
                         <FormattedCurrency
                             value={getTokenUSDValue(asset.value).toFixed(2)}

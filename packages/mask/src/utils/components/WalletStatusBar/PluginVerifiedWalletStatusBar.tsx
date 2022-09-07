@@ -25,7 +25,7 @@ import { WalletDescription } from './WalletDescription'
 import {
     isSameAddress,
     NetworkPluginID,
-    resolveNextIdPlatformPluginId,
+    resolveNextID_NetworkPluginID,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
 import { WalletMenuItem } from './WalletMenuItem'
@@ -75,7 +75,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         const isVerifiedAccount = verifiedWallets.some((x) => isSameAddress(x.identity, account))
 
         const pluginIdByDefaultVerifiedWallet = defaultVerifiedWallet
-            ? resolveNextIdPlatformPluginId(defaultVerifiedWallet?.platform)
+            ? resolveNextID_NetworkPluginID(defaultVerifiedWallet?.platform)
             : undefined
 
         const isNextIdWallet = !account || !isSameAddress(account, expectedAddress)
@@ -97,21 +97,20 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
 
         const pendingTransactions = useRecentTransactions(currentPluginId, TransactionStatusType.NOT_DEPEND)
 
+        // actual address
+        const walletIdentity = !isNextIdWallet ? account : defaultVerifiedWallet?.identity
+
         const description = useMemo(
             () => ({
                 name: defaultWalletName,
                 networkIcon: networkDescriptor?.icon,
                 providerIcon: !isNextIdWallet ? providerDescriptor?.icon : undefined,
                 iconFilterColor: !isNextIdWallet ? providerDescriptor?.iconFilterColor : '',
-                formattedAddress: Others?.formatAddress(
-                    !isNextIdWallet ? account : defaultVerifiedWallet?.identity ?? '',
-                    4,
-                ),
-                addressLink: Others?.explorerResolver.addressLink?.(
-                    !isNextIdWallet ? chainId : defaultChainId,
-                    !isNextIdWallet ? account : defaultVerifiedWallet?.identity ?? '',
-                ),
-                address: !isNextIdWallet ? account : defaultVerifiedWallet?.identity,
+                formattedAddress: walletIdentity ? Others?.formatAddress(walletIdentity, 4) : '',
+                addressLink: walletIdentity
+                    ? Others?.explorerResolver.addressLink?.(!isNextIdWallet ? chainId : defaultChainId, walletIdentity)
+                    : '',
+                address: walletIdentity,
                 verified: !isNextIdWallet ? isVerifiedAccount : true,
             }),
             [
@@ -122,6 +121,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                 defaultVerifiedWallet,
                 defaultChainId,
                 chainId,
+                walletIdentity,
             ],
         )
 

@@ -44,7 +44,6 @@
     "description": "Gift crypto or NFTs to any users, first come, first served.",
     "next": "Next",
     "nft_approve_all_tip": "Note: When you \"Unlock All\", all of the NFTs in the collection will be by default authorized for sale. This includes the NFTs transferred afterwards.",
-    "nft_unapproved_tip": "You can get the rest of your NFTs back 24 hours later after sending them out.",
     "nft_select_partially_option": "Select partially",
     "nft_select_all_option": "ALL ({{total}} NFT)",
     "nft_search_placeholder": "Token ID separated by comma, e.g. 1224, 7873, 8948",

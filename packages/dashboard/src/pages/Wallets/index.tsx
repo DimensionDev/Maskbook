@@ -8,11 +8,11 @@ import {
     useWallets,
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
-import { DashboardRoutes, EMPTY_LIST, relativeRouteOf } from '@masknet/shared-base'
+import { DashboardRoutes, EMPTY_LIST, relativeRouteOf, CrossIsolationMessages } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, useCallback } from 'react'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { PluginMessages } from '../../API'
 import { PageFrame } from '../../components/PageFrame'
@@ -52,7 +52,12 @@ function Wallets() {
     )
 
     const { openDialog: openBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak?.buyTokenDialogUpdated)
-    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
+
+    const openSwapDialog = useCallback(() => {
+        CrossIsolationMessages.events.swapDialogUpdate.sendToLocal({
+            open: true,
+        })
+    }, [])
 
     const renderNetworks = useMemo(() => {
         return networks.filter((x) => pluginId === x.networkSupporterPluginID && x.isMainnet)

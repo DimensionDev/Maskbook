@@ -40,8 +40,8 @@ export interface Proposal {
     isEnd: boolean
     status: string
     strategies: Strategy[]
-    authorName: string | null
-    authorAvatar: string | null
+    authorName?: string
+    authorAvatar?: string
     network: string
     type: string
     votes: RawVote[]
@@ -103,8 +103,8 @@ export interface VoteItem {
     /** the consist detail of voting power */
     scores: number[]
     strategySymbol: string
-    authorName: string | null
-    authorAvatar: string | null
+    authorName?: string
+    authorAvatar?: string
     choiceIndex: number | undefined
     choiceIndexes: number[] | undefined
     timestamp: number
@@ -122,16 +122,6 @@ export interface ProposalResult {
     }>
     power: number
     percentage: number
-}
-
-/**
- * Off-chain solution to bind personal information e.g. avatar name with EOA.
- * https://3boxlabs.com/
- */
-export interface Profile3Box {
-    eth_address: string
-    image: string | null
-    name: string | null
 }
 
 /**

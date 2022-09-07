@@ -23,16 +23,22 @@ const useStyles = makeStyles()((theme) => ({
     },
     emptyText: {
         fontSize: 14,
-        color: theme.palette.maskColor.second,
+        color: theme.palette.maskColor.publicSecond,
     },
 }))
 
 export const OffersTab = memo(() => {
     const { classes } = useStyles()
-    const { orders, provider } = CollectibleState.useContainer()
+    const { orders } = CollectibleState.useContainer()
     const _orders = orders.value?.data ?? EMPTY_LIST
+
     const { t } = useI18N()
-    if (orders.loading) return <LoadingBase />
+    if (orders.loading)
+        return (
+            <div className={classes.body}>
+                <LoadingBase />
+            </div>
+        )
     if (orders.error || !orders.value)
         return (
             <div className={classes.body}>
@@ -53,7 +59,7 @@ export const OffersTab = memo(() => {
         <CollectibleTab>
             <div className={classes.body} style={{ justifyContent: 'unset' }}>
                 {_orders?.map((x, idx) => (
-                    <NFTOfferCard provider={provider} key={idx} offer={x} />
+                    <NFTOfferCard key={idx} offer={x} />
                 ))}
             </div>
         </CollectibleTab>

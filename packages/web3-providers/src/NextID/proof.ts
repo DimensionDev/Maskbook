@@ -112,13 +112,13 @@ export class NextIDProofAPI implements NextIDBaseAPI.Proof {
     }
     async queryAllExistedBindingsByPlatform(platform: NextIDPlatform, identity: string) {
         const nextIDPersonaBindings: NextIDPersonaBindings[] = []
-        let page = 0
+        let page = 1
         do {
             const personaBindings = await this.queryExistedBindingByPlatform(platform, identity, page)
             if (personaBindings.length === 0) return nextIDPersonaBindings
             nextIDPersonaBindings.push(...personaBindings)
             page += 1
-        } while (page > 0)
+        } while (page > 1)
         return []
     }
 

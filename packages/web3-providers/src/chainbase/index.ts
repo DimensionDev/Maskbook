@@ -1,5 +1,4 @@
 import urlcat from 'urlcat'
-import getUnixTime from 'date-fns/getUnixTime'
 import {
     createIndicator,
     createNextIndicator,
@@ -8,11 +7,12 @@ import {
     HubIndicator,
     HubOptions,
     NonFungibleAsset,
-    NonFungibleTokenCollection,
+    NonFungibleCollection,
     NonFungibleTokenContract,
     NonFungibleTokenEvent,
     Pageable,
     scale10,
+    SourceType,
     TokenType,
     Transaction,
 } from '@masknet/web3-shared-base'
@@ -41,7 +41,7 @@ export class ChainbaseHistoryAPI implements HistoryAPI.Provider<ChainId, SchemaT
             id: tx.transaction_hash,
             chainId,
             status: tx.status,
-            timestamp: getUnixTime(new Date(tx.block_timestamp)),
+            timestamp: new Date(tx.block_timestamp).getTime(),
             from: tx.from_address,
             to: tx.to_address,
             tokens: EMPTY_LIST,
@@ -189,7 +189,7 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
         }
     }
 
-    createNonFungibleCollectionFromNFT(chainId: ChainId, nft: NFT): NonFungibleTokenCollection<ChainId, SchemaType> {
+    createNonFungibleCollectionFromNFT(chainId: ChainId, nft: NFT): NonFungibleCollection<ChainId, SchemaType> {
         return {
             chainId,
             schema: nft.contract_type === 'ERC1155' ? SchemaType.ERC1155 : SchemaType.ERC721,
@@ -212,13 +212,14 @@ export class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provide
             type: 'transfer',
             assetPermalink: this.createNonFungibleTokenPermalink(chainId, address, event.token_id),
             hash: event.transaction_hash,
-            timestamp: getUnixTime(new Date(event.block_timestamp)),
+            timestamp: new Date(event.block_timestamp).getTime(),
             from: {
                 address: event.from_address,
             },
             to: {
                 address: event.to_address,
             },
+            source: SourceType.Chainbase,
         }
     }
 

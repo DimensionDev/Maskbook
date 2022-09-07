@@ -1,4 +1,5 @@
 export const LightColor = {
+    bg: '##F9F9F9',
     primary: '#1c68f3',
     primaryContrastText: '#ffffff',
     background: '#FFFFFF',
@@ -76,6 +77,7 @@ export const LightColor = {
     buttonPluginColor: '#FFFFFF',
 }
 export const DarkColor: typeof LightColor = {
+    bg: '#1C1C1C',
     primary: '#1c68f3',
     primaryContrastText: '#ffffff',
     background: '#15171A',

@@ -7,7 +7,7 @@
     "emitDeclarationOnly": true,
     // MV3 = WebWorker, MV2 = DOM
     // but we cannot build the same code in two env
-    "lib": ["ES2021", "WebWorker"]
+    "lib": ["ES2022", "WebWorker"]
   },
   "include": ["./"],
   "references": [
@@ -16,6 +16,7 @@
     { "path": "../../encryption" },
     { "path": "../../backup-format" },
     { "path": "../../gun-utils" },
-    { "path": "../../web3-providers" }
+    { "path": "../../web3-providers" },
+    { "path": "../../sandboxed-plugin-runtime/src/background" }
   ]
 }

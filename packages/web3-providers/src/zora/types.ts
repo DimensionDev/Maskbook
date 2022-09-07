@@ -12,7 +12,7 @@ export interface CurrencyAmount {
         decimals: string
     }
     raw: string
-    decimals: number
+    decimal: number
 }
 
 export interface PriceAtTime {
@@ -89,13 +89,19 @@ export interface Token<T = unknown> {
 }
 
 export interface Collection {
-    address: string
-    description: string
     name?: string
-    symbol?: string
-    totalSupply?: number
-    networkInfo: Network
-    attributes: CollectionAttribute[]
+    description: string
+    entityTitle: string
+    collectionAddress: string
+    entity: {
+        address: string
+        description: string
+        name: string
+        symbol: string
+        totalSupply?: number
+        networkInfo: Network
+        attributes: CollectionAttribute[]
+    }
 }
 
 export enum EventType {
@@ -210,8 +216,6 @@ export interface ApprovalEventProperty {
 export interface LilNounsAuctionEventProperty<T = unknown> {
     lilNounsAuctionEventType: LilNounsAuctionEventType
     address: string
-    collectionAddress: string
-    tokenId: string
     properties: T[]
 }
 
@@ -226,8 +230,6 @@ export interface MintEventProperty {
 export interface NounsAuctionEventProperty<T = unknown> {
     nounsAuctionEventType: NounsAuctionEventType
     address: string
-    collectionAddress: string
-    tokenId: string
     properties: T[]
 }
 
@@ -255,33 +257,33 @@ export interface SeaportEventProperty<T = unknown> {
 export interface TransferEventProperty {
     fromAddress: string
     toAddress: string
-    collectionAddress: string
-    tokenId: string
 }
 
 export interface V1MarketEventProperty<T = unknown> {
     v1MarketEventType: V1MarketEventType
     address: string
-    collectionAddress: string
-    tokenId: string
-    properties: T[]
+    properties: T
 }
 
 export interface V2AuctionEventProperty<T = unknown> {
     v2AuctionEventType: V2AuctionEventType
     address: string
     auctionId: number
-    collectionAddress: string
-    tokenId: string
-    properties: T[]
+    properties: T
 }
 
 export interface V3AskEventProperty<T = unknown> {
     v3AskEventType: V3AskEventType
     address: string
-    collectionAddress: string
-    tokenId: string
-    properties: T[]
+    // only for V3_ASK_CREATED
+    properties: {
+        seller: string
+        sellerFundsRecipient: string
+        askCurrency: string
+        askPrice: string
+        findersFeeBps: number
+        price: PriceAtTime
+    }
 }
 
 export interface V3ReserveAuctionEventProperty<T = unknown> {
@@ -289,7 +291,7 @@ export interface V3ReserveAuctionEventProperty<T = unknown> {
     address: string
     tokenContract: string
     tokenId: string
-    properties: T[]
+    properties: T
 }
 
 export interface Event<T = unknown> {
@@ -298,5 +300,5 @@ export interface Event<T = unknown> {
     eventType: EventType
     collectionAddress?: string
     tokenId?: string
-    properties?: T[]
+    properties?: T
 }

@@ -6,7 +6,7 @@ import { BTC_FIRST_LEGER_DATE, CMC_STATIC_BASE_URL, CMC_V1_BASE_URL, THIRD_PARTY
 import { getCommunityLink, isMirroredKeyword, resolveChainIdByName } from './helper'
 import { DataProvider } from '@masknet/public-api'
 import type { Coin, ResultData, Status } from './type'
-import { fetchJSON, getTraderAllAPICachedFlag } from '../helpers'
+import { fetchJSON } from '../helpers'
 
 export enum Days {
     MAX = 0,
@@ -53,7 +53,7 @@ export async function getQuotesInfo(id: string, currency: string) {
 
     try {
         const response = await fetch(`${THIRD_PARTY_V1_BASE_URL}/cryptocurrency/widget?${params.toString()}`, {
-            cache: getTraderAllAPICachedFlag(),
+            cache: 'default',
         })
         return response.json() as Promise<{
             data: Record<string, QuotesInfo>
@@ -192,7 +192,7 @@ export async function getLatestMarketPairs(id: string, currency: string) {
 
     try {
         const response = await fetch(`${CMC_V1_BASE_URL}/cryptocurrency/market-pairs/latest?${params.toString()}`, {
-            cache: getTraderAllAPICachedFlag(),
+            cache: 'default',
         })
         return response.json() as Promise<{
             data: {
@@ -251,7 +251,7 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
         const response = await fetchJSON<
             ResultData<Record<string, Record<string, TrendingAPI.Stat>> | TrendingAPI.HistoricalCoinInfo>
         >(`${CMC_V1_BASE_URL}/cryptocurrency/quotes/historical?${params.toString()}`, {
-            cache: getTraderAllAPICachedFlag(),
+            cache: 'default',
         })
 
         return response.data

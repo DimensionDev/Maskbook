@@ -211,7 +211,7 @@ export function NFTAvatarClip(props: NFTAvatarClipProps) {
                             loading || loadingNFT
                                 ? 'loading...'
                                 : `${formatText(name, avatarMetadata?.token_id ?? '')} ${
-                                      slug.toLowerCase() === 'ens' ? 'ENS' : ''
+                                      slug?.toLowerCase() === 'ens' ? 'ENS' : ''
                                   }`
                         }
                     />

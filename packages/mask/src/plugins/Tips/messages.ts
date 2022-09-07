@@ -4,7 +4,7 @@ import type { TipTask } from './types'
 export interface TipMessage {
     tipTask: TipTask
     tipTaskUpdate: TipTask
-
+    tipsSettingUpdate: void
     rpc: unknown
 }
 

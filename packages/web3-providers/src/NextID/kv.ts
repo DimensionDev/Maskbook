@@ -7,6 +7,7 @@ import { deleteCache, fetchJSON } from './helper'
 import { Err, Ok, Result } from 'ts-results'
 import type { NextIDBaseAPI } from '../types'
 import { KV_BASE_URL_DEV, KV_BASE_URL_PROD } from './constants'
+import { compact } from 'lodash-unified'
 
 interface CreatePayloadResponse {
     uuid: string
@@ -55,6 +56,31 @@ export class NextIDStorageAPI implements NextIDBaseAPI.Storage {
             .filter((x) => x.identity === identity.toLowerCase())
         if (!proofs.length) return Err('Not found')
         return Ok(proofs[0].content[pluginId])
+    }
+
+    async getAllByIdentity<T>(
+        platform: NextIDPlatform,
+        identity: string,
+        pluginId: string,
+    ): Promise<Result<T[], string>> {
+        interface Proof {
+            avatar: string
+            content: Record<string, T>
+        }
+
+        interface Response {
+            values: Proof[]
+        }
+        const response = await fetchJSON<Response>(
+            urlcat(BASE_URL, '/v1/kv/by_identity', { platform, identity }),
+            undefined,
+            true,
+        )
+
+        if (!response.ok) return Err('User not found')
+
+        const result = compact(response.val.values.map((x) => x.content[pluginId]))
+        return Ok(result)
     }
     async get<T>(personaPublicKey: string): Promise<Result<T, string>> {
         return fetchJSON(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))

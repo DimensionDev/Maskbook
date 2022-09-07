@@ -1,7 +1,8 @@
 import urlcat from 'urlcat'
 import { Network } from 'opensea-js'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { createLookupTableResolver, createPredicate, SourceType } from '@masknet/web3-shared-base'
+import { createPredicate, SourceType } from '@masknet/web3-shared-base'
+import { createLookupTableResolver } from '@masknet/shared-base'
 import {
     RaribleRopstenUserURL,
     RaribleUserURL,

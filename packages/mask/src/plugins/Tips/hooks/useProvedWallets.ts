@@ -14,9 +14,11 @@ export function useProvedWallets() {
         async () => Services.Identity.queryOwnedPersonaInformation(false),
         [currentIdentifier],
     )
+
     useEffect(() => {
         return MaskMessages.events.ownPersonaChanged.on(retry)
     }, [retry])
+
     const res = useAsyncRetry(async () => {
         if (!currentIdentifier) return EMPTY_LIST
         const currentPersona = personas?.find(
@@ -26,6 +28,8 @@ export function useProvedWallets() {
         const { proofs } = (await NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex))!
         return proofs.filter((x) => x.platform === NextIDPlatform.Ethereum)
     }, [currentPersonaIdentifier, personas])
+
+    useEffect(() => MaskMessages.events.ownProofChanged.on(res.retry), [res.retry])
 
     return res
 }

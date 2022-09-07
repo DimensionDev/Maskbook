@@ -4,6 +4,7 @@ import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { Hub, OrderSide, resolveSourceName, SourceType } from '@masknet/web3-shared-base'
 import { Button, MenuItem, Table, TableBody, TableCell, TableRow, TextField, Typography } from '@mui/material'
 import { getEnumAsArray } from '@dimensiondev/kit'
+import { Icons } from '@masknet/icons'
 
 export interface HubContentProps {
     onClose?: () => void
@@ -21,9 +22,9 @@ export function HubContent(props: HubContentProps) {
     const chainId = useChainId()
     const account = useAccount()
     const [keyword, setKeyword] = useState<string>('PUNK')
-    const [address, setAddress] = useState<string>('0x7c3e8096b70a4ddc04c4344b8f33b97c9d12bc4e')
-    const [tokenId, setTokenId] = useState<string>('1')
-    const [sourceType, setSourceType] = useState(SourceType.OpenSea)
+    const [address, setAddress] = useState<string>('0x5537d90a4a2dc9d9b37bab49b490cf67d4c54e91')
+    const [tokenId, setTokenId] = useState<string>('5431')
+    const [sourceType, setSourceType] = useState(SourceType.NFTScan)
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
     type HubAll = Required<Hub<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll, Web3Helper.GasOptionAll>>
@@ -61,7 +62,7 @@ export function HubContent(props: HubContentProps) {
         ['getNonFungibleTokenStats', [address]],
         ['getNonFungibleTokenSecurity', [chainId, address]],
         ['getNonFungibleTokenContract', [address]],
-        ['getNonFungibleCollections', [account]],
+        ['getNonFungibleCollectionsByOwner', [account]],
         ['getNonFungibleCollectionsByKeyword', [keyword]],
         ['getNonFungibleTokenEvents', [address, tokenId]],
         ['getNonFungibleTokenOffers', [address, tokenId]],
@@ -71,6 +72,7 @@ export function HubContent(props: HubContentProps) {
         ['getNonFungibleAssets', [account]],
         ['getNonFungibleToken', [address, tokenId]],
         ['getNonFungibleTokens', [account]],
+        ['getNonFungibleRarity', [address, tokenId]],
         ['getNonFungibleTokenFloorPrice', [address, tokenId]],
         ['getNonFungibleTokensByCollection', [address]],
         ['getNonFungibleAssetsByCollection', [address]],
@@ -136,7 +138,10 @@ export function HubContent(props: HubContentProps) {
                             </Typography>
                         </TableCell>
                         <TableCell>
-                            <Button size="small" onClick={(e) => setAnchorEl(e.currentTarget)}>
+                            <Button
+                                size="small"
+                                onClick={(e) => setAnchorEl(e.currentTarget)}
+                                endIcon={<Icons.ArrowDownRound size={14} />}>
                                 {resolveSourceName(sourceType)}
                             </Button>
                             <ShadowRootMenu

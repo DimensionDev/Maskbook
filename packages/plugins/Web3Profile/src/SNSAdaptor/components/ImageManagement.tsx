@@ -4,10 +4,10 @@ import { WalletAssetsCard } from './WalletAssets'
 import { PersonaInformation, PopupRoutes } from '@masknet/shared-base'
 import { ImageListDialog } from './ImageList'
 import { useState } from 'react'
-import { InjectedDialog } from '@masknet/shared'
+import { InjectedDialog, WalletTypes } from '@masknet/shared'
 import { Box, Button, DialogContent } from '@mui/material'
 import type { IdentityResolved } from '@masknet/plugin-infra'
-import type { AccountType, WalletTypes } from '../types'
+import type { AccountType } from '../types'
 import WalletSetting from './WalletSetting'
 import { Empty } from './Empty'
 import { context } from '../context'
@@ -34,7 +34,6 @@ const useStyles = makeStyles()((theme) => ({
         width: 568,
         height: 548,
         padding: '0 16px 16px 16px',
-        backgroundColor: theme.palette.background.paper,
         display: 'flex',
         position: 'relative',
         flexDirection: 'column',
@@ -77,7 +76,7 @@ const getAddressesByStatus = (status: CURRENT_STATUS, accountList: AccountType) 
     let addresses
     if (status === CURRENT_STATUS.Donations_setting) addresses = accountList?.walletList?.donations
     if (status === CURRENT_STATUS.Footprints_setting) addresses = accountList?.walletList?.footprints
-    addresses = accountList?.walletList?.NFTs
+    if (status === CURRENT_STATUS.NFT_Setting) addresses = accountList?.walletList?.NFTs
     return addresses?.sort((a, z) => {
         const a_hasItems = a?.collections && a.collections.filter?.((collection) => !collection?.hidden)?.length > 0
         const z_hasItems = z?.collections && z.collections.filter?.((collection) => !collection?.hidden)?.length > 0
