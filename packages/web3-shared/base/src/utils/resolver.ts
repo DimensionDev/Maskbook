@@ -226,7 +226,7 @@ const MATCH_IPFS_CID_RAW =
     'Qm[1-9A-HJ-NP-Za-km-z]{44,}|b[2-7A-Za-z]{58,}|B[2-7A-Z]{58,}|z[1-9A-HJ-NP-Za-km-z]{48,}|F[\\dA-F]{50,}'
 const MATCH_IPFS_DATA_RE = /ipfs\/(data:.*)$/
 const CORS_HOST = 'https://cors.r2d2.to'
-const IPFS_IO_HOST = 'https://ipfs.io'
+const GATEWAY_HOST = 'https://gateway.ipfscdn.io'
 
 export const isIpfsCid = (cid: string) => {
     const re = new RegExp(`^${MATCH_IPFS_CID_RAW}$`)
@@ -255,27 +255,44 @@ export const resolveLocalResource = (url: string): string => {
     return url
 }
 
-export function resolveIPFSLink(cidOrURL?: string): string | undefined {
+/**
+ * Remove query from IPFS url, as it is not needed
+ * and will increase requests sometimes.
+ * For example https://ipfs.io/ipfs/<same-cid>?id=67891 and  https://ipfs.io/ipfs/<same-cid>?id=67892
+ * are set to two different NFTs, but according to the same CID,
+ * they are exactly the some.
+ */
+const trimQuery = (url: string) => {
+    return url.replace(/\?.+$/, '')
+}
+
+export function resolveResourceUri(uri: string | undefined) {
+    if (!uri) return uri
+    if (isLocaleResource(uri)) return resolveLocalResource(uri)
+    return resolveIPFSLink(uri)
+}
+
+export function resolveIPFSLink(cidOrURL: string | undefined): string | undefined {
     if (!cidOrURL) return cidOrURL
 
     // eliminate cors proxy
     if (cidOrURL.startsWith(CORS_HOST)) {
-        return resolveIPFSLink(decodeURIComponent(cidOrURL.replace(new RegExp(`^${CORS_HOST}\??`), '')))
+        return trimQuery(resolveIPFSLink(decodeURIComponent(cidOrURL.replace(new RegExp(`^${CORS_HOST}\??`), '')))!)
     }
 
     // a ipfs.io host
-    if (cidOrURL.startsWith(IPFS_IO_HOST)) {
+    if (cidOrURL.startsWith(GATEWAY_HOST)) {
         // base64 data string
         const [_, data] = cidOrURL.match(MATCH_IPFS_DATA_RE) ?? []
         if (data) return decodeURIComponent(data)
 
         // plain
-        return decodeURIComponent(cidOrURL)
+        return trimQuery(decodeURIComponent(cidOrURL))
     }
 
     // a ipfs hash fragment
     if (hasIpfsCid(cidOrURL)) {
-        return `${IPFS_IO_HOST}/ipfs/${getIpfsCidPathname(cidOrURL)}`
+        return trimQuery(`${GATEWAY_HOST}/ipfs/${getIpfsCidPathname(cidOrURL)}`)
     }
 
     return cidOrURL

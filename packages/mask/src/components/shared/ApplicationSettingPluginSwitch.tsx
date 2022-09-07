@@ -4,7 +4,7 @@ import { CrossIsolationMessages } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Avatar, Box, List, ListItem, ListItemAvatar, Switch, Typography } from '@mui/material'
-import { memo, useLayoutEffect, useMemo, useRef } from 'react'
+import { memo, useEffect, useMemo, useRef } from 'react'
 import { Services } from '../../extension/service'
 
 const useStyles = makeStyles()((theme) => ({
@@ -79,7 +79,7 @@ export const ApplicationSettingPluginSwitch = memo(({ focusPluginId }: Props) =>
     const targetPluginRef = useRef<HTMLLIElement | null>()
     const noAvailablePlugins = availablePlugins.length === 0
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         if (!focusPluginId || noAvailablePlugins || !targetPluginRef.current) return
         targetPluginRef.current.scrollIntoView()
     }, [focusPluginId, noAvailablePlugins])

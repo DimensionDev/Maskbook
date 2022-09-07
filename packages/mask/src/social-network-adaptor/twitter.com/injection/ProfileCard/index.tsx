@@ -20,7 +20,6 @@ export function injectProfileCardHolder(signal: AbortSignal) {
 
 const CARD_WIDTH = 450
 const CARD_HEIGHT = 500
-const DISMISS_TIMEOUT = process.env.NODE_ENV === 'production' ? 2000 : 120_000
 const useStyles = makeStyles()((theme) => ({
     root: {
         position: 'absolute',
@@ -48,9 +47,11 @@ function ProfileCardHolder() {
     })
     const activeRef = useRef(false)
     const holderRef = useRef<HTMLDivElement>(null)
+    const closeTimerRef = useRef<NodeJS.Timeout>()
     const [twitterId, setTwitterId] = useState('')
 
     const hideProfileCard = useCallback(() => {
+        if (activeRef.current) return
         setStyle((old) => {
             if (old.visibility === 'hidden') return old
             return {
@@ -60,17 +61,26 @@ function ProfileCardHolder() {
         })
     }, [])
 
+    const showProfileCard = useCallback((patchStyle: CSSProperties) => {
+        clearTimeout(closeTimerRef.current)
+        setStyle((old) => {
+            const { visibility, left, top } = old
+            if (visibility === 'visible' && left === patchStyle.left && top === patchStyle.top) return old
+            return { ...old, ...patchStyle, visibility: 'visible' }
+        })
+    }, [])
+
     useEffect(() => {
         const holder = holderRef.current
         if (!holder) return
-        let timer: NodeJS.Timeout
         const enter = () => {
             activeRef.current = true
-            clearTimeout(timer)
+            clearTimeout(closeTimerRef.current)
         }
         const leave = () => {
             activeRef.current = false
-            timer = setTimeout(hideProfileCard, DISMISS_TIMEOUT)
+            clearTimeout(closeTimerRef.current)
+            closeTimerRef.current = setTimeout(hideProfileCard, 2000)
         }
         holder.addEventListener('mouseenter', enter)
         holder.addEventListener('mouseleave', leave)
@@ -83,26 +93,36 @@ function ProfileCardHolder() {
     useEffect(() => {
         return CrossIsolationMessages.events.requestProfileCard.on((event) => {
             if (!event.open) {
-                if (activeRef.current) return
                 hideProfileCard()
                 return
             }
-            const { userId, x, y } = event
+            const { userId, badgeBounding: bounding } = event
             setTwitterId(userId)
-            setStyle((old) => {
-                const newLeft = x - CARD_WIDTH / 2
-                const newTop = y
-                const { visibility, left, top } = old
-                if (visibility === 'visible' && left === newLeft && top === newTop) return old
-                return {
-                    ...old,
-                    visibility: 'visible',
-                    left: newLeft,
-                    top: newTop,
+            const reachedBottomBoundary = bounding.top + bounding.height + CARD_HEIGHT > window.innerHeight
+            let x = Math.max(bounding.left + bounding.width / 2 - CARD_WIDTH / 2, 0)
+            let y = bounding.top + bounding.height
+            if (reachedBottomBoundary) {
+                const reachedTopBoundary = bounding.top < CARD_HEIGHT
+                if (reachedTopBoundary) {
+                    x = bounding.left + bounding.width
+                    y = Math.min(window.innerHeight - CARD_HEIGHT, Math.max(bounding.top - CARD_HEIGHT / 2))
+                } else {
+                    y = bounding.top - CARD_HEIGHT
                 }
+            }
+            // Prefer to show top left corner of the card.
+            x = Math.max(0, x)
+            y = Math.max(0, y)
+
+            const pageOffset = document.scrollingElement?.scrollTop || 0
+            const newLeft = x
+            const newTop = y + pageOffset
+            showProfileCard({
+                left: newLeft,
+                top: newTop,
             })
         })
-    }, [hideProfileCard])
+    }, [hideProfileCard, showProfileCard])
 
     useEffect(() => {
         const onClick = (event: MouseEvent) => {

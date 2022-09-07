@@ -93,6 +93,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
             content: (
                 <Typography variant="body2">
                     <span>{lookedAddress}</span>
+                    <br />
                     <Button
                         size="small"
                         onClick={() => {
@@ -108,6 +109,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
             content: (
                 <Typography variant="body2">
                     <span>{reversedName}</span>
+                    <br />
                     <Button
                         size="small"
                         onClick={() => {
@@ -144,7 +146,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
             ),
         },
         {
-            name: 'Test Snackbar',
+            name: 'Snackbar',
             content: (
                 <Button
                     size="small"
@@ -155,12 +157,12 @@ export function ConsoleContent(props: ConsoleContentProps) {
                             autoHideDuration: 100000000,
                         })
                     }}>
-                    show
+                    Show
                 </Button>
             ),
         },
         {
-            name: 'Open plugin setting',
+            name: 'Plugin Settings',
             content: (
                 <>
                     <select onChange={(event) => setPluginId(event.target.value as PluginId)}>
@@ -177,7 +179,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                 onChange={(event) => setQuickMode(event.currentTarget.checked)}
                             />
                         }
-                        label="Settings Quick Mode"
+                        label="Quick Mode"
                     />
 
                     <Button
@@ -193,7 +195,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                                 },
                             })
                         }}>
-                        open
+                        Open
                     </Button>
                 </>
             ),

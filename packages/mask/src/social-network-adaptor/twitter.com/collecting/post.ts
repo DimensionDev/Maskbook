@@ -137,7 +137,8 @@ function registerPostCollectorInner(
             if (!tweetNode) return node.innerText
             const parentTweetId = parentTweetNode ? postIdParser(parentTweetNode) : ''
             const tweetId = postIdParser(tweetNode)
-            return `${parentTweetId}/${tweetId}`
+            // To distinguish tweet nodes between time line and detail page
+            return `${location.pathname}/${parentTweetId}/${tweetId}`
         })
         .startWatch(250, cancel)
 }
