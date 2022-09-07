@@ -1603,7 +1603,7 @@ importers:
         version: 1.1.0
       '@metaplex/js':
         specifier: ^4.11.7
-        version: 4.11.7_3hthoayrtz7bowcduhtflwhjdu
+        version: 4.11.7
       '@project-serum/sol-wallet-adapter':
         specifier: ^0.2.6
         version: 0.2.6_@solana+web3.js@1.44.2
@@ -6166,6 +6166,21 @@ packages:
       - google-protobuf
     dev: false
 
+  /@bonfida/name-offers/0.0.1:
+    resolution: {integrity: sha512-R0GJ/+R5OXfm4KfiKEjHx88QnQxw+kzDA8O4pHouev1voPJueOzzo5x+YLowMpk3/2maqEwkNPWiWIlSExjdug==}
+    dependencies:
+      '@bonfida/spl-name-service': 0.1.50_6ci7fnommaueqn5khafi4cwqoq
+      '@solana/spl-token': 0.1.8
+      '@solana/web3.js': 1.44.2
+      bn.js: 5.2.0
+      borsh: 0.6.0
+      bs58: 4.0.1
+    transitivePeerDependencies:
+      - bufferutil
+      - encoding
+      - utf-8-validate
+    dev: false
+
   /@bonfida/name-offers/0.0.1_lkrc4hmmz5vh6i5esgpeenjqca:
     resolution: {integrity: sha512-R0GJ/+R5OXfm4KfiKEjHx88QnQxw+kzDA8O4pHouev1voPJueOzzo5x+YLowMpk3/2maqEwkNPWiWIlSExjdug==}
     dependencies:
@@ -6191,13 +6206,17 @@ packages:
       bn.js: ^5.1.3
       borsh: ^0.7.0
     dependencies:
-      '@bonfida/name-offers': 0.0.1_lkrc4hmmz5vh6i5esgpeenjqca
+      '@bonfida/name-offers': 0.0.1
       '@ethersproject/sha2': 5.7.0
       '@solana/buffer-layout': 4.0.0
       '@solana/spl-token': 0.1.8
       '@solana/web3.js': 1.44.2
       bn.js: 5.2.0
       borsh: 0.6.0
+    transitivePeerDependencies:
+      - bufferutil
+      - encoding
+      - utf-8-validate
     dev: false
 
   /@bonfida/spl-name-service/0.1.50_i3l72uyssgnssww75k2rqqnbtm:
@@ -6209,7 +6228,7 @@ packages:
       bn.js: ^5.1.3
       borsh: ^0.7.0
     dependencies:
-      '@bonfida/name-offers': 0.0.1_lkrc4hmmz5vh6i5esgpeenjqca
+      '@bonfida/name-offers': 0.0.1
       '@ethersproject/sha2': 5.7.0
       '@solana/buffer-layout': 4.0.0
       '@solana/spl-token': 0.1.8
@@ -6551,56 +6570,6 @@ packages:
       chalk: 4.1.2
     dev: true
 
-<<<<<<< HEAD
-=======
-  /@cspell/cspell-bundled-dicts/6.1.2:
-    resolution: {integrity: sha512-vMS15jKPNH93Fv0bu/lrTSmXKt6hDCEEwOIyajO84cJMuKRVuR9Vw0ZtkFsVAwHyTNZ8mGxposQ20TbAL/SUlw==}
-    engines: {node: '>=14'}
-    dependencies:
-      '@cspell/dict-ada': 2.0.0
-      '@cspell/dict-aws': 2.0.0
-      '@cspell/dict-bash': 2.0.3
-      '@cspell/dict-companies': 2.0.6
-      '@cspell/dict-cpp': 3.1.0
-      '@cspell/dict-cryptocurrencies': 2.0.0
-      '@cspell/dict-csharp': 3.0.1
-      '@cspell/dict-css': 2.0.0
-      '@cspell/dict-dart': 1.1.1
-      '@cspell/dict-django': 2.0.0
-      '@cspell/dict-docker': 1.1.1
-      '@cspell/dict-dotnet': 2.0.1
-      '@cspell/dict-elixir': 2.0.1
-      '@cspell/dict-en-gb': 1.1.33
-      '@cspell/dict-en_us': 2.2.5
-      '@cspell/dict-filetypes': 2.0.1
-      '@cspell/dict-fonts': 2.0.0
-      '@cspell/dict-fullstack': 2.0.6
-      '@cspell/dict-git': 1.0.1
-      '@cspell/dict-golang': 3.0.1
-      '@cspell/dict-haskell': 2.0.0
-      '@cspell/dict-html': 3.0.1
-      '@cspell/dict-html-symbol-entities': 3.0.0
-      '@cspell/dict-java': 3.0.4
-      '@cspell/dict-latex': 2.0.6
-      '@cspell/dict-lorem-ipsum': 2.0.0
-      '@cspell/dict-lua': 2.0.0
-      '@cspell/dict-node': 3.0.1
-      '@cspell/dict-npm': 3.0.1
-      '@cspell/dict-php': 2.0.0
-      '@cspell/dict-powershell': 2.0.0
-      '@cspell/dict-public-licenses': 1.0.5
-      '@cspell/dict-python': 3.0.6
-      '@cspell/dict-r': 1.0.3
-      '@cspell/dict-ruby': 2.0.1
-      '@cspell/dict-rust': 2.0.0
-      '@cspell/dict-scala': 2.0.0
-      '@cspell/dict-software-terms': 2.1.8
-      '@cspell/dict-swift': 1.0.3
-      '@cspell/dict-typescript': 2.0.0
-      '@cspell/dict-vue': 2.0.2
-    dev: false
-
->>>>>>> upstream/develop
   /@cspell/cspell-bundled-dicts/6.5.0:
     resolution: {integrity: sha512-rY1d9zNlMlhoOzN/S22zO6Z5171lAg0OX5ZtYepgyurnrrf6VL3tb31PD7pTC4N2aqCGXzk5DJql//vreg5buw==}
     engines: {node: '>=14'}
@@ -6618,8 +6587,8 @@ packages:
       '@cspell/dict-docker': 1.1.1
       '@cspell/dict-dotnet': 2.0.1
       '@cspell/dict-elixir': 2.0.1
-      '@cspell/dict-en-gb': 1.1.33
       '@cspell/dict-en_us': 2.3.0
+      '@cspell/dict-en-gb': 1.1.33
       '@cspell/dict-filetypes': 2.1.1
       '@cspell/dict-fonts': 2.0.1
       '@cspell/dict-fullstack': 2.0.6
@@ -6796,13 +6765,13 @@ packages:
     resolution: {integrity: sha512-4Qy4/JSzyk+f4LTsALERTwTjXGh2kRNHj+eVpLWF1oSJeTC2CQ8iZeKlQoIZa0zXcwbw/RYBpfiDJIXSqeI+Og==}
     hasBin: true
     dependencies:
-      3id-did-provider: 1.1.1
       '@3id/connect': 0.2.5
       '@ceramicnetwork/3id-did-resolver': 1.4.16
       '@ceramicnetwork/blockchain-utils-linking': 1.5.5
       '@ceramicnetwork/http-client': 1.5.7
       '@ceramicstudio/idx': 0.12.2
       '@stablelib/sha256': 1.0.1
+      3id-did-provider: 1.1.1
       bs58: 4.0.1
       idb: 7.0.0
       key-did-resolver: 1.4.4
@@ -8425,36 +8394,6 @@ packages:
       '@metaplex-foundation/mpl-core': 0.0.2
       '@metaplex-foundation/mpl-metaplex': 0.0.5
       '@metaplex-foundation/mpl-token-metadata': 0.0.2
-      '@metaplex-foundation/mpl-token-vault': 0.0.2
-      '@solana/spl-token': 0.1.8
-      '@solana/web3.js': 1.44.2
-      '@types/bs58': 4.0.1
-      axios: 0.25.0
-      bn.js: 5.2.1
-      borsh: 0.4.0
-      bs58: 4.0.1
-      buffer: 6.0.3
-      crypto-hash: 1.3.0
-      form-data: 4.0.0
-    transitivePeerDependencies:
-      - bufferutil
-      - debug
-      - encoding
-      - utf-8-validate
-    dev: false
-
-  /@metaplex/js/4.11.7_3hthoayrtz7bowcduhtflwhjdu:
-    resolution: {integrity: sha512-/8X04VEHMfWF84H2DZwLY3yg0xq75vgt/VtLuChTm8iUHkj99Whnq0NLTe0OqfhiEV0qFvT5dbLFh7x2CZqrEQ==}
-    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
-    peerDependencies:
-      '@metaplex-foundation/mpl-token-metadata': ^0.0.2
-      '@solana/spl-token': ^0.1.8
-      '@solana/web3.js': ^1.30.2
-    dependencies:
-      '@metaplex-foundation/mpl-auction': 0.0.2
-      '@metaplex-foundation/mpl-core': 0.0.2
-      '@metaplex-foundation/mpl-metaplex': 0.0.5
-      '@metaplex-foundation/mpl-token-metadata': 1.1.0
       '@metaplex-foundation/mpl-token-vault': 0.0.2
       '@solana/spl-token': 0.1.8
       '@solana/web3.js': 1.44.2
@@ -14085,7 +14024,7 @@ packages:
   /axios/0.25.0:
     resolution: {integrity: sha512-cD8FOb0tRH3uuEe6+evtAbgJtfxr7ly3fQjYcMcuPlgkwVS9xboaVIpcDV+cYQe+yGykgwZCs1pzjntcGa6l5g==}
     dependencies:
-      follow-redirects: 1.15.1_debug@4.3.4
+      follow-redirects: 1.15.1
     transitivePeerDependencies:
       - debug
     dev: false
@@ -16621,8 +16560,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
-      JSONStream: 1.3.5
       is-text-path: 1.0.1
+      JSONStream: 1.3.5
       lodash: 4.17.21
       meow: 8.1.2
       split2: 3.2.2
@@ -20390,18 +20329,6 @@ packages:
       debug:
         optional: true
 
-  /follow-redirects/1.15.1_debug@4.3.4:
-    resolution: {integrity: sha512-yLAMQs+k0b2m7cVxpS1VKJVvoz7SS9Td1zss3XRwXj+ZDH00RJgnuLx7E44wx02kQLrdM3aOOy+FpzS7+8OizA==}
-    engines: {node: '>=4.0'}
-    peerDependencies:
-      debug: '*'
-    peerDependenciesMeta:
-      debug:
-        optional: true
-    dependencies:
-      debug: 4.3.4_supports-color@6.1.0
-    dev: false
-
   /for-each/0.3.3:
     resolution: {integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw==}
     dependencies:
@@ -21802,7 +21729,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.15.1_debug@4.3.4
+      follow-redirects: 1.15.1
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
@@ -22133,7 +22060,7 @@ packages:
     dev: false
 
   /invert-kv/1.0.0:
-    resolution: {integrity: sha1-EEqOSqym09jNFXqO+L+rLXo//bY=}
+    resolution: {integrity: sha512-xgs2NH9AE66ucSq4cNG1nhSFghr5l6tdL15Pk+jl46bmmBapgoaY/AacXyaDznAqmGL99TiLSQgO/XazFSKYeQ==}
     engines: {node: '>=0.10.0'}
 
   /invert-kv/3.0.1:
@@ -23024,13 +22951,13 @@ packages:
       '@types/lodash': 4.14.182
       '@types/node': 18.7.4
       '@types/ws': 7.4.7
-      JSONStream: 1.3.5
       commander: 2.20.3
       delay: 5.0.0
       es6-promisify: 5.0.0
       eyes: 0.1.8
       isomorphic-ws: 4.0.1_ws@7.5.7
       json-stringify-safe: 5.0.1
+      JSONStream: 1.3.5
       lodash: 4.17.21
       uuid: 3.4.0
       ws: 7.5.7
@@ -23220,7 +23147,7 @@ packages:
       parse5: 7.0.0
       saxes: 6.0.0
       symbol-tree: 3.2.4
-      tough-cookie: 4.0.0
+      tough-cookie: 4.1.2
       w3c-hr-time: 1.0.2
       w3c-xmlserializer: 3.0.0
       webidl-conversions: 7.0.0
@@ -29988,13 +29915,14 @@ packages:
       psl: 1.8.0
       punycode: 2.1.1
 
-  /tough-cookie/4.0.0:
-    resolution: {integrity: sha512-tHdtEpQCMrc1YLrMaqXXcj6AxhYi/xgit6mZu1+EDWUn+qhUf8wMQoFIy9NXuq23zAwtcB0t/MjACGR18pcRbg==}
+  /tough-cookie/4.1.2:
+    resolution: {integrity: sha512-G9fqXWoYFZgTc2z8Q5zaHy/vJMjm+WV0AkAeHxVCQiEB1b+dGvWzFW6QV07cY5jQ5gRkeid2qIkzkxUnmoQZUQ==}
     engines: {node: '>=6'}
     dependencies:
       psl: 1.8.0
       punycode: 2.1.1
-      universalify: 0.1.2
+      universalify: 0.2.0
+      url-parse: 1.5.10
     dev: false
 
   /tr46/0.0.3:
@@ -30086,45 +30014,7 @@ packages:
       yargs-parser: 21.0.1
     dev: false
 
-<<<<<<< HEAD
-  /ts-node/10.9.1_56lxibevgiknxnszxlskatlj6e:
-=======
-  /ts-node/10.8.1_@types+node@18.7.4:
-    resolution: {integrity: sha512-Wwsnao4DQoJsN034wePSg5nZiw4YKXf56mPIAeD6wVmiv+RytNSWqc2f3fKvcUoV+Yn2+yocD71VOfQHbmVX4g==}
-    hasBin: true
-    peerDependencies:
-      '@swc/core': '>=1.2.50'
-      '@swc/wasm': '>=1.2.50'
-      '@types/node': '*'
-      typescript: '>=2.7'
-    peerDependenciesMeta:
-      '@swc/core':
-        optional: true
-      '@swc/wasm':
-        optional: true
-      '@types/node':
-        optional: true
-      typescript:
-        optional: true
-    dependencies:
-      '@cspotcode/source-map-support': 0.8.1
-      '@tsconfig/node10': 1.0.9
-      '@tsconfig/node12': 1.0.11
-      '@tsconfig/node14': 1.0.3
-      '@tsconfig/node16': 1.0.3
-      '@types/node': 18.7.4
-      acorn: 8.7.1
-      acorn-walk: 8.2.0
-      arg: 4.1.3
-      create-require: 1.1.1
-      diff: 4.0.2
-      make-error: 1.3.6
-      v8-compile-cache-lib: 3.0.1
-      yn: 3.1.1
-    dev: false
-
   /ts-node/10.9.1_@types+node@18.7.4:
->>>>>>> upstream/develop
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
     peerDependencies:
@@ -30156,7 +30046,6 @@ packages:
       make-error: 1.3.6
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    dev: true
 
   /ts-node/10.9.1_wpukp7hxn43nhdyg7ehccz4cfe:
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
@@ -30191,6 +30080,7 @@ packages:
       typescript: 4.8.1-rc
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
+    dev: true
 
   /ts-node/10.9.1_z5pvwnlowdvjz4pctvowf2rhw4:
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
@@ -30838,6 +30728,11 @@ packages:
     engines: {node: '>= 4.0.0'}
     dev: false
 
+  /universalify/0.2.0:
+    resolution: {integrity: sha512-CJ1QgKmNg3CwvAv/kOFmtnEN05f0D/cn9QntgNOQlQF9dgvVTHj3t+8JPdjqawCHk7V/KA+fbUqzZ9XWhcqPUg==}
+    engines: {node: '>= 4.0.0'}
+    dev: false
+
   /universalify/1.0.0:
     resolution: {integrity: sha512-rb6X1W158d7pRQBg5gkR8uPaSfiids68LTJQYOtEUhoJUWBdaQHsuT/EUduxXYxcrt4r5PJ4fuHW1MHT6p0qug==}
     engines: {node: '>= 10.0.0'}
@@ -31333,7 +31228,6 @@ packages:
   /vscode-uri/3.0.3:
     resolution: {integrity: sha512-EcswR2S8bpR7fD0YPeS7r2xXExrScVMxg4MedACaWHEtx9ftCF/qHG1xGkolzTPcEmjTavCQgbVzHUIdTMzFGA==}
 
-<<<<<<< HEAD
   /w3c-hr-time/1.0.2:
     resolution: {integrity: sha512-z8P5DvDNjKDoFIHK7q8r8lackT6l+jo/Ye3HOle7l9nICP9lf1Ci25fy9vHd0JOWewkIFzXIEig3TdKT7JQ5fQ==}
     dependencies:
@@ -31347,22 +31241,6 @@ packages:
       xml-name-validator: 4.0.0
     dev: false
 
-  /wait-on/6.0.0_debug@4.3.2:
-    resolution: {integrity: sha512-tnUJr9p5r+bEYXPUdRseolmz5XqJTTj98JgOsfBn7Oz2dxfE2g3zw1jE+Mo8lopM3j3et/Mq1yW7kKX6qw7RVw==}
-    engines: {node: '>=10.0.0'}
-    hasBin: true
-    dependencies:
-      axios: 0.21.1_debug@4.3.2
-      joi: 17.6.0
-      lodash: 4.17.21
-      minimist: 1.2.6
-      rxjs: 7.5.5
-    transitivePeerDependencies:
-      - debug
-    dev: false
-
-=======
->>>>>>> upstream/develop
   /walker/1.0.8:
     resolution: {integrity: sha512-ts/8E8l5b7kY0vlWLewOkDXMmPdLcVV4GmOQLyxuSswIJsweeFZtAsMF7k1Nszz+TYBQrlYRmzOnr398y1JemQ==}
     dependencies:
@@ -33049,12 +32927,12 @@ packages:
     name: wyvern-js
     version: 3.2.0
     dependencies:
-      0x.js: 0.29.2
       '@0xproject/abi-gen': 0.1.2
       '@0xproject/assert': 0.0.11
       '@0xproject/json-schemas': 0.7.24
       '@0xproject/utils': 0.1.3
       '@0xproject/web3-wrapper': 0.1.14
+      0x.js: 0.29.2
       bn.js: 4.12.0
       ethereumjs-abi: github.com/ProjectWyvern/ethereumjs-abi/3d2d89641a6ad5984929b6ca4b646452ec74f73d
       ethereumjs-util: 5.2.1
@@ -33070,7 +32948,6 @@ packages:
     name: wyvern-js
     version: 3.2.0
     dependencies:
-      0x.js: 0.29.2
       '@0xproject/abi-gen': 0.1.7
       '@0xproject/assert': 0.0.11
       '@0xproject/json-schemas': 0.7.24
@@ -33079,6 +32956,7 @@ packages:
       '@0xproject/web3-wrapper': 0.1.14
       '@types/lodash': 4.14.182
       '@types/node': 18.7.4
+      0x.js: 0.29.2
       awesome-typescript-loader: 3.5.0_typescript@2.9.2
       bn.js: 4.12.0
       ethereumjs-abi: github.com/ProjectWyvern/ethereumjs-abi/3d2d89641a6ad5984929b6ca4b646452ec74f73d
