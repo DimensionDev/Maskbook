@@ -8,7 +8,7 @@ import {
     FungibleTokenSecurity,
     FungibleToken,
     FungibleAsset,
-    FungibleTokenSpenderAuthorization,
+    FungibleTokenSpender,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { AuthorizationAPI, FungibleTokenAPI, TokenListAPI } from '@masknet/web3-providers'
@@ -66,11 +66,11 @@ export class HubStateFungibleClient<ChainId, SchemaType> extends HubStateBaseCli
         throw new Error('Method not implemented.')
     }
 
-    async getFungibleTokenApprovedSpenders(
+    async getFungibleTokenSpenders(
         chainId: ChainId,
         account: string,
         initial?: HubOptions<ChainId>,
-    ): Promise<Array<FungibleTokenSpenderAuthorization<ChainId, SchemaType>>> {
+    ): Promise<Array<FungibleTokenSpender<ChainId, SchemaType>>> {
         const options = this.getOptions(initial, {
             chainId,
             account,

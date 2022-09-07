@@ -1,13 +1,4 @@
-import { memoize } from 'lodash-unified'
-import type { Subscription } from 'use-subscription'
-import {
-    HubState as Web3HubState,
-    Hub,
-    HubOptions,
-    SourceType,
-    CurrencyType,
-    createPredicate,
-} from '@masknet/web3-shared-base'
+import { HubOptions, SourceType, CurrencyType, createPredicate } from '@masknet/web3-shared-base'
 
 export class HubStateBaseClient<ChainId> {
     constructor(

@@ -5,12 +5,7 @@ import { ActionButton } from '@masknet/theme'
 import type { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 import { useERC20TokenApproveCallback } from '@masknet/plugin-infra/web3-evm'
 import { useAccount, useWeb3State, useNetworkDescriptor, useWeb3Hub } from '@masknet/plugin-infra/web3'
-import {
-    NetworkPluginID,
-    NetworkDescriptor,
-    isGreaterThan,
-    FungibleTokenSpenderAuthorization,
-} from '@masknet/web3-shared-base'
+import { NetworkPluginID, NetworkDescriptor, isGreaterThan, FungibleTokenSpender } from '@masknet/web3-shared-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { useI18N } from '../locales'
 import { useStyles } from './useStyles'
@@ -47,7 +42,7 @@ export function ApprovalTokenContent({ chainId }: { chainId: ChainId }) {
 
 interface ApprovalTokenItemProps {
     chainId: ChainId
-    spender: FungibleTokenSpenderAuthorization<ChainId, SchemaType>
+    spender: FungibleTokenSpender<ChainId, SchemaType>
     networkDescriptor?: NetworkDescriptor<ChainId, NetworkType>
 }
 

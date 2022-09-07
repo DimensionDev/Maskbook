@@ -1,11 +1,7 @@
 import urlcat from 'urlcat'
 import { omit } from 'lodash-unified'
 import { ChainId, chainResolver, SchemaType } from '@masknet/web3-shared-evm'
-import {
-    isSameAddress,
-    NonFungibleContractSpenderAuthorization,
-    FungibleTokenSpenderAuthorization,
-} from '@masknet/web3-shared-base'
+import { isSameAddress, NonFungibleContractSpender, FungibleTokenSpender } from '@masknet/web3-shared-base'
 import type { AuthorizationAPI } from '../types'
 import { getAllMaskDappContractInfo, resolveNetworkOnRabby } from './helpers'
 import { NON_FUNGIBLE_TOKEN_API_URL, FUNGIBLE_TOKEN_API_URL } from './constants'
@@ -58,7 +54,7 @@ export class RabbyAPI implements AuthorizationAPI.Provider<ChainId> {
                 if (a.isMaskDapp && !b.isMaskDapp) return -1
                 if (!a.isMaskDapp && b.isMaskDapp) return 1
                 return Number(b.amount) - Number(a.amount)
-            }) as Array<NonFungibleContractSpenderAuthorization<ChainId, SchemaType>>
+            }) as Array<NonFungibleContractSpender<ChainId, SchemaType>>
     }
 
     async getFungibleTokenSpenders(chainId: ChainId, account: string) {
@@ -111,6 +107,6 @@ export class RabbyAPI implements AuthorizationAPI.Provider<ChainId> {
                 if (a.isMaskDapp && !b.isMaskDapp) return -1
                 if (!a.isMaskDapp && b.isMaskDapp) return 1
                 return b.exposure_usd - a.exposure_usd
-            }) as Array<FungibleTokenSpenderAuthorization<ChainId, SchemaType>>
+            }) as Array<FungibleTokenSpender<ChainId, SchemaType>>
     }
 }

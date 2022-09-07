@@ -25,7 +25,7 @@ class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
                 [SourceType.Solana]: SolanaFungible,
                 [SourceType.CoinGecko]: CoinGeckoPriceSolana,
             },
-            [SolanaFungible],
+            [SolanaFungible, CoinGeckoPriceSolana],
             initial,
         )
     }

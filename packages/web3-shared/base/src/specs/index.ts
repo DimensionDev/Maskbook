@@ -482,7 +482,7 @@ export interface NonFungibleAsset<ChainId, SchemaType> extends NonFungibleToken<
 /**
  * Authorization about a fungible token.
  */
-export interface FungibleTokenSpenderAuthorization<ChainId, SchemaType> {
+export interface FungibleTokenSpender<ChainId, SchemaType> {
     tokenInfo: Pick<FungibleToken<ChainId, SchemaType>, 'address' | 'logoURL' | 'symbol' | 'name'>
     /** spender address */
     address: string
@@ -497,7 +497,7 @@ export interface FungibleTokenSpenderAuthorization<ChainId, SchemaType> {
 /**
  * Authorization about a non-fungible contract.
  */
-export interface NonFungibleContractSpenderAuthorization<ChainId, SchemaType> {
+export interface NonFungibleContractSpender<ChainId, SchemaType> {
     amount: string
     contract: Pick<NonFungibleTokenContract<ChainId, SchemaType>, 'name' | 'address'>
     address: string
@@ -970,7 +970,7 @@ export interface HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions = Hu
         chainId: ChainId,
         account: string,
         initial?: Web3HubOptions,
-    ) => Promise<Array<FungibleTokenSpenderAuthorization<ChainId, SchemaType>>>
+    ) => Promise<Array<FungibleTokenSpender<ChainId, SchemaType>>>
     /** Get a fungible asset. */
     getFungibleAsset?: (
         address: string,
@@ -1036,7 +1036,7 @@ export interface HubNonFungible<ChainId, SchemaType, GasOption, Web3HubOptions =
         chainId: ChainId,
         account: string,
         initial?: Web3HubOptions,
-    ) => Promise<Array<NonFungibleContractSpenderAuthorization<ChainId, SchemaType>>>
+    ) => Promise<Array<NonFungibleContractSpender<ChainId, SchemaType>>>
     /** Get a non-fungible asset. */
     getNonFungibleAsset?: (
         address: string,

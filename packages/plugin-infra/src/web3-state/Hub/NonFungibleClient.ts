@@ -14,7 +14,7 @@ import {
     NonFungibleTokenContract,
     NonFungibleTokenSecurity,
     NonFungibleToken,
-    NonFungibleContractSpenderAuthorization,
+    NonFungibleContractSpender,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { AuthorizationAPI, NonFungibleTokenAPI, TokenListAPI } from '@masknet/web3-providers'
@@ -212,12 +212,15 @@ export class HubStateNonFungibleClient<ChainId, SchemaType> extends HubStateBase
         throw new Error('Method not implemented.')
     }
 
-    async getNonFungibleApprovedContracts(
+    async getNonFungibleTokenSpenders(
         chainId: ChainId,
         account: string,
         initial?: HubOptions<ChainId>,
-    ): Promise<Array<NonFungibleContractSpenderAuthorization<ChainId, SchemaType>>> {
-        const options = this.getOptions(initial)
+    ): Promise<Array<NonFungibleContractSpender<ChainId, SchemaType>>> {
+        const options = this.getOptions(initial, {
+            chainId,
+            account,
+        })
         const providers = this.getProviders(initial)
         return attemptUntil(
             providers.map((x) => () => x.getNonFungibleTokenSpenders?.(options.chainId, options.account)),
