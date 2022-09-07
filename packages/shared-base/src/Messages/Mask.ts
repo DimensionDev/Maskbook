@@ -134,8 +134,7 @@ export type ProfileCardEvent =
     | {
           open: true
           userId: string
-          x: number
-          y: number
+          badgeBounding: DOMRect
       }
 
 export type CheckSecurityDialogRequest =
