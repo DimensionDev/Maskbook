@@ -2,7 +2,7 @@ import { DataProvider } from '@masknet/public-api'
 import { HubIndicator, HubOptions, TokenType } from '@masknet/web3-shared-base'
 import { ChainId, getCoinGeckoConstants, isNativeTokenAddress, isValidAddress } from '@masknet/web3-shared-evm'
 import { uniq, uniqBy } from 'lodash-unified'
-import { getCommunityLink, isMirroredKeyword, resolveChainId, resolveCoinAddress } from '../../CoinMarketCap/helper'
+import { getCommunityLink, isMirroredKeyword, resolveChainId, resolveCoinAddress } from '../../cmc/helper'
 import { fetchJSON } from '../../helpers'
 import type { PriceAPI, TrendingAPI } from '../../types'
 import {
