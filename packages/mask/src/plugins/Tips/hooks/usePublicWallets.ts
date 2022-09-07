@@ -36,7 +36,7 @@ export function usePublicWallets(personaPubkey?: string): TipsAccount[] {
                 .sort((a, z) => {
                     if (!a.last_checked_at || !z.last_checked_at) return 1
                     if (isGreaterThan(a.last_checked_at, z.last_checked_at)) {
-                        return isSameAddress(z.address, TipsSetting?.defaultAddress) ? 1 : -1
+                        return isSameAddress(z.address, TipsSetting?.defaultAddress) ? -1 : 1
                     }
 
                     return isSameAddress(a.address, TipsSetting?.defaultAddress) ? -1 : 1
