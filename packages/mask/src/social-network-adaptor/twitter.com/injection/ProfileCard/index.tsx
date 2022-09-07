@@ -100,11 +100,22 @@ function ProfileCardHolder() {
             const { userId, badgeBounding: bounding } = event
             setTwitterId(userId)
             const reachedBottomBoundary = bounding.top + bounding.height + CARD_HEIGHT > window.innerHeight
-            const reachedLeftBoundary = bounding.left - CARD_WIDTH / 2 < 0
-            const pageOffset = document.scrollingElement?.scrollTop || 0
-            const x = reachedLeftBoundary ? 0 : bounding.left + bounding.width / 2 - CARD_WIDTH / 2
-            const y = reachedBottomBoundary ? bounding.top - CARD_HEIGHT : bounding.top + bounding.height
+            let x = Math.max(bounding.left + bounding.width / 2 - CARD_WIDTH / 2, 0)
+            let y = bounding.top + bounding.height
+            if (reachedBottomBoundary) {
+                const reachedTopBoundary = bounding.top < CARD_HEIGHT
+                if (reachedTopBoundary) {
+                    x = bounding.left + bounding.width
+                    y = Math.min(window.innerHeight - CARD_HEIGHT, Math.max(bounding.top - CARD_HEIGHT / 2))
+                } else {
+                    y = bounding.top - CARD_HEIGHT
+                }
+            }
+            // Prefer to show top left corner of the card.
+            x = Math.max(0, x)
+            y = Math.max(0, y)
 
+            const pageOffset = document.scrollingElement?.scrollTop || 0
             const newLeft = x
             const newTop = y + pageOffset
             showProfileCard({
