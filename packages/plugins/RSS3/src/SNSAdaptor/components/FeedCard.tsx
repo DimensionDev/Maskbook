@@ -60,6 +60,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     media: {
         marginLeft: theme.spacing(1),
+        width: 64,
+        height: 64,
         flexShrink: 0,
     },
     action: {

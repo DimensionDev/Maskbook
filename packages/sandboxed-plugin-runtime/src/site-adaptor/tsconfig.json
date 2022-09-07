@@ -10,6 +10,7 @@
     { "path": "../runtime" },
     { "path": "../types" },
     { "path": "../peer-dependencies" },
+    { "path": "../peer-dependencies-dom" },
     { "path": "../utils" },
     { "path": "../../../shared-base" }
   ]

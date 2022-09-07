@@ -34,6 +34,7 @@ export async function sendReportScam(result: ScamResult) {
 
 export async function detectScam(post: PostDetail) {
     initDetector()
+    await detector?.update()
     const result = await detector?.detectScam(post)
     return result
 }

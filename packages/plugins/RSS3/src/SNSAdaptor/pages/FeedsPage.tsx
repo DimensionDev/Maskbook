@@ -42,10 +42,10 @@ export const FeedsPage = memo(function FeedsPage({ address, disableViewDetails, 
 
     return (
         <Box p={2} boxSizing="border-box" {...rest}>
-            {feeds.map((feed) => {
+            {feeds.map((feed, index) => {
                 return (
                     <FeedCard
-                        key={feed.timestamp}
+                        key={index}
                         className={disableViewDetails ? classes.normalCard : undefined}
                         onSelect={setSelectedFeed}
                         feed={feed}

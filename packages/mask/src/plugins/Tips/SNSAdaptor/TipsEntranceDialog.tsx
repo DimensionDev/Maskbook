@@ -13,12 +13,11 @@ import { NetworkPluginID, isSameAddress, isGreaterThan } from '@masknet/web3-sha
 import { DialogContent, DialogActions, Avatar, Typography } from '@mui/material'
 import { delay } from '@dimensiondev/kit'
 import { sortBy, last } from 'lodash-unified'
-import { useCopyToClipboard, useAsyncFn, useAsyncRetry } from 'react-use'
+import { useCopyToClipboard, useAsyncFn, useAsyncRetry, useUpdateEffect } from 'react-use'
 import { useCallback, useMemo, useState, useEffect } from 'react'
 import Services from '../../../extension/service'
 import { useProvedWallets } from '../hooks/useProvedWallets'
 import { useI18N } from '../locales'
-import { getNowTime } from '../utils'
 import { VerifyAlertLine } from './components/VerifyAlertLine'
 import { WalletsByNetwork } from './components/WalletsByNetwork'
 import { Icons } from '@masknet/icons'
@@ -50,6 +49,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: '12px 16px',
         position: 'relative',
         boxSizing: 'border-box',
+        minHeight: 544,
     },
     btnContainer: {
         position: 'absolute',
@@ -163,13 +163,13 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
 
             showSnackbar(t.tip_persona_sign_success(), {
                 variant: 'success',
-                message: getNowTime(),
+                message: t.tip_default_set_successfully_description(),
                 autoHideDuration: 2000,
             })
         } catch {
             showSnackbar(t.tip_persona_sign_error(), {
                 variant: 'error',
-                message: getNowTime(),
+                message: t.tip_default_set_failed_description(),
                 autoHideDuration: 2000,
             })
         }
@@ -201,6 +201,11 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     useEffect(() => {
         return MaskMessages.events.ownPersonaChanged.on(retryCurrentPersona)
     }, [retryCurrentPersona])
+
+    // reset pending default wallet after dialog open changed
+    useUpdateEffect(() => {
+        setPendingDefault(undefined)
+    }, [open])
 
     return (
         <InjectedDialog

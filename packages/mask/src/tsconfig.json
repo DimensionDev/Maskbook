@@ -30,7 +30,6 @@
     { "path": "../../plugins/Wallet" },
     { "path": "../../plugins/GoPlusSecurity" },
     { "path": "../../plugins/DAO" },
-    { "path": "../../plugins/FileService" },
     { "path": "../../plugins/EVM" },
     { "path": "../../plugins/Flow" },
     { "path": "../../plugins/Solana" },

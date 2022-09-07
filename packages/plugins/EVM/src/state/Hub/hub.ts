@@ -76,7 +76,7 @@ class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
                 [SourceType.R2D2]: R2D2,
                 [SourceType.CF]: CF,
             },
-            [DeBank, Zerion, Rabby, R2D2],
+            [DeBank, Zerion, Rabby, R2D2, CF],
             initial,
         )
     }
