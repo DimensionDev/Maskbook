@@ -107,13 +107,6 @@ export function PluginSettingsDialog() {
                 titleTail={
                     <Icons.WalletUnderTabs size={24} onClick={openPopupWindow} className={classes.titleTailButton} />
                 }
-                // titleTabs={
-                //     <MaskTabList variant="base" onChange={onChange} aria-label="SettingTabs">
-                //         {tabs.map((tab) => (
-                //             <Tab key={tab.id} label={tab.label} value={tab.id} />
-                //         ))}
-                //     </MaskTabList>
-                // }
                 titleBarIconStyle="back">
                 <DialogContent className={classes.content}>{component}</DialogContent>
             </InjectedDialog>
