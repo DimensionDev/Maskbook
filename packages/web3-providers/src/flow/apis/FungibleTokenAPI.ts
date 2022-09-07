@@ -1,3 +1,4 @@
+import { ChainId as ChainId_EVM } from '@masknet/web3-shared-evm'
 import {
     ChainId,
     createClient,
@@ -15,9 +16,8 @@ import {
     HubOptions,
     HubIndicator,
     createIndicator,
-    TokenList,
 } from '@masknet/web3-shared-base'
-import { CoinGecko } from '@masknet/web3-providers'
+import { CoinGeckoPriceEVM } from '@masknet/web3-providers'
 import type { FungibleTokenAPI, TokenListAPI } from '../../types'
 
 async function getTokenBalance(
@@ -63,7 +63,9 @@ async function getTokenBalance(
 
 async function getAssetFUSD(chainId: ChainId, account: string) {
     const { FUSD_ADDRESS = '', FUNGIBLE_TOKEN_ADDRESS = '' } = getTokenConstants(chainId)
-    const price = await CoinGecko.getTokenPriceByCoinId('usd-coin', CurrencyType.USD)
+    const price = await CoinGeckoPriceEVM.getFungibleTokenPrice(ChainId_EVM.Mainnet, 'usd-coin', {
+        currencyType: CurrencyType.USD,
+    })
     const balance = await getTokenBalance(chainId, account, 8, {
         fungibleTokenAddress: FUNGIBLE_TOKEN_ADDRESS,
         tokenAddress: FUSD_ADDRESS,
@@ -88,7 +90,9 @@ async function getAssetFUSD(chainId: ChainId, account: string) {
 
 async function getAssetFLOW(chainId: ChainId, account: string) {
     const { FLOW_ADDRESS = '', FUNGIBLE_TOKEN_ADDRESS = '' } = getTokenConstants(chainId)
-    const price = await CoinGecko.getTokenPriceByCoinId('flow', CurrencyType.USD)
+    const price = await CoinGeckoPriceEVM.getFungibleTokenPrice(ChainId_EVM.Mainnet, 'flow', {
+        currencyType: CurrencyType.USD,
+    })
     const balance = await getTokenBalance(chainId, account, 8, {
         fungibleTokenAddress: FUNGIBLE_TOKEN_ADDRESS,
         tokenAddress: FLOW_ADDRESS,
@@ -114,7 +118,9 @@ async function getAssetFLOW(chainId: ChainId, account: string) {
 
 async function getAssetTether(chainId: ChainId, account: string) {
     const { TETHER_ADDRESS = '', FUNGIBLE_TOKEN_ADDRESS = '' } = getTokenConstants(chainId)
-    const price = await CoinGecko.getTokenPriceByCoinId('tether', CurrencyType.USD)
+    const price = await CoinGeckoPriceEVM.getFungibleTokenPrice(ChainId_EVM.Mainnet, 'tether', {
+        currencyType: CurrencyType.USD,
+    })
     const balance = await getTokenBalance(chainId, account, 8, {
         fungibleTokenAddress: FUNGIBLE_TOKEN_ADDRESS,
         tokenAddress: TETHER_ADDRESS,

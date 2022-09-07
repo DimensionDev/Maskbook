@@ -14,7 +14,7 @@ import {
 import { ChainId, SchemaType, createNativeToken } from '@masknet/web3-shared-solana'
 import { memoizePromise } from '@dimensiondev/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { CoinGeckoAPI } from '../../coingecko'
+import { CoinGeckoPriceSolanaAPI } from '../../coingecko'
 import type { FungibleTokenAPI, TokenListAPI } from '../../types'
 import { RAYDIUM_TOKEN_LIST, SPL_TOKEN_PROGRAM_ID } from '../constants'
 import { createFungibleAsset, createFungibleToken, requestRPC } from '../helpers'
@@ -49,7 +49,7 @@ const fetchTokenList = memoizePromise(
 export class SolanaFungibleAPI
     implements TokenListAPI.Provider<ChainId, SchemaType>, FungibleTokenAPI.Provider<ChainId, SchemaType>
 {
-    private coingecko = new CoinGeckoAPI()
+    private coingecko = new CoinGeckoPriceSolanaAPI()
 
     private async getSplTokenList(chainId: ChainId, account: string) {
         const data = await requestRPC<GetProgramAccountsResponse>(chainId, {
@@ -92,8 +92,9 @@ export class SolanaFungibleAPI
     }
 
     async getAsset(account: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId, HubIndicator> = {}) {
-        const priceData = await this.coingecko.getTokensPrice(['solana'])
-        const price = priceData.solana
+        const price = await this.coingecko.getFungibleTokenPrice(chainId, 'solana', {
+            currencyType: CurrencyType.USD,
+        })
 
         const data = await requestRPC<GetAccountInfoResponse>(chainId, {
             method: 'getAccountInfo',

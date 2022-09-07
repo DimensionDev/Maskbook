@@ -184,6 +184,7 @@ export const resolveSourceName = createLookupTableResolver<SourceType, string>(
         [SourceType.Solana]: 'Solana',
         [SourceType.R2D2]: 'R2D2',
         [SourceType.Rabby]: 'Rabby',
+        [SourceType.CoinGecko]: 'CoinGecko',
     },
     (providerType) => {
         throw new Error(`Unknown provider type: ${providerType}.`)

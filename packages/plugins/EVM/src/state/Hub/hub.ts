@@ -19,7 +19,8 @@ import {
     Gem,
     Zora,
     R2D2,
-    CoinGecko,
+    CoinGeckoPriceEVM,
+    PriceAPI,
 } from '@masknet/web3-providers'
 import {
     SourceType,
@@ -33,7 +34,6 @@ import {
     ChainId,
     chainResolver,
     formatEthereumAddress,
-    getCoinGeckoConstants,
     getTokenAssetBaseURLConstants,
     isNativeTokenAddress,
     SchemaType,
@@ -80,13 +80,15 @@ class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
         return this.getPredicateProviders<
             AuthorizationAPI.Provider<ChainId> &
                 FungibleTokenAPI.Provider<ChainId, SchemaType> &
-                TokenListAPI.Provider<ChainId, SchemaType>
+                TokenListAPI.Provider<ChainId, SchemaType> &
+                PriceAPI.Provider<ChainId>
         >(
             {
                 [SourceType.DeBank]: DeBank,
                 [SourceType.Zerion]: Zerion,
                 [SourceType.Rabby]: Rabby,
                 [SourceType.R2D2]: R2D2,
+                [SourceType.CoinGecko]: CoinGeckoPriceEVM,
             },
             [DeBank, Zerion, Rabby, R2D2],
             initial,
@@ -114,22 +116,6 @@ class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
 
         // load from remote
         return ERC20_TOKEN_ASSET_BASE_URI.map((x) => `${x}/${formattedAddress}/logo.png/quality=85`)
-    }
-
-    override async getFungibleTokenPrice(
-        chainId: ChainId,
-        address: string,
-        initial?: HubOptions<ChainId>,
-    ): Promise<number> {
-        const options = this.getOptions(initial, {
-            chainId,
-        })
-        const { PLATFORM_ID = '', COIN_ID = '' } = getCoinGeckoConstants(options.chainId)
-
-        if (isNativeTokenAddress(address)) {
-            return CoinGecko.getTokenPriceByCoinId(COIN_ID, options.currencyType)
-        }
-        return CoinGecko.getTokenPrice(PLATFORM_ID, address, options.currencyType)
     }
 }
 

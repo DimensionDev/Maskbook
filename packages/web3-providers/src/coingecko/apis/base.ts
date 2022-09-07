@@ -1,5 +1,8 @@
-import { fetchJSON, TrendingAPI } from '../'
-import { COINGECKO_URL_BASE } from './constants'
+import urlcat from 'urlcat'
+import { CurrencyType, Price } from '@masknet/web3-shared-base'
+import { fetchJSON } from '../../helpers'
+import type { TrendingAPI } from '../../types'
+import { COINGECKO_URL_BASE } from '../constants'
 
 // #region get currency
 export async function getAllCurrencies() {
@@ -125,5 +128,39 @@ export async function getPriceStats(coinId: string, currencyId: string, days: nu
     }>(`${COINGECKO_URL_BASE}/coins/${coinId}/market_chart?${params.toString()}`, {
         cache: 'default',
     })
+}
+// #endregion
+
+// #region get token price
+export async function getTokenPrice(platform_id: string, address: string, currencyType = CurrencyType.USD) {
+    const price = await getTokenPrices(platform_id, [address], currencyType)
+
+    return Number(price[address.toLowerCase()][currencyType]) ?? 0
+}
+
+export async function getTokensPrice(listOfAddress: string[], currencyType = CurrencyType.USD) {
+    const requestPath = `${COINGECKO_URL_BASE}/simple/price?ids=${listOfAddress}&vs_currencies=${currencyType}`
+    const response = await fetchJSON<Record<string, Record<CurrencyType, number>>>(requestPath)
+
+    return Object.fromEntries(
+        Object.keys(response).map((address) => [address, response[address.toLowerCase()][currencyType]]),
+    )
+}
+
+export async function getTokenPrices(platform_id: string, contractAddresses: string[], currency = CurrencyType.USD) {
+    const addressList = contractAddresses.join(',')
+    const requestPath = urlcat(COINGECKO_URL_BASE, '/simple/token_price/:platform_id', {
+        platform_id,
+        ['contract_addresses']: addressList,
+        ['vs_currencies']: currency,
+    })
+
+    return fetchJSON<Record<string, Price>>(requestPath)
+}
+
+export async function getTokenPriceByCoinId(coin_id: string, currency = CurrencyType.USD) {
+    const requestPath = urlcat(`${COINGECKO_URL_BASE}/simple/price`, { ids: coin_id, ['vs_currencies']: currency })
+    const price = await fetchJSON<Record<string, Record<CurrencyType, number>>>(requestPath)
+    return price[coin_id][currency]
 }
 // #endregion

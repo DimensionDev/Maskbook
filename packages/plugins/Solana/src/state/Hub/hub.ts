@@ -1,23 +1,16 @@
 import { assignIn } from 'lodash-unified'
 import { HubStateClient, HubStateFungibleClient, HubStateNonFungibleClient } from '@masknet/plugin-infra/web3'
 import {
-    CoinGecko,
+    CoinGeckoPriceSolana,
     MagicEden,
     FungibleTokenAPI,
     NonFungibleTokenAPI,
     SolanaFungible,
     SolanaNonFungible,
+    PriceAPI,
 } from '@masknet/web3-providers'
-import {
-    CurrencyType,
-    GasOptionType,
-    HubOptions,
-    isSameAddress,
-    Pageable,
-    SourceType,
-    Transaction,
-} from '@masknet/web3-shared-base'
-import { ChainId, GasOption, getCoinGeckoConstants, getTokenConstants, SchemaType } from '@masknet/web3-shared-solana'
+import { CurrencyType, GasOptionType, HubOptions, Pageable, SourceType, Transaction } from '@masknet/web3-shared-base'
+import { ChainId, GasOption, SchemaType } from '@masknet/web3-shared-solana'
 import type { SolanaHub } from './types'
 
 class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
@@ -27,29 +20,14 @@ class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
         // only the first page is available
         if ((options.indicator ?? 0) > 0) return []
 
-        return this.getPredicateProviders<FungibleTokenAPI.Provider<ChainId, SchemaType>>(
+        return this.getPredicateProviders<FungibleTokenAPI.Provider<ChainId, SchemaType> | PriceAPI.Provider<ChainId>>(
             {
                 [SourceType.Solana]: SolanaFungible,
+                [SourceType.CoinGecko]: CoinGeckoPriceSolana,
             },
             [SolanaFungible],
             initial,
         )
-    }
-
-    override async getFungibleTokenPrice(
-        chainId: ChainId,
-        address: string,
-        initial?: HubOptions<ChainId>,
-    ): Promise<number> {
-        const options = this.getOptions(initial)
-        const { PLATFORM_ID = '', COIN_ID = '' } = getCoinGeckoConstants(options.chainId)
-        const { SOL_ADDRESS } = getTokenConstants(options.chainId)
-
-        if (isSameAddress(address, SOL_ADDRESS)) {
-            return CoinGecko.getTokenPriceByCoinId(COIN_ID, options.currencyType)
-        }
-
-        return CoinGecko.getTokenPrice(PLATFORM_ID, address, options.currencyType)
     }
 }
 
