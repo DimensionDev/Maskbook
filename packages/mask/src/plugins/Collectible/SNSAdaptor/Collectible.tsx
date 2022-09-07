@@ -12,7 +12,6 @@ import { SupportedProvider } from '../constants'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectiblePaper } from './CollectiblePaper'
 import { LinkingAvatar } from './LinkingAvatar'
-import { ActionBar } from './OpenSea/ActionBar'
 import { AboutTab } from './Tabs/AboutTab'
 import { ActivityTab } from './Tabs/ActivityTab'
 import { DetailTab } from './Tabs/DetailTab'
@@ -259,7 +258,6 @@ export function Collectible(props: CollectibleProps) {
                     </Typography>
                 </Box>
             )}
-            <ActionBar />
         </>
     )
 }
