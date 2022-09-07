@@ -1,4 +1,5 @@
 import { HubStateClient } from '@masknet/plugin-infra/web3'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import {
     CoinGecko,
     FungibleTokenAPI,
@@ -21,6 +22,8 @@ import {
     SourceType,
     Transaction,
     attemptUntil,
+    createPageable,
+    createIndicator,
 } from '@masknet/web3-shared-base'
 import { ChainId, GasOption, getCoinGeckoConstants, getTokenConstants, SchemaType } from '@masknet/web3-shared-solana'
 import type { SolanaHub } from './types'
@@ -90,27 +93,24 @@ class Hub extends HubStateClient<ChainId> implements SolanaHub {
         const options = this.getOptions(initial, {
             account,
         })
-        return SolanaFungible.getAssets(options.account, options)
+        const providers = this.getFungibleProviders(initial)
+        return attemptUntil(
+            providers.map((x) => () => x.getAssets(options.account, options)),
+            createPageable(EMPTY_LIST, createIndicator(options.indicator)),
+        )
     }
-    getNonFungibleTokens(
+    async getNonFungibleAssets(
         account: string,
         initial?: HubOptions<ChainId>,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
         const options = this.getOptions(initial, {
             account,
         })
-        try {
-            return MagicEden.getAssets(options.account, options)
-        } catch {
-            // TODO: move to web3-provider
-            return SolanaNonFungible.getAssets(options.account, options)
-        }
-    }
-    async getNonFungibleAssets(
-        account: string,
-        initial?: HubOptions<ChainId>,
-    ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
-        return this.getNonFungibleTokens(account, initial)
+        const providers = this.getNonFungibleProviders(initial)
+        return attemptUntil(
+            providers.map((x) => () => x.getAssets?.(options.account, options)),
+            createPageable(EMPTY_LIST, createIndicator(options.indicator)),
+        )
     }
     getNonFungibleCollectionsByOwner(
         account: string,

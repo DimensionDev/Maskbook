@@ -84,15 +84,6 @@ class Hub extends HubStateClient<ChainId> implements FlowHub {
         const options = this.getOptions(initial)
         return AlchemyFlow.getAsset(address, tokenId, options, ownerAddress, contractName)
     }
-    getNonFungibleTokens(
-        account: string,
-        initial?: HubOptions<ChainId>,
-    ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
-        const options = this.getOptions(initial, {
-            account,
-        })
-        return AlchemyFlow.getAssets(options.account, options)
-    }
     getFungibleTokenPrice(chainId: ChainId, address: string, initial?: HubOptions<ChainId>): Promise<number> {
         // The Flow chain is unlisted in CoinGecko.
         throw new Error('Method not implemented.')

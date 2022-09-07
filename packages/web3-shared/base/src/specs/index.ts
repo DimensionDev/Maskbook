@@ -1056,22 +1056,11 @@ export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions
         address: string,
         initial?: Web3HubOptions,
     ) => Promise<FungibleToken<ChainId, SchemaType> | undefined>
-    /** Get a non-fungible token. */
-    getNonFungibleToken?: (
-        address: string,
-        tokenId: string,
-        initial?: Web3HubOptions,
-    ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
     /** Get fungible tokens owned by the given account. */
     getFungibleTokens?: (
         account: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<FungibleToken<ChainId, SchemaType> | Error>>
-    /** Get non-fungible tokens owned by the given account. */
-    getNonFungibleTokens?: (
-        account: string,
-        initial?: Web3HubOptions,
-    ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>>
     /** Get events of a non-fungible token. */
     getNonFungibleTokenEvents?: (
         address: string,

@@ -320,7 +320,9 @@ class Hub extends HubStateClient<ChainId> implements EVM_Hub {
         account: string,
         initial?: HubOptions<ChainId>,
     ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
-        const options = this.getOptions(initial)
+        const options = this.getOptions(initial, {
+            account,
+        })
         const providers = this.getNonFungibleProviders(initial)
         return attemptUntil(
             providers.map((x) => () => x.getAssets?.(options.account, options)),
@@ -335,30 +337,10 @@ class Hub extends HubStateClient<ChainId> implements EVM_Hub {
         throw new Error('Method not implemented.')
     }
 
-    async getNonFungibleToken(
-        address: string,
-        tokenId: string,
-        initial?: HubOptions<ChainId>,
-    ): Promise<NonFungibleToken<ChainId, SchemaType> | undefined> {
-        const options = this.getOptions(initial)
-        const providers = this.getNonFungibleProviders(initial)
-        return attemptUntil(
-            providers.map((x) => () => x.getToken?.(address, tokenId, options)),
-            undefined,
-        )
-    }
-
     async getFungibleTokens(
         account: string,
         initial?: HubOptions<ChainId, HubIndicator> | undefined,
     ): Promise<Pageable<Error | FungibleToken<ChainId, SchemaType>>> {
-        throw new Error('Method not implemented.')
-    }
-
-    async getNonFungibleTokens(
-        account: string,
-        initial?: HubOptions<ChainId>,
-    ): Promise<Pageable<NonFungibleToken<ChainId, SchemaType>>> {
         throw new Error('Method not implemented.')
     }
 
