@@ -10,7 +10,7 @@
     },
     "./jsx": {
       "types": "./icon-generated-as-jsx.d.ts",
-      "default": "./generated-icon-as-jsx.js"
+      "default": "./icon-generated-as-jsx.js"
     },
     "./url": {
       "types": "./icon-generated-as-url.d.ts",

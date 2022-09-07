@@ -35,13 +35,16 @@
   },
   "dependencies": {
     "@dimensiondev/holoflows-kit": "0.9.0-20220807034934-68f04f1",
-    "@masknet/compartment": "^0.3.4",
+    "@masknet/compartment": "^0.3.8",
     "@masknet/icons": "workspace:*",
-    "@masknet/membrane": "^0.1.0",
+    "@masknet/membrane": "^0.1.3",
     "@masknet/shared-base": "workspace:*",
     "@masknet/theme": "workspace:*",
     "@masknet/typed-message": "workspace:*",
     "@masknet/web-endowments": "^0.1.1",
     "async-call-rpc": "^6.1.5"
+  },
+  "peerDependencies": {
+    "react-i18next": "^11.15.3"
   }
 }

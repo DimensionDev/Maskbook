@@ -3,6 +3,8 @@ import { SiteAdaptorInstance, SiteAdaptorPluginHost } from '@masknet/sandboxed-p
 import { Flags } from '../../shared/flags'
 import { Plugin, registerPlugin } from '@masknet/plugin-infra'
 import { createHostAPIs } from '../../shared/sandboxed-plugin/host-api'
+import { WalletMessages } from '@masknet/plugin-wallet'
+import { Children, createElement } from 'react'
 
 const { signal } = hmr(import.meta.webpackHot)
 let hot: Map<string, (hot: Promise<{ default: Plugin.SNSAdaptor.Definition }>) => void> | undefined
@@ -15,6 +17,13 @@ if (Flags.sandboxedPluginRuntime) {
     const host = new SiteAdaptorPluginHost(
         {
             ...createHostAPIs(false),
+            // TODO: implement this
+            attachCompositionMetadata(plugin, id, meta) {},
+            // TODO: implement this
+            dropCompositionMetadata(plugin, id) {},
+            closeApplicationBoardDialog() {
+                WalletMessages.events.ApplicationDialogUpdated.sendToLocal({ open: false })
+            },
         },
         process.env.NODE_ENV === 'development',
         signal,
@@ -42,11 +51,12 @@ function __builtInPluginInfraBridgeCallback__(this: SiteAdaptorPluginHost, id: s
         SNSAdaptor: {
             hotModuleReload: (reload) => hot?.set(id, reload),
             async load() {
-                return { default: worker }
+                return { default: sns }
             },
         },
     }
-    const worker: Plugin.SNSAdaptor.Definition = {
+
+    const sns: Plugin.SNSAdaptor.Definition = {
         ...base,
         init: async (signal, context) => {
             try {
@@ -55,6 +65,21 @@ function __builtInPluginInfraBridgeCallback__(this: SiteAdaptorPluginHost, id: s
             } catch (error) {
                 console.error(`[Sandboxed-plugin] Plugin ${id} stopped due to an error when starting.`, error)
             }
+        },
+        get CompositionDialogEntry() {
+            if (!instance?.CompositionEntry) return undefined
+            return {
+                label: Children.only(instance.CompositionEntry.label),
+                dialog({ onClose, open }: Plugin.SNSAdaptor.CompositionDialogEntry_DialogProps) {
+                    if (open) return createElement(instance!.CompositionEntry!.dialog as any, { onClose, open })
+                    return null
+                },
+            }
+        },
+        CompositionDialogMetadataBadgeRender(key, meta) {
+            if (!key.startsWith(id + ':')) return null
+            const k = key.slice(id.length + 1)
+            return instance!.CompositionDialogMetadataBadgeRender(k, meta)
         },
     }
     if (hot?.has(id)) hot.get(id)!(def.SNSAdaptor!.load())
