@@ -102,7 +102,7 @@ const ScamAlert = ({ result }: { result: ScamResult }) => {
         <div className={classes.root}>
             <div className={classes.scam}>
                 <Typography variant="body2" className={classes.title}>
-                    {t.alertTitle()}
+                    {t.similarProject()}
                 </Typography>
                 <List className={classes.list}>
                     <ListItemButton>
