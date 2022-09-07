@@ -1,9 +1,9 @@
 export function isManifest(_manifest: any): _manifest is Manifest {
-    // TODO: validate with JSON schema mask-plugin-infra /packages/mainfest/plugin.schema.json
+    // TODO: validate with JSON schema mask-plugin-infra /packages/manifest/plugin.schema.json
     return true
 }
 
-// TODO: Those type definitions should be moved to mask-plugin-infra /packages/mainfest/manifest.d.ts
+// TODO: Those type definitions should be moved to mask-plugin-infra /packages/manifest/manifest.d.ts
 export interface Manifest {
     manifest_version: 1
     id: string

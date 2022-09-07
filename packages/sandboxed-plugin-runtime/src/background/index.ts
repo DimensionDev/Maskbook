@@ -34,7 +34,7 @@ export class BackgroundPluginHost extends PluginRunner<BackgroundHostHooks, Back
             registerBackupHandler(handler: BackupHandler) {
                 if (!manifest.contributes?.backup) {
                     throw new Error(
-                        'Refuse to register the backup handler because mainfest.contributes.backup is not true.',
+                        'Refuse to register the backup handler because manifest.contributes.backup is not true.',
                     )
                 }
                 const { onBackup, onRestore } = handler
