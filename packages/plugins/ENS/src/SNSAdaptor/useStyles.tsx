@@ -54,6 +54,23 @@ const useStyles = makeStyles()((theme) => {
             height: 36,
             marginBottom: 13,
         },
+        coverIcon: {
+            width: '100%',
+            height: 'auto',
+        },
+        coverCard: {
+            position: 'relative',
+        },
+        coverText: {
+            position: 'absolute',
+            fontSize: 24,
+            fontWeight: 700,
+            width: '100%',
+            textAlign: 'center',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            color: theme.palette.common.white,
+        },
     }
 })
 

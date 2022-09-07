@@ -6,6 +6,7 @@ interface ENSContextProps {
     isLoading: boolean
     isNoResult: boolean
     reversedAddress: string | undefined
+    domain: string
     isError: boolean
     tokenId: string | undefined
     retry: (() => void) | undefined
@@ -16,6 +17,7 @@ export const ENSContext = createContext<ENSContextProps>({
     isNoResult: true,
     reversedAddress: undefined,
     tokenId: undefined,
+    domain: '',
     isError: false,
     retry: undefined,
 })
@@ -32,7 +34,7 @@ export function ENSProvider({ children, domain }: PropsWithChildren<SearchResult
     const tokenId = resolveNonFungibleTokenIdFromEnsDomain(domain)
     console.log({ reversedAddress, tokenId })
     return (
-        <ENSContext.Provider value={{ isLoading, reversedAddress, isNoResult, isError, retry, tokenId }}>
+        <ENSContext.Provider value={{ isLoading, reversedAddress, isNoResult, isError, retry, tokenId, domain }}>
             {children}
         </ENSContext.Provider>
     )

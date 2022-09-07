@@ -77,7 +77,7 @@ const useStyles = makeStyles<{ backgroundGradient?: string; borderRadius?: strin
             },
             providerBy: {
                 marginRight: theme.spacing(0.5),
-                color: theme.palette.mode === 'dark' ? '#536471' : theme.palette.text.secondary,
+                color: theme.palette.mode === 'dark' ? theme.palette.grey[700] : theme.palette.text.secondary,
             },
         }
     },
