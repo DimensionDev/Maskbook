@@ -442,7 +442,7 @@ export namespace Plugin.SNSAdaptor {
             Web3Provider
         >
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
-        CompositionDialogEntry?: CompositionDialogEntry
+        readonly CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be use when there is known badges. */
         CompositionDialogMetadataBadgeRender?: CompositionMetadataBadgeRender
         /** This UI will be rendered as an entry in the wallet status dialog */
@@ -522,8 +522,8 @@ export namespace Plugin.SNSAdaptor {
         metadata: unknown,
     ) => string | BadgeDescriptor | null
     export interface BadgeDescriptor {
-        text: string | React.ReactChild
-        tooltip?: React.ReactChild
+        text: string | React.ReactNode
+        tooltip?: React.ReactNode
     }
     // #endregion
 

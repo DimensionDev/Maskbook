@@ -1,9 +1,6 @@
 import { registerPlugin } from '@masknet/plugin-infra'
 import { base } from './base.js'
 
-// TODO: avoid export things from this file
-export { FileInfoMetadataReader } from './helpers.js'
-
 registerPlugin({
     ...base,
     SNSAdaptor: {

@@ -5,10 +5,12 @@ import { combineAbortSignal } from '@dimensiondev/kit'
 export interface PluginListItem {
     normal?: boolean
     local?: boolean
+    locales?: Array<{ url: string; language: string }>
 }
 export interface BasicHostHooks {
     getPluginList(): Promise<Iterable<[string, PluginListItem]>>
     fetchManifest(id: string, isLocal: boolean): Promise<object>
+    fetchLocaleFiles(id: string, isLocal: boolean, languages: Array<{ url: string; language: string }>): void
     createRpcChannel(id: string, signal: AbortSignal): EventBasedChannel
     createRpcGeneratorChannel(id: string, signal: AbortSignal): EventBasedChannel
 }
@@ -70,22 +72,16 @@ export abstract class PluginRunner<HostHooks extends BasicHostHooks, HostPluginI
             if (this.plugins.has(id)) continue
 
             const abort = new AbortController()
-            this.startPluginInner(
-                id,
-                Boolean(data.local && this.allowLocalOverrides),
-                abort.signal,
-                abort.abort.bind(abort),
-            )
+            const isLocal = Boolean(data.local && this.allowLocalOverrides)
+            this.hooks.fetchLocaleFiles(id, isLocal, this.pluginList.get(id)?.locales ?? [])
+            this.startPluginInner(id, isLocal, abort.signal, abort.abort.bind(abort))
         }
     }
     async startPlugin_bridged(id: string, signal: AbortSignal) {
         const abort = new AbortController()
-        await this.startPluginInner(
-            id,
-            Boolean(this.pluginList.get(id)!.local && this.allowLocalOverrides),
-            combineAbortSignal(abort.signal, signal),
-            abort.abort.bind(abort),
-        )
+        const isLocal = Boolean(this.pluginList.get(id)!.local && this.allowLocalOverrides)
+        this.hooks.fetchLocaleFiles(id, isLocal, this.pluginList.get(id)?.locales ?? [])
+        await this.startPluginInner(id, isLocal, combineAbortSignal(abort.signal, signal), abort.abort.bind(abort))
         return this.plugins.get(id)!
     }
 
