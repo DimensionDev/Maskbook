@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { defaults } from 'lodash-unified'
 
-export interface FormatterCurrencyConfig {
+export interface FormatterCurrencyOptions {
     symbols?: Record<string, string>
     boundaries?: {
         min?: number
@@ -45,7 +45,7 @@ const digitalCurrencyModifier = (parts: Intl.NumberFormatPart[], symbols: Record
 export function formatCurrency(
     value: BigNumber.Value,
     currency = 'USD',
-    { boundaries = {}, symbols = {} }: FormatterCurrencyConfig = {},
+    { boundaries = {}, symbols = {} }: FormatterCurrencyOptions = {},
 ): string {
     const bgValue = new BigNumber(value)
     const integerValue = bgValue.integerValue(1)
