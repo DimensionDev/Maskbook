@@ -137,7 +137,7 @@ function registerPostCollectorInner(
             if (!tweetNode) return node.innerText
             const parentTweetId = parentTweetNode ? postIdParser(parentTweetNode) : ''
             const tweetId = postIdParser(tweetNode)
-            const isDetailPage = location.pathname.match('/status/*')
+            const isDetailPage = location.pathname.match('^/[^/]+/status/')
             // To distinguish tweet nodes between time line and detail page
             return `${isDetailPage ? 'detail' : 'normal'}/${parentTweetId}/${tweetId}`
         })
