@@ -1,7 +1,7 @@
 import { describe, test, expect } from 'vitest'
 import { formatCurrency } from '../src'
 
-describe('USD Currency format util test', () => {
+describe('USD Currency price format util test', () => {
     test.each([
         { give: 0, expected: '$0.00' },
         { give: 0.1, expected: '$0.1' },
@@ -26,6 +26,12 @@ describe('USD Currency format util test', () => {
         { give: 0.000000000000001, expected: '< $0.000001' },
     ])('.format($give)', ({ give, expected }) => {
         expect(formatCurrency(give)).toBe(expected)
+    })
+})
+
+describe('USD Currency value format util test', () => {
+    test.each([{ give: 0.001, expected: '< 0.01' }])('.format($give)', ({ give, expected }) => {
+        expect(formatCurrency(give, 'USD', { min: 0.01, hiddenCurrency: true }))
     })
 })
 

@@ -1,18 +1,17 @@
 import { FC, Fragment } from 'react'
 import type { BigNumber } from 'bignumber.js'
+import type { FormatterCurrencyConfig } from '@masknet/web3-shared-base'
 
 export interface FormattedCurrencyProps {
     sign?: string
-    symbol?: string
     value: BigNumber.Value
-    formatter?: (value: BigNumber.Value, sign?: string, symbol?: string) => string
+    formatter?: (value: BigNumber.Value, sign?: string, symbol?: FormatterCurrencyConfig) => string
 }
 
 export const FormattedCurrency: FC<FormattedCurrencyProps> = ({
     value,
     sign,
-    symbol,
-    formatter = (value, sign, symbol) => `${sign} ${value} ${symbol?.toUpperCase()}`.trim(),
+    formatter = (value, sign) => `${sign} ${value}`.trim(),
 }) => {
-    return <Fragment>{formatter(value, sign, symbol)}</Fragment>
+    return <Fragment>{formatter(value, sign)}</Fragment>
 }

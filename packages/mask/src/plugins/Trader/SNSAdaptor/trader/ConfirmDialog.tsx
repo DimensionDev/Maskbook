@@ -2,7 +2,7 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import type { TradeComputed } from '../../types'
 import { createNativeToken, formatUSD, formatWeiToEther, GasOptionConfig } from '@masknet/web3-shared-evm'
 import { useCallback, useMemo, useState } from 'react'
-import { formatBalance, FungibleToken, multipliedBy, NetworkPluginID, scale10 } from '@masknet/web3-shared-base'
+import { formatBalance, formatCurrency, FungibleToken, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { currentSlippageSettings } from '../../settings'
 import { useNativeTokenPrice, useFungibleTokenPrice, Web3Helper } from '@masknet/plugin-infra/web3'
@@ -63,9 +63,10 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
         trade.inputToken?.decimals ?? 0,
     )
 
-    const lostValue = multipliedBy(inputTokenPrice ?? 0, lostToken).lt(scale10(-2))
-        ? '< 0.01'
-        : multipliedBy(inputTokenPrice ?? 0, lostToken).toFixed(2)
+    const lostValue = formatCurrency(multipliedBy(inputTokenPrice ?? 0, lostToken), 'USD', {
+        min: 0.01,
+        hiddenCurrency: true,
+    })
 
     const handleOpenPriceImpactDialog = useCallback(() => {
         setPriceImpactDialogOpen(true)

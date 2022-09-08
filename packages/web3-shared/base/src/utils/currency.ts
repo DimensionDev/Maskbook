@@ -1,6 +1,13 @@
 import BigNumber from 'bignumber.js'
 
-const boundaryValues = {
+export type FormatterCurrencyConfig = {
+    min: number
+    max?: number
+    mid?: number
+    hiddenCurrency?: boolean
+}
+
+const defaultBoundaryValues = {
     max: 1,
     mid: 0,
     min: 0.000001,
@@ -36,7 +43,11 @@ const digitalCurrencyModifier = (parts: Intl.NumberFormatPart[]) => {
  * @param value
  * @param currency
  */
-export function formatCurrency(value: BigNumber.Value, currency = 'USD'): string {
+export function formatCurrency(
+    value: BigNumber.Value,
+    currency = 'USD',
+    boundaryValues: FormatterCurrencyConfig = defaultBoundaryValues,
+): string {
     const bgValue = new BigNumber(value)
 
     const integerValue = bgValue.integerValue(1)
@@ -56,7 +67,7 @@ export function formatCurrency(value: BigNumber.Value, currency = 'USD'): string
             .map(({ type, value }) => {
                 switch (type) {
                     case 'currency':
-                        return DigitalCurrencyMap[value] || value
+                        return !boundaryValues.hiddenCurrency ? DigitalCurrencyMap[value] || value : ''
                     case 'fraction':
                         return boundaryValues.min.toString()
                     default:
