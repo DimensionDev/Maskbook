@@ -26,8 +26,13 @@ export function useCurrentVisitingUser(flag?: number) {
             ? identity.identifier?.userId ?? ''
             : ''
         try {
-            const userId = identity.identifier?.userId
-            if (!Storage || !userId || userId === '$unknown') return
+            if (!Storage || !userId || userId === '$unknown') {
+                setUser({
+                    userId: '',
+                    address: '',
+                })
+                return
+            }
             const storage = Storage.createKVStorage(PetsPluginID)
             const address = (await storage.get<string>(userId)) ?? ''
             setUser({
