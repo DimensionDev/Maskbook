@@ -86,3 +86,11 @@ jobs:
           name: MaskNetwork.gecko.zip
           path: masknetwork.gecko.zip
           if-no-files-found: error
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "main"
+          prerelease: true
+          title: "develop build"
+          files: |
+            *.zip
