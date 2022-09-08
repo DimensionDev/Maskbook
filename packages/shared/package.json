@@ -37,9 +37,11 @@
     "urlcat": "^2.0.4",
     "use-subscription": "1.6.0",
     "unstated-next": "^1.1.0",
-    "zod": "^3.16.0"
+    "zod": "^3.16.0",
+    "remarkable": "^2.0.1"
   },
   "devDependencies": {
-    "@types/qrcode": "^1.4.2"
+    "@types/qrcode": "^1.4.2",
+    "@types/remarkable": "^2.0.3"
   }
 }

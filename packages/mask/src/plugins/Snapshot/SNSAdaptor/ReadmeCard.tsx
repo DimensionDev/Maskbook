@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { Markdown } from './Markdown'
+import { Markdown } from '@masknet/shared'
 import { useProposal } from './hooks/useProposal'
 import { SnapshotContext } from '../context'
 
