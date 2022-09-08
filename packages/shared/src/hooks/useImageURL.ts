@@ -1,5 +1,5 @@
 import { useAsync } from 'react-use'
-import { hasIPFS_CID, isLocaleResource, resolveIPFSLink, resolveLocalResource } from '@masknet/web3-shared-base'
+import { hasIPFS_CID, isLocaleResource, resolveIPFS_URL, resolveLocalResource } from '@masknet/web3-shared-base'
 
 export function useImageURL(url?: string) {
     return useAsync(async () => {
@@ -28,7 +28,7 @@ export function useImageURL(url?: string) {
             img.decoding = 'async'
             img.addEventListener('load', onload)
             img.addEventListener('error', onerror)
-            img.src = hasCID ? resolveIPFSLink(url)! : url
+            img.src = hasCID ? resolveIPFS_URL(url)! : url
         }).catch(async () => {
             const response = await fetch(url, {
                 cache: 'force-cache',

@@ -1,7 +1,7 @@
 import { ImgHTMLAttributes, useState } from 'react'
 import classNames from 'classnames'
 import { makeStyles, parseColor, useStylesExtends } from '@masknet/theme'
-import { resolveCORSLink, resolveIPFSLink } from '@masknet/web3-shared-base'
+import { resolveCrossOriginURL, resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { Box, CircularProgress, useTheme } from '@mui/material'
 import { useImageURL } from '../../../hooks/useImageURL'
 
@@ -70,8 +70,8 @@ export function Image({ fallback, disableSpinner, classes: externalClasses, onCl
         return fallback
     }
 
-    const fallbackImageURL = resolveCORSLink(
-        resolveIPFSLink(fallback?.toString()) ??
+    const fallbackImageURL = resolveCrossOriginURL(
+        resolveIPFS_URL(fallback?.toString()) ??
             (theme.palette.mode === 'dark'
                 ? new URL('./nft_token_fallback_dark.png', import.meta.url).toString()
                 : new URL('./nft_token_fallback.png', import.meta.url)

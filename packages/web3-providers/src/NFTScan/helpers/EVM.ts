@@ -10,7 +10,7 @@ import {
     NonFungibleCollection,
     NonFungibleTokenContract,
     NonFungibleTokenEvent,
-    resolveCORSLink,
+    resolveCrossOriginURL,
     resolveResourceURL,
     scale10,
     SourceType,
@@ -35,7 +35,7 @@ export const resolveHostName = createLookupTableResolver<NFTScanChainId, string>
 )
 
 export async function fetchFromNFTScan<T>(url: string) {
-    const response = await fetch(resolveCORSLink(url)!, {
+    const response = await fetch(resolveCrossOriginURL(url)!, {
         headers: {
             chain: 'ETH',
         },
