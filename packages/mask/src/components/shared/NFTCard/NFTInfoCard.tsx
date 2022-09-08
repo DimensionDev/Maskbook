@@ -18,8 +18,7 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
         gap: 8,
         borderRadius: 12,
-        // there is no public bg, have to hardcode
-        background: '#F9F9F9',
+        background: theme.palette.maskColor.bg,
     },
     listItem: {
         width: '100%',

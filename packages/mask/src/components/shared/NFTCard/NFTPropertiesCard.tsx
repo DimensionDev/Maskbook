@@ -45,8 +45,7 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.publicMain,
         fontWeight: 700,
         marginBottom: 12,
-        // there is no public bg, have to hardcode
-        background: '#F9F9F9',
+        background: theme.palette.maskColor.bg,
         borderRadius: 8,
         boxSizing: 'border-box',
     },
