@@ -87,15 +87,6 @@ jobs:
           path: masknetwork.gecko.zip
           if-no-files-found: error
       - uses: "marvinpinto/action-automatic-releases@latest"
-        if: {{ github.ref == 'ref/head/develop' }}
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "main"
-          prerelease: true
-          title: "develop build"
-          files: |
-            *.zip
-      - uses: "marvinpinto/action-automatic-releases@latest"
         if: {{ github.ref == 'ref/head/released' }}
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
