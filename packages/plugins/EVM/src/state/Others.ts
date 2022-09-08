@@ -24,6 +24,7 @@ import {
     getZeroAddress,
     getMaskTokenAddress,
     getNativeTokenAddress,
+    formatSchemaType,
 } from '@masknet/web3-shared-evm'
 
 export class Others extends OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
@@ -52,4 +53,5 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
     override formatAddress = formatEthereumAddress
     override formatTokenId = formatTokenId
     override formatDomainName = formatDomainName
+    override formatSchemaType = formatSchemaType
 }
