@@ -1,3 +1,4 @@
+/* cspell:disable */
 import { isIPFS_CID, resolveCrossOriginURL, resolveIPFS_URL } from '@masknet/web3-shared-base'
 
 const R2D2_ROOT_URL = 'r2d2.to'
