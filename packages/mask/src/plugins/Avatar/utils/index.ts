@@ -21,13 +21,18 @@ function blobToBase64(blob: Blob) {
     })
 }
 
+function checkBase64(str: string) {
+    return str.includes(';base64,')
+}
 async function fetchImage(url: string) {
+    if (checkBase64(url)) return
     const fetch = globalThis.r2d2Fetch ?? globalThis.fetch
     const response = await fetch(url)
     return response.blob()
 }
 
 export async function toPNG(image: string) {
+    const isBase64 = checkBase64(image)
     const imageData = await fetchImage(image)
     return new Promise<Blob | null>((resolve, reject) => {
         const img = new Image()
@@ -45,7 +50,8 @@ export async function toPNG(image: string) {
             reject(new Error('Could not load image'))
         })
         img.setAttribute('CrossOrigin', 'Anonymous')
-        img.src = URL.createObjectURL(imageData)
+        if (!isBase64 && imageData) img.src = URL.createObjectURL(imageData)
+        else img.src = image
     })
 }
 
