@@ -1362,6 +1362,7 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Tra
     // #region data formatting
     formatAddress(address: string, size?: number): string
     formatDomainName(domain?: string, size?: number): string
+    formatSchemaType(schemaType: SchemaType): string
     formatTokenId(id?: string, size?: number): string
     // #endregion
 
