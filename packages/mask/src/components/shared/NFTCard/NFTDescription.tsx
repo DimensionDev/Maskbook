@@ -33,10 +33,10 @@ const useStyles = makeStyles()((theme) => ({
         webkitBoxOrient: 'vertical',
         webkitLineClamp: '3',
         '& > p': {
-            color: `${theme.palette.maskColor.publicSecond} !important`,
+            color: `${theme.palette.maskColor.second} !important`,
         },
         '& a': {
-            color: `${theme.palette.maskColor.publicMain} !important`,
+            color: `${theme.palette.maskColor.main} !important`,
         },
     },
 }))

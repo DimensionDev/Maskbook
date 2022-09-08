@@ -27,21 +27,21 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         textTransform: 'capitalize',
     },
-    textBase: {
+    title: {
         fontSize: 14,
-        color: theme.palette.maskColor.publicSecond,
+        color: theme.palette.maskColor.second,
     },
-    listItemContent: {
+    content: {
         maxWidth: '40%',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
         display: 'flex',
         gap: 6,
-        color: theme.palette.maskColor.publicMain,
+        color: theme.palette.maskColor.main,
     },
     link: {
-        color: theme.palette.maskColor.publicSecond,
+        color: theme.palette.maskColor.second,
         fontSize: 14,
         display: 'flex',
         alignItems: 'center',
@@ -90,8 +90,8 @@ export function NFTInfoCard(props: NFTInfoCardProps) {
             {infoConfigMapping.map((x) => {
                 return (
                     <div key={x.title} className={classes.listItem}>
-                        <Typography className={classes.textBase}>{x.title}</Typography>
-                        <Typography className={classes.listItemContent}>
+                        <Typography className={classes.title}>{x.title}</Typography>
+                        <Typography className={classes.content}>
                             {x.value}{' '}
                             {x.link && (
                                 <Link

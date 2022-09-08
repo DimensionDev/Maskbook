@@ -26,7 +26,7 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '24px',
         fontWeight: 700,
         marginBottom: 12,
-        color: theme.palette.maskColor.publicMain,
+        color: theme.palette.maskColor.main,
     },
     content: {
         width: '100%',
@@ -42,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: 8,
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.publicMain,
+        color: theme.palette.maskColor.main,
         fontWeight: 700,
         marginBottom: 12,
         background: theme.palette.maskColor.bg,
@@ -51,7 +51,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     traitsTitle: {
         fontWeight: 400,
-        color: theme.palette.maskColor.publicMain,
+        color: theme.palette.maskColor.second,
     },
     unset: {
         color: 'unset',
