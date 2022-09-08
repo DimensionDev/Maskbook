@@ -232,6 +232,9 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
 
         const handler = (event: MouseEvent) => {
             if (!nftAvatar.tokenId || !nftAvatar.address) return
+
+            // TODO: refactor NFTCard and Collectible to support multiple networks
+            if (nftAvatar.chainId !== ChainId.Mainnet || nftAvatar.pluginId !== NetworkPluginID.PLUGIN_EVM) return
             CrossIsolationMessages.events.requestNFTCardDialog.sendToLocal({
                 open: true,
                 address: nftAvatar.address,
