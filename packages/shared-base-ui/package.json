@@ -15,7 +15,11 @@
     "@types/uuid": "^8.3.4",
     "react-use": "^17.4.0",
     "use-subscription": "1.6.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "remarkable": "^2.0.1"
+  },
+  "devDependencies": {
+    "@types/remarkable": "^2.0.3"
   },
   "peerDependencies": {
     "react-i18next": "^11.15.3"

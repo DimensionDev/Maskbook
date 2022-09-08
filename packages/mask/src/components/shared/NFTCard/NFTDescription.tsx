@@ -1,8 +1,9 @@
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { useI18N } from '../../../utils'
+import { Markdown } from '@masknet/shared'
 import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -27,6 +28,17 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         color: theme.palette.maskColor.second,
     },
+    markdown: {
+        textOverflow: 'ellipsis',
+        webkitBoxOrient: 'vertical',
+        webkitLineClamp: '3',
+        '& > p': {
+            color: `${theme.palette.maskColor.publicSecond} !important`,
+        },
+        '& a': {
+            color: `${theme.palette.maskColor.publicMain} !important`,
+        },
+    },
 }))
 interface NFTDescriptionProps {
     asset: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
@@ -40,7 +52,13 @@ export function NFTDescription(props: NFTDescriptionProps) {
         <div className={classes.wrapper}>
             <Typography className={classes.title}>{t('plugin_collectible_description_title')}</Typography>
             <div className={classes.content}>
-                <Typography className={classes.textContent}>{asset.metadata?.description ?? '-'}</Typography>
+                <Typography className={classes.textContent}>
+                    {asset.metadata?.description ? (
+                        <Markdown classes={{ root: classes.markdown }} content={asset.metadata?.description} />
+                    ) : (
+                        '-'
+                    )}
+                </Typography>
             </div>
         </div>
     )
