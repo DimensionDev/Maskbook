@@ -60,6 +60,7 @@ const useStyles = makeStyles()((theme) => {
         },
         coverCard: {
             position: 'relative',
+            marginBottom: 12,
         },
         coverText: {
             position: 'absolute',
@@ -70,6 +71,23 @@ const useStyles = makeStyles()((theme) => {
             top: '50%',
             transform: 'translateY(-50%)',
             color: theme.palette.common.white,
+        },
+        nextIdVerified: {
+            display: 'flex',
+            alignItems: 'center',
+            margin: '0px 28px 12px',
+        },
+        nextIdVerifiedTitle: {
+            color: theme.palette.maskColor.secondaryDark,
+            marginRight: 12,
+            fontSize: 16,
+        },
+        nextIdVerifiedTwitterName: {
+            color: theme.palette.maskColor.dark,
+            fontWeight: 700,
+            marginLeft: 4,
+            marginRight: 12,
+            fontSize: 16,
         },
     }
 })

@@ -17,6 +17,7 @@
     "@masknet/shared-base-ui": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
+    "@masknet/web3-providers": "workspace:*",
     "@masknet/theme": "workspace:*",
     "react-use": "^17.4.0"
   }

@@ -2,5 +2,6 @@
     "loading": "Loading...",
     "load_failed": "Load failed",
     "reload": "Reload",
-    "empty": "No search results found."
+    "empty": "No search results found.",
+    "associated_social_accounts": "Associated social accounts"
 }
