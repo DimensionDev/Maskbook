@@ -88,7 +88,7 @@ export function createNonFungibleAsset(
 ): NonFungibleAsset<ChainId, SchemaType> {
     const payload = getJSON<EVM.Payload>(asset.metadata_json)
     const contractName = asset.contract_name
-    const name = payload?.name || asset.name || ''
+    const name = payload?.name || asset.name || contractName || ''
     const description = payload?.description
     const uri = asset.nftscan_uri ?? asset.image_uri
     const mediaURL = resolveResourceUri(uri)
@@ -131,7 +131,7 @@ export function createNonFungibleAsset(
             : undefined,
         metadata: {
             chainId,
-            name: contractName,
+            name,
             symbol,
             description,
             imageURL: mediaURL,
@@ -147,7 +147,7 @@ export function createNonFungibleAsset(
         collection: {
             chainId,
             name: contractName,
-            slug: name,
+            slug: contractName,
             description,
             address: asset.contract_address,
             // If collectionContext.logo_url is null, we will directly render a fallback logo instead.

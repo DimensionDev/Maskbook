@@ -1,9 +1,9 @@
+import { ImgHTMLAttributes, useState } from 'react'
+import { useAsync } from 'react-use'
+import classNames from 'classnames'
 import { makeStyles, parseColor, useStylesExtends } from '@masknet/theme'
 import { resolveCORSLink, resolveIPFSLink } from '@masknet/web3-shared-base'
 import { Box, CircularProgress, useTheme } from '@mui/material'
-import classNames from 'classnames'
-import { ImgHTMLAttributes, useState } from 'react'
-import { useAsync } from 'react-use'
 import { loadImage } from './loadImage'
 
 const useStyles = makeStyles()((theme) => ({
@@ -33,7 +33,7 @@ interface ImageProps
     disableSpinner?: boolean
 }
 
-export function Image({ fallback, disableSpinner, classes: externalClasses, ...rest }: ImageProps) {
+export function Image({ fallback, disableSpinner, classes: externalClasses, onClick, ...rest }: ImageProps) {
     const classes = useStylesExtends(useStyles(), { classes: externalClasses })
     const theme = useTheme()
     const [failed, setFailed] = useState(false)
@@ -65,7 +65,7 @@ export function Image({ fallback, disableSpinner, classes: externalClasses, ...r
 
     if (image && !failed) {
         return (
-            <Box className={classes.container}>
+            <Box className={classes.container} onClick={onClick}>
                 <img loading="lazy" decoding="async" {...rest} src={image} onError={() => setFailed(true)} />
             </Box>
         )
@@ -83,7 +83,7 @@ export function Image({ fallback, disableSpinner, classes: externalClasses, ...r
     )
 
     return (
-        <Box className={classes.container}>
+        <Box className={classes.container} onClick={onClick}>
             <img
                 loading="lazy"
                 decoding="async"

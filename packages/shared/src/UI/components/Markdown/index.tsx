@@ -1,6 +1,6 @@
 import { purify } from '@masknet/shared-base'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useRemarkable } from './hooks/useRemarkable'
+import { useRemarkable } from '../../../hooks/useRemarkable'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

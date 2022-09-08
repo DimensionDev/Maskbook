@@ -1985,6 +1985,9 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0
+      remarkable:
+        specifier: ^2.0.1
+        version: 2.0.1
       unstated-next:
         specifier: ^1.1.0
         version: 1.1.0
@@ -1997,6 +2000,10 @@ importers:
       zod:
         specifier: ^3.16.0
         version: 3.16.0
+    devDependencies:
+      '@types/remarkable':
+        specifier: ^2.0.3
+        version: 2.0.3
 
   packages/shared-base:
     dependencies:
@@ -12015,7 +12022,6 @@ packages:
 
   /@types/highlight.js/9.12.4:
     resolution: {integrity: sha512-t2szdkwmg2JJyuCM20e8kR2X59WCE5Zkl4bzm1u1Oukjm79zpbiAv+QjnwLnuuV0WHEcX2NgUItu0pAMKuOPww==}
-    dev: false
 
   /@types/history/4.7.11:
     resolution: {integrity: sha512-qjDJRrmvBMiTx+jyLxvLfJU7UznFuokDv4f3WRuriHKERccVpFU+8XMQUAbDzoiJCsmexxRExQeMwwCdamSKDA==}
@@ -12260,7 +12266,6 @@ packages:
     dependencies:
       '@types/highlight.js': 9.12.4
       highlight.js: 9.18.5
-    dev: false
 
   /@types/resolve/1.17.1:
     resolution: {integrity: sha512-yy7HuzQhj0dhGpD8RLXSZWEkLsV9ibvxvi6EiJ3bkqLAO1RGo0WbkWQiwpRlSFymTJRz0d3k5LM3kkx8ArDbLw==}
@@ -21451,7 +21456,6 @@ packages:
   /highlight.js/9.18.5:
     resolution: {integrity: sha512-a5bFyofd/BHCX52/8i8uJkjr9DYwXIPnM/plwI6W7ezItLGqzt7X2G2nXuYSfsIJdkwwj/g9DG1LkcGJI/dDoA==}
     deprecated: Support has ended for 9.x series. Upgrade to @latest
-    dev: false
 
   /history/5.3.0:
     resolution: {integrity: sha512-ZqaKwjjrAYUYfLG+htGaIIZ4nioX2L70ZUMIFysS3xvBsSG4x/n1V6TXV3N8ZYNuFGlDirFg32T7B6WOUPDYcQ==}
@@ -21919,7 +21923,7 @@ packages:
     patched: true
 
   /immutable/3.8.1:
-    resolution: {integrity: sha512-0R2q5f83L0h+zizu3lAA3ZR/mzEl04U1jVVXIqf2rQbZs9eX5YGtx1EFQuuJJHzVXH10ur6hGKehR8yBOQmZlQ==}
+    resolution: {integrity: sha1-IAgH8Rqw9ycQ6khVQt4IgHX2jNI=}
     engines: {node: '>=0.10.0'}
     dev: false
 
