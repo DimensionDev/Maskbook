@@ -3,7 +3,7 @@ import { Link, Typography } from '@mui/material'
 import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
 import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
-import { SchemaType, formatTokenId, ChainId } from '@masknet/web3-shared-evm'
+import { SchemaType, formatTokenId, ChainId, chainResolver } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { Icons } from '@masknet/icons'
 import { getEnumAsArray } from '@dimensiondev/kit'
@@ -73,7 +73,7 @@ export function NFTInfoCard(props: NFTInfoCardProps) {
     const infoConfigMapping = [
         { title: t('plugin_collectible_token_id'), value: formatTokenId(asset.tokenId, 4) },
         { title: t('contract'), value: Others?.formatAddress(asset.address, 4) ?? '-', link: true },
-        { title: t('plugin_collectible_block_chain'), value: 'Ethereum' },
+        { title: t('plugin_collectible_block_chain'), value: chainResolver.chainFullName(asset.chainId) },
         { title: t('token_standard'), value: resolveTokenSchema(asset.schema || asset.contract?.schema) },
         {
             title: t('plugin_collectible_creator_earning'),
