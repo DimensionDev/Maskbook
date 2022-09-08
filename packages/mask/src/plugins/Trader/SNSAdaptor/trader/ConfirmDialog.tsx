@@ -67,6 +67,10 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
         boundaries: {
             min: 0.01,
         },
+        symbols: {
+            // hide USD symbol
+            $: '',
+        },
     })
 
     const handleOpenPriceImpactDialog = useCallback(() => {
