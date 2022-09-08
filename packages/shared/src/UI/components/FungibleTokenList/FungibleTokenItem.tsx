@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo } from 'react'
 import { Link, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
-import { FungibleToken, leftShift, NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance, FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { TokenIcon } from '../TokenIcon'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskLoadingButton, LoadingBase } from '@masknet/theme'
@@ -9,6 +9,7 @@ import { useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { TokenListMode } from './type'
 import { SettingSwitch } from '../SettingSwitch'
 import { useTokenBlocked, useTokenTrusted } from './useTokenBlocked'
+import { FormattedBalance } from '../../../wallet'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -166,7 +167,16 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
             }
             return source !== 'external' || isTrust ? (
                 <Typography className={classes.balance}>
-                    {balance === undefined ? <LoadingBase size={24} /> : leftShift(balance ?? 0, decimals).toFixed(6)}
+                    {balance === undefined ? (
+                        <LoadingBase size={24} />
+                    ) : (
+                        <FormattedBalance
+                            value={balance}
+                            decimals={decimals}
+                            significant={6}
+                            formatter={formatBalance}
+                        />
+                    )}
                 </Typography>
             ) : (
                 <MaskLoadingButton
