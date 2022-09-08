@@ -64,8 +64,9 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     )
 
     const lostValue = formatCurrency(multipliedBy(inputTokenPrice ?? 0, lostToken), 'USD', {
-        min: 0.01,
-        hiddenCurrency: true,
+        boundaries: {
+            min: 0.01,
+        },
     })
 
     const handleOpenPriceImpactDialog = useCallback(() => {

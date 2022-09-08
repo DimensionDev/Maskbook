@@ -31,7 +31,7 @@ describe('USD Currency price format util test', () => {
 
 describe('USD Currency value format util test', () => {
     test.each([{ give: 0.001, expected: '< 0.01' }])('.format($give)', ({ give, expected }) => {
-        expect(formatCurrency(give, 'USD', { min: 0.01, hiddenCurrency: true }))
+        expect(formatCurrency(give, 'USD', { boundaries: { min: 0.01 }, symbols: { $: '' } })).toBe(expected)
     })
 })
 
