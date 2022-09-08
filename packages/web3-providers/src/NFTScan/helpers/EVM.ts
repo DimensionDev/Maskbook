@@ -10,8 +10,8 @@ import {
     NonFungibleCollection,
     NonFungibleTokenContract,
     NonFungibleTokenEvent,
-    resolveCORSLink,
-    resolveResourceUri,
+    resolveCrossOriginURL,
+    resolveResourceURL,
     scale10,
     SourceType,
     TokenType,
@@ -35,7 +35,7 @@ export const resolveHostName = createLookupTableResolver<NFTScanChainId, string>
 )
 
 export async function fetchFromNFTScan<T>(url: string) {
-    const response = await fetch(resolveCORSLink(url)!, {
+    const response = await fetch(resolveCrossOriginURL(url)!, {
         headers: {
             chain: 'ETH',
         },
@@ -91,7 +91,7 @@ export function createNonFungibleAsset(
     const name = payload?.name || asset.name || contractName || ''
     const description = payload?.description
     const uri = asset.nftscan_uri ?? asset.image_uri
-    const mediaURL = resolveResourceUri(uri)
+    const mediaURL = resolveResourceURL(uri)
 
     const creator = asset.minter
     const owner = asset.owner

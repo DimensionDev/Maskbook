@@ -28,10 +28,11 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         color: theme.palette.maskColor.second,
     },
-    markdown: {
+    markdownContent: {
         textOverflow: 'ellipsis',
         webkitBoxOrient: 'vertical',
         webkitLineClamp: '3',
+        color: theme.palette.maskColor.second,
         '& > p': {
             color: `${theme.palette.maskColor.second} !important`,
         },
@@ -52,13 +53,11 @@ export function NFTDescription(props: NFTDescriptionProps) {
         <div className={classes.wrapper}>
             <Typography className={classes.title}>{t('plugin_collectible_description_title')}</Typography>
             <div className={classes.content}>
-                <Typography className={classes.textContent}>
-                    {asset.metadata?.description ? (
-                        <Markdown classes={{ root: classes.markdown }} content={asset.metadata?.description} />
-                    ) : (
-                        '-'
-                    )}
-                </Typography>
+                {asset.metadata?.description ? (
+                    <Markdown classes={{ root: classes.markdownContent }} content={asset.metadata?.description} />
+                ) : (
+                    <Typography className={classes.textContent}>-</Typography>
+                )}
             </div>
         </div>
     )
