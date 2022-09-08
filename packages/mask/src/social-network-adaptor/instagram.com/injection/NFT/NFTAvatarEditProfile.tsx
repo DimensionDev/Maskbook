@@ -31,7 +31,7 @@ const useStyles = makeStyles()(() => ({
         background: '#262626',
         borderRadius: '4px !important',
         height: 30,
-        width: 104,
+        width: 134,
     },
     text: {
         fontSize: 12,
