@@ -232,7 +232,7 @@ class Hub implements EVM_Hub {
         const formattedAddress = formatEthereumAddress(address)
 
         if (isNativeTokenAddress(formattedAddress)) {
-            return NATIVE_TOKEN_ASSET_BASE_URI?.map((x) => `${x}/info/logo.png`)
+            return NATIVE_TOKEN_ASSET_BASE_URI?.map((x) => `${x}/info/logo.png/public`)
         }
 
         const specialIcon = SPECIAL_ICON_LIST.find(currySameAddress(address))
