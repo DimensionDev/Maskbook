@@ -18,12 +18,13 @@ import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
 import { usePersonaNFTAvatar } from '../../../../plugins/Avatar/hooks/usePersonaNFTAvatar'
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { Box, Typography } from '@mui/material'
+import { openWindow } from '@masknet/shared-base-ui'
 import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet'
 import { useNFT, useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks'
 import { NFTCardStyledAssetPlayer, useShowConfirm } from '@masknet/shared'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
 import { EnhanceableSite, NFTAvatarEvent, CrossIsolationMessages } from '@masknet/shared-base'
-import { Box, Typography } from '@mui/material'
 import { activatedSocialNetworkUI } from '../../../../social-network/ui'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 
@@ -232,14 +233,20 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
 
         const handler = (event: MouseEvent) => {
             if (!nftAvatar.tokenId || !nftAvatar.address) return
+
+            event.stopPropagation()
+            event.preventDefault()
+
+            // TODO: refactor NFTCard and Collectible to support multiple networks
+            if (nftAvatar.chainId !== ChainId.Mainnet || nftAvatar.pluginId !== NetworkPluginID.PLUGIN_EVM) {
+                if (nftInfo?.permalink) openWindow(nftInfo.permalink)
+                return
+            }
             CrossIsolationMessages.events.requestNFTCardDialog.sendToLocal({
                 open: true,
                 address: nftAvatar.address,
                 tokenId: nftAvatar.tokenId,
             })
-
-            event.stopPropagation()
-            event.preventDefault()
         }
 
         linkParentDom.addEventListener('click', handler, true)

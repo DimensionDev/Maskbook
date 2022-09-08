@@ -49,9 +49,14 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 8,
         boxSizing: 'border-box',
     },
-    traitsTitle: {
+    traitTitle: {
         fontWeight: 400,
         color: theme.palette.maskColor.second,
+    },
+    traitValue: {
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
     },
     unset: {
         color: 'unset',
@@ -83,8 +88,10 @@ export function NFTPropertiesCard(props: NFTPropertiesCardProps) {
                 {asset.traits?.map((x) => {
                     return (
                         <div key={x.type} className={classes.traitsItem}>
-                            <Typography className={classes.traitsTitle}>{x.type}</Typography>
-                            <Typography>{x.value}</Typography>
+                            <Typography className={classes.traitTitle}>{x.type}</Typography>
+                            <Typography className={classes.traitValue} title={x.value}>
+                                {x.value}
+                            </Typography>
                             <Typography>({x.rarity ?? '-%'})</Typography>
                         </div>
                     )
