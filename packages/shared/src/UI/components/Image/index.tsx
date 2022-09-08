@@ -1,10 +1,9 @@
 import { ImgHTMLAttributes, useState } from 'react'
-import { useAsync } from 'react-use'
 import classNames from 'classnames'
 import { makeStyles, parseColor, useStylesExtends } from '@masknet/theme'
 import { resolveCORSLink, resolveIPFSLink } from '@masknet/web3-shared-base'
 import { Box, CircularProgress, useTheme } from '@mui/material'
-import { loadImage } from './loadImage'
+import { useImageURL } from '../../../hooks/useImageURL'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -38,10 +37,7 @@ export function Image({ fallback, disableSpinner, classes: externalClasses, onCl
     const theme = useTheme()
     const [failed, setFailed] = useState(false)
 
-    const { value: image, loading: imageLoading } = useAsync(async () => {
-        if (!rest.src) return
-        return loadImage(rest.src)
-    }, [rest.src])
+    const { value: image, loading: imageLoading } = useImageURL(rest.src)
 
     if (imageLoading && !disableSpinner) {
         return (

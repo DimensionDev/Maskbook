@@ -3,7 +3,7 @@ import {
     createNextIndicator,
     createPageable,
     HubOptions,
-    resolveResourceUri,
+    resolveResourceURL,
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -143,11 +143,11 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
             activity.actions.forEach((action) => {
                 if (!action.metadata) return
                 if ('image' in action.metadata) {
-                    action.metadata.image = resolveResourceUri(action.metadata.image)!
+                    action.metadata.image = resolveResourceURL(action.metadata.image)!
                 } else if ('token' in action.metadata) {
-                    action.metadata.token.image = resolveResourceUri(action.metadata.token.image)!
+                    action.metadata.token.image = resolveResourceURL(action.metadata.token.image)!
                 } else if ('logo' in action.metadata) {
-                    action.metadata.logo = resolveResourceUri(action.metadata.logo)!
+                    action.metadata.logo = resolveResourceURL(action.metadata.logo)!
                 }
             })
         })
