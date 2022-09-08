@@ -1982,6 +1982,9 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0
+      remarkable:
+        specifier: ^2.0.1
+        version: 2.0.1
       unstated-next:
         specifier: ^1.1.0
         version: 1.1.0
@@ -1994,6 +1997,10 @@ importers:
       zod:
         specifier: ^3.16.0
         version: 3.16.0
+    devDependencies:
+      '@types/remarkable':
+        specifier: ^2.0.3
+        version: 2.0.3
 
   packages/shared-base:
     dependencies:
@@ -2082,19 +2089,12 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0
-      remarkable:
-        specifier: ^2.0.1
-        version: 2.0.1
       use-subscription:
         specifier: 1.6.0
         version: 1.6.0
       uuid:
         specifier: ^8.3.2
         version: 8.3.2
-    devDependencies:
-      '@types/remarkable':
-        specifier: ^2.0.3
-        version: 2.0.3
 
   packages/storybook-shared:
     devDependencies:
