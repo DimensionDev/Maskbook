@@ -8,8 +8,7 @@ import {
     NetworkPluginID,
     isValidTimestamp,
 } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../../../utils'
 import { CollectibleProviderIcon } from '../../../plugins/Collectible/SNSAdaptor/CollectibleProviderIcon'
 import { Icons } from '@masknet/icons'
@@ -62,7 +61,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface NFTOfferCardProps {
-    offer: NonFungibleTokenOrder<ChainId, SchemaType>
+    offer: NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
 }
 
 export function NFTOfferCard(props: NFTOfferCardProps) {

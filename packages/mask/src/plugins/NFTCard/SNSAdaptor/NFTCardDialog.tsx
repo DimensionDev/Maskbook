@@ -9,7 +9,6 @@ import { TabContext } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
 import { NFTCardContent } from './NFTCardContent'
 import { useStyles } from '../useStyles'
-import { useNFTCardInfo } from './hooks/useNFTCardInfo'
 import { useI18N } from '../../../utils'
 
 export enum NFTCardDialogTabs {
@@ -27,7 +26,6 @@ export function NFTCardDialog() {
     const [pluginID, setPluginID] = useState(NetworkPluginID.PLUGIN_EVM)
     const chainIdValid = useChainIdValid(pluginID)
     const [open, setOpen] = useState(false)
-    const { asset, orders, events, provider } = useNFTCardInfo(tokenAddress, tokenId)
 
     const [currentTab, onChange] = useTabs<NFTCardDialogTabs>(
         NFTCardDialogTabs.About,
@@ -47,12 +45,19 @@ export function NFTCardDialog() {
         })
     }, [chainIdValid])
 
+    console.log('DEBUG: card dialog')
+    console.log({
+        chainId,
+        tokenId,
+        tokenAddress,
+    })
+
     return (
         <PluginIDContextProvider value={pluginID}>
             <PluginWeb3ContextProvider
                 pluginID={pluginID}
                 value={{
-                    chainId: chainId,
+                    chainId,
                 }}>
                 <TabContext value={currentTab}>
                     <InjectedDialog
@@ -68,13 +73,7 @@ export function NFTCardDialog() {
                             </MaskTabList>
                         }>
                         <DialogContent className={classes.dialogContent}>
-                            <NFTCardContent
-                                provider={provider}
-                                events={events}
-                                orders={orders}
-                                asset={asset}
-                                currentTab={currentTab}
-                            />
+                            <NFTCardContent tokenId={tokenId} tokenAddress={tokenAddress} currentTab={currentTab} />
                         </DialogContent>
                     </InjectedDialog>
                 </TabContext>

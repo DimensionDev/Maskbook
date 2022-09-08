@@ -3,10 +3,9 @@ import { NFTDescription } from '../../../../components/shared/NFTCard/NFTDescrip
 import { NFTPropertiesCard } from '../../../../components/shared/NFTCard/NFTPropertiesCard'
 import { NFTPriceCard } from '../../../../components/shared/NFTCard/NFTPriceCard'
 import { NFTInfoCard } from '../../../../components/shared/NFTCard/NFTInfoCard'
-import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
-import type { NetworkPluginID, NonFungibleTokenOrder, Pageable } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { NonFungibleTokenOrder, Pageable } from '@masknet/web3-shared-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { first } from 'lodash-unified'
 
@@ -20,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: 24,
     },
 }))
-const resolveTopOffer = (orders?: Array<NonFungibleTokenOrder<ChainId, SchemaType>>) => {
+const resolveTopOffer = (orders?: Array<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>) => {
     if (!orders?.length) return
     return first(
         orders.sort((a, b) => {
@@ -31,8 +30,8 @@ const resolveTopOffer = (orders?: Array<NonFungibleTokenOrder<ChainId, SchemaTyp
     )
 }
 export interface AboutTabProps {
-    asset: AsyncStateRetry<Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>>
-    orders: AsyncStateRetry<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
+    asset: AsyncStateRetry<Web3Helper.NonFungibleAssetScope<void>>
+    orders: AsyncStateRetry<Pageable<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>
 }
 
 export function AboutTab(props: AboutTabProps) {

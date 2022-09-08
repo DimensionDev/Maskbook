@@ -1,7 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { NFTRank } from './NFTRank'
 import { useI18N } from '../../../utils'
 
@@ -63,7 +62,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 interface NFTPropertiesCardProps {
-    asset: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
+    asset: Web3Helper.NonFungibleAssetScope<void>
     rank?: number
     timeline?: boolean
 }

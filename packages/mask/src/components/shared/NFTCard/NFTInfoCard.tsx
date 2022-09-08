@@ -1,13 +1,13 @@
+import { isEqual } from 'lodash-unified'
 import { makeStyles } from '@masknet/theme'
 import { Link, Typography } from '@mui/material'
-import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
-import { SchemaType, formatTokenId, ChainId, chainResolver } from '@masknet/web3-shared-evm'
+import { SchemaType, formatTokenId, ChainId } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { Icons } from '@masknet/icons'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { isEqual } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -50,7 +50,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NFTInfoCardProps {
-    asset: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
+    asset: Web3Helper.NonFungibleAssetScope<void>
     sourceType?: SourceType
 }
 
@@ -66,14 +66,14 @@ const resolveTokenSchema = (schema?: SchemaType) => {
 
 export function NFTInfoCard(props: NFTInfoCardProps) {
     const { asset, sourceType } = props
+    const { t } = useI18N()
     const { classes } = useStyles()
     const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    const { t } = useI18N()
 
     const infoConfigMapping = [
         { title: t('plugin_collectible_token_id'), value: formatTokenId(asset.tokenId, 4) },
         { title: t('contract'), value: Others?.formatAddress(asset.address, 4) ?? '-', link: true },
-        { title: t('plugin_collectible_block_chain'), value: chainResolver.chainFullName(asset.chainId) },
+        { title: t('plugin_collectible_block_chain'), value: Others?.chainResolver.chainFullName(asset.chainId) },
         { title: t('token_standard'), value: resolveTokenSchema(asset.schema || asset.contract?.schema) },
         {
             title: t('plugin_collectible_creator_earning'),

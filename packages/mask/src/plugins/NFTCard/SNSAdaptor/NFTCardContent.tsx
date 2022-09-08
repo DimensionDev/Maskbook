@@ -5,10 +5,6 @@ import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '../../Wallet/messages'
 import {
     NetworkPluginID,
-    SourceType,
-    NonFungibleTokenOrder,
-    NonFungibleTokenEvent,
-    Pageable,
 } from '@masknet/web3-shared-base'
 import { NFTCardDialogTabs } from './NFTCardDialog'
 import { useStyles } from '../useStyles'
@@ -17,28 +13,26 @@ import { AboutTab } from './Tabs/AboutTab'
 import { OffersTab } from './Tabs/OffersTab'
 import { ActivitiesTab } from './Tabs/ActivitiesTab'
 import { NFTBasicInfo } from '../../../components/shared/NFTCard/NFTBasicInfo'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { LoadingBase } from '@masknet/theme'
 import { base as pluginDefinition } from '../base'
+import { useNFTCardInfo } from './hooks/useNFTCardInfo'
 
 export interface NFTCardContentProps {
     currentTab: NFTCardDialogTabs
-    asset: AsyncStateRetry<Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>>
-    orders: AsyncStateRetry<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
-    events: AsyncStateRetry<Pageable<NonFungibleTokenEvent<ChainId, SchemaType>>>
-    provider: SourceType
+    tokenId: string
+    tokenAddress: string
 }
 
 export function NFTCardContent(props: NFTCardContentProps) {
-    const { currentTab, asset, orders, events } = props
+    const { currentTab, tokenId, tokenAddress } = props
     const { classes } = useStyles()
     const { t: tb } = useBaseI18n()
     const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
     const pluginId = useCurrentWeb3NetworkPluginID()
+    const { asset, orders, events,  } = useNFTCardInfo(tokenAddress, tokenId)
+
     const chainIdList = pluginDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
 
     if (asset.loading)

@@ -1,7 +1,7 @@
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useMemo } from 'react'
 import { CollectibleTab } from '../CollectibleTab'
-import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { NFTInfoCard } from '../../../../components/shared/NFTCard/NFTInfoCard'
 import { NFTPropertiesCard } from '../../../../components/shared/NFTCard/NFTPropertiesCard'

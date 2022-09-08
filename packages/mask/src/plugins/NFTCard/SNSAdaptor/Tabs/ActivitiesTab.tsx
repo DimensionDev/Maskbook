@@ -1,5 +1,4 @@
 import { makeStyles, LoadingBase } from '@masknet/theme'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { NonFungibleTokenEvent, Pageable } from '@masknet/web3-shared-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { Typography, Button } from '@mui/material'
@@ -7,6 +6,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { useI18N } from '../../../../utils'
 import { NFTActivityCard, ActivityType } from '../../../../components/shared/NFTCard/NFTActivityCard'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ActivitiesTabProps {
-    events: AsyncStateRetry<Pageable<NonFungibleTokenEvent<ChainId, SchemaType>>>
+    events: AsyncStateRetry<Pageable<NonFungibleTokenEvent<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>
 }
 
 const resolveActivityType = (type?: string) => {
