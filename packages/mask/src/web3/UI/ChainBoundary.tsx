@@ -45,6 +45,11 @@ const useStyles = makeStyles()((theme) => ({
         padding: 10,
         maxWidth: 260,
     },
+    connectWallet: {
+        '& > .MuiButton-startIcon': {
+            display: 'block',
+        },
+    },
 }))
 
 export interface ChainBoundaryProps<T extends NetworkPluginID> extends withClasses<'switchButton'> {
@@ -171,6 +176,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
             <>
                 {!props.hiddenConnectButton ? (
                     <ActionButton
+                        className={classes.connectWallet}
                         fullWidth
                         startIcon={<Icons.ConnectWallet size={18} />}
                         onClick={openSelectProviderDialog}
