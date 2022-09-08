@@ -73,7 +73,7 @@ const useStyles = makeStyles()((theme) => ({
     link: {
         cursor: 'pointer',
         marginTop: 2,
-        zIndex: 1,
+        zIndex: 0,
         '&:hover': {
             textDecoration: 'none',
         },
@@ -81,7 +81,7 @@ const useStyles = makeStyles()((theme) => ({
     settingLink: {
         cursor: 'pointer',
         marginTop: 4,
-        zIndex: 1,
+        zIndex: 0,
         '&:hover': {
             textDecoration: 'none',
         },
