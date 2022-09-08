@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
 import { AddressItem, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import {
@@ -119,7 +119,8 @@ export const ProfileBar = memo<ProfileBarProps>(
             successText: t('copy_success'),
         })
 
-        const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+        const { Others } = useWeb3State()
+        const chainId = useChainId()
 
         const [walletMenuOpen, setWalletMenuOpen] = useState(false)
         useEffect(() => {
@@ -147,7 +148,7 @@ export const ProfileBar = memo<ProfileBarProps>(
                             />
                             <Icons.PopupCopy onClick={onCopy} size={14} className={classes.linkIcon} />
                             <Link
-                                href={Others?.explorerResolver.addressLink(ChainId.Mainnet, address)}
+                                href={Others?.explorerResolver.addressLink(chainId ?? ChainId.Mainnet, address)}
                                 target="_blank"
                                 title={t('view_on_explorer')}
                                 rel="noopener noreferrer"
