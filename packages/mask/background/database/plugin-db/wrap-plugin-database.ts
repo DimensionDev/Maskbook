@@ -32,7 +32,7 @@ export function createPluginDatabase<Data extends IndexableTaggedUnion>(
         return IDBKeyRange.only([plugin_id, data.type, data.id])
     }
     function ensureAlive() {
-        if (ended) throw new Error(`[@masknet/plugin-infra] Storage instance for ${plugin_id} has been expired.`)
+        if (ended) throw new Error(`[@masknet/plugin-infra] Storage instance for ${plugin_id} has expired.`)
     }
     return {
         async get(type, id) {
