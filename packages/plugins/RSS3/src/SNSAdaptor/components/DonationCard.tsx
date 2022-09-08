@@ -67,6 +67,7 @@ const useStyles = makeStyles()((theme) => ({
         height: '126px !important',
         borderRadius: '8px',
         objectFit: 'cover',
+        flexShrink: 0,
     },
     fallbackImage: {
         minHeight: '0 !important',
