@@ -1,3 +1,4 @@
+/* cspell:disable */
 import { isIPFS_CID, resolveCrossOriginURL, resolveIPFS_URL } from '@masknet/web3-shared-base'
 
 const R2D2_ROOT_URL = 'r2d2.to'
@@ -17,6 +18,18 @@ enum AlchemyProxies {
     polygon = 'polygon-mainnet',
     flow = 'flow-mainnet',
 }
+
+const HOTFIX_RPC_URLS = [
+    'aurora.dev',
+    'astar.api.onfinality.io',
+    'arbitrum.io',
+    'avax.network',
+    'optimism.io',
+    'harmony.one',
+    'hmny.io',
+    'hermesdefi.io',
+    'pokt.network',
+]
 
 const AlchemyMatchers: Array<[string, AlchemyProxies]> = [
     ['https://eth-mainnet.alchemyapi.io', AlchemyProxies.eth_io],
@@ -45,6 +58,7 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
     const info = new Request(input, init)
     const url = info.url
     const u = new URL(url, location.href)
+
     // ipfs
     if (url.startsWith('ipfs://') || isIPFS_CID(url))
         return originalFetch(resolveCrossOriginURL(resolveIPFS_URL(url))!, info)
@@ -71,8 +85,8 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
         return originalFetch(url.replace(u.origin, `https://${r2deWorkerType}.${R2D2_ROOT_URL}`), info)
     }
 
-    // hack astar & arbitrum rpc fetch
-    if (url.includes('astar.api.onfinality.io') || url.includes('arbitrum.io')) {
+    // hotfix rpc requests lost content-type header
+    if (info.method === 'POST' && HOTFIX_RPC_URLS.some((x) => url.includes(x))) {
         return originalFetch(info, { ...init, headers: { ...init?.headers, 'Content-type': 'application/JSON' } })
     }
 
