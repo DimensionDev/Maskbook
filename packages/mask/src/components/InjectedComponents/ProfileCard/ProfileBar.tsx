@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { AddressItem, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import {
@@ -129,7 +129,6 @@ export const ProfileBar = memo<ProfileBarProps>(
                 window.removeEventListener('scroll', closeMenu, false)
             }
         }, [])
-        const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
         const selectedAddress = socialAddressList.find((x) => isSameAddress(x.address, address))
 
         return (
@@ -148,7 +147,7 @@ export const ProfileBar = memo<ProfileBarProps>(
                             />
                             <Icons.PopupCopy onClick={onCopy} size={14} className={classes.linkIcon} />
                             <Link
-                                href={Others?.explorerResolver.addressLink(chainId ?? ChainId.Mainnet, address)}
+                                href={Others?.explorerResolver.addressLink(ChainId.Mainnet, address)}
                                 target="_blank"
                                 title={t('view_on_explorer')}
                                 rel="noopener noreferrer"
