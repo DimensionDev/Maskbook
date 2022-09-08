@@ -2,7 +2,7 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import type { TradeComputed } from '../../types'
 import { createNativeToken, formatUSD, formatWeiToEther, GasOptionConfig } from '@masknet/web3-shared-evm'
 import { useCallback, useMemo, useState } from 'react'
-import { FungibleToken, leftShift, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance, FungibleToken, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { currentSlippageSettings } from '../../settings'
 import { useNativeTokenPrice, useFungibleTokenPrice, Web3Helper } from '@masknet/plugin-infra/web3'
@@ -58,9 +58,12 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     // #endregion
 
     // #region price impact dialog
-    const lostToken = leftShift(trade.inputAmount.multipliedBy(trade.priceImpact), trade.inputToken?.decimals ?? 0)
+    const lostToken = formatBalance(
+        multipliedBy(trade.inputAmount, trade.priceImpact).toFixed(),
+        trade.inputToken?.decimals ?? 0,
+    )
 
-    const lostValue = lostToken.multipliedBy(inputTokenPrice ?? 0).toFixed(2)
+    const lostValue = multipliedBy(inputTokenPrice ?? 0, lostToken).toFixed(2)
 
     const handleOpenPriceImpactDialog = useCallback(() => {
         setPriceImpactDialogOpen(true)
@@ -119,7 +122,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 open={priceImpactDialogOpen}
                 onClose={onPriceImpactDialogClose}
                 onConfirm={handlePriceImpactDialogConfirm}
-                lostToken={lostToken.toFixed()}
+                lostToken={lostToken}
                 symbol={inputToken.symbol}
                 lostValue={lostValue}
                 priceImpact={trade.priceImpact}

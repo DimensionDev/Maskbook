@@ -30,9 +30,9 @@ import {
 import {
     CurrencyType,
     currySameAddress,
+    formatBalance,
     FungibleToken,
     isSameAddress,
-    leftShift,
     minus,
     NetworkPluginID,
     toZero,
@@ -222,8 +222,8 @@ export const FungibleTokenList = forwardRef(
             return filteredFungibleTokens
                 .filter((x) => !isBlockedToken(x))
                 .sort((a, z) => {
-                    const aBalance = toZero(leftShift(fungibleTokensBalance[a.address] ?? '0', a.decimals))
-                    const zBalance = toZero(leftShift(fungibleTokensBalance[z.address] ?? '0', z.decimals))
+                    const aBalance = toZero(formatBalance(fungibleTokensBalance[a.address] ?? '0', a.decimals))
+                    const zBalance = toZero(formatBalance(fungibleTokensBalance[z.address] ?? '0', z.decimals))
 
                     const aUSD = toZero(fungibleAssetsTable[a.address]?.value?.[CurrencyType.USD] ?? '0')
                     const zUSD = toZero(fungibleAssetsTable[z.address]?.value?.[CurrencyType.USD] ?? '0')

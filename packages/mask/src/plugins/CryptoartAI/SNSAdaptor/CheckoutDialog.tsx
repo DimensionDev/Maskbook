@@ -11,7 +11,7 @@ import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, formatBalance, leftShift } from '@masknet/web3-shared-base'
+import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 import { PluginWalletStatusBar, useI18N } from '../../../utils'
 import { resolveAssetLinkOnCryptoartAI, resolvePaymentTokensOnCryptoartAI } from '../pipes'
 
@@ -124,7 +124,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
 
     const validationMessage = useMemo(() => {
         if (!isVerified) return t('plugin_collectible_check_tos_document')
-        if (new BigNumber(asset?.value?.priceInEth).gt(leftShift(balance.value ?? 0, token?.value?.decimals))) {
+        if (new BigNumber(asset?.value?.priceInEth).gt(formatBalance(balance.value, token?.value?.decimals, 4))) {
             return t('plugin_collectible_insufficient_balance')
         }
         return ''

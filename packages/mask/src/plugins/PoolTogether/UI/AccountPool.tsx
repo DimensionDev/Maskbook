@@ -1,6 +1,6 @@
 import { TokenIcon } from '@masknet/shared'
 import { DarkColor } from '@masknet/theme/base'
-import { leftShift, NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { Grid, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -118,11 +118,13 @@ export function AccountPool(props: AccountPoolProps) {
     const poolURL = useManagePoolURL(accountPool.pool)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
-    const balance = leftShift(
+    const balance = formatBalance(
         accountPool.account.ticketBalance,
         Number.parseInt(accountPool.pool.tokens.ticket.decimals, 10),
     )
-    const formattedBalance = balance.toFixed(6)
+    const formattedBalance = Number.parseFloat(balance).toLocaleString(undefined, {
+        maximumFractionDigits: 6,
+    })
 
     const odds = calculateOdds(
         Number.parseFloat(formattedBalance),

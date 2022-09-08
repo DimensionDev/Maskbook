@@ -6,7 +6,8 @@ import { Trans } from 'react-i18next'
 import { formatAmountPostfix } from '../utils'
 import { purify } from '@masknet/shared-base'
 import { POOL_DESCRIPTION_LIMIT } from '../constants'
-import { leftShift } from '@masknet/web3-shared-base'
+import BigNumber from 'bignumber.js'
+import { formatBalance } from '@masknet/web3-shared-base'
 
 const DIGIT_LENGTH = 18
 
@@ -46,8 +47,8 @@ export function PoolStats(props: PoolStatsProps) {
     const { pool } = props
     const { classes } = useStyles()
     // #region process stats
-    const valueManaged = formatAmountPostfix(leftShift(pool?.totalValue, DIGIT_LENGTH))
-    const lifeTimeReturn = leftShift(pool.performance, DIGIT_LENGTH).minus(1).multipliedBy(100)
+    const valueManaged = formatAmountPostfix(formatBalance(pool?.totalValue, DIGIT_LENGTH))
+    const lifeTimeReturn = new BigNumber(formatBalance(pool.performance, DIGIT_LENGTH)).minus(1).multipliedBy(100)
 
     const riskFactor = pool && pool?.riskFactor !== -1 ? pool?.riskFactor : '-'
 

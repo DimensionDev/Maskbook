@@ -6,7 +6,6 @@ export function formatBalance(rawValue: BigNumber.Value = '0', decimals = 0, sig
     if (balance.isNaN()) return '0'
     const negative = balance.isNegative() // balance < 0n
     const base = pow10(decimals) // 10n ** decimals
-    if (!negative && balance.div(base).lt(pow10(-6))) return '<0.000001'
 
     if (negative) balance = balance.absoluteValue() // balance * -1n
 
@@ -21,6 +20,7 @@ export function formatBalance(rawValue: BigNumber.Value = '0', decimals = 0, sig
 
     // trim tailing zeros
     fraction = fraction.replace(/0+$/g, '')
+
     const whole = balance.dividedToIntegerBy(base).toString(10) // (balance / base).toString(10)
     const value = `${whole}${fraction === '' ? '' : `.${fraction}`}`
 

@@ -371,7 +371,7 @@ const ContractInteraction = memo(() => {
                         {tokenDecimals !== undefined ? (
                             <>
                                 <Typography className={classes.amount}>
-                                    {leftShift(tokenAmount, tokenDecimals).gt(pow10(9)) ? (
+                                    {isGreaterThan(formatBalance(tokenAmount, tokenDecimals), pow10(9)) ? (
                                         t('popups_wallet_token_infinite_unlock')
                                     ) : (
                                         <FormattedBalance

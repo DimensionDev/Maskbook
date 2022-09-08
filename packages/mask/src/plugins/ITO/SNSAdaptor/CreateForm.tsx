@@ -1,5 +1,5 @@
 import { SchemaType, formatAmount, useITOConstants, ChainId } from '@masknet/web3-shared-evm'
-import { isGreaterThan, isZero, NetworkPluginID, FungibleToken, leftShift } from '@masknet/web3-shared-base'
+import { formatBalance, isGreaterThan, isZero, NetworkPluginID, FungibleToken } from '@masknet/web3-shared-base'
 import { Box, CircularProgress, Stack, TextField, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
 import CheckIcon from '@mui/icons-material/Check'
@@ -137,21 +137,21 @@ export function CreateForm(props: CreateFormProps) {
 
     const [message, setMessage] = useState(origin?.title ?? '')
     const [totalOfPerWallet, setTotalOfPerWallet] = useState(
-        isZero(origin?.limit || '0') ? '' : leftShift(origin?.limit ?? '0', origin?.token?.decimals).toFixed(),
+        isZero(origin?.limit || '0') ? '' : formatBalance(origin?.limit || '0', origin?.token?.decimals),
     )
     const [tokenAndAmount, setTokenAndAmount] = useState<ExchangeTokenAndAmountState>()
     const TAS: ExchangeTokenAndAmountState[] = []
     if (origin?.token && origin?.total) {
         TAS.push({
             token: origin?.token,
-            amount: leftShift(origin?.total ?? '0', origin?.token.decimals).toFixed(),
+            amount: formatBalance(origin?.total || '0', origin?.token.decimals),
             key: uuid(),
         })
     }
     if (origin?.exchangeTokens && origin?.exchangeAmounts) {
         origin?.exchangeTokens.map((i, x) =>
             TAS.push({
-                amount: leftShift(origin?.exchangeAmounts[x] || '0', i?.decimals).toFixed(),
+                amount: formatBalance(origin?.exchangeAmounts[x] || '0', i?.decimals),
                 token: i,
                 key: uuid(),
             }),

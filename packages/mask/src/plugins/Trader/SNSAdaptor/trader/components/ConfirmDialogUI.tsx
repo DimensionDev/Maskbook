@@ -12,7 +12,6 @@ import {
     multipliedBy,
     formatPercentage,
     isZero,
-    leftShift,
 } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { Alert, alpha, Box, Button, DialogActions, DialogContent, dialogTitleClasses, Typography } from '@mui/material'
@@ -353,9 +352,10 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                             <Typography className={classes.label}>
                                 ~
                                 <FormattedCurrency
-                                    value={leftShift(outputAmount.toFixed(), outputToken.decimals)
-                                        .multipliedBy(outputTokenPrice)
-                                        .toFixed(2)}
+                                    value={multipliedBy(
+                                        formatBalance(outputAmount.toFixed(), outputToken.decimals),
+                                        outputTokenPrice,
+                                    ).toFixed(2)}
                                     formatter={formatCurrency}
                                 />
                             </Typography>

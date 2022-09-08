@@ -128,7 +128,7 @@ export function SwapDialog(props: SwapDialogProps) {
 
     const [swapAmount, setSwapAmount] = useState<BigNumber>(tokenAmount.multipliedBy(ratio))
     const [inputAmountForUI, setInputAmountForUI] = useState(
-        swapAmount.isZero() ? '' : leftShift(swapAmount, swapToken?.decimals).toFixed(),
+        swapAmount.isZero() ? '' : formatBalance(swapAmount, swapToken?.decimals),
     )
     // #region select token
     const selectFungibleToken = useSelectFungibleToken(NetworkPluginID.PLUGIN_EVM)
@@ -145,9 +145,7 @@ export function SwapDialog(props: SwapDialogProps) {
         setSwapToken(picked)
         setTokenAmount(initAmount)
         setSwapAmount(initAmount.multipliedBy(ratio))
-        setInputAmountForUI(
-            initAmount.isZero() ? '' : leftShift(initAmount.multipliedBy(ratio), picked.decimals).toFixed(),
-        )
+        setInputAmountForUI(initAmount.isZero() ? '' : formatBalance(initAmount.multipliedBy(ratio), picked.decimals))
     }, [
         initAmount,
         payload,
@@ -244,7 +242,7 @@ export function SwapDialog(props: SwapDialogProps) {
                 token={swapToken}
                 onAmountChange={(value) => {
                     const val = value === '' || value === '0' ? ZERO : rightShift(value, swapToken.decimals)
-                    const isMax = value === leftShift(maxAmount, swapToken.decimals).toFixed() && !val.isZero()
+                    const isMax = value === formatBalance(maxAmount, swapToken.decimals) && !val.isZero()
                     const tokenAmount = isMax ? maxSwapAmount : val.dividedBy(ratio)
                     const swapAmount = isMax ? tokenAmount.multipliedBy(ratio) : val.dp(0)
                     setInputAmountForUI(
