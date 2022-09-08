@@ -228,17 +228,17 @@ const MATCH_IPFS_DATA_RE = /ipfs\/(data:.*)$/
 const CORS_HOST = 'https://cors.r2d2.to'
 const GATEWAY_HOST = 'https://gateway.ipfscdn.io'
 
-export const isIpfsCid = (cid: string) => {
+export const isIPFS_CID = (cid: string) => {
     const re = new RegExp(`^${MATCH_IPFS_CID_RAW}$`)
     return re.test(cid)
 }
 
-export const hasIpfsCid = (str: string) => {
+export const hasIPFS_CID = (str: string) => {
     const re = new RegExp(MATCH_IPFS_CID_RAW)
     return re.test(str)
 }
 
-export const getIpfsCidPathname = (str: string) => {
+export const getIPFS_Pathname = (str: string) => {
     const re = new RegExp(`(?:${MATCH_IPFS_CID_RAW})\\/?.*`)
     const matched = str.match(re) ?? []
     return matched[0]
@@ -266,18 +266,18 @@ const trimQuery = (url: string) => {
     return url.replace(/\?.+$/, '')
 }
 
-export function resolveResourceUri(uri: string | undefined) {
-    if (!uri) return uri
-    if (isLocaleResource(uri)) return resolveLocalResource(uri)
-    return resolveIPFSLink(uri)
+export function resolveResourceURL(url: string | undefined) {
+    if (!url) return url
+    if (isLocaleResource(url)) return resolveLocalResource(url)
+    return resolveIPFS_URL(url)
 }
 
-export function resolveIPFSLink(cidOrURL: string | undefined): string | undefined {
+export function resolveIPFS_URL(cidOrURL: string | undefined): string | undefined {
     if (!cidOrURL) return cidOrURL
 
     // eliminate cors proxy
     if (cidOrURL.startsWith(CORS_HOST)) {
-        return trimQuery(resolveIPFSLink(decodeURIComponent(cidOrURL.replace(new RegExp(`^${CORS_HOST}\??`), '')))!)
+        return trimQuery(resolveIPFS_URL(decodeURIComponent(cidOrURL.replace(new RegExp(`^${CORS_HOST}\??`), '')))!)
     }
 
     // a ipfs.io host
@@ -291,20 +291,20 @@ export function resolveIPFSLink(cidOrURL: string | undefined): string | undefine
     }
 
     // a ipfs hash fragment
-    if (hasIpfsCid(cidOrURL)) {
-        return trimQuery(`${GATEWAY_HOST}/ipfs/${getIpfsCidPathname(cidOrURL)}`)
+    if (hasIPFS_CID(cidOrURL)) {
+        return trimQuery(`${GATEWAY_HOST}/ipfs/${getIPFS_Pathname(cidOrURL)}`)
     }
 
     return cidOrURL
 }
 
-export function resolveARLink(str?: string): string {
+export function resolveArweaveURL(str?: string): string {
     if (!str) return ''
     if (str.startsWith('https://')) return str
     return urlcat('https://arweave.net/:str', { str })
 }
 
-export function resolveCORSLink(url?: string): string | undefined {
+export function resolveCrossOriginURL(url?: string): string | undefined {
     if (!url || isLocaleResource(url)) return url
     if (url.startsWith(CORS_HOST)) return url
     return `${CORS_HOST}?${encodeURIComponent(url)}`

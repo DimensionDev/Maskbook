@@ -1,11 +1,11 @@
 import { useAsync } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
-import { resolveResourceUri } from '@masknet/web3-shared-base'
+import { resolveResourceURL } from '@masknet/web3-shared-base'
 
 // filter out nft with image resource
 export function useIsImageURL(url: string | undefined): AsyncState<boolean> {
     return useAsync(async () => {
-        const urlComputed = resolveResourceUri(url)
+        const urlComputed = resolveResourceURL(url)
 
         if (!urlComputed) return false
         if (urlComputed.startsWith('data:image')) return true

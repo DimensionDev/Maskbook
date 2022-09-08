@@ -50,8 +50,8 @@ import {
     NonFungibleTokenContract,
     NonFungibleTokenMetadata,
     TransactionStatusType,
-    resolveIPFSLink,
-    resolveCORSLink,
+    resolveIPFS_URL,
+    resolveCrossOriginURL,
 } from '@masknet/web3-shared-base'
 import type { BaseContract } from '@masknet/web3-contracts/types/types'
 import { createContext, dispatch } from './composer'
@@ -433,7 +433,7 @@ class Connection implements EVM_Connection {
             if (uri.startsWith('https://api.opensea.io/') && tokenId) return uri.replace('0x{id}', tokenId)
 
             // add cors header
-            if (!uri.startsWith('ipfs://')) return resolveCORSLink(resolveIPFSLink(uri))!
+            if (!uri.startsWith('ipfs://')) return resolveCrossOriginURL(resolveIPFS_URL(uri))!
 
             return uri
         }
@@ -455,8 +455,8 @@ class Connection implements EVM_Connection {
                 '',
                 response.description,
                 undefined,
-                resolveIPFSLink(response.image),
-                resolveIPFSLink(response.image),
+                resolveIPFS_URL(response.image),
+                resolveIPFS_URL(response.image),
             )
         }
 
@@ -473,8 +473,8 @@ class Connection implements EVM_Connection {
             '',
             response.description,
             undefined,
-            resolveIPFSLink(response.image),
-            resolveIPFSLink(response.image),
+            resolveIPFS_URL(response.image),
+            resolveIPFS_URL(response.image),
         )
     }
     async getNonFungibleTokenContract(

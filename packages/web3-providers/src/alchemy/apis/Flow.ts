@@ -2,7 +2,7 @@ import urlcat from 'urlcat'
 import {
     createIndicator,
     createPageable,
-    resolveARLink,
+    resolveArweaveURL,
     HubOptions,
     NonFungibleAsset,
     TokenType,
@@ -20,7 +20,7 @@ function createNonFungibleTokenImageURL(asset: AlchemyNFT_FLOW | AlchemyResponse
         asset?.metadata?.metadata?.find((data) => data?.name === 'eventImage')?.value ||
         asset?.metadata?.metadata?.find((data) => data?.name === 'ipfsLink')?.value ||
         asset?.media?.find((data) => data?.mimeType === 'image/png | image')?.uri ||
-        resolveARLink(asset?.metadata?.metadata?.find((data) => data?.name === 'arLink')?.value || '')
+        resolveArweaveURL(asset?.metadata?.metadata?.find((data) => data?.name === 'arLink')?.value || '')
     )
 }
 
