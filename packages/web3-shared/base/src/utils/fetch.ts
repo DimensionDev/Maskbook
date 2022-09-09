@@ -28,7 +28,7 @@ export function fetchImageViaDOM(url: string) {
         }
         const onload = async () => {
             try {
-                resolve(await getImageBlobResized(img, 160, 160))
+                resolve(await getImageBlobResized(img, 450, 450))
             } catch {
                 // do nothing
             } finally {
