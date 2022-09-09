@@ -89,6 +89,8 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
     },
     fallbackImage: {
+        width: '100% !important',
+        height: '100% !important',
         position: 'absolute',
     },
     unset: {

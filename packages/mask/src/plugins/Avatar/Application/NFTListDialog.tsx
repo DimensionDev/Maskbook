@@ -1,13 +1,14 @@
+import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react'
+import { first, uniqBy } from 'lodash-unified'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { ChainId, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
+import { ChainId, NetworkType } from '@masknet/web3-shared-evm'
 import { isSameAddress, NetworkPluginID, isGreaterThan } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
-import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react'
 import { AddNFT } from '../SNSAdaptor/AddNFT'
 import { BindingProof, EMPTY_LIST } from '@masknet/shared-base'
 import { AllChainsNonFungibleToken, PFP_TYPE, SelectTokenInfo } from '../types'
-import { first, uniqBy } from 'lodash-unified'
 import { useI18N } from '../locales'
+import { SUPPORTED_CHAIN_IDS } from '../constants'
 import {
     useAccount,
     useChainId,
@@ -145,7 +146,7 @@ function isSameToken(token?: AllChainsNonFungibleToken, tokenInfo?: AllChainsNon
     if (!token && !tokenInfo) return false
     return isSameAddress(token?.address, tokenInfo?.address) && token?.tokenId === tokenInfo?.tokenId
 }
-interface NFTListDialogProps {
+export interface NFTListDialogProps {
     onNext: () => void
     tokenInfo?: AllChainsNonFungibleToken
     wallets?: BindingProof[]
@@ -174,7 +175,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const [disabled, setDisabled] = useState(false)
     const t = useI18N()
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
-    const chains = supportedChains.map((network: NetworkType) => networkResolver.networkChainId(network))
 
     const {
         value: collectibles = EMPTY_LIST,
@@ -301,10 +301,10 @@ export function NFTListDialog(props: NFTListDialogProps) {
 
     // Set eth to the default chain
     const actualChainId = useMemo(() => {
-        const defaultChain = first(chains)
-        if (!chains.includes(chainId) && defaultChain) return defaultChain
+        const defaultChain = first(SUPPORTED_CHAIN_IDS)
+        if (!SUPPORTED_CHAIN_IDS.includes(chainId) && defaultChain) return defaultChain
         return chainId
-    }, [chains, chainId])
+    }, [chainId])
 
     return (
         <>
@@ -314,7 +314,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                         {selectedPluginId === NetworkPluginID.PLUGIN_EVM ? (
                             <div className={classes.abstractTabWrapper}>
                                 <NetworkTab
-                                    chains={chains.filter(Boolean) as ChainId[]}
+                                    chains={SUPPORTED_CHAIN_IDS}
                                     chainId={actualChainId}
                                     setChainId={setChainId}
                                     classes={classes}

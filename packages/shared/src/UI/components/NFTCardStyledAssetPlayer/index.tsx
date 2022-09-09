@@ -27,8 +27,8 @@ const useStyles = makeStyles()((theme) => ({
         width: 120,
     },
     fallbackImage: {
-        height: '100% !important',
-        width: '100% !important',
+        height: '64px !important',
+        width: '64px !important',
     },
     loadingIcon: {
         width: 30,
@@ -119,6 +119,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
                     height="100%"
                     style={{ objectFit: 'cover' }}
                     src={urlComputed}
+                    fallback={fallbackImageURL}
                 />
                 {showNetwork && <ImageIcon icon={networkIcon} size={20} classes={{ icon: classes.networkIcon }} />}
             </div>
