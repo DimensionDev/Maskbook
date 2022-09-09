@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react'
 import { first, uniqBy } from 'lodash-unified'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { ChainId, NetworkType } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { isSameAddress, NetworkPluginID, isGreaterThan } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { AddNFT } from '../SNSAdaptor/AddNFT'
@@ -177,10 +177,10 @@ export function NFTListDialog(props: NFTListDialogProps) {
 
     // Set eth to the default chain
     const actualChainId = useMemo(() => {
-        const defaultChain = first(chains)
-        if (!chains.includes(chainId) && defaultChain) return defaultChain
+        const defaultChain = first(SUPPORTED_CHAIN_IDS)
+        if (!SUPPORTED_CHAIN_IDS.includes(chainId) && defaultChain) return defaultChain
         return chainId
-    }, [chains, chainId])
+    }, [chainId])
 
     const {
         value: collectibles = EMPTY_LIST,
