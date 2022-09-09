@@ -17,12 +17,12 @@ import {
     Typography,
 } from '@mui/material'
 import type { AutoPasteFailedEvent } from '@masknet/shared-base'
-import { Image } from '../shared/Image'
 import { DraggableDiv } from '../shared/DraggableDiv'
 import Download from '@mui/icons-material/CloudDownload'
 import CloseIcon from '@mui/icons-material/Close'
 import OpenInBrowser from '@mui/icons-material/OpenInBrowser'
 import { saveFileFromUrl } from '../../../shared'
+import { Image } from '@masknet/shared'
 
 export interface AutoPasteFailedDialogProps extends withClasses<never> {
     onClose: () => void
@@ -35,10 +35,10 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
-    const { t } = useI18N()
-    const [url, setURL] = useState('')
-    const classes = useStylesExtends(useStyles(), props)
     const { onClose, data } = props
+    const { t } = useI18N()
+    const classes = useStylesExtends(useStyles(), props)
+    const url = data.image ? URL.createObjectURL(data.image) : undefined
     const { showSnackbar } = useCustomSnackbar()
     const [, copy] = useCopyToClipboard()
     const isMobile = useMatchXS()
@@ -97,7 +97,7 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                     <div style={{ textAlign: permission === 'granted' ? 'left' : 'center' }}>
                         {data.image ? (
                             // It must be img
-                            <Image component="img" onURL={setURL} src={data.image} style={{ height: 'auto' }} />
+                            <Image src={URL.createObjectURL(data.image)} style={{ height: 'auto' }} />
                         ) : null}
                         <Box
                             sx={{
