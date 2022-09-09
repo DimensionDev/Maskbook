@@ -75,7 +75,7 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
     if (info.headers.get('accept')?.includes('image/')) {
         return new Response(await fetchImageByDOM(url), {
             headers: {
-                'Content-Type': 'image/jpeg',
+                'Content-Type': 'image/png',
             },
         })
     }

@@ -1,3 +1,6 @@
+const MAX_IMG_WIDTH = 160
+const MAX_IMG_HEIGHT = 160
+
 /**
  * Fetch image by creating an image element.
  * It's not supporting in mv3 on background page.
@@ -14,10 +17,14 @@ export function fetchImageByDOM(url: string) {
         const onload = () => {
             const canvas = document.createElement('canvas')
             const context = canvas.getContext('2d')
-            canvas.height = img.naturalHeight
-            canvas.width = img.naturalWidth
-            context?.drawImage(img, 0, 0)
-            canvas.toBlob((b) => resolve(b), 'image/jpeg', '0.8')
+            const w = img.naturalWidth
+            const h = img.naturalHeight
+            const scale = Math.min(MAX_IMG_WIDTH / w, MAX_IMG_HEIGHT / h)
+            canvas.height = MAX_IMG_HEIGHT
+            canvas.width = MAX_IMG_WIDTH
+            context?.setTransform(scale, 0, 0, scale, canvas.width / 2, canvas.height / 2)
+            context?.drawImage(img, -w / 2, -h / 2, w, h)
+            canvas.toBlob((b) => resolve(b), 'image/png')
             cleanup()
         }
         const onerror = () => {

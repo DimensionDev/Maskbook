@@ -17,8 +17,8 @@ function toBase64(blob: Blob | null | undefined) {
 function fetchImage(url: string) {
     return attemptUntil<string | null>(
         [
-            async () => toBase64(await fetchImageByDOM(url)),
             async () => toBase64(await fetchImageByDOM(resolveCrossOriginURL(url)!)),
+            async () => toBase64(await fetchImageByDOM(url)),
             async () => toBase64(await fetchImageByHTTP(url)),
         ],
         url,
