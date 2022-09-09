@@ -1,7 +1,6 @@
 import {
     attemptUntil,
     fetchImageViaDOM,
-    fetchImageViaHTTP,
     isIPFS_CID,
     resolveCrossOriginURL,
     resolveIPFS_URL,
@@ -85,7 +84,7 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
     // hotfix image requests from fetching by DOM
     if (info.method === 'GET' && info.headers.get('accept')?.includes('image/')) {
         const blob = await attemptUntil<Blob | null>(
-            [async () => (await originalFetch(url)).blob(), async () => await fetchImageViaDOM(url)],
+            [async () => (await originalFetch(url)).blob(), async () => fetchImageViaDOM(url)],
             null,
         )
         return new Response(blob, {

@@ -68,16 +68,14 @@ export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, 
                     isSameAddress(collection.address, selectedCollection) ? classes.selected : '',
                 )}
                 onClick={onClick}>
-                {
-                    <Image
-                        width={24}
-                        height={24}
-                        className={classes.collectionImg}
-                        src={collection?.iconURL}
-                        fallback={<Icons.MaskPlaceholder size={24} />}
-                        disableSpinner
-                    />
-                }
+                <Image
+                    width={24}
+                    height={24}
+                    className={classes.collectionImg}
+                    src={collection?.iconURL}
+                    fallback={<Icons.MaskPlaceholder size={24} />}
+                    disableSpinner
+                />
             </Box>
         </Tooltip>
     )
