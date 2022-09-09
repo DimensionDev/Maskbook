@@ -11,8 +11,8 @@ import {
 
 async function toBase64(blob: Blob | null | undefined) {
     if (!blob) throw new Error('Failed to create image URL.')
-    // const text = await blob.text()
-    // if (text.startsWith('<svg ')) return resolveLocalURL(text)
+    const text = await blob.text()
+    if (text.startsWith('<svg ')) return resolveLocalURL(text)
     return URL.createObjectURL(blob)
 }
 
@@ -21,10 +21,7 @@ function fetchImage(url: string) {
         [
             async () => toBase64(await fetchImageViaDOM(resolveCrossOriginURL(url)!)),
             async () => toBase64(await fetchImageViaDOM(url)),
-            async () => {
-                console.log(`DEBUG: fetch via http ${url}`)
-                return toBase64(await fetchImageViaHTTP(url))
-            },
+            async () => toBase64(await fetchImageViaHTTP(url)),
         ],
         url,
     )

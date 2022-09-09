@@ -61,5 +61,5 @@ export async function fetchImageViaHTTP(url: string) {
         },
     })
     if (response.ok) return response.blob()
-    return
+    return null
 }

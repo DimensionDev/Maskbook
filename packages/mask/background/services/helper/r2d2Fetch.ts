@@ -1,4 +1,11 @@
-import { fetchImageViaDOM } from '@masknet/web3-shared-base'
+import {
+    attemptUntil,
+    fetchImageViaDOM,
+    fetchImageViaHTTP,
+    isIPFS_CID,
+    resolveCrossOriginURL,
+    resolveIPFS_URL,
+} from '@masknet/web3-shared-base'
 
 /* cspell:disable */
 const R2D2_ROOT_URL = 'r2d2.to'
@@ -66,14 +73,22 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
     const url = info.url
     const u = new URL(url, location.href)
 
+    // ipfs
+    if (url.startsWith('ipfs://') || isIPFS_CID(url))
+        return originalFetch(resolveCrossOriginURL(resolveIPFS_URL(url))!, info)
+
     // hotfix rpc requests lost content-type header
     if (info.method === 'POST' && HOTFIX_RPC_URLS.some((x) => url.includes(x))) {
         return originalFetch(info, { ...init, headers: { ...init?.headers, 'Content-type': 'application/json' } })
     }
 
     // hotfix image requests from fetching by DOM
-    if (info.headers.get('accept')?.includes('image/')) {
-        return new Response(await fetchImageViaDOM(url), {
+    if (info.method === 'GET' && info.headers.get('accept')?.includes('image/')) {
+        const blob = await attemptUntil<Blob | null>(
+            [async () => (await originalFetch(url)).blob(), async () => await fetchImageViaDOM(url)],
+            null,
+        )
+        return new Response(blob, {
             headers: {
                 'Content-Type': 'image/png',
             },
