@@ -13,6 +13,7 @@ export class SwapDescriptor implements TransactionDescriptor {
         const { DODO_ETH_ADDRESS, OPENOCEAN_ETH_ADDRESS, ZERO_X_ETH_ADDRESS, BANCOR_ETH_ADDRESS } = getTraderConstants(
             context.chainId,
         )
+        console.log({ context })
         if (!context.methods?.find((x) => x.name)) return
 
         const connection = await Web3StateSettings.value.Connection?.getConnection?.({
@@ -198,7 +199,7 @@ export class SwapDescriptor implements TransactionDescriptor {
                 const tokenIn = isSameAddress(tokenInAddress, BANCOR_ETH_ADDRESS)
                     ? nativeToken
                     : await connection?.getFungibleToken(tokenInAddress ?? '')
-                const tokenOut = isSameAddress(tokenOutAddress, ZERO_X_ETH_ADDRESS)
+                const tokenOut = isSameAddress(tokenOutAddress, BANCOR_ETH_ADDRESS)
                     ? nativeToken
                     : await connection?.getFungibleToken(tokenOutAddress ?? '')
                 return {
@@ -254,6 +255,36 @@ export class SwapDescriptor implements TransactionDescriptor {
                         title: 'Swap Token',
                         description: 'Swap with UniSwap V3',
                     }
+                }
+            }
+            // 0x ETH mainnet
+            if (
+                method.name === 'sellToUniswap' &&
+                parameters?.minBuyAmount &&
+                parameters?.sellAmount &&
+                parameters?.tokens
+            ) {
+                const tokenInAddress = first(parameters.tokens)
+                const tokenOutAddress = last(parameters.tokens)
+                const tokenIn = isSameAddress(tokenInAddress, ZERO_X_ETH_ADDRESS)
+                    ? nativeToken
+                    : await connection?.getFungibleToken(tokenInAddress ?? '')
+                const tokenOut = isSameAddress(tokenOutAddress, ZERO_X_ETH_ADDRESS)
+                    ? nativeToken
+                    : await connection?.getFungibleToken(tokenOutAddress ?? '')
+                return {
+                    chainId: context.chainId,
+                    title: 'Swap Token',
+                    description: `Swap ${getTokenAmountDescription(parameters.sellAmount, tokenIn)} for ${
+                        tokenOut?.symbol ?? ''
+                    }.`,
+                    tokenInAddress: tokenIn?.address,
+                    tokenInAmount: parameters.sellAmount,
+                    successfulDescription: `Swap ${getTokenAmountDescription(
+                        parameters.sellAmount,
+                        tokenIn,
+                    )} for ${getTokenAmountDescription(parameters!.minBuyAmount, tokenOut)} successfully.`,
+                    failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
                 }
             }
         }
