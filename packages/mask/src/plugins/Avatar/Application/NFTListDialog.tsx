@@ -156,8 +156,6 @@ export interface NFTListDialogProps {
     setSelectedAccount: Dispatch<SetStateAction<string>>
 }
 
-const supportedChains = [NetworkType.Ethereum, NetworkType.Polygon]
-
 export function NFTListDialog(props: NFTListDialogProps) {
     const { onNext, wallets = EMPTY_LIST, onSelected, tokenInfo, pfpType, selectedAccount, setSelectedAccount } = props
     const { classes } = useStyles()
