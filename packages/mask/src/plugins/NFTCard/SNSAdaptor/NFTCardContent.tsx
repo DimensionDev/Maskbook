@@ -2,7 +2,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Button, Typography } from '@mui/material'
 import { PluginWalletStatusBar, useI18N as useBaseI18n } from '../../../utils'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
-import { WalletMessages } from '../../../plugins/Wallet/messages'
+import { WalletMessages } from '../../Wallet/messages'
 import {
     NetworkPluginID,
     SourceType,
@@ -23,7 +23,7 @@ import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { LoadingBase } from '@masknet/theme'
 import { base as pluginDefinition } from '../base'
 
-export interface NFTCardDialogUIProps {
+export interface NFTCardContentProps {
     currentTab: NFTCardDialogTabs
     asset: AsyncStateRetry<Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>>
     orders: AsyncStateRetry<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
@@ -31,7 +31,7 @@ export interface NFTCardDialogUIProps {
     provider: SourceType
 }
 
-export function NFTCardDialogUI(props: NFTCardDialogUIProps) {
+export function NFTCardContent(props: NFTCardContentProps) {
     const { currentTab, asset, orders, events } = props
     const { classes } = useStyles()
     const { t: tb } = useBaseI18n()

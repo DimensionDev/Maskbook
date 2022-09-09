@@ -6,7 +6,7 @@ import { CrossIsolationMessages } from '@masknet/shared-base'
 import { TabContext } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { NFTCardDialogUI } from './NFTCardDialogUI'
+import { NFTCardContent } from './NFTCardContent'
 import { useStyles } from '../useStyles'
 import { useNFTCardInfo } from './hooks/useNFTCardInfo'
 import { useI18N } from '../../../utils'
@@ -56,7 +56,7 @@ export function NFTCardDialog() {
                     </MaskTabList>
                 }>
                 <DialogContent className={classes.dialogContent}>
-                    <NFTCardDialogUI
+                    <NFTCardContent
                         provider={provider}
                         events={events}
                         orders={orders}

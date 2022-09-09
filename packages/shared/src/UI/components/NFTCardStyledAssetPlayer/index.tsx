@@ -119,6 +119,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
                     height="100%"
                     style={{ objectFit: 'cover' }}
                     src={urlComputed}
+                    fallback={fallbackImageURL}
                 />
                 {showNetwork && <ImageIcon icon={networkIcon} size={20} classes={{ icon: classes.networkIcon }} />}
             </div>
