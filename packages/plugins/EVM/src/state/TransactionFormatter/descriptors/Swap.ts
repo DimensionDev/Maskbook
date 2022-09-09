@@ -129,6 +129,31 @@ export class SwapDescriptor implements TransactionDescriptor {
                 }
             }
 
+            // DODO: swap DODO for eth
+            if (
+                method.name === 'dodoSwapV2TokenToETH' &&
+                parameters?.fromToken &&
+                parameters?.fromTokenAmount &&
+                parameters?.minReturnAmount
+            ) {
+                const tokenIn = await connection?.getFungibleToken(parameters!.fromToken ?? '')
+                const tokenOut = nativeToken
+                return {
+                    chainId: context.chainId,
+                    title: 'Swap Token',
+                    tokenInAddress: tokenIn?.address,
+                    tokenInAmount: parameters!.fromTokenAmount,
+                    description: `Swap ${getTokenAmountDescription(parameters!.fromTokenAmount, tokenIn)} for ${
+                        tokenOut?.symbol ?? ''
+                    }.`,
+                    successfulDescription: `Swap ${getTokenAmountDescription(
+                        parameters!.fromTokenAmount,
+                        tokenIn,
+                    )} for ${getTokenAmountDescription(parameters!.minReturnAmount, tokenOut)} successfully.`,
+                    failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                }
+            }
+
             // Openocean
             if (method.name === 'swap') {
                 const _parameters = parameters as
