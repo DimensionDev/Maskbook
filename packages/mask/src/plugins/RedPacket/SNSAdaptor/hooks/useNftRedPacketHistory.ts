@@ -1,4 +1,5 @@
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { uniqBy } from 'lodash-unified'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { RedPacketRPC } from '../../messages'
 import type { NftRedPacketHistory } from '../../types'
@@ -14,7 +15,7 @@ export function useNftRedPacketHistory(address: string, chainId: ChainId) {
         if (histories.length) {
             pageRef.current += 1
         }
-        setAllHistories((oldList) => [...oldList, ...histories])
+        setAllHistories((oldList) => uniqBy([...oldList, ...histories], (x) => x.rpid))
     }, [address, chainId])
 
     useEffect(() => {
