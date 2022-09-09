@@ -1,7 +1,7 @@
 import { DataProvider } from '@masknet/public-api'
 import { TokenType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { isMirroredKeyword } from '../CoinMarketCap/helper'
+import { isMirroredKeyword } from '../cmc/helper'
 import type { TrendingAPI } from '../types'
 import * as BaseAPI from './base-api'
 import { BTC_FIRST_LEGER_DATE, getAllCoinsByKeyword, getPriceStats as getStats } from './base-api'

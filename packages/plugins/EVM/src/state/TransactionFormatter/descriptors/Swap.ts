@@ -1,8 +1,16 @@
 import { first, last } from 'lodash-unified'
+import { i18NextInstance } from '@masknet/shared-base'
 import UniswapV3MulticallFunctionExactInputABI from '@masknet/web3-contracts/abis/UniswapV3MulticallFunctionExactInput.json'
+import UniswapV3MulticallFunctionExactInputSingleABI from '@masknet/web3-contracts/abis/UniswapV3MulticallFunctionExactInputSingle.json'
 import Web3 from 'web3'
 import { TransactionContext, isSameAddress } from '@masknet/web3-shared-base'
-import { ChainId, TransactionParameter, getTraderConstants, isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    TransactionParameter,
+    getTraderConstants,
+    isNativeTokenAddress,
+    getTokenConstant,
+} from '@masknet/web3-shared-evm'
 import type { TransactionDescriptor } from '../types'
 import { Web3StateSettings } from '../../../settings'
 import { getTokenAmountDescription } from '../utils'
@@ -121,6 +129,31 @@ export class SwapDescriptor implements TransactionDescriptor {
                 }
             }
 
+            // DODO: swap DODO for eth
+            if (
+                method.name === 'dodoSwapV2TokenToETH' &&
+                parameters?.fromToken &&
+                parameters?.fromTokenAmount &&
+                parameters?.minReturnAmount
+            ) {
+                const tokenIn = await connection?.getFungibleToken(parameters!.fromToken ?? '')
+                const tokenOut = nativeToken
+                return {
+                    chainId: context.chainId,
+                    title: 'Swap Token',
+                    tokenInAddress: tokenIn?.address,
+                    tokenInAmount: parameters!.fromTokenAmount,
+                    description: `Swap ${getTokenAmountDescription(parameters!.fromTokenAmount, tokenIn)} for ${
+                        tokenOut?.symbol ?? ''
+                    }.`,
+                    successfulDescription: `Swap ${getTokenAmountDescription(
+                        parameters!.fromTokenAmount,
+                        tokenIn,
+                    )} for ${getTokenAmountDescription(parameters!.minReturnAmount, tokenOut)} successfully.`,
+                    failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                }
+            }
+
             // Openocean
             if (method.name === 'swap') {
                 const _parameters = parameters as
@@ -198,7 +231,7 @@ export class SwapDescriptor implements TransactionDescriptor {
                 const tokenIn = isSameAddress(tokenInAddress, BANCOR_ETH_ADDRESS)
                     ? nativeToken
                     : await connection?.getFungibleToken(tokenInAddress ?? '')
-                const tokenOut = isSameAddress(tokenOutAddress, ZERO_X_ETH_ADDRESS)
+                const tokenOut = isSameAddress(tokenOutAddress, BANCOR_ETH_ADDRESS)
                     ? nativeToken
                     : await connection?.getFungibleToken(tokenOutAddress ?? '')
                 return {
@@ -221,13 +254,33 @@ export class SwapDescriptor implements TransactionDescriptor {
                 try {
                     const web3 = new Web3()
                     const results = web3.eth.abi.decodeParameters(
-                        UniswapV3MulticallFunctionExactInputABI,
+                        context.chainId === ChainId.Arbitrum
+                            ? UniswapV3MulticallFunctionExactInputSingleABI
+                            : UniswapV3MulticallFunctionExactInputABI,
                         method.parameters[0][0].slice(10),
                     ) as { [key: string]: string[] }
+                    let path: string
+                    let fee: string
+                    let deadline: string
+                    let tokenInAddress: string
+                    let tokenOutAddress: string
+                    let recipient: string
+                    let amountIn: string
+                    let amountOutMinimum: string
+                    if (context.chainId === ChainId.Arbitrum) {
+                        const WETH_ADDRESS = getTokenConstant(context.chainId, 'WETH_ADDRESS')
+                        console.log({ results })
+                        ;[tokenInAddress, tokenOutAddress, fee, recipient, deadline, amountIn, amountOutMinimum] =
+                            results['0']
 
-                    const [path, tokenOutAddress, _, amountIn, amountOutMinimum] = results['0']
+                        if (isSameAddress(WETH_ADDRESS, tokenOutAddress) && isNativeTokenAddress(recipient)) {
+                            tokenOutAddress = nativeToken?.address ?? ''
+                        }
+                    } else {
+                        ;[path, tokenOutAddress, fee, amountIn, amountOutMinimum] = results['0']
+                        tokenInAddress = path.slice(0, 42)
+                    }
 
-                    const tokenInAddress = path.slice(0, 42)
                     const tokenIn = isNativeTokenAddress(tokenInAddress)
                         ? nativeToken
                         : await connection?.getFungibleToken(tokenInAddress ?? '')
@@ -254,6 +307,64 @@ export class SwapDescriptor implements TransactionDescriptor {
                         title: 'Swap Token',
                         description: 'Swap with UniSwap V3',
                     }
+                }
+            }
+            // 0x ETH mainnet
+            if (
+                ['sellToUniswap', 'sellToPancakeSwap'].includes(method.name ?? '') &&
+                parameters?.minBuyAmount &&
+                parameters?.sellAmount &&
+                parameters?.tokens
+            ) {
+                const tokenInAddress = first(parameters.tokens)
+                const tokenOutAddress = last(parameters.tokens)
+                const tokenIn = isSameAddress(tokenInAddress, ZERO_X_ETH_ADDRESS)
+                    ? nativeToken
+                    : await connection?.getFungibleToken(tokenInAddress ?? '')
+                const tokenOut = isSameAddress(tokenOutAddress, ZERO_X_ETH_ADDRESS)
+                    ? nativeToken
+                    : await connection?.getFungibleToken(tokenOutAddress ?? '')
+                return {
+                    chainId: context.chainId,
+                    title: 'Swap Token',
+                    description: `Swap ${getTokenAmountDescription(parameters.sellAmount, tokenIn)} for ${
+                        tokenOut?.symbol ?? ''
+                    }.`,
+                    tokenInAddress: tokenIn?.address,
+                    tokenInAmount: parameters.sellAmount,
+                    successfulDescription: `Swap ${getTokenAmountDescription(
+                        parameters.sellAmount,
+                        tokenIn,
+                    )} for ${getTokenAmountDescription(parameters!.minBuyAmount, tokenOut)} successfully.`,
+                    failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                }
+            }
+
+            // Wrap & Unwrap, e.g. WETH <=> ETH
+            if (['withdraw', 'deposit'].includes(method.name ?? '')) {
+                const actionName =
+                    method.name === 'withdraw'
+                        ? i18NextInstance.t('plugin_trader_unwrap')
+                        : i18NextInstance.t('plugin_trader_wrap')
+                const amount = method.name === 'withdraw' ? parameters?.wad : context.value
+                const WETH_ADDRESS = getTokenConstant(context.chainId, 'WETH_ADDRESS')
+                const wethToken = await connection?.getFungibleToken(WETH_ADDRESS ?? '')
+
+                const tokenIn = method.name === 'withdraw' ? nativeToken : wethToken
+                const tokenOut = method.name === 'withdraw' ? wethToken : nativeToken
+                return {
+                    chainId: context.chainId,
+                    title: `${actionName} Token`,
+                    description: `${actionName} ${getTokenAmountDescription(amount, tokenIn)} for ${
+                        tokenOut?.symbol ?? ''
+                    }.`,
+                    tokenInAddress: tokenIn?.address,
+                    tokenInAmount: amount,
+                    successfulDescription: `${actionName} ${getTokenAmountDescription(
+                        amount,
+                        tokenIn,
+                    )} for ${getTokenAmountDescription(amount, tokenOut)} successfully.`,
+                    failedDescription: `Failed to ${actionName} ${tokenOut?.symbol ?? ''}.`,
                 }
             }
         }
