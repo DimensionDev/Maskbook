@@ -39,6 +39,13 @@ function isQuotedTweet(tweetNode: HTMLElement | null) {
     return tweetNode?.getAttribute('role') === 'link'
 }
 
+function isDetailTweet(tweetNode: HTMLElement) {
+    const isDetail =
+        /^\/[^/]+\/status\//.test(location.pathname) &&
+        !!tweetNode.querySelector(`a[role="link"][href="${location.pathname}"] time[datetime]`)
+    return isDetail
+}
+
 function registerPostCollectorInner(
     postStore: Next.CollectingCapabilities.PostsProvider['posts'],
     cancel: AbortSignal,
@@ -101,9 +108,7 @@ function registerPostCollectorInner(
                 comments: undefined,
                 rootElement: proxy,
                 actionsElement: actionsElementProxy,
-                isFocusing:
-                    location.pathname.includes('/status/') &&
-                    !!tweetNode.querySelector(`a[role="link"][href="${location.pathname}"]`),
+                isFocusing: isDetailTweet(tweetNode),
                 suggestedInjectionPoint: tweetNode,
                 ...refs.subscriptions,
             })
@@ -137,8 +142,8 @@ function registerPostCollectorInner(
             if (!tweetNode) return node.innerText
             const parentTweetId = parentTweetNode ? postIdParser(parentTweetNode) : ''
             const tweetId = postIdParser(tweetNode)
-            const isDetailPage = location.pathname.match('^/[^/]+/status/')
-            // To distinguish tweet nodes between time line and detail page
+            // To distinguish tweet nodes between timeline and detail page
+            const isDetailPage = isDetailTweet(tweetNode)
             return `${isDetailPage ? 'detail' : 'normal'}/${parentTweetId}/${tweetId}`
         })
         .startWatch(250, cancel)
