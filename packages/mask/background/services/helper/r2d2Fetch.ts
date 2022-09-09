@@ -20,15 +20,22 @@ enum AlchemyProxies {
 }
 
 const HOTFIX_RPC_URLS = [
+    'infura.io',
+    'quiknode.pro',
+    'binance.org',
     'aurora.dev',
-    'astar.api.onfinality.io',
+    'onfinality.io',
     'arbitrum.io',
+    'celo.org',
+    'ftm.tools',
+    'gnosischain.com',
     'avax.network',
     'optimism.io',
     'harmony.one',
     'hmny.io',
     'hermesdefi.io',
     'pokt.network',
+    'confluxrpc.com',
 ]
 
 const AlchemyMatchers: Array<[string, AlchemyProxies]> = [

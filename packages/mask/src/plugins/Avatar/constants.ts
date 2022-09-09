@@ -16,7 +16,7 @@ export enum RSS3_KEY_SNS {
     INSTAGRAM = '_instagram_nfts',
 }
 
-export const SUPPORTED_CHAIN_IDS: ChainId[] = [ChainId.Mainnet, ChainId.Matic]
+export const SUPPORTED_CHAIN_IDS: ChainId[] = [ChainId.Mainnet, ChainId.Matic, ChainId.BSC]
 
 export const mask_avatar_dark = new URL('./assets/mask.dark.svg', import.meta.url)
 export const mask_avatar_light = new URL('./assets/mask.light.svg', import.meta.url)
