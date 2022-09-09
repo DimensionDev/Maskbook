@@ -5,15 +5,15 @@ import { resolveResourceURL } from '@masknet/web3-shared-base'
 // filter out nft with image resource
 export function useIsImageURL(url: string | undefined): AsyncState<boolean> {
     return useAsync(async () => {
-        const urlComputed = resolveResourceURL(url)
+        const resolvedURL = resolveResourceURL(url)
+        if (!resolvedURL) return false
+        if (resolvedURL.startsWith('data:image')) return true
 
-        if (!urlComputed) return false
-        if (urlComputed.startsWith('data:image')) return true
-
-        const { pathname } = new URL(urlComputed.replace('https://r2d2.to?', ''))
+        const { pathname } = new URL(resolvedURL)
         if (/\.(gif|svg|png|webp|jpg|jpeg)$/.test(pathname)) return true
         if (/\.(mp4|webm|mov|ogg|mp3|wav)$/.test(pathname)) return false
-        const headers = await getHeaders(urlComputed)
+
+        const headers = await getHeaders(resolvedURL)
         const contentType = headers?.get('Content-Type')
         const contentDisposition = headers?.get('Content-Disposition')
         return contentType?.startsWith('image/') || /\.(gif|svg|png|webp|jpg|jpeg)/.test(contentDisposition ?? '')

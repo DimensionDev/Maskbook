@@ -7,7 +7,7 @@ import { useChainId, useWeb3Hub, Web3Helper } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import NO_IMAGE_COLOR from './constants'
-import { useAccessibleURL } from '../../../hooks/useAccessibleURL'
+import { useImageBase64 } from '../../../hooks/useImageBase64'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -45,7 +45,7 @@ export function TokenIcon(props: TokenIconProps) {
     }, [chainId, address, isNFT, logoURL, hub])
     const { urls = EMPTY_LIST, key } = value ?? {}
     const originalUrl = first(urls)
-    const accessibleUrl = useAccessibleURL(key, originalUrl)
+    const accessibleUrl = useImageBase64(key, originalUrl)
 
     if (!accessibleUrl && originalUrl && disableDefaultIcon) return null
 
