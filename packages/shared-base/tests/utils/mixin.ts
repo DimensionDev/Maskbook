@@ -1,8 +1,8 @@
-import { describe, expect, test } from "vitest";
-import { mixin } from "../../src";
+import { describe, expect, test } from 'vitest'
+import { mixin } from '../../src/utils/mixin.js'
 
 class ClassBase {
-    public type: string
+    public type = 'base'
 
     public getType() {
         return this.type
@@ -26,7 +26,7 @@ class ClassB {
 }
 
 class ClassC extends ClassBase {
-    public type = 'C'
+    public override type = 'C'
 
     public getC() {
         return 'C'
