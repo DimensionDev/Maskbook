@@ -21,7 +21,6 @@ export class SwapDescriptor implements TransactionDescriptor {
         const { DODO_ETH_ADDRESS, OPENOCEAN_ETH_ADDRESS, ZERO_X_ETH_ADDRESS, BANCOR_ETH_ADDRESS } = getTraderConstants(
             context.chainId,
         )
-        console.log({ context })
         if (!context.methods?.find((x) => x.name)) return
 
         const connection = await Web3StateSettings.value.Connection?.getConnection?.({
@@ -341,7 +340,7 @@ export class SwapDescriptor implements TransactionDescriptor {
                 }
             }
 
-            // WETH <=> ETH
+            // Wrap & Unwrap, e.g. WETH <=> ETH
             if (['withdraw', 'deposit'].includes(method.name ?? '')) {
                 const actionName =
                     method.name === 'withdraw'
