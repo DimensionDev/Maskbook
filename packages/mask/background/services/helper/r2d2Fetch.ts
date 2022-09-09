@@ -1,6 +1,12 @@
-/* cspell:disable */
-import { isIPFS_CID, resolveCrossOriginURL, resolveIPFS_URL } from '@masknet/web3-shared-base'
+import {
+    attemptUntil,
+    fetchImageViaDOM,
+    isIPFS_CID,
+    resolveCrossOriginURL,
+    resolveIPFS_URL,
+} from '@masknet/web3-shared-base'
 
+/* cspell:disable */
 const R2D2_ROOT_URL = 'r2d2.to'
 
 enum R2d2Workers {
@@ -70,6 +76,24 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
     if (url.startsWith('ipfs://') || isIPFS_CID(url))
         return originalFetch(resolveCrossOriginURL(resolveIPFS_URL(url))!, info)
 
+    // hotfix rpc requests lost content-type header
+    if (info.method === 'POST' && HOTFIX_RPC_URLS.some((x) => url.includes(x))) {
+        return originalFetch(info, { ...init, headers: { ...init?.headers, 'Content-type': 'application/json' } })
+    }
+
+    // hotfix image requests from fetching by DOM
+    if (info.method === 'GET' && info.headers.get('accept')?.includes('image/')) {
+        const blob = await attemptUntil<Blob | null>(
+            [async () => (await originalFetch(url)).blob(), async () => fetchImageViaDOM(url)],
+            null,
+        )
+        return new Response(blob, {
+            headers: {
+                'Content-Type': 'image/png',
+            },
+        })
+    }
+
     // r2d2
     if (url.includes('r2d2.to')) return originalFetch(info, init)
 
@@ -90,11 +114,6 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
             )
         }
         return originalFetch(url.replace(u.origin, `https://${r2deWorkerType}.${R2D2_ROOT_URL}`), info)
-    }
-
-    // hotfix rpc requests lost content-type header
-    if (info.method === 'POST' && HOTFIX_RPC_URLS.some((x) => url.includes(x))) {
-        return originalFetch(info, { ...init, headers: { ...init?.headers, 'Content-type': 'application/json' } })
     }
 
     // fallback
