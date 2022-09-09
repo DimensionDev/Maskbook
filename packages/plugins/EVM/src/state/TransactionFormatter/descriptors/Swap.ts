@@ -291,7 +291,7 @@ export class SwapDescriptor implements TransactionDescriptor {
             }
             // 0x ETH mainnet
             if (
-                method.name === 'sellToUniswap' &&
+                ['sellToUniswap', 'sellToPancakeSwap'].includes(method.name ?? '') &&
                 parameters?.minBuyAmount &&
                 parameters?.sellAmount &&
                 parameters?.tokens
