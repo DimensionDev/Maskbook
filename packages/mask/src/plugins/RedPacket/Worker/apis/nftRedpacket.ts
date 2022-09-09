@@ -90,7 +90,7 @@ export async function getNftRedPacketTxid(chainId: ChainId, rpid: string) {
 }
 
 const PAGE_SIZE = 5
-export async function getNftRedPacketHistory(chainId: ChainId, address: string, page: number) {
+export async function getNftRedPacketHistory(chainId: ChainId, address: string, page: number, pageSize = PAGE_SIZE) {
     const data = await fetchFromNFTRedPacketSubgraph<{ nftredPackets: NftRedPacketSubgraphOutMask[] }>(
         chainId,
         `
@@ -99,8 +99,8 @@ export async function getNftRedPacketHistory(chainId: ChainId, address: string, 
           where: { creator: "${address.toLowerCase()}" },
           orderBy: creation_time,
           orderDirection: desc,
-          first: ${PAGE_SIZE},
-          skip: ${(page - 1) * PAGE_SIZE}
+          first: ${pageSize},
+          skip: ${(page - 1) * pageSize}
         ) {
             ${RED_PACKET_FIELDS}
         }

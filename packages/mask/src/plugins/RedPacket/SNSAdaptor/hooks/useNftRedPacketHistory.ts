@@ -1,29 +1,43 @@
+import { EMPTY_LIST } from '@masknet/shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { uniqBy } from 'lodash-unified'
+import { eq, uniqBy } from 'lodash-unified'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { RedPacketRPC } from '../../messages'
 import type { NftRedPacketHistory } from '../../types'
 
-export function useNftRedPacketHistory(address: string, chainId: ChainId) {
-    const [allHistories, setAllHistories] = useState<NftRedPacketHistory[]>([])
-    const pageRef = useRef(1)
+const PAGE_SIZE = 5
+export function useNftRedPacketHistory(creatorAddress: string, chainId: ChainId) {
+    const pageRef = useRef<Record<string, number>>({})
     const [loading, setLoading] = useState(false)
+    const [historyDb, setHistoryDb] = useState<Record<string, NftRedPacketHistory[]>>({})
 
+    const dbKey = `${creatorAddress}_${chainId}`
     const getHistories = useCallback(async () => {
-        const histories = await RedPacketRPC.getNftRedPacketHistory(address, chainId, pageRef.current)
+        setLoading(true)
+        const histories = await RedPacketRPC.getNftRedPacketHistory(
+            creatorAddress,
+            chainId,
+            pageRef.current[dbKey] ?? 1,
+            PAGE_SIZE,
+        )
         setLoading(false)
-        if (histories.length) {
-            pageRef.current += 1
-        }
-        setAllHistories((oldList) => uniqBy([...oldList, ...histories], (x) => x.rpid))
-    }, [address, chainId])
+        setHistoryDb((db) => {
+            const oldList = db[dbKey] ?? []
+            const list = uniqBy([...oldList, ...histories], (x) => x.rpid)
+            if (eq(oldList, list)) return db
+            pageRef.current[dbKey] = Math.ceil(list.length / PAGE_SIZE) + 1
+            return {
+                ...db,
+                [dbKey]: list,
+            }
+        })
+    }, [creatorAddress, chainId, dbKey])
 
     useEffect(() => {
-        setLoading(true)
-        pageRef.current = 1
-        setAllHistories([])
         getHistories()
-    }, [address, chainId])
+    }, [getHistories])
 
-    return { histories: allHistories, fetchMore: getHistories, loading }
+    const histories = historyDb[dbKey] ?? EMPTY_LIST
+
+    return { histories, fetchMore: getHistories, loading }
 }
