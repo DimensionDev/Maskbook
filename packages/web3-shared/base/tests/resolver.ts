@@ -11,7 +11,7 @@ const IMAGE_DATA_PARTIAL = 'data:image/png;base64,iVB'
 
 describe('resolveCrossOriginURL', () => {
     test.each([
-        { give: '', expected: '' },
+        { give: '', expected: undefined },
         { give: MASK_URL, expected: `https://cors.r2d2.to?${encodeURIComponent(MASK_URL)}` },
         { give: MASK_URL, expected: `https://cors.r2d2.to?${encodeURIComponent(MASK_URL)}` },
         { give: CHROME_EXTENSION_URL, expected: CHROME_EXTENSION_URL },

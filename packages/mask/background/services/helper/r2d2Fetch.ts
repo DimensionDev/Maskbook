@@ -1,4 +1,4 @@
-import { fetchImageByDOM } from '@masknet/web3-shared-base'
+import { fetchImageViaDOM } from '@masknet/web3-shared-base'
 
 /* cspell:disable */
 const R2D2_ROOT_URL = 'r2d2.to'
@@ -73,7 +73,7 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
 
     // hotfix image requests from fetching by DOM
     if (info.headers.get('accept')?.includes('image/')) {
-        return new Response(await fetchImageByDOM(url), {
+        return new Response(await fetchImageViaDOM(url), {
             headers: {
                 'Content-Type': 'image/png',
             },
