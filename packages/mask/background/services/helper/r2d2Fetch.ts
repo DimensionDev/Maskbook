@@ -117,7 +117,7 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
     }
 
     // fallback
-    return originalFetch(resolveCrossOriginURL(url)!, info)
+    return originalFetch(info, init)
 }
 
 Reflect.set(globalThis, 'r2d2Fetch', r2d2Fetch)
