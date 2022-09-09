@@ -86,4 +86,7 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transac
     formatDomainName(domain?: string | undefined, size?: number | undefined): string {
         throw new Error('Method not implemented.')
     }
+    formatSchemaType(schema: SchemaType): string {
+        throw new Error('Method not implemented.')
+    }
 }

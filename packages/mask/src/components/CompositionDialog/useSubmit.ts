@@ -1,11 +1,9 @@
 import { ImageTemplateTypes, socialNetworkEncoder } from '@masknet/encryption'
-import { FileInfoMetadataReader } from '@masknet/plugin-file-service'
+import { PluginId } from '@masknet/plugin-infra'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import type { Meta } from '@masknet/typed-message'
 import { useCallback } from 'react'
 import Services from '../../extension/service'
-import { ITO_MetadataReader } from '../../plugins/ITO/SNSAdaptor/helpers'
-import { RedPacketMetadataReader, RedPacketNftMetadataReader } from '../../plugins/RedPacket/SNSAdaptor/helpers'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
 import { isFacebook } from '../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
@@ -83,7 +81,8 @@ function decorateEncryptedText(
     const hasOfficialAccount = isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
     const officialAccount = isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
 
-    if (RedPacketMetadataReader(meta).ok || RedPacketNftMetadataReader(meta).ok) {
+    // Note: since this is in the composition stage, we can assume plugins don't insert old version of meta.
+    if (meta?.has(`${PluginId.RedPacket}:1`) || meta?.has(`${PluginId.RedPacket}_nft:1`)) {
         return [
             'v2',
             hasOfficialAccount
@@ -93,7 +92,7 @@ function decorateEncryptedText(
                   })
                 : t('additional_post_box__encrypted_post_pre_red_packet', { encrypted }),
         ]
-    } else if (ITO_MetadataReader(meta).ok) {
+    } else if (meta?.has(`${PluginId.ITO}:2`)) {
         return [
             'v2',
             hasOfficialAccount
@@ -103,7 +102,7 @@ function decorateEncryptedText(
                   })
                 : t('additional_post_box__encrypted_post_pre_ito', { encrypted }),
         ]
-    } else if (FileInfoMetadataReader(meta).ok) {
+    } else if (meta?.has(`${PluginId.FileService}:2`)) {
         return [
             'v2',
             hasOfficialAccount

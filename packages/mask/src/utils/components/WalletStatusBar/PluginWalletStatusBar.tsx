@@ -84,7 +84,7 @@ export const PluginWalletStatusBar = memo<WalletStatusBarProps>(({ className, on
                 onClick={onClick ?? openSelectProviderDialog}
                 onPendingClick={openWalletStatusDialog}
             />
-            <Action openSelectWalletDialog={openWalletStatusDialog}>{children}</Action>
+            <Action openSelectWalletDialog={openSelectProviderDialog}>{children}</Action>
         </Box>
     )
 })

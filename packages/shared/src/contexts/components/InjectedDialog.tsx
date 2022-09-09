@@ -38,6 +38,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { clean }) => ({
         alignItems: 'flex-end',
     },
     dialogTitleWithTabs: {
+        display: 'grid !important',
         paddingBottom: '0 !important',
         gridTemplateRows: `${theme.spacing(3.5)} ${theme.spacing(4.5)}`,
         gridRowGap: theme.spacing(1.5),

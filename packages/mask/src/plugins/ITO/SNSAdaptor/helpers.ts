@@ -9,6 +9,7 @@ import type { JSON_PayloadInMask, JSON_PayloadOutMask } from '../types'
 import schemaV1 from '../schema-v1.json'
 import schemaV2 from '../schema-v2.json'
 
+// Note: if the latest version has been changed, please update packages/mask/src/components/CompositionDialog/useSubmit.ts
 const reader_v1 = createTypedMessageMetadataReader<JSON_PayloadOutMask>(ITO_MetaKey_1, schemaV1)
 const reader_v2 = createTypedMessageMetadataReader<JSON_PayloadOutMask>(ITO_MetaKey_2, schemaV2)
 export const renderWithITO_Metadata = createRenderWithMetadata(ITO_MetadataReader)

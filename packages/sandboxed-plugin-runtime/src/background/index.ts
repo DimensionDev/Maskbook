@@ -31,7 +31,12 @@ export class BackgroundPluginHost extends PluginRunner<BackgroundHostHooks, Back
         const runtime = new PluginRuntime(id, isLocal ? `local-plugin-${id}` : `plugin-${id}`, {}, signal)
         addPeerDependencies(runtime)
         runtime.addNamespaceModule('@masknet/plugin/worker', {
-            addBackupHandler(handler: BackupHandler) {
+            registerBackupHandler(handler: BackupHandler) {
+                if (!manifest.contributes?.backup) {
+                    throw new Error(
+                        'Refuse to register the backup handler because manifest.contributes.backup is not true.',
+                    )
+                }
                 const { onBackup, onRestore } = handler
                 if (typeof onBackup !== 'function' || typeof onRestore !== 'function')
                     throw new TypeError('BackupHandler must have onBackup and onRestore functions.')
