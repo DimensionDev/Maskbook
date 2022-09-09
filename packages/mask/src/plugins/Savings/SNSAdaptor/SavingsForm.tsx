@@ -148,7 +148,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
     }, [protocol.bareToken, inputAmount, chainId])
 
     const openShareTxDialog = useOpenShareTxDialog()
-    const shareText = t('promote_savings', {
+    const shareText = t(tab === TabType.Deposit ? 'promote_savings' : 'promote_withdraw', {
         amount: inputAmount,
         symbol: protocol.bareToken.symbol,
         chain: chainResolver.chainName(chainId),
