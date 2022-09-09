@@ -1,8 +1,15 @@
 import { first, last } from 'lodash-unified'
+import { i18NextInstance } from '@masknet/shared-base'
 import UniswapV3MulticallFunctionExactInputABI from '@masknet/web3-contracts/abis/UniswapV3MulticallFunctionExactInput.json'
 import Web3 from 'web3'
 import { TransactionContext, isSameAddress } from '@masknet/web3-shared-base'
-import { ChainId, TransactionParameter, getTraderConstants, isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    TransactionParameter,
+    getTraderConstants,
+    isNativeTokenAddress,
+    getTokenConstant,
+} from '@masknet/web3-shared-evm'
 import type { TransactionDescriptor } from '../types'
 import { Web3StateSettings } from '../../../settings'
 import { getTokenAmountDescription } from '../utils'
@@ -285,6 +292,34 @@ export class SwapDescriptor implements TransactionDescriptor {
                         tokenIn,
                     )} for ${getTokenAmountDescription(parameters!.minBuyAmount, tokenOut)} successfully.`,
                     failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
+                }
+            }
+
+            // WETH <=> ETH
+            if (['withdraw', 'deposit'].includes(method.name ?? '')) {
+                const actionName =
+                    method.name === 'withdraw'
+                        ? i18NextInstance.t('plugin_trader_unwrap')
+                        : i18NextInstance.t('plugin_trader_wrap')
+                const amount = method.name === 'withdraw' ? parameters?.wad : context.value
+                const WETH_ADDRESS = getTokenConstant(context.chainId, 'WETH_ADDRESS')
+                const wethToken = await connection?.getFungibleToken(WETH_ADDRESS ?? '')
+
+                const tokenIn = method.name === 'withdraw' ? nativeToken : wethToken
+                const tokenOut = method.name === 'withdraw' ? wethToken : nativeToken
+                return {
+                    chainId: context.chainId,
+                    title: `${actionName} Token`,
+                    description: `${actionName} ${getTokenAmountDescription(amount, tokenIn)} for ${
+                        tokenOut?.symbol ?? ''
+                    }.`,
+                    tokenInAddress: tokenIn?.address,
+                    tokenInAmount: amount,
+                    successfulDescription: `${actionName} ${getTokenAmountDescription(
+                        amount,
+                        tokenIn,
+                    )} for ${getTokenAmountDescription(amount, tokenOut)} successfully.`,
+                    failedDescription: `Failed to ${actionName} ${tokenOut?.symbol ?? ''}.`,
                 }
             }
         }
