@@ -1,4 +1,5 @@
 export * from './asyncIterator.js'
+export * from './mixin.js'
 export * from './detect.js'
 export * from './getLocalImplementation.js'
 export * from './parseURL.js'

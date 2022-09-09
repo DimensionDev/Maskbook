@@ -1,14 +1,20 @@
 import { uniqBy } from 'lodash-unified'
 import { memoizePromise } from '@dimensiondev/kit'
-import { FungibleToken, NonFungibleToken, TokenType } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, formatEthereumAddress, chainResolver } from '@masknet/web3-shared-evm'
-import type { TokenListBaseAPI } from '../types'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { FungibleToken, NonFungibleToken, TokenType } from '@masknet/web3-shared-base'
+import {
+    ChainId,
+    SchemaType,
+    formatEthereumAddress,
+    chainResolver,
+    getTokenListConstants,
+} from '@masknet/web3-shared-evm'
+import type { TokenListAPI } from '../types'
 
 const fetchTokenList = memoizePromise(
     async (url: string) => {
         const response = await globalThis.r2d2Fetch(url, { cache: 'default' })
-        return response.json() as Promise<TokenListBaseAPI.TokenList<ChainId> | TokenListBaseAPI.TokenObject<ChainId>>
+        return response.json() as Promise<TokenListAPI.TokenList<ChainId> | TokenListAPI.TokenObject<ChainId>>
     },
     (url) => url,
 )
@@ -22,7 +28,7 @@ async function fetchCommonERC20TokensFromTokenList(
     url: string,
     chainId = ChainId.Mainnet,
 ): Promise<Array<FungibleToken<ChainId, SchemaType.ERC20>>> {
-    return ((await fetchTokenList(url)) as TokenListBaseAPI.TokenList<ChainId>).tokens
+    return ((await fetchTokenList(url)) as TokenListAPI.TokenList<ChainId>).tokens
         .filter(
             (x) =>
                 x.chainId === chainId &&
@@ -59,8 +65,9 @@ async function fetchERC20TokensFromTokenList(urls: string[], chainId = ChainId.M
  * @param urls
  * @param chainId
  */
-export class TokenListAPI implements TokenListBaseAPI.Provider<ChainId, SchemaType> {
-    async getFungibleTokens(chainId: ChainId, url: string[]) {
+export class R2D2API implements TokenListAPI.Provider<ChainId, SchemaType> {
+    async getFungibleTokenList(chainId: ChainId, urls?: string[]) {
+        const { FUNGIBLE_TOKEN_LISTS = EMPTY_LIST } = getTokenListConstants(chainId)
         const result = memoizePromise(
             async (urls: string[], chainId = ChainId.Mainnet): Promise<Array<FungibleToken<ChainId, SchemaType>>> => {
                 const tokens = (await fetchERC20TokensFromTokenList(urls, chainId))
@@ -77,11 +84,11 @@ export class TokenListAPI implements TokenListBaseAPI.Provider<ChainId, SchemaTy
             (urls, chainId) => `${chainId}-${urls.join()}`,
         )
 
-        return result(url, chainId)
+        return result(urls ?? FUNGIBLE_TOKEN_LISTS, chainId)
     }
-    async getNonFungibleTokens(
+    async getNonFungibleTokenList(
         chainId: ChainId,
-        urls: string[],
+        urls?: string[],
     ): Promise<Array<NonFungibleToken<ChainId, SchemaType>>> {
         return EMPTY_LIST
     }

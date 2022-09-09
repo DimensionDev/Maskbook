@@ -12,12 +12,7 @@ import {
     useNonFungibleTokenContract,
     useWeb3Hub,
 } from '@masknet/plugin-infra/web3'
-import {
-    NetworkPluginID,
-    NetworkDescriptor,
-    TokenType,
-    NonFungibleContractSpenderAuthorization,
-} from '@masknet/web3-shared-base'
+import { NetworkPluginID, NetworkDescriptor, TokenType, NonFungibleContractSpender } from '@masknet/web3-shared-base'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 import { useI18N } from '../locales'
 import { useStyles } from './useStyles'
@@ -29,7 +24,7 @@ export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM)
     const { value: spenderList, loading } = useAsync(
-        async () => hub?.getApprovedNonFungibleContracts?.(chainId, account),
+        async () => hub?.getNonFungibleApprovedContracts?.(chainId, account),
         [chainId, account, hub],
     )
 
@@ -53,7 +48,7 @@ export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {
 }
 
 interface ApprovalNFTItemProps {
-    spender: NonFungibleContractSpenderAuthorization<ChainId, SchemaType>
+    spender: NonFungibleContractSpender<ChainId, SchemaType>
     chainId: ChainId
     networkDescriptor?: NetworkDescriptor<ChainId, NetworkType>
 }

@@ -1,4 +1,4 @@
-import { CoinGeckoAPI } from './coingecko'
+import { CoinGeckoTrendingEVM_API, CoinGeckoPriceSolanaAPI, CoinGeckoPriceEVM_API } from './coingecko'
 import { OpenSeaAPI } from './opensea'
 import { LooksRareAPI } from './looksrare'
 import { RaribleAPI } from './rarible'
@@ -9,7 +9,7 @@ import { RiskWarningAPI } from './risk-warning'
 import { RSS3API } from './rss3'
 import { KeyValueAPI } from './kv'
 import { TwitterAPI } from './twitter'
-import { TokenListAPI } from './token-list'
+import { R2D2API } from './r2d2'
 import { InstagramAPI } from './instagram'
 import { DeBankAPI } from './debank'
 import { ZerionAPI } from './zerion'
@@ -21,13 +21,15 @@ import { AlchemyEVM_API, AlchemyFlowAPI } from './alchemy'
 import { EthereumWeb3API } from './web3'
 import { MagicEdenAPI } from './MagicEden'
 import { TokenViewAPI } from './token-view'
-import { CoinMarketCapAPI } from './CoinMarketCap'
+import { CoinMarketCapAPI } from './cmc'
 import { UniSwapAPI } from './uniswap'
 import { RabbyAPI } from './rabby'
 import { GemAPI } from './gem'
 import { X2Y2API } from './x2y2'
 import { ChainbaseHistoryAPI, ChainbaseFungibleTokenAPI, ChainbaseNonFungibleTokenAPI } from './chainbase'
 import { SolanaFungibleAPI, SolanaNonFungibleAPI } from './solana'
+import { FlowFungibleAPI } from './flow'
+import { CF_API } from './cf'
 
 export * from './helpers'
 export * from './types'
@@ -40,7 +42,9 @@ export const MagicEden = new MagicEdenAPI()
 export const Rarible = new RaribleAPI()
 export const Zora = new ZoraAPI()
 export const Gem = new GemAPI()
-export const CoinGecko = new CoinGeckoAPI()
+export const CoinGeckoTrendingEVM = new CoinGeckoTrendingEVM_API()
+export const CoinGeckoPriceEVM = new CoinGeckoPriceEVM_API()
+export const CoinGeckoPriceSolana = new CoinGeckoPriceSolanaAPI()
 export const Explorer = new NativeExplorerAPI()
 export const RiskWarning = new RiskWarningAPI()
 export const RSS3 = new RSS3API()
@@ -48,7 +52,7 @@ export const KeyValue = new KeyValueAPI()
 export const Twitter = new TwitterAPI()
 export const Instagram = new InstagramAPI()
 export const GoPlusLabs = new GoPlusLabsAPI()
-export const TokenList = new TokenListAPI()
+export const R2D2 = new R2D2API()
 export const DeBank = new DeBankAPI()
 export const Zerion = new ZerionAPI()
 export const MetaSwap = new MetaSwapAPI()
@@ -61,10 +65,14 @@ export const CoinMarketCap = new CoinMarketCapAPI()
 export const UniSwap = new UniSwapAPI()
 export const Rabby = new RabbyAPI()
 export const X2Y2 = new X2Y2API()
+export const CF = new CF_API()
 
 // Alchemy
 export const AlchemyEVM = new AlchemyEVM_API()
 export const AlchemyFlow = new AlchemyFlowAPI()
+
+// Flow RPC
+export const FlowFungible = new FlowFungibleAPI()
 
 // Solana RPC
 export const SolanaFungible = new SolanaFungibleAPI()

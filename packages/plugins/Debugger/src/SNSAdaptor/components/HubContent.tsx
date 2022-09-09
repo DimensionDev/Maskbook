@@ -24,7 +24,7 @@ export function HubContent(props: HubContentProps) {
     const [keyword, setKeyword] = useState<string>('PUNK')
     const [address, setAddress] = useState<string>('0x5537d90a4a2dc9d9b37bab49b490cf67d4c54e91')
     const [tokenId, setTokenId] = useState<string>('5431')
-    const [sourceType, setSourceType] = useState(SourceType.NFTScan)
+    const [sourceType, setSourceType] = useState(SourceType.MagicEden)
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
     type HubAll = Required<Hub<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll, Web3Helper.GasOptionAll>>
@@ -38,8 +38,6 @@ export function HubContent(props: HubContentProps) {
         ['getTransactions', [chainId, account]],
 
         // fungible tokens
-        ['getFungibleToken', [address]],
-        ['getFungibleTokens', [account]],
         ['getFungibleAsset', [address]],
         ['getFungibleAssets', [account]],
         ['getFungibleTokenBalance', [address]],
@@ -51,13 +49,13 @@ export function HubContent(props: HubContentProps) {
 
         ['getFungibleTokenStats', [address]],
         ['getFungibleTokensFromTokenList', [chainId]],
-        ['getApprovedFungibleTokenSpenders', [chainId, account]],
+        ['getFungibleTokenApprovedSpenders', [chainId, account]],
 
         // non-fungible tokens
         ['getNonFungibleTokenOwner', [address, tokenId]],
         ['getNonFungibleTokenPrice', [chainId, address, tokenId]],
         ['getNonFungibleTokensFromTokenList', [chainId]],
-        ['getApprovedNonFungibleContracts', [chainId, address]],
+        ['getNonFungibleApprovedContracts', [chainId, address]],
         ['getNonFungibleTokenBalance', [address]],
         ['getNonFungibleTokenStats', [address]],
         ['getNonFungibleTokenSecurity', [chainId, address]],
@@ -70,11 +68,8 @@ export function HubContent(props: HubContentProps) {
         ['getNonFungibleTokenOrders', [address, tokenId, OrderSide.Buy]],
         ['getNonFungibleAsset', [address, tokenId]],
         ['getNonFungibleAssets', [account]],
-        ['getNonFungibleToken', [address, tokenId]],
-        ['getNonFungibleTokens', [account]],
         ['getNonFungibleRarity', [address, tokenId]],
         ['getNonFungibleTokenFloorPrice', [address, tokenId]],
-        ['getNonFungibleTokensByCollection', [address]],
         ['getNonFungibleAssetsByCollection', [address]],
     ]
 

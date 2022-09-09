@@ -1014,6 +1014,9 @@ importers:
       '@masknet/web3-contracts':
         specifier: workspace:*
         version: link:../web3-contracts
+      '@masknet/web3-providers':
+        specifier: workspace:*
+        version: link:../web3-providers
       '@masknet/web3-shared-base':
         specifier: workspace:*
         version: link:../web3-shared/base
@@ -2242,9 +2245,6 @@ importers:
       '@masknet/icons':
         specifier: workspace:*
         version: link:../icons
-      '@masknet/plugin-infra':
-        specifier: workspace:*
-        version: link:../plugin-infra
       '@masknet/public-api':
         specifier: workspace:*
         version: link:../public-api
