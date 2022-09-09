@@ -57,6 +57,7 @@ export function ApplicationBoardDialog() {
     )
 
     const reset = useCallback(() => {
+        setOpenSettings(false)
         setQuickMode(false)
         setTab(ApplicationSettingTabs.pluginList)
         setFocusPluginId(undefined)
