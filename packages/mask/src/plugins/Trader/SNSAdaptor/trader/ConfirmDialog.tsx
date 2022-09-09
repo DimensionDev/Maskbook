@@ -59,8 +59,9 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
 
     // #region price impact dialog
     const lostToken = formatBalance(
-        multipliedBy(trade.inputAmount, trade.priceImpact).toFixed(),
+        multipliedBy(trade.inputAmount, trade.priceImpact).toFixed(0),
         trade.inputToken?.decimals ?? 0,
+        6,
     )
 
     const lostValue = formatCurrency(multipliedBy(inputTokenPrice ?? 0, lostToken), 'USD', {

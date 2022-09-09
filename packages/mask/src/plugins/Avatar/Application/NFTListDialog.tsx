@@ -21,6 +21,7 @@ import { NFTListPage } from './NFTListPage'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { PluginVerifiedWalletStatusBar } from '../../../utils/components/WalletStatusBar/PluginVerifiedWalletStatusBar'
 import { Icons } from '@masknet/icons'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     AddressNames: {
@@ -174,13 +175,20 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const t = useI18N()
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
 
+    // Set eth to the default chain
+    const actualChainId = useMemo(() => {
+        const defaultChain = first(chains)
+        if (!chains.includes(chainId) && defaultChain) return defaultChain
+        return chainId
+    }, [chains, chainId])
+
     const {
         value: collectibles = EMPTY_LIST,
         done: loadFinish,
         next: nextPage,
         error: loadError,
     } = useNonFungibleAssets(selectedPluginId, undefined, {
-        chainId,
+        chainId: actualChainId,
         account: selectedAccount,
     })
 
@@ -189,7 +197,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
         setSelectedToken(undefined)
     }, [pfpType])
 
-    useEffect(() => setSelectedToken(undefined), [chainId])
+    useEffect(() => setSelectedToken(undefined), [actualChainId])
 
     const { showSnackbar } = useCustomSnackbar()
     const onChangeWallet = (address: string, pluginId: NetworkPluginID, chainId: Web3Helper.ChainIdAll) => {
@@ -278,15 +286,15 @@ export function NFTListDialog(props: NFTListDialogProps) {
     )
 
     const tokensInList = uniqBy(
-        [...tokens.filter((x) => x.chainId === chainId), ...collectibles],
+        [...tokens.filter((x) => x.chainId === actualChainId), ...collectibles],
         selectedPluginId === NetworkPluginID.PLUGIN_SOLANA
             ? (x) => x.tokenId
             : (x) => x.contract?.address?.toLowerCase() + x.tokenId,
-    ).filter((x) => x.chainId === chainId)
+    ).filter((x) => x.chainId === actualChainId)
 
     const NoNFTList = () => {
-        if (chainId === ChainId.Matic && tokensInList.length) return
-        if (tokensInList.length === 0) return AddCollectible
+        if (actualChainId === ChainId.Matic && tokensInList.length) return
+        if (tokensInList.length === 0 && !loadFinish) return AddCollectible
         if (loadError && !loadFinish && !collectibles.length) {
             return Retry
         }
@@ -296,13 +304,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const walletItems = wallets.sort((a, z) => {
         return isGreaterThan(a.last_checked_at, z.last_checked_at) ? -1 : 1
     })
-
-    // Set eth to the default chain
-    const actualChainId = useMemo(() => {
-        const defaultChain = first(SUPPORTED_CHAIN_IDS)
-        if (!SUPPORTED_CHAIN_IDS.includes(chainId) && defaultChain) return defaultChain
-        return chainId
-    }, [chainId])
 
     return (
         <>
@@ -408,9 +409,18 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     verifiedWallets={walletItems}
                     onChange={onChangeWallet}
                     expectedAddress={selectedAccount}>
-                    <Button onClick={onSave} disabled={disabled} fullWidth>
-                        {pfpType === PFP_TYPE.PFP ? t.set_PFP_title() : t.set_pfp_background_title()}
-                    </Button>
+                    <ChainBoundary
+                        expectedChainId={chainId}
+                        predicate={selectedPluginId !== NetworkPluginID.PLUGIN_FLOW ? () => true : undefined}
+                        expectedPluginID={
+                            selectedPluginId === NetworkPluginID.PLUGIN_FLOW
+                                ? NetworkPluginID.PLUGIN_EVM
+                                : selectedPluginId
+                        }>
+                        <Button onClick={onSave} disabled={disabled} fullWidth>
+                            {pfpType === PFP_TYPE.PFP ? t.set_PFP_title() : t.set_pfp_background_title()}
+                        </Button>
+                    </ChainBoundary>
                 </PluginVerifiedWalletStatusBar>
             </DialogActions>
             <AddNFT

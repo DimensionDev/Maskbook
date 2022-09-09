@@ -101,8 +101,9 @@ export const PriceImpactDialogUI = memo<PriceImpactDialogProps>(
                             values={{
                                 impact: formatPercentage(priceImpact ?? 0),
                                 lostSymbol: `${lostToken} ${symbol}`,
-                                lostValue: `${lostValue} USD`,
+                                lostValue: `${lostValue.replace('<', '&lt;')} USD`,
                             }}
+                            shouldUnescape
                         />
                     </Typography>
                 </DialogContent>
