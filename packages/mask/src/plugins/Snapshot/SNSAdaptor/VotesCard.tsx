@@ -13,7 +13,7 @@ import { LoadingCard } from './LoadingCard'
 import { LoadingFailCard } from './LoadingFailCard'
 import { SnapshotCard } from './SnapshotCard'
 import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, resolveIPFSLink } from '@masknet/web3-shared-base'
+import { NetworkPluginID, resolveIPFS_URL } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -108,7 +108,7 @@ function Content() {
                                 href={explorerResolver.addressLink(chainId, v.address)}>
                                 <Box className={classes.avatarWrapper}>
                                     {v.authorAvatar ? (
-                                        <Avatar src={resolveIPFSLink(v.authorAvatar)} className={classes.avatar} />
+                                        <Avatar src={resolveIPFS_URL(v.authorAvatar)} className={classes.avatar} />
                                     ) : (
                                         <EthereumBlockie address={v.address} />
                                     )}

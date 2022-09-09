@@ -1,6 +1,6 @@
 /* cspell:disable */
 import { describe, test, expect } from 'vitest'
-import { resolveCORSLink, resolveIPFSLink } from '../src/utils/resolver'
+import { resolveCrossOriginURL, resolveIPFS_URL } from '../src/utils/resolver'
 
 const MASK_URL = 'https://mask.io'
 const CHROME_EXTENSION_URL = 'chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/logo.png'
@@ -9,17 +9,17 @@ const CIDv0 = 'QmYE5ZAofUqGV7ph3owYBDTmGkZU44teCVAzLrKWwHCURM'
 const CIDv1 = 'bafkreiewefwtzgekhxv5r5hnvjisypqq5jwd2lqbex4a33ahhz3663qngy'
 const IMAGE_DATA_PARTIAL = 'data:image/png;base64,iVB'
 
-describe('resolveCORSLink', () => {
+describe('resolveCrossOriginURL', () => {
     test.each([
-        { give: '', expected: '' },
+        { give: '', expected: undefined },
         { give: MASK_URL, expected: `https://cors.r2d2.to?${encodeURIComponent(MASK_URL)}` },
         { give: MASK_URL, expected: `https://cors.r2d2.to?${encodeURIComponent(MASK_URL)}` },
         { give: CHROME_EXTENSION_URL, expected: CHROME_EXTENSION_URL },
         { give: MOZ_EXTENSION_URL, expected: MOZ_EXTENSION_URL },
         { give: IMAGE_DATA_PARTIAL, expected: IMAGE_DATA_PARTIAL },
         { give: '<svg xmlns></svg>', expected: '<svg xmlns></svg>' },
-    ])('.resolveCORSLink', ({ give, expected }) => {
-        expect(resolveCORSLink(give)).toBe(expected)
+    ])('.resolveCrossOriginURL', ({ give, expected }) => {
+        expect(resolveCrossOriginURL(give)).toBe(expected)
     })
 })
 
@@ -54,6 +54,6 @@ describe('resolveIPFSLink', () => {
         ])
     })
     test.each(cases)('.resolveIPFSLink($give)', ({ give, expected }) => {
-        expect(resolveIPFSLink(give)).toBe(expected)
+        expect(resolveIPFS_URL(give)).toBe(expected)
     })
 })

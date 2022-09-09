@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { NetworkPluginID, resolveIPFSLink } from '@masknet/web3-shared-base'
+import { NetworkPluginID, resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import type { User, NonFungibleContract, OwnerERC721TokenInfo } from '../types'
 import { useNonFungibleAssets } from '@masknet/plugin-infra/web3'
@@ -14,7 +14,7 @@ export function useNFTs(user: User | undefined) {
                 if (NFT.chainId !== ChainId.Mainnet) continue
                 const glbSupport = NFT.metadata?.imageURL?.endsWith('.glb') ?? false
                 if (NFT.metadata?.imageURL) {
-                    NFT.metadata.imageURL = resolveIPFSLink(NFT.metadata.imageURL)
+                    NFT.metadata.imageURL = resolveIPFS_URL(NFT.metadata.imageURL)
                 }
                 const tokens: Record<string, OwnerERC721TokenInfo> = {
                     ...tempNFTs[NFT.address]?.tokens,

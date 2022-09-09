@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useAccount, useChainId, useWeb3Hub, Web3Helper } from '@masknet/plugin-infra/web3'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
-import { Hub, OrderSide, resolveSourceName, SourceType } from '@masknet/web3-shared-base'
+import { Hub, OrderSide, resolveSourceTypeName, SourceType } from '@masknet/web3-shared-base'
 import { Button, MenuItem, Table, TableBody, TableCell, TableRow, TextField, Typography } from '@mui/material'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { Icons } from '@masknet/icons'
@@ -137,7 +137,7 @@ export function HubContent(props: HubContentProps) {
                                 size="small"
                                 onClick={(e) => setAnchorEl(e.currentTarget)}
                                 endIcon={<Icons.ArrowDownRound size={14} />}>
-                                {resolveSourceName(sourceType)}
+                                {resolveSourceTypeName(sourceType)}
                             </Button>
                             <ShadowRootMenu
                                 anchorEl={anchorEl}

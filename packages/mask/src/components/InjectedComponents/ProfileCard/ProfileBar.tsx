@@ -119,7 +119,8 @@ export const ProfileBar = memo<ProfileBarProps>(
             successText: t('copy_success'),
         })
 
-        const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+        const { Others } = useWeb3State()
+        const chainId = useChainId()
 
         const [walletMenuOpen, setWalletMenuOpen] = useState(false)
         useEffect(() => {
@@ -129,7 +130,6 @@ export const ProfileBar = memo<ProfileBarProps>(
                 window.removeEventListener('scroll', closeMenu, false)
             }
         }, [])
-        const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
         const selectedAddress = socialAddressList.find((x) => isSameAddress(x.address, address))
 
         return (

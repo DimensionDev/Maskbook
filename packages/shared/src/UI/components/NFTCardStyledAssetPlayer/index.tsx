@@ -27,8 +27,8 @@ const useStyles = makeStyles()((theme) => ({
         width: 120,
     },
     fallbackImage: {
-        height: '64px !important',
-        width: '64px !important',
+        height: 64,
+        width: 64,
     },
     loadingIcon: {
         width: 30,
@@ -63,8 +63,8 @@ interface Props extends withClasses<'fallbackImage' | 'iframe' | 'wrapper' | 'lo
     address?: SocialAddress<NetworkPluginID>
 }
 
-const assetPlayerFallbackImageDark = new URL('./nft_token_fallback_dark.png', import.meta.url)
-const assetPlayerFallbackImageLight = new URL('./nft_token_fallback.png', import.meta.url)
+const assetPlayerFallbackImageDark = new URL('../Image/nft_token_fallback_dark.png', import.meta.url)
+const assetPlayerFallbackImageLight = new URL('../Image/nft_token_fallback.png', import.meta.url)
 
 export function NFTCardStyledAssetPlayer(props: Props) {
     const {
@@ -119,6 +119,7 @@ export function NFTCardStyledAssetPlayer(props: Props) {
                     height="100%"
                     style={{ objectFit: 'cover' }}
                     src={urlComputed}
+                    fallback={fallbackImageURL}
                 />
                 {showNetwork && <ImageIcon icon={networkIcon} size={20} classes={{ icon: classes.networkIcon }} />}
             </div>

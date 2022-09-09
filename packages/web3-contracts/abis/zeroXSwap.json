@@ -158,5 +158,59 @@
         "outputs": [{ "internalType": "uint256", "name": "outputTokenAmount", "type": "uint256" }],
         "stateMutability": "payable",
         "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address[]",
+                "name": "tokens",
+                "type": "address[]"
+            },
+            {
+                "internalType": "uint256",
+                "name": "sellAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "minBuyAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "bool",
+                "name": "isSushi",
+                "type": "bool"
+            }
+        ],
+        "name": "sellToUniswap",
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address[]",
+                "name": "tokens",
+                "type": "address[]"
+            },
+            {
+                "internalType": "uint256",
+                "name": "sellAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "minBuyAmount",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint8",
+                "name": "fork",
+                "type": "uint8"
+            }
+        ],
+        "name": "sellToPancakeSwap",
+        "stateMutability": "payable",
+        "type": "function"
     }
 ]

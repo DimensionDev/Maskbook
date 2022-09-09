@@ -1,13 +1,14 @@
+import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react'
+import { first, uniqBy } from 'lodash-unified'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { ChainId, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { isSameAddress, NetworkPluginID, isGreaterThan } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
-import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react'
 import { AddNFT } from '../SNSAdaptor/AddNFT'
 import { BindingProof, EMPTY_LIST } from '@masknet/shared-base'
 import { AllChainsNonFungibleToken, PFP_TYPE, SelectTokenInfo } from '../types'
-import { first, uniqBy } from 'lodash-unified'
 import { useI18N } from '../locales'
+import { SUPPORTED_CHAIN_IDS } from '../constants'
 import {
     useAccount,
     useChainId,
@@ -20,6 +21,7 @@ import { NFTListPage } from './NFTListPage'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { PluginVerifiedWalletStatusBar } from '../../../utils/components/WalletStatusBar/PluginVerifiedWalletStatusBar'
 import { Icons } from '@masknet/icons'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     AddressNames: {
@@ -145,7 +147,7 @@ function isSameToken(token?: AllChainsNonFungibleToken, tokenInfo?: AllChainsNon
     if (!token && !tokenInfo) return false
     return isSameAddress(token?.address, tokenInfo?.address) && token?.tokenId === tokenInfo?.tokenId
 }
-interface NFTListDialogProps {
+export interface NFTListDialogProps {
     onNext: () => void
     tokenInfo?: AllChainsNonFungibleToken
     wallets?: BindingProof[]
@@ -154,8 +156,6 @@ interface NFTListDialogProps {
     selectedAccount: string
     setSelectedAccount: Dispatch<SetStateAction<string>>
 }
-
-const supportedChains = [NetworkType.Ethereum, NetworkType.Polygon]
 
 export function NFTListDialog(props: NFTListDialogProps) {
     const { onNext, wallets = EMPTY_LIST, onSelected, tokenInfo, pfpType, selectedAccount, setSelectedAccount } = props
@@ -174,7 +174,13 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const [disabled, setDisabled] = useState(false)
     const t = useI18N()
     const [tokens, setTokens] = useState<AllChainsNonFungibleToken[]>([])
-    const chains = supportedChains.map((network: NetworkType) => networkResolver.networkChainId(network))
+
+    // Set eth to the default chain
+    const actualChainId = useMemo(() => {
+        const defaultChain = first(SUPPORTED_CHAIN_IDS)
+        if (!SUPPORTED_CHAIN_IDS.includes(chainId) && defaultChain) return defaultChain
+        return chainId
+    }, [chainId])
 
     const {
         value: collectibles = EMPTY_LIST,
@@ -182,7 +188,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
         next: nextPage,
         error: loadError,
     } = useNonFungibleAssets(selectedPluginId, undefined, {
-        chainId,
+        chainId: actualChainId,
         account: selectedAccount,
     })
 
@@ -191,7 +197,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
         setSelectedToken(undefined)
     }, [pfpType])
 
-    useEffect(() => setSelectedToken(undefined), [chainId])
+    useEffect(() => setSelectedToken(undefined), [actualChainId])
 
     const { showSnackbar } = useCustomSnackbar()
     const onChangeWallet = (address: string, pluginId: NetworkPluginID, chainId: Web3Helper.ChainIdAll) => {
@@ -280,15 +286,15 @@ export function NFTListDialog(props: NFTListDialogProps) {
     )
 
     const tokensInList = uniqBy(
-        [...tokens.filter((x) => x.chainId === chainId), ...collectibles],
+        [...tokens.filter((x) => x.chainId === actualChainId), ...collectibles],
         selectedPluginId === NetworkPluginID.PLUGIN_SOLANA
             ? (x) => x.tokenId
             : (x) => x.contract?.address?.toLowerCase() + x.tokenId,
-    ).filter((x) => x.chainId === chainId)
+    ).filter((x) => x.chainId === actualChainId)
 
     const NoNFTList = () => {
-        if (chainId === ChainId.Matic && tokensInList.length) return
-        if (tokensInList.length === 0) return AddCollectible
+        if (actualChainId === ChainId.Matic && tokensInList.length) return
+        if (tokensInList.length === 0 && !loadFinish) return AddCollectible
         if (loadError && !loadFinish && !collectibles.length) {
             return Retry
         }
@@ -299,13 +305,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
         return isGreaterThan(a.last_checked_at, z.last_checked_at) ? -1 : 1
     })
 
-    // Set eth to the default chain
-    const actualChainId = useMemo(() => {
-        const defaultChain = first(chains)
-        if (!chains.includes(chainId) && defaultChain) return defaultChain
-        return chainId
-    }, [chains, chainId])
-
     return (
         <>
             <DialogContent className={classes.content}>
@@ -314,7 +313,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                         {selectedPluginId === NetworkPluginID.PLUGIN_EVM ? (
                             <div className={classes.abstractTabWrapper}>
                                 <NetworkTab
-                                    chains={chains.filter(Boolean) as ChainId[]}
+                                    chains={SUPPORTED_CHAIN_IDS}
                                     chainId={actualChainId}
                                     setChainId={setChainId}
                                     classes={classes}
@@ -410,9 +409,18 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     verifiedWallets={walletItems}
                     onChange={onChangeWallet}
                     expectedAddress={selectedAccount}>
-                    <Button onClick={onSave} disabled={disabled} fullWidth>
-                        {pfpType === PFP_TYPE.PFP ? t.set_PFP_title() : t.set_pfp_background_title()}
-                    </Button>
+                    <ChainBoundary
+                        expectedChainId={chainId}
+                        predicate={selectedPluginId !== NetworkPluginID.PLUGIN_FLOW ? () => true : undefined}
+                        expectedPluginID={
+                            selectedPluginId === NetworkPluginID.PLUGIN_FLOW
+                                ? NetworkPluginID.PLUGIN_EVM
+                                : selectedPluginId
+                        }>
+                        <Button onClick={onSave} disabled={disabled} fullWidth>
+                            {pfpType === PFP_TYPE.PFP ? t.set_PFP_title() : t.set_pfp_background_title()}
+                        </Button>
+                    </ChainBoundary>
                 </PluginVerifiedWalletStatusBar>
             </DialogActions>
             <AddNFT

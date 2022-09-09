@@ -10,6 +10,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
         position: 'relative',
+        zIndex: 0,
     },
     collectibleCard: {
         width: '100%',

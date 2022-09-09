@@ -116,7 +116,7 @@ export function NFTListPage(props: NFTListPageProps) {
                                 showBadge
                                 token={token}
                                 selectedToken={selectedToken}
-                                onChange={(token) => _onChange(token)}
+                                onClick={(token) => _onChange(token)}
                             />
                         </ListItem>
                     ))}

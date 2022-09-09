@@ -6,7 +6,7 @@ import {
     NonFungibleCollection,
     NonFungibleTokenContract,
     NonFungibleTokenEvent,
-    resolveIPFSLink,
+    resolveIPFS_URL,
     scale10,
     SourceType,
     TokenType,
@@ -41,7 +41,7 @@ export function createNonFungibleAsset(chainId: ChainId, asset: Solana.Asset): N
     const payload = getJSON<Solana.Payload>(asset.metadata_json)
     const name = payload?.name || asset.name || payload?.name || ''
     const description = payload?.description
-    const mediaURL = resolveIPFSLink(asset.image_uri ?? asset.content_uri)
+    const mediaURL = resolveIPFS_URL(asset.image_uri ?? asset.content_uri)
 
     const creator = asset.minter
     const owner = asset.owner

@@ -22,7 +22,7 @@ import {
     HubIndicator,
     formatPercentage,
     dividedBy,
-    resolveIPFSLink,
+    resolveIPFS_URL,
     SourceType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, createNativeToken, createERC20Token } from '@masknet/web3-shared-evm'
@@ -98,7 +98,7 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungi
                 asset.image_url ?? asset.image_preview_url ?? asset.image_original_url ?? asset.animation_url ?? '',
             mediaURL:
                 asset?.animation_url ??
-                resolveIPFSLink(asset?.image_original_url ?? asset?.image_preview_url ?? asset?.image_url ?? ''),
+                resolveIPFS_URL(asset?.image_original_url ?? asset?.image_preview_url ?? asset?.image_url ?? ''),
         },
         contract: {
             chainId,
