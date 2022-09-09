@@ -27,8 +27,8 @@ const useStyles = makeStyles()((theme) => ({
         width: 120,
     },
     fallbackImage: {
-        height: '64px !important',
-        width: '64px !important',
+        height: 64,
+        width: 64,
     },
     loadingIcon: {
         width: 30,
