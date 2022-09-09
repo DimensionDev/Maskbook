@@ -1,4 +1,4 @@
-import { assignIn } from 'lodash-unified'
+import { mixin } from '@masknet/shared-base'
 import { HubStateBaseClient, HubStateFungibleClient, HubStateNonFungibleClient } from '@masknet/plugin-infra/web3'
 import {
     CoinGeckoPriceSolana,
@@ -64,7 +64,7 @@ export function createHub(
     sourceType?: SourceType,
     currencyType?: CurrencyType,
 ) {
-    return assignIn(
+    return mixin(
         new Hub(chainId, account, sourceType, currencyType),
         new HubFungibleClient(chainId, account, sourceType, currencyType),
         new HubNonFungibleClient(chainId, account, sourceType, currencyType),

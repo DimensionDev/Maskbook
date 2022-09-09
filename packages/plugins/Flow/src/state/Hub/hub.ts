@@ -1,4 +1,4 @@
-import { assignIn } from 'lodash-unified'
+import { mixin } from '@masknet/shared-base'
 import { HubStateBaseClient, HubStateFungibleClient, HubStateNonFungibleClient } from '@masknet/plugin-infra/web3'
 import { AlchemyFlow, FlowFungible, FungibleTokenAPI, NonFungibleTokenAPI } from '@masknet/web3-providers'
 import { SourceType, CurrencyType, HubOptions, Pageable, Transaction } from '@masknet/web3-shared-base'
@@ -45,7 +45,7 @@ export function createHub(
     sourceType?: SourceType,
     currencyType?: CurrencyType,
 ) {
-    return assignIn(
+    return mixin(
         new Hub(chainId, account, sourceType, currencyType),
         new HubFungibleClient(chainId, account, sourceType, currencyType),
         new HubNonFungibleClient(chainId, account, sourceType, currencyType),
