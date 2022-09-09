@@ -1,35 +1,28 @@
 import { useAsync } from 'react-use'
-import { isLocaleResource, resolveLocalURL, resolveResourceURL } from '@masknet/web3-shared-base'
+import {
+    attemptUntil,
+    fetchImageByDOM,
+    fetchImageByHTTP,
+    isLocaleResource,
+    resolveCrossOriginURL,
+    resolveLocalURL,
+    resolveResourceURL,
+} from '@masknet/web3-shared-base'
 
-function fetchImageFromFE(url: string) {
-    return new Promise<string>((resolve, reject) => {
-        const img = document.createElement('img')
-        const cleanup = () => {
-            img.removeEventListener('load', onload)
-            img.removeEventListener('error', reject)
-        }
-        const onload = () => {
-            resolve(url)
-            cleanup()
-        }
-        const onerror = () => {
-            reject()
-            cleanup()
-        }
-        img.decoding = 'async'
-        img.crossOrigin = 'Anonymous'
-        img.addEventListener('load', onload)
-        img.addEventListener('error', onerror)
-        img.src = url
-    })
+function toBase64(blob: Blob | null | undefined) {
+    if (!blob) throw new Error('Failed to create image URL.')
+    return URL.createObjectURL(blob)
 }
 
-async function fetchImageFromBE(url: string) {
-    const response = await fetch(url, {
-        cache: 'force-cache',
-    })
-    if (response.ok) return URL.createObjectURL(await response.blob())
-    return
+function fetchImage(url: string) {
+    return attemptUntil<string | null>(
+        [
+            async () => toBase64(await fetchImageByDOM(url)),
+            async () => toBase64(await fetchImageByDOM(resolveCrossOriginURL(url)!)),
+            async () => toBase64(await fetchImageByHTTP(url)),
+        ],
+        url,
+    )
 }
 
 export function useImageURL(url?: string) {
@@ -41,10 +34,8 @@ export function useImageURL(url?: string) {
         if (!resolvedURL) return url
 
         try {
-            return fetchImageFromFE(resolvedURL)
+            return fetchImage(resolvedURL)
         } catch {
-            return fetchImageFromBE(resolvedURL)
-        } finally {
             return resolvedURL
         }
     }, [url])
