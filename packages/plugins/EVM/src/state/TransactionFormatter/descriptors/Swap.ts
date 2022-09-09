@@ -1,6 +1,7 @@
 import { first, last } from 'lodash-unified'
 import { i18NextInstance } from '@masknet/shared-base'
 import UniswapV3MulticallFunctionExactInputABI from '@masknet/web3-contracts/abis/UniswapV3MulticallFunctionExactInput.json'
+import UniswapV3MulticallFunctionExactInputSingleABI from '@masknet/web3-contracts/abis/UniswapV3MulticallFunctionExactInputSingle.json'
 import Web3 from 'web3'
 import { TransactionContext, isSameAddress } from '@masknet/web3-shared-base'
 import {
@@ -254,13 +255,33 @@ export class SwapDescriptor implements TransactionDescriptor {
                 try {
                     const web3 = new Web3()
                     const results = web3.eth.abi.decodeParameters(
-                        UniswapV3MulticallFunctionExactInputABI,
+                        context.chainId === ChainId.Arbitrum
+                            ? UniswapV3MulticallFunctionExactInputSingleABI
+                            : UniswapV3MulticallFunctionExactInputABI,
                         method.parameters[0][0].slice(10),
                     ) as { [key: string]: string[] }
+                    let path: string
+                    let fee: string
+                    let deadline: string
+                    let tokenInAddress: string
+                    let tokenOutAddress: string
+                    let recipient: string
+                    let amountIn: string
+                    let amountOutMinimum: string
+                    if (context.chainId === ChainId.Arbitrum) {
+                        const WETH_ADDRESS = getTokenConstant(context.chainId, 'WETH_ADDRESS')
+                        console.log({ results })
+                        ;[tokenInAddress, tokenOutAddress, fee, recipient, deadline, amountIn, amountOutMinimum] =
+                            results['0']
 
-                    const [path, tokenOutAddress, _, amountIn, amountOutMinimum] = results['0']
+                        if (isSameAddress(WETH_ADDRESS, tokenOutAddress) && isNativeTokenAddress(recipient)) {
+                            tokenOutAddress = nativeToken?.address ?? ''
+                        }
+                    } else {
+                        ;[path, tokenOutAddress, fee, amountIn, amountOutMinimum] = results['0']
+                        tokenInAddress = path.slice(0, 42)
+                    }
 
-                    const tokenInAddress = path.slice(0, 42)
                     const tokenIn = isNativeTokenAddress(tokenInAddress)
                         ? nativeToken
                         : await connection?.getFungibleToken(tokenInAddress ?? '')
