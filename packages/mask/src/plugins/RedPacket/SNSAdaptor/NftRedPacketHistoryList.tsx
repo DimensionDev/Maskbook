@@ -9,7 +9,6 @@ import { useRef, useState } from 'react'
 import type { NftRedPacketHistory } from '../types'
 import { useNftRedPacketHistory } from './hooks/useNftRedPacketHistory'
 import { NftRedPacketHistoryItem } from './NftRedPacketHistoryItem'
-import { useI18N as useBaseI18n } from '../../../utils'
 import { useI18N } from '../locales'
 import { Icons } from '@masknet/icons'
 
@@ -90,7 +89,6 @@ interface Props {
 
 export function NftRedPacketHistoryList({ onSend }: Props) {
     const { classes } = useStyles()
-    const { t: tr } = useBaseI18n()
     const t = useI18N()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
