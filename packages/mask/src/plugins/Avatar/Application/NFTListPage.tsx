@@ -87,7 +87,7 @@ export function NFTListPage(props: NFTListPageProps) {
 
     useEffect(() => setSelectedToken(tokenInfo), [tokenInfo])
 
-    if (!loadError && !loadFinish && !tokens.length)
+    if (loadFinish && !tokens.length)
         return (
             <Box
                 sx={{
