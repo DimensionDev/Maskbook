@@ -10,7 +10,7 @@ import { formatBalance, GasOptionType, isPositive, isZero, NetworkPluginID, scal
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import type { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useGasSchema } from './hooks'
+import { useGasSchema } from './hooks/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

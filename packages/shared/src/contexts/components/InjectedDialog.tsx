@@ -17,9 +17,9 @@ import {
     useTheme,
 } from '@mui/material'
 import { Children, cloneElement, useCallback } from 'react'
-import { useSharedI18N } from '../../locales'
-import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '../base'
-import { DialogDismissIcon } from './DialogDismissIcon'
+import { useSharedI18N } from '../../locales/index.js'
+import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '../base/index.js'
+import { DialogDismissIcon } from './DialogDismissIcon.js'
 import classnames from 'classnames'
 
 interface StyleProps {

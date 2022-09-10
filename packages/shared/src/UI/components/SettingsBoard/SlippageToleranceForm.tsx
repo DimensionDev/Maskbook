@@ -7,8 +7,8 @@ import { Box, Paper } from '@mui/material'
 import { isZero } from '@masknet/web3-shared-base'
 import type { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { RadioChip } from './RadioChip'
-import { useSlippageToleranceSchema } from './hooks'
+import { RadioChip } from './RadioChip.js'
+import { useSlippageToleranceSchema } from './hooks/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

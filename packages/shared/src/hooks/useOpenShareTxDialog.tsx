@@ -5,8 +5,8 @@ import { explorerResolver } from '@masknet/web3-shared-evm'
 import DoneIcon from '@mui/icons-material/Done'
 import { Link, Typography } from '@mui/material'
 import { FC, memo, useCallback } from 'react'
-import { useShowConfirm } from '../contexts/common'
-import { useSharedI18N } from '../locales'
+import { useShowConfirm } from '../contexts/common/index.js'
+import { useSharedI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

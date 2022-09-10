@@ -2,7 +2,7 @@ import { ImgHTMLAttributes, useState } from 'react'
 import classNames from 'classnames'
 import { makeStyles, parseColor, useStylesExtends } from '@masknet/theme'
 import { Box, CircularProgress, useTheme } from '@mui/material'
-import { useImageURL } from '../../../hooks/useImageURL'
+import { useImageURL } from '../../../hooks/useImageURL.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
