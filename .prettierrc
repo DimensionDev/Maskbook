@@ -4,5 +4,11 @@
   "semi": false,
   "singleQuote": true,
   "bracketSameLine": true,
-  "tabWidth": 4
+  "tabWidth": 4,
+  "overrides": [
+    {
+      "files": ["*rc", "package.json", "tsconfig*", "*.md", "*.yaml", "*.yml"],
+      "options": { "tabWidth": 2 }
+    }
+  ]
 }
