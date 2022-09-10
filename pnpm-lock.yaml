@@ -508,12 +508,15 @@ importers:
 
   packages/injected-script:
     devDependencies:
-      '@rollup/plugin-sucrase':
-        specifier: ^4.0.4
-        version: 4.0.4_rollup@2.75.6
+      '@swc/core':
+        specifier: 1.2.245
+        version: 1.2.245
       rollup:
         specifier: ^2.75.6
         version: 2.75.6
+      rollup-plugin-swc3:
+        specifier: ^0.5.0
+        version: 0.5.0_cifeaqcndudoro5ww2kwl3grv4
       rollup-plugin-terser:
         specifier: ^7.0.2
         version: 7.0.2_rollup@2.75.6
@@ -978,12 +981,15 @@ importers:
       '@rollup/plugin-node-resolve':
         specifier: ^13.3.0
         version: 13.3.0_rollup@2.75.6
-      '@rollup/plugin-sucrase':
-        specifier: ^4.0.4
-        version: 4.0.4_rollup@2.75.6
+      '@swc/core':
+        specifier: 1.2.245
+        version: 1.2.245
       rollup:
         specifier: ^2.75.6
         version: 2.75.6
+      rollup-plugin-swc3:
+        specifier: ^0.5.0
+        version: 0.5.0_cifeaqcndudoro5ww2kwl3grv4
       rollup-plugin-terser:
         specifier: ^7.0.2
         version: 7.0.2_rollup@2.75.6
@@ -1786,9 +1792,9 @@ importers:
       '@rollup/plugin-node-resolve':
         specifier: ^13.3.0
         version: 13.3.0_rollup@2.75.6
-      '@rollup/plugin-sucrase':
-        specifier: ^4.0.4
-        version: 4.0.4_rollup@2.75.6
+      '@swc/core':
+        specifier: 1.2.245
+        version: 1.2.245
       '@types/node':
         specifier: 18.7.4
         version: 18.7.4
@@ -1801,6 +1807,9 @@ importers:
       rollup:
         specifier: ^2.75.6
         version: 2.75.6
+      rollup-plugin-swc3:
+        specifier: ^0.5.0
+        version: 0.5.0_cifeaqcndudoro5ww2kwl3grv4
       rollup-plugin-terser:
         specifier: ^7.0.2
         version: 7.0.2_rollup@2.75.6
@@ -9145,17 +9154,6 @@ packages:
       rollup: 2.75.6
     dev: false
 
-  /@rollup/plugin-sucrase/4.0.4_rollup@2.75.6:
-    resolution: {integrity: sha512-YH4J8yoJb5EVnLhAwWxYAQNh2SJOR+SdZ6XdgoKEv6Kxm33riYkM8MlMaggN87UoISP52qAFyZ5ey56wu6umGg==}
-    engines: {node: '>=12.0.0'}
-    peerDependencies:
-      rollup: ^2.53.1
-    dependencies:
-      '@rollup/pluginutils': 4.2.1
-      rollup: 2.75.6
-      sucrase: 3.21.0
-    dev: true
-
   /@rollup/pluginutils/3.1.0_rollup@2.75.6:
     resolution: {integrity: sha512-GksZ6pr6TpIjHm8h9lSQ8pi8BE9VeubNT0OMJ3B5uZJ8pz73NPiqOtCog/x2/QzM1ENChPKxMDhiQuRHsqc+lg==}
     engines: {node: '>= 8.0.0'}
@@ -15343,8 +15341,8 @@ packages:
     resolution: {integrity: sha512-WHVocJYavUwVgVViC0ORikPHQquXwVh939TaelZ4WDqpWgTX/FsGhl/+P4qBUAGcRvtOgDgC+xftNWWp2RUTAQ==}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001376
-      electron-to-chromium: 1.4.219
+      caniuse-lite: 1.0.30001373
+      electron-to-chromium: 1.4.206
     dev: false
 
   /browserslist/4.20.3:
@@ -15741,11 +15739,6 @@ packages:
 
   /caniuse-lite/1.0.30001373:
     resolution: {integrity: sha512-pJYArGHrPp3TUqQzFYRmP/lwJlj8RCbVe3Gd3eJQkAV8SAC6b19XS9BjMvRdvaS8RMkaTN8ZhoHP6S1y8zzwEQ==}
-    dev: true
-
-  /caniuse-lite/1.0.30001376:
-    resolution: {integrity: sha512-I27WhtOQ3X3v3it9gNs/oTpoE5KpwmqKR5oKPA8M0G7uMXh9Ty81Q904HpKUrM30ei7zfcL5jE7AXefgbOfMig==}
-    dev: false
 
   /canonicalize/1.0.8:
     resolution: {integrity: sha512-0CNTVCLZggSh7bc5VkX5WWPWO+cyZbNd07IHIsSXLia/eAq+r836hgk+8BKoEh7949Mda87VUOitx5OddVj64A==}
@@ -18164,11 +18157,6 @@ packages:
 
   /electron-to-chromium/1.4.206:
     resolution: {integrity: sha512-h+Fadt1gIaQ06JaIiyqPsBjJ08fV5Q7md+V8bUvQW/9OvXfL2LRICTz2EcnnCP7QzrFTS6/27MRV6Bl9Yn97zA==}
-    dev: true
-
-  /electron-to-chromium/1.4.219:
-    resolution: {integrity: sha512-zoQJsXOUw0ZA0YxbjkmzBumAJRtr6je5JySuL/bAoFs0DuLiLJ+5FzRF7/ZayihxR2QcewlRZVm5QZdUhwjOgA==}
-    dev: false
 
   /elliptic/6.5.4:
     resolution: {integrity: sha512-iLhC6ULemrljPZb+QutR5TQGB+pdW6KGD5RSegS+8sorOZT+rdQFbsQFJgvN3eRqNALqJer4oQ16YvJHlU8hzQ==}
@@ -20870,17 +20858,6 @@ packages:
     dev: true
     optional: true
 
-  /glob/7.1.6:
-    resolution: {integrity: sha512-LwaxwyZ72Lk7vZINtNNrywX0ZuLyStrdDtabefZKAY5ZGJhVtgdznluResxNmPitE0SAO+O26sWTHeKSI2wMBA==}
-    dependencies:
-      fs.realpath: 1.0.0
-      inflight: 1.0.6
-      inherits: 2.0.4
-      minimatch: 3.1.2
-      once: 1.4.0
-      path-is-absolute: 1.0.1
-    dev: true
-
   /glob/7.1.7:
     resolution: {integrity: sha512-OvD9ENzPLbegENnYP5UUfJIirTg4+XwMWGaQfQTY0JenxNvvIKP3U3/tAQSPIu/lHxXYSZmpXlUHeqAIdKzBLQ==}
     dependencies:
@@ -21920,7 +21897,7 @@ packages:
     patched: true
 
   /immutable/3.8.1:
-    resolution: {integrity: sha1-IAgH8Rqw9ycQ6khVQt4IgHX2jNI=}
+    resolution: {integrity: sha512-0R2q5f83L0h+zizu3lAA3ZR/mzEl04U1jVVXIqf2rQbZs9eX5YGtx1EFQuuJJHzVXH10ur6hGKehR8yBOQmZlQ==}
     engines: {node: '>=0.10.0'}
     dev: false
 
@@ -23052,6 +23029,11 @@ packages:
     resolution: {integrity: sha1-vEztbWxF/gdFKCuvyGqfjE/JzmE=}
     dev: false
 
+  /joycon/3.1.1:
+    resolution: {integrity: sha512-34wB/Y7MW7bzjKRjUKTa46I2Z7eV62Rkhva+KkopW7Qvv/OSWBqvkSY7vusOPrNuZcUG3tApvdVgNB8POj3SPw==}
+    engines: {node: '>=10'}
+    dev: true
+
   /js-cookie/2.2.1:
     resolution: {integrity: sha512-HvdH2LzI/EAZcUwA8+0nKNtWHqS+ZmijLA30RwZA0bo7ToCckjK5MkGhjED9KoRcXO6BaGI3I9UIzSA1FKFPOQ==}
     dev: false
@@ -23297,6 +23279,10 @@ packages:
     resolution: {integrity: sha512-1hqLFMSrGHRHxav9q9gNjJ5EXznIxGVO09xQRrwplcS8qs28pZ8s8hupZAmqDwZUmVZ2Qb2jnyPOWcDH8m8dlA==}
     engines: {node: '>=6'}
     hasBin: true
+
+  /jsonc-parser/3.2.0:
+    resolution: {integrity: sha512-gfFQZrcTc8CnKXp6Y4/CBT3fTc0OVuDofpre4aEeEpSBPV5X5v4+Vmx+8snU7RLPrNHPKSgLxGo9YuQzz20o+w==}
+    dev: true
 
   /jsonfile/2.4.0:
     resolution: {integrity: sha512-PKllAqbgLgxHaj8TElYymKCAgrASebJrWpTnEkOaTowt23VKXXN0sUeriJ+eh7y6ufb/CC5ap11pz71/cM0hUw==}
@@ -27840,6 +27826,21 @@ packages:
       '@babel/code-frame': 7.18.6
     dev: false
 
+  /rollup-plugin-swc3/0.5.0_cifeaqcndudoro5ww2kwl3grv4:
+    resolution: {integrity: sha512-Y5zJAsvksM39YAmjNje9rWtRMrJefaieDfkv52B2H7PsFj9EuYsrgGJRRUZCiOjMkQwdkiAEYfobqMZFV1X6pg==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      '@swc/core': '>=1.2.165'
+      rollup: ^2.0.0
+    dependencies:
+      '@rollup/pluginutils': 4.2.1
+      '@swc/core': 1.2.245
+      deepmerge: 4.2.2
+      joycon: 3.1.1
+      jsonc-parser: 3.2.0
+      rollup: 2.75.6
+    dev: true
+
   /rollup-plugin-terser/7.0.2_rollup@2.75.6:
     resolution: {integrity: sha512-w3iIaU4OxcF52UUXiZNsNeuXIMDvFrr+ZXK6bFZ0Q60qyVfq4uLptoS4bbq3paG3x216eQllFZX7zt6TIImguQ==}
     peerDependencies:
@@ -29297,19 +29298,6 @@ packages:
     resolution: {integrity: sha512-lVrM/bNdhVX2OgBFNa2YJ9Lxj7kPzylieHd3TNjuGE0Re9JB7joL5VUKOVH1kdNNJTgGPpT8hmwIAPLaSyEVFQ==}
     dev: false
 
-  /sucrase/3.21.0:
-    resolution: {integrity: sha512-FjAhMJjDcifARI7bZej0Bi1yekjWQHoEvWIXhLPwDhC6O4iZ5PtGb86WV56riW87hzpgB13wwBKO9vKAiWu5VQ==}
-    engines: {node: '>=8'}
-    hasBin: true
-    dependencies:
-      commander: 4.1.1
-      glob: 7.1.6
-      lines-and-columns: 1.2.4
-      mz: 2.7.0
-      pirates: 4.0.5
-      ts-interface-checker: 0.1.13
-    dev: true
-
   /superstruct/0.14.2:
     resolution: {integrity: sha512-nPewA6m9mR3d6k7WkZ8N8zpTWfenFH3q9pA2PkuiZxINr9DKB2+40wEQf0ixn8VaGuJ78AB6iWOtStI+/4FKZQ==}
     dev: false
@@ -29980,10 +29968,6 @@ packages:
       typescript:
         optional: true
     dev: false
-
-  /ts-interface-checker/0.1.13:
-    resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
-    dev: true
 
   /ts-jest/28.0.5:
     resolution: {integrity: sha512-Sx9FyP9pCY7pUzQpy4FgRZf2bhHY3za576HMKJFs+OnQ9jS96Du5vNsDKkyedQkik+sEabbKAnCliv9BEsHZgQ==}

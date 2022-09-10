@@ -1,4 +1,4 @@
-import sucrase from '@rollup/plugin-sucrase'
+import { swc } from 'rollup-plugin-swc3'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import { terser } from 'rollup-plugin-terser'
@@ -44,9 +44,8 @@ function plugins() {
         nodeResolve(),
         commonjs(),
         json(),
-        sucrase({
-            exclude: ['node_modules/**'],
-            transforms: ['typescript'],
+        swc({
+            tsconfig: '../../tsconfig.json',
         }),
         terser({ mangle: false }),
     ]
