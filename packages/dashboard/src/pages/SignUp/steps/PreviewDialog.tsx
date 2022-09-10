@@ -1,13 +1,13 @@
 import { QRCode } from 'react-qrcode-logo'
 import { makeStyles, MaskDialog, MaskColorVar, MaskLightTheme, useCustomSnackbar } from '@masknet/theme'
 import { Box, Button, DialogContent, ThemeProvider, Typography } from '@mui/material'
-import { MnemonicReveal } from '../../../components/Mnemonic'
+import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
 import { Icons } from '@masknet/icons'
 import { ForwardedRef, forwardRef, useEffect, useMemo, useRef, useState } from 'react'
 import { useReactToPrint } from 'react-to-print'
 import { toJpeg } from 'html-to-image'
-import { WatermarkURL } from '../../../assets'
-import { useDashboardI18N } from '../../../locales'
+import { WatermarkURL } from '../../../assets/index.js'
+import { useDashboardI18N } from '../../../locales/index.js'
 import { useCopyToClipboard } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({

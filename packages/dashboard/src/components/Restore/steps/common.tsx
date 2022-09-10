@@ -1,6 +1,6 @@
 import { Button, Stack, Typography } from '@mui/material'
 import { memo } from 'react'
-import { AccountType } from '../../../pages/Settings/type'
+import { AccountType } from '../../../pages/Settings/type.js'
 
 interface LabelProps {
     onModeChange(mode: AccountType): void

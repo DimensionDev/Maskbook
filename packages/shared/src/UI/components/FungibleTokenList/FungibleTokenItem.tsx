@@ -1,15 +1,15 @@
 import { memo, useCallback, useMemo } from 'react'
 import { Link, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import { formatBalance, FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
-import { TokenIcon } from '../TokenIcon'
+import { TokenIcon } from '../TokenIcon/index.js'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskLoadingButton, LoadingBase } from '@masknet/theme'
-import { useSharedI18N } from '../../../locales'
+import { useSharedI18N } from '../../../locales/index.js'
 import { useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
-import { TokenListMode } from './type'
-import { SettingSwitch } from '../SettingSwitch'
-import { useTokenBlocked, useTokenTrusted } from './useTokenBlocked'
-import { FormattedBalance } from '../../../wallet'
+import { TokenListMode } from './type.js'
+import { SettingSwitch } from '../SettingSwitch/index.js'
+import { useTokenBlocked, useTokenTrusted } from './useTokenBlocked.js'
+import { FormattedBalance } from '../../../wallet/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {

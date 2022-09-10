@@ -6,7 +6,7 @@ import { useReverseAddress, useWeb3State, Web3Helper } from '@masknet/plugin-inf
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { ChainId, DebankTransactionDirection, SchemaType, ZerionTransactionDirection } from '@masknet/web3-shared-evm'
 import { Box, Link, Stack, TableCell, TableRow, Tooltip, Typography } from '@mui/material'
-import { TransactionIcon } from '../TransactionIcon'
+import { TransactionIcon } from '../TransactionIcon/index.js'
 import { TokenType, Transaction } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import fromUnixTime from 'date-fns/fromUnixTime'

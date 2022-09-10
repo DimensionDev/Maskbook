@@ -1,9 +1,9 @@
-import SettingItem from './SettingItem'
+import SettingItem from './SettingItem.js'
 import { Icons } from '@masknet/icons'
-import BackupSetting from './BackupSetting'
-import { UserContext } from '../hooks/UserContext'
+import BackupSetting from './BackupSetting.js'
+import { UserContext } from '../hooks/UserContext.js'
 import { useContext, useState, useEffect } from 'react'
-import { useDashboardI18N } from '../../../locales'
+import { useDashboardI18N } from '../../../locales/index.js'
 
 export default function BackupSettingItem() {
     const t = useDashboardI18N()

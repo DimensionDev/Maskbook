@@ -1,7 +1,7 @@
 import { memo, useState } from 'react'
 import { Avatar, AvatarProps, useTheme } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import NO_IMAGE_COLOR from './constants'
+import NO_IMAGE_COLOR from './constants.js'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {

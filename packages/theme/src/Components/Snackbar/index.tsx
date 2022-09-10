@@ -17,10 +17,10 @@ import { Close as CloseIcon } from '@mui/icons-material'
 import WarningIcon from '@mui/icons-material/Warning'
 import InfoIcon from '@mui/icons-material/Info'
 import { Icons } from '@masknet/icons'
-import { makeStyles, useStylesExtends } from '../../UIHelper'
-import { MaskColorVar } from '../../CSSVariables'
+import { makeStyles, useStylesExtends } from '../../UIHelper/index.js'
+import { MaskColorVar } from '../../CSSVariables/index.js'
 
-export { PopupSnackbarProvider, usePopupCustomSnackbar } from './PopupSnackbar'
+export { PopupSnackbarProvider, usePopupCustomSnackbar } from './PopupSnackbar.js'
 export { SnackbarProvider, useSnackbar } from 'notistack'
 export type { VariantType, OptionsObject, SnackbarKey, SnackbarMessage } from 'notistack'
 
@@ -247,7 +247,11 @@ export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarCo
     )
 })
 
-export const CustomSnackbarProvider = memo<SnackbarProviderProps & { offsetY?: number }>(({ offsetY, ...rest }) => {
+export const CustomSnackbarProvider = memo<
+    SnackbarProviderProps & {
+        offsetY?: number
+    }
+>(({ offsetY, ...rest }) => {
     const ref = useRef<SnackbarProvider>(null)
     const { classes } = useStyles({ offsetY })
     const onDismiss = (key: string | number) => () => {

@@ -1,4 +1,4 @@
-import { useDashboardI18N } from '../../locales'
+import { useDashboardI18N } from '../../locales/index.js'
 import { Typography } from '@mui/material'
 
 export const Version = ({ className }: { className?: string }) => {

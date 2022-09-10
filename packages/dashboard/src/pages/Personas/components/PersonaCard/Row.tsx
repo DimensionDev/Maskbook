@@ -2,7 +2,7 @@ import { memo, useContext, useState } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { Box, IconButton, MenuItem, Stack, Typography } from '@mui/material'
-import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine'
+import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine/index.js'
 import {
     PersonaIdentifier,
     ProfileIdentifier,
@@ -11,21 +11,21 @@ import {
     NextIDAction,
 } from '@masknet/shared-base'
 import { useMenu } from '@masknet/shared'
-import { useDashboardI18N } from '../../../../locales'
-import { PersonaContext } from '../../hooks/usePersonaContext'
-import { RenameDialog } from '../RenameDialog'
-import type { SocialNetwork } from '../../api'
+import { useDashboardI18N } from '../../../../locales/index.js'
+import { PersonaContext } from '../../hooks/usePersonaContext.js'
+import { RenameDialog } from '../RenameDialog/index.js'
+import type { SocialNetwork } from '../../api.js'
 import { useToggle } from 'react-use'
-import { UploadAvatarDialog } from '../UploadAvatarDialog'
-import { MaskAvatar } from '../../../../components/MaskAvatar'
+import { UploadAvatarDialog } from '../UploadAvatarDialog/index.js'
+import { MaskAvatar } from '../../../../components/MaskAvatar/index.js'
 import { useNavigate } from 'react-router-dom'
-import { LogoutPersonaDialog } from '../LogoutPersonaDialog'
-import { UserContext } from '../../../Settings/hooks/UserContext'
+import { LogoutPersonaDialog } from '../LogoutPersonaDialog/index.js'
+import { UserContext } from '../../../Settings/hooks/UserContext.js'
 import { styled } from '@mui/material/styles'
-import { PreviewDialog as ExportPersonaDialog } from '../../../SignUp/steps/PreviewDialog'
-import { useExportPrivateKey } from '../../hooks/useExportPrivateKey'
-import { useExportMnemonicWords } from '../../hooks/useExportMnemonicWords'
-import { usePersonaProof } from '../../hooks/usePersonaProof'
+import { PreviewDialog as ExportPersonaDialog } from '../../../SignUp/steps/PreviewDialog.js'
+import { useExportPrivateKey } from '../../hooks/useExportPrivateKey.js'
+import { useExportMnemonicWords } from '../../hooks/useExportMnemonicWords.js'
+import { usePersonaProof } from '../../hooks/usePersonaProof.js'
 
 const useStyles = makeStyles()((theme) => ({
     setting: {

@@ -1,5 +1,5 @@
 import { story } from '@masknet/storybook-shared'
-import C from '../src/components/ConfirmDialog'
+import C from '../src/components/ConfirmDialog/index.js'
 import { action } from '@storybook/addon-actions'
 
 const { meta, of } = story(C)

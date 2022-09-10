@@ -5,9 +5,9 @@ import { isDashboardPage } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { DialogContent } from '@mui/material'
-import { InjectedDialog } from '../components'
-import { SettingsBoard } from '../../UI/components/SettingsBoard'
-import { SettingsContext } from '../../UI/components/SettingsBoard/Context'
+import { InjectedDialog } from '../components/index.js'
+import { SettingsBoard } from '../../UI/components/SettingsBoard/index.js'
+import { SettingsContext } from '../../UI/components/SettingsBoard/Context.js'
 
 const isDashboard = isDashboardPage()
 
@@ -53,7 +53,10 @@ export interface SelectGasSettingsDialogProps<T extends NetworkPluginID = Networ
     disableSlippageTolerance?: boolean
     disableGasLimit?: boolean
     onSubmit?(
-        settings: { slippageTolerance?: number; transaction?: Web3Helper.Definition[T]['Transaction'] } | null,
+        settings: {
+            slippageTolerance?: number
+            transaction?: Web3Helper.Definition[T]['Transaction']
+        } | null,
     ): void
     onClose?(): void
 }

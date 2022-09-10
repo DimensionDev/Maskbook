@@ -1,8 +1,8 @@
 import type { FC, ReactNode } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogActions, DialogContent } from '@mui/material'
-import { useSharedI18N } from '../../../locales'
-import { InjectedDialog, InjectedDialogProps } from '../../components'
+import { useSharedI18N } from '../../../locales/index.js'
+import { InjectedDialog, InjectedDialogProps } from '../../components/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

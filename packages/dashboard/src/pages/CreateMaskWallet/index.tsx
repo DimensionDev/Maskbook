@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import { lazy } from 'react'
-import { CreateMaskWalletFrame } from '../../components/CreateWalletFrame'
+import { CreateMaskWalletFrame } from '../../components/CreateWalletFrame/index.js'
 import { DashboardRoutes, relativeRouteOf } from '@masknet/shared-base'
 
 const Welcome = lazy(() => import('./components/Welcome'))

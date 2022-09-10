@@ -1,11 +1,11 @@
 import { MaskDialog, CountdownButton, useCustomSnackbar, MaskTextField, MaskColorVar } from '@masknet/theme'
 import { MenuItem, Select, Box } from '@mui/material'
-import { useDashboardI18N } from '../../../../locales'
+import { useDashboardI18N } from '../../../../locales/index.js'
 import { useState, useContext, useMemo, useEffect } from 'react'
-import { UserContext } from '../../hooks/UserContext'
-import { fetchDownloadLink, sendCode, useLanguage, VerifyCodeRequest } from '../../api'
-import { BackupFileInfo, AccountType, Scenario, Locale } from '../../type'
-import { LoadingButton } from '../../../../components/LoadingButton'
+import { UserContext } from '../../hooks/UserContext.js'
+import { fetchDownloadLink, sendCode, useLanguage, VerifyCodeRequest } from '../../api.js'
+import { BackupFileInfo, AccountType, Scenario, Locale } from '../../type.js'
+import { LoadingButton } from '../../../../components/LoadingButton/index.js'
 import { useAsyncFn } from 'react-use'
 
 export interface VerifyNextData {

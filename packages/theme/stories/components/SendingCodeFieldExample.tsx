@@ -1,4 +1,4 @@
-import { SendingCodeField } from '../../src/Components/SendingCodeField'
+import { SendingCodeField } from '../../src/Components/SendingCodeField/index.js'
 
 const handleBlur = () => {}
 const handleSend = () => {}

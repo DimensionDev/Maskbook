@@ -1,18 +1,27 @@
-import { useDashboardI18N } from '../../../locales'
+import { useDashboardI18N } from '../../../locales/index.js'
 import { useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { sendCode, useLanguage } from '../../../pages/Settings/api'
+import { sendCode, useLanguage } from '../../../pages/Settings/api.js'
 import { SendingCodeField, useCustomSnackbar } from '@masknet/theme'
 import { Button, Typography } from '@mui/material'
-import { ButtonContainer } from '../../RegisterFrame/ButtonContainer'
-import type { StepCommonProps } from '../../Stepper'
-import { ValidationCodeStep } from './common'
-import { AccountType, BackupFileInfo, Locale, Scenario } from '../../../pages/Settings/type'
+import { ButtonContainer } from '../../RegisterFrame/ButtonContainer.js'
+import type { StepCommonProps } from '../../Stepper/index.js'
+import { ValidationCodeStep } from './common.js'
+import { AccountType, BackupFileInfo, Locale, Scenario } from '../../../pages/Settings/type.js'
 
 interface ValidationAccountProps extends StepCommonProps {
     account: string
     type: AccountType
-    onNext(account: string, type: AccountType, code: string): Promise<BackupFileInfo | { message: string }>
+    onNext(
+        account: string,
+        type: AccountType,
+        code: string,
+    ): Promise<
+        | BackupFileInfo
+        | {
+              message: string
+          }
+    >
 }
 
 export const ValidationAccount = ({ account, toStep, type, onNext }: ValidationAccountProps) => {
@@ -40,7 +49,13 @@ export const ValidationAccount = ({ account, toStep, type, onNext }: ValidationA
             setError('')
             toStep(ValidationCodeStep.ConfirmBackupInfo, { backupInfo, account, type })
         } else {
-            setError((backupInfo as { message: string }).message)
+            setError(
+                (
+                    backupInfo as {
+                        message: string
+                    }
+                ).message,
+            )
         }
     }
 

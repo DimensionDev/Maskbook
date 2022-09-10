@@ -1,7 +1,7 @@
 import { setDOMImpl } from 'ef.js'
 import { createReactRootShadowedPartial, ReactRootShadowed } from '@masknet/theme'
-import * as Components from './Components'
-import { RenderContext } from './RenderContext'
+import * as Components from './Components/index.js'
+import { RenderContext } from './RenderContext.js'
 
 const createReactRootShadowed = createReactRootShadowedPartial({
     preventEventPropagationList: [],

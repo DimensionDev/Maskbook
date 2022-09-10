@@ -4,8 +4,8 @@ import type { AvatarProps } from '@mui/material'
 import { useChainId, useWeb3Hub, Web3Helper } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { useImageBase64 } from '../../../hooks/useImageBase64'
-import { Icon } from '../Icon'
+import { useImageBase64 } from '../../../hooks/useImageBase64.js'
+import { Icon } from '../Icon/index.js'
 
 export interface TokenIconProps extends withClasses<'icon'> {
     chainId?: Web3Helper.ChainIdAll

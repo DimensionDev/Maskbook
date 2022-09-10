@@ -1,1 +1,1 @@
-export * from './ErrorBoundary'
+export * from './ErrorBoundary/index.js'

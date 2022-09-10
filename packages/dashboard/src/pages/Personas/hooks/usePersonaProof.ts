@@ -1,7 +1,7 @@
 import { NextIDProof } from '@masknet/web3-providers'
 import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { Messages } from '../../../API'
+import { Messages } from '../../../API.js'
 
 export function usePersonaProof(publicHexKey: string) {
     const res = useAsyncRetry(async () => {

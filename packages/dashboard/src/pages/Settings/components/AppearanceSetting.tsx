@@ -1,10 +1,10 @@
 import { MenuItem } from '@mui/material'
-import { Services } from '../../../API'
-import { useAppearance } from '../../Personas/api'
+import { Services } from '../../../API.js'
+import { useAppearance } from '../../Personas/api.js'
 import { Appearance } from '@masknet/theme'
 
-import SettingSelect from './SettingSelect'
-import { useDashboardI18N } from '../../../locales'
+import SettingSelect from './SettingSelect.js'
+import { useDashboardI18N } from '../../../locales/index.js'
 
 export default function AppearanceSetting() {
     const t = useDashboardI18N()

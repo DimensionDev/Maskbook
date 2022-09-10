@@ -1,7 +1,7 @@
 import { story } from '@masknet/storybook-shared'
 import { TokenType } from '@masknet/web3-shared-base'
 import { SchemaType } from '@masknet/web3-shared-evm'
-import { CollectibleCard as C } from '../../../src/pages/Wallets/components/CollectibleCard'
+import { CollectibleCard as C } from '../../../src/pages/Wallets/components/CollectibleCard/index.js'
 
 const { meta, of } = story(C)
 

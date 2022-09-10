@@ -1,7 +1,7 @@
-import { useDashboardI18N } from '../../../locales'
-import SettingItem from './SettingItem'
-import EmailSetting from './EmailSetting'
-import { UserContext } from '../hooks/UserContext'
+import { useDashboardI18N } from '../../../locales/index.js'
+import SettingItem from './SettingItem.js'
+import EmailSetting from './EmailSetting.js'
+import { UserContext } from '../hooks/UserContext.js'
 import { useContext } from 'react'
 import { Icons } from '@masknet/icons'
 

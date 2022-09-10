@@ -1,9 +1,9 @@
-import ConfirmDialog from '../../../../components/ConfirmDialog'
+import ConfirmDialog from '../../../../components/ConfirmDialog/index.js'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { Box, Typography } from '@mui/material'
 import { makeStyles, CountdownButton, MaskTextField, useCustomSnackbar } from '@masknet/theme'
-import { UserContext } from '../../hooks/UserContext'
-import { useDashboardI18N } from '../../../../locales'
+import { UserContext } from '../../hooks/UserContext.js'
+import { useDashboardI18N } from '../../../../locales/index.js'
 import {
     fetchBackupValue,
     fetchDownloadLink,
@@ -13,9 +13,9 @@ import {
     useLanguage,
     verifyCode,
     VerifyCodeRequest,
-} from '../../api'
-import { emailRegexp } from '../../regexp'
-import { Locale, Scenario, AccountType } from '../../type'
+} from '../../api.js'
+import { emailRegexp } from '../../regexp.js'
+import { Locale, Scenario, AccountType } from '../../type.js'
 import { decryptBackup, encryptBackup } from '@masknet/backup-format'
 import { encode } from '@msgpack/msgpack'
 

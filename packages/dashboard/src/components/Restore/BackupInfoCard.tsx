@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Box, Card, Grid, Stack, Typography } from '@mui/material'
 import formatDateTime from 'date-fns/format'
 import fromUnixTime from 'date-fns/fromUnixTime'
-import type { BackupFileInfo } from '../../pages/Settings/type'
+import type { BackupFileInfo } from '../../pages/Settings/type.js'
 import Tooltip from '@mui/material/Tooltip'
 import { formatFileSize } from '@dimensiondev/kit'
 
