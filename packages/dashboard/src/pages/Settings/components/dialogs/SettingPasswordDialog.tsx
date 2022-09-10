@@ -1,11 +1,11 @@
-import ConfirmDialog from '../../../../components/ConfirmDialog'
+import ConfirmDialog from '../../../../components/ConfirmDialog/index.js'
 import { useEffect, useState, useContext } from 'react'
 import { Box, Typography } from '@mui/material'
-import { UserContext } from '../../hooks/UserContext'
-import { useDashboardI18N } from '../../../../locales'
-import { passwordRegexp } from '../../regexp'
+import { UserContext } from '../../hooks/UserContext.js'
+import { useDashboardI18N } from '../../../../locales/index.js'
+import { passwordRegexp } from '../../regexp.js'
 import { useCustomSnackbar } from '@masknet/theme'
-import PasswordField from '../../../../components/PasswordField'
+import PasswordField from '../../../../components/PasswordField/index.js'
 
 interface SettingPasswordDialogProps {
     open: boolean

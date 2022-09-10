@@ -1,12 +1,17 @@
-import { story } from '../utils'
+import { story } from '../utils/index.js'
 import TabContext from '@mui/lab/TabContext'
 import TabPanel from '@mui/lab/TabPanel'
 import { Tab } from '@mui/material'
 import { useState } from 'react'
-import { ButtonGroupTabList, ButtonGroupTabListProps } from '../../src'
+import { ButtonGroupTabList, ButtonGroupTabListProps } from '../../src/index.js'
 
 const defaultTabs = ['One', 'Two', 'Three']
-const { meta, of } = story(function ({ tabs, ...rest }: { tabs: string[] } & ButtonGroupTabListProps) {
+const { meta, of } = story(function ({
+    tabs,
+    ...rest
+}: {
+    tabs: string[]
+} & ButtonGroupTabListProps) {
     const [state, setState] = useState(tabs[0])
     return (
         <TabContext value={tabs.includes(state) ? state : tabs[0]}>

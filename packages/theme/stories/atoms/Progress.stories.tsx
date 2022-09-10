@@ -1,5 +1,5 @@
 import { LinearProgress as MuiLinearProgress } from '@mui/material'
-import { story } from '../utils'
+import { story } from '../utils/index.js'
 
 const { meta, of } = story(MuiLinearProgress)
 

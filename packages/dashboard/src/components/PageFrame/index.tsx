@@ -16,12 +16,12 @@ import {
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Close as CloseIcon, Menu as MenuIcon } from '@mui/icons-material'
 import Color from 'color'
-import { FollowUs } from '../FollowUs'
-import { DashboardContext } from '../DashboardFrame/context'
-import { Navigation } from '../DashboardFrame/Navigation'
+import { FollowUs } from '../FollowUs/index.js'
+import { DashboardContext } from '../DashboardFrame/context.js'
+import { Navigation } from '../DashboardFrame/Navigation.js'
 import { Icons } from '@masknet/icons'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
-import { NavigationVersionFooter } from '../NavigationVersionFooter'
+import { NavigationVersionFooter } from '../NavigationVersionFooter/index.js'
 
 const MaskLogo = styled(Grid)`
     flex-basis: 212px;

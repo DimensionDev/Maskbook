@@ -1,9 +1,11 @@
 import { Route, Routes, useParams } from 'react-router-dom'
-import { ConnectSocialMedia, MnemonicRevealForm, PersonaCreate, PersonaRecovery } from './steps'
-import { SignUpRoutePath } from './routePath'
+import { ConnectSocialMedia, MnemonicRevealForm, PersonaCreate, PersonaRecovery } from './steps/index.js'
+import { SignUpRoutePath } from './routePath.js'
 
 const Actions = () => {
-    const { action } = useParams() as { action: string }
+    const { action } = useParams() as {
+        action: string
+    }
 
     switch (action) {
         case SignUpRoutePath.MnemonicReveal:

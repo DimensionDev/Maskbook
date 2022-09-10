@@ -1,5 +1,5 @@
-import { RowLayout } from '../../components/RegisterFrame/RowLayout'
-import { SignUpRoutes } from './routes'
+import { RowLayout } from '../../components/RegisterFrame/RowLayout.js'
+import { SignUpRoutes } from './routes.js'
 
 export default function SignUp() {
     return (

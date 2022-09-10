@@ -1,5 +1,5 @@
 import { createGlobalState } from '@masknet/shared-base-ui'
-import { Services, Messages } from '../../API'
+import { Services, Messages } from '../../API.js'
 
 export type SocialNetwork = {
     networkIdentifier: string

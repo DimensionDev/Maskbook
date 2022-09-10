@@ -1,6 +1,6 @@
 import { createContext, PropsWithChildren, useState } from 'react'
-import SettingPasswordDialog from '../components/dialogs/SettingPasswordDialog'
-import { BackupPasswordConfirmDialog } from '../../../components/BackupPasswordConfirmDialog'
+import SettingPasswordDialog from '../components/dialogs/SettingPasswordDialog.js'
+import { BackupPasswordConfirmDialog } from '../../../components/BackupPasswordConfirmDialog/index.js'
 
 export interface User {
     backupPassword: string | null

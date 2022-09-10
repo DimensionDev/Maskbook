@@ -14,7 +14,7 @@ import {
     alertClasses,
     linearProgressClasses,
 } from '@mui/material'
-import type { MaskColor } from './colors'
+import type { MaskColor } from './colors.js'
 
 export const Button = (mode: PaletteMode, colors: MaskColor): ThemeOptions => ({
     components: {

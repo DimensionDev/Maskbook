@@ -6,12 +6,12 @@ import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { useDashboardI18N } from '../../../../locales'
+import { useDashboardI18N } from '../../../../locales/index.js'
 import { useAsyncRetry } from 'react-use'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { PluginServices } from '../../../../API'
+import { PluginServices } from '../../../../API.js'
 import urlcat from 'urlcat'
-import PasswordField from '../../../../components/PasswordField'
+import PasswordField from '../../../../components/PasswordField/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

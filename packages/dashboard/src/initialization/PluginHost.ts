@@ -3,7 +3,7 @@ import './plugins'
 import { Emitter } from '@servie/events'
 import { startPluginDashboard, Plugin } from '@masknet/plugin-infra/dashboard'
 import { createI18NBundle, i18NextInstance } from '@masknet/shared-base'
-import { Services, Messages } from '../API'
+import { Services, Messages } from '../API.js'
 import { createPartialSharedUIContext } from '../../../mask/shared/plugin-infra/host'
 import { RestPartOfPluginUIContextShared } from '../../../mask/src/utils/plugin-context-shared-ui'
 

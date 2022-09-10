@@ -5,11 +5,11 @@ import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab } from '@mui/material'
 import { useSelectFungibleToken } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { ContentContainer } from '../../../../components/ContentContainer'
-import { useDashboardI18N } from '../../../../locales'
-import { AddCollectibleDialog } from '../AddCollectibleDialog'
-import { CollectibleList } from '../CollectibleList'
-import { FungibleTokenTable } from '../FungibleTokenTable'
+import { ContentContainer } from '../../../../components/ContentContainer/index.js'
+import { useDashboardI18N } from '../../../../locales/index.js'
+import { AddCollectibleDialog } from '../AddCollectibleDialog/index.js'
+import { CollectibleList } from '../CollectibleList/index.js'
+import { FungibleTokenTable } from '../FungibleTokenTable/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     caption: {

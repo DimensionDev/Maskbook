@@ -1,3 +1,3 @@
-export * from './Dialog'
-export * from './DialogTitle'
-export * from './DialogStack'
+export * from './Dialog.js'
+export * from './DialogTitle.js'
+export * from './DialogStack.js'

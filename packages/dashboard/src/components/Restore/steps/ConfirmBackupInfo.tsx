@@ -1,11 +1,11 @@
-import { useDashboardI18N } from '../../../locales'
+import { useDashboardI18N } from '../../../locales/index.js'
 import { memo, useState } from 'react'
 import { Box, Button } from '@mui/material'
-import { BackupInfoCard } from '../BackupInfoCard'
-import { ButtonContainer } from '../../RegisterFrame/ButtonContainer'
-import type { StepCommonProps } from '../../Stepper'
-import type { BackupFileInfo } from '../../../pages/Settings/type'
-import PasswordField from '../../PasswordField'
+import { BackupInfoCard } from '../BackupInfoCard.js'
+import { ButtonContainer } from '../../RegisterFrame/ButtonContainer.js'
+import type { StepCommonProps } from '../../Stepper/index.js'
+import type { BackupFileInfo } from '../../../pages/Settings/type.js'
+import PasswordField from '../../PasswordField/index.js'
 
 interface ConfirmBackupInfoProps extends StepCommonProps {
     backupInfo: BackupFileInfo

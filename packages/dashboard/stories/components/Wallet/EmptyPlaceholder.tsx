@@ -1,5 +1,5 @@
 import { story } from '@masknet/storybook-shared'
-import { EmptyPlaceholder as C } from '../../../src/pages/Wallets/components/EmptyPlaceholder'
+import { EmptyPlaceholder as C } from '../../../src/pages/Wallets/components/EmptyPlaceholder/index.js'
 
 const { meta, of } = story(C)
 

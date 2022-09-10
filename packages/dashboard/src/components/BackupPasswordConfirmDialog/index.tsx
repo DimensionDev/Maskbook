@@ -1,11 +1,11 @@
 import { memo, useContext, useMemo, useState } from 'react'
 import { Button, DialogActions, DialogContent, Typography } from '@mui/material'
-import { ConfirmPasswordOption, UserContext } from '../../pages/Settings/hooks/UserContext'
+import { ConfirmPasswordOption, UserContext } from '../../pages/Settings/hooks/UserContext.js'
 import { MaskDialog } from '@masknet/theme'
-import { useDashboardI18N } from '../../locales'
+import { useDashboardI18N } from '../../locales/index.js'
 import { useNavigate } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
-import PasswordField from '../PasswordField'
+import PasswordField from '../PasswordField/index.js'
 
 interface DialogProps {
     open: boolean

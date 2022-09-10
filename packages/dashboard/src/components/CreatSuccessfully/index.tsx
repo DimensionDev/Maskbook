@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Button, styled, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
-import { useDashboardI18N } from '../../locales'
+import { useDashboardI18N } from '../../locales/index.js'
 export interface CreateSuccessfully {
     onUnlock(): void
 }

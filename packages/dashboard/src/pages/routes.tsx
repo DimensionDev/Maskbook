@@ -1,8 +1,8 @@
 import React, { lazy, Suspense } from 'react'
 import { Route, Routes, Navigate } from 'react-router-dom'
-import { DashboardFrame } from '../components/DashboardFrame'
+import { DashboardFrame } from '../components/DashboardFrame/index.js'
 import { DashboardRoutes } from '@masknet/shared-base'
-import NoPersonaGuardRoute from '../GuardRoute'
+import NoPersonaGuardRoute from '../GuardRoute.js'
 const Wallets = lazy(() => import(/* webpackPrefetch: true */ './Wallets'))
 const Setup = lazy(() => import('./Setup'))
 const SignUp = lazy(() => import('./SignUp'))

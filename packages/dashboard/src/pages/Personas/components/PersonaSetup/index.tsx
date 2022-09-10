@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Button, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { useDashboardI18N } from '../../../../locales'
+import { useDashboardI18N } from '../../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

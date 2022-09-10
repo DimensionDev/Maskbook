@@ -1,8 +1,8 @@
 import { Box, Stack, TablePagination } from '@mui/material'
-import { usePostHistory } from '../../hooks/usePostHistory'
-import { PostHistoryRow } from './PostHistoryRow'
+import { usePostHistory } from '../../hooks/usePostHistory.js'
+import { PostHistoryRow } from './PostHistoryRow.js'
 import { memo, useState } from 'react'
-import { Placeholder } from './Placeholder'
+import { Placeholder } from './Placeholder.js'
 
 interface PostHistoryProps {
     network: string

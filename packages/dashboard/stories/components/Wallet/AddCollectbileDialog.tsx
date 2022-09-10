@@ -1,5 +1,5 @@
 import { story } from '@masknet/storybook-shared'
-import { AddCollectibleDialogUI as C } from '../../../src/pages/Wallets/components/AddCollectibleDialog'
+import { AddCollectibleDialogUI as C } from '../../../src/pages/Wallets/components/AddCollectibleDialog/index.js'
 import { action } from '@storybook/addon-actions'
 
 const { meta, of } = story(C)

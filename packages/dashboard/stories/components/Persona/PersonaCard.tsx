@@ -1,5 +1,5 @@
 import { story } from '@masknet/storybook-shared'
-import { PersonaCardUI as C } from '../../../src/pages/Personas/components/PersonaCard'
+import { PersonaCardUI as C } from '../../../src/pages/Personas/components/PersonaCard/index.js'
 import { ECKeyIdentifier, ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
 import { action } from '@storybook/addon-actions'
 
