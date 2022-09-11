@@ -128,7 +128,8 @@
       "gulp@4.0.2": "patches/gulp@4.0.2.patch",
       "urlcat@2.0.4": "patches/urlcat@2.0.4.patch",
       "ipfs-http-client@57.0.3": "patches/ipfs-http-client@57.0.3.patch",
-      "@ethersphere/bee-js@5.0.0": "patches/@ethersphere__bee-js@5.0.0.patch"
+      "@ethersphere/bee-js@5.0.0": "patches/@ethersphere__bee-js@5.0.0.patch",
+      "ses@0.15.21": "patches/ses@0.15.21.patch"
     }
   }
 }

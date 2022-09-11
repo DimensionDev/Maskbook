@@ -60,6 +60,9 @@ patchedDependencies:
   '@ethersphere/bee-js@5.0.0':
     hash: g3xomw7pzn5koufm6j4gkm6n5m
     path: patches/@ethersphere__bee-js@5.0.0.patch
+  ses@0.15.21:
+    hash: lq4kk43v4s6s25oynz2zdgllxe
+    path: patches/ses@0.15.21.patch
 
 importers:
 
@@ -136,7 +139,7 @@ importers:
         version: 11.18.6_4sidbwfhen5r7txudrvpua6nty
       ses:
         specifier: 0.15.21
-        version: 0.15.21
+        version: 0.15.21_lq4kk43v4s6s25oynz2zdgllxe
       ts-results:
         specifier: 3.3.0
         version: 3.3.0_g2bdan7o336xxsymnx5nlozu2m
@@ -27353,9 +27356,10 @@ packages:
       - supports-color
     dev: false
 
-  /ses/0.15.21:
+  /ses/0.15.21_lq4kk43v4s6s25oynz2zdgllxe:
     resolution: {integrity: sha512-Ee+ShLtk+pygy9hKr8RhyStQI+MfQFt7Tk98/iIvFqF5M4dpJTd2dYNMuTL+J803djxcFGyjHopwqkX+10fa3g==}
     dev: false
+    patched: true
 
   /set-blocking/2.0.0:
     resolution: {integrity: sha512-KiKBS8AnWGEyLzofFfmvKwpdPzqiy16LvQfK3yv/fVH7Bj13/wl3JSR1J+rfgRE9q7xUJK4qvgS8raSOeLUehw==}
