@@ -6,17 +6,17 @@ import WebExtensionPlugin from 'webpack-target-webextension'
 import CopyPlugin from 'copy-webpack-plugin'
 import HTMLPlugin from 'html-webpack-plugin'
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
-import { ReadonlyCachePlugin } from './ReadonlyCachePlugin.js'
-import { EnvironmentPluginCache, EnvironmentPluginNoCache } from './EnvironmentPlugin.js'
-import { emitManifestFile } from './manifest.js'
-import { emitGitInfo, getGitInfo } from './git-info.js'
+import { ReadonlyCachePlugin } from './ReadonlyCachePlugin'
+import { EnvironmentPluginCache, EnvironmentPluginNoCache } from './EnvironmentPlugin'
+import { emitManifestFile } from './manifest'
+import { emitGitInfo, getGitInfo } from './git-info'
 
 import { isAbsolute, join } from 'path'
 import { readFileSync } from 'fs'
-import { nonNullable, EntryDescription, normalizeEntryDescription, joinEntryItem } from './utils.js'
-import { BuildFlags, normalizeBuildFlags, computedBuildFlags } from './flags.js'
+import { nonNullable, EntryDescription, normalizeEntryDescription, joinEntryItem } from './utils'
+import { BuildFlags, normalizeBuildFlags, computedBuildFlags } from './flags'
 
-import './clean-hmr.js'
+import './clean-hmr'
 
 export function createConfiguration(rawFlags: BuildFlags): Configuration {
     const normalizedFlags = normalizeBuildFlags(rawFlags)

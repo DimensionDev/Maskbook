@@ -1,6 +1,6 @@
 import type { Configuration } from 'webpack'
-import type { BuildFlags } from '../../scripts/src/extension/normal.js'
-export type { BuildFlags, Runtime } from '../../scripts/src/extension/normal.js'
+import type { BuildFlags } from '../../scripts/src/extension/normal'
+export type { BuildFlags, Runtime } from '../../scripts/src/extension/normal'
 
 export type NormalizedFlags = ReturnType<typeof normalizeBuildFlags>
 export function normalizeBuildFlags(flags: BuildFlags) {
