@@ -20,12 +20,16 @@
   "types": "./index.d.ts",
   "typesVersions": {
     "*": {
-      "jsx": ["./icon-generated-as-jsx.d.ts"],
-      "url": ["./icon-generated-as-url.d.ts"]
+      "jsx": [
+        "./icon-generated-as-jsx.d.ts"
+      ],
+      "url": [
+        "./icon-generated-as-url.d.ts"
+      ]
     }
   },
   "scripts": {},
   "dependencies": {
-    "@emotion/server": "^11.4.0"
+    "@emotion/server": "^11.10.0"
   }
 }
