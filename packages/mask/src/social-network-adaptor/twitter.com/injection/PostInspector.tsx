@@ -33,9 +33,8 @@ export function injectPostInspectorAtTwitter(signal: AbortSignal, current: PostI
                 parent.style.overflow = 'hidden'
             }
 
-            const cardWrapper = contentContainer.parentElement?.querySelector<HTMLDivElement>(
-                '[data-testid="card.wrapper"]',
-            )
+            const cardWrapper =
+                contentContainer.parentElement?.querySelector<HTMLDivElement>('[data-testid="card.wrapper"]')
             if (cardWrapper) {
                 cardWrapper.style.display = 'none'
                 cardWrapper.setAttribute('aria-hidden', 'true')
