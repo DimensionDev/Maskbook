@@ -54,7 +54,7 @@ export async function generate_ECDH_256k1_KeyPair_ByMnemonicWord(
     const seed = await bip39.mnemonicToSeed(mnemonicWord, password)
     const masterKey = wallet.HDKey.parseMasterSeed(seed)
     const derivedKey = masterKey.derive(path)
-    const key = await split_ec_k256_keypair_into_pub_priv(await HDKeyToJwk(derivedKey))
+    const key = await split_ec_k256_key_pair_into_pub_priv(await HDKeyToJwk(derivedKey))
     return {
         key,
         password,
@@ -76,7 +76,7 @@ export async function recover_ECDH_256k1_KeyPair_ByMnemonicWord(
     const seed = await bip39.mnemonicToSeed(mnemonicWord, password)
     const masterKey = wallet.HDKey.parseMasterSeed(seed)
     const derivedKey = masterKey.derive(path)
-    const key = await split_ec_k256_keypair_into_pub_priv(await HDKeyToJwk(derivedKey))
+    const key = await split_ec_k256_key_pair_into_pub_priv(await HDKeyToJwk(derivedKey))
     return {
         key,
         password,
@@ -95,7 +95,7 @@ async function HDKeyToJwk(hdk: wallet.HDKey): Promise<JsonWebKey> {
     return jwk
 }
 
-async function split_ec_k256_keypair_into_pub_priv(
+async function split_ec_k256_key_pair_into_pub_priv(
     key: Readonly<JsonWebKey>,
 ): Promise<JsonWebKeyPair<EC_Public_JsonWebKey, EC_Private_JsonWebKey>> {
     assertEC_Private_JsonWebKey(key)

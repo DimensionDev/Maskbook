@@ -18,7 +18,7 @@ function defineSchema(refine: boolean, t: I18NFunction) {
             confirm: zod.string().optional(),
         })
         .refine((data) => !refine || data.password === data.confirm, {
-            message: t('popups_wallet_password_dont_match'),
+            message: t('popups_wallet_password_not_match'),
             path: ['confirm'],
         })
 }

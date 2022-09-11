@@ -29,12 +29,14 @@ const swapCallParameters = (trade: SwapParams[0], options: SwapParams[1], tradeP
                 parameters.methodName = 'swapTokensForExactAVAX'
                 break
             case 'swapExactTokensForETHSupportingFeeOnTransferTokens':
+                /* cspell:disable-next-line */
                 parameters.methodName = 'swapExactTokensForAVAXSupportingFeeOnTransferTokens'
                 break
             case 'swapExactTokensForETH':
                 parameters.methodName = 'swapExactTokensForAVAX'
                 break
             case 'swapExactETHForTokensSupportingFeeOnTransferTokens':
+                /* cspell:disable-next-line */
                 parameters.methodName = 'swapExactAVAXForTokensSupportingFeeOnTransferTokens'
                 break
             case 'swapExactETHForTokens':

@@ -11,7 +11,7 @@ interface injectPostCommentsDefaultConfig {
     needZip?(): void
 }
 /**
- * Creat a default implementation of injectPostComments
+ * Create a default implementation of injectPostComments
  */
 export function injectPostCommentsDefault<T extends string>(
     config: injectPostCommentsDefaultConfig = {},
