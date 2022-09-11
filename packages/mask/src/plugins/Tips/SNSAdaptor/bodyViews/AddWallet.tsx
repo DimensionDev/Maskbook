@@ -3,10 +3,10 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { memo, useMemo } from 'react'
-import { SignSteps, Steps } from '../../../../components/shared/VerifyWallet/Steps'
+import { SignSteps, Steps } from '../../../../components/shared/VerifyWallet/Steps.js'
 import { useAsync, useAsyncFn } from 'react-use'
 import { NextIDProof } from '@masknet/web3-providers'
-import Services from '../../../../extension/service'
+import Services from '../../../../extension/service.js'
 import { useCustomSnackbar } from '@masknet/theme'
 import formatDateTime from 'date-fns/format'
 import {
@@ -19,9 +19,9 @@ import {
     useWeb3Connection,
     useWeb3State,
 } from '@masknet/plugin-infra/web3'
-import { useI18N } from '../../locales'
+import { useI18N } from '../../locales/index.js'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { getNowTime } from '../../utils'
+import { getNowTime } from '../../utils/index.js'
 
 interface AddWalletViewProps {
     currentPersona: PersonaInformation

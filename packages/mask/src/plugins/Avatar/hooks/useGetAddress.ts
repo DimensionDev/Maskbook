@@ -2,8 +2,8 @@ import { useWeb3State } from '@masknet/plugin-infra/web3'
 import type { EnhanceableSite } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useCallback } from 'react'
-import { NFT_AVATAR_DB_NAME } from '../constants'
-import type { AddressStorageV1, AddressStorageV2 } from '../types'
+import { NFT_AVATAR_DB_NAME } from '../constants.js'
+import type { AddressStorageV1, AddressStorageV2 } from '../types.js'
 
 export function useGetAddress() {
     const { Storage } = useWeb3State()

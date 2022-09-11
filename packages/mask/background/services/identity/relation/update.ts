@@ -1,5 +1,5 @@
 import type { PersonaIdentifier, ProfileIdentifier, RelationFavor } from '@masknet/shared-base'
-import { createRelationsTransaction, updateRelationDB } from '../../../database/persona/db'
+import { createRelationsTransaction, updateRelationDB } from '../../../database/persona/db.js'
 
 export async function updateRelation(profile: ProfileIdentifier, linked: PersonaIdentifier, favor: RelationFavor) {
     const t = await createRelationsTransaction()

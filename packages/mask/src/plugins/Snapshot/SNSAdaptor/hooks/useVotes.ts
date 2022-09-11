@@ -1,7 +1,7 @@
-import { PluginSnapshotRPC } from '../../messages'
-import type { VoteItem, ProposalIdentifier } from '../../types'
-import { useSuspense } from '../../../../utils/hooks/useSuspense'
-import { useProposal } from './useProposal'
+import { PluginSnapshotRPC } from '../../messages.js'
+import type { VoteItem, ProposalIdentifier } from '../../types.js'
+import { useSuspense } from '../../../../utils/hooks/useSuspense.js'
+import { useProposal } from './useProposal.js'
 import { sumBy } from 'lodash-unified'
 
 const cache = new Map<string, [0, Promise<void>] | [1, VoteItem[]] | [2, Error]>()

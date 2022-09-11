@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Box, Grid, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useInterval } from 'react-use'
-import { ONE_SECOND } from '../constants'
+import { ONE_SECOND } from '../constants.js'
 import { DarkColor } from '@masknet/theme/base'
 import intervalToDuration from 'date-fns/intervalToDuration'
 

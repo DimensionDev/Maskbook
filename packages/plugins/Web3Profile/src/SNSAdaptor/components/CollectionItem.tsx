@@ -1,7 +1,7 @@
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { useI18N } from '../../locales'
-import { ArrowIcon } from '../assets/Arrow'
+import { useI18N } from '../../locales/index.js'
+import { ArrowIcon } from '../assets/Arrow.js'
 
 const useStyles = makeStyles()((theme) => ({
     flexItem: {

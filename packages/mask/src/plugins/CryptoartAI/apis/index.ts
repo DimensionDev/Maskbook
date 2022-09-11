@@ -1,8 +1,8 @@
 import { OrderSide } from 'opensea-js/lib/types'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
-import { resolveAPILinkOnCryptoartAI } from '../pipes'
-import { TransactionType } from '../types'
+import { resolveAPILinkOnCryptoartAI } from '../pipes/index.js'
+import { TransactionType } from '../types/index.js'
 
 export async function getAsset(tokenId: string, chainId?: ChainId) {
     const ownersResponse: any = await (

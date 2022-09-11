@@ -1,5 +1,5 @@
-import type { Transaction } from './types'
-import type { ExplorerAPI } from '..'
+import type { Transaction } from './types.js'
+import type { ExplorerAPI } from '../index.js'
 
 export function toTransaction(transaction: Transaction): ExplorerAPI.Transaction & {
     status: '0' | '1'

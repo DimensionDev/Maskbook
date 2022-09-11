@@ -4,16 +4,16 @@ import { TWITTER_RESERVED_SLUGS } from '@masknet/injected-script/shared'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { Twitter } from '@masknet/web3-providers'
 import { first } from 'lodash-unified'
-import { creator, SocialNetworkUI as Next } from '../../../social-network'
-import { twitterBase } from '../base'
-import { isMobileTwitter } from '../utils/isMobile'
+import { creator, SocialNetworkUI as Next } from '../../../social-network/index.js'
+import { twitterBase } from '../base.js'
+import { isMobileTwitter } from '../utils/isMobile.js'
 import {
     searchSelfAvatarSelector,
     searchSelfHandleSelector,
     searchSelfNicknameSelector,
     searchWatcherAvatarSelector,
     selfInfoSelectors,
-} from '../utils/selector'
+} from '../utils/selector.js'
 
 function recognizeDesktop() {
     const collect = () => {

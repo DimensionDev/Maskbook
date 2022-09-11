@@ -4,11 +4,13 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Box, List, ListItem, Stack, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { useI18N } from '../locales'
-import { NFTImage } from '../SNSAdaptor/NFTImage'
-import type { AllChainsNonFungibleToken } from '../types'
+import { useI18N } from '../locales/index.js'
+import { NFTImage } from '../SNSAdaptor/NFTImage.js'
+import type { AllChainsNonFungibleToken } from '../types.js'
 
-const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, props) => ({
+const useStyles = makeStyles<{
+    networkPluginID: NetworkPluginID
+}>()((theme, props) => ({
     root: {
         paddingTop: props.networkPluginID === NetworkPluginID.PLUGIN_EVM ? 60 : 16,
     },

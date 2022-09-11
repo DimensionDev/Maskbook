@@ -2,8 +2,8 @@ import { useMemo } from 'react'
 import type BigNumber from 'bignumber.js'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { multipliedBy, isGreaterThan } from '@masknet/web3-shared-base'
-import { currentSlippageSettings } from '../../../settings'
-import { AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext'
+import { currentSlippageSettings } from '../../../settings.js'
+import { AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext.js'
 
 export const useGreatThanSlippageSetting = (priceImpact?: BigNumber.Value) => {
     const slippageSetting = useValueRef(currentSlippageSettings)

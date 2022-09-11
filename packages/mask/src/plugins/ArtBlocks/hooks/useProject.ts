@@ -1,4 +1,4 @@
-import { fetchProject } from '../apis'
+import { fetchProject } from '../apis/index.js'
 import { useAsyncRetry } from 'react-use'
 import type { ChainId } from '@masknet/web3-shared-evm'
 

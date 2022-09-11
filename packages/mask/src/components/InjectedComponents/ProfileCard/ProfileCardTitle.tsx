@@ -7,9 +7,9 @@ import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID, SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { FC, HTMLProps, useMemo } from 'react'
-import { TipButton } from '../../../plugins/Tips/components'
-import type { TipsAccount } from '../../../plugins/Tips/types'
-import { ProfileBar } from './ProfileBar'
+import { TipButton } from '../../../plugins/Tips/components/index.js'
+import type { TipsAccount } from '../../../plugins/Tips/types/index.js'
+import { ProfileBar } from './ProfileBar.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

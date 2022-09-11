@@ -1,9 +1,9 @@
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import { useAccount } from '../useAccount'
-import { useBeatRetry } from '../useBeat'
-import { useChainId } from '../useChainId'
-import { useERC20TokenContract } from './useERC20TokenContract'
+import { useAccount } from '../useAccount.js'
+import { useBeatRetry } from '../useBeat.js'
+import { useChainId } from '../useChainId.js'
+import { useERC20TokenContract } from './useERC20TokenContract.js'
 
 export function useERC20TokenAllowance(address?: string, spender?: string): AsyncStateRetry<string> {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)

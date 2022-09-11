@@ -12,7 +12,7 @@ import {
 import { FungibleToken, ZERO } from '@masknet/web3-shared-base'
 import type { Lido } from '@masknet/web3-contracts/types/Lido'
 import LidoABI from '@masknet/web3-contracts/abis/Lido.json'
-import { ProtocolType, SavingsProtocol } from '../types'
+import { ProtocolType, SavingsProtocol } from '../types.js'
 
 export class LidoProtocol implements SavingsProtocol {
     private _apr = '0.00'

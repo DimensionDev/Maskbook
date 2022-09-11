@@ -1,11 +1,14 @@
 import * as d3 from 'd3'
 import { useEffect, RefObject } from 'react'
 import stringify from 'json-stable-stringify'
-import type { Dimension } from './useDimension'
+import type { Dimension } from './useDimension.js'
 
 export function usePriceLineChart(
     svgRef: RefObject<SVGSVGElement>,
-    data: Array<{ date: Date; value: number }>,
+    data: Array<{
+        date: Date
+        value: number
+    }>,
     dimension: Dimension,
     id: string,
     color = 'steelblue',
@@ -131,7 +134,15 @@ export function usePriceLineChart(
             const fixedX = mx - left
             const bisect = (mx: number) => {
                 const date = x.invert(mx)
-                const index = d3.bisector<{ date: Date; value: number }, Date>((d) => d.date).left(data, date, 1)
+                const index = d3
+                    .bisector<
+                        {
+                            date: Date
+                            value: number
+                        },
+                        Date
+                    >((d) => d.date)
+                    .left(data, date, 1)
                 return data[index]
             }
 

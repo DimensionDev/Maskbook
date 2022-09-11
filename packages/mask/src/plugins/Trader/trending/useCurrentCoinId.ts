@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { getCurrentPreferredCoinIdSettings } from '../settings'
+import { getCurrentPreferredCoinIdSettings } from '../settings.js'
 import type { DataProvider } from '@masknet/public-api'
 
 export function usePreferredCoinId(keyword: string, dataProvider: DataProvider) {

@@ -19,7 +19,7 @@ import type {
     HubState,
     Web3StorageServiceState,
 } from '@masknet/web3-shared-base'
-import type { Plugin } from './types'
+import type { Plugin } from './types.js'
 
 export declare namespace Web3Plugin {
     export namespace ObjectCapabilities {

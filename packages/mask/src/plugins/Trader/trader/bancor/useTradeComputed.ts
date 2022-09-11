@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { FungibleToken, rightShift, ZERO } from '@masknet/web3-shared-base'
-import type { SwapBancorRequest, TradeComputed, TradeStrategy } from '../../types'
+import type { SwapBancorRequest, TradeComputed, TradeStrategy } from '../../types/index.js'
 import type { SchemaType, ChainId } from '@masknet/web3-shared-evm'
 export function useTradeComputed(
     trade: SwapBancorRequest | null,

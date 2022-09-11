@@ -2,9 +2,9 @@ import { DataProvider } from '@masknet/public-api'
 import { HubIndicator, HubOptions, TokenType } from '@masknet/web3-shared-base'
 import { ChainId, getCoinGeckoConstants, isNativeTokenAddress, isValidAddress } from '@masknet/web3-shared-evm'
 import { uniq, uniqBy } from 'lodash-unified'
-import { getCommunityLink, isMirroredKeyword, resolveChainId, resolveCoinAddress } from '../../cmc/helper'
-import { fetchJSON } from '../../helpers'
-import type { PriceAPI, TrendingAPI } from '../../types'
+import { getCommunityLink, isMirroredKeyword, resolveChainId, resolveCoinAddress } from '../../cmc/helper.js'
+import { fetchJSON } from '../../helpers.js'
+import type { PriceAPI, TrendingAPI } from '../../types/index.js'
 import {
     getAllCoins,
     getAllCurrencies,
@@ -12,10 +12,10 @@ import {
     getPriceStats as getStats,
     getTokenPrice,
     getTokenPriceByCoinId,
-} from './base'
-import { COINGECKO_URL_BASE } from '../constants'
-import { resolveChain } from '../helper'
-import type { Platform } from '../type'
+} from './base.js'
+import { COINGECKO_URL_BASE } from '../constants.js'
+import { resolveChain } from '../helper.js'
+import type { Platform } from '../type.js'
 
 export class CoinGeckoTrendingEVM_API implements TrendingAPI.Provider<ChainId> {
     async getSupportedPlatform() {

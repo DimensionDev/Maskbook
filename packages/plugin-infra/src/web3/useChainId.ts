@@ -1,10 +1,10 @@
 import { useSubscription } from 'use-subscription'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '../web3-helpers'
-import { useWeb3State } from './useWeb3State'
-import { UNDEFINED } from '../utils/subscription'
-import { useDefaultChainId } from './useDefaultChainId'
-import { useCurrentWeb3NetworkChainId } from './Context'
+import type { Web3Helper } from '../web3-helpers/index.js'
+import { useWeb3State } from './useWeb3State.js'
+import { UNDEFINED } from '../utils/subscription.js'
+import { useDefaultChainId } from './useDefaultChainId.js'
+import { useCurrentWeb3NetworkChainId } from './Context.js'
 
 export function useChainId<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,

@@ -17,7 +17,7 @@ import { InjectedDialog } from '@masknet/shared'
 import { isDataMatchJSONSchema, getKnownMetadataKeys, getMetadataSchema } from '@masknet/typed-message/dom'
 import { ShadowRootPopper } from '@masknet/theme'
 import { useState } from 'react'
-import { useI18N } from '../../utils'
+import { useI18N } from '../../utils/index.js'
 
 export interface DebugMetadataInspectorProps {
     meta: ReadonlyMap<string, any>

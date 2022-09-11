@@ -25,7 +25,7 @@ import {
 } from '@masknet/web3-providers'
 import { SourceType, HubOptions, Pageable, CurrencyType, Transaction } from '@masknet/web3-shared-base'
 import { ChainId, chainResolver, SchemaType } from '@masknet/web3-shared-evm'
-import type { EVM_Hub } from './types'
+import type { EVM_Hub } from './types.js'
 
 class Hub extends HubStateBaseClient<ChainId> implements EVM_Hub {
     async getGasOptions(chainId: ChainId, initial?: HubOptions<ChainId>) {

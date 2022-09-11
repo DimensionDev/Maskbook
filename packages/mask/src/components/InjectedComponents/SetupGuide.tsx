@@ -1,15 +1,15 @@
 import { useMemo, useState, useEffect, useRef } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { useI18N, MaskMessages } from '../../utils'
-import { activatedSocialNetworkUI } from '../../social-network'
+import { useI18N, MaskMessages } from '../../utils/index.js'
+import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import {
     currentSetupGuideStatus,
     languageSettings,
     userGuideStatus,
     userGuideVersion,
     userPinExtension,
-} from '../../../shared/legacy-settings/settings'
+} from '../../../shared/legacy-settings/settings.js'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import {
     PersonaIdentifier,
@@ -21,14 +21,14 @@ import {
     EnhanceableSite,
     EncryptionTargetType,
 } from '@masknet/shared-base'
-import Services from '../../extension/service'
-import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
+import Services from '../../extension/service.js'
+import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import { useAsync } from 'react-use'
 import stringify from 'json-stable-stringify'
-import { SetupGuideContext, SetupGuideStep } from '../../../shared/legacy-settings/types'
-import { FindUsername } from './SetupGuide/FindUsername'
-import { VerifyNextID } from './SetupGuide/VerifyNextID'
-import { PinExtension } from './SetupGuide/PinExtension'
+import { SetupGuideContext, SetupGuideStep } from '../../../shared/legacy-settings/types.js'
+import { FindUsername } from './SetupGuide/FindUsername.js'
+import { VerifyNextID } from './SetupGuide/VerifyNextID.js'
+import { PinExtension } from './SetupGuide/PinExtension.js'
 import { NextIDProof } from '@masknet/web3-providers'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 

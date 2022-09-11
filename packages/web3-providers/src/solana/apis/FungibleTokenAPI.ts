@@ -14,11 +14,11 @@ import {
 import { ChainId, SchemaType, createNativeToken } from '@masknet/web3-shared-solana'
 import { memoizePromise } from '@dimensiondev/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { CoinGeckoPriceSolanaAPI } from '../../coingecko'
-import type { FungibleTokenAPI, TokenListAPI } from '../../types'
-import { RAYDIUM_TOKEN_LIST, SPL_TOKEN_PROGRAM_ID } from '../constants'
-import { createFungibleAsset, createFungibleToken, requestRPC } from '../helpers'
-import type { GetAccountInfoResponse, GetProgramAccountsResponse, RaydiumTokenList } from '../types'
+import { CoinGeckoPriceSolanaAPI } from '../../coingecko/index.js'
+import type { FungibleTokenAPI, TokenListAPI } from '../../types/index.js'
+import { RAYDIUM_TOKEN_LIST, SPL_TOKEN_PROGRAM_ID } from '../constants.js'
+import { createFungibleAsset, createFungibleToken, requestRPC } from '../helpers.js'
+import type { GetAccountInfoResponse, GetProgramAccountsResponse, RaydiumTokenList } from '../types.js'
 
 const fetchTokenList = memoizePromise(
     async (url: string): Promise<Array<FungibleToken<ChainId, SchemaType>>> => {

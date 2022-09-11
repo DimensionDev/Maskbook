@@ -4,10 +4,10 @@ import { usePostInfoDetails, Plugin, usePluginWrapper, PluginId } from '@masknet
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
-import { PreviewCard } from './PreviewCard'
-import { base } from '../base'
-import { PLUGIN_META_KEY, PLUGIN_NAME } from '../constants'
-import { DonateDialog } from './DonateDialog'
+import { PreviewCard } from './PreviewCard.js'
+import { base } from '../base.js'
+import { PLUGIN_META_KEY, PLUGIN_NAME } from '../constants.js'
+import { DonateDialog } from './DonateDialog.js'
 
 const isGitcoin = (x: string): boolean => /^https:\/\/gitcoin.co\/grants\/\d+/.test(x)
 
@@ -50,7 +50,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
 }
 
-function Renderer(props: React.PropsWithChildren<{ url: string }>) {
+function Renderer(
+    props: React.PropsWithChildren<{
+        url: string
+    }>,
+) {
     const [id = ''] = props.url.match(/\d+/) ?? []
     usePluginWrapper(true)
     return <PreviewCard id={id} />

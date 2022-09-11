@@ -3,16 +3,16 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { Grid, Typography, CircularProgress } from '@mui/material'
 
-import { useI18N } from '../../locales'
-import { getRequiredChainId } from '../../helpers'
-import type { PageInterface } from '../../types'
-import { ReferralRPC } from '../../messages'
+import { useI18N } from '../../locales/index.js'
+import { getRequiredChainId } from '../../helpers/index.js'
+import type { PageInterface } from '../../types.js'
+import { ReferralRPC } from '../../messages.js'
 
-import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
-import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
-import { Rewards } from './Rewards'
+import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary.js'
+import { ChainBoundary } from '../../../../web3/UI/ChainBoundary.js'
+import { Rewards } from './Rewards.js'
 
-import { useSharedStyles, useMyFarmsStyles } from '../styles'
+import { useSharedStyles, useMyFarmsStyles } from '../styles.js'
 
 export function MyRewards(props: PageInterface) {
     const t = useI18N()

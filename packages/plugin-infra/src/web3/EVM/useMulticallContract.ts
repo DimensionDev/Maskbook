@@ -2,7 +2,7 @@ import type { AbiItem } from 'web3-utils'
 import MulticallABI from '@masknet/web3-contracts/abis/Multicall.json'
 import type { Multicall } from '@masknet/web3-contracts/types/Multicall'
 import { ChainId, useEthereumConstants } from '@masknet/web3-shared-evm'
-import { useContract } from './useContract'
+import { useContract } from './useContract.js'
 
 export function useMulticallContract(chainId?: ChainId) {
     const { MULTICALL_ADDRESS } = useEthereumConstants(chainId)

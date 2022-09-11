@@ -3,7 +3,7 @@ import type { ECKeyIdentifier, NextIDPlatform } from '@masknet/shared-base'
 import { StorageState } from '@masknet/plugin-infra/web3'
 import { unreachable } from '@dimensiondev/kit'
 import { KVStorage, RSS3Storage, NextIDStorage } from '@masknet/shared'
-import { SharedContextSettings, Web3StateSettings } from '../../settings'
+import { SharedContextSettings, Web3StateSettings } from '../../settings/index.js'
 
 function createStorage(
     providerType: StorageProviderType,

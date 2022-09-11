@@ -2,16 +2,16 @@ import { ProfileIdentifier } from '@masknet/shared-base'
 import { Twitter } from '@masknet/web3-providers'
 import type { SocialIdentity } from '@masknet/web3-shared-base'
 import { isNull } from 'lodash-unified'
-import type { SocialNetwork } from '../../../social-network'
-import { collectNodeText } from '../../../utils'
-import { twitterBase } from '../base'
+import type { SocialNetwork } from '../../../social-network/index.js'
+import { collectNodeText } from '../../../utils/index.js'
+import { twitterBase } from '../base.js'
 import {
     personalHomepageSelector,
     profileBioSelector,
     searchAvatarSelector,
     searchNFTAvatarSelector,
     searchNickNameSelector,
-} from './selector'
+} from './selector.js'
 
 /**
  * @link https://help.twitter.com/en/managing-your-account/twitter-username-rules

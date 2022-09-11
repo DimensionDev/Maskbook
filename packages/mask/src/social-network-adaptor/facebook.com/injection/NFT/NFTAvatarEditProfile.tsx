@@ -1,8 +1,8 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { searchFacebookEditProfileSelector, searchFacebookProfileSettingButtonSelector } from '../../utils/selector'
-import { createReactRootShadowed, startWatch, useLocationChange } from '../../../../utils'
+import { searchFacebookEditProfileSelector, searchFacebookProfileSettingButtonSelector } from '../../utils/selector.js'
+import { createReactRootShadowed, startWatch, useLocationChange } from '../../../../utils/index.js'
 import { useLayoutEffect, useState } from 'react'
-import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
+import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton.js'
 import { makeStyles } from '@masknet/theme'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {

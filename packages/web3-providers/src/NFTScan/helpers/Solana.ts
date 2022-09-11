@@ -11,9 +11,9 @@ import {
     SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { NFTSCAN_BASE_SOLANA, NFTSCAN_URL } from '../constants'
-import type { Solana } from '../types'
-import { getJSON } from '../../helpers'
+import { NFTSCAN_BASE_SOLANA, NFTSCAN_URL } from '../constants.js'
+import type { Solana } from '../types/index.js'
+import { getJSON } from '../../helpers.js'
 
 export function createPermalink(chainId: ChainId, address?: string) {
     if (!address) return

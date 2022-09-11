@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import { formatBalance, leftShift } from '../src'
+import { formatBalance, leftShift } from '../src/index.js'
 
 describe('formatBalance util test', () => {
     test.each([

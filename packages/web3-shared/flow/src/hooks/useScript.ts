@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
-import type { ChainId } from '../types'
-import { useFCL } from './useFCL'
+import type { ChainId } from '../types.js'
+import { useFCL } from './useFCL.js'
 
 export function useScript(chainId: ChainId, script: string) {
     const fcl = useFCL(chainId)

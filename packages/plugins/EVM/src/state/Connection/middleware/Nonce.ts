@@ -3,7 +3,7 @@ import Web3 from 'web3'
 import { toHex } from 'web3-utils'
 import { first } from 'lodash-unified'
 import { ChainId, EthereumMethodType, getRPCConstants, ProviderType } from '@masknet/web3-shared-evm'
-import type { Context, Middleware } from '../types'
+import type { Context, Middleware } from '../types.js'
 
 export class Nonce implements Middleware<Context> {
     static INITIAL_NONCE = -1

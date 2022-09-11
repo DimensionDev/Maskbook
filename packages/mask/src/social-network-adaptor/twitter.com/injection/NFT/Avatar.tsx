@@ -1,10 +1,10 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { NFTBadgeTimeline } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeline'
-import { createReactRootShadowed, startWatch } from '../../../../utils'
-import { getInjectNodeInfo } from '../../utils/avatar'
-import { postAvatarsContentSelector } from '../../utils/selector'
-import { NFTAvatarMiniClip } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip'
-import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
+import { NFTBadgeTimeline } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeline.js'
+import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
+import { getInjectNodeInfo } from '../../utils/avatar.js'
+import { postAvatarsContentSelector } from '../../utils/selector.js'
+import { NFTAvatarMiniClip } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip.js'
+import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants.js'
 
 function getTwitterId(ele: HTMLElement) {
     const twitterIdNode = (ele.firstChild?.nextSibling as HTMLElement).querySelector(

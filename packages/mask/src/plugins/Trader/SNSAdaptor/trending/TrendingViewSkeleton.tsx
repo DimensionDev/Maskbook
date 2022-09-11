@@ -1,8 +1,8 @@
 import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
 import { CardContent, Stack, Typography } from '@mui/material'
-import { useI18N } from '../../../../utils'
-import { PluginHeader } from './PluginHeader'
-import { TrendingCard, TrendingCardProps } from './TrendingCard'
+import { useI18N } from '../../../../utils/index.js'
+import { PluginHeader } from './PluginHeader.js'
+import { TrendingCard, TrendingCardProps } from './TrendingCard.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

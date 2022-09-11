@@ -1,10 +1,10 @@
 import type { ChainId } from '@masknet/web3-shared-evm'
-import type { RedPacketRecord, RedPacketJSONPayloadFromChain } from '../types'
-import * as subgraph from './apis/subgraph'
-import * as database from './database'
-import * as nftDb from './databaseForNft'
+import type { RedPacketRecord, RedPacketJSONPayloadFromChain } from '../types.js'
+import * as subgraph from './apis/subgraph.js'
+import * as database from './database.js'
+import * as nftDb from './databaseForNft.js'
 
-export { addRedPacketNft, getRedPacketNft, updateRedPacketNft } from './databaseForNft'
+export { addRedPacketNft, getRedPacketNft, updateRedPacketNft } from './databaseForNft.js'
 
 export async function discoverRedPacket(record: RedPacketRecord, chainId: ChainId) {
     if (record.contract_version === 1) {

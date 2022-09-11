@@ -4,9 +4,9 @@ import type { Order } from 'opensea-js/lib/types'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { getOrderUnitPrice } from '@masknet/web3-providers'
 import { NetworkPluginID, ZERO } from '@masknet/web3-shared-base'
-import type { AssetOrder } from '../../../../../web3-providers/src/opensea/types'
-import { isOpenSeaSupportedChainId } from '../pipes'
-import { useOpenSea } from './useOpenSea'
+import type { AssetOrder } from '../../../../../web3-providers/src/opensea/types.js'
+import { isOpenSeaSupportedChainId } from '../pipes/index.js'
+import { useOpenSea } from './useOpenSea.js'
 
 export function useAssetOrder(address?: string, tokenId?: string) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)

@@ -1,2 +1,2 @@
-export * from './Avatar'
-export * from './WalletStatusBar'
+export * from './Avatar.js'
+export * from './WalletStatusBar/index.js'

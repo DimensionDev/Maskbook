@@ -1,10 +1,10 @@
 import urlcat from 'urlcat'
 import { first, isEmpty, parseInt, uniqBy } from 'lodash-unified'
 import { ChainId } from '@masknet/web3-shared-evm'
-import type { SecurityAPI } from '..'
-import { fetchJSON } from '../helpers'
-import { GO_PLUS_LABS_ROOT_URL, SecurityMessageLevel } from './constants'
-import { SecurityMessages } from './rules'
+import type { SecurityAPI } from '../index.js'
+import { fetchJSON } from '../helpers.js'
+import { GO_PLUS_LABS_ROOT_URL, SecurityMessageLevel } from './constants.js'
+import { SecurityMessages } from './rules.js'
 
 export interface SupportedChainResponse {
     id: string

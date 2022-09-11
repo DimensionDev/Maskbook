@@ -1,8 +1,8 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { Trans } from 'react-i18next'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
-import VCentDialog from './TweetDialog'
-import { base } from '../base'
+import VCentDialog from './TweetDialog.js'
+import { base } from '../base.js'
 import { Icons } from '@masknet/icons'
 
 const sns: Plugin.SNSAdaptor.Definition = {

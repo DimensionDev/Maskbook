@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { NetworkPluginID, resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import type { User, NonFungibleContract, OwnerERC721TokenInfo } from '../types'
+import type { User, NonFungibleContract, OwnerERC721TokenInfo } from '../types.js'
 import { useNonFungibleAssets } from '@masknet/plugin-infra/web3'
 
 export function useNFTs(user: User | undefined) {

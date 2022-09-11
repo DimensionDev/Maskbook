@@ -1,11 +1,11 @@
 import { useMemo } from 'react'
 import { Box } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { useI18N } from '../../../utils'
-import { CollectibleState } from '../hooks/useCollectibleState'
-import { useControlledDialog } from '../../../utils/hooks/useControlledDialog'
-import { MakeOfferDialog } from './MakeOfferDialog'
-import { CheckoutDialog } from './CheckoutDialog'
+import { useI18N } from '../../../utils/index.js'
+import { CollectibleState } from '../hooks/useCollectibleState.js'
+import { useControlledDialog } from '../../../utils/hooks/useControlledDialog.js'
+import { MakeOfferDialog } from './MakeOfferDialog.js'
+import { CheckoutDialog } from './CheckoutDialog.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

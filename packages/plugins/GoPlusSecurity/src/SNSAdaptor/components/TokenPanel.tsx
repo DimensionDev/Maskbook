@@ -1,5 +1,5 @@
 import { Link, Stack, Tooltip, Typography } from '@mui/material'
-import { useI18N } from '../../locales'
+import { useI18N } from '../../locales/index.js'
 import React from 'react'
 import { useTheme } from '@mui/system'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'

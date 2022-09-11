@@ -1,7 +1,7 @@
 import { Typography, CardContent, Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { AlertCircle } from 'react-feather'
-import { TrendingCard, TrendingCardProps } from './TrendingCard'
+import { TrendingCard, TrendingCardProps } from './TrendingCard.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

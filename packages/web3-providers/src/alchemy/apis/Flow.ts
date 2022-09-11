@@ -8,11 +8,11 @@ import {
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-flow'
-import type { NonFungibleTokenAPI } from '../../types'
-import { fetchJSON } from '../../helpers'
-import { Alchemy_FLOW_NetworkMap, FILTER_WORDS } from '../constants'
-import type { AlchemyNFT_FLOW, AlchemyResponse_FLOW, AlchemyResponse_FLOW_Metadata } from '../types'
-import { formatAlchemyTokenId } from '../helpers'
+import type { NonFungibleTokenAPI } from '../../types/index.js'
+import { fetchJSON } from '../../helpers.js'
+import { Alchemy_FLOW_NetworkMap, FILTER_WORDS } from '../constants.js'
+import type { AlchemyNFT_FLOW, AlchemyResponse_FLOW, AlchemyResponse_FLOW_Metadata } from '../types.js'
+import { formatAlchemyTokenId } from '../helpers.js'
 
 function createNonFungibleTokenImageURL(asset: AlchemyNFT_FLOW | AlchemyResponse_FLOW_Metadata) {
     return (

@@ -1,7 +1,7 @@
 import Web3 from 'web3'
 import type { provider as Provider, RequestArguments } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import type { Web3Provider } from '../types'
+import type { Web3Provider } from '../types/index.js'
 
 export function createWeb3(provider: Provider) {
     const web3 = new Web3(provider)

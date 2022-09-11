@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
-import type { Pool } from '../types'
-import { PoolView } from './PoolView'
+import type { Pool } from '../types.js'
+import { PoolView } from './PoolView.js'
 const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',

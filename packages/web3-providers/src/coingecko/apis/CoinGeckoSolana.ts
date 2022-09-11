@@ -1,7 +1,7 @@
 import type { HubIndicator, HubOptions } from '@masknet/web3-shared-base'
 import { ChainId, getCoinGeckoConstants, isNativeTokenAddress } from '@masknet/web3-shared-solana'
-import type { PriceAPI } from '../../types'
-import { getTokenPriceByCoinId, getTokenPrice } from './base'
+import type { PriceAPI } from '../../types/index.js'
+import { getTokenPriceByCoinId, getTokenPrice } from './base.js'
 
 export class CoinGeckoPriceSolanaAPI implements PriceAPI.Provider<ChainId> {
     getFungibleTokenPrice(

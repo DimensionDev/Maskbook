@@ -1,9 +1,9 @@
 import { formatBytes32String } from '@ethersproject/strings'
 import type Web3 from 'web3'
 
-import { MASK_SWAP_V1, MASK_REFERRER, ZERO_ADDR, ZERO_HASH, errors } from '../../constants'
+import { MASK_SWAP_V1, MASK_REFERRER, ZERO_ADDR, ZERO_HASH, errors } from '../../constants.js'
 
-import { ReferralRPC } from '../../messages'
+import { ReferralRPC } from '../../messages.js'
 
 function parseError(error: Error) {
     switch (error.message) {

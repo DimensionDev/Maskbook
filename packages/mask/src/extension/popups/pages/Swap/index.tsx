@@ -1,12 +1,12 @@
 import { Appearance, applyMaskColorVars, makeStyles } from '@masknet/theme'
 import { ThemeProvider, Typography } from '@mui/material'
 import { SharedContextProvider } from '@masknet/shared'
-import { SwapBox } from './SwapBox'
-import { useI18N } from '../../../../utils'
-import { useSwapPageTheme } from '../../../../utils/theme/useSwapPageTheme'
+import { SwapBox } from './SwapBox/index.js'
+import { useI18N } from '../../../../utils/index.js'
+import { useSwapPageTheme } from '../../../../utils/theme/useSwapPageTheme.js'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { AllProviderTradeContext } from '../../../../plugins/Trader/trader/useAllProviderTradeContext'
-import { NetworkSelector } from '../../components/NetworkSelector'
+import { AllProviderTradeContext } from '../../../../plugins/Trader/trader/useAllProviderTradeContext.js'
+import { NetworkSelector } from '../../components/NetworkSelector/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

@@ -6,9 +6,9 @@ import { KeyboardArrowLeft, KeyboardArrowRight, OpenInNew } from '@mui/icons-mat
 import { makeStyles } from '@masknet/theme'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { resolveImageLinkOnArtBlocks, resolveTokenLinkOnArtBlocks } from '../pipes'
-import { buildTokenId } from '../utils'
-import type { Project } from '../types'
+import { resolveImageLinkOnArtBlocks, resolveTokenLinkOnArtBlocks } from '../pipes/index.js'
+import { buildTokenId } from '../utils.js'
+import type { Project } from '../types.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

@@ -1,2 +1,2 @@
-export * from './specs'
-export * from './utils'
+export * from './specs/index.js'
+export * from './utils/index.js'

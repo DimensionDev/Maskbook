@@ -1,4 +1,4 @@
-import { createMaskSDKChannel, BridgeAPI, UserScriptAPI, serializer, InitInformation } from '../shared'
+import { createMaskSDKChannel, BridgeAPI, UserScriptAPI, serializer, InitInformation } from '../shared/index.js'
 import { AsyncCall } from 'async-call-rpc/base.min'
 
 const self: UserScriptAPI = {

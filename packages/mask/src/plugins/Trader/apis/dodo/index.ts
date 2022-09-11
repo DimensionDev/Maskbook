@@ -4,8 +4,8 @@ import type {
     SwapRouteRequest,
     SwapRouteResponse,
     SwapRouteSuccessResponse,
-} from '../../types/dodo'
-import { DODO_BASE_URL } from '../../constants/dodo'
+} from '../../types/dodo.js'
+import { DODO_BASE_URL } from '../../constants/dodo.js'
 import urlcat from 'urlcat'
 import { leftShift } from '@masknet/web3-shared-base'
 

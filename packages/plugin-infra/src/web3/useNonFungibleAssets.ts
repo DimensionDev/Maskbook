@@ -1,10 +1,10 @@
 import { pageableToIterator, NetworkPluginID } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '../web3-helpers'
-import { useAccount } from './useAccount'
-import { useWeb3Hub } from './useWeb3Hub'
+import type { Web3Helper } from '../web3-helpers/index.js'
+import { useAccount } from './useAccount.js'
+import { useWeb3Hub } from './useWeb3Hub.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { flattenAsyncIterator, EMPTY_LIST } from '@masknet/shared-base'
-import { useNetworkDescriptors } from './useNetworkDescriptors'
+import { useNetworkDescriptors } from './useNetworkDescriptors.js'
 
 export function useNonFungibleAssets<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,

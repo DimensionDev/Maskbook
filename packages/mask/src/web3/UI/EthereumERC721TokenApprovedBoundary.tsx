@@ -1,5 +1,5 @@
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../utils'
+import { useI18N } from '../../utils/index.js'
 import { makeStyles, useStylesExtends, ActionButtonProps, ActionButton } from '@masknet/theme'
 import { useMemo } from 'react'
 import { EthereumAddress } from 'wallet.ts'

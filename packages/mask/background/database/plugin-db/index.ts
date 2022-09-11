@@ -1,2 +1,2 @@
-export * from './base'
-export * from './wrap-plugin-database'
+export * from './base.js'
+export * from './wrap-plugin-database.js'

@@ -11,9 +11,9 @@ import { TextResizeContext, TypedMessageRender, useTransformedValue } from '@mas
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo } from 'react'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
-import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context'
-import { useCurrentIdentity } from '../DataSource/useActivatedUI'
-import { activatedSocialNetworkUI } from '../../social-network/ui'
+import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context.js'
+import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
+import { activatedSocialNetworkUI } from '../../social-network/ui.js'
 
 const useStyles = makeStyles()({
     root: {
@@ -55,7 +55,13 @@ export function PostReplacer(props: PostReplacerProps) {
     )
 }
 
-function Transformer({ message, unzip, zip }: { message: TypedMessage } & PostReplacerProps) {
+function Transformer({
+    message,
+    unzip,
+    zip,
+}: {
+    message: TypedMessage
+} & PostReplacerProps) {
     const after = useTransformedValue(message)
 
     const shouldReplace = useMemo(() => {

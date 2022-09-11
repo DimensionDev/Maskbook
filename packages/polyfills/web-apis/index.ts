@@ -2,4 +2,4 @@
 import 'clipboard-polyfill/overwrite-globals'
 
 // WorkerGlobalScope polyfills
-import './worker'
+import './worker.js'

@@ -1,4 +1,4 @@
-import './configuration'
+import './configuration.js'
 
 import 'core-js/proposals/array-find-from-last'
 import 'core-js/proposals/iterator-helpers'

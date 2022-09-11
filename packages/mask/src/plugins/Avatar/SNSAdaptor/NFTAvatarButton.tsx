@@ -1,8 +1,8 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
-import { useI18N } from '../../../utils'
-import { ApplicationSmallIcon } from '../assets/application'
+import { useI18N } from '../../../utils/index.js'
+import { ApplicationSmallIcon } from '../assets/application.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

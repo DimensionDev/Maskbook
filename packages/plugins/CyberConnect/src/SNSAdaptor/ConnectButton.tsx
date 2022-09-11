@@ -3,7 +3,7 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useAccount, useCurrentWeb3NetworkPluginID, useWeb3 } from '@masknet/plugin-infra/web3'
 import CyberConnect, { Env } from '@cyberlab/cyberconnect'
-import { PluginCyberConnectRPC } from '../messages'
+import { PluginCyberConnectRPC } from '../messages.js'
 import { CircularProgress, useTheme, Typography } from '@mui/material'
 import { useAsync } from 'react-use'
 

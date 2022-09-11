@@ -1,4 +1,4 @@
-import { InjectedProvider } from './Base'
+import { InjectedProvider } from './Base.js'
 
 export class SolflareProvider extends InjectedProvider {
     constructor() {

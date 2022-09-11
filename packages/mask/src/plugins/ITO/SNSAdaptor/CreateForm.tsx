@@ -13,20 +13,20 @@ import {
     useCurrentIdentity,
     useCurrentLinkedPersona,
     useLastRecognizedIdentity,
-} from '../../../components/DataSource/useActivatedUI'
-import { PluginWalletStatusBar, sliceTextByUILength, useI18N } from '../../../utils'
-import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import type { ExchangeTokenAndAmountState } from './hooks/useExchangeTokenAmountstate'
-import type { PoolSettings } from './hooks/useFill'
-import { useQualificationVerify } from './hooks/useQualificationVerify'
-import { decodeRegionCode, encodeRegionCode, regionCodes, useRegionSelect } from './hooks/useRegion'
-import { AdvanceSettingData, AdvanceSetting } from './AdvanceSetting'
-import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
-import { RegionSelect } from './RegionSelect'
+} from '../../../components/DataSource/useActivatedUI.js'
+import { PluginWalletStatusBar, sliceTextByUILength, useI18N } from '../../../utils/index.js'
+import { DateTimePanel } from '../../../web3/UI/DateTimePanel.js'
+import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
+import type { ExchangeTokenAndAmountState } from './hooks/useExchangeTokenAmountstate.js'
+import type { PoolSettings } from './hooks/useFill.js'
+import { useQualificationVerify } from './hooks/useQualificationVerify.js'
+import { decodeRegionCode, encodeRegionCode, regionCodes, useRegionSelect } from './hooks/useRegion.js'
+import { AdvanceSettingData, AdvanceSetting } from './AdvanceSetting.js'
+import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup.js'
+import { RegionSelect } from './RegionSelect.js'
 import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`

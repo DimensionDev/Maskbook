@@ -1,7 +1,7 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { searchFacebookProfileCoverSelector } from '../utils/selector'
-import { createReactRootShadowed, startWatch } from '../../../utils'
-import { ProfileCover } from '../../../components/InjectedComponents/ProfileCover'
+import { searchFacebookProfileCoverSelector } from '../utils/selector.js'
+import { createReactRootShadowed, startWatch } from '../../../utils/index.js'
+import { ProfileCover } from '../../../components/InjectedComponents/ProfileCover.js'
 
 export function injectFacebookProfileCover(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchFacebookProfileCoverSelector())

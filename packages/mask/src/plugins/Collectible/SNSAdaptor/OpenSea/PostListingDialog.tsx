@@ -4,9 +4,9 @@ import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { InjectedDialog } from '@masknet/shared'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { NonFungibleAsset } from '@masknet/web3-shared-base'
-import { useI18N } from '../../../../utils'
-import { ListingByPriceCard } from './ListingByPriceCard'
-import { ListingByHighestBidCard } from './ListingByHighestBidCard'
+import { useI18N } from '../../../../utils/index.js'
+import { ListingByPriceCard } from './ListingByPriceCard.js'
+import { ListingByHighestBidCard } from './ListingByHighestBidCard.js'
 import { TabContext, TabPanel } from '@mui/lab'
 
 const useStyles = makeStyles()((theme) => {

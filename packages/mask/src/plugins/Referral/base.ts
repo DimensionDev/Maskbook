@@ -2,8 +2,8 @@ import { type Plugin, PluginId } from '@masknet/plugin-infra'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 
-import { META_KEY } from './constants'
-import { languages } from './locales/languages'
+import { META_KEY } from './constants.js'
+import { languages } from './locales/languages.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: PluginId.Referral,

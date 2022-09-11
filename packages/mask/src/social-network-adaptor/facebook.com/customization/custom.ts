@@ -4,8 +4,8 @@ import produce, { setAutoFreeze } from 'immer'
 import { useMemo } from 'react'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { createSubscriptionFromValueRef } from '@masknet/shared-base'
-import type { SocialNetworkUI } from '../../../social-network'
-import { fromRGB, isDark, shade, toRGB } from '../../../utils/theme'
+import type { SocialNetworkUI } from '../../../social-network/index.js'
+import { fromRGB, isDark, shade, toRGB } from '../../../utils/theme/index.js'
 
 const primaryColorRef = new ValueRef(toRGB([29, 161, 242]))
 const primaryColorContrastColorRef = new ValueRef(toRGB([255, 255, 255]))

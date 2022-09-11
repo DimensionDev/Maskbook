@@ -9,17 +9,17 @@ import {
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, ChainId as ChainId_EVM, SchemaType as SchemaType_EVM } from '@masknet/web3-shared-evm'
-import type { NonFungibleTokenAPI } from '../../types'
-import { fetchJSON } from '../../helpers'
-import { Alchemy_EVM_NetworkMap } from '../constants'
+import type { NonFungibleTokenAPI } from '../../types/index.js'
+import { fetchJSON } from '../../helpers.js'
+import { Alchemy_EVM_NetworkMap } from '../constants.js'
 import type {
     AlchemyNFT_EVM,
     AlchemyResponse_EVM,
     AlchemyResponse_EVM_Contact_Metadata,
     AlchemyResponse_EVM_Metadata,
     AlchemyResponse_EVM_Owners,
-} from '../types'
-import { formatAlchemyTokenId } from '../helpers'
+} from '../types.js'
+import { formatAlchemyTokenId } from '../helpers.js'
 
 function createNonFungibleTokenLink(chainId: ChainId, address: string, tokenId: string) {
     if (chainId === ChainId.Matic) {

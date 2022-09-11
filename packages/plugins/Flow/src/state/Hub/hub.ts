@@ -3,7 +3,7 @@ import { HubStateBaseClient, HubStateFungibleClient, HubStateNonFungibleClient }
 import { AlchemyFlow, FlowFungible, FungibleTokenAPI, NonFungibleTokenAPI } from '@masknet/web3-providers'
 import { SourceType, CurrencyType, HubOptions, Pageable, Transaction } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-flow'
-import type { FlowHub } from './types'
+import type { FlowHub } from './types.js'
 
 class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
     protected override getProviders(initial?: HubOptions<ChainId>) {

@@ -5,7 +5,7 @@ import { createTypedMessageMetadataReader } from '@masknet/typed-message/dom'
 import { formatUnits } from '@ethersproject/units'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 
-import { META_KEY, supportedChainId } from '../constants'
+import { META_KEY, supportedChainId } from '../constants.js'
 import type {
     ReferralMetaData,
     ChainAddress,
@@ -15,9 +15,9 @@ import type {
     Bytes24,
     ChainId,
     BigNumberish,
-} from '../types'
+} from '../types.js'
 import schema from '../schema.json'
-import { toBigInt, writeUInt32BE, hexToArrayBuffer } from './buffer'
+import { toBigInt, writeUInt32BE, hexToArrayBuffer } from './buffer.js'
 
 function toChainAddress(chainId: BigNumber | bigint, address: Uint8Array): Uint8Array {
     if (isValidAddress(`0x${bytesToHex([...address])}`)) throw new Error('invalid address')

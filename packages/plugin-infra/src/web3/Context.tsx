@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from 'react'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { EMPTY_OBJECT } from '@masknet/shared-base'
-import type { Web3Helper } from '../web3-helpers'
+import type { Web3Helper } from '../web3-helpers/index.js'
 
 interface Web3Context<T extends NetworkPluginID> {
     account?: string
@@ -24,7 +24,9 @@ export function PluginWeb3ContextProvider<T extends NetworkPluginID>({
     pluginID,
     value,
     children,
-}: { pluginID: T } & React.ProviderProps<Web3Context<T>>) {
+}: {
+    pluginID: T
+} & React.ProviderProps<Web3Context<T>>) {
     return <PluginWeb3Context.Provider value={value} children={children} />
 }
 
@@ -32,7 +34,9 @@ export function PluginsWeb3ContextProvider<T extends NetworkPluginID>({
     pluginID,
     value,
     children,
-}: { pluginID: T } & React.ProviderProps<Record<NetworkPluginID, Web3Helper.Web3State<T>>>) {
+}: {
+    pluginID: T
+} & React.ProviderProps<Record<NetworkPluginID, Web3Helper.Web3State<T>>>) {
     return (
         <PluginIDContext.Provider value={pluginID}>
             <PluginsWeb3Context.Provider value={value}>

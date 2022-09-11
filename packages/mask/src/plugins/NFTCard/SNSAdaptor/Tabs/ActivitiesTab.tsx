@@ -5,8 +5,8 @@ import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { Typography, Button } from '@mui/material'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
-import { useI18N } from '../../../../utils'
-import { NFTActivityCard, ActivityType } from '../../../../components/shared/NFTCard/NFTActivityCard'
+import { useI18N } from '../../../../utils/index.js'
+import { NFTActivityCard, ActivityType } from '../../../../components/shared/NFTCard/NFTActivityCard.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {

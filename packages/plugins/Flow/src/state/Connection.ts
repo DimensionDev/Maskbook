@@ -14,7 +14,7 @@ import type {
     Web3Provider,
     Operation,
 } from '@masknet/web3-shared-flow'
-import { createConnection } from './Connection/connection'
+import { createConnection } from './Connection/connection.js'
 
 export interface ConnectionStorage {
     chainId: ChainId

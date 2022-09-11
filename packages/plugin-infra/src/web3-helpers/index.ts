@@ -20,7 +20,7 @@ import type {
 import type * as EVM from '@masknet/web3-shared-evm'
 import type * as Flow from '@masknet/web3-shared-flow'
 import type * as Solana from '@masknet/web3-shared-solana'
-import type { Web3Plugin } from '../web3-types'
+import type { Web3Plugin } from '../web3-types.js'
 
 export declare namespace Web3Helper {
     export type Definition = {

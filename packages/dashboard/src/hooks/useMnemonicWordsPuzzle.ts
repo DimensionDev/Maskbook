@@ -5,7 +5,7 @@
 import { range, shuffle } from 'lodash-unified'
 import { useCallback, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { WalletRPC } from '../../../mask/src/plugins/Wallet/messages'
+import { WalletRPC } from '../../../mask/src/plugins/Wallet/messages.js'
 
 // How many fields should be filled by the user?
 const PUZZLE_SIZE = 5

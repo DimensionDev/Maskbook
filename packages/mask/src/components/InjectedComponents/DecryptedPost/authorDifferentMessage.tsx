@@ -1,5 +1,5 @@
 import type { ProfileIdentifier } from '@masknet/shared-base'
-import { i18n } from '../../../../shared-ui/locales_legacy'
+import { i18n } from '../../../../shared-ui/locales_legacy/index.js'
 
 export function wrapAuthorDifferentMessage(
     author: ProfileIdentifier | null,

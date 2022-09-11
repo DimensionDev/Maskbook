@@ -54,11 +54,11 @@ import {
     resolveCrossOriginURL,
 } from '@masknet/web3-shared-base'
 import type { BaseContract } from '@masknet/web3-contracts/types/types'
-import { createContext, dispatch } from './composer'
-import { Providers } from './provider'
-import type { ERC1155Metadata, ERC721Metadata, EVM_Connection, EVM_Web3ConnectionOptions } from './types'
-import { getReceiptStatus } from './utils'
-import { Web3StateSettings } from '../../settings'
+import { createContext, dispatch } from './composer.js'
+import { Providers } from './provider.js'
+import type { ERC1155Metadata, ERC721Metadata, EVM_Connection, EVM_Web3ConnectionOptions } from './types.js'
+import { getReceiptStatus } from './utils.js'
+import { Web3StateSettings } from '../../settings/index.js'
 import { getSubscriptionCurrentValue, PartialRequired } from '@masknet/shared-base'
 
 const EMPTY_STRING = Promise.resolve('')

@@ -15,10 +15,10 @@ import {
     GasOption,
     formatWeiToGwei,
 } from '@masknet/web3-shared-evm'
-import { formatAssets, formatTransactions } from './format'
-import type { WalletTokenRecord, HistoryResponse, GasPriceDictResponse } from './type'
-import type { FungibleTokenAPI, HistoryAPI, GasOptionAPI } from '../types'
-import { getAllEVMNativeAssets } from '../helpers'
+import { formatAssets, formatTransactions } from './format.js'
+import type { WalletTokenRecord, HistoryResponse, GasPriceDictResponse } from './type.js'
+import type { FungibleTokenAPI, HistoryAPI, GasOptionAPI } from '../types/index.js'
+import { getAllEVMNativeAssets } from '../helpers.js'
 import { unionWith } from 'lodash-unified'
 import { EMPTY_LIST } from '@masknet/shared-base'
 

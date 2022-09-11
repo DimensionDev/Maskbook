@@ -5,8 +5,8 @@ import stringify from 'json-stable-stringify'
 import { NetworkPluginID, ZERO } from '@masknet/web3-shared-base'
 import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import type { GasOptionConfig } from '@masknet/web3-shared-evm'
-import { PluginTraderRPC } from '../../messages'
-import type { SwapBancorRequest, TradeComputed } from '../../types'
+import { PluginTraderRPC } from '../../messages.js'
+import type { SwapBancorRequest, TradeComputed } from '../../types/index.js'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest> | null, gasConfig?: GasOptionConfig) {

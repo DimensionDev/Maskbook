@@ -1,8 +1,8 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { PersonaSelectPanelDialog } from '../../../components/shared/PersonaSelectPanel/PersonaSelectPanelDialog'
-import { base } from '../base'
-import { NextIdPage } from '../components/NextIdPage'
-import { PLUGIN_ID } from '../constants'
+import { PersonaSelectPanelDialog } from '../../../components/shared/PersonaSelectPanel/PersonaSelectPanelDialog.js'
+import { base } from '../base.js'
+import { NextIdPage } from '../components/NextIdPage.js'
+import { PLUGIN_ID } from '../constants.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,

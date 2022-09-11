@@ -7,8 +7,8 @@ import { truncate } from 'lodash-unified'
 import { useCallback } from 'react'
 import Highlighter from 'react-highlight-words'
 import { useCopyToClipboard } from 'react-use'
-import { useI18N } from '../../../utils'
-import { Avatar } from '../../../utils/components/Avatar'
+import { useI18N } from '../../../utils/index.js'
+import { Avatar } from '../../../utils/components/Avatar.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
 import { useITOConstants } from '@masknet/web3-shared-evm'
-import { checkAvailability } from '../utils/checkAvailability'
+import { checkAvailability } from '../utils/checkAvailability.js'
 import { useAccount, useChainId, Web3Helper, useWeb3Connection } from '@masknet/plugin-infra/web3'
 
 export function useAvailability(

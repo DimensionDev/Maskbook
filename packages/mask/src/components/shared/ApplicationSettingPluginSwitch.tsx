@@ -6,7 +6,7 @@ import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Avatar, Box, List, ListItem, ListItemAvatar, Typography } from '@mui/material'
 import { memo, useEffect, useMemo, useRef } from 'react'
-import { Services } from '../../extension/service'
+import { Services } from '../../extension/service.js'
 
 const useStyles = makeStyles()((theme) => ({
     listItem: {

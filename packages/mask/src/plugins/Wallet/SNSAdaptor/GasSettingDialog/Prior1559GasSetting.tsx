@@ -10,16 +10,16 @@ import { useUpdateEffect } from 'react-use'
 import { toWei } from 'web3-utils'
 import { z as zod } from 'zod'
 // import { StyledInput } from '../../../../extension/popups/components/StyledInput'
-import { useI18N } from '../../../../utils'
-import type { GasSettingProps } from './types'
-import { useGasSettingStyles } from './useGasSettingStyles'
+import { useI18N } from '../../../../utils/index.js'
+import type { GasSettingProps } from './types.js'
+import { useGasSettingStyles } from './useGasSettingStyles.js'
 import { GasOptionType, NetworkPluginID, pow10 } from '@masknet/web3-shared-base'
 import { useChainId, useGasOptions, useNativeTokenPrice } from '@masknet/plugin-infra/web3'
 
 const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
-    [ChainId.BSC]: pow10(9).multipliedBy(5), // 5 Gwei
-    [ChainId.Conflux]: pow10(9).multipliedBy(5), // 5 Gwei
-    [ChainId.Matic]: pow10(9).multipliedBy(30), // 30 Gwei
+    [ChainId.BSC]: pow10(9).multipliedBy(5),
+    [ChainId.Conflux]: pow10(9).multipliedBy(5),
+    [ChainId.Matic]: pow10(9).multipliedBy(30),
     [ChainId.Astar]: pow10(9).multipliedBy(5), // 5 Gwei
 }
 

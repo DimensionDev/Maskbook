@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useValueRef } from '@masknet/shared-base-ui'
 import stringify from 'json-stable-stringify'
-import { approvedTokensFromUniswap } from '../settings'
-import { APPROVED_TOKENS_MAX } from '../constants'
+import { approvedTokensFromUniswap } from '../settings.js'
+import { APPROVED_TOKENS_MAX } from '../constants/index.js'
 
 export function useApprovedTokens(token_address: string | undefined) {
     const [approvedTokens, setApprovedTokens] = useState<string[]>([])

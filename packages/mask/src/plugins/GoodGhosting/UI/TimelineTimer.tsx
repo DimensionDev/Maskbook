@@ -4,11 +4,11 @@ import isBefore from 'date-fns/isBefore'
 import intervalToDuration from 'date-fns/intervalToDuration'
 import formatDuration from 'date-fns/formatDuration'
 import { useEffect, useState } from 'react'
-import { useI18N } from '../../../utils'
-import { useTimeline } from '../hooks/useGameInfo'
-import type { GoodGhostingInfo } from '../types'
-import { isEndOfTimeline, getNextTimelineIndex } from '../utils'
-import { GameAction } from './GameAction'
+import { useI18N } from '../../../utils/index.js'
+import { useTimeline } from '../hooks/useGameInfo.js'
+import type { GoodGhostingInfo } from '../types.js'
+import { isEndOfTimeline, getNextTimelineIndex } from '../utils.js'
+import { GameAction } from './GameAction.js'
 
 const useStyles = makeStyles()((theme) => ({
     timer: {

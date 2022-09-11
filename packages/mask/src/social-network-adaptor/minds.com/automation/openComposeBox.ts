@@ -1,8 +1,8 @@
 import { makeTypedMessageText, SerializableTypedMessages } from '@masknet/typed-message'
 import { CrossIsolationMessages, CompositionRequest } from '@masknet/shared-base'
 import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
-import { i18n } from '../../../../shared-ui/locales_legacy'
-import { composeButtonSelector, composeDialogIndicatorSelector, composeTextareaSelector } from '../utils/selector'
+import { i18n } from '../../../../shared-ui/locales_legacy/index.js'
+import { composeButtonSelector, composeDialogIndicatorSelector, composeTextareaSelector } from '../utils/selector.js'
 
 export async function openComposeBoxMinds(
     content: string | SerializableTypedMessages,

@@ -1,10 +1,10 @@
 import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
 import { Link, MenuItem, Select } from '@mui/material'
-import { useI18N } from '../locales'
+import { useI18N } from '../locales/index.js'
 import { FC, useRef } from 'react'
-import { CopyIconButton } from '../../NextID/components/CopyIconButton'
-import { useTip } from '../contexts'
+import { CopyIconButton } from '../../NextID/components/CopyIconButton/index.js'
+import { useTip } from '../contexts/index.js'
 import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles<{}, 'icon'>()((theme, _, refs) => {

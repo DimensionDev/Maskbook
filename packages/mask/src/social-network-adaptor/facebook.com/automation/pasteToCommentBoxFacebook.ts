@@ -1,7 +1,7 @@
-import { selectElementContents } from '../../../utils/utils'
+import { selectElementContents } from '../../../utils/utils.js'
 import { delay } from '@dimensiondev/kit'
-import { isMobileFacebook } from '../utils/isMobile'
-import { MaskMessages } from '../../../utils/messages'
+import { isMobileFacebook } from '../utils/isMobile.js'
+import { MaskMessages } from '../../../utils/messages.js'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { inputText, pasteText } from '@masknet/injected-script'
 

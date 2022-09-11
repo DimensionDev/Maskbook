@@ -2,17 +2,23 @@ import { delay } from '@dimensiondev/kit'
 import type { NormalizedBackup } from '@masknet/backup-format'
 import { activatedPluginsWorker, registeredPlugins } from '@masknet/plugin-infra/background-worker'
 import { ProfileIdentifier, RelationFavor } from '@masknet/shared-base'
-import { MaskMessages } from '../../../shared/messages'
+import { MaskMessages } from '../../../shared/messages.js'
 import {
     consistentPersonaDBWriteAccess,
     createOrUpdatePersonaDB,
     createOrUpdateProfileDB,
     createOrUpdateRelationDB,
     LinkedProfileDetails,
-} from '../../database/persona/db'
-import { withPostDBTransaction, createPostDB, PostRecord, queryPostDB, updatePostDB } from '../../database/post'
-import type { LatestRecipientDetailDB, LatestRecipientReasonDB } from '../../database/post/dbType'
-import { internal_wallet_restore } from './internal_wallet_restore'
+} from '../../database/persona/db.js'
+import {
+    withPostDBTransaction,
+    createPostDB,
+    PostRecord,
+    queryPostDB,
+    updatePostDB,
+} from '../../database/post/index.js'
+import type { LatestRecipientDetailDB, LatestRecipientReasonDB } from '../../database/post/dbType.js'
+import { internal_wallet_restore } from './internal_wallet_restore.js'
 
 export async function restoreNormalizedBackup(backup: NormalizedBackup.Data) {
     const { plugins, posts, wallets } = backup

@@ -3,8 +3,8 @@ import { PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { alpha, Button } from '@mui/material'
 import { memo, useCallback } from 'react'
-import Services from '../../../../extension/service'
-import { useI18N } from '../../locales'
+import Services from '../../../../extension/service.js'
+import { useI18N } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {

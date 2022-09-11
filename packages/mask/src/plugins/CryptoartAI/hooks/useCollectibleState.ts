@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { createContainer } from 'unstated-next'
 import { OrderSide } from 'opensea-js/lib/types'
-import { TabState, Token } from '../types'
-import { useAsset } from './useAsset'
-import { useOrders } from './useOrders'
-import { useEvents } from './useEvents'
+import { TabState, Token } from '../types/index.js'
+import { useAsset } from './useAsset.js'
+import { useOrders } from './useOrders.js'
+import { useEvents } from './useEvents.js'
 
 function useCollectibleState(token?: Token) {
     const [tabIndex, setTabIndex] = useState(TabState.ARTICLE)

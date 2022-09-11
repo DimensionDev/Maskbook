@@ -1,11 +1,11 @@
 import { DialogContent } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { useState } from 'react'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { PluginNextIDMessages } from '../../../plugins/NextID/messages'
-import { PersonaSelectPanel, PositionOption } from './PersonaSelectPanel'
+import { PluginNextIDMessages } from '../../../plugins/NextID/messages.js'
+import { PersonaSelectPanel, PositionOption } from './PersonaSelectPanel.js'
 
 type PositionStyle = {
     top?: number
@@ -13,7 +13,9 @@ type PositionStyle = {
     position?: 'absolute'
 }
 
-const useStyles = makeStyles<{ positionStyle: PositionStyle }>()((theme, props) => {
+const useStyles = makeStyles<{
+    positionStyle: PositionStyle
+}>()((theme, props) => {
     return {
         root: {
             width: 384,

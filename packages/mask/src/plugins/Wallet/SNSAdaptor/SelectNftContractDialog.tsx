@@ -6,10 +6,10 @@ import { SchemaType, explorerResolver, ChainId } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
-import { WalletMessages } from '../messages'
-import { useI18N } from '../../../utils'
+import { WalletMessages } from '../messages.js'
+import { useI18N } from '../../../utils/index.js'
 import Fuse from 'fuse.js'
-import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput'
+import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput.js'
 import {
     useChainId,
     useAccount,

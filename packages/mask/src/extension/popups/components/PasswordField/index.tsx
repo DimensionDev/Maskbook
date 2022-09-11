@@ -1,6 +1,6 @@
 import { forwardRef, memo, useState } from 'react'
 import { IconButton, InputAdornment, TextFieldProps } from '@mui/material'
-import { StyledInput } from '../StyledInput'
+import { StyledInput } from '../StyledInput/index.js'
 import { Icons } from '@masknet/icons'
 
 export const PasswordField = memo(

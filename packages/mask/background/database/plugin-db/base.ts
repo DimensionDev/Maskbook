@@ -1,5 +1,5 @@
 import { openDB, DBSchema } from 'idb/with-async-ittr'
-import { createDBAccess } from '../utils/openDB'
+import { createDBAccess } from '../utils/openDB.js'
 
 type InStore = {
     plugin_id: string

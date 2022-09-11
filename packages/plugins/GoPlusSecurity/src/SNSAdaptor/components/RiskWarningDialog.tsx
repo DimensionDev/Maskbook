@@ -7,8 +7,8 @@ import { Button, DialogActions, DialogContent, Link, Stack, Typography } from '@
 import { useCallback, useState } from 'react'
 import { Copy, ExternalLink } from 'react-feather'
 import { useCopyToClipboard } from 'react-use'
-import { useI18N } from '../../locales'
-import { PluginGoPlusSecurityMessages } from '../../messages'
+import { useI18N } from '../../locales/index.js'
+import { PluginGoPlusSecurityMessages } from '../../messages.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

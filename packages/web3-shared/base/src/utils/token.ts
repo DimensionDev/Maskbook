@@ -6,8 +6,8 @@ import {
     NonFungibleTokenContract,
     NonFungibleTokenMetadata,
     TokenType,
-} from '../specs'
-import type { Constants } from './types'
+} from '../specs/index.js'
+import type { Constants } from './types.js'
 
 export function createFungibleToken<ChainId, SchemaType>(
     chainId: ChainId,
@@ -108,7 +108,10 @@ export function createNonFungibleToken<ChainId, SchemaType>(
 }
 
 export function createFungibleTokensFromConstants<T extends Constants<string>, ChainId extends number, SchemaType>(
-    chainIds: Array<{ key: string; value: ChainId }>,
+    chainIds: Array<{
+        key: string
+        value: ChainId
+    }>,
     schema: SchemaType,
     constants: T,
 ) {

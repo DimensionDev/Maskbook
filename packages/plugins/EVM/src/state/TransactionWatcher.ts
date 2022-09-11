@@ -4,8 +4,8 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { TransactionWatcherState } from '@masknet/plugin-infra/web3'
 import { ChainId, Transaction } from '@masknet/web3-shared-evm'
 import { RecentTransaction, TransactionStatusType } from '@masknet/web3-shared-base'
-import { TransactionCheckers } from './TransactionWatcher/checker'
-import { Web3StateSettings } from '../settings'
+import { TransactionCheckers } from './TransactionWatcher/checker.js'
+import { Web3StateSettings } from '../settings/index.js'
 import { getSubscriptionCurrentValue } from '@masknet/shared-base'
 
 export class TransactionWatcher extends TransactionWatcherState<ChainId, Transaction> {

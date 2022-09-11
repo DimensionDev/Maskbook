@@ -11,13 +11,13 @@ import {
     pageableToIterator,
     toZero,
 } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '../web3-helpers'
-import { useAccount } from './useAccount'
-import { useChainId } from './useChainId'
-import { useWeb3Hub } from './useWeb3Hub'
-import { useWeb3State } from './useWeb3State'
-import { useTrustedFungibleTokens } from './useTrustedFungibleTokens'
-import { useBlockedFungibleTokens } from './useBlockedFungibleTokens'
+import type { Web3Helper } from '../web3-helpers/index.js'
+import { useAccount } from './useAccount.js'
+import { useChainId } from './useChainId.js'
+import { useWeb3Hub } from './useWeb3Hub.js'
+import { useWeb3State } from './useWeb3State.js'
+import { useTrustedFungibleTokens } from './useTrustedFungibleTokens.js'
+import { useBlockedFungibleTokens } from './useBlockedFungibleTokens.js'
 
 export function useFungibleAssets<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,

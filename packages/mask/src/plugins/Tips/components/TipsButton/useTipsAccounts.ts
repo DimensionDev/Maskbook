@@ -3,8 +3,8 @@ import { useCurrentWeb3NetworkPluginID, useSocialAddressListAll } from '@masknet
 import { NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { usePublicWallets } from '../../hooks/usePublicWallets'
-import type { TipsAccount } from '../../types'
+import { usePublicWallets } from '../../hooks/usePublicWallets.js'
+import type { TipsAccount } from '../../types/index.js'
 import { uniqBy } from 'lodash-unified'
 
 export function useTipsAccounts(

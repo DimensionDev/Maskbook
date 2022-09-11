@@ -1,7 +1,12 @@
 import { noop } from 'lodash-unified'
-import { Flags } from '../../../shared/flags'
-import { hmr } from '../../../utils-pure'
-import { fetchInjectContentScriptList, contentScriptURL, injectedScriptURL, maskSDK_URL } from './InjectContentScripts'
+import { Flags } from '../../../shared/flags.js'
+import { hmr } from '../../../utils-pure/index.js'
+import {
+    fetchInjectContentScriptList,
+    contentScriptURL,
+    injectedScriptURL,
+    maskSDK_URL,
+} from './InjectContentScripts.js'
 
 type Args = browser.webNavigation.TransitionNavListener extends browser.webNavigation.NavListener<infer U> ? U : never
 

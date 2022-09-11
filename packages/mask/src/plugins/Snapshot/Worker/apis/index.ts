@@ -1,7 +1,7 @@
 import ss from '@snapshot-labs/snapshot.js'
-import type { Proposal, VoteSuccess, RawVote, Strategy } from '../../types'
+import type { Proposal, VoteSuccess, RawVote, Strategy } from '../../types.js'
 import { transform } from 'lodash-unified'
-import { SNAPSHOT_GET_SCORE_API } from '../../constants'
+import { SNAPSHOT_GET_SCORE_API } from '../../constants.js'
 
 export async function fetchProposal(id: string) {
     const { votes, proposal } = await fetchProposalFromGraphql(id)
@@ -99,18 +99,22 @@ export async function getScores(
     space: string,
     strategies: Strategy[],
 ) {
-    const scores: Array<{ [key in string]: number }> = await ss.utils.getScores(
-        space,
-        strategies,
-        network,
-        voters,
-        Number(snapshot),
-        SNAPSHOT_GET_SCORE_API,
-    )
+    const scores: Array<{
+        [key in string]: number
+    }> = await ss.utils.getScores(space, strategies, network, voters, Number(snapshot), SNAPSHOT_GET_SCORE_API)
     return scores.map((score) =>
-        transform(score, function (result: { [key in string]: number }, val, key: string) {
-            result[key.toLowerCase()] = val
-        }),
+        transform(
+            score,
+            function (
+                result: {
+                    [key in string]: number
+                },
+                val,
+                key: string,
+            ) {
+                result[key.toLowerCase()] = val
+            },
+        ),
     )
 }
 

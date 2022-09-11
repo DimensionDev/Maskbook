@@ -6,11 +6,11 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { ActionButton } from '@masknet/theme'
 import { Box, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useI18N as useBaseI18n } from '../../../../utils'
-import { useI18N } from '../../locales'
-import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
-import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
-import { useStyles } from './useStyles'
+import { useI18N as useBaseI18n } from '../../../../utils/index.js'
+import { useI18N } from '../../locales/index.js'
+import { ChainBoundary } from '../../../../web3/UI/ChainBoundary.js'
+import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary.js'
+import { useStyles } from './useStyles.js'
 
 interface OperationFooterProps {
     chainId?: ChainId

@@ -1,6 +1,8 @@
-import type { Plugin } from '../types'
+import type { Plugin } from '../types.js'
 
-type HasRequirement = { enableRequirement: Plugin.Shared.Definition['enableRequirement'] }
+type HasRequirement = {
+    enableRequirement: Plugin.Shared.Definition['enableRequirement']
+}
 
 export function useAvailablePlugins<T extends HasRequirement, R extends unknown = T>(
     plugins: T[],

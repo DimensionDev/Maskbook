@@ -7,15 +7,15 @@ import { Box, Button, CardContent, CardHeader, Paper, Tab, Typography } from '@m
 import formatDateTime from 'date-fns/format'
 import isAfter from 'date-fns/isAfter'
 import isValidDate from 'date-fns/isValid'
-import { useI18N, useSwitcher } from '../../../utils'
-import { SupportedProvider } from '../constants'
-import { CollectibleState } from '../hooks/useCollectibleState'
-import { CollectiblePaper } from './CollectiblePaper'
-import { LinkingAvatar } from './LinkingAvatar'
-import { AboutTab } from './Tabs/AboutTab'
-import { ActivityTab } from './Tabs/ActivityTab'
-import { DetailTab } from './Tabs/DetailTab'
-import { OffersTab } from './Tabs/OffersTab'
+import { useI18N, useSwitcher } from '../../../utils/index.js'
+import { SupportedProvider } from '../constants.js'
+import { CollectibleState } from '../hooks/useCollectibleState.js'
+import { CollectiblePaper } from './CollectiblePaper.js'
+import { LinkingAvatar } from './LinkingAvatar.js'
+import { AboutTab } from './Tabs/AboutTab.js'
+import { ActivityTab } from './Tabs/ActivityTab.js'
+import { DetailTab } from './Tabs/DetailTab.js'
+import { OffersTab } from './Tabs/OffersTab.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -47,7 +47,7 @@ const useStyles = makeStyles()((theme) => {
             background: '#fff !important',
         },
         footer: {
-            marginTop: -1, // merge duplicate borders
+            marginTop: -1,
             zIndex: 1,
             position: 'relative',
             borderTop: `solid 1px ${theme.palette.divider}`,

@@ -3,14 +3,14 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { useLayoutEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-use'
-import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab'
-import { createReactRootShadowed, MaskMessages, startWatch, useMatchXS } from '../../../utils'
+import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab.js'
+import { createReactRootShadowed, MaskMessages, startWatch, useMatchXS } from '../../../utils/index.js'
 import {
     searchProfileActiveTabSelector,
     searchProfileTabListLastChildSelector,
     searchProfileTabPageSelector,
     searchProfileTabSelector,
-} from '../utils/selector'
+} from '../utils/selector.js'
 
 export function injectProfileTabAtInstagram(signal: AbortSignal) {
     let tabInjected = false

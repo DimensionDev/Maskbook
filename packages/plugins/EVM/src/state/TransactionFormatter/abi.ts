@@ -1,7 +1,7 @@
 import type { AbiItem } from 'web3-utils'
 import * as ABICoder from 'web3-eth-abi'
 import { uniqBy } from 'lodash-unified'
-import type { TransactionMethodABI } from './types'
+import type { TransactionMethodABI } from './types.js'
 
 // built-in abis
 import BulkCheckout from '@masknet/web3-contracts/abis/BulkCheckout.json'

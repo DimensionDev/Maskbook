@@ -4,14 +4,23 @@ import ListItemButton from '@mui/material/ListItemButton'
 import { makeStyles } from '@masknet/theme'
 import type { DefaultComponentProps } from '@mui/material/OverridableComponent'
 import type { ListItemTypeMap } from '@mui/material/ListItem'
-import { Avatar } from '../../../utils'
+import { Avatar } from '../../../utils/index.js'
 import type { ProfileInformation as Profile } from '@masknet/shared-base'
 
 export interface ProfileInListProps {
     item: Profile
     disabled?: boolean
     onClick?: () => void
-    ListItemProps?: Partial<DefaultComponentProps<ListItemTypeMap<{ button: true }, 'div'>>>
+    ListItemProps?: Partial<
+        DefaultComponentProps<
+            ListItemTypeMap<
+                {
+                    button: true
+                },
+                'div'
+            >
+        >
+    >
 }
 const useStyle = makeStyles()((theme) => ({
     // ? I want to let the children of this element have no change to

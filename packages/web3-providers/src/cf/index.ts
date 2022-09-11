@@ -6,7 +6,7 @@ import {
     getTokenAssetBaseURLConstants,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
-import type { TokenIconAPI } from '../types/TokenIcon'
+import type { TokenIconAPI } from '../types/TokenIcon.js'
 import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
 
 export class CF_API implements TokenIconAPI.Provider<ChainId> {

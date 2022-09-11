@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { PageTitleContext } from '../../context'
+import { PageTitleContext } from '../../context.js'
 import { PopupRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()(() => ({

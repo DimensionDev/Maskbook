@@ -2,7 +2,7 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
 import { useWeb3Hub, useWeb3State } from '@masknet/plugin-infra/web3'
 import { formatBalance, CurrencyType, NetworkPluginID } from '@masknet/web3-shared-base'
-import type { NFTInfo } from '../types'
+import type { NFTInfo } from '../types.js'
 
 export function useNFT(
     account: string,

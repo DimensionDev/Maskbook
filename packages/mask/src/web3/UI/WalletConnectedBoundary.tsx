@@ -1,8 +1,8 @@
 import { makeStyles, useStylesExtends, ActionButton, ActionButtonProps } from '@masknet/theme'
 import classNames from 'classnames'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { WalletMessages } from '../../plugins/Wallet/messages'
-import { useI18N } from '../../utils'
+import { WalletMessages } from '../../plugins/Wallet/messages.js'
+import { useI18N } from '../../utils/index.js'
 import { isZero } from '@masknet/web3-shared-base'
 import {
     useAccount,

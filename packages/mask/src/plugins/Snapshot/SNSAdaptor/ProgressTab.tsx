@@ -1,7 +1,7 @@
-import { ResultCard } from './ResultCard'
-import { VotesCard } from './VotesCard'
-import { InformationCard } from './InformationCard'
-import { SnapshotTab } from './SnapshotTab'
+import { ResultCard } from './ResultCard.js'
+import { VotesCard } from './VotesCard.js'
+import { InformationCard } from './InformationCard.js'
+import { SnapshotTab } from './SnapshotTab.js'
 
 export function ProgressTab() {
     return (

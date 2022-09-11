@@ -1,8 +1,8 @@
 import { createPluginMessage, PluginMessageEmitter, createPluginRPC } from '@masknet/plugin-infra'
-import type { FungibleTokenDetailed } from './types'
+import type { FungibleTokenDetailed } from './types.js'
 import type { AsyncVersionOf } from 'async-call-rpc/full'
 
-import { META_KEY, PLUGIN_ID } from './constants'
+import { META_KEY, PLUGIN_ID } from './constants.js'
 
 export type SelectTokenUpdated =
     | {
@@ -30,6 +30,6 @@ if (import.meta.webpackHot) import.meta.webpackHot.accept()
 export const PluginReferralMessages: PluginMessageEmitter<ReferralMessages> = createPluginMessage(META_KEY)
 export const ReferralRPC: AsyncVersionOf<typeof import('./Worker/services')> = createPluginRPC(
     PLUGIN_ID,
-    () => import('./Worker/services') as any,
+    () => import('./Worker/services.js') as any,
     PluginReferralMessages.rpc,
 )

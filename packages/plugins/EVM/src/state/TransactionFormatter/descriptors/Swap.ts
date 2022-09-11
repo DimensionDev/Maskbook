@@ -11,9 +11,9 @@ import {
     isNativeTokenAddress,
     getTokenConstant,
 } from '@masknet/web3-shared-evm'
-import type { TransactionDescriptor } from '../types'
-import { Web3StateSettings } from '../../../settings'
-import { getTokenAmountDescription } from '../utils'
+import type { TransactionDescriptor } from '../types.js'
+import { Web3StateSettings } from '../../../settings/index.js'
+import { getTokenAmountDescription } from '../utils.js'
 
 export class SwapDescriptor implements TransactionDescriptor {
     async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
@@ -158,7 +158,11 @@ export class SwapDescriptor implements TransactionDescriptor {
             if (method.name === 'swap') {
                 const _parameters = parameters as
                     | {
-                          [key: string]: { [key: string]: string } | undefined
+                          [key: string]:
+                              | {
+                                    [key: string]: string
+                                }
+                              | undefined
                       }
                     | undefined
                 if (
@@ -258,7 +262,9 @@ export class SwapDescriptor implements TransactionDescriptor {
                             ? UniswapV3MulticallFunctionExactInputSingleABI
                             : UniswapV3MulticallFunctionExactInputABI,
                         method.parameters[0][0].slice(10),
-                    ) as { [key: string]: string[] }
+                    ) as {
+                        [key: string]: string[]
+                    }
                     let path: string
                     let fee: string
                     let deadline: string
