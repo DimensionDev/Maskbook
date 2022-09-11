@@ -2,8 +2,8 @@ import classNames from 'classnames'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { NetworkPluginID, isSameAddress, NonFungibleToken, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import { SchemaType, formatTokenId, ChainId } from '@masknet/web3-shared-evm'
-import { useI18N as useBaseI18N } from '../../../utils'
-import { Translate, useI18N } from '../locales'
+import { useI18N as useBaseI18N } from '../../../utils/index.js'
+import { Translate, useI18N } from '../locales/index.js'
 import {
     DialogContent,
     Box,
@@ -22,7 +22,7 @@ import { Icons } from '@masknet/icons'
 import CheckIcon from '@mui/icons-material/Check'
 import { useUpdate } from 'react-use'
 import { findLastIndex, uniq } from 'lodash-unified'
-import { NFT_RED_PACKET_MAX_SHARES } from '../constants'
+import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 
 interface StyleProps {
@@ -305,7 +305,9 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
 }))
 
-export type OrderedERC721Token = NonFungibleToken<ChainId, SchemaType.ERC721> & { index: number }
+export type OrderedERC721Token = NonFungibleToken<ChainId, SchemaType.ERC721> & {
+    index: number
+}
 
 export interface SelectNftTokenDialogProps extends withClasses<never> {
     loadingOwnerList: boolean

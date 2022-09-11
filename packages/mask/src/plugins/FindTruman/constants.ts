@@ -1,4 +1,4 @@
-import FindTrumanConstPromise from './SNSAdaptor/ConstPromise'
+import FindTrumanConstPromise from './SNSAdaptor/ConstPromise.js'
 
 export const FIND_TRUMAN_PLUGIN_NAME = 'FindTruman'
 export const FIND_TRUMAN_PLUGIN_ID = 'org.findtruman'

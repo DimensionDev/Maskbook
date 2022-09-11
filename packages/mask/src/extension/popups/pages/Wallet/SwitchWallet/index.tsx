@@ -4,13 +4,13 @@ import { makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
-import { useI18N } from '../../../../../utils'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { WalletItem } from './WalletItem'
+import { useI18N } from '../../../../../utils/index.js'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
+import { WalletItem } from './WalletItem.js'
 import { MAX_WALLET_LIMIT } from '@masknet/shared'
 import classNames from 'classnames'
 import { useWallet, useWalletPrimary, useWallets } from '@masknet/plugin-infra/web3'
-import { Services } from '../../../../service'
+import { Services } from '../../../../service.js'
 
 const useStyles = makeStyles()({
     header: {

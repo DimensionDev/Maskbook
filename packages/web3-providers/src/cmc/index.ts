@@ -1,12 +1,12 @@
 import getUnixTime from 'date-fns/getUnixTime'
-import type { TrendingAPI } from '../types'
+import type { TrendingAPI } from '../types/index.js'
 import { TokenType } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { BTC_FIRST_LEGER_DATE, CMC_STATIC_BASE_URL, CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from './constants'
-import { getCommunityLink, isMirroredKeyword, resolveChainIdByName } from './helper'
+import { BTC_FIRST_LEGER_DATE, CMC_STATIC_BASE_URL, CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from './constants.js'
+import { getCommunityLink, isMirroredKeyword, resolveChainIdByName } from './helper.js'
 import { DataProvider } from '@masknet/public-api'
-import type { Coin, ResultData, Status } from './type'
-import { fetchJSON } from '../helpers'
+import type { Coin, ResultData, Status } from './type.js'
+import { fetchJSON } from '../helpers.js'
 
 export enum Days {
     MAX = 0,

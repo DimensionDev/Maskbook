@@ -1,5 +1,5 @@
-import type { InitInformation } from '../shared'
-import { contentScript } from './bridge'
+import type { InitInformation } from '../shared/index.js'
+import { contentScript } from './bridge.js'
 
 let connected = false
 let metadata: Mask.SocialNetwork['metadata'] = undefined

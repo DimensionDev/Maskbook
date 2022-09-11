@@ -1,5 +1,5 @@
-import { defineSocialNetworkUI } from '../../social-network'
-import { facebookBase } from './base'
+import { defineSocialNetworkUI } from '../../social-network/index.js'
+import { facebookBase } from './base.js'
 
 defineSocialNetworkUI({
     ...facebookBase,

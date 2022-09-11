@@ -1,7 +1,7 @@
 import { ChainId } from '@masknet/web3-shared-evm'
-import type { I18NFunction } from '../../utils'
-import { ONE_DAY_SECONDS, ONE_SECOND, ONE_WEEK_SECONDS } from './constants'
-import type { Pool } from './types'
+import type { I18NFunction } from '../../utils/index.js'
+import { ONE_DAY_SECONDS, ONE_SECOND, ONE_WEEK_SECONDS } from './constants.js'
+import type { Pool } from './types.js'
 
 export const calculateOdds = (usersTicketBalance: number, totalSupply: number, numberOfWinners: number) => {
     if (usersTicketBalance === 0 || Number.isNaN(usersTicketBalance)) {

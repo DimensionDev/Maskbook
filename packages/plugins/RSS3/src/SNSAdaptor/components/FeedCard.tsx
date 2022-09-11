@@ -6,9 +6,9 @@ import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Box, BoxProps, Card, Typography } from '@mui/material'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { memo, useMemo } from 'react'
-import { useI18N } from '../../locales'
-import type { RSS3Feed } from '../../types'
-import { useNormalizeFeed } from '../hooks'
+import { useI18N } from '../../locales/index.js'
+import type { RSS3Feed } from '../../types.js'
+import { useNormalizeFeed } from '../hooks/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {

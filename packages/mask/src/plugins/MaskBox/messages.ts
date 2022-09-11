@@ -1,5 +1,5 @@
 import { createPluginMessage, createPluginRPC, PluginMessageEmitter } from '@masknet/plugin-infra'
-import { PLUGIN_ID } from './constants'
+import { PLUGIN_ID } from './constants.js'
 
 export interface MaskBoxMessages {
     rpc: unknown

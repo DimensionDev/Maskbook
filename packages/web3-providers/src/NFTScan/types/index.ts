@@ -1,5 +1,5 @@
-export * from './EVM'
-export * from './Solana'
+export * from './EVM.js'
+export * from './Solana.js'
 
 export interface Response<T> {
     data: T

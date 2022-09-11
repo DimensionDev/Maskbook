@@ -11,17 +11,17 @@ import {
     i18NextInstance,
     queryRemoteI18NBundle,
 } from '@masknet/shared-base'
-import { Flags } from '../../shared'
-import { currentSetupGuideStatus } from '../../shared/legacy-settings/settings'
-import type { SetupGuideContext } from '../../shared/legacy-settings/types'
-import { createPartialSharedUIContext, createPluginHost } from '../../shared/plugin-infra/host'
-import Services from '../extension/service'
-import { getCurrentIdentifier, getCurrentSNSNetwork } from '../social-network-adaptor/utils'
-import { MaskMessages, setupShadowRootPortal } from '../utils'
-import '../utils/debug/general'
-import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui'
-import { definedSocialNetworkUIs } from './define'
-import type { SocialNetworkUI } from './types'
+import { Flags } from '../../shared/index.js'
+import { currentSetupGuideStatus } from '../../shared/legacy-settings/settings.js'
+import type { SetupGuideContext } from '../../shared/legacy-settings/types.js'
+import { createPartialSharedUIContext, createPluginHost } from '../../shared/plugin-infra/host.js'
+import Services from '../extension/service.js'
+import { getCurrentIdentifier, getCurrentSNSNetwork } from '../social-network-adaptor/utils.js'
+import { MaskMessages, setupShadowRootPortal } from '../utils/index.js'
+import '../utils/debug/general.js'
+import { RestPartOfPluginUIContextShared } from '../utils/plugin-context-shared-ui.js'
+import { definedSocialNetworkUIs } from './define.js'
+import type { SocialNetworkUI } from './types.js'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {

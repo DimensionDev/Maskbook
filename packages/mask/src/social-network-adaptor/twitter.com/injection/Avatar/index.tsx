@@ -1,9 +1,9 @@
 import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { Plugin } from '@masknet/plugin-infra'
-import { Avatar } from '../../../../components/InjectedComponents/Avatar'
-import { createReactRootShadowed, startWatch } from '../../../../utils'
-import { inpageAvatarSelector } from '../../utils/selector'
-import { getUserIdentity } from '../../utils/user'
+import { Avatar } from '../../../../components/InjectedComponents/Avatar.js'
+import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
+import { inpageAvatarSelector } from '../../utils/selector.js'
+import { getUserIdentity } from '../../utils/user.js'
 
 function getTwitterId(ele: HTMLElement) {
     const profileLink = ele.querySelector('a[role="link"]') as HTMLAnchorElement

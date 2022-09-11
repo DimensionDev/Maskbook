@@ -1,7 +1,7 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils'
-import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
+import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils/index.js'
+import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar.js'
 import { hookInputUploadOnce } from '@masknet/injected-script'
 import {
     searchFacebookAvatarListSelector,
@@ -10,14 +10,14 @@ import {
     searchFacebookAvatarOpenFilesSelector,
     searchFacebookConfirmAvatarImageSelector,
     searchFacebookSaveAvatarButtonSelector,
-} from '../../utils/selector'
+} from '../../utils/selector.js'
 import { useCallback, useEffect } from 'react'
-import { toPNG } from '../../../../plugins/Avatar/utils'
-import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
-import { getAvatarId } from '../../utils/user'
-import { isMobileFacebook } from '../../utils/isMobile'
-import { InMemoryStorages } from '../../../../../shared'
-import type { SelectTokenInfo } from '../../../../plugins/Avatar/types'
+import { toPNG } from '../../../../plugins/Avatar/utils/index.js'
+import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
+import { getAvatarId } from '../../utils/user.js'
+import { isMobileFacebook } from '../../utils/isMobile.js'
+import { InMemoryStorages } from '../../../../../shared/index.js'
+import type { SelectTokenInfo } from '../../../../plugins/Avatar/types.js'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 

@@ -8,11 +8,11 @@ import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { TransactionEventType, ChainId, SchemaType, FAKE_SIGN_PASSWORD } from '@masknet/web3-shared-evm'
 import { useAccount, useChainId, useWeb3, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { FungibleToken, isGreaterThan, NetworkPluginID, ONE } from '@masknet/web3-shared-base'
-import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../../constants'
-import type { AdvanceSettingData } from '../AdvanceSetting'
-import { gcd, sortTokens } from '../helpers'
-import { useITO_Contract } from './useITO_Contract'
-import { useI18N } from '../../../../utils'
+import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../../constants.js'
+import type { AdvanceSettingData } from '../AdvanceSetting.js'
+import { gcd, sortTokens } from '../helpers.js'
+import { useITO_Contract } from './useITO_Contract.js'
+import { useI18N } from '../../../../utils/index.js'
 
 export interface PoolSettings {
     password: string
@@ -106,7 +106,10 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         }
 
         // send transaction and wait for hash
-        return new Promise<{ receipt: TransactionReceipt; settings: PoolSettings }>(async (resolve, reject) => {
+        return new Promise<{
+            receipt: TransactionReceipt
+            settings: PoolSettings
+        }>(async (resolve, reject) => {
             ;(ITO_Contract as ITO2).methods
                 .fill_pool(...params)
                 .send(config as NonPayableTx)

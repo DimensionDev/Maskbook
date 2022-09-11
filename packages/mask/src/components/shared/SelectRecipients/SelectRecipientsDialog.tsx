@@ -8,8 +8,8 @@ import type {
     ProfileInformation,
     ProfileInformationFromNextID,
 } from '@masknet/shared-base'
-import { useI18N } from '../../../utils'
-import { ProfileInList } from './ProfileInList'
+import { useI18N } from '../../../utils/index.js'
+import { ProfileInList } from './ProfileInList.js'
 import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({

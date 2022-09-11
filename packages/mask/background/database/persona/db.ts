@@ -1,5 +1,5 @@
-import { hasNativeAPI } from '../../../shared/native-rpc'
-export * from './type'
+import { hasNativeAPI } from '../../../shared/native-rpc/index.js'
+export * from './type.js'
 
 function assign(module: any) {
     ;({

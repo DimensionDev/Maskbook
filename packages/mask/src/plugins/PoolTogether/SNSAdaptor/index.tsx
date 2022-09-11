@@ -4,10 +4,10 @@ import { parseURL } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { useMemo } from 'react'
 import { Trans } from 'react-i18next'
-import { base } from '../base'
-import { URL_PATTERN } from '../constants'
-import { DepositDialog } from '../UI/DepositDialog'
-import { PoolTogetherView } from '../UI/PoolTogetherView'
+import { base } from '../base.js'
+import { URL_PATTERN } from '../constants.js'
+import { DepositDialog } from '../UI/DepositDialog.js'
+import { PoolTogetherView } from '../UI/PoolTogetherView.js'
 
 const isPoolTogetherUrl = (url: string) => URL_PATTERN.test(url)
 
@@ -53,7 +53,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
 
 export default sns
 
-function Renderer(props: React.PropsWithChildren<{ url: string }>) {
+function Renderer(
+    props: React.PropsWithChildren<{
+        url: string
+    }>,
+) {
     usePluginWrapper(true)
     return <PoolTogetherView />
 }

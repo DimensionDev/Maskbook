@@ -3,7 +3,7 @@ import { None, Result, Some } from 'ts-results'
 import { base } from '../base.js'
 import type { FileInfo } from '../types.js'
 import { getAllFiles, setFileInfo, setupDatabase } from './database.js'
-import './rpc'
+import './rpc.js'
 
 const worker: Plugin.Worker.Definition = {
     ...base,

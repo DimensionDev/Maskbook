@@ -4,8 +4,8 @@ import { CrossIsolationMessages } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogContent, Stack, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { useI18N } from '../../locales'
-import { context } from '../context'
+import { useI18N } from '../../locales/index.js'
+import { context } from '../context.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {

@@ -1,7 +1,7 @@
 import { DataProvider } from '@masknet/public-api'
 import MIRRORED_TOKENS from './mirrored_tokens.json'
 import { ChainId } from '@masknet/web3-shared-evm'
-import type { TrendingAPI } from '../types'
+import type { TrendingAPI } from '../types/index.js'
 
 const ID_ADDRESS_MAP: {
     [key in DataProvider]: {
@@ -10,7 +10,7 @@ const ID_ADDRESS_MAP: {
 } = {
     [DataProvider.COIN_MARKET_CAP]: {
         [ChainId.Mainnet]: {
-            '6747': '0x32a7c02e79c4ea1008dd6564b35f131428673c41', // CRUST
+            '6747': '0x32a7c02e79c4ea1008dd6564b35f131428673c41',
             '8536': '0x69af81e73A73B40adF4f3d4223Cd9b1ECE623074', // MASK
         },
         [ChainId.Matic]: {
@@ -40,7 +40,9 @@ const NETWORK_ID_MAP: {
     [DataProvider.NFTSCAN]: {},
 }
 
-const NETWORK_NAME_MAP: { [key in string]: ChainId } = {
+const NETWORK_NAME_MAP: {
+    [key in string]: ChainId
+} = {
     Ethereum: ChainId.Mainnet,
     'BNB Smart Chain (BEP20)': ChainId.BSCT,
     Polygon: ChainId.Matic,

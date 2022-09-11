@@ -2,8 +2,8 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { eq, uniqBy } from 'lodash-unified'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { RedPacketRPC } from '../../messages'
-import type { NftRedPacketHistory } from '../../types'
+import { RedPacketRPC } from '../../messages.js'
+import type { NftRedPacketHistory } from '../../types.js'
 
 const PAGE_SIZE = 5
 export function useNftRedPacketHistory(creatorAddress: string, chainId: ChainId) {

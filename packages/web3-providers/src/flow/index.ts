@@ -1,1 +1,1 @@
-export * from './apis/FungibleTokenAPI'
+export * from './apis/FungibleTokenAPI.js'

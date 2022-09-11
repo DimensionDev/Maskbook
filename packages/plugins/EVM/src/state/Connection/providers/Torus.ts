@@ -3,8 +3,8 @@ import { createLookupTableResolver } from '@masknet/shared-base'
 import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
 import * as Torus from '@toruslabs/torus-embed'
 import type { RequestArguments } from 'web3-core'
-import type { EVM_Provider } from '../types'
-import { BaseProvider } from './Base'
+import type { EVM_Provider } from '../types.js'
+import { BaseProvider } from './Base.js'
 
 export type ChainIdTorus = ChainId.Mainnet | ChainId.BSC | ChainId.Matic | ChainId.xDai
 

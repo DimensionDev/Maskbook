@@ -16,10 +16,10 @@ import {
     SourceType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { RaribleEventType, RaribleOrder, RaribleHistory, RaribleNFTItemMapResponse } from './types'
-import { RaribleURL } from './constants'
-import type { NonFungibleTokenAPI } from '../types'
-import { getPaymentToken } from '../helpers'
+import { RaribleEventType, RaribleOrder, RaribleHistory, RaribleNFTItemMapResponse } from './types.js'
+import { RaribleURL } from './constants.js'
+import type { NonFungibleTokenAPI } from '../types/index.js'
+import { getPaymentToken } from '../helpers.js'
 
 const resolveRaribleBlockchain = createLookupTableResolver<number, string>(
     {
@@ -149,7 +149,15 @@ function createEvent(chainId: ChainId, history: RaribleHistory): NonFungibleToke
 }
 
 export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
-    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: { chainId?: ChainId } = {}) {
+    async getAsset(
+        address: string,
+        tokenId: string,
+        {
+            chainId = ChainId.Mainnet,
+        }: {
+            chainId?: ChainId
+        } = {},
+    ) {
         const requestPath = `/v0.1/items/${resolveRaribleBlockchain(chainId)}:${address}:${tokenId}`
         const asset = await fetchFromRarible<RaribleNFTItemMapResponse>(RaribleURL, requestPath)
         if (!asset) return

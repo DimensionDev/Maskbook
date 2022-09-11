@@ -1,6 +1,6 @@
 import { getTraderConstants } from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'
-import type { TradeContext as TradeContext_ } from '../types'
+import type { TradeContext as TradeContext_ } from '../types/index.js'
 import { TradeProvider } from '@masknet/public-api'
 import {
     PANCAKESWAP_BASE_AGAINST_TOKENS,
@@ -35,7 +35,7 @@ import {
     DEFIKINGDOMS_CUSTOM_BASES,
     YUMISWAP_BASE_AGAINST_TOKENS,
     YUMISWAP_CUSTOM_BASES,
-} from '../constants'
+} from '../constants/index.js'
 import { unreachable } from '@dimensiondev/kit'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 

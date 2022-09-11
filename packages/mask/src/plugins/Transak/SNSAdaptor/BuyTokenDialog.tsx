@@ -4,8 +4,8 @@ import { DialogContent, IconButton } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import CloseIcon from '@mui/icons-material/Close'
 import { useState } from 'react'
-import { useTransakURL } from '../hooks/useTransakURL'
-import { PluginTransakMessages } from '../messages'
+import { useTransakURL } from '../hooks/useTransakURL.js'
+import { PluginTransakMessages } from '../messages.js'
 
 const useStyles = makeStyles()((theme) => ({
     dialogPaper: {

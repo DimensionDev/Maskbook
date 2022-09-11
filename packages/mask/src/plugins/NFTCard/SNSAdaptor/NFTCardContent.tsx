@@ -1,8 +1,8 @@
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Button, Typography } from '@mui/material'
-import { PluginWalletStatusBar, useI18N as useBaseI18n } from '../../../utils'
+import { PluginWalletStatusBar, useI18N as useBaseI18n } from '../../../utils/index.js'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
-import { WalletMessages } from '../../Wallet/messages'
+import { WalletMessages } from '../../Wallet/messages.js'
 import {
     NetworkPluginID,
     SourceType,
@@ -10,18 +10,18 @@ import {
     NonFungibleTokenEvent,
     Pageable,
 } from '@masknet/web3-shared-base'
-import { NFTCardDialogTabs } from './NFTCardDialog'
-import { useStyles } from '../useStyles'
+import { NFTCardDialogTabs } from './NFTCardDialog.js'
+import { useStyles } from '../useStyles.js'
 import { chainResolver, NetworkType } from '@masknet/web3-shared-evm'
-import { AboutTab } from './Tabs/AboutTab'
-import { OffersTab } from './Tabs/OffersTab'
-import { ActivitiesTab } from './Tabs/ActivitiesTab'
-import { NFTBasicInfo } from '../../../components/shared/NFTCard/NFTBasicInfo'
+import { AboutTab } from './Tabs/AboutTab.js'
+import { OffersTab } from './Tabs/OffersTab.js'
+import { ActivitiesTab } from './Tabs/ActivitiesTab.js'
+import { NFTBasicInfo } from '../../../components/shared/NFTCard/NFTBasicInfo.js'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { LoadingBase } from '@masknet/theme'
-import { base as pluginDefinition } from '../base'
+import { base as pluginDefinition } from '../base.js'
 
 export interface NFTCardContentProps {
     currentTab: NFTCardDialogTabs

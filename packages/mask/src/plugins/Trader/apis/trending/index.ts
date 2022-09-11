@@ -1,11 +1,11 @@
 import { first, groupBy } from 'lodash-unified'
-import type { Coin, CommunityUrls, Currency, Stat, TagType, Trending } from '../../types'
+import type { Coin, CommunityUrls, Currency, Stat, TagType, Trending } from '../../types/index.js'
 import { DataProvider } from '@masknet/public-api'
 import { getEnumAsArray, unreachable } from '@dimensiondev/kit'
-import { CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants'
-import { isBlockedId, isBlockedKeyword, resolveAlias, resolveCoinId, isBlockedAddress } from './hotfix'
+import { CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants/index.js'
+import { isBlockedId, isBlockedKeyword, resolveAlias, resolveCoinId, isBlockedAddress } from './hotfix.js'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
-import { Days } from '../../SNSAdaptor/trending/PriceChartDaysControl'
+import { Days } from '../../SNSAdaptor/trending/PriceChartDaysControl.js'
 import { CoinGeckoTrendingEVM, CoinMarketCap, NFTScanTrending, UniSwap } from '@masknet/web3-providers'
 
 /**

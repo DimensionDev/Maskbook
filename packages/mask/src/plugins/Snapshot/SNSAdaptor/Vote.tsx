@@ -1,6 +1,6 @@
 import { Avatar, Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import type { VoteItem as VoteType } from '../types'
+import type { VoteItem as VoteType } from '../types.js'
 import { useBlockie } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({

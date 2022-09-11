@@ -9,7 +9,7 @@ import { Grid, GridProps, Link, List, ListItem, ListProps, Stack, Typography } f
 import classnames from 'classnames'
 import format from 'date-fns/format'
 import { noop } from 'lodash-unified'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     list: {

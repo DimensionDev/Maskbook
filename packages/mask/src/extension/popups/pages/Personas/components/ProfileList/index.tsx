@@ -1,6 +1,6 @@
 import { memo, useCallback, useState } from 'react'
 import { Avatar, Link, List, ListItem, ListItemText, Typography } from '@mui/material'
-import { definedSocialNetworkUIs } from '../../../../../../social-network'
+import { definedSocialNetworkUIs } from '../../../../../../social-network/index.js'
 import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import {
     ProfileIdentifier,
@@ -12,17 +12,17 @@ import {
 } from '@masknet/shared-base'
 import { compact } from 'lodash-unified'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../../../../utils'
-import { PersonaContext } from '../../hooks/usePersonaContext'
+import { useI18N } from '../../../../../../utils/index.js'
+import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
-import Services from '../../../../../service'
+import Services from '../../../../../service.js'
 import { Icons } from '@masknet/icons'
-import { DisconnectDialog } from '../DisconnectDialog'
+import { DisconnectDialog } from '../DisconnectDialog/index.js'
 import { NextIDProof } from '@masknet/web3-providers'
 import classNames from 'classnames'
 import { useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
-import { MethodAfterPersonaSign } from '../../../Wallet/type'
+import { MethodAfterPersonaSign } from '../../../Wallet/type.js'
 
 const useStyles = makeStyles()((theme) => ({
     list: {

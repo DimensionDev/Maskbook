@@ -3,10 +3,10 @@ import { Button, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { FungibleTokenList } from '@masknet/shared'
 import { useBlockedFungibleTokens } from '@masknet/plugin-infra/web3'
-import { useI18N } from '../../../../../utils'
+import { useI18N } from '../../../../../utils/index.js'
 import { useNavigate } from 'react-router-dom'
-import { useTitle } from '../../../hook/useTitle'
-import { useRowSize } from '../../../../../../../shared/src/contexts/components/useRowSize'
+import { useTitle } from '../../../hook/useTitle.js'
+import { useRowSize } from '../../../../../../../shared/src/contexts/components/useRowSize.js'
 
 const useStyles = makeStyles()((theme) => ({
     header: {

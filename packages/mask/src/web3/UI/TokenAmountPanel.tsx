@@ -6,8 +6,8 @@ import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { Box, Chip, ChipProps, InputProps, TextField, TextFieldProps, Typography } from '@mui/material'
 import { FormattedBalance } from '@masknet/shared'
 import { formatBalance, FungibleToken } from '@masknet/web3-shared-base'
-import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
-import { useI18N } from '../../utils'
+import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip.js'
+import { useI18N } from '../../utils/index.js'
 
 const MIN_AMOUNT_LENGTH = 1
 const MAX_AMOUNT_LENGTH = 79
@@ -85,7 +85,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
     // #region update amount by self
     const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
         () => ({
-            RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${token?.decimals}}$`), // .ddd...d
+            RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${token?.decimals}}$`),
             RE_MATCH_WHOLE_AMOUNT: new RegExp(`^\\d*\\.?\\d{0,${token?.decimals}}$`), // d.ddd...d
         }),
         [token?.decimals],

@@ -1,10 +1,10 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { PluginIDContextProvider } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, SocialAddress, SocialIdentity } from '@masknet/web3-shared-base'
-import { base } from '../base'
-import { PLUGIN_ID } from '../constants'
-import { setupContext } from './context'
-import { DonationPage, FeedsPage, FeedPageProps, FootprintPageProps, FootprintsPage } from './pages'
+import { base } from '../base.js'
+import { PLUGIN_ID } from '../constants.js'
+import { setupContext } from './context.js'
+import { DonationPage, FeedsPage, FeedPageProps, FootprintPageProps, FootprintsPage } from './pages/index.js'
 
 function shouldDisplay(identity?: SocialIdentity, addressName?: SocialAddress<NetworkPluginID>) {
     return addressName?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM

@@ -2,8 +2,8 @@ import { useCallback } from 'react'
 import type { NonPayableTx, PayableTx } from '@masknet/web3-contracts/types/types'
 import { isLessThan, isZero, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, GasOptionConfig, TransactionEventType } from '@masknet/web3-shared-evm'
-import { useNativeTokenWrapperContract } from './useWrappedEtherContract'
-import { useAccount } from '../useAccount'
+import { useNativeTokenWrapperContract } from './useWrappedEtherContract.js'
+import { useAccount } from '../useAccount.js'
 
 export function useNativeTokenWrapperCallback(chainId?: ChainId) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)

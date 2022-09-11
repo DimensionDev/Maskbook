@@ -7,9 +7,9 @@ import { InjectedDialog } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useChainIdValid } from '@masknet/plugin-infra/web3'
-import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
-import { useI18N } from '../../../../utils'
-import { WalletMessages } from '../../messages'
+import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox/index.js'
+import { useI18N } from '../../../../utils/index.js'
+import { WalletMessages } from '../../messages.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

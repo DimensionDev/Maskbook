@@ -9,11 +9,11 @@ import {
 } from '@masknet/public-api'
 import { Environment, assertEnvironment } from '@dimensiondev/holoflows-kit'
 import { convertIdentifierMapToRawMap, ECKeyIdentifier, ProfileIdentifier } from '@masknet/shared-base'
-import { launchPageSettings } from '../../../shared/legacy-settings/settings'
-import Services from '../../extension/service'
+import { launchPageSettings } from '../../../shared/legacy-settings/settings.js'
+import Services from '../../extension/service.js'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { WalletRPC } from '../../plugins/Wallet/messages'
-import { MaskMessages } from '../messages'
+import { WalletRPC } from '../../plugins/Wallet/messages.js'
+import { MaskMessages } from '../messages.js'
 
 const stringToPersonaIdentifier = (input: string) => ECKeyIdentifier.from(input).unwrap()
 const stringToProfileIdentifier = (input: string) => ProfileIdentifier.from(input).unwrap()

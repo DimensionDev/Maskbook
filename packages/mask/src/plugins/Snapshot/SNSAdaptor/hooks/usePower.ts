@@ -1,9 +1,9 @@
 import { useAsyncRetry } from 'react-use'
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { PluginSnapshotRPC } from '../../messages'
-import type { ProposalIdentifier } from '../../types'
-import { useProposal } from './useProposal'
+import { PluginSnapshotRPC } from '../../messages.js'
+import type { ProposalIdentifier } from '../../types.js'
+import { useProposal } from './useProposal.js'
 import { find, sumBy } from 'lodash-unified'
 
 export function usePower(identifier: ProposalIdentifier) {

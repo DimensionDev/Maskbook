@@ -22,7 +22,7 @@ import {
     queryPersonaByProfileDB,
     queryPersonasWithPrivateKey,
     queryProfileDB,
-} from './db'
+} from './db.js'
 
 // #region Local key helpers
 /**

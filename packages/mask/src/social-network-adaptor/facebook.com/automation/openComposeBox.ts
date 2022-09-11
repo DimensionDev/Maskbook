@@ -1,6 +1,6 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
 import { CrossIsolationMessages, CompositionRequest } from '@masknet/shared-base'
-import { i18n } from '../../../../shared-ui/locales_legacy'
+import { i18n } from '../../../../shared-ui/locales_legacy/index.js'
 import { makeTypedMessageText, SerializableTypedMessages } from '@masknet/typed-message'
 import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
 
@@ -8,7 +8,7 @@ const nativeComposeButtonSelector = () =>
     new LiveSelector()
         .querySelector<HTMLDivElement>(
             [
-                '[role="region"] [role="link"]+[role="button"]', // PC
+                '[role="region"] [role="link"]+[role="button"]',
                 '#MComposer [role="button"]', // mobile
             ].join(','),
         )

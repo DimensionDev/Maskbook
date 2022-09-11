@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { pow10 } from './number'
+import { pow10 } from './number.js'
 
 export function formatBalance(rawValue: BigNumber.Value = '0', decimals = 0, significant = decimals) {
     let balance = new BigNumber(rawValue)

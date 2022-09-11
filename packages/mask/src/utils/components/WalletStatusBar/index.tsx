@@ -1,1 +1,1 @@
-export * from './PluginWalletStatusBar'
+export * from './PluginWalletStatusBar.js'

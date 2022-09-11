@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { NetworkSelector } from '../../../../components/NetworkSelector'
+import { NetworkSelector } from '../../../../components/NetworkSelector/index.js'
 
 const useStyles = makeStyles()({
     header: {

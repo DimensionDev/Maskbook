@@ -2,11 +2,11 @@ import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { noop } from 'lodash-unified'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '../web3-helpers'
-import { useAccount } from './useAccount'
-import { useChainId } from './useChainId'
-import { useWeb3Connection } from './useWeb3Connection'
-import { useWeb3State } from '../entry-web3'
+import type { Web3Helper } from '../web3-helpers/index.js'
+import { useAccount } from './useAccount.js'
+import { useChainId } from './useChainId.js'
+import { useWeb3Connection } from './useWeb3Connection.js'
+import { useWeb3State } from '../entry-web3.js'
 
 export function useBalance<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,

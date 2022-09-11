@@ -1,11 +1,11 @@
 import { memo } from 'react'
 import { type PostInfo, PostInfoProvider } from '@masknet/plugin-infra/content-script'
 import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
-import { PostComment, PostCommentProps } from '../../../components/InjectedComponents/PostComments'
+import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { PostComment, PostCommentProps } from '../../../components/InjectedComponents/PostComments.js'
 import { makeStyles } from '@masknet/theme'
-import { collectNodeText } from '../../../utils'
-import { startWatch } from '../../../utils/watcher'
+import { collectNodeText } from '../../../utils/index.js'
+import { startWatch } from '../../../utils/watcher.js'
 
 interface injectPostCommentsDefaultConfig {
     needZip?(): void
@@ -16,7 +16,9 @@ interface injectPostCommentsDefaultConfig {
 export function injectPostCommentsDefault<T extends string>(
     config: injectPostCommentsDefaultConfig = {},
     additionalPropsToPostComment: (classes: Record<T, string>) => Partial<PostCommentProps> = () => ({}),
-    useCustomStyles: (props?: any) => { classes: Record<T, string> } = makeStyles()({}) as any,
+    useCustomStyles: (props?: any) => {
+        classes: Record<T, string>
+    } = makeStyles()({}) as any,
 ) {
     const { needZip } = config
     const PostCommentDefault = memo(function PostCommentDefault(props: Pick<PostCommentProps, 'needZip' | 'comment'>) {

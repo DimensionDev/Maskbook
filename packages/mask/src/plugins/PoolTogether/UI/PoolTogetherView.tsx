@@ -5,12 +5,12 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Box, Card, CardContent, CircularProgress, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import React, { useState, useEffect } from 'react'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { usePool, usePools } from '../hooks/usePools'
-import type { Pool } from '../types'
-import { Account } from './Account'
-import { PoolsView } from './PoolsView'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { useI18N } from '../../../utils/i18n-next-ui.js'
+import { usePool, usePools } from '../hooks/usePools.js'
+import type { Pool } from '../types.js'
+import { Account } from './Account.js'
+import { PoolsView } from './PoolsView.js'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

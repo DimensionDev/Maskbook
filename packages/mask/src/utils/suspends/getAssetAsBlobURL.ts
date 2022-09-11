@@ -1,4 +1,4 @@
-import Services from '../../extension/service'
+import Services from '../../extension/service.js'
 import { getAssetAsBlobURL as _ } from '@masknet/shared-base'
 
 /**

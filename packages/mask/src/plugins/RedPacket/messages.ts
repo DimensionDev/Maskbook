@@ -1,4 +1,4 @@
-import { RedPacketPluginID } from './constants'
+import { RedPacketPluginID } from './constants.js'
 import { createPluginMessage, createPluginRPC } from '@masknet/plugin-infra'
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()

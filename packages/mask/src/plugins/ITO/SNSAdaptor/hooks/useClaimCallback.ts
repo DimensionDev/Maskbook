@@ -3,8 +3,8 @@ import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { encodeContractTransaction, useITOConstants } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
 import { useAsyncFn } from 'react-use'
-import { checkAvailability } from '../utils/checkAvailability'
-import { useITO_Contract } from './useITO_Contract'
+import { checkAvailability } from '../utils/checkAvailability.js'
+import { useITO_Contract } from './useITO_Contract.js'
 
 export function useClaimCallback(pids: string[], contractAddress: string | undefined) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)

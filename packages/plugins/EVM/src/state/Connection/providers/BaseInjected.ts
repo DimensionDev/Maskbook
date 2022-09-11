@@ -4,8 +4,8 @@ import { isEthereumInjected } from '@masknet/shared-base'
 import type { InjectedProvider } from '@masknet/injected-script/sdk/Base'
 import { ChainId, EthereumMethodType, ProviderType, Web3Provider } from '@masknet/web3-shared-evm'
 import type { ProviderOptions } from '@masknet/web3-shared-base'
-import type { EVM_Provider } from '../types'
-import { BaseProvider } from './Base'
+import type { EVM_Provider } from '../types.js'
+import { BaseProvider } from './Base.js'
 
 export class BaseInjectedProvider extends BaseProvider implements EVM_Provider {
     constructor(protected providerType: ProviderType, protected bridge: InjectedProvider) {

@@ -7,19 +7,19 @@ import {
     NetworkType,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
-import { base } from '../base'
-import { RedPacketMetaKey, RedPacketNftMetaKey } from '../constants'
+import { base } from '../base.js'
+import { RedPacketMetaKey, RedPacketNftMetaKey } from '../constants.js'
 import {
     RedPacketMetadataReader,
     RedPacketNftMetadataReader,
     renderWithRedPacketMetadata,
     renderWithRedPacketNftMetadata,
-} from './helpers'
-import { useI18N } from '../locales'
-import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '../types'
-import RedPacketDialog from './RedPacketDialog'
-import { RedPacketInPost } from './RedPacketInPost'
-import { RedPacketNftInPost } from './RedPacketNftInPost'
+} from './helpers.js'
+import { useI18N } from '../locales/index.js'
+import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '../types.js'
+import RedPacketDialog from './RedPacketDialog.js'
+import { RedPacketInPost } from './RedPacketInPost.js'
+import { RedPacketNftInPost } from './RedPacketNftInPost.js'
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { CrossIsolationMessages } from '@masknet/shared-base'
@@ -27,7 +27,11 @@ import { ApplicationEntry } from '@masknet/shared'
 import { useFungibleToken } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
 
-function Render(props: React.PropsWithChildren<{ name: string }>) {
+function Render(
+    props: React.PropsWithChildren<{
+        name: string
+    }>,
+) {
     usePluginWrapper(true, { name: props.name })
     return <>{props.children}</>
 }

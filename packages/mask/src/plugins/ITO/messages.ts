@@ -1,4 +1,4 @@
-import { ITO_PluginID } from './constants'
+import { ITO_PluginID } from './constants.js'
 import { createPluginMessage, createPluginRPC } from '@masknet/plugin-infra'
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()

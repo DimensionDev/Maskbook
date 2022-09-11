@@ -1,5 +1,5 @@
-import { defineSocialNetworkUI } from '../../social-network'
-import { mindsBase } from './base'
+import { defineSocialNetworkUI } from '../../social-network/index.js'
+import { mindsBase } from './base.js'
 
 defineSocialNetworkUI({
     ...mindsBase,

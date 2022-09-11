@@ -6,10 +6,10 @@ import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { List, Popper, Typography, Box } from '@mui/material'
 import { useRef, useState } from 'react'
-import type { NftRedPacketHistory } from '../types'
-import { useNftRedPacketHistory } from './hooks/useNftRedPacketHistory'
-import { NftRedPacketHistoryItem } from './NftRedPacketHistoryItem'
-import { useI18N } from '../locales'
+import type { NftRedPacketHistory } from '../types.js'
+import { useNftRedPacketHistory } from './hooks/useNftRedPacketHistory.js'
+import { NftRedPacketHistoryItem } from './NftRedPacketHistoryItem.js'
+import { useI18N } from '../locales/index.js'
 import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles<void, 'atBottom'>()((theme, _, refs) => {

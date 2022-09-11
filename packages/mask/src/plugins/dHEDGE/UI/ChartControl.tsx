@@ -1,6 +1,6 @@
 import { Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { Period } from '../types'
+import { Period } from '../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

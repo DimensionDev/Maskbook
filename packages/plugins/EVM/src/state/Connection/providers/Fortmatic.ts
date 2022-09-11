@@ -5,8 +5,8 @@ import { first } from 'lodash-unified'
 import type { FmProvider } from 'fortmatic/dist/cjs/src/core/fm-provider'
 import { ChainId, chainResolver, getRPCConstants, ProviderType } from '@masknet/web3-shared-evm'
 import { createLookupTableResolver } from '@masknet/shared-base'
-import type { EVM_Provider } from '../types'
-import { BaseProvider } from './Base'
+import type { EVM_Provider } from '../types.js'
+import { BaseProvider } from './Base.js'
 
 // #region create in-page fortmatic provider
 

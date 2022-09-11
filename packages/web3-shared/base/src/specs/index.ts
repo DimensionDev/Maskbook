@@ -15,8 +15,7 @@ import type {
     ReturnExplorerResolver,
     ReturnNetworkResolver,
     ReturnProviderResolver,
-} from '../utils'
-
+} from '../utils/index.js'
 
 export interface Pageable<Item, Indicator = unknown> {
     /** the indicator of the current page */
@@ -110,7 +109,7 @@ export enum TransactionDescriptorType {
     /** A transaction to cancel a previous transaction. */
     CANCEL = 'cancel',
     /** A transaction to modify a previous transaction. */
-    RETRY = 'retry', // speed up
+    RETRY = 'retry',
 }
 
 export enum SocialAddressType {
@@ -267,9 +266,7 @@ export interface FungibleToken<ChainId, SchemaType> extends Token<ChainId, Schem
     logoURL?: string
 }
 
-export interface FungibleTokenStats {
-    /** TODO */
-}
+export interface FungibleTokenStats {}
 
 export interface NonFungibleTokenStats {
     volume24h: number
@@ -508,18 +505,12 @@ export interface NonFungibleContractSpender<ChainId, SchemaType> {
 /**
  * The security diagnosis about a fungible token.
  */
-export interface FungibleTokenSecurity {
-    // TODO:
-    // security items
-}
+export interface FungibleTokenSecurity {}
 
 /**
  * The security diagnosis about a non-fungible token.
  */
-export interface NonFungibleTokenSecurity {
-    // TODO:
-    // security items
-}
+export interface NonFungibleTokenSecurity {}
 
 /**
  * Plugin can declare what chain it supports to trigger side effects (e.g. create a new transaction).
@@ -773,8 +764,12 @@ export interface Connection<
         schema?: SchemaType,
         initial?: Web3ConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>>
-    getNonFungibleTokenOwner(address: string, tokenId: string, schema?: SchemaType,
-        initial?: Web3ConnectionOptions,): Promise<string>
+    getNonFungibleTokenOwner(
+        address: string,
+        tokenId: string,
+        schema?: SchemaType,
+        initial?: Web3ConnectionOptions,
+    ): Promise<string>
     getNonFungibleTokenOwnership(
         address: string,
         tokenId: string,
@@ -1083,11 +1078,11 @@ export interface HubNonFungible<ChainId, SchemaType, GasOption, Web3HubOptions =
         keyword: string,
         initial?: Web3HubOptions,
     ) => Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>>>
-    getNonFungibleRarity?:(
+    getNonFungibleRarity?: (
         address: string,
         tokenId: string,
         initial?: Web3HubOptions,
-    )=>Promise<NonFungibleTokenRarity<ChainId> | undefined>
+    ) => Promise<NonFungibleTokenRarity<ChainId> | undefined>
 
     /** Place a bid on a token. */
     createBuyOrder?: (/** TODO: add parameters */) => Promise<void>
@@ -1099,7 +1094,9 @@ export interface HubNonFungible<ChainId, SchemaType, GasOption, Web3HubOptions =
     cancelOrder?: (/** TODO: add parameters */) => Promise<void>
 }
 
-export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>> extends HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions>, HubNonFungible<ChainId, SchemaType, GasOption, Web3HubOptions> {
+export interface Hub<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>>
+    extends HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions>,
+        HubNonFungible<ChainId, SchemaType, GasOption, Web3HubOptions> {
     /** Get recommended gas options. */
     getGasOptions?: (chainId: ChainId, initial?: Web3HubOptions) => Promise<Record<GasOptionType, GasOption>>
     /** Get the most recent transactions of the given account. */
@@ -1174,7 +1171,11 @@ export interface Web3StorageServiceState {
     ) => Storage
     createKVStorage: (namespace: string) => Storage
     createRSS3Storage: (namespace: string) => Storage
-    createNextIDStorage: (proofIdentity: string, platform: NextIDPlatform, signerOrPublicKey: string | ECKeyIdentifier) => Storage
+    createNextIDStorage: (
+        proofIdentity: string,
+        platform: NextIDPlatform,
+        signerOrPublicKey: string | ECKeyIdentifier,
+    ) => Storage
 }
 
 export interface IdentityServiceState {
@@ -1304,7 +1305,7 @@ export interface ConnectionState<
         ProviderType,
         Signature,
         Block,
-    Operation,
+        Operation,
         Transaction,
         TransactionReceipt,
         TransactionDetailed,
@@ -1364,7 +1365,6 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Tra
     getMaskTokenAddress(chainId?: ChainId): string | undefined
     getAverageBlockDelay(chainId?: ChainId, scale?: number): number
     getTransactionSignature(chainId?: ChainId, transaction?: Partial<Transaction>): string | undefined
-    // #endregion
 }
 
 export interface BalanceNotifierState<ChainId> {

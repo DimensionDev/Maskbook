@@ -1,5 +1,5 @@
-import { defineSocialNetworkUI } from '../../social-network'
-import { openseaBase } from './base'
+import { defineSocialNetworkUI } from '../../social-network/index.js'
+import { openseaBase } from './base.js'
 
 defineSocialNetworkUI({
     ...openseaBase,

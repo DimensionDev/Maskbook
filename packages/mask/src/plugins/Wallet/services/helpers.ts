@@ -1,6 +1,6 @@
-import type { IDBPSafeTransaction } from '../../../../background/database/utils/openDB'
-import type { WalletDB } from '../database/Wallet.db'
-import type { LegacyWalletRecord, LegacyWalletRecordInDatabase } from '../database/types'
+import type { IDBPSafeTransaction } from '../../../../background/database/utils/openDB.js'
+import type { WalletDB } from '../database/Wallet.db.js'
+import type { LegacyWalletRecord, LegacyWalletRecordInDatabase } from '../database/types.js'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 
 export async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {

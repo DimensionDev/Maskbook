@@ -1,2 +1,2 @@
-export * from './apis/CoinGeckoEVM'
-export * from './apis/CoinGeckoSolana'
+export * from './apis/CoinGeckoEVM.js'
+export * from './apis/CoinGeckoSolana.js'

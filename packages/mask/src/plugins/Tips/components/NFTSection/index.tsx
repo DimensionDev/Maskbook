@@ -8,12 +8,12 @@ import classnames from 'classnames'
 import { uniqWith } from 'lodash-unified'
 import { FC, HTMLProps, useEffect, useMemo, useState } from 'react'
 import { useTimeoutFn } from 'react-use'
-import { TargetRuntimeContext, useTip } from '../../contexts'
-import { useI18N } from '../../locales'
-import type { TipNFTKeyPair } from '../../types'
-import { NFTList } from './NFTList'
+import { TargetRuntimeContext, useTip } from '../../contexts/index.js'
+import { useI18N } from '../../locales/index.js'
+import type { TipNFTKeyPair } from '../../types/index.js'
+import { NFTList } from './NFTList.js'
 
-export * from './NFTList'
+export * from './NFTList.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

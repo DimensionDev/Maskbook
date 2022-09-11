@@ -1,1 +1,1 @@
-export * from './web3/EVM'
+export * from './web3/EVM/index.js'

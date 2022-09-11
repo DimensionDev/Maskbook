@@ -3,7 +3,7 @@ import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, encodeContractTransaction, SchemaType } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useAsyncFn } from 'react-use'
-import { usePoolTogetherPoolContract } from '../contracts/usePoolTogetherPool'
+import { usePoolTogetherPoolContract } from '../contracts/usePoolTogetherPool.js'
 
 /**
  * A callback for deposit into pool

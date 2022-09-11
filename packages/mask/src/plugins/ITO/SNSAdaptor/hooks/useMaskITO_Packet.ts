@@ -1,7 +1,7 @@
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useAsyncRetry } from 'react-use'
-import { useMaskITO_Contract } from './useMaskITO_Contract'
+import { useMaskITO_Contract } from './useMaskITO_Contract.js'
 
 export function useMaskITO_Packet() {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)

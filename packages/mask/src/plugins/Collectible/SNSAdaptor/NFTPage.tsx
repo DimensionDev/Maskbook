@@ -2,7 +2,7 @@ import type { SocialAddress, NetworkPluginID, SocialIdentity } from '@masknet/we
 import {
     CollectibleGridProps,
     CollectionList,
-} from '../../../extension/options-page/DashboardComponents/CollectibleList'
+} from '../../../extension/options-page/DashboardComponents/CollectibleList/index.js'
 
 export interface NFTPageProps {
     identity?: SocialIdentity

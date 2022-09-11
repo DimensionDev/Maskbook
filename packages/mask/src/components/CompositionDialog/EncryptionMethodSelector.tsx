@@ -1,8 +1,8 @@
-import { useI18N } from '../../utils'
+import { useI18N } from '../../utils/index.js'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { PopoverListTrigger } from './PopoverListTrigger'
-import { PopoverListItem } from './PopoverListItem'
+import { PopoverListTrigger } from './PopoverListTrigger.js'
+import { PopoverListItem } from './PopoverListItem.js'
 import { PropsWithChildren, useState } from 'react'
 
 const useStyles = makeStyles()((theme) => ({

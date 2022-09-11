@@ -6,7 +6,7 @@ import {
     NetworkPluginID,
     ProviderDescriptor,
     SourceType,
-} from '../specs'
+} from '../specs/index.js'
 import { createLookupTableResolver, NextIDPlatform } from '@masknet/shared-base'
 
 export interface ExplorerRoutes {

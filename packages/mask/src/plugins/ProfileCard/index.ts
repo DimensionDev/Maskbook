@@ -1,6 +1,6 @@
 import { registerPlugin } from '@masknet/plugin-infra'
-import { base } from './base'
-import { languages } from './locales/languages'
+import { base } from './base.js'
+import { languages } from './locales/languages.js'
 
 registerPlugin({
     ...base,

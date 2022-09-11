@@ -1,15 +1,15 @@
-import { status } from '../../setup.ui'
+import { status } from '../../setup.ui.js'
 import { startPluginDashboard } from '@masknet/plugin-infra/dashboard'
-import { createNormalReactRoot, hydrateNormalReactRoot } from '../../utils'
-import { createPluginHost, createPartialSharedUIContext } from '../../../shared/plugin-infra/host'
-import { Services } from '../service'
-import Popups from './UI'
+import { createNormalReactRoot, hydrateNormalReactRoot } from '../../utils/index.js'
+import { createPluginHost, createPartialSharedUIContext } from '../../../shared/plugin-infra/host.js'
+import { Services } from '../service.js'
+import Popups from './UI.js'
 import createCache from '@emotion/cache'
 import { CacheProvider } from '@emotion/react'
 import { TssCacheProvider } from '@masknet/theme'
-import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings'
-import { setInitialPersonaInformation } from './pages/Personas/hooks/PersonaContextInitialData'
-import { RestPartOfPluginUIContextShared } from '../../utils/plugin-context-shared-ui'
+import { currentPersonaIdentifier } from '../../../shared/legacy-settings/settings.js'
+import { setInitialPersonaInformation } from './pages/Personas/hooks/PersonaContextInitialData.js'
+import { RestPartOfPluginUIContextShared } from '../../utils/plugin-context-shared-ui.js'
 
 if (location.hash === '#/personas') {
     async function hydrate() {

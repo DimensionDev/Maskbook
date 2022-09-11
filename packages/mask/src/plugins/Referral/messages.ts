@@ -1,8 +1,8 @@
 import { createPluginMessage, PluginMessageEmitter, createPluginRPC } from '@masknet/plugin-infra'
-import type { FungibleTokenDetailed } from './types'
+import type { FungibleTokenDetailed } from './types.js'
 import type { AsyncVersionOf } from 'async-call-rpc/full'
 
-import { META_KEY, PLUGIN_ID } from './constants'
+import { META_KEY, PLUGIN_ID } from './constants.js'
 
 export type SelectTokenUpdated =
     | {

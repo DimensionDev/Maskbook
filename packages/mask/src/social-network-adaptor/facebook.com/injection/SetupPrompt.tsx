@@ -1,8 +1,8 @@
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
-import { isMobileFacebook } from '../utils/isMobile'
-import { NotSetupYetPrompt } from '../../../components/shared/NotSetupYetPrompt'
-import { startWatch } from '../../../utils/watcher'
+import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { isMobileFacebook } from '../utils/isMobile.js'
+import { NotSetupYetPrompt } from '../../../components/shared/NotSetupYetPrompt.js'
+import { startWatch } from '../../../utils/watcher.js'
 
 let composeBox: LiveSelector<Element>
 if (isMobileFacebook) {

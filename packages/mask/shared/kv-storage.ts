@@ -1,6 +1,6 @@
 import { createProxyKVStorageBackend, createKVStorageHost, KVStorageBackend } from '@masknet/shared-base'
 import { PluginId } from '@masknet/plugin-infra'
-import { MaskMessages } from './messages'
+import { MaskMessages } from './messages.js'
 
 const indexedDBProxy = createProxyKVStorageBackend()
 const inMemoryBackend = createProxyKVStorageBackend()
@@ -30,26 +30,27 @@ export const PersistentStorages = {
     Settings: createPersistentKVStorage('settings', {
         debugging: false,
     }),
-    ApplicationEntryUnListedList: createPersistentKVStorage<{ current: { [key: string]: boolean } }>(
-        ApplicationEntryUnlistedListKey,
-        {
-            current: {
-                [PluginId.RedPacket]: false,
-                [PluginId.FileService]: false,
-                [PluginId.ITO]: false,
-                [`${PluginId.ITO}_claim`]: false,
-                [PluginId.CrossChainBridge]: false,
-                [PluginId.MaskBox]: false,
-                [PluginId.Savings]: false,
-                [PluginId.Avatar]: false,
-                [PluginId.Trader]: false,
-                [PluginId.Tips]: false,
-                [PluginId.Transak]: false,
-                [PluginId.Pets]: false,
-                [PluginId.FindTruman]: false,
-                [PluginId.GoPlusSecurity]: false,
-                [PluginId.Referral]: false,
-            },
+    ApplicationEntryUnListedList: createPersistentKVStorage<{
+        current: {
+            [key: string]: boolean
+        }
+    }>(ApplicationEntryUnlistedListKey, {
+        current: {
+            [PluginId.RedPacket]: false,
+            [PluginId.FileService]: false,
+            [PluginId.ITO]: false,
+            [`${PluginId.ITO}_claim`]: false,
+            [PluginId.CrossChainBridge]: false,
+            [PluginId.MaskBox]: false,
+            [PluginId.Savings]: false,
+            [PluginId.Avatar]: false,
+            [PluginId.Trader]: false,
+            [PluginId.Tips]: false,
+            [PluginId.Transak]: false,
+            [PluginId.Pets]: false,
+            [PluginId.FindTruman]: false,
+            [PluginId.GoPlusSecurity]: false,
+            [PluginId.Referral]: false,
         },
-    ),
+    }),
 }

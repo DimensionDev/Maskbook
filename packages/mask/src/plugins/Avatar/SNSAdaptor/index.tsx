@@ -3,9 +3,9 @@ import { Plugin, PluginId, PluginI18NFieldRender } from '@masknet/plugin-infra/c
 import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { Trans } from 'react-i18next'
-import { NFTAvatarDialog } from '../Application/NFTAvatarsDialog'
-import { base } from '../base'
-import { setupContext } from '../context'
+import { NFTAvatarDialog } from '../Application/NFTAvatarsDialog.js'
+import { base } from '../base.js'
+import { setupContext } from '../context.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,

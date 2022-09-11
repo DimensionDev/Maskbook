@@ -3,9 +3,9 @@ import { BindingProof, NextIDPlatform, PersonaInformation } from '@masknet/share
 import { AlchemyEVM, NextIDStorage, RSS3 } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { isSameAddress } from '../../../../web3-shared/base/src/utils'
-import { PLUGIN_ID } from '../constants'
-import type { AccountType, Collection, PersonaKV } from './types'
+import { isSameAddress } from '../../../../web3-shared/base/src/utils/index.js'
+import { PLUGIN_ID } from '../constants.js'
+import type { AccountType, Collection, PersonaKV } from './types.js'
 
 export const formatPublicKey = (publicKey?: string) => {
     return `${publicKey?.slice(0, 6)}...${publicKey?.slice(-6)}`

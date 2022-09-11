@@ -1,6 +1,6 @@
 import { isFirefox } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { RainbowBox } from './RainbowBox'
+import { RainbowBox } from './RainbowBox.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

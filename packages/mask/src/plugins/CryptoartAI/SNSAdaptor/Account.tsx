@@ -1,4 +1,4 @@
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
 import { useAccount } from '@masknet/plugin-infra/web3'
 

@@ -1,7 +1,7 @@
 import type { AESJsonWebKey, PersonaIdentifier, PostIVIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import type { DBSchema } from 'idb/with-async-ittr'
-import type { IDBPSafeTransaction } from '../utils/openDB'
-import type { LatestPostDBRecord } from './dbType'
+import type { IDBPSafeTransaction } from '../utils/openDB.js'
+import type { LatestPostDBRecord } from './dbType.js'
 
 /**
  * @internal

@@ -8,7 +8,7 @@ import {
     ArtBlocksRopstenHostImageUrl,
     ArtBlocksMainnetSubgraphLink,
     ArtBlocksRopstenSubgraphLink,
-} from '../constants'
+} from '../constants.js'
 
 export const resolveTokenLinkOnArtBlocks = (chainId: ChainId, tokenId: number) => {
     if (chainId === ChainId.Ropsten) {

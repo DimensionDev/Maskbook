@@ -1,3 +1,3 @@
-export * from './useSaveNFTAvatar'
-export * from './useSaveNFTAvatarToRSS3'
-export * from './useGetNFTAvatarFromRSS3'
+export * from './useSaveNFTAvatar.js'
+export * from './useSaveNFTAvatarToRSS3.js'
+export * from './useGetNFTAvatarFromRSS3.js'

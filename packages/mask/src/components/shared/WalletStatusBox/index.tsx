@@ -20,9 +20,9 @@ import { Button, Link, Typography, useTheme } from '@mui/material'
 import classNames from 'classnames'
 import { Icons } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
-import { WalletMessages } from '../../../plugins/Wallet/messages'
-import { useI18N } from '../../../utils'
-import { usePendingTransactions } from './usePendingTransactions'
+import { WalletMessages } from '../../../plugins/Wallet/messages.js'
+import { useI18N } from '../../../utils/index.js'
+import { usePendingTransactions } from './usePendingTransactions.js'
 
 const useStyles = makeStyles<{
     contentBackground?: string

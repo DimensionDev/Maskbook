@@ -13,7 +13,7 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Link, MenuItem, Typography } from '@mui/material'
 import { HTMLProps, memo, useEffect, useRef, useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 
 const MENU_ITEM_HEIGHT = 40
 const MENU_LIST_PADDING = 8

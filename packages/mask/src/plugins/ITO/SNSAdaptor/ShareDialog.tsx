@@ -4,8 +4,8 @@ import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
 import type { BigNumber } from 'bignumber.js'
 import { useCallback } from 'react'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { getAssetAsBlobURL, useI18N } from '../../../utils'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import { getAssetAsBlobURL, useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     shareWrapper: {

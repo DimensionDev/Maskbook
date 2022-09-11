@@ -2,10 +2,16 @@ import { useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Typography, Button, Grid, Box } from '@mui/material'
 
-import { useI18N, Translate } from '../locales'
-import { PageInterface, PagesType } from '../types'
+import { useI18N, Translate } from '../locales/index.js'
+import { PageInterface, PagesType } from '../types.js'
 
-import { ReferralFarmsIcon, ReferToFarmIcon, CreateFarmIcon, BuyToFarmIcon, RewardsIcon } from './shared-ui/icons'
+import {
+    ReferralFarmsIcon,
+    ReferToFarmIcon,
+    CreateFarmIcon,
+    BuyToFarmIcon,
+    RewardsIcon,
+} from './shared-ui/icons/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {

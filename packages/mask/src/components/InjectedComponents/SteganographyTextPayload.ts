@@ -1,8 +1,8 @@
 import { GrayscaleAlgorithm, type ImageTemplateTypes } from '@masknet/encryption'
-import Services from '../../extension/service'
-import { ImagePayloadURLs } from '../../resources/image-payload'
-import { activatedSocialNetworkUI } from '../../social-network'
-import { downloadUrl } from '../../utils/utils'
+import Services from '../../extension/service.js'
+import { ImagePayloadURLs } from '../../resources/image-payload/index.js'
+import { activatedSocialNetworkUI } from '../../social-network/index.js'
+import { downloadUrl } from '../../utils/utils.js'
 
 export async function SteganographyTextPayload(template: ImageTemplateTypes, text: string) {
     const pass = activatedSocialNetworkUI.configuration.steganography?.password?.() || 'mask'

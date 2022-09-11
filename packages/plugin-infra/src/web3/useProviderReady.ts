@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '../web3-helpers'
-import { useWeb3State } from './useWeb3State'
+import type { Web3Helper } from '../web3-helpers/index.js'
+import { useWeb3State } from './useWeb3State.js'
 
 export function useProviderReady<T extends NetworkPluginID>(
     pluginID?: T,

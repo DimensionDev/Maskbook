@@ -1,9 +1,9 @@
 import { waitDocumentReadyState } from '@dimensiondev/kit'
 import { ProfileIdentifier } from '@masknet/shared-base'
-import { creator, SocialNetworkUI as Next } from '../../../social-network'
-import { untilElementAvailable } from '../../../utils/dom'
-import { mindsBase } from '../base'
-import { handleSelector, selfInfoSelectors } from '../utils/selector'
+import { creator, SocialNetworkUI as Next } from '../../../social-network/index.js'
+import { untilElementAvailable } from '../../../utils/dom.js'
+import { mindsBase } from '../base.js'
+import { handleSelector, selfInfoSelectors } from '../utils/selector.js'
 
 async function resolveLastRecognizedIdentityInner(
     ref: Next.CollectingCapabilities.IdentityResolveProvider['recognized'],

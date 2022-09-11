@@ -1,9 +1,9 @@
 import { memo } from 'react'
-import { useI18N } from '../../../utils'
-import { AdditionalContent } from '../AdditionalPostContent'
-import type { DecryptionProgress } from './types'
+import { useI18N } from '../../../utils/index.js'
+import { AdditionalContent } from '../AdditionalPostContent.js'
+import type { DecryptionProgress } from './types.js'
 import type { ProfileIdentifier } from '@masknet/shared-base'
-import { wrapAuthorDifferentMessage } from './authorDifferentMessage'
+import { wrapAuthorDifferentMessage } from './authorDifferentMessage.js'
 export interface DecryptPostAwaitingProps {
     type?: DecryptionProgress
     /** The author in the payload */

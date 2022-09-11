@@ -2,9 +2,9 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
-import { base } from '../base'
+import { base } from '../base.js'
 import { useState } from 'react'
-import { CrossChainBridgeDialog } from './CrossChainBridgeDialog'
+import { CrossChainBridgeDialog } from './CrossChainBridgeDialog.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,

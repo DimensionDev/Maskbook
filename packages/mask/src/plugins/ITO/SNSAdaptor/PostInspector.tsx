@@ -1,9 +1,9 @@
 import { useCallback, useMemo } from 'react'
 import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
-import { isCompactPayload } from './helpers'
-import { usePoolPayload } from './hooks/usePoolPayload'
-import type { JSON_PayloadInMask } from '../types'
-import { ITO, ITO_Error, ITO_Loading } from './ITO'
+import { isCompactPayload } from './helpers.js'
+import { usePoolPayload } from './hooks/usePoolPayload.js'
+import type { JSON_PayloadInMask } from '../types.js'
+import { ITO, ITO_Error, ITO_Loading } from './ITO.js'
 import { NetworkPluginID, FungibleToken, TokenType } from '@masknet/web3-shared-base'
 import { useChainId, useFungibleToken, useFungibleTokens } from '@masknet/plugin-infra/web3'
 

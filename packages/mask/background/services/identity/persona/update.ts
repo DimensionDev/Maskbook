@@ -15,9 +15,9 @@ import {
     safeDeletePersonaDB,
     updatePersonaDB,
     queryPersonasDB,
-} from '../../../database/persona/db'
-import { personaRecordToMobilePersona } from './mobile'
-import { recover_ECDH_256k1_KeyPair_ByMnemonicWord, validateMnemonic } from './utils'
+} from '../../../database/persona/db.js'
+import { personaRecordToMobilePersona } from './mobile.js'
+import { recover_ECDH_256k1_KeyPair_ByMnemonicWord, validateMnemonic } from './utils.js'
 
 export async function deletePersona(id: PersonaIdentifier, confirm: 'delete even with private' | 'safe delete') {
     return consistentPersonaDBWriteAccess(async (t) => {

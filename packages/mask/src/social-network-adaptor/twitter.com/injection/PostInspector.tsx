@@ -1,7 +1,7 @@
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import { TwitterDecoder } from '@masknet/encryption'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
-import { injectPostInspectorDefault } from '../../../social-network/defaults/inject/PostInspector'
+import { injectPostInspectorDefault } from '../../../social-network/defaults/inject/PostInspector.js'
 
 export function injectPostInspectorAtTwitter(signal: AbortSignal, current: PostInfo) {
     return injectPostInspectorDefault({
@@ -33,8 +33,9 @@ export function injectPostInspectorAtTwitter(signal: AbortSignal, current: PostI
                 parent.style.overflow = 'hidden'
             }
 
-            const cardWrapper =
-                contentContainer.parentElement?.querySelector<HTMLDivElement>('[data-testid="card.wrapper"]')
+            const cardWrapper = contentContainer.parentElement?.querySelector<HTMLDivElement>(
+                '[data-testid="card.wrapper"]',
+            )
             if (cardWrapper) {
                 cardWrapper.style.display = 'none'
                 cardWrapper.setAttribute('aria-hidden', 'true')

@@ -14,8 +14,8 @@ import {
     SourceType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-solana'
-import type { NonFungibleTokenAPI } from '../types'
-import { MAGIC_EDEN_API_URL } from './constants'
+import type { NonFungibleTokenAPI } from '../types/index.js'
+import { MAGIC_EDEN_API_URL } from './constants.js'
 import type {
     Auction,
     MagicEdenCollection as Collection,
@@ -23,7 +23,7 @@ import type {
     MagicEdenToken,
     TokenActivity,
     WalletOffer,
-} from './types'
+} from './types.js'
 
 async function fetchFromMagicEden<T>(chainId: ChainId, path: string) {
     if (chainId !== ChainId.Mainnet) return
@@ -148,7 +148,9 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
     async getAssets(owner: string, { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {}) {
         if ((indicator?.index ?? 0) > 0) return createPageable(EMPTY_LIST, createIndicator(indicator))
 
-        const response = await fetchFromMagicEden<{ results: MagicEdenNFT[] }>(
+        const response = await fetchFromMagicEden<{
+            results: MagicEdenNFT[]
+        }>(
             chainId,
             urlcat('/rpc/getNFTsByOwner/:owner', {
                 owner,

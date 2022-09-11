@@ -2,7 +2,7 @@ import { useActivatedPluginsSNSAdaptor, Plugin, usePluginI18NField } from '@mask
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import type { TypedMessage } from '@masknet/typed-message'
 import { Box, Chip } from '@mui/material'
-import { useI18N } from '../../utils'
+import { useI18N } from '../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     chip: {

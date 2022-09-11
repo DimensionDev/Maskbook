@@ -1,1 +1,1 @@
-export * from './useGameList'
+export * from './useGameList.js'

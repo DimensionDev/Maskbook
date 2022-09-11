@@ -1,5 +1,5 @@
 import { makeStyles, keyframes } from '@masknet/theme'
-import { IconURLs } from '../IconURL'
+import { IconURLs } from '../IconURL.js'
 
 export const useStyles = makeStyles()((theme) => {
     const spinningAnimationKeyFrames = keyframes`

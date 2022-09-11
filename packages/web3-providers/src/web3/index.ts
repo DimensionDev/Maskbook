@@ -3,7 +3,7 @@ import Web3SDK from 'web3'
 import type { FeeHistoryResult } from 'web3-eth'
 import { GasOptionType } from '@masknet/web3-shared-base'
 import { ChainId, chainResolver, formatWeiToGwei, GasOption, getRPCConstants, Web3 } from '@masknet/web3-shared-evm'
-import type { GasOptionAPI } from '../types'
+import type { GasOptionAPI } from '../types/index.js'
 
 function avg(arr: number[]) {
     // eslint-disable-next-line unicorn/no-array-reduce

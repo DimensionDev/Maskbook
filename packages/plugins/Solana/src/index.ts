@@ -15,7 +15,7 @@ import type {
     TransactionSignature,
     Web3,
 } from '@masknet/web3-shared-solana'
-import { base } from './base'
+import { base } from './base.js'
 
 registerPlugin<
     ChainId,

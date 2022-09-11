@@ -1,8 +1,8 @@
 import { Alert, AlertTitle, Box, Button, Link, Paper } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../../utils'
-import type { Coin } from '../../types'
-import { useApprovedTokens } from '../../trending/useApprovedTokens'
+import { useI18N } from '../../../../utils/index.js'
+import type { Coin } from '../../types/index.js'
+import { useApprovedTokens } from '../../trending/useApprovedTokens.js'
 import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {

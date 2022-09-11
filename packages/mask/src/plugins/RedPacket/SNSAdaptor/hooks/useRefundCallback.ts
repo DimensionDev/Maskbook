@@ -3,7 +3,7 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { encodeContractTransaction } from '@masknet/web3-shared-evm'
 import { useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { useRedPacketContract } from './useRedPacketContract'
+import { useRedPacketContract } from './useRedPacketContract.js'
 
 export function useRefundCallback(version: number, from: string, id?: string) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)

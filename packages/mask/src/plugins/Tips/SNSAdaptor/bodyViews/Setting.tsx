@@ -4,7 +4,7 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { memo } from 'react'
-import { WalletSwitch } from '../components/WalletSwitch'
+import { WalletSwitch } from '../components/WalletSwitch.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

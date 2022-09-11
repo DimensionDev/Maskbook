@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { SNAPSHOT_PLUGIN_ID } from './constants'
+import { SNAPSHOT_PLUGIN_ID } from './constants.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: SNAPSHOT_PLUGIN_ID,

@@ -1,4 +1,4 @@
-import type { SocialNetworkUI } from './types'
+import type { SocialNetworkUI } from './types.js'
 
 const definedSocialNetworkUIsLocal = new Map<string, SocialNetworkUI.DeferredDefinition>()
 export const definedSocialNetworkUIs: ReadonlyMap<string, SocialNetworkUI.DeferredDefinition> =

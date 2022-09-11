@@ -5,10 +5,10 @@ import { CollectionType, RSS3 } from '@masknet/web3-providers'
 import { Box, BoxProps } from '@mui/material'
 import { memo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { useI18N } from '../../locales'
-import type { RSS3Feed } from '../../types'
-import { FeedCard } from '../components/FeedCard'
-import { StatusBox } from '../components/StatusBox'
+import { useI18N } from '../../locales/index.js'
+import type { RSS3Feed } from '../../types.js'
+import { FeedCard } from '../components/FeedCard.js'
+import { StatusBox } from '../components/StatusBox.js'
 
 export interface FeedPageProps extends BoxProps {
     address?: string

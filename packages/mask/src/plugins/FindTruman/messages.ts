@@ -1,5 +1,5 @@
 import { createPluginMessage, createPluginRPC } from '@masknet/plugin-infra'
-import { FIND_TRUMAN_PLUGIN_ID } from './constants'
+import { FIND_TRUMAN_PLUGIN_ID } from './constants.js'
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
 const PluginFindTrumanMessages = createPluginMessage(FIND_TRUMAN_PLUGIN_ID)

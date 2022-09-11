@@ -1,6 +1,6 @@
 import { createPluginMessage, PluginMessageEmitter, createPluginRPC } from '@masknet/plugin-infra'
-import { DHEDGE_PLUGIN_ID } from './constants'
-import type { Pool } from './types'
+import { DHEDGE_PLUGIN_ID } from './constants.js'
+import type { Pool } from './types.js'
 
 type InvestDialogUpdated =
     | {

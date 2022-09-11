@@ -1,8 +1,8 @@
-import { SnapshotContext } from '../context'
-import { getProposalIdentifier } from './helpers'
-import { Snapshot } from './Snapshot'
-import { LoadingFailCard } from './LoadingFailCard'
-import { useRetry } from './hooks/useRetry'
+import { SnapshotContext } from '../context.js'
+import { getProposalIdentifier } from './helpers.js'
+import { Snapshot } from './Snapshot.js'
+import { LoadingFailCard } from './LoadingFailCard.js'
+import { useRetry } from './hooks/useRetry.js'
 
 export interface PostInspectorProps {
     url: string

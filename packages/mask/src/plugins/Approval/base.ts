@@ -1,8 +1,8 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { ApprovalPluginID } from './constants'
-import { languages } from './locales/languages'
+import { ApprovalPluginID } from './constants.js'
+import { languages } from './locales/languages.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: ApprovalPluginID,

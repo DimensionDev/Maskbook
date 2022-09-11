@@ -1,19 +1,21 @@
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography, ListItemButton } from '@mui/material'
-import { NFTAvatar } from './NFTAvatar'
-import { NFTInfo } from './NFTInfo'
-import { MoreIcon } from '../assets/more'
-import { RSS3_KEY_SNS } from '../constants'
-import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
+import { NFTAvatar } from './NFTAvatar.js'
+import { NFTInfo } from './NFTInfo.js'
+import { MoreIcon } from '../assets/more.js'
+import { RSS3_KEY_SNS } from '../constants.js'
+import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user.js'
 import { useCallback, useMemo } from 'react'
 import type { BindingProof } from '@masknet/shared-base'
-import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar'
+import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar.js'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { TokenType } from '@masknet/web3-shared-base'
-import type { AllChainsNonFungibleToken } from '../types'
-import { useI18N } from '../locales'
+import type { AllChainsNonFungibleToken } from '../types.js'
+import { useI18N } from '../locales/index.js'
 
-const useStyles = makeStyles<{ disabled: boolean }>()((theme, props) => ({
+const useStyles = makeStyles<{
+    disabled: boolean
+}>()((theme, props) => ({
     root: {
         margin: theme.spacing(2, 0.5),
         border: `1px solid ${theme.palette.divider}`,

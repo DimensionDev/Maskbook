@@ -1,8 +1,8 @@
 import { getAddress } from '@ethersproject/address'
 
-import type { EvmAddress } from '../../types'
+import type { EvmAddress } from '../../types.js'
 
-import { getOracle, rpcCall, RpcRoute, RecommendationsRpcMethod } from './oracle'
+import { getOracle, rpcCall, RpcRoute, RecommendationsRpcMethod } from './oracle.js'
 
 // Get a time signature from the oracle (all fields required, send sized 0x000....00 when not used)
 type TPropsTimeSignature = {

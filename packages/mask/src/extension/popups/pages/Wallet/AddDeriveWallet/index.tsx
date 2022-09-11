@@ -3,16 +3,16 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { TableContainer, TablePagination, tablePaginationClasses, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useAsync, useAsyncFn } from 'react-use'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { DeriveWalletTable } from '../components/DeriveWalletTable'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
+import { DeriveWalletTable } from '../components/DeriveWalletTable/index.js'
 import { currySameAddress, NetworkPluginID, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
 import { useWallets } from '@masknet/plugin-infra/web3'
-import { useI18N } from '../../../../../utils'
+import { useI18N } from '../../../../../utils/index.js'
 import { LoadingButton } from '@mui/lab'
 import { PopupRoutes } from '@masknet/shared-base'
-import { currentMaskWalletAccountSettings } from '../../../../../../shared/legacy-settings/wallet-settings'
+import { currentMaskWalletAccountSettings } from '../../../../../../shared/legacy-settings/wallet-settings.js'
 import { first } from 'lodash-unified'
-import { useTitle } from '../../../hook/useTitle'
+import { useTitle } from '../../../hook/useTitle.js'
 
 const useStyles = makeStyles()({
     container: {
@@ -76,7 +76,11 @@ const AddDeriveWallet = memo(() => {
     const { t } = useI18N()
     const navigate = useNavigate()
     const location = useLocation()
-    const state = location.state as any as { mnemonic?: string } | undefined
+    const state = location.state as any as
+        | {
+              mnemonic?: string
+          }
+        | undefined
     const { classes } = useStyles()
     const wallets = useWallets(NetworkPluginID.PLUGIN_EVM)
     const walletName = new URLSearchParams(location.search).get('name')

@@ -1,4 +1,4 @@
-import { ChainId } from '../types'
+import { ChainId } from '../types.js'
 import { Connection } from '@solana/web3.js'
 
 const Endpoints: Record<ChainId, string> = {

@@ -1,5 +1,5 @@
-export * from './type'
-import { hasNativeAPI } from '../../../shared/native-rpc'
+export * from './type.js'
+import { hasNativeAPI } from '../../../shared/native-rpc/index.js'
 
 function assign(module: any) {
     ;({ createPostDB, updatePostDB, queryPostDB, queryPostsDB, queryPostPagedDB, withPostDBTransaction } = module)

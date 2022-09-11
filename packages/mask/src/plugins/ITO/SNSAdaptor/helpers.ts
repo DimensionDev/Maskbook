@@ -4,8 +4,8 @@ import type { Result } from 'ts-results'
 import { ChainId, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import type { TypedMessage } from '@masknet/typed-message'
 import { createRenderWithMetadata, createTypedMessageMetadataReader } from '@masknet/typed-message/dom'
-import { ITO_MetaKey_1, ITO_MetaKey_2 } from '../constants'
-import type { JSON_PayloadInMask, JSON_PayloadOutMask } from '../types'
+import { ITO_MetaKey_1, ITO_MetaKey_2 } from '../constants.js'
+import type { JSON_PayloadInMask, JSON_PayloadOutMask } from '../types.js'
 import schemaV1 from '../schema-v1.json'
 import schemaV2 from '../schema-v2.json'
 
@@ -39,7 +39,14 @@ export function gcd(a: BigNumber, b: BigNumber) {
     }
 }
 
-export function sortTokens(tokenA: { address: string }, tokenB: { address: string }) {
+export function sortTokens(
+    tokenA: {
+        address: string
+    },
+    tokenB: {
+        address: string
+    },
+) {
     const addressA = tokenA.address.toLowerCase()
     const addressB = tokenB.address.toLowerCase()
     if (isNativeTokenAddress(addressA)) return -1
@@ -55,7 +62,11 @@ export function timestampOutMask(timestamp: number) {
     return Math.floor(timestamp / 1000)
 }
 
-export function tokenIntoMask<T extends { chain_id: ChainId }>(token: T) {
+export function tokenIntoMask<
+    T extends {
+        chain_id: ChainId
+    },
+>(token: T) {
     return {
         ...omit(token, 'chain_id'),
         chainId: token.chain_id,
@@ -64,7 +75,11 @@ export function tokenIntoMask<T extends { chain_id: ChainId }>(token: T) {
     }
 }
 
-export function tokenOutMask<T extends { chainId: ChainId }>(token: T) {
+export function tokenOutMask<
+    T extends {
+        chainId: ChainId
+    },
+>(token: T) {
     return {
         ...omit(token, 'chainId'),
         chain_id: token.chainId,

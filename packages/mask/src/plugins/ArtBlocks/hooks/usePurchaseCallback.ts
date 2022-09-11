@@ -3,7 +3,7 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, encodeContractTransaction, SchemaType } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useAsyncFn } from 'react-use'
-import { useArtBlocksContract } from './useArtBlocksContract'
+import { useArtBlocksContract } from './useArtBlocksContract.js'
 
 export function usePurchaseCallback(chainId: ChainId, projectId: string, amount: string, schema = SchemaType.Native) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)

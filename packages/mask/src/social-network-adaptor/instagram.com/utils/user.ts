@@ -1,4 +1,4 @@
-import { collectNodeText } from '../../../utils'
+import { collectNodeText } from '../../../utils/index.js'
 import {
     bioDescriptionSelector,
     personalHomepageSelector,
@@ -6,7 +6,7 @@ import {
     searchNickNameSelector,
     searchUserIdInEditPageSelector,
     searchUserIdSelector,
-} from './selector'
+} from './selector.js'
 
 export function getBioDescription() {
     const bio = bioDescriptionSelector().evaluate()

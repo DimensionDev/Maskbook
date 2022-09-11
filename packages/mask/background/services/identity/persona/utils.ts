@@ -11,8 +11,8 @@ import {
     AESJsonWebKey,
     assertEC_Private_JsonWebKey,
 } from '@masknet/shared-base'
-import { CryptoKeyToJsonWebKey } from '../../../../utils-pure'
-import type { PersonaRecord } from '../../../database/persona/db'
+import { CryptoKeyToJsonWebKey } from '../../../../utils-pure/index.js'
+import type { PersonaRecord } from '../../../database/persona/db.js'
 
 /**
  * Local key (AES key) is used to encrypt message to myself.

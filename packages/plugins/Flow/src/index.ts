@@ -15,7 +15,7 @@ import type {
     Web3,
     TransactionReceipt,
 } from '@masknet/web3-shared-flow'
-import { base } from './base'
+import { base } from './base.js'
 
 registerPlugin<
     ChainId,

@@ -1,7 +1,7 @@
 import { RSS3BaseAPI } from '@masknet/web3-providers'
 import { useMemo } from 'react'
-import { RSS3_DEFAULT_IMAGE } from '../../constants'
-import type { RSS3Feed } from '../../types'
+import { RSS3_DEFAULT_IMAGE } from '../../constants.js'
+import type { RSS3Feed } from '../../types.js'
 
 const { Tag } = RSS3BaseAPI
 export function useNormalizeFeed(feed: RSS3BaseAPI.Activity): RSS3Feed {

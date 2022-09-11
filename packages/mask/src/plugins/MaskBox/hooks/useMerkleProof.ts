@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { getMerkleProof } from '../apis'
+import { getMerkleProof } from '../apis/index.js'
 
 export function useMerkelProof(root?: string) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)

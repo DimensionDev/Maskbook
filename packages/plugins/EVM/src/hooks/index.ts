@@ -1,1 +1,1 @@
-export * from './useProviderReady'
+export * from './useProviderReady.js'

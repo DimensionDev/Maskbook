@@ -2,16 +2,16 @@ import { memo, useMemo, useState } from 'react'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
-import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
+import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import { formatGweiToWei, formatWeiToEther, SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { Link, Typography } from '@mui/material'
-import { useI18N } from '../../../../../utils'
+import { useI18N } from '../../../../../utils/index.js'
 import { PopupRoutes } from '@masknet/shared-base'
 import { LoadingButton } from '@mui/lab'
 import { unreachable } from '@dimensiondev/kit'
 import BigNumber from 'bignumber.js'
-import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
+import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder/index.js'
 import { toHex } from 'web3-utils'
 import {
     useChainId,
@@ -36,9 +36,9 @@ import {
     TransactionDescriptorType,
     ZERO,
 } from '@masknet/web3-shared-base'
-import { CopyIconButton } from '../../../components/CopyIconButton'
-import { useTitle } from '../../../hook/useTitle'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
+import { useTitle } from '../../../hook/useTitle.js'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
 
 const useStyles = makeStyles()(() => ({
     container: {

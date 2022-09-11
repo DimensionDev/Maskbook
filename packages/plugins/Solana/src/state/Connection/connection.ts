@@ -31,10 +31,10 @@ import {
 } from '@solana/web3.js'
 import type { Plugin } from '@masknet/plugin-infra'
 import type { PartialRequired } from '@masknet/shared-base'
-import { Web3StateSettings } from '../../settings'
-import { Providers } from './provider'
-import { createTransferInstruction, getOrCreateAssociatedTokenAccount } from './spl-token'
-import type { SolanaConnection as BaseConnection, SolanaWeb3ConnectionOptions } from './types'
+import { Web3StateSettings } from '../../settings/index.js'
+import { Providers } from './provider.js'
+import { createTransferInstruction, getOrCreateAssociatedTokenAccount } from './spl-token/index.js'
+import type { SolanaConnection as BaseConnection, SolanaWeb3ConnectionOptions } from './types.js'
 
 class Connection implements BaseConnection {
     private connections: Map<ChainId, SolConnection> = new Map()

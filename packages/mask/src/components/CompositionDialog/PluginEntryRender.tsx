@@ -9,7 +9,7 @@ import {
 import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { Result } from 'ts-results'
-import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
+import { ClickableChip } from '../shared/SelectRecipients/ClickableChip.js'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState, useRef, forwardRef, memo, useImperativeHandle, useMemo } from 'react'
 import { Trans } from 'react-i18next'
@@ -26,7 +26,13 @@ export interface PluginEntryRenderRef {
     openPlugin(id: string): void
 }
 export const PluginEntryRender = memo(
-    forwardRef<PluginEntryRenderRef, { readonly: boolean; isOpenFromApplicationBoard: boolean }>((props, ref) => {
+    forwardRef<
+        PluginEntryRenderRef,
+        {
+            readonly: boolean
+            isOpenFromApplicationBoard: boolean
+        }
+    >((props, ref) => {
         const [trackPluginRef] = useSetPluginEntryRenderRef(ref)
         const pluginField = usePluginI18NField()
         const chainId = useChainId()
@@ -92,7 +98,9 @@ function useSetPluginRef(ref: React.ForwardedRef<PluginRef>, onClick: () => void
     useImperativeHandle(ref, () => refItem, [refItem])
 }
 
-type PluginRef = { open(): void }
+type PluginRef = {
+    open(): void
+}
 type ExtraPluginProps = {
     unstable: boolean
     id: string

@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { User } from '../types'
-import { ImageType, ShowMeta, EssayRSSNode } from './../types'
-import { Punk3D, DEFAULT_SET_WORD, MASK_TWITTER, DEFAULT_PUNK_MASK_WORD, PunkIcon } from './../constants'
-import { useUser } from './useUser'
+import type { User } from '../types.js'
+import { ImageType, ShowMeta, EssayRSSNode } from './../types.js'
+import { Punk3D, DEFAULT_SET_WORD, MASK_TWITTER, DEFAULT_PUNK_MASK_WORD, PunkIcon } from './../constants.js'
+import { useUser } from './useUser.js'
 
 export function useEssay(user: User, refresh?: number) {
     const { Storage } = useWeb3State(NetworkPluginID.PLUGIN_EVM)

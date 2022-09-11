@@ -1,7 +1,7 @@
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
 import { memo } from 'react'
-import { useI18N, Translate } from '../../../locales'
+import { useI18N, Translate } from '../../../locales/index.js'
 import {
     alpha,
     Button,
@@ -16,7 +16,9 @@ import { isDashboardPage } from '@masknet/shared-base'
 import { formatPercentage } from '@masknet/web3-shared-evm'
 import type BigNumber from 'bignumber.js'
 
-const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
+const useStyles = makeStyles<{
+    isDashboard: boolean
+}>()((theme, { isDashboard }) => ({
     dialog: {
         [`.${dialogClasses.paper}`]: {
             width: '420px!important',

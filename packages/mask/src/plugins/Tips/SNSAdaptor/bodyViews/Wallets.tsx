@@ -3,9 +3,9 @@ import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { Typography } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
-import { useI18N } from '../../locales'
-import { DisconnectWalletDialog } from '../components/DisconnectDialog'
-import { WalletItem } from '../components/WalletItem'
+import { useI18N } from '../../locales/index.js'
+import { DisconnectWalletDialog } from '../components/DisconnectDialog.js'
+import { WalletItem } from '../components/WalletItem.js'
 
 const useStyles = makeStyles()((theme) => ({
     emptyBox: {

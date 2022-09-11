@@ -1,9 +1,9 @@
 import { useCallback } from 'react'
-import { TrendingPopper } from './TrendingPopper'
-import { TagType } from '../../types'
+import { TrendingPopper } from './TrendingPopper.js'
+import { TagType } from '../../types/index.js'
 import type { DataProvider } from '@masknet/public-api'
-import { TrendingView } from './TrendingView'
-import { useAvailableDataProviders } from '../../trending/useAvailableDataProviders'
+import { TrendingView } from './TrendingView.js'
+import { useAvailableDataProviders } from '../../trending/useAvailableDataProviders.js'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 
 export interface TagInspectorProps {}

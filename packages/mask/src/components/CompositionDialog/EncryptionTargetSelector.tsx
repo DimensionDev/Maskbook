@@ -1,14 +1,14 @@
-import { useI18N } from '../../utils'
+import { useI18N } from '../../utils/index.js'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { PopoverListTrigger } from './PopoverListTrigger'
+import { PopoverListTrigger } from './PopoverListTrigger.js'
 import { useState } from 'react'
-import { PopoverListItem } from './PopoverListItem'
-import { E2EUnavailableReason } from './CompositionUI'
+import { PopoverListItem } from './PopoverListItem.js'
+import { E2EUnavailableReason } from './CompositionUI.js'
 import { Icons } from '@masknet/icons'
 import { EncryptionTargetType } from '@masknet/shared-base'
 import { unreachable } from '@dimensiondev/kit'
-import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary'
+import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary.js'
 
 const useStyles = makeStyles()((theme) => ({
     optionTitle: {

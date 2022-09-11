@@ -6,10 +6,10 @@ import {
     rariblePathnameRegexMatcher,
     zoraHostnames,
     zoraPathnameRegexMatcher,
-} from './constants'
+} from './constants.js'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { WyvernSchemaName } from 'opensea-js/lib/types'
-import type { CollectibleJSON_Payload } from './types'
+import type { CollectibleJSON_Payload } from './types/index.js'
 import { SourceType } from '@masknet/web3-shared-base'
 
 export function checkUrl(url: string): boolean {

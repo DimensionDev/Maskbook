@@ -4,12 +4,12 @@ import type {
     ExpectedSourceAmountResponse,
     SwapBancorRequest,
     TradeTransactionCreationResponse,
-} from '../../types/bancor'
+} from '../../types/bancor.js'
 import urlcat from 'urlcat'
-import { BANCOR_API_BASE_URL } from '../../constants'
-import { calculateMinimumReturn } from './calculateMinimumReturn'
+import { BANCOR_API_BASE_URL } from '../../constants/index.js'
+import { calculateMinimumReturn } from './calculateMinimumReturn.js'
 import { toChecksumAddress } from 'web3-utils'
-import { TradeStrategy } from '../../types'
+import { TradeStrategy } from '../../types/index.js'
 
 const roundDecimal = (value: number | string | undefined, decimals: number) => {
     return Math.round(Number(value || 0) * Math.pow(10, decimals)) / Math.pow(10, decimals)

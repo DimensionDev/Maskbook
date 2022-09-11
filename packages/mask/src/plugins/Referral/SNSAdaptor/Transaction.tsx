@@ -5,8 +5,8 @@ import { Grid, Typography, CircularProgress, Link } from '@mui/material'
 import DoneIcon from '@mui/icons-material/Done'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
-import { TransactionStatus, TransactionDialogInterface, ChainId } from '../types'
-import { useI18N } from '../locales'
+import { TransactionStatus, TransactionDialogInterface, ChainId } from '../types.js'
+import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     confirmation: {

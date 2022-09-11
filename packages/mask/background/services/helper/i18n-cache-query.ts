@@ -1,5 +1,5 @@
-import { Flags } from '../../../shared/flags'
-import list from './i18n-cache-query-list'
+import { Flags } from '../../../shared/flags.js'
+import list from './i18n-cache-query-list.js'
 
 export type Bundle = [namespace: string, lang: string, json: object]
 export async function queryRemoteI18NBundle(lang: string): Promise<Bundle[]> {

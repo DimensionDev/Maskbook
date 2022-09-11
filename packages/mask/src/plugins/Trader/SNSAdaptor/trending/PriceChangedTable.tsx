@@ -1,7 +1,7 @@
 import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import type { Market } from '../../types'
-import { PriceChanged } from './PriceChanged'
+import type { Market } from '../../types/index.js'
+import { PriceChanged } from './PriceChanged.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

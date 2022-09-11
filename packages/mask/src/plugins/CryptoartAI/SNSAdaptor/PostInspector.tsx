@@ -1,6 +1,6 @@
-import type { PayloadType } from '../types'
-import { Collectible } from './Collectible'
-import { CollectibleState } from '../hooks/useCollectibleState'
+import type { PayloadType } from '../types/index.js'
+import { Collectible } from './Collectible.js'
+import { CollectibleState } from '../hooks/useCollectibleState.js'
 
 export interface PostInspectorProps {
     payload: PayloadType

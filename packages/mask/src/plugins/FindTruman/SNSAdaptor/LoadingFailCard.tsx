@@ -1,14 +1,20 @@
 import { Component } from 'react'
-import { FindTrumanCard } from './FindTrumanCard'
+import { FindTrumanCard } from './FindTrumanCard.js'
 import { Typography, Button } from '@mui/material'
 
 export class LoadingFailCard extends Component<
-    React.PropsWithChildren<{ title: string; retry: () => void; isFullPluginDown?: boolean }>
+    React.PropsWithChildren<{
+        title: string
+        retry: () => void
+        isFullPluginDown?: boolean
+    }>
 > {
     static getDerivedStateFromError(error: unknown) {
         return { error }
     }
-    override state: { error: Error | null } = { error: null }
+    override state: {
+        error: Error | null
+    } = { error: null }
     override render() {
         if (this.state.error) {
             return this.props.isFullPluginDown ? (

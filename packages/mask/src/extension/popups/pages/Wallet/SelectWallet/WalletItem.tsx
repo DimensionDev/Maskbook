@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { ListItem, ListItemText, Typography } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
-import { CopyIconButton } from '../../../components/CopyIconButton'
+import { CopyIconButton } from '../../../components/CopyIconButton/index.js'
 import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({

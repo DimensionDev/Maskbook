@@ -1,4 +1,4 @@
-import { useI18N, MaskMessages } from '../../utils'
+import { useI18N, MaskMessages } from '../../utils/index.js'
 import { InjectedDialog } from '@masknet/shared'
 import {
     PluginId,
@@ -16,7 +16,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Icons } from '@masknet/icons'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useAsyncRetry } from 'react-use'
-import Services from '../../extension/service'
+import Services from '../../extension/service.js'
 
 const useStyles = makeStyles()((theme) => ({
     titleTailButton: {

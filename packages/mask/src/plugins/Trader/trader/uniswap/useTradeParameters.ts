@@ -2,19 +2,19 @@ import { useMemo } from 'react'
 import JSBI from 'jsbi'
 import { Percent, TradeType } from '@uniswap/sdk-core'
 import { Router, Trade as V2Trade } from '@uniswap/v2-sdk'
-import { SLIPPAGE_DEFAULT } from '../../constants'
+import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { SwapCall, Trade, TradeComputed } from '../../types'
+import type { SwapCall, Trade, TradeComputed } from '../../types/index.js'
 import { SwapRouter } from '@uniswap/v3-sdk'
-import { useRouterV2Contract } from '../../contracts/uniswap/useRouterV2Contract'
-import { useSwapRouterContract } from '../../contracts/uniswap/useSwapRouterContract'
-import { useTransactionDeadline } from './useTransactionDeadline'
-import { useGetTradeContext } from '../useGetTradeContext'
+import { useRouterV2Contract } from '../../contracts/uniswap/useRouterV2Contract.js'
+import { useSwapRouterContract } from '../../contracts/uniswap/useSwapRouterContract.js'
+import { useTransactionDeadline } from './useTransactionDeadline.js'
+import { useGetTradeContext } from '../useGetTradeContext.js'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { TradeProvider } from '@masknet/public-api'
 
-const UNISWAP_BIPS_BASE = JSBI.BigInt(10_000)
+const UNISWAP_BIPS_BASE = JSBI.BigInt(10000)
 
 // Pangolin and TraderJoe have modified uniswap contracts
 type SwapParams = Parameters<typeof Router.swapCallParameters>
@@ -54,7 +54,7 @@ const swapCallParameters = (trade: SwapParams[0], options: SwapParams[1], tradeP
 export function useSwapParameters(
     trade: TradeComputed<Trade> | null, // trade to execute, required
     tradeProvider?: TradeProvider,
-    allowedSlippage: number = SLIPPAGE_DEFAULT, // in bips
+    allowedSlippage: number = SLIPPAGE_DEFAULT,
 ) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const context = useGetTradeContext(tradeProvider)

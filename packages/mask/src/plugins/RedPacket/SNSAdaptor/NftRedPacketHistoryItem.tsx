@@ -9,12 +9,12 @@ import { NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-
 import { useAccount, useNonFungibleTokenContract } from '@masknet/plugin-infra/web3'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, ListItem, Typography } from '@mui/material'
-import { dateTimeFormat } from '../../ITO/assets/formatDate'
-import type { NftRedPacketHistory } from '../types'
-import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket'
-import { useNftAvailabilityComputed } from './hooks/useNftAvailabilityComputed'
-import { NftList } from './NftList'
-import { Translate, useI18N } from '../locales'
+import { dateTimeFormat } from '../../ITO/assets/formatDate.js'
+import type { NftRedPacketHistory } from '../types.js'
+import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
+import { useNftAvailabilityComputed } from './hooks/useNftAvailabilityComputed.js'
+import { NftList } from './NftList.js'
+import { Translate, useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`

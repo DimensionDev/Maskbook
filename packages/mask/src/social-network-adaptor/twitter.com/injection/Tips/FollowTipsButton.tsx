@@ -3,9 +3,9 @@ import { createInjectHooksRenderer, Plugin, useActivatedPluginsSNSAdaptor } from
 import { makeStyles } from '@masknet/theme'
 import { memo, useMemo } from 'react'
 import { useAsync } from 'react-use'
-import { createReactRootShadowed, startWatch } from '../../../../utils'
-import { normalFollowButtonSelector as selector } from '../../utils/selector'
-import { getUserIdentity } from '../../utils/user'
+import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
+import { normalFollowButtonSelector as selector } from '../../utils/selector.js'
+import { getUserIdentity } from '../../utils/user.js'
 
 function getTwitterId(ele: HTMLElement) {
     const profileLink = ele.closest('[data-testid="UserCell"]')?.querySelector('a[role="link"]')
@@ -51,7 +51,7 @@ const useStyles = makeStyles()((theme) => ({
         width: 36,
         position: 'absolute',
         left: -10,
-        top: -2, // 2, half of (icon_height - follow_button_height)
+        top: -2,
         transform: 'translate(-100%)',
         display: 'flex',
         justifyContent: 'center',

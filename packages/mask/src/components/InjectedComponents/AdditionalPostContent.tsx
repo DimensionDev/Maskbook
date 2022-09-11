@@ -3,13 +3,13 @@ import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import { TypedMessage, makeTypedMessageText } from '@masknet/typed-message'
 import { TextResizeContext, TypedMessageRender } from '@masknet/typed-message/dom'
-import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context'
+import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context.js'
 import CheckIcon from '@mui/icons-material/Check'
 import CloseIcon from '@mui/icons-material/Close'
 import green from '@mui/material/colors/green'
-import { MaskIcon } from '../../resources/MaskIcon'
+import { MaskIcon } from '../../resources/MaskIcon.js'
 import { memo, useCallback, useMemo } from 'react'
-import { activatedSocialNetworkUI } from '../../social-network/ui'
+import { activatedSocialNetworkUI } from '../../social-network/ui.js'
 
 export enum AdditionalIcon {
     check = 'check',

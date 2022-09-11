@@ -1,4 +1,4 @@
-import { postEditorDraftContentSelector } from './selector'
+import { postEditorDraftContentSelector } from './selector.js'
 import type { LiveSelector } from '@dimensiondev/holoflows-kit'
 
 export const getEditorContent = () => {

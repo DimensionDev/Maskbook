@@ -1,8 +1,8 @@
 import { createPluginMessage, PluginMessageEmitter, createPluginRPC } from '@masknet/plugin-infra'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { POOLTOGETHER_PLUGIN_ID } from './constants'
-import type { Pool } from './types'
+import { POOLTOGETHER_PLUGIN_ID } from './constants.js'
+import type { Pool } from './types.js'
 
 type DepositDialogUpdated =
     | {
