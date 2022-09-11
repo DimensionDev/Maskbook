@@ -22,4 +22,8 @@ interface DHedgeMessages {
 }
 
 export const PluginDHedgeMessages: PluginMessageEmitter<DHedgeMessages> = createPluginMessage(DHEDGE_PLUGIN_ID)
-export const PluginDHedgeRPC = createPluginRPC(DHEDGE_PLUGIN_ID, () => import('./services'), PluginDHedgeMessages.rpc)
+export const PluginDHedgeRPC = createPluginRPC(
+    DHEDGE_PLUGIN_ID,
+    () => import('./services.js'),
+    PluginDHedgeMessages.rpc,
+)

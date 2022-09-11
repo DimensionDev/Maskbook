@@ -5,6 +5,6 @@ if (import.meta.webpackHot) import.meta.webpackHot.accept()
 const PluginSnapshotMessages = createPluginMessage(SNAPSHOT_PLUGIN_ID)
 export const PluginSnapshotRPC = createPluginRPC(
     SNAPSHOT_PLUGIN_ID,
-    () => import('./Worker/services'),
+    () => import('./Worker/services.js'),
     PluginSnapshotMessages.rpc,
 )

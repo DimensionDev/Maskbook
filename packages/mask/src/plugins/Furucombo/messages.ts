@@ -5,4 +5,4 @@ interface FurucomboMessages {
     rpc: unknown
 }
 export const PluginFurucomboMessages: PluginMessageEmitter<FurucomboMessages> = createPluginMessage(PLUGIN_ID)
-export const PluginFurucomboRPC = createPluginRPC(PLUGIN_ID, () => import('./services'), PluginFurucomboMessages.rpc)
+export const PluginFurucomboRPC = createPluginRPC(PLUGIN_ID, () => import('./services.js'), PluginFurucomboMessages.rpc)

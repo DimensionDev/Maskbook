@@ -14,13 +14,13 @@ const message = new WebExtensionMessage<Record<string, any>>({ domain: '$' })
 const hmr = new EventTarget()
 
 // #region Setup services
-setup('Crypto', () => import(/* webpackPreload: true */ './crypto'))
-setup('Identity', () => import(/* webpackPreload: true */ './identity'))
-setup('Backup', () => import(/* webpackPreload: true */ './backup'))
-setup('Helper', () => import(/* webpackPreload: true */ './helper'))
-setup('SiteAdaptor', () => import(/* webpackPreload: true */ './site-adaptors'))
-setup('Settings', () => import(/* webpackPreload: true */ './settings'), false)
-setup('ThirdPartyPlugin', () => import(/* webpackPreload: true */ './third-party-plugins'))
+setup('Crypto', () => import(/* webpackPreload: true */ './crypto/index.js'))
+setup('Identity', () => import(/* webpackPreload: true */ './identity/index.js'))
+setup('Backup', () => import(/* webpackPreload: true */ './backup/index.js'))
+setup('Helper', () => import(/* webpackPreload: true */ './helper/index.js'))
+setup('SiteAdaptor', () => import(/* webpackPreload: true */ './site-adaptors/index.js'))
+setup('Settings', () => import(/* webpackPreload: true */ './settings/index.js'), false)
+setup('ThirdPartyPlugin', () => import(/* webpackPreload: true */ './third-party-plugins/index.js'))
 
 if (import.meta.webpackHot) {
     import.meta.webpackHot.accept(['./crypto'], () => hmr.dispatchEvent(new Event('crypto')))
@@ -71,7 +71,9 @@ import { decryptionWithSocialNetworkDecoding } from './crypto/decryption.js'
     }
     import.meta.webpackHot &&
         import.meta.webpackHot.accept(['./crypto/decryption'], async () => {
-            GeneratorService.decryption = (await import('./crypto/decryption')).decryptionWithSocialNetworkDecoding
+            GeneratorService.decryption = (
+                await import(/* webpackPreload: true */ './crypto/decryption.js')
+            ).decryptionWithSocialNetworkDecoding
         })
     const channel = message.events.GeneratorServices.bind(MessageTarget.Broadcast)
 

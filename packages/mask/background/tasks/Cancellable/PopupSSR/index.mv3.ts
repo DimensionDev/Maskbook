@@ -7,7 +7,7 @@ if (process.env.manifest === '3') {
     signal.addEventListener('abort', () => browser.runtime.onMessage.removeListener(f), { once: true })
 
     startListen(async (props) => {
-        const { main } = await import('./worker')
+        const { main } = await import('./worker.js')
         return main(props)
     }, signal)
 }

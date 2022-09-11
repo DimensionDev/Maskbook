@@ -15,4 +15,4 @@ export const EVM_Messages: {
     events: evmEventEmitter,
 }
 
-export const EVM_RPC = createPluginRPC(PLUGIN_ID, () => import('./services'), EVM_Messages.events.rpc)
+export const EVM_RPC = createPluginRPC(PLUGIN_ID, () => import('./services.js'), EVM_Messages.events.rpc)

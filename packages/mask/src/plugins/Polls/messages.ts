@@ -5,7 +5,7 @@ import type { AsyncVersionOf } from 'async-call-rpc'
 const PollMessage = createPluginMessage(PLUGIN_ID)
 export const PluginPollRPC: AsyncVersionOf<typeof import('./Services')> = createPluginRPC(
     PLUGIN_ID,
-    () => import('./Services'),
+    () => import('./Services.js'),
     PollMessage.rpc,
     true,
 )

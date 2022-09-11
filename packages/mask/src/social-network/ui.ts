@@ -159,7 +159,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     )
 
     // TODO: receive the signal
-    if (Flags.sandboxedPluginRuntime) import('./sandboxed-plugin')
+    if (Flags.sandboxedPluginRuntime) import('./sandboxed-plugin.js')
 
     setupShadowRootPortal()
 

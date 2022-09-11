@@ -17,12 +17,12 @@ import Services from '../service.js'
 function usePopupTheme() {
     return usePopupFullPageTheme(useValueRef(languageSettings))
 }
-const Wallet = lazy(() => import(/* webpackPreload: true */ './pages/Wallet'))
-const Personas = lazy(() => import(/* webpackPreload: true */ './pages/Personas'))
-const SwapPage = lazy(() => import('./pages/Swap'))
-const RequestPermissionPage = lazy(() => import('./RequestPermission'))
-const PermissionAwareRedirect = lazy(() => import('./PermissionAwareRedirect'))
-const ThirdPartyRequestPermission = lazy(() => import('./ThirdPartyRequestPermission'))
+const Wallet = lazy(() => import(/* webpackPreload: true */ './pages/Wallet/index.js'))
+const Personas = lazy(() => import(/* webpackPreload: true */ './pages/Personas/index.js'))
+const SwapPage = lazy(() => import('./pages/Swap/index.js'))
+const RequestPermissionPage = lazy(() => import('./RequestPermission/index.js'))
+const PermissionAwareRedirect = lazy(() => import('./PermissionAwareRedirect/index.js'))
+const ThirdPartyRequestPermission = lazy(() => import('./ThirdPartyRequestPermission/index.js'))
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 function PluginRenderDelayed() {

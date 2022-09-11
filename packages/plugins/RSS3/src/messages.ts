@@ -6,4 +6,4 @@ interface ProfileMessages {
 }
 
 export const PluginProfileMessages: PluginMessageEmitter<ProfileMessages> = createPluginMessage(PLUGIN_ID)
-export const PluginProfileRPC = createPluginRPC(PLUGIN_ID, () => import('./services'), PluginProfileMessages.rpc)
+export const PluginProfileRPC = createPluginRPC(PLUGIN_ID, () => import('./services.js'), PluginProfileMessages.rpc)

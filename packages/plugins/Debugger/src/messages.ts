@@ -25,4 +25,8 @@ interface DebuggerMessages {
 }
 
 export const PluginDebuggerMessages: PluginMessageEmitter<DebuggerMessages> = createPluginMessage(PLUGIN_ID)
-export const PluginDebuggerRPC = createPluginRPC(PLUGIN_ID, () => import('./services'), PluginDebuggerMessages.rpc)
+export const PluginDebuggerRPC = createPluginRPC(
+    PLUGIN_ID,
+    () => import('./services/index.js'),
+    PluginDebuggerMessages.rpc,
+)

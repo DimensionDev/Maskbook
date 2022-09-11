@@ -6,4 +6,4 @@ export interface MaskBoxMessages {
 }
 
 export const MaskBoxMessages: PluginMessageEmitter<MaskBoxMessages> = createPluginMessage(PLUGIN_ID)
-export const MaskBoxRPC = createPluginRPC(PLUGIN_ID, () => import('./services'), MaskBoxMessages.rpc)
+export const MaskBoxRPC = createPluginRPC(PLUGIN_ID, () => import('./services.js'), MaskBoxMessages.rpc)

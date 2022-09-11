@@ -3,11 +3,11 @@ import { mindsBase } from './base.js'
 
 defineSocialNetworkUI({
     ...mindsBase,
-    load: () => import('./ui-provider'),
+    load: () => import('./ui-provider.js'),
     hotModuleReload(callback) {
         if (import.meta.webpackHot) {
             import.meta.webpackHot.accept('./ui-provider.ts', async () => {
-                callback((await import('./ui-provider')).default)
+                callback((await import('./ui-provider.js')).default)
             })
         }
     },

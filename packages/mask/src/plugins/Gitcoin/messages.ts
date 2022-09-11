@@ -22,4 +22,4 @@ interface GitcoinMessages {
 }
 
 export const PluginGitcoinMessages: PluginMessageEmitter<GitcoinMessages> = createPluginMessage(PLUGIN_ID)
-export const PluginGitcoinRPC = createPluginRPC(PLUGIN_ID, () => import('./services'), PluginGitcoinMessages.rpc)
+export const PluginGitcoinRPC = createPluginRPC(PLUGIN_ID, () => import('./services.js'), PluginGitcoinMessages.rpc)

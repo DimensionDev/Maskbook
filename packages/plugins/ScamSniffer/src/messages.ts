@@ -13,4 +13,4 @@ export const PluginMessages: {
     events: createPluginMessage<PetMessage>(PLUGIN_ID, serializer),
 }
 
-export const PluginScamRPC = createPluginRPC(PLUGIN_ID, () => import('./Services'), PluginMessages.events.rpc)
+export const PluginScamRPC = createPluginRPC(PLUGIN_ID, () => import('./Services/index.js'), PluginMessages.events.rpc)

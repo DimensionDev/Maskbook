@@ -25,6 +25,6 @@ export const PluginPoolTogetherMessages: PluginMessageEmitter<PoolTogetherMessag
 
 export const PluginPooltogetherRPC = createPluginRPC(
     POOLTOGETHER_PLUGIN_ID,
-    () => import('./services'),
+    () => import('./services.js'),
     PluginPoolTogetherMessages.rpc,
 )

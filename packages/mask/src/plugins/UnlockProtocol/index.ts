@@ -4,12 +4,13 @@ import { base } from './base.js'
 registerPlugin({
     ...base,
     SNSAdaptor: {
-        load: () => import('./SNSAdaptor'),
+        load: () => import('./SNSAdaptor/index.js'),
         hotModuleReload: (hot) =>
-            import.meta.webpackHot?.accept('./SNSAdaptor/index', () => hot(import('./SNSAdaptor'))),
+            import.meta.webpackHot?.accept('./SNSAdaptor/index', () => hot(import('./SNSAdaptor/index.js'))),
     },
     Worker: {
-        load: () => import('./Worker'),
-        hotModuleReload: (hot) => import.meta.webpackHot?.accept('./Worker/index', () => hot(import('./Worker'))),
+        load: () => import('./Worker/index.js'),
+        hotModuleReload: (hot) =>
+            import.meta.webpackHot?.accept('./Worker/index', () => hot(import('./Worker/index.js'))),
     },
 })
