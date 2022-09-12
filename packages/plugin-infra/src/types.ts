@@ -452,6 +452,9 @@ export namespace Plugin.SNSAdaptor {
         SettingTabs?: SettingTab[]
         /** This UI will be rendered components on the avatar realm */
         AvatarRealm?: AvatarRealm
+        ContributedView?: {
+            [key in keyof ContributedViewRegistry]: ContributedView<ContributedViewRegistry[key]>
+        }
         /** This UI will be rendered components on the tips realm */
         TipsRealm?: TipsRealm
         /** This UI will be rendered as plugin wrapper page */
@@ -761,6 +764,15 @@ export namespace Plugin.SNSAdaptor {
                 currentPersona?: ECKeyIdentifier
             }>
         }
+    }
+
+    /** Contribute a view to other plugins. */
+    export interface ContributedView<Props> {
+        component: React.ComponentType<Props>
+    }
+    export interface ContributedViewRegistry {
+        // example: Props here
+        example: {}
     }
 }
 

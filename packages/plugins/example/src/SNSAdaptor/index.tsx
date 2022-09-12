@@ -8,6 +8,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
         console.debug('Example plugin has been loaded.')
         signal.addEventListener('abort', () => console.debug('Example plugin has been terminated'))
     },
+    ContributedView: {
+        example: {
+            component() {
+                return <h1>Test</h1>
+            },
+        },
+    },
     // PostInspector: HelloWorld,
     // SearchBox: HelloWorld,
     // DecryptedInspector: HelloWorld,

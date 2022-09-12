@@ -18,3 +18,4 @@ export {
     usePostInfoDetails,
 } from './PostContext.js'
 export { CompositionContext, useCompositionContext } from './CompositionContext.js'
+export { RemoteView, type RemoteViewProps } from './hooks/RemoteView'
