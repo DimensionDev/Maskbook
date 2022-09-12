@@ -12,9 +12,9 @@ import {
     getRPCConstants,
     isRiskMethod,
 } from '@masknet/web3-shared-evm'
-import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper'
-import { nativeAPI } from '../../../../shared/native-rpc'
-import { WalletRPC } from '../messages'
+import { openPopupWindow, removePopupWindow } from '../../../../background/services/helper/index.js'
+import { nativeAPI } from '../../../../shared/native-rpc/index.js'
+import { WalletRPC } from '../messages.js'
 
 enum JSON_RPC_ERROR_CODE {
     INVALID_REQUEST = -32600,
@@ -44,7 +44,7 @@ function createProviderInstance(url: string) {
     if (instance) return instance
 
     const newInstance = new Web3.providers.HttpProvider(url, {
-        timeout: 30 * 1000, // ms
+        timeout: 30 * 1000,
         // @ts-ignore
         clientConfig: {
             keepalive: true,
@@ -52,7 +52,7 @@ function createProviderInstance(url: string) {
         },
         reconnect: {
             auto: true,
-            delay: 5000, // ms
+            delay: 5000,
             maxAttempts: Number.MAX_SAFE_INTEGER,
             onTimeout: true,
         },
@@ -90,7 +90,10 @@ function getInternalError(error: unknown, response?: JsonRpcResponse | null, fal
 export function getError(error: unknown, response?: JsonRpcResponse | null, fallback?: string): Error {
     const internalError = getInternalError(error, response, fallback)
     const internalErrorMessage = (() => {
-        const { code, message } = internalError as unknown as { code?: number; message: string }
+        const { code, message } = internalError as unknown as {
+            code?: number
+            message: string
+        }
 
         if (message.includes(`"code":${JSON_RPC_ERROR_CODE.INTERNAL_ERROR}`))
             return 'Transaction was failed due to an internal JSON-RPC server error.'

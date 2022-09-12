@@ -1,9 +1,9 @@
 import { memo, useCallback, useMemo } from 'react'
-import { PersonaHomeUI } from './UI'
-import { PersonaContext } from '../hooks/usePersonaContext'
+import { PersonaHomeUI } from './UI.js'
+import { PersonaContext } from '../hooks/usePersonaContext.js'
 import { DashboardRoutes, NextIDPlatform } from '@masknet/shared-base'
-import { useTitle } from '../../../hook/useTitle'
-import Services from '../../../../service'
+import { useTitle } from '../../../hook/useTitle.js'
+import Services from '../../../../service.js'
 
 const PersonaHome = memo(() => {
     const { avatar, currentPersona, proofs, setSelectedPersona, fetchProofsLoading, personas, accounts } =

@@ -1,14 +1,20 @@
 import { Component, PropsWithChildren } from 'react'
-import { SnapshotCard } from './SnapshotCard'
+import { SnapshotCard } from './SnapshotCard.js'
 import { Typography, Button, Box } from '@mui/material'
 
 export class LoadingFailCard extends Component<
-    PropsWithChildren<{ title: string; retry: () => void; isFullPluginDown?: boolean }>
+    PropsWithChildren<{
+        title: string
+        retry: () => void
+        isFullPluginDown?: boolean
+    }>
 > {
     static getDerivedStateFromError(error: unknown) {
         return { error }
     }
-    override state: { error: Error | null } = { error: null }
+    override state: {
+        error: Error | null
+    } = { error: null }
     override render() {
         if (this.state.error) {
             return this.props.isFullPluginDown ? (

@@ -1,12 +1,12 @@
-import { postsContentSelector, postsImageSelector, timelinePostContentSelector } from '../utils/selector'
+import { postsContentSelector, postsImageSelector, timelinePostContentSelector } from '../utils/selector.js'
 import { IntervalWatcher, DOMProxy, DOMProxyEvents } from '@dimensiondev/holoflows-kit'
 import type { EventListener } from '@servie/events'
-import { creator, globalUIState, SocialNetworkUI as Next } from '../../../social-network'
+import { creator, globalUIState, SocialNetworkUI as Next } from '../../../social-network/index.js'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
-import { postIdParser, postParser, postImagesParser, postContentMessageParser } from '../utils/fetch'
+import { postIdParser, postParser, postImagesParser, postContentMessageParser } from '../utils/fetch.js'
 import { memoize, noop } from 'lodash-unified'
-import Services from '../../../extension/service'
-import { injectMaskIconToPostTwitter } from '../injection/MaskIcon'
+import Services from '../../../extension/service.js'
+import { injectMaskIconToPostTwitter } from '../injection/MaskIcon.js'
 import { PostIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import {
     makeTypedMessageImage,
@@ -17,12 +17,12 @@ import {
     isTypedMessageText,
     isTypedMessageAnchor,
 } from '@masknet/typed-message'
-import { untilElementAvailable } from '../../../utils/dom'
-import { twitterBase } from '../base'
-import { twitterShared } from '../shared'
-import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context'
-import { getCurrentIdentifier } from '../../utils'
-import { IdentityProviderTwitter } from './identity'
+import { untilElementAvailable } from '../../../utils/dom.js'
+import { twitterBase } from '../base.js'
+import { twitterShared } from '../shared.js'
+import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context.js'
+import { getCurrentIdentifier } from '../../utils.js'
+import { IdentityProviderTwitter } from './identity.js'
 
 function getPostActionsNode(postNode: HTMLElement | null) {
     if (!postNode) return null
@@ -37,6 +37,13 @@ const getParentTweetNode = (node: HTMLElement) => {
 
 function isQuotedTweet(tweetNode: HTMLElement | null) {
     return tweetNode?.getAttribute('role') === 'link'
+}
+
+function isDetailTweet(tweetNode: HTMLElement) {
+    const isDetail =
+        /^\/[^/]+\/status\//.test(location.pathname) &&
+        !!tweetNode.querySelector(`a[role="link"][href="${location.pathname}"] time[datetime]`)
+    return isDetail
 }
 
 function registerPostCollectorInner(
@@ -55,7 +62,7 @@ function registerPostCollectorInner(
         const isCardNode = node.matches('[data-testid="card.wrapper"]')
         const hasTextNode = !!root.querySelector(
             [
-                '[data-testid="tweet"] div[lang]', // timeline
+                '[data-testid="tweet"] div[lang]',
                 '[data-testid="tweet"] + div div[lang]', // detailed
             ].join(),
         )
@@ -101,9 +108,7 @@ function registerPostCollectorInner(
                 comments: undefined,
                 rootElement: proxy,
                 actionsElement: actionsElementProxy,
-                isFocusing:
-                    location.pathname.includes('/status/') &&
-                    !!tweetNode.querySelector(`a[role="link"][href="${location.pathname}"]`),
+                isFocusing: isDetailTweet(tweetNode),
                 suggestedInjectionPoint: tweetNode,
                 ...refs.subscriptions,
             })
@@ -137,7 +142,9 @@ function registerPostCollectorInner(
             if (!tweetNode) return node.innerText
             const parentTweetId = parentTweetNode ? postIdParser(parentTweetNode) : ''
             const tweetId = postIdParser(tweetNode)
-            return `${parentTweetId}/${tweetId}`
+            // To distinguish tweet nodes between timeline and detail page
+            const isDetailPage = isDetailTweet(tweetNode)
+            return `${isDetailPage ? 'detail' : 'normal'}/${parentTweetId}/${tweetId}`
         })
         .startWatch(250, cancel)
 }

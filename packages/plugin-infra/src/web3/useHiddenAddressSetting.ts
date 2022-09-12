@@ -1,7 +1,7 @@
 import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { useAsync } from 'react-use'
-import { useWeb3State } from '../entry-web3'
-import type { PluginId } from '../types'
+import { useWeb3State } from '../entry-web3.js'
+import type { PluginId } from '../types.js'
 
 /**
  *
@@ -15,7 +15,9 @@ export function useHiddenAddressSetting(pluginId: PluginId, identity?: string) {
     return useAsync(async () => {
         if (!Storage || !pluginId || !identity) return EMPTY_LIST
         const storage = Storage.createNextIDStorage(identity, NextIDPlatform.NextID, identity)
-        const result = await storage.get<{ hiddenAddresses?: string[] }>(pluginId)
+        const result = await storage.get<{
+            hiddenAddresses?: string[]
+        }>(pluginId)
 
         if (!result) return EMPTY_LIST
 

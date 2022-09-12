@@ -2,11 +2,11 @@ import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } 
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../../utils'
-import { CollectibleTab } from '../CollectibleTab'
-import { CollectibleState } from '../../hooks/useCollectibleState'
-import { Row } from './Row'
-import { LoadingTable } from '../LoadingTable'
+import { useI18N } from '../../../../utils/index.js'
+import { CollectibleTab } from '../CollectibleTab.js'
+import { CollectibleState } from '../../hooks/useCollectibleState.js'
+import { Row } from './Row.js'
+import { LoadingTable } from '../LoadingTable.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

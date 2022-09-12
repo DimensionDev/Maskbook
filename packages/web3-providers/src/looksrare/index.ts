@@ -17,9 +17,9 @@ import {
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, createERC20Token, formatWeiToEther, SchemaType } from '@masknet/web3-shared-evm'
-import type { NonFungibleTokenAPI } from '../types'
-import type { Collection, Event, Order, Stats, Token } from './types'
-import { LOOKSRARE_API_URL, LOOKSRARE_PAGE_SIZE } from './constants'
+import type { NonFungibleTokenAPI } from '../types/index.js'
+import type { Collection, Event, Order, Stats, Token } from './types.js'
+import { LOOKSRARE_API_URL, LOOKSRARE_PAGE_SIZE } from './constants.js'
 
 async function fetchFromLooksRare<T>(chainId: ChainId, url: string) {
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
@@ -153,7 +153,9 @@ function createNonFungibleTokenOrderFromOrder(
 
 export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {
-        const response = await fetchFromLooksRare<{ data: Token }>(
+        const response = await fetchFromLooksRare<{
+            data: Token
+        }>(
             chainId,
             urlcat('/api/v1/tokens', {
                 collection: address,
@@ -174,7 +176,9 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         address: string,
         { chainId = ChainId.Mainnet }: HubOptions<ChainId, HubIndicator> = {},
     ): Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined> {
-        const response = await fetchFromLooksRare<{ data: Collection }>(chainId, address)
+        const response = await fetchFromLooksRare<{
+            data: Collection
+        }>(chainId, address)
         return createNonFungibleContractFromCollection(chainId, response?.data)
     }
 
@@ -183,7 +187,9 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         tokenId: string,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
     ) {
-        const response = await fetchFromLooksRare<{ data: Event[] }>(
+        const response = await fetchFromLooksRare<{
+            data: Event[]
+        }>(
             chainId,
             urlcat('/api/v1/events', {
                 collection: address,
@@ -210,7 +216,9 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         address: string,
         { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {},
     ): Promise<NonFungibleTokenStats | undefined> {
-        const response = await fetchFromLooksRare<{ data: Stats }>(
+        const response = await fetchFromLooksRare<{
+            data: Stats
+        }>(
             chainId,
             urlcat('/api/v1/collections/stats', {
                 address,
@@ -232,7 +240,9 @@ export class LooksRareAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
         side: OrderSide,
         { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId, HubIndicator> = {},
     ) {
-        const response = await fetchFromLooksRare<{ data: Order[] }>(
+        const response = await fetchFromLooksRare<{
+            data: Order[]
+        }>(
             chainId,
             urlcat('/api/v1/orders', {
                 // For ask (aka. listing) set true. For bid (aka. offer) set false.

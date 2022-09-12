@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useRef, forwardRef, useContext } from 'react'
 import type { PopperProps } from '@mui/material'
-import { DisableShadowRootContext, PreventEventPropagationListContext, StyleSheetsContext } from './Contexts'
+import { DisableShadowRootContext, PreventEventPropagationListContext, StyleSheetsContext } from './Contexts.js'
 
 let mountingPoint: HTMLDivElement
 let mountingShadowRoot: ShadowRoot
@@ -80,16 +80,21 @@ export function usePortalShadowRoot(renderer: (container: HTMLElement | undefine
 }
 
 export function createShadowRootForwardedComponent<
-    T extends { container?: Element | (() => Element | null) | null | undefined; open: boolean },
+    T extends {
+        container?: Element | (() => Element | null) | null | undefined
+        open: boolean
+    },
 >(Component: React.ComponentType<T>) {
     return forwardRef((props: T, ref) => {
         return usePortalShadowRoot((container) => <Component container={container} {...props} ref={ref} />)
     }) as any as typeof Component
 }
 
-export function createShadowRootForwardedPopperComponent<T extends { PopperProps?: Partial<PopperProps> }>(
-    Component: React.ComponentType<T>,
-) {
+export function createShadowRootForwardedPopperComponent<
+    T extends {
+        PopperProps?: Partial<PopperProps>
+    },
+>(Component: React.ComponentType<T>) {
     return forwardRef((props: T, ref) => {
         return usePortalShadowRoot((container) => {
             return <Component {...props} PopperProps={{ container, ...props.PopperProps }} ref={ref} />

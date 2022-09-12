@@ -1,4 +1,4 @@
 import { createContext } from 'react'
-import type { ProposalIdentifier } from './types'
+import type { ProposalIdentifier } from './types.js'
 
 export const SnapshotContext = createContext<ProposalIdentifier>(null!)

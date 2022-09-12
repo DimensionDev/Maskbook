@@ -1,6 +1,6 @@
 import { memo, PropsWithChildren, useLayoutEffect, useRef, useState } from 'react'
 import { Box, Button } from '@mui/material'
-import { useI18N } from '../../i18n-next-ui'
+import { useI18N } from '../../i18n-next-ui.js'
 
 interface ActionProps extends PropsWithChildren<{}> {
     openSelectWalletDialog: () => void

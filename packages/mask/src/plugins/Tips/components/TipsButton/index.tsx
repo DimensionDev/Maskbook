@@ -7,14 +7,17 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { TooltipProps } from '@mui/material'
 import { FC, HTMLProps, MouseEventHandler, useCallback, useEffect, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { MaskMessages } from '../../../../../shared'
-import { useCurrentVisitingIdentity, useSocialIdentityByUseId } from '../../../../components/DataSource/useActivatedUI'
-import { activatedSocialNetworkUI } from '../../../../social-network'
-import { useProfilePublicKey } from '../../hooks/useProfilePublicKey'
-import { useI18N } from '../../locales'
-import { PluginNextIDMessages } from '../../messages'
-import type { TipsAccount } from '../../types'
-import { useTipsAccounts } from './useTipsAccounts'
+import { MaskMessages } from '../../../../../shared/index.js'
+import {
+    useCurrentVisitingIdentity,
+    useSocialIdentityByUseId,
+} from '../../../../components/DataSource/useActivatedUI.js'
+import { activatedSocialNetworkUI } from '../../../../social-network/index.js'
+import { useProfilePublicKey } from '../../hooks/useProfilePublicKey.js'
+import { useI18N } from '../../locales/index.js'
+import { PluginNextIDMessages } from '../../messages.js'
+import type { TipsAccount } from '../../types/index.js'
+import { useTipsAccounts } from './useTipsAccounts.js'
 
 interface Props extends HTMLProps<HTMLDivElement> {
     addresses?: TipsAccount[]

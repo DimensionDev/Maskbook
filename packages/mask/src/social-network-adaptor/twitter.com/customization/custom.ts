@@ -4,10 +4,10 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import { PaletteMode, Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
 import produce, { setAutoFreeze } from 'immer'
 import { useMemo } from 'react'
-import type { SocialNetworkUI } from '../../../social-network'
-import { fromRGB, getBackgroundColor, getForegroundColor, isDark, shade, toRGB } from '../../../utils/theme'
-import { isMobileTwitter } from '../utils/isMobile'
-import { composeAnchorSelector, composeAnchorTextSelector, headingTextSelector } from '../utils/selector'
+import type { SocialNetworkUI } from '../../../social-network/index.js'
+import { fromRGB, getBackgroundColor, getForegroundColor, isDark, shade, toRGB } from '../../../utils/theme/index.js'
+import { isMobileTwitter } from '../utils/isMobile.js'
+import { composeAnchorSelector, composeAnchorTextSelector, headingTextSelector } from '../utils/selector.js'
 
 const themeColorRef = new ValueRef('rgb(29, 161, 242)')
 const textColorRef = new ValueRef('rgb(255, 255, 255)')

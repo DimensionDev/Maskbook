@@ -3,18 +3,18 @@ import { PopupRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
-import { useCurrentPersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus'
-import Services from '../../../extension/service'
-import { useI18N } from '../locales'
-import { BindDialog } from './BindDialog'
-import { PluginEnableBoundary } from '../../../components/shared/PluginEnableBoundary'
+import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
+import { useCurrentPersonaConnectStatus } from '../../../components/DataSource/usePersonaConnectStatus.js'
+import Services from '../../../extension/service.js'
+import { useI18N } from '../locales/index.js'
+import { BindDialog } from './BindDialog.js'
+import { PluginEnableBoundary } from '../../../components/shared/PluginEnableBoundary.js'
 import {
     AddWalletPersonaAction,
     CreatePersonaAction,
     OtherLackWalletAction,
     SelectConnectPersonaAction,
-} from './Actions'
+} from './Actions/index.js'
 import { PluginCardFrameMini } from '@masknet/shared'
 import { ThemeProvider } from '@mui/material'
 import { makeStyles, MaskLightTheme } from '@masknet/theme'

@@ -1,6 +1,6 @@
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
-import { Flags } from '../../../../../shared'
-import { createPostActionsInjector } from '../../../../social-network/defaults/inject/PostActions'
+import { Flags } from '../../../../../shared/index.js'
+import { createPostActionsInjector } from '../../../../social-network/defaults/inject/PostActions.js'
 
 export function injectPostActionsAtTwitter(signal: AbortSignal, postInfo: PostInfo) {
     if (!Flags.post_actions_enabled) return

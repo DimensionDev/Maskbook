@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Box, IconButton, Stack, Typography } from '@mui/material'
-import { MaskAvatar } from '../../../../components/MaskAvatar'
+import { MaskAvatar } from '../../../../components/MaskAvatar/index.js'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { formatPersonaFingerprint } from '@masknet/shared-base'

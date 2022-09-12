@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs'
 import path from 'path'
-import { run } from '../web3-contracts/utils'
+import { run } from '../web3-contracts/utils.js'
 
 async function compileConstants(folderPath: string, names: string[]) {
     // fix constants

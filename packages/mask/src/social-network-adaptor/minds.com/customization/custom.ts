@@ -4,9 +4,9 @@ import produce, { setAutoFreeze } from 'immer'
 import { useMemo } from 'react'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { createSubscriptionFromValueRef } from '@masknet/shared-base'
-import type { SocialNetworkUI } from '../../../social-network'
-import { fromRGB, getBackgroundColor, getForegroundColor, shade, toRGB } from '../../../utils/theme'
-import { themeListItemSelector } from '../utils/selector'
+import type { SocialNetworkUI } from '../../../social-network/index.js'
+import { fromRGB, getBackgroundColor, getForegroundColor, shade, toRGB } from '../../../utils/theme/index.js'
+import { themeListItemSelector } from '../utils/selector.js'
 
 // TODO: get this from DOM. But currently Minds has a single primary color
 const primaryColorRef = new ValueRef(toRGB([68, 170, 255]))

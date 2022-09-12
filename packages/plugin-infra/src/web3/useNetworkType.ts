@@ -1,10 +1,10 @@
 import { useSubscription } from 'use-subscription'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '../web3-helpers'
-import { useWeb3State } from './useWeb3State'
-import { UNDEFINED } from '../utils/subscription'
-import { useDefaultNetworkType } from './useDefaultNetworkType'
-import { useCurrentWeb3NetworkNetworkType } from './Context'
+import type { Web3Helper } from '../web3-helpers/index.js'
+import { useWeb3State } from './useWeb3State.js'
+import { UNDEFINED } from '../utils/subscription.js'
+import { useDefaultNetworkType } from './useDefaultNetworkType.js'
+import { useCurrentWeb3NetworkNetworkType } from './Context.js'
 
 export function useNetworkType<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,

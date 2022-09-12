@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
 import { memo } from 'react'
-import { useSharedI18N } from '../../../locales'
+import { useSharedI18N } from '../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

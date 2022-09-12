@@ -10,10 +10,10 @@ import {
 import { ListItemButton, List, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useNavigate } from 'react-router-dom'
-import Services from '../../../../../service'
+import Services from '../../../../../service.js'
 import { useHover } from 'react-use'
-import { CopyIconButton } from '../../../../components/CopyIconButton'
-import { PersonaContext } from '../../hooks/usePersonaContext'
+import { CopyIconButton } from '../../../../components/CopyIconButton/index.js'
+import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import { Trash2 } from 'react-feather'
 
 const useStyles = makeStyles()({

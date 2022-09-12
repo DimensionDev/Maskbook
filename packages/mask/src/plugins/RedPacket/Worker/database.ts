@@ -1,5 +1,5 @@
 import { omit } from 'lodash-unified'
-import type { RedPacketRecord, RedPacketRecordInDatabase, RedPacketNftRecordInDatabase } from '../types'
+import type { RedPacketRecord, RedPacketRecordInDatabase, RedPacketNftRecordInDatabase } from '../types.js'
 import type { Plugin } from '@masknet/plugin-infra'
 
 export let RedPacketDatabase: Plugin.Worker.DatabaseStorage<RedPacketRecordInDatabase | RedPacketNftRecordInDatabase>

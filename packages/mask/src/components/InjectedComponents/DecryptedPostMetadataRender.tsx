@@ -5,8 +5,8 @@ import {
     PossiblePluginSuggestionUI,
     useDisabledPluginSuggestionFromMeta,
     useDisabledPluginSuggestionFromPost,
-} from './DisabledPluginSuggestion'
-import { MaskPostExtraPluginWrapper } from '../../plugins/MaskPluginWrapper'
+} from './DisabledPluginSuggestion.js'
+import { MaskPostExtraPluginWrapper } from '../../plugins/MaskPluginWrapper.js'
 
 const Decrypted = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,

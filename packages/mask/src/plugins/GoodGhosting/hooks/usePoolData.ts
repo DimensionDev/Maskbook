@@ -5,9 +5,9 @@ import { DAI, WNATIVE as WETH } from '@masknet/web3-shared-evm'
 import { useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import { useGoodGhostingContract } from '../contracts/useGoodGhostingContract'
-import { useGoodGhostingIncentiveContract } from '../contracts/useGoodGhostingIncentivesContract'
-import type { GameAssets, GoodGhostingInfo, LendingPoolData } from '../types'
+import { useGoodGhostingContract } from '../contracts/useGoodGhostingContract.js'
+import { useGoodGhostingIncentiveContract } from '../contracts/useGoodGhostingIncentivesContract.js'
+import type { GameAssets, GoodGhostingInfo, LendingPoolData } from '../types.js'
 
 export function usePoolData(info: GoodGhostingInfo) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)

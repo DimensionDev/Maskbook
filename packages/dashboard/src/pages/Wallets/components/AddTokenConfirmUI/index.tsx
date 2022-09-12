@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { useDashboardI18N } from '../../../../locales'
+import { useDashboardI18N } from '../../../../locales/index.js'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { TokenIcon } from '@masknet/shared'

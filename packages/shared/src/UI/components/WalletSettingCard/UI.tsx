@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Link, styled, Switch, SwitchProps, Typography } from '@mui/material'
 import { memo } from 'react'
-import { WalletIcon } from '../WalletIcon'
+import { WalletIcon } from '../WalletIcon/index.js'
 
 // TODO: replace to UI kit
 const IOSSwitch = styled((props: SwitchProps) => (

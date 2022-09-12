@@ -1,6 +1,6 @@
-import { MuiArgs, story } from '../utils'
+import { MuiArgs, story } from '../utils/index.js'
 import { Button } from '@mui/material'
-import { useCustomSnackbar, ShowSnackbarOptions } from '../../src'
+import { useCustomSnackbar, ShowSnackbarOptions } from '../../src/index.js'
 
 const { meta, of } = story((props: ShowSnackbarOptions) => {
     const { showSnackbar } = useCustomSnackbar()

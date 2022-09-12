@@ -1,5 +1,5 @@
-import { API_KEY, API_URL } from '../constants'
-import type { Investable } from '../types'
+import { API_KEY, API_URL } from '../constants.js'
+import type { Investable } from '../types.js'
 
 export interface InvestablesData {
     count: number

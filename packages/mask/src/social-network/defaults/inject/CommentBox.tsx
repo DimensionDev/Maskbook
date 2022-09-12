@@ -1,11 +1,11 @@
 import { memo, useCallback } from 'react'
 import { type PostInfo, usePostInfoDetails, usePostInfo, PostInfoProvider } from '@masknet/plugin-infra/content-script'
 import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { CommentBox, CommentBoxProps } from '../../../components/InjectedComponents/CommentBox'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
+import { CommentBox, CommentBoxProps } from '../../../components/InjectedComponents/CommentBox.js'
+import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { makeStyles } from '@masknet/theme'
-import { MaskMessages } from '../../../utils/messages'
-import { startWatch } from '../../../utils/watcher'
+import { MaskMessages } from '../../../utils/messages.js'
+import { startWatch } from '../../../utils/watcher.js'
 
 const defaultOnPasteToCommentBox = async (
     encryptedComment: string,
@@ -20,7 +20,9 @@ const defaultOnPasteToCommentBox = async (
 export const injectCommentBoxDefaultFactory = function <T extends string>(
     onPasteToCommentBox = defaultOnPasteToCommentBox,
     additionPropsToCommentBox: (classes: Record<T, string>) => Partial<CommentBoxProps> = () => ({}),
-    useCustomStyles: (props?: any) => { classes: Record<T, string> } = makeStyles()({}) as any,
+    useCustomStyles: (props?: any) => {
+        classes: Record<T, string>
+    } = makeStyles()({}) as any,
     mountPointCallback?: (node: DOMProxy<HTMLElement, HTMLSpanElement, HTMLSpanElement>) => void,
 ) {
     const CommentBoxUI = memo(function CommentBoxUI({ dom }: { dom: HTMLElement | null }) {

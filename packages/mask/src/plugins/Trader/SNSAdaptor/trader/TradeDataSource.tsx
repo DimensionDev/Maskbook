@@ -3,10 +3,10 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import type { FC } from 'react'
-import { useI18N } from '../../../../utils'
-import { resolveDataProviderName } from '../../pipes'
-import { DataProviderIconUI } from './components/DataProviderIconUI'
-import { FootnoteMenuUI, FootnoteMenuOption } from './components/FootnoteMenuUI'
+import { useI18N } from '../../../../utils/index.js'
+import { resolveDataProviderName } from '../../pipes.js'
+import { DataProviderIconUI } from './components/DataProviderIconUI.js'
+import { FootnoteMenuUI, FootnoteMenuOption } from './components/FootnoteMenuUI.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

@@ -1,4 +1,4 @@
-import { activatedSocialNetworkUI } from '../../social-network'
+import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 
 export function usePostLink() {

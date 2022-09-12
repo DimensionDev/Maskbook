@@ -6,8 +6,8 @@ import {
     NetworkType,
     ProviderType,
 } from '@masknet/web3-shared-flow'
-import { languages } from './locales/languages'
-import { PLUGIN_ID, PLUGIN_NAME, PLUGIN_DESCRIPTION } from './constants'
+import { languages } from './locales/languages.js'
+import { PLUGIN_ID, PLUGIN_NAME, PLUGIN_DESCRIPTION } from './constants.js'
 
 export const base: Plugin.Shared.Definition<ChainId, ProviderType, NetworkType> = {
     ID: PLUGIN_ID,

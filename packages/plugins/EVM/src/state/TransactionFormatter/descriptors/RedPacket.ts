@@ -3,10 +3,10 @@ import { ChainId, getNftRedPacketConstant, getRedPacketConstants, TransactionPar
 import HappyRedPacketV4ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import NftRedPacketABI from '@masknet/web3-contracts/abis/NftRedPacket.json'
 import { isSameAddress, TransactionContext } from '@masknet/web3-shared-base'
-import type { TransactionDescriptor } from '../types'
-import { Web3StateSettings } from '../../../settings'
+import type { TransactionDescriptor } from '../types.js'
+import { Web3StateSettings } from '../../../settings/index.js'
 import type { AbiItem } from 'web3-utils'
-import { DescriptorWithTransactionDecodedReceipt, getTokenAmountDescription } from '../utils'
+import { DescriptorWithTransactionDecodedReceipt, getTokenAmountDescription } from '../utils.js'
 
 export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt implements TransactionDescriptor {
     async getClaimTokenInfo(chainId: ChainId, contractAddress: string | undefined, hash: string | undefined) {

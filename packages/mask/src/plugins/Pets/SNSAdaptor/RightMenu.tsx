@@ -3,18 +3,24 @@ import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Typography } from '@mui/material'
-import { PluginPetMessages } from '../messages'
-import { useI18N } from '../locales'
-import { PluginGameMessages } from '../../Game/messages'
-import { NFF_TWITTER } from '../constants'
-import { ShowMeta, MenuType } from '../types'
-import { useCurrentVisitingUser } from '../hooks'
-import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
+import { PluginPetMessages } from '../messages.js'
+import { useI18N } from '../locales/index.js'
+import { PluginGameMessages } from '../../Game/messages.js'
+import { NFF_TWITTER } from '../constants.js'
+import { ShowMeta, MenuType } from '../types.js'
+import { useCurrentVisitingUser } from '../hooks/index.js'
+import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
 
 type Props = {
     isShow: boolean
-    mousePosition: { x: number; y: number }
-    dragPosition: { x: number; y: number }
+    mousePosition: {
+        x: number
+        y: number
+    }
+    dragPosition: {
+        x: number
+        y: number
+    }
     showMeta: ShowMeta | undefined
     onClose: () => void
 }

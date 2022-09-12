@@ -1,13 +1,13 @@
 import { useStylesExtends, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { useCopyToClipboard } from 'react-use'
-import { PlatformAvatar } from './PlatformAvatar'
+import { PlatformAvatar } from './PlatformAvatar.js'
 import type { PersonaInformation } from '@masknet/shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { Icons } from '@masknet/icons'
 import { useCallback, useState } from 'react'
-import { formatPublicKey } from '../../../utils'
-import { useSharedI18N } from '../../../locales'
+import { formatPublicKey } from '../../../utils/index.js'
+import { useSharedI18N } from '../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     bottomFixed: {

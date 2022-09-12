@@ -5,7 +5,7 @@ import { MouseEvent, useCallback } from 'react'
 import type { DefaultComponentProps } from '@mui/material/OverridableComponent'
 import type { CheckboxProps } from '@mui/material/Checkbox'
 import type { ListItemTypeMap } from '@mui/material/ListItem'
-import type { UnlockLocks } from '../types'
+import type { UnlockLocks } from '../types.js'
 
 const useStyle = makeStyles()({
     root: {
@@ -30,7 +30,16 @@ export interface LockInListProps {
     disabled?: boolean
     onChange: (ev: MouseEvent<HTMLDivElement>, checked: boolean) => void
     CheckboxProps?: Partial<CheckboxProps>
-    ListItemProps?: Partial<DefaultComponentProps<ListItemTypeMap<{ button: true }, 'div'>>>
+    ListItemProps?: Partial<
+        DefaultComponentProps<
+            ListItemTypeMap<
+                {
+                    button: true
+                },
+                'div'
+            >
+        >
+    >
 }
 
 export function LockInList(props: LockInListProps) {

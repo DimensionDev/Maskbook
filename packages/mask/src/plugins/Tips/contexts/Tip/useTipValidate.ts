@@ -1,10 +1,10 @@
 import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 import { isGreaterThan, isLessThanOrEqualTo, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import { useContext, useMemo } from 'react'
-import { useI18N } from '../../locales'
-import { TipType } from '../../types'
-import { TargetRuntimeContext } from '../TargetRuntimeContext'
-import { TipContext } from './TipContext'
+import { useI18N } from '../../locales/index.js'
+import { TipType } from '../../types/index.js'
+import { TargetRuntimeContext } from '../TargetRuntimeContext.js'
+import { TipContext } from './TipContext.js'
 
 type ValidationTuple = [isValid: boolean, message?: string]
 

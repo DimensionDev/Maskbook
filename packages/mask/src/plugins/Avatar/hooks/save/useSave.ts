@@ -3,12 +3,14 @@ import type { TwitterBaseAPI } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
-import type { AllChainsNonFungibleToken, NextIDAvatarMeta } from '../../types'
-import { useSaveKV } from './useSaveKV'
-import { useSaveToNextID } from './useSaveToNextID'
-import { useSaveToRSS3 } from './useSaveToRSS3'
+import type { AllChainsNonFungibleToken, NextIDAvatarMeta } from '../../types.js'
+import { useSaveKV } from './useSaveKV.js'
+import { useSaveToNextID } from './useSaveToNextID.js'
+import { useSaveToRSS3 } from './useSaveToRSS3.js'
 
-export type AvatarInfo = TwitterBaseAPI.AvatarInfo & { avatarId: string }
+export type AvatarInfo = TwitterBaseAPI.AvatarInfo & {
+    avatarId: string
+}
 
 export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
     const saveToNextID = useSaveToNextID()

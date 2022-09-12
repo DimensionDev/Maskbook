@@ -1,4 +1,4 @@
-import { getAvatarId } from './user'
+import { getAvatarId } from './user.js'
 
 // cspell:disable-next
 const ClipPath = 'url("#hex-hw-shapeclip-clipconfig")'

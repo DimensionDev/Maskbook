@@ -21,7 +21,7 @@ const responseToBase64 = async (response: Response) => {
     return dataURL
 }
 
-export function useAccessibleUrl(key = '', url?: string) {
+export function useImageBase64(key = '', url?: string) {
     const [availableUrl, setAvailableUrl] = useState(() => {
         const hit = cache.get(key)
         return typeof hit === 'string' ? hit : ''

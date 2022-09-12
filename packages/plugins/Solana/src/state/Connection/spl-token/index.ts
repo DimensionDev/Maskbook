@@ -1,2 +1,2 @@
-export * from './createTransferInstructions'
-export * from './getOrCreateAssociatedTokenAccount'
+export * from './createTransferInstructions.js'
+export * from './getOrCreateAssociatedTokenAccount.js'

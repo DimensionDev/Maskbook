@@ -1,7 +1,7 @@
 import { createContext, createElement, FC, ComponentType, PropsWithChildren, useMemo, useState } from 'react'
 import { defer, DeferTuple } from '@dimensiondev/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import type { InjectedDialogProps } from './components'
+import type { InjectedDialogProps } from './components/index.js'
 
 export interface ContextOptions<T, R> {
     show(options?: Omit<T, 'open'>, signal?: AbortSignal): Promise<R>

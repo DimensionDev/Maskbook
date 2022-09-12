@@ -1,8 +1,8 @@
 import { useAsync } from 'react-use'
-import { PluginTraderRPC } from '../messages'
-import type { Coin, TagType } from '../types'
+import { PluginTraderRPC } from '../messages.js'
+import type { Coin, TagType } from '../types/index.js'
 import type { DataProvider } from '@masknet/public-api'
-import { useCurrentCurrency } from './useCurrentCurrency'
+import { useCurrentCurrency } from './useCurrentCurrency.js'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useChainId, useFungibleToken } from '@masknet/plugin-infra/web3'
 

@@ -1,11 +1,11 @@
 import { CircularProgress } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { MaskMessages } from '../../../utils'
-import type { AvatarMetaDB } from '../types'
-import { RainbowBox } from './RainbowBox'
-import type { RSS3_KEY_SNS } from '../constants'
+import { MaskMessages } from '../../../utils/index.js'
+import type { AvatarMetaDB } from '../types.js'
+import { RainbowBox } from './RainbowBox.js'
+import type { RSS3_KEY_SNS } from '../constants.js'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar'
+import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar.js'
 
 interface NFTBadgeTimelineProps extends withClasses<'root'> {
     userId: string

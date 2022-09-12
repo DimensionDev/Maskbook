@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { Box, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { memo } from 'react'
-import { useDashboardI18N } from '../../locales'
+import { useDashboardI18N } from '../../locales/index.js'
 
 export const ColumnContentLayout = styled('div')`
     display: flex;

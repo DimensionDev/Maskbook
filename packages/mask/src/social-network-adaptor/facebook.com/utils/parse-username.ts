@@ -1,6 +1,6 @@
 import type { ProfileIdentifier, PostIdentifier } from '@masknet/shared-base'
-import { isMobileFacebook } from './isMobile'
-import { i18n } from '../../../../shared-ui/locales_legacy'
+import { isMobileFacebook } from './isMobile.js'
+import { i18n } from '../../../../shared-ui/locales_legacy/index.js'
 
 /**
  * @see https://www.facebook.com/help/105399436216001#What-are-the-guidelines-around-creating-a-custom-username?

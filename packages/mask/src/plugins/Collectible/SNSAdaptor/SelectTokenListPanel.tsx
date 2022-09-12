@@ -1,5 +1,5 @@
 import { FormControl, InputAdornment, ListItemIcon, MenuItem, OutlinedInput, Typography } from '@mui/material'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 import { useEffect, useState, useCallback, useRef, useMemo, ChangeEvent } from 'react'
 import { FormattedBalance, TokenIcon, useMenuConfig } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
@@ -106,7 +106,7 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
     // #region update amount by self
     const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
         () => ({
-            RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${token?.decimals}}$`), // .ddd...d
+            RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${token?.decimals}}$`),
             RE_MATCH_WHOLE_AMOUNT: new RegExp(`^\\d*\\.?\\d{0,${token?.decimals}}$`), // d.ddd...d
         }),
         [token?.decimals],

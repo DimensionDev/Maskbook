@@ -7,14 +7,14 @@ import { FormattedAddress, FormattedBalance, ImageIcon, InjectedDialog } from '@
 import { Box, Button, DialogActions, DialogContent, TextField, Typography } from '@mui/material'
 import { formatEthereumAddress, SchemaType, useMaskBoxConstants } from '@masknet/web3-shared-evm'
 import { formatBalance, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
-import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
-import type { BoxInfo } from '../../type'
-import { GasSettingBar } from '../../../Wallet/SNSAdaptor/GasSettingDialog/GasSettingBar'
-import { TokenPrice } from '../../../../components/shared/TokenPrice'
-import { Context } from '../../hooks/useContext'
-import { PluginWalletStatusBar } from '../../../../utils'
-import { useI18N } from '../../locales'
+import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
+import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary.js'
+import type { BoxInfo } from '../../type.js'
+import { GasSettingBar } from '../../../Wallet/SNSAdaptor/GasSettingDialog/GasSettingBar.js'
+import { TokenPrice } from '../../../../components/shared/TokenPrice.js'
+import { Context } from '../../hooks/useContext.js'
+import { PluginWalletStatusBar } from '../../../../utils/index.js'
+import { useI18N } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     main: {

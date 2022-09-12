@@ -9,9 +9,9 @@ import {
     SnackbarKey,
     useSnackbar,
 } from 'notistack'
-import { makeStyles } from '../../UIHelper'
+import { makeStyles } from '../../UIHelper/index.js'
 import classnames from 'classnames'
-import type { ShowSnackbarOptions } from './index'
+import type { ShowSnackbarOptions } from './index.js'
 
 const useStyles = makeStyles()(() => ({
     container: {

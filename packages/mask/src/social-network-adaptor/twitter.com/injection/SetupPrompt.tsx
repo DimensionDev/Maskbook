@@ -1,9 +1,9 @@
 import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-kit'
-import { postEditorInTimelineSelector, postEditorInPopupSelector } from '../utils/selector'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
-import { hasEditor, isCompose } from '../utils/postBox'
-import { NotSetupYetPrompt } from '../../../components/shared/NotSetupYetPrompt'
-import { startWatch } from '../../../utils/watcher'
+import { postEditorInTimelineSelector, postEditorInPopupSelector } from '../utils/selector.js'
+import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { hasEditor, isCompose } from '../utils/postBox.js'
+import { NotSetupYetPrompt } from '../../../components/shared/NotSetupYetPrompt.js'
+import { startWatch } from '../../../utils/watcher.js'
 
 export function injectSetupPromptAtTwitter(signal: AbortSignal) {
     const emptyNode = document.createElement('div')

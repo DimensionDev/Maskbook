@@ -2,8 +2,8 @@ import { compact } from 'lodash-unified'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, networkResolver, NetworkType } from '@masknet/web3-shared-evm'
-import { RedPacketJSONPayload, RedPacketStatus } from '../../types'
-import { useAvailability } from './useAvailability'
+import { RedPacketJSONPayload, RedPacketStatus } from '../../types.js'
+import { useAvailability } from './useAvailability.js'
 
 /**
  * Fetch the red packet info from the chain

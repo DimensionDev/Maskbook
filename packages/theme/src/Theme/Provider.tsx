@@ -1,6 +1,6 @@
 import { CssBaseline, Theme, ThemeProvider } from '@mui/material'
 import { MaskIconPalette, MaskIconPaletteContext } from '@masknet/icons'
-import { CustomSnackbarProvider } from '../Components'
+import { CustomSnackbarProvider } from '../Components/index.js'
 
 function compose(init: React.ReactNode, ...f: Array<(children: React.ReactNode) => JSX.Element>) {
     // eslint-disable-next-line unicorn/no-array-reduce

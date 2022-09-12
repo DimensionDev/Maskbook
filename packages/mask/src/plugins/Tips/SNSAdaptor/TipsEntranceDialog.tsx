@@ -13,19 +13,18 @@ import { NetworkPluginID, isSameAddress, isGreaterThan } from '@masknet/web3-sha
 import { DialogContent, DialogActions, Avatar, Typography } from '@mui/material'
 import { delay } from '@dimensiondev/kit'
 import { sortBy, last } from 'lodash-unified'
-import { useCopyToClipboard, useAsyncFn, useAsyncRetry } from 'react-use'
+import { useCopyToClipboard, useAsyncFn, useAsyncRetry, useUpdateEffect } from 'react-use'
 import { useCallback, useMemo, useState, useEffect } from 'react'
-import Services from '../../../extension/service'
-import { useProvedWallets } from '../hooks/useProvedWallets'
-import { useI18N } from '../locales'
-import { getNowTime } from '../utils'
-import { VerifyAlertLine } from './components/VerifyAlertLine'
-import { WalletsByNetwork } from './components/WalletsByNetwork'
+import Services from '../../../extension/service.js'
+import { useProvedWallets } from '../hooks/useProvedWallets.js'
+import { useI18N } from '../locales/index.js'
+import { VerifyAlertLine } from './components/VerifyAlertLine.js'
+import { WalletsByNetwork } from './components/WalletsByNetwork.js'
 import { Icons } from '@masknet/icons'
-import { useTipsSetting } from '../hooks/useTipsSetting'
-import type { TipsSettingType } from '../types'
-import { PluginNextIDMessages } from '../messages'
-import { MaskMessages } from '../../../utils'
+import { useTipsSetting } from '../hooks/useTipsSetting.js'
+import type { TipsSettingType } from '../types/index.js'
+import { PluginNextIDMessages } from '../messages.js'
+import { MaskMessages } from '../../../utils/index.js'
 
 export interface TipsEntranceDialogProps {
     open: boolean
@@ -50,6 +49,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: '12px 16px',
         position: 'relative',
         boxSizing: 'border-box',
+        minHeight: 544,
     },
     btnContainer: {
         position: 'absolute',
@@ -123,7 +123,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         if (!proofRes?.length) return EMPTY_LIST
         return sortBy(proofRes, (x) => -Number.parseInt(x.last_checked_at, 10)).map((wallet, index, list) => ({
             ...wallet,
-            fallbackName: `Wallet ${list.length - index - 1}`,
+            fallbackName: `Wallet ${list.length - index}`,
         }))
     }, [proofRes])
 
@@ -136,7 +136,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
             .filter((x) => !TipsSetting?.hiddenAddresses?.includes(x.identity))
             .sort((a, z) => {
                 if (isGreaterThan(a.last_checked_at, z.last_checked_at)) {
-                    return isSameAddress(z.identity, defaultAddress) ? -1 : 1
+                    return isSameAddress(z.identity, defaultAddress) ? 1 : -1
                 }
 
                 return isSameAddress(a.identity, defaultAddress) ? -1 : 1
@@ -163,13 +163,13 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
 
             showSnackbar(t.tip_persona_sign_success(), {
                 variant: 'success',
-                message: getNowTime(),
+                message: t.tip_default_set_successfully_description(),
                 autoHideDuration: 2000,
             })
         } catch {
             showSnackbar(t.tip_persona_sign_error(), {
                 variant: 'error',
-                message: getNowTime(),
+                message: t.tip_default_set_failed_description(),
                 autoHideDuration: 2000,
             })
         }
@@ -201,6 +201,11 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     useEffect(() => {
         return MaskMessages.events.ownPersonaChanged.on(retryCurrentPersona)
     }, [retryCurrentPersona])
+
+    // reset pending default wallet after dialog open changed
+    useUpdateEffect(() => {
+        setPendingDefault(undefined)
+    }, [open])
 
     return (
         <InjectedDialog

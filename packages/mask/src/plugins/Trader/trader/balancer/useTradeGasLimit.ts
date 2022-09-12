@@ -1,13 +1,13 @@
-import type { SwapResponse, TradeComputed } from '../../types'
+import type { SwapResponse, TradeComputed } from '../../types/index.js'
 import { useAsync } from 'react-use'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
-import { TradeStrategy } from '../../types'
+import { TradeStrategy } from '../../types/index.js'
 import { encodeContractTransaction, SchemaType, useTraderConstants } from '@masknet/web3-shared-evm'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { useExchangeProxyContract } from '../../contracts/balancer/useExchangeProxyContract'
+import { useExchangeProxyContract } from '../../contracts/balancer/useExchangeProxyContract.js'
 import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy'
-import { useTradeAmount } from './useTradeAmount'
-import { SLIPPAGE_DEFAULT } from '../../constants'
+import { useTradeAmount } from './useTradeAmount.js'
+import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import BigNumber from 'bignumber.js'
@@ -40,11 +40,11 @@ export function useTradeGasLimit(trade: TradeComputed<SwapResponse> | null): Asy
             x.map(
                 (y) =>
                     [
-                        y.pool, // address pool
-                        y.tokenIn, // address tokenIn
-                        y.tokenOut, // address tokenOut
-                        y.swapAmount, // uint swapAmount
-                        y.limitReturnAmount, // uint limitReturnAmount
+                        y.pool,
+                        y.tokenIn,
+                        y.tokenOut,
+                        y.swapAmount,
+                        y.limitReturnAmount,
                         y.maxPrice, // uint maxPrice
                     ] as [string, string, string, string, string, string],
             ),

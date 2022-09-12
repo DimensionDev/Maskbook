@@ -2,9 +2,9 @@ import { makeStyles } from '@masknet/theme'
 import { useSharedI18N } from '@masknet/shared'
 import { Typography } from '@mui/material'
 import { formatBalance, multipliedBy } from '@masknet/web3-shared-base'
-import { Section } from './Section'
-import { SlippageToleranceForm } from './SlippageToleranceForm'
-import { SettingsContext } from './Context'
+import { Section } from './Section.js'
+import { SlippageToleranceForm } from './SlippageToleranceForm.js'
+import { SettingsContext } from './Context.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

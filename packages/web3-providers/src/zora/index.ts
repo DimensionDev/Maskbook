@@ -27,10 +27,10 @@ import {
     Token,
     TransferEventProperty,
     V3AskEventProperty,
-} from './types'
-import type { NonFungibleTokenAPI } from '../types'
-import { GetCollectionsByKeywordQuery, GetEventsQuery, GetTokenQuery } from './queries'
-import { ZORA_MAINNET_GRAPHQL_URL } from './constants'
+} from './types.js'
+import type { NonFungibleTokenAPI } from '../types/index.js'
+import { GetCollectionsByKeywordQuery, GetEventsQuery, GetTokenQuery } from './queries.js'
+import { ZORA_MAINNET_GRAPHQL_URL } from './constants.js'
 import type { Variables } from 'graphql-request/dist/types'
 
 export class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {

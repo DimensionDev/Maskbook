@@ -2,15 +2,15 @@ import { useAccount, useChainIdMatched } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Button, Divider, Grid, Typography, Container } from '@mui/material'
-import { FurucomboIcon } from '../../../resources/FurucomboIcon'
-import { useI18N } from '../../../utils'
-import { BASE_URL } from '../constants'
-import { QuickIcon } from '../resources/QuickIcon'
-import { UnknownIcon } from '../resources/UnknownIcon'
-import { WmaticIcon } from '../resources/WmaticIcon'
+import { FurucomboIcon } from '../../../resources/FurucomboIcon.js'
+import { useI18N } from '../../../utils/index.js'
+import { BASE_URL } from '../constants.js'
+import { QuickIcon } from '../resources/QuickIcon.js'
+import { UnknownIcon } from '../resources/UnknownIcon.js'
+import { WmaticIcon } from '../resources/WmaticIcon.js'
 
-import type { Angel, Investable, Token } from '../types'
-import { apyFormatter, liquidityFormatter } from '../utils'
+import type { Angel, Investable, Token } from '../types.js'
+import { apyFormatter, liquidityFormatter } from '../utils.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

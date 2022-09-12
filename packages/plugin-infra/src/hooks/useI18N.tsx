@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import type { I18NFieldOrReactNode, I18NStringField } from '../types'
+import type { I18NFieldOrReactNode, I18NStringField } from '../types.js'
 
 export interface PluginI18NFieldRenderProps {
     field: I18NFieldOrReactNode

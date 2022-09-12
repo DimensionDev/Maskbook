@@ -2,8 +2,8 @@ import { memo, useState } from 'react'
 import { ButtonGroupTabList, makeStyles } from '@masknet/theme'
 import { Box, Tab } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
-import { ContactsTable } from '../ContactsTable'
-import { PostHistory } from '../PostHistory'
+import { ContactsTable } from '../ContactsTable/index.js'
+import { PostHistory } from '../PostHistory/index.js'
 const useStyles = makeStyles()((theme) => ({
     container: {
         flex: 1,

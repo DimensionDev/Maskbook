@@ -1,9 +1,9 @@
 import { SnackbarContent } from '@mui/material'
 import { useAsyncRetry } from 'react-use'
 import { Suspense, useRef } from 'react'
-import type { ExternalPluginLoadDetails } from '../types'
-import { UnknownPluginLoadRequestUI } from './UnknownPluginLoadRequest'
-import { ExternalPluginRenderer } from './ExternalPluginRenderer'
+import type { ExternalPluginLoadDetails } from '../types.js'
+import { UnknownPluginLoadRequestUI } from './UnknownPluginLoadRequest.js'
+import { ExternalPluginRenderer } from './ExternalPluginRenderer.js'
 export interface ExternalPluginContainerProps {
     plugins: ExternalPluginLoadDetails[]
 }

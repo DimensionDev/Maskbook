@@ -1,5 +1,5 @@
 import { story } from '@masknet/storybook-shared'
-import { AddTokenFormUI as C } from '../../../src/pages/Wallets/components/AddTokenFormUI'
+import { AddTokenFormUI as C } from '../../../src/pages/Wallets/components/AddTokenFormUI/index.js'
 import { action } from '@storybook/addon-actions'
 import { useForm, FormProvider } from 'react-hook-form'
 

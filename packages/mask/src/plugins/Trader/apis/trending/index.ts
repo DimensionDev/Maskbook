@@ -1,12 +1,12 @@
 import { first, groupBy } from 'lodash-unified'
-import type { Coin, CommunityUrls, Currency, Stat, TagType, Trending } from '../../types'
+import type { Coin, CommunityUrls, Currency, Stat, TagType, Trending } from '../../types/index.js'
 import { DataProvider } from '@masknet/public-api'
 import { getEnumAsArray, unreachable } from '@dimensiondev/kit'
-import { CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants'
-import { isBlockedId, isBlockedKeyword, resolveAlias, resolveCoinId, isBlockedAddress } from './hotfix'
+import { CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants/index.js'
+import { isBlockedId, isBlockedKeyword, resolveAlias, resolveCoinId, isBlockedAddress } from './hotfix.js'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
-import { Days } from '../../SNSAdaptor/trending/PriceChartDaysControl'
-import { CoinGecko, CoinMarketCap, NFTScanTrending, UniSwap } from '@masknet/web3-providers'
+import { Days } from '../../SNSAdaptor/trending/PriceChartDaysControl.js'
+import { CoinGeckoTrendingEVM, CoinMarketCap, NFTScanTrending, UniSwap } from '@masknet/web3-providers'
 
 /**
  * Get supported currencies of specific data provider
@@ -15,7 +15,7 @@ import { CoinGecko, CoinMarketCap, NFTScanTrending, UniSwap } from '@masknet/web
 export async function getCurrencies(dataProvider: DataProvider): Promise<Currency[]> {
     switch (dataProvider) {
         case DataProvider.COIN_GECKO:
-            return CoinGecko.getCurrencies()
+            return CoinGeckoTrendingEVM.getCurrencies()
         case DataProvider.COIN_MARKET_CAP:
             return CoinMarketCap.getCurrencies()
         case DataProvider.UNISWAP_INFO:
@@ -30,7 +30,7 @@ export async function getCurrencies(dataProvider: DataProvider): Promise<Currenc
 export async function getCoins(dataProvider: DataProvider): Promise<Coin[]> {
     switch (dataProvider) {
         case DataProvider.COIN_GECKO:
-            return CoinGecko.getCoins()
+            return CoinGeckoTrendingEVM.getCoins()
         case DataProvider.COIN_MARKET_CAP:
             return CoinMarketCap.getCoins()
         case DataProvider.UNISWAP_INFO:
@@ -184,7 +184,7 @@ async function getCoinTrending(
 ): Promise<Trending> {
     switch (dataProvider) {
         case DataProvider.COIN_GECKO:
-            return CoinGecko.getCoinTrending(chainId, id, currency)
+            return CoinGeckoTrendingEVM.getCoinTrending(chainId, id, currency)
         case DataProvider.COIN_MARKET_CAP:
             return CoinMarketCap.getCoinTrending(chainId, id, currency)
         case DataProvider.UNISWAP_INFO:
@@ -235,7 +235,7 @@ export async function getPriceStats(
 ): Promise<Stat[]> {
     switch (dataProvider) {
         case DataProvider.COIN_GECKO:
-            return CoinGecko.getPriceStats(chainId, id, currency, days === Days.MAX ? 11430 : days)
+            return CoinGeckoTrendingEVM.getPriceStats(chainId, id, currency, days === Days.MAX ? 11430 : days)
         case DataProvider.COIN_MARKET_CAP:
             return CoinMarketCap.getPriceStats(chainId, id, currency, days)
         case DataProvider.UNISWAP_INFO:

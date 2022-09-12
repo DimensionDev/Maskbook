@@ -1,5 +1,5 @@
 import { makeStyles, usePopupCustomSnackbar, ActionButton } from '@masknet/theme'
-import { CurrentWalletBox } from './CurrentWalletBox'
+import { CurrentWalletBox } from './CurrentWalletBox.js'
 import {
     step1ActiveIcon,
     stepSuccessIcon,
@@ -8,11 +8,11 @@ import {
     dividerActiveIcon,
     step2DisableIcon,
     step2ActiveIcon,
-} from './constants'
+} from './constants.js'
 import { ImageIcon } from '@masknet/shared'
 import { Typography } from '@mui/material'
 import { useEffect } from 'react'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 import type { Account } from '@masknet/web3-shared-base'
 import type { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { LoadingButton } from '@mui/lab'

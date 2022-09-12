@@ -1,8 +1,8 @@
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useCallback } from 'react'
-import type { RSS3_KEY_SNS } from '../../constants'
-import type { NFTRSSNode } from '../../types'
+import type { RSS3_KEY_SNS } from '../../constants.js'
+import type { NFTRSSNode } from '../../types.js'
 
 export function useGetNFTAvatarFromRSS3() {
     const { Storage } = useWeb3State(NetworkPluginID.PLUGIN_EVM)

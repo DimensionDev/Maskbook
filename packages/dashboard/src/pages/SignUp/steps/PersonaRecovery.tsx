@@ -2,12 +2,12 @@ import { useCallback, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useCustomSnackbar } from '@masknet/theme'
 import { DashboardRoutes, ECKeyIdentifier } from '@masknet/shared-base'
-import { useDashboardI18N } from '../../../locales'
-import { SignUpRoutePath } from '../routePath'
-import { Services } from '../../../API'
-import { PersonaNameUI } from './PersonaNameUI'
-import { useCreatePersonaByPrivateKey, useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2'
-import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
+import { useDashboardI18N } from '../../../locales/index.js'
+import { SignUpRoutePath } from '../routePath.js'
+import { Services } from '../../../API.js'
+import { PersonaNameUI } from './PersonaNameUI.js'
+import { useCreatePersonaByPrivateKey, useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
+import { PersonaContext } from '../../Personas/hooks/usePersonaContext.js'
 import { delay } from '@dimensiondev/kit'
 import { useAsync } from 'react-use'
 
@@ -19,7 +19,10 @@ export const PersonaRecovery = () => {
     const createPersonaByPrivateKey = useCreatePersonaByPrivateKey()
     const { showSnackbar } = useCustomSnackbar()
     const { changeCurrentPersona } = PersonaContext.useContainer()
-    const state = useLocation().state as { mnemonic?: string[]; privateKey?: string }
+    const state = useLocation().state as {
+        mnemonic?: string[]
+        privateKey?: string
+    }
 
     const [error, setError] = useState('')
 

@@ -1,5 +1,5 @@
 import { PluginId } from '@masknet/plugin-infra'
-import { resolveIPFSLink } from '@masknet/web3-shared-base'
+import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 
 export const PLUGIN_ID = PluginId.RSS3
 export const PLUGIN_DESCRIPTION =
@@ -7,4 +7,4 @@ export const PLUGIN_DESCRIPTION =
 export const PLUGIN_NAME = 'RSS3'
 
 /* cspell:disable-next-line */
-export const RSS3_DEFAULT_IMAGE = resolveIPFSLink('QmVFq9qimnudPcs6QkQv8ZVEsvwD3aqETHWtS5yXgdbYY5')!
+export const RSS3_DEFAULT_IMAGE = resolveIPFS_URL('QmVFq9qimnudPcs6QkQv8ZVEsvwD3aqETHWtS5yXgdbYY5')!

@@ -5,8 +5,8 @@ import { Typography, Button } from '@mui/material'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { Icons } from '@masknet/icons'
-import { NFTOfferCard } from '../../../../components/shared/NFTCard/NFTOfferCard'
-import { useI18N } from '../../../../utils'
+import { NFTOfferCard } from '../../../../components/shared/NFTCard/NFTOfferCard.js'
+import { useI18N } from '../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {

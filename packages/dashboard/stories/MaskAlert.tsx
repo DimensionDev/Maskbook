@@ -1,5 +1,5 @@
 import { story } from '@masknet/storybook-shared'
-import { MaskAlert as Component } from '../src/components/MaskAlert'
+import { MaskAlert as Component } from '../src/components/MaskAlert/index.js'
 
 function C() {
     return (

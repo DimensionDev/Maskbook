@@ -2,12 +2,12 @@ import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { chainResolver } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../../../../utils'
-import { GasSetting1559 } from './GasSetting1559'
-import { Prior1559GasSetting } from './Prior1559GasSetting'
+import { useI18N } from '../../../../../utils/index.js'
+import { GasSetting1559 } from './GasSetting1559.js'
+import { Prior1559GasSetting } from './Prior1559GasSetting.js'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useTitle } from '../../../hook/useTitle'
+import { useTitle } from '../../../hook/useTitle.js'
 
 const useStyles = makeStyles()(() => ({
     container: {

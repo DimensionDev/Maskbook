@@ -1,9 +1,9 @@
 import { useContext } from 'react'
-import { VotingCard } from './VotingCard'
-import { useProposal } from './hooks/useProposal'
-import { SnapshotTab } from './SnapshotTab'
-import { ReadMeCard } from './ReadmeCard'
-import { SnapshotContext } from '../context'
+import { VotingCard } from './VotingCard.js'
+import { useProposal } from './hooks/useProposal.js'
+import { SnapshotTab } from './SnapshotTab.js'
+import { ReadMeCard } from './ReadmeCard.js'
+import { SnapshotContext } from '../context.js'
 
 export function ProposalTab() {
     const identifier = useContext(SnapshotContext)

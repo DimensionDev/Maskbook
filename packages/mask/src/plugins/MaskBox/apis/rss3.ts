@@ -1,6 +1,6 @@
 import RSS3 from 'rss3-next'
-import { RSS3_ENDPOINT } from '../constants'
-import type { BoxMetadata } from '../type'
+import { RSS3_ENDPOINT } from '../constants.js'
+import type { BoxMetadata } from '../type.js'
 
 async function createRSS(address: string) {
     return new RSS3({

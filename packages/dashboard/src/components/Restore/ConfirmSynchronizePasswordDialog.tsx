@@ -1,4 +1,4 @@
-import { useDashboardI18N } from '../../locales'
+import { useDashboardI18N } from '../../locales/index.js'
 import { memo } from 'react'
 import { getMaskColor, MaskDialog } from '@masknet/theme'
 import { Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'

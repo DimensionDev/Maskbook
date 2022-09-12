@@ -9,7 +9,7 @@ import {
     RaribleRinkebyUserURL,
     OpenSeaMainnetURL,
     OpenSeaTestnetURL,
-} from '../constants'
+} from '../constants.js'
 
 type RaribleSupportedChainId = ChainId.Mainnet | ChainId.Ropsten | ChainId.Rinkeby
 type OpenSeaSupportedChainId = ChainId.Mainnet | ChainId.Rinkeby

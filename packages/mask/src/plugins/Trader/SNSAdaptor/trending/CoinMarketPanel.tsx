@@ -1,7 +1,7 @@
-import type { Trending } from '../../types'
+import type { Trending } from '../../types/index.js'
 import type { DataProvider } from '@masknet/public-api'
-import { CoinMarketTable } from './CoinMarketTable'
-import { CoinMetadataTable } from './CoinMetadataTable'
+import { CoinMarketTable } from './CoinMarketTable.js'
+import { CoinMetadataTable } from './CoinMetadataTable.js'
 import { Stack } from '@mui/material'
 
 export interface CoinMarketPanelProps {

@@ -1,10 +1,10 @@
 import { createContainer } from 'unstated-next'
 import { useCallback, useState } from 'react'
-import { useConnectSite, useDisconnectSite, useOpenProfilePage } from './useConnectSite'
-import { Services } from '../../../API'
-import { useOwnedPersonas, useSupportedSites, SocialNetwork, useCurrentPersonaIdentifier } from '../api'
-import { useCreatePersona } from './useCreatePersona'
-import { useDeleteBound } from './useOperateBindingProof'
+import { useConnectSite, useDisconnectSite, useOpenProfilePage } from './useConnectSite.js'
+import { Services } from '../../../API.js'
+import { useOwnedPersonas, useSupportedSites, SocialNetwork, useCurrentPersonaIdentifier } from '../api.js'
+import { useCreatePersona } from './useCreatePersona.js'
+import { useDeleteBound } from './useOperateBindingProof.js'
 
 function usePersonaContext() {
     const currentPersonaIdentifier = useCurrentPersonaIdentifier()

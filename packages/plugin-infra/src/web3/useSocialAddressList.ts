@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { NetworkPluginID, SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
-import { useWeb3State } from './useWeb3State'
+import { useWeb3State } from './useWeb3State.js'
 
 /**
  * Get all social addresses under a specific network.

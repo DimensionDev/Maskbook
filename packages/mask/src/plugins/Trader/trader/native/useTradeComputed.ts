@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { FungibleToken, ZERO } from '@masknet/web3-shared-base'
-import { TradeComputed, TradeStrategy } from '../../types'
+import { TradeComputed, TradeStrategy } from '../../types/index.js'
 
 export interface NativeTokenWrapper {
     /**

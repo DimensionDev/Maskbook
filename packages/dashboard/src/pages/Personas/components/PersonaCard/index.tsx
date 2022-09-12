@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine'
+import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine/index.js'
 import {
     type NextIDPersonaBindings,
     type PersonaIdentifier,
@@ -9,10 +9,10 @@ import {
     type ProfileInformation,
     formatPersonaFingerprint,
 } from '@masknet/shared-base'
-import { PersonaContext } from '../../hooks/usePersonaContext'
-import type { SocialNetwork } from '../../api'
+import { PersonaContext } from '../../hooks/usePersonaContext.js'
+import type { SocialNetwork } from '../../api.js'
 import classNames from 'classnames'
-import { usePersonaProof } from '../../hooks/usePersonaProof'
+import { usePersonaProof } from '../../hooks/usePersonaProof.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -143,4 +143,4 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
     )
 })
 
-export * as PersonaRowCard from './Row'
+export * as PersonaRowCard from './Row.js'

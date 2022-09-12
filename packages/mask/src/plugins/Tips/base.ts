@@ -1,5 +1,5 @@
 import { CurrentSNSNetwork, Plugin, PluginId } from '@masknet/plugin-infra'
-import { languages } from './locales/languages'
+import { languages } from './locales/languages.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: PluginId.Tips,

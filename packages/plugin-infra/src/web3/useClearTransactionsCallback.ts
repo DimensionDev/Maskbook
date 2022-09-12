@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useAccount } from './useAccount'
-import { useChainId } from './useChainId'
-import { useWeb3State } from './useWeb3State'
+import { useAccount } from './useAccount.js'
+import { useChainId } from './useChainId.js'
+import { useWeb3State } from './useWeb3State.js'
 import { getSubscriptionCurrentValue } from '@masknet/shared-base'
 
 export function useClearTransactionsCallback<T extends NetworkPluginID>(pluginID?: T) {

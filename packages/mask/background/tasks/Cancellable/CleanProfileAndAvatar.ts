@@ -1,8 +1,8 @@
-import { consistentPersonaDBWriteAccess } from '../../database/persona/db'
+import { consistentPersonaDBWriteAccess } from '../../database/persona/db.js'
 import { ProfileIdentifier } from '@masknet/shared-base'
-import { cleanAvatarDB } from '../../database/avatar-cache/cleanup'
-import { hasNativeAPI } from '../../../shared/native-rpc'
-import { hmr } from '../../../utils-pure'
+import { cleanAvatarDB } from '../../database/avatar-cache/cleanup.js'
+import { hasNativeAPI } from '../../../shared/native-rpc/index.js'
+import { hmr } from '../../../utils-pure/index.js'
 
 const { signal } = hmr(import.meta.webpackHot)
 if (process.env.architecture === 'web') {

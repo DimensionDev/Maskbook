@@ -1,6 +1,6 @@
 import { Chip } from '@mui/material'
 import type { ChipProps } from '@mui/material/Chip'
-import { Avatar } from '../../../utils'
+import { Avatar } from '../../../utils/index.js'
 import type { ProfileInformation as Profile } from '@masknet/shared-base'
 
 export interface ProfileInChipProps {

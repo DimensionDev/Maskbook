@@ -1,6 +1,6 @@
 import { createRoot } from 'react-dom/client'
 
-import { Entry } from './Entry'
+import { Entry } from './Entry.js'
 
 const container = document.createElement('main')
 

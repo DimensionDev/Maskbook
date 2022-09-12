@@ -1,3 +1,3 @@
-export * from './constants'
-export * from './descriptors'
-export * from './primitives'
+export * from './constants.js'
+export * from './descriptors.js'
+export * from './primitives.js'

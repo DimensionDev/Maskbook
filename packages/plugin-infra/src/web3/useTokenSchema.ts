@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useWeb3Connection, Web3Helper } from '../entry-web3'
+import { useWeb3Connection, Web3Helper } from '../entry-web3.js'
 
 export function useTokenSchema<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,

@@ -1,5 +1,5 @@
-import { getAvatarId } from './user'
-import { isMobileFacebook } from './isMobile'
+import { getAvatarId } from './user.js'
+import { isMobileFacebook } from './isMobile.js'
 
 export function getInjectNodeInfo(element: HTMLElement | SVGElement) {
     if (!isMobileFacebook) {

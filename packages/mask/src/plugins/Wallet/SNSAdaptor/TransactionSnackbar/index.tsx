@@ -7,7 +7,7 @@ import { NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-bas
 import { createLookupTableResolver } from '@masknet/shared-base'
 import { useWeb3State, useChainId, Web3Helper } from '@masknet/plugin-infra/web3'
 import { makeStyles, ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../../../utils/index.js'
 
 const useStyles = makeStyles()({
     link: {
@@ -25,7 +25,13 @@ export function TransactionSnackbar<T extends NetworkPluginID>({ pluginID }: Tra
     const snackbarKeyRef = useRef<SnackbarKey>()
 
     const chainId = useChainId(pluginID)
-    const [errorInfo, setErrorInfo] = useState<{ error: Error; request: JsonRpcPayload } | undefined>()
+    const [errorInfo, setErrorInfo] = useState<
+        | {
+              error: Error
+              request: JsonRpcPayload
+          }
+        | undefined
+    >()
     const [progress, setProgress] = useState<{
         chainId: Web3Helper.Definition[T]['ChainId']
         status: TransactionStatusType

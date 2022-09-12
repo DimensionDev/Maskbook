@@ -1,4 +1,4 @@
-import type { RiskWarningBaseAPI } from '../types'
+import type { RiskWarningBaseAPI } from '../types/index.js'
 
 const BASE_URL_MAP: Record<typeof process.env.NODE_ENV, string> = {
     production: 'https://backup.mask.io/api',

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useFungibleTokenBalance } from './useFungibleTokenBalance'
-import { useFungibleToken } from './useFungibleToken'
+import { useFungibleTokenBalance } from './useFungibleTokenBalance.js'
+import { useFungibleToken } from './useFungibleToken.js'
 
 export function useFungibleTokenWatched<T extends NetworkPluginID>(pluginID?: T, address_ = '') {
     const [amount, setAmount] = useState('')

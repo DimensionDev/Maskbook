@@ -1,6 +1,6 @@
 import { ECKeyIdentifier, PersonaIdentifier } from '@masknet/shared-base'
 import { head } from 'lodash-unified'
-import type { InternalSettings } from '../../../shared/legacy-settings/createSettings'
+import type { InternalSettings } from '../../../shared/legacy-settings/createSettings.js'
 import {
     appearanceSettings,
     currentPersonaIdentifier,
@@ -8,9 +8,9 @@ import {
     pluginIDSettings,
     getCurrentPluginMinimalMode,
     setCurrentPluginMinimalMode,
-} from '../../../shared/legacy-settings/settings'
-import { MaskMessages } from '../../../shared/messages'
-import { queryPersonasDB } from '../../../background/database/persona/db'
+} from '../../../shared/legacy-settings/settings.js'
+import { MaskMessages } from '../../../shared/messages.js'
+import { queryPersonasDB } from '../../../background/database/persona/db.js'
 import { BooleanPreference } from '@masknet/plugin-infra'
 
 function create<T>(settings: InternalSettings<T>) {

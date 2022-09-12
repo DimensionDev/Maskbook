@@ -1,5 +1,5 @@
-import type { RequestArguments } from '../shared'
-import { InjectedProvider } from './Base'
+import type { RequestArguments } from '../shared/index.js'
+import { InjectedProvider } from './Base.js'
 
 export enum Coin98ProviderType {
     EVM = 1,

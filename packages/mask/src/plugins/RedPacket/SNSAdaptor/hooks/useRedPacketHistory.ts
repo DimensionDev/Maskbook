@@ -3,8 +3,8 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, getRedPacketConstants } from '@masknet/web3-shared-evm'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useWeb3Connection, Web3Helper } from '@masknet/plugin-infra/web3'
-import * as chain from '../utils/chain'
-import { RedPacketRPC } from '../../messages'
+import * as chain from '../utils/chain.js'
+import { RedPacketRPC } from '../../messages.js'
 
 export function useRedPacketHistory(address: string, chainId: ChainId) {
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })

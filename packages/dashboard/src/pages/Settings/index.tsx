@@ -1,21 +1,21 @@
-import { PageFrame } from '../../components/PageFrame'
-import SettingCard from './components/SettingCard'
-import SettingItem from './components/SettingItem'
+import { PageFrame } from '../../components/PageFrame/index.js'
+import SettingCard from './components/SettingCard.js'
+import SettingItem from './components/SettingItem.js'
 
-import { useDashboardI18N } from '../../locales'
+import { useDashboardI18N } from '../../locales/index.js'
 
-import BackupSettingItem from './components/BackupSettingItem'
-import PasswordSettingItem from './components/PasswordSettingItem'
-import EmailSettingItem from './components/EmailSettingItem'
-import PhoneNumberSettingItem from './components/PhoneNumberSettingItem'
+import BackupSettingItem from './components/BackupSettingItem.js'
+import PasswordSettingItem from './components/PasswordSettingItem.js'
+import EmailSettingItem from './components/EmailSettingItem.js'
+import PhoneNumberSettingItem from './components/PhoneNumberSettingItem.js'
 
-import LanguageSetting from './components/LanguageSetting'
-import AppearanceSetting from './components/AppearanceSetting'
-import RestoreSetting from './components/RestoreSetting'
+import LanguageSetting from './components/LanguageSetting.js'
+import AppearanceSetting from './components/AppearanceSetting.js'
+import RestoreSetting from './components/RestoreSetting.js'
 // import MobileSyncSetting from './components/MobileSyncSetting'
 
-import { PasswordVerifiedProvider } from './hooks/VerifyPasswordContext'
-import { UserProvider } from './hooks/UserContext'
+import { PasswordVerifiedProvider } from './hooks/VerifyPasswordContext.js'
+import { UserProvider } from './hooks/UserContext.js'
 import { Icons } from '@masknet/icons'
 
 export default function Settings() {
@@ -39,11 +39,11 @@ export default function Settings() {
                             <AppearanceSetting />
                         </SettingItem>
                         {/* <SettingItem
-                            icon={<SettingsSyncIcon />}
-                            title={t.settings_sync_with_mobile_title()}
-                            desc={t.settings_sync_with_mobile_desc()}>
-                            <MobileSyncSetting />
-                        </SettingItem> */}
+            icon={<SettingsSyncIcon />}
+            title={t.settings_sync_with_mobile_title()}
+            desc={t.settings_sync_with_mobile_desc()}>
+            <MobileSyncSetting />
+        </SettingItem> */}
                     </SettingCard>
 
                     <SettingCard title={t.settings_backup_recovery()}>

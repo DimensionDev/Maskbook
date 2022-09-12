@@ -24,27 +24,27 @@ import classNames from 'classnames'
 import formatDateTime from 'date-fns/format'
 import { startCase } from 'lodash-unified'
 import { EnhanceableSite } from '@masknet/shared-base'
-import { usePostLink } from '../../../components/DataSource/usePostInfo'
+import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
 import { TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { getAssetAsBlobURL, getTextUILength, useI18N } from '../../../utils'
-import { ITO_EXCHANGE_RATION_MAX, MSG_DELIMITER, TIME_WAIT_BLOCKCHAIN } from '../constants'
-import { sortTokens } from './helpers'
-import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
-import { useClaimCallback } from './hooks/useClaimCallback'
-import { useDestructCallback } from './hooks/useDestructCallback'
-import { useIfQualified } from './hooks/useIfQualified'
-import { usePoolTradeInfo } from './hooks/usePoolTradeInfo'
-import { checkRegionRestrict, decodeRegionCode, useIPRegion } from './hooks/useRegion'
-import { ITO_Status, JSON_PayloadInMask } from '../types'
-import { StyledLinearProgress } from './StyledLinearProgress'
-import { SwapGuide, SwapStatus } from './SwapGuide'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
-import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import { getAssetAsBlobURL, getTextUILength, useI18N } from '../../../utils/index.js'
+import { ITO_EXCHANGE_RATION_MAX, MSG_DELIMITER, TIME_WAIT_BLOCKCHAIN } from '../constants.js'
+import { sortTokens } from './helpers.js'
+import { useAvailabilityComputed } from './hooks/useAvailabilityComputed.js'
+import { useClaimCallback } from './hooks/useClaimCallback.js'
+import { useDestructCallback } from './hooks/useDestructCallback.js'
+import { useIfQualified } from './hooks/useIfQualified.js'
+import { usePoolTradeInfo } from './hooks/usePoolTradeInfo.js'
+import { checkRegionRestrict, decodeRegionCode, useIPRegion } from './hooks/useRegion.js'
+import { ITO_Status, JSON_PayloadInMask } from '../types.js'
+import { StyledLinearProgress } from './StyledLinearProgress.js'
+import { SwapGuide, SwapStatus } from './SwapGuide.js'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { Icons } from '@masknet/icons'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 export interface IconProps {
     size?: number
@@ -283,7 +283,10 @@ export function ITO(props: ITO_Props) {
         !isRegionRestrict || !currentRegion || (!loadingRegion && allowRegions.includes(currentRegion.code))
 
     // #region if qualified
-    type Qual_V2 = { qualified: boolean; errorMsg: string }
+    type Qual_V2 = {
+        qualified: boolean
+        errorMsg: string
+    }
     const {
         value: ifQualified = false,
         loading: loadingIfQualified,

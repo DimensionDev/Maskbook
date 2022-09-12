@@ -1,8 +1,8 @@
-import { useI18N } from '../../../../utils'
-import { fetchConst } from '../../Worker/apis'
+import { useI18N } from '../../../../utils/index.js'
+import { fetchConst } from '../../Worker/apis/index.js'
 import { useCallback, useEffect, useState } from 'react'
-import type { FindTrumanConst } from '../../types'
-import { FindTruman_Const } from '../../constants'
+import type { FindTrumanConst } from '../../types.js'
+import { FindTruman_Const } from '../../constants.js'
 
 function renderString(template: string, data: Record<string, string | number>) {
     return template.replace(/{{([^}]+)}}/g, (match, p1) => data[p1]?.toString() ?? match)

@@ -3,14 +3,14 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 
-import { base } from '../base'
-import { referralMetadataReader } from '../helpers'
-import { META_KEY } from '../constants'
+import { base } from '../base.js'
+import { referralMetadataReader } from '../helpers/index.js'
+import { META_KEY } from '../constants.js'
 
-import { FarmPost } from './FarmPost'
-import { ReferralDialog } from './ReferralDialog'
-import { SelectToken } from './SelectToken'
-import { ReferralFarmsIcon } from './shared-ui/icons/ReferralFarms'
+import { FarmPost } from './FarmPost.js'
+import { ReferralDialog } from './ReferralDialog.js'
+import { SelectToken } from './SelectToken.js'
+import { ReferralFarmsIcon } from './shared-ui/icons/ReferralFarms.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,

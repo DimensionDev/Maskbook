@@ -1,21 +1,21 @@
 import { memo, useMemo, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { ReplaceType } from '../type'
+import { ReplaceType } from '../type.js'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { formatGweiToEther, formatGweiToWei, formatWeiToGwei } from '@masknet/web3-shared-evm'
 import { z as zod } from 'zod'
 import BigNumber from 'bignumber.js'
-import { useI18N } from '../../../../../utils'
+import { useI18N } from '../../../../../utils/index.js'
 import { hexToNumber, toHex } from 'web3-utils'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { StyledInput } from '../../../components/StyledInput'
+import { StyledInput } from '../../../components/StyledInput/index.js'
 import { LoadingButton } from '@mui/lab'
 import { isEmpty } from 'lodash-unified'
 import { useAsync, useAsyncFn } from 'react-use'
 import { useContainer } from 'unstated-next'
-import { WalletContext } from '../hooks/useWalletContext'
+import { WalletContext } from '../hooks/useWalletContext.js'
 import { isLessThanOrEqualTo, isPositive, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
 import {
     useChainId,
@@ -25,7 +25,7 @@ import {
     useChainIdSupport,
     useWeb3Connection,
 } from '@masknet/plugin-infra/web3'
-import { useTitle } from '../../../hook/useTitle'
+import { useTitle } from '../../../hook/useTitle.js'
 
 const useStyles = makeStyles()({
     container: {

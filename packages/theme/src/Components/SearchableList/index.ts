@@ -1,2 +1,2 @@
-export * from './SearchableList'
-export * from './MaskSearchableItemInList'
+export * from './SearchableList.js'
+export * from './MaskSearchableItemInList.js'

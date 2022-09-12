@@ -1,17 +1,21 @@
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
-import { base } from '../base'
+import { base } from '../base.js'
 import { Icons } from '@masknet/icons'
 import { EnhanceableSite } from '@masknet/shared-base'
-import { PLUGIN_DESCRIPTION, PLUGIN_NAME } from '../constants'
+import { PLUGIN_DESCRIPTION, PLUGIN_NAME } from '../constants.js'
 import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import type { ScamResult } from '@scamsniffer/detector'
-import ScamAlert from './ScamAlert'
-import { PluginScamRPC } from '../messages'
+import ScamAlert from './ScamAlert.js'
+import { PluginScamRPC } from '../messages.js'
 import { useAsync } from 'react-use'
 import { useState } from 'react'
 
-function Renderer(props: React.PropsWithChildren<{ project: ScamResult }>) {
+function Renderer(
+    props: React.PropsWithChildren<{
+        project: ScamResult
+    }>,
+) {
     usePluginWrapper(true)
     return <ScamAlert result={props.project} />
 }

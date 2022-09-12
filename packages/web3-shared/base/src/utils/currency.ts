@@ -1,20 +1,26 @@
 import BigNumber from 'bignumber.js'
+import { defaults } from 'lodash-unified'
 
-const boundaryValues = {
-    max: 1,
-    mid: 0,
+export interface FormatterCurrencyOptions {
+    symbols?: Record<string, string>
+    boundaries?: {
+        min?: number
+    }
+}
+
+const DEFAULT_BOUNDARIES = {
     min: 0.000001,
 }
 
-const DigitalCurrencyMap: Record<string, string> = {
+const DEFAULT_CURRENCY_SYMBOLS: Record<string, string> = {
     BTC: '\u20BF',
     ETH: '\u039E',
     SOL: '\u25CE',
 }
 
-const digitalCurrencyModifier = (parts: Intl.NumberFormatPart[]) => {
+const digitalCurrencyModifier = (parts: Intl.NumberFormatPart[], symbols: Record<string, string>) => {
     const [currencyPart, literalPart, ...rest] = parts
-    const symbol = DigitalCurrencyMap[currencyPart.value]
+    const symbol = symbols[currencyPart.value]
     if (symbol) return [...rest, literalPart, { ...currencyPart, value: symbol }]
     return parts
 }
@@ -36,29 +42,36 @@ const digitalCurrencyModifier = (parts: Intl.NumberFormatPart[]) => {
  * @param value
  * @param currency
  */
-export function formatCurrency(value: BigNumber.Value, currency = 'USD'): string {
+export function formatCurrency(
+    value: BigNumber.Value,
+    currency = 'USD',
+    { boundaries = {}, symbols = {} }: FormatterCurrencyOptions = {},
+): string {
     const bgValue = new BigNumber(value)
-
     const integerValue = bgValue.integerValue(1)
     const decimalValue = bgValue.plus(integerValue.negated())
     const isMoreThanOrEqualToOne = bgValue.isGreaterThanOrEqualTo(1)
-    const isLessMinValue = bgValue.isLessThan(boundaryValues.min)
+
+    const resolvedBoundaries = defaults({}, boundaries, DEFAULT_BOUNDARIES)
+    const resolvedSymbols = defaults({}, symbols, DEFAULT_CURRENCY_SYMBOLS)
 
     const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency, currencyDisplay: 'narrowSymbol' })
 
     if (bgValue.isZero()) {
-        const symbol = DigitalCurrencyMap[currency]
+        const symbol = resolvedSymbols[currency]
         return symbol ? `0.00 ${symbol}` : formatter.format(0)
     }
 
+    const isLessMinValue = bgValue.isLessThan(resolvedBoundaries.min)
+
     if (isLessMinValue) {
-        const value = digitalCurrencyModifier(formatter.formatToParts(boundaryValues.min))
+        const value = digitalCurrencyModifier(formatter.formatToParts(resolvedBoundaries.min), resolvedSymbols)
             .map(({ type, value }) => {
                 switch (type) {
                     case 'currency':
-                        return DigitalCurrencyMap[value] || value
+                        return resolvedSymbols[value] ?? value
                     case 'fraction':
-                        return boundaryValues.min.toString()
+                        return resolvedBoundaries.min.toString()
                     default:
                         return ''
                 }
@@ -67,11 +80,11 @@ export function formatCurrency(value: BigNumber.Value, currency = 'USD'): string
         return `< ${value}`
     }
 
-    return digitalCurrencyModifier(formatter.formatToParts(bgValue.toNumber()))
+    return digitalCurrencyModifier(formatter.formatToParts(bgValue.toNumber()), resolvedSymbols)
         .map(({ type, value }) => {
             switch (type) {
                 case 'currency':
-                    return DigitalCurrencyMap[value] || value
+                    return resolvedSymbols[value] ?? value
                 case 'fraction':
                     const unFormatString = decimalValue.toFormat(isMoreThanOrEqualToOne ? 2 : 6).replace('0.', '')
                     return isLessMinValue || bgValue.isGreaterThanOrEqualTo(1) || isMoreThanOrEqualToOne

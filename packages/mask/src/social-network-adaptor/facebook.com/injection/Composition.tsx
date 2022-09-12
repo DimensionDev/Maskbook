@@ -1,12 +1,12 @@
 import { useCallback } from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
-import { Composition } from '../../../components/CompositionDialog/Composition'
-import { isMobileFacebook } from '../utils/isMobile'
-import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
-import { startWatch } from '../../../utils/watcher'
-import { taskOpenComposeBoxFacebook } from '../automation/openComposeBox'
+import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { Composition } from '../../../components/CompositionDialog/Composition.js'
+import { isMobileFacebook } from '../utils/isMobile.js'
+import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint.js'
+import { startWatch } from '../../../utils/watcher.js'
+import { taskOpenComposeBoxFacebook } from '../automation/openComposeBox.js'
 import { makeStyles } from '@masknet/theme'
 
 let composeBox: LiveSelector<Element>

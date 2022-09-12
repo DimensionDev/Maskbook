@@ -7,11 +7,11 @@ import { isSameAddress, Wallet, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/
 import { createPayload, EthereumMethodType, formatEthereumAddress, Transaction } from '@masknet/web3-shared-evm'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { MAX_DERIVE_COUNT } from '@masknet/plugin-wallet'
-import * as database from './database'
-import * as password from './password'
-import * as Mask from '../maskwallet'
-import { hasNativeAPI } from '../../../../../shared/native-rpc'
-import { sendPayload } from '../send'
+import * as database from './database/index.js'
+import * as password from './password.js'
+import * as Mask from '../maskwallet/index.js'
+import { hasNativeAPI } from '../../../../../shared/native-rpc/index.js'
+import { sendPayload } from '../send.js'
 
 function bumpDerivationPath(path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`) {
     const splitted = path.split('/')
@@ -25,13 +25,20 @@ function sanitizeWallet(wallet: Wallet): Wallet {
 }
 
 // wallet db
-export { hasWallet, updateWallet } from './database/wallet'
+export { hasWallet, updateWallet } from './database/wallet.js'
 
 // password
-export { setPassword, hasPassword, verifyPassword, changePassword, validatePassword, clearPassword } from './password'
+export {
+    setPassword,
+    hasPassword,
+    verifyPassword,
+    changePassword,
+    validatePassword,
+    clearPassword,
+} from './password.js'
 
 // locker
-export { isLocked, lockWallet, unlockWallet } from './locker'
+export { isLocked, lockWallet, unlockWallet } from './locker.js'
 
 export async function getWallet(address?: string) {
     if (hasNativeAPI) {

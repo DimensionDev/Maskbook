@@ -16,7 +16,7 @@ import {
     TransactionEventType,
     ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
-import { ProtocolType, SavingsProtocol } from '../types'
+import { ProtocolType, SavingsProtocol } from '../types.js'
 
 export class AAVEProtocol implements SavingsProtocol {
     static DEFAULT_APR = '0.17'

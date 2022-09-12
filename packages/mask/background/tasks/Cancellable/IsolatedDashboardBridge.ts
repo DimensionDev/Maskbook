@@ -1,6 +1,6 @@
 import { Environment, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import { Flags } from '../../../shared/flags'
-import { hmr } from '../../../utils-pure'
+import { Flags } from '../../../shared/flags.js'
+import { hmr } from '../../../utils-pure/index.js'
 
 let disconnected = false
 const { signal } = hmr(import.meta.webpackHot)

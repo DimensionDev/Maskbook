@@ -1,10 +1,10 @@
 import { makeStyles } from '@masknet/theme'
-import { PluginCyberConnectRPC } from '../messages'
+import { PluginCyberConnectRPC } from '../messages.js'
 import { Skeleton, Typography } from '@mui/material'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import Avatar from 'boring-avatars'
-import ConnectButton from './ConnectButton'
-import FollowTab from './FollowTab'
+import ConnectButton from './ConnectButton.js'
+import FollowTab from './FollowTab.js'
 import { useAsyncRetry } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({

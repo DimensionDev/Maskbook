@@ -6,11 +6,11 @@ import {
     useRPCConstants,
     useTraderConstants,
 } from '@masknet/web3-shared-evm'
-import { PluginTraderRPC } from '../../messages'
-import type { SwapOOData, TradeStrategy } from '../../types'
+import { PluginTraderRPC } from '../../messages.js'
+import type { SwapOOData, TradeStrategy } from '../../types/index.js'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { useSlippageTolerance } from './useSlippageTolerance'
-import { OPENOCEAN_SUPPORTED_CHAINS } from './constants'
+import { useSlippageTolerance } from './useSlippageTolerance.js'
+import { OPENOCEAN_SUPPORTED_CHAINS } from './constants.js'
 import { useAccount, useDoubleBlockBeatRetry } from '@masknet/plugin-infra/web3'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { FungibleToken, NetworkPluginID, isZero } from '@masknet/web3-shared-base'

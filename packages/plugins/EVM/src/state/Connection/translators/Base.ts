@@ -2,9 +2,9 @@ import BigNumber from 'bignumber.js'
 import { toHex } from 'web3-utils'
 import { GasOptionType, isLessThan } from '@masknet/web3-shared-base'
 import { addGasMargin, chainResolver, formatGweiToWei, formatWeiToGwei } from '@masknet/web3-shared-evm'
-import type { Context, Translator } from '../types'
-import { Web3StateSettings } from '../../../settings'
-import { isReadOnlyMethod } from '../connection'
+import type { Context, Translator } from '../types.js'
+import { Web3StateSettings } from '../../../settings/index.js'
+import { isReadOnlyMethod } from '../connection.js'
 
 export class Base implements Translator {
     async encode(context: Context) {

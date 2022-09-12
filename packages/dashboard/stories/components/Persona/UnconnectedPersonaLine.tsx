@@ -1,5 +1,5 @@
 import { story } from '@masknet/storybook-shared'
-import { UnconnectedPersonaLine as C } from '../../../src/pages/Personas/components/PersonaLine'
+import { UnconnectedPersonaLine as C } from '../../../src/pages/Personas/components/PersonaLine/index.js'
 import { action } from '@storybook/addon-actions'
 
 const { meta, of } = story(C)

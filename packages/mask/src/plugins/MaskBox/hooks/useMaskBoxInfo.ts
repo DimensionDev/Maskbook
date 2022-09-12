@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { useMaskBoxContract } from './useMaskBoxContract'
+import { useMaskBoxContract } from './useMaskBoxContract.js'
 
 export function useMaskBoxInfo(id: string | number) {
     const maskBoxContract = useMaskBoxContract()

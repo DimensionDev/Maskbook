@@ -3,7 +3,7 @@ import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { FungibleToken, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'
-import { useMaskBoxContract } from './useMaskBoxContract'
+import { useMaskBoxContract } from './useMaskBoxContract.js'
 
 export function useOpenBoxTransaction(
     boxId: string,

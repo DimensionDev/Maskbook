@@ -1,4 +1,4 @@
-import { deleteCache, fetchJSON } from './helper'
+import { deleteCache, fetchJSON } from './helper.js'
 import urlcat from 'urlcat'
 import { first } from 'lodash-unified'
 import {
@@ -11,8 +11,8 @@ import {
     NextIDPlatform,
     toBase64,
 } from '@masknet/shared-base'
-import type { NextIDBaseAPI } from '../types'
-import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD } from './constants'
+import type { NextIDBaseAPI } from '../types/index.js'
+import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD } from './constants.js'
 
 const BASE_URL =
     process.env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
@@ -27,7 +27,9 @@ interface CreatePayloadBody {
 type PostContentLanguages = 'default' | 'zh_CN'
 
 interface CreatePayloadResponse {
-    post_content: { [key in PostContentLanguages]: string }
+    post_content: {
+        [key in PostContentLanguages]: string
+    }
     sign_payload: string
     uuid: string
     created_at: string

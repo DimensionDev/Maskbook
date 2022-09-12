@@ -1,7 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { SAVINGS_PLUGIN_ID } from './constants'
+import { SAVINGS_PLUGIN_ID } from './constants.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: SAVINGS_PLUGIN_ID,
