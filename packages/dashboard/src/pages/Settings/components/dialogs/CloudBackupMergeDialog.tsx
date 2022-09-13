@@ -1,16 +1,16 @@
 import { useCallback, useEffect, useState } from 'react'
 import { MaskColorVar, MaskDialog, useCustomSnackbar, makeStyles } from '@masknet/theme'
 import { Box, FormControlLabel, formControlLabelClasses, Radio, RadioGroup, styled, Typography } from '@mui/material'
-import { BackupInfoCard } from '../../../../components/Restore/BackupInfoCard'
-import type { BackupFileInfo } from '../../type'
-import { useDashboardI18N } from '../../../../locales'
-import { Messages, Services } from '../../../../API'
-import { fetchBackupValue } from '../../api'
+import { BackupInfoCard } from '../../../../components/Restore/BackupInfoCard.js'
+import type { BackupFileInfo } from '../../type.js'
+import { useDashboardI18N } from '../../../../locales/index.js'
+import { Messages, Services } from '../../../../API.js'
+import { fetchBackupValue } from '../../api.js'
 import { useAsyncFn } from 'react-use'
 import { decryptBackup } from '@masknet/backup-format'
 import { decode, encode } from '@msgpack/msgpack'
-import PasswordField from '../../../../components/PasswordField'
-import { LoadingButton } from '../../../../components/LoadingButton'
+import PasswordField from '../../../../components/PasswordField/index.js'
+import { LoadingButton } from '../../../../components/LoadingButton/index.js'
 
 const StyledFormControlLabel = styled(FormControlLabel)({
     [`&.${formControlLabelClasses.root}`]: {

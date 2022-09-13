@@ -5,7 +5,7 @@ import CheckIcon from '@mui/icons-material/Check'
 import type { DefaultComponentProps } from '@mui/material/OverridableComponent'
 import { formatEthereumAddress, Wallet } from '@masknet/web3-shared-evm'
 import { useBlockie } from '@masknet/plugin-infra/web3'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 
 const useStyle = makeStyles()((theme) => ({
     root: {
@@ -28,7 +28,16 @@ export interface WalletInListProps extends withClasses<never> {
     selected?: boolean
     disabled?: boolean
     onClick?: () => void
-    ListItemProps?: Partial<DefaultComponentProps<ListTypeMap<{ button: true }, 'div'>>>
+    ListItemProps?: Partial<
+        DefaultComponentProps<
+            ListTypeMap<
+                {
+                    button: true
+                },
+                'div'
+            >
+        >
+    >
 }
 
 export function WalletInList(props: WalletInListProps) {

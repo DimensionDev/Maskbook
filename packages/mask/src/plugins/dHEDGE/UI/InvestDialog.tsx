@@ -13,10 +13,10 @@ import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { useInvestCallback } from '../hooks/useInvestCallback'
-import { PluginDHedgeMessages } from '../messages'
-import type { Pool } from '../types'
-import { PluginWalletStatusBar } from '../../../utils'
+import { useInvestCallback } from '../hooks/useInvestCallback.js'
+import { PluginDHedgeMessages } from '../messages.js'
+import type { Pool } from '../types.js'
+import { PluginWalletStatusBar } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {

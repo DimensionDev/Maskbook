@@ -5,16 +5,16 @@ import { Grid, Typography, Box, Button } from '@mui/material'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
-import { useI18N } from '../locales'
-import { PageInterface, PagesType, FarmDetailed } from '../types'
-import { getRequiredChainId } from '../helpers'
-import { ReferralRPC } from '../messages'
+import { useI18N } from '../locales/index.js'
+import { PageInterface, PagesType, FarmDetailed } from '../types.js'
+import { getRequiredChainId } from '../helpers/index.js'
+import { ReferralRPC } from '../messages.js'
 
-import { AccordionFarm } from './shared-ui/AccordionFarm'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { AccordionFarm } from './shared-ui/AccordionFarm.js'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
-import { useSharedStyles, useMyFarmsStyles } from './styles'
+import { useSharedStyles, useMyFarmsStyles } from './styles.js'
 
 const useStyles = makeStyles()((theme) => ({
     buttonWithdraw: {

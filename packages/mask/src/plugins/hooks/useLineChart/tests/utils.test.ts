@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { fixOverPosition } from '../utils'
+import { fixOverPosition } from '../utils.js'
 
 describe('chart element position', () => {
     test.each([

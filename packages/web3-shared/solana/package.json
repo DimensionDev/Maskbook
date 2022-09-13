@@ -9,6 +9,7 @@
     }
   },
   "types": "./dist/index.d.js",
+  "include": ["src", "src/**/*.json"],
   "dependencies": {
     "@masknet/shared-base": "workspace:*",
     "@masknet/web3-constants": "workspace:*",

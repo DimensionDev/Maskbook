@@ -1,8 +1,8 @@
 import { unreachable } from '@dimensiondev/kit'
 import { SchemaType } from '@masknet/web3-shared-evm'
-import { useERC20TokenTransferCallback } from './useERC20TokenTransferCallback'
-import { useERC721TokenTransferCallback } from './useERC721TokenTransferCallback'
-import { useNativeTransferCallback } from './useNativeTokenTransferCallback'
+import { useERC20TokenTransferCallback } from './useERC20TokenTransferCallback.js'
+import { useERC721TokenTransferCallback } from './useERC721TokenTransferCallback.js'
+import { useNativeTransferCallback } from './useNativeTokenTransferCallback.js'
 
 export function useTokenTransferCallback(type: SchemaType, address: string) {
     const r1 = useNativeTransferCallback()

@@ -4,7 +4,7 @@ import { alpha, Box, Link, Typography } from '@mui/material'
 import { WalletIcon, useSnackbarCallback } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
-import { useI18N } from '../../i18n-next-ui'
+import { useI18N } from '../../i18n-next-ui.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

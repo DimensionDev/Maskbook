@@ -1,7 +1,7 @@
 import { MaskColorVar } from '@masknet/theme'
 import { styled } from '@mui/system'
 import { memo } from 'react'
-import { useDashboardI18N } from '../../locales'
+import { useDashboardI18N } from '../../locales/index.js'
 
 const VersionContainer = styled('div')(() => ({
     color: MaskColorVar.textSecondary,

@@ -1,10 +1,10 @@
 import { Grid, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import type { GoodGhostingInfo } from '../types'
+import type { GoodGhostingInfo } from '../types.js'
 import formatDateTime from 'date-fns/format'
 import isBefore from 'date-fns/isBefore'
 import classNames from 'classnames'
-import { useTimeline } from '../hooks/useGameInfo'
+import { useTimeline } from '../hooks/useGameInfo.js'
 
 const useStyles = makeStyles()((theme) => ({
     text: {

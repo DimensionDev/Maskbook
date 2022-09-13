@@ -3,7 +3,7 @@ import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { useGameConstants } from '@masknet/web3-shared-evm'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { GameRSSNode, GameInfo } from '../types'
+import type { GameRSSNode, GameInfo } from '../types.js'
 
 export function useGameList() {
     const { Storage } = useWeb3State(NetworkPluginID.PLUGIN_EVM)

@@ -34,7 +34,7 @@ export function QRCode({ text, options = {}, canvasProps }: QRProps) {
     useEffect(() => {
         if (!ref.current || error) return
 
-        qr.toCanvas(ref.current, text, options, (err: Error) => {
+        qr.toCanvas(ref.current, text, options, (err) => {
             if (err) {
                 setError(true)
                 cache.remove(CACHE_SCOPE, text)

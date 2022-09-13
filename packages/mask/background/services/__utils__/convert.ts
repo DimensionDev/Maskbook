@@ -1,7 +1,7 @@
 import type { PersonaInformation, ProfileInformation } from '@masknet/shared-base'
 import { noop } from 'lodash-unified'
-import { queryAvatarsDataURL } from '../../database/avatar-cache/avatar'
-import { FullPersonaDBTransaction, PersonaRecord, ProfileRecord, queryProfilesDB } from '../../database/persona/db'
+import { queryAvatarsDataURL } from '../../database/avatar-cache/avatar.js'
+import { FullPersonaDBTransaction, PersonaRecord, ProfileRecord, queryProfilesDB } from '../../database/persona/db.js'
 
 /** @internal */
 export function toProfileInformation(profiles: ProfileRecord[]) {

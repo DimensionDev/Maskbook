@@ -3,12 +3,12 @@ import { TabContext, TabPanel } from '@mui/lab'
 import { makeStyles } from '@masknet/theme'
 import { Button, Box, Tab, Tabs, Grid, Typography } from '@mui/material'
 
-import { useI18N } from '../locales'
-import { PageInterface, PagesType, TabsReferralFarms } from '../types'
+import { useI18N } from '../locales/index.js'
+import { PageInterface, PagesType, TabsReferralFarms } from '../types.js'
 
-import { ReferToFarmIcon, CreateFarmIcon, BuyToFarmIcon } from './shared-ui/icons'
+import { ReferToFarmIcon, CreateFarmIcon, BuyToFarmIcon } from './shared-ui/icons/index.js'
 
-import { useTabStyles } from './styles'
+import { useTabStyles } from './styles.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

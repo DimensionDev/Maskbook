@@ -1,5 +1,5 @@
-import { useStyles } from './useStyles'
-import { useI18N } from '../locales'
+import { useStyles } from './useStyles.js'
+import { useI18N } from '../locales/index.js'
 import { Icons } from '@masknet/icons'
 import { Typography } from '@mui/material'
 

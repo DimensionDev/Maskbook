@@ -1,5 +1,5 @@
 import { story } from '@masknet/storybook-shared'
-import { DeletePersonaDialog as C } from '../../../src/pages/Personas/components/DeletePersonaDialog'
+import { DeletePersonaDialog as C } from '../../../src/pages/Personas/components/DeletePersonaDialog/index.js'
 import { action } from '@storybook/addon-actions'
 
 const { meta, of } = story(C)

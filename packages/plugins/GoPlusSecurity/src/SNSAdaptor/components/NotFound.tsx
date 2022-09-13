@@ -1,6 +1,6 @@
 import { MaskColorVar } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
-import { useI18N } from '../../locales'
+import { useI18N } from '../../locales/index.js'
 
 export const NotFound = () => {
     const t = useI18N()

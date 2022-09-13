@@ -9,8 +9,8 @@ import { editTypedMessageMeta } from '@masknet/typed-message/dom'
 import { makeStyles } from '@masknet/theme'
 import { InputBase, Alert, Button } from '@mui/material'
 import { useCallback, useImperativeHandle, useState, useRef, forwardRef, memo, useMemo } from 'react'
-import { useI18N } from '../../utils'
-import { BadgeRenderer } from './BadgeRenderer'
+import { useI18N } from '../../utils/index.js'
+import { BadgeRenderer } from './BadgeRenderer.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

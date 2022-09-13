@@ -1,8 +1,8 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
-import { startWatch } from '../../../utils/watcher'
-import { toolboxInSidebarSelector } from '../utils/selector'
-import { ToolboxHintAtMinds } from './ToolboxHint_UI'
+import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { startWatch } from '../../../utils/watcher.js'
+import { toolboxInSidebarSelector } from '../utils/selector.js'
+import { ToolboxHintAtMinds } from './ToolboxHint_UI.js'
 
 export function injectToolboxHintAtMinds(signal: AbortSignal, category: 'wallet' | 'application') {
     const watcher = new MutationObserverWatcher(toolboxInSidebarSelector())

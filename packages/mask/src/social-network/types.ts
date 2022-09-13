@@ -15,7 +15,7 @@ import type { RenderFragmentsContextType } from '@masknet/typed-message/dom'
 import type { SharedComponentOverwrite } from '@masknet/shared'
 import type { PaletteMode, Theme } from '@mui/material'
 import type { Subscription } from 'use-subscription'
-import type { createSNSAdaptorSpecializedPostContext } from './utils/create-post-context'
+import type { createSNSAdaptorSpecializedPostContext } from './utils/create-post-context.js'
 import type { SocialIdentity } from '@masknet/web3-shared-base'
 
 export declare namespace SocialNetwork {
@@ -57,7 +57,9 @@ export namespace SocialNetworkUI {
          * @returns the completion definition of this SNS
          * @example load: () => import('./full-definition')
          */
-        load(): Promise<{ default: Definition }>
+        load(): Promise<{
+            default: Definition
+        }>
         /**
          * On Hot Module Reload. When call the callback, it will unload the current instance and load the new one.
          */

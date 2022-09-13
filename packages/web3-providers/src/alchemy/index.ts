@@ -1,2 +1,2 @@
-export * from './apis/EVM'
-export * from './apis/Flow'
+export * from './apis/EVM.js'
+export * from './apis/Flow.js'

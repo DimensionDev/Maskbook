@@ -3,9 +3,9 @@ import './plugins'
 import { Emitter } from '@servie/events'
 import { startPluginDashboard, Plugin } from '@masknet/plugin-infra/dashboard'
 import { createI18NBundle, i18NextInstance } from '@masknet/shared-base'
-import { Services, Messages } from '../API'
-import { createPartialSharedUIContext } from '../../../mask/shared/plugin-infra/host'
-import { RestPartOfPluginUIContextShared } from '../../../mask/src/utils/plugin-context-shared-ui'
+import { Services, Messages } from '../API.js'
+import { createPartialSharedUIContext } from '../../../mask/shared/plugin-infra/host.js'
+import { RestPartOfPluginUIContextShared } from '../../../mask/src/utils/plugin-context-shared-ui.js'
 
 const PluginHost: Plugin.__Host.Host<Plugin.Dashboard.DashboardContext> = {
     minimalMode: {

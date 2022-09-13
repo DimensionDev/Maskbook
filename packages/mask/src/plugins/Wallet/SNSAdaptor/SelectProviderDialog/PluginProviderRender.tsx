@@ -7,8 +7,8 @@ import { Web3Helper, Web3Plugin, useWeb3State } from '@masknet/plugin-infra/web3
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, List, ListItem, Typography } from '@mui/material'
-import { useI18N } from '../../../../utils'
-import { ProviderIcon } from './ProviderIcon'
+import { useI18N } from '../../../../utils/index.js'
+import { ProviderIcon } from './ProviderIcon.js'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`

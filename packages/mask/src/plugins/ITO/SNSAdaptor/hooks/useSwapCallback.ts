@@ -17,10 +17,10 @@ import {
     currySameAddress,
 } from '@masknet/web3-shared-base'
 import { fromHex, toHex } from '@masknet/shared-base'
-import { useITO_Contract } from './useITO_Contract'
-import { useQualificationContract } from './useQualificationContract'
-import type { JSON_PayloadInMask } from '../../types'
-import { checkAvailability } from '../utils/checkAvailability'
+import { useITO_Contract } from './useITO_Contract.js'
+import { useQualificationContract } from './useQualificationContract.js'
+import type { JSON_PayloadInMask } from '../../types.js'
+import { checkAvailability } from '../utils/checkAvailability.js'
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 
 export function useSwapCallback(

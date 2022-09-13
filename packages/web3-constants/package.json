@@ -3,5 +3,8 @@
   "private": true,
   "scripts": {
     "start": "ts-node compile-constants.ts"
+  },
+  "dependencies": {
+    "@masknet/web3-contracts": "workspace:*"
   }
 }

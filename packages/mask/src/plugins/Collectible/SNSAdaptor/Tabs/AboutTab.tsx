@@ -6,10 +6,10 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
 import type { NetworkPluginID, NonFungibleTokenOrder } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { CollectibleState } from '../../hooks/useCollectibleState'
-import { CollectibleTab } from '../CollectibleTab'
-import { NFTBasicInfo } from '../../../../components/shared/NFTCard/NFTBasicInfo'
-import { NFTPriceCard } from '../../../../components/shared/NFTCard/NFTPriceCard'
+import { CollectibleState } from '../../hooks/useCollectibleState.js'
+import { CollectibleTab } from '../CollectibleTab.js'
+import { NFTBasicInfo } from '../../../../components/shared/NFTCard/NFTBasicInfo.js'
+import { NFTPriceCard } from '../../../../components/shared/NFTCard/NFTPriceCard.js'
 
 const useStyles = makeStyles()((theme) => ({
     body: {

@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
-import { useI18N } from '../../locales'
+import { useI18N } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

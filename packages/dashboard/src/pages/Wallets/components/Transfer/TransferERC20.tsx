@@ -37,8 +37,8 @@ import {
 } from '@masknet/web3-shared-evm'
 import TuneIcon from '@mui/icons-material/Tune'
 import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/material'
-import { useDashboardI18N } from '../../../../locales'
-import { useGasConfig } from '../../hooks/useGasConfig'
+import { useDashboardI18N } from '../../../../locales/index.js'
+import { useGasConfig } from '../../hooks/useGasConfig.js'
 
 export interface TransferERC20Props {
     token: FungibleToken<ChainId, SchemaType>

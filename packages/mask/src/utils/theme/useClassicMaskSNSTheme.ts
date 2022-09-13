@@ -1,13 +1,13 @@
 import { unstable_createMuiStrictModeTheme } from '@mui/material'
 import type { Theme } from '@mui/material/styles/createTheme'
 import { useRef } from 'react'
-import { activatedSocialNetworkUI } from '../../social-network'
+import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import { useSubscription } from 'use-subscription'
-import { useThemeLanguage } from './useThemeLanguage'
+import { useThemeLanguage } from './useThemeLanguage.js'
 import { createSubscriptionFromValueRef } from '@masknet/shared-base'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { languageSettings } from '../../../shared/legacy-settings/settings'
+import { languageSettings } from '../../../shared/legacy-settings/settings.js'
 import { MaskDarkTheme, MaskLightTheme } from '@masknet/theme'
 
 const staticRef = createSubscriptionFromValueRef(new ValueRef('light'))

@@ -1,6 +1,6 @@
 import { useAccount, useChainId, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { TipTuple } from './type'
+import type { TipTuple } from './type.js'
 import { useAsyncFn } from 'react-use'
 
 export function useNftTip<T extends NetworkPluginID>(

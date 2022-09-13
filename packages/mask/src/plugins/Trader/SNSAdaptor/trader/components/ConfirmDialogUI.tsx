@@ -2,8 +2,8 @@ import { FormattedBalance, FormattedCurrency, InjectedDialog, TokenIcon } from '
 import { isDashboardPage } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, parseColor } from '@masknet/theme'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { PluginWalletStatusBar, useI18N } from '../../../../../utils'
-import type { TradeComputed } from '../../../types'
+import { PluginWalletStatusBar, useI18N } from '../../../../../utils/index.js'
+import type { TradeComputed } from '../../../types/index.js'
 import type BigNumber from 'bignumber.js'
 import {
     formatBalance,
@@ -18,10 +18,12 @@ import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { Alert, alpha, Box, Button, DialogActions, DialogContent, dialogTitleClasses, Typography } from '@mui/material'
 import { ArrowDownward } from '@mui/icons-material'
 import { Icons } from '@masknet/icons'
-import { ONE_BIPS, MIN_SLIPPAGE, MAX_SLIPPAGE } from '../../../constants'
+import { ONE_BIPS, MIN_SLIPPAGE, MAX_SLIPPAGE } from '../../../constants/index.js'
 import { useUpdateEffect } from 'react-use'
 
-const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
+const useStyles = makeStyles<{
+    isDashboard: boolean
+}>()((theme, { isDashboard }) => ({
     section: {
         display: 'flex',
         justifyContent: 'space-between',

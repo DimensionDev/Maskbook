@@ -1,5 +1,5 @@
 import { story } from '@masknet/storybook-shared'
-import C from '../../../src/pages/Settings/components/SettingButton'
+import C from '../../../src/pages/Settings/components/SettingButton.js'
 
 const { meta, of } = story(C)
 

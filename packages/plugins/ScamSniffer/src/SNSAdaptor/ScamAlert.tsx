@@ -5,7 +5,7 @@ import LinkIcon from '@mui/icons-material/Link'
 import Checkbox from '@mui/material/Checkbox'
 import DescriptionIcon from '@mui/icons-material/Description'
 import type { ScamResult } from '@scamsniffer/detector'
-import { PluginScamRPC } from '../messages'
+import { PluginScamRPC } from '../messages.js'
 import { useAsync } from 'react-use'
 import { useState, useEffect } from 'react'
 import { openWindow } from '@masknet/shared-base-ui'
@@ -102,7 +102,7 @@ const ScamAlert = ({ result }: { result: ScamResult }) => {
         <div className={classes.root}>
             <div className={classes.scam}>
                 <Typography variant="body2" className={classes.title}>
-                    {t.alertTitle()}
+                    {t.similarProject()}
                 </Typography>
                 <List className={classes.list}>
                     <ListItemButton>

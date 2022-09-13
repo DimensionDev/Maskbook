@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import JSBI from 'jsbi'
 import { Trade as V2Trade } from '@uniswap/v2-sdk'
 import { Percent, Fraction, CurrencyAmount, Currency } from '@uniswap/sdk-core'
-import type { Trade } from '../../types'
+import type { Trade } from '../../types/index.js'
 
 const BASE_FEE = new Percent(JSBI.BigInt(30), JSBI.BigInt(10000))
 const ONE_HUNDRED_PERCENT = new Percent(JSBI.BigInt(10000), JSBI.BigInt(10000))
@@ -26,7 +26,7 @@ function computeRealizedLPFeePercent(trade: Trade): Percent {
             // eslint-disable-next-line unicorn/no-array-reduce
             trade.route.pools.reduce<Percent>(
                 (currentFee: Percent, pool): Percent =>
-                    currentFee.multiply(ONE_HUNDRED_PERCENT.subtract(new Fraction(pool.fee, 1_000_000))),
+                    currentFee.multiply(ONE_HUNDRED_PERCENT.subtract(new Fraction(pool.fee, 1000000))),
                 ONE_HUNDRED_PERCENT,
             ),
         )

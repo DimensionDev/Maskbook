@@ -15,8 +15,8 @@ import { first, uniqBy } from 'lodash-unified'
 import { FC, useEffect, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { useUpdateEffect } from 'react-use'
-import { MaskMessages, sorter, useLocationChange } from '../../../utils'
-import { ProfileCardTitle } from './ProfileCardTitle'
+import { MaskMessages, sorter, useLocationChange } from '../../../utils/index.js'
+import { ProfileCardTitle } from './ProfileCardTitle.js'
 
 interface Props extends withClasses<'text' | 'button' | 'root'> {
     identity: SocialIdentity

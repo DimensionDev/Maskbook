@@ -20,4 +20,4 @@ export const ConnectActionList: StyledComponent<
     },
 }))
 
-export * from './ConnectActionListItem'
+export * from './ConnectActionListItem.js'

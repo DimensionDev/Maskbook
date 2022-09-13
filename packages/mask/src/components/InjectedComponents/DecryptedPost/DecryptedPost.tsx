@@ -2,20 +2,26 @@ import { Fragment, useEffect, useReducer } from 'react'
 import { extractTextFromTypedMessage, TypedMessage } from '@masknet/typed-message'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 
-import Services, { GeneratorServices } from '../../../extension/service'
-import type { DecryptionProgress, FailureDecryption, SuccessDecryption } from './types'
-import { DecryptPostSuccess } from './DecryptedPostSuccess'
-import { DecryptPostAwaiting } from './DecryptPostAwaiting'
-import { DecryptPostFailed } from './DecryptPostFailed'
+import Services, { GeneratorServices } from '../../../extension/service.js'
+import type { DecryptionProgress, FailureDecryption, SuccessDecryption } from './types.js'
+import { DecryptPostSuccess } from './DecryptedPostSuccess.js'
+import { DecryptPostAwaiting } from './DecryptPostAwaiting.js'
+import { DecryptPostFailed } from './DecryptPostFailed.js'
 import { encodeArrayBuffer, safeUnreachable } from '@dimensiondev/kit'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import type { DecryptionContext, SocialNetworkEncodedPayload } from '../../../../background/services/crypto/decryption'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import type {
+    DecryptionContext,
+    SocialNetworkEncodedPayload,
+} from '../../../../background/services/crypto/decryption.js'
 import { DecryptIntermediateProgressKind, DecryptProgressKind } from '@masknet/encryption'
 import { type PostContext, usePostInfoDetails, usePostInfo } from '@masknet/plugin-infra/content-script'
 import { Some } from 'ts-results'
 
 function progressReducer(
-    state: Array<{ key: string; progress: SuccessDecryption | FailureDecryption | DecryptionProgress }>,
+    state: Array<{
+        key: string
+        progress: SuccessDecryption | FailureDecryption | DecryptionProgress
+    }>,
     payload: {
         type: 'refresh'
         key: string

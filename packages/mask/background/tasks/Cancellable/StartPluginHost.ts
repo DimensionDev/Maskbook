@@ -1,8 +1,8 @@
 import { startPluginWorker, Plugin } from '@masknet/plugin-infra/background-worker'
-import { createPluginDatabase } from '../../database/plugin-db'
-import { createPluginHost, createSharedContext } from '../../../shared/plugin-infra/host'
-import { getPluginMinimalModeEnabled } from '../../services/settings/old-settings-accessor'
-import { hmr } from '../../../utils-pure'
+import { createPluginDatabase } from '../../database/plugin-db/index.js'
+import { createPluginHost, createSharedContext } from '../../../shared/plugin-infra/host.js'
+import { getPluginMinimalModeEnabled } from '../../services/settings/old-settings-accessor.js'
+import { hmr } from '../../../utils-pure/index.js'
 
 const { signal } = hmr(import.meta.webpackHot)
 startPluginWorker(createPluginHost(signal, createWorkerContext, getPluginMinimalModeEnabled))

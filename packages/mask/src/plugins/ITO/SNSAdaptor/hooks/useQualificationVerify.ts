@@ -6,8 +6,8 @@ import {
     QUALIFICATION2_INTERFACE_ID,
     QUALIFICATION_HAS_START_TIME_INTERFACE_ID,
     QUALIFICATION_HAS_LUCKY_INTERFACE_ID,
-} from '../../constants'
-import { useQualificationContract } from './useQualificationContract'
+} from '../../constants.js'
+import { useQualificationContract } from './useQualificationContract.js'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useERC165 } from '@masknet/plugin-infra/web3-evm'

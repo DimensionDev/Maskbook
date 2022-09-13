@@ -1,14 +1,20 @@
 import { throttle } from 'lodash-unified'
-import { MaskMessages } from '../../../../shared/messages'
-import { InternalStorageKeys } from '../../../services/settings/utils'
-import type { PopupSSR_Props } from './type'
-import { getCurrentPersonaIdentifier, getLanguage } from '../../../services/settings'
-import { queryOwnedPersonaInformation } from '../../../services/identity'
+import { MaskMessages } from '../../../../shared/messages.js'
+import { InternalStorageKeys } from '../../../services/settings/utils.js'
+import type { PopupSSR_Props } from './type.js'
+import { getCurrentPersonaIdentifier, getLanguage } from '../../../services/settings/index.js'
+import { queryOwnedPersonaInformation } from '../../../services/identity/index.js'
 
 const CACHE_KEY = 'popup-ssr-cache'
-export let cache: { html: string; css: string } = { html: '', css: '' }
+export let cache: {
+    html: string
+    css: string
+} = { html: '', css: '' }
 export function startListen(
-    render: (props: PopupSSR_Props) => Promise<{ html: string; css: string }>,
+    render: (props: PopupSSR_Props) => Promise<{
+        html: string
+        css: string
+    }>,
     signal: AbortSignal,
 ) {
     async function task() {

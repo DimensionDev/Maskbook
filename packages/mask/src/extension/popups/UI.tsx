@@ -2,27 +2,27 @@ import { lazy, useEffect, useState } from 'react'
 import { Navigate, Route, Routes, HashRouter } from 'react-router-dom'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra/dashboard'
 import { PopupRoutes, queryRemoteI18NBundle } from '@masknet/shared-base'
-import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme'
-import '../../social-network-adaptor/browser-action'
-import { PopupContext } from './hook/usePopupContext'
-import { PopupFrame } from './components/PopupFrame'
-import { MaskUIRoot } from '../../UIRoot'
-import { PageTitleContext } from './context'
+import { usePopupFullPageTheme } from '../../utils/theme/useClassicMaskFullPageTheme.js'
+import '../../social-network-adaptor/browser-action/index.js'
+import { PopupContext } from './hook/usePopupContext.js'
+import { PopupFrame } from './components/PopupFrame/index.js'
+import { MaskUIRoot } from '../../UIRoot.js'
+import { PageTitleContext } from './context.js'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { languageSettings } from '../../../shared/legacy-settings/settings'
+import { languageSettings } from '../../../shared/legacy-settings/settings.js'
 import { PopupSnackbarProvider } from '@masknet/theme'
-import { LoadingPlaceholder } from './components/LoadingPlaceholder'
-import Services from '../service'
+import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
+import Services from '../service.js'
 
 function usePopupTheme() {
     return usePopupFullPageTheme(useValueRef(languageSettings))
 }
-const Wallet = lazy(() => import(/* webpackPreload: true */ './pages/Wallet'))
-const Personas = lazy(() => import(/* webpackPreload: true */ './pages/Personas'))
-const SwapPage = lazy(() => import('./pages/Swap'))
-const RequestPermissionPage = lazy(() => import('./RequestPermission'))
-const PermissionAwareRedirect = lazy(() => import('./PermissionAwareRedirect'))
-const ThirdPartyRequestPermission = lazy(() => import('./ThirdPartyRequestPermission'))
+const Wallet = lazy(() => import(/* webpackPreload: true */ './pages/Wallet/index.js'))
+const Personas = lazy(() => import(/* webpackPreload: true */ './pages/Personas/index.js'))
+const SwapPage = lazy(() => import('./pages/Swap/index.js'))
+const RequestPermissionPage = lazy(() => import('./RequestPermission/index.js'))
+const PermissionAwareRedirect = lazy(() => import('./PermissionAwareRedirect/index.js'))
+const ThirdPartyRequestPermission = lazy(() => import('./ThirdPartyRequestPermission/index.js'))
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 function PluginRenderDelayed() {

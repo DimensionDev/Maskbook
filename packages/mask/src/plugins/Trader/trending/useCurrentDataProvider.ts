@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import type { DataProvider } from '@masknet/public-api'
 import { useSubscription } from 'use-subscription'
-import { getDataProvider } from '../storage'
+import { getDataProvider } from '../storage/index.js'
 
 export function useCurrentDataProvider(availableDataProviders: DataProvider[]) {
     const currentDataProvider = useSubscription(getDataProvider().subscription)

@@ -1,7 +1,7 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { searchMindsProfileCover } from '../utils/selector'
-import { createReactRootShadowed, startWatch } from '../../../utils'
-import { ProfileCover } from '../../../components/InjectedComponents/ProfileCover'
+import { searchMindsProfileCover } from '../utils/selector.js'
+import { createReactRootShadowed, startWatch } from '../../../utils/index.js'
+import { ProfileCover } from '../../../components/InjectedComponents/ProfileCover.js'
 
 export function injectMindsProfileCover(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchMindsProfileCover())

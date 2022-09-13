@@ -15,7 +15,7 @@ import type {
     Web3Provider,
     Operation,
 } from '@masknet/web3-shared-solana'
-import { createConnection } from './Connection/connection'
+import { createConnection } from './Connection/connection.js'
 
 export class Connection extends ConnectionState<
     ChainId,

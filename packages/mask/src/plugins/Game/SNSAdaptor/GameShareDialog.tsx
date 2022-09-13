@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Button, Typography, Box } from '@mui/material'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { useI18N } from '../locales'
-import type { GameInfo } from '../types'
-import { Share_Twitter } from '../constants'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import { useI18N } from '../locales/index.js'
+import type { GameInfo } from '../types.js'
+import { Share_Twitter } from '../constants.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

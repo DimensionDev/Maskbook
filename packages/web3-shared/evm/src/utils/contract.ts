@@ -7,8 +7,8 @@ import type {
     PayableTransactionObject,
     PayableTx,
 } from '@masknet/web3-contracts/types/types'
-import type { Transaction } from '../types'
-import { isValidAddress } from './address'
+import type { Transaction } from '../types/index.js'
+import { isValidAddress } from './address.js'
 
 export function encodeTransaction(transaction: Transaction): PayableTx & {
     maxPriorityFeePerGas?: string

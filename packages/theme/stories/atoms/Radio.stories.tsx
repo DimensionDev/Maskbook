@@ -1,5 +1,5 @@
 import { Radio as MuiRadio, RadioGroup, FormControlLabel, FormControlLabelProps } from '@mui/material'
-import { story } from '../utils'
+import { story } from '../utils/index.js'
 
 const C = (props: FormControlLabelProps) => {
     return (

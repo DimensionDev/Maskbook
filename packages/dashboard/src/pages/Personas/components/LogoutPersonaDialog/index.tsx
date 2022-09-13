@@ -5,9 +5,9 @@ import { LoadingButton } from '@mui/lab'
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import { memo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Services } from '../../../../API'
-import { useDashboardI18N } from '../../../../locales'
-import { PersonaContext } from '../../hooks/usePersonaContext'
+import { Services } from '../../../../API.js'
+import { useDashboardI18N } from '../../../../locales/index.js'
+import { PersonaContext } from '../../hooks/usePersonaContext.js'
 
 export interface LogoutPersonaDialogProps {
     open: boolean

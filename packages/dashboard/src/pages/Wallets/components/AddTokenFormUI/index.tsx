@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { useDashboardI18N } from '../../../../locales'
+import { useDashboardI18N } from '../../../../locales/index.js'
 import { Button, DialogActions, DialogContent, TextField } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useFormContext, Controller } from 'react-hook-form'

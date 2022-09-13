@@ -2,10 +2,10 @@ import { memo, Suspense, useMemo, useState } from 'react'
 import { Grid, styled, Theme, useMediaQuery } from '@mui/material'
 import { MaskColorVar } from '@masknet/theme'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
-import { FollowUs } from '../FollowUs'
-import { DashboardContext } from './context'
-import { Navigation } from './Navigation'
-import { NavigationVersionFooter } from '../NavigationVersionFooter'
+import { FollowUs } from '../FollowUs/index.js'
+import { DashboardContext } from './context.js'
+import { Navigation } from './Navigation.js'
+import { NavigationVersionFooter } from '../NavigationVersionFooter/index.js'
 
 const Root = styled(Grid)(({ theme }) => ({
     backgroundColor: MaskColorVar.primaryBackground,

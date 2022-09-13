@@ -1,1 +1,1 @@
-export * from './checkLengthExceed'
+export * from './checkLengthExceed.js'

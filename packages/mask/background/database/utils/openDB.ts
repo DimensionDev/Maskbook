@@ -13,7 +13,7 @@ import type {
     IDBPCursor,
 } from 'idb/with-async-ittr'
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { MaskMessages } from '../../../shared'
+import { MaskMessages } from '../../../shared/index.js'
 import fixSafari from 'safari-14-idb-fix'
 
 export function createDBAccess<DBSchema>(opener: () => Promise<IDBPDatabase<DBSchema>>) {

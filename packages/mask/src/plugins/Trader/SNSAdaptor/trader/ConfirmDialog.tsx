@@ -1,19 +1,19 @@
 import { useValueRef } from '@masknet/shared-base-ui'
-import type { TradeComputed } from '../../types'
+import type { TradeComputed } from '../../types/index.js'
 import { createNativeToken, formatUSD, formatWeiToEther, GasOptionConfig } from '@masknet/web3-shared-evm'
 import { useCallback, useMemo, useState } from 'react'
-import { FungibleToken, leftShift, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
+import { formatBalance, formatCurrency, FungibleToken, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { currentSlippageSettings } from '../../settings'
+import { currentSlippageSettings } from '../../settings.js'
 import { useNativeTokenPrice, useFungibleTokenPrice, Web3Helper } from '@masknet/plugin-infra/web3'
-import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting'
-import { PluginTraderMessages } from '../../messages'
-import { ConfirmDialogUI } from './components/ConfirmDialogUI'
+import { useGreatThanSlippageSetting } from './hooks/useGreatThanSlippageSetting.js'
+import { PluginTraderMessages } from '../../messages.js'
+import { ConfirmDialogUI } from './components/ConfirmDialogUI.js'
 import { useSelectAdvancedSettings } from '@masknet/shared'
-import { PriceImpactDialogUI } from './components/PriceImpactDialogUI'
-import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
+import { PriceImpactDialogUI } from './components/PriceImpactDialogUI.js'
+import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import BigNumber from 'bignumber.js'
-import { MIN_GAS_LIMIT } from '../../constants'
+import { MIN_GAS_LIMIT } from '../../constants/index.js'
 
 export interface ConfirmDialogProps {
     open: boolean
@@ -58,9 +58,21 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     // #endregion
 
     // #region price impact dialog
-    const lostToken = leftShift(trade.inputAmount.multipliedBy(trade.priceImpact), trade.inputToken?.decimals ?? 0)
+    const lostToken = formatBalance(
+        multipliedBy(trade.inputAmount, trade.priceImpact).toFixed(0),
+        trade.inputToken?.decimals ?? 0,
+        6,
+    )
 
-    const lostValue = lostToken.multipliedBy(inputTokenPrice ?? 0).toFixed(2)
+    const lostValue = formatCurrency(multipliedBy(inputTokenPrice ?? 0, lostToken), 'USD', {
+        boundaries: {
+            min: 0.01,
+        },
+        symbols: {
+            // hide USD symbol
+            $: '',
+        },
+    })
 
     const handleOpenPriceImpactDialog = useCallback(() => {
         setPriceImpactDialogOpen(true)
@@ -119,7 +131,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 open={priceImpactDialogOpen}
                 onClose={onPriceImpactDialogClose}
                 onConfirm={handlePriceImpactDialogConfirm}
-                lostToken={lostToken.toFixed()}
+                lostToken={lostToken}
                 symbol={inputToken.symbol}
                 lostValue={lostValue}
                 priceImpact={trade.priceImpact}

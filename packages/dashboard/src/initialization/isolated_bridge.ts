@@ -1,7 +1,7 @@
 import { Environment, UnboundedRegistry, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import { AsyncCall } from 'async-call-rpc'
 import { serializer } from '@masknet/shared-base'
-import { PluginMessages, setMessages, setPluginMessages, setPluginServices, setService } from '../API'
+import { PluginMessages, setMessages, setPluginMessages, setPluginServices, setService } from '../API.js'
 
 class WebExtensionExternalChannel extends WebExtensionMessage<any> {
     // cspell:disable-next-line

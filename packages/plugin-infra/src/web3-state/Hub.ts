@@ -2,10 +2,14 @@ import { memoize } from 'lodash-unified'
 import type { Subscription } from 'use-subscription'
 import type { HubState as Web3HubState, Hub, HubOptions, SourceType, CurrencyType } from '@masknet/web3-shared-base'
 
-const SIZE_PER_PAGE = 50
-const MAX_PAGE_SIZE = 25
+export * from './Hub/BaseClient.js'
+export * from './Hub/FungibleClient.js'
+export * from './Hub/NonFungibleClient.js'
 
 export class HubState<ChainId, SchemaType, GasOption> implements Web3HubState<ChainId, SchemaType, GasOption> {
+    static SIZE_PER_PAGE = 50
+    static MAX_PAGE_SIZE = 25
+
     private createHubCached: (ReturnType<typeof memoize> & typeof this.createHub) | undefined
 
     constructor(
@@ -55,8 +59,8 @@ export class HubState<ChainId, SchemaType, GasOption> implements Web3HubState<Ch
                 options?.account ?? this.subscription.account?.getCurrentValue(),
                 options?.sourceType ?? this.subscription.sourceType?.getCurrentValue(),
                 options?.currencyType ?? this.subscription.currencyType?.getCurrentValue(),
-                SIZE_PER_PAGE,
-                MAX_PAGE_SIZE,
+                HubState.SIZE_PER_PAGE,
+                HubState.MAX_PAGE_SIZE,
             ),
         )
     }

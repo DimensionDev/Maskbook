@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { Button, List, Typography } from '@mui/material'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useI18N } from '../locales'
-import { useGameList } from '../hook'
-import type { GameInfo } from '../types'
+import { useI18N } from '../locales/index.js'
+import { useGameList } from '../hook/index.js'
+import type { GameInfo } from '../types.js'
 import classNames from 'classnames'
 
 const useStyles = makeStyles()(() => ({

@@ -5,9 +5,9 @@ import { BottomNavigation, BottomNavigationAction, Box } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useMatch, useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
-import { useEnterDashboard } from '../../hook/useEnterDashboard'
+import { useEnterDashboard } from '../../hook/useEnterDashboard.js'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../../utils/i18n-next-ui'
+import { useI18N } from '../../../../utils/i18n-next-ui.js'
 
 enum NavRouter {
     Personas = 'Personas',

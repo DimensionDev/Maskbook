@@ -7,10 +7,10 @@ import { List, ListItem, ListItemText, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { TokenIcon, FormattedBalance } from '@masknet/shared'
-import { WalletContext } from '../../hooks/useWalletContext'
+import { WalletContext } from '../../hooks/useWalletContext.js'
 import { isNaN } from 'lodash-unified'
 import { formatBalance, FungibleAsset, isGreaterThanOrEqualTo, isLessThan } from '@masknet/web3-shared-base'
-import { useI18N } from '../../../../../../utils'
+import { useI18N } from '../../../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     list: {

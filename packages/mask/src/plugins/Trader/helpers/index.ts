@@ -1,3 +1,3 @@
-export * from './pair'
-export * from './uniswap'
-export * from './trader'
+export * from './pair.js'
+export * from './uniswap.js'
+export * from './trader.js'

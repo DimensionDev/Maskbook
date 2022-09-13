@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { createContainer } from 'unstated-next'
-import type { CollectibleToken } from '../types'
+import type { CollectibleToken } from '../types/index.js'
 import {
     useNonFungibleAsset,
     useNonFungibleOrders,

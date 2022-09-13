@@ -1,5 +1,5 @@
-import { DialogExample } from './DialogExample'
-import { story } from '../utils'
+import { DialogExample } from './DialogExample.js'
+import { story } from '../utils/index.js'
 
 const { meta, of } = story(DialogExample)
 export default meta({

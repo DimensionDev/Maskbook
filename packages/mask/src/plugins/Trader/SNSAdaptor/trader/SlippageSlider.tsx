@@ -1,7 +1,7 @@
 import { Slider } from '@mui/material'
 import { formatPercentage } from '@masknet/web3-shared-evm'
-import { SLIPPAGE_DEFAULT, SLIPPAGE_MAX, SLIPPAGE_MIN } from '../../constants'
-import { toBips } from '../../helpers'
+import { SLIPPAGE_DEFAULT, SLIPPAGE_MAX, SLIPPAGE_MIN } from '../../constants/index.js'
+import { toBips } from '../../helpers/index.js'
 
 export interface SlippageSliderProps {
     value: number

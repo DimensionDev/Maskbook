@@ -1,4 +1,4 @@
-import { PersonaContext } from './pages/Personas/hooks/usePersonaContext'
+import { PersonaContext } from './pages/Personas/hooks/usePersonaContext.js'
 import { Navigate } from 'react-router-dom'
 
 interface GuardRouteProps {

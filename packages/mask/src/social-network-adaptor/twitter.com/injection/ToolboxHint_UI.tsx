@@ -1,8 +1,8 @@
-import { ToolboxHintUnstyled } from '../../../components/InjectedComponents/ToolboxUnstyled'
-import { useSideBarNativeItemStyleVariants } from './ToolboxHint'
+import { ToolboxHintUnstyled } from '../../../components/InjectedComponents/ToolboxUnstyled.js'
+import { useSideBarNativeItemStyleVariants } from './ToolboxHint.js'
 import { styled, ListItemButton, Typography, ListItemIcon, useMediaQuery, Box } from '@mui/material'
-import GuideStep from '../../../components/GuideStep'
-import { useI18N } from '../../../utils'
+import GuideStep from '../../../components/GuideStep/index.js'
+import { useI18N } from '../../../utils/index.js'
 
 const twitterBreakPoint = 1265
 const Container = styled('div')`

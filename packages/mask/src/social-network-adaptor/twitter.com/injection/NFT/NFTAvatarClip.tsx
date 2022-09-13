@@ -3,9 +3,9 @@ import { makeStyles } from '@masknet/theme'
 import { isZero } from '@masknet/web3-shared-base'
 import { useEffect, useMemo, useRef } from 'react'
 import { useLocation, useWindowSize } from 'react-use'
-import { NFTAvatarClip } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip'
-import { createReactRootShadowed, startWatch } from '../../../../utils'
-import { searchTwitterAvatarNFTLinkSelector, searchTwitterAvatarNFTSelector } from '../../utils/selector'
+import { NFTAvatarClip } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip.js'
+import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
+import { searchTwitterAvatarNFTLinkSelector, searchTwitterAvatarNFTSelector } from '../../utils/selector.js'
 
 export function injectNFTAvatarClipInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarNFTSelector())

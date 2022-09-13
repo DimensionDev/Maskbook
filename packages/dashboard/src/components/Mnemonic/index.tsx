@@ -1,2 +1,2 @@
-export * from './DesktopMnemonicConfirm'
-export * from './MnemonicReveal'
+export * from './DesktopMnemonicConfirm.js'
+export * from './MnemonicReveal.js'

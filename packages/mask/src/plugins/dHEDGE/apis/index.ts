@@ -1,5 +1,5 @@
-import type { Fund, PerformanceHistory, Period, Pool } from '../types'
-import { getChainIdFromCode } from '../utils'
+import type { Fund, PerformanceHistory, Period, Pool } from '../types.js'
+import { getChainIdFromCode } from '../utils.js'
 
 export async function fetchPool(address: string, url: string) {
     const body = {

@@ -8,7 +8,7 @@ import { FormattedAddress } from '@masknet/shared'
 import { PopupRoutes } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { CopyIconButton } from '../../../../components/CopyIconButton'
+import { CopyIconButton } from '../../../../components/CopyIconButton/index.js'
 import { useReverseAddress, useWallet, useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({

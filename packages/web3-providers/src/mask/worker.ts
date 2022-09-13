@@ -1,5 +1,5 @@
-import './prepare'
-import type { MaskBaseAPI } from '../types'
+import './prepare.js'
+import type { MaskBaseAPI } from '../types/index.js'
 
 const promise = (async () => {
     const { request, default: init } = await import('@dimensiondev/mask-wallet-core/web')

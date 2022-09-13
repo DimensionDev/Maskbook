@@ -3,10 +3,10 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Twitter } from '@masknet/web3-providers'
 import { CSSProperties, useCallback, useEffect, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
-import { useSocialIdentity } from '../../../../components/DataSource/useActivatedUI'
-import { ProfileCard } from '../../../../components/InjectedComponents/ProfileCard'
-import { createReactRootShadowed } from '../../../../utils'
-import { twitterBase } from '../../base'
+import { useSocialIdentity } from '../../../../components/DataSource/useActivatedUI.js'
+import { ProfileCard } from '../../../../components/InjectedComponents/ProfileCard/index.js'
+import { createReactRootShadowed } from '../../../../utils/index.js'
+import { twitterBase } from '../../base.js'
 
 export function injectProfileCardHolder(signal: AbortSignal) {
     const root = document.createElement('div')

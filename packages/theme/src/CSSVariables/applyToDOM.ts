@@ -1,6 +1,6 @@
 import type { PaletteMode } from '@mui/material'
 import { kebabCase } from 'lodash-unified'
-import { LightColor, DarkColor } from './constants'
+import { LightColor, DarkColor } from './constants.js'
 import tinyColor from 'tinycolor2'
 
 // Fragment are in the form of "1, 2, 3"

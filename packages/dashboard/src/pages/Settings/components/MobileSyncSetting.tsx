@@ -1,5 +1,5 @@
-import { useDashboardI18N } from '../../../locales'
-import SettingButton from './SettingButton'
+import { useDashboardI18N } from '../../../locales/index.js'
+import SettingButton from './SettingButton.js'
 
 export default function MobileSyncSetting() {
     const t = useDashboardI18N()

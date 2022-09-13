@@ -9,9 +9,9 @@ import { Typography } from '@mui/material'
 import BigNumber from 'bignumber.js'
 import { isEmpty, noop } from 'lodash-unified'
 // import { StyledInput } from '../../../../extension/popups/components/StyledInput'
-import { useI18N } from '../../../../utils'
-import { useGasSettingStyles } from './useGasSettingStyles'
-import type { GasSettingProps } from './types'
+import { useI18N } from '../../../../utils/index.js'
+import { useGasSettingStyles } from './useGasSettingStyles.js'
+import type { GasSettingProps } from './types.js'
 import {
     GasOptionType,
     isGreaterThan,

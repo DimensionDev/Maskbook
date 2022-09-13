@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import punycode from 'punycode'
-import { ChainId } from '../types'
+import { ChainId } from '../types/index.js'
 
 export function isValidDomain(domain?: string) {
     if (!domain || !domain.includes('.eth')) return false

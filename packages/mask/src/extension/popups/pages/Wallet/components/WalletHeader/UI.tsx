@@ -1,12 +1,12 @@
 import { makeStyles } from '@masknet/theme'
 import { memo, MouseEvent } from 'react'
 import { Box, Link, Typography } from '@mui/material'
-import { CopyIconButton } from '../../../../components/CopyIconButton'
+import { CopyIconButton } from '../../../../components/CopyIconButton/index.js'
 import { ChainIcon, FormattedAddress, WalletIcon } from '@masknet/shared'
 import { ChainId, formatEthereumAddress, explorerResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 import type { NetworkDescriptor, Wallet } from '@masknet/web3-shared-base'
-import { useI18N } from '../../../../../../utils'
+import { useI18N } from '../../../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

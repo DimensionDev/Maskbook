@@ -3,11 +3,11 @@ import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { LoadingBase, makeStyles, MaskColorVar } from '@masknet/theme'
 import { Card, CardContent, Tabs, Tab, Typography, Paper, Button, Stack } from '@mui/material'
 import { useState } from 'react'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { useFetchPools } from '../hooks/usePool'
-import type { Investable } from '../types'
-import { InvestmentsView } from './InvestmentsView'
-import { PoolView } from './PoolView'
+import { useI18N } from '../../../utils/i18n-next-ui.js'
+import { useFetchPools } from '../hooks/usePool.js'
+import type { Investable } from '../types.js'
+import { InvestmentsView } from './InvestmentsView.js'
+import { PoolView } from './PoolView.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

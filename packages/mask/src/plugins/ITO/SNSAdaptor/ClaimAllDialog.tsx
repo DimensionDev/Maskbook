@@ -15,13 +15,13 @@ import { DialogContent, Typography, List, ListItem, useTheme, DialogActions } fr
 import { formatBalance, NetworkPluginID, isSameAddress, FungibleToken } from '@masknet/web3-shared-base'
 import { useITOConstants, ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
-import { NetworkTab } from '../../../components/shared/NetworkTab'
-import { PluginWalletStatusBar, useI18N } from '../../../utils'
-import { useClaimAll } from './hooks/useClaimAll'
-import { useClaimCallback } from './hooks/useClaimCallback'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import type { SwappedTokenType } from '../types'
+import { NetworkTab } from '../../../components/shared/NetworkTab.js'
+import { PluginWalletStatusBar, useI18N } from '../../../utils/index.js'
+import { useClaimAll } from './hooks/useClaimAll.js'
+import { useClaimCallback } from './hooks/useClaimCallback.js'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import type { SwappedTokenType } from '../types.js'
 
 interface StyleProps {
     shortITOwrapper: boolean

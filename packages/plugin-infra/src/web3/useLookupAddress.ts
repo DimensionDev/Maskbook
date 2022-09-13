@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useChainId } from './useChainId'
-import { useWeb3State } from './useWeb3State'
+import { useChainId } from './useChainId.js'
+import { useWeb3State } from './useWeb3State.js'
 
 export function useLookupAddress<T extends NetworkPluginID>(pluginId?: T, domain?: string) {
     const chainId = useChainId(pluginId)

@@ -2,13 +2,13 @@ import * as bip39 from 'bip39'
 import { EthereumAddress, HDKey } from 'wallet.ts'
 import { BigNumber } from 'bignumber.js'
 import { ec as EC } from 'elliptic'
-import { createTransaction } from '../../../../background/database/utils/openDB'
-import { createWalletDBAccess } from '../database/Wallet.db'
-import type { LegacyWalletRecord } from '../database/types'
+import { createTransaction } from '../../../../background/database/utils/openDB.js'
+import { createWalletDBAccess } from '../database/Wallet.db.js'
+import type { LegacyWalletRecord } from '../database/types.js'
 import { fromHex, toHex } from '@masknet/shared-base'
 import { isSameAddress, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-shared-base'
-import { LegacyWalletRecordOutDB } from './helpers'
-import { hasNativeAPI } from '../../../../shared/native-rpc'
+import { LegacyWalletRecordOutDB } from './helpers.js'
+import { hasNativeAPI } from '../../../../shared/native-rpc/index.js'
 
 function sortWallet(a: LegacyWalletRecord, b: LegacyWalletRecord) {
     if (a.updatedAt > b.updatedAt) return -1

@@ -1,10 +1,10 @@
 import { Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import { memo, useCallback } from 'react'
 import { MaskColorVar, MaskDialog, useCustomSnackbar } from '@masknet/theme'
-import { DashboardTrans, useDashboardI18N } from '../../../../locales'
-import { Services } from '../../../../API'
+import { DashboardTrans, useDashboardI18N } from '../../../../locales/index.js'
+import { Services } from '../../../../API.js'
 import { PersonaIdentifier, DashboardRoutes } from '@masknet/shared-base'
-import { PersonaContext } from '../../hooks/usePersonaContext'
+import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import { useNavigate } from 'react-router-dom'
 
 export interface DeletePersonaDialogProps {

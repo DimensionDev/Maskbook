@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
-import Services from '../../../extension/service'
-import type { Manifest } from '../types'
+import Services from '../../../extension/service.js'
+import type { Manifest } from '../types.js'
 
 // TODO: support suspense
 export function useExternalPluginManifest(url: string) {

@@ -3,10 +3,10 @@ import { FixedSizeList, FixedSizeListProps, ListChildComponentProps } from 'reac
 import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-unified'
 import { Box, InputAdornment, Stack } from '@mui/material'
-import { makeStyles } from '../../UIHelper'
-import { MaskTextField, MaskTextFieldProps } from '../TextField'
+import { makeStyles } from '../../UIHelper/index.js'
+import { MaskTextField, MaskTextFieldProps } from '../TextField/index.js'
 import { Icons } from '@masknet/icons'
-import { EmptyResult } from './EmptyResult'
+import { EmptyResult } from './EmptyResult.js'
 
 export interface MaskSearchableListProps<T> {
     /** The list data should be render */
@@ -100,7 +100,12 @@ export function SearchableList<T extends {}>({
     }
 
     const getItemKey = useCallback(
-        (index: number, data: { dataSet: T[] }) => {
+        (
+            index: number,
+            data: {
+                dataSet: T[]
+            },
+        ) => {
             if (!itemKey) return index.toString()
             return data.dataSet[index][itemKey] as string
         },

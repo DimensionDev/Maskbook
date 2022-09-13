@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { Link, Switch, Typography } from '@mui/material'
 import { FormattedAddress, PersonaImageIcon, WalletTypes } from '@masknet/shared'
-import { useI18N } from '../../locales'
+import { useI18N } from '../../locales/index.js'
 import { useState } from 'react'
 import { ChainId, explorerResolver, NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'

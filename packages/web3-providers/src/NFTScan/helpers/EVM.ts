@@ -10,16 +10,16 @@ import {
     NonFungibleCollection,
     NonFungibleTokenContract,
     NonFungibleTokenEvent,
-    resolveCORSLink,
-    resolveResourceUri,
+    resolveCrossOriginURL,
+    resolveResourceURL,
     scale10,
     SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, createContract, getRPCConstants, SchemaType, WNATIVE } from '@masknet/web3-shared-evm'
-import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants'
-import type { EVM } from '../types/EVM'
-import { getJSON, getPaymentToken } from '../../helpers'
+import { NFTSCAN_BASE, NFTSCAN_LOGO_BASE, NFTSCAN_URL } from '../constants.js'
+import type { EVM } from '../types/EVM.js'
+import { getJSON, getPaymentToken } from '../../helpers.js'
 
 type NFTScanChainId = ChainId.Mainnet | ChainId.Matic | ChainId.BSC | ChainId.Arbitrum | ChainId.Optimism
 
@@ -35,7 +35,7 @@ export const resolveHostName = createLookupTableResolver<NFTScanChainId, string>
 )
 
 export async function fetchFromNFTScan<T>(url: string) {
-    const response = await fetch(resolveCORSLink(url)!, {
+    const response = await fetch(resolveCrossOriginURL(url)!, {
         headers: {
             chain: 'ETH',
         },
@@ -88,10 +88,10 @@ export function createNonFungibleAsset(
 ): NonFungibleAsset<ChainId, SchemaType> {
     const payload = getJSON<EVM.Payload>(asset.metadata_json)
     const contractName = asset.contract_name
-    const name = payload?.name || asset.name || ''
+    const name = payload?.name || asset.name || contractName || ''
     const description = payload?.description
     const uri = asset.nftscan_uri ?? asset.image_uri
-    const mediaURL = resolveResourceUri(uri)
+    const mediaURL = resolveResourceURL(uri)
 
     const creator = asset.minter
     const owner = asset.owner
@@ -131,7 +131,7 @@ export function createNonFungibleAsset(
             : undefined,
         metadata: {
             chainId,
-            name: contractName,
+            name,
             symbol,
             description,
             imageURL: mediaURL,
@@ -147,7 +147,7 @@ export function createNonFungibleAsset(
         collection: {
             chainId,
             name: contractName,
-            slug: name,
+            slug: contractName,
             description,
             address: asset.contract_address,
             // If collectionContext.logo_url is null, we will directly render a fallback logo instead.

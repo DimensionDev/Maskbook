@@ -1,5 +1,5 @@
 import type { ChainId } from '@masknet/web3-shared-evm'
-import type { SecurityMessage } from '../gopluslabs/rules'
+import type { SecurityMessage } from '../gopluslabs/rules.js'
 
 export namespace SecurityAPI {
     export interface Holder {
@@ -66,7 +66,10 @@ export namespace SecurityAPI {
     export type TokenSecurityType = ContractSecurity &
         TokenSecurity &
         SecurityItem &
-        TradingSecurity & { contract: string; chainId: ChainId }
+        TradingSecurity & {
+            contract: string
+            chainId: ChainId
+        }
 
     export interface Provider<ChainId> {
         getTokenSecurity(chainId: ChainId, listOfAddress: string[]): Promise<TokenSecurityType | void>

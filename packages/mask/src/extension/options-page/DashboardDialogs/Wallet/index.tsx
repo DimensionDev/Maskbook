@@ -1,2 +1,2 @@
-export { DashboardWalletHideTokenConfirmDialog } from './HideTokenConfirm'
-export { DashboardWalletTransferDialogNFT } from './TransferNFT'
+export { DashboardWalletHideTokenConfirmDialog } from './HideTokenConfirm.js'
+export { DashboardWalletTransferDialogNFT } from './TransferNFT.js'

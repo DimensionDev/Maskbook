@@ -3,7 +3,7 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, InputBase, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 import {
     useAccount,
     useChainId,
@@ -12,7 +12,7 @@ import {
     useWeb3Hub,
 } from '@masknet/plugin-infra/web3'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { AllChainsNonFungibleToken } from '../types'
+import type { AllChainsNonFungibleToken } from '../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},

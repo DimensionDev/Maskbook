@@ -1,3 +1,3 @@
-export * from './SelectProfileUI'
-export * from './ProfileInList'
-export * from './ProfileInChip'
+export * from './SelectProfileUI.js'
+export * from './ProfileInList.js'
+export * from './ProfileInChip.js'

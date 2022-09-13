@@ -20,7 +20,7 @@
     "react-use": "^17.4.0",
     "reconnecting-websocket": "^4.4.0",
     "urlcat": "^2.0.4",
-    "web3-core-helpers": "1.7.4"
+    "web3-core-helpers": "1.7.5"
   },
   "devDependencies": {
     "mock-socket": "^9.1.2"

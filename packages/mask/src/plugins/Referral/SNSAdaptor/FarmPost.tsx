@@ -10,21 +10,21 @@ import { Button, Card, Grid, Typography, Box } from '@mui/material'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
-import type { ReferralMetaData } from '../types'
-import { MASK_REFERRER, META_KEY, SWAP_CHAIN_ID } from '../constants'
-import { useI18N } from '../locales'
-import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
-import { ReferralRPC } from '../messages'
+import type { ReferralMetaData } from '../types.js'
+import { MASK_REFERRER, META_KEY, SWAP_CHAIN_ID } from '../constants.js'
+import { useI18N } from '../locales/index.js'
+import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
+import { ReferralRPC } from '../messages.js'
 import {
     singAndPostProofOfRecommendationOrigin,
     singAndPostProofOfRecommendationWithReferrer,
-} from './utils/proofOfRecommendation'
+} from './utils/proofOfRecommendation.js'
 
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import { RewardFarmPostWidget } from './shared-ui/RewardFarmPostWidget'
-import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm'
-import { IconURLs } from '../assets'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import { RewardFarmPostWidget } from './shared-ui/RewardFarmPostWidget.js'
+import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm.js'
+import { IconURLs } from '../assets/index.js'
 
 interface FarmPostProps {
     payload: ReferralMetaData

@@ -13,7 +13,7 @@ import {
     useWeb3State,
 } from '@masknet/plugin-infra/web3'
 import { GasOptionType, NetworkPluginID } from '@masknet/web3-shared-base'
-import { GasSettingsType } from './types'
+import { GasSettingsType } from './types/index.js'
 
 const DEFAULT_SLIPPAGE_TOLERANCE = 0.5
 const DEFAULT_SLIPPAGE_TOLERANCES = [0.5, 1, 2, 5]

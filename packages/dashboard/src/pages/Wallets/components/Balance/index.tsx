@@ -6,8 +6,8 @@ import { DashboardRoutes } from '@masknet/shared-base'
 import { MaskColorVar } from '@masknet/theme'
 import { formatCurrency, NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-base'
 import { Box, Button, buttonClasses, styled, Typography } from '@mui/material'
-import { useDashboardI18N } from '../../../../locales'
-import { useIsMatched } from '../../hooks'
+import { useDashboardI18N } from '../../../../locales/index.js'
+import { useIsMatched } from '../../hooks/index.js'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 
 const BalanceContainer = styled('div')(

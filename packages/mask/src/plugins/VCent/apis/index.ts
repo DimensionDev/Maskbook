@@ -1,4 +1,4 @@
-import { TWEET_BASE_URL } from '../constants'
+import { TWEET_BASE_URL } from '../constants.js'
 
 export interface TweetData {
     id: string

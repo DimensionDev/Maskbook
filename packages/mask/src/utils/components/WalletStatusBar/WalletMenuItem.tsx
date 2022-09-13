@@ -1,10 +1,10 @@
 import { Button, ListItemIcon, MenuItem } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { memo } from 'react'
-import { useI18N } from '../../i18n-next-ui'
+import { useI18N } from '../../i18n-next-ui.js'
 import { resolveNextID_NetworkPluginID, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { NextIDPlatform } from '@masknet/shared-base'
-import { useWalletName } from './hooks/useWalletName'
+import { useWalletName } from './hooks/useWalletName.js'
 import {
     useCurrentWeb3NetworkPluginID,
     useChainId,
@@ -14,7 +14,7 @@ import {
     useWeb3State,
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
-import { WalletDescription, WalletDescriptionProps } from './WalletDescription'
+import { WalletDescription, WalletDescriptionProps } from './WalletDescription.js'
 
 interface WalletMenuItemProps {
     onSelect?: (value: WalletDescriptionProps, chainId: Web3Helper.ChainIdAll, pluginId: NetworkPluginID) => void

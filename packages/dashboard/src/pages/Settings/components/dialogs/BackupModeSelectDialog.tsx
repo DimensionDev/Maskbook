@@ -2,8 +2,8 @@ import { MaskColorVar, MaskDialog, makeStyles } from '@masknet/theme'
 import { Box, DialogContent, Tooltip, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useContext, useMemo } from 'react'
-import { UserContext } from '../../hooks/UserContext'
-import { useDashboardI18N } from '../../../../locales'
+import { UserContext } from '../../hooks/UserContext.js'
+import { useDashboardI18N } from '../../../../locales/index.js'
 import classNames from 'classnames'
 
 const useStyles = makeStyles()((theme) => ({

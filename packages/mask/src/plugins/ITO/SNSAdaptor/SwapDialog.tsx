@@ -20,13 +20,13 @@ import {
 import { Slider, Typography } from '@mui/material'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useI18N } from '../../../utils'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import type { JSON_PayloadInMask } from '../types'
-import { useQualificationVerify } from './hooks/useQualificationVerify'
-import { useSwapCallback } from './hooks/useSwapCallback'
-import { SwapStatus } from './SwapGuide'
+import { useI18N } from '../../../utils/index.js'
+import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
+import type { JSON_PayloadInMask } from '../types.js'
+import { useQualificationVerify } from './hooks/useQualificationVerify.js'
+import { useSwapCallback } from './hooks/useSwapCallback.js'
+import { SwapStatus } from './SwapGuide.js'
 import { useChainId, useFungibleToken, useFungibleTokenBalance, useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
@@ -180,7 +180,9 @@ export function SwapDialog(props: SwapDialogProps) {
             await openShareTxDialog({
                 hash: receipt.transactionHash,
             })
-            const { to_value } = (receipt.events?.SwapSuccess.returnValues ?? {}) as { to_value: string }
+            const { to_value } = (receipt.events?.SwapSuccess.returnValues ?? {}) as {
+                to_value: string
+            }
             setActualSwapAmount(to_value)
             setStatus(SwapStatus.Share)
             setTimeout(() => {

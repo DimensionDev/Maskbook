@@ -9,10 +9,10 @@ import {
 } from '@masknet/web3-shared-evm'
 import type { BaseContract, NonPayableTx } from '@masknet/web3-contracts/types/types'
 import type { Multicall } from '@masknet/web3-contracts/types/Multicall'
-import { useMulticallContract } from './useMulticallContract'
-import { useChainId } from '../useChainId'
-import { useWeb3 } from '../useWeb3'
-import { useWeb3Connection } from '../useWeb3Connection'
+import { useMulticallContract } from './useMulticallContract.js'
+import { useChainId } from '../useChainId.js'
+import { useWeb3 } from '../useWeb3.js'
+import { useWeb3Connection } from '../useWeb3Connection.js'
 
 // #region types
 // [target, gasLimit, callData]
@@ -22,11 +22,11 @@ type Call = [string, number, string]
 type Result = [boolean, string, string]
 
 // conservative, hard-coded estimate of the current block gas limit
-const CONSERVATIVE_BLOCK_GAS_LIMIT = 10_000_000
+const CONSERVATIVE_BLOCK_GAS_LIMIT = 10000000
 
 // the default value for calls that don't specify gasRequired
-const DEFAULT_GAS_REQUIRED = 200_000
-const DEFAULT_GAS_LIMIT = 1_000_000
+const DEFAULT_GAS_REQUIRED = 200000
+const DEFAULT_GAS_LIMIT = 1000000
 // #endregion
 
 // #region cached results
@@ -99,10 +99,20 @@ export enum MulticallStateType {
 }
 
 export type MulticallState =
-    | { type: MulticallStateType.UNKNOWN }
-    | { type: MulticallStateType.PENDING }
-    | { type: MulticallStateType.SUCCEED; results: Result[] }
-    | { type: MulticallStateType.FAILED; error: Error }
+    | {
+          type: MulticallStateType.UNKNOWN
+      }
+    | {
+          type: MulticallStateType.PENDING
+      }
+    | {
+          type: MulticallStateType.SUCCEED
+          results: Result[]
+      }
+    | {
+          type: MulticallStateType.FAILED
+          error: Error
+      }
 
 /**
  * The basic hook for fetching data from the Multicall contract
@@ -194,17 +204,27 @@ export function useMulticallStateDecoded<
     R extends UnboxTransactionObject<ReturnType<T['methods'][K]>>,
 >(contracts: T[], names: K[], state: MulticallState, chainId?: ChainId) {
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
-    type Result = { succeed: boolean; gasUsed: string } & ({ error: any; value: null } | { error: null; value: R })
+    type Result = {
+        succeed: boolean
+        gasUsed: string
+    } & (
+        | {
+              error: any
+              value: null
+          }
+        | {
+              error: null
+              value: R
+          }
+    )
     return useMemo(() => {
         if (!web3 || state.type !== MulticallStateType.SUCCEED || contracts.length !== state.results.length) return []
         return state.results.map(([succeed, gasUsed, result], index): Result => {
             // the ignore formatter for better reading
             // prettier-ignore
-            const outputs: AbiOutput[] = (
-                contracts[index].options.jsonInterface
-                    .find(({ type, name }) => type === 'function' && name === names[index])
-                    ?.outputs ?? []
-            )
+            const outputs: AbiOutput[] = (contracts[index].options.jsonInterface
+                .find(({ type, name }) => type === "function" && name === names[index])
+                ?.outputs ?? []);
             try {
                 const value = decodeOutputString(web3, outputs, result) as R
                 return { succeed, gasUsed, value, error: null }

@@ -2,12 +2,12 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createInjectHooksRenderer, Plugin, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo, useState } from 'react'
-import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
-import { createReactRootShadowed, startWatch, useLocationChange } from '../../../../utils'
+import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
+import { createReactRootShadowed, startWatch, useLocationChange } from '../../../../utils/index.js'
 import {
     profileFollowButtonSelector as selector,
     profileMenuButtonSelector as menuButtonSelector,
-} from '../../utils/selector'
+} from '../../utils/selector.js'
 
 export function injectOpenTipsButtonOnProfile(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(selector())

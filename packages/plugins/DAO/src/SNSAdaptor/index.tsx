@@ -1,7 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { base } from '../base'
-import { PLUGIN_ID } from '../constants'
-import { DAOPage } from '../components/DAOPage'
+import { base } from '../base.js'
+import { PLUGIN_ID } from '../constants.js'
+import { DAOPage } from '../components/DAOPage.js'
 import { create } from '@masknet/configuration'
 
 // cspell:disable

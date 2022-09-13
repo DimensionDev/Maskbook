@@ -1,7 +1,7 @@
 import type { ChangeEvent } from 'react'
 import { FormGroup, FormLabel, FormControlLabel, Checkbox } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 
 export enum SettingField {
     IPRegion = 'IPRegion',

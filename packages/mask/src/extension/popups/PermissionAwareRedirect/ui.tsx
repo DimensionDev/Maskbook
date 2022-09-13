@@ -1,5 +1,5 @@
 import { Typography, Card, CardContent, Button, CardActions } from '@mui/material'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 import { Trans } from 'react-i18next'
 
 export function PermissionAwareRedirectUI(props: PermissionAwareRedirectProps) {

@@ -4,9 +4,9 @@ import { isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
 import { uniqBy } from 'lodash-unified'
 import { useEffect, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { MaskMessages } from '../../../utils'
-import type { TipsAccount } from '../types'
-import { useTipsSetting } from './useTipsSetting'
+import { MaskMessages } from '../../../utils/index.js'
+import type { TipsAccount } from '../types/index.js'
+import { useTipsSetting } from './useTipsSetting.js'
 
 export function usePublicWallets(personaPubkey?: string): TipsAccount[] {
     const { value: nextIdWallets, retry: queryWallets } = useAsyncRetry(async (): Promise<TipsAccount[]> => {
@@ -36,7 +36,7 @@ export function usePublicWallets(personaPubkey?: string): TipsAccount[] {
                 .sort((a, z) => {
                     if (!a.last_checked_at || !z.last_checked_at) return 1
                     if (isGreaterThan(a.last_checked_at, z.last_checked_at)) {
-                        return isSameAddress(z.address, TipsSetting?.defaultAddress) ? -1 : 1
+                        return isSameAddress(z.address, TipsSetting?.defaultAddress) ? 1 : -1
                     }
 
                     return isSameAddress(a.address, TipsSetting?.defaultAddress) ? -1 : 1

@@ -14,10 +14,10 @@ import {
     FilledInput,
 } from '@mui/material'
 
-import { useI18N } from '../../../utils'
-import { Flags } from '../../../../shared'
-import { useRegionList } from './hooks/useRegion'
-import type { RegionCode } from './hooks/useRegion'
+import { useI18N } from '../../../utils/index.js'
+import { Flags } from '../../../../shared/index.js'
+import { useRegionList } from './hooks/useRegion.js'
+import type { RegionCode } from './hooks/useRegion.js'
 
 export interface RegionSelectProps extends InputBaseComponentProps {
     value: RegionCode[]
@@ -223,6 +223,6 @@ export const RegionSelect = forwardRef(({ value = [], onRegionChange, ...props }
 // ISO 3166-1 alpha-2
 function countryToFlag(isoCode: string) {
     if (!Flags.using_emoji_flag) return ''
-    const modifiedPoints = [...isoCode.toUpperCase()].map((point) => 0x1f1a5 + point.codePointAt(0)!)
+    const modifiedPoints = [...isoCode.toUpperCase()].map((point) => 127397 + point.codePointAt(0)!)
     return String.fromCodePoint(...modifiedPoints)
 }

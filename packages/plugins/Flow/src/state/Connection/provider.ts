@@ -1,8 +1,8 @@
 import { ProviderType } from '@masknet/web3-shared-flow'
-import { BaseProvider } from './providers/Base'
-import { BloctoProvider } from './providers/Blocto'
-import { DapperProvider } from './providers/Dapper'
-import { LedgerProvider } from './providers/Ledger'
+import { BaseProvider } from './providers/Base.js'
+import { BloctoProvider } from './providers/Blocto.js'
+import { DapperProvider } from './providers/Dapper.js'
+import { LedgerProvider } from './providers/Ledger.js'
 
 export const Providers: Record<ProviderType, BaseProvider> = {
     [ProviderType.None]: new BaseProvider(),

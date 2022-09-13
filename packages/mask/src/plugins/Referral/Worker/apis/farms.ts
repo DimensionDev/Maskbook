@@ -16,21 +16,23 @@ import type {
     RewardData,
     FarmDepositIncreasedEvent,
     FungibleTokenDetailed,
-} from '../../types'
+} from '../../types.js'
 import {
     expandBytes24ToBytes32,
     expandEvmAddressToBytes32,
     parseChainAddress,
     toChainAddressEthers,
-} from '../../helpers'
-import { queryIndexersWithNearestQuorum } from './indexers'
-import { fetchERC20TokensFromTokenListsMap } from './tokenLists'
-import { getReferralFarmsV1Address } from './discovery'
+} from '../../helpers/index.js'
+import { queryIndexersWithNearestQuorum } from './indexers.js'
+import { fetchERC20TokensFromTokenListsMap } from './tokenLists.js'
+import { getReferralFarmsV1Address } from './discovery.js'
 
 const REFERRAL_FARMS_V1_IFACE = new Interface(ReferralFarmsV1ABI)
 
 // Index the events name => id
-const eventIds: { [eventName: string]: string } = {}
+const eventIds: {
+    [eventName: string]: string
+} = {}
 Object.entries(REFERRAL_FARMS_V1_IFACE.events).forEach(([k, v]) => (eventIds[v.name] = keccak256(k)))
 
 function parseEvents(items: any[]): any[] {
@@ -192,7 +194,11 @@ export async function getAccountFarms(
     return [...farmsMap.values()]
 }
 
-type Farm = { farmHash: string; dailyFarmReward: number; totalFarmRewards: number }
+type Farm = {
+    farmHash: string
+    dailyFarmReward: number
+    totalFarmRewards: number
+}
 export async function getDailyAndTotalRewardsFarm(
     chainId: ChainId,
     farmHash: FarmHash,
@@ -236,7 +242,9 @@ export async function getDailyAndTotalRewardsFarm(
 export async function getMyRewardsHarvested(
     account: string,
     chainId: ChainId,
-    filter?: { rewardTokens?: ChainAddress[] },
+    filter?: {
+        rewardTokens?: ChainAddress[]
+    },
 ): Promise<RewardsHarvested[]> {
     const farmsAddr = await getReferralFarmsV1Address()
 
@@ -306,7 +314,11 @@ export async function getRewardsForReferredToken(chainId: ChainId, referredToken
 
     const rewards = new Map<
         ChainAddress,
-        { rewardToken?: FungibleTokenDetailed; dailyReward: number; totalReward: number }
+        {
+            rewardToken?: FungibleTokenDetailed
+            dailyReward: number
+            totalReward: number
+        }
     >()
     for (const [, value] of farmsData.entries()) {
         const prevState = rewards.get(value.rewardTokenDefn)

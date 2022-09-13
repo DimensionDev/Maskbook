@@ -1,10 +1,8 @@
-import { LoadingBase, makeStyles, parseColor, useStylesExtends } from '@masknet/theme'
-import { resolveCORSLink, resolveIPFSLink } from '@masknet/web3-shared-base'
-import { Box, useTheme } from '@mui/material'
-import classNames from 'classnames'
 import { ImgHTMLAttributes, useState } from 'react'
-import { useAsync } from 'react-use'
-import { loadImage } from './loadImage'
+import classNames from 'classnames'
+import { LoadingBase, makeStyles, parseColor, useStylesExtends } from '@masknet/theme'
+import { Box, useTheme } from '@mui/material'
+import { useImageURL } from '../../../hooks/useImageURL.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -33,17 +31,14 @@ interface ImageProps
     disableSpinner?: boolean
 }
 
-export function Image({ fallback, disableSpinner, classes: externalClasses, ...rest }: ImageProps) {
+export function Image({ fallback, disableSpinner, classes: externalClasses, onClick, ...rest }: ImageProps) {
     const classes = useStylesExtends(useStyles(), { classes: externalClasses })
     const theme = useTheme()
     const [failed, setFailed] = useState(false)
 
-    const { value: image, loading: imageLoading } = useAsync(async () => {
-        if (!rest.src) return
-        return loadImage(rest.src)
-    }, [rest.src])
+    const { value: imageURL, loading: loadingImageURL } = useImageURL(rest.src)
 
-    if (imageLoading && !disableSpinner) {
+    if (loadingImageURL && !disableSpinner) {
         return (
             <Box className={classes.container}>
                 <Box className={classes.spinContainer}>
@@ -53,10 +48,10 @@ export function Image({ fallback, disableSpinner, classes: externalClasses, ...r
         )
     }
 
-    if (image && !failed) {
+    if (imageURL && !failed) {
         return (
-            <Box className={classes.container}>
-                <img loading="lazy" decoding="async" {...rest} src={image} onError={() => setFailed(true)} />
+            <Box className={classes.container} onClick={onClick}>
+                <img loading="lazy" decoding="async" {...rest} src={imageURL} onError={() => setFailed(true)} />
             </Box>
         )
     }
@@ -64,16 +59,14 @@ export function Image({ fallback, disableSpinner, classes: externalClasses, ...r
         return fallback
     }
 
-    const fallbackImageURL = resolveCORSLink(
-        resolveIPFSLink(fallback?.toString()) ??
-            (theme.palette.mode === 'dark'
-                ? new URL('./nft_token_fallback_dark.png', import.meta.url).toString()
-                : new URL('./nft_token_fallback.png', import.meta.url)
-            ).toString(),
-    )
+    const fallbackImageURL =
+        fallback?.toString() ??
+        (theme.palette.mode === 'dark'
+            ? new URL('./nft_token_fallback_dark.png', import.meta.url).toString()
+            : new URL('./nft_token_fallback.png', import.meta.url).toString())
 
     return (
-        <Box className={classes.container}>
+        <Box className={classes.container} onClick={onClick}>
             <img
                 loading="lazy"
                 decoding="async"

@@ -1,5 +1,5 @@
 import { story } from '@masknet/storybook-shared'
-import { Balance as C } from '../../../src/pages/Wallets/components/Balance'
+import { Balance as C } from '../../../src/pages/Wallets/components/Balance/index.js'
 import { action } from '@storybook/addon-actions'
 const { meta, of } = story(C)
 

@@ -4,7 +4,7 @@ import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
 import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { SchemaType, formatTokenId, ChainId } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 import { Icons } from '@masknet/icons'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { isEqual } from 'lodash-unified'
@@ -18,8 +18,7 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
         gap: 8,
         borderRadius: 12,
-        // there is no public bg, have to hardcode
-        background: '#F9F9F9',
+        background: theme.palette.maskColor.bg,
     },
     listItem: {
         width: '100%',
@@ -28,21 +27,21 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         textTransform: 'capitalize',
     },
-    textBase: {
+    title: {
         fontSize: 14,
-        color: theme.palette.maskColor.publicSecond,
+        color: theme.palette.maskColor.second,
     },
-    listItemContent: {
+    content: {
         maxWidth: '40%',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
         display: 'flex',
         gap: 6,
-        color: theme.palette.maskColor.publicMain,
+        color: theme.palette.maskColor.main,
     },
     link: {
-        color: theme.palette.maskColor.publicSecond,
+        color: theme.palette.maskColor.second,
         fontSize: 14,
         display: 'flex',
         alignItems: 'center',
@@ -55,7 +54,9 @@ interface NFTInfoCardProps {
     sourceType?: SourceType
 }
 
-const platformCosts: { [k in SourceType]?: number } = {
+const platformCosts: {
+    [k in SourceType]?: number
+} = {
     [SourceType.OpenSea]: 2.5,
     [SourceType.X2Y2]: 0.5,
     [SourceType.LooksRare]: 2,
@@ -91,8 +92,8 @@ export function NFTInfoCard(props: NFTInfoCardProps) {
             {infoConfigMapping.map((x) => {
                 return (
                     <div key={x.title} className={classes.listItem}>
-                        <Typography className={classes.textBase}>{x.title}</Typography>
-                        <Typography className={classes.listItemContent}>
+                        <Typography className={classes.title}>{x.title}</Typography>
+                        <Typography className={classes.content}>
                             {x.value}{' '}
                             {x.link && (
                                 <Link

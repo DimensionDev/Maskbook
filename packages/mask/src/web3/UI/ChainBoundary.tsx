@@ -20,9 +20,9 @@ import { delay } from '@dimensiondev/kit'
 import {
     ActionButtonPromise,
     ActionButtonPromiseProps,
-} from '../../extension/options-page/DashboardComponents/ActionButton'
-import { useI18N } from '../../utils'
-import { WalletMessages } from '../../plugins/Wallet/messages'
+} from '../../extension/options-page/DashboardComponents/ActionButton.js'
+import { useI18N } from '../../utils/index.js'
+import { WalletMessages } from '../../plugins/Wallet/messages.js'
 import { WalletIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
@@ -44,6 +44,11 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 4,
         padding: 10,
         maxWidth: 260,
+    },
+    connectWallet: {
+        '& > .MuiButton-startIcon': {
+            display: 'block',
+        },
     },
 }))
 
@@ -171,6 +176,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
             <>
                 {!props.hiddenConnectButton ? (
                     <ActionButton
+                        className={classes.connectWallet}
                         fullWidth
                         startIcon={<Icons.ConnectWallet size={18} />}
                         onClick={openSelectProviderDialog}

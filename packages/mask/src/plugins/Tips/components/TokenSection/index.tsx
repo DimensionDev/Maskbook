@@ -5,7 +5,7 @@ import { useGasConfig } from '@masknet/plugin-infra/web3-evm'
 import { useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
-import { TargetRuntimeContext, useTip } from '../../contexts'
+import { TargetRuntimeContext, useTip } from '../../contexts/index.js'
 
 const GAS_LIMIT = 21000
 export const TokenSection: FC = () => {

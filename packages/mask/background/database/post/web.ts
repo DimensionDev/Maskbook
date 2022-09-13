@@ -8,12 +8,17 @@ import {
     ProfileIdentifier,
 } from '@masknet/shared-base'
 import { openDB } from 'idb/with-async-ittr'
-import { CryptoKeyToJsonWebKey } from '../../../utils-pure'
-import { createDBAccessWithAsyncUpgrade, createTransaction } from '../utils/openDB'
-import type { PostRecord, PostDB, PostReadOnlyTransaction, PostReadWriteTransaction } from './type'
-import type { PostDB_HistoryTypes, LatestPostDBRecord, LatestRecipientDetailDB } from './dbType'
+import { CryptoKeyToJsonWebKey } from '../../../utils-pure/index.js'
+import { createDBAccessWithAsyncUpgrade, createTransaction } from '../utils/openDB.js'
+import type { PostRecord, PostDB, PostReadOnlyTransaction, PostReadWriteTransaction } from './type.js'
+import type { PostDB_HistoryTypes, LatestPostDBRecord, LatestRecipientDetailDB } from './dbType.js'
 
-type UpgradeKnowledge = { version: 4; data: Map<string, AESJsonWebKey> } | undefined
+type UpgradeKnowledge =
+    | {
+          version: 4
+          data: Map<string, AESJsonWebKey>
+      }
+    | undefined
 const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
     4,
     7,

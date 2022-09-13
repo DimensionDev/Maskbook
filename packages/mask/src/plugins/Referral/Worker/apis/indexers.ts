@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-loop-func */
 /* eslint-disable no-return-await */
 
-import { getFullDiscovery } from './discovery'
+import { getFullDiscovery } from './discovery.js'
 
-import type { Bytes32, EvmAddress, Geolocation, Airport, Node } from '../../types'
+import type { Bytes32, EvmAddress, Geolocation, Airport, Node } from '../../types.js'
 
 // Nearest Node
 const toRad = (num: number): number => {

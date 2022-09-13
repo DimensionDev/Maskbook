@@ -1,12 +1,12 @@
 import type { TypedMessage } from '@masknet/typed-message'
 import { Button, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { useI18N } from '../../../utils'
-import { paywallUrl } from '../constants'
-import { renderWithUnlockProtocolMetadata, UnlockProtocolMetadataReader } from '../helpers'
+import { useI18N } from '../../../utils/index.js'
+import { paywallUrl } from '../constants.js'
+import { renderWithUnlockProtocolMetadata, UnlockProtocolMetadataReader } from '../helpers.js'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
-import { PluginUnlockProtocolRPC } from '../messages'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { PluginUnlockProtocolRPC } from '../messages.js'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 import { usePluginWrapper } from '@masknet/plugin-infra/dom'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
@@ -26,7 +26,9 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
         const metadata = UnlockProtocolMetadataReader(props.message.meta)
         if (metadata.ok) {
             if (address) {
-                const data: { locks: Record<string, object> } = { locks: {} }
+                const data: {
+                    locks: Record<string, object>
+                } = { locks: {} }
                 metadata.val.unlockLocks.forEach((locks) => {
                     PluginUnlockProtocolRPC.verifyPurchase(address, locks.unlocklock, locks.chainid).then((res) => {
                         if (!res) return

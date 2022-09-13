@@ -1,6 +1,6 @@
 import type { PersonaIdentifier } from '@masknet/shared-base'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
-import { SetupGuide } from '../../../components/InjectedComponents/SetupGuide'
+import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { SetupGuide } from '../../../components/InjectedComponents/SetupGuide.js'
 
 function UI({ unmount, persona }: { unmount: () => void; persona: PersonaIdentifier }) {
     return <SetupGuide persona={persona} onClose={unmount} />

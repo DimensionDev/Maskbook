@@ -1,8 +1,8 @@
 import { useWeb3Connection, useWeb3State } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useCallback } from 'react'
-import type { RSS3_KEY_SNS } from '../../constants'
-import type { AvatarMetaDB, NFTRSSNode } from '../../types'
+import type { RSS3_KEY_SNS } from '../../constants.js'
+import type { AvatarMetaDB, NFTRSSNode } from '../../types.js'
 
 export function useSaveAvatarToRSS3() {
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)

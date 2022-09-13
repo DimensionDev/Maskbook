@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Link, Switch, Typography } from '@mui/material'
 import { memo } from 'react'
-import { WalletIcon } from '../WalletIcon'
+import { WalletIcon } from '../WalletIcon/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

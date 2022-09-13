@@ -1,10 +1,10 @@
 import { makeStyles } from '@masknet/theme'
 import { GasOptionType, isLessThan, NetworkPluginID, pow10, TransactionDescriptorType } from '@masknet/web3-shared-base'
 import { memo, useEffect, useMemo, useState } from 'react'
-import { useI18N } from '../../../../../utils'
+import { useI18N } from '../../../../../utils/index.js'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
+import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import {
     ChainId,
     formatGweiToWei,
@@ -17,7 +17,7 @@ import { z as zod } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Typography } from '@mui/material'
-import { StyledInput } from '../../../components/StyledInput'
+import { StyledInput } from '../../../components/StyledInput/index.js'
 import { LoadingButton } from '@mui/lab'
 import { isEmpty } from 'lodash-unified'
 import { useNavigate } from 'react-router-dom'
@@ -90,9 +90,9 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
-    [ChainId.BSC]: pow10(9).multipliedBy(5), // 5 Gwei
-    [ChainId.Conflux]: pow10(9).multipliedBy(5), // 5 Gwei
-    [ChainId.Matic]: pow10(9).multipliedBy(30), // 30 Gwei
+    [ChainId.BSC]: pow10(9).multipliedBy(5),
+    [ChainId.Conflux]: pow10(9).multipliedBy(5),
+    [ChainId.Matic]: pow10(9).multipliedBy(30),
     [ChainId.Astar]: pow10(9).multipliedBy(5), // 5 Gwei
 }
 

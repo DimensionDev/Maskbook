@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { useEssay, useDefaultEssay, useCurrentVisitingUser } from '../hooks'
-import { ModelNFT } from './ModelNFT'
-import { NormalNFT } from './NormalNFT'
-import { ImageType } from '../types'
-import { PluginPetMessages } from '../messages'
-import { petShowSettings } from '../settings'
+import { useEssay, useDefaultEssay, useCurrentVisitingUser } from '../hooks/index.js'
+import { ModelNFT } from './ModelNFT.js'
+import { NormalNFT } from './NormalNFT.js'
+import { ImageType } from '../types.js'
+import { PluginPetMessages } from '../messages.js'
+import { petShowSettings } from '../settings.js'
 
 const useStyles = makeStyles()(() => ({
     root: {

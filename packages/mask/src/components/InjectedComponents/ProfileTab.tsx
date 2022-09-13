@@ -1,9 +1,9 @@
 import { ReactElement, useCallback, useEffect, useState } from 'react'
 import classnames from 'classnames'
 import { Typography } from '@mui/material'
-import { MaskMessages, useMatchXS, useLocationChange } from '../../utils'
-import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
-import { activatedSocialNetworkUI } from '../../social-network'
+import { MaskMessages, useMatchXS, useLocationChange } from '../../utils/index.js'
+import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
+import { activatedSocialNetworkUI } from '../../social-network/index.js'
 
 export interface ProfileTabProps extends withClasses<'tab' | 'button' | 'selected'> {
     clear(): void

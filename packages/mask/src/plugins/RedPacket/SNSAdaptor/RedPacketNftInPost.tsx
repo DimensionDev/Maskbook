@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import { RedPacketRPC } from '../messages'
-import type { RedPacketNftJSONPayload } from '../types'
-import { RedPacketNft } from './RedPacketNft'
+import { RedPacketRPC } from '../messages.js'
+import type { RedPacketNftJSONPayload } from '../types.js'
+import { RedPacketNft } from './RedPacketNft.js'
 
 export interface RedPacketNftInPostProps {
     payload: RedPacketNftJSONPayload

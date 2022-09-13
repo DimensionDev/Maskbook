@@ -1,0 +1,13 @@
+diff --git a/dist/lockdown.umd.js b/dist/lockdown.umd.js
+index 1ef96f5f27d22cbaa6d700615814a8ee5685e91d..d6966bf996668743183582c81e581e21cf6f8bf9 100644
+--- a/dist/lockdown.umd.js
++++ b/dist/lockdown.umd.js
+@@ -8014,7 +8014,7 @@ function                tameFunctionConstructors() {
+     FERAL_FUNCTION.prototype.constructor('return 1');
+    }catch( ignore) {
+     // Throws, no need to patch.
+-    return harden({});
++    return {};
+    }
+ 
+   const newIntrinsics=  {};

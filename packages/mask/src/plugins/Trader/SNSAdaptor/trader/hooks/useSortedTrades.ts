@@ -1,9 +1,9 @@
-import type { TradeInfo } from '../../../types'
+import type { TradeInfo } from '../../../types/index.js'
 import { useMemo } from 'react'
 import { isGreaterThan, isLessThan, multipliedBy, NetworkPluginID, leftShift } from '@masknet/web3-shared-base'
-import { MINIMUM_AMOUNT } from '../../../constants'
+import { MINIMUM_AMOUNT } from '../../../constants/index.js'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext'
+import { AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext.js'
 import { useFungibleToken, useFungibleTokenPrice, useNativeTokenPrice } from '@masknet/plugin-infra/web3'
 
 export function useSortedTrades(traders: TradeInfo[], chainId: ChainId, gasPrice?: string) {

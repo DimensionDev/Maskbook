@@ -1,10 +1,10 @@
 import { Grid, Box, Typography, Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import { useI18N } from '../../../utils'
-import type { GoodGhostingInfo, Player } from '../types'
-import { getPlayerStandings } from '../utils'
-import { CircularDataDisplay } from './CircularDataDisplay'
+import { useI18N } from '../../../utils/index.js'
+import type { GoodGhostingInfo, Player } from '../types.js'
+import { getPlayerStandings } from '../utils.js'
+import { CircularDataDisplay } from './CircularDataDisplay.js'
 
 const useStyles = makeStyles()((theme) => ({
     infoRow: {

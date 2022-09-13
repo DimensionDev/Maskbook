@@ -1,9 +1,18 @@
-import type { InjectedDialogClassKey, InjectedDialogProps } from '../components'
+import type { InjectedDialogClassKey, InjectedDialogProps } from '../components/index.js'
 
-type ClassNameMap<ClassKey extends string = string> = { [P in ClassKey]: string }
+type ClassNameMap<ClassKey extends string = string> = {
+    [P in ClassKey]: string
+}
 
-interface ComponentOverwriteConfig<Props extends { classes?: any }, Classes extends string> {
-    classes?: () => { classes: Partial<ClassNameMap<Classes>> }
+interface ComponentOverwriteConfig<
+    Props extends {
+        classes?: any
+    },
+    Classes extends string,
+> {
+    classes?: () => {
+        classes: Partial<ClassNameMap<Classes>>
+    }
     props?: (props: Props) => Props
 }
 

@@ -11,7 +11,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {

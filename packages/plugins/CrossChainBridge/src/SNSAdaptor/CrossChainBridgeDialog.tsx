@@ -1,7 +1,7 @@
 import { DialogContent, Stack, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useI18N } from '../locales'
-import { getCrossChainBridge } from '../constants'
+import { useI18N } from '../locales/index.js'
+import { getCrossChainBridge } from '../constants.js'
 import { openWindow } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
 

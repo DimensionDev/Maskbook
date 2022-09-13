@@ -7,7 +7,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { Chip, ChipProps } from '@mui/material'
 import classNames from 'classnames'
 import { noop } from 'lodash-unified'
-import { useI18N } from '../../utils'
+import { useI18N } from '../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { blue, green, red } from '@mui/material/colors'
-import type { MaskDarkTheme } from './MaskTheme'
+import type { MaskDarkTheme } from './MaskTheme.js'
 
 export const useColorStyles = makeStyles()((theme: typeof MaskDarkTheme) => {
     const dark = theme.palette.mode === 'dark'

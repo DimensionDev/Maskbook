@@ -1,9 +1,9 @@
 import { i18NextInstance } from '@masknet/shared-base'
 import { TransactionContext, isZero } from '@masknet/web3-shared-base'
 import { ChainId, TransactionParameter, SchemaType } from '@masknet/web3-shared-evm'
-import type { TransactionDescriptor } from '../types'
-import { getTokenAmountDescription } from '../utils'
-import { Web3StateSettings } from '../../../settings'
+import type { TransactionDescriptor } from '../types.js'
+import { getTokenAmountDescription } from '../utils.js'
+import { Web3StateSettings } from '../../../settings/index.js'
 
 export class ERC20Descriptor implements TransactionDescriptor {
     async compute(context_: TransactionContext<ChainId, TransactionParameter>) {

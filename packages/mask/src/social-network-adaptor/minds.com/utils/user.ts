@@ -1,5 +1,5 @@
 import { isNull } from 'lodash-unified'
-import type { SocialNetwork } from '../../../social-network'
+import type { SocialNetwork } from '../../../social-network/index.js'
 
 export const usernameValidator: NonNullable<SocialNetwork.Utils['isValidUsername']> = (name: string) => {
     for (const v of [/(minds|admin)/i, /.{16,}/, /\W/]) {

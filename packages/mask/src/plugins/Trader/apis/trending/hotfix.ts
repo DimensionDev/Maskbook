@@ -1,7 +1,7 @@
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { ChainId, getCoinGeckoConstants, getCoinMarketCapConstants } from '@masknet/web3-shared-evm'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { TagType } from '../../types'
+import { TagType } from '../../types/index.js'
 import { DataProvider } from '@masknet/public-api'
 import MIRRORED_TOKENS from './mirrored_tokens.json'
 import STOCKS_KEYWORDS from './stocks.json'
@@ -74,7 +74,7 @@ const ID_ADDRESS_MAP: {
 } = {
     [DataProvider.COIN_MARKET_CAP]: {
         [ChainId.Mainnet]: {
-            '6747': '0x32a7c02e79c4ea1008dd6564b35f131428673c41', // CRUST
+            '6747': '0x32a7c02e79c4ea1008dd6564b35f131428673c41',
             '8536': '0x69af81e73A73B40adF4f3d4223Cd9b1ECE623074', // MASK
         },
         [ChainId.Matic]: {
@@ -104,7 +104,9 @@ const NETWORK_ID_MAP: {
     [DataProvider.NFTSCAN]: {},
 }
 
-export const SCAM_ADDRESS_MAP: { [key in ChainId]?: string[] } = {
+export const SCAM_ADDRESS_MAP: {
+    [key in ChainId]?: string[]
+} = {
     [ChainId.Mainnet]: ['0xc89f3672d1178c83470a53edf67c4f5521e8d400'],
 }
 

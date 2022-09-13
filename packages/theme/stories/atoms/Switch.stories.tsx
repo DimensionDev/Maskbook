@@ -1,5 +1,5 @@
 import { Switch as MuiSwitch, FormControlLabel, SwitchProps } from '@mui/material'
-import { story } from '../utils'
+import { story } from '../utils/index.js'
 
 function C(props: SwitchProps) {
     return (

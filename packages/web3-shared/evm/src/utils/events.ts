@@ -1,6 +1,6 @@
 import type { EventLog } from 'web3-core'
 import { AbiItem, keccak256 } from 'web3-utils'
-import type { TransactionReceipt, Web3 } from '../types'
+import type { TransactionReceipt, Web3 } from '../types/index.js'
 
 export function decodeEvents(web3: Web3, abis: AbiItem[], receipt: TransactionReceipt) {
     // the topic0 for identifying which abi to be used for decoding the event
@@ -24,7 +24,9 @@ export function decodeEvents(web3: Web3, abis: AbiItem[], receipt: TransactionRe
             ...log,
         } as EventLog
     })
-    return events.reduce<{ [eventName: string]: EventLog }>((accumulate, event) => {
+    return events.reduce<{
+        [eventName: string]: EventLog
+    }>((accumulate, event) => {
         if (event) accumulate[event.event] = event
         return accumulate
     }, {})

@@ -1,7 +1,7 @@
 import ENS from 'ethjs-ens'
 import type { NameServiceResolver } from '@masknet/plugin-infra/web3'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
-import { Providers } from '../Connection/provider'
+import { Providers } from '../Connection/provider.js'
 
 export class ENS_Resolver implements NameServiceResolver<ChainId> {
     private ens: ENS | null = null

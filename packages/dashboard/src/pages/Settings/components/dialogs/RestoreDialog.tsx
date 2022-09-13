@@ -3,10 +3,10 @@ import { Tab, styled, tabClasses, tabsClasses, InputBase, inputBaseClasses } fro
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useState } from 'react'
 import { useAsync } from 'react-use'
-import ConfirmDialog from '../../../../components/ConfirmDialog'
-import FileUpload from '../../../../components/FileUpload'
-import { Services } from '../../../../API'
-import BackupPreviewCard from '../BackupPreviewCard'
+import ConfirmDialog from '../../../../components/ConfirmDialog/index.js'
+import FileUpload from '../../../../components/FileUpload/index.js'
+import { Services } from '../../../../API.js'
+import BackupPreviewCard from '../BackupPreviewCard.js'
 import type { BackupPreview } from '@masknet/backup-format'
 
 const useStyles = makeStyles()(() => ({

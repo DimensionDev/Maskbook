@@ -6,8 +6,8 @@ import { Divider, MenuItem, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/system'
 import { groupBy, toPairs } from 'lodash-unified'
 import { FC, PropsWithChildren, useCallback, useMemo } from 'react'
-import type { Coin } from '../../types'
-import { CoinIcon } from './components'
+import type { Coin } from '../../types/index.js'
+import { CoinIcon } from './components/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     coinMenu: {

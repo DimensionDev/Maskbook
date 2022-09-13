@@ -1,5 +1,5 @@
 import { createContext, useState, PropsWithChildren } from 'react'
-import VerifyPasswordDialog from '../components/dialogs/VerifyPasswordDialog'
+import VerifyPasswordDialog from '../components/dialogs/VerifyPasswordDialog.js'
 
 export interface PasswordVerifiedContext {
     isPasswordVerified: boolean

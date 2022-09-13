@@ -1,9 +1,9 @@
 import { notify } from 'async-call-rpc/full'
-import { MaskMessages } from '../../../shared'
-import { nativeAPI, hasNativeAPI } from '../../../shared/native-rpc'
-import { __deprecated__setStorage } from '../../utils/deprecated-storage'
-import { queryOwnedPersonaInformation } from '../../services/identity'
-import { hmr } from '../../../utils-pure'
+import { MaskMessages } from '../../../shared/index.js'
+import { nativeAPI, hasNativeAPI } from '../../../shared/native-rpc/index.js'
+import { __deprecated__setStorage } from '../../utils/deprecated-storage.js'
+import { queryOwnedPersonaInformation } from '../../services/identity/index.js'
+import { hmr } from '../../../utils-pure/index.js'
 
 const { signal } = hmr(import.meta.webpackHot)
 if (hasNativeAPI) {

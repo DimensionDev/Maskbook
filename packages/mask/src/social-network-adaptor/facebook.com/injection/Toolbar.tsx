@@ -1,8 +1,8 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
-import { startWatch } from '../../../utils/watcher'
-import { toolboxInSidebarSelector, toolboxInSidebarSelectorWithNoLeftRailStart } from '../utils/selector'
-import { ToolboxAtFacebook } from './ToolbarUI'
+import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { startWatch } from '../../../utils/watcher.js'
+import { toolboxInSidebarSelector, toolboxInSidebarSelectorWithNoLeftRailStart } from '../utils/selector.js'
+import { ToolboxAtFacebook } from './ToolbarUI.js'
 
 export function injectToolboxHintAtFacebook(signal: AbortSignal, category: 'wallet' | 'application') {
     const hasSpecificLeftRailStartBar = Boolean(document.querySelector<HTMLElement>('#ssrb_left_rail_start'))

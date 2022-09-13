@@ -1,6 +1,6 @@
 import { ChainId } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
-import { BlockchainCode } from './types'
+import { BlockchainCode } from './types.js'
 
 const ONE_THOUSAND = 1000
 const ONE_MILLION = ONE_THOUSAND * 1000

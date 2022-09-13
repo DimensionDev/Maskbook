@@ -1,11 +1,11 @@
 import { styled, Breadcrumbs, Dialog, IconButton, Link, Typography } from '@mui/material'
 import { useHref, useNavigate } from 'react-router-dom'
 import { makeStyles, getMaskColor } from '@masknet/theme'
-import { useDashboardI18N } from '../../locales'
+import { useDashboardI18N } from '../../locales/index.js'
 import { memo, useState } from 'react'
-import { About } from './About'
+import { About } from './About.js'
 import { Close } from '@mui/icons-material'
-import { Version } from './Version'
+import { Version } from './Version.js'
 import links from './links.json'
 import { openWindow } from '@masknet/shared-base-ui'
 
@@ -39,8 +39,12 @@ const AboutDialog = styled(Dialog)`
     overflow: hidden;
 `
 
-type FooterLinkBaseProps = React.PropsWithChildren<{ title?: string }>
-type FooterLinkAnchorProps = FooterLinkBaseProps & { href: string }
+type FooterLinkBaseProps = React.PropsWithChildren<{
+    title?: string
+}>
+type FooterLinkAnchorProps = FooterLinkBaseProps & {
+    href: string
+}
 
 function FooterLinkExternal(props: FooterLinkAnchorProps) {
     const { classes } = useStyles()
@@ -59,7 +63,9 @@ function FooterLinkExternal(props: FooterLinkAnchorProps) {
     )
 }
 
-type FooterLinkLinkProps = FooterLinkBaseProps & { to: string }
+type FooterLinkLinkProps = FooterLinkBaseProps & {
+    to: string
+}
 function FooterLinkTo(props: FooterLinkLinkProps) {
     const { classes } = useStyles()
     const href = useHref(props.to)
@@ -79,7 +85,9 @@ function FooterLinkTo(props: FooterLinkLinkProps) {
     )
 }
 
-type FooterLinkAnchorButtonProps = FooterLinkBaseProps & { onClick(e: React.MouseEvent<HTMLAnchorElement>): void }
+type FooterLinkAnchorButtonProps = FooterLinkBaseProps & {
+    onClick(e: React.MouseEvent<HTMLAnchorElement>): void
+}
 function FooterLinkButton(props: FooterLinkAnchorButtonProps) {
     const { classes } = useStyles()
     return (

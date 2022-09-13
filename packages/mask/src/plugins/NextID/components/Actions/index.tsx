@@ -1,9 +1,9 @@
 import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
 import { Button, Stack, Typography } from '@mui/material'
-import { useI18N } from '../../locales'
+import { useI18N } from '../../locales/index.js'
 import { Icons } from '@masknet/icons'
-import { PersonaSelectPanel } from '../../../../components/shared/PersonaSelectPanel/PersonaSelectPanel'
+import { PersonaSelectPanel } from '../../../../components/shared/PersonaSelectPanel/PersonaSelectPanel.js'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -30,7 +30,7 @@ export const CreatePersonaAction = memo<CreatePersonaActionProps>(({ disabled, o
     const { classes } = useStyles()
     return (
         <>
-            <Stack flex={1}>
+            <Stack flex={1} px={1.25} justifyContent="flex-start" width="100%" boxSizing="border-box">
                 <Typography fontWeight={400} fontSize={14}>
                     {t.create_persona_intro()}
                 </Typography>
@@ -66,7 +66,7 @@ export const AddWalletPersonaAction = memo<AddWalletPersonaActionProps>(({ disab
     const { classes } = useStyles()
     return (
         <>
-            <Stack>
+            <Stack flex={1} px={1.25} justifyContent="flex-start" width="100%" boxSizing="border-box">
                 <Typography fontWeight={400} fontSize={14}>
                     {t.add_wallet_intro()}
                 </Typography>

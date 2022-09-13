@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Accordion, AccordionDetails, AccordionSummary, Card, Typography } from '@mui/material'
 import { ExpandMore } from '@mui/icons-material'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import AlertIcon from '@mui/icons-material/Error'
 

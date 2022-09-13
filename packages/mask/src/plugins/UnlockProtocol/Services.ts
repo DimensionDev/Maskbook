@@ -1,9 +1,11 @@
 import { GraphQLClient, gql } from 'graphql-request'
 import stringify from 'json-stable-stringify'
 import urlcat from 'urlcat'
-import { graphEndpointKeyVal, keyServerEndpoint } from './constants'
+import { graphEndpointKeyVal, keyServerEndpoint } from './constants.js'
 
-const graphQLClients: { [key: string]: GraphQLClient } = {}
+const graphQLClients: {
+    [key: string]: GraphQLClient
+} = {}
 
 for (const [key, url] of Object.entries(graphEndpointKeyVal)) {
     graphQLClients[key] = new GraphQLClient(url)
@@ -80,9 +82,15 @@ export const verifyPurchase = async (_userAddress: string, _lockAddress: string,
     if (data.locks[0].owner === _userAddress.toLowerCase()) {
         flag = true
     } else if (data.locks[0].keys.length) {
-        data.locks[0].keys.forEach((key: { owner: { id: string } }) => {
-            if (key.owner.id === _userAddress.toLowerCase()) flag = true
-        })
+        data.locks[0].keys.forEach(
+            (key: {
+                owner: {
+                    id: string
+                }
+            }) => {
+                if (key.owner.id === _userAddress.toLowerCase()) flag = true
+            },
+        )
     }
     return flag
 }
@@ -103,12 +111,26 @@ export const getLocks = async <UnlockLocks>(_address1: string) => {
         address: _address1,
     }
 
-    const dataRes: Array<{ lock: { chain: number; name: string; price?: string; address: string } }> = []
+    const dataRes: Array<{
+        lock: {
+            chain: number
+            name: string
+            price?: string
+            address: string
+        }
+    }> = []
 
     for (const key of Object.keys(graphEndpointKeyVal)) {
         const data = await graphQLClients[key].request(query, variables)
         data.lockManagers.forEach(
-            (element: { lock: { chain: number; name: string; price?: string; address: string } }) => {
+            (element: {
+                lock: {
+                    chain: number
+                    name: string
+                    price?: string
+                    address: string
+                }
+            }) => {
                 element.lock.chain = Number.parseInt(key, 10)
                 dataRes.push(element)
             },
@@ -130,7 +152,10 @@ export const getPurchasedLocks = async (_address: string) => {
     const variables = {
         address: _address,
     }
-    const dataRes: Array<{ lock: string; chain: number }> = []
+    const dataRes: Array<{
+        lock: string
+        chain: number
+    }> = []
 
     for (const key of Object.keys(graphEndpointKeyVal)) {
         const data = await graphQLClients[key].request(query, variables)
@@ -163,4 +188,4 @@ export const getKey = async <requestKeyResponse>(data: unknown) => {
     return response.json()
 }
 
-export * from './utils/crypto'
+export * from './utils/crypto.js'
