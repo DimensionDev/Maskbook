@@ -43,6 +43,7 @@ interface RouteState {
     checksum: string
     useCDN: boolean
     provider: Provider
+    encrypted: boolean
 }
 
 export const Uploading: React.FC = () => {
@@ -90,6 +91,8 @@ export const Uploading: React.FC = () => {
             key: state.key,
             payloadTxID,
             landingTxID,
+            meson: state.useCDN,
+            encrypted: state.encrypted,
         }
         await PluginFileServiceRPC.setFileInfo(item)
         navigate(FileRouter.Uploaded, { state: item })

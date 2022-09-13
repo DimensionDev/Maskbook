@@ -35,6 +35,14 @@
         "landingTxID": {
             "type": "string",
             "title": "landingTxID"
+        },
+        "meson": {
+            "type": "boolean",
+            "title": "meson"
+        },
+        "encrypted": {
+            "type": "boolean",
+            "title": "encrypted"
         }
     },
     "required": ["createdAt", "id", "landingTxID", "name", "payloadTxID", "size"]

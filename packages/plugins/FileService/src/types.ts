@@ -43,6 +43,8 @@ export interface FileInfo {
     key: string | undefined
     payloadTxID: string
     landingTxID: string
+    meson?: boolean
+    encrypted?: boolean
 }
 
 export type FileInfoV1 = Omit<FileInfo, 'type' | 'provider'> & {

@@ -93,6 +93,7 @@ export const Prepare: React.FC = () => {
                         checksum,
                         useCDN,
                         provider,
+                        encrypted,
                     },
                 })
             } else {
