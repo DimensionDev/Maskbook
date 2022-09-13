@@ -2216,7 +2216,11 @@ importers:
         specifier: ^5.0.3
         version: 5.0.3
 
-  packages/web3-constants: {}
+  packages/web3-constants:
+    dependencies:
+      '@masknet/web3-contracts':
+        specifier: workspace:*
+        version: link:../web3-contracts
 
   packages/web3-contracts:
     dependencies:
@@ -20954,7 +20958,7 @@ packages:
     patched: true
 
   /immutable/3.8.1:
-    resolution: {integrity: sha512-0R2q5f83L0h+zizu3lAA3ZR/mzEl04U1jVVXIqf2rQbZs9eX5YGtx1EFQuuJJHzVXH10ur6hGKehR8yBOQmZlQ==}
+    resolution: {integrity: sha1-IAgH8Rqw9ycQ6khVQt4IgHX2jNI=}
     engines: {node: '>=0.10.0'}
     dev: false
 
