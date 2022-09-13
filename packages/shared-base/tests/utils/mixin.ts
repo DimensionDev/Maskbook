@@ -33,7 +33,7 @@ class ClassC extends ClassBase {
     }
 }
 
-describe('mix', () => {
+describe('mixin', () => {
     const target = { name: 'target' }
     const source1 = new ClassA()
     const source2 = new ClassB()
@@ -53,5 +53,11 @@ describe('mix', () => {
 
     test('access properties on parent of rest source', () => {
         expect(result.getType()).toBe('C')
+    })
+
+    test('should not recreate function when access again', () => {
+        const fn1 = result.getA
+        const fn2 = result.getA
+        expect(fn1).toEqual(fn2)
     })
 })
