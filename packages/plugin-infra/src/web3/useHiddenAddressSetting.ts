@@ -19,6 +19,9 @@ export function useHiddenAddressSetting(pluginId: PluginID, identity?: string) {
             hiddenAddresses?: string[]
         }>(pluginId)
 
+        // When the tips data is legacy
+        if (!Array.isArray(result)) return result?.hiddenAddresses ?? EMPTY_LIST
+
         if (!result) return EMPTY_LIST
 
         const { hiddenAddresses } = result

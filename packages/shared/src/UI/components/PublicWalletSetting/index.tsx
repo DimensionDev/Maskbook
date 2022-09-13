@@ -1,11 +1,12 @@
 import { Icons } from '@masknet/icons'
 import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { Typography } from '@mui/material'
-import { memo, useCallback, useState } from 'react'
+import { Typography, Box } from '@mui/material'
+import { memo, useCallback, useMemo, useState } from 'react'
 import {
     BindingProof,
     CrossIsolationMessages,
     ECKeyIdentifier,
+    EMPTY_LIST,
     NextIDPlatform,
     PopupRoutes,
 } from '@masknet/shared-base'
@@ -14,8 +15,10 @@ import { PluginId } from '@masknet/plugin-infra'
 import { WalletSettingCard } from '@masknet/shared'
 import { useAsyncFn, useUpdateEffect } from 'react-use'
 
-import { SettingActions } from './SettingActions'
+import { differenceWith } from 'lodash-unified'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { useSharedI18N } from '../../../locales'
+import { SettingActions } from './SettingActions.js'
 
 export type PublicWalletSettingType = {
     hiddenAddresses?: string[]
@@ -33,9 +36,9 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1.5),
         background: theme.palette.maskColor.bg,
         display: 'flex',
+        justifyContent: 'space-between',
         alignItems: 'center',
         borderRadius: 4,
-        columnGap: 6,
     },
     alertTitle: {
         fontSize: 14,
@@ -64,6 +67,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: 12,
         '& > *': {
             flex: 1,
+            maxWidth: 'calc(50% - 22px)',
         },
     },
 }))
@@ -82,19 +86,26 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
         const { Storage } = useWeb3State()
 
         const [addresses, setAddresses] = useState<string[]>([])
-
+        const [showAlert, setShowAlert] = useState(true)
         const { showSnackbar } = useCustomSnackbar()
 
-        const { value: hiddenAddress, loading } = useHiddenAddressSetting(
-            PluginId.Web3Profile,
-            currentPersona?.publicKeyAsHex,
-        )
+        const { value: hiddenAddresses, loading } = useHiddenAddressSetting(pluginId, currentPersona?.publicKeyAsHex)
 
         const onSwitchChange = useCallback((address: string) => {
             setAddresses((prev) => {
                 return prev.some((x) => address === x) ? prev.filter((x) => address !== x) : [...prev, address]
             })
         }, [])
+
+        const disabled = useMemo(() => {
+            // If `hiddenAddresses` setting length is different from `addresses`
+            if (hiddenAddresses?.length !== addresses.length) return false
+
+            // If `addresses` is different from setting
+            if (differenceWith(hiddenAddresses ?? EMPTY_LIST, addresses, isSameAddress).length) return false
+
+            return true
+        }, [addresses, hiddenAddresses])
 
         const [{ loading: confirmLoading }, onConfirm] = useAsyncFn(async () => {
             try {
@@ -125,12 +136,12 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
                     autoHideDuration: 2000,
                 })
             }
-        }, [Storage, currentPersona, addresses, pluginId])
+        }, [Storage, currentPersona, addresses])
 
         useUpdateEffect(() => {
-            if (!hiddenAddress) return
-            setAddresses(hiddenAddress)
-        }, [hiddenAddress])
+            if (!hiddenAddresses) return
+            setAddresses(hiddenAddresses)
+        }, [hiddenAddresses])
 
         const onOpenConnectWallet = useCallback(() => {
             onOpenPopup(PopupRoutes.ConnectedWallets, {
@@ -151,10 +162,15 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
         return (
             <>
                 <div className={classes.container}>
-                    <div className={classes.alert}>
-                        <Icons.Info />
-                        <Typography className={classes.alertTitle}>{t.wallet_setting_hint()}</Typography>
-                    </div>
+                    {showAlert ? (
+                        <div className={classes.alert}>
+                            <Box display="flex" alignItems="center" columnGap="6px">
+                                <Icons.Info />
+                                <Typography className={classes.alertTitle}>{t.setting_alert_title()}</Typography>
+                            </Box>
+                            <Icons.Close onClick={() => setShowAlert(false)} size={20} />
+                        </div>
+                    ) : null}
                     {bindingWallets?.length ? (
                         <div className={classes.content}>
                             {bindingWallets.map((wallet, index) => (
@@ -176,10 +192,10 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
                 <SettingActions
                     hasWallet={!!bindingWallets?.length}
                     onClose={onClose}
-                    onOpenConnectWallet={onOpenConnectWallet}
-                    disableConfirm={addresses.length === hiddenAddress?.length}
+                    disableConfirm={disabled}
                     confirmLoading={confirmLoading}
                     onConfirm={onConfirm}
+                    onOpenConnectWallet={onOpenConnectWallet}
                 />
             </>
         )

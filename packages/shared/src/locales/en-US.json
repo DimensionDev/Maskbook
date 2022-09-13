@@ -118,5 +118,6 @@
     "save_successfully": "Save successfully",
     "save_failed": "Save failed",
     "wallet_set_up_successfully": "Web3 Profile Wallet set up successfully.",
-    "wallet_set_up_failed": "Web3 Profile Wallet setup failed, please try again."
+    "wallet_set_up_failed": "Web3 Profile Wallet setup failed, please try again.",
+    "setting_alert_title": "Toggle the button to manage wallet display settings."
 }
