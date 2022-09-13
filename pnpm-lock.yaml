@@ -509,8 +509,8 @@ importers:
         specifier: ^2.79.0
         version: 2.79.0
       rollup-plugin-swc3:
-        specifier: ^0.5.0
-        version: 0.5.0_2ow5pay2d6jwu26j6mh7yfyzum
+        specifier: ^0.6.0
+        version: 0.6.0_2ow5pay2d6jwu26j6mh7yfyzum
       rollup-plugin-terser:
         specifier: ^7.0.2
         version: 7.0.2_rollup@2.79.0
@@ -982,8 +982,8 @@ importers:
         specifier: ^2.79.0
         version: 2.79.0
       rollup-plugin-swc3:
-        specifier: ^0.5.0
-        version: 0.5.0_2ow5pay2d6jwu26j6mh7yfyzum
+        specifier: ^0.6.0
+        version: 0.6.0_2ow5pay2d6jwu26j6mh7yfyzum
       rollup-plugin-terser:
         specifier: ^7.0.2
         version: 7.0.2_rollup@2.79.0
@@ -1802,8 +1802,8 @@ importers:
         specifier: ^2.79.0
         version: 2.79.0
       rollup-plugin-swc3:
-        specifier: ^0.5.0
-        version: 0.5.0_2ow5pay2d6jwu26j6mh7yfyzum
+        specifier: ^0.6.0
+        version: 0.6.0_2ow5pay2d6jwu26j6mh7yfyzum
       rollup-plugin-terser:
         specifier: ^7.0.2
         version: 7.0.2_rollup@2.79.0
@@ -19818,6 +19818,10 @@ packages:
       call-bind: 1.0.2
       get-intrinsic: 1.1.2
 
+  /get-tsconfig/4.2.0:
+    resolution: {integrity: sha512-X8u8fREiYOE6S8hLbq99PeykTDoLVnxvF4DjWKJmz9xy2nNRdUcV8ZN9tniJFeKyTU3qnC9lL8n4Chd6LmVKHg==}
+    dev: true
+
   /get-value/2.0.6:
     resolution: {integrity: sha512-Ln0UQDlxH1BapMu3GPtf7CuYNwRZf2gwCuPqbyG6pB8WfmFpzqcy4xtAaAMUhnNqjMKTiCPZG2oMT3YSx8U2NA==}
     engines: {node: '>=0.10.0'}
@@ -20958,7 +20962,7 @@ packages:
     patched: true
 
   /immutable/3.8.1:
-    resolution: {integrity: sha1-IAgH8Rqw9ycQ6khVQt4IgHX2jNI=}
+    resolution: {integrity: sha512-0R2q5f83L0h+zizu3lAA3ZR/mzEl04U1jVVXIqf2rQbZs9eX5YGtx1EFQuuJJHzVXH10ur6hGKehR8yBOQmZlQ==}
     engines: {node: '>=0.10.0'}
     dev: false
 
@@ -22082,11 +22086,6 @@ packages:
     resolution: {integrity: sha1-vEztbWxF/gdFKCuvyGqfjE/JzmE=}
     dev: false
 
-  /joycon/3.1.1:
-    resolution: {integrity: sha512-34wB/Y7MW7bzjKRjUKTa46I2Z7eV62Rkhva+KkopW7Qvv/OSWBqvkSY7vusOPrNuZcUG3tApvdVgNB8POj3SPw==}
-    engines: {node: '>=10'}
-    dev: true
-
   /js-cookie/2.2.1:
     resolution: {integrity: sha512-HvdH2LzI/EAZcUwA8+0nKNtWHqS+ZmijLA30RwZA0bo7ToCckjK5MkGhjED9KoRcXO6BaGI3I9UIzSA1FKFPOQ==}
     dev: false
@@ -22327,10 +22326,6 @@ packages:
     resolution: {integrity: sha512-1hqLFMSrGHRHxav9q9gNjJ5EXznIxGVO09xQRrwplcS8qs28pZ8s8hupZAmqDwZUmVZ2Qb2jnyPOWcDH8m8dlA==}
     engines: {node: '>=6'}
     hasBin: true
-
-  /jsonc-parser/3.2.0:
-    resolution: {integrity: sha512-gfFQZrcTc8CnKXp6Y4/CBT3fTc0OVuDofpre4aEeEpSBPV5X5v4+Vmx+8snU7RLPrNHPKSgLxGo9YuQzz20o+w==}
-    dev: true
 
   /jsonfile/2.4.0:
     resolution: {integrity: sha512-PKllAqbgLgxHaj8TElYymKCAgrASebJrWpTnEkOaTowt23VKXXN0sUeriJ+eh7y6ufb/CC5ap11pz71/cM0hUw==}
@@ -26785,8 +26780,8 @@ packages:
       '@babel/code-frame': 7.18.6
     dev: false
 
-  /rollup-plugin-swc3/0.5.0_2ow5pay2d6jwu26j6mh7yfyzum:
-    resolution: {integrity: sha512-Y5zJAsvksM39YAmjNje9rWtRMrJefaieDfkv52B2H7PsFj9EuYsrgGJRRUZCiOjMkQwdkiAEYfobqMZFV1X6pg==}
+  /rollup-plugin-swc3/0.6.0_2ow5pay2d6jwu26j6mh7yfyzum:
+    resolution: {integrity: sha512-nNG2T3x3wq6e7H+8ZHB0CxJ3H9QeYZUh+DwCjwWEyGCaIwIMyIaq/30ZJlYK8/OWWhCfYMwxKRcZGirPg6nPqA==}
     engines: {node: '>=12'}
     peerDependencies:
       '@swc/core': '>=1.2.165'
@@ -26795,8 +26790,7 @@ packages:
       '@rollup/pluginutils': 4.2.1
       '@swc/core': 1.2.245
       deepmerge: 4.2.2
-      joycon: 3.1.1
-      jsonc-parser: 3.2.0
+      get-tsconfig: 4.2.0
       rollup: 2.79.0
     dev: true
 

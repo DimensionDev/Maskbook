@@ -45,7 +45,8 @@ function plugins() {
         commonjs(),
         json(),
         swc({
-            tsconfig: '../../tsconfig.json',
+            tsconfig: './tsconfig.json',
+            jsc: { target: 'es2021' },
         }),
         terser({ mangle: false }),
     ]
