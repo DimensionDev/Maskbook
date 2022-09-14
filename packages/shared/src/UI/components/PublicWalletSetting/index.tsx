@@ -71,6 +71,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
 }))
+
 interface PublicWalletSettingProps {
     onClose: () => void
     onOpenPopup: (route?: PopupRoutes, params?: Record<string, any>) => void
@@ -149,6 +150,15 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
             })
         }, [onOpenPopup])
 
+        const EmptyHintMapping = useMemo(() => {
+            const mapping: Record<string, string> = {
+                [PluginId.Tips]: t.add_wallet_tips(),
+                [PluginId.Tips]: t.add_wallet_web3_profile(),
+            }
+
+            return mapping[pluginId] ?? t.add_wallet_web3_profile()
+        }, [pluginId, t])
+
         if (loading) {
             return (
                 <div className={classes.container}>
@@ -185,7 +195,7 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
                     ) : (
                         <div className={classes.placeholder}>
                             <Icons.EmptySimple size={36} className={classes.placeholderIcon} />
-                            <Typography className={classes.placeholderText}>{t.add_wallet_tips()}</Typography>
+                            <Typography className={classes.placeholderText}>{EmptyHintMapping}</Typography>
                         </div>
                     )}
                 </div>

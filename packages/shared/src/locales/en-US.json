@@ -115,6 +115,7 @@
     "add_wallet": "Add Wallet",
     "wallet_setting_hint": "Toggle the button to manage wallet display settings.",
     "add_wallet_tips": "Please add wallets to receive tips",
+    "add_wallet_web3_profile": "No connected wallet, please add wallet.",
     "save_successfully": "Save successfully",
     "save_failed": "Save failed",
     "wallet_set_up_successfully": "Web3 Profile Wallet set up successfully.",
