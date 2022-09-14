@@ -246,8 +246,8 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
                 open: true,
                 pluginID: nftAvatar.pluginId,
                 chainId: nftAvatar.chainId,
-                address: nftAvatar.address,
                 tokenId: nftAvatar.tokenId,
+                tokenAddress: nftAvatar.address,
             })
         }
 

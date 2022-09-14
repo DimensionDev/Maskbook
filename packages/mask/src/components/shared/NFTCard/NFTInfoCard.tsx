@@ -1,12 +1,9 @@
-import { isEqual } from 'lodash-unified'
 import { Icons } from '@masknet/icons'
-import { getEnumAsArray } from '@dimensiondev/kit'
 import { makeStyles } from '@masknet/theme'
 import { Link, Typography } from '@mui/material'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
+import { SourceType } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
-import { SchemaType, formatTokenId, ChainId } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -50,7 +47,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NFTInfoCardProps {
-    asset: Web3Helper.NonFungibleAssetScope<void>
+    asset: Web3Helper.NonFungibleAssetScope<'all'>
     sourceType?: SourceType
 }
 
@@ -62,21 +59,17 @@ const platformCosts: {
     [SourceType.LooksRare]: 2,
 }
 
-const resolveTokenSchema = (schema?: SchemaType) => {
-    return getEnumAsArray(SchemaType).find((x) => isEqual(x.value, schema))?.key ?? SchemaType.ERC721
-}
-
 export function NFTInfoCard(props: NFTInfoCardProps) {
     const { asset, sourceType } = props
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { Others } = useWeb3State()
 
     const infoConfigMapping = [
-        { title: t('plugin_collectible_token_id'), value: formatTokenId(asset.tokenId, 4) },
+        { title: t('plugin_collectible_token_id'), value: Others?.formatTokenId(asset.tokenId, 4) },
         { title: t('contract'), value: Others?.formatAddress(asset.address, 4) ?? '-', link: true },
         { title: t('plugin_collectible_block_chain'), value: Others?.chainResolver.chainFullName(asset.chainId) },
-        { title: t('token_standard'), value: resolveTokenSchema(asset.schema || asset.contract?.schema) },
+        { title: t('token_standard'), value: Others?.formatSchemaType(asset.schema || asset.contract?.schema) },
         {
             title: t('plugin_collectible_creator_earning'),
             value: `${Number.parseInt(asset.contract?.creatorEarning || '0', 10) / 100}%` ?? '0',
@@ -98,7 +91,7 @@ export function NFTInfoCard(props: NFTInfoCardProps) {
                             {x.link && (
                                 <Link
                                     className={classes.link}
-                                    href={Others?.explorerResolver.addressLink?.(ChainId.Mainnet, asset.address) ?? ''}
+                                    href={Others?.explorerResolver.addressLink?.(asset.chainId, asset.address) ?? ''}
                                     target="_blank"
                                     rel="noopener noreferrer">
                                     <Icons.LinkOut size={16} />
