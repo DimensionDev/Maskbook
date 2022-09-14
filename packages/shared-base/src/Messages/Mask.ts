@@ -92,10 +92,10 @@ export interface NFTAvatarSettingDialogEvent {
 export type OpenNFTDialogEvent =
     | {
           open: true
-          pluginID?: NetworkPluginID
-          chainId?: number
+          pluginID: NetworkPluginID
+          chainId: number
           tokenId: string
-          address: string
+          tokenAddress: string
       }
     | {
           open: false

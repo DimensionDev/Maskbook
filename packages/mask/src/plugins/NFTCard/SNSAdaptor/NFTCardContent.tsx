@@ -12,16 +12,14 @@ import { ActivitiesTab } from './Tabs/ActivitiesTab.js'
 import { NFTBasicInfo } from '../../../components/shared/NFTCard/NFTBasicInfo.js'
 import { LoadingBase } from '@masknet/theme'
 import { base as pluginDefinition } from '../base.js'
-import { useNFTCardInfo } from './hooks/useNFTCardInfo.js'
+import { Context } from './hooks/useContext.js'
 
 export interface NFTCardContentProps {
     currentTab: NFTCardDialogTabs
-    tokenId: string
-    tokenAddress: string
 }
 
 export function NFTCardContent(props: NFTCardContentProps) {
-    const { currentTab, tokenId, tokenAddress } = props
+    const { currentTab } = props
     const { classes } = useStyles()
     const { t: tb } = useBaseI18n()
     const pluginID = useCurrentWeb3NetworkPluginID()
@@ -29,8 +27,7 @@ export function NFTCardContent(props: NFTCardContentProps) {
     const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
-    const pluginId = useCurrentWeb3NetworkPluginID()
-    const { asset, orders, events } = useNFTCardInfo(tokenAddress, tokenId)
+    const { asset, orders, events } = Context.useContainer()
 
     const chainIdList = pluginDefinition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? []
 
@@ -79,15 +76,12 @@ export function NFTCardContent(props: NFTCardContentProps) {
                         setSelectProviderDialog({
                             open: true,
                             supportedNetworkList: chainIdList
-                                .map((chainId) => {
-                                    const x = Others?.chainResolver.chainNetworkType(chainId)
-                                    return x
-                                })
+                                .map((chainId) => Others?.chainResolver.chainNetworkType(chainId))
                                 .filter((x) => Boolean(x)) as Web3Helper.NetworkTypeAll[],
                         })
                     }}
                     fullWidth>
-                    {pluginId === NetworkPluginID.PLUGIN_EVM
+                    {pluginID === NetworkPluginID.PLUGIN_EVM
                         ? tb('wallet_status_button_change')
                         : tb('wallet_status_button_change_to_evm')}
                 </Button>
