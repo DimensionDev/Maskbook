@@ -9,9 +9,9 @@ import {
     isValidTimestamp,
 } from '@masknet/web3-shared-base'
 import { useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
-import { useI18N } from '../../../utils/index.js'
-import { CollectibleProviderIcon } from '../../../plugins/Collectible/SNSAdaptor/CollectibleProviderIcon.js'
 import { Icons } from '@masknet/icons'
+import { useI18N } from '../../../../utils/index.js'
+import { CollectibleProviderIcon } from '../../../Collectible/SNSAdaptor/CollectibleProviderIcon'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {

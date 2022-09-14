@@ -4,7 +4,8 @@ import { Typography, Link } from '@mui/material'
 import { useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { NonFungibleTokenEvent, formatBalance, isZero, isValidTimestamp } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../../../utils/index.js'
+import { ActivityType } from '../../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -75,15 +76,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export enum ActivityType {
-    Transfer = 'Transfer',
-    Mint = 'Mint',
-    Sale = 'Sale',
-    Offer = 'Offer',
-    List = 'List',
-    CancelOffer = 'Cancel Offer',
-}
-interface NFTActivityCardProps {
+export interface NFTActivityCardProps {
     type: ActivityType
     activity: NonFungibleTokenEvent<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
 }
