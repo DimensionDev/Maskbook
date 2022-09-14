@@ -32,6 +32,7 @@ function ContentUI(props: ContentUIProps) {
     const { classes } = useStyles()
     switch (props.dialogType) {
         case SetupGuideStep.FindUsername:
+        case SetupGuideStep.VerifyOnNextID:
         case SetupGuideStep.PinExtension:
             return (
                 <Box>

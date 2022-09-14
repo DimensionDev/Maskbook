@@ -43,7 +43,7 @@ export const VerifyNextID = ({
 
     return (
         <WizardDialog
-            dialogType={SetupGuideStep.FindUsername}
+            dialogType={SetupGuideStep.VerifyOnNextID}
             small={!username}
             content={
                 <Box className={classes.connection}>

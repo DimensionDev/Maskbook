@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useI18N } from '../../utils/index.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
@@ -82,7 +82,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         [currentIdentityResolved, userId],
     )
 
-    const onConnect = async () => {
+    const onConnect = useCallback(async () => {
         const id = ProfileIdentifier.of(ui.networkIdentifier, userId)
         if (!id.some) return
         // attach persona with SNS profile
@@ -100,9 +100,9 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
             status: SetupGuideStep.VerifyOnNextID,
         })
-    }
+    }, [ui.networkIdentifier, destinedPersonaInfo, step])
 
-    const onVerify = async () => {
+    const onVerify = useCallback(async () => {
         if (!userId) return
         if (!destinedPersonaInfo) return
 
@@ -112,22 +112,22 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         const isBound = await NextIDProof.queryIsBound(destinedPersonaInfo.identifier.publicKeyAsHex, platform, userId)
         if (isBound) return
 
-        const afterVerify = () => {
-            setOperation(true)
-            if (step === SetupGuideStep.VerifyOnNextID) {
-                currentSetupGuideStatus[ui.networkIdentifier].value = ''
-            }
-            retryCheckStep()
-        }
-
+        const afterVerify = () => setOperation(true)
         await handleVerifyNextID(destinedPersonaInfo, userId, afterVerify)
-    }
+    }, [userId, destinedPersonaInfo])
 
-    const onClose = () => {
+    const onVerifyDone = useCallback(() => {
+        if (step === SetupGuideStep.VerifyOnNextID) {
+            currentSetupGuideStatus[ui.networkIdentifier].value = ''
+        }
+        retryCheckStep()
+    }, [step, retryCheckStep])
+
+    const onClose = useCallback(() => {
         currentSetupGuideStatus[ui.networkIdentifier].value = ''
-    }
+    }, [ui.networkIdentifier])
 
-    const onPinDone = () => {
+    const onPinDone = useCallback(() => {
         const network = ui.networkIdentifier
         if (!userPinExtension.value) {
             userPinExtension.value = true
@@ -138,7 +138,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         } else {
             onCreate()
         }
-    }
+    }, [])
 
     const onCreate = () => {
         let content = t('setup_guide_say_hello_content')
@@ -174,7 +174,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                     network={ui.networkIdentifier}
                     avatar={currentIdentityResolved?.avatar}
                     onVerify={onVerify}
-                    onDone={retryCheckStep}
+                    onDone={onVerifyDone}
                     onClose={onClose}
                     disableVerify={disableVerify}
                 />
