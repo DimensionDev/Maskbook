@@ -1,7 +1,7 @@
 import { Box, Link, Stack, Typography } from '@mui/material'
-import { useI18N } from '../../locales'
-import { GoPlusLabLogo } from '../icons/Logo'
-import { PLUGIN_OFFICIAL_WEBSITE } from '../../constants'
+import { useI18N } from '../../locales/index.js'
+import { GoPlusLabLogo } from '../icons/Logo.js'
+import { PLUGIN_OFFICIAL_WEBSITE } from '../../constants.js'
 
 export const Footer = () => {
     const t = useI18N()

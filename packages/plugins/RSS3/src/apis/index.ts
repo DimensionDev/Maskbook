@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { AssetType, GeneralAsset, RSS3Profile } from '../types'
+import { AssetType, GeneralAsset, RSS3Profile } from '../types.js'
 
 async function fetchJSON<T = unknown>(url: string): Promise<T> {
     const res = await globalThis.fetch(url)

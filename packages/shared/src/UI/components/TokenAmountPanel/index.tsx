@@ -5,9 +5,9 @@ import { Box, Chip, ChipProps, InputProps, StandardTextFieldProps, Typography } 
 import { makeStyles, MaskTextField, useStylesExtends } from '@masknet/theme'
 import { FungibleToken, formatBalance } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { SelectTokenChip, SelectTokenChipProps } from '../SelectTokenChip'
-import { useSharedI18N } from '../../../locales'
-import { FormattedBalance } from '../../../wallet'
+import { SelectTokenChip, SelectTokenChipProps } from '../SelectTokenChip/index.js'
+import { useSharedI18N } from '../../../locales/index.js'
+import { FormattedBalance } from '../../../wallet/index.js'
 
 const MIN_AMOUNT_LENGTH = 1
 const MAX_AMOUNT_LENGTH = 79
@@ -86,7 +86,7 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
     // #region update amount by self
     const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
         () => ({
-            RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${token?.decimals}}$`), // .ddd...d
+            RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${token?.decimals}}$`),
             RE_MATCH_WHOLE_AMOUNT: new RegExp(`^\\d*\\.?\\d{0,${token?.decimals}}$`), // d.ddd...d
         }),
         [token?.decimals],

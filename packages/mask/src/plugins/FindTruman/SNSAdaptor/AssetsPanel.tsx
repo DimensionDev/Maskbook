@@ -1,11 +1,11 @@
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import type React from 'react'
-import PoapPanel from './PoapPanel'
-import PartsPanel from './PartsPanel'
-import FtgPanel from './FtgPanel'
+import PoapPanel from './PoapPanel.js'
+import PartsPanel from './PartsPanel.js'
+import FtgPanel from './FtgPanel.js'
 import { useContext } from 'react'
-import { FindTrumanContext } from '../context'
+import { FindTrumanContext } from '../context.js'
 
 const useStyles = makeStyles()((theme) => ({
     box: {

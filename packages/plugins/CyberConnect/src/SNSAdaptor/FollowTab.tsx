@@ -8,7 +8,7 @@ import TabList from '@mui/lab/TabList'
 import TabPanel from '@mui/lab/TabPanel'
 import Avatar from 'boring-avatars'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import type { IFollowIdentity } from '../Worker/apis'
+import type { IFollowIdentity } from '../Worker/apis/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     tabContext: {

@@ -13,10 +13,10 @@ import { makeStyles } from '@masknet/theme'
 import millify from 'millify'
 import OpenInNew from '@mui/icons-material/OpenInNew'
 import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 import { InjectedDialog } from '@masknet/shared'
-import { InfoField } from './InformationCard'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
+import { InfoField } from './InformationCard.js'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {

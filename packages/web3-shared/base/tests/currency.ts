@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import { formatCurrency } from '../src'
+import { formatCurrency } from '../src/index.js'
 
 describe('USD Currency price format util test', () => {
     test.each([
@@ -23,7 +23,7 @@ describe('USD Currency price format util test', () => {
         { give: 0.000001, expected: '$0.000001' },
         { give: 0.00000101, expected: '$0.000001' },
         { give: 0.000002, expected: '$0.000002' },
-        { give: 0.000000000000001, expected: '< $0.000001' },
+        { give: 1e-15, expected: '< $0.000001' },
     ])('.format($give)', ({ give, expected }) => {
         expect(formatCurrency(give)).toBe(expected)
     })
@@ -57,7 +57,7 @@ describe('EUR Currency format util test', () => {
         { give: 0.000001, expected: '\u20AC0.000001' },
         { give: 0.00000101, expected: '\u20AC0.000001' },
         { give: 0.000002, expected: '\u20AC0.000002' },
-        { give: 0.000000000000001, expected: '< \u20AC0.000001' },
+        { give: 1e-15, expected: '< \u20AC0.000001' },
     ])('.format($give)', ({ give, expected }) => {
         expect(formatCurrency(give, 'EUR')).toBe(expected)
     })
@@ -66,8 +66,8 @@ describe('EUR Currency format util test', () => {
 describe('Digital currency format util test', () => {
     test.each([
         { give: 0, currency: 'ETH', expected: '0.00 \u039E' },
-        { give: 1.55, currency: 'ETH', expected: '1.55\u00a0\u039E' },
-        { give: 1.55, currency: 'BTC', expected: '1.55\u00a0\u20BF' },
+        { give: 1.55, currency: 'ETH', expected: '1.55\u00A0\u039E' },
+        { give: 1.55, currency: 'BTC', expected: '1.55\u00A0\u20BF' },
     ])('.format($give)', ({ give, currency, expected }) => {
         const result = formatCurrency(give, currency)
 

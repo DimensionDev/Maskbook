@@ -1,4 +1,4 @@
-import { ToolboxHintUnstyled } from '../../../components/InjectedComponents/ToolboxUnstyled'
+import { ToolboxHintUnstyled } from '../../../components/InjectedComponents/ToolboxUnstyled.js'
 import { styled, ListItemButton, Typography, ListItemIcon, useMediaQuery, useTheme } from '@mui/material'
 
 const mindsBreakPoint = 1221 /** px */

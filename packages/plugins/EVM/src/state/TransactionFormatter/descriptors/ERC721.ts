@@ -1,8 +1,8 @@
 import { i18NextInstance } from '@masknet/shared-base'
 import type { TransactionContext } from '@masknet/web3-shared-base'
 import type { ChainId, TransactionParameter } from '@masknet/web3-shared-evm'
-import { Web3StateSettings } from '../../../settings'
-import type { TransactionDescriptor } from '../types'
+import { Web3StateSettings } from '../../../settings/index.js'
+import type { TransactionDescriptor } from '../types.js'
 
 export class ERC721Descriptor implements TransactionDescriptor {
     async getContractSymbol(chainId: ChainId, address: string) {

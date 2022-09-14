@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { useI18N, useMatchXS, useQueryNavigatorPermission } from '../../utils'
+import { useI18N, useMatchXS, useQueryNavigatorPermission } from '../../utils/index.js'
 import formatDateTime from 'date-fns/format'
 import { makeStyles, useStylesExtends, useCustomSnackbar } from '@masknet/theme'
 import {
@@ -17,11 +17,11 @@ import {
     Typography,
 } from '@mui/material'
 import type { AutoPasteFailedEvent } from '@masknet/shared-base'
-import { DraggableDiv } from '../shared/DraggableDiv'
+import { DraggableDiv } from '../shared/DraggableDiv.js'
 import Download from '@mui/icons-material/CloudDownload'
 import CloseIcon from '@mui/icons-material/Close'
 import OpenInBrowser from '@mui/icons-material/OpenInBrowser'
-import { saveFileFromUrl } from '../../../shared'
+import { saveFileFromUrl } from '../../../shared/index.js'
 import { Image } from '@masknet/shared'
 
 export interface AutoPasteFailedDialogProps extends withClasses<never> {

@@ -3,7 +3,7 @@
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Avatar, Box, Typography } from '@mui/material'
-import { CopyIconButton } from '../../../../components/CopyIconButton'
+import { CopyIconButton } from '../../../../components/CopyIconButton/index.js'
 import { Icons } from '@masknet/icons'
 import { formatPersonaFingerprint, formatPersonaName } from '@masknet/shared-base'
 

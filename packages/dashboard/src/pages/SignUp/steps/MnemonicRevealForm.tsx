@@ -4,23 +4,23 @@ import { Button, Stack, Box, IconButton, FormControlLabel, Checkbox } from '@mui
 import RefreshIcon from '@mui/icons-material/Refresh'
 import { MaskColorVar, useCustomSnackbar } from '@masknet/theme'
 import { DashboardRoutes, ECKeyIdentifier } from '@masknet/shared-base'
-import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
+import { Header } from '../../../components/RegisterFrame/ColumnContentHeader.js'
 import {
     Body,
     ColumnContentLayout,
     PersonaLogoBox,
     SignUpAccountLogo,
-} from '../../../components/RegisterFrame/ColumnContentLayout'
-import { useDashboardI18N } from '../../../locales'
-import { MnemonicReveal } from '../../../components/Mnemonic'
-import { SignUpRoutePath } from '../routePath'
-import { ButtonContainer } from '../../../components/RegisterFrame/ButtonContainer'
-import { useMnemonicWordsPuzzle } from '../../../hooks/useMnemonicWordsPuzzle'
-import { useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2'
-import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
-import { Services } from '../../../API'
+} from '../../../components/RegisterFrame/ColumnContentLayout.js'
+import { useDashboardI18N } from '../../../locales/index.js'
+import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
+import { SignUpRoutePath } from '../routePath.js'
+import { ButtonContainer } from '../../../components/RegisterFrame/ButtonContainer.js'
+import { useMnemonicWordsPuzzle } from '../../../hooks/useMnemonicWordsPuzzle.js'
+import { useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
+import { PersonaContext } from '../../Personas/hooks/usePersonaContext.js'
+import { Services } from '../../../API.js'
 import PrintIcon from '@mui/icons-material/Print'
-import { PreviewDialog } from './PreviewDialog'
+import { PreviewDialog } from './PreviewDialog.js'
 import { Icons } from '@masknet/icons'
 import { useAsync } from 'react-use'
 
@@ -29,7 +29,11 @@ export const MnemonicRevealForm = memo(() => {
     const { changeCurrentPersona } = PersonaContext.useContainer()
     const t = useDashboardI18N()
     const navigate = useNavigate()
-    const { state } = useLocation() as { state: { personaName: string } }
+    const { state } = useLocation() as {
+        state: {
+            personaName: string
+        }
+    }
     const { showSnackbar } = useCustomSnackbar()
     const { words, refreshCallback } = useMnemonicWordsPuzzle()
     const [preview, setPreview] = useState<{

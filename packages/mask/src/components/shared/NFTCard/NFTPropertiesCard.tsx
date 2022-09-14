@@ -1,8 +1,9 @@
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
-import { NFTRank } from './NFTRank'
-import { useI18N } from '../../../utils'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { NFTRank } from './NFTRank.js'
+import { useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {

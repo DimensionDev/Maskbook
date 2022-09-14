@@ -5,7 +5,7 @@ import { EMPTY_LIST, EnhanceableSite, getSiteType, NextIDPlatform } from '@maskn
 import { ChainId, isValidAddress, isZeroAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { IdentityServiceState } from '@masknet/plugin-infra/web3'
 import { KeyValue, NextIDProof, RSS3 } from '@masknet/web3-providers'
-import { Providers } from './Connection/provider'
+import { Providers } from './Connection/provider.js'
 
 const ENS_RE = /\S{1,256}\.(eth|kred|xyz|luxe)\b/
 const ADDRESS_FULL = /0x\w{40,}/
@@ -91,7 +91,13 @@ export class IdentityService extends IdentityServiceState {
     /** Read a social address from KV service. */
     private async getSocialAddressFromKV({ identifier }: SocialIdentity) {
         const address = await KeyValue.createJSON_Storage<
-            Record<NetworkPluginID, { address: string; networkPluginID: NetworkPluginID }>
+            Record<
+                NetworkPluginID,
+                {
+                    address: string
+                    networkPluginID: NetworkPluginID
+                }
+            >
         >(`com.maskbook.user_${getSiteType()}`)
             .get(identifier?.userId ?? '$unknown')
             .then((x) => x?.[NetworkPluginID.PLUGIN_EVM].address ?? '')

@@ -5,10 +5,10 @@ import { SchemaType, formatEthereumAddress, explorerResolver, useITOConstants, C
 import { Link, Typography } from '@mui/material'
 import { Trans } from 'react-i18next'
 import { useSelectFungibleToken } from '@masknet/shared'
-import { useI18N } from '../../../utils'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
+import { useI18N } from '../../../utils/index.js'
+import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
+import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel.js'
 import { useChainId, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 
 function isMoreThanMillion(allowance: string, decimals: number) {

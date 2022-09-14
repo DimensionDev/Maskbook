@@ -1,8 +1,8 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { noop } from 'lodash-unified'
-import { ShadowRootStyleProvider } from './ShadowRootStyleProvider'
-import { PreventEventPropagationListContext } from './Contexts'
+import { ShadowRootStyleProvider } from './ShadowRootStyleProvider.js'
+import { PreventEventPropagationListContext } from './Contexts.js'
 
 export interface RenderInShadowRootOptions {
     /** Root tag. @default "main" */

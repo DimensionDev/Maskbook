@@ -1,6 +1,6 @@
 import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
 import { useEffect, useMemo, useState } from 'react'
-import type { TipsAccount } from '../../types'
+import type { TipsAccount } from '../../types/index.js'
 
 /**
  * Add name service

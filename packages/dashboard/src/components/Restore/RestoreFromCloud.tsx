@@ -1,25 +1,25 @@
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { useDashboardI18N } from '../../locales'
+import { useDashboardI18N } from '../../locales/index.js'
 import { Box } from '@mui/material'
-import { MaskAlert } from '../MaskAlert'
-import { CodeValidation } from './CodeValidation'
-import { fetchBackupValue } from '../../pages/Settings/api'
-import { Messages, Services } from '../../API'
-import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard'
-import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
+import { MaskAlert } from '../MaskAlert/index.js'
+import { CodeValidation } from './CodeValidation.js'
+import { fetchBackupValue } from '../../pages/Settings/api.js'
+import { Messages, Services } from '../../API.js'
+import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard.js'
+import { ButtonContainer } from '../RegisterFrame/ButtonContainer.js'
 import { useCustomSnackbar } from '@masknet/theme'
 import { useAsyncFn } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { Step, Stepper } from '../Stepper'
-import { LoadingCard } from './steps/LoadingCard'
+import { Step, Stepper } from '../Stepper/index.js'
+import { LoadingCard } from './steps/LoadingCard.js'
 import { BackupPreview, decryptBackup } from '@masknet/backup-format'
 import { decode, encode } from '@msgpack/msgpack'
-import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
-import { AccountType } from '../../pages/Settings/type'
-import { UserContext } from '../../pages/Settings/hooks/UserContext'
-import { ConfirmSynchronizePasswordDialog } from './ConfirmSynchronizePasswordDialog'
-import { LoadingButton } from '../LoadingButton'
+import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext.js'
+import { AccountType } from '../../pages/Settings/type.js'
+import { UserContext } from '../../pages/Settings/hooks/UserContext.js'
+import { ConfirmSynchronizePasswordDialog } from './ConfirmSynchronizePasswordDialog.js'
+import { LoadingButton } from '../LoadingButton/index.js'
 
 export const RestoreFromCloud = memo(() => {
     const t = useDashboardI18N()
@@ -28,10 +28,17 @@ export const RestoreFromCloud = memo(() => {
     const { user, updateUser } = useContext(UserContext)
     const { currentPersona, changeCurrentPersona } = PersonaContext.useContainer()
 
-    const [account, setAccount] = useState<null | { type: AccountType; value: string; password: string }>(null)
+    const [account, setAccount] = useState<null | {
+        type: AccountType
+        value: string
+        password: string
+    }>(null)
     const [backupId, setBackupId] = useState('')
     const [openSynchronizePasswordDialog, toggleSynchronizePasswordDialog] = useState(false)
-    const [step, setStep] = useState<{ name: string; params: any }>({ name: 'validate', params: null })
+    const [step, setStep] = useState<{
+        name: string
+        params: any
+    }>({ name: 'validate', params: null })
 
     const [{ loading: fetchingBackupValue, error: fetchBackupValueError }, fetchBackupValueFn] = useAsyncFn(
         async (downloadLink: string) => fetchBackupValue(downloadLink),

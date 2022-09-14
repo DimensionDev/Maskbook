@@ -1,4 +1,4 @@
-import Services from '../extension/service'
+import Services from '../extension/service.js'
 
 const { fetch: original_fetch } = globalThis
 export function contentFetch(input: RequestInfo, init?: RequestInit) {

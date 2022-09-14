@@ -1,6 +1,6 @@
 import { createGlobalState } from '@masknet/shared-base-ui'
-import { Messages, Services } from '../../API'
-import type { AccountType, BackupFileInfo, Scenario, Locale } from './type'
+import { Messages, Services } from '../../API.js'
+import type { AccountType, BackupFileInfo, Scenario, Locale } from './type.js'
 
 export const [useLanguage] = createGlobalState(Services.Settings.getLanguage, Messages.events.languageSettings.on)
 

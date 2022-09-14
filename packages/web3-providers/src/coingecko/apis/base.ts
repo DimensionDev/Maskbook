@@ -1,8 +1,8 @@
 import urlcat from 'urlcat'
 import { CurrencyType, Price } from '@masknet/web3-shared-base'
-import { fetchJSON } from '../../helpers'
-import type { TrendingAPI } from '../../types'
-import { COINGECKO_URL_BASE } from '../constants'
+import { fetchJSON } from '../../helpers.js'
+import type { TrendingAPI } from '../../types/index.js'
+import { COINGECKO_URL_BASE } from '../constants.js'
 
 // #region get currency
 export async function getAllCurrencies() {
@@ -41,7 +41,10 @@ export interface CoinInfo {
         facebook_username: string
         homepage: string[]
         official_forum_url: string[]
-        repos_url: { github: string[]; bitbucket: string[] }
+        repos_url: {
+            github: string[]
+            bitbucket: string[]
+        }
         subreddit_url: string
         telegram_channel_identifier: string
         twitter_screen_name: string
@@ -106,10 +109,14 @@ export interface CoinInfo {
 }
 
 export async function getCoinInfo(coinId: string) {
-    return fetchJSON<CoinInfo | { error: string }>(
-        `${COINGECKO_URL_BASE}/coins/${coinId}?developer_data=false&community_data=false&tickers=true`,
-        { cache: 'default' },
-    )
+    return fetchJSON<
+        | CoinInfo
+        | {
+              error: string
+          }
+    >(`${COINGECKO_URL_BASE}/coins/${coinId}?developer_data=false&community_data=false&tickers=true`, {
+        cache: 'default',
+    })
 }
 // #endregion
 

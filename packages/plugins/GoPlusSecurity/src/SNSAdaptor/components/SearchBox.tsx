@@ -3,11 +3,11 @@ import { memo, useMemo, useState } from 'react'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { makeStyles, MaskTextField, ShadowRootMenu } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { useI18N } from '../../locales'
+import { useI18N } from '../../locales/index.js'
 import type { SecurityAPI } from '@masknet/web3-providers'
 import { ChainId, chainResolver } from '@masknet/web3-shared-evm'
 import { WalletIcon } from '@masknet/shared'
-import { useSupportedChains } from '../hooks/useSupportedChains'
+import { useSupportedChains } from '../hooks/useSupportedChains.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -57,7 +57,11 @@ function getChainName(chain?: SecurityAPI.SupportedChain<ChainId>) {
 export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
     const t = useI18N()
     const { classes } = useStyles()
-    const [selectedChain, setSelectedChain] = useState<SecurityAPI.SupportedChain<ChainId> & { icon?: URL }>()
+    const [selectedChain, setSelectedChain] = useState<
+        SecurityAPI.SupportedChain<ChainId> & {
+            icon?: URL
+        }
+    >()
     const [searchContent, setSearchSearchContent] = useState<string>()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 

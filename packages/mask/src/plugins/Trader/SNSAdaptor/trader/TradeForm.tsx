@@ -1,7 +1,7 @@
 import { memo, useCallback, useMemo, useRef, useState } from 'react'
-import { PluginWalletStatusBar, useI18N } from '../../../../utils'
+import { PluginWalletStatusBar, useI18N } from '../../../../utils/index.js'
 import { makeStyles, MaskColorVar, useStylesExtends, ActionButton } from '@masknet/theme'
-import { InputTokenPanel } from './InputTokenPanel'
+import { InputTokenPanel } from './InputTokenPanel.js'
 import { alpha, Box, chipClasses, Collapse, IconButton, lighten, Typography } from '@mui/material'
 import { ChainId, formatWeiToEther, GasOptionConfig, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import {
@@ -13,32 +13,35 @@ import {
     leftShift,
 } from '@masknet/web3-shared-base'
 import TuneIcon from '@mui/icons-material/Tune'
-import { TokenPanelType, TradeInfo } from '../../types'
+import { TokenPanelType, TradeInfo } from '../../types/index.js'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
 import { SelectTokenChip, TokenSecurityBar, useSelectAdvancedSettings, useTokenSecurity } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import classnames from 'classnames'
-import { isNativeTokenWrapper } from '../../helpers'
-import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo'
-import { MINIMUM_AMOUNT, MIN_GAS_LIMIT } from '../../constants'
-import { resolveTradeProviderName } from '../../pipes'
-import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
-import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
+import { isNativeTokenWrapper } from '../../helpers/index.js'
+import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo.js'
+import { MINIMUM_AMOUNT, MIN_GAS_LIMIT } from '../../constants/index.js'
+import { resolveTradeProviderName } from '../../pipes.js'
+import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
+import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed.js'
+import { ChainBoundary } from '../../../../web3/UI/ChainBoundary.js'
 import { useUpdateEffect } from 'react-use'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { isDashboardPage, isPopupPage, PopupRoutes } from '@masknet/shared-base'
-import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
-import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
-import { TokenSecurityBoundary } from '../../../../web3/UI/TokenSecurityBoundary'
-import { currentSlippageSettings } from '../../settings'
-import { PluginTraderMessages } from '../../messages'
-import Services from '../../../../extension/service'
+import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
+import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary.js'
+import { TokenSecurityBoundary } from '../../../../web3/UI/TokenSecurityBoundary.js'
+import { currentSlippageSettings } from '../../settings.js'
+import { PluginTraderMessages } from '../../messages.js'
+import Services from '../../../../extension/service.js'
 import { PluginId, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
 
-const useStyles = makeStyles<{ isDashboard: boolean; isPopup: boolean }>()((theme, { isDashboard, isPopup }) => {
+const useStyles = makeStyles<{
+    isDashboard: boolean
+    isPopup: boolean
+}>()((theme, { isDashboard, isPopup }) => {
     return {
         root: {
             display: 'flex',

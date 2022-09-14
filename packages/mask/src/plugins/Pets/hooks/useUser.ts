@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
-import type { User } from '../types'
-import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
-import { PetsPluginID } from '../constants'
+import type { User } from '../types.js'
+import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI.js'
+import { PetsPluginID } from '../constants.js'
 import { useAccount, useWeb3State } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 

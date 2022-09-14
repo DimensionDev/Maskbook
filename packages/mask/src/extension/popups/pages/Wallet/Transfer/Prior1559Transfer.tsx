@@ -1,5 +1,5 @@
 import { memo, ReactElement, SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react'
-import { useI18N } from '../../../../../utils'
+import { useI18N } from '../../../../../utils/index.js'
 import { z as zod } from 'zod'
 import BigNumber from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
@@ -20,7 +20,7 @@ import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-fo
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { Box, Button, Chip, Collapse, MenuItem, Popover, Typography } from '@mui/material'
-import { StyledInput } from '../../../components/StyledInput'
+import { StyledInput } from '../../../components/StyledInput/index.js'
 import { Icons } from '@masknet/icons'
 import { FormattedAddress, FormattedBalance, TokenIcon, useMenuConfig } from '@masknet/shared'
 import { ChevronDown } from 'react-feather'
@@ -30,7 +30,7 @@ import { ExpandMore } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import { LoadingButton } from '@mui/lab'
 import { toHex } from 'web3-utils'
-import { TransferAddressError } from '../type'
+import { TransferAddressError } from '../type.js'
 import {
     useChainId,
     useFungibleTokenBalance,
@@ -148,7 +148,10 @@ const useStyles = makeStyles()({
 
 export interface Prior1559TransferProps {
     selectedAsset?: FungibleAsset<ChainId, SchemaType>
-    otherWallets: Array<{ name: string; address: string }>
+    otherWallets: Array<{
+        name: string
+        address: string
+    }>
     openAssetMenu: (anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => void
 }
 
@@ -162,7 +165,10 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     const [minGasLimitContext, setMinGasLimitContext] = useState(0)
     const navigate = useNavigate()
 
-    const [addressTip, setAddressTip] = useState<{ type: TransferAddressError; message: string } | null>()
+    const [addressTip, setAddressTip] = useState<{
+        type: TransferAddressError
+        message: string
+    } | null>()
 
     const schema = useMemo(() => {
         return zod.object({
@@ -406,7 +412,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
 
         const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
             () => ({
-                RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${selectedAsset?.decimals}}$`), // .ddd...d
+                RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${selectedAsset?.decimals}}$`),
                 RE_MATCH_WHOLE_AMOUNT: new RegExp(`^\\d*\\.?\\d{0,${selectedAsset?.decimals}}$`), // d.ddd...d
             }),
             [selectedAsset?.decimals],

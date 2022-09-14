@@ -21,7 +21,7 @@ import type {
     SettingsService,
     SiteAdaptorService,
     ThirdPartyPluginService,
-} from '../../background/services/types'
+} from '../../background/services/types.js'
 assertNotEnvironment(Environment.ManifestBackground)
 
 const message = new WebExtensionMessage<Record<string, any>>({ domain: '$' })

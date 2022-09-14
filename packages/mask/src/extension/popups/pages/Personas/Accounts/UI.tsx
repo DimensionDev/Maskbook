@@ -3,10 +3,10 @@ import { Icons } from '@masknet/icons'
 import type { EnhanceableSite } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Button, Typography } from '@mui/material'
-import { AccountAvatar } from '../components/AccountAvatar'
-import { useI18N } from '../../../../../utils'
-import { ConnectDialog } from '../components/ConnectDialog'
-import type { Account } from '../type'
+import { AccountAvatar } from '../components/AccountAvatar/index.js'
+import { useI18N } from '../../../../../utils/index.js'
+import { ConnectDialog } from '../components/ConnectDialog/index.js'
+import type { Account } from '../type.js'
 
 const useStyles = makeStyles()(() => ({
     container: {

@@ -4,11 +4,13 @@ import { ChangeEvent, memo, useCallback, useMemo } from 'react'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { formatBalance, formatCurrency, FungibleToken } from '@masknet/web3-shared-base'
 import { FormattedBalance, FormattedCurrency, SelectTokenChip, SelectTokenChipProps } from '@masknet/shared'
-import { useI18N } from '../../../../../utils'
+import { useI18N } from '../../../../../utils/index.js'
 import { isDashboardPage } from '@masknet/shared-base'
 
 // TODO: remove isDashboard after remove Dashboard page
-const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
+const useStyles = makeStyles<{
+    isDashboard: boolean
+}>()((theme, { isDashboard }) => ({
     filledInput: {
         borderRadius: 12,
         padding: 12,
@@ -149,7 +151,7 @@ export const InputTokenPanelUI = memo<InputTokenPanelUIProps>(
         // #region update amount by self
         const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
             () => ({
-                RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${token?.decimals}}$`), // .ddd...d
+                RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${token?.decimals}}$`),
                 RE_MATCH_WHOLE_AMOUNT: new RegExp(`^\\d*\\.?\\d{0,${token?.decimals}}$`), // d.ddd...d
             }),
             [token?.decimals],

@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { base } from '../base'
-import { setupContext } from './context'
+import { base } from '../base.js'
+import { setupContext } from './context.js'
 
 const dashboard: Plugin.Dashboard.Definition = {
     ...base,

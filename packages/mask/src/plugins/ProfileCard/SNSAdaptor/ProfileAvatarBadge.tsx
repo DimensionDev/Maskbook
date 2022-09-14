@@ -14,8 +14,6 @@ const useStyles = makeStyles()((theme) => ({
 interface Props extends IconButtonProps {
     userId: string
 }
-let closeTimer: NodeJS.Timeout
-let openTimer: NodeJS.Timeout
 export const ProfileAvatarBadge: FC<Props> = ({ userId, className, ...rest }) => {
     const buttonRef = useRef<HTMLButtonElement>(null)
     const { classes, cx } = useStyles()
@@ -23,6 +21,8 @@ export const ProfileAvatarBadge: FC<Props> = ({ userId, className, ...rest }) =>
     useEffect(() => {
         const button = buttonRef.current
         if (!button) return
+        let closeTimer: NodeJS.Timeout
+        let openTimer: NodeJS.Timeout
         const enter = () => {
             clearTimeout(openTimer)
             clearTimeout(closeTimer)
@@ -47,13 +47,19 @@ export const ProfileAvatarBadge: FC<Props> = ({ userId, className, ...rest }) =>
         }
         button.addEventListener('mouseenter', enter)
         button.addEventListener('mouseleave', leave)
+        // Other badges might want to open the profile card
+        const unsubscribe = CrossIsolationMessages.events.requestProfileCard.on((event) => {
+            if (!event.open) return
+            clearTimeout(closeTimer)
+        })
         return () => {
             clearTimeout(closeTimer)
             clearTimeout(openTimer)
             button.removeEventListener('mouseenter', enter)
             button.removeEventListener('mouseleave', leave)
+            unsubscribe()
         }
-    }, [])
+    }, [userId])
 
     return (
         <IconButton disableRipple className={cx(classes.badge, className)} {...rest} ref={buttonRef}>

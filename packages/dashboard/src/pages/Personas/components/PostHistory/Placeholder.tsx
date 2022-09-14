@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useDashboardI18N } from '../../../../locales'
+import { useDashboardI18N } from '../../../../locales/index.js'
 import urlcat from 'urlcat'
 import { MaskColorVar } from '@masknet/theme'
 import { openWindow } from '@masknet/shared-base-ui'

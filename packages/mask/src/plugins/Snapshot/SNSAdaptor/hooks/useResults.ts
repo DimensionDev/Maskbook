@@ -1,12 +1,20 @@
-import type { ProposalIdentifier, ProposalResult, VoteItem } from '../../types'
-import { useSuspense } from '../../../../utils/hooks/useSuspense'
-import { useProposal } from './useProposal'
-import { useVotes } from './useVotes'
+import type { ProposalIdentifier, ProposalResult, VoteItem } from '../../types.js'
+import { useSuspense } from '../../../../utils/hooks/useSuspense.js'
+import { useProposal } from './useProposal.js'
+import { useVotes } from './useVotes.js'
 import { sumBy } from 'lodash-unified'
 
 const cache = new Map<
     string,
-    [0, Promise<void>] | [1, { results: ProposalResult[]; totalPower: number }] | [2, Error]
+    | [0, Promise<void>]
+    | [
+          1,
+          {
+              results: ProposalResult[]
+              totalPower: number
+          },
+      ]
+    | [2, Error]
 >()
 export function resultsRetry() {
     for (const key of cache.keys()) {
@@ -14,12 +22,13 @@ export function resultsRetry() {
     }
 }
 export function useResults(identifier: ProposalIdentifier) {
-    return useSuspense<{ results: ProposalResult[]; totalPower: number }, [ProposalIdentifier]>(
-        identifier.id,
-        [identifier],
-        cache,
-        Suspender,
-    )
+    return useSuspense<
+        {
+            results: ProposalResult[]
+            totalPower: number
+        },
+        [ProposalIdentifier]
+    >(identifier.id, [identifier], cache, Suspender)
 }
 
 async function Suspender(identifier: ProposalIdentifier) {

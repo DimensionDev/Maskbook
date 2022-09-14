@@ -6,9 +6,9 @@ import {
     leftShift,
     multipliedBy,
 } from '@masknet/web3-shared-base'
-import { getTokenConstants } from '../constants'
-import { ChainId, SchemaType } from '../types'
-import { chainResolver } from './resolver'
+import { getTokenConstants } from '../constants/index.js'
+import { ChainId, SchemaType } from '../types.js'
+import { chainResolver } from './resolver.js'
 
 export function createNativeToken(chainId: ChainId) {
     const nativeCurrency = chainResolver.nativeCurrency(chainId)
@@ -45,7 +45,9 @@ export function createFungibleToken(
 export function createFungibleAsset(
     token: FungibleToken<ChainId, SchemaType>,
     balance: string,
-    price?: { [key in CurrencyType]?: string },
+    price?: {
+        [key in CurrencyType]?: string
+    },
 ): FungibleAsset<ChainId, SchemaType> {
     return {
         ...token,

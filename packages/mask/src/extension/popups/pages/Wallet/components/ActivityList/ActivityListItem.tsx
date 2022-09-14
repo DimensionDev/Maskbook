@@ -11,7 +11,7 @@ import {
 import type { ChainId, Transaction } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 import formatDateTime from 'date-fns/format'
-import { useI18N } from '../../../../../../utils'
+import { useI18N } from '../../../../../../utils/index.js'
 import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()({

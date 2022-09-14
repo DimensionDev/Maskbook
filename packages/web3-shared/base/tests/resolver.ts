@@ -1,6 +1,6 @@
 /* cspell:disable */
 import { describe, test, expect } from 'vitest'
-import { resolveCrossOriginURL, resolveIPFS_URL } from '../src/utils/resolver'
+import { resolveCrossOriginURL, resolveIPFS_URL } from '../src/utils/resolver.js'
 
 const MASK_URL = 'https://mask.io'
 const CHROME_EXTENSION_URL = 'chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/logo.png'

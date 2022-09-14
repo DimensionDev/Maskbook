@@ -5,13 +5,13 @@ import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { formatBalance, isSameAddress, isZero, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import type { ChainId, Web3 } from '@masknet/web3-shared-evm'
-import { ProviderIconURLs } from './IconURL'
-import { useI18N } from '../../../utils'
-import { ProtocolType, SavingsProtocol, TabType } from '../types'
+import { ProviderIconURLs } from './IconURL.js'
+import { useI18N } from '../../../utils/index.js'
+import { ProtocolType, SavingsProtocol, TabType } from '../types.js'
 import { useAccount, useFungibleAssets, useWeb3 } from '@masknet/plugin-infra/web3'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { useCallback, useMemo } from 'react'
-import { LDO_PAIRS } from '../constants'
+import { LDO_PAIRS } from '../constants.js'
 
 const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {

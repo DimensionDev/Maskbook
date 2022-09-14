@@ -1,11 +1,11 @@
 import classNames from 'classnames'
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { SelectedIcon } from '../assets/selected'
-import type { AllChainsNonFungibleToken } from '../types'
+import { SelectedIcon } from '../assets/selected.js'
+import type { AllChainsNonFungibleToken } from '../types.js'
 import { Box, useTheme } from '@mui/material'
 import { Image } from '@masknet/shared'
-import { mask_avatar_dark, mask_avatar_light } from '../constants'
+import { mask_avatar_dark, mask_avatar_light } from '../constants.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

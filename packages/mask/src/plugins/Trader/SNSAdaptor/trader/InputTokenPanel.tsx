@@ -3,7 +3,7 @@ import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useFungibleTokenPrice } from '@masknet/plugin-infra/web3'
 import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
-import { InputTokenPanelUI } from './components/InputTokenPanelUI'
+import { InputTokenPanelUI } from './components/InputTokenPanelUI.js'
 import type { SelectTokenChipProps } from '@masknet/shared'
 
 export interface InputTokenPanelProps extends withClasses<'root'> {

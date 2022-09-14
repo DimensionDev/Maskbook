@@ -1,8 +1,8 @@
 import { memo, useState } from 'react'
 import { Button, TextField } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { useDashboardI18N } from '../../../../locales'
-import { isPersonaNameLengthValid, PERSONA_NAME_MAX_LENGTH } from '../../../../utils/checkLengthExceed'
+import { useDashboardI18N } from '../../../../locales/index.js'
+import { isPersonaNameLengthValid, PERSONA_NAME_MAX_LENGTH } from '../../../../utils/checkLengthExceed.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

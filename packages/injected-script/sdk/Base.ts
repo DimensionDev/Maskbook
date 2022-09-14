@@ -1,4 +1,4 @@
-import { createPromise, sendEvent } from './utils'
+import { createPromise, sendEvent } from './utils.js'
 
 export class InjectedProvider {
     private events = new Map<string, Set<Function>>()

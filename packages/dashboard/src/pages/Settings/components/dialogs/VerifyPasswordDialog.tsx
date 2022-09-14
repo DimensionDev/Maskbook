@@ -1,9 +1,9 @@
-import ConfirmDialog from '../../../../components/ConfirmDialog'
+import ConfirmDialog from '../../../../components/ConfirmDialog/index.js'
 import React, { useContext, useState } from 'react'
 import { Box } from '@mui/material'
-import { UserContext } from '../../hooks/UserContext'
-import { useDashboardI18N } from '../../../../locales'
-import PasswordField from '../../../../components/PasswordField'
+import { UserContext } from '../../hooks/UserContext.js'
+import { useDashboardI18N } from '../../../../locales/index.js'
+import PasswordField from '../../../../components/PasswordField/index.js'
 
 interface VerifyPasswordDialogProps {
     open: boolean

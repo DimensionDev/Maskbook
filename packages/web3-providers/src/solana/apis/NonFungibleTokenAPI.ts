@@ -10,10 +10,10 @@ import {
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-solana'
-import type { NonFungibleTokenAPI } from '../../types'
-import type { GetProgramAccountsResponse } from '../types'
-import { fetchJSON } from '../../helpers'
-import { requestRPC } from '../helpers'
+import type { NonFungibleTokenAPI } from '../../types/index.js'
+import type { GetProgramAccountsResponse } from '../types.js'
+import { fetchJSON } from '../../helpers.js'
+import { requestRPC } from '../helpers.js'
 
 interface ExternalMetadata {
     name: string

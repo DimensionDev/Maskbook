@@ -2,11 +2,11 @@ import { makeStyles, LoadingBase } from '@masknet/theme'
 import type { NonFungibleTokenEvent, Pageable } from '@masknet/web3-shared-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { Typography, Button } from '@mui/material'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
-import { useI18N } from '../../../../utils'
-import { NFTActivityCard, ActivityType } from '../../../../components/shared/NFTCard/NFTActivityCard'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import { useI18N } from '../../../../utils/index.js'
+import { NFTActivityCard, ActivityType } from '../../../../components/shared/NFTCard/NFTActivityCard.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {

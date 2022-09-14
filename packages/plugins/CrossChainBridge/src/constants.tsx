@@ -5,7 +5,7 @@ import {
     BobaBridgeIcon,
     PolygonBridgeIcon,
     RainbowBridgeIcon,
-} from './SNSAdaptor/MaskIcon'
+} from './SNSAdaptor/MaskIcon.js'
 
 export const PLUGIN_ID = PluginId.CrossChainBridge
 export const PLUGIN_DESCRIPTION = 'A cross-chain-bridge plugin'

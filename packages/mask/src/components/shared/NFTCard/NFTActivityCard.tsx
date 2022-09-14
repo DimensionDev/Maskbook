@@ -4,7 +4,7 @@ import { Typography, Link } from '@mui/material'
 import { useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { NonFungibleTokenEvent, formatBalance, isZero, isValidTimestamp } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {

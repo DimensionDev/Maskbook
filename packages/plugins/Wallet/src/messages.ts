@@ -3,7 +3,7 @@ import { createPluginMessage, PluginId, PluginMessageEmitter } from '@masknet/pl
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import type { GasOptionType, NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { PLUGIN_ID } from './constants'
+import { PLUGIN_ID } from './constants.js'
 
 export type ApplicationDialogEvent = {
     open: boolean
@@ -137,7 +137,9 @@ export interface WalletMessage {
     phrasesUpdated: void
     addressBookUpdated: void
     transactionsUpdated: void
-    requestsUpdated: { hasRequest: boolean }
+    requestsUpdated: {
+        hasRequest: boolean
+    }
     /** true: Now locked; false: Now unlocked */
     walletLockStatusUpdated: boolean
     socketMessageUpdated: SocketMessageUpdatedEvent
@@ -146,6 +148,8 @@ export interface WalletMessage {
 }
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
-export const WalletMessages: { events: PluginMessageEmitter<WalletMessage> } = {
+export const WalletMessages: {
+    events: PluginMessageEmitter<WalletMessage>
+} = {
     events: createPluginMessage<WalletMessage>(PLUGIN_ID),
 }

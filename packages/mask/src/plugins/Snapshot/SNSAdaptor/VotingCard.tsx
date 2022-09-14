@@ -2,20 +2,20 @@ import { useContext, useState, useEffect } from 'react'
 import classNames from 'classnames'
 import { Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { SnapshotContext } from '../context'
+import { SnapshotContext } from '../context.js'
 import { toChecksumAddress } from 'web3-utils'
 import { useAccount, useChainId, useWeb3Connection, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useSnackbarCallback } from '@masknet/shared'
-import { useI18N } from '../../../utils'
-import { PluginSnapshotRPC } from '../messages'
-import { SnapshotCard } from './SnapshotCard'
-import { useProposal } from './hooks/useProposal'
-import { usePower } from './hooks/usePower'
-import { VoteConfirmDialog } from './VoteConfirmDialog'
-import { useRetry } from './hooks/useRetry'
-import { SNAPSHOT_VOTE_DOMAIN } from '../constants'
-import { getSnapshotVoteType } from '../utils'
+import { useI18N } from '../../../utils/index.js'
+import { PluginSnapshotRPC } from '../messages.js'
+import { SnapshotCard } from './SnapshotCard.js'
+import { useProposal } from './hooks/useProposal.js'
+import { usePower } from './hooks/usePower.js'
+import { VoteConfirmDialog } from './VoteConfirmDialog.js'
+import { useRetry } from './hooks/useRetry.js'
+import { SNAPSHOT_VOTE_DOMAIN } from '../constants.js'
+import { getSnapshotVoteType } from '../utils.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -64,7 +64,7 @@ export function VotingCard() {
             const message = {
                 from: toChecksumAddress(account),
                 space: identifier.space,
-                timestamp: Math.floor(Date.now() / 1e3),
+                timestamp: Math.floor(Date.now() / 1000),
                 proposal: identifier.id,
                 choice: proposal.type === 'single-choice' ? choice : [choice],
                 metadata: JSON.stringify({}),

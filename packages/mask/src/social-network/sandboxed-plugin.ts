@@ -1,15 +1,24 @@
-import { hmr } from '../../utils-pure'
+import { hmr } from '../../utils-pure/index.js'
 import { SiteAdaptorInstance, SiteAdaptorPluginHost } from '@masknet/sandboxed-plugin-runtime/site-adaptor'
-import { Flags } from '../../shared/flags'
+import { Flags } from '../../shared/flags.js'
 import { Plugin, registerPlugin } from '@masknet/plugin-infra'
-import { createHostAPIs } from '../../shared/sandboxed-plugin/host-api'
+import { createHostAPIs } from '../../shared/sandboxed-plugin/host-api.js'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { Children, createElement } from 'react'
 
 const { signal } = hmr(import.meta.webpackHot)
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
 
-let hot: Map<string, (hot: Promise<{ default: Plugin.SNSAdaptor.Definition }>) => void> | undefined
+let hot:
+    | Map<
+          string,
+          (
+              hot: Promise<{
+                  default: Plugin.SNSAdaptor.Definition
+              }>,
+          ) => void
+      >
+    | undefined
 if (process.env.NODE_ENV === 'development') {
     const sym = Symbol.for('sandboxed plugin bridge hot map')
     hot = (globalThis as any)[sym] ??= new Map()

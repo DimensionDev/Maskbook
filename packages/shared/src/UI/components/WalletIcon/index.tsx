@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { ImageIcon } from '../ImageIcon'
+import { ImageIcon } from '../ImageIcon/index.js'
 
 interface StyleProps {
     size: number

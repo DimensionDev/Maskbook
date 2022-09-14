@@ -15,10 +15,10 @@ import {
     Web3Helper,
     useWallets,
 } from '@masknet/plugin-infra/web3'
-import { useTitle } from '../../../hook/useTitle'
-import { useI18N } from '../../../../../utils'
-import { PopupContext } from '../../../hook/usePopupContext'
-import { useWalletLockStatus } from '../hooks/useWalletLockStatus'
+import { useTitle } from '../../../hook/useTitle.js'
+import { useI18N } from '../../../../../utils/index.js'
+import { PopupContext } from '../../../hook/usePopupContext.js'
+import { useWalletLockStatus } from '../hooks/useWalletLockStatus.js'
 
 const useStyles = makeStyles()((theme) => ({
     box: {

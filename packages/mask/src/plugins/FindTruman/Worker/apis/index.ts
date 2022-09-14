@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { WalletRPC } from '../../../Wallet/messages'
+import { WalletRPC } from '../../../Wallet/messages.js'
 import {
     DecryptedClue,
     ExchangeStatus,
@@ -20,7 +20,7 @@ import {
     UserPollOrPuzzleStatus,
     UserPollStatus,
     UserStoryStatus,
-} from '../../types'
+} from '../../types.js'
 
 const PREFIX = 'https://findtruman.io/api'
 

@@ -1,10 +1,10 @@
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import classNames from 'classnames'
-import { useI18N } from '../locales'
-import type { OwnerERC721TokenInfo } from '../types'
-import { ImageLoader } from './ImageLoader'
-import ModelView from './ModelView'
+import { useI18N } from '../locales/index.js'
+import type { OwnerERC721TokenInfo } from '../types.js'
+import { ImageLoader } from './ImageLoader.js'
+import ModelView from './ModelView.js'
 
 export const useStyles = makeStyles()((theme) => ({
     box: {

@@ -7,9 +7,9 @@ import {
     TokenType,
 } from '@masknet/web3-shared-base'
 import CHAINS from './chains.json'
-import { ChainId, NetworkType, ProviderType, SchemaType } from '../types'
-import { getTokenConstant } from './constants'
-import { ZERO_ADDRESS } from './primitives'
+import { ChainId, NetworkType, ProviderType, SchemaType } from '../types/index.js'
+import { getTokenConstant } from './constants.js'
+import { ZERO_ADDRESS } from './primitives.js'
 import { EnhanceableSite, ExtensionSite, isFirefox } from '@masknet/shared-base'
 
 const PLUGIN_ID = NetworkPluginID.PLUGIN_EVM
@@ -86,7 +86,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         networkSupporterPluginID: PLUGIN_ID,
         chainId: ChainId.Gorli,
         type: NetworkType.Ethereum,
-        name: 'G\xf6rli',
+        name: 'G\u00F6rli',
         icon: new URL('../assets/ethereum.png', import.meta.url),
         iconColor: 'rgb(48, 153, 242)',
         averageBlockDelay: 15,

@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { GITCOIN_API_GRANTS_V1 } from '../constants'
+import { GITCOIN_API_GRANTS_V1 } from '../constants.js'
 
 export interface Metadata {}
 

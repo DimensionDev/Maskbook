@@ -1,8 +1,8 @@
 import { EthereumAddress } from 'wallet.ts'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { getRedPacketConstants, getTokenConstant, ZERO_ADDRESS } from '../constants'
-import { ChainId, NetworkType, ProviderType } from '../types'
+import { getRedPacketConstants, getTokenConstant, ZERO_ADDRESS } from '../constants/index.js'
+import { ChainId, NetworkType, ProviderType } from '../types/index.js'
 import { isExtensionSiteType } from '@masknet/shared-base'
 
 export function isEmptyHex(hex?: string) {

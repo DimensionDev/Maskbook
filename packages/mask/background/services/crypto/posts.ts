@@ -1,6 +1,6 @@
 import { isNonNull } from '@dimensiondev/kit'
 import type { PersonaIdentifier, PostInformation, PostIVIdentifier } from '@masknet/shared-base'
-import { PostRecord, queryPostPagedDB } from '../../database/post'
+import { PostRecord, queryPostPagedDB } from '../../database/post/index.js'
 
 export interface QueryPagedPostHistoryOptions {
     network: string

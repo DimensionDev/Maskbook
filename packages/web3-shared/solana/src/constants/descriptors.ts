@@ -7,8 +7,8 @@ import {
     NetworkPluginID,
     ProviderDescriptor,
 } from '@masknet/web3-shared-base'
-import { ChainId, NetworkType, ProviderType, SchemaType } from '../types'
-import { getTokenConstant } from './constants'
+import { ChainId, NetworkType, ProviderType, SchemaType } from '../types.js'
+import { getTokenConstant } from './constants.js'
 
 const PLUGIN_ID = NetworkPluginID.PLUGIN_SOLANA
 

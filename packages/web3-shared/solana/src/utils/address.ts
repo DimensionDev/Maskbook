@@ -2,8 +2,8 @@ import bs58 from 'bs58'
 import * as Web3 from '@solana/web3.js'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { ChainId, NetworkType, ProviderType, SchemaType } from '../types'
-import { getTokenConstant, ZERO_ADDRESS } from '../constants'
+import { ChainId, NetworkType, ProviderType, SchemaType } from '../types.js'
+import { getTokenConstant, ZERO_ADDRESS } from '../constants/index.js'
 import { createLookupTableResolver } from '@masknet/shared-base'
 
 export function encodePublicKey(key: Web3.PublicKey) {

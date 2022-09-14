@@ -1,4 +1,4 @@
-import { main } from './worker'
+import { main } from './worker.js'
 import { serializer } from '@masknet/shared-base'
 
 globalThis.addEventListener('message', async (event) => {

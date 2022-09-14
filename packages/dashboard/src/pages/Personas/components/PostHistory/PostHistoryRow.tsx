@@ -2,10 +2,10 @@ import { Box, Button, Link, Stack, Typography } from '@mui/material'
 import { memo, ReactNode, useCallback, useMemo } from 'react'
 import { Icons } from '@masknet/icons'
 import { getMaskColor, MaskColorVar, makeStyles } from '@masknet/theme'
-import { Services } from '../../../../API'
+import { Services } from '../../../../API.js'
 import type { PostInformation } from '@masknet/shared-base'
-import { useDashboardI18N } from '../../../../locales'
-import { PersonaContext } from '../../hooks/usePersonaContext'
+import { useDashboardI18N } from '../../../../locales/index.js'
+import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import { PluginId } from '@masknet/plugin-infra'
 import { openWindow } from '@masknet/shared-base-ui'
 
@@ -35,7 +35,11 @@ const parseFileServiceMessage = (body: any) => {
 
 const SUPPORT_PLUGIN: Record<
     string,
-    { pluginId: null | string; icon: ReactNode; messageParse: (body: any) => ReactNode }
+    {
+        pluginId: null | string
+        icon: ReactNode
+        messageParse: (body: any) => ReactNode
+    }
 > = {
     text: {
         pluginId: null,

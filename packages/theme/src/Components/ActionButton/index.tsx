@@ -1,7 +1,7 @@
 import { Box, Button } from '@mui/material'
 import type { ButtonProps } from '@mui/material/Button'
-import { LoadingBase } from '../LoadingBase'
-import { makeStyles } from '../../UIHelper'
+import { LoadingBase } from '../LoadingBase/index.js'
+import { makeStyles } from '../../UIHelper/index.js'
 
 export interface ActionButtonProps extends ButtonProps {
     width?: number | string

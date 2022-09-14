@@ -1,9 +1,9 @@
 import { Box } from '@mui/material'
-import type { Part } from '../types'
+import type { Part } from '../types.js'
 import type { SxProps } from '@mui/system'
 import type { Theme } from '@mui/material/styles'
 import { makeStyles } from '@masknet/theme'
-import { PartType } from '../types'
+import { PartType } from '../types.js'
 import { Image } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme, props) => ({

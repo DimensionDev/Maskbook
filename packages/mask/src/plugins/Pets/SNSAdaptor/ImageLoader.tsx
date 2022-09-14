@@ -1,6 +1,6 @@
 import { CircularProgress } from '@mui/material'
 import { ImgHTMLAttributes, useState, SyntheticEvent } from 'react'
-import { DefaultIcon } from '../constants'
+import { DefaultIcon } from '../constants.js'
 
 export function ImageLoader(props: ImgHTMLAttributes<HTMLImageElement>) {
     const [loaded, setLoaded] = useState(false)

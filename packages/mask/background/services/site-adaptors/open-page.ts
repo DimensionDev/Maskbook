@@ -1,7 +1,7 @@
 import { delay } from '@dimensiondev/kit'
 import { ProfileIdentifier } from '@masknet/shared-base'
-import { definedSiteAdaptors } from '../../../shared/site-adaptors/definitions'
-import { requestSiteAdaptorsPermission } from '../helper/request-permission'
+import { definedSiteAdaptors } from '../../../shared/site-adaptors/definitions.js'
+import { requestSiteAdaptorsPermission } from '../helper/request-permission.js'
 
 export async function openProfilePage(network: string, userId?: string) {
     const worker = definedSiteAdaptors.get(network)

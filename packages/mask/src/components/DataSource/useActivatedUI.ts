@@ -7,9 +7,9 @@ import type { IdentityResolved } from '@masknet/plugin-infra'
 import { NextIDProof } from '@masknet/web3-providers'
 import { EMPTY_LIST, ProfileInformation } from '@masknet/shared-base'
 import type { SocialIdentity } from '@masknet/web3-shared-base'
-import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
-import Services from '../../extension/service'
-import { MaskMessages, sortPersonaBindings } from '../../utils'
+import { activatedSocialNetworkUI, globalUIState } from '../../social-network/index.js'
+import Services from '../../extension/service.js'
+import { MaskMessages, sortPersonaBindings } from '../../utils/index.js'
 import { useEffect } from 'react'
 
 async function queryPersonaFromDB(identityResolved: IdentityResolved) {

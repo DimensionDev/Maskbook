@@ -2,9 +2,9 @@ import { memoize } from 'lodash-unified'
 import type { Subscription } from 'use-subscription'
 import type { HubState as Web3HubState, Hub, HubOptions, SourceType, CurrencyType } from '@masknet/web3-shared-base'
 
-export * from './Hub/BaseClient'
-export * from './Hub/FungibleClient'
-export * from './Hub/NonFungibleClient'
+export * from './Hub/BaseClient.js'
+export * from './Hub/FungibleClient.js'
+export * from './Hub/NonFungibleClient.js'
 
 export class HubState<ChainId, SchemaType, GasOption> implements Web3HubState<ChainId, SchemaType, GasOption> {
     static SIZE_PER_PAGE = 50

@@ -11,19 +11,19 @@ import {
     useCurrentIdentity,
     useCurrentLinkedPersona,
     useLastRecognizedIdentity,
-} from '../../../components/DataSource/useActivatedUI'
-import { useI18N } from '../locales'
-import { useI18N as useBaseI18N } from '../../../utils'
-import { WalletMessages } from '../../Wallet/messages'
-import { RedPacketMetaKey } from '../constants'
-import { DialogTabs, RedPacketJSONPayload } from '../types'
-import type { RedPacketSettings } from './hooks/useCreateCallback'
-import { RedPacketConfirmDialog } from './RedPacketConfirmDialog'
-import { RedPacketPast } from './RedPacketPast'
+} from '../../../components/DataSource/useActivatedUI.js'
+import { useI18N } from '../locales/index.js'
+import { useI18N as useBaseI18N } from '../../../utils/index.js'
+import { WalletMessages } from '../../Wallet/messages.js'
+import { RedPacketMetaKey } from '../constants.js'
+import { DialogTabs, RedPacketJSONPayload } from '../types.js'
+import type { RedPacketSettings } from './hooks/useCreateCallback.js'
+import { RedPacketConfirmDialog } from './RedPacketConfirmDialog.js'
+import { RedPacketPast } from './RedPacketPast.js'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Icons } from '@masknet/icons'
-import { RedPacketERC20Form } from './RedPacketERC20Form'
-import { RedPacketERC721Form } from './RedPacketERC721Form'
+import { RedPacketERC20Form } from './RedPacketERC20Form.js'
+import { RedPacketERC721Form } from './RedPacketERC721Form.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

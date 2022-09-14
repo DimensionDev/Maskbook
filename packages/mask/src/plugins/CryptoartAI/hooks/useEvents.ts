@@ -1,10 +1,10 @@
 import { useAsyncRetry } from 'react-use'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { Token } from '../types'
-import { toTokenIdentifier } from '../utils'
+import type { Token } from '../types/index.js'
+import { toTokenIdentifier } from '../utils.js'
 
-import { getEvents } from '../apis'
+import { getEvents } from '../apis/index.js'
 
 export function useEvents(token?: Token) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)

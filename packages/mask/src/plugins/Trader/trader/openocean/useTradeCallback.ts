@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import type { TransactionConfig } from 'web3-core'
 import type { GasOptionConfig } from '@masknet/web3-shared-evm'
-import type { SwapOOSuccessResponse, TradeComputed } from '../../types'
+import type { SwapOOSuccessResponse, TradeComputed } from '../../types/index.js'
 import { NetworkPluginID, ZERO } from '@masknet/web3-shared-base'
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 

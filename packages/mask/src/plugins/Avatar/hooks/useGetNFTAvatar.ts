@@ -2,10 +2,10 @@ import { useWeb3State } from '@masknet/plugin-infra/web3'
 import type { EnhanceableSite } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useCallback } from 'react'
-import { NFT_AVATAR_METADATA_STORAGE, RSS3_KEY_SNS } from '../constants'
-import type { NextIDAvatarMeta } from '../types'
-import { useGetNFTAvatarFromRSS3 } from './rss3/useGetNFTAvatarFromRSS3'
-import { useGetAddress } from './useGetAddress'
+import { NFT_AVATAR_METADATA_STORAGE, RSS3_KEY_SNS } from '../constants.js'
+import type { NextIDAvatarMeta } from '../types.js'
+import { useGetNFTAvatarFromRSS3 } from './rss3/useGetNFTAvatarFromRSS3.js'
+import { useGetAddress } from './useGetAddress.js'
 
 export function useGetNFTAvatar() {
     const getNFTAvatarFromRSS = useGetNFTAvatarFromRSS3()

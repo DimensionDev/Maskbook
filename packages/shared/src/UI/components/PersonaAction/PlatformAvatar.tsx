@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { PersonaImageIcon } from './PersonaImageIcon'
+import { PersonaImageIcon } from './PersonaImageIcon.js'
 
 interface StyleProps {
     size: number

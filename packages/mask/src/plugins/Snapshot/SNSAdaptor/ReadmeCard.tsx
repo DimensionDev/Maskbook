@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { Markdown } from '@masknet/shared'
-import { useProposal } from './hooks/useProposal'
-import { SnapshotContext } from '../context'
+import { useProposal } from './hooks/useProposal.js'
+import { SnapshotContext } from '../context.js'
 
 export interface ReadMeCardProps {}
 

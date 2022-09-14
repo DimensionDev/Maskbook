@@ -1,7 +1,12 @@
 import BigNumber from 'bignumber.js'
 import { FungibleAsset, leftShift, multipliedBy, TokenType, Transaction } from '@masknet/web3-shared-base'
 import { ChainId, getTokenConstant, SchemaType, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { ZerionAddressPosition, ZerionRBDTransactionType, ZerionTransactionItem, ZerionTransactionStatus } from './type'
+import {
+    ZerionAddressPosition,
+    ZerionRBDTransactionType,
+    ZerionTransactionItem,
+    ZerionTransactionStatus,
+} from './type.js'
 
 export function formatAsset(chainId: ChainId, data: ZerionAddressPosition): FungibleAsset<ChainId, SchemaType> {
     const { asset, chain, quantity } = data

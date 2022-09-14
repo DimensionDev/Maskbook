@@ -1,12 +1,12 @@
-import type { UserPollStatus } from '../types'
+import type { UserPollStatus } from '../types.js'
 import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Alert, Box, Card, CardContent, Chip, Snackbar, Typography } from '@mui/material'
 import { RadioButtonChecked, RadioButtonUnchecked, DoneOutlined, Send, RefreshOutlined } from '@mui/icons-material'
-import NoNftCard from './NoNftCard'
-import { FindTrumanContext } from '../context'
-import { BorderLinearProgress } from './ResultCard'
-import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
+import NoNftCard from './NoNftCard.js'
+import { FindTrumanContext } from '../context.js'
+import { BorderLinearProgress } from './ResultCard.js'
+import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton.js'
 import { sumBy } from 'lodash-unified'
 
 const useOptionsStyles = makeStyles()((theme) => {

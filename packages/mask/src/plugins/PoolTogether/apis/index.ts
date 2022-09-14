@@ -1,7 +1,7 @@
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { formatBalance } from '@masknet/web3-shared-base'
-import { API_URL } from '../constants'
-import type { Pool, TokenFaucet } from '../types'
+import { API_URL } from '../constants.js'
+import type { Pool, TokenFaucet } from '../types.js'
 
 export async function fetchPools(chainId: ChainId) {
     // See https://github.com/pooltogether/pooltogether-api-monorepo for API documentation

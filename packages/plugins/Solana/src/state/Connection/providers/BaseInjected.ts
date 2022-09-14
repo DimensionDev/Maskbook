@@ -2,8 +2,8 @@ import { isExtensionSiteType } from '@masknet/shared-base'
 import type { InjectedProvider } from '@masknet/injected-script/sdk/Base'
 import type { Account, ProviderOptions } from '@masknet/web3-shared-base'
 import { ChainId, ProviderType, Web3Provider } from '@masknet/web3-shared-solana'
-import type { SolanaProvider } from '../types'
-import { BaseProvider } from './Base'
+import type { SolanaProvider } from '../types.js'
+import { BaseProvider } from './Base.js'
 
 export class BaseInjectedProvider extends BaseProvider implements SolanaProvider {
     constructor(protected providerType: ProviderType, protected bridge: InjectedProvider) {

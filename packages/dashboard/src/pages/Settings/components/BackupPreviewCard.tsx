@@ -1,7 +1,7 @@
 import { MaskColorVar, makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import classNames from 'classnames'
-import { useDashboardI18N } from '../../../locales'
+import { useDashboardI18N } from '../../../locales/index.js'
 import formatDateTime from 'date-fns/format'
 import type { BackupPreview } from '@masknet/backup-format'
 

@@ -9,11 +9,11 @@ import {
     getEcKeyCurve,
 } from '@masknet/encryption'
 import type { EC_Public_CryptoKey, EC_Public_JsonWebKey } from '@masknet/shared-base'
-import { CryptoKeyToJsonWebKey } from '../../../../utils-pure'
+import { CryptoKeyToJsonWebKey } from '../../../../utils-pure/index.js'
 import { getGunData, pushToGunDataArray, subscribeGunMapData } from '@masknet/gun-utils'
 import { EventIterator } from 'event-iterator'
 import { isObject, noop, uniq } from 'lodash-unified'
-import { queryPublicKey } from '../../../database/persona/helper'
+import { queryPublicKey } from '../../../database/persona/helper.js'
 
 // !!! Change how this file access Gun will break the compatibility of v40 payload decryption.
 export async function GUN_queryPostKey_version40(
@@ -28,7 +28,10 @@ export async function GUN_queryPostKey_version40(
         postKeyIV: new Uint8Array(decodeArrayBuffer(result.salt)),
     }
 
-    type DataOnGun = { encryptedKey: string; salt: string }
+    type DataOnGun = {
+        encryptedKey: string
+        salt: string
+    }
     function isValidData(x: typeof result): x is DataOnGun {
         if (typeof x !== 'object') return false
         if (!x) return false

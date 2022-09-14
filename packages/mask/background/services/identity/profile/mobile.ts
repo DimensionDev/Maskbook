@@ -1,5 +1,5 @@
 import type { MobileProfile } from '@masknet/public-api'
-import type { ProfileRecord } from '../../../database/persona/type'
+import type { ProfileRecord } from '../../../database/persona/type.js'
 
 /** @internal */
 export function profileRecordToMobileProfile(profile: ProfileRecord): MobileProfile {

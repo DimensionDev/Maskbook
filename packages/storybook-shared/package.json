@@ -17,8 +17,8 @@
     "build": "tsc -p ./tsconfig.json"
   },
   "devDependencies": {
-    "@storybook/addons": "^6.5.9",
-    "@storybook/react": "^6.5.9",
+    "@storybook/addons": "^6.5.10",
+    "@storybook/react": "^6.5.10",
     "@swc/core": "1.2.245",
     "stream-browserify": "3",
     "swc-loader": "^0.2.3",

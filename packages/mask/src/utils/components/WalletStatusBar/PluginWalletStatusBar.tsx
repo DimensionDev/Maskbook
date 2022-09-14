@@ -14,13 +14,13 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { TransactionStatusType } from '@masknet/web3-shared-base'
 import { Box, Button } from '@mui/material'
-import { useI18N } from '../../i18n-next-ui'
+import { useI18N } from '../../i18n-next-ui.js'
 import { Icons } from '@masknet/icons'
 import { memo, PropsWithChildren, useMemo } from 'react'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { WalletDescription } from './WalletDescription'
-import { Action } from './Action'
-import { useStatusBarStyles } from './styles'
+import { WalletDescription } from './WalletDescription.js'
+import { Action } from './Action.js'
+import { useStatusBarStyles } from './styles.js'
 
 interface WalletStatusBarProps extends PropsWithChildren<{}> {
     className?: string

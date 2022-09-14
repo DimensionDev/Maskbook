@@ -1,9 +1,9 @@
 import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
 import { Button, Stack, Typography } from '@mui/material'
-import { useI18N } from '../../locales'
+import { useI18N } from '../../locales/index.js'
 import { Icons } from '@masknet/icons'
-import { PersonaSelectPanel } from '../../../../components/shared/PersonaSelectPanel/PersonaSelectPanel'
+import { PersonaSelectPanel } from '../../../../components/shared/PersonaSelectPanel/PersonaSelectPanel.js'
 
 const useStyles = makeStyles()((theme) => ({
     button: {

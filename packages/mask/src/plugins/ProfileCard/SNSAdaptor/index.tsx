@@ -4,10 +4,10 @@ import type { EnhanceableSite } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Box } from '@mui/material'
 import { Trans } from 'react-i18next'
-import { base } from '../base'
-import { PLUGIN_ID, SNS_RSS3_FIELD_KEY_MAP } from '../constants'
-import { setupContext } from '../context'
-import { ProfileAvatarBadge } from './ProfileAvatarBadge'
+import { base } from '../base.js'
+import { PLUGIN_ID, SNS_RSS3_FIELD_KEY_MAP } from '../constants.js'
+import { setupContext } from '../context.js'
+import { ProfileAvatarBadge } from './ProfileAvatarBadge.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,

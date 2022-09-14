@@ -18,7 +18,7 @@ import {
     createIndicator,
 } from '@masknet/web3-shared-base'
 import { CoinGeckoPriceEVM } from '@masknet/web3-providers'
-import type { FungibleTokenAPI, TokenListAPI } from '../../types'
+import type { FungibleTokenAPI, TokenListAPI } from '../../types/index.js'
 
 async function getTokenBalance(
     chainId: ChainId,

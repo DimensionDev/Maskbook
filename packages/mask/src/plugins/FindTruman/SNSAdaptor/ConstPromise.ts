@@ -1,4 +1,4 @@
-import type { FindTrumanConst } from '../types'
+import type { FindTrumanConst } from '../types.js'
 
 enum Status {
     PENDING = 0,

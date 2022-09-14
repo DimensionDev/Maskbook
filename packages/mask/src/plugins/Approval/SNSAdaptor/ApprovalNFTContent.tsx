@@ -13,11 +13,11 @@ import {
     useWeb3Hub,
 } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, NetworkDescriptor, TokenType, NonFungibleContractSpender } from '@masknet/web3-shared-base'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import { useI18N } from '../locales'
-import { useStyles } from './useStyles'
-import { ApprovalLoadingContent } from './ApprovalLoadingContent'
-import { ApprovalEmptyContent } from './ApprovalEmptyContent'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import { useI18N } from '../locales/index.js'
+import { useStyles } from './useStyles.js'
+import { ApprovalLoadingContent } from './ApprovalLoadingContent.js'
+import { ApprovalEmptyContent } from './ApprovalEmptyContent.js'
 import { useAsync } from 'react-use'
 
 export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {

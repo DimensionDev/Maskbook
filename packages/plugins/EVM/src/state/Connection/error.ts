@@ -1,6 +1,6 @@
 import { isNil } from 'lodash-unified'
 import type { JsonRpcResponse } from 'web3-core-helpers'
-import { JSON_RPC_ERROR_CODE } from '../../types'
+import { JSON_RPC_ERROR_CODE } from '../../types/index.js'
 // TODO: 6002: missing i18n
 
 function getInternalError(error: unknown, response?: JsonRpcResponse | null, fallback?: string): Error {
@@ -29,7 +29,10 @@ export function hasError(error: unknown, response?: JsonRpcResponse | null) {
 export function getError(error: unknown, response?: JsonRpcResponse | null, fallback?: string): Error {
     const internalError = getInternalError(error, response, fallback)
     const internalErrorMessage = (() => {
-        const { code, message } = internalError as unknown as { code?: number; message: string }
+        const { code, message } = internalError as unknown as {
+            code?: number
+            message: string
+        }
 
         if (message.includes(`"code":${JSON_RPC_ERROR_CODE.INTERNAL_ERROR}`))
             return 'Transaction was failed due to an internal JSON-RPC server error.'

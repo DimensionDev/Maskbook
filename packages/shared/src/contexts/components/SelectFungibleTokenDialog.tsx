@@ -5,10 +5,10 @@ import { EMPTY_LIST, EnhanceableSite, isDashboardPage } from '@masknet/shared-ba
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import type { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import { DialogContent, Theme, useMediaQuery } from '@mui/material'
-import { useBaseUIRuntime } from '../base'
-import { InjectedDialog } from '../components'
-import { useRowSize } from './useRowSize'
-import { TokenListMode } from '../../UI/components/FungibleTokenList/type'
+import { useBaseUIRuntime } from '../base/index.js'
+import { InjectedDialog } from '../components/index.js'
+import { useRowSize } from './useRowSize.js'
+import { TokenListMode } from '../../UI/components/FungibleTokenList/type.js'
 
 interface StyleProps {
     compact: boolean

@@ -1,7 +1,7 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { PluginSettingsDialog } from '../../../components/InjectedComponents/PluginSettingsDialog'
-import { createReactRootShadowed, startWatch } from '../../../utils'
-import { rootSelector } from '../utils/selector'
+import { PluginSettingsDialog } from '../../../components/InjectedComponents/PluginSettingsDialog.js'
+import { createReactRootShadowed, startWatch } from '../../../utils/index.js'
+import { rootSelector } from '../utils/selector.js'
 
 export function injectPluginSettingsDialogAtTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(rootSelector())

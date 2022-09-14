@@ -5,10 +5,10 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
 import { useNetworkDescriptor, useNonFungibleToken, Web3Helper } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, SocialAddress } from '@masknet/web3-shared-base'
-import { AssetPlayer } from '../AssetPlayer'
-import { useIsImageURL } from '../../../hooks'
-import { ImageIcon } from '../ImageIcon'
-import { Image } from '../Image'
+import { AssetPlayer } from '../AssetPlayer/index.js'
+import { useIsImageURL } from '../../../hooks/index.js'
+import { ImageIcon } from '../ImageIcon/index.js'
+import { Image } from '../Image/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {

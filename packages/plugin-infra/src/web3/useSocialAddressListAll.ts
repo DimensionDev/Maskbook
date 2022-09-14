@@ -2,7 +2,7 @@ import LRUCache from 'lru-cache'
 import { useAsyncRetry } from 'react-use'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { NetworkPluginID, SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
-import { useWeb3State } from './useWeb3State'
+import { useWeb3State } from './useWeb3State.js'
 
 type AddressList = Array<SocialAddress<NetworkPluginID>>
 type CacheValue = Promise<Array<PromiseSettledResult<AddressList>>>

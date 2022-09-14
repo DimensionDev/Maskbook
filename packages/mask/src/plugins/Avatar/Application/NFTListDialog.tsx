@@ -4,11 +4,11 @@ import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { isSameAddress, NetworkPluginID, isGreaterThan } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
-import { AddNFT } from '../SNSAdaptor/AddNFT'
+import { AddNFT } from '../SNSAdaptor/AddNFT.js'
 import { BindingProof, EMPTY_LIST } from '@masknet/shared-base'
-import { AllChainsNonFungibleToken, PFP_TYPE, SelectTokenInfo } from '../types'
-import { useI18N } from '../locales'
-import { SUPPORTED_CHAIN_IDS } from '../constants'
+import { AllChainsNonFungibleToken, PFP_TYPE, SelectTokenInfo } from '../types.js'
+import { useI18N } from '../locales/index.js'
+import { SUPPORTED_CHAIN_IDS } from '../constants.js'
 import {
     useAccount,
     useChainId,
@@ -16,12 +16,12 @@ import {
     useNonFungibleAssets,
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
-import { toPNG } from '../utils'
-import { NFTListPage } from './NFTListPage'
-import { NetworkTab } from '../../../components/shared/NetworkTab'
-import { PluginVerifiedWalletStatusBar } from '../../../utils/components/WalletStatusBar/PluginVerifiedWalletStatusBar'
+import { toPNG } from '../utils/index.js'
+import { NFTListPage } from './NFTListPage.js'
+import { NetworkTab } from '../../../components/shared/NetworkTab.js'
+import { PluginVerifiedWalletStatusBar } from '../../../utils/components/WalletStatusBar/PluginVerifiedWalletStatusBar.js'
 import { Icons } from '@masknet/icons'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 const useStyles = makeStyles()((theme) => ({
     AddressNames: {

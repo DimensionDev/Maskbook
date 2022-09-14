@@ -1,5 +1,5 @@
-import { story } from '../utils'
-import { MaskLoadingButton } from '../../src'
+import { story } from '../utils/index.js'
+import { MaskLoadingButton } from '../../src/index.js'
 import { Save } from '@mui/icons-material'
 import { delay } from '@dimensiondev/kit'
 

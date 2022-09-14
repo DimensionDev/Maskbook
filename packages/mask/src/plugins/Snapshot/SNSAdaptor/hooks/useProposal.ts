@@ -1,6 +1,6 @@
-import { PluginSnapshotRPC } from '../../messages'
-import type { Proposal } from '../../types'
-import { useSuspense } from '../../../../utils/hooks/useSuspense'
+import { PluginSnapshotRPC } from '../../messages.js'
+import type { Proposal } from '../../types.js'
+import { useSuspense } from '../../../../utils/hooks/useSuspense.js'
 
 const cache = new Map<string, [0, Promise<void>] | [1, Proposal] | [2, Error]>()
 export function proposalRetry() {

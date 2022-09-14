@@ -1,4 +1,4 @@
-import { CustomEventId, InternalEvents, encodeEvent } from '../shared'
+import { CustomEventId, InternalEvents, encodeEvent } from '../shared/index.js'
 
 export function sendEvent<K extends keyof InternalEvents>(name: K, ...params: InternalEvents[K]) {
     document.dispatchEvent(

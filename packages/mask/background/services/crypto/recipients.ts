@@ -1,7 +1,7 @@
 import type { PostIVIdentifier, ProfileIdentifier, ProfileInformation } from '@masknet/shared-base'
-import { queryProfilesDB } from '../../database/persona/db'
-import { queryPostDB } from '../../database/post'
-import { toProfileInformation } from '../__utils__/convert'
+import { queryProfilesDB } from '../../database/persona/db.js'
+import { queryPostDB } from '../../database/post/index.js'
+import { toProfileInformation } from '../__utils__/convert.js'
 
 export async function hasRecipientAvailable(whoAmI: ProfileIdentifier): Promise<boolean> {
     const profiles = await queryProfilesDB({ hasLinkedPersona: true, network: whoAmI.network })

@@ -1,5 +1,5 @@
-import type { Context } from '../types'
-import { Base } from './Base'
+import type { Context } from '../types.js'
+import { Base } from './Base.js'
 
 export class Optimistic extends Base {
     override async encode(context: Context) {

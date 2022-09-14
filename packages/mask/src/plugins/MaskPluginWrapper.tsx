@@ -1,8 +1,8 @@
 import { Typography, SnackbarContent, Link } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { MaskIcon } from '../resources/MaskIcon'
+import { MaskIcon } from '../resources/MaskIcon.js'
 import { Suspense, ReactNode, useMemo, forwardRef, useImperativeHandle, useState } from 'react'
-import { useI18N } from '../utils'
+import { useI18N } from '../utils/index.js'
 import { Box } from '@mui/system'
 import {
     usePluginI18NField,
@@ -24,7 +24,9 @@ interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     publisherLink?: string
 }
 
-const useStyles = makeStyles<{ backgroundGradient?: string }>()((theme, props) => {
+const useStyles = makeStyles<{
+    backgroundGradient?: string
+}>()((theme, props) => {
     return {
         card: {
             background:

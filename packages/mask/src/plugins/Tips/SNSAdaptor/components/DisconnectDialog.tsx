@@ -6,7 +6,7 @@ import { makeStyles, ActionButton } from '@masknet/theme'
 import classNames from 'classnames'
 import { Trans } from 'react-i18next'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../locales'
+import { useI18N } from '../../locales/index.js'
 import { InjectedDialog } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({

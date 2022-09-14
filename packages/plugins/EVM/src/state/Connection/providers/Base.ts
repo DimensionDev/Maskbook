@@ -13,7 +13,7 @@ import {
     getRPCConstants,
     NetworkType,
 } from '@masknet/web3-shared-evm'
-import type { EVM_Provider } from '../types'
+import type { EVM_Provider } from '../types.js'
 
 export class BaseProvider implements EVM_Provider {
     emitter = new Emitter<ProviderEvents<ChainId, ProviderType>>()

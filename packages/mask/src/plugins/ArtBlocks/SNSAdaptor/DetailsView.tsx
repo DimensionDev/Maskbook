@@ -6,9 +6,9 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { OpenInNew } from '@mui/icons-material'
 import { Typography, Box, Link } from '@mui/material'
 import BigNumber from 'bignumber.js'
-import { useI18N } from '../../../utils'
-import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes'
-import type { Project } from '../types'
+import { useI18N } from '../../../utils/index.js'
+import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes/index.js'
+import type { Project } from '../types.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

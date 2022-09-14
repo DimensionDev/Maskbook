@@ -7,7 +7,7 @@ import ErrorIcon from '@mui/icons-material/Error'
 import { red, green } from '@mui/material/colors'
 import classNames from 'classnames'
 import { useDebounce, useAsyncFn, useUpdateEffect } from 'react-use'
-import { useErrorStyles } from '../../../utils/theme'
+import { useErrorStyles } from '../../../utils/theme/index.js'
 const circle = <CircularProgress color="inherit" size={18} />
 
 interface DebounceButtonProps extends Omit<ButtonProps, 'color' | 'onClick'> {
@@ -17,7 +17,11 @@ interface DebounceButtonProps extends Omit<ButtonProps, 'color' | 'onClick'> {
 
 function useDebounceAsync<T extends any[]>(
     asyncFn: (...args: T) => unknown,
-): { loading: boolean; disabled: boolean; f(...args: T): void } {
+): {
+    loading: boolean
+    disabled: boolean
+    f(...args: T): void
+} {
     // useAsyncFn use T | [] as it's parameter where is conflict with our usage.
     // We should ensure always call startAsyncFn with parameters.
     const [state, startAsyncFn] = useAsyncFn(asyncFn as any, [asyncFn], { loading: false, value: undefined })

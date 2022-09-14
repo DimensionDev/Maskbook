@@ -1,9 +1,9 @@
 import type { BindingProof } from '@masknet/shared-base'
-import { networkMap } from '../../hooks/useSupportedNetworks'
+import { networkMap } from '../../hooks/useSupportedNetworks.js'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { useI18N } from '../../locales'
-import { WalletItem } from './WalletItem'
+import { useI18N } from '../../locales/index.js'
+import { WalletItem } from './WalletItem.js'
 import { NetworkPluginID, isSameAddress } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -58,7 +58,11 @@ const useStyles = makeStyles()((theme) => ({
 interface WalletsByNetworkProps {
     networkId: NetworkPluginID
     toSetting: () => void
-    wallets: Array<BindingProof & { fallbackName: string }>
+    wallets: Array<
+        BindingProof & {
+            fallbackName: string
+        }
+    >
     notEmpty: boolean
     defaultAddress?: string
     setAsDefault: (address: string) => void

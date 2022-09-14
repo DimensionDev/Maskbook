@@ -5,7 +5,7 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { encodeContractTransaction, decodeEvents } from '@masknet/web3-shared-evm'
 import { useAccount, useChainId, useWeb3Connection, useWeb3 } from '@masknet/plugin-infra/web3'
 import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket'
-import { useNftRedPacketContract } from './useNftRedPacketContract'
+import { useNftRedPacketContract } from './useNftRedPacketContract.js'
 
 export function useCreateNftRedpacketCallback(
     duration: number,

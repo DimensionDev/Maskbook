@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import type { Pool } from '../types'
+import type { Pool } from '../types.js'
 import { Divider, Grid, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Trans } from 'react-i18next'
-import { formatAmountPostfix } from '../utils'
+import { formatAmountPostfix } from '../utils.js'
 import { purify } from '@masknet/shared-base'
-import { POOL_DESCRIPTION_LIMIT } from '../constants'
+import { POOL_DESCRIPTION_LIMIT } from '../constants.js'
 import { leftShift } from '@masknet/web3-shared-base'
 
 const DIGIT_LENGTH = 18

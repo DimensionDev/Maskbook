@@ -1,19 +1,19 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import type { SocialNetworkUI as Next } from '../../../social-network/types'
-import { creator } from '../../../social-network/utils'
-import { isMobileFacebook } from '../utils/isMobile'
-import { getProfileIdentifierAtFacebook } from '../utils/getProfileIdentifier'
+import type { SocialNetworkUI as Next } from '../../../social-network/types.js'
+import { creator } from '../../../social-network/utils.js'
+import { isMobileFacebook } from '../utils/isMobile.js'
+import { getProfileIdentifierAtFacebook } from '../utils/getProfileIdentifier.js'
 import {
     TypedMessage,
     makeTypedMessageText,
     makeTypedMessageImage,
     makeTypedMessageTuple,
 } from '@masknet/typed-message'
-import { clickSeeMore } from '../injection/PostInspector'
-import { startWatch } from '../../../utils/watcher'
-import { facebookShared } from '../shared'
-import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context'
-import { collectNodeText } from '../../../utils'
+import { clickSeeMore } from '../injection/PostInspector.js'
+import { startWatch } from '../../../utils/watcher.js'
+import { facebookShared } from '../shared.js'
+import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context.js'
+import { collectNodeText } from '../../../utils/index.js'
 import { None, Some, Option } from 'ts-results'
 
 const posts = new LiveSelector().querySelectorAll<HTMLDivElement>(

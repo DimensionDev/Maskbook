@@ -2,7 +2,7 @@ import Color from 'color'
 import { useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createReactRootShadowed, startWatch, untilElementAvailable, MaskMessages } from '../../../utils'
+import { createReactRootShadowed, startWatch, untilElementAvailable, MaskMessages } from '../../../utils/index.js'
 import {
     searchAppBarBackSelector,
     searchNewTweetButtonSelector,
@@ -13,8 +13,8 @@ import {
     searchProfileTabSelector,
     searchProfileTabLoseConnectionPageSelector,
     searchNameTag,
-} from '../utils/selector'
-import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab'
+} from '../utils/selector.js'
+import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab.js'
 
 function getStyleProps() {
     const EMPTY_STYLE = {} as CSSStyleDeclaration

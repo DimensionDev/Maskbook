@@ -1,8 +1,8 @@
 import { parseURL } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { escapeRegExp } from 'lodash-unified'
-import { prefixPath, mainNetwork, testNetwork } from './constants'
-import type { Token } from './types'
+import { prefixPath, mainNetwork, testNetwork } from './constants.js'
+import type { Token } from './types/index.js'
 
 export function checkUrl(url: string): boolean {
     const protocol = 'https://'

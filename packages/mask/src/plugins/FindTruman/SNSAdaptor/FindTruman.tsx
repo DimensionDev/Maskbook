@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { FindTrumanContext } from '../context'
+import { FindTrumanContext } from '../context.js'
 import { Avatar, Box, Card, CardHeader, CardMedia, Chip, Skeleton, Tooltip, Typography } from '@mui/material'
 import type {
     CompletionQuestionAnswer,
@@ -10,17 +10,17 @@ import type {
     UserCompletionStatus,
     UserPollStatus,
     UserStoryStatus,
-} from '../types'
-import { FindTrumanI18nFunction, PostType } from '../types'
-import ResultCard from './ResultCard'
-import OptionsCard from './OptionsCard'
-import Footer from './Footer'
-import StageCard from './StageCard'
-import EncryptionCard from './EncryptionCard'
-import CompletionCard from './CompletionCard'
+} from '../types.js'
+import { FindTrumanI18nFunction, PostType } from '../types.js'
+import ResultCard from './ResultCard.js'
+import OptionsCard from './OptionsCard.js'
+import Footer from './Footer.js'
+import StageCard from './StageCard.js'
+import EncryptionCard from './EncryptionCard.js'
+import CompletionCard from './CompletionCard.js'
 import { Icons } from '@masknet/icons'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 

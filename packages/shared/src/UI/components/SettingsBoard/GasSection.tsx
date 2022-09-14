@@ -5,11 +5,11 @@ import { Tab, Typography } from '@mui/material'
 import { formatBalance, GasOptionType, NetworkPluginID, scale10 } from '@masknet/web3-shared-base'
 import { ChainId, formatWeiToGwei, Transaction } from '@masknet/web3-shared-evm'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
-import { GasOptionSelector } from './GasOptionSelector'
-import { SettingsContext } from './Context'
-import { Section } from './Section'
-import { GasForm } from './GasForm'
-import { GasSettingsType } from './types'
+import { GasOptionSelector } from './GasOptionSelector.js'
+import { SettingsContext } from './Context.js'
+import { Section } from './Section.js'
+import { GasForm } from './GasForm.js'
+import { GasSettingsType } from './types/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

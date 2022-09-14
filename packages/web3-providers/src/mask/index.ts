@@ -1,6 +1,6 @@
 import { OnDemandWorker } from '@masknet/shared-base'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
-import type { MaskBaseAPI } from '..'
+import type { MaskBaseAPI } from '../index.js'
 
 enum ErrorCode {
     KdfParamsInvalid = '-3001',

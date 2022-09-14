@@ -1,12 +1,12 @@
 import { memo } from 'react'
-import { PersonaList } from '../components/PersonaList'
+import { PersonaList } from '../components/PersonaList/index.js'
 import { makeStyles } from '@masknet/theme'
 import { Button } from '@mui/material'
 import classNames from 'classnames'
-import { PersonaContext } from '../hooks/usePersonaContext'
+import { PersonaContext } from '../hooks/usePersonaContext.js'
 import { MAX_PERSONA_LIMIT } from '@masknet/shared-base'
 import urlcat from 'urlcat'
-import { useI18N } from '../../../../../utils'
+import { useI18N } from '../../../../../utils/index.js'
 
 const useStyles = makeStyles()({
     content: {

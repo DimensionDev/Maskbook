@@ -7,9 +7,9 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { TabContext } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
-import { NFTCardContent } from './NFTCardContent'
-import { useStyles } from '../useStyles'
-import { useI18N } from '../../../utils'
+import { NFTCardContent } from './NFTCardContent.js'
+import { useStyles } from '../useStyles.js'
+import { useI18N } from '../../../utils/index.js'
 
 export enum NFTCardDialogTabs {
     About = 'About',

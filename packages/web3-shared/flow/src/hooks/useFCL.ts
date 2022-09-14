@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import type { ChainId } from '../types'
-import * as SDK from '../sdk'
+import type { ChainId } from '../types.js'
+import * as SDK from '../sdk/index.js'
 
 export function useFCL(chainId: ChainId) {
     return useMemo(() => {

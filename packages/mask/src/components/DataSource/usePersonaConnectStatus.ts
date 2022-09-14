@@ -8,17 +8,17 @@ import {
     PersonaInformation,
     resolveNextIDIdentityToProfile,
 } from '@masknet/shared-base'
-import Services from '../../extension/service'
-import { currentPersonaIdentifier, currentSetupGuideStatus } from '../../../shared/legacy-settings/settings'
-import { activatedSocialNetworkUI } from '../../social-network'
-import { SetupGuideStep } from '../../../shared/legacy-settings/types'
-import { useLastRecognizedIdentity } from './useActivatedUI'
-import { usePersonasFromDB } from './usePersonasFromDB'
+import Services from '../../extension/service.js'
+import { currentPersonaIdentifier, currentSetupGuideStatus } from '../../../shared/legacy-settings/settings.js'
+import { activatedSocialNetworkUI } from '../../social-network/index.js'
+import { SetupGuideStep } from '../../../shared/legacy-settings/types.js'
+import { useLastRecognizedIdentity } from './useActivatedUI.js'
+import { usePersonasFromDB } from './usePersonasFromDB.js'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { useAsync, useAsyncRetry } from 'react-use'
-import { PluginNextIDMessages } from '../../plugins/NextID/messages'
+import { PluginNextIDMessages } from '../../plugins/NextID/messages.js'
 import { NextIDProof } from '@masknet/web3-providers'
-import { MaskMessages, useI18N } from '../../utils'
+import { MaskMessages, useI18N } from '../../utils/index.js'
 
 const createPersona = () => {
     Services.Helper.openDashboard(DashboardRoutes.Setup)

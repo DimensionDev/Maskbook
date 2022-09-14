@@ -1,8 +1,8 @@
 import { BigNumber } from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
-import { isValidDomain } from './domain'
-import { isValidAddress } from './address'
-import { SchemaType } from '../types'
+import { isValidDomain } from './domain.js'
+import { isValidAddress } from './address.js'
+import { SchemaType } from '../types/index.js'
 import { createLookupTableResolver } from '@masknet/shared-base'
 
 export { formatPercentage } from '@masknet/web3-shared-base'

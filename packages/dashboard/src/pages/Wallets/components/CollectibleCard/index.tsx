@@ -4,8 +4,8 @@ import { WalletIcon, NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { Box, Button, Link, Tooltip, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useDashboardI18N } from '../../../../locales'
-import { ChangeNetworkTip } from '../FungibleTokenTableRow/ChangeNetworkTip'
+import { useDashboardI18N } from '../../../../locales/index.js'
+import { ChangeNetworkTip } from '../FungibleTokenTableRow/ChangeNetworkTip.js'
 import {
     useChainId,
     useCurrentWeb3NetworkPluginID,

@@ -13,17 +13,17 @@ import {
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { UnreviewedWarning } from '../UnreviewedWarning'
-import { useI18N } from '../../../../utils'
+import { UnreviewedWarning } from '../UnreviewedWarning.js'
+import { useI18N } from '../../../../utils/index.js'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { InjectedDialog } from '@masknet/shared'
-import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
-import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
-import { CheckoutOrder } from './CheckoutOrder'
+import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton.js'
+import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary.js'
+import { CheckoutOrder } from './CheckoutOrder.js'
 import { isGreaterThan, NetworkPluginID, NonFungibleAsset } from '@masknet/web3-shared-base'
 import { useAccount, useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
 import type { Order } from 'opensea-js/lib/types'
-import { useOpenSea } from '../../hooks/useOpenSea'
+import { useOpenSea } from '../../hooks/useOpenSea.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

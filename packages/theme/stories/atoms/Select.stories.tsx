@@ -1,5 +1,5 @@
 import { MenuItem, Select as MuiSelect, SelectProps } from '@mui/material'
-import { story } from '../utils'
+import { story } from '../utils/index.js'
 
 const { meta, of } = story((props: SelectProps) => {
     return (

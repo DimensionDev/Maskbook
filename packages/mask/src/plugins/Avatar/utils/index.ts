@@ -1,12 +1,12 @@
 import { isNull } from 'lodash-unified'
-import Services from '../../../extension/service'
+import Services from '../../../extension/service.js'
 import { NextIDProof, NextIDStorage } from '@masknet/web3-providers'
 import BigNumber from 'bignumber.js'
-import { activatedSocialNetworkUI } from '../../../social-network'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import type { NextIDPlatform } from '@masknet/shared-base'
-import type { NextIDAvatarMeta } from '../types'
-import { PLUGIN_ID } from '../constants'
-import { sortPersonaBindings } from '../../../utils'
+import type { NextIDAvatarMeta } from '../types.js'
+import { PLUGIN_ID } from '../constants.js'
+import { sortPersonaBindings } from '../../../utils/index.js'
 import { isLocaleResource } from '@masknet/web3-shared-base'
 
 export async function getImage(image: string): Promise<string> {
@@ -57,9 +57,9 @@ export function formatPrice(amount: string, symbol: string) {
     const _amount = new BigNumber(amount ?? '0')
     if (_amount.isZero() || _amount.isLessThan(0.01)) return ''
     if (_amount.isLessThan(1)) return `${_amount.toFixed(2)} ${symbol}`
-    if (_amount.isLessThan(1e3)) return `${_amount.toFixed(1)} ${symbol}`
-    if (_amount.isLessThan(1e6)) return `${_amount.div(1e6).toFixed(1)}K ${symbol}`
-    return `${_amount.div(1e6).toFixed(1)}M ${symbol}`
+    if (_amount.isLessThan(1000)) return `${_amount.toFixed(1)} ${symbol}`
+    if (_amount.isLessThan(1000000)) return `${_amount.div(1000000).toFixed(1)}K ${symbol}`
+    return `${_amount.div(1000000).toFixed(1)}M ${symbol}`
 }
 
 export function formatText(name: string, tokenId: string) {

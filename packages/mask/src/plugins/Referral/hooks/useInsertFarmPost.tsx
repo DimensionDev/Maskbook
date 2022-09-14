@@ -4,10 +4,10 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import { useCustomSnackbar } from '@masknet/theme'
 import { useCompositionContext } from '@masknet/plugin-infra/content-script'
 
-import { useI18N } from '../locales'
-import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
-import { META_KEY } from '../constants'
-import type { FungibleTokenDetailed } from '../types'
+import { useI18N } from '../locales/index.js'
+import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
+import { META_KEY } from '../constants.js'
+import type { FungibleTokenDetailed } from '../types.js'
 
 export function useInsertFarmPost(token: FungibleTokenDetailed | undefined, chainId: ChainId, onClose?: () => void) {
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(

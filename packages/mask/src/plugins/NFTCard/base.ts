@@ -1,5 +1,5 @@
 import { CurrentSNSNetwork, Plugin } from '@masknet/plugin-infra'
-import { PLUGIN_ID, PLUGIN_NAME } from './constants'
+import { PLUGIN_ID, PLUGIN_NAME } from './constants.js'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 

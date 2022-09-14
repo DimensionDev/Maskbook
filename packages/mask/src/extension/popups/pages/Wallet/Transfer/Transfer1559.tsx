@@ -31,7 +31,7 @@ import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-fo
 import { zodResolver } from '@hookform/resolvers/zod'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Chip, Collapse, Link, MenuItem, Popover, Typography } from '@mui/material'
-import { StyledInput } from '../../../components/StyledInput'
+import { StyledInput } from '../../../components/StyledInput/index.js'
 import { Icons } from '@masknet/icons'
 import { FormattedAddress, FormattedBalance, TokenIcon, useMenuConfig } from '@masknet/shared'
 import { ChevronDown } from 'react-feather'
@@ -52,9 +52,9 @@ import {
     useWeb3Connection,
     useGasOptions,
 } from '@masknet/plugin-infra/web3'
-import { AccountItem } from './AccountItem'
-import { TransferAddressError } from '../type'
-import { useI18N } from '../../../../../utils'
+import { AccountItem } from './AccountItem.js'
+import { TransferAddressError } from '../type.js'
+import { useI18N } from '../../../../../utils/index.js'
 import { useGasLimit, useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
 
 const useStyles = makeStyles()({
@@ -181,7 +181,10 @@ const useStyles = makeStyles()({
 const MIN_GAS_LIMIT = 21000
 export interface Transfer1559Props {
     selectedAsset?: FungibleAsset<ChainId, SchemaType>
-    otherWallets: Array<{ name: string; address: string }>
+    otherWallets: Array<{
+        name: string
+        address: string
+    }>
     openAssetMenu: (anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => void
 }
 
@@ -201,7 +204,10 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     const navigate = useNavigate()
 
     const [minGasLimitContext, setMinGasLimitContext] = useState(0)
-    const [addressTip, setAddressTip] = useState<{ type: TransferAddressError; message: string } | null>()
+    const [addressTip, setAddressTip] = useState<{
+        type: TransferAddressError
+        message: string
+    } | null>()
 
     const { value: etherPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
         chainId: nativeToken?.chainId,
@@ -566,7 +572,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
 
         const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
             () => ({
-                RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${selectedAsset?.decimals}}$`), // .ddd...d
+                RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${selectedAsset?.decimals}}$`),
                 RE_MATCH_WHOLE_AMOUNT: new RegExp(`^\\d*\\.?\\d{0,${selectedAsset?.decimals}}$`), // d.ddd...d
             }),
             [selectedAsset?.decimals],

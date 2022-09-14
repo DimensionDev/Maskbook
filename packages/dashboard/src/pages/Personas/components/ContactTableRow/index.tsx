@@ -3,10 +3,10 @@ import { memo, useCallback } from 'react'
 import { Box, TableCell, TableRow, Typography, Avatar, useTheme } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { Services } from '../../../../API'
-import { useDashboardI18N } from '../../../../locales'
-import { useAddContactToFavorite, useRemoveContactFromFavorite } from '../../hooks/useFavoriteContact'
-import { PersonaContext } from '../../hooks/usePersonaContext'
+import { Services } from '../../../../API.js'
+import { useDashboardI18N } from '../../../../locales/index.js'
+import { useAddContactToFavorite, useRemoveContactFromFavorite } from '../../hooks/useFavoriteContact.js'
+import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import { useAsyncFn } from 'react-use'
 import { LoadingButton } from '@mui/lab'
 import { generateContactAvatarColor } from '@masknet/shared-base'
@@ -101,7 +101,7 @@ export interface ContactTableRowUIProps {
 }
 
 // https://unicode-table.com/en/0020/
-const SPACE_POINT = 0x0020
+const SPACE_POINT = 32
 
 export const ContactTableRowUI = memo<ContactTableRowUIProps>(
     ({ contact, index, handleClickStar, handleClickInvite, theme, loading }) => {

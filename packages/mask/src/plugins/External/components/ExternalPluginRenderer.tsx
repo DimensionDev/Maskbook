@@ -1,8 +1,8 @@
-import type { ExternalPluginLoadDetails } from '../types'
+import type { ExternalPluginLoadDetails } from '../types.js'
 import { Card, CardHeader, Typography, Link, Button } from '@mui/material'
 // import { PermissionAwareRedirectOf } from '../../../extension/popups'
-import { useExternalPluginManifest, useExternalPluginTemplate } from '../loader'
-import { useI18N } from '../../../utils'
+import { useExternalPluginManifest, useExternalPluginTemplate } from '../loader/index.js'
+import { useI18N } from '../../../utils/index.js'
 
 export function ExternalPluginRenderer(props: ExternalPluginLoadDetails) {
     const { t } = useI18N()
@@ -44,27 +44,27 @@ export function ExternalPluginRenderer(props: ExternalPluginLoadDetails) {
                 }
             />
             {/* <CardContent>
-                <RenderContext.Provider
-                    value={{
-                        permissionAwareOpen(url: string) {
-                            const context = createThirdPartyPopupContext()
-                            Services.ThirdPartyPlugin.openPluginPopup(PermissionAwareRedirectOf(url, context), [
-                                context,
-                                props.metaKey,
-                                props.meta,
-                            ])
-                        },
-                        baseURL: props.url,
-                    }}>
-                    <MaskExternalPluginPreviewRenderer
-                        pluginBase={props.url}
-                        onError={console.warn}
-                        script=""
-                        payload={props.meta}
-                        template={template.value}
-                    />
-                </RenderContext.Provider>
-            </CardContent> */}
+            <RenderContext.Provider
+                value={{
+                    permissionAwareOpen(url: string) {
+                        const context = createThirdPartyPopupContext()
+                        Services.ThirdPartyPlugin.openPluginPopup(PermissionAwareRedirectOf(url, context), [
+                            context,
+                            props.metaKey,
+                            props.meta,
+                        ])
+                    },
+                    baseURL: props.url,
+                }}>
+                <MaskExternalPluginPreviewRenderer
+                    pluginBase={props.url}
+                    onError={console.warn}
+                    script=""
+                    payload={props.meta}
+                    template={template.value}
+                />
+            </RenderContext.Provider>
+        </CardContent> */}
         </Card>
     )
 }

@@ -4,19 +4,22 @@ import { Typography } from '@mui/material'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useCurrentWeb3NetworkPluginID, useAccount, useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils'
-import { activatedSocialNetworkUI } from '../../social-network'
-import { useI18N } from '../../utils'
-import { Application, getUnlistedApp } from './ApplicationSettingPluginList'
-import { ApplicationRecommendArea } from './ApplicationRecommendArea'
+import { getCurrentSNSNetwork } from '../../social-network-adaptor/utils.js'
+import { activatedSocialNetworkUI } from '../../social-network/index.js'
+import { useI18N } from '../../utils/index.js'
+import { Application, getUnlistedApp } from './ApplicationSettingPluginList.js'
+import { ApplicationRecommendArea } from './ApplicationRecommendArea.js'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
-import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus'
-import { WalletMessages } from '../../plugins/Wallet/messages'
-import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext'
+import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
+import { usePersonaAgainstSNSConnectStatus } from '../DataSource/usePersonaAgainstSNSConnectStatus.js'
+import { WalletMessages } from '../../plugins/Wallet/messages.js'
+import { PersonaContext } from '../../extension/popups/pages/Personas/hooks/usePersonaContext.js'
 import { useTimeout } from 'react-use'
 
-const useStyles = makeStyles<{ shouldScroll: boolean; isCarouselReady: boolean }>()((theme, props) => {
+const useStyles = makeStyles<{
+    shouldScroll: boolean
+    isCarouselReady: boolean
+}>()((theme, props) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
         applicationWrapper: {

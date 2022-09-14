@@ -8,7 +8,7 @@ import {
     useWallets,
     useWeb3State,
 } from '@masknet/plugin-infra/web3'
-import { WalletSettingCardUI } from './UI'
+import { WalletSettingCardUI } from './UI.js'
 
 interface WalletSettingCardProps {
     wallet: BindingProof

@@ -2,10 +2,13 @@ import { useCallback } from 'react'
 import { IconButton, MenuItem } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 import { useMenu } from '@masknet/shared'
-import { useModal } from '../DashboardDialogs/Base'
-import { DashboardWalletHideTokenConfirmDialog, DashboardWalletTransferDialogNFT } from '../DashboardDialogs/Wallet'
+import { useModal } from '../DashboardDialogs/Base.js'
+import {
+    DashboardWalletHideTokenConfirmDialog,
+    DashboardWalletTransferDialogNFT,
+} from '../DashboardDialogs/Wallet/index.js'
 import { useChainIdValid, Web3Helper } from '@masknet/plugin-infra/web3'
 import type { NonFungibleAsset, Wallet } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'

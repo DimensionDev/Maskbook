@@ -1,32 +1,32 @@
-import { createReactRootShadowed, MaskMessages, startWatch, useI18N } from '../../../../utils'
+import { createReactRootShadowed, MaskMessages, startWatch, useI18N } from '../../../../utils/index.js'
 import {
     searchAvatarMetaSelector,
     searchAvatarSelector,
     searchTwitterAvatarLinkSelector,
     searchTwitterAvatarSelector,
-} from '../../utils/selector'
+} from '../../utils/selector.js'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
+import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { getAvatarId } from '../../utils/user'
-import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
+import { getAvatarId } from '../../utils/user.js'
+import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge.js'
 import { useAsync, useLocation, useUpdateEffect, useWindowSize } from 'react-use'
-import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/RainbowBox'
-import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
-import { usePersonaNFTAvatar } from '../../../../plugins/Avatar/hooks/usePersonaNFTAvatar'
+import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/RainbowBox.js'
+import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants.js'
+import { usePersonaNFTAvatar } from '../../../../plugins/Avatar/hooks/usePersonaNFTAvatar.js'
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Box, Typography } from '@mui/material'
 import { openWindow } from '@masknet/shared-base-ui'
-import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet'
-import { useNFT, useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks'
+import { useWallet } from '../../../../plugins/Avatar/hooks/useWallet.js'
+import { useNFT, useSaveNFTAvatar } from '../../../../plugins/Avatar/hooks/index.js'
 import { NFTCardStyledAssetPlayer, useShowConfirm } from '@masknet/shared'
-import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
+import type { AvatarMetaDB } from '../../../../plugins/Avatar/types.js'
 import { EnhanceableSite, NFTAvatarEvent, CrossIsolationMessages } from '@masknet/shared-base'
-import { activatedSocialNetworkUI } from '../../../../social-network/ui'
-import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
+import { activatedSocialNetworkUI } from '../../../../social-network/ui.js'
+import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar.js'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())

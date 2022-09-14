@@ -8,9 +8,10 @@ import {
     NetworkPluginID,
     isValidTimestamp,
 } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
-import { useI18N } from '../../../utils'
-import { CollectibleProviderIcon } from '../../../plugins/Collectible/SNSAdaptor/CollectibleProviderIcon'
+import { useI18N } from '../../../utils/index.js'
+import { CollectibleProviderIcon } from '../../../plugins/Collectible/SNSAdaptor/CollectibleProviderIcon.js'
 import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({

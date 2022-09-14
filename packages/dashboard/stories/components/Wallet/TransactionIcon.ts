@@ -1,5 +1,5 @@
 import { story } from '@masknet/storybook-shared'
-import { TransactionIconUI as C } from '../../../src/pages/Wallets/components/TransactionIcon'
+import { TransactionIconUI as C } from '../../../src/pages/Wallets/components/TransactionIcon/index.js'
 
 const { meta, of } = story(C)
 

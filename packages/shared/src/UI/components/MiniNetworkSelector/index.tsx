@@ -1,8 +1,8 @@
 import { memo } from 'react'
 import { Box, Button, Stack, styled } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { ChainIcon } from '../ChainIcon'
-import { WalletIcon } from '../WalletIcon'
+import { ChainIcon } from '../ChainIcon/index.js'
+import { WalletIcon } from '../WalletIcon/index.js'
 
 const AllNetworkButton = styled(Button)(({ theme }) => ({
     display: 'inline-block',
@@ -16,7 +16,9 @@ const AllNetworkButton = styled(Button)(({ theme }) => ({
     opacity: 0.5,
 }))
 
-const useStyles = makeStyles<{ size: number }>()((theme, props) => ({
+const useStyles = makeStyles<{
+    size: number
+}>()((theme, props) => ({
     networkSelected: {
         opacity: 1,
         '&:after': {
@@ -51,7 +53,11 @@ export interface NetworkSelectorMinProps {
         icon: URL
         iconColor: string
     }>
-    onSelect(network: { chainId: number } | null): void
+    onSelect(
+        network: {
+            chainId: number
+        } | null,
+    ): void
     hideAllNetworkButton?: boolean
     disabledNonCurrentNetwork?: boolean
     size?: number

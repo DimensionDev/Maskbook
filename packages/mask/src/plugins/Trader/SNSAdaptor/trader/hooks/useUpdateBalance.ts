@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useAccount, useBalance } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
-import { AllProviderTradeActionType, AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext'
+import { AllProviderTradeActionType, AllProviderTradeContext } from '../../../trader/useAllProviderTradeContext.js'
 
 export function useUpdateBalance(chainId: ChainId) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
