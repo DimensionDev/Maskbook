@@ -78,13 +78,22 @@ export const useSetupGuideStepInfo = (destinedPersona: PersonaIdentifier) => {
                 type: stepType,
             }
         },
-        [username, lastRecognized],
+        [username, lastRecognized, persona],
     )
 
     return useAsyncRetry(async () => {
-        // Not set status
-        if (!lastSettingState.status || !persona) {
+        if (!persona) {
             return composeInfo(SetupGuideStep.Close, 'close')
+        }
+
+        // Not set status
+        if (!lastSettingState.status) {
+            // Should show pin extension when not set
+            if (!userPinExtension.value) {
+                return composeInfo(SetupGuideStep.PinExtension, 'doing')
+            } else {
+                return composeInfo(SetupGuideStep.Close, 'close')
+            }
         }
 
         const profileIdentifier = ProfileIdentifier.of(ui.networkIdentifier, username).unwrap()
@@ -98,10 +107,6 @@ export const useSetupGuideStepInfo = (destinedPersona: PersonaIdentifier) => {
         // The SNS is enabled NextID
         if (!platform) {
             // Should show pin extension when not set
-            if (!userPinExtension.value) {
-                userPinExtension.value = true
-                return composeInfo(SetupGuideStep.PinExtension, 'doing')
-            }
             return composeInfo(SetupGuideStep.Close, 'close')
         }
 
@@ -116,13 +121,7 @@ export const useSetupGuideStepInfo = (destinedPersona: PersonaIdentifier) => {
         )
         if (!verifiedProfile) return composeInfo(SetupGuideStep.VerifyOnNextID, 'doing')
 
-        // Should show pin extension when not set
-        if (!userPinExtension.value) {
-            userPinExtension.value = true
-            return composeInfo(SetupGuideStep.PinExtension, 'doing')
-        }
-
         // Default
         return composeInfo(SetupGuideStep.Close, 'done')
-    }, [lastSettingState, persona, username, ui.networkIdentifier, platform, userPinExtension, composeInfo])
+    }, [lastSettingState, persona, username, ui.networkIdentifier, platform, userPinExtension.value, composeInfo])
 }
