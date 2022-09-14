@@ -1,5 +1,5 @@
-import { LoadingBase, makeStyles } from '@masknet/theme'
 import { memo } from 'react'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { CollectibleTab } from '../CollectibleTab.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { Typography, Button } from '@mui/material'

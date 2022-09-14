@@ -1,15 +1,8 @@
 import { makeStyles } from '@masknet/theme'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { Typography, Link } from '@mui/material'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
-import {
-    NonFungibleTokenEvent,
-    formatBalance,
-    isZero,
-    NetworkPluginID,
-    isValidTimestamp,
-} from '@masknet/web3-shared-base'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
+import { NonFungibleTokenEvent, formatBalance, isZero, isValidTimestamp } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
 import { useI18N } from '../../../utils/index.js'
 
@@ -92,14 +85,14 @@ export enum ActivityType {
 }
 interface NFTActivityCardProps {
     type: ActivityType
-    activity: NonFungibleTokenEvent<ChainId, SchemaType>
+    activity: NonFungibleTokenEvent<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
 }
 
 export function NFTActivityCard(props: NFTActivityCardProps) {
     const { activity, type } = props
-    const { classes, cx } = useStyles()
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { t } = useI18N()
+    const { classes, cx } = useStyles()
+    const { Others } = useWeb3State<'all'>()
 
     return (
         <div className={classes.wrapper}>
@@ -160,7 +153,7 @@ export function NFTActivityCard(props: NFTActivityCardProps) {
                     {activity.hash && (
                         <Link
                             className={classes.link}
-                            href={Others?.explorerResolver.transactionLink?.(ChainId.Mainnet, activity.hash) ?? ''}
+                            href={Others?.explorerResolver.transactionLink?.(activity.chainId, activity.hash) ?? ''}
                             target="_blank">
                             <Icons.LinkOut size={16} />
                         </Link>

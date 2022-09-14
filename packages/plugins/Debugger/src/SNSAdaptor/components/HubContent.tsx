@@ -24,7 +24,7 @@ export function HubContent(props: HubContentProps) {
     const [keyword, setKeyword] = useState<string>('PUNK')
     const [address, setAddress] = useState<string>('0x5537d90a4a2dc9d9b37bab49b490cf67d4c54e91')
     const [tokenId, setTokenId] = useState<string>('5431')
-    const [sourceType, setSourceType] = useState(SourceType.MagicEden)
+    const [sourceType, setSourceType] = useState<SourceType | undefined>()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
     type HubAll = Required<Hub<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll, Web3Helper.GasOptionAll>>
@@ -137,7 +137,7 @@ export function HubContent(props: HubContentProps) {
                                 size="small"
                                 onClick={(e) => setAnchorEl(e.currentTarget)}
                                 endIcon={<Icons.ArrowDownRound size={14} />}>
-                                {resolveSourceTypeName(sourceType)}
+                                {sourceType ? resolveSourceTypeName(sourceType) : 'NOT PROVIDER'}
                             </Button>
                             <ShadowRootMenu
                                 anchorEl={anchorEl}

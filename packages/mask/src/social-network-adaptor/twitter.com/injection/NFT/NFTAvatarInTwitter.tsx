@@ -244,8 +244,10 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
             }
             CrossIsolationMessages.events.requestNFTCardDialog.sendToLocal({
                 open: true,
-                address: nftAvatar.address,
+                pluginID: nftAvatar.pluginId,
+                chainId: nftAvatar.chainId,
                 tokenId: nftAvatar.tokenId,
+                tokenAddress: nftAvatar.address,
             })
         }
 

@@ -1,45 +1,35 @@
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Button, Typography } from '@mui/material'
 import { PluginWalletStatusBar, useI18N as useBaseI18n } from '../../../utils/index.js'
-import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '../../Wallet/messages.js'
-import {
-    NetworkPluginID,
-    SourceType,
-    NonFungibleTokenOrder,
-    NonFungibleTokenEvent,
-    Pageable,
-} from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { NFTCardDialogTabs } from './NFTCardDialog.js'
 import { useStyles } from '../useStyles.js'
-import { chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { AboutTab } from './Tabs/AboutTab.js'
 import { OffersTab } from './Tabs/OffersTab.js'
 import { ActivitiesTab } from './Tabs/ActivitiesTab.js'
 import { NFTBasicInfo } from '../../../components/shared/NFTCard/NFTBasicInfo.js'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { LoadingBase } from '@masknet/theme'
 import { base as pluginDefinition } from '../base.js'
+import { Context } from './hooks/useContext.js'
 
 export interface NFTCardContentProps {
     currentTab: NFTCardDialogTabs
-    asset: AsyncStateRetry<Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>>
-    orders: AsyncStateRetry<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
-    events: AsyncStateRetry<Pageable<NonFungibleTokenEvent<ChainId, SchemaType>>>
-    provider: SourceType
 }
 
 export function NFTCardContent(props: NFTCardContentProps) {
-    const { currentTab, asset, orders, events } = props
+    const { currentTab } = props
     const { classes } = useStyles()
     const { t: tb } = useBaseI18n()
+    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { Others } = useWeb3State()
     const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
-    const pluginId = useCurrentWeb3NetworkPluginID()
-    const chainIdList = pluginDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
+    const { asset, orders, events } = Context.useContainer()
+
+    const chainIdList = pluginDefinition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? []
 
     if (asset.loading)
         return (
@@ -86,15 +76,12 @@ export function NFTCardContent(props: NFTCardContentProps) {
                         setSelectProviderDialog({
                             open: true,
                             supportedNetworkList: chainIdList
-                                .map((chainId) => {
-                                    const x = chainResolver.chainNetworkType(chainId)
-                                    return x
-                                })
-                                .filter((x) => Boolean(x)) as NetworkType[],
+                                .map((chainId) => Others?.chainResolver.chainNetworkType(chainId))
+                                .filter((x) => Boolean(x)) as Web3Helper.NetworkTypeAll[],
                         })
                     }}
                     fullWidth>
-                    {pluginId === NetworkPluginID.PLUGIN_EVM
+                    {pluginID === NetworkPluginID.PLUGIN_EVM
                         ? tb('wallet_status_button_change')
                         : tb('wallet_status_button_change_to_evm')}
                 </Button>

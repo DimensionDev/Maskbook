@@ -1,9 +1,11 @@
 import { Avatar, Link } from '@mui/material'
-interface LinkingAvatarProps {
+
+export interface LinkingAvatarProps {
     href: string
     title: string
     src: string
 }
+
 export function LinkingAvatar(props: LinkingAvatarProps) {
     const { href, title, src } = props
     try {

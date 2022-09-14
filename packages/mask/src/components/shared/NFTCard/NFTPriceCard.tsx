@@ -1,16 +1,9 @@
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
-import {
-    NetworkPluginID,
-    isZero,
-    NonFungibleTokenOrder,
-    formatBalance,
-    formatCurrency,
-} from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import { isZero, NonFungibleTokenOrder, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -64,8 +57,8 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NFTPriceCardProps {
-    asset: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
-    topOffer?: NonFungibleTokenOrder<ChainId, SchemaType>
+    asset: Web3Helper.NonFungibleAssetScope<void>
+    topOffer?: NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
 }
 
 export function NFTPriceCard(props: NFTPriceCardProps) {

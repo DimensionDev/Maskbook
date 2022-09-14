@@ -1,10 +1,10 @@
+import type BigNumber from 'bignumber.js'
 import type { Asset, WyvernSchemaName } from 'opensea-js/lib/types'
 import { createRenderWithMetadata, createTypedMessageMetadataReader } from '@masknet/typed-message/dom'
+import { leftShift } from '@masknet/web3-shared-base'
 import { PLUGIN_META_KEY } from './constants.js'
 import type { CollectibleJSON_Payload, CollectibleToken } from './types/index.js'
 import schema from './schema.json'
-import type BigNumber from 'bignumber.js'
-import { leftShift } from '@masknet/web3-shared-base'
 
 export const CollectibleMetadataReader = createTypedMessageMetadataReader<CollectibleJSON_Payload>(
     PLUGIN_META_KEY,

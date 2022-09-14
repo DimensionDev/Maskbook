@@ -1,14 +1,13 @@
 import { makeStyles } from '@masknet/theme'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import BigNumber from 'bignumber.js'
+import { first } from 'lodash-unified'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { NonFungibleTokenOrder, Pageable } from '@masknet/web3-shared-base'
 import { NFTDescription } from '../../../../components/shared/NFTCard/NFTDescription.js'
 import { NFTPropertiesCard } from '../../../../components/shared/NFTCard/NFTPropertiesCard.js'
 import { NFTPriceCard } from '../../../../components/shared/NFTCard/NFTPriceCard.js'
 import { NFTInfoCard } from '../../../../components/shared/NFTCard/NFTInfoCard.js'
-import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
-import type { NetworkPluginID, NonFungibleTokenOrder, Pageable } from '@masknet/web3-shared-base'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import BigNumber from 'bignumber.js'
-import { first } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -20,19 +19,19 @@ const useStyles = makeStyles()((theme) => ({
         gap: 24,
     },
 }))
-const resolveTopOffer = (orders?: Array<NonFungibleTokenOrder<ChainId, SchemaType>>) => {
+const resolveTopOffer = (orders?: Array<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>) => {
     if (!orders?.length) return
     return first(
         orders.sort((a, b) => {
-            const value_a = new BigNumber(a.price?.usd ?? 0)
-            const value_b = new BigNumber(b.price?.usd ?? 0)
-            return Number(value_a.lt(value_b))
+            const priceA = new BigNumber(a.price?.usd ?? 0)
+            const priceB = new BigNumber(b.price?.usd ?? 0)
+            return priceA.lt(priceB) ? 1 : 0
         }),
     )
 }
 export interface AboutTabProps {
-    asset: AsyncStateRetry<Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>>
-    orders: AsyncStateRetry<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
+    asset: AsyncStateRetry<Web3Helper.NonFungibleAssetScope<void>>
+    orders: AsyncStateRetry<Pageable<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>
 }
 
 export function AboutTab(props: AboutTabProps) {

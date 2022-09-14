@@ -1,10 +1,10 @@
 import { makeStyles, LoadingBase } from '@masknet/theme'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { NonFungibleTokenOrder, Pageable } from '@masknet/web3-shared-base'
 import { Typography, Button } from '@mui/material'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { Icons } from '@masknet/icons'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { NFTOfferCard } from '../../../../components/shared/NFTCard/NFTOfferCard.js'
 import { useI18N } from '../../../../utils/index.js'
 
@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface OffersTabProps {
-    offers: AsyncStateRetry<Pageable<NonFungibleTokenOrder<ChainId, SchemaType>>>
+    offers: AsyncStateRetry<Pageable<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>
 }
 
 export function OffersTab(props: OffersTabProps) {
