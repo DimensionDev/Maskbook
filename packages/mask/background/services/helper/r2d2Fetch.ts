@@ -79,7 +79,7 @@ export async function r2d2Fetch(input: RequestInfo, init?: RequestInit): Promise
     // hotfix image requests
     if (info.method === 'GET' && info.headers.get('accept')?.includes('image/')) {
         const blob = await attemptUntil<Blob | null>(
-            [async () => (await originalFetch(url)).blob(), async () => fetchImageViaDOM(url)],
+            [async () => (await originalFetch(url, info)).blob(), async () => fetchImageViaDOM(url)],
             null,
         )
         return new Response(blob, {
