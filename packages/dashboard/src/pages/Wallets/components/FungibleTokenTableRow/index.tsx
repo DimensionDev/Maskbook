@@ -10,9 +10,9 @@ import {
 } from '@masknet/plugin-infra/web3'
 import { CurrencyType, formatBalance, formatCurrency, FungibleAsset, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { useDashboardI18N } from '../../../../locales'
-import { ChangeNetworkTip } from './ChangeNetworkTip'
-import { getTokenUSDValue } from '../../utils/getTokenUSDValue'
+import { useDashboardI18N } from '../../../../locales/index.js'
+import { ChangeNetworkTip } from './ChangeNetworkTip.js'
+import { getTokenUSDValue } from '../../utils/getTokenUSDValue.js'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {

@@ -3,11 +3,11 @@ import { Button, DialogActions, DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
-import { useI18N } from '../../../../utils'
-import { WalletMessages } from '../../messages'
-import { SafariPlatform } from './SafariPlatform'
-import { FirefoxPlatform } from './FirefoxPlatform'
-import { QRCodeModal } from './QRCodeModal'
+import { useI18N } from '../../../../utils/index.js'
+import { WalletMessages } from '../../messages.js'
+import { SafariPlatform } from './SafariPlatform.js'
+import { FirefoxPlatform } from './FirefoxPlatform.js'
+import { QRCodeModal } from './QRCodeModal.js'
 
 const useStyles = makeStyles()({
     container: {

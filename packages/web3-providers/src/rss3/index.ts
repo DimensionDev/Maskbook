@@ -3,17 +3,21 @@ import {
     createNextIndicator,
     createPageable,
     HubOptions,
-    resolveIPFSLink,
+    resolveResourceURL,
     TokenType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import RSS3 from 'rss3-next'
 import urlcat from 'urlcat'
-import { fetchJSON } from '../helpers'
-import { NonFungibleTokenAPI, RSS3BaseAPI } from '../types'
-import { NEW_RSS3_ENDPOINT, RSS3_ENDPOINT, TAG, TYPE } from './constants'
+import { fetchJSON } from '../helpers.js'
+import { NonFungibleTokenAPI, RSS3BaseAPI } from '../types/index.js'
+import { NEW_RSS3_ENDPOINT, RSS3_ENDPOINT, TAG, TYPE } from './constants.js'
 
-type RSS3Result<T> = { cursor?: string; total: number; result: T[] }
+type RSS3Result<T> = {
+    cursor?: string
+    total: number
+    result: T[]
+}
 
 export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     createRSS3(
@@ -138,16 +142,19 @@ export class RSS3API implements RSS3BaseAPI.Provider, NonFungibleTokenAPI.Provid
             cursor: indicator?.id,
             include_poap: true,
         })
-        const { result, cursor } = await fetchJSON<{ result: RSS3BaseAPI.Activity[]; cursor?: string }>(url)
+        const { result, cursor } = await fetchJSON<{
+            result: RSS3BaseAPI.Activity[]
+            cursor?: string
+        }>(url)
         result.forEach((activity) => {
             activity.actions.forEach((action) => {
                 if (!action.metadata) return
                 if ('image' in action.metadata) {
-                    action.metadata.image = resolveIPFSLink(action.metadata.image)!
+                    action.metadata.image = resolveResourceURL(action.metadata.image)!
                 } else if ('token' in action.metadata) {
-                    action.metadata.token.image = resolveIPFSLink(action.metadata.token.image)!
+                    action.metadata.token.image = resolveResourceURL(action.metadata.token.image)!
                 } else if ('logo' in action.metadata) {
-                    action.metadata.logo = resolveIPFSLink(action.metadata.logo)!
+                    action.metadata.logo = resolveResourceURL(action.metadata.logo)!
                 }
             })
         })

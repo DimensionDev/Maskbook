@@ -1,5 +1,5 @@
-export * from './entry'
-export { createInjectHooksRenderer } from './utils/createInjectHooksRenderer'
+export * from './entry.js'
+export { createInjectHooksRenderer } from './utils/createInjectHooksRenderer.js'
 export {
     PluginI18NFieldRender,
     type PluginI18NFieldRenderProps,
@@ -8,4 +8,4 @@ export {
     useActivatedPlugin,
     usePluginI18NField,
     usePluginWrapper,
-} from './hooks'
+} from './hooks/index.js'

@@ -2,8 +2,8 @@ import { useActivatedPluginsSNSAdaptor, Plugin, PluginI18NFieldRender } from '@m
 import { useMemo, useState, useCallback } from 'react'
 import { List, ListItem, Typography } from '@mui/material'
 import { makeStyles, getMaskColor, ShadowRootTooltip } from '@masknet/theme'
-import { useI18N } from '../../utils'
-import { PersistentStorages } from '../../../shared'
+import { useI18N } from '../../utils/index.js'
+import { PersistentStorages } from '../../../shared/index.js'
 
 export interface Application {
     entry: Plugin.SNSAdaptor.ApplicationEntry
@@ -29,7 +29,9 @@ export function getUnlistedApp(app: Application): boolean {
 }
 // #endregion
 
-const useStyles = makeStyles<{ iconFilterColor?: string }>()((theme, { iconFilterColor }) => ({
+const useStyles = makeStyles<{
+    iconFilterColor?: string
+}>()((theme, { iconFilterColor }) => ({
     list: {
         display: 'grid',
         gap: theme.spacing(1.5),

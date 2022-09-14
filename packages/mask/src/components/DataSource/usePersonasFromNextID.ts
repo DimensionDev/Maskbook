@@ -2,8 +2,8 @@ import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import { MaskMessages } from '../../utils'
-import { activatedSocialNetworkUI } from '../../social-network'
+import { MaskMessages } from '../../utils/index.js'
+import { activatedSocialNetworkUI } from '../../social-network/index.js'
 
 /**
  * Get all personas bound with the given identity from NextID service

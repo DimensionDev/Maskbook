@@ -5,9 +5,9 @@ import {
     useRPCConstants,
     useTraderConstants,
 } from '@masknet/web3-shared-evm'
-import { PluginTraderRPC } from '../../messages'
-import type { SwapRouteData, TradeStrategy } from '../../types'
-import { useSlippageTolerance } from './useSlippageTolerance'
+import { PluginTraderRPC } from '../../messages.js'
+import type { SwapRouteData, TradeStrategy } from '../../types/index.js'
+import { useSlippageTolerance } from './useSlippageTolerance.js'
 import { first } from 'lodash-unified'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useAccount, useDoubleBlockBeatRetry } from '@masknet/plugin-infra/web3'

@@ -2,7 +2,7 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { useSharedI18N } from '@masknet/shared'
-import { FootnoteMenuUI, FootnoteMenuOption } from '../FootnoteMenuUI/index'
+import { FootnoteMenuUI, FootnoteMenuOption } from '../FootnoteMenuUI'
 
 const useStyles = makeStyles()((theme) => {
     return {

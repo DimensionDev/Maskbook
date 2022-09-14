@@ -1,5 +1,5 @@
 import { useReducer, useState } from 'react'
-import { useAllTradeComputed } from './useAllTradeComputed'
+import { useAllTradeComputed } from './useAllTradeComputed.js'
 import { createContainer } from 'unstated-next'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'

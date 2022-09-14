@@ -1,11 +1,10 @@
-import { CircularProgress } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { MaskMessages } from '../../../utils'
-import type { AvatarMetaDB } from '../types'
-import { RainbowBox } from './RainbowBox'
-import type { RSS3_KEY_SNS } from '../constants'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar'
+import { MaskMessages } from '../../../utils/index.js'
+import type { AvatarMetaDB } from '../types.js'
+import { RainbowBox } from './RainbowBox.js'
+import type { RSS3_KEY_SNS } from '../constants.js'
+import { LoadingBase, makeStyles, useStylesExtends } from '@masknet/theme'
+import { usePersonaNFTAvatar } from '../hooks/usePersonaNFTAvatar.js'
 
 interface NFTBadgeTimelineProps extends withClasses<'root'> {
     userId: string
@@ -51,7 +50,7 @@ export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
     if (avatarId_ && avatar.avatarId !== avatarId_) return null
 
     return loading ? (
-        <CircularProgress size={width} />
+        <LoadingBase size={width} />
     ) : (
         <RainbowBox width={width} height={height} radius="100%" classes={{ root: classes.root }} />
     )

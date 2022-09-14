@@ -2,8 +2,8 @@ import { DialogActions, DialogContent } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useEffect, useMemo, useState } from 'react'
 import { InjectedDialog, PersonaAction } from '@masknet/shared'
-import { useAllPersonas, useCurrentPersona, useLastRecognizedProfile } from '../hooks/usePersona'
-import { Main } from './Main'
+import { useAllPersonas, useCurrentPersona, useLastRecognizedProfile } from '../hooks/usePersona.js'
+import { Main } from './Main.js'
 import {
     CrossIsolationMessages,
     EMPTY_LIST,
@@ -13,7 +13,7 @@ import {
 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useAsyncRetry } from 'react-use'
-import { ImageManagement } from './ImageManagement'
+import { ImageManagement } from './ImageManagement.js'
 import {
     getDonationList,
     getFootprintList,
@@ -22,11 +22,11 @@ import {
     getWalletList,
     mergeList,
     placeFirst,
-} from '../utils'
+} from '../utils.js'
 import { Icons } from '@masknet/icons'
-import { context } from '../context'
+import { context } from '../context.js'
 import { useChainId } from '@masknet/plugin-infra/web3'
-import { CurrentStatusMap, CURRENT_STATUS } from '../../constants'
+import { CurrentStatusMap, CURRENT_STATUS } from '../../constants.js'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 const useStyles = makeStyles()((theme) => ({

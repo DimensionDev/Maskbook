@@ -5,7 +5,7 @@ import {
     PossiblePluginSuggestionUI,
     useDisabledPluginSuggestionFromMeta,
     useDisabledPluginSuggestionFromPost,
-} from './DisabledPluginSuggestion'
+} from './DisabledPluginSuggestion.js'
 import { MaskPostExtraPluginWrapper } from '@masknet/shared'
 
 const Decrypted = createInjectHooksRenderer(

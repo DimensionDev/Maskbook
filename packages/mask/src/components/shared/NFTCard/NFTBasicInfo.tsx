@@ -2,7 +2,7 @@ import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
-import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -89,6 +89,8 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
     },
     fallbackImage: {
+        width: '100% !important',
+        height: '100% !important',
         position: 'absolute',
     },
     unset: {
@@ -98,7 +100,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface NFTBasicInfoProps {
     hideSubTitle?: boolean
-    asset: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
+    asset: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID>
     timeline?: boolean
 }
 

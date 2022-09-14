@@ -7,7 +7,7 @@ import {
 import BigNumber from 'bignumber.js'
 import { keccak256 } from '@ethersproject/keccak256'
 import { toUtf8Bytes } from '@ethersproject/strings'
-import { CHAIN_DESCRIPTORS, NETWORK_DESCRIPTORS, PROVIDER_DESCRIPTORS } from '../constants'
+import { CHAIN_DESCRIPTORS, NETWORK_DESCRIPTORS, PROVIDER_DESCRIPTORS } from '../constants/index.js'
 
 export const chainResolver = createChainResolver(CHAIN_DESCRIPTORS)
 export const explorerResolver = createExplorerResolver(CHAIN_DESCRIPTORS)

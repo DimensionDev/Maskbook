@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import type { ChainIdEnum, Constants, Primitive } from './types'
+import type { ChainIdEnum, Constants, Primitive } from './types.js'
 
 function replaceAll(input: string, values: Record<string, string>) {
     return input.replace(/\${([^}]+)}/g, (match, p1) => values[p1] ?? match)
@@ -10,7 +10,9 @@ export function transformAll<ChainId extends number, T extends Constants>(
     constants: T,
     environment: Record<string, string> = {},
 ) {
-    type Entries = { [key in keyof T]?: T[key]['Mainnet'] }
+    type Entries = {
+        [key in keyof T]?: T[key]['Mainnet']
+    }
     return (chainId: ChainId = 1 as ChainId) => {
         const chainName = chainIdEnum[chainId] as 'Mainnet'
         // unknown chain id
@@ -38,7 +40,9 @@ export function transform<ChainId extends number, T extends Constants>(
     constants: T,
     environment: Record<string, string> = {},
 ) {
-    type Entries = { [key in keyof T]?: T[key]['Mainnet'] }
+    type Entries = {
+        [key in keyof T]?: T[key]['Mainnet']
+    }
     const getAllConstants = transformAll(chainIdEnum, constants, environment)
     return <K extends keyof Entries, F extends Entries[K], R = F extends undefined ? Entries[K] : Required<Entries>[K]>(
         chainId: ChainId,

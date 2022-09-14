@@ -4,16 +4,16 @@ import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import classNames from 'classnames'
 import millify from 'millify'
 import { useContext } from 'react'
-import { useI18N } from '../../../utils'
-import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie'
-import { SnapshotContext } from '../context'
-import { useRetry } from './hooks/useRetry'
-import { useVotes } from './hooks/useVotes'
-import { LoadingCard } from './LoadingCard'
-import { LoadingFailCard } from './LoadingFailCard'
-import { SnapshotCard } from './SnapshotCard'
+import { useI18N } from '../../../utils/index.js'
+import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie.js'
+import { SnapshotContext } from '../context.js'
+import { useRetry } from './hooks/useRetry.js'
+import { useVotes } from './hooks/useVotes.js'
+import { LoadingCard } from './LoadingCard.js'
+import { LoadingFailCard } from './LoadingFailCard.js'
+import { SnapshotCard } from './SnapshotCard.js'
 import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, resolveIPFSLink } from '@masknet/web3-shared-base'
+import { NetworkPluginID, resolveIPFS_URL } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -108,7 +108,7 @@ function Content() {
                                 href={explorerResolver.addressLink(chainId, v.address)}>
                                 <Box className={classes.avatarWrapper}>
                                     {v.authorAvatar ? (
-                                        <Avatar src={resolveIPFSLink(v.authorAvatar)} className={classes.avatar} />
+                                        <Avatar src={resolveIPFS_URL(v.authorAvatar)} className={classes.avatar} />
                                     ) : (
                                         <EthereumBlockie address={v.address} />
                                     )}

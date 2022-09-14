@@ -2,8 +2,8 @@ import { useEffect } from 'react'
 import { useCustomSnackbar } from '@masknet/theme'
 import { Button, Box, Typography } from '@mui/material'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import { useMatchXS, MaskMessages, useI18N } from '../../utils'
-import { useAutoPasteFailedDialog } from './AutoPasteFailedDialog'
+import { useMatchXS, MaskMessages, useI18N } from '../../utils/index.js'
+import { useAutoPasteFailedDialog } from './AutoPasteFailedDialog.js'
 
 const PluginRender = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useAnyMode,

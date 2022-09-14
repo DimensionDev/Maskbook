@@ -7,10 +7,10 @@ import {
     uniswapPercentTo,
     uniswapPriceTo,
     uniswapTokenTo,
-} from '../../helpers'
-import { Trade, TradeComputed, TradeStrategy } from '../../types'
-import { useSlippageTolerance } from './useSlippageTolerance'
-import { useTradeBreakdown } from './useTradeBreakdown'
+} from '../../helpers/index.js'
+import { Trade, TradeComputed, TradeStrategy } from '../../types/index.js'
+import { useSlippageTolerance } from './useSlippageTolerance.js'
+import { useTradeBreakdown } from './useTradeBreakdown.js'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export function useTradeComputed(

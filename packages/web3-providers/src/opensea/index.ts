@@ -22,11 +22,11 @@ import {
     HubIndicator,
     formatPercentage,
     dividedBy,
-    resolveIPFSLink,
+    resolveIPFS_URL,
     SourceType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, createNativeToken, createERC20Token } from '@masknet/web3-shared-evm'
-import type { NonFungibleTokenAPI, TrendingAPI } from '../types'
+import type { NonFungibleTokenAPI, TrendingAPI } from '../types/index.js'
 import {
     OpenSeaAssetContract,
     OpenSeaAssetEvent,
@@ -35,10 +35,10 @@ import {
     OpenSeaCustomAccount,
     OpenSeaAssetResponse,
     EventType,
-} from './types'
-import { getOrderUSDPrice } from './utils'
-import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants'
-import { getPaymentToken } from '../helpers'
+} from './types.js'
+import { getOrderUSDPrice } from './utils.js'
+import { OPENSEA_ACCOUNT_URL, OPENSEA_API_URL } from './constants.js'
+import { getPaymentToken } from '../helpers.js'
 
 async function fetchFromOpenSea<T>(url: string, chainId: ChainId, init?: RequestInit) {
     if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
@@ -98,7 +98,7 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungi
                 asset.image_url ?? asset.image_preview_url ?? asset.image_original_url ?? asset.animation_url ?? '',
             mediaURL:
                 asset?.animation_url ??
-                resolveIPFSLink(asset?.image_original_url ?? asset?.image_preview_url ?? asset?.image_url ?? ''),
+                resolveIPFS_URL(asset?.image_original_url ?? asset?.image_preview_url ?? asset?.image_url ?? ''),
         },
         contract: {
             chainId,
@@ -275,7 +275,11 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
     }
 
     async getAssets(account: string, { chainId = ChainId.Mainnet, indicator, size = 50 }: HubOptions<ChainId> = {}) {
-        const response = await fetchFromOpenSea<{ assets?: OpenSeaAssetResponse[]; next: string; previous?: string }>(
+        const response = await fetchFromOpenSea<{
+            assets?: OpenSeaAssetResponse[]
+            next: string
+            previous?: string
+        }>(
             urlcat('/api/v1/assets', {
                 owner: account,
                 offset: (indicator?.index ?? 0) * size,
@@ -432,7 +436,9 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         )
         const slug = assetContract?.collection.slug
         if (!slug) return
-        const response = await fetchFromOpenSea<{ stats: OpenSeaCollectionStats }>(
+        const response = await fetchFromOpenSea<{
+            stats: OpenSeaCollectionStats
+        }>(
             urlcat('/api/v1/collection/:slug/stats', {
                 slug,
             }),

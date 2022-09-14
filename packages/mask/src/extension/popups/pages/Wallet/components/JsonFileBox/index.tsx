@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { useDropArea } from 'react-use'
 import { Icons } from '@masknet/icons'
 import { blobToText } from '@dimensiondev/kit'
-import { useI18N } from '../../../../../../utils'
+import { useI18N } from '../../../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},

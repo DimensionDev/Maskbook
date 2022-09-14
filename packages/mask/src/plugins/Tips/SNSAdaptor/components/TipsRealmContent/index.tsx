@@ -1,5 +1,5 @@
 import { Plugin } from '@masknet/plugin-infra'
-import { TipButton } from '../../../components'
+import { TipButton } from '../../../components/index.js'
 import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles<{}, 'postTipsButton'>()((theme, _, refs) => ({

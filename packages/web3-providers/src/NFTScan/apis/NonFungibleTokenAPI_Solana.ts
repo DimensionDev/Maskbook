@@ -12,15 +12,15 @@ import {
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-solana'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import type { NonFungibleTokenAPI } from '../../types'
+import type { NonFungibleTokenAPI } from '../../types/index.js'
 import {
     createNonFungibleAsset,
     createNonFungibleCollection,
     createNonFungibleTokenContract,
     createNonFungibleTokenEvent,
     fetchFromNFTScanV2,
-} from '../helpers/Solana'
-import type { Solana, PageableResponse, Response } from '../types'
+} from '../helpers/Solana.js'
+import type { Solana, PageableResponse, Response } from '../types/index.js'
 
 export class NFTScanNonFungibleTokenAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, _: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId> = {}) {

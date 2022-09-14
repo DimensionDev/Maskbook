@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react'
-import { useI18N } from '../../../../../../utils'
+import { useI18N } from '../../../../../../utils/index.js'
 import type { DialogProps } from '@mui/material'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'

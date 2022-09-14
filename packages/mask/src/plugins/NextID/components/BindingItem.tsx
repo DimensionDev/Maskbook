@@ -4,14 +4,14 @@ import { memo, useMemo } from 'react'
 import { NextIDPlatform } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { CopyIconButton } from './CopyIconButton'
+import { CopyIconButton } from './CopyIconButton/index.js'
 import { ExternalLink } from 'react-feather'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useNetworkDescriptor } from '@masknet/plugin-infra/web3'
-import { useI18N } from '../locales'
+import { useI18N } from '../locales/index.js'
 import { ImageIcon } from '@masknet/shared'
-import { TipButton } from '../../../plugins/Tips/components'
-import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
+import { TipButton } from '../../../plugins/Tips/components/index.js'
+import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI.js'
 
 const useStyles = makeStyles()((theme) => ({
     item: {

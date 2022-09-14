@@ -1,5 +1,5 @@
 import { story } from '@masknet/storybook-shared'
-import C from '../../../src/pages/Settings/components/BackupPreviewCard'
+import C from '../../../src/pages/Settings/components/BackupPreviewCard.js'
 
 const { meta, of } = story(C)
 

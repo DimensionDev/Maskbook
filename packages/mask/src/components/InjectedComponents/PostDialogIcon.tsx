@@ -1,6 +1,6 @@
 import type { SvgIconClassKey } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { MaskSharpIcon } from '../../resources/MaskIcon'
+import { MaskSharpIcon } from '../../resources/MaskIcon.js'
 
 const useStyles = makeStyles()({
     root: { verticalAlign: 'middle' },

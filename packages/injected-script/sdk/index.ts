@@ -1,13 +1,13 @@
-import { CustomEventId, decodeEvent } from '../shared'
-import { Coin98Provider, Coin98ProviderType } from './Coin98'
-import { PhantomProvider } from './Phantom'
-import { SolflareProvider } from './Solflare'
-import { MetaMaskProvider } from './MetaMask'
-import { sendEvent, rejectPromise, resolvePromise } from './utils'
-import { MathWalletProvider } from './MathWallet'
-import { WalletLinkProvider } from './WalletLink'
+import { CustomEventId, decodeEvent } from '../shared/index.js'
+import { Coin98Provider, Coin98ProviderType } from './Coin98.js'
+import { PhantomProvider } from './Phantom.js'
+import { SolflareProvider } from './Solflare.js'
+import { MetaMaskProvider } from './MetaMask.js'
+import { sendEvent, rejectPromise, resolvePromise } from './utils.js'
+import { MathWalletProvider } from './MathWallet.js'
+import { WalletLinkProvider } from './WalletLink.js'
 
-export type { EthereumProvider, InternalEvents } from '../shared'
+export type { EthereumProvider, InternalEvents } from '../shared/index.js'
 
 export const injectedCoin98EVMProvider = new Coin98Provider(Coin98ProviderType.EVM)
 export const injectedCoin98SolanaProvider = new Coin98Provider(Coin98ProviderType.Solana)

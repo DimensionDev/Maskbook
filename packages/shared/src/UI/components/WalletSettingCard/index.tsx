@@ -8,7 +8,7 @@ import {
     useWallets,
     useWeb3State,
 } from '@masknet/plugin-infra/web3'
-import { WalletSettingCardUI } from './UI'
+import { WalletSettingCardUI } from './UI.js'
 
 interface WalletSettingCardProps {
     wallet: BindingProof
@@ -21,8 +21,7 @@ export const WalletSettingCard = memo<WalletSettingCardProps>(({ wallet, checked
 
     const networkPluginId = resolveNextID_NetworkPluginID(wallet.platform)
     const chainId = useDefaultChainId(networkPluginId)
-    const networkDescriptor = useNetworkDescriptor(networkPluginId)
-
+    const networkDescriptor = useNetworkDescriptor(networkPluginId, chainId)
     const { Others } = useWeb3State(networkPluginId)
     const { value: domain } = useReverseAddress(networkPluginId, wallet.identity)
 

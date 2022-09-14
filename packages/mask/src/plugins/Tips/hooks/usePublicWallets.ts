@@ -4,9 +4,9 @@ import { isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
 import { uniqBy } from 'lodash-unified'
 import { useEffect, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { MaskMessages } from '../../../utils'
-import type { TipsAccount } from '../types'
-import { useTipsSetting } from './useTipsSetting'
+import { MaskMessages } from '../../../utils/index.js'
+import type { TipsAccount } from '../types/index.js'
+import { useTipsSetting } from './useTipsSetting.js'
 
 export function usePublicWallets(personaPubkey?: string): TipsAccount[] {
     const { value: nextIdWallets, retry: queryWallets } = useAsyncRetry(async (): Promise<TipsAccount[]> => {

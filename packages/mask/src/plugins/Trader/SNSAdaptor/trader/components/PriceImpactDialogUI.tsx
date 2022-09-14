@@ -1,7 +1,7 @@
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
 import { memo } from 'react'
-import { useI18N, Translate } from '../../../locales'
+import { useI18N, Translate } from '../../../locales/index.js'
 import {
     alpha,
     Button,
@@ -16,7 +16,9 @@ import { isDashboardPage } from '@masknet/shared-base'
 import { formatPercentage } from '@masknet/web3-shared-evm'
 import type BigNumber from 'bignumber.js'
 
-const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
+const useStyles = makeStyles<{
+    isDashboard: boolean
+}>()((theme, { isDashboard }) => ({
     dialog: {
         [`.${dialogClasses.paper}`]: {
             width: '420px!important',
@@ -90,6 +92,7 @@ export const PriceImpactDialogUI = memo<PriceImpactDialogProps>(
         const isDashboard = isDashboardPage()
         const { classes } = useStyles({ isDashboard })
 
+        console.log(`${lostToken} ${symbol}`, `${lostValue.replace('<', '&lt;')} USD`)
         return (
             <InjectedDialog open={open} onClose={onClose} title={t.impact_warning()} className={classes.dialog}>
                 <DialogContent className={classes.content}>
@@ -100,9 +103,10 @@ export const PriceImpactDialogUI = memo<PriceImpactDialogProps>(
                             components={{ span: <span /> }}
                             values={{
                                 impact: formatPercentage(priceImpact ?? 0),
-                                lostSymbol: `${lostToken} ${symbol}`,
-                                lostValue: `${lostValue} USD`,
+                                lostSymbol: `${lostToken.replace('<', '&lt;')} ${symbol}`,
+                                lostValue: `${lostValue.replace('<', '&lt;')} USD`,
                             }}
+                            shouldUnescape
                         />
                     </Typography>
                 </DialogContent>

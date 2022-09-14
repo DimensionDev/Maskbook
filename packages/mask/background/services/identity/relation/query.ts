@@ -1,6 +1,6 @@
 import type { PersonaIdentifier } from '@masknet/shared-base'
-import { queryRelationsPagedDB, RelationRecord } from '../../../database/persona/db'
-import { queryRelations as queryRelationsFromIndexedDB } from '../../../database/persona/web'
+import { queryRelationsPagedDB, RelationRecord } from '../../../database/persona/db.js'
+import { queryRelations as queryRelationsFromIndexedDB } from '../../../database/persona/web.js'
 
 export async function mobile_queryRelationsRecordFromIndexedDB(): Promise<RelationRecord[]> {
     if (process.env.architecture !== 'app') throw new Error('This function is only available in app')

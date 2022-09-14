@@ -1,12 +1,12 @@
 import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy'
 import { SchemaType, GasOptionConfig, useTraderConstants, encodeContractTransaction } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
-import { SLIPPAGE_DEFAULT } from '../../constants'
-import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
+import { SLIPPAGE_DEFAULT } from '../../constants/index.js'
+import { SwapResponse, TradeComputed, TradeStrategy } from '../../types/index.js'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useAccount, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useTradeAmount } from './useTradeAmount'
+import { useTradeAmount } from './useTradeAmount.js'
 
 export function useTradeCallback(
     trade: TradeComputed<SwapResponse> | null,
@@ -41,11 +41,11 @@ export function useTradeCallback(
             x.map(
                 (y) =>
                     [
-                        y.pool, // address pool
-                        y.tokenIn, // address tokenIn
-                        y.tokenOut, // address tokenOut
-                        y.swapAmount, // uint swapAmount
-                        y.limitReturnAmount, // uint limitReturnAmount
+                        y.pool,
+                        y.tokenIn,
+                        y.tokenOut,
+                        y.swapAmount,
+                        y.limitReturnAmount,
                         y.maxPrice, // uint maxPrice
                     ] as [string, string, string, string, string, string],
             ),

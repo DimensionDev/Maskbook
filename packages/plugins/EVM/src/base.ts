@@ -1,7 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { ChainId, NetworkType, NETWORK_DESCRIPTORS, ProviderType, PROVIDER_DESCRIPTORS } from '@masknet/web3-shared-evm'
-import { PLUGIN_ID, PLUGIN_NAME, PLUGIN_DESCRIPTION } from './constants'
-import { languages } from './locales/languages'
+import { PLUGIN_ID, PLUGIN_NAME, PLUGIN_DESCRIPTION } from './constants/index.js'
+import { languages } from './locales/languages.js'
 
 export const base: Plugin.Shared.Definition<ChainId, ProviderType, NetworkType> = {
     ID: PLUGIN_ID,

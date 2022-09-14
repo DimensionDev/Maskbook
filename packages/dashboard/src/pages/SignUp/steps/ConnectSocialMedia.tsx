@@ -5,16 +5,16 @@ import {
     Footer,
     PersonaLogoBox,
     SignUpAccountLogo,
-} from '../../../components/RegisterFrame/ColumnContentLayout'
+} from '../../../components/RegisterFrame/ColumnContentLayout.js'
 import { useNavigate } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
-import { useDashboardI18N } from '../../../locales'
-import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
+import { Header } from '../../../components/RegisterFrame/ColumnContentHeader.js'
+import { useDashboardI18N } from '../../../locales/index.js'
+import { PersonaContext } from '../../Personas/hooks/usePersonaContext.js'
 import { upperFirst } from 'lodash-unified'
 import { Button, Stack } from '@mui/material'
 import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
-import { ActionCard } from '../../../components/ActionCard'
+import { ActionCard } from '../../../components/ActionCard/index.js'
 
 export const ConnectSocialMedia = () => {
     const navigate = useNavigate()

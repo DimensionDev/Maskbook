@@ -1,10 +1,10 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { NFTBadgeTweet } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTweet'
-import { createReactRootShadowed, startWatch } from '../../../../utils'
-import { getInjectNodeInfo } from '../../utils/avatar'
-import { searchRetweetAvatarSelector, searchTweetAvatarSelector } from '../../utils/selector'
-import { NFTAvatarMiniClip } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip'
-import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants'
+import { NFTBadgeTweet } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTweet.js'
+import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
+import { getInjectNodeInfo } from '../../utils/avatar.js'
+import { searchRetweetAvatarSelector, searchTweetAvatarSelector } from '../../utils/selector.js'
+import { NFTAvatarMiniClip } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip.js'
+import { RSS3_KEY_SNS } from '../../../../plugins/Avatar/constants.js'
 
 function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
     startWatch(

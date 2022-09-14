@@ -8,9 +8,9 @@ import { TokenIcon, useSharedI18N } from '@masknet/shared'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { Box } from '@mui/system'
 
-import { toChainAddressEthers } from '../../../helpers'
-import { SponsoredFarmIcon } from '../icons/SponsoredFarm'
-import type { ChainAddress } from '../../../types'
+import { toChainAddressEthers } from '../../../helpers/index.js'
+import { SponsoredFarmIcon } from '../icons/SponsoredFarm.js'
+import type { ChainAddress } from '../../../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {

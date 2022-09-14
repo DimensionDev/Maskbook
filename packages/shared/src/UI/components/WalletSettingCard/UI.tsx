@@ -1,57 +1,8 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { Link, styled, Switch, SwitchProps, Typography } from '@mui/material'
+import { Link, Switch, Typography } from '@mui/material'
 import { memo } from 'react'
-import { WalletIcon } from '../WalletIcon'
-
-// TODO: replace to UI kit
-const IOSSwitch = styled((props: SwitchProps) => (
-    <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
-))(({ theme }) => ({
-    width: 43,
-    height: 22,
-    padding: 0,
-    '& .MuiSwitch-switchBase': {
-        padding: 0,
-        margin: 3.5,
-        transitionDuration: '300ms',
-        '&.Mui-checked': {
-            transform: 'translateX(22px)',
-            color: '#fff',
-            '& + .MuiSwitch-track': {
-                backgroundColor: theme.palette.maskColor.success,
-                opacity: 1,
-                border: 0,
-            },
-            '&.Mui-disabled + .MuiSwitch-track': {
-                opacity: 0.5,
-            },
-        },
-        '&.Mui-focusVisible .MuiSwitch-thumb': {
-            color: '#33cf4d',
-            border: '6px solid #fff',
-        },
-        '&.Mui-disabled .MuiSwitch-thumb': {
-            color: theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[600],
-        },
-        '&.Mui-disabled + .MuiSwitch-track': {
-            opacity: theme.palette.mode === 'light' ? 0.7 : 0.3,
-        },
-    },
-    '& .MuiSwitch-thumb': {
-        boxSizing: 'border-box',
-        width: 14,
-        height: 14,
-    },
-    '& .MuiSwitch-track': {
-        borderRadius: 26 / 2,
-        backgroundColor: theme.palette.maskColor.primaryMain,
-        opacity: 1,
-        transition: theme.transitions.create(['background-color'], {
-            duration: 500,
-        }),
-    },
-}))
+import { WalletIcon } from '../WalletIcon/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -120,7 +71,7 @@ export const WalletSettingCardUI = memo<WalletSettingCardUIProps>(
                         </Typography>
                     </div>
                 </div>
-                <IOSSwitch checked={checked} onChange={onSwitchChange} />
+                <Switch checked={checked} onChange={onSwitchChange} />
             </div>
         )
     },

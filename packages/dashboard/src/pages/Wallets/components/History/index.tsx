@@ -1,6 +1,6 @@
 import { memo } from 'react'
-import { ContentContainer } from '../../../../components/ContentContainer'
-import { HistoryTable } from '../HistoryTable'
+import { ContentContainer } from '../../../../components/ContentContainer/index.js'
+import { HistoryTable } from '../HistoryTable/index.js'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 
 interface HistoryProps {

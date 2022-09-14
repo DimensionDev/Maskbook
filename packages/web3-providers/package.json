@@ -11,7 +11,7 @@
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
-    "@masknet/plugin-infra": "workspace:*",
+    "@masknet/icons": "workspace:*",
     "@masknet/public-api": "workspace:*",
     "@masknet/shared-base": "workspace:*",
     "@masknet/web3-constants": "workspace:*",
@@ -20,7 +20,6 @@
     "@masknet/web3-shared-evm": "workspace:*",
     "@masknet/web3-shared-flow": "workspace:*",
     "@masknet/web3-shared-solana": "workspace:*",
-    "@masknet/icons": "workspace:*",
     "@metaplex-foundation/mpl-token-metadata": "^1.1.0",
     "@metaplex/js": "^4.11.7",
     "@solana/buffer-layout": "^4.0.0",
@@ -41,10 +40,10 @@
     "urlcat": "^2.0.4",
     "uuid": "^8.3.2",
     "wallet.ts": "^1.0.1",
-    "web3": "1.7.4",
-    "web3-core": "1.7.4",
-    "web3-utils": "1.7.4",
-    "web3-eth": "1.7.4"
+    "web3": "1.7.5",
+    "web3-core": "1.7.5",
+    "web3-eth": "1.7.5",
+    "web3-utils": "1.7.5"
   },
   "devDependencies": {
     "@types/json-stable-stringify": "^1.0.34"

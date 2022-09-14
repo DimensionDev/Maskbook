@@ -2,8 +2,9 @@ import bs58 from 'bs58'
 import * as Web3 from '@solana/web3.js'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { ChainId, NetworkType, ProviderType } from '../types'
-import { getTokenConstant, ZERO_ADDRESS } from '../constants'
+import { ChainId, NetworkType, ProviderType, SchemaType } from '../types.js'
+import { getTokenConstant, ZERO_ADDRESS } from '../constants/index.js'
+import { createLookupTableResolver } from '@masknet/shared-base'
 
 export function encodePublicKey(key: Web3.PublicKey) {
     return key.toBase58()
@@ -20,9 +21,20 @@ export function formatAddress(address: string, size = 0) {
     if (size === 0 || size >= 22) return address
     return `${address.slice(0, Math.max(0, size))}...${address.slice(-size)}`
 }
+
+export const formatSchemaType = createLookupTableResolver<SchemaType, string>(
+    {
+        [SchemaType.Native]: 'Native',
+        [SchemaType.Fungible]: 'Fungible',
+        [SchemaType.NonFungible]: 'NonFungible',
+    },
+    '',
+)
+
 export function formatTokenId(id: string) {
     return id
 }
+
 export function isValidAddress(address?: string) {
     const length = address?.length
     if (!length) return false

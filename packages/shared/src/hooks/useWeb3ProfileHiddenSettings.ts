@@ -5,7 +5,7 @@ import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useAsync } from 'react-use'
 import { useMemo } from 'react'
 import type { CollectionType } from '@masknet/web3-providers'
-import type { Web3ProfileStorage } from '../types'
+import type { Web3ProfileStorage } from '../types.js'
 
 export function useWeb3ProfileHiddenSettings(
     identity?: string,

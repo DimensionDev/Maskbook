@@ -13,7 +13,7 @@
             "name": "Ether",
             "symbol": "ETH",
             "decimals": 18,
-            "logoURL": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
         },
         "infoURL": "https://ethereum.org",
         "explorers": [
@@ -38,7 +38,7 @@
             "name": "Ropsten Ether",
             "symbol": "ROP",
             "decimals": 18,
-            "logoURL": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
         },
         "infoURL": "https://github.com/ethereum/ropsten",
         "explorers": [
@@ -63,7 +63,7 @@
             "name": "Rinkeby Ether",
             "symbol": "RIN",
             "decimals": 18,
-            "logoURL": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
         },
         "infoURL": "https://www.rinkeby.io",
         "explorers": [
@@ -136,7 +136,7 @@
             "name": "Binance Chain Native Token",
             "symbol": "BNB",
             "decimals": 18,
-            "logoURL": "https://static.debank.com/image/bsc_token/logo_url/bsc/8bfdeaa46fe9be8f5cd43a53b8d1eea1.png"
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/smartchain/info/logo.png/quality=85"
         },
         "infoURL": "https://www.binance.org",
         "explorers": [
@@ -185,7 +185,7 @@
             "name": "Matic",
             "symbol": "MATIC",
             "decimals": 18,
-            "logoURL": "https://static.debank.com/image/matic_token/logo_url/matic/e5a8a2860ba5cf740a474dcab796dc63.png"
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/polygon/info/logo.png/quality=85"
         },
         "infoURL": "https://matic.network/",
         "explorers": [
@@ -210,7 +210,7 @@
             "name": "Matic",
             "symbol": "tMATIC",
             "decimals": 18,
-            "logoURL": "https://static.debank.com/image/matic_token/logo_url/matic/e5a8a2860ba5cf740a474dcab796dc63.png"
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/polygon/info/logo.png/quality=85"
         },
         "infoURL": "https://matic.network/",
         "explorers": [
@@ -235,7 +235,7 @@
             "name": "Arbitrum Ether",
             "symbol": "ARETH",
             "decimals": 18,
-            "logoURL": "https://assets.debank.com/static/media/arbitrum.8e326f58.svg"
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/arbitrum/info/logo.png/quality=85"
         },
         "infoURL": "https://arbitrum.io",
         "explorers": [
@@ -260,7 +260,7 @@
             "name": "Arbitrum Rinkeby Ether",
             "symbol": "ARETH",
             "decimals": 18,
-            "logoURL": "https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png"
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
         },
         "infoURL": "https://arbitrum.io",
         "explorers": [
@@ -339,7 +339,7 @@
             "name": "Ether",
             "symbol": "ETH",
             "decimals": 18,
-            "logoURL": "https://logo.chainbit.xyz/eth"
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/optimism/info/logo.png/quality=85"
         },
         "infoURL": "https://optimistic.etherscan.io/",
         "shortName": "op",
@@ -1349,7 +1349,7 @@
             "name": "Fantom",
             "symbol": "FTM",
             "decimals": 18,
-            "logoURL": "https://static.debank.com/image/ftm_token/logo_url/ftm/33fdb9c5067e94f3a1b9e78f6fa86984.png"
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/fantom/info/logo.png/quality=85"
         },
         "infoURL": "https://fantom.foundation",
         "explorers": [
@@ -2270,7 +2270,7 @@
             "name": "Avalanche",
             "symbol": "AVAX",
             "decimals": 18,
-            "logoURL": "https://static.debank.com/image/avax_token/logo_url/avax/0b9c84359c84d6bdd5bfda9c2d4c4a82.png"
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/avalanchec/info/logo.png/quality=85"
         },
         "infoURL": "https://snowtrace.io/",
         "explorers": [

@@ -5,17 +5,17 @@ import { first } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { Box, Card, CardActions, CardContent, DialogContent, Link } from '@mui/material'
-import { useI18N } from '../../../utils'
-import { SelectTokenAmountPanel } from '../../ITO/SNSAdaptor/SelectTokenAmountPanel'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import type { useAsset } from '../hooks/useAsset'
-import { usePlaceBidCallback } from '../hooks/usePlaceBidCallback'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
+import { useI18N } from '../../../utils/index.js'
+import { SelectTokenAmountPanel } from '../../ITO/SNSAdaptor/SelectTokenAmountPanel.js'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
+import type { useAsset } from '../hooks/useAsset.js'
+import { usePlaceBidCallback } from '../hooks/usePlaceBidCallback.js'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
 import { formatBalance, leftShift, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
-import { resolveAssetLinkOnCryptoartAI, resolvePaymentTokensOnCryptoartAI } from '../pipes'
+import { resolveAssetLinkOnCryptoartAI, resolvePaymentTokensOnCryptoartAI } from '../pipes/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -192,7 +192,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                             disableNativeToken={!paymentTokens.some((x) => isNativeTokenAddress(x.address))}
                             onAmountChange={setAmount}
                             onTokenChange={(x) => setAddress(x.address)}
-                            TokenAmountPanelProps={{
+                            FungibleTokenInputProps={{
                                 label: t('plugin_collectible_price'),
                             }}
                             FungibleTokenListProps={{

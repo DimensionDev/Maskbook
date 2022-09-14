@@ -1,6 +1,6 @@
 import { Link, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { resolveDaysName } from '../../pipes'
+import { resolveDaysName } from '../../pipes.js'
 import classNames from 'classnames'
 
 const useStyles = makeStyles()((theme) => ({

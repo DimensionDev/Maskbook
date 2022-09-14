@@ -2,7 +2,7 @@ import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
 import { Skeleton, Typography } from '@mui/material'
 import { forwardRef, HTMLProps } from 'react'
-import { CollectibleCard, CollectibleCardProps } from './CollectibleCard'
+import { CollectibleCard, CollectibleCardProps } from './CollectibleCard.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -10,6 +10,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
         position: 'relative',
+        zIndex: 0,
     },
     collectibleCard: {
         width: '100%',

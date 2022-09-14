@@ -12,7 +12,7 @@ import {
     useTokenConstants,
     decodeEvents,
 } from '@masknet/web3-shared-evm'
-import { useRedPacketContract } from './useRedPacketContract'
+import { useRedPacketContract } from './useRedPacketContract.js'
 
 export interface RedPacketSettings {
     shares: number

@@ -1,5 +1,4 @@
 import type {
-    NonFungibleToken,
     NonFungibleAsset,
     Pageable,
     OrderSide,
@@ -18,25 +17,25 @@ export namespace NonFungibleTokenAPI {
     export interface Provider<ChainId, SchemaType, Indicator = HubIndicator> {
         /** Get balance of a fungible token owned by the given account. */
         getBalance?: (account: string, options?: HubOptions<ChainId, Indicator>) => Promise<number>
+        /** Get owner address. */
+        getOwner?: (address: string, tokenId: string, options?: HubOptions<ChainId, Indicator>) => Promise<string>
         /** Get a non-fungible rarity. */
         getRarity?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId, Indicator>,
         ) => Promise<NonFungibleTokenRarity<ChainId> | undefined>
-        /** Get owner address. */
-        getOwner?: (address: string, tokenId: string, options?: HubOptions<ChainId, Indicator>) => Promise<string>
-        /** Get a non-fungible contract. */
-        getContract?: (
-            address: string,
-            options?: HubOptions<ChainId>,
-        ) => Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined>
         /** Get a non-fungible token floor price. */
         getFloorPrice?: (
             address: string,
             tokenId: string,
             options?: HubOptions<ChainId>,
         ) => Promise<PriceInToken<ChainId, SchemaType> | undefined>
+        /** Get a non-fungible contract. */
+        getContract?: (
+            address: string,
+            options?: HubOptions<ChainId>,
+        ) => Promise<NonFungibleTokenContract<ChainId, SchemaType> | undefined>
         /** Get a non-fungible asset. */
         getAsset?: (
             address: string,
@@ -53,31 +52,6 @@ export namespace NonFungibleTokenAPI {
             address: string,
             options?: HubOptions<ChainId>,
         ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
-        /**
-         * @deprecated Use getAsset stead
-         * Get a non-fungible token.
-         * */
-        getToken?: (
-            address: string,
-            tokenId: string,
-            options?: HubOptions<ChainId>,
-        ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
-        /**
-         * @deprecated Use getAssets stead
-         * Get non-fungible tokens owned by the given account.
-         * */
-        getTokens?: (
-            account: string,
-            options?: HubOptions<ChainId, Indicator>,
-        ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, Indicator>>
-        /**
-         * @deprecated Use getAssetsByCollection stead
-         * Get non-fungible tokens of the given collection.
-         * */
-        getTokensByCollection?: (
-            account: string,
-            options?: HubOptions<ChainId, Indicator>,
-        ) => Promise<Pageable<NonFungibleToken<ChainId, SchemaType>, Indicator>>
         /** Get non-fungible collection stats */
         getStats?: (
             address: string,

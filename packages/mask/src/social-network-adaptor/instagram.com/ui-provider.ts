@@ -1,23 +1,26 @@
-import { SocialNetworkUI, stateCreator } from '../../social-network'
-import { instagramShared } from './shared'
-import { instagramBase } from './base'
-import { IdentityProviderInstagram } from './collecting/identity-provider'
-import { PostProviderInstagram } from './collecting/posts'
+import { SocialNetworkUI, stateCreator } from '../../social-network/index.js'
+import { instagramShared } from './shared.js'
+import { instagramBase } from './base.js'
+import { IdentityProviderInstagram } from './collecting/identity-provider.js'
+import { PostProviderInstagram } from './collecting/posts.js'
 import {
     createTaskStartSetupGuideDefault,
     InitAutonomousStateProfiles,
     injectPageInspectorDefault,
-} from '../../social-network/defaults'
+} from '../../social-network/defaults/index.js'
 import { pasteInstagram } from '@masknet/injected-script'
-import { injectPostInspectorInstagram } from './injection/post-inspector'
-import { CurrentVisitingIdentityProviderInstagram } from './collecting/identity'
-import { injectProfileNFTAvatarInInstagram } from './injection/NFT/ProfileNFTAvatar'
-import { injectNFTAvatarInInstagram } from './injection/NFT/NFTAvatarInInstagram'
-import { injectOpenNFTAvatarEditProfileButton, openNFTAvatarSettingDialog } from './injection/NFT/NFTAvatarEditProfile'
-import { injectUserNFTAvatarAtInstagram } from './injection/NFT/NFTAvatarInTimeline'
-import { injectProfileTabAtInstagram } from './injection/ProfileTab'
-import { injectProfileTabContentAtInstagram } from './injection/ProfileTabContent'
-import { injectAvatar } from './injection/Avatar'
+import { injectPostInspectorInstagram } from './injection/post-inspector.js'
+import { CurrentVisitingIdentityProviderInstagram } from './collecting/identity.js'
+import { injectProfileNFTAvatarInInstagram } from './injection/NFT/ProfileNFTAvatar.js'
+import { injectNFTAvatarInInstagram } from './injection/NFT/NFTAvatarInInstagram.js'
+import {
+    injectOpenNFTAvatarEditProfileButton,
+    openNFTAvatarSettingDialog,
+} from './injection/NFT/NFTAvatarEditProfile.js'
+import { injectUserNFTAvatarAtInstagram } from './injection/NFT/NFTAvatarInTimeline.js'
+import { injectProfileTabAtInstagram } from './injection/ProfileTab.js'
+import { injectProfileTabContentAtInstagram } from './injection/ProfileTabContent.js'
+import { injectAvatar } from './injection/Avatar/index.js'
 
 const define: SocialNetworkUI.Definition = {
     ...instagramShared,

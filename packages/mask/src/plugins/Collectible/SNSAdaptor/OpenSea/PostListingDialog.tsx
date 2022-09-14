@@ -1,12 +1,11 @@
-import { useState } from 'react'
 import { DialogContent, Tab, Typography } from '@mui/material'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { InjectedDialog } from '@masknet/shared'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { NonFungibleAsset } from '@masknet/web3-shared-base'
-import { useI18N } from '../../../../utils'
-import { ListingByPriceCard } from './ListingByPriceCard'
-import { ListingByHighestBidCard } from './ListingByHighestBidCard'
+import { useI18N } from '../../../../utils/index.js'
+import { ListingByPriceCard } from './ListingByPriceCard.js'
+import { ListingByHighestBidCard } from './ListingByHighestBidCard.js'
 import { TabContext, TabPanel } from '@mui/lab'
 
 const useStyles = makeStyles()((theme) => {
@@ -41,12 +40,6 @@ export function PostListingDialog(props: PostListingDialogProps) {
 
     const { t } = useI18N()
     const { classes } = useStyles()
-
-    const [tabIndex, setTabIndex] = useState(0)
-    const _tabs = [
-        <Tab key="price" label={t('plugin_collectible_set_price')} />,
-        <Tab key="bid" label={t('plugin_collectible_highest_bid')} />,
-    ]
 
     const [currentTab, onChange, tabs] = useTabs('price', 'bid')
 

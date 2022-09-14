@@ -7,17 +7,17 @@ import {
     makeTypedMessageImage,
 } from '@masknet/typed-message'
 import { ProfileIdentifier } from '@masknet/shared-base'
-import type { SocialNetworkUI as Next } from '../../../social-network/types'
-import { creator } from '../../../social-network/utils'
-import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context'
-import { untilElementAvailable } from '../../../utils/dom'
-import { startWatch } from '../../../utils/watcher'
-import { mindsBase } from '../base'
-import { mindsShared } from '../shared'
-import { postParser } from '../utils/fetch'
-import { postContentSelector } from '../utils/selector'
-import { getCurrentIdentifier } from '../../utils'
-import Services from '../../../extension/service'
+import type { SocialNetworkUI as Next } from '../../../social-network/types.js'
+import { creator } from '../../../social-network/utils.js'
+import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context.js'
+import { untilElementAvailable } from '../../../utils/dom.js'
+import { startWatch } from '../../../utils/watcher.js'
+import { mindsBase } from '../base.js'
+import { mindsShared } from '../shared.js'
+import { postParser } from '../utils/fetch.js'
+import { postContentSelector } from '../utils/selector.js'
+import { getCurrentIdentifier } from '../../utils.js'
+import Services from '../../../extension/service.js'
 
 export const PostProviderMinds: Next.CollectingCapabilities.PostsProvider = {
     posts: creator.EmptyPostProviderState(),

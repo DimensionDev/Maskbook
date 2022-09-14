@@ -1,5 +1,5 @@
 import { story } from '@masknet/storybook-shared'
-import { ConnectedPersonaLine as C } from '../../../src/pages/Personas/components/PersonaLine'
+import { ConnectedPersonaLine as C } from '../../../src/pages/Personas/components/PersonaLine/index.js'
 import { action } from '@storybook/addon-actions'
 import { ProfileIdentifier, EnhanceableSite } from '@masknet/shared-base'
 

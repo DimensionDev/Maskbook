@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { Box, InputBase } from '@mui/material'
-import { activatedSocialNetworkUI } from '../../social-network'
-import { useI18N } from '../../utils'
+import { activatedSocialNetworkUI } from '../../social-network/index.js'
+import { useI18N } from '../../utils/index.js'
 import { EnhanceableSite } from '@masknet/shared-base'
 
 interface StyleProps {

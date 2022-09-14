@@ -1,7 +1,7 @@
 import type { EnhanceableSite } from '@masknet/shared-base'
 import { useAsyncRetry } from 'react-use'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { useGetAddress } from './useGetAddress'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import { useGetAddress } from './useGetAddress.js'
 
 export function useWallet(userId?: string) {
     const getAddress = useGetAddress()

@@ -1,7 +1,7 @@
 // DO NOT import React in this file. This file is also used by worker.
-import type { Plugin } from '../types'
+import type { Plugin } from '../types.js'
 import { memoize } from 'lodash-unified'
-import type { Web3Helper } from '../web3-helpers'
+import type { Web3Helper } from '../web3-helpers/index.js'
 import type { Subscription } from 'use-subscription'
 
 const __registered = new Map<string, Plugin.DeferredDefinition>()

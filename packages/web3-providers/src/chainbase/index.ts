@@ -18,9 +18,9 @@ import {
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { ChainId, createNativeToken, explorerResolver, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import type { FT, NFT, NFT_FloorPrice, NFT_Metadata, NFT_TransferEvent, Tx } from './types'
-import type { FungibleTokenAPI, HistoryAPI, NonFungibleTokenAPI } from '../types'
-import { CHAINBASE_API_URL } from './constants'
+import type { FT, NFT, NFT_FloorPrice, NFT_Metadata, NFT_TransferEvent, Tx } from './types.js'
+import type { FungibleTokenAPI, HistoryAPI, NonFungibleTokenAPI } from '../types/index.js'
+import { CHAINBASE_API_URL } from './constants.js'
 
 async function fetchFromChainbase<T>(pathname: string) {
     const response = await globalThis.fetch(urlcat(CHAINBASE_API_URL, pathname))

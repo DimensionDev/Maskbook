@@ -1,7 +1,9 @@
 import { BigNumber } from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
-import { isValidDomain } from './domain'
-import { isValidAddress } from './address'
+import { isValidDomain } from './domain.js'
+import { isValidAddress } from './address.js'
+import { SchemaType } from '../types/index.js'
+import { createLookupTableResolver } from '@masknet/shared-base'
 
 export { formatPercentage } from '@masknet/web3-shared-base'
 
@@ -19,6 +21,16 @@ export function formatEthereumAddress(address: string, size = 0) {
     if (size === 0 || size >= 20) return address_
     return `${address_.slice(0, Math.max(0, 2 + size))}...${address_.slice(-size)}`
 }
+
+export const formatSchemaType = createLookupTableResolver<SchemaType, string>(
+    {
+        [SchemaType.Native]: 'Native',
+        [SchemaType.ERC20]: 'ERC20',
+        [SchemaType.ERC721]: 'ERC721',
+        [SchemaType.ERC1155]: 'ERC1155',
+    },
+    '',
+)
 
 export function formatTokenId(tokenId: string, size = 4) {
     size = Math.max(2, size)

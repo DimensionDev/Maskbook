@@ -5,14 +5,14 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, BoxProps, Button, FormControl, FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { FC, memo, useCallback, useMemo, useState } from 'react'
-import { PluginWalletStatusBar } from '../../../utils'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import { TargetRuntimeContext, useTip, useTipValidate } from '../contexts'
-import { useI18N } from '../locales'
-import { TipType } from '../types'
-import { NFTSection } from './NFTSection'
-import { RecipientSelect } from './RecipientSelect'
-import { TokenSection } from './TokenSection'
+import { PluginWalletStatusBar } from '../../../utils/index.js'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import { TargetRuntimeContext, useTip, useTipValidate } from '../contexts/index.js'
+import { useI18N } from '../locales/index.js'
+import { TipType } from '../types/index.js'
+import { NFTSection } from './NFTSection/index.js'
+import { RecipientSelect } from './RecipientSelect.js'
+import { TokenSection } from './TokenSection/index.js'
 
 const useStyles = makeStyles<{}, 'icon'>()((theme, _, refs) => {
     return {
@@ -25,7 +25,7 @@ const useStyles = makeStyles<{}, 'icon'>()((theme, _, refs) => {
             flexDirection: 'column',
             flexGrow: 1,
             overflow: 'auto',
-            padding: theme.spacing(2, 2, 0),
+            padding: theme.spacing(2),
         },
         receiverRow: {
             display: 'flex',

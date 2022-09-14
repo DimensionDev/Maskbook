@@ -1,8 +1,10 @@
 {
+    "available_balance": "Available Balance",
     "snackbar_done": "Done",
     "import": "Import",
     "balance": "Balance",
     "select_token": "Select",
+    "select_a_token": "Select a token",
     "manage_token_list": "Manage Token List",
     "token_list_loading": "Loading",
     "erc20_token_list_placeholder": "Name or Contract address e.g., USDC or 0x234...",

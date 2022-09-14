@@ -2,7 +2,7 @@ import { Box } from '@mui/material'
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useAsyncRetry } from 'react-use'
-import { RequestPermission } from './RequestPermission'
+import { RequestPermission } from './RequestPermission.js'
 
 const acceptable: readonly browser.permissions.Permission[] = [
     'alarms',

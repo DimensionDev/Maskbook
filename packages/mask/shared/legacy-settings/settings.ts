@@ -3,14 +3,14 @@ import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'
 import { EnhanceableSite, ExtensionSite, updateLanguage } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { LaunchPage } from './types'
+import { LaunchPage } from './types.js'
 import {
     createGlobalSettings,
     createNetworkSettings,
     createComplexNetworkSettings,
     createComplexGlobalSettings,
     NetworkSettings,
-} from './createSettings'
+} from './createSettings.js'
 import { BooleanPreference } from '@masknet/plugin-infra'
 
 export const appearanceSettings = createGlobalSettings<Appearance>('appearance', Appearance.default)

@@ -1,12 +1,12 @@
-import { LoadingBase, makeStyles } from '@masknet/theme'
 import { memo } from 'react'
-import { CollectibleTab } from '../CollectibleTab'
+import { LoadingBase, makeStyles } from '@masknet/theme'
+import { CollectibleTab } from '../CollectibleTab.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { Typography, Button } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { CollectibleState } from '../../hooks/useCollectibleState'
-import { NFTOfferCard } from '../../../../components/shared/NFTCard/NFTOfferCard'
-import { useI18N } from '../../../../utils'
+import { CollectibleState } from '../../hooks/useCollectibleState.js'
+import { NFTOfferCard } from '../../../../components/shared/NFTCard/NFTOfferCard.js'
+import { useI18N } from '../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     body: {

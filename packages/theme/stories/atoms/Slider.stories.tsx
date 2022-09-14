@@ -1,4 +1,4 @@
-import { story } from '../utils'
+import { story } from '../utils/index.js'
 import { Slider as MuiSlider } from '@mui/material'
 
 const { meta, of } = story(MuiSlider)

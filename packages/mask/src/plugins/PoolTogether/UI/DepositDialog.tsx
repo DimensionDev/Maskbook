@@ -1,21 +1,20 @@
-import { InjectedDialog, useOpenShareTxDialog, useSelectFungibleToken } from '@masknet/shared'
+import { InjectedDialog, useOpenShareTxDialog, useSelectFungibleToken, FungibleTokenInput } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { keyframes, makeStyles, ActionButton } from '@masknet/theme'
 import { FungibleToken, isZero, NetworkPluginID, rightShift } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { DialogContent, Grid, Typography } from '@mui/material'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
-import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
-import { useDepositCallback } from '../hooks/useDepositCallback'
-import { PluginPoolTogetherMessages } from '../messages'
-import type { Pool } from '../types'
-import { calculateOdds, getPrizePeriod } from '../utils'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
+import { useI18N } from '../../../utils/i18n-next-ui.js'
+import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
+import { useDepositCallback } from '../hooks/useDepositCallback.js'
+import { PluginPoolTogetherMessages } from '../messages.js'
+import type { Pool } from '../types.js'
+import { calculateOdds, getPrizePeriod } from '../utils.js'
 import { useAccount, useFungibleTokenBalance } from '@masknet/plugin-infra/web3'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 
@@ -212,18 +211,13 @@ export function DepositDialog() {
                 maxWidth="xs">
                 <DialogContent>
                     <form className={classes.form} noValidate autoComplete="off">
-                        <TokenAmountPanel
-                            label="Amount"
+                        <FungibleTokenInput
+                            label={t('amount')}
                             amount={rawAmount}
                             balance={tokenBalance ?? '0'}
                             token={token}
                             onAmountChange={setRawAmount}
-                            SelectTokenChip={{
-                                loading: loadingTokenBalance,
-                                ChipProps: {
-                                    onClick: onSelectTokenChipClick,
-                                },
-                            }}
+                            onSelectToken={onSelectTokenChipClick}
                         />
                     </form>
                     <WalletConnectedBoundary>

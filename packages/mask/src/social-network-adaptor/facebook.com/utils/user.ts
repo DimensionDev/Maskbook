@@ -10,10 +10,10 @@ import {
     searchNickNameSelectorOnMobile,
     searchUserIdSelector,
     searchUserIdSelectorOnMobile,
-} from './selector'
-import { collectNodeText } from '../../../utils'
-import { isMobileFacebook } from './isMobile'
-import { bioDescription, personalHomepage } from '../../../../shared/legacy-settings/settings'
+} from './selector.js'
+import { collectNodeText } from '../../../utils/index.js'
+import { isMobileFacebook } from './isMobile.js'
+import { bioDescription, personalHomepage } from '../../../../shared/legacy-settings/settings.js'
 
 export const getNickName = () => {
     const node = isMobileFacebook ? searchNickNameSelectorOnMobile().evaluate() : searchNickNameSelector().evaluate()

@@ -1,9 +1,9 @@
 import { useAsyncRetry } from 'react-use'
-import type { Currency } from '../types'
+import type { Currency } from '../types/index.js'
 import type { DataProvider } from '@masknet/public-api'
 import { isUndefined } from 'lodash-unified'
-import { PluginTraderRPC } from '../messages'
-import { Days } from '../SNSAdaptor/trending/PriceChartDaysControl'
+import { PluginTraderRPC } from '../messages.js'
+import { Days } from '../SNSAdaptor/trending/PriceChartDaysControl.js'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 

@@ -1,8 +1,8 @@
 import urlcat from 'urlcat'
 import { MEDIA_VIEWER_URL } from '@masknet/shared'
-import { resolveIPFSLink } from '@masknet/web3-shared-base'
+import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { ImageType } from './types'
+import { ImageType } from './types.js'
 
 export const PetsPluginID = 'com.maskbook.pets'
 export const TWITTER = 'twitter.com'
@@ -36,7 +36,7 @@ export const Punk3D = {
     tokenId: '6128',
     url: urlcat(MEDIA_VIEWER_URL, {
         /* cspell:disable-next-line */
-        url: resolveIPFSLink('QmZjfo1zKTfQZjqs4CaZJ7pQDZHrUBaozre8Z71c7ZXGMc'),
+        url: resolveIPFS_URL('QmZjfo1zKTfQZjqs4CaZJ7pQDZHrUBaozre8Z71c7ZXGMc'),
         type: 'model/gltf-binary',
     }),
 }

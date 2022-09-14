@@ -3,12 +3,12 @@ import { makeStyles, ActionButton } from '@masknet/theme'
 import { Grid, Typography } from '@mui/material'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
-import { useI18N } from '../locales'
-import type { DepositDialogInterface } from '../types'
-import { roundValue } from '../helpers'
+import { useI18N } from '../locales/index.js'
+import type { DepositDialogInterface } from '../types.js'
+import { roundValue } from '../helpers/index.js'
 
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

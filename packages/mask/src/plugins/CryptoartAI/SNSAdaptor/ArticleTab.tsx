@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
-import { CollectibleTab } from './CollectibleTab'
-import { CollectibleState } from '../hooks/useCollectibleState'
+import { CollectibleTab } from './CollectibleTab.js'
+import { CollectibleState } from '../hooks/useCollectibleState.js'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 
 const useStyles = makeStyles()({

@@ -1,10 +1,10 @@
 import { useAsyncRetry } from 'react-use'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '../web3-helpers'
-import { useAccount } from './useAccount'
-import { useChainId } from './useChainId'
-import { useProviderType } from './useProviderType'
-import { useWeb3State } from './useWeb3State'
+import type { Web3Helper } from '../web3-helpers/index.js'
+import { useAccount } from './useAccount.js'
+import { useChainId } from './useChainId.js'
+import { useProviderType } from './useProviderType.js'
+import { useWeb3State } from './useWeb3State.js'
 
 export function useWeb3Provider<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,

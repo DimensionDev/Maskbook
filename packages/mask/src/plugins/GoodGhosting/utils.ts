@@ -7,7 +7,7 @@ import type {
     Player,
     PlayerStandings,
     TimelineEvent,
-} from './types'
+} from './types.js'
 import addSeconds from 'date-fns/addSeconds'
 import differenceInDays from 'date-fns/differenceInDays'
 import formatDuration from 'date-fns/formatDuration'

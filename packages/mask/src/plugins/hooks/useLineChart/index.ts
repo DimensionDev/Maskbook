@@ -1,17 +1,24 @@
 import * as d3 from 'd3'
 import { useEffect, RefObject } from 'react'
 import stringify from 'json-stable-stringify'
-import type { Dimension } from '../useDimension'
+import type { Dimension } from '../useDimension.js'
 import format from 'date-fns/format'
 import { alpha, useTheme } from '@mui/material'
-import { fixOverPosition } from './utils'
+import { fixOverPosition } from './utils.js'
 
 export function useLineChart(
     svgRef: RefObject<SVGSVGElement>,
-    data: Array<{ date: Date; value: number }>,
+    data: Array<{
+        date: Date
+        value: number
+    }>,
     dimension: Dimension,
     id: string,
-    opts: { color?: string; tickFormat?: string; formatTooltip?: Function },
+    opts: {
+        color?: string
+        tickFormat?: string
+        formatTooltip?: Function
+    },
 ) {
     const theme = useTheme()
     const { color = 'steelblue', tickFormat = ',.2s', formatTooltip = (value: number) => value } = opts
@@ -129,7 +136,13 @@ export function useLineChart(
 
         const callout = (
             g: d3.Selection<SVGGElement, unknown, null, undefined>,
-            value: { text: string; position: { x: number; y: number } },
+            value: {
+                text: string
+                position: {
+                    x: number
+                    y: number
+                }
+            },
         ) => {
             if (!value) {
                 g.style('display', 'none')
@@ -205,7 +218,15 @@ export function useLineChart(
             const fixedX = mx - left
             const bisect = (mx: number) => {
                 const date = x.invert(mx)
-                const index = d3.bisector<{ date: Date; value: number }, Date>((d) => d.date).left(data, date, 1)
+                const index = d3
+                    .bisector<
+                        {
+                            date: Date
+                            value: number
+                        },
+                        Date
+                    >((d) => d.date)
+                    .left(data, date, 1)
                 return data[index]
             }
 

@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { languages } from './locales/languages'
-import { PLUGIN_ID } from './constants'
+import { languages } from './locales/languages.js'
+import { PLUGIN_ID } from './constants.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,

@@ -16,12 +16,12 @@ import { Button, Link, MenuItem, Stack, Tab, ThemeProvider, Typography } from '@
 import { first, uniqBy } from 'lodash-unified'
 import { useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { activatedSocialNetworkUI } from '../../social-network'
-import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
-import { MaskMessages, sorter, useI18N, useLocationChange } from '../../utils'
-import { useCurrentVisitingSocialIdentity } from '../DataSource/useActivatedUI'
-import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
-import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary'
+import { activatedSocialNetworkUI } from '../../social-network/index.js'
+import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
+import { MaskMessages, sorter, useI18N, useLocationChange } from '../../utils/index.js'
+import { useCurrentVisitingSocialIdentity } from '../DataSource/useActivatedUI.js'
+import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
+import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary.js'
 
 function getTabContent(tabId?: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
@@ -73,7 +73,7 @@ const useStyles = makeStyles()((theme) => ({
     link: {
         cursor: 'pointer',
         marginTop: 2,
-        zIndex: 1,
+        zIndex: 0,
         '&:hover': {
             textDecoration: 'none',
         },
@@ -81,7 +81,7 @@ const useStyles = makeStyles()((theme) => ({
     settingLink: {
         cursor: 'pointer',
         marginTop: 4,
-        zIndex: 1,
+        zIndex: 0,
         '&:hover': {
             textDecoration: 'none',
         },

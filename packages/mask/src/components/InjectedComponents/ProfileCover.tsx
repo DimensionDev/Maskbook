@@ -7,8 +7,8 @@ import {
     PluginId,
 } from '@masknet/plugin-infra/content-script'
 
-import { MaskMessages } from '../../utils'
-import { useCurrentVisitingIdentity } from '../DataSource/useActivatedUI'
+import { MaskMessages } from '../../utils/index.js'
+import { useCurrentVisitingIdentity } from '../DataSource/useActivatedUI.js'
 import { makeStyles } from '@masknet/theme'
 
 export interface ProfileCoverProps extends withClasses<'root'> {}

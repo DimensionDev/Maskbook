@@ -1,1 +1,1 @@
-export * from './fungibleAssets'
+export {}

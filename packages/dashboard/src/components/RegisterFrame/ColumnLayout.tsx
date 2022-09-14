@@ -1,5 +1,5 @@
 import { styled, useTheme } from '@mui/material/styles'
-import { FooterLine } from '../FooterLine'
+import { FooterLine } from '../FooterLine/index.js'
 import { Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'

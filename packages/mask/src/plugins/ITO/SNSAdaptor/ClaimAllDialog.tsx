@@ -9,19 +9,19 @@ import { PluginId, useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useState, useLayoutEffect, useRef, useCallback } from 'react'
 import { flatten, uniq } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
-import { SnackbarProvider, makeStyles, ActionButton } from '@masknet/theme'
+import { SnackbarProvider, makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
 import { InjectedDialog, FormattedBalance, useOpenShareTxDialog } from '@masknet/shared'
-import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme, DialogActions } from '@mui/material'
+import { DialogContent, Typography, List, ListItem, useTheme, DialogActions } from '@mui/material'
 import { formatBalance, NetworkPluginID, isSameAddress, FungibleToken } from '@masknet/web3-shared-base'
 import { useITOConstants, ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
-import { NetworkTab } from '../../../components/shared/NetworkTab'
-import { PluginWalletStatusBar, useI18N } from '../../../utils'
-import { useClaimAll } from './hooks/useClaimAll'
-import { useClaimCallback } from './hooks/useClaimCallback'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import type { SwappedTokenType } from '../types'
+import { NetworkTab } from '../../../components/shared/NetworkTab.js'
+import { PluginWalletStatusBar, useI18N } from '../../../utils/index.js'
+import { useClaimAll } from './hooks/useClaimAll.js'
+import { useClaimCallback } from './hooks/useClaimCallback.js'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import type { SwappedTokenType } from '../types.js'
 
 interface StyleProps {
     shortITOwrapper: boolean
@@ -268,7 +268,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                     <div className={classes.contentWrapper} ref={DialogRef}>
                         {loading || initLoading || !swappedTokens ? (
                             <div className={classes.emptyContentWrapper}>
-                                <CircularProgress size={24} />
+                                <LoadingBase size={24} />
                             </div>
                         ) : swappedTokens.length > 0 ? (
                             <div className={classes.content}>

@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { useLocation, useMatch, useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import type { ChainId, NetworkType } from '@masknet/web3-shared-evm'
-import { WalletHeaderUI } from './UI'
+import { WalletHeaderUI } from './UI.js'
 import {
     getRegisteredWeb3Networks,
     useAccount,
@@ -11,15 +11,15 @@ import {
     useProviderType,
     useWallet,
 } from '@masknet/plugin-infra/web3'
-import { Flags } from '../../../../../../../shared'
+import { Flags } from '../../../../../../../shared/index.js'
 import { MenuItem, Typography } from '@mui/material'
 import { useMenuConfig, WalletIcon, ChainIcon } from '@masknet/shared'
-import { currentMaskWalletAccountSettings } from '../../../../../../../shared/legacy-settings/wallet-settings'
-import { WalletRPC } from '../../../../../../plugins/Wallet/messages'
-import { NormalHeader } from '../../../../components/NormalHeader'
+import { currentMaskWalletAccountSettings } from '../../../../../../../shared/legacy-settings/wallet-settings.js'
+import { WalletRPC } from '../../../../../../plugins/Wallet/messages.js'
+import { NormalHeader } from '../../../../components/NormalHeader/index.js'
 import { NetworkDescriptor, NetworkPluginID } from '@masknet/web3-shared-base'
-import Services from '../../../../../service'
-import { useConnected } from '../../hooks/useConnected'
+import Services from '../../../../../service.js'
+import { useConnected } from '../../hooks/useConnected.js'
 
 const useStyles = makeStyles()({
     menu: {

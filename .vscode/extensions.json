@@ -6,7 +6,6 @@
     "recommendations": [
         "esbenp.prettier-vscode",
         "dbaeumer.vscode-eslint",
-        "editorconfig.editorconfig",
         "aaron-bond.better-comments",
         "davidanson.vscode-markdownlint",
         "diegolincoln.vscode-styled-components",

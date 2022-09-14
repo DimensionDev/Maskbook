@@ -3,8 +3,8 @@ import { makeStyles } from '@masknet/theme'
 import { DataProvider } from '@masknet/public-api'
 import { FormattedCurrency } from '@masknet/shared'
 import { formatCurrency, formatInteger, formatMarketCap, formatSupply, TokenType } from '@masknet/web3-shared-base'
-import type { Trending } from '../../types'
-import { useI18N } from '../../../../utils'
+import type { Trending } from '../../types/index.js'
+import { useI18N } from '../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

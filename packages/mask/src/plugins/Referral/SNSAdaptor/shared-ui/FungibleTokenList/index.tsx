@@ -21,11 +21,11 @@ import {
     isSameAddress,
     NetworkPluginID,
 } from '@masknet/web3-shared-base'
-import { getFungibleTokenItem } from './FungibleTokenItem'
+import { getFungibleTokenItem } from './FungibleTokenItem.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
-import type { ChainAddress } from '../../../types'
-import { useI18N } from '../../../locales'
+import type { ChainAddress } from '../../../types.js'
+import { useI18N } from '../../../locales/index.js'
 
 const DEFAULT_LIST_HEIGHT = 300
 const SEARCH_KEYS = ['address', 'symbol', 'name']

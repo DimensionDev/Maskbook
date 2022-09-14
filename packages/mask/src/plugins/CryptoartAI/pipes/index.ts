@@ -1,6 +1,6 @@
 import { ChainId } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
-import { prefixPath, mainNetwork, testNetwork } from '../constants'
+import { prefixPath, mainNetwork, testNetwork } from '../constants.js'
 
 export function resolveAPILinkOnCryptoartAI(chainId?: ChainId) {
     if (chainId === ChainId.Kovan) {

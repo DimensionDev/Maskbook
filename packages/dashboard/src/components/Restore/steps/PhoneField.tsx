@@ -1,12 +1,12 @@
-import { useDashboardI18N } from '../../../locales'
+import { useDashboardI18N } from '../../../locales/index.js'
 import { memo, useCallback, useState } from 'react'
 import { PhoneNumberField } from '@masknet/theme'
-import { ButtonContainer } from '../../RegisterFrame/ButtonContainer'
+import { ButtonContainer } from '../../RegisterFrame/ButtonContainer.js'
 import { Button } from '@mui/material'
-import { Label, ValidationCodeStep } from './common'
-import type { StepCommonProps } from '../../Stepper'
-import { AccountType } from '../../../pages/Settings/type'
-import { phoneRegexp } from '../../../pages/Settings/regexp'
+import { Label, ValidationCodeStep } from './common.js'
+import type { StepCommonProps } from '../../Stepper/index.js'
+import { AccountType } from '../../../pages/Settings/type.js'
+import { phoneRegexp } from '../../../pages/Settings/regexp.js'
 
 export const PhoneField = memo(({ toStep }: StepCommonProps) => {
     const t = useDashboardI18N()

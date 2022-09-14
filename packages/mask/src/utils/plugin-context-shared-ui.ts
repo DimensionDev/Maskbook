@@ -1,8 +1,8 @@
 import { WalletConnectQRCodeDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
 import { createSubscriptionFromAsync, EMPTY_LIST } from '@masknet/shared-base'
-import Services from '../extension/service'
-import { WalletRPC } from '../plugins/Wallet/messages'
-import { MaskMessages } from './messages'
+import Services from '../extension/service.js'
+import { WalletRPC } from '../plugins/Wallet/messages.js'
+import { MaskMessages } from './messages.js'
 
 export const RestPartOfPluginUIContextShared = {
     currentPersona: createSubscriptionFromAsync(

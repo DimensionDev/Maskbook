@@ -1,6 +1,6 @@
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { getTokenConstant, ZERO_ADDRESS } from '../constants'
-import { ChainId, NetworkType, ProviderType } from '../types'
+import { getTokenConstant, ZERO_ADDRESS } from '../constants/index.js'
+import { ChainId, NetworkType, ProviderType } from '../types.js'
 
 export function formatAddress(address: string, size = 0) {
     if (!isValidAddress(address)) return address

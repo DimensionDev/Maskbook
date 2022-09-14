@@ -1,12 +1,12 @@
 import { Table, TableHead, TableBody, TableRow, TableCell, Typography, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { Image } from '../../../../components/shared/Image'
 import { CurrencyType, formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
-import { resolveAssetLinkOnCurrentProvider } from '../../pipes'
-import { useI18N } from '../../../../utils'
+import { resolveAssetLinkOnCurrentProvider } from '../../pipes/index.js'
+import { useI18N } from '../../../../utils/index.js'
 import type { Order } from 'opensea-js/lib/types'
-import { CollectibleState } from '../../hooks/useCollectibleState'
+import { CollectibleState } from '../../hooks/useCollectibleState.js'
 import { useChainId } from '@masknet/plugin-infra/web3'
+import { Image } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     itemInfo: {

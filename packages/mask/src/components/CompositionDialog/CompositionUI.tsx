@@ -1,22 +1,22 @@
 import { forwardRef, useImperativeHandle, useMemo, useRef, useState, startTransition, useCallback, useId } from 'react'
-import { Typography, Chip, Button } from '@mui/material'
+import { Typography, Chip, Button, Checkbox } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { PluginEntryRender, PluginEntryRenderRef } from './PluginEntryRender'
-import { TypedMessageEditor, TypedMessageEditorRef } from './TypedMessageEditor'
-import { CharLimitIndicator } from './CharLimitIndicator'
-import { useI18N } from '../../utils'
-import { PersistentStorages } from '../../../shared'
+import { PluginEntryRender, PluginEntryRenderRef } from './PluginEntryRender.js'
+import { TypedMessageEditor, TypedMessageEditorRef } from './TypedMessageEditor.js'
+import { CharLimitIndicator } from './CharLimitIndicator.js'
+import { useI18N } from '../../utils/index.js'
+import { PersistentStorages } from '../../../shared/index.js'
 import { ProfileInformation, EncryptionTargetType } from '@masknet/shared-base'
 import { CompositionContext } from '@masknet/plugin-infra/content-script'
-import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
+import { DebugMetadataInspector } from '../shared/DebugMetadataInspector.js'
 import type { EncryptTargetE2E, EncryptTargetPublic } from '@masknet/encryption'
 import { useSubscription } from 'use-subscription'
-import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients'
-import { EncryptionTargetSelector } from './EncryptionTargetSelector'
-import { EncryptionMethodSelector, EncryptionMethodType } from './EncryptionMethodSelector'
+import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients.js'
+import { EncryptionTargetSelector } from './EncryptionTargetSelector.js'
+import { EncryptionMethodSelector, EncryptionMethodType } from './EncryptionMethodSelector.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -24,7 +24,6 @@ const useStyles = makeStyles()((theme) => ({
             marginBottom: '18px !important',
         },
         minHeight: 450,
-        overflowY: 'auto',
     },
     flex: {
         width: '100%',
@@ -71,13 +70,6 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         color: theme.palette.text.secondary,
         marginRight: 12,
-    },
-    editorWrapper: {
-        minHeight: 338,
-        background: theme.palette.background.input,
-        padding: 14,
-        boxSizing: 'border-box',
-        borderRadius: 8,
     },
 }))
 
@@ -186,20 +178,18 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
     return (
         <CompositionContext.Provider value={context}>
             <div className={classes.root}>
-                <div className={classes.editorWrapper}>
-                    <TypedMessageEditor
-                        autoFocus
-                        readonly={sending}
-                        ref={(element) => {
-                            Editor.current = element
-                            if (element) updatePostSize(element.estimatedLength)
-                        }}
-                        onChange={(message) => {
-                            startTransition(() => props.onChange?.(message))
-                            updatePostSize(Editor.current?.estimatedLength || 0)
-                        }}
-                    />
-                </div>
+                <TypedMessageEditor
+                    autoFocus
+                    readonly={sending}
+                    ref={(element) => {
+                        Editor.current = element
+                        if (element) updatePostSize(element.estimatedLength)
+                    }}
+                    onChange={(message) => {
+                        startTransition(() => props.onChange?.(message))
+                        updatePostSize(Editor.current?.estimatedLength || 0)
+                    }}
+                />
 
                 <div className={classes.flex}>
                     <Typography className={classes.optionTitle}>{t('plugins')}</Typography>
@@ -243,9 +233,8 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                             Next generation payload
                         </Typography>
                         <div style={{ flex: 1 }} />
-                        <input
+                        <Checkbox
                             id={id}
-                            type="checkbox"
                             checked={props.version === -37}
                             onChange={() => props.setVersion(props.version === -38 ? -37 : -38)}
                         />

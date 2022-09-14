@@ -3,7 +3,7 @@ import { HubState } from '@masknet/plugin-infra/web3'
 import type { ChainId, GasOption, SchemaType } from '@masknet/web3-shared-solana'
 import type { Plugin } from '@masknet/plugin-infra'
 import type { Subscription } from 'use-subscription'
-import { createHub } from './Hub/hub'
+import { createHub } from './Hub/hub.js'
 
 export class Hub extends HubState<ChainId, SchemaType, GasOption> {
     constructor(

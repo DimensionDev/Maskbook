@@ -1,5 +1,5 @@
 import { story } from '@masknet/storybook-shared'
-import { MnemonicReveal as C } from '../../../src/components/Mnemonic'
+import { MnemonicReveal as C } from '../../../src/components/Mnemonic/index.js'
 
 const { meta, of } = story(C)
 

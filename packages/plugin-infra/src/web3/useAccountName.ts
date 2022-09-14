@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
-import { useWeb3State } from './useWeb3State'
-import { useAccount } from './useAccount'
-import { useWallets } from './useWallets'
-import { useProviderType } from './useProviderType'
+import { useWeb3State } from './useWeb3State.js'
+import { useAccount } from './useAccount.js'
+import { useWallets } from './useWallets.js'
+import { useProviderType } from './useProviderType.js'
 
 export function useAccountName<T extends NetworkPluginID>(pluginID?: T, expectedAccount?: string) {
     const { Others } = useWeb3State(pluginID)

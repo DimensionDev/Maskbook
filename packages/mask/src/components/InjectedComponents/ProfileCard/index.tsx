@@ -7,16 +7,16 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { useAvailablePlugins, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, SocialIdentity } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
-import { CircularProgress, Tab, Typography } from '@mui/material'
+import { Tab, Typography } from '@mui/material'
 import { first, uniqBy } from 'lodash-unified'
 import { FC, useEffect, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { useUpdateEffect } from 'react-use'
-import { MaskMessages, sorter, useLocationChange } from '../../../utils'
-import { ProfileCardTitle } from './ProfileCardTitle'
+import { MaskMessages, sorter, useLocationChange } from '../../../utils/index.js'
+import { ProfileCardTitle } from './ProfileCardTitle.js'
 
 interface Props extends withClasses<'text' | 'button' | 'root'> {
     identity: SocialIdentity
@@ -220,7 +220,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
     if (!userId || loadingSocialAddressList)
         return (
             <div className={cx(classes.root, classes.loading)}>
-                <CircularProgress />
+                <LoadingBase />
             </div>
         )
 

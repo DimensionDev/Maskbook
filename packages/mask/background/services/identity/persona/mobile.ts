@@ -1,5 +1,5 @@
 import type { MobilePersona } from '@masknet/public-api'
-import type { PersonaRecord } from '../../../database/persona/type'
+import type { PersonaRecord } from '../../../database/persona/type.js'
 
 /** @internal */
 export function personaRecordToMobilePersona(persona: PersonaRecord): MobilePersona

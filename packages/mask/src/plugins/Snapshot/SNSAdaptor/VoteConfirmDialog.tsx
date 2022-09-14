@@ -1,22 +1,12 @@
-import {
-    Box,
-    Typography,
-    Button,
-    Card,
-    CardContent,
-    Link,
-    DialogContent,
-    DialogActions,
-    CircularProgress,
-} from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { Box, Typography, Card, CardContent, Link, DialogContent, DialogActions } from '@mui/material'
+import { ActionButton, makeStyles } from '@masknet/theme'
 import millify from 'millify'
 import OpenInNew from '@mui/icons-material/OpenInNew'
 import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 import { InjectedDialog } from '@masknet/shared'
-import { InfoField } from './InformationCard'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
+import { InfoField } from './InformationCard.js'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -103,18 +93,15 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                 <WalletConnectedBoundary
                     offChain
                     classes={{ connectWallet: classes.button, unlockMetaMask: classes.button }}>
-                    <Button
+                    <ActionButton
                         classes={{ root: classes.button }}
                         color="primary"
                         fullWidth
                         disabled={loading}
-                        onClick={onVoteConfirm}>
-                        {loading ? (
-                            <CircularProgress size={16} className={classes.loading} />
-                        ) : (
-                            t('plugin_snapshot_vote')
-                        )}
-                    </Button>
+                        onClick={onVoteConfirm}
+                        loading={loading}>
+                        {t('plugin_snapshot_vote')}
+                    </ActionButton>
                 </WalletConnectedBoundary>
             </DialogActions>
         </InjectedDialog>

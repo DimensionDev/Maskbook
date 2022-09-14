@@ -1,7 +1,7 @@
 import { openDB, wrap } from 'idb/with-async-ittr'
 import { __DEBUG__ONLY__enableCryptoKeySerialization, serializer } from '@masknet/shared-base'
-import type { BackupFormat, Instance, ObjectStore } from './types'
-import { useI18N } from '../../utils'
+import type { BackupFormat, Instance, ObjectStore } from './types.js'
+import { useI18N } from '../../utils/index.js'
 
 __DEBUG__ONLY__enableCryptoKeySerialization()
 

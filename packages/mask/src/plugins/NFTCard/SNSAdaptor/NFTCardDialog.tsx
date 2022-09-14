@@ -1,15 +1,20 @@
-import { useChainIdValid } from '@masknet/plugin-infra/web3'
+import { useEffect, useState } from 'react'
+import {
+    PluginIDContextProvider,
+    PluginWeb3ContextProvider,
+    useChainIdValid,
+    Web3Helper,
+} from '@masknet/plugin-infra/web3'
 import { InjectedDialog } from '@masknet/shared'
 import { MaskTabList, useTabs } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { TabContext } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
-import { useEffect, useState } from 'react'
-import { NFTCardDialogUI } from './NFTCardDialogUI'
-import { useStyles } from '../useStyles'
-import { useNFTCardInfo } from './hooks/useNFTCardInfo'
-import { useI18N } from '../../../utils'
+import { NFTCardContent } from './NFTCardContent.js'
+import { useStyles } from '../useStyles.js'
+import { useI18N } from '../../../utils/index.js'
+import { Context } from './hooks/useContext.js'
 
 export enum NFTCardDialogTabs {
     About = 'About',
@@ -20,11 +25,12 @@ export enum NFTCardDialogTabs {
 export function NFTCardDialog() {
     const { classes } = useStyles()
     const { t } = useI18N()
-    const [tokenId, setTokenId] = useState('')
-    const [tokenAddress, setTokenAddress] = useState('')
-    const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
+    const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
+    const [pluginID, setPluginID] = useState<NetworkPluginID>()
+    const [tokenAddress, setTokenAddress] = useState<string>()
+    const [tokenId, setTokenId] = useState<string>()
+    const chainIdValid = useChainIdValid(pluginID, chainId)
     const [open, setOpen] = useState(false)
-    const { asset, orders, events, provider } = useNFTCardInfo(tokenAddress, tokenId)
 
     const [currentTab, onChange] = useTabs<NFTCardDialogTabs>(
         NFTCardDialogTabs.About,
@@ -34,37 +40,54 @@ export function NFTCardDialog() {
 
     useEffect(() => {
         if (!chainIdValid) setOpen(false)
-        return CrossIsolationMessages.events.requestNFTCardDialog.on(({ open, address, tokenId }) => {
-            setOpen(open)
-            setTokenAddress(address)
-            setTokenId(tokenId)
+        return CrossIsolationMessages.events.requestNFTCardDialog.on((ev) => {
+            if (!ev.open) return
+            setPluginID(ev.pluginID)
+            setChainId(ev.chainId)
+            setTokenAddress(ev.tokenAddress)
+            setTokenId(ev.tokenId)
+            setOpen(ev.open)
         })
     }, [chainIdValid])
 
+    console.log('DEBUG: card dialog')
+    console.log({
+        chainId,
+        tokenId,
+        tokenAddress,
+    })
+
+    if (!chainId || !pluginID) return null
+    if (!tokenId || !tokenAddress) return null
+
     return (
-        <TabContext value={currentTab}>
-            <InjectedDialog
-                open={open}
-                title={t('plugin_collectible_nft_detail')}
-                onClose={() => setOpen(false)}
-                classes={{ paper: classes.dialogRoot }}
-                titleTabs={
-                    <MaskTabList variant="base" onChange={onChange} aria-label="NFTCard">
-                        <Tab label="About" value={NFTCardDialogTabs.About} />
-                        <Tab label="Offers" value={NFTCardDialogTabs.Offers} />
-                        <Tab label="Activity" value={NFTCardDialogTabs.Activity} />
-                    </MaskTabList>
-                }>
-                <DialogContent className={classes.dialogContent}>
-                    <NFTCardDialogUI
-                        provider={provider}
-                        events={events}
-                        orders={orders}
-                        asset={asset}
-                        currentTab={currentTab}
-                    />
-                </DialogContent>
-            </InjectedDialog>
-        </TabContext>
+        <PluginIDContextProvider value={pluginID}>
+            <PluginWeb3ContextProvider
+                pluginID={pluginID}
+                value={{
+                    chainId,
+                }}>
+                <Context.Provider initialState={{ tokenId, tokenAddress }}>
+                    <TabContext value={currentTab}>
+                        <InjectedDialog
+                            open={open}
+                            title={t('plugin_collectible_nft_detail')}
+                            onClose={() => setOpen(false)}
+                            classes={{ paper: classes.dialogRoot }}
+                            titleTabs={
+                                <MaskTabList variant="base" onChange={onChange} aria-label="NFTCard">
+                                    <Tab label="About" value={NFTCardDialogTabs.About} />
+                                    <Tab label="Offers" value={NFTCardDialogTabs.Offers} />
+                                    <Tab label="Activity" value={NFTCardDialogTabs.Activity} />
+                                </MaskTabList>
+                            }>
+                            <DialogContent className={classes.dialogContent}>
+                                <NFTCardContent currentTab={currentTab} />
+                            </DialogContent>
+                        </InjectedDialog>
+                    </TabContext>
+                </Context.Provider>
+            </PluginWeb3ContextProvider>
+        </PluginIDContextProvider>
     )
 }

@@ -1,12 +1,12 @@
-import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useMemo } from 'react'
-import { CollectibleTab } from '../CollectibleTab'
-import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import { NFTInfoCard } from '../../../../components/shared/NFTCard/NFTInfoCard'
-import { NFTPropertiesCard } from '../../../../components/shared/NFTCard/NFTPropertiesCard'
-import { CollectibleState } from '../../hooks/useCollectibleState'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
+import { LoadingBase, makeStyles } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
+import { CollectibleTab } from '../CollectibleTab.js'
+import { NFTInfoCard } from '../../../../components/shared/NFTCard/NFTInfoCard.js'
+import { NFTPropertiesCard } from '../../../../components/shared/NFTCard/NFTPropertiesCard.js'
+import { CollectibleState } from '../../hooks/useCollectibleState.js'
 
 const useStyles = makeStyles()((theme) => ({
     body: {

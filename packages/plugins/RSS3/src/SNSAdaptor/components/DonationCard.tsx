@@ -7,8 +7,8 @@ import { Card, Typography } from '@mui/material'
 import classnames from 'classnames'
 import formatDateTime from 'date-fns/format'
 import { HTMLProps, memo } from 'react'
-import { RSS3_DEFAULT_IMAGE } from '../../constants'
-import { useI18N } from '../../locales'
+import { RSS3_DEFAULT_IMAGE } from '../../constants.js'
+import { useI18N } from '../../locales/index.js'
 
 export interface DonationCardProps extends Omit<HTMLProps<HTMLDivElement>, 'onSelect'> {
     donation: RSS3BaseAPI.Donation
@@ -67,6 +67,7 @@ const useStyles = makeStyles()((theme) => ({
         height: '126px !important',
         borderRadius: '8px',
         objectFit: 'cover',
+        flexShrink: 0,
     },
     fallbackImage: {
         minHeight: '0 !important',

@@ -1,15 +1,21 @@
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { useAsyncRetry } from 'react-use'
-import { fetchQuestions, fetchUserStoryStatus, submitCompletion, submitPoll, submitPuzzle } from '../Worker/apis'
+import {
+    fetchQuestions,
+    fetchUserStoryStatus,
+    submitCompletion,
+    submitPoll,
+    submitPuzzle,
+} from '../Worker/apis/index.js'
 import { Box, Button, Card, DialogActions, DialogContent, Tab, Typography } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
-import StageCard from './StageCard'
-import { useControlledDialog } from '../../../utils'
+import StageCard from './StageCard.js'
+import { useControlledDialog } from '../../../utils/index.js'
 import { InjectedDialog, Image } from '@masknet/shared'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import OptionsCard from './OptionsCard'
-import ResultCard from './ResultCard'
+import OptionsCard from './OptionsCard.js'
+import ResultCard from './ResultCard.js'
 import getUnixTime from 'date-fns/getUnixTime'
 import {
     BasicQuestion,
@@ -18,9 +24,9 @@ import {
     QuestionGroup,
     UserCompletionStatus,
     UserPollOrPuzzleStatus,
-} from '../types'
-import { FindTrumanContext } from '../context'
-import CompletionCard from './CompletionCard'
+} from '../types.js'
+import { FindTrumanContext } from '../context.js'
+import CompletionCard from './CompletionCard.js'
 
 const useStyles = makeStyles()((theme, props) => ({
     panel: {},

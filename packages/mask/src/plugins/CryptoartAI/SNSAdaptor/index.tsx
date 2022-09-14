@@ -1,10 +1,10 @@
 import { uniq } from 'lodash-unified'
 import { Trans } from 'react-i18next'
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
-import { PostInspector } from './PostInspector'
-import { base } from '../base'
+import { PostInspector } from './PostInspector.js'
+import { base } from '../base.js'
 import { Icons } from '@masknet/icons'
-import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils'
+import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils.js'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 
 const sns: Plugin.SNSAdaptor.Definition = {

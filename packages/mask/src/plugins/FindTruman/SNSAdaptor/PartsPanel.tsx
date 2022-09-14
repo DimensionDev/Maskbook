@@ -1,11 +1,11 @@
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { formatTokenId } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
-import { useControlledDialog } from '../../../utils'
+import { useControlledDialog } from '../../../utils/index.js'
 import { useAsyncRetry } from 'react-use'
-import { fetchUserPartsInfo, openMysteryBox } from '../Worker/apis'
-import type { FindTrumanI18nFunction, MysteryBox, Part, Quest } from '../types'
-import { PartType } from '../types'
+import { fetchUserPartsInfo, openMysteryBox } from '../Worker/apis/index.js'
+import type { FindTrumanI18nFunction, MysteryBox, Part, Quest } from '../types.js'
+import { PartType } from '../types.js'
 import {
     Alert,
     AlertTitle,
@@ -25,7 +25,7 @@ import { InjectedDialog, Image } from '@masknet/shared'
 import { useContext, useMemo, useState } from 'react'
 import { LoadingButton } from '@mui/lab'
 import getUnixTime from 'date-fns/getUnixTime'
-import { FindTrumanContext } from '../context'
+import { FindTrumanContext } from '../context.js'
 
 const useStyles = makeStyles()((theme, props) => ({
     skeleton: {

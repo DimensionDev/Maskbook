@@ -6,9 +6,9 @@ import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Box, BoxProps, Card, Typography } from '@mui/material'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { memo, useMemo } from 'react'
-import { useI18N } from '../../locales'
-import type { RSS3Feed } from '../../types'
-import { useNormalizeFeed } from '../hooks'
+import { useI18N } from '../../locales/index.js'
+import type { RSS3Feed } from '../../types.js'
+import { useNormalizeFeed } from '../hooks/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -60,6 +60,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     media: {
         marginLeft: theme.spacing(1),
+        width: 64,
+        height: 64,
         flexShrink: 0,
     },
     action: {
@@ -181,14 +183,14 @@ export const FeedCard = memo(({ feed, address, onSelect, className, ...rest }: F
     return (
         <Box className={cx(classes.wrapper, className)} {...rest} onClick={() => onSelect(normalizedFeed)}>
             <div className={classes.texts}>
-                <div>
+                <Typography component="div">
                     <span className={classes.action}>
                         <ReversedAddress TypographyProps={{ display: 'inline' }} address={address!} /> {feedAction}
                     </span>{' '}
                     <span className={classes.time}>
                         {formatDistanceToNow(new Date(feed.timestamp))} {t.ago()}
                     </span>
-                </div>
+                </Typography>
                 <Box className={classes.collection}>
                     <Typography fontWeight={700} className={classes.summary}>
                         {normalizedFeed.title}

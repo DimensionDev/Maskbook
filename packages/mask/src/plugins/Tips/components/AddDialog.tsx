@@ -14,7 +14,7 @@ import { Button, DialogContent, FormControl, TextField, Typography } from '@mui/
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
-import { useI18N } from '../locales'
+import { useI18N } from '../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     addButton: {

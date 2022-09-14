@@ -5,10 +5,10 @@ import { CollectionType, RSS3BaseAPI } from '@masknet/web3-providers'
 import { Box, BoxProps, Typography } from '@mui/material'
 import { differenceWith } from 'lodash-unified'
 import { memo, useMemo, useState } from 'react'
-import { RSS3_DEFAULT_IMAGE } from '../../constants'
-import { useI18N } from '../../locales'
-import { FootprintList, FootprintsLayoutProps, StatusBox } from '../components'
-import { useFootprints } from '../hooks'
+import { RSS3_DEFAULT_IMAGE } from '../../constants.js'
+import { useI18N } from '../../locales/index.js'
+import { FootprintList, FootprintsLayoutProps, StatusBox } from '../components/index.js'
+import { useFootprints } from '../hooks/index.js'
 
 export interface FootprintPageProps extends BoxProps, FootprintsLayoutProps {
     address: string

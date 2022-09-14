@@ -4,8 +4,8 @@ import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { useSingleContractMultipleData } from '@masknet/plugin-infra/web3-evm'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { useGoodGhostingContract } from '../contracts/useGoodGhostingContract'
-import type { GoodGhostingInfo, Player } from '../types'
+import { useGoodGhostingContract } from '../contracts/useGoodGhostingContract.js'
+import type { GoodGhostingInfo, Player } from '../types.js'
 
 export function useOtherPlayerInfo(info: GoodGhostingInfo) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)

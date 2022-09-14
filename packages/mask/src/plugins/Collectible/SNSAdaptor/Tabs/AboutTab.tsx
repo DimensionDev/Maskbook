@@ -3,13 +3,12 @@ import type { AsyncState } from 'react-use/lib/useAsyncFn'
 import BigNumber from 'bignumber.js'
 import { first } from 'lodash-unified'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import type { NetworkPluginID, NonFungibleTokenOrder } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { CollectibleState } from '../../hooks/useCollectibleState'
-import { CollectibleTab } from '../CollectibleTab'
-import { NFTBasicInfo } from '../../../../components/shared/NFTCard/NFTBasicInfo'
-import { NFTPriceCard } from '../../../../components/shared/NFTCard/NFTPriceCard'
+import { CollectibleState } from '../../hooks/useCollectibleState.js'
+import { CollectibleTab } from '../CollectibleTab.js'
+import { NFTBasicInfo } from '../../../../components/shared/NFTCard/NFTBasicInfo.js'
+import { NFTPriceCard } from '../../../../components/shared/NFTCard/NFTPriceCard.js'
 
 const useStyles = makeStyles()((theme) => ({
     body: {
@@ -24,7 +23,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const resolveTopOffer = (orders?: Array<NonFungibleTokenOrder<ChainId, SchemaType>>) => {
+const resolveTopOffer = (orders?: Array<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>) => {
     if (!orders || !orders.length) return
     return first(
         orders.sort((a, b) => {

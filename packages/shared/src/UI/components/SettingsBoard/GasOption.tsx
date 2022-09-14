@@ -9,7 +9,7 @@ import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import formatDistanceStrict from 'date-fns/formatDistanceStrict'
 import addSeconds from 'date-fns/addSeconds'
 import type { SupportedLanguages } from '@masknet/public-api'
-import { SettingsContext } from './Context'
+import { SettingsContext } from './Context.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

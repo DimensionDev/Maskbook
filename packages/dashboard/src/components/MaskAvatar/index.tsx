@@ -2,7 +2,7 @@ import { Avatar, Stack } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { memo } from 'react'
-import { usePersonaAvatar } from '../../pages/Personas/api'
+import { usePersonaAvatar } from '../../pages/Personas/api.js'
 
 const useStyles = makeStyles()((theme) => ({
     author: {

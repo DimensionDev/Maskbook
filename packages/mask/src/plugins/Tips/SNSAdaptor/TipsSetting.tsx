@@ -1,23 +1,25 @@
 import { Icons } from '@masknet/icons'
 import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Typography, Box } from '@mui/material'
-import { memo, useCallback, useState } from 'react'
-import { BindingProof, ECKeyIdentifier, NextIDPlatform } from '@masknet/shared-base'
+import { memo, useCallback, useMemo, useState } from 'react'
+import { BindingProof, ECKeyIdentifier, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { PluginId } from '@masknet/plugin-infra'
 import { WalletSettingCard } from '@masknet/shared'
 import { useAsyncFn, useUpdateEffect } from 'react-use'
 
-import { useTipsSetting } from '../hooks/useTipsSetting'
-import type { TipsSettingType } from '../types'
-import { useI18N } from '../locales'
-import { SettingActions } from './components/SettingActions'
-import { PluginNextIDMessages } from '../messages'
+import { useTipsSetting } from '../hooks/useTipsSetting.js'
+import type { TipsSettingType } from '../types/index.js'
+import { useI18N } from '../locales/index.js'
+import { SettingActions } from './components/SettingActions.js'
+import { PluginNextIDMessages } from '../messages.js'
+import { differenceWith } from 'lodash-unified'
+import { isSameAddress } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
         padding: 16,
-        minHeight: 424,
+        minHeight: 460,
         display: 'flex',
         flexDirection: 'column',
     },
@@ -56,7 +58,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: 12,
         '& > *': {
             flex: 1,
-            maxWidth: 'calc(50% - 6px)',
+            maxWidth: 'calc(50% - 22px)',
         },
     },
 }))
@@ -82,6 +84,16 @@ export const TipsSetting = memo<TipsSettingProps>(({ onClose, bindingWallets, cu
             return prev.some((x) => address === x) ? prev.filter((x) => address !== x) : [...prev, address]
         })
     }, [])
+
+    const disabled = useMemo(() => {
+        // If `hiddenAddresses` setting length is different from `addresses`
+        if (TipsSetting?.hiddenAddresses?.length !== addresses.length) return false
+
+        // If `addresses` is different from setting
+        if (differenceWith(TipsSetting?.hiddenAddresses ?? EMPTY_LIST, addresses, isSameAddress).length) return false
+
+        return true
+    }, [addresses, TipsSetting?.hiddenAddresses])
 
     const [{ loading: confirmLoading }, onConfirm] = useAsyncFn(async () => {
         try {
@@ -162,7 +174,7 @@ export const TipsSetting = memo<TipsSettingProps>(({ onClose, bindingWallets, cu
             <SettingActions
                 hasWallet={!!bindingWallets?.length}
                 onClose={onClose}
-                disableConfirm={addresses.length === TipsSetting?.hiddenAddresses?.length}
+                disableConfirm={disabled}
                 confirmLoading={confirmLoading}
                 onConfirm={onConfirm}
             />

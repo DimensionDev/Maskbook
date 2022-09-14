@@ -1,9 +1,9 @@
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { NotSetupYetPrompt } from '../../../components/shared/NotSetupYetPrompt'
-import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
-import { startWatch } from '../../../utils/watcher'
-import { postEditorInTimelineSelector, postEditorInDialogSelector } from '../utils/selector'
+import { NotSetupYetPrompt } from '../../../components/shared/NotSetupYetPrompt.js'
+import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
+import { startWatch } from '../../../utils/watcher.js'
+import { postEditorInTimelineSelector, postEditorInDialogSelector } from '../utils/selector.js'
 
 export function injectSetupPromptAtMinds(signal: AbortSignal) {
     injectSetupPrompt(postEditorInTimelineSelector(), signal, <MindsNotSetupYet_Timeline />)

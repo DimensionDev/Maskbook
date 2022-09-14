@@ -12,9 +12,9 @@ import {
 import { makeStyles } from '@masknet/theme'
 import { Theme, ThemeOptions, ThemeProvider } from '@mui/material/styles'
 import CloseIcon from '@mui/icons-material/Close'
-import { useMatchXS } from '../../../utils'
-import { useClassicMaskFullPageTheme } from '../../../utils/theme/useClassicMaskFullPageTheme'
-import { appearanceSettings, languageSettings } from '../../../../shared/legacy-settings/settings'
+import { useMatchXS } from '../../../utils/index.js'
+import { useClassicMaskFullPageTheme } from '../../../utils/theme/useClassicMaskFullPageTheme.js'
+import { appearanceSettings, languageSettings } from '../../../../shared/legacy-settings/settings.js'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { cloneDeep, merge } from 'lodash-unified'
 
@@ -68,8 +68,14 @@ enum DialogState {
     Destroyed = 3,
 }
 
-type useModalState<Props extends object> = { state: DialogState; props?: Props }
-type useModalActions<Props extends object> = { type: 'open' | 'close' | 'destroy'; props?: Props }
+type useModalState<Props extends object> = {
+    state: DialogState
+    props?: Props
+}
+type useModalActions<Props extends object> = {
+    type: 'open' | 'close' | 'destroy'
+    props?: Props
+}
 function reducer<Props extends object>(
     state: useModalState<Props>,
     action: useModalActions<Props>,

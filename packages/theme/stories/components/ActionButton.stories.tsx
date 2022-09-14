@@ -1,5 +1,5 @@
-import { ActionButton as Example } from '../../src'
-import { story } from '../utils'
+import { ActionButton as Example } from '../../src/index.js'
+import { story } from '../utils/index.js'
 
 const { meta, of } = story(Example)
 

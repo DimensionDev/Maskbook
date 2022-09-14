@@ -3,9 +3,9 @@ import { Box, Typography } from '@mui/material'
 import { TokenIcon } from '@masknet/shared'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
-import { useI18N } from '../../locales'
+import { useI18N } from '../../locales/index.js'
 
-import { SponsoredFarmIcon } from './icons/SponsoredFarm'
+import { SponsoredFarmIcon } from './icons/SponsoredFarm.js'
 
 const useStyles = makeStyles()((theme) => ({
     tokenDetails: {

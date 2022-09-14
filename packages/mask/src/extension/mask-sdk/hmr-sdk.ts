@@ -1,5 +1,5 @@
-import { MaskMessages } from '../../utils'
-import { hmr } from '../../../utils-pure'
+import { MaskMessages } from '../../utils/index.js'
+import { hmr } from '../../../utils-pure/index.js'
 
 const { signal } = hmr(import.meta.webpackHot)
 

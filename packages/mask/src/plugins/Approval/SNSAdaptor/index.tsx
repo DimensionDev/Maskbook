@@ -4,8 +4,8 @@ import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { useState } from 'react'
-import { base } from '../base'
-import { ApprovalDialog } from './ApprovalDialog'
+import { base } from '../base.js'
+import { ApprovalDialog } from './ApprovalDialog.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,

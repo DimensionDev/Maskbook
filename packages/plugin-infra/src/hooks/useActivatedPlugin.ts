@@ -1,5 +1,5 @@
-import { useActivatedPluginDashboard } from '../manager/dashboard'
-import { useActivatedPluginSNSAdaptor } from '../manager/sns-adaptor'
+import { useActivatedPluginDashboard } from '../manager/dashboard.js'
+import { useActivatedPluginSNSAdaptor } from '../manager/sns-adaptor.js'
 
 export function useActivatedPlugin(pluginID: string, minimalModeEqualsTo: 'any' | boolean) {
     const pluginSNSAdaptor = useActivatedPluginSNSAdaptor(pluginID, minimalModeEqualsTo)

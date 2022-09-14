@@ -3,7 +3,7 @@ import type { FungibleToken, NonFungibleToken, NonFungibleTokenContract } from '
 import type { GasConfig } from '@masknet/web3-shared-evm'
 import { noop } from 'lodash-unified'
 import { createContext, Dispatch, SetStateAction } from 'react'
-import { TipsAccount, TipType } from '../../types'
+import { TipsAccount, TipType } from '../../types/index.js'
 
 export interface ContextOptions {
     recipient: string

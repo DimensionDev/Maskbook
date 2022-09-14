@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import type BigNumber from 'bignumber.js'
-import { PRICE_IMPACT_HIGH, PRICE_IMPACT_MEDIUM, PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN } from '../constants'
-import { WarningLevel } from '../types'
+import { PRICE_IMPACT_HIGH, PRICE_IMPACT_MEDIUM, PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN } from '../constants/index.js'
+import { WarningLevel } from '../types/index.js'
 
 export function usePriceImpactWarningLevel(priceImpact: BigNumber) {
     return useMemo(() => {

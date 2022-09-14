@@ -3,7 +3,7 @@ import { OpenSeaPort } from 'opensea-js'
 import { useWeb3Provider } from '@masknet/plugin-infra/web3'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { isOpenSeaSupportedChainId, resolveOpenSeaNetwork } from '../pipes'
+import { isOpenSeaSupportedChainId, resolveOpenSeaNetwork } from '../pipes/index.js'
 
 export function useOpenSea(chainId?: ChainId) {
     const web3Provider = useWeb3Provider(NetworkPluginID.PLUGIN_EVM)

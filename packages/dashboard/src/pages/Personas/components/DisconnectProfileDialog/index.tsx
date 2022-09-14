@@ -1,6 +1,6 @@
 import { getMaskColor, makeStyles, MaskColorVar, MaskDialog } from '@masknet/theme'
 import { Box, Button, DialogContent, Link, Stack, Typography } from '@mui/material'
-import { useDashboardI18N } from '../../../../locales'
+import { useDashboardI18N } from '../../../../locales/index.js'
 import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { useState } from 'react'

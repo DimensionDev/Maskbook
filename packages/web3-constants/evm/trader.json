@@ -906,7 +906,7 @@
         "Optimism": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
         "Optimism_Kovan": "",
         "Optimism_Goerli": "",
-        "Avalanche": "",
+        "Avalanche": "0x0000000000000000000000000000000000000000",
         "Avalanche_Fuji": "",
         "Celo": "",
         "Fantom": "",

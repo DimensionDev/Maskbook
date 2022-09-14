@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { MERKLE_PROOF_ENDPOINT } from '../constants'
+import { MERKLE_PROOF_ENDPOINT } from '../constants.js'
 
 export async function getMerkleProof(leaf: string, root: string) {
     try {
@@ -9,7 +9,11 @@ export async function getMerkleProof(leaf: string, root: string) {
                 root: root.replace(/^0x/, ''),
             }),
         )
-        return (await response.json()) as { proof?: string[]; message?: string; module?: string }
+        return (await response.json()) as {
+            proof?: string[]
+            message?: string
+            module?: string
+        }
     } catch (err) {
         throw new Error(Reflect.get(Object(err), 'message'))
     }

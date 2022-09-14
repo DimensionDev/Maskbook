@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState } from 'react'
-import { useDashboardI18N } from '../../locales'
+import { useDashboardI18N } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

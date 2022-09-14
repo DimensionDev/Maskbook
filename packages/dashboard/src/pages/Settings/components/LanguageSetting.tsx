@@ -1,10 +1,10 @@
 /* eslint-disable @dimensiondev/unicode/specific-set */
 import { MenuItem } from '@mui/material'
-import { useLanguage } from '../api'
-import { Services } from '../../../API'
-import SettingSelect from './SettingSelect'
+import { useLanguage } from '../api.js'
+import { Services } from '../../../API.js'
+import SettingSelect from './SettingSelect.js'
 import { LanguageOptions } from '@masknet/public-api'
-import { useDashboardI18N } from '../../../locales'
+import { useDashboardI18N } from '../../../locales/index.js'
 
 export default function LanguageSetting() {
     const lang = useLanguage()

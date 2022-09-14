@@ -5,7 +5,7 @@ import { Currency, CurrencyAmount, Ether, Percent, Price, Token, TradeType } fro
 import type { Trade } from '@uniswap/v2-sdk'
 import { ChainId, formatEthereumAddress, SchemaType, WNATIVE } from '@masknet/web3-shared-evm'
 import { FungibleToken, isGreaterThan, isSameAddress, pow10, TokenType } from '@masknet/web3-shared-base'
-import { ONE_HUNDRED_PERCENT, ZERO_PERCENT } from '../constants'
+import { ONE_HUNDRED_PERCENT, ZERO_PERCENT } from '../constants/index.js'
 
 export function swapErrorToUserReadableMessage(error: any): string {
     let reason: string | undefined

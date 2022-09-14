@@ -14,9 +14,9 @@ import {
     Web3Helper,
     useAccount,
 } from '@masknet/plugin-infra/web3'
-import { PluginMessages } from '../../../../API'
-import { useDashboardI18N } from '../../../../locales'
-import { useNetworkSelector } from './useNetworkSelector'
+import { PluginMessages } from '../../../../API.js'
+import { useDashboardI18N } from '../../../../locales/index.js'
+import { useNetworkSelector } from './useNetworkSelector.js'
 import { NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({

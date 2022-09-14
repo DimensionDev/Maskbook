@@ -1,7 +1,7 @@
 import { useAsyncFn } from 'react-use'
 import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn'
 import { RelationFavor, PersonaInformation, ProfileIdentifier } from '@masknet/shared-base'
-import { Services } from '../../../API'
+import { Services } from '../../../API.js'
 
 export function useAddContactToFavorite(): AsyncFnReturn<
     (identifier: ProfileIdentifier, currentPersona: PersonaInformation) => Promise<void>

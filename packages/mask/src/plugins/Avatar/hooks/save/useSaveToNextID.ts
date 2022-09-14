@@ -2,10 +2,10 @@ import type { BindingProof, ECKeyIdentifier, EnhanceableSite } from '@masknet/sh
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useCallback } from 'react'
-import { activatedSocialNetworkUI } from '../../../../social-network'
-import { useSaveAddress } from './useSaveAddress'
-import type { NextIDAvatarMeta } from '../../types'
-import { PLUGIN_ID } from '../../constants'
+import { activatedSocialNetworkUI } from '../../../../social-network/index.js'
+import { useSaveAddress } from './useSaveAddress.js'
+import type { NextIDAvatarMeta } from '../../types.js'
+import { PLUGIN_ID } from '../../constants.js'
 
 export function useSaveToNextID() {
     const { Storage } = useWeb3State()

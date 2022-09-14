@@ -4,7 +4,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, createContract } from '@masknet/web3-shared-evm'
 import type { BaseContract } from '@masknet/web3-contracts/types/types'
-import { useWeb3 } from '../useWeb3'
+import { useWeb3 } from '../useWeb3.js'
 
 /**
  * Create a contract which will forward its all transactions to the

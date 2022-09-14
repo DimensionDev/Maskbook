@@ -1,7 +1,7 @@
 import { noop } from 'lodash-unified'
-import { MaskMessages } from '../../../shared/messages'
-import { Flags } from '../../../shared/flags'
-import { hmr } from '../../../utils-pure'
+import { MaskMessages } from '../../../shared/messages.js'
+import { Flags } from '../../../shared/flags.js'
+import { hmr } from '../../../utils-pure/index.js'
 
 const { signal } = hmr(import.meta.webpackHot)
 type Args = browser.webNavigation.TransitionNavListener extends browser.webNavigation.NavListener<infer U> ? U : never

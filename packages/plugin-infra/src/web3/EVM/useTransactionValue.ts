@@ -1,7 +1,7 @@
-import { useBalance } from '../useBalance'
+import { useBalance } from '../useBalance.js'
 import BigNumber from 'bignumber.js'
-import { useGasConfig } from './useGasConfig'
-import { useChainId } from '../useChainId'
+import { useGasConfig } from './useGasConfig.js'
+import { useChainId } from '../useChainId.js'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function useTransactionValue(originalValue: BigNumber.Value | undefined, gas: number | undefined) {

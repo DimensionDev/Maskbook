@@ -1,16 +1,16 @@
 import { useState } from 'react'
 import { Icons } from '@masknet/icons'
-import { Box, Card, CardContent, CardHeader, CircularProgress, Paper, Tab, Tabs, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../utils/i18n-next-ui'
-import { useFetchPool, usePoolDepositAssets } from '../hooks/usePool'
-import { PerformanceChart } from './PerformanceChart'
-import { PoolStats } from './PoolStats'
-import { PoolViewDeck } from './PoolViewDeck'
+import { Box, Card, CardContent, CardHeader, Paper, Tab, Tabs, Typography } from '@mui/material'
+import { LoadingBase, makeStyles } from '@masknet/theme'
+import { useI18N } from '../../../utils/i18n-next-ui.js'
+import { useFetchPool, usePoolDepositAssets } from '../hooks/usePool.js'
+import { PerformanceChart } from './PerformanceChart.js'
+import { PoolStats } from './PoolStats.js'
+import { PoolViewDeck } from './PoolViewDeck.js'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -87,7 +87,7 @@ export function PoolView(props: PoolViewProps) {
     if (loading || loadingAllowedTokens)
         return (
             <Typography className={classes.message} textAlign="center" sx={{ padding: 2 }}>
-                <CircularProgress />
+                <LoadingBase />
             </Typography>
         )
     if (!pool)

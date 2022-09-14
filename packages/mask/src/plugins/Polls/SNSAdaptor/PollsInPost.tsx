@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import type { TypedMessage } from '@masknet/typed-message'
-import { PluginPollRPC } from '../messages'
-import { renderWithPollMetadata, PollMetadataReader } from '../helpers'
-import type { PollGunDB } from '../Services'
-import { PollCardUI } from './Polls'
-import { PollMetaData, PollStatus } from '../types'
+import { PluginPollRPC } from '../messages.js'
+import { renderWithPollMetadata, PollMetadataReader } from '../helpers.js'
+import type { PollGunDB } from '../Services.js'
+import { PollCardUI } from './Polls.js'
+import { PollMetaData, PollStatus } from '../types.js'
 import { usePluginWrapper } from '@masknet/plugin-infra/dom'
 
 interface PollsInPostProps {

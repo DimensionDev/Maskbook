@@ -9,5 +9,9 @@
   },
   "include": ["./"],
   "exclude": ["./plugin-infra/register.js"],
-  "references": [{ "path": "../../shared-base" }, { "path": "../../plugin-infra" }]
+  "references": [
+    { "path": "../../shared-base" },
+    { "path": "../../plugin-infra" },
+    { "path": "../../sandboxed-plugin-runtime/src/runtime" }
+  ]
 }

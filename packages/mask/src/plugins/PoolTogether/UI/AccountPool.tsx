@@ -5,12 +5,12 @@ import { useChainId } from '@masknet/plugin-infra/web3'
 import { Grid, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { useI18N } from '../../../utils'
-import { useManagePoolURL } from '../hooks/usePoolURL'
-import type { AccountPool as Pool } from '../types'
-import { calculateNextPrize, calculateOdds, calculateSecondsRemaining } from '../utils'
-import { CountdownView } from './CountdownView'
-import { NetworkView } from './NetworkView'
+import { useI18N } from '../../../utils/index.js'
+import { useManagePoolURL } from '../hooks/usePoolURL.js'
+import type { AccountPool as Pool } from '../types.js'
+import { calculateNextPrize, calculateOdds, calculateSecondsRemaining } from '../utils.js'
+import { CountdownView } from './CountdownView.js'
+import { NetworkView } from './NetworkView.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

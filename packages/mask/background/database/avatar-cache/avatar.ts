@@ -1,7 +1,7 @@
-import { queryAvatarDB, isAvatarOutdatedDB, storeAvatarDB, IdentifierWithAvatar, createAvatarDBAccess } from './db'
-import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
+import { queryAvatarDB, isAvatarOutdatedDB, storeAvatarDB, IdentifierWithAvatar, createAvatarDBAccess } from './db.js'
+import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc/index.js'
 import { blobToDataURL, memoizePromise } from '@dimensiondev/kit'
-import { createTransaction } from '../utils/openDB'
+import { createTransaction } from '../utils/openDB.js'
 
 /**
  * Get a (cached) blob url for an identifier. No cache for native api.

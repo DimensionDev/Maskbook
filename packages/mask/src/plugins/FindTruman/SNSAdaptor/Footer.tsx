@@ -1,7 +1,7 @@
 import { Avatar, Box, Chip, Link, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useContext } from 'react'
-import { FindTrumanContext } from '../context'
+import { FindTrumanContext } from '../context.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

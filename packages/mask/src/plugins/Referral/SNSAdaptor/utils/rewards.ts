@@ -5,9 +5,9 @@ import { createContract, TransactionEventType } from '@masknet/web3-shared-evm'
 import type { AbiItem } from 'web3-utils'
 import ReferralFarmsV1ABI from '@masknet/web3-contracts/abis/ReferralFarmsV1.json'
 
-import type { Reward, ChainAddress } from '../../types'
-import { parseChainAddress, valueToNumber } from '../../helpers'
-import { ReferralRPC } from '../../messages'
+import type { Reward, ChainAddress } from '../../types.js'
+import { parseChainAddress, valueToNumber } from '../../helpers/index.js'
+import { ReferralRPC } from '../../messages.js'
 
 function validateRewardPeriods(rewards: Reward[]) {
     let isValid = true

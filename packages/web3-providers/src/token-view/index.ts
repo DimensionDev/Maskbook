@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
-import type { TokenAPI } from '..'
-import { fetchJSON } from '../helpers'
-import { TOKEN_VIEW_ROOT_URL, API_KEY, INTERVAL } from './constants'
+import type { TokenAPI } from '../index.js'
+import { fetchJSON } from '../helpers.js'
+import { TOKEN_VIEW_ROOT_URL, API_KEY, INTERVAL } from './constants.js'
 
 export class TokenViewAPI implements TokenAPI.Provider {
     async getTokenInfo(tokenSymbol: string) {

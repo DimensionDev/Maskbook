@@ -1,2 +1,2 @@
-export * from './useGasSchema'
-export * from './useSlippageToleranceSchema'
+export * from './useGasSchema.js'
+export * from './useSlippageToleranceSchema.js'

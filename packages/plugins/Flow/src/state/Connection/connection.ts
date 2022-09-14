@@ -20,9 +20,9 @@ import {
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
 import { PartialRequired, toHex } from '@masknet/shared-base'
-import { Providers } from './provider'
-import type { FlowWeb3Connection as BaseConnection, FlowConnectionOptions } from './types'
-import { Web3StateSettings } from '../../settings'
+import { Providers } from './provider.js'
+import type { FlowWeb3Connection as BaseConnection, FlowConnectionOptions } from './types.js'
+import { Web3StateSettings } from '../../settings/index.js'
 import type { Plugin } from '@masknet/plugin-infra'
 class Connection implements BaseConnection {
     constructor(

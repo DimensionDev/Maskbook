@@ -3,7 +3,7 @@ import { currySameAddress, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/web3-
 import { concatArrayBuffer } from '@dimensiondev/kit'
 import { ec as EC } from 'elliptic'
 import { fromBase64URL, EC_JsonWebKey, isSecp256k1Point, isSecp256k1PrivateKey } from '@masknet/shared-base'
-import { provider } from './internal_wallet'
+import { provider } from './internal_wallet.js'
 
 export async function internal_wallet_restore(backup: NormalizedBackup.WalletBackup[]) {
     const password = await provider.INTERNAL_getPasswordRequired()
@@ -40,7 +40,7 @@ async function JWKToKey(jwk: EC_JsonWebKey, type: 'public' | 'private'): Promise
     if (type === 'public' && jwk.x && jwk.y) {
         const xb = fromBase64URL(jwk.x)
         const yb = fromBase64URL(jwk.y)
-        const point = new Uint8Array(concatArrayBuffer(new Uint8Array([0x04]), xb, yb))
+        const point = new Uint8Array(concatArrayBuffer(new Uint8Array([4]), xb, yb))
         if (await isSecp256k1Point(point)) return `0x${ec.keyFromPublic(point).getPublic(false, 'hex')}`
     }
     if (type === 'private' && jwk.d) {

@@ -1,7 +1,7 @@
 import type { AbiItem } from 'web3-utils'
 import * as ABICoder from 'web3-eth-abi'
 import { uniqBy } from 'lodash-unified'
-import type { TransactionMethodABI } from './types'
+import type { TransactionMethodABI } from './types.js'
 
 // built-in abis
 import BulkCheckout from '@masknet/web3-contracts/abis/BulkCheckout.json'
@@ -14,6 +14,7 @@ import RouterV2ABI from '@masknet/web3-contracts/abis/RouterV2.json'
 import SwapRouter from '@masknet/web3-contracts/abis/SwapRouter.json'
 import MaskBox from '@masknet/web3-contracts/abis/MaskBox.json'
 import DODORouteProxy from '@masknet/web3-contracts/abis/DODORouteProxy.json'
+import WETH from '@masknet/web3-contracts/abis/WETH.json'
 import BancorNetwork from '@masknet/web3-contracts/abis/BancorNetwork.json'
 import OpenOceanExchangeV2 from '@masknet/web3-contracts/abis/OpenOceanExchangeV2.json'
 import zeroXSwap from '@masknet/web3-contracts/abis/zeroXSwap.json'
@@ -36,6 +37,7 @@ class ABI {
         this.construct(BancorNetwork as AbiItem[]) // bancor swap
         this.construct(OpenOceanExchangeV2 as AbiItem[]) // openocean swap
         this.construct(zeroXSwap as AbiItem[]) // 0x swap
+        this.construct(WETH as AbiItem[]) // wrap & unwrap
     }
 
     read(signature?: string) {

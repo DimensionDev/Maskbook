@@ -5,7 +5,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { FungibleToken, NetworkPluginID, toFixed } from '@masknet/web3-shared-base'
 import { ChainId, encodeContractTransaction, SchemaType, useGitcoinConstants } from '@masknet/web3-shared-evm'
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
-import { useBulkCheckoutContract } from '../contracts/useBulkCheckoutWallet'
+import { useBulkCheckoutContract } from '../contracts/useBulkCheckoutWallet.js'
 
 /**
  * A callback for donate gitcoin grant
@@ -27,13 +27,13 @@ export function useDonateCallback(address: string, amount: string, token?: Fungi
         const grantAmount = new BigNumber(amount).minus(tipAmount)
         return [
             [
-                token.schema === SchemaType.Native ? GITCOIN_ETH_ADDRESS : token.address, // token
-                tipAmount.toFixed(0), // amount
+                token.schema === SchemaType.Native ? GITCOIN_ETH_ADDRESS : token.address,
+                tipAmount.toFixed(0),
                 address, // dest
             ],
             [
-                token.schema === SchemaType.Native ? GITCOIN_ETH_ADDRESS : token.address, // token
-                grantAmount.toFixed(0), // amount
+                token.schema === SchemaType.Native ? GITCOIN_ETH_ADDRESS : token.address,
+                grantAmount.toFixed(0),
                 address, // dest
             ],
         ]

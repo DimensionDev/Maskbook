@@ -2,7 +2,7 @@ import { useAsyncFn } from 'react-use'
 import { useAccount, useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { encodeContractTransaction } from '@masknet/web3-shared-evm'
-import { useITO_Contract } from './useITO_Contract'
+import { useITO_Contract } from './useITO_Contract.js'
 
 export function useDestructCallback(ito_address: string) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)

@@ -1,11 +1,12 @@
 import { registerPlugin } from '@masknet/plugin-infra'
-import { base } from './base'
+import { base } from './base.js'
 
 registerPlugin({
     ...base,
     SNSAdaptor: {
-        load: () => import('./SNSAdaptor'),
+        load: () => import('./SNSAdaptor/index.js'),
         hotModuleReload: (hot) =>
-            import.meta.webpackHot && import.meta.webpackHot.accept('./SNSAdaptor', () => hot(import('./SNSAdaptor'))),
+            import.meta.webpackHot &&
+            import.meta.webpackHot.accept('./SNSAdaptor', () => hot(import('./SNSAdaptor/index.js'))),
     },
 })

@@ -3,7 +3,7 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, InputBase, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { InjectedDialog } from '@masknet/shared'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 import {
     useAccount,
     useChainId,
@@ -12,7 +12,7 @@ import {
     useWeb3Hub,
 } from '@masknet/plugin-infra/web3'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { AllChainsNonFungibleToken } from '../types'
+import type { AllChainsNonFungibleToken } from '../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -24,13 +24,8 @@ const useStyles = makeStyles()((theme) => ({
     input: {
         marginTop: theme.spacing(1),
         marginBottom: theme.spacing(1),
-        display: 'block',
-        width: '100%',
-        border: `1px solid ${theme.palette.mode === 'dark' ? '#2F3336' : '#EFF3F4'}`,
-        alignItems: 'center',
-        padding: theme.spacing(1),
+
         boxSizing: 'border-box',
-        borderRadius: 8,
     },
     message: {
         '&:before': {
@@ -145,24 +140,25 @@ export function AddNFT(props: AddNFTProps) {
                 <Button className={classes.addNFT} size="small" disabled={checking} onClick={onClick}>
                     {checking ? t('nft_add_button_label_checking') : t('nft_add_button_label')}
                 </Button>
-                <div className={classes.input}>
-                    <InputBase
-                        // Workaround for pure-react-carousel bug:
-                        // https://stackoverflow.com/questions/70434847/not-able-to-type-anything-in-input-field-inside-pure-react-carousel
-                        onClick={(e) => e.currentTarget.getElementsByTagName('input')[0].focus()}
-                        sx={{ width: '100%' }}
-                        placeholder={t('plugin_avatar_input_token_address')}
-                        onChange={(e) => onAddressChange(e.target.value)}
-                    />
-                </div>
-                <div className={classes.input}>
-                    <InputBase
-                        onClick={(e) => e.currentTarget.getElementsByTagName('input')[0].focus()}
-                        sx={{ width: '100%' }}
-                        placeholder={t('plugin_avatar_input_token_id')}
-                        onChange={(e) => onTokenIdChange(e.target.value)}
-                    />
-                </div>
+
+                <InputBase
+                    // Workaround for pure-react-carousel bug:
+                    // https://stackoverflow.com/questions/70434847/not-able-to-type-anything-in-input-field-inside-pure-react-carousel
+                    onClick={(e) => e.currentTarget.getElementsByTagName('input')[0].focus()}
+                    fullWidth
+                    className={classes.input}
+                    placeholder={t('plugin_avatar_input_token_address')}
+                    onChange={(e) => onAddressChange(e.target.value)}
+                />
+
+                <InputBase
+                    onClick={(e) => e.currentTarget.getElementsByTagName('input')[0].focus()}
+                    fullWidth
+                    className={classes.input}
+                    placeholder={t('plugin_avatar_input_token_id')}
+                    onChange={(e) => onTokenIdChange(e.target.value)}
+                />
+
                 {message ? (
                     <Typography color="error" className={classes.message} fontSize={12}>
                         {message}

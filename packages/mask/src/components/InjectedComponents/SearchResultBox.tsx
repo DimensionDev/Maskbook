@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
-import { useSearchedKeyword } from '../DataSource/useSearchedKeyword'
+import { useSearchedKeyword } from '../DataSource/useSearchedKeyword.js'
 
 function getSearchResultContent(keyword: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode, (x) => {

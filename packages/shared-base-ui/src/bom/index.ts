@@ -1,1 +1,1 @@
-export { openWindow } from './open-window'
+export { openWindow } from './open-window.js'

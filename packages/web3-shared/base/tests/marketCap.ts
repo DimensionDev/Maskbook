@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import { formatMarketCap } from '../src/utils/marketCap'
+import { formatMarketCap } from '../src/utils/marketCap.js'
 
 describe('Market Cap format util test', () => {
     test.each([

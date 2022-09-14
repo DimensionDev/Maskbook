@@ -4,8 +4,8 @@ import type { RSS3BaseAPI } from '@masknet/web3-providers'
 import { Card, Typography } from '@mui/material'
 import formatDateTime from 'date-fns/format'
 import { forwardRef, HTMLProps, memo } from 'react'
-import { RSS3_DEFAULT_IMAGE } from '../../constants'
-import { useI18N } from '../../locales'
+import { RSS3_DEFAULT_IMAGE } from '../../constants.js'
+import { useI18N } from '../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {

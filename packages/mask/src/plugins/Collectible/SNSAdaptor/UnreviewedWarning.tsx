@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Accordion, AccordionDetails, AccordionSummary, Card, Typography } from '@mui/material'
-import { ExpandMore } from '@mui/icons-material'
-import { useI18N } from '../../../utils'
-import { getMaskColor, makeStyles } from '@masknet/theme'
 import AlertIcon from '@mui/icons-material/Error'
+import { ExpandMore } from '@mui/icons-material'
+import { getMaskColor, makeStyles } from '@masknet/theme'
+import { useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => {
     const warningMain = getMaskColor(theme).warning
@@ -35,8 +35,8 @@ const useStyles = makeStyles()((theme) => {
 
 export function UnreviewedWarning() {
     const { t } = useI18N()
-    const [expand, setExpand] = useState(true)
     const { classes } = useStyles()
+    const [expand, setExpand] = useState(true)
     return (
         <Card variant="outlined" className={classes.box}>
             <Accordion

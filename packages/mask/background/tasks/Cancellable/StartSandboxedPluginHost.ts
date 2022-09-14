@@ -1,13 +1,22 @@
-import { hmr } from '../../../utils-pure'
+import { hmr } from '../../../utils-pure/index.js'
 import { BackgroundInstance, BackgroundPluginHost } from '@masknet/sandboxed-plugin-runtime/background'
-import { Flags } from '../../../shared/flags'
+import { Flags } from '../../../shared/flags.js'
 import { Plugin, registerPlugin } from '@masknet/plugin-infra'
 import { None, Result, Some } from 'ts-results'
-import { createPluginDatabase } from '../../database/plugin-db'
-import { createHostAPIs } from '../../../shared/sandboxed-plugin/host-api'
+import { createPluginDatabase } from '../../database/plugin-db/index.js'
+import { createHostAPIs } from '../../../shared/sandboxed-plugin/host-api.js'
 
 const { signal } = hmr(import.meta.webpackHot)
-let hot: Map<string, (hot: Promise<{ default: Plugin.Worker.Definition }>) => void> | undefined
+let hot:
+    | Map<
+          string,
+          (
+              hot: Promise<{
+                  default: Plugin.Worker.Definition
+              }>,
+          ) => void
+      >
+    | undefined
 if (process.env.NODE_ENV === 'development') {
     const sym = Symbol.for('sandboxed plugin bridge hot map')
     hot = (globalThis as any)[sym] ??= new Map()

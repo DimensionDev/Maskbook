@@ -1,4 +1,4 @@
-import type { HubIndicator, Pageable } from '../specs'
+import type { HubIndicator, Pageable } from '../specs/index.js'
 
 export function createIndicator(indicator?: HubIndicator, id?: string) {
     const index = indicator?.index ?? 0
