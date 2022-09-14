@@ -237,7 +237,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             type: AllProviderTradeActionType.SWITCH_TOKEN,
             inputToken: outputToken,
             outputToken: inputToken,
-            inputBalance: outputTokenBalance_ ?? '0',
+            inputBalance: outputToken ? outputTokenBalance_ ?? '0' : '0',
             outputBalance: inputTokenBalance_ ?? '0',
         })
     }, [dispatchTradeStore, inputToken, outputToken, inputAmount, inputTokenBalance_, outputTokenBalance_])
