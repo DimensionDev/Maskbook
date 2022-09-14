@@ -151,7 +151,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                     disableNativeToken={!paymentTokens.some((x) => isNativeTokenAddress(x.address))}
                     onAmountChange={setAmount}
                     onTokenChange={(x) => setAddress(x.address)}
-                    ERC20InputProps={{
+                    FungibleTokenInputProps={{
                         label: endingPriceChecked
                             ? t('plugin_collectible_starting_price')
                             : t('plugin_collectible_price'),
@@ -175,7 +175,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                             onAmountChange={setEndingAmount}
                             token={token.value}
                             onTokenChange={(x) => setAddress(x.address)}
-                            ERC20InputProps={{
+                            FungibleTokenInputProps={{
                                 label: t('plugin_collectible_ending_price'),
                                 disableToken: true,
                                 disableBalance: true,
@@ -213,9 +213,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                         <InputBase
                             fullWidth
                             value={buyerAddress}
-                            // label={t('plugin_collectible_buyer_address')}
                             placeholder={t('plugin_collectible_buyer_address_placeholder')}
-                            // helperText={}
                             onChange={(e) => setBuyerAddress(e.target.value)}
                         />
                         <Typography className={classes.helperText}>

@@ -212,7 +212,7 @@ export function DepositDialog() {
                 <DialogContent>
                     <form className={classes.form} noValidate autoComplete="off">
                         <FungibleTokenInput
-                            label="Amount"
+                            label={t('amount')}
                             amount={rawAmount}
                             balance={tokenBalance ?? '0'}
                             token={token}

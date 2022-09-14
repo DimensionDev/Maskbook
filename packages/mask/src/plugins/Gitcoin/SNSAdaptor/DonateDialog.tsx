@@ -150,12 +150,13 @@ export function DonateDialog(props: DonateDialogProps) {
                 <DialogContent style={{ padding: 16 }}>
                     <form className={classes.form} noValidate autoComplete="off">
                         <FungibleTokenInput
-                            label="Amount"
+                            label={tr('amount')}
                             amount={rawAmount}
                             balance={tokenBalance.value ?? '0'}
                             token={token}
                             onAmountChange={setRawAmount}
                             onSelectToken={onSelectTokenChipClick}
+                            loadingBalance={tokenBalance.loading}
                         />
                     </form>
                     <Typography className={classes.tip} variant="body1" sx={{ marginBottom: 2 }}>

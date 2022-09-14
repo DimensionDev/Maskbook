@@ -58,7 +58,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
     return (
         <div className={classes.root}>
             <FungibleTokenInput
-                label="Amount"
+                label={t('amount')}
                 amount={rawAmount}
                 balance={tokenBalance ?? '0'}
                 token={token}

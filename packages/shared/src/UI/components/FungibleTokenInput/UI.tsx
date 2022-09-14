@@ -110,6 +110,7 @@ interface FungibleTokenInputUIProps extends InputBaseProps {
     onSelectToken?: () => void
     onMaxClick: () => void
     balance: string
+    loadingBalance?: boolean
     maxAmountSignificant?: number
     disableBalance?: boolean
     disableToken?: boolean
@@ -124,6 +125,7 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
         onMaxClick,
         balance,
         maxAmountSignificant = 4,
+        loadingBalance,
         disableMax = false,
         disableToken = false,
         disableBalance = false,
@@ -141,7 +143,7 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                             <Typography className={classes.label} display="flex" alignItems="center">
                                 {isNative ? t.available_balance() : t.balance()}:
                                 <Typography className={classes.balance} component="span">
-                                    {token ? (
+                                    {token && !loadingBalance ? (
                                         <FormattedBalance
                                             value={balance}
                                             decimals={token?.decimals}

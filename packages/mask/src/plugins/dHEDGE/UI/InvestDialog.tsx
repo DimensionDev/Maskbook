@@ -156,7 +156,7 @@ export function InvestDialog() {
                 <DialogContent style={{ padding: 16 }}>
                     <form className={classes.form} noValidate autoComplete="off">
                         <FungibleTokenInput
-                            label="Amount"
+                            label={t('amount')}
                             amount={rawAmount}
                             balance={tokenBalance ?? '0'}
                             token={token}

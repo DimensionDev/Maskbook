@@ -1,8 +1,9 @@
 import { useCallback } from 'react'
 import type { MaskFixedSizeListProps, MaskTextFieldProps } from '@masknet/theme'
-import { useSelectFungibleToken, FungibleTokenInput, ERC20InputProps } from '@masknet/shared'
+import { useSelectFungibleToken, FungibleTokenInput, FungibleTokenInputProps } from '@masknet/shared'
 import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { useI18N } from '../../../utils'
 
 interface ERC20TokenListProps extends withClasses<'list' | 'placeholder'> {
     targetChainId?: ChainId
@@ -25,10 +26,11 @@ export interface SelectTokenAmountPanelProps {
     onAmountChange: (amount: string) => void
     onTokenChange: (token: FungibleToken<ChainId, SchemaType>) => void
     FungibleTokenListProps?: Partial<ERC20TokenListProps>
-    ERC20InputProps?: Partial<ERC20InputProps>
+    FungibleTokenInputProps?: Partial<FungibleTokenInputProps>
 }
 
 export function SelectTokenAmountPanel(props: SelectTokenAmountPanelProps) {
+    const { t } = useI18N()
     const {
         amount,
         balance,
@@ -38,7 +40,7 @@ export function SelectTokenAmountPanel(props: SelectTokenAmountPanelProps) {
         onAmountChange,
         onTokenChange,
         FungibleTokenListProps,
-        ERC20InputProps,
+        FungibleTokenInputProps,
     } = props
 
     // #region select token
@@ -58,9 +60,9 @@ export function SelectTokenAmountPanel(props: SelectTokenAmountPanelProps) {
             amount={amount}
             balance={balance}
             token={token}
-            label="Amount"
+            label={t('amount')}
             onAmountChange={onAmountChange}
-            {...ERC20InputProps}
+            {...FungibleTokenInputProps}
             onSelectToken={onSelectTokenChipClick}
         />
     )

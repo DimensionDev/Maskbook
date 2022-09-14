@@ -7,7 +7,7 @@ import BigNumber from 'bignumber.js'
 const MIN_AMOUNT_LENGTH = 1
 const MAX_AMOUNT_LENGTH = 79
 
-export interface ERC20InputProps {
+export interface FungibleTokenInputProps {
     amount: string
     maxAmount?: string
     maxAmountShares?: number
@@ -19,12 +19,13 @@ export interface ERC20InputProps {
     disableToken?: boolean
     disableBalance?: boolean
     placeholder?: string
+    loadingBalance?: boolean
     token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
     onSelectToken?: () => void
     onAmountChange: (amount: string) => void
 }
 
-export const FungibleTokenInput = memo<ERC20InputProps>(
+export const FungibleTokenInput = memo<FungibleTokenInputProps>(
     ({
         label,
         token,
@@ -38,6 +39,7 @@ export const FungibleTokenInput = memo<ERC20InputProps>(
         maxAmount,
         balance,
         maxAmountSignificant,
+        loadingBalance,
         placeholder = '0.0',
         maxAmountShares = 1,
     }) => {
@@ -93,6 +95,7 @@ export const FungibleTokenInput = memo<ERC20InputProps>(
                 }}
                 balance={balance}
                 required
+                loadingBalance
                 disabled={disabled}
                 disableMax={disableMax}
                 disableBalance={disableBalance}

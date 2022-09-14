@@ -110,7 +110,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                     disableNativeToken={!paymentTokens.some((x) => isNativeTokenAddress(x.address))}
                     onAmountChange={setAmount}
                     onTokenChange={(x) => setAddress(x.address)}
-                    ERC20InputProps={{
+                    FungibleTokenInputProps={{
                         label: t('plugin_collectible_minimum_bid'),
                     }}
                     FungibleTokenListProps={{
@@ -126,7 +126,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                     onAmountChange={setReservePrice}
                     token={token.value}
                     onTokenChange={(x) => setAddress(x.address)}
-                    ERC20InputProps={{
+                    FungibleTokenInputProps={{
                         disableToken: true,
                         disableBalance: true,
                         label: t('plugin_collectible_reserve_price'),

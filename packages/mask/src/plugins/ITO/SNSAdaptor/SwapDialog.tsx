@@ -228,7 +228,7 @@ export function SwapDialog(props: SwapDialogProps) {
                 {token.symbol}.
             </Typography>
             <FungibleTokenInput
-                label="Amount"
+                label={t('amount')}
                 amount={inputAmountForUI}
                 maxAmount={maxAmount}
                 balance={tokenBalance}
