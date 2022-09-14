@@ -2,7 +2,14 @@ import { Icons } from '@masknet/icons'
 import { PluginId, useActivatedPluginsSNSAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { DataProvider } from '@masknet/public-api'
-import { FormattedCurrency, Linking, TokenSecurityBar, useTokenSecurity } from '@masknet/shared'
+import {
+    FormattedCurrency,
+    Linking,
+    TokenSecurityBar,
+    useTokenSecurity,
+    DataSourceSwitcher,
+    FootnoteMenuOption,
+} from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColors, useStylesExtends } from '@masknet/theme'
@@ -20,11 +27,11 @@ import { PluginTransakMessages } from '../../../Transak/messages'
 import { getCurrentPreferredCoinIdSettings } from '../../settings'
 import { setStorage } from '../../storage'
 import type { Coin, Currency, Stat } from '../../types'
-import type { FootnoteMenuOption } from '../trader/components/FootnoteMenuUI'
-import { TradeDataSource } from '../trader/TradeDataSource'
+import { resolveDataProviderName } from '../../pipes'
 import { CoinMenu } from './CoinMenu'
 import { CoinSafetyAlert } from './CoinSafetyAlert'
 import { CoinIcon } from './components'
+import { DataProviderIconUI } from '../trader/components/DataProviderIconUI'
 import { PluginHeader } from './PluginHeader'
 import { PriceChanged } from './PriceChanged'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
@@ -203,7 +210,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         <TrendingCard {...TrendingCardProps}>
             <Stack className={classes.cardHeader}>
                 <PluginHeader>
-                    <TradeDataSource
+                    <DataSourceSwitcher
+                        DataProviderIconUI={DataProviderIconUI}
+                        resolveDataProviderName={resolveDataProviderName}
                         showDataProviderIcon={showDataProviderIcon}
                         dataProvider={dataProvider}
                         dataProviders={dataProviders}

@@ -1,12 +1,8 @@
-import type { DataProvider } from '@masknet/public-api'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import type { FC } from 'react'
-import { useI18N } from '../../../../utils'
-import { resolveDataProviderName } from '../../pipes'
-import { DataProviderIconUI } from './components/DataProviderIconUI'
-import { FootnoteMenuUI, FootnoteMenuOption } from './components/FootnoteMenuUI'
+import { useSharedI18N } from '@masknet/shared'
+import { FootnoteMenuUI, FootnoteMenuOption } from '../FootnoteMenuUI/index'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -30,16 +26,25 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface TradeDataSourceProps extends withClasses<'source'> {
+export interface TradeDataSourceProps<T> extends withClasses<'source' | 'sourceNote'> {
     showDataProviderIcon?: boolean
-    dataProvider?: DataProvider
-    dataProviders?: DataProvider[]
+    dataProvider?: T
+    dataProviders?: T[]
+    resolveDataProviderName: (key: T) => string
+    DataProviderIconUI: (props: { provider: T; size?: number }) => JSX.Element
     onDataProviderChange?: (option: FootnoteMenuOption) => void
 }
 
-export const TradeDataSource: FC<TradeDataSourceProps> = (props) => {
-    const { showDataProviderIcon = false, dataProvider, dataProviders = [], onDataProviderChange } = props
-    const { t } = useI18N()
+export const DataSourceSwitcher = function <T extends string | number>(props: TradeDataSourceProps<T>) {
+    const {
+        showDataProviderIcon = false,
+        dataProvider,
+        dataProviders = [],
+        onDataProviderChange,
+        resolveDataProviderName,
+        DataProviderIconUI,
+    } = props
+    const t = useSharedI18N()
     const classes = useStylesExtends(useStyles(), props)
     return (
         <Box className={classes.source}>
@@ -50,7 +55,7 @@ export const TradeDataSource: FC<TradeDataSourceProps> = (props) => {
                     flexDirection="row"
                     alignItems="center"
                     gap={0.5}>
-                    <Typography className={classes.sourceNote}>{t('plugin_trader_data_source')}</Typography>
+                    <Typography className={classes.sourceNote}>{t.plugin_trader_data_source()}</Typography>
                     <FootnoteMenuUI
                         options={dataProviders.map((x) => ({
                             name: (

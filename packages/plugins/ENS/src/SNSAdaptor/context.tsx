@@ -3,7 +3,8 @@ import { useAsync } from 'react-use'
 import { useLookupAddress } from '@masknet/plugin-infra/web3'
 import { NextIDPlatform, BindingProof } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import { NetworkPluginID, resolveNonFungibleTokenIdFromEnsDomain } from '@masknet/web3-shared-base'
+import { resolveNonFungibleTokenIdFromEnsDomain } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 interface ENSContextProps {
     isLoading: boolean

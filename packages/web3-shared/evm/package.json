@@ -33,6 +33,8 @@
     "web3-core": "1.7.4",
     "web3-core-helpers": "1.7.4",
     "web3-eth-contract": "1.7.4",
+    "@ethersproject/keccak256": "5.7.0",
+    "@ethersproject/strings": "5.7.0",
     "web3-utils": "1.7.4"
   },
   "devDependencies": {

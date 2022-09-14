@@ -3,5 +3,7 @@
     "load_failed": "Load failed",
     "reload": "Reload",
     "empty": "No search results found.",
-    "associated_social_accounts": "Associated social accounts"
+    "associated_social_accounts": "Associated social accounts",
+    "top_offer": "Top offer",
+    "last_offer": "Last"
 }

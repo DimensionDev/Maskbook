@@ -75,7 +75,7 @@ const useStyles = makeStyles()((theme) => {
         nextIdVerified: {
             display: 'flex',
             alignItems: 'center',
-            margin: '0px 28px 12px',
+            margin: '0px 12px 28px',
         },
         nextIdVerifiedTitle: {
             color: theme.palette.maskColor.secondaryDark,
@@ -88,6 +88,16 @@ const useStyles = makeStyles()((theme) => {
             marginLeft: 4,
             marginRight: 12,
             fontSize: 16,
+        },
+        dataSourceSwitcherWrapper: {
+            display: 'flex',
+            justifyContent: 'right',
+            marginBottom: 13,
+        },
+        sourceNote: {
+            fontSize: 14,
+            fontWeight: '400 !important',
+            color: theme.palette.maskColor.secondaryDark,
         },
     }
 })
