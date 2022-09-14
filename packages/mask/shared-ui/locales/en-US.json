@@ -166,6 +166,8 @@
     "setup_guide_verify_dismiss": "Don't show again.",
     "setup_guide_verify_checking": "Checking",
     "setup_guide_verify_post_not_found": "No verification post found",
+    "setup_guide_connected_title": "Connected and verified successfully.",
+    "setup_guide_connected_description": "Try exploring Web3 dApps features on social media.",
     "setup_guide_verifying": "Verifiying",
     "setup_guide_verifying_failed": "Re-Verfiy",
     "user_guide_tip_connected": "You have connected to this account successfully.",

@@ -69,12 +69,13 @@ export const useSetupGuideStepInfo = (destinedPersona: PersonaIdentifier) => {
     }, [username])
 
     const composeInfo = useCallback(
-        (step: SetupGuideStep) => {
+        (step: SetupGuideStep, stepType: 'close' | 'done' | 'doing' = 'close') => {
             return {
                 step,
                 userId: username,
                 currentIdentityResolved: lastRecognized,
                 destinedPersonaInfo: persona,
+                type: stepType,
             }
         },
         [username, lastRecognized],
@@ -83,7 +84,7 @@ export const useSetupGuideStepInfo = (destinedPersona: PersonaIdentifier) => {
     return useAsyncRetry(async () => {
         // Not set status
         if (!lastSettingState.status || !persona) {
-            return composeInfo(SetupGuideStep.Close)
+            return composeInfo(SetupGuideStep.Close, 'close')
         }
 
         const profileIdentifier = ProfileIdentifier.of(ui.networkIdentifier, username).unwrap()
@@ -92,16 +93,16 @@ export const useSetupGuideStepInfo = (destinedPersona: PersonaIdentifier) => {
         const personaConnectedProfile = persona?.linkedProfiles.find((x) =>
             isSameProfile(x.identifier, profileIdentifier),
         )
-        if (!personaConnectedProfile) return composeInfo(SetupGuideStep.FindUsername)
+        if (!personaConnectedProfile) return composeInfo(SetupGuideStep.FindUsername, 'doing')
 
         // The SNS is enabled NextID
         if (!platform) {
             // Should show pin extension when not set
             if (!userPinExtension.value) {
                 userPinExtension.value = true
-                return composeInfo(SetupGuideStep.PinExtension)
+                return composeInfo(SetupGuideStep.PinExtension, 'doing')
             }
-            return composeInfo(SetupGuideStep.Close)
+            return composeInfo(SetupGuideStep.Close, 'close')
         }
 
         // Should verified persona
@@ -113,15 +114,15 @@ export const useSetupGuideStepInfo = (destinedPersona: PersonaIdentifier) => {
                     personaConnectedProfile?.identifier,
                 ) && x.is_valid,
         )
-        if (!verifiedProfile) return composeInfo(SetupGuideStep.VerifyOnNextID)
+        if (!verifiedProfile) return composeInfo(SetupGuideStep.VerifyOnNextID, 'doing')
 
         // Should show pin extension when not set
         if (!userPinExtension.value) {
             userPinExtension.value = true
-            return composeInfo(SetupGuideStep.PinExtension)
+            return composeInfo(SetupGuideStep.PinExtension, 'doing')
         }
 
         // Default
-        return composeInfo(SetupGuideStep.Close)
+        return composeInfo(SetupGuideStep.Close, 'done')
     }, [lastSettingState, persona, username, ui.networkIdentifier, platform, userPinExtension, composeInfo])
 }

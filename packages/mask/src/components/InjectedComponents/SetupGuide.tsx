@@ -1,5 +1,5 @@
-import { useState, useRef } from 'react'
-import { makeStyles } from '@masknet/theme'
+import { useState, useRef, useEffect } from 'react'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useI18N, MaskMessages } from '../../utils/index.js'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
 import {
@@ -26,6 +26,7 @@ import { VerifyNextID } from './SetupGuide/VerifyNextID.js'
 import { PinExtension } from './SetupGuide/PinExtension.js'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useSetupGuideStepInfo } from './SetupGuide/useSetupGuideStepInfo'
+import stringify from 'json-stable-stringify'
 
 // #region setup guide ui
 interface SetupGuideUIProps {
@@ -36,16 +37,44 @@ interface SetupGuideUIProps {
 function SetupGuideUI(props: SetupGuideUIProps) {
     const { t } = useI18N()
     const { persona } = props
+    const { showSnackbar } = useCustomSnackbar()
     const ui = activatedSocialNetworkUI
     const [enableNextID] = useState(ui.configuration.nextIDConfig?.enable)
     const verifyPostCollectTimer = useRef<NodeJS.Timer | null>(null)
     const {
-        value: { step, userId, currentIdentityResolved, destinedPersonaInfo } = {
+        value: { step, userId, currentIdentityResolved, destinedPersonaInfo, type } = {
             step: SetupGuideStep.Close,
             userId: '',
+            type: 'close',
         },
+        loading: loadingSetupGuideStep,
         retry: retryCheckStep,
     } = useSetupGuideStepInfo(persona)
+
+    // #region should not show notification if user have operation
+    const [hasOperation, setOperation] = useState(false)
+
+    useEffect(() => {
+        if (!(type === 'done' && !hasOperation)) return;
+            showSnackbar(t('setup_guide_connected_title'), {
+                variant: 'success',
+                message: t('setup_guide_connected_description'),
+            })
+
+            /**
+             * why use setTimeout?
+             *
+             * In this case: User opened the twitter.com page, and then click `connect social media` from Popup
+             * The popup will create new tab to open the twitter.com.
+             * In old twitter.com, the follow setter will execute immediately,
+             * and the new twitter.com page need time to load, and will get the empty `currentSetupGuideStatus`.
+             */
+            setTimeout(() => {
+                currentSetupGuideStatus[ui.networkIdentifier].value = ''
+            }, 10000)
+        
+    }, [type, hasOperation])
+    // #endregion
 
     // todo: refactor this
     // const disableVerify =
@@ -66,6 +95,13 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         // auto-finish the setup process
         if (!destinedPersonaInfo) throw new Error('invalid persona')
         await Services.Identity.setupPersona(destinedPersonaInfo?.identifier)
+
+        setOperation(true)
+        if (step === SetupGuideStep.FindUsername) {
+            currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
+                status: SetupGuideStep.VerifyOnNextID,
+            })
+        }
     }
 
     const onVerify = async () => {
@@ -77,6 +113,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         if (!platform) return
 
         const isBound = await NextIDProof.queryIsBound(destinedPersonaInfo.identifier.publicKeyAsHex, platform, userId)
+        // TODO: use verify hook
         if (!isBound) {
             const payload = await NextIDProof.createPersonaPayload(
                 destinedPersonaInfo.identifier.publicKeyAsHex,
@@ -130,6 +167,11 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                 userId,
             )
             if (!isBound) throw new Error('Failed to verify.')
+
+            setOperation(true)
+            if (step === SetupGuideStep.VerifyOnNextID) {
+                currentSetupGuideStatus[ui.networkIdentifier].value = ''
+            }
             MaskMessages.events.ownProofChanged.sendToAll(undefined)
         }
     }
@@ -139,6 +181,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         // retryCheckStep()
     }
 
+    // TODO: should use this method
     const onDone = async () => {
         const network = ui.networkIdentifier
         if (network === EnhanceableSite.Twitter && userGuideStatus[network].value !== userGuideVersion.value) {
@@ -172,6 +215,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
                     onDone={retryCheckStep}
                     onClose={onClose}
                     enableNextID={enableNextID}
+                    stepUpdating={loadingSetupGuideStep}
                 />
             )
         case SetupGuideStep.VerifyOnNextID:
