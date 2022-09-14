@@ -13,11 +13,11 @@ export const Widget: <Name extends keyof Plugin.SNSAdaptor.WidgetRegistry>(
 ) => React.ReactElement = (props) => {
     const { name, pluginID, fallback, ...rest } = props
     const plugins = useActivatedPluginsSNSAdaptor(false)
-    const TargetView: any = useMemo(() => {
+    const WidgetComponent: any = useMemo(() => {
         if (pluginID) return plugins.find((x) => x.ID === pluginID)?.Widgets?.[name]
         return plugins.find((x) => x.Widgets && name in x.Widgets)?.Widgets![name].component
     }, [plugins])
 
-    if (!TargetView) return fallback || createElement(Fragment, {})
-    return createElement(TargetView, rest)
+    if (!WidgetComponent) return fallback || createElement(Fragment, {})
+    return createElement(WidgetComponent, rest)
 }
