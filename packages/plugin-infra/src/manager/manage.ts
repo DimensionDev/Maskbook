@@ -1,5 +1,4 @@
 import { ObservableSet } from '@masknet/shared-base'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Emitter } from '@servie/events'
 import { noop } from 'lodash-unified'
 import { BooleanPreference, Plugin, PluginID } from '../types.js'

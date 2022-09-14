@@ -15,12 +15,12 @@ export function WidgetContent(props: WidgetContentProps) {
     return (
         <Box>
             {displayPlugins.map((x) => (
-                <Box>
+                <Box key={x.ID}>
                     <Typography variant="h2">
                         <PluginI18NFieldRender field={x.name} pluginID={x.ID} />
                     </Typography>
                     {x.Widgets?.map((y) => (
-                        <Widget pluginID={x.ID} name={y.name} />
+                        <Widget key={y.ID} pluginID={x.ID} name={y.name} />
                     ))}
                 </Box>
             ))}
