@@ -12,7 +12,7 @@ import { ConnectionDialog } from './components/ConnectionDialog.js'
 import { HubDialog } from './components/HubDialog.js'
 import { ProfileCover } from './components/ProfileCover.js'
 import { AvatarDecorator } from './components/AvatarDecorator.js'
-import { WidgetContent } from './components/WidgetContent.js'
+import { WidgetDialog } from './components/WidgetDialog.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -87,7 +87,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 const { openDialog } = useRemoteControlledDialog(PluginDebuggerMessages.widgetDialogUpdated)
                 return (
                     <ApplicationEntry
-                        title="Widget"
+                        title="Widgets"
                         disabled={false}
                         iconFilterColor=""
                         icon={<Icons.MaskBlue size={36} />}
@@ -109,7 +109,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 <ConsoleDialog />
                 <ConnectionDialog />
                 <HubDialog />
-                <WidgetContent />
+                <WidgetDialog />
             </>
         )
     },

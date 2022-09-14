@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { PluginI18NFieldRender, PluginId, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { PluginI18NFieldRender, PluginID, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
@@ -63,7 +63,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface Props {
-    focusPluginId?: PluginId
+    focusPluginId?: PluginID
 }
 export const ApplicationSettingPluginSwitch = memo(({ focusPluginId }: Props) => {
     const { classes } = useStyles()
@@ -85,7 +85,7 @@ export const ApplicationSettingPluginSwitch = memo(({ focusPluginId }: Props) =>
     }, [focusPluginId, noAvailablePlugins])
 
     async function onSwitch(id: string, checked: boolean) {
-        if (id === PluginId.GoPlusSecurity && checked === false)
+        if (id === PluginID.GoPlusSecurity && checked === false)
             return CrossIsolationMessages.events.requestCheckSecurityCloseConfirmDialog.sendToAll({ open: true })
         await Services.Settings.setPluginMinimalModeEnabled(id, !checked)
     }

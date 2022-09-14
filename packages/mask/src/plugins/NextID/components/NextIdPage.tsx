@@ -1,4 +1,4 @@
-import { PluginId } from '@masknet/plugin-infra/content-script'
+import { PluginID } from '@masknet/plugin-infra/content-script'
 import { PopupRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { useMemo, useState } from 'react'
@@ -61,7 +61,7 @@ export function NextIdPage() {
         if (!isOwn) return <OtherLackWalletAction />
 
         return (
-            <PluginEnableBoundary pluginId={PluginId.Web3Profile} classes={{ root: classes.enablePluginRoot }}>
+            <PluginEnableBoundary pluginId={PluginID.Web3Profile} classes={{ root: classes.enablePluginRoot }}>
                 {(() => {
                     if (!personaConnectStatus.hasPersona)
                         return (

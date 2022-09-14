@@ -1,7 +1,8 @@
 import { ObservableSet } from '@masknet/shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Emitter } from '@servie/events'
 import { noop } from 'lodash-unified'
-import { BooleanPreference, Plugin } from '../types.js'
+import { BooleanPreference, Plugin, PluginID } from '../types.js'
 import { getPluginDefine, onNewPluginRegistered, registeredPlugins } from './store.js'
 
 // Plugin state machine
@@ -17,8 +18,8 @@ export function createManager<
         controller: AbortController
         context: Context
     }
-    const resolved = new Map<string, T>()
-    const activated = new Map<string, ActivatedPluginInstance>()
+    const resolved = new Map<PluginID, T>()
+    const activated = new Map<PluginID, ActivatedPluginInstance>()
     const minimalModePluginIDs = (() => {
         const value = new ObservableSet<string>()
         value.event.on('add', (id) => id.forEach((id) => events.emit('minimalModeChanged', id, true)))
@@ -55,7 +56,7 @@ export function createManager<
         events,
     }
 
-    function startDaemon(host: Plugin.__Host.Host<Context>, extraCheck?: (id: string) => boolean) {
+    function startDaemon(host: Plugin.__Host.Host<Context>, extraCheck?: (id: PluginID) => boolean) {
         _host = host
         const { signal = new AbortController().signal, addI18NResource, minimalMode } = _host
         const removeListener1 = minimalMode.events.on('enabled', (id) => minimalModePluginIDs.add(id))
@@ -87,7 +88,7 @@ export function createManager<
             }
         }
 
-        async function meetRequirement(id: string) {
+        async function meetRequirement(id: PluginID) {
             const define = getPluginDefine(id)
             if (!define) return false
             if (extraCheck && !extraCheck(id)) return false
@@ -102,7 +103,7 @@ export function createManager<
             )
     }
 
-    async function activatePlugin(id: string) {
+    async function activatePlugin(id: PluginID) {
         if (activated.has(id)) return
         const definition = await __getDefinition(id)
         if (!definition) return
@@ -135,7 +136,7 @@ export function createManager<
         events.emit('activateChanged', id, true)
     }
 
-    function stopPlugin(id: string) {
+    function stopPlugin(id: PluginID) {
         const instance = activated.get(id)
         if (!instance) return
         instance.controller.abort()
@@ -143,15 +144,15 @@ export function createManager<
         events.emit('activateChanged', id, false)
     }
 
-    function isActivated(id: string) {
+    function isActivated(id: PluginID) {
         return activated.has(id)
     }
 
-    function isMinimalMode(id: string) {
+    function isMinimalMode(id: PluginID) {
         return minimalModePluginIDs.has(id)
     }
 
-    async function __getDefinition(id: string) {
+    async function __getDefinition(id: PluginID) {
         if (resolved.has(id)) return resolved.get(id)!
 
         const deferredDefinition = getPluginDefine(id)

@@ -1,4 +1,4 @@
-import { PluginId } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/plugin-infra'
 import { InjectedDialog } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
@@ -44,7 +44,7 @@ function CheckSecurityConfirmDialog() {
 
     const onClose = () => setOpen(false)
 
-    const onConfirm = () => context.setMinimalMode(PluginId.GoPlusSecurity, true)
+    const onConfirm = () => context.setMinimalMode(PluginID.GoPlusSecurity, true)
 
     return (
         <InjectedDialog

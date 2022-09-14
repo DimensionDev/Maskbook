@@ -10,7 +10,7 @@ import { PluginDebuggerMessages } from '../../messages.js'
 export interface WidgetDialogProps {}
 
 export function WidgetDialog(props: WidgetDialogProps) {
-    const { open, closeDialog } = useRemoteControlledDialog(PluginDebuggerMessages.connectionDialogUpdated)
+    const { open, closeDialog } = useRemoteControlledDialog(PluginDebuggerMessages.widgetDialogUpdated)
     return (
         <InjectedDialog title="Connection" fullWidth open={open} onClose={closeDialog}>
             <DialogContent>

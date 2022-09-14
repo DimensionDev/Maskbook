@@ -50,13 +50,6 @@ export function NFTCardDialog() {
         })
     }, [chainIdValid])
 
-    console.log('DEBUG: card dialog')
-    console.log({
-        chainId,
-        tokenId,
-        tokenAddress,
-    })
-
     if (!chainId || !pluginID) return null
     if (!tokenId || !tokenAddress) return null
 

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Button, Checkbox, FormControlLabel, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { PluginId } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/plugin-infra'
 import {
     useAccount,
     useBalance,
@@ -46,8 +46,8 @@ export function ConsoleContent(props: ConsoleContentProps) {
     const onSelectFungibleToken = useSelectFungibleToken()
     const onSelectGasSettings = useSelectAdvancedSettings(pluginID)
 
-    const [pluginId, setPluginId] = useState<PluginId>(PluginId.RSS3)
-    const plugins = getEnumAsArray(PluginId) as Array<{ key: PluginId; value: string }>
+    const [pluginId, setPluginId] = useState<PluginID>(PluginID.RSS3)
+    const plugins = getEnumAsArray(PluginID) as Array<{ key: PluginID; value: string }>
 
     const [quickMode, setQuickMode] = useState(true)
     const { setDialog } = useRemoteControlledDialog(WalletMessages.events.ApplicationDialogUpdated)
@@ -165,7 +165,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
             name: 'Plugin Settings',
             content: (
                 <>
-                    <select onChange={(event) => setPluginId(event.target.value as PluginId)}>
+                    <select onChange={(event) => setPluginId(event.target.value as PluginID)}>
                         {plugins.map((x) => (
                             <option key={x.value} value={x.value}>
                                 {x.key}

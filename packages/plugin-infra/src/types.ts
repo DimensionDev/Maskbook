@@ -16,14 +16,14 @@ import type {
     BindingProof,
 } from '@masknet/shared-base'
 import type {
-    ChainDescriptor,
+    NetworkPluginID,
     SocialAddress,
+    ChainDescriptor,
     NetworkDescriptor,
     ProviderDescriptor,
     SocialIdentity,
     Wallet,
     Web3EnableRequirement,
-    NetworkPluginID,
 } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType, Transaction } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
@@ -224,7 +224,7 @@ export namespace Plugin.Shared {
          * ID of the plugin. It should be unique.
          * @example "com.mask.wallet"
          */
-        ID: string
+        ID: PluginID
         /**
          * The human readable name of the plugin.
          * @example { i18nKey: "name", fallback: "Never gonna give you up" }
@@ -452,9 +452,11 @@ export namespace Plugin.SNSAdaptor {
         SettingTabs?: SettingTab[]
         /** This UI will be rendered components on the avatar realm */
         AvatarRealm?: AvatarRealm
-        Widgets?: {
-            [key in keyof WidgetRegistry]: Widget<WidgetRegistry[key]>
-        }
+        /** This UI will be shared across plugins */
+        Widgets?: Widget[]
+        // Widgets?: {
+        //     [key in keyof WidgetRegistry]: Widget<WidgetRegistry[key]>
+        // }
         /** This UI will be rendered components on the tips realm */
         TipsRealm?: TipsRealm
         /** This UI will be rendered as plugin wrapper page */
@@ -767,12 +769,19 @@ export namespace Plugin.SNSAdaptor {
     }
 
     /** Contribute a widget to other plugins. */
-    export interface Widget<Props> {
-        component: React.ComponentType<Props>
+    export interface Widget {
+        ID: string
+
+        name: keyof WidgetRegistry
+
+        label: I18NStringField | string
+
+        UI?: {
+            Widget: InjectUI<{}>
+        }
     }
 
     export interface WidgetRegistry {
-        // example: Props here
         example: {}
     }
 }
@@ -1101,14 +1110,16 @@ export interface IdentityResolved {
 /**
  * All integrated Plugin IDs
  */
-export enum PluginId {
+export enum PluginID {
+    EVM = 'com.mask.evm',
+    Flow = 'com.mask.flow',
+    Solana = 'com.mask.solana',
     Approval = 'com.maskbook.approval',
     Avatar = 'com.maskbook.avatar',
     ArtBlocks = 'io.artblocks',
     Collectible = 'com.maskbook.collectibles',
     CryptoArtAI = 'com.maskbook.cryptoartai',
     dHEDGE = 'org.dhedge',
-    EVM = 'com.mask.evm',
     NextID = 'com.mask.next_id',
     External = 'io.mask.external',
     Furucombo = 'app.furucombo',
@@ -1125,7 +1136,6 @@ export enum PluginId {
     DAO = 'money.juicebox',
     Debugger = 'io.mask.debugger',
     Example = 'io.mask.example',
-    Flow = 'com.mask.flow',
     RSS3 = 'bio.rss3',
     RedPacket = 'com.maskbook.red_packet',
     RedPacketNFT = 'com.maskbook.red_packet_nft',
@@ -1147,6 +1157,7 @@ export enum PluginId {
     ScamSniffer = 'io.scamsniffer.mask-plugin',
     NFTCard = 'com.maskbook.nft-card',
 }
+
 /**
  * This namespace is not related to the plugin authors
  */

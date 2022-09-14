@@ -1,4 +1,4 @@
-import { Plugin, PluginId } from '@masknet/plugin-infra'
+import { Plugin, PluginID } from '@masknet/plugin-infra'
 import { base } from '../base.js'
 import { TraderDialog } from './trader/TraderDialog.js'
 import { SearchResultInspector } from './trending/SearchResultInspector.js'
@@ -30,7 +30,7 @@ const sns: Plugin.SNSAdaptor.Definition<
         setupStorage(context.createKVStorage('persistent', storageDefaultValue))
     },
     SearchResultBox: {
-        ID: PluginId.Trader,
+        ID: PluginID.Trader,
         UI: {
             Content: SearchResultInspector,
         },
