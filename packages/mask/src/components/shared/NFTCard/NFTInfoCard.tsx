@@ -1,4 +1,6 @@
 import { isEqual } from 'lodash-unified'
+import { Icons } from '@masknet/icons'
+import { getEnumAsArray } from '@dimensiondev/kit'
 import { makeStyles } from '@masknet/theme'
 import { Link, Typography } from '@mui/material'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
@@ -6,8 +8,6 @@ import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { SchemaType, formatTokenId, ChainId } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils/index.js'
-import { Icons } from '@masknet/icons'
-import { getEnumAsArray } from '@dimensiondev/kit'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {

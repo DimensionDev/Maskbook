@@ -3,9 +3,7 @@ import { Button, Typography } from '@mui/material'
 import { PluginWalletStatusBar, useI18N as useBaseI18n } from '../../../utils/index.js'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '../../Wallet/messages.js'
-import {
-    NetworkPluginID,
-} from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { NFTCardDialogTabs } from './NFTCardDialog.js'
 import { useStyles } from '../useStyles.js'
 import { chainResolver, NetworkType } from '@masknet/web3-shared-evm'
@@ -31,7 +29,7 @@ export function NFTCardContent(props: NFTCardContentProps) {
         WalletMessages.events.selectProviderDialogUpdated,
     )
     const pluginId = useCurrentWeb3NetworkPluginID()
-    const { asset, orders, events,  } = useNFTCardInfo(tokenAddress, tokenId)
+    const { asset, orders, events } = useNFTCardInfo(tokenAddress, tokenId)
 
     const chainIdList = pluginDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
 

@@ -2,7 +2,6 @@ import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { Markdown } from '@masknet/shared'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
