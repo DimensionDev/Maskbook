@@ -1,7 +1,7 @@
 import { useAsync } from 'react-use'
 import { useAccount, useChainId } from '@masknet/plugin-infra/web3'
-import { getMaskColor, makeStyles } from '@masknet/theme'
-import { Grid, Typography, CircularProgress, Box, Button } from '@mui/material'
+import { getMaskColor, LoadingBase, makeStyles } from '@masknet/theme'
+import { Grid, Typography, Box, Button } from '@mui/material'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
@@ -40,7 +40,7 @@ function FarmList({ loading, error, farms, onAdjustRewardButtonClick }: FarmList
     const { classes } = useStyles()
     const { classes: sharedClasses } = useSharedStyles()
 
-    if (loading) return <CircularProgress size={50} />
+    if (loading) return <LoadingBase size={50} />
 
     if (error) return <Typography className={sharedClasses.msg}>{t.blockchain_error_referral_farms()}</Typography>
 

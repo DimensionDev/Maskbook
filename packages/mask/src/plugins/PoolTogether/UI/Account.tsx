@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { DarkColor } from '@masknet/theme/base'
-import { CircularProgress, Grid, Link, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { Grid, Link, Typography } from '@mui/material'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils/index.js'
 import { COMMUNITY_URL } from '../constants.js'
 import { useAccountBalance } from '../hooks/useAccountBalances.js'
@@ -69,7 +69,7 @@ export function Account(props: AccountProps) {
     const { value: balances = [], loading, retry, error } = useAccountBalance(pools)
 
     if (loading) {
-        return <CircularProgress className={classes.progress} color="primary" size={15} />
+        return <LoadingBase className={classes.progress} color="primary" size={15} />
     }
 
     if (error) {

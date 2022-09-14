@@ -1,5 +1,5 @@
-import { Box, Typography, List, ListItem, CircularProgress } from '@mui/material'
-import { makeStyles, ActionButton } from '@masknet/theme'
+import { Box, Typography, List, ListItem } from '@mui/material'
+import { makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
 import { useState, useCallback, useEffect, useMemo } from 'react'
 import { useI18N } from '../locales/index.js'
 import classNames from 'classnames'
@@ -336,8 +336,9 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                 </Box>
                 {contract && balance ? (
                     loadingOwnerList ? (
-                        <CircularProgress size={24} className={classes.loadingOwnerList} />
+                        <LoadingBase size={24} className={classes.loadingOwnerList} />
                     ) : (
+                        // TODO: replace to radio
                         <Box className={classes.selectWrapper}>
                             <div
                                 className={classNames(
