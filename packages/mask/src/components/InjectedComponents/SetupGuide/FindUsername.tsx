@@ -35,7 +35,6 @@ export interface FindUsernameProps extends Partial<WizardDialogProps> {
     username: string
     personaName?: string
     avatar?: string
-    onUsernameChange?: (username: string) => void
     onConnect: () => Promise<void>
     onDone?: () => void
     enableNextID?: boolean

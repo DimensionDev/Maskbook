@@ -18,7 +18,6 @@ interface VerifyNextIDProps extends Partial<WizardDialogProps> {
     network: string
     avatar?: string
     disableVerify: boolean
-    onUsernameChange?: (username: string) => void
     onVerify: () => Promise<void>
     onDone?: () => void
 }
