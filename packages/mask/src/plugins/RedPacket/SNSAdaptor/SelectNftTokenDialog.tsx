@@ -4,19 +4,9 @@ import { NetworkPluginID, isSameAddress, NonFungibleToken, NonFungibleTokenContr
 import { SchemaType, formatTokenId, ChainId } from '@masknet/web3-shared-evm'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { Translate, useI18N } from '../locales/index.js'
-import {
-    DialogContent,
-    Box,
-    InputBase,
-    Paper,
-    Button,
-    Typography,
-    ListItem,
-    CircularProgress,
-    useTheme,
-} from '@mui/material'
+import { DialogContent, Box, InputBase, Paper, Button, Typography, ListItem, useTheme } from '@mui/material'
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark'
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useCallback, useState, useEffect } from 'react'
 import { Icons } from '@masknet/icons'
 import CheckIcon from '@mui/icons-material/Check'
@@ -644,7 +634,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                 })}
                                 {loadingOwnerList ? (
                                     <ListItem className={classNames(classes.selectWrapper, classes.loadingWrapper)}>
-                                        <CircularProgress size={25} />
+                                        <LoadingBase size={25} />
                                     </ListItem>
                                 ) : null}
                             </div>

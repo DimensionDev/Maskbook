@@ -1,10 +1,10 @@
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { TokenIcon } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import ErrorIcon from '@mui/icons-material/Error'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { Chip, ChipProps, CircularProgress } from '@mui/material'
+import { Chip, ChipProps } from '@mui/material'
 import classNames from 'classnames'
 import { noop } from 'lodash-unified'
 import { useI18N } from '../../utils/index.js'
@@ -47,7 +47,7 @@ export function SelectTokenChip(props: SelectTokenChipProps) {
         return (
             <Chip
                 className={classNames(classes.chip, classes.loadingChip)}
-                icon={<CircularProgress size={16} />}
+                icon={<LoadingBase size={16} />}
                 size="small"
                 clickable={false}
                 variant="outlined"

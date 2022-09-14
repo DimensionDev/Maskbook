@@ -1,7 +1,7 @@
-import { makeStyles, ActionButton } from '@masknet/theme'
+import { makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
 import { explorerResolver } from '@masknet/web3-shared-evm'
 import { useChainId } from '@masknet/plugin-infra/web3'
-import { Grid, Typography, CircularProgress, Link } from '@mui/material'
+import { Grid, Typography, Link } from '@mui/material'
 import DoneIcon from '@mui/icons-material/Done'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
@@ -50,7 +50,7 @@ export function Transaction(props: TransactionProps) {
                 justifyContent="center"
                 alignItems="center"
                 className={classes.confirmation}>
-                <CircularProgress size={72} />
+                <LoadingBase size={72} />
                 <Typography fontWeight={600} className={classes.title} variant="h6">
                     {props.title}
                 </Typography>

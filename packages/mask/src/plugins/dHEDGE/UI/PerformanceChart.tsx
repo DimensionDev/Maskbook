@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useWindowSize } from 'react-use'
-import { CircularProgress, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { Typography } from '@mui/material'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import RefreshIcon from '@mui/icons-material/Refresh'
 import { useLineChart } from '../../hooks/useLineChart/index.js'
 import { Period, Pool } from '../types.js'
@@ -101,7 +101,7 @@ export function PerformanceChart(props: PerformanceChartProps) {
     return (
         <div className={classes.root} ref={rootRef}>
             {loading ? (
-                <CircularProgress className={classes.progress} color="primary" size={15} />
+                <LoadingBase className={classes.progress} color="primary" size={15} />
             ) : (
                 <RefreshIcon className={classes.refresh} color="primary" onClick={retry} style={{ fill: '#1C68F3' }} />
             )}

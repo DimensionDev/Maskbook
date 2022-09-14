@@ -1,7 +1,6 @@
 import { CrossIsolationMessages, EMPTY_OBJECT, ProfileIdentifier } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Twitter } from '@masknet/web3-providers'
-import { CircularProgress } from '@mui/material'
 import { CSSProperties, useCallback, useEffect, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
 import { useSocialIdentity } from '../../../../components/DataSource/useActivatedUI.js'
@@ -165,7 +164,7 @@ function ProfileCardHolder() {
         <div className={classes.root} style={style} ref={holderRef}>
             {loading || resolving ? (
                 <div className={classes.loading}>
-                    <CircularProgress size={36} />
+                    <LoadingBase size={36} />
                 </div>
             ) : resolvedIdentity ? (
                 <ProfileCard identity={resolvedIdentity} />

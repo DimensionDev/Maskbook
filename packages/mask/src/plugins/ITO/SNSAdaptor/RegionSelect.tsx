@@ -29,9 +29,8 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
         width: '100%',
-        height: '54px',
         alignItems: 'center',
-        paddingLeft: theme.spacing(2),
+        paddingTop: 22,
     },
     allToggle: {
         marginLeft: `-${theme.spacing(1)}`,

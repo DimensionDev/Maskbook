@@ -1,8 +1,8 @@
 import { useNonFungibleAsset } from '@masknet/plugin-infra/web3'
-import { makeStyles } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { NetworkPluginID, NonFungibleTokenContract, SourceType } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { CircularProgress, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import { memo } from 'react'
 import { CollectibleCard } from '../../../../extension/options-page/DashboardComponents/CollectibleList/CollectibleCard.js'
 
@@ -40,6 +40,6 @@ export const TokenCard = memo<TokenCardProps>((props: TokenCardProps) => {
             </div>
         </>
     ) : (
-        <CircularProgress />
+        <LoadingBase />
     )
 })

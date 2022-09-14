@@ -1,12 +1,12 @@
-import { FormControl, InputAdornment, ListItemIcon, MenuItem, OutlinedInput, Typography } from '@mui/material'
+import { FormControl, ListItemIcon, MenuItem, Typography, InputBase, InputAdornment } from '@mui/material'
 import { useI18N } from '../../../utils/index.js'
 import { useEffect, useState, useCallback, useRef, useMemo, ChangeEvent } from 'react'
 import { FormattedBalance, TokenIcon, useMenuConfig } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import Check from '@mui/icons-material/Check'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { FungibleToken, isSameAddress, formatBalance } from '@masknet/web3-shared-base'
+import { Icons } from '@masknet/icons'
 
 const MIN_AMOUNT_LENGTH = 1
 const MAX_AMOUNT_LENGTH = 79
@@ -24,12 +24,17 @@ const useStyles = makeStyles()((theme) => ({
         width: 24,
         height: 24,
     },
-    input: {},
     check: {
         flex: 1,
         display: 'flex',
         justifyContent: 'end',
         color: theme.palette.text.primary,
+    },
+    end: {
+        paddingRight: 16,
+    },
+    arrow: {
+        color: theme.palette.maskColor.second,
     },
 }))
 
@@ -138,14 +143,13 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
                     <span style={{ marginLeft: 4 }}>{token?.symbol}</span>
                 </Typography>
             </div>
-            <FormControl className={classes.input} variant="outlined" fullWidth>
-                <OutlinedInput
+            <FormControl fullWidth>
+                <InputBase
                     fullWidth
-                    required
-                    type="text"
                     value={amount}
                     ref={ref}
                     placeholder="0.0"
+                    onChange={onChange}
                     inputProps={{
                         autoComplete: 'off',
                         autoCorrect: 'off',
@@ -156,11 +160,9 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
                         maxLength: MAX_AMOUNT_LENGTH,
                         pattern: /^\d+[,.]?\d+$/,
                         spellCheck: false,
-                        className: classes.input,
                     }}
-                    onChange={onChange}
                     endAdornment={
-                        <InputAdornment position="end">
+                        <InputAdornment position="end" className={classes.end}>
                             {token?.address ? (
                                 <>
                                     <TokenIcon
@@ -178,7 +180,7 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
                                     </Typography>
                                 </>
                             ) : null}
-                            {haveMenu ? <ArrowDropDownIcon onClick={onClick} /> : null}
+                            {haveMenu ? <Icons.ArrowDrop onClick={onClick} className={classes.arrow} /> : null}
                         </InputAdornment>
                     }
                 />

@@ -1,5 +1,5 @@
 import { openWindow } from '@masknet/shared-base-ui'
-import { useSelectFungibleToken, useOpenShareTxDialog } from '@masknet/shared'
+import { useSelectFungibleToken, useOpenShareTxDialog, FungibleTokenInput } from '@masknet/shared'
 import { makeStyles, useStylesExtends, ActionButton } from '@masknet/theme'
 import {
     leftShift,
@@ -17,13 +17,12 @@ import {
     useTokenConstants,
     explorerResolver,
 } from '@masknet/web3-shared-evm'
-import { CircularProgress, Slider, Typography } from '@mui/material'
+import { Slider, Typography } from '@mui/material'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../utils/index.js'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
 import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
-import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel.js'
 import type { JSON_PayloadInMask } from '../types.js'
 import { useQualificationVerify } from './hooks/useQualificationVerify.js'
 import { useSwapCallback } from './hooks/useSwapCallback.js'
@@ -48,17 +47,6 @@ const useStyles = makeStyles()((theme) => ({
         flexGrow: 1,
         width: 'auto !important',
         margin: theme.spacing(0, 3),
-        '& .MuiSlider-thumb': {
-            width: 28,
-            height: 28,
-            background: theme.palette.mode === 'dark' ? '#fff' : '2CA4EF, 100%',
-        },
-        '& .MuiSlider-rail': {
-            height: 5,
-        },
-        '& .MuiSlider-track': {
-            height: 5,
-        },
     },
     exchangeText: {
         textAlign: 'right',
@@ -239,7 +227,8 @@ export function SwapDialog(props: SwapDialogProps) {
                 <span className={classes.exchangeAmountText}>{formatBalance(tokenAmount, token.decimals)}</span>{' '}
                 {token.symbol}.
             </Typography>
-            <TokenAmountPanel
+            <FungibleTokenInput
+                label={t('amount')}
                 amount={inputAmountForUI}
                 maxAmount={maxAmount}
                 balance={tokenBalance}
@@ -255,12 +244,7 @@ export function SwapDialog(props: SwapDialogProps) {
                     setTokenAmount(tokenAmount.dp(0))
                     setSwapAmount(swapAmount)
                 }}
-                label={t('plugin_ito_dialog_swap_panel_title')}
-                SelectTokenChip={{
-                    ChipProps: {
-                        onClick: onSelectTokenChipClick,
-                    },
-                }}
+                onSelectToken={onSelectTokenChipClick}
             />
             <Typography className={classes.remindText} variant="body1" color="textSecondary">
                 {t('plugin_ito_swap_only_once_remind')}
@@ -273,17 +257,13 @@ export function SwapDialog(props: SwapDialogProps) {
                         spender={payload.contract_address}
                         token={swapToken.schema === SchemaType.ERC20 ? swapToken : undefined}>
                         <ActionButton
-                            loading={isSwapping}
+                            loading={isSwapping || loadingQualification}
                             className={classes.button}
                             fullWidth
                             size="large"
                             disabled={!!validationMessage || loadingQualification || isSwapping}
                             onClick={onSwap}>
-                            {loadingQualification ? (
-                                <CircularProgress size={16} className={classes.loading} />
-                            ) : (
-                                validationMessage || t('plugin_ito_swap')
-                            )}
+                            {validationMessage || t('plugin_ito_swap')}
                         </ActionButton>
                     </EthereumERC20TokenApprovedBoundary>
                 </WalletConnectedBoundary>

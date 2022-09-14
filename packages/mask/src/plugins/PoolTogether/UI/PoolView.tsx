@@ -1,7 +1,7 @@
 import { first } from 'lodash-unified'
 import type { Pool } from '../types.js'
-import { Typography, Grid, CircularProgress, Button } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { Typography, Grid, Button } from '@mui/material'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { usePoolURL } from '../hooks/usePoolURL.js'
 import { CountdownView } from './CountdownView.js'
@@ -209,7 +209,7 @@ export function PoolView(props: PoolProps) {
     if (loadingToken) {
         return (
             <div className={classes.root}>
-                <CircularProgress className={classes.progress} color="primary" size={15} />
+                <LoadingBase className={classes.progress} color="primary" size={15} />
             </div>
         )
     }
