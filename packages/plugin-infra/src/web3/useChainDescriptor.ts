@@ -3,7 +3,6 @@ import { useCurrentWeb3NetworkPluginID } from './Context.js'
 import { getPluginDefine } from '../manager/store.js'
 import { useChainId } from './useChainId.js'
 import type { Web3Helper } from '../web3-helpers/index.js'
-import type { PluginID } from '../types.js'
 
 export function useChainDescriptor<T extends NetworkPluginID>(
     expectedPluginID?: T,
@@ -12,7 +11,5 @@ export function useChainDescriptor<T extends NetworkPluginID>(
     const pluginID = useCurrentWeb3NetworkPluginID(expectedPluginID)
     const chainId = useChainId(pluginID)
 
-    return getPluginDefine(pluginID as unknown as PluginID)?.declareWeb3Chains?.find(
-        (x) => x.chainId === (expectedChainId ?? chainId),
-    )
+    return getPluginDefine(pluginID)?.declareWeb3Chains?.find((x) => x.chainId === (expectedChainId ?? chainId))
 }

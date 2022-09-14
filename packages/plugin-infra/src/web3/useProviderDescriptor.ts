@@ -3,7 +3,6 @@ import { useProviderType } from './useProviderType.js'
 import type { Web3Helper } from '../web3-helpers/index.js'
 import { useCurrentWeb3NetworkPluginID } from './Context.js'
 import { getPluginDefine } from '../manager/store.js'
-import type { PluginID } from '../types.js'
 
 export function useProviderDescriptor<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     expectedPluginID?: T,
@@ -12,7 +11,7 @@ export function useProviderDescriptor<S extends 'all' | void = void, T extends N
     const pluginID = useCurrentWeb3NetworkPluginID(expectedPluginID)
     const providerType = useProviderType(pluginID)
 
-    return getPluginDefine(pluginID as unknown as PluginID)?.declareWeb3Providers?.find((x) =>
+    return getPluginDefine(pluginID)?.declareWeb3Providers?.find((x) =>
         [x.type, x.ID].includes(expectedProviderTypeOrID ?? providerType ?? ''),
     ) as Web3Helper.ProviderDescriptorScope<S, T> | undefined
 }

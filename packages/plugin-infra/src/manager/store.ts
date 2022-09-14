@@ -3,6 +3,7 @@ import type { Plugin, PluginID } from '../types.js'
 import { memoize } from 'lodash-unified'
 import type { Web3Helper } from '../web3-helpers/index.js'
 import type { Subscription } from 'use-subscription'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const __registered = new Map<PluginID, Plugin.DeferredDefinition>()
 const listeners = new Set<onNewPluginRegisteredListener>()
@@ -22,8 +23,8 @@ export const registeredPlugins: Subscription<Array<[PluginID, Plugin.DeferredDef
     },
 }
 
-export function getPluginDefine(id: PluginID) {
-    return __registered.get(id)
+export function getPluginDefine(id: PluginID | NetworkPluginID) {
+    return __registered.get(id as unknown as PluginID)
 }
 
 export function registerPlugin<
