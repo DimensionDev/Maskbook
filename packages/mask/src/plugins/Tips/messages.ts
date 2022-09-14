@@ -4,7 +4,6 @@ import type { TipTask } from './types/index.js'
 export interface TipMessage {
     tipTask: TipTask
     tipTaskUpdate: TipTask
-    tipsSettingUpdate: void
     rpc: unknown
 }
 
