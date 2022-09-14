@@ -21,7 +21,7 @@ import { EncryptionMethodSelector, EncryptionMethodType } from './EncryptionMeth
 const useStyles = makeStyles()((theme) => ({
     root: {
         '& > *': {
-            marginBottom: '18px !important',
+            height: '36px !important',
         },
         minHeight: 450,
         overflowY: 'auto',
@@ -42,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
         left: '50%',
         transform: 'translateX(-50%)',
         display: 'flex',
-        padding: '14px 16px',
+        padding: 16,
         boxSizing: 'border-box',
         flexDirection: 'row',
         justifyContent: 'flex-end',
@@ -74,10 +74,17 @@ const useStyles = makeStyles()((theme) => ({
     },
     editorWrapper: {
         minHeight: 338,
+        width: 568,
         background: theme.palette.background.input,
-        padding: 14,
+        padding: 0,
         boxSizing: 'border-box',
         borderRadius: 8,
+        marginBottom: 16,
+    },
+    icon: {
+        width: 18,
+        height: 18,
+        fill: theme.palette.text.buttonText,
     },
 }))
 
@@ -260,12 +267,13 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     </Button>
                 )}
                 <LoadingButton
+                    style={{ opacity: 1 }}
                     disabled={!submitAvailable}
                     loading={sending}
                     loadingPosition="start"
                     variant="roundedContained"
                     onClick={onSubmit}
-                    startIcon={<Icons.Send size={18} color={theme.palette.text.buttonText} />}>
+                    startIcon={<Icons.Send className={classes.icon} />}>
                     {t('post_dialog__button')}
                 </LoadingButton>
             </div>

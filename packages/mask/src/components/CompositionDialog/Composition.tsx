@@ -27,7 +27,7 @@ const useStyles = makeStyles()({
         visibility: 'hidden',
     },
     dialogContent: {
-        padding: '20px 24px',
+        padding: 16,
     },
 })
 export interface PostDialogProps {
@@ -134,7 +134,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                         isOpenFromApplicationBoard={isOpenFromApplicationBoard}
                     />
                 </DialogContent>
-                <DialogActions sx={{ height: 68 }} />
+                <DialogActions sx={{ height: 68, padding: '0px !important' }} />
             </InjectedDialog>
         </DialogStackingProvider>
     )
