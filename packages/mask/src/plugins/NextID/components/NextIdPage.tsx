@@ -82,7 +82,7 @@ export function NextIdPage() {
             )
         }
 
-        return null
+        return <AddWalletPersonaAction disabled={statusLoading} onAddWallet={handleAddWallets} />
     }, [isOwn, t, statusLoading, handleAddWallets, personaConnectStatus])
 
     if (loadingBindings || loadingPersona) {

@@ -390,7 +390,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         )
     }
 
-    if (showPublicWalletSetting) {
+    if (showPublicWalletSetting && !showNextID) {
         return (
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
