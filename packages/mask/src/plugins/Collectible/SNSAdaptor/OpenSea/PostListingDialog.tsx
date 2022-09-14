@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { DialogContent, Tab, Typography } from '@mui/material'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { InjectedDialog } from '@masknet/shared'
@@ -41,12 +40,6 @@ export function PostListingDialog(props: PostListingDialogProps) {
 
     const { t } = useI18N()
     const { classes } = useStyles()
-
-    const [tabIndex, setTabIndex] = useState(0)
-    const _tabs = [
-        <Tab key="price" label={t('plugin_collectible_set_price')} />,
-        <Tab key="bid" label={t('plugin_collectible_highest_bid')} />,
-    ]
 
     const [currentTab, onChange, tabs] = useTabs('price', 'bid')
 

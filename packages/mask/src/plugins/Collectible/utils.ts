@@ -7,10 +7,10 @@ import {
     zoraHostnames,
     zoraPathnameRegexMatcher,
 } from './constants.js'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId as ChainIdEVM } from '@masknet/web3-shared-evm'
+import { SourceType } from '@masknet/web3-shared-base'
 import { WyvernSchemaName } from 'opensea-js/lib/types'
 import type { CollectibleJSON_Payload } from './types/index.js'
-import { SourceType } from '@masknet/web3-shared-base'
 
 export function checkUrl(url: string): boolean {
     const protocol = 'https://'
@@ -36,7 +36,7 @@ export function getAssetInfoFromURL(url?: string): CollectibleJSON_Payload | nul
     const openSeaMatched = _url.pathname.match(openseaPathnameRegexMatcher)
     if (openSeaMatched) {
         return {
-            chain_id: _url.host.includes('testnets') ? ChainId.Rinkeby : ChainId.Mainnet,
+            chain_id: _url.host.includes('testnets') ? ChainIdEVM.Rinkeby : ChainIdEVM.Mainnet,
             address: openSeaMatched[1],
             token_id: openSeaMatched[2],
             provider: SourceType.OpenSea,
@@ -49,10 +49,10 @@ export function getAssetInfoFromURL(url?: string): CollectibleJSON_Payload | nul
     if (raribleMatched) {
         return {
             chain_id: _url.host.includes('ropsten')
-                ? ChainId.Ropsten
+                ? ChainIdEVM.Ropsten
                 : _url.host.includes('rinkeby')
-                ? ChainId.Rinkeby
-                : ChainId.Mainnet,
+                ? ChainIdEVM.Rinkeby
+                : ChainIdEVM.Mainnet,
             address: raribleMatched[1],
             token_id: raribleMatched[2],
             provider: SourceType.Rarible,
@@ -64,7 +64,7 @@ export function getAssetInfoFromURL(url?: string): CollectibleJSON_Payload | nul
     const zoraMatched = _url.pathname.match(zoraPathnameRegexMatcher)
     if (zoraMatched) {
         return {
-            chain_id: _url.host.includes('rinkeby') ? ChainId.Rinkeby : ChainId.Mainnet,
+            chain_id: _url.host.includes('rinkeby') ? ChainIdEVM.Rinkeby : ChainIdEVM.Mainnet,
             address: zoraMatched[1],
             token_id: zoraMatched[2],
             provider: SourceType.Zora,

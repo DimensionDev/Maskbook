@@ -1,6 +1,7 @@
 import { uniq } from 'lodash-unified'
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
+import { Box } from '@mui/material'
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { PostInspector } from './PostInspector.js'
 import { base } from '../base.js'
@@ -10,7 +11,6 @@ import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { NFTPage } from './NFTPage.js'
 import { NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
 import { setupContext } from '../context.js'
-import { Box } from '@mui/material'
 
 const NFTTabConfig: Plugin.SNSAdaptor.ProfileTab = {
     ID: `${PLUGIN_ID}_nfts`,

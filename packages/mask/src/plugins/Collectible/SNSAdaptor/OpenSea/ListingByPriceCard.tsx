@@ -70,8 +70,9 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const opensea = useOpenSea(chainId)
 
-    const [scheduleTime, setScheduleTime] = useState(new Date())
-    const [expirationTime, setExpirationTime] = useState(new Date())
+    const now = new Date()
+    const [scheduleTime, setScheduleTime] = useState(now)
+    const [expirationTime, setExpirationTime] = useState(now)
     const [buyerAddress, setBuyerAddress] = useState('')
     const [endingAmount, setEndingAmount] = useState('')
 
