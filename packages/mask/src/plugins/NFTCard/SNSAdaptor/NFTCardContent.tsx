@@ -1,12 +1,11 @@
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Button, Typography } from '@mui/material'
 import { PluginWalletStatusBar, useI18N as useBaseI18n } from '../../../utils/index.js'
-import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '../../Wallet/messages.js'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { NFTCardDialogTabs } from './NFTCardDialog.js'
 import { useStyles } from '../useStyles.js'
-import { chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { AboutTab } from './Tabs/AboutTab.js'
 import { OffersTab } from './Tabs/OffersTab.js'
 import { ActivitiesTab } from './Tabs/ActivitiesTab.js'
@@ -25,13 +24,15 @@ export function NFTCardContent(props: NFTCardContentProps) {
     const { currentTab, tokenId, tokenAddress } = props
     const { classes } = useStyles()
     const { t: tb } = useBaseI18n()
+    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { Others } = useWeb3State()
     const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
     const pluginId = useCurrentWeb3NetworkPluginID()
     const { asset, orders, events } = useNFTCardInfo(tokenAddress, tokenId)
 
-    const chainIdList = pluginDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
+    const chainIdList = pluginDefinition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? []
 
     if (asset.loading)
         return (
@@ -79,10 +80,10 @@ export function NFTCardContent(props: NFTCardContentProps) {
                             open: true,
                             supportedNetworkList: chainIdList
                                 .map((chainId) => {
-                                    const x = chainResolver.chainNetworkType(chainId)
+                                    const x = Others?.chainResolver.chainNetworkType(chainId)
                                     return x
                                 })
-                                .filter((x) => Boolean(x)) as NetworkType[],
+                                .filter((x) => Boolean(x)) as Web3Helper.NetworkTypeAll[],
                         })
                     }}
                     fullWidth>

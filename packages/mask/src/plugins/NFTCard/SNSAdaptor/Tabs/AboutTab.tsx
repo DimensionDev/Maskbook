@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import BigNumber from 'bignumber.js'
 import { first } from 'lodash-unified'
-import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import type { NonFungibleTokenOrder, Pageable } from '@masknet/web3-shared-base'
 import { NFTDescription } from '../../../../components/shared/NFTCard/NFTDescription.js'
 import { NFTPropertiesCard } from '../../../../components/shared/NFTCard/NFTPropertiesCard.js'
@@ -23,9 +23,9 @@ const resolveTopOffer = (orders?: Array<NonFungibleTokenOrder<Web3Helper.ChainId
     if (!orders?.length) return
     return first(
         orders.sort((a, b) => {
-            const value_a = new BigNumber(a.price?.usd ?? 0)
-            const value_b = new BigNumber(b.price?.usd ?? 0)
-            return Number(value_a.lt(value_b))
+            const priceA = new BigNumber(a.price?.usd ?? 0)
+            const priceB = new BigNumber(b.price?.usd ?? 0)
+            return priceA.lt(priceB) ? 1 : 0
         }),
     )
 }

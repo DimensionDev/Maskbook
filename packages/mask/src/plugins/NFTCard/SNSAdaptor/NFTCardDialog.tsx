@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react'
-import { PluginIDContextProvider, PluginWeb3ContextProvider, useChainIdValid } from '@masknet/plugin-infra/web3'
-import { ChainId } from '@masknet/web3-shared-evm'
+import {
+    PluginIDContextProvider,
+    PluginWeb3ContextProvider,
+    useChainIdValid,
+    Web3Helper,
+} from '@masknet/plugin-infra/web3'
 import { InjectedDialog } from '@masknet/shared'
 import { MaskTabList, useTabs } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { TabContext } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
@@ -22,8 +26,8 @@ export function NFTCardDialog() {
     const { t } = useI18N()
     const [tokenId, setTokenId] = useState('')
     const [tokenAddress, setTokenAddress] = useState('')
-    const [chainId, setChainId] = useState(ChainId.Mainnet)
-    const [pluginID, setPluginID] = useState(NetworkPluginID.PLUGIN_EVM)
+    const [chainId, setChainId] = useState<Web3Helper.ChainIdAll | undefined>()
+    const [pluginID, setPluginID] = useState<NetworkPluginID | undefined>()
     const chainIdValid = useChainIdValid(pluginID)
     const [open, setOpen] = useState(false)
 
@@ -51,6 +55,8 @@ export function NFTCardDialog() {
         tokenId,
         tokenAddress,
     })
+
+    if (!chainId || !pluginID) return null
 
     return (
         <PluginIDContextProvider value={pluginID}>
