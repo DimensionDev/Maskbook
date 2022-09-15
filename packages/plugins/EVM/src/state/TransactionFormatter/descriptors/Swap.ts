@@ -356,8 +356,8 @@ export class SwapDescriptor implements TransactionDescriptor {
                 const WETH_ADDRESS = getTokenConstant(context.chainId, 'WETH_ADDRESS')
                 const wethToken = await connection?.getFungibleToken(WETH_ADDRESS ?? '')
 
-                const tokenIn = method.name === 'withdraw' ? nativeToken : wethToken
-                const tokenOut = method.name === 'withdraw' ? wethToken : nativeToken
+                const tokenIn = method.name === 'withdraw' ? wethToken : nativeToken
+                const tokenOut = method.name === 'withdraw' ? nativeToken : wethToken
                 return {
                     chainId: context.chainId,
                     title: `${actionName} Token`,
