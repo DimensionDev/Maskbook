@@ -18,7 +18,6 @@ import { getTokenAmountDescription } from '../utils.js'
 export class SwapDescriptor implements TransactionDescriptor {
     async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
         const context = context_ as TransactionContext<ChainId, string | undefined>
-        console.log({ context })
         const { DODO_ETH_ADDRESS, OPENOCEAN_ETH_ADDRESS, ZERO_X_ETH_ADDRESS, BANCOR_ETH_ADDRESS } = getTraderConstants(
             context.chainId,
         )
@@ -276,7 +275,7 @@ export class SwapDescriptor implements TransactionDescriptor {
                     let amountOutMinimum: string
                     if (context.chainId === ChainId.Arbitrum) {
                         const WETH_ADDRESS = getTokenConstant(context.chainId, 'WETH_ADDRESS')
-                        console.log({ results })
+
                         ;[tokenInAddress, tokenOutAddress, fee, recipient, deadline, amountIn, amountOutMinimum] =
                             results['0']
 
@@ -372,6 +371,31 @@ export class SwapDescriptor implements TransactionDescriptor {
                         tokenIn,
                     )} for ${getTokenAmountDescription(amount, tokenOut)} successfully.`,
                     failedDescription: `Failed to ${actionName} ${tokenOut?.symbol ?? ''}.`,
+                }
+            }
+
+            if (
+                method.name === 'swapExactTokensForAVAX' &&
+                parameters?.amountIn &&
+                parameters?.amountOutMin &&
+                parameters?.path
+            ) {
+                const tokenIn = await connection?.getFungibleToken(first(parameters!.path) ?? '')
+                const tokenOut = nativeToken
+
+                return {
+                    chainId: context.chainId,
+                    title: 'Swap Token',
+                    tokenInAddress: tokenIn?.address,
+                    tokenInAmount: parameters!.amountIn,
+                    description: `Swap ${getTokenAmountDescription(parameters!.amountIn, tokenIn)} for ${
+                        tokenOut?.symbol ?? ''
+                    }.`,
+                    successfulDescription: `Swap ${getTokenAmountDescription(
+                        parameters!.amountIn,
+                        tokenIn,
+                    )} for ${getTokenAmountDescription(parameters!.amountOutMin, tokenOut)} successfully.`,
+                    failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
                 }
             }
         }
