@@ -45,7 +45,9 @@ export function SearchResultInspectorContent() {
                             {t.associated_social_accounts()}
                         </Typography>
                         <Icons.TwitterRound />
-                        <Typography className={classes.nextIdVerifiedTwitterName}>VitalikButerin</Typography>
+                        <Typography className={classes.nextIdVerifiedTwitterName}>
+                            {nextIdTwitterBindingName}
+                        </Typography>
                         <Icons.NextIDMini variant="light" width={32} />
                     </div>
                 ) : null}
