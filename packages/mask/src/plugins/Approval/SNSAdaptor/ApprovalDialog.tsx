@@ -7,7 +7,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
-import { PluginId } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/plugin-infra'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useI18N } from '../locales/index.js'
 import { useI18N as useBaseI18n, PluginWalletStatusBar } from '../../../utils/index.js'
@@ -66,7 +66,7 @@ function ApprovalWrapper(props: ApprovalWrapperProps) {
     const t = useI18N()
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const [networkTabChainId, setNetworkTabChainId] = useState<ChainId>(chainId)
-    const approvalDefinition = useActivatedPlugin(PluginId.Approval, 'any')
+    const approvalDefinition = useActivatedPlugin(PluginID.Approval, 'any')
     const pluginId = useCurrentWeb3NetworkPluginID()
     const chainIdList =
         approvalDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []

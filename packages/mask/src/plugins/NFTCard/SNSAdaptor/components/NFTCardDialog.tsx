@@ -12,9 +12,9 @@ import { CrossIsolationMessages } from '@masknet/shared-base'
 import { TabContext } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
 import { NFTCardContent } from './NFTCardContent.js'
-import { useStyles } from '../useStyles.js'
-import { useI18N } from '../../../utils/index.js'
-import { Context } from './hooks/useContext.js'
+import { useStyles } from '../../useStyles.js'
+import { useI18N } from '../../../../utils/index.js'
+import { Context } from '../hooks/useContext.js'
 
 export enum NFTCardDialogTabs {
     About = 'About',
@@ -49,13 +49,6 @@ export function NFTCardDialog() {
             setOpen(ev.open)
         })
     }, [chainIdValid])
-
-    console.log('DEBUG: card dialog')
-    console.log({
-        chainId,
-        tokenId,
-        tokenAddress,
-    })
 
     if (!chainId || !pluginID) return null
     if (!tokenId || !tokenAddress) return null

@@ -1,8 +1,8 @@
-import { PluginId } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/plugin-infra'
 import { ChainId, NetworkType } from '@masknet/web3-shared-evm'
 import { createGlobalSettings } from './createSettings.js'
 
-const PLUGIN_ID = PluginId.Wallet
+const PLUGIN_ID = PluginID.Wallet
 export enum LockStatus {
     INIT = 0,
     UNLOCK = 1,

@@ -5,8 +5,9 @@ import { Typography, Button } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
-import { useI18N } from '../../../../utils/index.js'
-import { NFTActivityCard, ActivityType } from '../../../../components/shared/NFTCard/NFTActivityCard.js'
+import { useI18N } from '../../../../../utils/index.js'
+import { NFTActivityCard } from '../NFTActivityCard'
+import { ActivityType } from '../../../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {

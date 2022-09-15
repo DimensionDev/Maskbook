@@ -1,4 +1,4 @@
-import { PluginId, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
+import { PluginID, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import {
     useChainIdValid,
     useFungibleToken,
@@ -124,7 +124,7 @@ export function TrendingView(props: TrendingViewProps) {
     const { classes } = useStyles({ isPopper })
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const theme = useTheme()
-    const isMinimalMode = useIsMinimalMode(PluginId.Trader)
+    const isMinimalMode = useIsMinimalMode(PluginID.Trader)
     const dataProvider = useCurrentDataProvider(dataProviders)
     const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP_INFO ? 1 : 0)
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)

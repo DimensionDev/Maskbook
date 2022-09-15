@@ -1,15 +1,14 @@
 import { useEffect, useMemo } from 'react'
+import { makeStyles } from '@masknet/theme'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { useAvailablePlugins, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
+import { useSocialAddressListAll } from '@masknet/plugin-infra/web3'
 import {
     useActivatedPluginsSNSAdaptor,
     createInjectHooksRenderer,
-    PluginId,
+    PluginID,
 } from '@masknet/plugin-infra/content-script'
-
 import { MaskMessages } from '../../utils/index.js'
 import { useCurrentVisitingIdentity } from '../DataSource/useActivatedUI.js'
-import { makeStyles } from '@masknet/theme'
 
 export interface ProfileCoverProps extends withClasses<'root'> {}
 
@@ -37,17 +36,10 @@ export function ProfileCover(props: ProfileCoverProps) {
         return MaskMessages.events.ownProofChanged.on(reloadSocialAddress)
     }, [reloadSocialAddress])
 
-    const displayPlugins = useAvailablePlugins(activatedPlugins, (plugins) => {
-        return plugins
-            .flatMap((x) => x.ProfileCover?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
-            .filter((x) => x.Utils.shouldDisplay?.(currentVisitingIdentity, socialAddressList) ?? true)
-            .sort((a, z) => a.priority - z.priority)
-    })
-
     // TODO: Multi-plugin rendering support
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
-            const cover = x.ProfileCover?.find((x) => x.ID === `${PluginId.Debugger}_cover`)
+            const cover = x.ProfileCover?.find((x) => x.ID === `${PluginID.Debugger}_cover`)
 
             return cover?.UI?.Cover
         })

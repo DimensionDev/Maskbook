@@ -5,7 +5,7 @@ import {
     useCurrentWeb3NetworkPluginID,
     useFungibleTokens,
 } from '@masknet/plugin-infra/web3'
-import { PluginId, useActivatedPlugin } from '@masknet/plugin-infra/dom'
+import { PluginID, useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useState, useLayoutEffect, useRef, useCallback } from 'react'
 import { flatten, uniq } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
@@ -207,7 +207,7 @@ interface ClaimAllDialogProps {
 export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { t } = useI18N()
     const { open, onClose } = props
-    const ITO_Definition = useActivatedPlugin(PluginId.ITO, 'any')
+    const ITO_Definition = useActivatedPlugin(PluginID.ITO, 'any')
     const pluginId = useCurrentWeb3NetworkPluginID()
     const chainIdList = ITO_Definition?.enableRequirement.web3?.[pluginId]?.supportedChainIds ?? []
     const DialogRef = useRef<HTMLDivElement>(null)

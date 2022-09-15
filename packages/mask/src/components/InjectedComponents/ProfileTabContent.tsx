@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import {
     createInjectHooksRenderer,
-    PluginId,
+    PluginID,
     useActivatedPluginsSNSAdaptor,
     useIsMinimalMode,
     usePluginI18NField,
@@ -200,24 +200,24 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
             .filter((x) => {
                 const shouldDisplay = x.Utils?.shouldDisplay?.(currentVisitingSocialIdentity, selectedAddress) ?? true
-                return x.pluginID !== PluginId.NextID && shouldDisplay
+                return x.pluginID !== PluginID.NextID && shouldDisplay
             })
             .sort((a, z) => {
                 // order those tabs from next id first
-                if (a.pluginID === PluginId.NextID) return -1
-                if (z.pluginID === PluginId.NextID) return 1
+                if (a.pluginID === PluginID.NextID) return -1
+                if (z.pluginID === PluginID.NextID) return 1
 
                 // order those tabs from collectible first
-                if (a.pluginID === PluginId.Collectible) return -1
-                if (z.pluginID === PluginId.Collectible) return 1
+                if (a.pluginID === PluginID.Collectible) return -1
+                if (z.pluginID === PluginID.Collectible) return 1
 
                 // place those tabs from debugger last
-                if (a.pluginID === PluginId.Debugger) return 1
-                if (z.pluginID === PluginId.Debugger) return -1
+                if (a.pluginID === PluginID.Debugger) return 1
+                if (z.pluginID === PluginID.Debugger) return -1
 
                 // place those tabs from dao before the last
-                if (a.pluginID === PluginId.DAO) return 1
-                if (z.pluginID === PluginId.DAO) return -1
+                if (a.pluginID === PluginID.DAO) return 1
+                if (z.pluginID === PluginID.DAO) return -1
 
                 return a.priority - z.priority
             })
@@ -227,9 +227,9 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
     }))
 
-    const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginId.Collectible, ...tabs.map((tab) => tab.id))
+    const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
 
-    const isWeb3ProfileDisable = useIsMinimalMode(PluginId.Web3Profile)
+    const isWeb3ProfileDisable = useIsMinimalMode(PluginID.Web3Profile)
 
     const isTwitterPlatform = isTwitter(activatedSocialNetworkUI)
     const doesOwnerHaveNoAddress =
@@ -246,7 +246,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             // the visiting persona not have social address list
             (!isOwnerIdentity && !socialAddressList.length))
 
-    const componentTabId = showNextID ? `${PluginId.NextID}_tabContent` : currentTab
+    const componentTabId = showNextID ? `${PluginID.NextID}_tabContent` : currentTab
 
     const component = useMemo(() => {
         const Component = getTabContent(componentTabId)
@@ -417,7 +417,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                     <ConnectPersonaBoundary
                                         customHint
                                         handlerPosition="top-right"
-                                        directTo={PluginId.Web3Profile}>
+                                        directTo={PluginID.Web3Profile}>
                                         <Icons.Gear
                                             variant="light"
                                             onClick={handleOpenDialog}

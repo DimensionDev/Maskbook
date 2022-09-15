@@ -1,5 +1,5 @@
 import { ImageTemplateTypes, socialNetworkEncoder } from '@masknet/encryption'
-import { PluginId } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/plugin-infra'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import type { Meta } from '@masknet/typed-message'
 import { useCallback } from 'react'
@@ -82,7 +82,7 @@ function decorateEncryptedText(
     const officialAccount = isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
 
     // Note: since this is in the composition stage, we can assume plugins don't insert old version of meta.
-    if (meta?.has(`${PluginId.RedPacket}:1`) || meta?.has(`${PluginId.RedPacket}_nft:1`)) {
+    if (meta?.has(`${PluginID.RedPacket}:1`) || meta?.has(`${PluginID.RedPacket}_nft:1`)) {
         return [
             'v2',
             hasOfficialAccount
@@ -92,7 +92,7 @@ function decorateEncryptedText(
                   })
                 : t('additional_post_box__encrypted_post_pre_red_packet', { encrypted }),
         ]
-    } else if (meta?.has(`${PluginId.ITO}:2`)) {
+    } else if (meta?.has(`${PluginID.ITO}:2`)) {
         return [
             'v2',
             hasOfficialAccount
@@ -102,7 +102,7 @@ function decorateEncryptedText(
                   })
                 : t('additional_post_box__encrypted_post_pre_ito', { encrypted }),
         ]
-    } else if (meta?.has(`${PluginId.FileService}:2`)) {
+    } else if (meta?.has(`${PluginID.FileService}:2`)) {
         return [
             'v2',
             hasOfficialAccount
