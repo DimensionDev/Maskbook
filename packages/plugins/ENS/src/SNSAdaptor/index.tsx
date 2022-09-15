@@ -1,4 +1,4 @@
-import { Plugin, PluginId } from '@masknet/plugin-infra'
+import { Plugin, PluginID } from '@masknet/plugin-infra'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
@@ -10,7 +10,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     SearchResultBox: {
-        ID: PluginId.ENS,
+        ID: PluginID.ENS,
         UI: {
             Content: ({ keyword }) => (
                 <MaskPostExtraInfoWrapper
@@ -20,11 +20,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
                         borderRadius: '0px',
                         margin: '0px',
                     }}
-                    key={PluginId.ENS}
-                    title={<PluginI18NFieldRender field={base.name} pluginID={PluginId.ENS} />}
+                    key={PluginID.ENS}
+                    title={<PluginI18NFieldRender field={base.name} pluginID={PluginID.ENS} />}
                     publisher={
                         base.publisher ? (
-                            <PluginI18NFieldRender pluginID={PluginId.ENS} field={base.publisher.name} />
+                            <PluginI18NFieldRender pluginID={PluginID.ENS} field={base.publisher.name} />
                         ) : undefined
                     }
                     publisherLink={base.publisher?.link}>
