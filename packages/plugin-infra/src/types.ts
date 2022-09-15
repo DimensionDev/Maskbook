@@ -452,8 +452,8 @@ export namespace Plugin.SNSAdaptor {
         SettingTabs?: SettingTab[]
         /** This UI will be rendered components on the avatar realm */
         AvatarRealm?: AvatarRealm
-        ContributedView?: {
-            [key in keyof ContributedViewRegistry]: ContributedView<ContributedViewRegistry[key]>
+        Widgets?: {
+            [key in keyof WidgetRegistry]: Widget<WidgetRegistry[key]>
         }
         /** This UI will be rendered components on the tips realm */
         TipsRealm?: TipsRealm
@@ -768,11 +768,12 @@ export namespace Plugin.SNSAdaptor {
         }
     }
 
-    /** Contribute a view to other plugins. */
-    export interface ContributedView<Props> {
+    /** Contribute a widget to other plugins. */
+    export interface Widget<Props> {
         component: React.ComponentType<Props>
     }
-    export interface ContributedViewRegistry {
+
+    export interface WidgetRegistry {
         // example: Props here
         example: {}
     }
