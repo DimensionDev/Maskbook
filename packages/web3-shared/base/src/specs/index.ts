@@ -963,7 +963,7 @@ export interface HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions = Hu
     /** Get token icon URLs that point to a fungible token. */
     getFungibleTokenIconURLs?: (chainId: ChainId, address: string, initial?: Web3HubOptions) => Promise<string[]>
     /** Get spenders of a fungible token approved by the given account. */
-    getFungibleTokenApprovedSpenders?: (
+    getFungibleTokenSpenders?: (
         chainId: ChainId,
         account: string,
         initial?: Web3HubOptions,
@@ -1029,7 +1029,7 @@ export interface HubNonFungible<ChainId, SchemaType, GasOption, Web3HubOptions =
         initial?: Web3HubOptions,
     ) => Promise<string[]>
     /** Get contracts of a non-fungible token approved by the given account. */
-    getNonFungibleApprovedContracts?: (
+    getNonFungibleTokenSpenders?: (
         chainId: ChainId,
         account: string,
         initial?: Web3HubOptions,
