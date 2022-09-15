@@ -31,7 +31,7 @@ import { resolveDataProviderName } from '../../pipes'
 import { CoinMenu } from './CoinMenu.js'
 import { CoinSafetyAlert } from './CoinSafetyAlert.js'
 import { CoinIcon } from './components/index.js'
-import { DataProviderIconUI } from '../trader/components/DataProviderIconUI'
+import { DataProviderIcon } from '../trader/components/DataProviderIcon'
 import { PluginHeader } from './PluginHeader.js'
 import { PriceChanged } from './PriceChanged.js'
 import { TrendingCard, TrendingCardProps } from './TrendingCard.js'
@@ -211,7 +211,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
             <Stack className={classes.cardHeader}>
                 <PluginHeader>
                     <DataSourceSwitcher
-                        DataProviderIconUI={DataProviderIconUI}
+                        DataProviderIcon={DataProviderIcon}
                         resolveDataProviderName={resolveDataProviderName}
                         showDataProviderIcon={showDataProviderIcon}
                         dataProvider={dataProvider}

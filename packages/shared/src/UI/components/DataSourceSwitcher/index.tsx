@@ -31,7 +31,7 @@ export interface TradeDataSourceProps<T> extends withClasses<'source' | 'sourceN
     dataProvider?: T
     dataProviders?: T[]
     resolveDataProviderName: (key: T) => string
-    DataProviderIconUI: (props: { provider: T; size?: number }) => JSX.Element
+    DataProviderIcon: (props: { provider: T; size?: number }) => JSX.Element
     onDataProviderChange?: (option: FootnoteMenuOption) => void
 }
 
@@ -42,7 +42,7 @@ export const DataSourceSwitcher = function <T extends string | number>(props: Tr
         dataProviders = [],
         onDataProviderChange,
         resolveDataProviderName,
-        DataProviderIconUI,
+        DataProviderIcon,
     } = props
     const t = useSharedI18N()
     const classes = useStylesExtends(useStyles(), props)
@@ -60,7 +60,7 @@ export const DataSourceSwitcher = function <T extends string | number>(props: Tr
                         options={dataProviders.map((x) => ({
                             name: (
                                 <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
-                                    <DataProviderIconUI provider={x} size={20} />
+                                    <DataProviderIcon provider={x} size={20} />
                                     <Typography className={classes.sourceName}>{resolveDataProviderName(x)}</Typography>
                                 </Stack>
                             ),
