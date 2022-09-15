@@ -15,7 +15,7 @@ import { useAsync } from 'react-use'
 
 export function ApprovalTokenContent({ chainId }: { chainId: ChainId }) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM)
+    const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     const { value: spenders, loading } = useAsync(
         async () => hub?.getFungibleTokenSpenders?.(chainId, account),
