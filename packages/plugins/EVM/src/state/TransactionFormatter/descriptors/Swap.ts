@@ -18,6 +18,7 @@ import { getTokenAmountDescription } from '../utils.js'
 export class SwapDescriptor implements TransactionDescriptor {
     async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
         const context = context_ as TransactionContext<ChainId, string | undefined>
+        console.log({ context })
         const { DODO_ETH_ADDRESS, OPENOCEAN_ETH_ADDRESS, ZERO_X_ETH_ADDRESS, BANCOR_ETH_ADDRESS } = getTraderConstants(
             context.chainId,
         )
@@ -94,7 +95,7 @@ export class SwapDescriptor implements TransactionDescriptor {
                     successfulDescription: `Swap ${getTokenAmountDescription(
                         parameters!.amountIn,
                         tokenIn,
-                    )} for ${getTokenAmountDescription(parameters!.amountOut, tokenOut)} successfully.`,
+                    )} for ${getTokenAmountDescription(parameters!.amountOutMin, tokenOut)} successfully.`,
                     failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
                 }
             }
