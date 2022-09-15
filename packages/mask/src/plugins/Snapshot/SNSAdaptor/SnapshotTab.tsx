@@ -4,8 +4,11 @@ const useStyles = makeStyles()((theme) => {
     return {
         root: {
             width: '100%',
-            borderTopLeftRadius: 0,
-            borderTopRightRadius: 0,
+            borderRadius: 0,
+            backgroundColor: '#fff !important',
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            height: 400,
         },
         content: {
             padding: `${theme.spacing(2)} !important`,

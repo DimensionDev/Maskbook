@@ -29,6 +29,7 @@ export function LoadingCard(
                         <Skeleton
                             key={i}
                             className={classes.skeleton}
+                            sx={{ backgroundColor: 'gray' }}
                             animation="wave"
                             variant="rectangular"
                             width={i === 0 ? '80%' : '60%'}

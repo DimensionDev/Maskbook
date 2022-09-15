@@ -25,6 +25,8 @@ const useStyles = makeStyles()((theme) => {
         listItem: {
             display: 'flex',
             flexDirection: 'column',
+            paddingLeft: 0,
+            paddingRight: 0,
         },
         listItemHeader: {
             display: 'flex',
@@ -32,12 +34,15 @@ const useStyles = makeStyles()((theme) => {
         },
         power: {
             marginLeft: theme.spacing(2),
+            color: theme.palette.maskColor.dark,
         },
         ratio: {
             marginLeft: 'auto',
+            color: theme.palette.maskColor.dark,
         },
         choice: {
             maxWidth: choiceMaxWidth,
+            color: theme.palette.maskColor.dark,
         },
         linearProgressWrap: {
             width: '100%',
@@ -72,6 +77,7 @@ function Content() {
     const {
         payload: { results },
     } = useResults(identifier)
+    console.log('result', results)
     const { classes } = useStyles()
     const { t } = useI18N()
     const listRef = useRef<HTMLSpanElement[]>([])
