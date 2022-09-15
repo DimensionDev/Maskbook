@@ -5,6 +5,7 @@ import { SetupGuideStep } from '../../../shared/legacy-settings/types.js'
 import { definedSiteAdaptors } from '../../../shared/site-adaptors/definitions.js'
 import { requestSiteAdaptorsPermission } from '../helper/request-permission.js'
 import stringify from 'json-stable-stringify'
+import { first } from 'lodash-unified'
 
 export async function getSupportedSites(): Promise<
     Array<{
@@ -41,6 +42,7 @@ export async function connectSite(
 
     if (!(await requestSiteAdaptorsPermission([worker]))) return
 
+    // #region reset the global setup status setting
     currentSetupGuideStatus[network].value = stringify({
         status: type === 'nextID' ? SetupGuideStep.VerifyOnNextID : SetupGuideStep.FindUsername,
         persona: identifier.toText(),
@@ -48,8 +50,19 @@ export async function connectSite(
     })
 
     await delay(100)
+    // #endregion
 
-    if (worker.homepage) {
-        browser.tabs.create({ active: true, url: worker.homepage })
+    // #region open or switch the site
+    const openedTabs = await browser.tabs.query({ url: `${worker.homepage}/*` })
+    const targetTab = openedTabs.find((x) => x.active) ?? first(openedTabs)
+
+    if (targetTab?.id) {
+        await browser.tabs.update(targetTab.id, {
+            active: true,
+        })
+        await browser.windows.update(targetTab.windowId, { focused: true })
+    } else {
+        await browser.tabs.create({ active: true, url: worker.homepage })
     }
+    // #endregion
 }
