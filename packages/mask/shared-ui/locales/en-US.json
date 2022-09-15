@@ -1082,7 +1082,7 @@
     "popups_wallet_backup_json_file_click_tip": "Click or drag your file here",
     "popups_wallet_enter_your_wallet_name": "Enter your wallet name",
     "popups_wallet_delete_tip": "Are you sure you want to delete this wallet? Your wallet cannot be recovered without seed phrase.",
-    "popups_wallet_confirm_payment_password": "Confirm with payment password",
+    "popups_wallet_confirm_payment_password": "Payment password",
     "popups_wallet_token_buy": "Buy",
     "popups_wallet_token_send": "Send",
     "popups_wallet_token_swap": "Swap",

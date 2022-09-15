@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { PluginId, useActivatedPlugin } from '@masknet/plugin-infra/dom'
+import { PluginID, useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAsset } from '@masknet/plugin-infra/web3'
 import { InjectedDialog } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
@@ -131,7 +131,7 @@ export interface TipDialogProps {
 
 export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const pluginID = useCurrentWeb3NetworkPluginID()
-    const tipDefinition = useActivatedPlugin(PluginId.NextID, 'any')
+    const tipDefinition = useActivatedPlugin(PluginID.NextID, 'any')
     const chainIdList = tipDefinition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? EMPTY_LIST
     const t = useI18N()
     const { classes } = useStyles()

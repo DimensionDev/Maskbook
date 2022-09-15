@@ -107,28 +107,33 @@ export const usePostInfoDetails: {
         : PostInfo[key] extends Subscription<infer T>
         ? T
         : PostInfo[key]
-} = new Proxy({ __proto__: null } as any, {
-    get(_, key) {
-        if (typeof key === 'symbol') throw new Error()
-        if (_[key]) return _[key]
-        _[key] = function usePostInfoDetails() {
-            const postInfo = usePostInfo()
-            if (!postInfo) throw new TypeError('No post context')
-            if (!(key in postInfo)) throw new TypeError()
-            const k = postInfo[key as keyof PostInfo]
-            // eslint-disable-next-line react-hooks/rules-of-hooks
-            if (k instanceof ValueRef) return useValueRef<any>(k)
-            // eslint-disable-next-line react-hooks/rules-of-hooks
-            if (k instanceof ObservableMap) return useObservableValues<any>(k)
-            // eslint-disable-next-line react-hooks/rules-of-hooks
-            if (k instanceof ObservableSet) return useObservableValues<any>(k)
-            // eslint-disable-next-line react-hooks/rules-of-hooks
-            if (isSubscription(k)) return useSubscription<any>(k)
-            return k
-        }
-        return _[key]
-    },
-})
+} = {
+    __proto__: new Proxy(
+        { __proto__: null },
+        {
+            get(_, key) {
+                if (typeof key === 'symbol') return undefined
+                function usePostInfoDetails() {
+                    const postInfo = usePostInfo()
+                    if (!postInfo) throw new TypeError('No post context')
+                    if (!(key in postInfo)) throw new TypeError('postInfo.' + (key as string) + ' is not found')
+                    const k = postInfo[key as keyof PostInfo]
+                    // eslint-disable-next-line react-hooks/rules-of-hooks
+                    if (k instanceof ValueRef) return useValueRef<any>(k)
+                    // eslint-disable-next-line react-hooks/rules-of-hooks
+                    if (k instanceof ObservableMap) return useObservableValues<any>(k)
+                    // eslint-disable-next-line react-hooks/rules-of-hooks
+                    if (k instanceof ObservableSet) return useObservableValues<any>(k)
+                    // eslint-disable-next-line react-hooks/rules-of-hooks
+                    if (isSubscription(k)) return useSubscription<any>(k)
+                    return k
+                }
+                Object.defineProperty(usePostInfoDetails, key, { value: usePostInfoDetails, configurable: true })
+                return usePostInfoDetails
+            },
+        },
+    ),
+} as any
 function isSubscription(x: any): x is Subscription<any> {
     return (
         typeof x === 'object' &&

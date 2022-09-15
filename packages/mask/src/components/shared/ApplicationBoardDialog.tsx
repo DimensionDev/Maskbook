@@ -13,7 +13,7 @@ import { useI18N } from '../../utils/index.js'
 import { Icons } from '@masknet/icons'
 import { PersonaSelectPanelDialog } from './PersonaSelectPanel/PersonaSelectPanelDialog.js'
 import { PluginNextIDMessages } from '../../plugins/NextID/messages.js'
-import type { PluginId } from '@masknet/plugin-infra'
+import type { PluginID } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles<{
     openSettings: boolean
@@ -44,7 +44,7 @@ export function ApplicationBoardDialog() {
         ApplicationSettingTabs.pluginSwitch,
     )
 
-    const [focusPluginId, setFocusPluginId] = useState<PluginId>()
+    const [focusPluginId, setFocusPluginId] = useState<PluginID>()
     const [quickMode, setQuickMode] = useState(false)
 
     const { open, closeDialog: closeBoard } = useRemoteControlledDialog(

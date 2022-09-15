@@ -1,13 +1,13 @@
-import { makeStyles } from '@masknet/theme'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import BigNumber from 'bignumber.js'
 import { first } from 'lodash-unified'
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import type { NonFungibleTokenOrder, Pageable } from '@masknet/web3-shared-base'
-import { NFTDescription } from '../../../../components/shared/NFTCard/NFTDescription.js'
-import { NFTPropertiesCard } from '../../../../components/shared/NFTCard/NFTPropertiesCard.js'
-import { NFTPriceCard } from '../../../../components/shared/NFTCard/NFTPriceCard.js'
-import { NFTInfoCard } from '../../../../components/shared/NFTCard/NFTInfoCard.js'
+import { NFTDescription } from '../NFTDescription.js'
+import { NFTPropertiesCard } from '../NFTPropertiesCard.js'
+import { NFTPriceCard } from '../NFTPriceCard.js'
+import { NFTInfoCard } from '../NFTInfoCard.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {

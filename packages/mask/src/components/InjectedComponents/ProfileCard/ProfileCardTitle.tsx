@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { PluginId } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/plugin-infra'
 import { PluginWeb3ContextProvider } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -60,7 +60,7 @@ export const ProfileCardTitle: FC<Props> = ({
             settings: {
                 quickMode: true,
                 switchTab: {
-                    focusPluginId: PluginId.Web3ProfileCard,
+                    focusPluginId: PluginID.Web3ProfileCard,
                 },
             },
         })

@@ -11,7 +11,7 @@ import { useI18N } from '../locales/i18n_generated'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { makeStyles, useTabs } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
-import { PluginId } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -43,7 +43,7 @@ export function NFTAvatarDialog() {
 
     useEffect(() => {
         return CrossIsolationMessages.events.requestOpenApplication.on(({ open, application }) => {
-            if (application !== PluginId.Avatar) return
+            if (application !== PluginID.Avatar) return
             setOpen(open)
         })
     }, [])

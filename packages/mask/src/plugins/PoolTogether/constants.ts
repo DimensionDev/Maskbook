@@ -1,6 +1,7 @@
+import { PluginID } from '@masknet/plugin-infra'
 import { escapeRegExp } from 'lodash-unified'
 
-export const POOLTOGETHER_PLUGIN_ID = 'com.pooltogether'
+export const POOLTOGETHER_PLUGIN_ID = PluginID.PoolTogether
 
 export const BASE_URL = 'pooltogether.com'
 export const APP_URL = 'https://app.pooltogether.com'

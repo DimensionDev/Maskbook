@@ -1,7 +1,7 @@
 import { Button, Stack } from '@mui/material'
 import { memo, ReactNode, useCallback, useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
-import type { PluginId } from '@masknet/plugin-infra'
+import type { PluginID } from '@masknet/plugin-infra'
 import { PersonaConnectStatus, useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
 import { useI18N } from '../../utils/index.js'
 import { Icons } from '@masknet/icons'
@@ -34,7 +34,7 @@ type SupportChildren = ((status: PersonaConnectStatus) => ReactNode) | ReactNode
 
 interface ConnectPersonaBoundaryProps {
     handlerPosition?: 'center' | 'top-right'
-    directTo?: PluginId
+    directTo?: PluginID
     customHint?: boolean
     children: SupportChildren
     enableVerify?: boolean

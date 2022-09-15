@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { Plugin, PluginId } from '@masknet/plugin-infra'
+import { Plugin, PluginID } from '@masknet/plugin-infra'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
 import { MaskColorVar } from '@masknet/theme'
@@ -29,7 +29,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 category: 'dapp',
                 description: (
                     <Trans
-                        ns={PluginId.Tips}
+                        ns={PluginID.Tips}
                         i18nKey="description"
                         components={{
                             Link: (
@@ -49,7 +49,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
 
                     useEffect(() => {
                         return CrossIsolationMessages.events.requestOpenApplication.on(({ open, application }) => {
-                            if (application !== PluginId.Tips) return
+                            if (application !== PluginID.Tips) return
                             setOpen(open)
                         })
                     }, [])
@@ -83,7 +83,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ],
     SettingTabs: [
         {
-            ID: PluginId.Tips,
+            ID: PluginID.Tips,
             label: 'Tips',
             priority: 1,
             UI: {

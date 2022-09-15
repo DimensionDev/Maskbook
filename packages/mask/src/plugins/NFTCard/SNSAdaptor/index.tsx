@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base.js'
-import { NFTCardDialog } from './NFTCardDialog.js'
+import { NFTCardDialog } from './components/NFTCardDialog.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,

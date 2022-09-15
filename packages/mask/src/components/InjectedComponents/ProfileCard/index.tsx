@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import {
     createInjectHooksRenderer,
-    PluginId,
+    PluginID,
     useActivatedPluginsSNSAdaptor,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
@@ -190,7 +190,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         return plugins
             .flatMap((x) => x.ProfileCardTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
             .filter((x) => {
-                const isAllowed = x.pluginID === PluginId.RSS3 || x.pluginID === PluginId.Collectible
+                const isAllowed = x.pluginID === PluginID.RSS3 || x.pluginID === PluginID.Collectible
                 const shouldDisplay = x.Utils?.shouldDisplay?.(identity, selectedSocialAddress) ?? true
                 return isAllowed && shouldDisplay
             })
@@ -201,7 +201,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
     }))
 
-    const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginId.Collectible, ...tabs.map((tab) => tab.id))
+    const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
 
     const component = useMemo(() => {
         const Component = getTabContent(currentTab)
