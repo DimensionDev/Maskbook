@@ -1,7 +1,7 @@
 import type { SocialAddress, NetworkPluginID, SocialIdentity } from '@masknet/web3-shared-base'
 import {
     CollectibleGridProps,
-    CollectionList,
+    CollectionList as SharedCollectibleList,
 } from '../../../extension/options-page/DashboardComponents/CollectibleList/index.js'
 
 export interface NFTPageProps {
@@ -10,10 +10,10 @@ export interface NFTPageProps {
     gridProps?: CollectibleGridProps
 }
 
-export function NFTPage({ socialAddress, identity, gridProps }: NFTPageProps) {
+export function CollectibleList({ socialAddress, identity, gridProps }: NFTPageProps) {
     if (!socialAddress) return null
     return (
-        <CollectionList
+        <SharedCollectibleList
             addressName={socialAddress}
             persona={identity?.publicKey}
             profile={identity}

@@ -11,7 +11,7 @@ import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoun
 import { DateTimePanel } from '../../../../web3/UI/DateTimePanel.js'
 import { toAsset } from '../../helpers.js'
 import getUnixTime from 'date-fns/getUnixTime'
-import { isWyvernSchemaName } from '../../utils.js'
+import { isWyvernSchemaName } from '../../helpers.js'
 import { useAccount, useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
 import { useOpenSea } from '../../hooks/useOpenSea.js'
 import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton.js'

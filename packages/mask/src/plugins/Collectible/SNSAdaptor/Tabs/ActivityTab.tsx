@@ -3,7 +3,7 @@ import { Icons } from '@masknet/icons'
 import { Button, Typography } from '@mui/material'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import { CollectibleTab } from '../CollectibleTab.js'
+import { CollectibleCard } from '../CollectibleCard.js'
 import { CollectibleState } from '../../hooks/useCollectibleState.js'
 import { NFTActivityCard, ActivityType } from '../../../../components/shared/NFTCard/NFTActivityCard.js'
 import { useI18N } from '../../../../utils/index.js'
@@ -68,13 +68,13 @@ export function ActivityTab(props: ActivityTabProps) {
                 </div>
             )
         return (
-            <CollectibleTab>
+            <CollectibleCard>
                 <div className={classes.body} style={{ justifyContent: 'unset' }}>
                     {_events.map((x, idx) => (
                         <NFTActivityCard type={resolveActivityType(x.type)} key={idx} activity={x} />
                     ))}
                 </div>
-            </CollectibleTab>
+            </CollectibleCard>
         )
     }, [events, classes])
 }

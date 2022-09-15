@@ -3,7 +3,7 @@ import { Accordion, AccordionDetails, AccordionSummary, Card, Typography } from 
 import AlertIcon from '@mui/icons-material/Error'
 import { ExpandMore } from '@mui/icons-material'
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../utils/index.js'
+import { useI18N } from '../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => {
     const warningMain = getMaskColor(theme).warning
@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export function UnreviewedWarning() {
+export function UnreviewedWarnings() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [expand, setExpand] = useState(true)

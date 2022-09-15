@@ -1,4 +1,5 @@
 import { ChangeEvent, useState, useCallback, useMemo } from 'react'
+import { Trans } from 'react-i18next'
 import {
     DialogContent,
     Box,
@@ -11,18 +12,17 @@ import {
     Link,
 } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { Trans } from 'react-i18next'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { UnreviewedWarning } from '../UnreviewedWarning.js'
-import { useI18N } from '../../../../utils/index.js'
-import { CrossIsolationMessages } from '@masknet/shared-base'
+import type { Order } from 'opensea-js/lib/types'
 import { InjectedDialog } from '@masknet/shared'
+import { CrossIsolationMessages } from '@masknet/shared-base'
+import { isGreaterThan, NetworkPluginID, NonFungibleAsset } from '@masknet/web3-shared-base'
+import { useAccount, useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { UnreviewedWarnings } from './UnreviewedWarnings.js'
+import { useI18N } from '../../../../utils/index.js'
 import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton.js'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary.js'
 import { CheckoutOrder } from './CheckoutOrder.js'
-import { isGreaterThan, NetworkPluginID, NonFungibleAsset } from '@masknet/web3-shared-base'
-import { useAccount, useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
-import type { Order } from 'opensea-js/lib/types'
 import { useOpenSea } from '../../hooks/useOpenSea.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -110,7 +110,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                     <CardContent>
                         {isVerified ? null : (
                             <Box sx={{ marginBottom: 2 }}>
-                                <UnreviewedWarning />
+                                <UnreviewedWarnings />
                             </Box>
                         )}
                         <Box sx={{ padding: 2 }}>

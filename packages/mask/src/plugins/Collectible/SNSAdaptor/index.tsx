@@ -7,18 +7,18 @@ import { NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { PostInspector } from './PostInspector.js'
 import { base } from '../base.js'
-import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils.js'
+import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../helpers.js'
 import { PLUGIN_ID, PLUGIN_WRAPPER_TITLE } from '../constants.js'
-import { NFTPage } from './NFTPage.js'
+import { CollectibleList } from './CollectibleList.js'
 import { setupContext } from '../context.js'
 
-const NFTTabConfig: Plugin.SNSAdaptor.ProfileTab = {
+const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
     ID: `${PLUGIN_ID}_nfts`,
     label: 'NFTs',
     priority: 1,
     UI: {
         TabContent({ socialAddress, identity }) {
-            return <NFTPage socialAddress={socialAddress} identity={identity} />
+            return <CollectibleList socialAddress={socialAddress} identity={identity} />
         },
     },
     Utils: {
@@ -69,16 +69,16 @@ const sns: Plugin.SNSAdaptor.Definition = {
         usePluginWrapper(!!asset)
         return asset ? <PostInspector payload={asset} /> : null
     },
-    ProfileTabs: [NFTTabConfig],
+    ProfileTabs: [TabConfig],
     ProfileCardTabs: [
         {
-            ...NFTTabConfig,
+            ...TabConfig,
             priority: 2,
             UI: {
                 TabContent({ socialAddress, identity }) {
                     return (
                         <Box pr={1.5}>
-                            <NFTPage
+                            <CollectibleList
                                 socialAddress={socialAddress}
                                 identity={identity}
                                 gridProps={{
@@ -90,7 +90,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 },
             },
             Utils: {
-                ...NFTTabConfig.Utils,
+                ...TabConfig.Utils,
                 shouldDisplay(identity, socialAddress) {
                     return socialAddress?.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM
                 },

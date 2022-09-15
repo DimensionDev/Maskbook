@@ -13,12 +13,12 @@ const useStyles = makeStyles()({
     },
 })
 
-export interface CollectibleTabProps extends withClasses<'root' | 'content'> {
+export interface CollectibleCardProps extends withClasses<'root' | 'content'> {
     children: React.ReactNode
     CardProps?: Partial<CardProps>
 }
 
-export function CollectibleTab(props: CollectibleTabProps) {
+export function CollectibleCard(props: CollectibleCardProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     return (

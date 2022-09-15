@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import { CollectibleTab } from '../CollectibleTab.js'
+import { CollectibleCard } from '../CollectibleCard.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { Typography, Button } from '@mui/material'
 import { Icons } from '@masknet/icons'
@@ -56,12 +56,12 @@ export const OffersTab = memo(() => {
             </div>
         )
     return (
-        <CollectibleTab>
+        <CollectibleCard>
             <div className={classes.body} style={{ justifyContent: 'unset' }}>
                 {_orders?.map((x, idx) => (
                     <NFTOfferCard key={idx} offer={x} />
                 ))}
             </div>
-        </CollectibleTab>
+        </CollectibleCard>
     )
 })

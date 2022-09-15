@@ -6,7 +6,7 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import type { NetworkPluginID, NonFungibleTokenOrder } from '@masknet/web3-shared-base'
 import { CollectibleState } from '../../hooks/useCollectibleState.js'
-import { CollectibleTab } from '../CollectibleTab.js'
+import { CollectibleCard } from '../CollectibleCard.js'
 import { NFTBasicInfo } from '../../../../components/shared/NFTCard/NFTBasicInfo.js'
 import { NFTPriceCard } from '../../../../components/shared/NFTCard/NFTPriceCard.js'
 
@@ -47,21 +47,21 @@ export function AboutTab(props: AboutTabProps) {
     return useMemo(() => {
         if (asset.loading || !asset.value)
             return (
-                <CollectibleTab>
+                <CollectibleCard>
                     <div className={classes.body}>
                         <LoadingBase />
                     </div>
-                </CollectibleTab>
+                </CollectibleCard>
             )
         return (
-            <CollectibleTab>
+            <CollectibleCard>
                 <div className={classes.body}>
                     <div className={classes.basic}>
                         <NFTBasicInfo hideSubTitle asset={asset.value} />
                     </div>
                     <NFTPriceCard topOffer={topOffer} asset={asset.value} />
                 </div>
-            </CollectibleTab>
+            </CollectibleCard>
         )
     }, [asset, classes])
 }

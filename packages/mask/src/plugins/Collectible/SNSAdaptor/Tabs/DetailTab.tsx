@@ -3,7 +3,7 @@ import type { AsyncState } from 'react-use/lib/useAsyncFn'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import { CollectibleTab } from '../CollectibleTab.js'
+import { CollectibleCard } from '../CollectibleCard.js'
 import { NFTInfoCard } from '../../../../components/shared/NFTCard/NFTInfoCard.js'
 import { NFTPropertiesCard } from '../../../../components/shared/NFTCard/NFTPropertiesCard.js'
 import { CollectibleState } from '../../hooks/useCollectibleState.js'
@@ -33,21 +33,21 @@ export function DetailTab(props: DetailTabProps) {
     return useMemo(() => {
         if (asset.loading || !asset.value || rarity.loading)
             return (
-                <CollectibleTab>
+                <CollectibleCard>
                     <div className={classes.body}>
                         <LoadingBase />
                     </div>
-                </CollectibleTab>
+                </CollectibleCard>
             )
         return (
-            <CollectibleTab>
+            <CollectibleCard>
                 <div className={classes.body}>
                     <div className={classes.info}>
                         <NFTInfoCard sourceType={provider} asset={asset.value} />
                     </div>
                     <NFTPropertiesCard rank={rarity.value?.rank} asset={asset.value} />
                 </div>
-            </CollectibleTab>
+            </CollectibleCard>
         )
     }, [asset, classes])
 }
