@@ -312,7 +312,7 @@ export class CoinMarketCapAPI implements TrendingAPI.Provider<ChainId> {
                 contract_address: contracts.find((x) => x.chainId === chainId)?.address,
             },
             currency,
-            dataProvider: DataProvider.COIN_MARKET_CAP,
+            dataProvider: DataProvider.CoinMarketCap,
             tickers: market.market_pairs
                 .map((pair) => ({
                     logo_url: `${CMC_STATIC_BASE_URL}/img/exchanges/32x32/${pair.exchange.id}.png`,

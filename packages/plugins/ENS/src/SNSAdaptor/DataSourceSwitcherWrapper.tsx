@@ -1,8 +1,7 @@
 import { useCallback } from 'react'
-import { SourceType, resolveSourceTypeName } from '@masknet/web3-shared-base'
+import type { SourceType } from '@masknet/web3-shared-base'
 import useStyles from './useStyles'
 import { DataSourceSwitcher, FootnoteMenuOption } from '@masknet/shared'
-import { DataProviderIcon } from './DataProviderIcon'
 import { CollectibleState } from './hooks/useCollectibleState'
 import { SupportedProvider } from '../constants'
 
@@ -20,8 +19,6 @@ export function DataSourceSwitcherWrapper() {
                 classes={{
                     sourceNote: classes.sourceNote,
                 }}
-                DataProviderIcon={DataProviderIcon}
-                resolveDataProviderName={resolveSourceTypeName}
                 showDataProviderIcon
                 dataProvider={provider}
                 dataProviders={SupportedProvider}

@@ -19,9 +19,9 @@ export function SearchResultInspectorContent() {
     const { isLoading, isNoResult, isError, reversedAddress, retry, nextIdTwitterBindingName, domain, tokenId } =
         useContext(ENSContext)
 
-    if (isLoading) return <LoadingContent />
-
     if (isNoResult || !reversedAddress || !tokenId) return <EmptyContent />
+
+    if (isLoading) return <LoadingContent />
 
     if (isError) return <LoadFailedContent isLoading={isLoading} retry={retry} />
     return (

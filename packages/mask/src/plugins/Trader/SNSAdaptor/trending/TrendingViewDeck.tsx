@@ -14,7 +14,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColors, useStylesExtends } from '@masknet/theme'
 import type { TrendingAPI } from '@masknet/web3-providers'
-import { formatCurrency, NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
+import { formatCurrency, NetworkPluginID, TokenType, SourceType } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Avatar, Button, CardContent, IconButton, Paper, Stack, Typography, useTheme } from '@mui/material'
 import { Box } from '@mui/system'
@@ -27,11 +27,9 @@ import { PluginTransakMessages } from '../../../Transak/messages.js'
 import { getCurrentPreferredCoinIdSettings } from '../../settings.js'
 import { setStorage } from '../../storage/index.js'
 import type { Coin, Currency, Stat } from '../../types/index.js'
-import { resolveDataProviderName } from '../../pipes'
 import { CoinMenu } from './CoinMenu.js'
 import { CoinSafetyAlert } from './CoinSafetyAlert.js'
 import { CoinIcon } from './components/index.js'
-import { DataProviderIcon } from '../trader/components/DataProviderIcon'
 import { PluginHeader } from './PluginHeader.js'
 import { PriceChanged } from './PriceChanged.js'
 import { TrendingCard, TrendingCardProps } from './TrendingCard.js'
@@ -211,11 +209,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
             <Stack className={classes.cardHeader}>
                 <PluginHeader>
                     <DataSourceSwitcher
-                        DataProviderIcon={DataProviderIcon}
-                        resolveDataProviderName={resolveDataProviderName}
                         showDataProviderIcon={showDataProviderIcon}
-                        dataProvider={dataProvider}
-                        dataProviders={dataProviders}
+                        dataProvider={dataProvider as unknown as SourceType}
+                        dataProviders={dataProviders as unknown as SourceType[]}
                         onDataProviderChange={onDataProviderChange}
                     />
                 </PluginHeader>
@@ -295,7 +291,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             {isNFT ? `${t('plugin_trader_floor_price')}: ` : null}
                                             <FormattedCurrency
                                                 value={
-                                                    (dataProvider === DataProvider.COIN_MARKET_CAP
+                                                    (dataProvider === DataProvider.CoinMarketCap
                                                         ? last(stats)?.[1] ?? market.current_price
                                                         : market.current_price) ?? 0
                                                 }
@@ -325,7 +321,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 </Stack>
             </Stack>
             <CardContent className={classes.content}>
-                {dataProvider === DataProvider.UNISWAP_INFO && <CoinSafetyAlert coin={trending.coin} />}
+                {dataProvider === DataProvider.UniswapInfo && <CoinSafetyAlert coin={trending.coin} />}
                 <Paper className={classes.body} elevation={0}>
                     {children}
                 </Paper>

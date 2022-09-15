@@ -1,8 +1,10 @@
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
+import { SourceType, resolveSourceTypeName } from '@masknet/web3-shared-base'
 import { Box } from '@mui/system'
 import { useSharedI18N } from '@masknet/shared'
 import { FootnoteMenuUI, FootnoteMenuOption } from '../FootnoteMenuUI'
+import { DataProviderIcon } from '../DataProviderIcon'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -26,24 +28,15 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface TradeDataSourceProps<T> extends withClasses<'source' | 'sourceNote'> {
+export interface TradeDataSourceProps extends withClasses<'source' | 'sourceNote'> {
     showDataProviderIcon?: boolean
-    dataProvider?: T
-    dataProviders?: T[]
-    resolveDataProviderName: (key: T) => string
-    DataProviderIcon: (props: { provider: T; size?: number }) => JSX.Element
+    dataProvider?: SourceType
+    dataProviders?: SourceType[]
     onDataProviderChange?: (option: FootnoteMenuOption) => void
 }
 
-export const DataSourceSwitcher = function <T extends string | number>(props: TradeDataSourceProps<T>) {
-    const {
-        showDataProviderIcon = false,
-        dataProvider,
-        dataProviders = [],
-        onDataProviderChange,
-        resolveDataProviderName,
-        DataProviderIcon,
-    } = props
+export const DataSourceSwitcher = function (props: TradeDataSourceProps) {
+    const { showDataProviderIcon = false, dataProvider, dataProviders = [], onDataProviderChange } = props
     const t = useSharedI18N()
     const classes = useStylesExtends(useStyles(), props)
     return (
@@ -61,7 +54,7 @@ export const DataSourceSwitcher = function <T extends string | number>(props: Tr
                             name: (
                                 <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
                                     <DataProviderIcon provider={x} size={20} />
-                                    <Typography className={classes.sourceName}>{resolveDataProviderName(x)}</Typography>
+                                    <Typography className={classes.sourceName}>{resolveSourceTypeName(x)}</Typography>
                                 </Stack>
                             ),
                             value: x,

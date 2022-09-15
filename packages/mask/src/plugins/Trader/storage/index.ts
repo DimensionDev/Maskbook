@@ -6,7 +6,7 @@ interface StorageValue {
 }
 
 export const storageDefaultValue = {
-    dataProvider: DataProvider.COIN_GECKO,
+    dataProvider: DataProvider.CoinGecko,
 }
 
 let storage: ScopedStorage<StorageValue> = null!

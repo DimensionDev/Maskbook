@@ -68,6 +68,8 @@ export enum SourceType {
     Flow = 'Flow',
     Solana = 'Solana',
     CoinGecko = 'CoinGecko',
+    CoinMarketCap = 'CoinMarketCap',
+    UniswapInfo = 'UniswapInfo',
     CF = 'CloudFlare',
 
     // NFT assets

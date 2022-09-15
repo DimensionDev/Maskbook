@@ -10,7 +10,13 @@ import { DataProvider } from '@masknet/public-api'
 import { NFTList } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, useTabs, ActionButton } from '@masknet/theme'
-import { NetworkPluginID, TokenType, createFungibleToken } from '@masknet/web3-shared-base'
+import {
+    NetworkPluginID,
+    TokenType,
+    createFungibleToken,
+    resolveSourceTypeName,
+    SourceType,
+} from '@masknet/web3-shared-base'
 import { isNativeTokenSymbol, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { Link, Stack, Tab } from '@mui/material'
@@ -18,7 +24,7 @@ import { Box, useTheme } from '@mui/system'
 import { compact } from 'lodash-unified'
 import { useEffect, useMemo, useState } from 'react'
 import { useI18N } from '../../../../utils/index.js'
-import { resolveDataProviderLink, resolveDataProviderName } from '../../pipes.js'
+import { resolveDataProviderLink } from '../../pipes.js'
 import { setStorage } from '../../storage/index.js'
 import { useAvailableCoins } from '../../trending/useAvailableCoins.js'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId.js'
@@ -126,7 +132,7 @@ export function TrendingView(props: TrendingViewProps) {
     const theme = useTheme()
     const isMinimalMode = useIsMinimalMode(PluginId.Trader)
     const dataProvider = useCurrentDataProvider(dataProviders)
-    const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP_INFO ? 1 : 0)
+    const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UniswapInfo ? 1 : 0)
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
     // #region track network type
     const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
@@ -229,10 +235,10 @@ export function TrendingView(props: TrendingViewProps) {
 
         return (
             <ActionButton sx={{ marginTop: 1 }} color="primary" onClick={() => setStorage(nextOption)}>
-                Switch to {resolveDataProviderName(nextOption)}
+                Switch to {resolveSourceTypeName(nextOption as unknown as SourceType)}
             </ActionButton>
         )
-    }, [dataProvider, resolveDataProviderName])
+    }, [dataProvider])
     // // #endregion
 
     // #region api ready callback
@@ -265,7 +271,7 @@ export function TrendingView(props: TrendingViewProps) {
                             target="_blank"
                             rel="noopener noreferrer"
                             href={resolveDataProviderLink(dataProvider)}>
-                            {resolveDataProviderName(dataProvider)}
+                            {resolveSourceTypeName(dataProvider as unknown as SourceType)}
                         </Link>
                         .
                     </span>
