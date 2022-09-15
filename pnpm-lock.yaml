@@ -4934,7 +4934,7 @@ packages:
       '@ethersproject/providers': 5.0.12
       '@ethersproject/solidity': 5.4.0
       '@ethersproject/units': 5.6.0
-      bignumber.js: 9.1.0
+      bignumber.js: 9.0.2
       isomorphic-fetch: 2.2.1
     transitivePeerDependencies:
       - bufferutil
@@ -10363,7 +10363,7 @@ packages:
       '@toruslabs/http-helpers': 2.2.0
       '@toruslabs/openlogin-jrpc': 1.7.3
       async-mutex: 0.3.2
-      bignumber.js: 9.1.0
+      bignumber.js: 9.0.2
       bowser: 2.11.0
       eth-rpc-errors: 4.0.3
       ethereumjs-util: 7.1.4
@@ -12828,7 +12828,7 @@ packages:
       asn1.js: 5.4.1
       axios: 0.27.2
       base64-js: 1.5.1
-      bignumber.js: 9.1.0
+      bignumber.js: 9.0.2
       util: 0.12.4
     transitivePeerDependencies:
       - debug
@@ -14127,7 +14127,7 @@ packages:
     resolution: {integrity: sha512-Sy9eoUi4OiKzq7VovMn246iTo17kzuyHJKomCfpWMlI6RpfN1gk95w7d7gH264nApVLg0HZfcpz62/g4VH1Y4w==}
     engines: {node: '>=4'}
     dependencies:
-      bignumber.js: 9.1.0
+      bignumber.js: 9.0.2
       buffer: 5.7.1
       commander: 2.20.3
       ieee754: 1.2.1
