@@ -18,12 +18,12 @@ export function SearchResultInspectorContent() {
     const { classes } = useStyles()
     const { isLoading, isNoResult, isError, reversedAddress, retry, nextIdTwitterBindingName, domain, tokenId } =
         useContext(ENSContext)
-    if (isError) return <LoadFailedContent isLoading={isLoading} retry={retry} />
 
     if (isLoading) return <LoadingContent />
 
     if (isNoResult || !reversedAddress || !tokenId) return <EmptyContent />
 
+    if (isError) return <LoadFailedContent isLoading={isLoading} retry={retry} />
     return (
         <CollectibleState.Provider
             initialState={{
