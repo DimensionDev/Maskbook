@@ -3,7 +3,7 @@ import { useAsync } from 'react-use'
 import { useLookupAddress } from '@masknet/plugin-infra/web3'
 import { NextIDPlatform, BindingProof } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import { resolveNonFungibleTokenIdFromEnsDomain } from '@masknet/web3-shared-evm'
+import { ChainId, resolveNonFungibleTokenIdFromEnsDomain } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 interface ENSContextProps {
@@ -34,7 +34,7 @@ export function ENSProvider({ children, domain }: PropsWithChildren<SearchResult
         loading: isLoading,
         error,
         retry,
-    } = useLookupAddress(NetworkPluginID.PLUGIN_EVM, domain)
+    } = useLookupAddress(NetworkPluginID.PLUGIN_EVM, domain, ChainId.Mainnet)
     const isNoResult = reversedAddress === undefined
     const isError = !!error
     const tokenId = resolveNonFungibleTokenIdFromEnsDomain(domain)
