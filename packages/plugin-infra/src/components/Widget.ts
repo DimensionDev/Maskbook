@@ -14,7 +14,7 @@ export const Widget: <Name extends keyof Plugin.SNSAdaptor.WidgetRegistry>(
     const { name, pluginID, fallback, ...rest } = props
     const plugins = useActivatedPluginsSNSAdaptor(false)
     const WidgetComponent: any = useMemo(() => {
-        if (pluginID) return plugins.find((x) => x.ID === pluginID)?.Widgets?.find((y) => y.name === name)
+        if (pluginID) return plugins.find((x) => x.ID === pluginID)?.Widgets?.find((y) => y.name === name)?.UI?.Widget
         return null
     }, [plugins])
 

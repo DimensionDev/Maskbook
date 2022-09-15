@@ -1,5 +1,6 @@
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import { Plugin, PluginID } from '@masknet/plugin-infra'
+import { Typography } from '@mui/material'
 import { base } from '../base.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -15,7 +16,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             label: 'Example',
             UI: {
                 Widget() {
-                    return <h1>Test</h1>
+                    return <Typography variant="body1">Example Widget</Typography>
                 },
             },
         },

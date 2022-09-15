@@ -12,7 +12,7 @@ export interface WidgetDialogProps {}
 export function WidgetDialog(props: WidgetDialogProps) {
     const { open, closeDialog } = useRemoteControlledDialog(PluginDebuggerMessages.widgetDialogUpdated)
     return (
-        <InjectedDialog title="Connection" fullWidth open={open} onClose={closeDialog}>
+        <InjectedDialog title="Widgets" fullWidth open={open} onClose={closeDialog}>
             <DialogContent>
                 <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
                     <PluginWeb3ContextProvider
