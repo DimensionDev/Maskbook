@@ -49,7 +49,7 @@
     "add_token": "Add Token",
     "add_nft_contract_search_hint": "Search NFT Contract Symbol Name or Address",
     "applications": "Applications",
-    "application_settings": "Application Settings",
+    "application_settings": "APP Settings",
     "application_tooltip_hint_sns_persona_unmatched": "Twitter ID verified persona({{currentSNSConnectedPersonaPublicKey}}) is not consistent with your current persona({{currentPersonaPublicKey}}). Please switch to persona({{currentSNSConnectedPersonaPublicKey}}) and try again.",
     "application_tooltip_hint_verify": "Please verify your social account",
     "application_tooltip_hint_create_persona": "Please create your persona and use it",
