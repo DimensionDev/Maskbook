@@ -96,7 +96,7 @@ export function ApplicationBoardDialog() {
                         </MaskTabList>
                     ) : null
                 }
-                title={t('applications')}
+                title={openSettings ? t('application_settings') : t('applications')}
                 titleTail={
                     openSettings ? null : (
                         <Icons.Gear size={24} className={classes.settingIcon} onClick={() => setOpenSettings(true)} />
