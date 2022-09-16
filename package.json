@@ -28,7 +28,7 @@
     "spellcheck": "cspell lint --no-must-find-files"
   },
   "dependencies": {
-    "@dimensiondev/holoflows-kit": "0.9.0-20220916140519-2191d7a",
+    "@dimensiondev/holoflows-kit": "0.9.0-20220916150447-7ac7ff2",
     "@dimensiondev/kit": "0.0.0-20220617045824-8bc7a27",
     "@emotion/cache": "11.10.3",
     "@emotion/react": "11.10.4",
