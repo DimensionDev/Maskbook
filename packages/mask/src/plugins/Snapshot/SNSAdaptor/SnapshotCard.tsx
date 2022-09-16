@@ -14,7 +14,7 @@ const useStyles = makeStyles()((theme) => {
             '&:last-child': {
                 marginBottom: 0,
             },
-            background: '#fff',
+            background: theme.palette.maskColor.white,
         },
         header: {
             borderBottom: `solid 1px ${theme.palette.maskColor.publicLine}`,
@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => {
         title: {
             display: 'flex',
             alignItems: 'center',
-            color: theme.palette.maskColor.dark,
+            color: theme.palette.maskColor.publicMain,
             fontWeight: 'bold',
             fontSize: 18,
         },

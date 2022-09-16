@@ -47,7 +47,7 @@ const useStyles = makeStyles()((theme) => {
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
             maxWidth: 180,
-            color: theme.palette.maskColor.dark,
+            color: theme.palette.maskColor.publicMain,
         },
         ellipsisText: {
             textOverflow: 'ellipsis',
@@ -68,10 +68,10 @@ const useStyles = makeStyles()((theme) => {
         },
         power: {
             minWidth: 90,
-            color: theme.palette.maskColor.dark,
+            color: theme.palette.maskColor.publicMain,
         },
         shadowRootTooltip: {
-            color: 'white',
+            color: theme.palette.maskColor.white,
         },
     }
 })

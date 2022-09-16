@@ -34,15 +34,15 @@ const useStyles = makeStyles()((theme) => {
         },
         power: {
             marginLeft: theme.spacing(2),
-            color: theme.palette.maskColor.dark,
+            color: theme.palette.maskColor.publicMain,
         },
         ratio: {
             marginLeft: 'auto',
-            color: theme.palette.maskColor.dark,
+            color: theme.palette.maskColor.publicMain,
         },
         choice: {
             maxWidth: choiceMaxWidth,
-            color: theme.palette.maskColor.dark,
+            color: theme.palette.maskColor.publicMain,
         },
         linearProgressWrap: {
             width: '100%',

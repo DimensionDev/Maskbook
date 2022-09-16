@@ -26,7 +26,7 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'space-between',
             alignItems: 'center',
             marginTop: 14,
-            color: theme.palette.maskColor.dark,
+            color: theme.palette.maskColor.publicMain,
             width: '100%',
         },
         title: {
@@ -48,6 +48,9 @@ const useStyles = makeStyles()((theme) => {
         },
         avatarWrapper: {
             marginRight: 8,
+        },
+        strategy: {
+            marginTop: 0,
         },
     }
 })
@@ -73,7 +76,7 @@ export function InformationCard(props: InformationCardProps) {
     const { start, end, snapshot, strategies } = proposal
     return (
         <SnapshotCard title={t('plugin_snapshot_info_title')}>
-            <InfoField title={t('plugin_snapshot_info_strategy')}>
+            <InfoField title={t('plugin_snapshot_info_strategy')} classes={{ field: classes.strategy }}>
                 <Box sx={{ display: 'flex' }}>
                     {strategies
                         .filter((strategy) => Boolean(strategy.params.address))

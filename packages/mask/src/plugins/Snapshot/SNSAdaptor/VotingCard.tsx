@@ -25,8 +25,8 @@ const useStyles = makeStyles()((theme) => {
         },
         choiceButton: {},
         buttonActive: {
-            backgroundColor: theme.palette.maskColor.dark,
-            color: '#fff',
+            backgroundColor: theme.palette.maskColor.publicMain,
+            color: theme.palette.maskColor.white,
         },
         buttons: {
             '& > :first-child': {

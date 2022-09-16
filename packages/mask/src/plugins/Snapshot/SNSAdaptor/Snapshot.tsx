@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { Box, Paper, Tab, Avatar, Typography, Chip } from '@mui/material'
+import { Box, Tab, Avatar, Typography, Chip } from '@mui/material'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { SnapshotContext } from '../context.js'
 import { useProposal } from './hooks/useProposal.js'
@@ -8,7 +8,7 @@ import { ProgressTab } from './ProgressTab.js'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, resolveIPFS_URL } from '@masknet/web3-shared-base'
-import { TabContext } from '@mui/lab'
+import { TabContext, TabPanel } from '@mui/lab'
 import Color from 'color'
 import { useI18N } from '../../../utils/index.js'
 
@@ -42,10 +42,10 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         tabActive: {
-            background: '#fff',
+            background: theme.palette.maskColor.white,
             color: theme.palette.maskColor.publicMain,
             '&:hover': {
-                background: '#fff',
+                background: theme.palette.maskColor.white,
             },
         },
         content: {
@@ -56,7 +56,7 @@ const useStyles = makeStyles()((theme) => {
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
-            background: '#fff !important',
+            background: theme.palette.maskColor.white,
         },
         active: {
             color: '#fff',
@@ -139,8 +139,14 @@ export function Snapshot() {
                         />
                     ))}
                 </MaskTabList>
-
-                <Paper className={classes.content}>{renderTab()}</Paper>
+                <Box className={classes.content}>
+                    <TabPanel value={tabs.Proposal} key={tabs.Proposal} sx={{ padding: 0 }}>
+                        <ProposalTab />
+                    </TabPanel>
+                    <TabPanel value={tabs.Progress} key={tabs.Progress} sx={{ padding: 0 }}>
+                        <ProgressTab />
+                    </TabPanel>
+                </Box>
             </Box>
             <Box style={{ padding: 12 }}>
                 <ChainBoundary
