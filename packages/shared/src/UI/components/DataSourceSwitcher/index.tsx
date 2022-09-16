@@ -4,7 +4,7 @@ import { SourceType, resolveSourceTypeName } from '@masknet/web3-shared-base'
 import { Box } from '@mui/system'
 import { useSharedI18N } from '@masknet/shared'
 import { FootnoteMenuUI, FootnoteMenuOption } from '../FootnoteMenuUI'
-import { DataProviderIcon } from '../DataProviderIcon'
+import { SourceProviderIcon } from '../SourceProviderIcon'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -53,7 +53,7 @@ export const DataSourceSwitcher = function (props: TradeDataSourceProps) {
                         options={dataProviders.map((x) => ({
                             name: (
                                 <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
-                                    <DataProviderIcon provider={x} size={20} />
+                                    <SourceProviderIcon provider={x} size={20} />
                                     <Typography className={classes.sourceName}>{resolveSourceTypeName(x)}</Typography>
                                 </Stack>
                             ),

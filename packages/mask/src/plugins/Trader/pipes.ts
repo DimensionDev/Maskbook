@@ -1,6 +1,18 @@
 import { DataProvider, TradeProvider } from '@masknet/public-api'
 import { createLookupTableResolver } from '@masknet/shared-base'
 
+export const resolveDataProviderName = createLookupTableResolver<DataProvider, string>(
+    {
+        [DataProvider.CoinGecko]: 'CoinGecko',
+        [DataProvider.CoinMarketCap]: 'CoinMarketCap',
+        [DataProvider.UniswapInfo]: 'Uniswap Info',
+        [DataProvider.NFTScan]: 'NFTScan',
+    },
+    (dataProvider) => {
+        throw new Error(`Unknown data provider: ${dataProvider}`)
+    },
+)
+
 export const resolveDataProviderLink = createLookupTableResolver<DataProvider, string>(
     {
         [DataProvider.CoinGecko]: 'https://www.coingecko.com/',

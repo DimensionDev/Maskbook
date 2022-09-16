@@ -6,7 +6,7 @@ export interface DataProviderIconProps {
     size?: number
 }
 
-export function DataProviderIcon(props: DataProviderIconProps) {
+export function SourceProviderIcon(props: DataProviderIconProps) {
     const { size = 16 } = props
     switch (props.provider) {
         case SourceType.NFTScan:

@@ -92,7 +92,7 @@ function OfferBox({ offer, type }: { offer: NonFungibleTokenOrder<ChainId, Schem
                 (offer.priceInToken?.token.symbol.toUpperCase() === 'WETH' ? (
                     <Icons.WETH size={18} />
                 ) : (
-                    <Typography className={classes.fallbackSymbol}>
+                    <Typography className={classes.fallbackSymbol} component="span">
                         {offer.priceInToken?.token.symbol || offer.priceInToken?.token.name}
                     </Typography>
                 ))}
