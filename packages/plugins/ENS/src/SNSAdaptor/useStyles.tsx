@@ -89,7 +89,7 @@ const useStyles = makeStyles()((theme) => {
             marginRight: 12,
             fontSize: 16,
         },
-        dataSourceSwitcherWrapper: {
+        sourceSwitcherWrapper: {
             display: 'flex',
             justifyContent: 'right',
             marginBottom: 13,
