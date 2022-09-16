@@ -1,11 +1,11 @@
 import { delay } from '@dimensiondev/kit'
 import type { PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import { openOrActiveTab } from '@masknet/shared-base-ui'
 import { currentSetupGuideStatus, userGuideStatus } from '../../../shared/legacy-settings/settings.js'
 import { SetupGuideStep } from '../../../shared/legacy-settings/types.js'
 import { definedSiteAdaptors } from '../../../shared/site-adaptors/definitions.js'
 import { requestSiteAdaptorsPermission } from '../helper/request-permission.js'
 import stringify from 'json-stable-stringify'
-import { first } from 'lodash-unified'
 
 export async function getSupportedSites(): Promise<
     Array<{
@@ -52,17 +52,5 @@ export async function connectSite(
     await delay(100)
     // #endregion
 
-    // #region open or switch the site
-    const openedTabs = await browser.tabs.query({ url: `${worker.homepage}/*` })
-    const targetTab = openedTabs.find((x) => x.active) ?? first(openedTabs)
-
-    if (targetTab?.id) {
-        await browser.tabs.update(targetTab.id, {
-            active: true,
-        })
-        await browser.windows.update(targetTab.windowId, { focused: true })
-    } else {
-        await browser.tabs.create({ active: true, url: worker.homepage })
-    }
-    // #endregion
+    await openOrActiveTab(worker.homepage)
 }
