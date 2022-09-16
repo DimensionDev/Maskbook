@@ -1,6 +1,4 @@
-import urlcat from 'urlcat'
 import punycode from 'punycode'
-import { ChainId } from '../types/index.js'
 
 export function isValidDomain(domain?: string) {
     if (!domain || !domain.includes('.eth')) return false
@@ -9,10 +7,4 @@ export function isValidDomain(domain?: string) {
         .toLowerCase()
         .match(/^(?:[a-z0-9](?:[-a-z0-9]*[a-z0-9])?\.)+[a-z0-9][-a-z0-9]*[a-z0-9]$/u)
     return match !== null
-}
-
-export function resolveDomainLink(chainId: ChainId, domain: string): string {
-    if (!domain) return domain
-    if (chainId === ChainId.Mainnet) return urlcat('https://app.ens.domains/name/:domain/details', { domain })
-    return ''
 }

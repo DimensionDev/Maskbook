@@ -53,7 +53,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
             <TableContainer className={classes.container} component={Paper} elevation={0}>
                 <Table size="small">
                     <TableBody>
-                        {DataProvider.UNISWAP_INFO !== dataProvider ? (
+                        {DataProvider.UniswapInfo !== dataProvider ? (
                             <TableRow>
                                 <TableCell className={classes.head} component="th">
                                     <Typography color="textSecondary" variant="body2">
@@ -65,7 +65,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                                 </TableCell>
                             </TableRow>
                         ) : null}
-                        {DataProvider.UNISWAP_INFO !== dataProvider ? (
+                        {DataProvider.UniswapInfo !== dataProvider ? (
                             <TableRow>
                                 <TableCell className={classes.head} component="th">
                                     <Typography color="textSecondary" variant="body2">
@@ -87,7 +87,7 @@ export function FungibleCoinMarketTable(props: CoinMarketTableProps) {
                                 {market?.total_volume ? `$${formatSupply(market.total_volume)}` : '--'}
                             </TableCell>
                         </TableRow>
-                        {dataProvider !== DataProvider.UNISWAP_INFO ? (
+                        {dataProvider !== DataProvider.UniswapInfo ? (
                             <TableRow>
                                 <TableCell className={classes.head} component="th">
                                     <Typography color="textSecondary" variant="body2">

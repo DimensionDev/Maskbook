@@ -430,6 +430,7 @@
     "plugin_gitcoin_select_a_token": "Select a token",
     "plugin_gitcoin_insufficient_balance": "Insufficient {{symbol}} balance",
     "plugin_trader_fail_to_load": "Fail to load trending info from  ",
+    "plugin_trader_switch_provider": "Switch to {{provider}}",
     "plugin_trader_lbp_pool_in_balancer": "LBP Pool in Balancer",
     "plugin_trader_swap_description": "Pop-up trading widget allows you to instantly view prices of the hottest Crypto/Stock and trade, also invest in the best performing managers.",
     "plugin_trader_tutorial": "Tutorial",
@@ -1182,6 +1183,8 @@
     "plugin_tips_not_evm_alert": "The tips feature currently supports only EVM chains. Support for other chains will be added in the future.",
     "plugin_artblocks_description": "Artblocks allow you to pick a style that you like, pay for the work, and a randomly generated version of the content is created by an algorithm and sent to your Ethereum account.",
     "plugin_artblocks_name": "Artblocks",
+    "plugin_ens_description": "Optimize the display of search results about ENS in social media.",
+    "plugin_ens_name": "ENS",
     "plugin_dhedge_description": "Decentralized hedge funds on Ethereum and Polygon (Matic).",
     "plugin_dhedge_name": "dHEDGE",
     "nft_button_set_avatar": "Set NFT Avatar",
@@ -1194,7 +1197,5 @@
     "plugin_valuables_name": "Valuables",
     "plugin_valuables_description": "Buy & sell tweets autographed by their original creators.",
     "popups_wallet_unsupported_network": "Unsupported network type",
-    "plugin_default_title": "Default",
-    "plugin_provider_by": "Provided by",
     "plugin_enables": "Enable plugins"
 }

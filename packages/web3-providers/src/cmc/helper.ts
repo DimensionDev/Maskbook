@@ -8,7 +8,7 @@ const ID_ADDRESS_MAP: {
         [key in ChainId]?: Record<string, string>
     }
 } = {
-    [DataProvider.COIN_MARKET_CAP]: {
+    [DataProvider.CoinMarketCap]: {
         [ChainId.Mainnet]: {
             '6747': '0x32a7c02e79c4ea1008dd6564b35f131428673c41',
             '8536': '0x69af81e73A73B40adF4f3d4223Cd9b1ECE623074', // MASK
@@ -17,7 +17,7 @@ const ID_ADDRESS_MAP: {
             '8536': '0x2B9E7ccDF0F4e5B24757c1E1a80e311E34Cb10c7', // MASK
         },
     },
-    [DataProvider.COIN_GECKO]: {
+    [DataProvider.CoinGecko]: {
         [ChainId.Mainnet]: {
             'crust-network': '0x32a7c02e79c4ea1008dd6564b35f131428673c41', // CRUST
         },
@@ -25,8 +25,8 @@ const ID_ADDRESS_MAP: {
             'mask-network': '0x2B9E7ccDF0F4e5B24757c1E1a80e311E34Cb10c7', // MASK
         },
     },
-    [DataProvider.UNISWAP_INFO]: {},
-    [DataProvider.NFTSCAN]: {},
+    [DataProvider.UniswapInfo]: {},
+    [DataProvider.NFTScan]: {},
 }
 
 const NETWORK_ID_MAP: {
@@ -34,10 +34,10 @@ const NETWORK_ID_MAP: {
         [key in ChainId]?: string
     }
 } = {
-    [DataProvider.COIN_GECKO]: {},
-    [DataProvider.COIN_MARKET_CAP]: {},
-    [DataProvider.UNISWAP_INFO]: {},
-    [DataProvider.NFTSCAN]: {},
+    [DataProvider.CoinGecko]: {},
+    [DataProvider.CoinMarketCap]: {},
+    [DataProvider.UniswapInfo]: {},
+    [DataProvider.NFTScan]: {},
 }
 
 const NETWORK_NAME_MAP: {
@@ -58,7 +58,7 @@ export function isMirroredKeyword(symbol: string) {
 }
 
 export function resolveChainId(id: string, dataProvider: DataProvider) {
-    if (dataProvider === DataProvider.UNISWAP_INFO) return ChainId.Mainnet
+    if (dataProvider === DataProvider.UniswapInfo) return ChainId.Mainnet
     const chainIds = NETWORK_ID_MAP[dataProvider]
     return Object.entries(chainIds).find(([_, key]) => key === id)?.[0]
 }

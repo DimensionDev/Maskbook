@@ -36,6 +36,7 @@
     "@masknet/plugin-solana": "workspace:*",
     "@masknet/plugin-wallet": "workspace:*",
     "@masknet/plugin-web3-profile": "workspace:*",
+    "@masknet/plugin-ens": "workspace:*",
     "@masknet/public-api": "workspace:*",
     "@masknet/sandboxed-plugin-runtime": "workspace:*",
     "@masknet/sdk": "workspace:*",

@@ -172,10 +172,10 @@ export enum LaunchPage {
 }
 
 export enum DataProvider {
-    COIN_GECKO = 0,
-    COIN_MARKET_CAP = 1,
-    UNISWAP_INFO = 2,
-    NFTSCAN = 3,
+    CoinGecko = 'CoinGecko',
+    CoinMarketCap = 'CoinMarketCap',
+    UniswapInfo = 'UniswapInfo',
+    NFTScan = 'NFTScan',
 }
 
 export enum TradeProvider {

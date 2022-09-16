@@ -580,6 +580,8 @@ export namespace Plugin.SNSAdaptor {
         icon?: React.ReactNode
         title?: string
         backgroundGradient?: string
+        borderRadius?: string
+        margin?: string
     }
 
     export interface SearchResultBox {
@@ -1120,6 +1122,7 @@ export enum PluginID {
     Collectible = 'com.maskbook.collectibles',
     CryptoArtAI = 'com.maskbook.cryptoartai',
     dHEDGE = 'org.dhedge',
+    ENS = 'com.maskbook.ens',
     NextID = 'com.mask.next_id',
     External = 'io.mask.external',
     Furucombo = 'app.furucombo',
