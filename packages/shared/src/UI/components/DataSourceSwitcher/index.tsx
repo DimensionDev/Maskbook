@@ -28,14 +28,14 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface TradeDataSourceProps extends withClasses<'source' | 'sourceNote'> {
+export interface DataSourceSwitcherProps extends withClasses<'source' | 'sourceNote'> {
     showDataProviderIcon?: boolean
     dataProvider?: SourceType
     dataProviders?: SourceType[]
     onDataProviderChange?: (option: FootnoteMenuOption) => void
 }
 
-export const DataSourceSwitcher = function (props: TradeDataSourceProps) {
+export const DataSourceSwitcher = function (props: DataSourceSwitcherProps) {
     const { showDataProviderIcon = false, dataProvider, dataProviders = [], onDataProviderChange } = props
     const t = useSharedI18N()
     const classes = useStylesExtends(useStyles(), props)
