@@ -263,7 +263,7 @@ const ContractInteraction = memo(() => {
     const { value: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, !isNativeTokenInteraction ? tokenAddress : '')
 
     // gas price
-    const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, chainId, 'EIP1559')
+    const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)
     const { value: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM)
     const { value: defaultPrices } = useAsync(async () => {
         if (isSupport1559 && !maxFeePerGas && !maxPriorityFeePerGas) {

@@ -7,7 +7,7 @@ import {
     Linking,
     TokenSecurityBar,
     useTokenSecurity,
-    DataSourceSwitcher,
+    SourceSwitcher,
     FootnoteMenuOption,
 } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
@@ -208,12 +208,13 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         <TrendingCard {...TrendingCardProps}>
             <Stack className={classes.cardHeader}>
                 <PluginHeader>
-                    <DataSourceSwitcher
-                        showDataProviderIcon={showDataProviderIcon}
-                        dataProvider={dataProvider as unknown as SourceType}
-                        dataProviders={dataProviders as unknown as SourceType[]}
-                        onDataProviderChange={onDataProviderChange}
-                    />
+                    {showDataProviderIcon ? (
+                        <SourceSwitcher
+                            sourceType={dataProvider as unknown as SourceType}
+                            sourceTypes={dataProviders as unknown as SourceType[]}
+                            onSourceTypeChange={onDataProviderChange}
+                        />
+                    ) : null}
                 </PluginHeader>
                 <Stack className={classes.headline}>
                     <Stack gap={2} flexGrow={1}>

@@ -35,7 +35,7 @@ export interface FootnoteMenuProps {
     onChange?: (option: FootnoteMenuOption) => void
 }
 
-export function FootnoteMenuUI(props: FootnoteMenuProps) {
+export function FootnoteMenu(props: FootnoteMenuProps) {
     const { children, options, selectedIndex = -1, onChange } = props
 
     const { classes, theme } = useStyles()

@@ -1,11 +1,11 @@
 import { useCallback } from 'react'
 import type { SourceType } from '@masknet/web3-shared-base'
 import useStyles from './useStyles'
-import { DataSourceSwitcher, FootnoteMenuOption } from '@masknet/shared'
+import { FootnoteMenuOption, SourceSwitcher as SourceSwitcherShared } from '@masknet/shared'
 import { CollectibleState } from './hooks/useCollectibleState'
-import { SupportedProvider } from '../constants'
+import { SUPPORTED_SOURCE_TYPES } from '../constants'
 
-export function DataSourceSwitcherWrapper() {
+export function SourceSwitcher() {
     const { classes } = useStyles()
     const { setProvider, provider } = CollectibleState.useContainer()
 
@@ -14,15 +14,14 @@ export function DataSourceSwitcherWrapper() {
     }, [])
 
     return (
-        <div className={classes.dataSourceSwitcherWrapper}>
-            <DataSourceSwitcher
+        <div className={classes.sourceSwitcher}>
+            <SourceSwitcherShared
                 classes={{
                     sourceNote: classes.sourceNote,
                 }}
-                showDataProviderIcon
-                dataProvider={provider}
-                dataProviders={SupportedProvider}
-                onDataProviderChange={onDataProviderChange}
+                sourceType={provider}
+                sourceTypes={SUPPORTED_SOURCE_TYPES}
+                onSourceTypeChange={onDataProviderChange}
             />
         </div>
     )
