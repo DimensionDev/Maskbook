@@ -37,6 +37,7 @@ export async function connectSite(
     profile?: ProfileIdentifier,
 ) {
     const worker = definedSiteAdaptors.get(network)
+    console.log(definedSiteAdaptors)
     if (!worker) return
 
     if (!(await requestSiteAdaptorsPermission([worker]))) return
