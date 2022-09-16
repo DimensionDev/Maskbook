@@ -19,8 +19,8 @@ export class LoadingFailCard extends Component<
         if (this.state.error) {
             return this.props.isFullPluginDown ? (
                 <Box style={{ textAlign: 'center', padding: 16 }}>
-                    <Typography textAlign="center" color="#07101b">
-                        Loading fails due to Snapshot API service breakdown.
+                    <Typography textAlign="center" color="error">
+                        Load failed
                     </Typography>
                     <Button
                         style={{
@@ -33,11 +33,12 @@ export class LoadingFailCard extends Component<
                             marginBottom: 4,
                             marginTop: 32,
                         }}
+                        variant="roundedContained"
                         onClick={() => {
                             this.setState({ error: null })
                             this.props.retry()
                         }}>
-                        Retry
+                        Reload
                     </Button>
                 </Box>
             ) : (
