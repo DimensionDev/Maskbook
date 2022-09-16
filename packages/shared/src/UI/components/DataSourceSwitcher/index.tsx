@@ -3,7 +3,7 @@ import { Stack, Typography } from '@mui/material'
 import { SourceType, resolveSourceTypeName } from '@masknet/web3-shared-base'
 import { Box } from '@mui/system'
 import { useSharedI18N } from '@masknet/shared'
-import { FootnoteMenuUI, FootnoteMenuOption } from '../FootnoteMenuUI'
+import { FootnoteMenu, FootnoteMenuOption } from '../FootnoteMenu'
 import { SourceProviderIcon } from '../SourceProviderIcon'
 
 const useStyles = makeStyles()((theme) => {
@@ -49,7 +49,7 @@ export const DataSourceSwitcher = function (props: TradeDataSourceProps) {
                     alignItems="center"
                     gap={0.5}>
                     <Typography className={classes.sourceNote}>{t.plugin_trader_data_source()}</Typography>
-                    <FootnoteMenuUI
+                    <FootnoteMenu
                         options={dataProviders.map((x) => ({
                             name: (
                                 <Stack display="inline-flex" flexDirection="row" alignItems="center" gap={0.5}>
