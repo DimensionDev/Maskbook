@@ -62,8 +62,8 @@ importers:
   .:
     dependencies:
       '@dimensiondev/holoflows-kit':
-        specifier: 0.9.0-20220916115517-12dfbdd
-        version: 0.9.0-20220916115517-12dfbdd
+        specifier: 0.9.0-20220916140519-2191d7a
+        version: 0.9.0-20220916140519-2191d7a
       '@dimensiondev/kit':
         specifier: 0.0.0-20220617045824-8bc7a27
         version: 0.0.0-20220617045824-8bc7a27
@@ -1865,8 +1865,8 @@ importers:
   packages/sandboxed-plugin-runtime:
     dependencies:
       '@dimensiondev/holoflows-kit':
-        specifier: 0.9.0-20220916115517-12dfbdd
-        version: 0.9.0-20220916115517-12dfbdd
+        specifier: 0.9.0-20220916140519-2191d7a
+        version: 0.9.0-20220916140519-2191d7a
       '@masknet/compartment':
         specifier: ^0.3.8
         version: 0.3.8
@@ -5749,8 +5749,8 @@ packages:
       eslint: 8.23.0
     dev: true
 
-  /@dimensiondev/holoflows-kit/0.9.0-20220916115517-12dfbdd:
-    resolution: {integrity: sha512-Blp+bvH0ZzEJUoG5e+QEWUQ/fs8z0HFAjdUDhI/5j2nHKsJr+l9avocmEQb4fYfzX9Nq2t2v+73j5n18ycYhQg==, tarball: download/@DimensionDev/holoflows-kit/0.9.0-20220916115517-12dfbdd/a4b6409c85d26189824dedd238f6dcc0e8ee5270}
+  /@dimensiondev/holoflows-kit/0.9.0-20220916140519-2191d7a:
+    resolution: {integrity: sha512-SlV2mmLTdkJVFyJUZOLFcwj9t4zdlx52d6Rr+1+7reQz+YxEPsc5C2DdytWKi8EMFzufi+d/K1JBN8YLRZsxdw==, tarball: download/@DimensionDev/holoflows-kit/0.9.0-20220916140519-2191d7a/35a322abed6a38c0ad986680ab70c07d1c3346a5}
     dependencies:
       '@servie/events': 3.0.0
       event-iterator: 2.0.0
