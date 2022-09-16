@@ -13,9 +13,8 @@ import { useTransactionCallback, TargetChainIdContext } from '@masknet/plugin-in
 import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
 import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
-import { formatAddress } from '@masknet/web3-shared-flow'
 import { ImageIcon, TokenIcon } from '@masknet/shared'
-import { useNetworkDescriptor } from '@masknet/plugin-infra/web3'
+import { useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../../locales'
 
 const useTabsStyles = makeStyles()((theme) => ({
@@ -181,7 +180,7 @@ export function PreviewCard(props: PreviewCardProps) {
         } catch {}
         setDrawing(false)
     }, [openBoxCallback, refreshLastPurchasedTokenIds, onRefresh, retryMaskBoxStatus])
-
+    const { Others } = useWeb3State()
     // #endregion
 
     if (boxState === BoxState.UNKNOWN)
@@ -302,7 +301,7 @@ export function PreviewCard(props: PreviewCardProps) {
                                     {t.by()}
                                 </Typography>
                                 <Typography color="textPrimary" fontSize={14} fontWeight="bold">
-                                    {formatAddress(boxInfo.creator, 4)}
+                                    {Others?.formatAddress(boxInfo.creator, 4)}
                                 </Typography>
                             </Box>
                         </Box>
