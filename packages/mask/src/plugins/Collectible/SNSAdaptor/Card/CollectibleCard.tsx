@@ -1,0 +1,29 @@
+import { Card, CardContent, CardProps } from '@mui/material'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
+
+const useStyles = makeStyles()({
+    root: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 0,
+        overflow: 'auto',
+    },
+    overContent: {
+        background: '#fff',
+    },
+})
+
+export interface CollectibleCardProps extends withClasses<'root' | 'content'> {
+    children: React.ReactNode
+    CardProps?: Partial<CardProps>
+}
+
+export function CollectibleCard(props: CollectibleCardProps) {
+    const classes = useStylesExtends(useStyles(), props)
+
+    return (
+        <Card className={classes.root} elevation={0} {...props.CardProps}>
+            <CardContent className={classes.overContent}>{props.children}</CardContent>
+        </Card>
+    )
+}

@@ -25,7 +25,7 @@ export const RaribleUserURL = 'https://rarible.com/user/'
 export const RaribleRopstenUserURL = 'https://ropsten.rarible.com/user/'
 export const RaribleRinkebyUserURL = 'https://rinkeby.rarible.com/user/'
 
-export const SupportedProvider = [
+export const SUPPORTED_PROVIDERS = [
     SourceType.Gem,
     SourceType.NFTScan,
     SourceType.Rarible,
