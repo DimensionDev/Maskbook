@@ -28,7 +28,7 @@
     "spellcheck": "cspell lint --no-must-find-files"
   },
   "dependencies": {
-    "@dimensiondev/holoflows-kit": "^0.9.0-20220807034934-68f04f1",
+    "@dimensiondev/holoflows-kit": "0.9.0-20220916115517-12dfbdd",
     "@dimensiondev/kit": "0.0.0-20220617045824-8bc7a27",
     "@emotion/cache": "11.10.3",
     "@emotion/react": "11.10.4",
@@ -92,7 +92,13 @@
       "@types/node": "18.7.4",
       "@types/react": "18.0.17",
       "cross-fetch": "3.1.5",
-      "cross-blob": "3.0.1"
+      "cross-blob": "3.0.1",
+      "i18next-translation-parser>html-parse-stringify2": "github:locize/html-parse-stringify2#d463109433b2c49c74a081044f54b2a6a1ccad7c",
+      "web3@0.20.7>bignumber.js": "git+https://github.com/frozeman/bignumber.js-nolookahead.git#57692b3ecfc98bbdd6b3a516cb2353652ea49934"
+    },
+    "override comments": {
+      "ipfs-utils": "see https://github.com/ipfs/js-ipfs-utils/issues/158",
+      "i18next-translation-parser": "see https://github.com/i18next/i18next-translation-parser/issues/11 we manually pin the commit"
     },
     "onlyBuiltDependencies": [],
     "peerDependencyRules": {
