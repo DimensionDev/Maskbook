@@ -1,5 +1,5 @@
-import { createNonFungibleToken } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import formatDateTime from 'date-fns/format'
+import fromUnixTime from 'date-fns/fromUnixTime'
 import stringify from 'json-stable-stringify'
 import type { MirrorBaseAPI, Writer } from '../types'
 
@@ -21,7 +21,21 @@ interface EntryRespnose {
     nftAddress?: string
     title: string
     body: string
-    timestamp: number
+    publishedAtTimestamp: number
+    writingNFT: {
+        name: string
+        symbol?: string
+        description: string
+        proxyAddress: string
+        quantity: number
+        timestamp: number
+        network: {
+            chainId: number
+        }
+        media: {
+            url: string
+        }
+    }
 }
 
 async function fetchFromMirror<T>(query: string) {
@@ -59,7 +73,7 @@ export class MirrorAPI implements MirrorBaseAPI.Provider {
         if (!digest) return null
 
         const response = await fetchFromMirror<EntryRespnose>(`
-            query Entry() {
+            query Entry {
                 entry(digest: ${digest}) {
                     digest
                     arweaveTransactionRequest {
@@ -99,6 +113,24 @@ export class MirrorAPI implements MirrorBaseAPI.Provider {
                     title
                     body
                     timestamp
+                    publishedAtTimestamp
+                    writingNFT {
+                        name
+                        network {
+                            chainId
+                            name
+                        }
+                        description
+                        owner
+                        proxyAddress
+                        quantity
+                        symbol
+                        title
+                        timestamp
+                        media {
+                            url
+                        }
+                    }
                 }
             }
         `)
@@ -107,21 +139,22 @@ export class MirrorAPI implements MirrorBaseAPI.Provider {
             transactionId: response.arweaveTransactionRequest.transactionId,
             digest: response.digest,
             author: response.publisher.member,
-            // TODO: chainId and schemaType
-            token:
-                response.nftAddress && response.nft?.tokenId
-                    ? createNonFungibleToken(
-                          ChainId.Mainnet,
-                          response.nftAddress,
-                          SchemaType.ERC721,
-                          response.nft?.tokenId,
-                          response.nft?.contributorAddress,
-                      )
-                    : undefined,
+            collection: {
+                chainId: response.writingNFT.network.chainId,
+                name: response.writingNFT.name,
+                slug: response.writingNFT.symbol || response.writingNFT.name,
+                symbol: response.writingNFT.symbol,
+                description: response.writingNFT.description,
+                address: response.writingNFT.proxyAddress,
+                tokensTotal: response.writingNFT.quantity,
+                iconURL: response.writingNFT.media.url,
+                createAt: response.writingNFT.timestamp,
+            },
+            version: formatDateTime(fromUnixTime(response.publishedAtTimestamp), 'mm-dd-yyyy'),
             content: {
                 title: response.title,
                 body: response.body,
-                timestamp: response.timestamp,
+                timestamp: response.publishedAtTimestamp,
             },
         }
     }

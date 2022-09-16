@@ -1,4 +1,4 @@
-import type { NonFungibleToken } from '@masknet/web3-shared-base'
+import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export interface Writer {
@@ -18,10 +18,10 @@ export interface Entry {
     transactionId: string
     digest: string
     // mm-dd-yyyy
-    // version: string
+    version: string
     author: Writer
     // NFT token
-    token?: NonFungibleToken<ChainId, SchemaType>
+    collection: NonFungibleCollection<ChainId, SchemaType.ERC721>
     content: {
         title: string
         // markdown
@@ -35,7 +35,5 @@ export namespace MirrorBaseAPI {
     export interface Provider {
         getWriter(id: string): Promise<Writer | null>
         getPost(digest: string): Promise<Entry | null>
-        // getCollectedPosts(): Promise<Pageable<Entry> | null>
-        // getOwnedPosts(): Promise<Pageable<Entry> | null>
     }
 }
