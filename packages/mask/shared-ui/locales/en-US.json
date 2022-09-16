@@ -840,6 +840,7 @@
     "plugin_snapshot_vote_title": "Cast your vote",
     "plugin_snapshot_proposal": "Proposal",
     "plugin_snapshot_progress": "Progress",
+    "plugin_snapshot_load_failed": "Loading fails due to Snapshot API service breakdown.",
     "plugin_snapshot_vote_confirm_dialog_title": "Vote Overview",
     "plugin_snapshot_vote_confirm_dialog_choice": "Are you sure you want to vote \"{{ choiceText }}\"?",
     "plugin_snapshot_vote_confirm_dialog_warning": "This action cannot be undone.",

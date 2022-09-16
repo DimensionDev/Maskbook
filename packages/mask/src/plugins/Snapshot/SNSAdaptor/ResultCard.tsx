@@ -77,7 +77,6 @@ function Content() {
     const {
         payload: { results },
     } = useResults(identifier)
-    console.log('result', results)
     const { classes } = useStyles()
     const { t } = useI18N()
     const listRef = useRef<HTMLSpanElement[]>([])
