@@ -1,6 +1,6 @@
 import { useI18N } from '../../../utils/index.js'
 import { Box, Checkbox, FormControlLabel, Typography } from '@mui/material'
-import { MaskIcon } from '../../../resources/MaskIcon.js'
+import { MaskIcon } from '@masknet/shared'
 import classNames from 'classnames'
 import { Icons } from '@masknet/icons'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton.js'

@@ -27,13 +27,13 @@ const coinNftScanPreferredCoinId = createInternalSettings(`${PLUGIN_ID}+coinNftS
 
 export function getCurrentPreferredCoinIdSettings(dataProvider: DataProvider) {
     switch (dataProvider) {
-        case DataProvider.COIN_GECKO:
+        case DataProvider.CoinGecko:
             return coinGeckoPreferredCoinId
-        case DataProvider.COIN_MARKET_CAP:
+        case DataProvider.CoinMarketCap:
             return coinMarketCapPreferredCoinId
-        case DataProvider.UNISWAP_INFO:
+        case DataProvider.UniswapInfo:
             return coinUniswapPreferredCoinId
-        case DataProvider.NFTSCAN:
+        case DataProvider.NFTScan:
             return coinNftScanPreferredCoinId
         default:
             unreachable(dataProvider)

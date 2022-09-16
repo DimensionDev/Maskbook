@@ -1,7 +1,7 @@
 import { ChangeEvent, memo, useCallback, useMemo } from 'react'
 import { useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { formatBalance, FungibleToken } from '@masknet/web3-shared-base'
-import { FungibleTokenInputUI } from './UI'
+import { FungibleTokenInputUI } from './UI.js'
 import BigNumber from 'bignumber.js'
 
 const MIN_AMOUNT_LENGTH = 1
@@ -50,7 +50,7 @@ export const FungibleTokenInput = memo<FungibleTokenInputProps>(
         // #region update amount by self
         const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
             () => ({
-                RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${token?.decimals}}$`), // .ddd...d
+                RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${token?.decimals}}$`),
                 RE_MATCH_WHOLE_AMOUNT: new RegExp(`^\\d*\\.?\\d{0,${token?.decimals}}$`), // d.ddd...d
             }),
             [token?.decimals],

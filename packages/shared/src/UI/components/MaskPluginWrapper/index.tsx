@@ -1,8 +1,8 @@
 import { Typography, SnackbarContent, Link } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { MaskIcon } from '../resources/MaskIcon.js'
+import { MaskIcon } from '../MaskIcon'
 import { Suspense, ReactNode, useMemo, forwardRef, useImperativeHandle, useState } from 'react'
-import { useI18N } from '../utils/index.js'
+import { useSharedI18N } from '@masknet/shared'
 import { Box } from '@mui/system'
 import {
     usePluginI18NField,
@@ -24,69 +24,73 @@ interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     publisherLink?: string
 }
 
-const useStyles = makeStyles<{
-    backgroundGradient?: string
-}>()((theme, props) => {
-    return {
-        card: {
-            background:
-                props?.backgroundGradient ??
-                'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(45, 41, 253, 0.2) 100%), #FFFFFF;',
-            margin: theme.spacing(2, 0),
-            width: '100%',
-            boxSizing: 'border-box',
-            cursor: 'default',
-            borderRadius: 15,
-            overflow: 'hidden',
-        },
-        header: {
-            backgroundColor: 'transparent',
-            color: theme.palette.text.primary,
-            display: 'flex',
-            alignItems: 'center',
-            padding: 15,
-        },
-        title: {
-            display: 'flex',
-            flexDirection: 'column',
-            paddingLeft: theme.spacing(1.5),
-        },
-        provider: {
-            display: 'flex',
-            alignItems: 'center',
-            '& > a': {
-                lineHeight: 0,
+const useStyles = makeStyles<{ backgroundGradient?: string; borderRadius?: string; margin?: string }>()(
+    (theme, props) => {
+        return {
+            card: {
+                background:
+                    props?.backgroundGradient ??
+                    'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(45, 41, 253, 0.2) 100%), #FFFFFF;',
+                margin: props?.margin ?? theme.spacing(2, 0),
+                width: '100%',
+                boxSizing: 'border-box',
+                cursor: 'default',
+                borderRadius: props?.borderRadius ?? 15,
+                overflow: 'hidden',
             },
-        },
-        publish: {
-            flex: 1,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-        },
-        action: {
-            textAlign: 'center',
-            margin: theme.spacing(1),
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: 16,
-        },
-        body: {
-            padding: theme.spacing(0),
-        },
-        providerBy: {
-            marginRight: theme.spacing(0.5),
-            color: theme.palette.mode === 'dark' ? '#536471' : theme.palette.text.secondary,
-        },
-    }
-})
+            header: {
+                backgroundColor: 'transparent',
+                color: theme.palette.text.primary,
+                display: 'flex',
+                alignItems: 'center',
+                padding: 15,
+            },
+            title: {
+                display: 'flex',
+                flexDirection: 'column',
+                paddingLeft: theme.spacing(1.5),
+            },
+            provider: {
+                display: 'flex',
+                alignItems: 'center',
+                '& > a': {
+                    lineHeight: 0,
+                },
+            },
+            publish: {
+                flex: 1,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+            },
+            action: {
+                textAlign: 'center',
+                margin: theme.spacing(1),
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: 16,
+            },
+            body: {
+                padding: theme.spacing(0),
+            },
+            providerBy: {
+                marginRight: theme.spacing(0.5),
+                color: theme.palette.mode === 'dark' ? theme.palette.grey[700] : theme.palette.text.secondary,
+            },
+        }
+    },
+)
 
-export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
+export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
     const { open, title, children, action, publisher, publisherLink, content, wrapperProps } = props
-    const { classes } = useStyles({ backgroundGradient: wrapperProps?.backgroundGradient })
-    const { t } = useI18N()
+    const { classes } = useStyles({
+        backgroundGradient: wrapperProps?.backgroundGradient,
+        borderRadius: wrapperProps?.borderRadius,
+        margin: wrapperProps?.margin,
+    })
+    const t = useSharedI18N()
 
     const publisherInfo = useMemo(() => {
         if (!publisher) return
@@ -98,7 +102,7 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
         return (
             <Box className={classes.provider}>
                 <Typography variant="body1" fontSize={14} fontWeight="400" className={classes.providerBy}>
-                    {t('plugin_provider_by')}
+                    {t.plugin_provider_by()}
                 </Typography>
                 {main}
                 {publisherLink ? (
@@ -127,7 +131,7 @@ export default function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
                     fontSize={16}
                     fontWeight={700}
                     color={MaskColorVar.textPluginColor}>
-                    {wrapperProps?.title ?? title ?? t('plugin_default_title')}
+                    {wrapperProps?.title ?? title ?? t.plugin_default_title()}
                 </Typography>
                 <div className={classes.publish}>{publisherInfo}</div>
             </div>

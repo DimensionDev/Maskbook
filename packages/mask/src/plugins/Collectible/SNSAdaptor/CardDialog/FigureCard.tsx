@@ -108,7 +108,7 @@ export function FigureCard(props: FigureCardProps) {
     const { asset, hideSubTitle, timeline } = props
     const { classes, cx } = useStyles()
 
-    const fallbackImgURL = new URL('../assets/fallbackImg.svg', import.meta.url)
+    const fallbackImgURL = new URL('./assets/fallbackImg.svg', import.meta.url)
     const resourceUrl = asset.metadata?.imageURL ?? asset.metadata?.mediaURL
     return (
         <div className={classes.layout}>

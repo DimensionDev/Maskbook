@@ -3,7 +3,7 @@ import type { MaskFixedSizeListProps, MaskTextFieldProps } from '@masknet/theme'
 import { useSelectFungibleToken, FungibleTokenInput, FungibleTokenInputProps } from '@masknet/shared'
 import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 
 interface ERC20TokenListProps extends withClasses<'list' | 'placeholder'> {
     targetChainId?: ChainId

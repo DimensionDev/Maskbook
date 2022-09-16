@@ -126,7 +126,7 @@ export function TrendingView(props: TrendingViewProps) {
     const theme = useTheme()
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
     const dataProvider = useCurrentDataProvider(dataProviders)
-    const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UNISWAP_INFO ? 1 : 0)
+    const [tabIndex, setTabIndex] = useState(dataProvider !== DataProvider.UniswapInfo ? 1 : 0)
     const chainIdValid = useChainIdValid(NetworkPluginID.PLUGIN_EVM)
     // #region track network type
     const networkType = useNetworkType(NetworkPluginID.PLUGIN_EVM)
@@ -229,10 +229,12 @@ export function TrendingView(props: TrendingViewProps) {
 
         return (
             <ActionButton sx={{ marginTop: 1 }} color="primary" onClick={() => setStorage(nextOption)}>
-                Switch to {resolveDataProviderName(nextOption)}
+                {t('plugin_trader_switch_provider', {
+                    provider: resolveDataProviderName(nextOption),
+                })}
             </ActionButton>
         )
-    }, [dataProvider, resolveDataProviderName])
+    }, [dataProvider])
     // // #endregion
 
     // #region api ready callback

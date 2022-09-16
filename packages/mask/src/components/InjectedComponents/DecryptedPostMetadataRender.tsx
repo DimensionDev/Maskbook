@@ -6,7 +6,7 @@ import {
     useDisabledPluginSuggestionFromMeta,
     useDisabledPluginSuggestionFromPost,
 } from './DisabledPluginSuggestion.js'
-import { MaskPostExtraPluginWrapper } from '../../plugins/MaskPluginWrapper.js'
+import { MaskPostExtraPluginWrapper } from '@masknet/shared'
 
 const Decrypted = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
