@@ -2,7 +2,7 @@ import { useWizardDialogStyles, WizardDialog } from './WizardDialog.js'
 import { useI18N } from '../../../utils/index.js'
 import { SetupGuideStep } from '../../../../shared/legacy-settings/types.js'
 import { Box, Button, Typography } from '@mui/material'
-import { MaskIcon } from '../../../resources/MaskIcon.js'
+import { MaskIcon } from '@masknet/shared'
 import ExtensionIcon from '@mui/icons-material/Extension'
 import { Icons } from '@masknet/icons'
 

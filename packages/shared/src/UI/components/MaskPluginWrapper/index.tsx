@@ -1,6 +1,6 @@
 import { Typography, SnackbarContent, Link } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { MaskIcon } from './MaskIcon'
+import { MaskIcon } from '../MaskIcon'
 import { Suspense, ReactNode, useMemo, forwardRef, useImperativeHandle, useState } from 'react'
 import { useSharedI18N } from '@masknet/shared'
 import { Box } from '@mui/system'
