@@ -2,11 +2,11 @@ import { DataProvider } from '@masknet/public-api'
 import type { ScopedStorage } from '@masknet/shared-base'
 
 interface StorageValue {
-    dataProvider: DataProvider
+    sourceProvider: DataProvider
 }
 
 export const storageDefaultValue = {
-    dataProvider: DataProvider.CoinGecko,
+    sourceProvider: DataProvider.CoinGecko,
 }
 
 let storage: ScopedStorage<StorageValue> = null!
@@ -19,10 +19,10 @@ export function getStorage() {
     return storage.storage
 }
 
-export function setStorage(dataProvider: DataProvider) {
-    storage.storage.dataProvider.setValue(dataProvider)
+export function setStorage(sourceProvider: DataProvider) {
+    storage.storage.sourceProvider.setValue(sourceProvider)
 }
 
 export function getDataProvider() {
-    return storage.storage.dataProvider
+    return storage.storage.sourceProvider
 }
