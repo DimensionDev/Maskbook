@@ -10,7 +10,7 @@ import {
 import { ChainId as ChainIdEVM } from '@masknet/web3-shared-evm'
 import { SourceType } from '@masknet/web3-shared-base'
 import { Asset, WyvernSchemaName } from 'opensea-js/lib/types'
-import type { CollectibleToken, CollectibleJSON_Payload } from './types/index.js'
+import type { CollectibleToken, CollectibleJSON_Payload } from './types.js'
 
 export function toAsset(asset: { tokenId: string; tokenAddress: string; schemaName?: WyvernSchemaName }): Asset {
     return {

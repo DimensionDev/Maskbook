@@ -30,7 +30,7 @@ import { SelectTokenListPanel } from './SelectTokenListPanel.js'
 import { isWyvernSchemaName } from '../../helpers.js'
 import { ChainBoundary } from '../../../../web3/UI/ChainBoundary.js'
 import { useAccount, useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
-import { useOpenSea } from '../../hooks/useOpenSea.js'
+import { useOpenSea } from './hooks/useOpenSea.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

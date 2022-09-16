@@ -23,7 +23,7 @@ import { useI18N } from '../../../../utils/index.js'
 import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton.js'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary.js'
 import { CheckoutOrder } from './CheckoutOrder.js'
-import { useOpenSea } from '../../hooks/useOpenSea.js'
+import { useOpenSea } from './hooks/useOpenSea.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

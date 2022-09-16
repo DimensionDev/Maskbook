@@ -1,4 +1,5 @@
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
+import { first } from 'lodash-unified'
 import { EthereumAddress } from 'wallet.ts'
 import { Box, Card, CardActions, CardContent, Checkbox, FormControlLabel, Typography, InputBase } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -11,11 +12,10 @@ import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoun
 import { DateTimePanel } from '../../../../web3/UI/DateTimePanel.js'
 import { toAsset } from '../../helpers.js'
 import getUnixTime from 'date-fns/getUnixTime'
-import { first } from 'lodash-unified'
 import { isWyvernSchemaName } from '../../helpers.js'
 import { useAccount, useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
-import { useOpenSea } from '../../hooks/useOpenSea.js'
 import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton.js'
+import { useOpenSea } from './hooks/useOpenSea.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
