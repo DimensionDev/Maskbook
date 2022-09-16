@@ -18,7 +18,7 @@ const useStyles = makeStyles()((theme) => {
         },
         sourceMenu: {
             fontSize: 14,
-            fontWeight: 'bolder',
+            fontWeight: 700,
         },
         sourceName: {
             fontSize: 14,
