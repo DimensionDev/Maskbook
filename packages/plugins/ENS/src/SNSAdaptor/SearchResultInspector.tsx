@@ -34,7 +34,6 @@ export function SearchResultInspectorContent() {
             }}>
             <Box className={classes.root}>
                 <div className={classes.coverCard}>
-                    <img src={new URL('./assets/ENSCover.svg', import.meta.url).toString()} />
                     <Typography className={classes.coverText}>{domain}</Typography>
                 </div>
                 <SourceSwitcher />

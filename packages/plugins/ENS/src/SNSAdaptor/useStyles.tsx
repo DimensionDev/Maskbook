@@ -60,7 +60,10 @@ const useStyles = makeStyles()((theme) => {
         },
         coverCard: {
             position: 'relative',
+            height: 256,
             marginBottom: 12,
+            backgroundImage: `url(${new URL('./assets/ENSCover.svg', import.meta.url)})`,
+            backgroundSize: 'contain',
         },
         coverText: {
             position: 'absolute',
