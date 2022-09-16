@@ -1,6 +1,6 @@
 import React, { createElement, Fragment, useMemo } from 'react'
-import { useActivatedPluginsSNSAdaptor } from '../manager/sns-adaptor'
-import type { Plugin, PluginID } from '../types'
+import { useActivatedPluginsSNSAdaptor } from '../manager/sns-adaptor.js'
+import type { Plugin, PluginID } from '../types.js'
 
 export interface WidgetProps<Name extends keyof Plugin.SNSAdaptor.WidgetRegistry> {
     name: Name

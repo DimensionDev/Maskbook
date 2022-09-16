@@ -5,8 +5,8 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { Icons } from '@masknet/icons'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
-import { NFTOfferCard } from '../NFTOfferCard'
-import { useI18N } from '../../../../../utils'
+import { NFTOfferCard } from '../NFTOfferCard.js'
+import { useI18N } from '../../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
