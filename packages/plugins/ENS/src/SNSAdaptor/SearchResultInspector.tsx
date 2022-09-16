@@ -9,7 +9,7 @@ import { EmptyContent } from './EmptyContent'
 import { LoadingContent } from './LoadingContent'
 import { LoadFailedContent } from './LoadFailedContent'
 import { TopAndLastOffers } from './TopAndLastOffers'
-import { SourceSwitcherWrapper } from './SourceSwitcherWrapper'
+import { SourceSwitcher } from './SourceSwitcher'
 import { ENSProvider, ENSContext, SearchResultInspectorProps } from './context'
 import { CollectibleState } from './hooks/useCollectibleState'
 
@@ -37,7 +37,7 @@ export function SearchResultInspectorContent() {
                     <img src={new URL('./assets/ENSCover.svg', import.meta.url).toString()} />
                     <Typography className={classes.coverText}>{domain}</Typography>
                 </div>
-                <SourceSwitcherWrapper />
+                <SourceSwitcher />
                 <TopAndLastOffers />
                 {nextIdTwitterBindingName ? (
                     <div className={classes.nextIdVerified}>
