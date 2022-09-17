@@ -1,5 +1,10 @@
 import { ChangeEvent, useState, useCallback, useMemo, useEffect } from 'react'
 import { Trans } from 'react-i18next'
+import { first } from 'lodash-unified'
+import BigNumber from 'bignumber.js'
+import getUnixTime from 'date-fns/getUnixTime'
+import formatDateTime from 'date-fns/format'
+import type { Order } from 'opensea-js/lib/types'
 import {
     DialogContent,
     Box,
@@ -12,25 +17,19 @@ import {
     DialogActions,
 } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { first } from 'lodash-unified'
-import BigNumber from 'bignumber.js'
-import formatDateTime from 'date-fns/format'
-import { PluginWalletStatusBar, useI18N } from '../../../../utils/index.js'
 import { InjectedDialog } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { UnreviewedWarning } from '.././UnreviewedWarning.js'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { UnreviewedWarnings } from './UnreviewedWarnings.js'
+import { PluginWalletStatusBar, useI18N } from '../../../../utils/index.js'
 import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton.js'
 import { DateTimePanel } from '../../../../web3/UI/DateTimePanel.js'
-import { toAsset } from '../../helpers.js'
-import getUnixTime from 'date-fns/getUnixTime'
+import { toAsset, isWyvernSchemaName } from '../../helpers.js'
 import { CurrencyType, NetworkPluginID, NonFungibleAsset, rightShift, ZERO } from '@masknet/web3-shared-base'
-import { SelectTokenListPanel } from '.././SelectTokenListPanel.js'
-import { isWyvernSchemaName } from '../../utils.js'
+import { SelectTokenListPanel } from './SelectTokenListPanel.js'
 import { ChainBoundary } from '../../../../web3/UI/ChainBoundary.js'
 import { useAccount, useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import type { Order } from 'opensea-js/lib/types'
-import { useOpenSea } from '../../hooks/useOpenSea.js'
+import { useOpenSea } from './hooks/useOpenSea.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -163,7 +162,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                     <CardContent>
                         {isVerified ? null : (
                             <Box sx={{ marginBottom: 2 }}>
-                                <UnreviewedWarning />
+                                <UnreviewedWarnings />
                             </Box>
                         )}
                         <SelectTokenListPanel

@@ -1,12 +1,12 @@
-import { Table, TableHead, TableBody, TableRow, TableCell, Typography, Link } from '@mui/material'
+import type { Order } from 'opensea-js/lib/types'
 import { makeStyles } from '@masknet/theme'
+import { Image } from '@masknet/shared'
+import { Table, TableHead, TableBody, TableRow, TableCell, Typography, Link } from '@mui/material'
 import { CurrencyType, formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useChainId } from '@masknet/plugin-infra/web3'
 import { resolveAssetLinkOnCurrentProvider } from '../../pipes/index.js'
 import { useI18N } from '../../../../utils/index.js'
-import type { Order } from 'opensea-js/lib/types'
-import { CollectibleState } from '../../hooks/useCollectibleState.js'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { Image } from '@masknet/shared'
+import { Context } from '../Card/hooks/useContext.js'
 
 const useStyles = makeStyles()((theme) => ({
     itemInfo: {
@@ -25,7 +25,7 @@ export interface CheckoutOrderProps {
 export function CheckoutOrder({ order }: CheckoutOrderProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { token, asset, provider } = CollectibleState.useContainer()
+    const { token, asset, provider } = Context.useContainer()
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     if (!asset?.value || !token || !order) return null
