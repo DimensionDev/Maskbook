@@ -232,8 +232,8 @@
         "features": [],
         "nativeCurrency": {
             "chainId": 42161,
-            "name": "Arbitrum Ether",
-            "symbol": "ARETH",
+            "name": "Ether",
+            "symbol": "ETH",
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/arbitrum/info/logo.png/quality=85"
         },
@@ -258,7 +258,7 @@
         "nativeCurrency": {
             "chainId": 421611,
             "name": "Arbitrum Rinkeby Ether",
-            "symbol": "ARETH",
+            "symbol": "ETH",
             "decimals": 18,
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
         },
@@ -2831,7 +2831,7 @@
         "nativeCurrency": {
             "chainId": 1313161554,
             "name": "Ether",
-            "symbol": "AETH",
+            "symbol": "ETH",
             "decimals": 18
         },
         "infoURL": "https://aurora.dev",
@@ -2849,12 +2849,13 @@
         "name": "Aurora",
         "color": "rgb(112, 212, 74)",
         "network": "testnet",
+        "fullName": "Aurora Testnet",
         "shortName": "aurora-testnet",
         "features": [],
         "nativeCurrency": {
             "chainId": 1313161555,
             "name": "Ether",
-            "symbol": "AETH",
+            "symbol": "ETH",
             "decimals": 18
         },
         "infoURL": "https://aurora.dev"
@@ -2870,7 +2871,7 @@
         "nativeCurrency": {
             "chainId": 1313161556,
             "name": "Ether",
-            "symbol": "AETH",
+            "symbol": "ETH",
             "decimals": 18
         },
         "infoURL": "https://aurora.dev"
@@ -3071,7 +3072,7 @@
         "type": "Conflux",
         "name": "Conflux",
         "network": "testnet",
-        "fullName": "Conflux eSpace",
+        "fullName": "Conflux eSpace (Testnet)",
         "shortName": "Conflux",
         "features": [],
         "nativeCurrency": {
@@ -3087,6 +3088,7 @@
         "type": "Conflux",
         "name": "Conflux",
         "network": "mainnet",
+        "fullName": "Conflux eSpace",
         "shortName": "Conflux",
         "features": [],
         "nativeCurrency": {
