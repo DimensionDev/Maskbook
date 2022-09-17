@@ -2,7 +2,14 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import type { TradeComputed } from '../../types'
 import { createNativeToken, formatUSD, formatWeiToEther, GasOptionConfig } from '@masknet/web3-shared-evm'
 import { useCallback, useMemo, useState } from 'react'
-import { formatBalance, formatCurrency, FungibleToken, multipliedBy, NetworkPluginID } from '@masknet/web3-shared-base'
+import {
+    formatBalance,
+    formatCurrency,
+    FungibleToken,
+    leftShift,
+    multipliedBy,
+    NetworkPluginID,
+} from '@masknet/web3-shared-base'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { currentSlippageSettings } from '../../settings'
 import { useNativeTokenPrice, useFungibleTokenPrice, Web3Helper } from '@masknet/plugin-infra/web3'
@@ -57,22 +64,23 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
     const selectAdvancedSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
     // #endregion
 
+    const lostTokenValue = multipliedBy(trade.inputAmount, trade.priceImpact).toFixed(0)
     // #region price impact dialog
-    const lostToken = formatBalance(
-        multipliedBy(trade.inputAmount, trade.priceImpact).toFixed(0),
-        trade.inputToken?.decimals ?? 0,
-        6,
-    )
+    const lostToken = formatBalance(lostTokenValue, trade.inputToken?.decimals ?? 0, 6)
 
-    const lostValue = formatCurrency(multipliedBy(inputTokenPrice ?? 0, lostToken), 'USD', {
-        boundaries: {
-            min: 0.01,
+    const lostValue = formatCurrency(
+        multipliedBy(inputTokenPrice ?? 0, leftShift(lostTokenValue, trade.inputToken?.decimals ?? 0)),
+        'USD',
+        {
+            boundaries: {
+                min: 0.01,
+            },
+            symbols: {
+                // hide USD symbol
+                $: '',
+            },
         },
-        symbols: {
-            // hide USD symbol
-            $: '',
-        },
-    })
+    )
 
     const handleOpenPriceImpactDialog = useCallback(() => {
         setPriceImpactDialogOpen(true)

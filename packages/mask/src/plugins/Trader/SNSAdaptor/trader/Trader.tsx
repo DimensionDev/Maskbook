@@ -126,25 +126,24 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     )
 
     useEffect(() => {
-        if (!inputTokenBalance_ || loadingInputTokenBalance) {
+        if (!inputTokenBalance_ || loadingInputTokenBalance || !inputToken) {
             return
         }
-
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
             balance: inputTokenBalance_,
         })
-    }, [inputTokenBalance_, loadingInputTokenBalance])
+    }, [inputTokenBalance_, loadingInputTokenBalance, inputToken])
 
     useEffect(() => {
-        if (!outputTokenBalance_ || loadingOutputTokenBalance) {
+        if (!outputTokenBalance_ || loadingOutputTokenBalance || outputToken) {
             return
         }
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
             balance: outputTokenBalance_,
         })
-    }, [outputTokenBalance_, loadingOutputTokenBalance])
+    }, [outputTokenBalance_, loadingOutputTokenBalance, outputToken])
 
     // #region select token
     const excludeTokens = [inputToken, outputToken].filter(Boolean).map((x) => x?.address) as string[]
@@ -237,7 +236,7 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
             type: AllProviderTradeActionType.SWITCH_TOKEN,
             inputToken: outputToken,
             outputToken: inputToken,
-            inputBalance: outputTokenBalance_ ?? '0',
+            inputBalance: outputToken ? outputTokenBalance_ ?? '0' : '0',
             outputBalance: inputTokenBalance_ ?? '0',
         })
     }, [dispatchTradeStore, inputToken, outputToken, inputAmount, inputTokenBalance_, outputTokenBalance_])

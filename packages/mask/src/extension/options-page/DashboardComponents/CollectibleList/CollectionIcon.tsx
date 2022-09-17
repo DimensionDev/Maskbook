@@ -44,15 +44,6 @@ export interface CollectionIconProps {
 export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, selectedCollection }) => {
     const { classes } = useStyles()
 
-    if (!collection?.iconURL) {
-        return (
-            <Icon
-                classes={{ icon: classes.collectionImg }}
-                name={collection?.name ?? collection?.symbol ?? 'Unknown'}
-            />
-        )
-    }
-
     return (
         <Tooltip
             placement="right-end"
@@ -65,17 +56,24 @@ export const CollectionIcon = memo<CollectionIconProps>(({ collection, onClick, 
             <Box
                 className={classNames(
                     classes.collectionWrap,
-                    isSameAddress(collection.address, selectedCollection) ? classes.selected : '',
+                    isSameAddress(collection?.address, selectedCollection) ? classes.selected : '',
                 )}
                 onClick={onClick}>
-                <Image
-                    width={24}
-                    height={24}
-                    className={classes.collectionImg}
-                    src={collection?.iconURL}
-                    fallback={<Icons.MaskPlaceholder size={24} />}
-                    disableSpinner
-                />
+                {collection?.iconURL ? (
+                    <Image
+                        width={24}
+                        height={24}
+                        className={classes.collectionImg}
+                        src={collection?.iconURL}
+                        fallback={<Icons.MaskPlaceholder size={24} />}
+                        disableSpinner
+                    />
+                ) : (
+                    <Icon
+                        classes={{ icon: classes.collectionImg }}
+                        name={collection?.name ?? collection?.symbol ?? 'Unknown'}
+                    />
+                )}
             </Box>
         </Tooltip>
     )
