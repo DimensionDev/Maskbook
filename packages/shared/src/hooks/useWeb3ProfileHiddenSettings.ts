@@ -1,5 +1,5 @@
 import { useWeb3State } from '@masknet/plugin-infra/web3'
-import { PluginId } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/plugin-infra'
 import { NextIDPlatform, EMPTY_LIST } from '@masknet/shared-base'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useAsync } from 'react-use'
@@ -22,7 +22,7 @@ export function useWeb3ProfileHiddenSettings(
         if (!Storage || !publicKeyAsHex || !identity) return
         const storage = Storage.createNextIDStorage(identity, NextIDPlatform.Twitter, publicKeyAsHex)
 
-        return storage.get<Web3ProfileStorage>(PluginId.Web3Profile)
+        return storage.get<Web3ProfileStorage>(PluginID.Web3Profile)
     }, [Storage, publicKeyAsHex, identity])
 
     const isHiddenAddress = useMemo(() => {

@@ -67,7 +67,7 @@ export function TickersTable({ dataProvider, tickers, coinType }: TickersTablePr
     const { t } = useI18N()
     const { classes } = useStyles()
     const isNFT = coinType === TokenType.NonFungible
-    const isUniswap = dataProvider === DataProvider.UNISWAP_INFO
+    const isUniswap = dataProvider === DataProvider.UniswapInfo
 
     const headCellMap: Record<Cells, string> = {
         volume: t('plugin_trader_table_volume'),

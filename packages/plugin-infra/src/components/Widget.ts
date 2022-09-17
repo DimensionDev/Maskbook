@@ -1,10 +1,10 @@
 import React, { createElement, Fragment, useMemo } from 'react'
-import { useActivatedPluginsSNSAdaptor } from '../manager/sns-adaptor'
-import type { Plugin, PluginId } from '../types'
+import { useActivatedPluginsSNSAdaptor } from '../manager/sns-adaptor.js'
+import type { Plugin, PluginID } from '../types.js'
 
 export interface WidgetProps<Name extends keyof Plugin.SNSAdaptor.WidgetRegistry> {
     name: Name
-    pluginID?: PluginId
+    pluginID?: PluginID
     fallback?: React.ReactElement | null
 }
 
@@ -14,8 +14,8 @@ export const Widget: <Name extends keyof Plugin.SNSAdaptor.WidgetRegistry>(
     const { name, pluginID, fallback, ...rest } = props
     const plugins = useActivatedPluginsSNSAdaptor(false)
     const WidgetComponent: any = useMemo(() => {
-        if (pluginID) return plugins.find((x) => x.ID === pluginID)?.Widgets?.[name]
-        return plugins.find((x) => x.Widgets && name in x.Widgets)?.Widgets![name].component
+        if (pluginID) return plugins.find((x) => x.ID === pluginID)?.Widgets?.find((y) => y.name === name)?.UI?.Widget
+        return null
     }, [plugins])
 
     if (!WidgetComponent) return fallback || createElement(Fragment, {})

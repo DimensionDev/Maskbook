@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { Plugin, PluginId, PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
+import { Plugin, PluginID, PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { Trans } from 'react-i18next'
@@ -28,7 +28,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     const clickHandler = () => {
                         CrossIsolationMessages.events.requestOpenApplication.sendToLocal({
                             open: true,
-                            application: PluginId.Avatar,
+                            application: PluginID.Avatar,
                         })
                     }
                     return (

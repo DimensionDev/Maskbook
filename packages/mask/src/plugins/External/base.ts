@@ -1,8 +1,8 @@
-import { type Plugin, PluginId } from '@masknet/plugin-infra'
+import { type Plugin, PluginID } from '@masknet/plugin-infra'
 import { Flags } from '../../../shared/index.js'
 
 export const base: Plugin.Shared.Definition = {
-    ID: PluginId.External,
+    ID: PluginID.External,
     name: { fallback: 'Mask External Plugin Loader' },
     description: { fallback: 'Able to load external plugins.' },
     publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },

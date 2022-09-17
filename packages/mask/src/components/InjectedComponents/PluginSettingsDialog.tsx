@@ -1,7 +1,7 @@
 import { useI18N, MaskMessages } from '../../utils/index.js'
 import { InjectedDialog } from '@masknet/shared'
 import {
-    PluginId,
+    PluginID,
     useActivatedPluginsSNSAdaptor,
     usePluginI18NField,
     createInjectHooksRenderer,
@@ -58,7 +58,7 @@ export function PluginSettingsDialog() {
         label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
     }))
 
-    const [currentTab, onChange, , setTab] = useTabs(first(tabs)?.id ?? PluginId.Tips, ...tabs.map((tab) => tab.id))
+    const [currentTab, onChange, , setTab] = useTabs(first(tabs)?.id ?? PluginID.Tips, ...tabs.map((tab) => tab.id))
 
     const openPopupWindow = useCallback(
         () =>

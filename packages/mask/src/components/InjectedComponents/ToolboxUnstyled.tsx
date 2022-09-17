@@ -24,7 +24,7 @@ import {
     useRecentTransactions,
 } from '@masknet/plugin-infra/web3'
 import { useCallback } from 'react'
-import { WalletIcon } from '@masknet/shared'
+import { WalletIcon, MaskIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { WalletMessages } from '../../plugins/Wallet/messages.js'
 import { useI18N } from '../../utils/index.js'
@@ -33,7 +33,6 @@ import GuideStep from '../GuideStep/index.js'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
-import { MaskIcon } from '../../resources/MaskIcon.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {

@@ -88,7 +88,7 @@ const ReplaceTransaction = memo(() => {
 
     const { value: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
     const { value: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
-    const is1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, chainId, 'EIP1559')
+    const is1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)
 
     const schema = useMemo(() => {
         return zod

@@ -1,7 +1,7 @@
 import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { useAsync } from 'react-use'
 import { useWeb3State } from '../entry-web3.js'
-import type { PluginId } from '../types.js'
+import type { PluginID } from '../types.js'
 
 /**
  *
@@ -9,7 +9,7 @@ import type { PluginId } from '../types.js'
  * @param identity The persona identifier's hex string
  * @returns
  */
-export function useHiddenAddressSetting(pluginId: PluginId, identity?: string) {
+export function useHiddenAddressSetting(pluginId: PluginID, identity?: string) {
     const { Storage } = useWeb3State()
 
     return useAsync(async () => {

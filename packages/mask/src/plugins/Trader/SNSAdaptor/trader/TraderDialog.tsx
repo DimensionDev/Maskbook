@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { PluginId } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/plugin-infra'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useChainId, useChainIdValid } from '@masknet/plugin-infra/web3'
 import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
@@ -73,7 +73,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export function TraderDialog() {
     const tradeRef = useRef<TraderRef>(null)
-    const traderDefinition = useActivatedPlugin(PluginId.Trader, 'any')
+    const traderDefinition = useActivatedPlugin(PluginID.Trader, 'any')
     const chainIdList = traderDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
     const { t } = useI18N()
     const { classes } = useStyles()

@@ -94,7 +94,7 @@ export class SwapDescriptor implements TransactionDescriptor {
                     successfulDescription: `Swap ${getTokenAmountDescription(
                         parameters!.amountIn,
                         tokenIn,
-                    )} for ${getTokenAmountDescription(parameters!.amountOut, tokenOut)} successfully.`,
+                    )} for ${getTokenAmountDescription(parameters!.amountOutMin, tokenOut)} successfully.`,
                     failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
                 }
             }
@@ -275,7 +275,7 @@ export class SwapDescriptor implements TransactionDescriptor {
                     let amountOutMinimum: string
                     if (context.chainId === ChainId.Arbitrum) {
                         const WETH_ADDRESS = getTokenConstant(context.chainId, 'WETH_ADDRESS')
-                        console.log({ results })
+
                         ;[tokenInAddress, tokenOutAddress, fee, recipient, deadline, amountIn, amountOutMinimum] =
                             results['0']
 
@@ -356,8 +356,8 @@ export class SwapDescriptor implements TransactionDescriptor {
                 const WETH_ADDRESS = getTokenConstant(context.chainId, 'WETH_ADDRESS')
                 const wethToken = await connection?.getFungibleToken(WETH_ADDRESS ?? '')
 
-                const tokenIn = method.name === 'withdraw' ? nativeToken : wethToken
-                const tokenOut = method.name === 'withdraw' ? wethToken : nativeToken
+                const tokenIn = method.name === 'withdraw' ? wethToken : nativeToken
+                const tokenOut = method.name === 'withdraw' ? nativeToken : wethToken
                 return {
                     chainId: context.chainId,
                     title: `${actionName} Token`,
@@ -371,6 +371,31 @@ export class SwapDescriptor implements TransactionDescriptor {
                         tokenIn,
                     )} for ${getTokenAmountDescription(amount, tokenOut)} successfully.`,
                     failedDescription: `Failed to ${actionName} ${tokenOut?.symbol ?? ''}.`,
+                }
+            }
+
+            if (
+                method.name === 'swapExactTokensForAVAX' &&
+                parameters?.amountIn &&
+                parameters?.amountOutMin &&
+                parameters?.path
+            ) {
+                const tokenIn = await connection?.getFungibleToken(first(parameters!.path) ?? '')
+                const tokenOut = nativeToken
+
+                return {
+                    chainId: context.chainId,
+                    title: 'Swap Token',
+                    tokenInAddress: tokenIn?.address,
+                    tokenInAmount: parameters!.amountIn,
+                    description: `Swap ${getTokenAmountDescription(parameters!.amountIn, tokenIn)} for ${
+                        tokenOut?.symbol ?? ''
+                    }.`,
+                    successfulDescription: `Swap ${getTokenAmountDescription(
+                        parameters!.amountIn,
+                        tokenIn,
+                    )} for ${getTokenAmountDescription(parameters!.amountOutMin, tokenOut)} successfully.`,
+                    failedDescription: `Failed to swap ${tokenOut?.symbol ?? ''}.`,
                 }
             }
         }

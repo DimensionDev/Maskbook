@@ -21,4 +21,4 @@ export {
 export { CompositionContext, useCompositionContext } from './CompositionContext.js'
 
 // shared components
-export { Widget, type WidgetProps } from './components/Widget'
+export { Widget, type WidgetProps } from './components/Widget.js'

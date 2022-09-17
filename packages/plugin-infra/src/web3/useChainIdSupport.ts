@@ -5,8 +5,8 @@ import type { Web3Helper } from '../web3-helpers/index.js'
 
 export function useChainIdSupport<T extends NetworkPluginID>(
     pluginID?: T,
-    expectedChainId?: Web3Helper.Definition[T]['ChainId'],
     feature?: string,
+    expectedChainId?: Web3Helper.Definition[T]['ChainId'],
 ) {
     const chainId = useChainId(pluginID, expectedChainId)
     const { Others } = useWeb3State(pluginID)

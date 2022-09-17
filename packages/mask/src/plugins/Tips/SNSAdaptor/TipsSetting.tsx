@@ -4,7 +4,7 @@ import { Typography, Box } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { BindingProof, ECKeyIdentifier, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
-import { PluginId } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/plugin-infra'
 import { WalletSettingCard } from '@masknet/shared'
 import { useAsyncFn, useUpdateEffect } from 'react-use'
 
@@ -103,9 +103,9 @@ export const TipsSetting = memo<TipsSettingProps>(({ onClose, bindingWallets, cu
                 NextIDPlatform.NextID,
                 currentPersona,
             )
-            const prevResult = storage.get<TipsSettingType>(PluginId.Tips)
+            const prevResult = storage.get<TipsSettingType>(PluginID.Tips)
 
-            await storage.set<TipsSettingType>(PluginId.Tips, {
+            await storage.set<TipsSettingType>(PluginID.Tips, {
                 ...prevResult,
                 hiddenAddresses: addresses,
             })

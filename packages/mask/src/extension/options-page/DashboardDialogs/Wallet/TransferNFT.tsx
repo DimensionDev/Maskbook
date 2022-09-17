@@ -4,12 +4,11 @@ import { useCallback, useContext, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils/index.js'
-import { MaskIconOutlined } from '../../../../resources/MaskIcon.js'
 import { CollectibleContext } from '../../DashboardComponents/CollectibleList/index.js'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base.js'
 import type { NonFungibleToken } from '@masknet/web3-shared-base'
 import { useTokenTransferCallback } from '@masknet/plugin-infra/web3-evm'
-import { Image, useOpenShareTxDialog } from '@masknet/shared'
+import { Image, useOpenShareTxDialog, MaskIconOutlined } from '@masknet/shared'
 
 const useTransferDialogStylesNFT = makeStyles()((theme) => ({
     root: {

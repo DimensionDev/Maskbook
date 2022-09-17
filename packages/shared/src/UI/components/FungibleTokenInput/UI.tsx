@@ -15,7 +15,7 @@ import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { formatBalance, FungibleToken } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
 import { noop } from 'lodash-unified'
-import { FormattedBalance, TokenIcon, useSharedI18N } from '../../../index'
+import { FormattedBalance, TokenIcon, useSharedI18N } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
