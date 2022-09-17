@@ -12,7 +12,7 @@ export async function discoverRedPacket(record: RedPacketRecord, chainId: ChainI
         if (!txid) return
         record.id = txid
     }
-    database.addRedPacket(record)
+    await database.addRedPacket(record)
 }
 
 export async function getRedPacketHistoryFromDatabase(redpacketsFromChain: RedPacketJSONPayloadFromChain[]) {
