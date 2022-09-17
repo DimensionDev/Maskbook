@@ -5,13 +5,13 @@ import {
     useCurrentWeb3NetworkPluginID,
     useFungibleTokens,
 } from '@masknet/plugin-infra/web3'
-import { PluginId, useActivatedPlugin } from '@masknet/plugin-infra/dom'
+import { PluginID, useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useState, useLayoutEffect, useRef, useCallback } from 'react'
 import { flatten, uniq } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
-import { SnackbarProvider, makeStyles, ActionButton } from '@masknet/theme'
+import { SnackbarProvider, makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
 import { InjectedDialog, FormattedBalance, useOpenShareTxDialog } from '@masknet/shared'
-import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme, DialogActions } from '@mui/material'
+import { DialogContent, Typography, List, ListItem, useTheme, DialogActions } from '@mui/material'
 import { formatBalance, NetworkPluginID, isSameAddress, FungibleToken } from '@masknet/web3-shared-base'
 import { useITOConstants, ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
@@ -207,7 +207,7 @@ interface ClaimAllDialogProps {
 export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const { t } = useI18N()
     const { open, onClose } = props
-    const ITO_Definition = useActivatedPlugin(PluginId.ITO, 'any')
+    const ITO_Definition = useActivatedPlugin(PluginID.ITO, 'any')
     const pluginId = useCurrentWeb3NetworkPluginID()
     const chainIdList = ITO_Definition?.enableRequirement.web3?.[pluginId]?.supportedChainIds ?? []
     const DialogRef = useRef<HTMLDivElement>(null)
@@ -268,7 +268,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                     <div className={classes.contentWrapper} ref={DialogRef}>
                         {loading || initLoading || !swappedTokens ? (
                             <div className={classes.emptyContentWrapper}>
-                                <CircularProgress size={24} />
+                                <LoadingBase size={24} />
                             </div>
                         ) : swappedTokens.length > 0 ? (
                             <div className={classes.content}>

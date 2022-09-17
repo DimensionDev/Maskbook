@@ -43,7 +43,7 @@ export class UniSwapAPI implements TrendingAPI.Provider<ChainId> {
         const { token, marketInfo, tickersInfo } = await BaseAPI.getCoinInfo(chainId, id)
         return {
             currency,
-            dataProvider: DataProvider.UNISWAP_INFO,
+            dataProvider: DataProvider.UniswapInfo,
             market: marketInfo,
             coin: {
                 id,

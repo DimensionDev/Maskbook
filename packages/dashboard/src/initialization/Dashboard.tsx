@@ -19,7 +19,6 @@ import { i18NextInstance, queryRemoteI18NBundle } from '@masknet/shared-base'
 
 import '../utils/kv-storage.js'
 
-import './PluginHost.js'
 import { Pages } from '../pages/routes.js'
 import { useAppearance } from '../pages/Personas/api.js'
 import { PersonaContext } from '../pages/Personas/hooks/usePersonaContext.js'

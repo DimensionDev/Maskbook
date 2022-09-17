@@ -3,7 +3,7 @@ import { bioPageUserNickNameSelector, floatingBioCardSelector, bioPageUserIDSele
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import Services from '../../../extension/service.js'
 import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
-import { MaskIcon } from '../../../resources/MaskIcon.js'
+import { MaskIcon } from '@masknet/shared'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { memoizePromise } from '@dimensiondev/kit'
 import { startWatch } from '../../../utils/watcher.js'

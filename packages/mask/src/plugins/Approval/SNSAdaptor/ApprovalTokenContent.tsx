@@ -15,10 +15,10 @@ import { useAsync } from 'react-use'
 
 export function ApprovalTokenContent({ chainId }: { chainId: ChainId }) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM)
+    const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     const { value: spenders, loading } = useAsync(
-        async () => hub?.getFungibleTokenApprovedSpenders?.(chainId, account),
+        async () => hub?.getFungibleTokenSpenders?.(chainId, account),
         [chainId, account, hub],
     )
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
@@ -99,11 +99,9 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
                 </div>
                 <ChainBoundary
                     expectedChainId={chainId}
-                    switchChainWithoutPopup
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                     className={classes.chainBoundary}
                     classes={{ switchButton: classes.button }}
-                    expectedChainIdSwitchedCallback={() => approveCallback(true, true)}
                     ActionButtonPromiseProps={{
                         fullWidth: false,
                         init: t.revoke(),

@@ -3,7 +3,7 @@ import { IconButton, Tooltip } from '@mui/material'
 import { useStylesExtends, makeStyles } from '@masknet/theme'
 import { useI18N } from '../../utils/index.js'
 import { isMobileFacebook } from '../../social-network-adaptor/facebook.com/utils/isMobile.js'
-import { MaskSharpIcon, MaskIconInMinds } from '../../resources/MaskIcon.js'
+import { MaskSharpIcon, MaskIconInMinds } from '@masknet/shared'
 import classNames from 'classnames'
 import GuideStep from '../GuideStep/index.js'
 

@@ -1,4 +1,4 @@
-import { Plugin, PluginId } from '@masknet/plugin-infra'
+import { Plugin, PluginID } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { base } from '../base.js'
@@ -29,7 +29,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 RenderEntryComponent(EntryComponentProps) {
                     useEffect(() => {
                         return CrossIsolationMessages.events.requestOpenApplication.on(({ open, application }) => {
-                            if (application !== PluginId.Web3Profile) return
+                            if (application !== PluginID.Web3Profile) return
                             CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToLocal({ open })
                         })
                     }, [])
@@ -69,7 +69,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ],
     SettingTabs: [
         {
-            ID: PluginId.Web3Profile,
+            ID: PluginID.Web3Profile,
             label: 'Web3Profile',
             priority: 2,
         },

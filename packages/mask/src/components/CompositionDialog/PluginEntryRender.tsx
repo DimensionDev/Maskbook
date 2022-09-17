@@ -4,7 +4,7 @@ import {
     Plugin,
     PluginI18NFieldRender,
     usePluginI18NField,
-    PluginId,
+    PluginID,
 } from '@masknet/plugin-infra/content-script'
 import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
@@ -42,7 +42,7 @@ export const PluginEntryRender = memo(
         const result = [...useActivatedPluginsSNSAdaptor('any')]
             .sort((plugin) => {
                 // TODO: support priority order
-                if (plugin.ID === PluginId.RedPacket || plugin.ID === PluginId.ITO) return -1
+                if (plugin.ID === PluginID.RedPacket || plugin.ID === PluginID.ITO) return -1
                 return 1
             })
             .map((plugin) =>

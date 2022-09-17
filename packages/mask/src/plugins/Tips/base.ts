@@ -1,8 +1,8 @@
-import { CurrentSNSNetwork, Plugin, PluginId } from '@masknet/plugin-infra'
+import { CurrentSNSNetwork, Plugin, PluginID } from '@masknet/plugin-infra'
 import { languages } from './locales/languages.js'
 
 export const base: Plugin.Shared.Definition = {
-    ID: PluginId.Tips,
+    ID: PluginID.Tips,
     name: { fallback: 'Tips' },
     description: {
         fallback: 'Tips Entrance',

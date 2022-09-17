@@ -1,4 +1,4 @@
-import { type Plugin, usePluginWrapper, PluginId } from '@masknet/plugin-infra/content-script'
+import { type Plugin, usePluginWrapper, PluginID } from '@masknet/plugin-infra/content-script'
 import {
     ChainId,
     SchemaType,
@@ -97,9 +97,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <Icons.RedPacket size={36} />
-            const name = <Trans ns={PluginId.RedPacket} i18nKey="name" />
+            const name = <Trans ns={PluginID.RedPacket} i18nKey="name" />
             const recommendFeature = {
-                description: <Trans ns={PluginId.RedPacket} i18nKey="recommend_feature_description" />,
+                description: <Trans ns={PluginID.RedPacket} i18nKey="recommend_feature_description" />,
                 backgroundGradient: 'linear-gradient(180.54deg, #FF9A9E 0.71%, #FECFEF 98.79%, #FECFEF 99.78%)',
                 isFirst: true,
             }
@@ -132,7 +132,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 appBoardSortingDefaultPriority: 1,
                 marketListSortingPriority: 1,
                 icon,
-                description: <Trans ns={PluginId.RedPacket} i18nKey="description" />,
+                description: <Trans ns={PluginID.RedPacket} i18nKey="description" />,
                 name,
                 tutorialLink: 'https://realmasknetwork.notion.site/0a71fd421aae4563bd07caa3e2129e5b',
                 category: 'dapp',

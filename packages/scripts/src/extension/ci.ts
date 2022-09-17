@@ -23,8 +23,6 @@ export const ciBuild: TaskFunction = series(
             zipTo(BUILD_PATH, 'MaskNetwork.chromium.zip'),
         ),
         buildTarget('Firefox', { firefox: true, 'output-path': 'build-firefox' }, 'MaskNetwork.firefox.zip'),
-        buildTarget('Android', { android: true, 'output-path': 'build-android' }, 'MaskNetwork.gecko.zip'),
-        buildTarget('iOS', { iOS: true, 'output-path': 'build-iOS' }, 'MaskNetwork.iOS.zip'),
         buildTarget(
             'Chromium-beta',
             { chromium: true, beta: true, 'output-path': 'build-chromium-beta' },
