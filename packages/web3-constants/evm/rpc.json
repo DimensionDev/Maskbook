@@ -78,7 +78,7 @@
         "Harmony_Test": ["https://api.s0.b.hmny.io/"],
         "Astar": ["https://astar.api.onfinality.io/public"]
     },
-    "RPC_URLS_OFFCIAL": {
+    "RPC_URLS_OFFICIAL": {
         "Mainnet": ["https://mainnet.infura.io/v3/d65858b010d249419cf8687eca12b094"],
         "Ropsten": ["https://ropsten.infura.io/v3/d65858b010d249419cf8687eca12b094"],
         "Rinkeby": ["https://rinkeby.infura.io/v3/d65858b010d249419cf8687eca12b094"],

@@ -47,7 +47,7 @@ export class BaseProvider implements EVM_Provider {
                         chainId: toHex(chainId),
                         chainName: chainResolver.chainFullName(chainId) ?? chainResolver.chainName(chainId),
                         nativeCurrency: chainResolver.nativeCurrency(chainId),
-                        rpcUrls: getRPCConstants(chainId).RPC_URLS_OFFCIAL ?? [],
+                        rpcUrls: getRPCConstants(chainId).RPC_URLS_OFFICIAL ?? [],
                         blockExplorerUrls: [chainResolver.infoURL(chainId)?.url],
                     },
                 ],
