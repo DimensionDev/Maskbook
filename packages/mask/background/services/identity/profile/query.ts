@@ -5,11 +5,11 @@ import {
     ProfileRecord,
     queryPersonasDB,
     queryProfilesDB,
-} from '../../../database/persona/db'
-import { hasLocalKeyOf } from '../../../database/persona/helper'
-import { queryProfilesDB as queryProfilesFromIndexedDB } from '../../../database/persona/web'
-import { toProfileInformation } from '../../__utils__/convert'
-import { profileRecordToMobileProfile } from './mobile'
+} from '../../../database/persona/db.js'
+import { hasLocalKeyOf } from '../../../database/persona/helper.js'
+import { queryProfilesDB as queryProfilesFromIndexedDB } from '../../../database/persona/web.js'
+import { toProfileInformation } from '../../__utils__/convert.js'
+import { profileRecordToMobileProfile } from './mobile.js'
 
 export interface MobileQueryProfilesOptions {
     network?: string

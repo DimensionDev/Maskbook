@@ -1,10 +1,10 @@
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
-import { useChainId } from '../../entry-web3'
-import { useWeb3Connection } from '../useWeb3Connection'
-import { useAccount } from '../useAccount'
-import { useERC721TokenContract } from './useERC721TokenContract'
+import { useChainId } from '../../entry-web3.js'
+import { useWeb3Connection } from '../useWeb3Connection.js'
+import { useAccount } from '../useAccount.js'
+import { useERC721TokenContract } from './useERC721TokenContract.js'
 
 /**
  * @param contractAddress NFT contract Address.

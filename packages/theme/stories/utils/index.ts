@@ -1,3 +1,3 @@
 export * from '@masknet/storybook-shared'
-export * from './Material-UI'
-export { matrix } from './args'
+export * from './Material-UI.js'
+export { matrix } from './args.js'

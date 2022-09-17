@@ -24,16 +24,15 @@ import {
     useRecentTransactions,
 } from '@masknet/plugin-infra/web3'
 import { useCallback } from 'react'
-import { WalletIcon } from '@masknet/shared'
+import { WalletIcon, MaskIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { WalletMessages } from '../../plugins/Wallet/messages'
-import { useI18N } from '../../utils'
-import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc'
-import GuideStep from '../GuideStep'
+import { WalletMessages } from '../../plugins/Wallet/messages.js'
+import { useI18N } from '../../utils/index.js'
+import { hasNativeAPI, nativeAPI } from '../../../shared/native-rpc/index.js'
+import GuideStep from '../GuideStep/index.js'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
-import { MaskIcon } from '../../resources/MaskIcon'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -90,6 +89,7 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
 function ToolboxHintForApplication(props: ToolboxHintProps) {
     const {
         ListItemButton = MuiListItemButton,
+        ListItemIcon = MuiListItemIcon,
         Container = 'div',
         Typography = MuiTypography,
         iconSize = 24,
@@ -103,7 +103,9 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
         <GuideStep step={1} total={4} tip={t('user_guide_tip_1')}>
             <Container>
                 <ListItemButton onClick={openDialog}>
-                    <MaskIcon style={{ width: iconSize, height: iconSize }} />
+                    <ListItemIcon>
+                        <MaskIcon style={{ width: iconSize, height: iconSize }} />
+                    </ListItemIcon>
                     {mini ? null : (
                         <ListItemText
                             primary={

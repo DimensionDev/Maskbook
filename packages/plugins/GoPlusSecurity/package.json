@@ -3,7 +3,6 @@
   "private": true,
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
       "webpack": "./src/index.ts",
       "default": "./dist/index.js"
     },
@@ -20,7 +19,6 @@
       ]
     }
   },
-  "types": "./dist/index.d.ts",
   "dependencies": {
     "react-feather": "^2.0.9",
     "@masknet/icons": "workspace:*",

@@ -12,8 +12,8 @@ import {
 } from '@mui/material'
 import ListItemButton from '@mui/material/ListItemButton'
 import { useMap } from 'react-use'
-import { useI18N } from '../../../utils'
-import type { ExternalPluginLoadDetails } from '../types'
+import { useI18N } from '../../../utils/index.js'
+import type { ExternalPluginLoadDetails } from '../types.js'
 
 export function UnknownPluginLoadRequestUI({ plugins, onConfirm }: UnknownPluginLoadRequestProps) {
     const [_selected, { get, set }] = useMap({} as Record<string, boolean>)

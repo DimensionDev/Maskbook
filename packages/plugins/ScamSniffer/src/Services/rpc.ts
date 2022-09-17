@@ -1,5 +1,5 @@
 import { KeyValue } from '@masknet/web3-providers'
-import { PLUGIN_ID } from '../constants'
+import { PLUGIN_ID } from '../constants.js'
 import type { ScamResult, PostDetail } from '@scamsniffer/detector'
 import { reportScam, Detector } from '@scamsniffer/detector'
 
@@ -34,6 +34,7 @@ export async function sendReportScam(result: ScamResult) {
 
 export async function detectScam(post: PostDetail) {
     initDetector()
+    await detector?.update()
     const result = await detector?.detectScam(post)
     return result
 }

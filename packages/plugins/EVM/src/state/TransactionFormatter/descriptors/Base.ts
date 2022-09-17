@@ -1,8 +1,8 @@
 import type { TransactionContext } from '@masknet/web3-shared-base'
 import { ChainId, getTokenConstants, TransactionParameter } from '@masknet/web3-shared-evm'
-import { Web3StateSettings } from '../../../settings'
-import type { TransactionDescriptor } from '../types'
-import { getTokenAmountDescription } from '../utils'
+import { Web3StateSettings } from '../../../settings/index.js'
+import type { TransactionDescriptor } from '../types.js'
+import { getTokenAmountDescription } from '../utils.js'
 
 export class BaseTransactionDescriptor implements TransactionDescriptor {
     async compute(context: TransactionContext<ChainId, TransactionParameter>) {

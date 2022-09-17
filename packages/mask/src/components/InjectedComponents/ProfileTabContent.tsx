@@ -1,31 +1,27 @@
 import { Icons } from '@masknet/icons'
 import {
     createInjectHooksRenderer,
-    PluginId,
+    PluginID,
     useActivatedPluginsSNSAdaptor,
     useIsMinimalMode,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
 import { useAvailablePlugins, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
-import { AddressItem } from '@masknet/shared'
+import { AddressItem, PluginCardFrameMini } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
-import { makeStyles, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
+import { makeStyles, MaskLightTheme, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
-import { Box, Button, CircularProgress, Link, MenuItem, Tab, Typography } from '@mui/material'
+import { Button, Link, MenuItem, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import { first, uniqBy } from 'lodash-unified'
 import { useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { activatedSocialNetworkUI } from '../../social-network'
-import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
-import { MaskMessages, sorter, useI18N, useLocationChange } from '../../utils'
-import {
-    useCurrentVisitingIdentity,
-    useCurrentVisitingSocialIdentity,
-    useIsOwnerIdentity,
-} from '../DataSource/useActivatedUI'
-import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus'
-import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary'
+import { activatedSocialNetworkUI } from '../../social-network/index.js'
+import { isTwitter } from '../../social-network-adaptor/twitter.com/base.js'
+import { MaskMessages, sorter, useI18N, useLocationChange } from '../../utils/index.js'
+import { useCurrentVisitingSocialIdentity } from '../DataSource/useActivatedUI.js'
+import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
+import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary.js'
 
 function getTabContent(tabId?: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
@@ -37,7 +33,9 @@ function getTabContent(tabId?: string) {
 const MENU_ITEM_HEIGHT = 40
 const MENU_LIST_PADDING = 8
 const useStyles = makeStyles()((theme) => ({
-    root: {},
+    root: {
+        width: isTwitter(activatedSocialNetworkUI) ? 'auto' : 876,
+    },
     container: {
         background:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(69, 163, 251, 0.2) 100%), #FFFFFF;',
@@ -75,7 +73,7 @@ const useStyles = makeStyles()((theme) => ({
     link: {
         cursor: 'pointer',
         marginTop: 2,
-        zIndex: 1,
+        zIndex: 0,
         '&:hover': {
             textDecoration: 'none',
         },
@@ -83,7 +81,7 @@ const useStyles = makeStyles()((theme) => ({
     settingLink: {
         cursor: 'pointer',
         marginTop: 4,
-        zIndex: 1,
+        zIndex: 0,
         '&:hover': {
             textDecoration: 'none',
         },
@@ -138,6 +136,10 @@ const useStyles = makeStyles()((theme) => ({
         margin: '4px 2px 0 2px',
         color: theme.palette.maskColor.second,
     },
+    reload: {
+        borderRadius: 20,
+        minWidth: 254,
+    },
 }))
 
 export interface ProfileTabContentProps extends withClasses<'text' | 'button' | 'root'> {}
@@ -151,21 +153,27 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const [hidden, setHidden] = useState(true)
     const [selectedAddress, setSelectedAddress] = useState<SocialAddress<NetworkPluginID> | undefined>()
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-    const { value: personaStatus } = useCurrentPersonaConnectStatus()
-
-    const currentVisitingIdentity = useCurrentVisitingIdentity()
-    const currentVisitingUserId = currentVisitingIdentity.identifier?.userId
-    const isOwnerIdentity = useIsOwnerIdentity(currentVisitingIdentity)
+    const {
+        value: personaStatus,
+        loading: loadingPersonaStatus,
+        error: loadPersonaStatusError,
+        retry: retryLoadPersonaStatus,
+    } = useCurrentPersonaConnectStatus()
 
     const {
         value: currentVisitingSocialIdentity,
         loading: loadingCurrentVisitingSocialIdentity,
+        error: loadCurrentVisitingSocialIdentityError,
         retry: retryIdentity,
     } = useCurrentVisitingSocialIdentity()
+
+    const currentVisitingUserId = currentVisitingSocialIdentity?.identifier?.userId
+    const isOwnerIdentity = currentVisitingSocialIdentity?.isOwner
 
     const {
         value: socialAddressList = EMPTY_LIST,
         loading: loadingSocialAddressList,
+        error: loadSocialAddressListError,
         retry: retrySocialAddress,
     } = useSocialAddressListAll(currentVisitingSocialIdentity, undefined, sorter)
 
@@ -191,25 +199,25 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         return plugins
             .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
             .filter((x) => {
-                const shouldDisplay = x.Utils?.shouldDisplay?.(currentVisitingIdentity, selectedAddress) ?? true
-                return x.pluginID !== PluginId.NextID && shouldDisplay
+                const shouldDisplay = x.Utils?.shouldDisplay?.(currentVisitingSocialIdentity, selectedAddress) ?? true
+                return x.pluginID !== PluginID.NextID && shouldDisplay
             })
             .sort((a, z) => {
                 // order those tabs from next id first
-                if (a.pluginID === PluginId.NextID) return -1
-                if (z.pluginID === PluginId.NextID) return 1
+                if (a.pluginID === PluginID.NextID) return -1
+                if (z.pluginID === PluginID.NextID) return 1
 
                 // order those tabs from collectible first
-                if (a.pluginID === PluginId.Collectible) return -1
-                if (z.pluginID === PluginId.Collectible) return 1
+                if (a.pluginID === PluginID.Collectible) return -1
+                if (z.pluginID === PluginID.Collectible) return 1
 
                 // place those tabs from debugger last
-                if (a.pluginID === PluginId.Debugger) return 1
-                if (z.pluginID === PluginId.Debugger) return -1
+                if (a.pluginID === PluginID.Debugger) return 1
+                if (z.pluginID === PluginID.Debugger) return -1
 
                 // place those tabs from dao before the last
-                if (a.pluginID === PluginId.DAO) return 1
-                if (z.pluginID === PluginId.DAO) return -1
+                if (a.pluginID === PluginID.DAO) return 1
+                if (z.pluginID === PluginID.DAO) return -1
 
                 return a.priority - z.priority
             })
@@ -219,17 +227,26 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
     }))
 
-    const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginId.Collectible, ...tabs.map((tab) => tab.id))
+    const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
 
-    const isWeb3ProfileDisable = useIsMinimalMode(PluginId.Web3Profile)
+    const isWeb3ProfileDisable = useIsMinimalMode(PluginID.Web3Profile)
 
     const isTwitterPlatform = isTwitter(activatedSocialNetworkUI)
-    const isOwnerNotHasAddress =
+    const doesOwnerHaveNoAddress =
         isOwnerIdentity && personaStatus.proof?.findIndex((p) => p.platform === NextIDPlatform.Ethereum) === -1
 
-    const showNextID = isTwitterPlatform && (isWeb3ProfileDisable || !personaStatus.verified || isOwnerNotHasAddress)
+    const showNextID =
+        isTwitterPlatform &&
+        // enabled the plugin
+        (isWeb3ProfileDisable ||
+            // the owner persona and sns not verify on next ID
+            (isOwnerIdentity && !personaStatus.verified) ||
+            // the owner persona and sns verified on next ID but not verify the wallet
+            doesOwnerHaveNoAddress ||
+            // the visiting persona not have social address list
+            (!isOwnerIdentity && !socialAddressList.length))
 
-    const componentTabId = showNextID ? `${PluginId.NextID}_tabContent` : currentTab
+    const componentTabId = showNextID ? `${PluginID.NextID}_tabContent` : currentTab
 
     const component = useMemo(() => {
         const Component = getTabContent(componentTabId)
@@ -280,18 +297,52 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }
     if (hidden) return null
 
-    if (!currentVisitingUserId || loadingSocialAddressList || loadingCurrentVisitingSocialIdentity)
+    if (
+        !currentVisitingUserId ||
+        loadingSocialAddressList ||
+        loadingCurrentVisitingSocialIdentity ||
+        loadingPersonaStatus
+    )
         return (
-            <div className={classes.root}>
-                <Box
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    sx={{ paddingTop: 4, paddingBottom: 4 }}>
-                    <CircularProgress />
-                </Box>
-            </div>
+            <ThemeProvider theme={MaskLightTheme}>
+                <div className={classes.root}>
+                    <PluginCardFrameMini />
+                </div>
+            </ThemeProvider>
         )
+
+    if (
+        (loadCurrentVisitingSocialIdentityError ||
+            (isOwnerIdentity && loadPersonaStatusError) ||
+            loadSocialAddressListError) &&
+        socialAddressList.length === 0
+    ) {
+        const handleClick = () => {
+            if (loadPersonaStatusError) retryLoadPersonaStatus()
+            if (loadCurrentVisitingSocialIdentityError) retryIdentity()
+            if (loadSocialAddressListError) retrySocialAddress()
+        }
+        return (
+            <ThemeProvider theme={MaskLightTheme}>
+                <div className={classes.root}>
+                    <PluginCardFrameMini>
+                        <Stack display="inline-flex" gap={3} justifyContent="center" alignItems="center">
+                            <Typography
+                                fontSize={14}
+                                fontWeight={400}
+                                lineHeight="18px"
+                                color={(t) => t.palette.maskColor.danger}>
+                                {t('load_failed')}
+                            </Typography>
+                            <Button color="primary" className={classes.reload} onClick={handleClick}>
+                                {t('reload')}
+                            </Button>
+                        </Stack>
+                    </PluginCardFrameMini>
+                </div>
+            </ThemeProvider>
+        )
+    }
 
     return (
         <div className={classes.root}>
@@ -362,11 +413,11 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                     color={(theme) => theme.palette.maskColor.dark}>
                                     {t('mask_network')}
                                 </Typography>
-                                {isOwnerIdentity ? (
+                                {isOwnerIdentity && isTwitter(activatedSocialNetworkUI) ? (
                                     <ConnectPersonaBoundary
                                         customHint
                                         handlerPosition="top-right"
-                                        directTo={PluginId.Web3Profile}>
+                                        directTo={PluginID.Web3Profile}>
                                         <Icons.Gear
                                             variant="light"
                                             onClick={handleOpenDialog}

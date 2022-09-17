@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 import { Trade } from '@uniswap/v2-sdk'
 import type { Currency, CurrencyAmount, TradeType } from '@uniswap/sdk-core'
-import { isTradeBetter } from '../../helpers'
-import { useAllCommonPairs } from './useAllCommonPairs'
-import { BETTER_TRADE_LESS_HOPS_THRESHOLD, MAX_HOP } from '../../constants'
+import { isTradeBetter } from '../../helpers/index.js'
+import { useAllCommonPairs } from './useAllCommonPairs.js'
+import { BETTER_TRADE_LESS_HOPS_THRESHOLD, MAX_HOP } from '../../constants/index.js'
 import type { TradeProvider } from '@masknet/public-api'
 
 export function useV2BestTradeExactIn(

@@ -1,8 +1,8 @@
 import { Avatar, Link, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { Account } from '../Account'
+import { Account } from '../Account.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { resolveWebLinkOnCryptoartAI } from '../../pipes'
+import { resolveWebLinkOnCryptoartAI } from '../../pipes/index.js'
 import { truncate } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => {

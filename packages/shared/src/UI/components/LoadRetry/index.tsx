@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Button, Stack, Typography } from '@mui/material'
-import { useSharedI18N } from '../../../locales'
+import { useSharedI18N } from '../../../locales/index.js'
 
 interface RetryHintProps {
     hint?: boolean

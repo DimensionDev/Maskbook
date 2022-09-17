@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { DEFAULT_TRANSACTION_DEADLINE, L2_TRANSACTION_DEADLINE } from '../../constants'
+import { DEFAULT_TRANSACTION_DEADLINE, L2_TRANSACTION_DEADLINE } from '../../constants/index.js'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
 import { useBlockTimestamp } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'

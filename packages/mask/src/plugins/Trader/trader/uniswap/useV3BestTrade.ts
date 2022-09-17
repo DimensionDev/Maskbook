@@ -4,11 +4,11 @@ import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import BigNumber from 'bignumber.js'
 import { Currency, CurrencyAmount, TradeType } from '@uniswap/sdk-core'
 import { encodeRouteToPath, Route, Trade } from '@uniswap/v3-sdk'
-import { useQuoterContract } from '../../contracts/uniswap/useQuoterContract'
-import { useAllV3Routes } from './useAllV3Routes'
-import { DEFAULT_MULTICALL_GAS_LIMIT } from '../../constants'
+import { useQuoterContract } from '../../contracts/uniswap/useQuoterContract.js'
+import { useAllV3Routes } from './useAllV3Routes.js'
+import { DEFAULT_MULTICALL_GAS_LIMIT } from '../../constants/index.js'
 import { TargetChainIdContext, useSingleContractMultipleData } from '@masknet/plugin-infra/web3-evm'
-import { useTargetBlockNumber } from '../useTargetBlockNumber'
+import { useTargetBlockNumber } from '../useTargetBlockNumber.js'
 
 export enum V3TradeState {
     LOADING = 0,
@@ -80,7 +80,10 @@ export function useV3BestTradeExactIn(
             // eslint-disable-next-line unicorn/no-array-reduce
             .reduce(
                 (
-                    currentBest: { bestRoute: Route<Currency, Currency> | null; amountOut: string | null },
+                    currentBest: {
+                        bestRoute: Route<Currency, Currency> | null
+                        amountOut: string | null
+                    },
                     { value },
                     i,
                 ) => {
@@ -201,7 +204,10 @@ export function useV3BestTradeExactOut(
             // eslint-disable-next-line unicorn/no-array-reduce
             .reduce(
                 (
-                    currentBest: { bestRoute: Route<Currency, Currency> | null; amountIn: string | null },
+                    currentBest: {
+                        bestRoute: Route<Currency, Currency> | null
+                        amountIn: string | null
+                    },
                     { value },
                     i,
                 ) => {

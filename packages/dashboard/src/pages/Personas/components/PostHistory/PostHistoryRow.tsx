@@ -2,11 +2,11 @@ import { Box, Button, Link, Stack, Typography } from '@mui/material'
 import { memo, ReactNode, useCallback, useMemo } from 'react'
 import { Icons } from '@masknet/icons'
 import { getMaskColor, MaskColorVar, makeStyles } from '@masknet/theme'
-import { Services } from '../../../../API'
+import { Services } from '../../../../API.js'
 import type { PostInformation } from '@masknet/shared-base'
-import { useDashboardI18N } from '../../../../locales'
-import { PersonaContext } from '../../hooks/usePersonaContext'
-import { PluginId } from '@masknet/plugin-infra'
+import { useDashboardI18N } from '../../../../locales/index.js'
+import { PersonaContext } from '../../hooks/usePersonaContext.js'
+import { PluginID } from '@masknet/plugin-infra'
 import { openWindow } from '@masknet/shared-base-ui'
 
 const MSG_DELIMITER = '2c1aca02'
@@ -35,7 +35,11 @@ const parseFileServiceMessage = (body: any) => {
 
 const SUPPORT_PLUGIN: Record<
     string,
-    { pluginId: null | string; icon: ReactNode; messageParse: (body: any) => ReactNode }
+    {
+        pluginId: null | string
+        icon: ReactNode
+        messageParse: (body: any) => ReactNode
+    }
 > = {
     text: {
         pluginId: null,
@@ -53,27 +57,27 @@ const SUPPORT_PLUGIN: Record<
         messageParse: parseFileServiceMessage,
     },
     'com.maskbook.red_packet:1': {
-        pluginId: PluginId.RedPacket,
+        pluginId: PluginID.RedPacket,
         icon: <Icons.RedPacket />,
         messageParse: (body: any) => body.sender.message,
     },
     'com.maskbook.red_packet_nft:1': {
-        pluginId: PluginId.RedPacket,
+        pluginId: PluginID.RedPacket,
         icon: <Icons.NFTRedPacket />,
         messageParse: (body: { message: string }) => body.message,
     },
     'com.maskbook.ito:1': {
-        pluginId: PluginId.ITO,
+        pluginId: PluginID.ITO,
         icon: <Icons.ITO />,
         messageParse: (body: any) => body.message.split(MSG_DELIMITER)[1],
     },
     'com.maskbook.ito:2': {
-        pluginId: PluginId.ITO,
+        pluginId: PluginID.ITO,
         icon: <Icons.ITO />,
         messageParse: (body: any) => body.message.split(MSG_DELIMITER)[1],
     },
     'com.maskbook.poll:1': {
-        pluginId: PluginId.Poll,
+        pluginId: PluginID.Poll,
         icon: <Icons.Poll />,
         messageParse: (body: any) => body.question,
     },

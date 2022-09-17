@@ -61,19 +61,25 @@ function createScope(
     if (scope.includes('/')) throw new TypeError('scope name cannot contains "/"')
     if (scope.includes(':')) throw new TypeError('scope name cannot contains ":"')
     const currentScope = parentScope === null ? scope : `${parentScope}/${scope}`
-    const storage: StorageObject<any> = new Proxy({ __proto__: null } as any, {
+    const storage_inner: StorageObject<any> = {
+        __proto__: new Proxy({ __proto__: null } as any, { get: (_, prop) => get(prop) }),
+    }
+    const storage = new Proxy(storage_inner, {
         defineProperty: alwaysThrowHandler,
         deleteProperty: alwaysThrowHandler,
-        set: alwaysThrowHandler,
-        preventExtensions: alwaysThrowHandler,
-        setPrototypeOf: alwaysThrowHandler,
-        get(target, prop, receiver) {
-            if (typeof prop === 'symbol') return undefined
-            if (target[prop]) return target[prop]
-            target[prop] = createState(signal, backend, message, currentScope, prop, defaultValues[prop])
-            return target[prop]
+        getPrototypeOf: () => null,
+        setPrototypeOf: (_, v) => v === null,
+        getOwnPropertyDescriptor: (_, p) => {
+            get(p)
+            return Reflect.getOwnPropertyDescriptor(storage_inner, p)
         },
     })
+    function get(key: string | symbol) {
+        if (typeof key === 'symbol') return undefined
+        const value = createState(signal, backend, message, currentScope, key, defaultValues[key])
+        Object.defineProperty(storage_inner, key, { enumerable: true, value })
+        return value
+    }
 
     backend.beforeAutoSync.then(() => {
         for (const [key, value] of Object.entries(defaultValues)) {

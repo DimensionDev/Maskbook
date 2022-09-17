@@ -3,10 +3,10 @@ import { useLocation, useWindowScroll } from 'react-use'
 import { Popper, ClickAwayListener, PopperProps, Fade } from '@mui/material'
 import type { DataProvider } from '@masknet/public-api'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { PluginTraderMessages } from '../../messages'
-import { WalletMessages } from '../../../Wallet/messages'
-import type { TagType } from '../../types'
-import { PluginTransakMessages } from '../../../Transak/messages'
+import { PluginTraderMessages } from '../../messages.js'
+import { WalletMessages } from '../../../Wallet/messages.js'
+import type { TagType } from '../../types/index.js'
+import { PluginTransakMessages } from '../../../Transak/messages.js'
 
 export interface TrendingPopperProps {
     children?: (name: string, type: TagType, dataProviders: DataProvider[], reposition?: () => void) => React.ReactNode
@@ -14,7 +14,9 @@ export interface TrendingPopperProps {
 }
 
 export function TrendingPopper(props: TrendingPopperProps) {
-    const popperRef = useRef<{ update(): void } | null>(null)
+    const popperRef = useRef<{
+        update(): void
+    } | null>(null)
     const [freezed, setFreezed] = useState(false) // disable any click
     const [locked, setLocked] = useState(false) // state is updating, lock UI
     const [name, setName] = useState('')

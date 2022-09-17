@@ -7,8 +7,8 @@ import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { SelectNftContractDialogEvent, WalletMessages } from '../../plugins/Wallet/messages'
-import { useI18N } from '../../utils'
+import { SelectNftContractDialogEvent, WalletMessages } from '../../plugins/Wallet/messages.js'
+import { useI18N } from '../../utils/index.js'
 import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
 
 interface StyleProps {

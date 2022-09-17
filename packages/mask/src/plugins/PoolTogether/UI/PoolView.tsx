@@ -1,15 +1,15 @@
 import { first } from 'lodash-unified'
-import type { Pool } from '../types'
-import { Typography, Grid, CircularProgress, Button } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import type { Pool } from '../types.js'
+import { Typography, Grid, Button } from '@mui/material'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { usePoolURL } from '../hooks/usePoolURL'
-import { CountdownView } from './CountdownView'
-import { PluginPoolTogetherMessages } from '../messages'
+import { usePoolURL } from '../hooks/usePoolURL.js'
+import { CountdownView } from './CountdownView.js'
+import { PluginPoolTogetherMessages } from '../messages.js'
 import { useCallback, useEffect, useState } from 'react'
-import { calculateNextPrize, calculateSecondsRemaining, getPrizePeriod } from '../utils'
-import { NetworkView } from './NetworkView'
-import { useI18N } from '../../../utils'
+import { calculateNextPrize, calculateSecondsRemaining, getPrizePeriod } from '../utils.js'
+import { NetworkView } from './NetworkView.js'
+import { useI18N } from '../../../utils/index.js'
 import { TokenIcon } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useChainId, useFungibleToken, useCurrentWeb3NetworkPluginID, useAccount } from '@masknet/plugin-infra/web3'
@@ -209,7 +209,7 @@ export function PoolView(props: PoolProps) {
     if (loadingToken) {
         return (
             <div className={classes.root}>
-                <CircularProgress className={classes.progress} color="primary" size={15} />
+                <LoadingBase className={classes.progress} color="primary" size={15} />
             </div>
         )
     }

@@ -8,9 +8,9 @@ import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Box, List, ListItem, Typography } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { differenceWith } from 'lodash-unified'
-import { useI18N } from '../../locales'
-import { DonationCard, StatusBox } from '../components'
-import { useDonations } from '../hooks'
+import { useI18N } from '../../locales/index.js'
+import { DonationCard, StatusBox } from '../components/index.js'
+import { useDonations } from '../hooks/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     statusBox: {

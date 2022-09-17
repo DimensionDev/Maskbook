@@ -1,8 +1,8 @@
 import { memo } from 'react'
-import { useI18N } from '../../../utils'
-import { AdditionalContent } from '../AdditionalPostContent'
+import { useI18N } from '../../../utils/index.js'
+import { AdditionalContent } from '../AdditionalPostContent.js'
 import type { ProfileIdentifier } from '@masknet/shared-base'
-import { wrapAuthorDifferentMessage } from './authorDifferentMessage'
+import { wrapAuthorDifferentMessage } from './authorDifferentMessage.js'
 
 export interface DecryptPostFailedProps {
     error: Error

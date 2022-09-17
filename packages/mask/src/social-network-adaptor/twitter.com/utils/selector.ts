@@ -1,7 +1,7 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
-import { regexMatch } from '../../../utils/utils'
-import { isMobileTwitter } from './isMobile'
-import { isCompose } from './postBox'
+import { regexMatch } from '../../../utils/utils.js'
+import { isMobileTwitter } from './isMobile.js'
+import { isCompose } from './postBox.js'
 
 type E = HTMLElement
 
@@ -68,6 +68,10 @@ export const profileFollowButtonSelector: () => LiveSelector<E, true> = () =>
         '[data-testid="primaryColumn"] [aria-haspopup="menu"][data-testid="userActions"] ~ [data-testid="placementTracking"]',
     )
 
+export const normalFollowButtonSelector = () =>
+    // Including [data-testid$="-follow"] and [data-testid$="-unfollow"]
+    querySelectorAll('[role="button"][data-testid="UserCell"] [data-testid$="follow"]')
+
 export const searchProfileCoverSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
         '[data-testid="primaryColumn"] > div > div:last-child > div > div > div > div > div > div[style], [data-testid="primaryColumn"] > div > div:last-child > div > div > div > a > div > div[style]',
@@ -81,8 +85,8 @@ export const searchEditProfileSelector: () => LiveSelector<E, true> = () =>
 export const bioCardSelector = <SingleMode extends boolean = true>(singleMode = true) =>
     querySelector<HTMLDivElement, SingleMode>(
         [
-            '.profile', // legacy twitter
-            'a[href*="header_photo"] ~ div', // new twitter
+            '.profile',
+            'a[href*="header_photo"] ~ div',
             'div[data-testid="primaryColumn"] > div > div:last-child > div > div > div > div ~ div', // new twitter without header photo
         ].join(),
         singleMode,
@@ -114,7 +118,7 @@ export const postEditorContentInPopupSelector: () => LiveSelector<E, true> = () 
     )
 export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-labelledby="modal-header"]  div[data-testid="toolBar"] div[data-testid="geoButton"]')
-export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
+export const toolboxInSidebarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="banner"] [role="navigation"] > div')
 export const sideBarProfileSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="banner"] [role="navigation"] [data-testid="AppTabBar_Profile_Link"] > div')
@@ -137,7 +141,7 @@ export const postEditorDraftContentSelector = () => {
 }
 
 export const searchResultHeadingSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[role="main"] [data-testid="primaryColumn"] [role="region"] > [role="heading"]')
+    querySelector<E>('[role="main"] [data-testid="primaryColumn"] > div > div > :nth-child(2)')
 
 export const postEditorToolbarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="toolBar"] > div > *:last-child')
@@ -167,7 +171,7 @@ export const floatingBioCardSelector = () =>
 export const postsImageSelector = (node: HTMLElement) =>
     new LiveSelector([node]).querySelectorAll<HTMLElement>(
         [
-            '[data-testid="tweet"] > div > div img[src*="media"]', // image in timeline page for new twitter
+            '[data-testid="tweet"] > div > div img[src*="media"]',
             '[data-testid="tweet"] ~ div img[src*="media"]', // image in detail page for new twitter
         ].join(),
     )
@@ -175,7 +179,7 @@ export const postsImageSelector = (node: HTMLElement) =>
 export const timelinePostContentSelector = () =>
     querySelectorAll(
         [
-            '[data-testid="tweet"] div + div div[lang]', // text tweets
+            '[data-testid="tweet"] div + div div[lang]',
             '[data-testid="tweet"] div + div div[data-testid="card.wrapper"]', // link box tweets
         ].join(),
     )
@@ -184,12 +188,12 @@ export const postsContentSelector = () =>
     querySelectorAll(
         [
             // tweets on timeline page
-            '[data-testid="tweet"] div + div div[lang]', // text tweets
-            '[data-testid="tweet"] div + div div[data-testid="card.wrapper"]', // link box tweets
+            '[data-testid="tweet"] div + div div[lang]',
+            '[data-testid="tweet"] div + div div[data-testid="card.wrapper"]',
 
             // tweets on detailed page
-            '[data-testid="tweet"] + div > div:first-child div[lang]', // text tweets
-            '[data-testid="tweet"] + div > div div[data-testid="card.wrapper"]', // link box tweets
+            '[data-testid="tweet"] + div > div:first-child div[lang]',
+            '[data-testid="tweet"] + div > div div[data-testid="card.wrapper"]',
 
             // quoted tweets
             '[data-testid="tweet"] + div div[role="link"] div[lang]',
@@ -226,7 +230,7 @@ export const selfInfoSelectors = () => ({
 export const searchSelfHandleSelector = () => {
     return querySelector<HTMLSpanElement>(
         [
-            '[data-testid="SideNav_AccountSwitcher_Button"] [dir="ltr"] span', // desktop
+            '[data-testid="SideNav_AccountSwitcher_Button"] [dir="ltr"] span',
             '#layers [role="group"] [role="dialog"] [role="link"] [dir="ltr"] span', // sidebar opened in mobile
         ].join(),
     )
@@ -235,7 +239,7 @@ export const searchSelfHandleSelector = () => {
 export const searchSelfNicknameSelector = () => {
     return querySelector<HTMLSpanElement>(
         [
-            '[data-testid="SideNav_AccountSwitcher_Button"] [dir="auto"] span span', // desktop
+            '[data-testid="SideNav_AccountSwitcher_Button"] [dir="auto"] span span',
             '#layers [role="group"] [role="dialog"] [role="link"] span span', // sidebar opened in mobile
         ].join(),
     )
@@ -247,8 +251,8 @@ export const searchWatcherAvatarSelector = () =>
 export const searchSelfAvatarSelector = () => {
     return querySelector<HTMLImageElement>(
         [
-            '#layers ~ div [role="banner"] [role="button"] img', // desktop
-            '[data-testid="DashButton_ProfileIcon_Link"] [role="presentation"] img', // topbar in mobile
+            '#layers ~ div [role="banner"] [role="button"] img',
+            '[data-testid="DashButton_ProfileIcon_Link"] [role="presentation"] img',
             '#layers [role="group"] [role="dialog"] [role="link"] img', // sidebar opened in mobile
         ].join(),
     )

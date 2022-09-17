@@ -5,25 +5,20 @@ import { ActionButton } from '@masknet/theme'
 import type { ChainId, NetworkType, SchemaType } from '@masknet/web3-shared-evm'
 import { useERC20TokenApproveCallback } from '@masknet/plugin-infra/web3-evm'
 import { useAccount, useWeb3State, useNetworkDescriptor, useWeb3Hub } from '@masknet/plugin-infra/web3'
-import {
-    NetworkPluginID,
-    NetworkDescriptor,
-    isGreaterThan,
-    FungibleTokenSpenderAuthorization,
-} from '@masknet/web3-shared-base'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import { useI18N } from '../locales'
-import { useStyles } from './useStyles'
-import { ApprovalLoadingContent } from './ApprovalLoadingContent'
-import { ApprovalEmptyContent } from './ApprovalEmptyContent'
+import { NetworkPluginID, NetworkDescriptor, isGreaterThan, FungibleTokenSpender } from '@masknet/web3-shared-base'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import { useI18N } from '../locales/index.js'
+import { useStyles } from './useStyles.js'
+import { ApprovalLoadingContent } from './ApprovalLoadingContent.js'
+import { ApprovalEmptyContent } from './ApprovalEmptyContent.js'
 import { useAsync } from 'react-use'
 
 export function ApprovalTokenContent({ chainId }: { chainId: ChainId }) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM)
+    const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     const { value: spenders, loading } = useAsync(
-        async () => hub?.getApprovedFungibleTokenSpenders?.(chainId, account),
+        async () => hub?.getFungibleTokenSpenders?.(chainId, account),
         [chainId, account, hub],
     )
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
@@ -47,7 +42,7 @@ export function ApprovalTokenContent({ chainId }: { chainId: ChainId }) {
 
 interface ApprovalTokenItemProps {
     chainId: ChainId
-    spender: FungibleTokenSpenderAuthorization<ChainId, SchemaType>
+    spender: FungibleTokenSpender<ChainId, SchemaType>
     networkDescriptor?: NetworkDescriptor<ChainId, NetworkType>
 }
 
@@ -104,11 +99,9 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
                 </div>
                 <ChainBoundary
                     expectedChainId={chainId}
-                    switchChainWithoutPopup
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                     className={classes.chainBoundary}
                     classes={{ switchButton: classes.button }}
-                    expectedChainIdSwitchedCallback={() => approveCallback(true, true)}
                     ActionButtonPromiseProps={{
                         fullWidth: false,
                         init: t.revoke(),

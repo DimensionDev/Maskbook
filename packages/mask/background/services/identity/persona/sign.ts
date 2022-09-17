@@ -8,10 +8,10 @@ import {
     publicToAddress,
     ECDSASignature,
 } from 'ethereumjs-util'
-import { MaskMessages } from '../../../../shared'
+import { MaskMessages } from '../../../../shared/index.js'
 import { PersonaIdentifier, fromBase64URL, PopupRoutes, ECKeyIdentifier } from '@masknet/shared-base'
-import { queryPersonasWithPrivateKey } from '../../../../background/database/persona/db'
-import { openPopupWindow } from '../../../../background/services/helper'
+import { queryPersonasWithPrivateKey } from '../../../../background/database/persona/db.js'
+import { openPopupWindow } from '../../../../background/services/helper/index.js'
 import { delay, encodeText } from '@dimensiondev/kit'
 export interface SignRequest {
     /** Use that who to sign this message. */
@@ -35,6 +35,9 @@ export interface SignRequestResult {
     messageHex: string
 }
 
+/**
+ * Generate a signature with confirmation from user
+ */
 export async function signWithPersona({ message, method, identifier }: SignRequest): Promise<SignRequestResult> {
     if (method !== 'eth') throw new Error('Unknown sign method')
     const requestID = Math.random().toString(16).slice(3)
@@ -52,6 +55,9 @@ export async function signWithPersona({ message, method, identifier }: SignReque
     return generateSignResult(signer, message)
 }
 
+/**
+ * Generate a signature without confirmation from user
+ */
 export async function generateSignResult(signer: ECKeyIdentifier, message: string) {
     const persona = (await queryPersonasWithPrivateKey()).find((x) => x.identifier === signer)
     if (!persona) throw new Error('Persona not found')

@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { CYBERCONNECT_PLUGIN_ID } from './constants'
+import { CYBERCONNECT_PLUGIN_ID } from './constants.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: CYBERCONNECT_PLUGIN_ID,

@@ -1,11 +1,11 @@
 import { useMemo } from 'react'
 import { Trans } from 'react-i18next'
 import { type Plugin, usePluginWrapper, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
-import { base } from '../base'
+import { base } from '../base.js'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { parseURL } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
-import { FurucomboView } from '../UI/FurucomboView'
+import { FurucomboView } from '../UI/FurucomboView.js'
 
 const matchLink = /^https:\/\/furucombo.app\/invest\/(pool|farm)\/(137|1)\/(0x\w+)/
 const isFurucomboLink = (link: string): boolean => matchLink.test(link)
@@ -43,7 +43,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ],
 }
 
-function Renderer(props: React.PropsWithChildren<{ url: string }>) {
+function Renderer(
+    props: React.PropsWithChildren<{
+        url: string
+    }>,
+) {
     const [, category, chainId, address] = props.url.match(matchLink) ?? []
     usePluginWrapper(true)
     return <FurucomboView category={category} address={address} chainId={Number.parseInt(chainId, 10)} />

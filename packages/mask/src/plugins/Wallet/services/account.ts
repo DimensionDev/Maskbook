@@ -5,9 +5,9 @@ import {
     currentMaskWalletAccountSettings,
     currentMaskWalletChainIdSettings,
     currentMaskWalletNetworkSettings,
-} from '../../../../shared/legacy-settings/wallet-settings'
-import { Flags } from '../../../../shared'
-import { WalletRPC } from '../messages'
+} from '../../../../shared/legacy-settings/wallet-settings.js'
+import { Flags } from '../../../../shared/index.js'
+import { WalletRPC } from '../messages.js'
 import { defer, DeferTuple } from '@dimensiondev/kit'
 import type { EnhanceableSite, ExtensionSite } from '@masknet/shared-base'
 

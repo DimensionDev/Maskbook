@@ -4,8 +4,8 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
-import { useI18N } from '../../../../utils'
-import { GasSetting } from './GasSetting'
+import { useI18N } from '../../../../utils/index.js'
+import { GasSetting } from './GasSetting.js'
 import { GasOptionType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({

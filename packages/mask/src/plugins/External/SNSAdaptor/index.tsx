@@ -1,12 +1,12 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { Suspense } from 'react'
-import { ExternalPluginLoader } from '../components/Container'
-import type { ExternalPluginLoadDetails } from '../types'
-import { base } from '../base'
-import { ThirdPartyPluginCompositionEntry } from '../components/CompositionEntry'
-import { ExternalPluginMessages } from '../messages'
-import { isLocalContext } from '../sns-context'
-import { MaskMessages } from '../../../utils'
+import { ExternalPluginLoader } from '../components/Container.js'
+import type { ExternalPluginLoadDetails } from '../types.js'
+import { base } from '../base.js'
+import { ThirdPartyPluginCompositionEntry } from '../components/CompositionEntry.js'
+import { ExternalPluginMessages } from '../messages.js'
+import { isLocalContext } from '../sns-context.js'
+import { MaskMessages } from '../../../utils/index.js'
 import { makeTypedMessageText } from '@masknet/typed-message'
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -41,7 +41,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             </Suspense>
         )
     },
-    CompositionDialogEntry: { label: '\u{1F9E9} Third-party Plugins', dialog: ThirdPartyPluginCompositionEntry },
+    CompositionDialogEntry: { label: '\uD83E\uDDE9 Third-party Plugins', dialog: ThirdPartyPluginCompositionEntry },
     CompositionDialogMetadataBadgeRender: (key, val) =>
         key.startsWith('plugin:')
             ? {

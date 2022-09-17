@@ -20,10 +20,10 @@ import {
 } from '@masknet/web3-shared-evm'
 // import { useERC721TokenDetailedOwnerList } from '@masknet/web3-providers'
 import { FormattedAddress } from '@masknet/shared'
-import { useDashboardI18N } from '../../../../locales'
+import { useDashboardI18N } from '../../../../locales/index.js'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { SelectNFTList } from './SelectNFTList'
-import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
+import { SelectNFTList } from './SelectNFTList.js'
+import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder/index.js'
 import { z } from 'zod'
 import { EthereumAddress } from 'wallet.ts'
 import { Controller, useForm } from 'react-hook-form'
@@ -33,9 +33,9 @@ import TuneIcon from '@mui/icons-material/Tune'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useGasConfig } from '../../hooks'
+import { useGasConfig } from '../../hooks/index.js'
 import { unionBy } from 'lodash-unified'
-import { TransferTab } from './types'
+import { TransferTab } from './types.js'
 import {
     useAccount,
     useChainId,
@@ -71,7 +71,10 @@ export const TransferERC721 = memo(() => {
     const connection = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
     const { state } = useLocation() as {
-        state: { nonFungibleToken?: NonFungibleToken<ChainId, SchemaType>; type?: TransferTab } | null
+        state: {
+            nonFungibleToken?: NonFungibleToken<ChainId, SchemaType>
+            type?: TransferTab
+        } | null
     }
 
     const { classes } = useStyles()

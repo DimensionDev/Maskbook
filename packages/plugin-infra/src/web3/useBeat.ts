@@ -2,8 +2,8 @@ import { DependencyList, useState } from 'react'
 import { useAsyncRetry, useTimeoutFn } from 'react-use'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import { useWeb3State } from './useWeb3State'
-import { useChainId } from './useChainId'
+import { useWeb3State } from './useWeb3State.js'
+import { useChainId } from './useChainId.js'
 
 const DEFAULT_SINGLE_BLOCK_DELAY = 15 * 1000
 const DEFAULT_DOUBLE_BLOCK_DELAY = DEFAULT_SINGLE_BLOCK_DELAY * 2

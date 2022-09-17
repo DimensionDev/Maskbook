@@ -1,6 +1,6 @@
 import { openDB, DBSchema } from 'idb/with-async-ittr'
 import { ECKeyIdentifier, Identifier, PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
-import { createDBAccess, createTransaction, IDBPSafeTransaction } from '../utils/openDB'
+import { createDBAccess, createTransaction, IDBPSafeTransaction } from '../utils/openDB.js'
 
 const pendingUpdate = new Map<IdentifierWithAvatar, Partial<AvatarMetadataRecord>>()
 let pendingUpdateTimer: ReturnType<typeof setTimeout> | null

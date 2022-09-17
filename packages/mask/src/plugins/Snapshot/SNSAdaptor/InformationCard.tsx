@@ -4,13 +4,13 @@ import { makeStyles } from '@masknet/theme'
 import OpenInNew from '@mui/icons-material/OpenInNew'
 import formatDateTime from 'date-fns/format'
 import { useContext } from 'react'
-import { useI18N } from '../../../utils'
-import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie'
-import { SnapshotContext } from '../context'
-import { useProposal } from './hooks/useProposal'
-import { SnapshotCard } from './SnapshotCard'
+import { useI18N } from '../../../utils/index.js'
+import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie.js'
+import { SnapshotContext } from '../context.js'
+import { useProposal } from './hooks/useProposal.js'
+import { SnapshotCard } from './SnapshotCard.js'
 import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, resolveIPFSLink } from '@masknet/web3-shared-base'
+import { NetworkPluginID, resolveIPFS_URL } from '@masknet/web3-shared-base'
 
 export interface InformationCardProps {}
 
@@ -79,7 +79,7 @@ export function InformationCard(props: InformationCardProps) {
                                     target="_blank"
                                     rel="noopener"
                                     href={explorerResolver.addressLink(chainId, strategy.params.address)}>
-                                    <Avatar src={resolveIPFSLink(proposal.space.avatar)} className={classes.avatar} />
+                                    <Avatar src={resolveIPFS_URL(proposal.space.avatar)} className={classes.avatar} />
                                 </Link>
                             ))}
                     </Box>
@@ -92,7 +92,7 @@ export function InformationCard(props: InformationCardProps) {
                         href={explorerResolver.addressLink(chainId, proposal.address)}>
                         <div className={classes.avatarWrapper}>
                             {proposal.authorAvatar ? (
-                                <Avatar src={resolveIPFSLink(proposal.authorAvatar)} className={classes.avatar} />
+                                <Avatar src={resolveIPFS_URL(proposal.authorAvatar)} className={classes.avatar} />
                             ) : (
                                 <EthereumBlockie address={proposal.address} />
                             )}
@@ -101,7 +101,7 @@ export function InformationCard(props: InformationCardProps) {
                     </Link>
                 </InfoField>
                 <InfoField title={t('plugin_snapshot_info_ipfs')}>
-                    <Link className={classes.link} target="_blank" rel="noopener" href={resolveIPFSLink(identifier.id)}>
+                    <Link className={classes.link} target="_blank" rel="noopener" href={resolveIPFS_URL(identifier.id)}>
                         #{identifier.id.slice(0, 7)}
                         <OpenInNew fontSize="small" />
                     </Link>

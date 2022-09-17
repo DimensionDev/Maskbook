@@ -1,4 +1,4 @@
-import type { PoolRecord, PoolRecordInDatabase } from '../types'
+import type { PoolRecord, PoolRecordInDatabase } from '../types.js'
 import { omit } from 'lodash-unified'
 import type { Plugin } from '@masknet/plugin-infra'
 

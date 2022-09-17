@@ -1,4 +1,4 @@
-import { resolveSubgraphLinkOnArtBlocks } from '../pipes'
+import { resolveSubgraphLinkOnArtBlocks } from '../pipes/index.js'
 
 export async function fetchProject(chainId: number, projectId: string) {
     const body = {

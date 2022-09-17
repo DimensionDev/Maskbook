@@ -1,6 +1,6 @@
 import { unreachable } from '@dimensiondev/kit'
 import { ProfileIdentifier, type PersonaIdentifier, ECKeyIdentifier } from '@masknet/shared-base'
-import type { FullPersonaDBTransaction } from './type'
+import type { FullPersonaDBTransaction } from './type.js'
 
 type ReadwriteFullPersonaDBTransaction = FullPersonaDBTransaction<'readwrite'>
 

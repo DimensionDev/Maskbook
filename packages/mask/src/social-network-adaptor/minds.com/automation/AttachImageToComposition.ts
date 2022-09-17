@@ -1,8 +1,8 @@
-import type { SocialNetworkUI } from '../../../social-network'
-import { MaskMessages } from '../../../utils/messages'
-import { downloadUrl } from '../../../utils/utils'
-import { composerModalTextAreaSelector, composerPreviewSelector } from '../utils/selector'
-import { pasteTextToCompositionMinds } from './pasteTextToComposition'
+import type { SocialNetworkUI } from '../../../social-network/index.js'
+import { MaskMessages } from '../../../utils/messages.js'
+import { downloadUrl } from '../../../utils/utils.js'
+import { composerModalTextAreaSelector, composerPreviewSelector } from '../utils/selector.js'
+import { pasteTextToCompositionMinds } from './pasteTextToComposition.js'
 
 const hasSucceed = () => composerPreviewSelector().evaluate()
 

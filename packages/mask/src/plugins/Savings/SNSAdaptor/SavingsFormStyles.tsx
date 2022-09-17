@@ -8,7 +8,7 @@ export const useStyles = makeStyles()((theme, props) => ({
     inputWrap: {
         position: 'relative',
         width: '100%',
-        margin: '0 0 10px 0',
+        margin: theme.spacing(1.25, 0),
     },
     inputTextField: {
         padding: '15px 10px 0 10px',

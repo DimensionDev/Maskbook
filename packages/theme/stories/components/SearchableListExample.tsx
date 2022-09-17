@@ -1,6 +1,6 @@
-import { SearchableList } from '../../src/Components/SearchableList'
+import { SearchableList } from '../../src/Components/SearchableList/index.js'
 import { DialogContent } from '@mui/material'
-import { MaskDialog } from '../../src/Components'
+import { MaskDialog } from '../../src/Components/index.js'
 import { styled } from '@mui/material/styles'
 
 const demoData: IDemoData[] = [

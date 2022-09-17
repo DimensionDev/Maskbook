@@ -1,8 +1,8 @@
 import { memo } from 'react'
 import { styled, Typography } from '@mui/material'
-import { WalletQRCodeContainer } from '../WalletQRCodeContainer'
+import { WalletQRCodeContainer } from '../WalletQRCodeContainer/index.js'
 import { MaskColorVar } from '@masknet/theme'
-import { useDashboardI18N } from '../../locales'
+import { useDashboardI18N } from '../../locales/index.js'
 
 const Container = styled('div')`
     display: flex;

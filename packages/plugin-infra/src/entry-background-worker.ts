@@ -1,2 +1,2 @@
-export * from './entry'
-export { activatedPluginsWorker, startPluginWorker } from './manager/worker'
+export * from './entry.js'
+export { activatedPluginsWorker, startPluginWorker } from './manager/worker.js'

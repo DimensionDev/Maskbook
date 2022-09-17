@@ -1,6 +1,6 @@
 import { validate } from 'uuid'
-import * as database from './database'
-import { i18n } from '../../../../../shared-ui/locales_legacy'
+import * as database from './database/index.js'
+import { i18n } from '../../../../../shared-ui/locales_legacy/index.js'
 
 let password = ''
 

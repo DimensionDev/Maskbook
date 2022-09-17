@@ -1,6 +1,6 @@
 import { createPluginMessage, PluginMessageEmitter, createPluginRPC } from '@masknet/plugin-infra'
-import { DHEDGE_PLUGIN_ID } from './constants'
-import type { Pool } from './types'
+import { DHEDGE_PLUGIN_ID } from './constants.js'
+import type { Pool } from './types.js'
 
 type InvestDialogUpdated =
     | {
@@ -22,4 +22,8 @@ interface DHedgeMessages {
 }
 
 export const PluginDHedgeMessages: PluginMessageEmitter<DHedgeMessages> = createPluginMessage(DHEDGE_PLUGIN_ID)
-export const PluginDHedgeRPC = createPluginRPC(DHEDGE_PLUGIN_ID, () => import('./services'), PluginDHedgeMessages.rpc)
+export const PluginDHedgeRPC = createPluginRPC(
+    DHEDGE_PLUGIN_ID,
+    () => import('./services.js'),
+    PluginDHedgeMessages.rpc,
+)

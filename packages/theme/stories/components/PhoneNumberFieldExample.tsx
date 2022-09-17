@@ -1,4 +1,4 @@
-import { PhoneNumberField } from '../../src/Components'
+import { PhoneNumberField } from '../../src/Components/index.js'
 
 const onBlur = () => {}
 

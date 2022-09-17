@@ -19,21 +19,21 @@ import {
     Transaction,
     TransactionParameter,
 } from '@masknet/web3-shared-evm'
-import { readABIs } from './TransactionFormatter/abi'
-import { createConnection } from './Connection/connection'
-import type { TransactionDescriptor } from './TransactionFormatter/types'
+import { readABIs } from './TransactionFormatter/abi.js'
+import { createConnection } from './Connection/connection.js'
+import type { TransactionDescriptor } from './TransactionFormatter/types.js'
 
 // built-in descriptors
-import { TransferTokenDescriptor } from './TransactionFormatter/descriptors/TransferToken'
-import { ContractDeploymentDescriptor } from './TransactionFormatter/descriptors/ContractDeployment'
-import { CancelDescriptor } from './TransactionFormatter/descriptors/Cancel'
-import { BaseTransactionDescriptor } from './TransactionFormatter/descriptors/Base'
-import { ITODescriptor } from './TransactionFormatter/descriptors/ITO'
-import { MaskBoxDescriptor } from './TransactionFormatter/descriptors/MaskBox'
-import { RedPacketDescriptor } from './TransactionFormatter/descriptors/RedPacket'
-import { ERC20Descriptor } from './TransactionFormatter/descriptors/ERC20'
-import { ERC721Descriptor } from './TransactionFormatter/descriptors/ERC721'
-import { SwapDescriptor } from './TransactionFormatter/descriptors/Swap'
+import { TransferTokenDescriptor } from './TransactionFormatter/descriptors/TransferToken.js'
+import { ContractDeploymentDescriptor } from './TransactionFormatter/descriptors/ContractDeployment.js'
+import { CancelDescriptor } from './TransactionFormatter/descriptors/Cancel.js'
+import { BaseTransactionDescriptor } from './TransactionFormatter/descriptors/Base.js'
+import { ITODescriptor } from './TransactionFormatter/descriptors/ITO.js'
+import { MaskBoxDescriptor } from './TransactionFormatter/descriptors/MaskBox.js'
+import { RedPacketDescriptor } from './TransactionFormatter/descriptors/RedPacket.js'
+import { ERC20Descriptor } from './TransactionFormatter/descriptors/ERC20.js'
+import { ERC721Descriptor } from './TransactionFormatter/descriptors/ERC721.js'
+import { SwapDescriptor } from './TransactionFormatter/descriptors/Swap.js'
 
 export class TransactionFormatter extends TransactionFormatterState<ChainId, TransactionParameter, Transaction> {
     private coder = ABICoder as unknown as ABICoder.AbiCoder
@@ -70,7 +70,8 @@ export class TransactionFormatter extends TransactionFormatterState<ChainId, Tra
         const signature = getFunctionSignature(transaction)
         const parameters = getFunctionParameters(transaction)
 
-        const context = {
+        const context: TransactionContext<ChainId, string | undefined> = {
+            type: TransactionDescriptorType.INTERACTION,
             chainId,
             from,
             to,

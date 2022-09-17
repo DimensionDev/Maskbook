@@ -1,5 +1,5 @@
 import { isRiskMethod } from '@masknet/web3-shared-evm'
-import type { Context, Middleware } from '../types'
+import type { Context, Middleware } from '../types.js'
 
 export class NoneWallet implements Middleware<Context> {
     async fn(context: Context, next: () => Promise<void>) {

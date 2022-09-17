@@ -4,13 +4,13 @@ import { TokenType } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
 import { compact } from 'lodash-unified'
-import { LooksRareLogo, OpenSeaLogo } from '../../resources'
-import type { TrendingAPI } from '../../types'
-import { NFTSCAN_API } from '../constants'
-import type { EVM, Response } from '../types'
-import { fetchFromNFTScan, getContractSymbol } from '../helpers/EVM'
-import { LooksRareAPI } from '../../looksrare'
-import { OpenSeaAPI } from '../../opensea'
+import { LooksRareLogo, OpenSeaLogo } from '../../resources/index.js'
+import type { TrendingAPI } from '../../types/index.js'
+import { NFTSCAN_API } from '../constants.js'
+import type { EVM, Response } from '../types/index.js'
+import { fetchFromNFTScan, getContractSymbol } from '../helpers/EVM.js'
+import { LooksRareAPI } from '../../looksrare/index.js'
+import { OpenSeaAPI } from '../../opensea/index.js'
 
 enum NonFungibleMarketplace {
     OpenSea = 'OpenSea',
@@ -124,7 +124,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         ])
         return {
             lastUpdated: new Date().toJSON(),
-            dataProvider: DataProvider.NFTSCAN,
+            dataProvider: DataProvider.NFTScan,
             contracts: [{ chainId, address: platformInfo.address }],
             currency,
             coin: {

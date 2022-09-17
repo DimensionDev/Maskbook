@@ -1,12 +1,14 @@
 import BigNumber from 'bignumber.js'
-import { pow10 } from './number'
+import { pow10 } from './number.js'
 
 export function formatBalance(rawValue: BigNumber.Value = '0', decimals = 0, significant = decimals) {
     let balance = new BigNumber(rawValue)
     if (balance.isNaN()) return '0'
-    const negative = balance.isNegative() // balance < 0n
-    const base = pow10(decimals) // 10n ** decimals
 
+    const base = pow10(decimals) // 10n ** decimals
+    if (balance.div(base).lt(pow10(-6)) && balance.isGreaterThan(0)) return '<0.000001'
+
+    const negative = balance.isNegative() // balance < 0n
     if (negative) balance = balance.absoluteValue() // balance * -1n
 
     let fraction = balance.modulo(base).toString(10) // (balance % base).toString(10)
@@ -20,7 +22,6 @@ export function formatBalance(rawValue: BigNumber.Value = '0', decimals = 0, sig
 
     // trim tailing zeros
     fraction = fraction.replace(/0+$/g, '')
-
     const whole = balance.dividedToIntegerBy(base).toString(10) // (balance / base).toString(10)
     const value = `${whole}${fraction === '' ? '' : `.${fraction}`}`
 

@@ -1,7 +1,7 @@
 import type { DOMProxy } from '@dimensiondev/holoflows-kit'
-import { isMobileFacebook } from '../utils/isMobile'
+import { isMobileFacebook } from '../utils/isMobile.js'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
-import { injectPostInspectorDefault } from '../../../social-network/defaults/inject/PostInspector'
+import { injectPostInspectorDefault } from '../../../social-network/defaults/inject/PostInspector.js'
 
 const map = new WeakMap<HTMLElement, ShadowRoot>()
 function getShadowRoot(node: HTMLElement) {
@@ -48,7 +48,7 @@ function zipEncryptedPostContent(node: DOMProxy) {
     if (node.destroyed) return
     const parent = node.current.parentElement
     // It's image based encryption, skip zip post.
-    if (!node.current.innerText.includes('\u{1F3BC}')) return
+    if (!node.current.innerText.includes('\uD83C\uDFBC')) return
     // Style modification for repost
     if (!node.current.className.includes('userContent') && node.current.innerText.length > 0) {
         node.after.setAttribute(
@@ -78,7 +78,7 @@ export function clickSeeMore(node: HTMLElement | undefined | null) {
         isMobileFacebook ? '[data-sigil="more"] a' : '[role=article] span[dir="auto"] div[dir="auto"] [role="button"]',
     )
 
-    if (more && node.querySelector('img[alt="\u{1F3BC}"]')) {
+    if (more && node.querySelector('img[alt="\uD83C\uDFBC"]')) {
         const trap = (e: Event) => {
             e.preventDefault()
         }

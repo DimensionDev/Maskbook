@@ -20,19 +20,19 @@ import {
     useNativeToken,
     useWeb3,
 } from '@masknet/plugin-infra/web3'
-import { FormattedCurrency, InjectedDialog, TokenAmountPanel, TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
+import { FungibleTokenInput, FormattedCurrency, InjectedDialog, TokenIcon, useOpenShareTxDialog } from '@masknet/shared'
 import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider'
 import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
-import { PluginWalletStatusBar, useI18N } from '../../../utils'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
-import { ProtocolType, SavingsProtocol, TabType } from '../types'
-import { useStyles } from './SavingsFormStyles'
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
+import { PluginWalletStatusBar, useI18N } from '../../../utils/index.js'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
+import { ProtocolType, SavingsProtocol, TabType } from '../types.js'
+import { useStyles } from './SavingsFormStyles.js'
+import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary.js'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
-import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton.js'
 import { createLookupTableResolver } from '@masknet/shared-base'
 
 export interface SavingsFormDialogProps {
@@ -148,7 +148,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
     }, [protocol.bareToken, inputAmount, chainId])
 
     const openShareTxDialog = useOpenShareTxDialog()
-    const shareText = t('promote_savings', {
+    const shareText = t(tab === TabType.Deposit ? 'promote_savings' : 'promote_withdraw', {
         amount: inputAmount,
         symbol: protocol.bareToken.symbol,
         chain: chainResolver.chainName(chainId),
@@ -247,16 +247,13 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                     {needsSwap ? null : (
                         <>
                             <div className={classes.inputWrap}>
-                                <TokenAmountPanel
+                                <FungibleTokenInput
                                     amount={inputAmount}
                                     maxAmount={balanceAsBN.minus(estimatedGas).toString()}
                                     balance={balanceAsBN.toString()}
                                     label={t('plugin_savings_amount')}
                                     token={protocol.bareToken}
                                     onAmountChange={setInputAmount}
-                                    InputProps={{ classes: { root: classes.inputTextField } }}
-                                    MaxChipProps={{ classes: { root: classes.maxChip } }}
-                                    SelectTokenChip={{ ChipProps: { classes: { root: classes.selectTokenChip } } }}
                                 />
                             </div>
 
@@ -279,7 +276,13 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
 
                     <div className={classes.infoRow}>
                         <Typography variant="body2" className={classes.infoRowLeft}>
-                            <TokenIcon address={protocol.bareToken.address} classes={{ icon: classes.rowImage }} />
+                            <TokenIcon
+                                address={protocol.bareToken.address}
+                                logoURL={protocol.bareToken.logoURL}
+                                classes={{ icon: classes.rowImage }}
+                                chainId={protocol.bareToken.chainId}
+                                name={protocol.bareToken.name}
+                            />
                             {protocol.bareToken.name} {t('plugin_savings_apr')}%
                         </Typography>
                         <Typography variant="body2" className={classes.infoRowRight}>

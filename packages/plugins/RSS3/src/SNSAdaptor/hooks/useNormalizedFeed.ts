@@ -1,7 +1,7 @@
 import { RSS3BaseAPI } from '@masknet/web3-providers'
 import { useMemo } from 'react'
-import { RSS3_DEFAULT_IMAGE } from '../../constants'
-import type { RSS3Feed } from '../../types'
+import { RSS3_DEFAULT_IMAGE } from '../../constants.js'
+import type { RSS3Feed } from '../../types.js'
 
 const { Tag } = RSS3BaseAPI
 export function useNormalizeFeed(feed: RSS3BaseAPI.Activity): RSS3Feed {
@@ -13,7 +13,7 @@ export function useNormalizeFeed(feed: RSS3BaseAPI.Activity): RSS3Feed {
                 image: metadata?.image || RSS3_DEFAULT_IMAGE,
                 title: metadata?.name,
                 relatedURLs: action.related_urls,
-                description: metadata?.description ?? metadata?.name,
+                description: metadata?.description ?? '',
                 network: feed.network,
                 attributes: metadata && 'attributes' in metadata ? metadata.attributes : [],
                 metadata: {
@@ -42,7 +42,7 @@ export function useNormalizeFeed(feed: RSS3BaseAPI.Activity): RSS3Feed {
                 image: metadata?.image || RSS3_DEFAULT_IMAGE,
                 title: action.type,
                 relatedURLs: action.related_urls,
-                description: metadata?.description,
+                description: metadata?.value_display ? `${metadata?.value_display} ${metadata?.symbol}` : '',
                 network: feed.network,
                 attributes: [],
                 metadata: {

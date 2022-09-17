@@ -1,9 +1,9 @@
 import type { TradeProvider } from '@masknet/public-api'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { useV2Trade as useUniswapV2Trade } from './useTrade'
-import { TradeStrategy } from '../../types'
-import { useTradeComputed as useUniswapTradeComputed } from './useTradeComputed'
-import { useTradeGasLimit as useUniswapTradeGasLimit } from './useTradeGasLimit'
+import { useV2Trade as useUniswapV2Trade } from './useTrade.js'
+import { TradeStrategy } from '../../types/index.js'
+import { useTradeComputed as useUniswapTradeComputed } from './useTradeComputed.js'
+import { useTradeGasLimit as useUniswapTradeGasLimit } from './useTradeGasLimit.js'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 
 export function useUniswapV2Like(

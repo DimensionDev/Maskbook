@@ -1,7 +1,7 @@
 import { ForwardedRef, forwardRef } from 'react'
 import { Box, formHelperTextClasses, TextField, StandardTextFieldProps, InputProps, Typography } from '@mui/material'
-import { makeStyles } from '../../UIHelper/makeStyles'
-import { getMaskColor, MaskColorVar } from '../../CSSVariables/vars'
+import { makeStyles } from '../../UIHelper/makeStyles.js'
+import { getMaskColor, MaskColorVar } from '../../CSSVariables/vars.js'
 import { isDashboardPage } from '@masknet/shared-base'
 
 const isDashboard = isDashboardPage()

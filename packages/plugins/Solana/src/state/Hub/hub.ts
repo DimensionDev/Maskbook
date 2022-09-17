@@ -1,142 +1,54 @@
-import type { PartialRequired } from '@masknet/shared-base'
-import { CoinGecko, MagicEden, SolanaFungible, SolanaNonFungible } from '@masknet/web3-providers'
+import { mixin } from '@masknet/shared-base'
+import { HubStateBaseClient, HubStateFungibleClient, HubStateNonFungibleClient } from '@masknet/plugin-infra/web3'
 import {
-    CurrencyType,
-    FungibleAsset,
-    FungibleToken,
-    GasOptionType,
-    HubOptions,
-    isSameAddress,
-    NonFungibleAsset,
-    NonFungibleToken,
-    NonFungibleCollection,
-    Pageable,
-    SourceType,
-    Transaction,
-} from '@masknet/web3-shared-base'
-import { ChainId, GasOption, getCoinGeckoConstants, getTokenConstants, SchemaType } from '@masknet/web3-shared-solana'
-import type { SolanaHub } from './types'
+    CoinGeckoPriceSolana,
+    MagicEden,
+    FungibleTokenAPI,
+    NonFungibleTokenAPI,
+    SolanaFungible,
+    SolanaNonFungible,
+    PriceAPI,
+} from '@masknet/web3-providers'
+import { CurrencyType, GasOptionType, HubOptions, Pageable, SourceType, Transaction } from '@masknet/web3-shared-base'
+import { ChainId, GasOption, SchemaType } from '@masknet/web3-shared-solana'
+import type { SolanaHub } from './types.js'
 
-class Hub implements SolanaHub {
-    constructor(
-        private chainId: ChainId,
-        private account: string,
-        private sourceType?: SourceType,
-        private currencyType?: CurrencyType,
-    ) {}
+class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
+    protected getFungibleProviders(initial?: HubOptions<ChainId>) {
+        const options = this.getOptions(initial)
 
-    private getOptions(
-        initial?: HubOptions<ChainId>,
-        overrides?: Partial<HubOptions<ChainId>>,
-    ): PartialRequired<HubOptions<ChainId>, 'chainId' | 'account'> {
-        return {
-            chainId: this.chainId,
-            account: this.account,
-            sourceType: this.sourceType,
-            currencyType: this.currencyType,
-            ...initial,
-            ...overrides,
-        }
-    }
+        // only the first page is available
+        if ((options.indicator ?? 0) > 0) return []
 
-    async getFungibleTokensFromTokenList(
-        chainId: ChainId,
-        initial?: HubOptions<ChainId>,
-    ): Promise<Array<FungibleToken<ChainId, SchemaType>>> {
-        return SolanaFungible.getFungibleTokens(chainId, [])
+        return this.getPredicateProviders<FungibleTokenAPI.Provider<ChainId, SchemaType> | PriceAPI.Provider<ChainId>>(
+            {
+                [SourceType.Solana]: SolanaFungible,
+                [SourceType.CoinGecko]: CoinGeckoPriceSolana,
+            },
+            [SolanaFungible, CoinGeckoPriceSolana],
+            initial,
+        )
     }
-    async getNonFungibleTokensFromTokenList(
-        chainId: ChainId,
-        initial?: HubOptions<ChainId>,
-    ): Promise<Array<NonFungibleToken<ChainId, SchemaType>>> {
-        throw new Error('Method not implemented.')
+}
+
+class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType> {
+    protected override getProviders(initial?: HubOptions<ChainId>) {
+        return this.getPredicateProviders<NonFungibleTokenAPI.Provider<ChainId, SchemaType>>(
+            {
+                [SourceType.MagicEden]: MagicEden,
+                [SourceType.Solana]: SolanaNonFungible,
+            },
+            [MagicEden, SolanaNonFungible],
+            initial,
+        )
     }
+}
+
+class Hub extends HubStateBaseClient<ChainId> implements SolanaHub {
     getGasOptions(chainId: ChainId, initial?: HubOptions<ChainId>): Promise<Record<GasOptionType, GasOption>> {
         throw new Error('Method not implemented.')
     }
-    getFungibleAsset(address: string, initial?: HubOptions<ChainId>): Promise<FungibleAsset<ChainId, SchemaType>> {
-        throw new Error('Method not implemented.')
-    }
-    async getNonFungibleAsset(
-        address: string,
-        tokenId: string,
-        initial?: HubOptions<ChainId>,
-    ): Promise<NonFungibleAsset<ChainId, SchemaType> | undefined> {
-        const options = this.getOptions(initial)
-        return MagicEden.getAsset(address, tokenId, options)
-    }
-    async getFungibleAssets(
-        account: string,
-        initial?: HubOptions<ChainId>,
-    ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
-        const options = this.getOptions(initial, {
-            account,
-        })
-        return SolanaFungible.getAssets(options.account, options)
-    }
-    getNonFungibleTokens(
-        account: string,
-        initial?: HubOptions<ChainId>,
-    ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
-        const options = this.getOptions(initial, {
-            account,
-        })
-        try {
-            return MagicEden.getAssets(options.account, options)
-        } catch {
-            // TODO: move to web3-provider
-            return SolanaNonFungible.getAssets(options.account, options)
-        }
-    }
-    async getNonFungibleAssets(
-        account: string,
-        initial?: HubOptions<ChainId>,
-    ): Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>> {
-        return this.getNonFungibleTokens(account, initial)
-    }
-    getNonFungibleCollectionsByOwner(
-        account: string,
-        initial?: HubOptions<ChainId>,
-    ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>>> {
-        const options = this.getOptions(initial, {
-            account,
-        })
-        return MagicEden.getCollectionsByOwner(options.account, options)
-    }
-    getFungibleTokenPrice(chainId: ChainId, address: string, initial?: HubOptions<ChainId>): Promise<number> {
-        const options = this.getOptions(initial)
-        const { PLATFORM_ID = '', COIN_ID = '' } = getCoinGeckoConstants(options.chainId)
-        const { SOL_ADDRESS } = getTokenConstants(options.chainId)
 
-        if (isSameAddress(address, SOL_ADDRESS)) {
-            return CoinGecko.getTokenPriceByCoinId(COIN_ID, options.currencyType)
-        }
-
-        return CoinGecko.getTokenPrice(PLATFORM_ID, address, options.currencyType)
-    }
-    getNonFungibleTokenPrice(
-        chainId: ChainId,
-        address: string,
-        tokenId: string,
-        initial?: HubOptions<ChainId>,
-    ): Promise<never> {
-        throw new Error('Method not implemented.')
-    }
-    async getFungibleTokenIconURLs(
-        chainId: ChainId,
-        address: string,
-        initial?: HubOptions<ChainId>,
-    ): Promise<string[]> {
-        return []
-    }
-    getNonFungibleTokenIconURLs(
-        chainId: ChainId,
-        address: string,
-        tokenId?: string | undefined,
-        initial?: HubOptions<ChainId>,
-    ): Promise<string[]> {
-        throw new Error('Method not implemented.')
-    }
     getTransactions(
         chainId: ChainId,
         account: string,
@@ -152,5 +64,9 @@ export function createHub(
     sourceType?: SourceType,
     currencyType?: CurrencyType,
 ) {
-    return new Hub(chainId, account, sourceType, currencyType)
+    return mixin(
+        new Hub(chainId, account, sourceType, currencyType),
+        new HubFungibleClient(chainId, account, sourceType, currencyType),
+        new HubNonFungibleClient(chainId, account, sourceType, currencyType),
+    )
 }

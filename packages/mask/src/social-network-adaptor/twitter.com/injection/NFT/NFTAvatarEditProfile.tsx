@@ -1,11 +1,11 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useState, useEffect } from 'react'
-import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
-import { startWatch, createReactRootShadowed, useLocationChange } from '../../../../utils'
-import { searchEditProfileSelector } from '../../utils/selector'
-import { ConnectPersonaBoundary } from '../../../../components/shared/ConnectPersonaBoundary'
-import { PluginId } from '@masknet/plugin-infra'
+import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton.js'
+import { startWatch, createReactRootShadowed, useLocationChange } from '../../../../utils/index.js'
+import { searchEditProfileSelector } from '../../utils/selector.js'
+import { ConnectPersonaBoundary } from '../../../../components/shared/ConnectPersonaBoundary.js'
+import { PluginID } from '@masknet/plugin-infra'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
@@ -73,13 +73,13 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     const clickHandler = () => {
         CrossIsolationMessages.events.requestOpenApplication.sendToLocal({
             open: true,
-            application: PluginId.Avatar,
+            application: PluginID.Avatar,
         })
     }
 
     const { classes } = useStyles(style)
     return (
-        <ConnectPersonaBoundary handlerPosition="top-right" customHint directTo={PluginId.Avatar}>
+        <ConnectPersonaBoundary handlerPosition="top-right" customHint directTo={PluginID.Avatar}>
             <NFTAvatarButton classes={{ root: classes.root, text: classes.text }} onClick={clickHandler} />
         </ConnectPersonaBoundary>
     )

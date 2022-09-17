@@ -1,20 +1,20 @@
 import { memo, useEffect, useState } from 'react'
-import { useI18N } from '../../../utils'
-import { AdditionalContent } from '../AdditionalPostContent'
-import { SelectProfileDialog } from '../SelectPeopleDialog'
+import { useI18N } from '../../../utils/index.js'
+import { AdditionalContent } from '../AdditionalPostContent.js'
+import { SelectProfileDialog } from '../SelectPeopleDialog.js'
 import { makeStyles } from '@masknet/theme'
 import { Link } from '@mui/material'
 import type { TypedMessage } from '@masknet/typed-message'
 import { EMPTY_LIST, ProfileIdentifier } from '@masknet/shared-base'
-import { wrapAuthorDifferentMessage } from './authorDifferentMessage'
-import { DecryptedUI_PluginRendererWithSuggestion } from '../DecryptedPostMetadataRender'
+import { wrapAuthorDifferentMessage } from './authorDifferentMessage.js'
+import { DecryptedUI_PluginRendererWithSuggestion } from '../DecryptedPostMetadataRender.js'
 import { usePostInfo, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
-import { useRecipientsList } from '../../CompositionDialog/useRecipientsList'
+import { useRecipientsList } from '../../CompositionDialog/useRecipientsList.js'
 import { useAsyncRetry } from 'react-use'
-import Services from '../../../extension/service'
-import type { LazyRecipients } from '../../CompositionDialog/CompositionUI'
+import Services from '../../../extension/service.js'
+import type { LazyRecipients } from '../../CompositionDialog/CompositionUI.js'
 import { delay } from '@dimensiondev/kit'
-import { activatedSocialNetworkUI } from '../../../social-network'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 
 export interface DecryptPostSuccessProps {
     message: TypedMessage
@@ -68,7 +68,9 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 const DecryptPostSuccessAppendShare = memo(function DecryptPostSuccessAppendShare(
-    props: DecryptPostSuccessProps & { whoAmI: ProfileIdentifier },
+    props: DecryptPostSuccessProps & {
+        whoAmI: ProfileIdentifier
+    },
 ) {
     const { classes } = useStyles()
     const { t } = useI18N()

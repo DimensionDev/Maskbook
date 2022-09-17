@@ -7,16 +7,16 @@ import {
     PluginI18NFieldRender,
 } from '@masknet/plugin-infra/content-script'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
-import Services from '../../extension/service'
-import MaskPostExtraInfoWrapper from '../../plugins/MaskPluginWrapper'
+import Services from '../../extension/service.js'
+import { MaskPostExtraInfoWrapper } from '@masknet/shared'
 import { HTMLProps, useCallback } from 'react'
 import { Button, Skeleton, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../utils'
+import { useI18N } from '../../utils/index.js'
 import { useSubscription } from 'use-subscription'
 
-function useDisabledPlugins() {
+export function useDisabledPlugins() {
     const activated = new Set(useActivatedPluginsSNSAdaptor('any').map((x) => x.ID))
     const minimalMode = new Set(useActivatedPluginsSNSAdaptor(true).map((x) => x.ID))
     const disabledPlugins = useSubscription(registeredPlugins)

@@ -1,17 +1,19 @@
 import { Icons } from '@masknet/icons'
-import { Plugin, PluginId } from '@masknet/plugin-infra'
+import { Plugin, PluginID } from '@masknet/plugin-infra'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
 import { MaskColorVar } from '@masknet/theme'
 import { Link } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { Trans } from 'react-i18next'
-import { base } from '../base'
-import { PostTipButton, TipTaskManager } from '../components'
-import { RootContext } from '../contexts'
-import { setupStorage, storageDefaultValue } from '../storage'
-import { TipsEntranceDialog } from './TipsEntranceDialog'
+import { base } from '../base.js'
+import { TipTaskManager } from '../components/index.js'
+import { RootContext } from '../contexts/index.js'
+import { setupStorage, storageDefaultValue } from '../storage/index.js'
+import { TipsEntranceDialog } from './TipsEntranceDialog.js'
 import { CrossIsolationMessages } from '@masknet/shared-base'
+import { TipsRealmContent } from './components/TipsRealmContent/index.js'
+import { TipsSetting } from './TipsSetting.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -27,7 +29,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 category: 'dapp',
                 description: (
                     <Trans
-                        ns={PluginId.Tips}
+                        ns={PluginID.Tips}
                         i18nKey="description"
                         components={{
                             Link: (
@@ -47,7 +49,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
 
                     useEffect(() => {
                         return CrossIsolationMessages.events.requestOpenApplication.on(({ open, application }) => {
-                            if (application !== PluginId.Tips) return
+                            if (application !== PluginID.Tips) return
                             setOpen(open)
                         })
                     }, [])
@@ -81,9 +83,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ],
     SettingTabs: [
         {
-            ID: PluginId.Tips,
+            ID: PluginID.Tips,
             label: 'Tips',
             priority: 1,
+            UI: {
+                TabContent: TipsSetting,
+            },
         },
     ],
     GlobalInjection() {
@@ -93,12 +98,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
             </RootContext>
         )
     },
-    PostActions() {
-        return (
-            <RootContext>
-                <PostTipButton />
-            </RootContext>
-        )
+    TipsRealm: {
+        ID: `${base.ID}_tips`,
+        priority: 1,
+        UI: {
+            Content: TipsRealmContent,
+        },
     },
 }
 

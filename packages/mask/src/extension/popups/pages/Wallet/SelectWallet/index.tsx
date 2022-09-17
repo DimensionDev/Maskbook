@@ -5,10 +5,10 @@ import { makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { Button, List, Typography } from '@mui/material'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { useI18N } from '../../../../../utils'
-import Services from '../../../../service'
-import { WalletItem } from './WalletItem'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages.js'
+import { useI18N } from '../../../../../utils/index.js'
+import Services from '../../../../service.js'
+import { WalletItem } from './WalletItem.js'
 import {
     useAccount,
     useChainIdValid,

@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { useMaskBoxContract } from './useMaskBoxContract'
+import { useMaskBoxContract } from './useMaskBoxContract.js'
 
 export function useMaskBoxPurchasedTokens(id: string | number, customer: string) {
     const maskBoxContract = useMaskBoxContract()

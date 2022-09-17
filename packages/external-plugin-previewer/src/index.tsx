@@ -1,10 +1,10 @@
 /// <reference path="./global.d.ts" />
 import { create } from 'ef.js'
 import { useContext, useEffect, useState } from 'react'
-import './DOMImpl'
-import { RenderContext } from './RenderContext'
+import './DOMImpl.js'
+import { RenderContext } from './RenderContext.js'
 
-export * from './RenderContext'
+export * from './RenderContext.js'
 
 export function MaskExternalPluginPreviewRenderer({ pluginBase, payload, script, template, onError }: RenderData) {
     const [dom, setDOM] = useState<HTMLDivElement | null>(null)

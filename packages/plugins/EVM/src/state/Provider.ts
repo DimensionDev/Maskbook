@@ -14,7 +14,7 @@ import {
     getDefaultNetworkType,
     getDefaultProviderType,
 } from '@masknet/web3-shared-evm'
-import { Providers } from './Connection/provider'
+import { Providers } from './Connection/provider.js'
 import { mapSubscription, mergeSubscription } from '@masknet/shared-base'
 
 export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, Web3Provider, Web3> {

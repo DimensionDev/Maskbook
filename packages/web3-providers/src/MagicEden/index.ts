@@ -9,12 +9,13 @@ import {
     NonFungibleTokenContract,
     OrderSide,
     TokenType,
-    resolveIPFSLink,
-    resolveCORSLink,
+    resolveIPFS_URL,
+    resolveCrossOriginURL,
+    SourceType,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-solana'
-import type { NonFungibleTokenAPI } from '../types'
-import { MAGIC_EDEN_API_URL } from './constants'
+import type { NonFungibleTokenAPI } from '../types/index.js'
+import { MAGIC_EDEN_API_URL } from './constants.js'
 import type {
     Auction,
     MagicEdenCollection as Collection,
@@ -22,12 +23,12 @@ import type {
     MagicEdenToken,
     TokenActivity,
     WalletOffer,
-} from './types'
+} from './types.js'
 
 async function fetchFromMagicEden<T>(chainId: ChainId, path: string) {
     if (chainId !== ChainId.Mainnet) return
     try {
-        const url = resolveCORSLink(urlcat(MAGIC_EDEN_API_URL, path))!
+        const url = resolveCrossOriginURL(urlcat(MAGIC_EDEN_API_URL, path))!
         const response = await fetch(url, {
             method: 'GET',
             headers: { Accept: 'application/json' },
@@ -147,7 +148,9 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
     async getAssets(owner: string, { chainId = ChainId.Mainnet, indicator }: HubOptions<ChainId> = {}) {
         if ((indicator?.index ?? 0) > 0) return createPageable(EMPTY_LIST, createIndicator(indicator))
 
-        const response = await fetchFromMagicEden<{ results: MagicEdenNFT[] }>(
+        const response = await fetchFromMagicEden<{
+            results: MagicEdenNFT[]
+        }>(
             chainId,
             urlcat('/rpc/getNFTsByOwner/:owner', {
                 owner,
@@ -168,8 +171,8 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                     chainId,
                     name: token?.title,
                     symbol: '',
-                    imageURL: resolveIPFSLink(token.img),
-                    mediaURL: resolveIPFSLink(token.img),
+                    imageURL: resolveIPFS_URL(token.img),
+                    mediaURL: resolveIPFS_URL(token.img),
                     owner: token.owner,
                 },
                 contract: {
@@ -234,6 +237,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                 },
                 quantity: '1',
                 type: '',
+                source: SourceType.MagicEden,
             }
         })
         return createPageable(
@@ -267,6 +271,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
                 quantity: '1',
                 // TODO's
                 assetPermalink: '',
+                source: SourceType.MagicEden,
             }
         })
         return createPageable(
@@ -294,7 +299,7 @@ export class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, Schem
             slug: collection.symbol,
             address: '',
             symbol: collection.symbol,
-            iconURL: resolveIPFSLink(collection.image),
+            iconURL: resolveIPFS_URL(collection.image),
         }))
 
         return createPageable(

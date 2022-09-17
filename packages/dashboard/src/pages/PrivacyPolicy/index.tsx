@@ -1,5 +1,5 @@
-import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout'
-import { useLanguage } from '../Settings/api'
+import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout.js'
+import { useLanguage } from '../Settings/api.js'
 import { styled } from '@mui/material/styles'
 
 const IFrame = styled('iframe')(

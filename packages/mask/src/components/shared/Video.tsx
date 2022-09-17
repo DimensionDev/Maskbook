@@ -1,7 +1,7 @@
 import { Skeleton, SkeletonProps } from '@mui/lab'
 import { forwardRef, useMemo, useRef } from 'react'
 import { useAsync } from 'react-use'
-import Services from '../../extension/service'
+import Services from '../../extension/service.js'
 
 export interface VideoRef {
     video?: HTMLVideoElement | null

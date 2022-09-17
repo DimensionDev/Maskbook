@@ -1,6 +1,6 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { defer } from '@dimensiondev/kit'
-import { MaskMessages } from '../messages'
+import { MaskMessages } from '../messages.js'
 
 /** @deprecated */
 export type InternalSettings<T> = ValueRef<T> & {
@@ -128,7 +128,10 @@ export function createGlobalSettings(key: string, defaultValue: any): InternalSe
 
 /** @deprecated */
 export interface NetworkSettings<T> {
-    [networkKey: string]: ValueRef<T> & { ready: boolean; readyPromise: Promise<T> }
+    [networkKey: string]: ValueRef<T> & {
+        ready: boolean
+        readyPromise: Promise<T>
+    }
 }
 
 /**

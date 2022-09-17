@@ -1,5 +1,5 @@
-import { createTransaction } from '../utils/openDB'
-import { createAvatarDBAccess, deleteAvatarsDB, IdentifierWithAvatar, queryAvatarOutdatedDB } from './db'
+import { createTransaction } from '../utils/openDB.js'
+import { createAvatarDBAccess, deleteAvatarsDB, IdentifierWithAvatar, queryAvatarOutdatedDB } from './db.js'
 
 export async function cleanAvatarDB(anotherList: Set<IdentifierWithAvatar>) {
     const t = createTransaction(await createAvatarDBAccess(), 'readwrite')('avatars', 'metadata')

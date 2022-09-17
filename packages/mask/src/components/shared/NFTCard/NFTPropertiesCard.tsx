@@ -1,9 +1,8 @@
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import type { Web3Helper } from '@masknet/plugin-infra/src/web3-helpers'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import { NFTRank } from './NFTRank'
-import { useI18N } from '../../../utils'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import { NFTRank } from './NFTRank.js'
+import { useI18N } from '../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -26,7 +25,7 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '24px',
         fontWeight: 700,
         marginBottom: 12,
-        color: theme.palette.maskColor.publicMain,
+        color: theme.palette.maskColor.main,
     },
     content: {
         width: '100%',
@@ -42,24 +41,28 @@ const useStyles = makeStyles()((theme) => ({
         gap: 8,
         fontSize: 14,
         lineHeight: '18px',
-        color: theme.palette.maskColor.publicMain,
+        color: theme.palette.maskColor.main,
         fontWeight: 700,
         marginBottom: 12,
-        // there is no public bg, have to hardcode
-        background: '#F9F9F9',
+        background: theme.palette.maskColor.bg,
         borderRadius: 8,
         boxSizing: 'border-box',
     },
-    traitsTitle: {
+    traitTitle: {
         fontWeight: 400,
-        color: theme.palette.maskColor.publicMain,
+        color: theme.palette.maskColor.second,
+    },
+    traitValue: {
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
     },
     unset: {
         color: 'unset',
     },
 }))
 interface NFTPropertiesCardProps {
-    asset: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
+    asset: Web3Helper.NonFungibleAssetScope<void>
     rank?: number
     timeline?: boolean
 }
@@ -84,8 +87,10 @@ export function NFTPropertiesCard(props: NFTPropertiesCardProps) {
                 {asset.traits?.map((x) => {
                     return (
                         <div key={x.type} className={classes.traitsItem}>
-                            <Typography className={classes.traitsTitle}>{x.type}</Typography>
-                            <Typography>{x.value}</Typography>
+                            <Typography className={classes.traitTitle}>{x.type}</Typography>
+                            <Typography className={classes.traitValue} title={x.value}>
+                                {x.value}
+                            </Typography>
                             <Typography>({x.rarity ?? '-%'})</Typography>
                         </div>
                     )

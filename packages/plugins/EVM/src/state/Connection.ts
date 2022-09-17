@@ -15,7 +15,7 @@ import type {
     Web3,
     Web3Provider,
 } from '@masknet/web3-shared-evm'
-import { createConnection } from './Connection/connection'
+import { createConnection } from './Connection/connection.js'
 
 export class Connection extends ConnectionState<
     ChainId,

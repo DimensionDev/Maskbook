@@ -13,12 +13,12 @@ import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
-import { useI18N } from '../locales'
-import { META_KEY } from '../constants'
-import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI'
-import { PluginReferralMessages, SelectTokenUpdated, ReferralRPC } from '../messages'
-import { getRequiredChainId } from '../helpers'
-import { singAndPostProofOfRecommendationOrigin } from './utils/proofOfRecommendation'
+import { useI18N } from '../locales/index.js'
+import { META_KEY } from '../constants.js'
+import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
+import { PluginReferralMessages, SelectTokenUpdated, ReferralRPC } from '../messages.js'
+import { getRequiredChainId } from '../helpers/index.js'
+import { singAndPostProofOfRecommendationOrigin } from './utils/proofOfRecommendation.js'
 import {
     ReferralMetaData,
     TabsReferAndBuy,
@@ -26,16 +26,16 @@ import {
     PageInterface,
     PagesType,
     FungibleTokenDetailed,
-} from '../types'
+} from '../types.js'
 
-import { MyRewards } from './MyRewards'
-import { TokenSelectField } from './shared-ui/TokenSelectField'
-import { RewardDataWidget } from './shared-ui/RewardDataWidget'
-import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { MyRewards } from './MyRewards/index.js'
+import { TokenSelectField } from './shared-ui/TokenSelectField.js'
+import { RewardDataWidget } from './shared-ui/RewardDataWidget.js'
+import { SponsoredFarmIcon } from './shared-ui/icons/SponsoredFarm.js'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
-import { useTabStyles } from './styles'
+import { useTabStyles } from './styles.js'
 
 const useStyles = makeStyles()((theme) => ({
     walletStatusBox: {

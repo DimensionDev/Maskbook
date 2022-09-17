@@ -14,11 +14,11 @@ import {
 import { ChainId, SchemaType, createNativeToken } from '@masknet/web3-shared-solana'
 import { memoizePromise } from '@dimensiondev/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { CoinGeckoAPI } from '../../coingecko'
-import type { FungibleTokenAPI, TokenListBaseAPI } from '../../types'
-import { RAYDIUM_TOKEN_LIST, SPL_TOKEN_PROGRAM_ID } from '../constants'
-import { createFungibleAsset, createFungibleToken, requestRPC } from '../helpers'
-import type { GetAccountInfoResponse, GetProgramAccountsResponse, RaydiumTokenList } from '../types'
+import { CoinGeckoPriceSolanaAPI } from '../../coingecko/index.js'
+import type { FungibleTokenAPI, TokenListAPI } from '../../types/index.js'
+import { RAYDIUM_TOKEN_LIST, SPL_TOKEN_PROGRAM_ID } from '../constants.js'
+import { createFungibleAsset, createFungibleToken, requestRPC } from '../helpers.js'
+import type { GetAccountInfoResponse, GetProgramAccountsResponse, RaydiumTokenList } from '../types.js'
 
 const fetchTokenList = memoizePromise(
     async (url: string): Promise<Array<FungibleToken<ChainId, SchemaType>>> => {
@@ -47,9 +47,9 @@ const fetchTokenList = memoizePromise(
 )
 
 export class SolanaFungibleAPI
-    implements TokenListBaseAPI.Provider<ChainId, SchemaType>, FungibleTokenAPI.Provider<ChainId, SchemaType>
+    implements TokenListAPI.Provider<ChainId, SchemaType>, FungibleTokenAPI.Provider<ChainId, SchemaType>
 {
-    private coingecko = new CoinGeckoAPI()
+    private coingecko = new CoinGeckoPriceSolanaAPI()
 
     private async getSplTokenList(chainId: ChainId, account: string) {
         const data = await requestRPC<GetProgramAccountsResponse>(chainId, {
@@ -73,7 +73,7 @@ export class SolanaFungibleAPI
             ],
         })
         if (!data.result?.length) return []
-        const tokenList = await this.getFungibleTokens(chainId, [])
+        const tokenList = await this.getFungibleTokenList(chainId, [])
         const splTokens: Array<FungibleAsset<ChainId, SchemaType>> = []
         data.result.forEach((x) => {
             const info = x.account.data.parsed.info
@@ -92,8 +92,9 @@ export class SolanaFungibleAPI
     }
 
     async getAsset(account: string, { chainId = ChainId.Mainnet }: HubOptions<ChainId, HubIndicator> = {}) {
-        const priceData = await this.coingecko.getTokensPrice(['solana'])
-        const price = priceData.solana
+        const price = await this.coingecko.getFungibleTokenPrice(chainId, 'solana', {
+            currencyType: CurrencyType.USD,
+        })
 
         const data = await requestRPC<GetAccountInfoResponse>(chainId, {
             method: 'getAccountInfo',
@@ -121,14 +122,14 @@ export class SolanaFungibleAPI
         return createPageable(assets as Array<FungibleAsset<ChainId, SchemaType>>, createIndicator(indicator))
     }
 
-    async getFungibleTokens(chainId: ChainId, urls: string[]): Promise<Array<FungibleToken<ChainId, SchemaType>>> {
+    async getFungibleTokenList(chainId: ChainId, urls?: string[]): Promise<Array<FungibleToken<ChainId, SchemaType>>> {
         if (chainId !== ChainId.Mainnet) return EMPTY_LIST
         return fetchTokenList(RAYDIUM_TOKEN_LIST)
     }
 
-    async getNonFungibleTokens(
+    async getNonFungibleTokenList(
         chainId: ChainId,
-        urls: string[],
+        urls?: string[],
     ): Promise<Array<NonFungibleToken<ChainId, SchemaType>>> {
         return EMPTY_LIST
     }

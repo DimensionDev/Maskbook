@@ -1,9 +1,9 @@
 import { memo } from 'react'
 import { Button, styled, FilledInput, Tab } from '@mui/material'
 import { makeStyles, ButtonGroupTabList, useTabs } from '@masknet/theme'
-import { DesktopMnemonicConfirm } from '../../../../components/Mnemonic'
-import { MaskAlert } from '../../../../components/MaskAlert'
-import { useDashboardI18N } from '../../../../locales'
+import { DesktopMnemonicConfirm } from '../../../../components/Mnemonic/index.js'
+import { MaskAlert } from '../../../../components/MaskAlert/index.js'
+import { useDashboardI18N } from '../../../../locales/index.js'
 import { TabContext, TabPanel } from '@mui/lab'
 
 const Container = styled('div')`

@@ -1,3 +1,3 @@
-export * from './InjectedDialog'
-export * from './SelectFungibleTokenDialog'
-export * from './SelectGasSettingsDialog'
+export * from './InjectedDialog.js'
+export * from './SelectFungibleTokenDialog.js'
+export * from './SelectGasSettingsDialog.js'

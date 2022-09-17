@@ -1,6 +1,6 @@
 import type { FungibleToken, NonFungibleToken } from '@masknet/web3-shared-base'
 
-export namespace TokenListBaseAPI {
+export namespace TokenListAPI {
     export interface Token<ChainId> {
         chainId: ChainId
         address: string
@@ -28,10 +28,10 @@ export namespace TokenListBaseAPI {
     }
 
     export interface Provider<ChainId, SchemaType> {
-        getFungibleTokens: (chainId: ChainId, urls: string[]) => Promise<Array<FungibleToken<ChainId, SchemaType>>>
-        getNonFungibleTokens: (
+        getFungibleTokenList?: (chainId: ChainId, urls?: string[]) => Promise<Array<FungibleToken<ChainId, SchemaType>>>
+        getNonFungibleTokenList?: (
             chainId: ChainId,
-            urls: string[],
+            urls?: string[],
         ) => Promise<Array<NonFungibleToken<ChainId, SchemaType>>>
     }
 }

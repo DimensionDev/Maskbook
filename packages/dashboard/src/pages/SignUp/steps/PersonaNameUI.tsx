@@ -7,12 +7,12 @@ import {
     Footer,
     PersonaLogoBox,
     SignUpAccountLogo,
-} from '../../../components/RegisterFrame/ColumnContentLayout'
+} from '../../../components/RegisterFrame/ColumnContentLayout.js'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
+import { Header } from '../../../components/RegisterFrame/ColumnContentHeader.js'
 import { Box, Button, Typography } from '@mui/material'
-import { useDashboardI18N } from '../../../locales'
-import { ButtonContainer } from '../../../components/RegisterFrame/ButtonContainer'
+import { useDashboardI18N } from '../../../locales/index.js'
+import { ButtonContainer } from '../../../components/RegisterFrame/ButtonContainer.js'
 
 const Label = ({ value }: { value: string }) => (
     <Typography

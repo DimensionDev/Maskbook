@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box } from '@mui/material'
 import classNames from 'classnames'
-import Drag from './Drag'
-import ModelView from './ModelView'
-import { useStyles as boxUseStyles } from './PreviewBox'
-import { DragIcon } from '../constants'
-import type { ShowMeta } from '../types'
-import RightMenu from './RightMenu'
+import Drag from './Drag.js'
+import ModelView from './ModelView.js'
+import { useStyles as boxUseStyles } from './PreviewBox.js'
+import { DragIcon } from '../constants.js'
+import type { ShowMeta } from '../types.js'
+import RightMenu from './RightMenu.js'
 
 const useStyles = makeStyles()(() => ({
     dragContent: {

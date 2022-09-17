@@ -1,14 +1,14 @@
-import { Plugin, PluginId } from '@masknet/plugin-infra'
-import { base } from '../base'
-import { TraderDialog } from './trader/TraderDialog'
-import { SearchResultInspector } from './trending/SearchResultInspector'
+import { Plugin, PluginID } from '@masknet/plugin-infra'
+import { base } from '../base.js'
+import { TraderDialog } from './trader/TraderDialog.js'
+import { SearchResultInspector } from './trending/SearchResultInspector.js'
 import { Trans } from 'react-i18next'
-import { TagInspector } from './trending/TagInspector'
-import { enhanceTag } from './cashTag'
+import { TagInspector } from './trending/TagInspector.js'
+import { enhanceTag } from './cashTag.js'
 import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
-import { setupStorage, storageDefaultValue } from '../storage'
+import { setupStorage, storageDefaultValue } from '../storage/index.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
 const sns: Plugin.SNSAdaptor.Definition<
@@ -30,7 +30,7 @@ const sns: Plugin.SNSAdaptor.Definition<
         setupStorage(context.createKVStorage('persistent', storageDefaultValue))
     },
     SearchResultBox: {
-        ID: PluginId.Trader,
+        ID: PluginID.Trader,
         UI: {
             Content: SearchResultInspector,
         },

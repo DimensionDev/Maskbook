@@ -1,8 +1,8 @@
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { APP_URL, COMMUNITY_URL } from '../constants'
-import type { Pool } from '../types'
+import { APP_URL, COMMUNITY_URL } from '../constants.js'
+import type { Pool } from '../types.js'
 
 export function usePoolURL(pool: Pool) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)

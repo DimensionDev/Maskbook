@@ -1,6 +1,6 @@
-import { CircularProgress } from '@mui/material'
+import { LoadingBase } from '@masknet/theme'
 import { ImgHTMLAttributes, useState, SyntheticEvent } from 'react'
-import { DefaultIcon } from '../constants'
+import { DefaultIcon } from '../constants.js'
 
 export function ImageLoader(props: ImgHTMLAttributes<HTMLImageElement>) {
     const [loaded, setLoaded] = useState(false)
@@ -15,7 +15,7 @@ export function ImageLoader(props: ImgHTMLAttributes<HTMLImageElement>) {
                 onError={onErrorHandle}
                 style={{ display: loaded || !props.src ? 'block' : 'none' }}
             />
-            {!loaded && Boolean(props.src) ? <CircularProgress size={20} /> : null}
+            {!loaded && Boolean(props.src) ? <LoadingBase size={20} /> : null}
         </>
     )
 }

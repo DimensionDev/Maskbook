@@ -1,11 +1,12 @@
-import { PluginId } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/plugin-infra'
+import { SourceType } from '@masknet/web3-shared-base'
 
 export const PLUGIN_NAME = 'Collectibles'
 export const PLUGIN_DESCRIPTION = 'An NFT collectible viewer.'
 export const PLUGIN_WRAPPER_TITLE = 'NFT'
 
-export const PLUGIN_ID = PluginId.Collectible
-export const PLUGIN_META_KEY = `${PluginId.Collectible}:1`
+export const PLUGIN_ID = PluginID.Collectible
+export const PLUGIN_META_KEY = `${PluginID.Collectible}:1`
 
 export const openseaHostnames = ['opensea.io', 'testnets.opensea.io']
 export const openseaPathnameRegexMatcher = /^\/assets\/(?:ethereum\/)?(0x[\dA-Fa-f]{40})\/(\d+)/
@@ -23,3 +24,14 @@ export const OpenSeaTestnetURL = 'https://testnets.opensea.io'
 export const RaribleUserURL = 'https://rarible.com/user/'
 export const RaribleRopstenUserURL = 'https://ropsten.rarible.com/user/'
 export const RaribleRinkebyUserURL = 'https://rinkeby.rarible.com/user/'
+
+export const SupportedProvider = [
+    SourceType.Gem,
+    SourceType.NFTScan,
+    SourceType.Rarible,
+    SourceType.OpenSea,
+    // SourceType.X2Y2,
+    // SourceType.NFTScan,
+    // SourceType.Zora,
+    // SourceType.LooksRare,
+]

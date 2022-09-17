@@ -3,15 +3,15 @@ import { Tab, Tabs, Paper, Card, CardHeader, CardContent, Link, Typography, Avat
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useChainId } from '@masknet/plugin-infra/web3'
-import { useI18N } from '../../../utils'
-import { CollectionView } from './CollectionView'
-import { DetailsView } from './DetailsView'
+import { useI18N } from '../../../utils/index.js'
+import { CollectionView } from './CollectionView.js'
+import { DetailsView } from './DetailsView.js'
 import { ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
-import { useFetchProject } from '../hooks/useProject'
-import { ActionBar } from './ActionBar'
-import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes'
-import { ArtBlocksLogoUrl } from '../constants'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { useFetchProject } from '../hooks/useProject.js'
+import { ActionBar } from './ActionBar.js'
+import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes/index.js'
+import { ArtBlocksLogoUrl } from '../constants.js'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => {
             padding: '0 !important',
         },
         footer: {
-            marginTop: -1, // merge duplicate borders
+            marginTop: -1,
             zIndex: 1,
             position: 'relative',
             borderTop: `solid 1px ${theme.palette.divider}`,

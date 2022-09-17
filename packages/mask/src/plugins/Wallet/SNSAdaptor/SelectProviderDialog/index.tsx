@@ -11,11 +11,11 @@ import {
     useWeb3UI,
     Web3Helper,
 } from '@masknet/plugin-infra/web3'
-import { useI18N } from '../../../../utils/i18n-next-ui'
-import { WalletMessages } from '../../messages'
-import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc'
-import { PluginProviderRender } from './PluginProviderRender'
-import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings'
+import { useI18N } from '../../../../utils/i18n-next-ui.js'
+import { WalletMessages } from '../../messages.js'
+import { hasNativeAPI, nativeAPI } from '../../../../../shared/native-rpc/index.js'
+import { PluginProviderRender } from './PluginProviderRender.js'
+import { pluginIDSettings } from '../../../../../shared/legacy-settings/settings.js'
 import { getSiteType, isDashboardPage } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
@@ -38,11 +38,17 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const [supportedNetworkList, setSupportedNetworkList] = useState<
         Array<Web3Helper.NetworkDescriptorAll['type']> | undefined
     >()
+    const network = useNetworkDescriptor()
+    const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(network?.ID)
     // #region remote controlled dialog logic
     const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated, (ev) => {
         if (!ev.open) return
         setWalletConnectedCallback(() => ev.walletConnectedCallback)
         setSupportedNetworkList(ev.supportedNetworkList)
+        if (ev.network) {
+            setUndeterminedNetworkID(ev.network.ID)
+            setUndeterminedPluginID(ev.network.networkSupporterPluginID)
+        }
     })
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.connectWalletDialogUpdated,
@@ -60,9 +66,7 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const networks = getRegisteredWeb3Networks()
     const providers = getRegisteredWeb3Providers()
     const pluginIDs = useValueRef(pluginIDSettings)
-    const network = useNetworkDescriptor()
     const [undeterminedPluginID, setUndeterminedPluginID] = useState(site ? pluginIDs[site] : undefined)
-    const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(network?.ID)
 
     const Web3State = useWeb3State(undeterminedPluginID)
     const { Others, Provider } = Web3State

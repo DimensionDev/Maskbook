@@ -1,16 +1,16 @@
 import { useCallback } from 'react'
 import urlcat from 'urlcat'
-import { Box, Card, Typography, Button, Avatar, CircularProgress, useTheme } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { Box, Card, Typography, Button, Avatar, useTheme } from '@mui/material'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import QueryBuilderIcon from '@mui/icons-material/QueryBuilder'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
-import { useI18N as useBaseI18N } from '../../../utils'
-import { useI18N } from '../locales'
-import { useGrant } from '../hooks/useGrant'
-import { PluginGitcoinMessages } from '../messages'
-import { usePostLink } from '../../../components/DataSource/usePostInfo'
-import { ChainBoundary } from '../../../web3/UI/ChainBoundary'
+import { useI18N as useBaseI18N } from '../../../utils/index.js'
+import { useI18N } from '../locales/index.js'
+import { useGrant } from '../hooks/useGrant.js'
+import { PluginGitcoinMessages } from '../messages.js'
+import { usePostLink } from '../../../components/DataSource/usePostInfo.js'
+import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 
@@ -106,7 +106,7 @@ export function PreviewCard(props: PreviewCardProps) {
     if (loading)
         return (
             <Typography color="textPrimary" textAlign="center" sx={{ padding: 2 }}>
-                <CircularProgress />
+                <LoadingBase />
             </Typography>
         )
     if (error)

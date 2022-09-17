@@ -31,7 +31,7 @@
     "@masknet/icons": "workspace:*",
     "@masknet/shared-base": "workspace:*",
     "@masknet/storybook-shared": "workspace:*",
-    "@types/qrcode": "^1.4.2",
+    "@types/qrcode": "^1.5.0",
     "@types/tinycolor2": "^1.4.3",
     "classnames": "^2.3.1",
     "fuse.js": "^6.6.2",
@@ -44,13 +44,13 @@
     "use-subscription": "1.6.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.18.9",
-    "@storybook/addon-actions": "^6.5.9",
-    "@storybook/addon-essentials": "^6.5.9",
-    "@storybook/addon-links": "^6.5.9",
-    "@storybook/builder-webpack5": "^6.5.9",
-    "@storybook/manager-webpack5": "^6.5.9",
-    "@storybook/react": "^6.5.9",
+    "@babel/core": "^7.19.0",
+    "@storybook/addon-actions": "^6.5.10",
+    "@storybook/addon-essentials": "^6.5.10",
+    "@storybook/addon-links": "^6.5.10",
+    "@storybook/builder-webpack5": "^6.5.10",
+    "@storybook/manager-webpack5": "^6.5.10",
+    "@storybook/react": "^6.5.10",
     "@types/react-window": "^1.8.4",
     "babel-loader": "^8.2.5"
   }

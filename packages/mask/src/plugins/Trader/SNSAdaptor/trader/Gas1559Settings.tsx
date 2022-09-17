@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { I18NFunction, useI18N } from '../../../../utils'
+import { I18NFunction, useI18N } from '../../../../utils/index.js'
 import { Accordion, AccordionDetails, AccordionSummary, Box, TextField, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, ActionButton } from '@masknet/theme'
 import { formatGweiToWei, GasOptionConfig } from '@masknet/web3-shared-evm'
@@ -24,7 +24,9 @@ import {
 import { isDashboardPage } from '@masknet/shared-base'
 import { useGasOptions } from '@masknet/plugin-infra/web3'
 
-const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
+const useStyles = makeStyles<{
+    isDashboard: boolean
+}>()((theme, { isDashboard }) => ({
     option: {
         display: 'flex',
         flexDirection: 'column',

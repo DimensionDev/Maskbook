@@ -1,5 +1,5 @@
-import SettingButton from './SettingButton'
-import { useDashboardI18N } from '../../../locales'
+import SettingButton from './SettingButton.js'
+import { useDashboardI18N } from '../../../locales/index.js'
 import { useNavigate } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
 

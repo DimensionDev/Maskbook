@@ -3,15 +3,13 @@
   "private": true,
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
       "webpack": "./src/index.ts",
       "default": "./dist/index.js"
     }
   },
-  "types": "./dist/index.d.ts",
   "dependencies": {
     "@bonfida/name-offers": "^0.0.1",
-    "@bonfida/spl-name-service": "^0.1.27",
+    "@bonfida/spl-name-service": "^0.1.50",
     "@masknet/icons": "workspace:*",
     "@masknet/injected-script": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",

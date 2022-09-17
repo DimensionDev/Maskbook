@@ -1,12 +1,12 @@
-import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useMemo } from 'react'
-import { CollectibleTab } from '../CollectibleTab'
-import { Button, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { CollectibleState } from '../../hooks/useCollectibleState'
+import { Button, Typography } from '@mui/material'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { NFTActivityCard, ActivityType } from '../../../../components/shared/NFTCard/NFTActivityCard'
-import { useI18N } from '../../../../utils'
+import { LoadingBase, makeStyles } from '@masknet/theme'
+import { CollectibleTab } from '../CollectibleTab.js'
+import { CollectibleState } from '../../hooks/useCollectibleState.js'
+import { NFTActivityCard, ActivityType } from '../../../../components/shared/NFTCard/NFTActivityCard.js'
+import { useI18N } from '../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     body: {

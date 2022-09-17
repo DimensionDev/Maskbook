@@ -1,8 +1,8 @@
-import SettingButton from './SettingButton'
-import { UserContext } from '../hooks/UserContext'
+import SettingButton from './SettingButton.js'
+import { UserContext } from '../hooks/UserContext.js'
 import { useContext, useState } from 'react'
-import SettingEmailDialog from './dialogs/SettingEmailDialog'
-import { useDashboardI18N } from '../../../locales'
+import SettingEmailDialog from './dialogs/SettingEmailDialog.js'
+import { useDashboardI18N } from '../../../locales/index.js'
 
 export default function EmailSetting() {
     const t = useDashboardI18N()

@@ -1,12 +1,12 @@
-import { LoadingBase, makeStyles } from '@masknet/theme'
 import { memo } from 'react'
-import { CollectibleTab } from '../CollectibleTab'
+import { LoadingBase, makeStyles } from '@masknet/theme'
+import { CollectibleTab } from '../CollectibleTab.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { Typography, Button } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { CollectibleState } from '../../hooks/useCollectibleState'
-import { NFTOfferCard } from '../../../../components/shared/NFTCard/NFTOfferCard'
-import { useI18N } from '../../../../utils'
+import { CollectibleState } from '../../hooks/useCollectibleState.js'
+import { NFTOfferCard } from '../../../../components/shared/NFTCard/NFTOfferCard.js'
+import { useI18N } from '../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     body: {
@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export const OffersTab = memo(() => {
     const { classes } = useStyles()
-    const { orders, provider } = CollectibleState.useContainer()
+    const { orders } = CollectibleState.useContainer()
     const _orders = orders.value?.data ?? EMPTY_LIST
 
     const { t } = useI18N()
@@ -59,7 +59,7 @@ export const OffersTab = memo(() => {
         <CollectibleTab>
             <div className={classes.body} style={{ justifyContent: 'unset' }}>
                 {_orders?.map((x, idx) => (
-                    <NFTOfferCard provider={provider} key={idx} offer={x} />
+                    <NFTOfferCard key={idx} offer={x} />
                 ))}
             </div>
         </CollectibleTab>

@@ -1,5 +1,5 @@
 import { Box, Checkbox, Typography, experimentalStyled as styled } from '@mui/material'
-import { useDashboardI18N } from '../../../locales'
+import { useDashboardI18N } from '../../../locales/index.js'
 import { MaskColorVar } from '@masknet/theme'
 import { useState, useEffect } from 'react'
 import type { BackupPreview } from '@masknet/backup-format'

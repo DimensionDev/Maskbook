@@ -1,9 +1,9 @@
 import { useAsyncRetry, useUpdateEffect } from 'react-use'
-import { Services } from '../../../API'
+import { Services } from '../../../API.js'
 import type { ProfileInformation, Relation, RelationFavor } from '@masknet/shared-base'
 import { useRef } from 'react'
 import { last } from 'lodash-unified'
-import { PersonaContext } from './usePersonaContext'
+import { PersonaContext } from './usePersonaContext.js'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 
 export interface Contacts extends ProfileInformation {

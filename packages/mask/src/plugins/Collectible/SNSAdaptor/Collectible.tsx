@@ -1,22 +1,21 @@
 import { Icons } from '@masknet/icons'
+import { Markdown } from '@masknet/shared'
 import { LoadingBase, makeStyles, MaskColorVar, MaskTabList, useTabs } from '@masknet/theme'
-import { resolveSourceName, SourceType } from '@masknet/web3-shared-base'
+import { resolveSourceTypeName } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { Box, Button, CardContent, CardHeader, Paper, Tab, Typography } from '@mui/material'
 import formatDateTime from 'date-fns/format'
 import isAfter from 'date-fns/isAfter'
 import isValidDate from 'date-fns/isValid'
-import { useCallback } from 'react'
-import { useI18N, useSwitcher } from '../../../utils'
-import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
-import { CollectibleState } from '../hooks/useCollectibleState'
-import { CollectiblePaper } from './CollectiblePaper'
-import { LinkingAvatar } from './LinkingAvatar'
-import { ActionBar } from './OpenSea/ActionBar'
-import { AboutTab } from './Tabs/AboutTab'
-import { ActivityTab } from './Tabs/ActivityTab'
-import { DetailTab } from './Tabs/DetailTab'
-import { OffersTab } from './Tabs/OffersTab'
+import { useI18N, useSwitcher } from '../../../utils/index.js'
+import { SupportedProvider } from '../constants.js'
+import { CollectibleState } from '../hooks/useCollectibleState.js'
+import { CollectiblePaper } from './CollectiblePaper.js'
+import { LinkingAvatar } from './LinkingAvatar.js'
+import { AboutTab } from './Tabs/AboutTab.js'
+import { ActivityTab } from './Tabs/ActivityTab.js'
+import { DetailTab } from './Tabs/DetailTab.js'
+import { OffersTab } from './Tabs/OffersTab.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -48,7 +47,7 @@ const useStyles = makeStyles()((theme) => {
             background: '#fff !important',
         },
         footer: {
-            marginTop: -1, // merge duplicate borders
+            marginTop: -1,
             zIndex: 1,
             position: 'relative',
             borderTop: `solid 1px ${theme.palette.divider}`,
@@ -125,7 +124,7 @@ const useStyles = makeStyles()((theme) => {
                 color: `${theme.palette.maskColor.publicSecond} !important`,
             },
             '& a': {
-                color: theme.palette.maskColor.publicMain,
+                color: `${theme.palette.maskColor.publicMain} !important`,
             },
         },
         cardTitle: {
@@ -137,17 +136,6 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-const supportedProvider = [
-    // to add providers, temp hide some providers
-    SourceType.OpenSea,
-    SourceType.Gem,
-    SourceType.Rarible,
-    // SourceType.X2Y2,
-    // SourceType.NFTScan,
-    // SourceType.Zora,
-    // SourceType.LooksRare,
-]
-
 export interface CollectibleProps {}
 
 export function Collectible(props: CollectibleProps) {
@@ -155,12 +143,14 @@ export function Collectible(props: CollectibleProps) {
     const { classes } = useStyles()
     const { asset, provider, setProvider } = CollectibleState.useContainer()
 
-    const onDataProviderChange = useCallback((v: SourceType) => {
-        setProvider(v)
-    }, [])
-
     // #region provider switcher
-    const CollectibleProviderSwitcher = useSwitcher(provider, setProvider, supportedProvider, resolveSourceName, true)
+    const CollectibleProviderSwitcher = useSwitcher(
+        provider,
+        setProvider,
+        SupportedProvider,
+        resolveSourceTypeName,
+        true,
+    )
     // #endregion
     const [currentTab, onChange, tabs] = useTabs('about', 'details', 'offers', 'activity')
     if (asset.loading)
@@ -182,13 +172,13 @@ export function Collectible(props: CollectibleProps) {
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
                 <Typography color={MaskColorVar.textPluginColor} sx={{ marginTop: 8, marginBottom: 8 }}>
-                    Failed to load your collectible on {resolveSourceName(provider)}.
+                    Failed to load your collectible on {resolveSourceTypeName(provider)}.
                 </Typography>
                 <Box alignItems="center" sx={{ padding: 1, display: 'flex', flexDirection: 'row', width: '100%' }}>
                     <Box sx={{ flex: 1, padding: 1 }}> {CollectibleProviderSwitcher}</Box>
                     <Box sx={{ flex: 1, padding: 1 }}>
                         <Button fullWidth onClick={() => asset.retry()} variant="roundedDark">
-                            Refresh
+                            {t('plugin_collectible_refresh')}
                         </Button>
                     </Box>
                 </Box>
@@ -199,14 +189,7 @@ export function Collectible(props: CollectibleProps) {
     const endDate = _asset.auction?.endAt
     const renderTab = () => {
         const tabMap = {
-            [tabs.about]: (
-                <AboutTab
-                    currentProvider={provider}
-                    providers={supportedProvider}
-                    onChangeProvider={onDataProviderChange}
-                    asset={asset}
-                />
-            ),
+            [tabs.about]: <AboutTab asset={asset} />,
             [tabs.details]: <DetailTab asset={asset} />,
             [tabs.offers]: <OffersTab />,
             [tabs.activity]: <ActivityTab />,
@@ -237,7 +220,7 @@ export function Collectible(props: CollectibleProps) {
                     }
                     title={
                         <Typography style={{ display: 'flex', alignItems: 'center' }}>
-                            <Typography className={classes.cardTitle}>{_asset.metadata?.name || '-'}</Typography>
+                            <span className={classes.cardTitle}>{_asset.metadata?.name || '-'}</span>
                             {_asset.collection?.verified ? <Icons.VerifiedCollection sx={{ marginLeft: 0.5 }} /> : null}
                         </Typography>
                     }
@@ -281,7 +264,6 @@ export function Collectible(props: CollectibleProps) {
                     </Typography>
                 </Box>
             )}
-            <ActionBar />
         </>
     )
 }

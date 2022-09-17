@@ -1,15 +1,15 @@
 import { memo, useCallback, useMemo } from 'react'
-import BigNumber from 'bignumber.js'
 import { Link, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import { formatBalance, FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
-import { TokenIcon } from '../TokenIcon'
+import { TokenIcon } from '../TokenIcon/index.js'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskLoadingButton, LoadingBase } from '@masknet/theme'
-import { useSharedI18N } from '../../../locales'
+import { useSharedI18N } from '../../../locales/index.js'
 import { useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
-import { TokenListMode } from './type'
-import { SettingSwitch } from '../SettingSwitch'
-import { useTokenBlocked, useTokenTrusted } from './useTokenBlocked'
+import { TokenListMode } from './type.js'
+import { SettingSwitch } from '../SettingSwitch/index.js'
+import { useTokenBlocked, useTokenTrusted } from './useTokenBlocked.js'
+import { FormattedBalance } from '../../../wallet/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -170,7 +170,12 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                     {balance === undefined ? (
                         <LoadingBase size={24} />
                     ) : (
-                        Number.parseFloat(new BigNumber(formatBalance(balance ?? 0, decimals, 6)).toFixed(6))
+                        <FormattedBalance
+                            value={balance}
+                            decimals={decimals}
+                            significant={6}
+                            formatter={formatBalance}
+                        />
                     )}
                 </Typography>
             ) : (

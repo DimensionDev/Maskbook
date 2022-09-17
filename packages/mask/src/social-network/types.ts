@@ -15,7 +15,8 @@ import type { RenderFragmentsContextType } from '@masknet/typed-message/dom'
 import type { SharedComponentOverwrite } from '@masknet/shared'
 import type { PaletteMode, Theme } from '@mui/material'
 import type { Subscription } from 'use-subscription'
-import type { createSNSAdaptorSpecializedPostContext } from './utils/create-post-context'
+import type { createSNSAdaptorSpecializedPostContext } from './utils/create-post-context.js'
+import type { SocialIdentity } from '@masknet/web3-shared-base'
 
 export declare namespace SocialNetwork {
     export interface Utils {
@@ -26,6 +27,7 @@ export declare namespace SocialNetwork {
         /** Handle share */
         share?(text: string): void
         createPostContext: ReturnType<typeof createSNSAdaptorSpecializedPostContext>
+        getUserIdentity?(useId: string): Promise<SocialIdentity | undefined>
     }
     export interface Shared {
         utils: Utils
@@ -55,7 +57,9 @@ export namespace SocialNetworkUI {
          * @returns the completion definition of this SNS
          * @example load: () => import('./full-definition')
          */
-        load(): Promise<{ default: Definition }>
+        load(): Promise<{
+            default: Definition
+        }>
         /**
          * On Hot Module Reload. When call the callback, it will unload the current instance and load the new one.
          */
@@ -124,14 +128,13 @@ export namespace SocialNetworkUI {
             /** @deprecated same reason as userAvatar */
             profileAvatar?(signal: AbortSignal): void
             /** @deprecated same reason as userAvatar */
-            profileTip?(signal: AbortSignal): void
-            /** @deprecated same reason as userAvatar */
             openNFTAvatar?(signal: AbortSignal): void
             /** @deprecated same reason as userAvatar */
             postAndReplyNFTAvatar?(signal: AbortSignal): void
             /** @deprecated same reason as useAvatar */
             avatarClipNFT?(signal: AbortSignal): void
             avatar?(signal: AbortSignal): void
+            tips?(signal: AbortSignal): void
             profileCard?(signal: AbortSignal): void
         }
         export interface NewPostComposition {

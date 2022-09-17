@@ -99,7 +99,7 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
     if (type === 'plugin') {
         const NormativeName = upperFirst(camelCase(path.split('/').at(-1)))
         await changeFile.typescript(resolve(packagePath, 'src/constants.ts'), (content) =>
-            content.replace('PluginId.Example', `PluginId.${NormativeName}`),
+            content.replace('PluginID.Example', `PluginID.${NormativeName}`),
         )
         /**
          * .i18n-codegen.json

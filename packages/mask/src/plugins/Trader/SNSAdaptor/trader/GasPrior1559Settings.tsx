@@ -1,7 +1,7 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { formatGweiToEther, formatGweiToWei, formatWeiToGwei, GasOptionConfig } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../../../utils/index.js'
 import { Accordion, AccordionDetails, AccordionSummary, Box, TextField, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, ActionButton } from '@masknet/theme'
 import classnames from 'classnames'
@@ -12,7 +12,9 @@ import { isDashboardPage } from '@masknet/shared-base'
 import { useChainId, useFungibleToken, useGasOptions, useNativeTokenPrice } from '@masknet/plugin-infra/web3'
 import { GasOptionType, NetworkPluginID } from '@masknet/web3-shared-base'
 
-const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
+const useStyles = makeStyles<{
+    isDashboard: boolean
+}>()((theme, { isDashboard }) => ({
     container: {
         display: 'grid',
         gridTemplateColumns: 'repeat(3, 1fr)',

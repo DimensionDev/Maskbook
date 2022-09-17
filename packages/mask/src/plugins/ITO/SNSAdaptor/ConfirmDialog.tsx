@@ -7,16 +7,16 @@ import {
     SchemaType,
     ChainId,
 } from '@masknet/web3-shared-evm'
-import { formatBalance, FungibleToken, NetworkPluginID, ONE } from '@masknet/web3-shared-base'
+import { formatBalance, FungibleToken, leftShift, NetworkPluginID, ONE } from '@masknet/web3-shared-base'
 import { Grid, IconButton, Link, Paper, Typography, Box } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import LaunchIcon from '@mui/icons-material/Launch'
 import RepeatIcon from '@mui/icons-material/Repeat'
 import formatDateTime from 'date-fns/format'
 import { Fragment, useCallback, useState, useEffect } from 'react'
-import { PluginWalletStatusBar, useI18N } from '../../../utils'
-import type { PoolSettings } from './hooks/useFill'
-import { decodeRegionCode, regionCodes } from './hooks/useRegion'
+import { PluginWalletStatusBar, useI18N } from '../../../utils/index.js'
+import type { PoolSettings } from './hooks/useFill.js'
+import { decodeRegionCode, regionCodes } from './hooks/useRegion.js'
 import { useChainId } from '@masknet/plugin-infra/web3'
 
 const useSwapItemStyles = makeStyles()({
@@ -39,7 +39,7 @@ function SwapItem(props: SwapItemProps) {
     const { classes } = useSwapItemStyles()
     const { t } = useI18N()
 
-    const amount_ = formatBalance(swapAmount || '0', swap?.decimals)
+    const amount_ = leftShift(swapAmount || '0', swap?.decimals)
 
     return (
         <div className={classes.root}>
@@ -47,7 +47,7 @@ function SwapItem(props: SwapItemProps) {
                 {t('plugin_ito_swap_title', {
                     swap: exchange ? swap?.symbol : token?.symbol,
                     token: exchange ? token?.symbol : swap?.symbol,
-                    amount: exchange ? ONE.dividedBy(amount_).toFixed() : amount_,
+                    amount: exchange ? ONE.dividedBy(amount_).toFixed() : amount_.toFixed(),
                 })}
             </Typography>
             <div onClick={() => setExchange(!exchange)}>

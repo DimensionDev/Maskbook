@@ -1,8 +1,8 @@
 import createEmotionCache, { type EmotionCache } from '@emotion/cache'
 import { CacheProvider as EmotionCacheProvider } from '@emotion/react'
 import { TssCacheProvider } from 'tss-react'
-import { StyleSheet } from './ShadowRootStyleSheet'
-import { StyleSheetsContext } from './Contexts'
+import { StyleSheet } from './ShadowRootStyleSheet.js'
+import { StyleSheetsContext } from './Contexts.js'
 
 /** @internal */
 export interface ShadowRootStyleProviderProps extends React.PropsWithChildren<{}> {

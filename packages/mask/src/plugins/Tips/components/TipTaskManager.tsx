@@ -1,9 +1,9 @@
 import { FC, useCallback, useEffect, useState } from 'react'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { TipTaskProvider } from '../contexts'
-import { PluginNextIDMessages } from '../messages'
-import type { TipTask } from '../types'
-import { TipDialog } from './TipDialog'
+import { TipTaskProvider } from '../contexts/index.js'
+import { PluginNextIDMessages } from '../messages.js'
+import type { TipTask } from '../types/index.js'
+import { TipDialog } from './TipDialog.js'
 
 let id = 0
 

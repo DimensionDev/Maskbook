@@ -2,7 +2,7 @@ import ITO_ABI from '@masknet/web3-contracts/abis/ITO.json'
 import ITO2_ABI from '@masknet/web3-contracts/abis/ITO2.json'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { Interface } from '@ethersproject/abi'
-import type { Availability } from '../../types'
+import type { Availability } from '../../types.js'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 

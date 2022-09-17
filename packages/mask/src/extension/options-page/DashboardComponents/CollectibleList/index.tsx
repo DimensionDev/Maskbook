@@ -16,10 +16,10 @@ import {
 import { Box, Button, Stack, styled, Tooltip, Typography } from '@mui/material'
 import { differenceWith, uniqBy } from 'lodash-unified'
 import { createContext, useEffect, useMemo, useState } from 'react'
-import { useI18N } from '../../../../utils'
-import { CollectibleItem } from './CollectibleItem'
-import { CollectionIcon } from './CollectionIcon'
-import { LoadingSkeleton } from './LoadingSkeleton'
+import { useI18N } from '../../../../utils/index.js'
+import { CollectibleItem } from './CollectibleItem.js'
+import { CollectionIcon } from './CollectionIcon.js'
+import { LoadingSkeleton } from './LoadingSkeleton.js'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void

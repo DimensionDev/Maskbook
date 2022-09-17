@@ -1,6 +1,6 @@
-import { FindTrumanContext } from '../context'
-import { LoadingFailCard } from './LoadingFailCard'
-import { FindTruman } from './FindTruman'
+import { FindTrumanContext } from '../context.js'
+import { LoadingFailCard } from './LoadingFailCard.js'
+import { FindTruman } from './FindTruman.js'
 import {
     CompletionQuestionAnswer,
     PollResult,
@@ -10,7 +10,7 @@ import {
     UserCompletionStatus,
     UserPollStatus,
     UserStoryStatus,
-} from '../types'
+} from '../types.js'
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { useEffect, useState } from 'react'
 import {
@@ -24,9 +24,9 @@ import {
     submitCompletion,
     submitPoll,
     submitPuzzle,
-} from '../Worker/apis'
+} from '../Worker/apis/index.js'
 import getUnixTime from 'date-fns/getUnixTime'
-import { useConst } from './hooks/useConst'
+import { useConst } from './hooks/useConst.js'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export interface PostInspectorProps {

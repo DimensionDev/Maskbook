@@ -1,12 +1,12 @@
-import { FormControl, InputAdornment, ListItemIcon, MenuItem, OutlinedInput, Typography } from '@mui/material'
-import { useI18N } from '../../../utils'
 import { useEffect, useState, useCallback, useRef, useMemo, ChangeEvent } from 'react'
+import { Icons } from '@masknet/icons'
 import { FormattedBalance, TokenIcon, useMenuConfig } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import Check from '@mui/icons-material/Check'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { FormControl, ListItemIcon, MenuItem, Typography, InputBase, InputAdornment } from '@mui/material'
 import { FungibleToken, isSameAddress, formatBalance } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import { useI18N } from '../../../utils/index.js'
 
 const MIN_AMOUNT_LENGTH = 1
 const MAX_AMOUNT_LENGTH = 79
@@ -24,22 +24,27 @@ const useStyles = makeStyles()((theme) => ({
         width: 24,
         height: 24,
     },
-    input: {},
     check: {
         flex: 1,
         display: 'flex',
         justifyContent: 'end',
         color: theme.palette.text.primary,
     },
+    end: {
+        paddingRight: 16,
+    },
+    arrow: {
+        color: theme.palette.maskColor.second,
+    },
 }))
 
 export interface SelectTokenPanelProps {
     amount: string
     balance: string
-    token?: FungibleToken<ChainId, SchemaType>
+    token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     onAmountChange: (amount: string) => void
-    onTokenChange: (token: FungibleToken<ChainId, SchemaType>) => void
-    tokens?: Array<FungibleToken<ChainId, SchemaType>>
+    onTokenChange: (token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>) => void
+    tokens?: Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
 }
 
 export function SelectTokenListPanel(props: SelectTokenPanelProps) {
@@ -106,7 +111,7 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
     // #region update amount by self
     const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
         () => ({
-            RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${token?.decimals}}$`), // .ddd...d
+            RE_MATCH_FRACTION_AMOUNT: new RegExp(`^\\.\\d{0,${token?.decimals}}$`),
             RE_MATCH_WHOLE_AMOUNT: new RegExp(`^\\d*\\.?\\d{0,${token?.decimals}}$`), // d.ddd...d
         }),
         [token?.decimals],
@@ -138,14 +143,13 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
                     <span style={{ marginLeft: 4 }}>{token?.symbol}</span>
                 </Typography>
             </div>
-            <FormControl className={classes.input} variant="outlined" fullWidth>
-                <OutlinedInput
+            <FormControl fullWidth>
+                <InputBase
                     fullWidth
-                    required
-                    type="text"
                     value={amount}
                     ref={ref}
                     placeholder="0.0"
+                    onChange={onChange}
                     inputProps={{
                         autoComplete: 'off',
                         autoCorrect: 'off',
@@ -156,11 +160,9 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
                         maxLength: MAX_AMOUNT_LENGTH,
                         pattern: /^\d+[,.]?\d+$/,
                         spellCheck: false,
-                        className: classes.input,
                     }}
-                    onChange={onChange}
                     endAdornment={
-                        <InputAdornment position="end">
+                        <InputAdornment position="end" className={classes.end}>
                             {token?.address ? (
                                 <>
                                     <TokenIcon
@@ -178,7 +180,7 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
                                     </Typography>
                                 </>
                             ) : null}
-                            {haveMenu ? <ArrowDropDownIcon onClick={onClick} /> : null}
+                            {haveMenu ? <Icons.ArrowDrop onClick={onClick} className={classes.arrow} /> : null}
                         </InputAdornment>
                     }
                 />

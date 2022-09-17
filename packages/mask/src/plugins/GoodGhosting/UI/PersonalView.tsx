@@ -2,11 +2,11 @@ import { explorerResolver, formatEthereumAddress, TransactionStateType } from '@
 import { Grid, Typography, Button, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useState } from 'react'
-import { useI18N } from '../../../utils'
-import { useEarlyWithdraw } from '../hooks/useGameActions'
-import { useGameToken } from '../hooks/usePoolData'
-import type { GoodGhostingInfo, Player } from '../types'
-import { getPlayerStatus, isGameActionError, PlayerStatus } from '../utils'
+import { useI18N } from '../../../utils/index.js'
+import { useEarlyWithdraw } from '../hooks/useGameActions.js'
+import { useGameToken } from '../hooks/usePoolData.js'
+import type { GoodGhostingInfo, Player } from '../types.js'
+import { getPlayerStatus, isGameActionError, PlayerStatus } from '../utils.js'
 import BigNumber from 'bignumber.js'
 import { FormattedBalance } from '@masknet/shared'
 import { useChainId } from '@masknet/plugin-infra/web3'
@@ -44,7 +44,10 @@ export function PersonalView(props: PersonalViewProps) {
     const gameToken = useGameToken()
     const { canEarlyWithdraw, earlyWithdraw } = useEarlyWithdraw(props.info)
     const [buttonEnabled, setButtonEnabled] = useState(true)
-    const [errorState, setErrorState] = useState<{ message?: string; link?: string }>({})
+    const [errorState, setErrorState] = useState<{
+        message?: string
+        link?: string
+    }>({})
 
     const status = usePlayerStatusMessage(props.info, props.info.currentPlayer)
 

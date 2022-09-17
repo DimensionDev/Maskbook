@@ -1,9 +1,9 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '@masknet/plugin-wallet'
-import { setWalletBackupProvider } from '../../../../background/services/backup/internal_wallet'
-import { MaskMessages } from '../../../../shared/messages'
-import { setupDatabase } from '../database/Plugin.db'
-import '../messages'
+import { setWalletBackupProvider } from '../../../../background/services/backup/internal_wallet.js'
+import { MaskMessages } from '../../../../shared/messages.js'
+import { setupDatabase } from '../database/Plugin.db.js'
+import '../messages.js'
 import {
     exportMnemonic,
     exportPrivateKey,
@@ -13,8 +13,8 @@ import {
     isLocked,
     recoverWalletFromMnemonic,
     recoverWalletFromPrivateKey,
-} from '../services'
-import { INTERNAL_getPasswordRequired } from '../services/wallet/password'
+} from '../services/index.js'
+import { INTERNAL_getPasswordRequired } from '../services/wallet/password.js'
 
 const worker: Plugin.Worker.Definition = {
     ...base,

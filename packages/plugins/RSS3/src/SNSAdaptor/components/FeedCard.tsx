@@ -1,14 +1,14 @@
-import { NFTCardStyledAssetPlayer, ReversedAddress } from '@masknet/shared'
+import { Image, NFTCardStyledAssetPlayer, ReversedAddress } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { Box, Card, Typography } from '@mui/material'
+import { Box, BoxProps, Card, Typography } from '@mui/material'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { memo, useMemo } from 'react'
-import { useI18N } from '../../locales'
-import type { RSS3Feed } from '../../types'
-import { useNormalizeFeed } from '../hooks'
+import { useI18N } from '../../locales/index.js'
+import type { RSS3Feed } from '../../types.js'
+import { useNormalizeFeed } from '../hooks/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -60,6 +60,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     media: {
         marginLeft: theme.spacing(1),
+        width: 64,
+        height: 64,
         flexShrink: 0,
     },
     action: {
@@ -68,14 +70,14 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const { Tag, Type, MaskNetworkMap } = RSS3BaseAPI
-export interface FeedCardProps {
+export interface FeedCardProps extends Omit<BoxProps, 'onSelect'> {
     feed: RSS3BaseAPI.Activity
     address?: string
     onSelect: (feed: RSS3Feed) => void
 }
 
-export const FeedCard = memo(({ feed, address, onSelect }: FeedCardProps) => {
-    const { classes } = useStyles()
+export const FeedCard = memo(({ feed, address, onSelect, className, ...rest }: FeedCardProps) => {
+    const { classes, cx } = useStyles()
     const t = useI18N()
 
     const action = feed.actions[0]
@@ -86,10 +88,9 @@ export const FeedCard = memo(({ feed, address, onSelect }: FeedCardProps) => {
                 return (
                     <span>
                         {`${t.sent_an_NFT_to()} `}
-                        <ReversedAddress
-                            TypographyProps={{ display: 'inline' }}
-                            address={action.address_to ?? ZERO_ADDRESS}
-                        />
+                        {action.address_to ? (
+                            <ReversedAddress TypographyProps={{ display: 'inline' }} address={action.address_to} />
+                        ) : null}
                     </span>
                 )
             }
@@ -139,7 +140,7 @@ export const FeedCard = memo(({ feed, address, onSelect }: FeedCardProps) => {
             }
         }
         return isSameAddress(action.address_to, address) ? t.received() : t.sent()
-    }, [address, feed, t])
+    }, [address, feed, action, t])
 
     const logo = useMemo(() => {
         if (feed.tag === Tag.Collectible) {
@@ -164,7 +165,15 @@ export const FeedCard = memo(({ feed, address, onSelect }: FeedCardProps) => {
         if (feed.tag === Tag.Donation) {
             const action = feed.actions[0] as RSS3BaseAPI.ActionGeneric<RSS3BaseAPI.Tag.Donation>
             const logo = action.metadata?.logo
-            return <img className={classes.img} src={logo} />
+            return logo ? <Image className={classes.img} src={logo} /> : null
+        }
+        if (feed.tag === Tag.Transaction && feed.type === Type.Transfer) {
+            const action = feed.actions[0] as RSS3BaseAPI.ActionGeneric<
+                RSS3BaseAPI.Tag.Transaction,
+                RSS3BaseAPI.Type.Transfer
+            >
+            const logo = action.metadata?.image
+            return logo ? <Image className={classes.img} src={logo} /> : null
         }
         return null
     }, [feed])
@@ -172,9 +181,9 @@ export const FeedCard = memo(({ feed, address, onSelect }: FeedCardProps) => {
     const normalizedFeed = useNormalizeFeed(feed)
 
     return (
-        <Box className={classes.wrapper} onClick={() => onSelect(normalizedFeed)}>
+        <Box className={cx(classes.wrapper, className)} {...rest} onClick={() => onSelect(normalizedFeed)}>
             <div className={classes.texts}>
-                <Typography>
+                <Typography component="div">
                     <span className={classes.action}>
                         <ReversedAddress TypographyProps={{ display: 'inline' }} address={address!} /> {feedAction}
                     </span>{' '}

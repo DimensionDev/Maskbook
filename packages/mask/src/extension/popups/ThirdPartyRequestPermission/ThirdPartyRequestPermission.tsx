@@ -1,5 +1,5 @@
-import { ThirdPartyPluginPermission } from '../../../../shared/definitions/routes'
-import { useI18N } from '../../../utils'
+import { ThirdPartyPluginPermission } from '../../../../shared/definitions/routes.js'
+import { useI18N } from '../../../utils/index.js'
 import { Trans } from 'react-i18next'
 export interface ThirdPartyRequestPermissionProps {
     pluginURL: string

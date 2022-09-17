@@ -1,11 +1,12 @@
-export * from './entry-dom'
+export * from './entry-dom.js'
 export {
     startPluginSNSAdaptor,
     useActivatedPluginSNSAdaptor,
     useActivatedPluginSNSAdaptor_Web3Supported,
     useActivatedPluginsSNSAdaptor,
     useIsMinimalMode,
-} from './manager/sns-adaptor'
+} from './manager/sns-adaptor.js'
+
 export {
     type PostContext,
     type PostContextAuthor,
@@ -16,5 +17,8 @@ export {
     PostInfoProvider,
     usePostInfo,
     usePostInfoDetails,
-} from './PostContext'
-export { CompositionContext, useCompositionContext } from './CompositionContext'
+} from './PostContext.js'
+export { CompositionContext, useCompositionContext } from './CompositionContext.js'
+
+// shared components
+export { Widget, type WidgetProps } from './components/Widget.js'

@@ -1,1 +1,1 @@
-export * from './renderInShadowRoot'
+export * from './renderInShadowRoot.js'

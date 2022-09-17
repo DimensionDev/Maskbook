@@ -3,12 +3,12 @@ import {
     searchInstagramAvatarSettingDialog,
     searchInstagramProfileAvatarButtonSelector,
     searchInstagramProfileEditButton,
-} from '../../utils/selector'
-import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils'
+} from '../../utils/selector.js'
+import { createReactRootShadowed, MaskMessages, startWatch } from '../../../../utils/index.js'
 import { useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
-import { NFTAvatarSettingDialog } from './NFTAvatarSettingDialog'
+import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton.js'
+import { NFTAvatarSettingDialog } from './NFTAvatarSettingDialog.js'
 import { useLocation } from 'react-use'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
@@ -31,7 +31,7 @@ const useStyles = makeStyles()(() => ({
         background: '#262626',
         borderRadius: '4px !important',
         height: 30,
-        width: 104,
+        width: 134,
     },
     text: {
         fontSize: 12,

@@ -11,9 +11,9 @@ import {
 } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Link, MenuItem, Typography } from '@mui/material'
-import { HTMLProps, memo, useRef, useState } from 'react'
+import { HTMLProps, memo, useEffect, useRef, useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../../../utils/index.js'
 
 const MENU_ITEM_HEIGHT = 40
 const MENU_LIST_PADDING = 8
@@ -119,10 +119,17 @@ export const ProfileBar = memo<ProfileBarProps>(
             successText: t('copy_success'),
         })
 
-        const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+        const { Others } = useWeb3State()
+        const chainId = useChainId()
 
         const [walletMenuOpen, setWalletMenuOpen] = useState(false)
-        const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
+        useEffect(() => {
+            const closeMenu = () => setWalletMenuOpen(false)
+            window.addEventListener('scroll', closeMenu, false)
+            return () => {
+                window.removeEventListener('scroll', closeMenu, false)
+            }
+        }, [])
         const selectedAddress = socialAddressList.find((x) => isSameAddress(x.address, address))
 
         return (

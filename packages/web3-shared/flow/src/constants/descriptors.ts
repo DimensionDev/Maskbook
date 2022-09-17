@@ -7,7 +7,7 @@ import {
     NetworkPluginID,
     ProviderDescriptor,
 } from '@masknet/web3-shared-base'
-import { ChainId, NetworkType, ProviderType, SchemaType } from '../types'
+import { ChainId, NetworkType, ProviderType, SchemaType } from '../types.js'
 
 const PLUGIN_ID = NetworkPluginID.PLUGIN_FLOW
 

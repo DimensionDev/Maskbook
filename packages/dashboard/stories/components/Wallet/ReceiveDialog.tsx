@@ -1,6 +1,6 @@
 import { story } from '@masknet/storybook-shared'
 import { action } from '@storybook/addon-actions'
-import { ReceiveDialogUI as C } from '../../../src/pages/Wallets/components/ReceiveDialog'
+import { ReceiveDialogUI as C } from '../../../src/pages/Wallets/components/ReceiveDialog/index.js'
 
 const { meta, of } = story(C)
 

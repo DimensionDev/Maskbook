@@ -1,19 +1,19 @@
 import { BindingProof, EMPTY_LIST, NextIDPlatform, PersonaInformation } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
-import { Box, CircularProgress, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
+import { LoadingBase, makeStyles } from '@masknet/theme'
+import { Box, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { useSubscription } from 'use-subscription'
-import { CloseIcon } from '../assets/close'
-import { context } from '../context'
-import { useI18N } from '../locales'
-import { PersonaItem } from './PersonaItem'
-import { InfoIcon } from '../assets/info'
-import { usePersonasFromDB } from '../../../components/DataSource/usePersonasFromDB'
-import type { AllChainsNonFungibleToken } from '../types'
+import { CloseIcon } from '../assets/close.js'
+import { context } from '../context.js'
+import { useI18N } from '../locales/index.js'
+import { PersonaItem } from './PersonaItem.js'
+import { InfoIcon } from '../assets/info.js'
+import { usePersonasFromDB } from '../../../components/DataSource/usePersonasFromDB.js'
+import type { AllChainsNonFungibleToken } from '../types.js'
 import { PersonaAction } from '@masknet/shared'
 import { useAsyncRetry } from 'react-use'
 import { isValidAddress } from '@masknet/web3-shared-evm'
-import { useLastRecognizedSocialIdentity } from '../../../components/DataSource/useActivatedUI'
+import { useLastRecognizedSocialIdentity } from '../../../components/DataSource/useActivatedUI.js'
 
 const useStyles = makeStyles()((theme) => ({
     messageBox: {
@@ -69,7 +69,7 @@ export function PersonaPage(props: PersonaPageProps) {
             <DialogContent sx={{ flex: 1, height: 450, padding: 2 }}>
                 {loading ? (
                     <Stack justifyContent="center" alignItems="center">
-                        <CircularProgress />
+                        <LoadingBase />
                     </Stack>
                 ) : (
                     <>

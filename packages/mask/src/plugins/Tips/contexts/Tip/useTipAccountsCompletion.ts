@@ -1,11 +1,11 @@
 import { useChainId, useWeb3State } from '@masknet/plugin-infra/web3'
 import { useEffect, useMemo, useState } from 'react'
-import type { TipAccount } from '../../types'
+import type { TipsAccount } from '../../types/index.js'
 
 /**
  * Add name service
  */
-export function useTipAccountsCompletion(tipAccounts: TipAccount[]) {
+export function useTipAccountsCompletion(tipAccounts: TipsAccount[]) {
     const [map, setMap] = useState<Record<string, string>>({})
 
     const { NameService } = useWeb3State()

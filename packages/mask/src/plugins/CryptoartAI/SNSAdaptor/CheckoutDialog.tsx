@@ -4,16 +4,16 @@ import { first } from 'lodash-unified'
 import { InjectedDialog, NFTCardStyledAssetPlayer, useOpenShareTxDialog } from '@masknet/shared'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { Box, Card, CardActions, CardContent, DialogContent, Link, Typography } from '@mui/material'
-import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary'
-import type { useAsset } from '../hooks/useAsset'
-import { usePurchaseCallback } from '../hooks/usePurchaseCallback'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
+import { WalletConnectedBoundary } from '../../../web3/UI/WalletConnectedBoundary.js'
+import type { useAsset } from '../hooks/useAsset.js'
+import { usePurchaseCallback } from '../hooks/usePurchaseCallback.js'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base.js'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base.js'
 import { useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, formatBalance } from '@masknet/web3-shared-base'
-import { PluginWalletStatusBar, useI18N } from '../../../utils'
-import { resolveAssetLinkOnCryptoartAI, resolvePaymentTokensOnCryptoartAI } from '../pipes'
+import { NetworkPluginID, formatBalance, leftShift } from '@masknet/web3-shared-base'
+import { PluginWalletStatusBar, useI18N } from '../../../utils/index.js'
+import { resolveAssetLinkOnCryptoartAI, resolvePaymentTokensOnCryptoartAI } from '../pipes/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -124,7 +124,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
 
     const validationMessage = useMemo(() => {
         if (!isVerified) return t('plugin_collectible_check_tos_document')
-        if (new BigNumber(asset?.value?.priceInEth).gt(formatBalance(balance.value, token?.value?.decimals, 4))) {
+        if (new BigNumber(asset?.value?.priceInEth).gt(leftShift(balance.value ?? 0, token?.value?.decimals))) {
             return t('plugin_collectible_insufficient_balance')
         }
         return ''

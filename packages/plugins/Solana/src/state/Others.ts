@@ -23,6 +23,7 @@ import {
     getMaskTokenAddress,
     getNativeTokenAddress,
     explorerResolver,
+    formatSchemaType,
 } from '@masknet/web3-shared-solana'
 
 export class Others extends OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transaction> {
@@ -51,4 +52,5 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
     override formatAddress = formatAddress
     override formatDomainName = formatDomainName
     override formatTokenId = formatTokenId
+    override formatSchemaType = formatSchemaType
 }

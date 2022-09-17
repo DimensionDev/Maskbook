@@ -13,10 +13,10 @@ import { makeStyles } from '@masknet/theme'
 import { FormattedCurrency } from '@masknet/shared'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { formatCurrency, TokenType } from '@masknet/web3-shared-base'
-import { useI18N } from '../../../../utils'
-import type { Ticker } from '../../types'
+import { useI18N } from '../../../../utils/index.js'
+import type { Ticker } from '../../types/index.js'
 import { DataProvider } from '@masknet/public-api'
-import { formatElapsed } from '../../../Wallet/formatter'
+import { formatElapsed } from '../../../Wallet/formatter.js'
 import { ReactNode, useMemo } from 'react'
 import { compact, pick } from 'lodash-unified'
 
@@ -67,7 +67,7 @@ export function TickersTable({ dataProvider, tickers, coinType }: TickersTablePr
     const { t } = useI18N()
     const { classes } = useStyles()
     const isNFT = coinType === TokenType.NonFungible
-    const isUniswap = dataProvider === DataProvider.UNISWAP_INFO
+    const isUniswap = dataProvider === DataProvider.UniswapInfo
 
     const headCellMap: Record<Cells, string> = {
         volume: t('plugin_trader_table_volume'),

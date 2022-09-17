@@ -1,11 +1,11 @@
 import { Grid, Accordion, AccordionDetails, AccordionSummary } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
-import type { FungibleTokenDetailed } from '../../types'
+import type { FungibleTokenDetailed } from '../../types.js'
 
-import { FarmTokenDetailed } from './FarmTokenDetailed'
+import { FarmTokenDetailed } from './FarmTokenDetailed.js'
 
-import { useStylesAccordion } from '../styles'
+import { useStylesAccordion } from '../styles.js'
 
 export interface AccordionFarmProps extends React.PropsWithChildren<{}> {
     rewardToken?: FungibleTokenDetailed

@@ -3,14 +3,16 @@ import { WalletIcon } from '@masknet/shared'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import { Box, Card, CircularProgress, Typography, Paper, Link } from '@mui/material'
-import { useStylesExtends, makeStyles, MaskColorVar, ActionButton } from '@masknet/theme'
+import { Box, Card, Typography, Paper, Link } from '@mui/material'
+import { useStylesExtends, makeStyles, MaskColorVar, ActionButton, LoadingBase } from '@masknet/theme'
 import { useProviderDescriptor, useNetworkDescriptor, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../../../utils/index.js'
 import { Icons } from '@masknet/icons'
 import { isDashboardPage } from '@masknet/shared-base'
 
-const useStyles = makeStyles<{ contentBackground?: string }>()((theme, props) => ({
+const useStyles = makeStyles<{
+    contentBackground?: string
+}>()((theme, props) => ({
     content: {
         padding: theme.spacing('22px', '12px'),
         borderRadius: 8,
@@ -98,11 +100,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                             </Typography>
                             {loading ? (
                                 <Box display="flex" alignItems="center">
-                                    <CircularProgress
-                                        className={classes.progressIcon}
-                                        size={14}
-                                        sx={{ marginRight: 1 }}
-                                    />
+                                    <LoadingBase className={classes.progressIcon} size={14} sx={{ marginRight: 1 }} />
                                     <Typography variant="body2" className={classes.progress}>
                                         {t('initializing')}
                                     </Typography>

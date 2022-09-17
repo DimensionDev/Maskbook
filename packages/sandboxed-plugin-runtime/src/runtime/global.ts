@@ -6,11 +6,9 @@ export function createGlobal(pluginID: string, manifest: unknown, signal: AbortS
     const { proxy: localThis, revoke } = Proxy.revocable(makeGlobalThis(Object.prototype), {})
     signal.addEventListener('abort', revoke, { once: true })
 
-    if (typeof window === 'object') Object.defineProperty(localThis, 'window', { value: localThis })
-    Object.defineProperties(localThis, {
-        self: { value: localThis },
-        console: { value: console, configurable: true, writable: true },
-    })
+    // Note: move it to elsewhere
+    // Note: reenable this after https://github.com/facebook/react/pull/25198/files
+    // if (typeof harden === 'function') harden(console)
 
     const endowments = {
         AbortController,
@@ -68,7 +66,18 @@ export function createGlobal(pluginID: string, manifest: unknown, signal: AbortS
 
     const membrane = createMembrane(globalThis, localThis, {
         endowments: Object.getOwnPropertyDescriptors(endowments),
+        // distortionCallback: (o) => (o === globalThis ? localThis : o),
     })
+
+    // Note: the membrane library will replace all intrinsic with the link to the blueRealm
+    // we need to avoid it.
+    if (typeof window === 'object') Object.defineProperty(localThis, 'window', { value: localThis })
+    Object.defineProperties(localThis, {
+        self: { value: localThis, configurable: true, writable: true },
+        globalThis: { value: localThis, configurable: true, writable: true },
+        console: { value: console, configurable: true, writable: true },
+    })
+    membrane.virtualEnvironment.link('console')
 
     return { localThis, membrane }
 }

@@ -1,10 +1,10 @@
 import { useEffect, useState, useCallback } from 'react'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { LoadingBase, makeStyles, MaskColorVar } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useAccount, useCurrentWeb3NetworkPluginID, useWeb3 } from '@masknet/plugin-infra/web3'
 import CyberConnect, { Env } from '@cyberlab/cyberconnect'
-import { PluginCyberConnectRPC } from '../messages'
-import { CircularProgress, useTheme, Typography } from '@mui/material'
+import { PluginCyberConnectRPC } from '../messages.js'
+import { useTheme, Typography } from '@mui/material'
 import { useAsync } from 'react-use'
 
 const useStyles = makeStyles()(() => ({
@@ -154,7 +154,7 @@ export default function ConnectButton({
                         <Logo /> <Typography variant="button">{!isFollowing ? 'Follow Now' : 'Following'}</Typography>
                     </>
                 ) : (
-                    <CircularProgress size={30} sx={{ marginLeft: '154px' }} />
+                    <LoadingBase size={30} sx={{ marginLeft: '154px' }} />
                 )}
             </div>
         )

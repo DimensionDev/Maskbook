@@ -1,15 +1,21 @@
 import { useAccount } from '@masknet/plugin-infra/web3'
-import { makeStyles, useStylesExtends, useTabs } from '@masknet/theme'
+import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { useAsyncRetry } from 'react-use'
-import { fetchQuestions, fetchUserStoryStatus, submitCompletion, submitPoll, submitPuzzle } from '../Worker/apis'
-import { Box, Button, Card, DialogActions, DialogContent, Typography } from '@mui/material'
+import {
+    fetchQuestions,
+    fetchUserStoryStatus,
+    submitCompletion,
+    submitPoll,
+    submitPuzzle,
+} from '../Worker/apis/index.js'
+import { Box, Button, Card, DialogActions, DialogContent, Tab, Typography } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
-import StageCard from './StageCard'
-import { useControlledDialog } from '../../../utils'
+import StageCard from './StageCard.js'
+import { useControlledDialog } from '../../../utils/index.js'
 import { InjectedDialog, Image } from '@masknet/shared'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import OptionsCard from './OptionsCard'
-import ResultCard from './ResultCard'
+import OptionsCard from './OptionsCard.js'
+import ResultCard from './ResultCard.js'
 import getUnixTime from 'date-fns/getUnixTime'
 import {
     BasicQuestion,
@@ -18,11 +24,9 @@ import {
     QuestionGroup,
     UserCompletionStatus,
     UserPollOrPuzzleStatus,
-} from '../types'
-import { FindTrumanContext } from '../context'
-import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
-import { useTabsStyles } from './FindTrumanDialog'
-import CompletionCard from './CompletionCard'
+} from '../types.js'
+import { FindTrumanContext } from '../context.js'
+import CompletionCard from './CompletionCard.js'
 
 const useStyles = makeStyles()((theme, props) => ({
     panel: {},
@@ -43,14 +47,6 @@ const useStyles = makeStyles()((theme, props) => ({
             marginBottom: theme.spacing(2),
         },
     },
-    abstractTabWrapper: {
-        position: 'sticky',
-        top: 0,
-        width: '100%',
-        zIndex: 2,
-        paddingBottom: theme.spacing(2),
-        backgroundColor: theme.palette.background.paper,
-    },
     tabPaneWrapper: {
         width: '100%',
         marginBottom: '24px',
@@ -61,8 +57,18 @@ const useStyles = makeStyles()((theme, props) => ({
         padding: 0,
     },
     dialogWrapper: {
-        paddingBottom: '0 !important',
-        paddingTop: '0 !important',
+        paddingBottom: theme.spacing(2),
+        '::-webkit-scrollbar': {
+            backgroundColor: 'transparent',
+            width: 20,
+        },
+        '::-webkit-scrollbar-thumb': {
+            borderRadius: '20px',
+            width: 5,
+            border: '7px solid rgba(0, 0, 0, 0)',
+            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+            backgroundClip: 'padding-box',
+        },
     },
 }))
 
@@ -109,9 +115,6 @@ enum ParticipationType {
     Critical = 'critical',
     NonCritical = 'non-critical',
 }
-
-const ParticipationTabValues = [ParticipationType.Critical, ParticipationType.NonCritical]
-
 interface ParticipateDialogProps {
     account: string
     open: boolean
@@ -228,13 +231,19 @@ function ParticipateDialog(props: ParticipateDialogProps) {
     )
 
     return (
-        <InjectedDialog title={t('plugin_find_truman_dialog_participation_title')} open={open} onClose={onClose}>
-            <DialogContent className={classes.dialogWrapper}>
-                <TabContext value={currentTab}>
-                    <div className={classes.abstractTabWrapper}>
-                        <FindTrumanDialogTabs currentTab={currentTab} setTab={(tab) => onChange(null, tab)} />
-                    </div>
-                    <Box className={classes.tabPaneWrapper}>
+        <TabContext value={currentTab}>
+            <InjectedDialog
+                title={t('plugin_find_truman_dialog_participation_title')}
+                open={open}
+                onClose={onClose}
+                titleTabs={
+                    <MaskTabList variant="base" onChange={onChange} aria-label="ParticipateDialogTabs">
+                        <Tab label={t('plugin_find_truman_dialog_critical')} value={ParticipationType.Critical} />
+                        <Tab label={t('plugin_find_truman_dialog_noncritical')} value={ParticipationType.NonCritical} />
+                    </MaskTabList>
+                }>
+                <DialogContent className={classes.dialogWrapper}>
+                    <Box>
                         <TabPanel
                             className={classes.tabPane}
                             value={ParticipationType.Critical}
@@ -248,44 +257,11 @@ function ParticipateDialog(props: ParticipateDialogProps) {
                             {!itemsNonCritical.length ? <EmptyTip /> : itemsNonCritical.map((e) => renderItem(e))}
                         </TabPanel>
                     </Box>
-                </TabContext>
-            </DialogContent>
-        </InjectedDialog>
+                </DialogContent>
+            </InjectedDialog>
+        </TabContext>
     )
 }
-
-interface ParticipationTabsProps
-    extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {
-    currentTab: ParticipationType
-    setTab(tab: ParticipationType): void
-}
-
-function FindTrumanDialogTabs(props: ParticipationTabsProps) {
-    const classes = useStylesExtends(useTabsStyles({ columns: 'repeat(2, 50%)' }), props)
-    const { t } = useContext(FindTrumanContext)
-    const { currentTab, setTab } = props
-
-    const tabProps: AbstractTabProps = {
-        tabs: [
-            {
-                label: <span>{t('plugin_find_truman_dialog_critical')}</span>,
-                sx: { p: 0 },
-                cb: () => setTab(ParticipationType.Critical),
-            },
-            {
-                label: <span>{t('plugin_find_truman_dialog_noncritical')}</span>,
-                sx: { p: 0 },
-                cb: () => setTab(ParticipationType.NonCritical),
-            },
-        ],
-        index: ParticipationTabValues.indexOf(currentTab),
-        classes,
-        hasOnlyOneChild: true,
-    }
-
-    return <AbstractTab {...tabProps} />
-}
-
 function EmptyTip() {
     const { t } = useContext(FindTrumanContext)
     return (

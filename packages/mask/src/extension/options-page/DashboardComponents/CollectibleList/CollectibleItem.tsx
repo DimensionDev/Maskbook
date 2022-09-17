@@ -2,7 +2,7 @@ import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
 import { Skeleton, Typography } from '@mui/material'
 import { forwardRef, HTMLProps } from 'react'
-import { CollectibleCard, CollectibleCardProps } from './CollectibleCard'
+import { CollectibleCard, CollectibleCardProps } from './CollectibleCard.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -10,6 +10,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
         position: 'relative',
+        zIndex: 0,
     },
     collectibleCard: {
         width: '100%',
@@ -38,9 +39,7 @@ export const CollectibleItem = forwardRef<HTMLDivElement, CollectibleItemProps>(
     const { classes, cx } = useStyles()
     const { Others } = useWeb3State()
 
-    const name = asset.collection?.name || asset.contract?.name
     const uiTokenId = Others?.formatTokenId(asset.tokenId, 4) ?? `#${asset.tokenId}`
-    const title = name ? `${name} ${uiTokenId}` : asset.metadata?.name ?? ''
 
     return (
         <div className={cx(classes.card, className)} {...rest} ref={ref}>
@@ -54,7 +53,7 @@ export const CollectibleItem = forwardRef<HTMLDivElement, CollectibleItemProps>(
             />
             <div className={classes.description}>
                 <Typography className={classes.name} color="textPrimary" variant="body2">
-                    {title}
+                    {uiTokenId}
                 </Typography>
             </div>
         </div>

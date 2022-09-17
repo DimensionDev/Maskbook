@@ -1,5 +1,5 @@
-import './setup.hmr'
+import './setup.hmr.js'
 
 // NotCancellable tasks here
-import './NotCancellable/PrintBuildFlags'
-import './NotCancellable/DatabaseCleanup/DropOldDatabase'
+import './NotCancellable/PrintBuildFlags.js'
+import './NotCancellable/DatabaseCleanup/DropOldDatabase.js'

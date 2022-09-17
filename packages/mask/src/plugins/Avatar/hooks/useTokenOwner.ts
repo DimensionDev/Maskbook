@@ -1,13 +1,13 @@
 import { useAsyncRetry } from 'react-use'
 import { isValidAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { useWeb3Connection } from '@masknet/plugin-infra/web3'
-import { activatedSocialNetworkUI } from '../../../social-network'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { EMPTY_LIST, EnhanceableSite, NextIDPlatform } from '@masknet/shared-base'
 import type { NetworkPluginID, SocialIdentity } from '@masknet/web3-shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import type { IdentityResolved } from '@masknet/plugin-infra'
-import Services from '../../../extension/service'
-import { useGetAddress } from './useGetAddress'
+import Services from '../../../extension/service.js'
+import { useGetAddress } from './useGetAddress.js'
 
 async function queryCurrentPersona(identityResolved: IdentityResolved) {
     if (!identityResolved.identifier) return

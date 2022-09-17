@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import type { NetworkPluginID, NonFungibleAsset, SocialAddress, SourceType, Wallet } from '@masknet/web3-shared-base'
-import { ActionsBarNFT } from '../ActionsBarNFT'
+import { ActionsBarNFT } from '../ActionsBarNFT.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

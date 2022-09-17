@@ -4,9 +4,9 @@ import { ChevronDown } from 'react-feather'
 import { makeStyles } from '@masknet/theme'
 import { TokenIcon } from '@masknet/shared'
 
-import type { FungibleTokenDetailed } from '../../types'
+import type { FungibleTokenDetailed } from '../../types.js'
 
-import { useI18N } from '../../locales'
+import { useI18N } from '../../locales/index.js'
 
 const useStyles = makeStyles()(() => ({
     button: {

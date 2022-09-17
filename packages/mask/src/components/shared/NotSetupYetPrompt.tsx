@@ -1,1 +1,1 @@
-export { Banner as NotSetupYetPrompt } from '../Welcomes/Banner'
+export { Banner as NotSetupYetPrompt } from '../Welcomes/Banner.js'

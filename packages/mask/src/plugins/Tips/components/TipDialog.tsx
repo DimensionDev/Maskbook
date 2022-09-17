@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { PluginId, useActivatedPlugin } from '@masknet/plugin-infra/dom'
+import { PluginID, useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAsset } from '@masknet/plugin-infra/web3'
 import { InjectedDialog } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
@@ -9,15 +9,15 @@ import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { DialogContent, Typography } from '@mui/material'
 import { useCallback, useMemo } from 'react'
 import { useBoolean } from 'react-use'
-import { NetworkTab } from '../../../components/shared/NetworkTab'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { TargetRuntimeContext, useTip } from '../contexts'
-import { useI18N } from '../locales'
-import { TipType } from '../types'
-import { AddDialog } from './AddDialog'
-import { ConfirmModal } from './common/ConfirmModal'
-import { NFTItem } from './NFTSection'
-import { TipForm } from './TipForm'
+import { NetworkTab } from '../../../components/shared/NetworkTab.js'
+import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import { TargetRuntimeContext, useTip } from '../contexts/index.js'
+import { useI18N } from '../locales/index.js'
+import { TipType } from '../types/index.js'
+import { AddDialog } from './AddDialog.js'
+import { ConfirmModal } from './common/ConfirmModal.js'
+import { NFTItem } from './NFTSection/index.js'
+import { TipForm } from './TipForm.js'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -131,7 +131,7 @@ export interface TipDialogProps {
 
 export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const pluginID = useCurrentWeb3NetworkPluginID()
-    const tipDefinition = useActivatedPlugin(PluginId.NextID, 'any')
+    const tipDefinition = useActivatedPlugin(PluginID.NextID, 'any')
     const chainIdList = tipDefinition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? EMPTY_LIST
     const t = useI18N()
     const { classes } = useStyles()

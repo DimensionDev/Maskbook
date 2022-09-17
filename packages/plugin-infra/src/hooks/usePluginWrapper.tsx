@@ -1,8 +1,14 @@
 import { noop } from 'lodash-unified'
 import { createContext, useEffect, useContext, ForwardRefExoticComponent, RefAttributes } from 'react'
-import type { Plugin } from '../types'
+import type { Plugin } from '../types.js'
 export type PluginWrapperComponent<T extends Plugin.Shared.Definition = Plugin.Shared.Definition> =
-    ForwardRefExoticComponent<React.PropsWithChildren<RefAttributes<PluginWrapperMethods> & { definition: T }>>
+    ForwardRefExoticComponent<
+        React.PropsWithChildren<
+            RefAttributes<PluginWrapperMethods> & {
+                definition: T
+            }
+        >
+    >
 
 /** @internal */
 export const emptyPluginWrapperMethods = {
@@ -18,7 +24,13 @@ export interface PluginWrapperMethods {
     setWidth(width: number | undefined): void
 }
 
-export function usePluginWrapper(open: boolean, options?: { width?: number; name?: string }) {
+export function usePluginWrapper(
+    open: boolean,
+    options?: {
+        width?: number
+        name?: string
+    },
+) {
     const { setWidth, setWrap, setWrapperName } = useContext(PluginWrapperMethodsContext)
     const { width, name } = options || {}
 

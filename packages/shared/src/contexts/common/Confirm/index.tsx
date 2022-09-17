@@ -1,6 +1,6 @@
 import { useContext } from 'react'
-import { createUITaskManager } from '../../UITaskManager'
-import { ConfirmDialog, ConfirmDialogProps } from './Dialog'
+import { createUITaskManager } from '../../UITaskManager.js'
+import { ConfirmDialog, ConfirmDialogProps } from './Dialog.js'
 
 const { TaskManagerContext, TaskManagerProvider: ConfirmProvider } = createUITaskManager<ConfirmDialogProps, boolean>(
     ConfirmDialog,

@@ -1,2 +1,2 @@
-export * from './rss3'
-export * from './merkleProof'
+export * from './rss3.js'
+export * from './merkleProof.js'

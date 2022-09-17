@@ -1,8 +1,8 @@
 import { Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { BoxInfo, BoxMetadata, MediaType } from '../../type'
-import { MaskSharpIconOfSize } from '../../../../resources/MaskIcon'
-import { Video } from '../../../../components/shared/Video'
+import { BoxInfo, BoxMetadata, MediaType } from '../../type.js'
+import { MaskSharpIconOfSize } from '@masknet/shared'
+import { Video } from '../../../../components/shared/Video.js'
 
 const useStyles = makeStyles()((theme) => ({
     main: {

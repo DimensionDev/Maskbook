@@ -5,7 +5,7 @@ import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-
 import { Checkbox, List, ListItem, Radio, Stack, Tooltip } from '@mui/material'
 import classnames from 'classnames'
 import { FC, useCallback } from 'react'
-import type { TipNFTKeyPair } from '../../types'
+import type { TipNFTKeyPair } from '../../types/index.js'
 
 interface Props {
     selectedPairs: TipNFTKeyPair[]

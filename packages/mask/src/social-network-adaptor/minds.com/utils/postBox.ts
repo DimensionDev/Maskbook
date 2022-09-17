@@ -1,5 +1,5 @@
 import type { LiveSelector } from '@dimensiondev/holoflows-kit'
-import { composerModalSelector, postEditorDraftContentSelector } from './selector'
+import { composerModalSelector, postEditorDraftContentSelector } from './selector.js'
 
 export const getEditorContent = () => {
     const editorNode = postEditorDraftContentSelector().evaluate()

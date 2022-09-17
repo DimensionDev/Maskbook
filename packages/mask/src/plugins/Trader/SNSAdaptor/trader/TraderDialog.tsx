@@ -1,22 +1,22 @@
 import { useEffect, useRef, useState } from 'react'
-import { PluginId } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/plugin-infra'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useChainId, useChainIdValid } from '@masknet/plugin-infra/web3'
 import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { DialogContent, dialogTitleClasses, IconButton } from '@mui/material'
 import { InjectedDialog, useSelectAdvancedSettings } from '@masknet/shared'
-import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
+import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { PluginTraderMessages } from '../../messages'
-import { Trader, TraderRef, TraderProps } from './Trader'
-import { useI18N } from '../../../../utils'
+import { PluginTraderMessages } from '../../messages.js'
+import { Trader, TraderRef, TraderProps } from './Trader.js'
+import { useI18N } from '../../../../utils/index.js'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { NetworkTab } from '../../../../components/shared/NetworkTab'
+import { NetworkTab } from '../../../../components/shared/NetworkTab.js'
 import { useUpdateEffect } from 'react-use'
 import { NetworkPluginID, createFungibleToken } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
-import { currentSlippageSettings } from '../../settings'
-import { MIN_GAS_LIMIT } from '../../constants'
+import { currentSlippageSettings } from '../../settings.js'
+import { MIN_GAS_LIMIT } from '../../constants/index.js'
 import { isDashboardPage, CrossIsolationMessages } from '@masknet/shared-base'
 
 const isDashboard = isDashboardPage()
@@ -73,7 +73,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export function TraderDialog() {
     const tradeRef = useRef<TraderRef>(null)
-    const traderDefinition = useActivatedPlugin(PluginId.Trader, 'any')
+    const traderDefinition = useActivatedPlugin(PluginID.Trader, 'any')
     const chainIdList = traderDefinition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? []
     const { t } = useI18N()
     const { classes } = useStyles()

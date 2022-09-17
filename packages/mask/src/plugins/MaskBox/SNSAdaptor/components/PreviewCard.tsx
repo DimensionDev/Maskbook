@@ -1,21 +1,21 @@
 import { useCallback, useMemo, useState } from 'react'
 import { useContainer } from 'unstated-next'
-import { makeStyles, ActionButton, useTabs, MaskTabList } from '@masknet/theme'
-import { Box, Button, CircularProgress, Paper, Tab, Typography, useTheme } from '@mui/material'
-import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary'
-import { Context } from '../../hooks/useContext'
-import { BoxState, CardTab } from '../../type'
-import { ArticlesTab } from './ArticlesTab'
-import { DetailsTab } from './DetailsTab'
-import { DrawDialog } from './DrawDialog'
-import { DrawResultDialog } from './DrawResultDialog'
+import { makeStyles, ActionButton, LoadingBase, useTabs, MaskTabList } from '@masknet/theme'
+import { Box, Button, Paper, Tab, Typography, useTheme } from '@mui/material'
+import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary.js'
+import { Context } from '../../hooks/useContext.js'
+import { BoxState, CardTab } from '../../type.js'
+import { ArticlesTab } from './ArticlesTab.js'
+import { DetailsTab } from './DetailsTab.js'
+import { DrawDialog } from './DrawDialog.js'
+import { DrawResultDialog } from './DrawResultDialog.js'
 import { useTransactionCallback, TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
-import { ChainBoundary } from '../../../../web3/UI/ChainBoundary'
+import { ChainBoundary } from '../../../../web3/UI/ChainBoundary.js'
 import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useWeb3State, useNetworkDescriptor } from '@masknet/plugin-infra/web3'
+import { useI18N } from '../../locales/index.js'
 import { TabContext } from '@mui/lab'
 import { ImageIcon, TokenIcon } from '@masknet/shared'
-import { useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra/web3'
-import { useI18N } from '../../locales'
 
 const useTabsStyles = makeStyles()((theme) => ({
     button: {
@@ -186,7 +186,7 @@ export function PreviewCard(props: PreviewCardProps) {
     if (boxState === BoxState.UNKNOWN)
         return (
             <Box sx={{ display: 'flex', padding: 2, justifyContent: 'center', alignItems: 'center' }}>
-                <CircularProgress />
+                <LoadingBase />
             </Box>
         )
     if (boxState === BoxState.ERROR)

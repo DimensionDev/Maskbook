@@ -15,7 +15,7 @@ import { makeStyles } from '@masknet/theme'
 import { FormattedAddress, FormattedBalance } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { useI18N } from '../../../../../../utils'
+import { useI18N } from '../../../../../../utils/index.js'
 import { useWeb3 } from '@masknet/plugin-infra/web3'
 import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
 import { range } from 'lodash-unified'
@@ -44,7 +44,11 @@ const useStyles = makeStyles()({
 
 export interface DeriveWalletTableProps {
     loading: boolean
-    dataSource?: Array<{ address: string; added: boolean; selected: boolean }>
+    dataSource?: Array<{
+        address: string
+        added: boolean
+        selected: boolean
+    }>
     onCheck: (checked: boolean, index: number) => void
     confirmLoading: boolean
 }

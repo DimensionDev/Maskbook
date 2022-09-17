@@ -2,7 +2,7 @@
 
 import { memo, useCallback, useState } from 'react'
 import { IconProps, Tooltip } from '@mui/material'
-import { useI18N } from '../../../../utils/i18n-next-ui'
+import { useI18N } from '../../../../utils/i18n-next-ui.js'
 import { Icons } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
 

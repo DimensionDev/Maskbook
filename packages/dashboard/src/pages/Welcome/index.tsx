@@ -1,11 +1,11 @@
 import { Button, useTheme } from '@mui/material'
-import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout'
+import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout.js'
 import { styled } from '@mui/material/styles'
 import { memo, MutableRefObject, useEffect, useMemo, useRef } from 'react'
-import { useDashboardI18N } from '../../locales'
+import { useDashboardI18N } from '../../locales/index.js'
 import links from '../../components/FooterLine/links.json'
 import { openWindow } from '@masknet/shared-base-ui'
-import { Services } from '../../API'
+import { Services } from '../../API.js'
 
 const Content = styled('div')(({ theme }) => ({
     padding: `${theme.spacing(1)} ${theme.spacing(4)}`,

@@ -3,9 +3,9 @@ import { Button, Dialog, DialogActions, DialogContent, Typography, DialogProps }
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import { formatPersonaFingerprint, type ProfileIdentifier } from '@masknet/shared-base'
-import { PersonaContext } from '../../hooks/usePersonaContext'
+import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import { LoadingButton } from '@mui/lab'
-import { useI18N } from '../../../../../../utils'
+import { useI18N } from '../../../../../../utils/index.js'
 
 const useStyles = makeStyles()(() => ({
     title: {

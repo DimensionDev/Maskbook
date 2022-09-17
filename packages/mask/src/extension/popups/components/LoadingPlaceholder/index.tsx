@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Icons } from '@masknet/icons'
 import { Typography } from '@mui/material'
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../../../utils/index.js'
 import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({

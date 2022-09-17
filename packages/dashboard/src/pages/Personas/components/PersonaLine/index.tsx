@@ -1,8 +1,8 @@
 import { memo, MouseEvent, useState } from 'react'
 import { Box, Button, Link, Stack, Typography } from '@mui/material'
 import { getMaskColor, MaskColorVar, makeStyles, LoadingBase } from '@masknet/theme'
-import { useDashboardI18N } from '../../../../locales'
-import { DisconnectProfileDialog } from '../DisconnectProfileDialog'
+import { useDashboardI18N } from '../../../../locales/index.js'
+import { DisconnectProfileDialog } from '../DisconnectProfileDialog/index.js'
 import {
     PersonaIdentifier,
     ProfileIdentifier,
@@ -12,7 +12,7 @@ import {
     EnhanceableSite,
 } from '@masknet/shared-base'
 import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
-import { PersonaContext } from '../../hooks/usePersonaContext'
+import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
@@ -85,7 +85,10 @@ export interface ConnectedPersonaLineProps {
     networkIdentifier: string
     disableAdd?: boolean
     personaIdentifier: PersonaIdentifier
-    proof: { loading: boolean; value?: NextIDPersonaBindings }
+    proof: {
+        loading: boolean
+        value?: NextIDPersonaBindings
+    }
 }
 
 export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(

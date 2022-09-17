@@ -1,7 +1,7 @@
 /* eslint @dimensiondev/unicode/specific-set: ["error", { "only": "code" }] */
 import { TwitterDecoder } from '@masknet/encryption'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
-import { injectPostInspectorDefault } from '../../../social-network/defaults/inject/PostInspector'
+import { injectPostInspectorDefault } from '../../../social-network/defaults/inject/PostInspector.js'
 
 export function injectPostInspectorAtTwitter(signal: AbortSignal, current: PostInfo) {
     return injectPostInspectorDefault({

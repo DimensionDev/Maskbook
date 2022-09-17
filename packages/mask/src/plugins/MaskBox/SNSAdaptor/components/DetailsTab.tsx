@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import type { BoxInfo, BoxMetadata } from '../../type'
+import type { BoxInfo, BoxMetadata } from '../../type.js'
 
 const useStyles = makeStyles()((theme) => ({
     main: {

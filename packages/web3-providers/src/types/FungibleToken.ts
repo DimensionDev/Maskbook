@@ -3,18 +3,21 @@ import type { FungibleAsset, Pageable, HubOptions, HubIndicator, FungibleTokenSt
 export namespace FungibleTokenAPI {
     export interface Provider<ChainId, SchemaType, Indicator = HubIndicator> {
         /** Get fungible token price. */
-        getPrice?: (address: string, options?: HubOptions<ChainId>) => Promise<number>
+        getPrice?: (address: string, options?: HubOptions<ChainId, Indicator>) => Promise<number>
         /** Get fungible asset. */
         getAsset?: (
             address: string,
-            options?: HubOptions<ChainId>,
+            options?: HubOptions<ChainId, Indicator>,
         ) => Promise<FungibleAsset<ChainId, SchemaType> | undefined>
         /** Get fungible assets. */
-        getAssets(
+        getAssets?: (
             address: string,
-            options?: HubOptions<ChainId>,
-        ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>, Indicator>>
+            options?: HubOptions<ChainId, Indicator>,
+        ) => Promise<Pageable<FungibleAsset<ChainId, SchemaType>, Indicator>>
         /** Get fungible token stats. */
-        getStats?: (address: string, options?: HubOptions<ChainId>) => Promise<FungibleTokenStats | undefined>
+        getStats?: (
+            address: string,
+            options?: HubOptions<ChainId, Indicator>,
+        ) => Promise<FungibleTokenStats | undefined>
     }
 }
