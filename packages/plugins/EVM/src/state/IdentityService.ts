@@ -7,11 +7,11 @@ import { IdentityServiceState } from '@masknet/plugin-infra/web3'
 import { KeyValue, NextIDProof, RSS3 } from '@masknet/web3-providers'
 import { Providers } from './Connection/provider'
 
-const ENS_RE = /\S{1,256}\.(eth|kred|xyz|luxe)\b/
-const ADDRESS_FULL = /0x\w{40,}/
+const ENS_RE = /\S{1,256}\.(eth|kred|xyz|luxe)\b/i
+const ADDRESS_FULL = /0x\w{40,}/i
 // xxx.cheers.bio xxx.rss3.bio
-const RSS3_URL_RE = /https?:\/\/(?<name>[\w.]+)\.(rss3|cheers)\.bio/
-const RSS3_RNS_RE = /(?<name>[\w.]+)\.rss3/
+const RSS3_URL_RE = /https?:\/\/(?<name>[\w.]+)\.(rss3|cheers)\.bio/i
+const RSS3_RNS_RE = /(?<name>[\w.]+)\.rss3/i
 
 function getENSName(nickname: string, bio: string) {
     const [matched] = nickname.match(ENS_RE) ?? bio.match(ENS_RE) ?? []
