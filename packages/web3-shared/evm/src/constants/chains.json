@@ -128,7 +128,7 @@
         "name": "BNB Chain",
         "color": "rgb(240, 185, 10)",
         "network": "mainnet",
-        "fullName": "Binance",
+        "fullName": "Binance Smart Chain Mainnet",
         "shortName": "bnb",
         "features": [],
         "nativeCurrency": {
@@ -177,7 +177,7 @@
         "name": "Polygon",
         "color": "rgb(119, 62, 225)",
         "network": "mainnet",
-        "fullName": "Polygon",
+        "fullName": "Polygon Mainnet",
         "shortName": "matic",
         "features": ["EIP1559"],
         "nativeCurrency": {
@@ -342,6 +342,7 @@
             "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/optimism/info/logo.png/quality=85"
         },
         "infoURL": "https://optimistic.etherscan.io/",
+        "fullName": "Optimism",
         "shortName": "op",
         "explorers": [
             {
@@ -1120,14 +1121,15 @@
         "chainId": 100,
         "type": "xDai",
         "name": "Gnosis",
+        "fullName": "Gnosis",
         "color": "rgb(73, 169, 166)",
         "network": "mainnet",
         "shortName": "xDai",
         "features": [],
         "nativeCurrency": {
             "chainId": 100,
-            "name": "xDai",
-            "symbol": "xDai",
+            "name": "xDAI",
+            "symbol": "xDAI",
             "decimals": 18
         },
         "infoURL": "https://blockscout.com/xdai/mainnet"
@@ -1205,8 +1207,9 @@
     {
         "chainId": 122,
         "type": "Fuse",
-        "name": "FUSE",
+        "name": "Fuse",
         "network": "mainnet",
+        "fullName": "Fuse Mainnet",
         "shortName": "fuse",
         "features": [],
         "nativeCurrency": {
@@ -1340,7 +1343,7 @@
         "chainId": 250,
         "type": "Fantom",
         "name": "FTM",
-        "fullName": "Fantom",
+        "fullName": "Fantom Opera",
         "network": "mainnet",
         "shortName": "ftm",
         "features": [],
@@ -2264,6 +2267,7 @@
         "color": "rgb(232, 65, 66)",
         "network": "mainnet",
         "shortName": "AVAX",
+        "fullName": "Avalanche C-Chain",
         "features": [],
         "nativeCurrency": {
             "chainId": 43114,
@@ -2300,6 +2304,7 @@
         "chainId": 44787,
         "name": "Celo",
         "network": "Alfajores",
+        "fullName": "Celo Mainnet",
         "shortName": "ALFA",
         "features": [],
         "nativeCurrency": {
@@ -2820,6 +2825,7 @@
         "name": "Aurora",
         "color": "rgb(112, 212, 74)",
         "network": "mainnet",
+        "fullName": "Aurora Mainnet",
         "shortName": "aurora",
         "features": [],
         "nativeCurrency": {
@@ -2874,6 +2880,7 @@
         "name": "Harmony",
         "type": "Harmony",
         "network": "mainnet",
+        "fullName": "Harmony Mainnet Shard 0",
         "shortName": "hmy",
         "features": [],
         "nativeCurrency": {
@@ -3064,6 +3071,7 @@
         "type": "Conflux",
         "name": "Conflux",
         "network": "testnet",
+        "fullName": "Conflux eSpace",
         "shortName": "Conflux",
         "features": [],
         "nativeCurrency": {
@@ -3094,6 +3102,7 @@
         "type": "Astar",
         "name": "Astar",
         "network": "mainnet",
+        "fullName": "Astar",
         "shortName": "Astar",
         "rpc": ["https://evm.astar.network"],
         "faucets": [],
