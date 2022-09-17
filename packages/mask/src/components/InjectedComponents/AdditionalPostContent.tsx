@@ -7,7 +7,7 @@ import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender
 import CheckIcon from '@mui/icons-material/Check'
 import CloseIcon from '@mui/icons-material/Close'
 import green from '@mui/material/colors/green'
-import { MaskIcon } from '../../resources/MaskIcon.js'
+import { MaskIcon } from '@masknet/shared'
 import { memo, useCallback, useMemo } from 'react'
 import { activatedSocialNetworkUI } from '../../social-network/ui.js'
 

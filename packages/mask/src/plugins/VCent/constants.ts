@@ -1,4 +1,4 @@
-import { PluginId } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/plugin-infra'
 
 // #region plugin definitions
 
@@ -7,6 +7,6 @@ export const TWEET_BASE_URL = 'https://vcent-agent.r2d2.to/data/tweet-txn?tweetI
 export const VALUABLES_VCENT_URL = 'https://v.cent.co/tweet/'
 // #endregion
 
-export const PLUGIN_ID = PluginId.Valuables
+export const PLUGIN_ID = PluginID.Valuables
 export const PLUGIN_NAME = 'vCent'
 export const PLUGIN_DESCRIPTION = 'A Plugin for https://v.cent.co/'

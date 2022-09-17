@@ -1,6 +1,7 @@
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
+import { first } from 'lodash-unified'
 import { EthereumAddress } from 'wallet.ts'
-import { Box, Card, CardActions, CardContent, Checkbox, FormControlLabel, TextField, Typography } from '@mui/material'
+import { Box, Card, CardActions, CardContent, Checkbox, FormControlLabel, Typography, InputBase } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { isZero, isGreaterThan, NetworkPluginID, FungibleToken, NonFungibleAsset } from '@masknet/web3-shared-base'
@@ -9,13 +10,11 @@ import { PluginWalletStatusBar, useI18N } from '../../../../utils/index.js'
 import { SelectTokenAmountPanel } from '../../../ITO/SNSAdaptor/SelectTokenAmountPanel.js'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary.js'
 import { DateTimePanel } from '../../../../web3/UI/DateTimePanel.js'
-import { toAsset } from '../../helpers.js'
+import { toAsset, isWyvernSchemaName } from '../../helpers.js'
 import getUnixTime from 'date-fns/getUnixTime'
-import { first } from 'lodash-unified'
-import { isWyvernSchemaName } from '../../utils.js'
 import { useAccount, useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
-import { useOpenSea } from '../../hooks/useOpenSea.js'
 import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton.js'
+import { useOpenSea } from './hooks/useOpenSea.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -42,6 +41,11 @@ const useStyles = makeStyles()((theme) => {
             margin: 0,
             height: 40,
         },
+        helperText: {
+            color: theme.palette.maskColor.second,
+            margin: theme.spacing(1, 0),
+            fontSize: 12,
+        },
     }
 })
 
@@ -65,8 +69,9 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const opensea = useOpenSea(chainId)
 
-    const [scheduleTime, setScheduleTime] = useState(new Date())
-    const [expirationTime, setExpirationTime] = useState(new Date())
+    const now = new Date()
+    const [scheduleTime, setScheduleTime] = useState(now)
+    const [expirationTime, setExpirationTime] = useState(now)
     const [buyerAddress, setBuyerAddress] = useState('')
     const [endingAmount, setEndingAmount] = useState('')
 
@@ -146,18 +151,10 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                     disableNativeToken={!paymentTokens.some((x) => isNativeTokenAddress(x.address))}
                     onAmountChange={setAmount}
                     onTokenChange={(x) => setAddress(x.address)}
-                    TokenAmountPanelProps={{
+                    FungibleTokenInputProps={{
                         label: endingPriceChecked
                             ? t('plugin_collectible_starting_price')
                             : t('plugin_collectible_price'),
-                        TextFieldProps: {
-                            classes: {
-                                root: classes.panel,
-                            },
-                            helperText: endingPriceChecked
-                                ? t('plugin_collectible_set_initial_price')
-                                : t('plugin_collectible_ending_price_tip'),
-                        },
                     }}
                     FungibleTokenListProps={{
                         selectedTokens: token.value ? [token.value.address] : [],
@@ -165,59 +162,64 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                         whitelist: paymentTokens.map((x) => x.address),
                     }}
                 />
+                <Typography className={classes.helperText}>
+                    {endingPriceChecked
+                        ? t('plugin_collectible_set_initial_price')
+                        : t('plugin_collectible_ending_price_tip')}
+                </Typography>
                 {endingPriceChecked ? (
-                    <SelectTokenAmountPanel
-                        amount={endingAmount}
-                        balance={balance.value ?? '0'}
-                        onAmountChange={setEndingAmount}
-                        token={token.value}
-                        onTokenChange={(x) => setAddress(x.address)}
-                        TokenAmountPanelProps={{
-                            label: t('plugin_collectible_ending_price'),
-                            disableToken: true,
-                            disableBalance: true,
-                            TextFieldProps: {
-                                classes: {
-                                    root: classes.panel,
-                                },
-                                helperText: t('plugin_collectible_ending_price_less_than_staring'),
-                            },
-                        }}
-                    />
+                    <>
+                        <SelectTokenAmountPanel
+                            amount={endingAmount}
+                            balance={balance.value ?? '0'}
+                            onAmountChange={setEndingAmount}
+                            token={token.value}
+                            onTokenChange={(x) => setAddress(x.address)}
+                            FungibleTokenInputProps={{
+                                label: t('plugin_collectible_ending_price'),
+                                disableToken: true,
+                                disableBalance: true,
+                            }}
+                        />
+                        <Typography className={classes.helperText}>
+                            {t('plugin_collectible_ending_price_less_than_staring')}
+                        </Typography>
+                    </>
                 ) : null}
+
                 {futureTimeChecked || endingPriceChecked ? (
-                    <DateTimePanel
-                        label={
-                            endingPriceChecked
-                                ? t('plugin_collectible_expiration_date')
-                                : t('plugin_collectible_schedule_date')
-                        }
-                        date={endingPriceChecked ? expirationTime : scheduleTime}
-                        min={formatDateTime(new Date(), "yyyy-MM-dd'T23:59")}
-                        onChange={endingPriceChecked ? setExpirationTime : setScheduleTime}
-                        className={classes.panel}
-                        helperText={
-                            endingPriceChecked
+                    <>
+                        <DateTimePanel
+                            label={
+                                endingPriceChecked
+                                    ? t('plugin_collectible_expiration_date')
+                                    : t('plugin_collectible_schedule_date')
+                            }
+                            date={endingPriceChecked ? expirationTime : scheduleTime}
+                            min={formatDateTime(new Date(), "yyyy-MM-dd'T23:59")}
+                            onChange={endingPriceChecked ? setExpirationTime : setScheduleTime}
+                            fullWidth
+                        />
+                        <Typography className={classes.helperText}>
+                            {endingPriceChecked
                                 ? t('plugin_collectible_auto_cancel_tip')
-                                : t('plugin_collectible_schedule_future_date')
-                        }
-                        fullWidth
-                    />
+                                : t('plugin_collectible_schedule_future_date')}
+                        </Typography>
+                    </>
                 ) : null}
                 {privacyChecked ? (
-                    <TextField
-                        className={classes.panel}
-                        fullWidth
-                        value={buyerAddress}
-                        variant="outlined"
-                        label={t('plugin_collectible_buyer_address')}
-                        placeholder={t('plugin_collectible_buyer_address_placeholder')}
-                        helperText={t('plugin_collectible_buyer_address_helper_text')}
-                        onChange={(e) => setBuyerAddress(e.target.value)}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                    />
+                    <>
+                        <Typography>{t('plugin_collectible_buyer_address')}</Typography>
+                        <InputBase
+                            fullWidth
+                            value={buyerAddress}
+                            placeholder={t('plugin_collectible_buyer_address_placeholder')}
+                            onChange={(e) => setBuyerAddress(e.target.value)}
+                        />
+                        <Typography className={classes.helperText}>
+                            {t('plugin_collectible_buyer_address_helper_text')}
+                        </Typography>
+                    </>
                 ) : null}
                 <Box sx={{ padding: 2, paddingBottom: 0 }}>
                     <FormControlLabel

@@ -1,7 +1,7 @@
 import { ImgHTMLAttributes, useState } from 'react'
 import classNames from 'classnames'
-import { makeStyles, parseColor, useStylesExtends } from '@masknet/theme'
-import { Box, CircularProgress, useTheme } from '@mui/material'
+import { LoadingBase, makeStyles, parseColor, useStylesExtends } from '@masknet/theme'
+import { Box, useTheme } from '@mui/material'
 import { useImageURL } from '../../../hooks/useImageURL.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -42,17 +42,7 @@ export function Image({ fallback, disableSpinner, classes: externalClasses, onCl
         return (
             <Box className={classes.container}>
                 <Box className={classes.spinContainer}>
-                    <CircularProgress
-                        variant="determinate"
-                        value={100}
-                        className={classNames(classes.imageLoading, classes.circle)}
-                    />
-                    <CircularProgress
-                        variant="indeterminate"
-                        disableShrink
-                        className={classes.imageLoading}
-                        sx={{ position: 'absolute', left: 0 }}
-                    />
+                    <LoadingBase />
                 </Box>
             </Box>
         )

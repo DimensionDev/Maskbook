@@ -1,8 +1,8 @@
-import { hmr } from '../../../utils-pure/index.js'
-import { BackgroundInstance, BackgroundPluginHost } from '@masknet/sandboxed-plugin-runtime/background'
-import { Flags } from '../../../shared/flags.js'
-import { Plugin, registerPlugin } from '@masknet/plugin-infra'
 import { None, Result, Some } from 'ts-results'
+import { Plugin, PluginID, registerPlugin } from '@masknet/plugin-infra'
+import { BackgroundInstance, BackgroundPluginHost } from '@masknet/sandboxed-plugin-runtime/background'
+import { hmr } from '../../../utils-pure/index.js'
+import { Flags } from '../../../shared/flags.js'
 import { createPluginDatabase } from '../../database/plugin-db/index.js'
 import { createHostAPIs } from '../../../shared/sandboxed-plugin/host-api.js'
 
@@ -43,7 +43,7 @@ function __builtInPluginInfraBridgeCallback__(this: BackgroundPluginHost, id: st
             networks: { type: 'opt-out', networks: {} },
             target: 'beta',
         },
-        ID: id,
+        ID: id as PluginID,
         // TODO: read i18n files
         // TODO: read the name from the manifest
         name: { fallback: '__generated__bridge__plugin__' + id },

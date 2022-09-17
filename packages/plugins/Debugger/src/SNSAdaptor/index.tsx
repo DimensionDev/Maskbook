@@ -12,6 +12,7 @@ import { ConnectionDialog } from './components/ConnectionDialog.js'
 import { HubDialog } from './components/HubDialog.js'
 import { ProfileCover } from './components/ProfileCover.js'
 import { AvatarDecorator } from './components/AvatarDecorator.js'
+import { WidgetDialog } from './components/WidgetDialog.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -80,6 +81,27 @@ const sns: Plugin.SNSAdaptor.Definition = {
             icon: <Icons.MaskBlue size={36} />,
             name: PLUGIN_NAME,
         },
+        {
+            ApplicationEntryID: `${PLUGIN_ID}_Widget`,
+            RenderEntryComponent() {
+                const { openDialog } = useRemoteControlledDialog(PluginDebuggerMessages.widgetDialogUpdated)
+                return (
+                    <ApplicationEntry
+                        title="Widgets"
+                        disabled={false}
+                        iconFilterColor=""
+                        icon={<Icons.MaskBlue size={36} />}
+                        onClick={() => {
+                            openDialog()
+                        }}
+                    />
+                )
+            },
+            appBoardSortingDefaultPriority: Number.MAX_SAFE_INTEGER,
+            marketListSortingPriority: Number.MAX_SAFE_INTEGER,
+            icon: <Icons.MaskBlue size={36} />,
+            name: PLUGIN_NAME,
+        },
     ],
     GlobalInjection() {
         return (
@@ -87,6 +109,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 <ConsoleDialog />
                 <ConnectionDialog />
                 <HubDialog />
+                <WidgetDialog />
             </>
         )
     },

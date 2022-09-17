@@ -1,20 +1,19 @@
 import { first } from 'lodash-unified'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Card, CardActions, CardContent } from '@mui/material'
+import { Card, CardActions, CardContent, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { isZero, isLessThan, NetworkPluginID, NonFungibleAsset, FungibleToken } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
+import getUnixTime from 'date-fns/getUnixTime'
 import { PluginWalletStatusBar, useI18N } from '../../../../utils/index.js'
 import { SelectTokenAmountPanel } from '../../../ITO/SNSAdaptor/SelectTokenAmountPanel.js'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary.js'
 import { DateTimePanel } from '../../../../web3/UI/DateTimePanel.js'
-import { toAsset } from '../../helpers.js'
-import getUnixTime from 'date-fns/getUnixTime'
-import { isWyvernSchemaName } from '../../utils.js'
+import { toAsset, isWyvernSchemaName } from '../../helpers.js'
 import { useAccount, useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
-import { useOpenSea } from '../../hooks/useOpenSea.js'
 import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton.js'
+import { useOpenSea } from './hooks/useOpenSea.js'
 
 const useStyles = makeStyles()((theme) => ({
     footer: {
@@ -36,6 +35,11 @@ const useStyles = makeStyles()((theme) => ({
     },
     stateBar: {
         marginTop: theme.spacing(1.5),
+    },
+    helperText: {
+        color: theme.palette.maskColor.second,
+        margin: theme.spacing(1, 0, 2),
+        fontSize: 12,
     },
 }))
 
@@ -105,14 +109,8 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                     disableNativeToken={!paymentTokens.some((x) => isNativeTokenAddress(x.address))}
                     onAmountChange={setAmount}
                     onTokenChange={(x) => setAddress(x.address)}
-                    TokenAmountPanelProps={{
-                        classes: {
-                            root: classes.panel,
-                        },
+                    FungibleTokenInputProps={{
                         label: t('plugin_collectible_minimum_bid'),
-                        TextFieldProps: {
-                            helperText: t('plugin_collectible_set_starting_bid_price'),
-                        },
                     }}
                     FungibleTokenListProps={{
                         selectedTokens: token.value ? [token.value.address] : [],
@@ -120,24 +118,20 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                         whitelist: paymentTokens.map((x) => x.address),
                     }}
                 />
+                <Typography className={classes.helperText}>{t('plugin_collectible_set_starting_bid_price')}</Typography>
                 <SelectTokenAmountPanel
                     amount={reservePrice}
                     balance={balance.value ?? '0'}
                     onAmountChange={setReservePrice}
                     token={token.value}
                     onTokenChange={(x) => setAddress(x.address)}
-                    TokenAmountPanelProps={{
-                        classes: {
-                            root: classes.panel,
-                        },
+                    FungibleTokenInputProps={{
                         disableToken: true,
                         disableBalance: true,
                         label: t('plugin_collectible_reserve_price'),
-                        TextFieldProps: {
-                            helperText: t('plugin_collectible_reserve_price_helper'),
-                        },
                     }}
                 />
+                <Typography className={classes.helperText}>{t('plugin_collectible_reserve_price_helper')}</Typography>
                 <DateTimePanel
                     label={t('plugin_collectible_expiration_date')}
                     date={expirationDateTime}

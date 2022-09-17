@@ -21,6 +21,11 @@ interface DebuggerMessages {
      */
     hubDialogUpdated: DialogUpdated
 
+    /**
+     * Open widget dialog
+     */
+    widgetDialogUpdated: DialogUpdated
+
     rpc: unknown
 }
 

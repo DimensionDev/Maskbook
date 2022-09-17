@@ -1,5 +1,5 @@
 import { forwardRef, useImperativeHandle, useMemo, useRef, useState, startTransition, useCallback, useId } from 'react'
-import { Typography, Chip, Button } from '@mui/material'
+import { Typography, Chip, Button, Checkbox } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
 import { makeStyles } from '@masknet/theme'
@@ -24,7 +24,6 @@ const useStyles = makeStyles()((theme) => ({
             height: '36px !important',
         },
         minHeight: 450,
-        overflowY: 'auto',
     },
     flex: {
         width: '100%',
@@ -193,20 +192,18 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
     return (
         <CompositionContext.Provider value={context}>
             <div className={classes.root}>
-                <div className={classes.editorWrapper}>
-                    <TypedMessageEditor
-                        autoFocus
-                        readonly={sending}
-                        ref={(element) => {
-                            Editor.current = element
-                            if (element) updatePostSize(element.estimatedLength)
-                        }}
-                        onChange={(message) => {
-                            startTransition(() => props.onChange?.(message))
-                            updatePostSize(Editor.current?.estimatedLength || 0)
-                        }}
-                    />
-                </div>
+                <TypedMessageEditor
+                    autoFocus
+                    readonly={sending}
+                    ref={(element) => {
+                        Editor.current = element
+                        if (element) updatePostSize(element.estimatedLength)
+                    }}
+                    onChange={(message) => {
+                        startTransition(() => props.onChange?.(message))
+                        updatePostSize(Editor.current?.estimatedLength || 0)
+                    }}
+                />
 
                 <div className={classes.flex}>
                     <Typography className={classes.optionTitle}>{t('plugins')}</Typography>
@@ -250,9 +247,8 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                             Next generation payload
                         </Typography>
                         <div style={{ flex: 1 }} />
-                        <input
+                        <Checkbox
                             id={id}
-                            type="checkbox"
                             checked={props.version === -37}
                             onChange={() => props.setVersion(props.version === -38 ? -37 : -38)}
                         />

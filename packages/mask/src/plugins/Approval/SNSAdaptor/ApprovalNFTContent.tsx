@@ -24,7 +24,7 @@ export function ApprovalNFTContent({ chainId }: { chainId: ChainId }) {
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM)
     const { value: spenderList, loading } = useAsync(
-        async () => hub?.getNonFungibleApprovedContracts?.(chainId, account),
+        async () => hub?.getNonFungibleTokenSpenders?.(chainId, account),
         [chainId, account, hub],
     )
 
@@ -124,11 +124,9 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
 
                 <ChainBoundary
                     expectedChainId={chainId}
-                    switchChainWithoutPopup
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                     className={classes.chainBoundary}
                     classes={{ switchButton: classes.button }}
-                    expectedChainIdSwitchedCallback={() => approveCallback()}
                     ActionButtonPromiseProps={{
                         fullWidth: false,
                         init: t.revoke(),

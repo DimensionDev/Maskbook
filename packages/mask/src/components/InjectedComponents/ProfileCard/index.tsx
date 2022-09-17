@@ -1,16 +1,16 @@
 import { Icons } from '@masknet/icons'
 import {
     createInjectHooksRenderer,
-    PluginId,
+    PluginID,
     useActivatedPluginsSNSAdaptor,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
 import { useAvailablePlugins, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, SocialIdentity } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
-import { CircularProgress, Tab, Typography } from '@mui/material'
+import { Tab, Typography } from '@mui/material'
 import { first, uniqBy } from 'lodash-unified'
 import { FC, useEffect, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
@@ -190,7 +190,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         return plugins
             .flatMap((x) => x.ProfileCardTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? EMPTY_LIST)
             .filter((x) => {
-                const isAllowed = x.pluginID === PluginId.RSS3 || x.pluginID === PluginId.Collectible
+                const isAllowed = x.pluginID === PluginID.RSS3 || x.pluginID === PluginID.Collectible
                 const shouldDisplay = x.Utils?.shouldDisplay?.(identity, selectedSocialAddress) ?? true
                 return isAllowed && shouldDisplay
             })
@@ -201,7 +201,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
         label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
     }))
 
-    const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginId.Collectible, ...tabs.map((tab) => tab.id))
+    const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
 
     const component = useMemo(() => {
         const Component = getTabContent(currentTab)
@@ -220,7 +220,7 @@ export const ProfileCard: FC<Props> = ({ identity, ...rest }) => {
     if (!userId || loadingSocialAddressList)
         return (
             <div className={cx(classes.root, classes.loading)}>
-                <CircularProgress />
+                <LoadingBase />
             </div>
         )
 

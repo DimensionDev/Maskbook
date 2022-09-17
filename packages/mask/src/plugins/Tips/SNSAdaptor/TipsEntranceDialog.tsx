@@ -1,6 +1,6 @@
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { InjectedDialog, useSnackbarCallback } from '@masknet/shared'
-import { PluginId } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/plugin-infra'
 import {
     NextIDPlatform,
     CrossIsolationMessages,
@@ -151,7 +151,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
                 NextIDPlatform.NextID,
                 currentPersonaIdentifier,
             )
-            storage.set<TipsSettingType>(PluginId.Tips, {
+            storage.set<TipsSettingType>(PluginID.Tips, {
                 ...TipsSetting,
                 defaultAddress: pendingDefault,
             })
@@ -179,7 +179,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
         () =>
             CrossIsolationMessages.events.PluginSettingsDialogUpdate.sendToLocal({
                 open: true,
-                targetTab: PluginId.Tips,
+                targetTab: PluginID.Tips,
             }),
         [],
     )

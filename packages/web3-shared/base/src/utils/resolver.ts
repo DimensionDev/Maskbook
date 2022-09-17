@@ -167,6 +167,8 @@ export const resolveSourceTypeName = createLookupTableResolver<SourceType, strin
         [SourceType.DeBank]: 'DeBank',
         [SourceType.Zerion]: 'Zerion',
         [SourceType.RSS3]: 'RSS3',
+        [SourceType.CoinMarketCap]: 'CoinMarketCap',
+        [SourceType.UniswapInfo]: 'UniswapInfo',
         [SourceType.OpenSea]: 'OpenSea',
         [SourceType.Rarible]: 'Rarible',
         [SourceType.LooksRare]: 'LooksRare',

@@ -1,13 +1,20 @@
 import { Icons } from '@masknet/icons'
-import { PluginId, useActivatedPluginsSNSAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
+import { PluginID, useActivatedPluginsSNSAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { useAccount } from '@masknet/plugin-infra/web3'
 import { DataProvider } from '@masknet/public-api'
-import { FormattedCurrency, Linking, TokenSecurityBar, useTokenSecurity } from '@masknet/shared'
+import {
+    FormattedCurrency,
+    Linking,
+    TokenSecurityBar,
+    useTokenSecurity,
+    SourceSwitcher,
+    FootnoteMenuOption,
+} from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColors, useStylesExtends } from '@masknet/theme'
 import type { TrendingAPI } from '@masknet/web3-providers'
-import { formatCurrency, NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
+import { formatCurrency, NetworkPluginID, TokenType, SourceType } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Avatar, Button, CardContent, IconButton, Paper, Stack, Typography, useTheme } from '@mui/material'
 import { Box } from '@mui/system'
@@ -20,8 +27,6 @@ import { PluginTransakMessages } from '../../../Transak/messages.js'
 import { getCurrentPreferredCoinIdSettings } from '../../settings.js'
 import { setStorage } from '../../storage/index.js'
 import type { Coin, Currency, Stat } from '../../types/index.js'
-import type { FootnoteMenuOption } from '../trader/components/FootnoteMenuUI.js'
-import { TradeDataSource } from '../trader/TradeDataSource.js'
 import { CoinMenu } from './CoinMenu.js'
 import { CoinSafetyAlert } from './CoinSafetyAlert.js'
 import { CoinIcon } from './components/index.js'
@@ -150,15 +155,15 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const isNFT = coin.type === TokenType.NonFungible
 
     // #region buy
-    const transakPluginEnabled = useActivatedPluginsSNSAdaptor('any').some((x) => x.ID === PluginId.Transak)
-    const transakIsMinimalMode = useIsMinimalMode(PluginId.Transak)
+    const transakPluginEnabled = useActivatedPluginsSNSAdaptor('any').some((x) => x.ID === PluginID.Transak)
+    const transakIsMinimalMode = useIsMinimalMode(PluginID.Transak)
 
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const isAllowanceCoin = useTransakAllowanceCoin({ address: coin.contract_address, symbol: coin.symbol })
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
 
     const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
-    const isTokenSecurityEnable = !isNFT && !snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginId.GoPlusSecurity)
+    const isTokenSecurityEnable = !isNFT && !snsAdaptorMinimalPlugins.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
 
     const { value: tokenSecurityInfo, error } = useTokenSecurity(
         coin.chainId ?? ChainId.Mainnet,
@@ -203,12 +208,13 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         <TrendingCard {...TrendingCardProps}>
             <Stack className={classes.cardHeader}>
                 <PluginHeader>
-                    <TradeDataSource
-                        showDataProviderIcon={showDataProviderIcon}
-                        dataProvider={dataProvider}
-                        dataProviders={dataProviders}
-                        onDataProviderChange={onDataProviderChange}
-                    />
+                    {showDataProviderIcon ? (
+                        <SourceSwitcher
+                            sourceType={dataProvider as unknown as SourceType}
+                            sourceTypes={dataProviders as unknown as SourceType[]}
+                            onSourceTypeChange={onDataProviderChange}
+                        />
+                    ) : null}
                 </PluginHeader>
                 <Stack className={classes.headline}>
                     <Stack gap={2} flexGrow={1}>
@@ -286,7 +292,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             {isNFT ? `${t('plugin_trader_floor_price')}: ` : null}
                                             <FormattedCurrency
                                                 value={
-                                                    (dataProvider === DataProvider.COIN_MARKET_CAP
+                                                    (dataProvider === DataProvider.CoinMarketCap
                                                         ? last(stats)?.[1] ?? market.current_price
                                                         : market.current_price) ?? 0
                                                 }
@@ -316,7 +322,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 </Stack>
             </Stack>
             <CardContent className={classes.content}>
-                {dataProvider === DataProvider.UNISWAP_INFO && <CoinSafetyAlert coin={trending.coin} />}
+                {dataProvider === DataProvider.UniswapInfo && <CoinSafetyAlert coin={trending.coin} />}
                 <Paper className={classes.body} elevation={0}>
                     {children}
                 </Paper>

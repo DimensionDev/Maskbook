@@ -6,6 +6,7 @@ export {
     useActivatedPluginsSNSAdaptor,
     useIsMinimalMode,
 } from './manager/sns-adaptor.js'
+
 export {
     type PostContext,
     type PostContextAuthor,
@@ -18,4 +19,6 @@ export {
     usePostInfoDetails,
 } from './PostContext.js'
 export { CompositionContext, useCompositionContext } from './CompositionContext.js'
-export { RemoteView, type RemoteViewProps } from './hooks/RemoteView'
+
+// shared components
+export { Widget, type WidgetProps } from './components/Widget.js'

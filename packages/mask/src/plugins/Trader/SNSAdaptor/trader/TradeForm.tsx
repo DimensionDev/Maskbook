@@ -35,7 +35,7 @@ import { TokenSecurityBoundary } from '../../../../web3/UI/TokenSecurityBoundary
 import { currentSlippageSettings } from '../../settings.js'
 import { PluginTraderMessages } from '../../messages.js'
 import Services from '../../../../extension/service.js'
-import { PluginId, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import { PluginID, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
 import { useIsMinimalModeDashBoard } from '@masknet/plugin-infra/dashboard'
 
 const useStyles = makeStyles<{
@@ -264,8 +264,8 @@ export const TradeForm = memo<AllTradeFormProps>(
         const [isExpand, setExpand] = useState(false)
 
         const snsAdaptorMinimalPlugins = useActivatedPluginsSNSAdaptor(true)
-        const isSNSClosed = snsAdaptorMinimalPlugins?.map((x) => x.ID).includes(PluginId.GoPlusSecurity)
-        const isDashboardClosed = useIsMinimalModeDashBoard(PluginId.GoPlusSecurity)
+        const isSNSClosed = snsAdaptorMinimalPlugins?.map((x) => x.ID).includes(PluginID.GoPlusSecurity)
+        const isDashboardClosed = useIsMinimalModeDashBoard(PluginID.GoPlusSecurity)
         const isTokenSecurityEnable = !isSNSClosed && !isDashboardClosed
 
         const { value: tokenSecurityInfo, error } = useTokenSecurity(

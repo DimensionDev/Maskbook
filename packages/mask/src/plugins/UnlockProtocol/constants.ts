@@ -1,9 +1,9 @@
-import { PluginId } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/plugin-infra'
 import { ChainId } from '@masknet/web3-shared-evm'
 
 export const pluginName = 'Unlock Protocol'
 export const pluginDescription = 'Post content behind a secure paywall'
-export const pluginId = PluginId.UnlockProtocol
+export const pluginId = PluginID.UnlockProtocol
 export const pluginMetaKey = `${pluginId}:1`
 
 export const graphEndpointKeyVal = {

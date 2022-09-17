@@ -1,5 +1,5 @@
 import type BigNumber from 'bignumber.js'
-import { createPluginMessage, PluginId, PluginMessageEmitter } from '@masknet/plugin-infra'
+import { createPluginMessage, PluginID, PluginMessageEmitter } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import type { GasOptionType, NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -12,7 +12,7 @@ export type ApplicationDialogEvent = {
         // closing the Setting dialog will not return to ApplicationBoard normal dialog
         quickMode?: boolean
         switchTab?: {
-            focusPluginId?: PluginId
+            focusPluginId?: PluginID
         }
     }
 }

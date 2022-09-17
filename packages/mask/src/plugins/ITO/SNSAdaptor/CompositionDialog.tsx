@@ -1,4 +1,4 @@
-import { PluginId, useActivatedPlugin, useCompositionContext } from '@masknet/plugin-infra/content-script'
+import { PluginID, useActivatedPlugin, useCompositionContext } from '@masknet/plugin-infra/content-script'
 import { InjectedDialog, InjectedDialogProps, useOpenShareTxDialog } from '@masknet/shared'
 import { EMPTY_LIST, EnhanceableSite } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -79,7 +79,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
     const { attachMetadata, dropMetadata } = useCompositionContext()
     const pluginID = useCurrentWeb3NetworkPluginID()
-    const ITO_Definition = useActivatedPlugin(PluginId.ITO, 'any')
+    const ITO_Definition = useActivatedPlugin(PluginID.ITO, 'any')
     const chainIdList = ITO_Definition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? EMPTY_LIST
     const [chainId, setChainId] = useState<ChainId>(currentChainId)
 

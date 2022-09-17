@@ -1,4 +1,4 @@
-import { PluginId } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/plugin-infra'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { BindingProof, NextIDPlatform } from '@masknet/shared-base'
 import { useAsyncRetry } from 'react-use'
@@ -11,7 +11,7 @@ export function useTipsSetting(publicKeyAsHex?: string) {
         if (!Storage || !publicKeyAsHex) return
         const storage = Storage.createNextIDStorage(publicKeyAsHex, NextIDPlatform.NextID, publicKeyAsHex)
 
-        const settings = await storage.get<BindingProof[] | TipsSettingType>(PluginId.Tips)
+        const settings = await storage.get<BindingProof[] | TipsSettingType>(PluginID.Tips)
 
         // When the data is legacy
         if (!Array.isArray(settings)) return settings

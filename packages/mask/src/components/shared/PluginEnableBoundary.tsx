@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { PluginId, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
+import { PluginID, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { makeStyles, LoadingBase, useStylesExtends } from '@masknet/theme'
 import { Button, Typography } from '@mui/material'
 import { memo } from 'react'
@@ -18,7 +18,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface PluginEnableBoundaryProps extends withClasses<'root'> {
-    pluginId: PluginId
+    pluginId: PluginID
     children: React.ReactNode
 }
 export const PluginEnableBoundary = memo<PluginEnableBoundaryProps>((props) => {

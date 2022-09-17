@@ -38,7 +38,6 @@
     }
   },
   "dependencies": {
-    "@dimensiondev/holoflows-kit": "0.9.0-20220807034934-68f04f1",
     "@masknet/compartment": "^0.3.8",
     "@masknet/icons": "workspace:*",
     "@masknet/membrane": "^0.1.3",

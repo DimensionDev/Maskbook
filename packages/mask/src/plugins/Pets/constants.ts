@@ -3,8 +3,9 @@ import { MEDIA_VIEWER_URL } from '@masknet/shared'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { ImageType } from './types.js'
+import { PluginID } from '@masknet/plugin-infra'
 
-export const PetsPluginID = 'com.maskbook.pets'
+export const PetsPluginID = PluginID.Pets
 export const TWITTER = 'twitter.com'
 export const MASK_TWITTER = 'realMaskNetwork'
 export const DEFAULT_SET_WORD =

@@ -1,9 +1,9 @@
 import { useCallback } from 'react'
 import type { MaskFixedSizeListProps, MaskTextFieldProps } from '@masknet/theme'
-import { useSelectFungibleToken } from '@masknet/shared'
+import { useSelectFungibleToken, FungibleTokenInput, FungibleTokenInputProps } from '@masknet/shared'
 import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { TokenAmountPanel, TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel.js'
+import { useI18N } from '../../../utils/index.js'
 
 interface ERC20TokenListProps extends withClasses<'list' | 'placeholder'> {
     targetChainId?: ChainId
@@ -26,10 +26,11 @@ export interface SelectTokenAmountPanelProps {
     onAmountChange: (amount: string) => void
     onTokenChange: (token: FungibleToken<ChainId, SchemaType>) => void
     FungibleTokenListProps?: Partial<ERC20TokenListProps>
-    TokenAmountPanelProps?: Partial<TokenAmountPanelProps>
+    FungibleTokenInputProps?: Partial<FungibleTokenInputProps>
 }
 
 export function SelectTokenAmountPanel(props: SelectTokenAmountPanelProps) {
+    const { t } = useI18N()
     const {
         amount,
         balance,
@@ -39,7 +40,7 @@ export function SelectTokenAmountPanel(props: SelectTokenAmountPanelProps) {
         onAmountChange,
         onTokenChange,
         FungibleTokenListProps,
-        TokenAmountPanelProps,
+        FungibleTokenInputProps,
     } = props
 
     // #region select token
@@ -55,20 +56,14 @@ export function SelectTokenAmountPanel(props: SelectTokenAmountPanelProps) {
     // #endregion
 
     return (
-        <TokenAmountPanel
+        <FungibleTokenInput
             amount={amount}
             balance={balance}
             token={token}
-            label="Amount"
+            label={t('amount')}
             onAmountChange={onAmountChange}
-            {...TokenAmountPanelProps}
-            SelectTokenChip={{
-                ...TokenAmountPanelProps?.SelectTokenChip,
-                ChipProps: {
-                    ...TokenAmountPanelProps?.SelectTokenChip?.ChipProps,
-                    onClick: onSelectTokenChipClick,
-                },
-            }}
+            {...FungibleTokenInputProps}
+            onSelectToken={onSelectTokenChipClick}
         />
     )
 }

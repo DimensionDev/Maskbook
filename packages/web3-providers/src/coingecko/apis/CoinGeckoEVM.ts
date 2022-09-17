@@ -42,7 +42,7 @@ export class CoinGeckoTrendingEVM_API implements TrendingAPI.Provider<ChainId> {
 
         return {
             lastUpdated: info.last_updated,
-            dataProvider: DataProvider.COIN_GECKO,
+            dataProvider: DataProvider.CoinGecko,
             contracts: Object.entries(info.platforms).map(([key, address]) => ({
                 chainId: platforms.find((x) => x.id === key)?.chain_identifier ?? resolveChain(key),
                 address,
@@ -84,11 +84,11 @@ export class CoinGeckoTrendingEVM_API implements TrendingAPI.Provider<ChainId> {
                 twitter_url,
                 telegram_url,
                 contract_address:
-                    resolveCoinAddress(chainId, id, DataProvider.COIN_GECKO) ??
+                    resolveCoinAddress(chainId, id, DataProvider.CoinGecko) ??
                     info.contract_address ??
                     info.platforms[
                         Object.keys(info.platforms).find(
-                            (x) => resolveChainId(x, DataProvider.COIN_GECKO) === chainId,
+                            (x) => resolveChainId(x, DataProvider.CoinGecko) === chainId,
                         ) ?? ''
                     ],
             },

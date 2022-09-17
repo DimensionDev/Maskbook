@@ -124,7 +124,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         ])
         return {
             lastUpdated: new Date().toJSON(),
-            dataProvider: DataProvider.NFTSCAN,
+            dataProvider: DataProvider.NFTScan,
             contracts: [{ chainId, address: platformInfo.address }],
             currency,
             coin: {
