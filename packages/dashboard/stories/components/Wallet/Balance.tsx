@@ -7,7 +7,6 @@ export default meta({ title: 'Components/Wallet/Balance Card' })
 
 export const BalanceCard = of({
     args: {
-        balance: 9000000,
         onBuy: action('onBuy'),
         onSend: action('onSend'),
         onSwap: action('onSwap'),
