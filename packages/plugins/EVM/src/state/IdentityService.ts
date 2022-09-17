@@ -13,22 +13,21 @@ const ADDRESS_FULL = /0x\w{40,}/
 const RSS3_URL_RE = /https?:\/\/(?<name>[\w.]+)\.(rss3|cheers)\.bio/
 const RSS3_RNS_RE = /(?<name>[\w.]+)\.rss3/
 
-function getENSName(twitterId: string, nickname: string, bio: string) {
+function getENSName(nickname: string, bio: string) {
     const [matched] = nickname.match(ENS_RE) ?? bio.match(ENS_RE) ?? []
-    if (matched) return matched
-    return twitterId && !twitterId.endsWith('.eth') ? `${twitterId}.eth` : twitterId
+    return matched
 }
 
 function getRSS3Id(nickname: string, profileURL: string, bio: string) {
     const matched =
         nickname.match(RSS3_RNS_RE) || profileURL.match(RSS3_URL_RE) || bio.match(RSS3_URL_RE) || bio.match(RSS3_RNS_RE)
-    return matched?.groups?.name ?? ''
+    return matched?.groups?.name
 }
 
 function getAddress(text: string) {
     const [matched] = text.match(ADDRESS_FULL) ?? []
     if (matched && isValidAddress(matched)) return matched
-    return ''
+    return
 }
 
 function getNextIDPlatform() {
@@ -69,8 +68,9 @@ export class IdentityService extends IdentityServiceState {
 
     /** Read a social address from bio. */
     private async getSocialAddressFromBio({ bio = '' }: SocialIdentity) {
-        if (!bio) return
-        return this.createSocialAddress(SocialAddressType.ADDRESS, getAddress(bio))
+        const address = getAddress(bio)
+        if (!address) return
+        return this.createSocialAddress(SocialAddressType.ADDRESS, address)
     }
 
     /** Read a social address from NextID. */
@@ -84,6 +84,7 @@ export class IdentityService extends IdentityServiceState {
     /** Read a social address from bio when it contains a RSS3 ID. */
     private async getSocialAddressFromRSS3({ nickname = '', homepage = '', bio = '' }: SocialIdentity) {
         const RSS3Id = getRSS3Id(nickname, homepage, bio)
+        if (!RSS3Id) return
         const info = await RSS3.getNameInfo(RSS3Id)
         return this.createSocialAddress(SocialAddressType.RSS3, info?.address ?? '', `${RSS3Id}.rss3`)
     }
@@ -100,8 +101,8 @@ export class IdentityService extends IdentityServiceState {
     }
 
     /** Read a social address from nickname, bio if them contain a ENS. */
-    private async getSocialAddressFromENS({ identifier, nickname = '', bio = '' }: SocialIdentity) {
-        const name = getENSName(identifier?.userId ?? '', nickname, bio)
+    private async getSocialAddressFromENS({ nickname = '', bio = '' }: SocialIdentity) {
+        const name = getENSName(nickname, bio)
         if (!name) return
 
         const provider = await Providers[ProviderType.MaskWallet].createWeb3Provider({
