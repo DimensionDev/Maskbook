@@ -90,7 +90,6 @@ export const PriceImpactDialogUI = memo<PriceImpactDialogProps>(
         const isDashboard = isDashboardPage()
         const { classes } = useStyles({ isDashboard })
 
-        console.log(`${lostToken} ${symbol}`, `${lostValue.replace('<', '&lt;')} USD`)
         return (
             <InjectedDialog open={open} onClose={onClose} title={t.impact_warning()} className={classes.dialog}>
                 <DialogContent className={classes.content}>
