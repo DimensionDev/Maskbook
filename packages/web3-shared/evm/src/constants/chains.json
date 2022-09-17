@@ -1128,8 +1128,8 @@
         "features": [],
         "nativeCurrency": {
             "chainId": 100,
-            "name": "xDai",
-            "symbol": "xDai",
+            "name": "xDAI",
+            "symbol": "xDAI",
             "decimals": 18
         },
         "infoURL": "https://blockscout.com/xdai/mainnet"
