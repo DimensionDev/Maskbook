@@ -17,9 +17,18 @@ const sns: Plugin.SNSAdaptor.Definition = {
             name: <Trans i18nKey="plugin_valuables_name" />,
             marketListSortingPriority: 10,
             tutorialLink: 'https://realmasknetwork.notion.site/27424923ee454a4a9b0ed16fc5cb93d0',
-            icon: <Icons.Valuables size={36} />,
+            icon: <Icons.Valuables size={36} style={{ fill: 'white' }} />,
         },
     ],
+    wrapperProps: {
+        icon: (
+            <Icons.Valuables
+                size={24}
+                style={{ filter: 'drop-shadow(0px 6px 12px rgba(0, 0, 0, 0.2))', fill: 'black' }}
+            />
+        ),
+        title: <Trans i18nKey="plugin_valuables_name" />,
+    },
 }
 
 export default sns
@@ -28,8 +37,6 @@ function Component() {
     const tweetAddress = usePostInfoDetails.snsID()
 
     if (!tweetAddress) return null
-    // only for the primary tweet on the detailed page
-    if (!location.pathname.includes(`/status/${tweetAddress}`)) return null
 
     return <VCentDialog tweetAddress={tweetAddress} />
 }
