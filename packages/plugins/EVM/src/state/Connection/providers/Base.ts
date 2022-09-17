@@ -11,7 +11,6 @@ import {
     ProviderType,
     EthereumMethodType,
     getRPCConstants,
-    NetworkType,
 } from '@masknet/web3-shared-evm'
 import type { EVM_Provider } from '../types'
 
@@ -30,7 +29,9 @@ export class BaseProvider implements EVM_Provider {
 
     // Switch chain with RPC calls by default
     async switchChain(chainId?: ChainId): Promise<void> {
-        if (chainId && chainResolver.chainNetworkType(chainId) === NetworkType.Ethereum) {
+        if (!chainId) throw new Error('Unknown chain id.')
+
+        try {
             await this.request({
                 method: EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN,
                 params: [
@@ -39,7 +40,7 @@ export class BaseProvider implements EVM_Provider {
                     },
                 ],
             })
-        } else if (chainId) {
+        } catch {
             await this.request<void>({
                 method: EthereumMethodType.WALLET_ADD_ETHEREUM_CHAIN,
                 params: [
@@ -52,8 +53,6 @@ export class BaseProvider implements EVM_Provider {
                     },
                 ],
             })
-        } else {
-            throw new Error('Unknown chain id.')
         }
 
         // Delay to make sure the provider will return the newest chain id.
