@@ -3,6 +3,7 @@ import { Route, Routes, Navigate } from 'react-router-dom'
 import { DashboardFrame } from '../components/DashboardFrame'
 import { DashboardRoutes } from '@masknet/shared-base'
 import NoPersonaGuardRoute from '../GuardRoute'
+
 const Wallets = lazy(() => import(/* webpackPrefetch: true */ './Wallets'))
 const Setup = lazy(() => import('./Setup'))
 const SignUp = lazy(() => import('./SignUp'))

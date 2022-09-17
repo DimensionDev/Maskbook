@@ -95,5 +95,5 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
 
                 return 0
             })
-    }, [account, chainId, hub, trustedTokens, blockedTokens, Others])
+    }, [account, chainId, schemaType, hub, trustedTokens, blockedTokens, Others])
 }

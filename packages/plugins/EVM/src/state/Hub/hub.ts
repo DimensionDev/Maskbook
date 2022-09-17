@@ -101,7 +101,7 @@ class Hub implements EVM_Hub {
                 [SourceType.DeBank]: DeBank,
                 [SourceType.Zerion]: Zerion,
             },
-            [DeBank, Zerion],
+            [Zerion, DeBank],
             initial,
         )
     }
