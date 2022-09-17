@@ -13,21 +13,6 @@ export function useIsImageURL(url: string | undefined): AsyncState<boolean> {
         if (/\.(gif|svg|png|webp|jpg|jpeg)$/.test(pathname)) return true
         if (/\.(mp4|webm|mov|ogg|mp3|wav)$/.test(pathname)) return false
 
-        const headers = await getHeaders(resolvedURL)
-        const contentType = headers?.get('Content-Type')
-        const contentDisposition = headers?.get('Content-Disposition')
-        return contentType?.startsWith('image/') || /\.(gif|svg|png|webp|jpg|jpeg)/.test(contentDisposition ?? '')
+        return true
     }, [url])
-}
-
-async function getHeaders(url: string) {
-    if (!/^https?:/.test(url)) return
-    return Promise.race([
-        new Promise((resolve) => setTimeout(() => resolve(''), 20000)),
-        new Promise((resolve) => {
-            fetch(url, { method: 'HEAD', mode: 'cors' })
-                .then((response) => (response.status !== 200 ? resolve(undefined) : resolve(response.headers)))
-                .catch(() => resolve(''))
-        }),
-    ]) as Promise<Headers | undefined>
 }
