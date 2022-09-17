@@ -936,7 +936,7 @@
     },
     {
         "chainId": 69,
-        "type": "Optimistic",
+        "type": "Optimism",
         "name": "Optimism",
         "network": "kovan",
         "shortName": "okov",
