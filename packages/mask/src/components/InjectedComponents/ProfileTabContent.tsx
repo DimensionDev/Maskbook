@@ -355,7 +355,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                                 fontWeight={400}
                                 lineHeight="18px"
                                 color={(t) => t.palette.maskColor.publicMain}>
-                                {t('web3_profile_no_socialaddresslist')}
+                                {t('web3_profile_no_social_address_list')}
                             </Typography>
                         </Stack>
                     </PluginCardFrameMini>
