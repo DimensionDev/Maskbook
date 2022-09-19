@@ -18,7 +18,6 @@ interface VerifyNextIDProps extends Partial<WizardDialogProps> {
     network: string
     avatar?: string
     disableVerify: boolean
-    onUsernameChange?: (username: string) => void
     onVerify: () => Promise<void>
     onDone?: () => void
 }
@@ -44,7 +43,7 @@ export const VerifyNextID = ({
 
     return (
         <WizardDialog
-            dialogType={SetupGuideStep.FindUsername}
+            dialogType={SetupGuideStep.VerifyOnNextID}
             small={!username}
             content={
                 <Box className={classes.connection}>
