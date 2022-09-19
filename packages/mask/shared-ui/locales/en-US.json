@@ -78,6 +78,7 @@
     "persona_boundary_create_persona": "Create Persona",
     "persona_boundary_connect_persona": "Connect Persona",
     "persona_boundary_verify_persona": "Verify your Twitter ID",
+    "persona_load_failed": "Load failed",
     "enable_plugin_boundary": "Enable plugin",
     "close_check_security": "Close [Check Security]?",
     "check_security_intro": "The [Check Security] dApp provides quick, reliable, and convenient Web3 security services.",
