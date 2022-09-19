@@ -19,6 +19,7 @@ export const resolveNetworkToNextIDPlatform = createLookupTableResolver<Enhancea
         [EnhanceableSite.Minds]: undefined,
         [EnhanceableSite.OpenSea]: undefined,
         [EnhanceableSite.Localhost]: undefined,
+        [EnhanceableSite.Mirror]: undefined,
         [EnhanceableSite.Twitter]: NextIDPlatform.Twitter,
     },
     undefined,

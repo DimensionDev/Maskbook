@@ -5,6 +5,7 @@ export enum EnhanceableSite {
     Minds = 'minds.com',
     Instagram = 'instagram.com',
     OpenSea = 'opensea.io',
+    Mirror = 'mirror.xyz',
 }
 
 export enum ExtensionSite {

@@ -34,6 +34,7 @@ import { ChainbaseHistoryAPI, ChainbaseFungibleTokenAPI, ChainbaseNonFungibleTok
 import { SolanaFungibleAPI, SolanaNonFungibleAPI } from './solana/index.js'
 import { FlowFungibleAPI } from './flow/index.js'
 import { CF_API } from './cf/index.js'
+import { MirrorAPI } from './mirror/index.js'
 
 export * from './helpers.js'
 export * from './types/index.js'
@@ -70,6 +71,7 @@ export const UniSwap = new UniSwapAPI()
 export const Rabby = new RabbyAPI()
 export const X2Y2 = new X2Y2API()
 export const CF = new CF_API()
+export const Mirror = new MirrorAPI()
 
 // Alchemy
 export const AlchemyEVM = new AlchemyEVM_API()
