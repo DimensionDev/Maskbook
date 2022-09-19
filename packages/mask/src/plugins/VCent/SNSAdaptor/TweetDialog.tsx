@@ -1,5 +1,5 @@
 import { first } from 'lodash-unified'
-import { Box, Button, Typography } from '@mui/material'
+import { alpha, Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useAsync } from 'react-use'
 import { PluginVCentRPC } from '../messages.js'
@@ -8,15 +8,15 @@ import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { Icons } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
 import { useNetworkDescriptor } from '@masknet/plugin-infra/web3'
-import Color from 'color'
 import { VALUABLES_VCENT_URL } from '../constants'
+import urlcat from 'urlcat'
 
 const useStyle = makeStyles()((theme) => ({
     root: {
         margin: theme.spacing(1.5),
         display: 'flex',
         gap: theme.spacing(1),
-        backgroundColor: new Color(theme.palette.maskColor.white).alpha(0.8).toString(),
+        backgroundColor: alpha(theme.palette.maskColor.white, 0.8),
         padding: theme.spacing(1),
         alignItems: 'center',
         borderRadius: 8,
@@ -59,7 +59,7 @@ export default function VCentDialog({ tweetAddress }: { tweetAddress: string }) 
 
     return (
         <Box className={classes.root}>
-            <Icons.TwitterColored className={classes.twitter} />
+            <Icons.TwitterOtherColored className={classes.twitter} />
             <Box className={classes.content}>
                 <Box className={classes.title}>
                     <ImageIcon icon={networkDescriptor?.icon} size={20} />
@@ -84,7 +84,7 @@ export default function VCentDialog({ tweetAddress }: { tweetAddress: string }) 
                 variant="roundedContained"
                 className={classes.button}
                 target="_blank"
-                href={VALUABLES_VCENT_URL + tweet.tweet_id}>
+                href={urlcat(VALUABLES_VCENT_URL, tweet.tweet_id)}>
                 {t('plugin_vcent_go')}
             </Button>
         </Box>
