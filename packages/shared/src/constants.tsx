@@ -8,6 +8,7 @@ export const SOCIAL_MEDIA_ICON_MAPPING: Record<EnhanceableSite | string, ReactNo
     [EnhanceableSite.Minds]: <Icons.Minds />,
     [EnhanceableSite.Instagram]: <Icons.InstagramColored />,
     [EnhanceableSite.OpenSea]: <Icons.OpenSeaColored />,
+    [EnhanceableSite.Mirror]: <Icons.Mirror />,
     [EnhanceableSite.Localhost]: null,
 }
 
@@ -17,6 +18,7 @@ export const SOCIAL_MEDIA_ROUND_ICON_MAPPING: Record<EnhanceableSite | string, R
     [EnhanceableSite.Minds]: <Icons.MindsRound />,
     [EnhanceableSite.Instagram]: <Icons.InstagramRound />,
     [EnhanceableSite.OpenSea]: <Icons.OpenSeaColored />,
+    [EnhanceableSite.Mirror]: <Icons.Mirror />,
     [EnhanceableSite.Localhost]: null,
 }
 
@@ -27,6 +29,7 @@ export const SOCIAL_MEDIA_NAME: Record<EnhanceableSite | string, string> = {
     [EnhanceableSite.Instagram]: 'Instagram',
     [EnhanceableSite.OpenSea]: 'OpenSea',
     [EnhanceableSite.Localhost]: 'Localhost',
+    [EnhanceableSite.Mirror]: 'Mirror',
 }
 
 export const NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP: Record<string, string> = {
