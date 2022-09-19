@@ -83,32 +83,28 @@ export class DeBankAPI
             }),
         )
         const result = (await response.json()) as WalletTokenRecord[] | undefined
-        try {
-            return createPageable(
-                unionWith(
-                    formatAssets(
-                        (result ?? []).map((x) => ({
-                            ...x,
+        return createPageable(
+            unionWith(
+                formatAssets(
+                    (result ?? []).map((x) => ({
+                        ...x,
 
-                            // rename bsc to bnb
-                            id: x.id === 'bsc' ? 'bnb' : x.id,
-                            chain: x.chain === 'bsc' ? 'bnb' : x.chain,
-                            // prefix ARETH
-                            symbol: x.chain === 'arb' && x.symbol === 'ETH' ? 'ARETH' : x.symbol,
-                            logo_url:
-                                x.chain === 'arb' && x.symbol === 'ETH'
-                                    ? 'https://assets.debank.com/static/media/arbitrum.8e326f58.svg'
-                                    : x.logo_url,
-                        })),
-                    ),
-                    getAllEVMNativeAssets(),
-                    (a, z) => a.symbol === z.symbol && a.chainId === z.chainId,
+                        // rename bsc to bnb
+                        id: x.id === 'bsc' ? 'bnb' : x.id,
+                        chain: x.chain === 'bsc' ? 'bnb' : x.chain,
+                        // prefix ARETH
+                        symbol: x.chain === 'arb' && x.symbol === 'ETH' ? 'ARETH' : x.symbol,
+                        logo_url:
+                            x.chain === 'arb' && x.symbol === 'ETH'
+                                ? 'https://assets.debank.com/static/media/arbitrum.8e326f58.svg'
+                                : x.logo_url,
+                    })),
                 ),
-                createIndicator(options?.indicator),
-            )
-        } catch {
-            return createPageable([], createIndicator(options?.indicator))
-        }
+                getAllEVMNativeAssets(),
+                (a, z) => a.symbol === z.symbol && a.chainId === z.chainId,
+            ),
+            createIndicator(options?.indicator),
+        )
     }
 
     async getTransactions(

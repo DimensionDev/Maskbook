@@ -539,6 +539,7 @@ export namespace Plugin.SNSAdaptor {
             disabled: boolean
             tooltipHint?: string
             onClick?: (walletConnectedCallback?: () => void) => void
+            popperBoundary?: HTMLElement | null
         }) => JSX.Element | null
         /**
          * Used to order the applications on the board

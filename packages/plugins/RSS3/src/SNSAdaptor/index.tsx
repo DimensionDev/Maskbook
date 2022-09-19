@@ -74,7 +74,7 @@ const createActivitiesTabConfig = (props: FeedPageProps): Plugin.SNSAdaptor.Prof
             TabContent: ({ socialAddress }) => {
                 return (
                     <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
-                        <FeedsPage address={socialAddress?.address} {...props} />
+                        <FeedsPage address={socialAddress?.address} disableViewDetails {...props} />
                     </PluginIDContextProvider>
                 )
             },
