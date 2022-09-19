@@ -344,6 +344,26 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         )
     }
 
+    if (socialAddressList.length === 0) {
+        return (
+            <ThemeProvider theme={MaskLightTheme}>
+                <div className={classes.root}>
+                    <PluginCardFrameMini>
+                        <Stack display="inline-flex" gap={3} justifyContent="center" alignItems="center">
+                            <Typography
+                                fontSize={14}
+                                fontWeight={400}
+                                lineHeight="18px"
+                                color={(t) => t.palette.maskColor.publicMain}>
+                                {t('web3_profile_no_social_address_list')}
+                            </Typography>
+                        </Stack>
+                    </PluginCardFrameMini>
+                </div>
+            </ThemeProvider>
+        )
+    }
+
     return (
         <div className={classes.root}>
             <div>
