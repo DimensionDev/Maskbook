@@ -31,6 +31,14 @@ export interface Entry {
     }
 }
 
+export interface MirrorInitData {
+    props?: {
+        pageProps?: {
+            projectAddress: string
+        }
+    }
+}
+
 export namespace MirrorBaseAPI {
     export interface Provider {
         getWriter(id: string): Promise<Writer | null>

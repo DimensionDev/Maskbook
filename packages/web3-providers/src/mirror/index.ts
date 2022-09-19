@@ -1,6 +1,5 @@
 import formatDateTime from 'date-fns/format'
 import fromUnixTime from 'date-fns/fromUnixTime'
-import stringify from 'json-stable-stringify'
 import type { MirrorBaseAPI, Writer } from '../types'
 
 const MIRRORAPI_URL = 'https://mirror-api.com/graphql'
@@ -38,12 +37,21 @@ interface EntryRespnose {
     }
 }
 
-async function fetchFromMirror<T>(query: string) {
-    if (!query) return null
-    const response = await fetch(MIRRORAPI_URL, {
+interface requestBody {
+    query: string
+    variables: Record<string, string>
+    operationName: string
+}
+
+async function fetchFromMirror<T>(body: requestBody) {
+    if (!body) return null
+    const response = await globalThis.fetch(MIRRORAPI_URL, {
         method: 'POST',
         mode: 'cors',
-        body: stringify({ query }),
+        body: JSON.stringify(body),
+        headers: {
+            'Content-Type': 'application/json',
+        },
     })
     const { data } = (await response.json()) as {
         data: T
@@ -53,9 +61,10 @@ async function fetchFromMirror<T>(query: string) {
 export class MirrorAPI implements MirrorBaseAPI.Provider {
     async getWriter(id: string) {
         if (!id) return null
-        const writer = await fetchFromMirror<Writer>(`
-            query Writer {
-                projectFeed(projectAddress: ${id}) {
+
+        const writer = await fetchFromMirror<Writer>({
+            query: `query Writer ($projectAddress: String!) {
+                projectFeed(projectAddress: $projectAddress) {
                     address
                     avatarURL
                     description
@@ -63,8 +72,10 @@ export class MirrorAPI implements MirrorBaseAPI.Provider {
                     ens
                     domain
                 }
-            }
-        `)
+            }`,
+            variables: { projectAddress: id },
+            operationName: 'Writer',
+        })
 
         return writer
     }
@@ -72,9 +83,10 @@ export class MirrorAPI implements MirrorBaseAPI.Provider {
     async getPost(digest: string) {
         if (!digest) return null
 
-        const response = await fetchFromMirror<EntryRespnose>(`
-            query Entry {
-                entry(digest: ${digest}) {
+        const response = await fetchFromMirror<EntryRespnose>({
+            query: `
+            query Entry ($digest: String!) {
+                entry(digest: $digest) {
                     digest
                     arweaveTransactionRequest {
                         transactionId
@@ -133,7 +145,10 @@ export class MirrorAPI implements MirrorBaseAPI.Provider {
                     }
                 }
             }
-        `)
+        `,
+            variables: { digest },
+            operationName: 'Entry',
+        })
         if (!response) return null
         return {
             transactionId: response.arweaveTransactionRequest.transactionId,

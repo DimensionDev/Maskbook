@@ -5,11 +5,16 @@ import { InitAutonomousStateProfiles } from '../../social-network/defaults/state
 
 import { mirrorBase } from './base.js'
 import { mirrorShared } from './shared.js'
+import { CurrentVisitingIdentityProviderMirror, IdentityProviderMirror } from './collecting/identity.js'
+
 const define: SocialNetworkUI.Definition = {
     ...mirrorBase,
     ...mirrorShared,
     automation: {},
-    collecting: {},
+    collecting: {
+        identityProvider: IdentityProviderMirror,
+        currentVisitingIdentityProvider: CurrentVisitingIdentityProviderMirror,
+    },
     configuration: {},
     customization: {},
     init(signal) {
