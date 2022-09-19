@@ -4,7 +4,7 @@ import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar
 import { startWatch, createReactRootShadowed } from '../../../../utils'
 import { searchProfileAvatarSelector } from '../../utils/selector'
 import { ConnectPersonaBoundary } from '../../../../components/shared/ConnectPersonaBoundary'
-import { PluginId } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/plugin-infra'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 
 export function injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog(signal: AbortSignal) {
@@ -31,7 +31,7 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     const clickHandler = () => {
         CrossIsolationMessages.events.requestOpenApplication.sendToLocal({
             open: true,
-            application: PluginId.Avatar,
+            application: PluginID.Avatar,
         })
     }
 
