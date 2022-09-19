@@ -7,4 +7,8 @@ export const querySelector = <T extends E, SingleMode extends boolean = true>(se
     return (singleMode ? ls.enableSingleMode() : ls) as LiveSelector<T, SingleMode>
 }
 
+export const entryInfoSelector: () => LiveSelector<E, true> = () => querySelector<E>('todo...')
+
+export const menuAuthorSelector: () => LiveSelector<E, true> = () => querySelector<E>('a[href="/"]')
+
 export const themeSelector: () => LiveSelector<E, true> = () => querySelector<E>('[data-theme]')

@@ -7,7 +7,9 @@ import { mirrorBase } from './base.js'
 import { mirrorShared } from './shared.js'
 import { CurrentVisitingIdentityProviderMirror, IdentityProviderMirror } from './collecting/identity.js'
 import { PaletteModeProviderMirror } from './customization/custom.js'
+import { injectTips } from './injection/Tips/index.js'
 
+// TODO: access chrome permission
 const define: SocialNetworkUI.Definition = {
     ...mirrorBase,
     ...mirrorShared,
@@ -26,7 +28,9 @@ const define: SocialNetworkUI.Definition = {
         return { profiles }
     },
     injection: {
+        // Todo: should remove this?
         setupWizard: createTaskStartSetupGuideDefault(),
+        tips: injectTips,
     },
 }
 export default define
