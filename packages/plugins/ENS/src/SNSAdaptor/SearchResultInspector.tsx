@@ -42,7 +42,7 @@ export function SearchResultInspectorContent() {
                 chainId: ChainId.Mainnet,
                 tokenId,
                 contractAddress: reversedAddress,
-                provider: SourceType.OpenSea,
+                sourceType: SourceType.OpenSea,
             }}>
             <Box className={classes.root}>
                 <div className={classes.coverCard}>

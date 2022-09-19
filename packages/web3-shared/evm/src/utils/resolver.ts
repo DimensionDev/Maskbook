@@ -16,6 +16,6 @@ export const providerResolver = createProviderResolver(PROVIDER_DESCRIPTORS)
 
 export function resolveNonFungibleTokenIdFromEnsDomain(domain: string): string {
     return new BigNumber(
-        keccak256(toUtf8Bytes(domain.endsWith('.ens') ? domain.replace('.eth', '') : domain)),
+        keccak256(toUtf8Bytes(domain.endsWith('.eth') ? domain.replace('.eth', '') : domain)),
     ).toFixed()
 }
