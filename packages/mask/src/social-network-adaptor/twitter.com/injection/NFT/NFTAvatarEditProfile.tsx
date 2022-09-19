@@ -7,8 +7,14 @@ import { searchEditProfileSelector } from '../../utils/selector.js'
 import { ConnectPersonaBoundary } from '../../../../components/shared/ConnectPersonaBoundary.js'
 import { PluginID } from '@masknet/plugin-infra'
 import { CrossIsolationMessages } from '@masknet/shared-base'
+import { injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog } from './NFTAvatarEditProfileDialog'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
+    injectOpenNFTAvatarEditProfileButtonAtProfilePage(signal)
+    injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog(signal)
+}
+
+export function injectOpenNFTAvatarEditProfileButtonAtProfilePage(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchEditProfileSelector())
     startWatch(watcher, signal)
     createReactRootShadowed(watcher.firstDOMProxy.beforeShadow, { signal }).render(

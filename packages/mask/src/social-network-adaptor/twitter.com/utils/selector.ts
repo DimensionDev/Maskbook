@@ -261,7 +261,7 @@ export const searchSelfAvatarSelector = () => {
 
 // #region twitter nft avatar
 export const searchProfileAvatarSelector = () => {
-    return querySelectorAll<E>('[data-testid="fileInput"]').at(1).closest<E>(4)
+    return querySelectorAll<E>('[data-testid="fileInput"]').at(1).closest<E>(5)
 }
 
 export const searchProfileAvatarParentSelector = () =>
