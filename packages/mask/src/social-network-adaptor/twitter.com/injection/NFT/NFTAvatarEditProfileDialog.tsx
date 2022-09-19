@@ -38,7 +38,7 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     const { classes } = useStyles()
     return (
         <div className={classes.root}>
-            <ConnectPersonaBoundary handlerPosition="top-right" customHint directTo={PluginId.Avatar}>
+            <ConnectPersonaBoundary handlerPosition="top-right" customHint directTo={PluginID.Avatar}>
                 <NFTAvatarButton classes={{ root: classes.button }} onClick={clickHandler} />
             </ConnectPersonaBoundary>
         </div>
