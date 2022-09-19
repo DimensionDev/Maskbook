@@ -35,13 +35,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     infoIcon: {
         color: MaskColorVar.secondaryInfoText,
-        fontSize: 24,
         marginRight: 12,
     },
     copyIcon: {
-        stroke: '#F6F6F8',
-        fontSize: '14px',
-        cursor: 'pointer',
+        color: '#F6F6F8',
         verticalAlign: 'middle',
     },
 }))
@@ -163,7 +160,11 @@ const ComponentToPrint = forwardRef((props: PreviewDialogProps, ref: ForwardedRe
                         <Box display="flex">
                             <Typography fontSize={14} fontWeight={600} width={102}>
                                 <span style={{ verticalAlign: 'middle' }}>{t.create_account_private_key()} </span>
-                                <Icons.Copy className={classes.copyIcon} onClick={() => copyToClipboard(privateKey)} />
+                                <Icons.Copy
+                                    className={classes.copyIcon}
+                                    size={14}
+                                    onClick={() => copyToClipboard(privateKey)}
+                                />
                             </Typography>
                             <Typography
                                 fontSize={10}

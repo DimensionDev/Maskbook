@@ -18,13 +18,10 @@ import {
     NetworkPluginID,
     toZero,
 } from '@masknet/web3-shared-base'
-import {
-    useCurrentWeb3NetworkPluginID,
-    useFungibleAssets,
-    useNativeToken,
-    Web3Helper,
-} from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID, useNativeToken, Web3Helper } from '@masknet/plugin-infra/web3'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { useContainer } from 'unstated-next'
+import { Context } from '../../hooks/useContext'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -84,23 +81,18 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface TokenTableProps {
+export interface FungibleTokenTableProps {
     selectedChainId?: Web3Helper.ChainIdAll
 }
 
-export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
+export const FungibleTokenTable = memo<FungibleTokenTableProps>(({ selectedChainId }) => {
     const navigate = useNavigate()
     const [isExpand, setIsExpand] = useState(false)
     const { value: nativeToken } = useNativeToken<'all'>(NetworkPluginID.PLUGIN_EVM, {
         chainId: selectedChainId,
     })
-    const {
-        value: fungibleAssets = EMPTY_LIST,
-        loading: fungibleAssetsLoading,
-        error: fungibleAssetsError,
-    } = useFungibleAssets<'all'>(NetworkPluginID.PLUGIN_EVM, undefined, {
-        chainId: selectedChainId,
-    })
+    const { fungibleAssets } = useContainer(Context)
+
     const onSwap = useCallback(
         (
             token: FungibleAsset<
@@ -134,7 +126,8 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
     )
 
     const dataSource = useMemo(() => {
-        const results = fungibleAssets.filter((x) => !selectedChainId || x.chainId === selectedChainId)
+        const results =
+            fungibleAssets.value?.filter((x) => !selectedChainId || x.chainId === selectedChainId) ?? EMPTY_LIST
 
         if (!selectedChainId)
             return results.sort((a, z) => {
@@ -157,21 +150,21 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
         }
 
         return results
-    }, [nativeToken, fungibleAssets, selectedChainId])
+    }, [nativeToken, fungibleAssets.value, selectedChainId])
 
     return (
         <>
             <TokenTableUI
-                isLoading={fungibleAssetsLoading}
-                isEmpty={!fungibleAssetsLoading && (!!fungibleAssetsError || !fungibleAssets?.length)}
+                isLoading={fungibleAssets.loading}
+                isEmpty={!fungibleAssets.loading && (!!fungibleAssets.error || !fungibleAssets.value?.length)}
                 isExpand={isExpand}
                 dataSource={dataSource}
                 onSwap={onSwap}
                 onSend={onSend}
             />
             <MoreBarUI
-                isLoading={fungibleAssetsLoading}
-                isEmpty={!fungibleAssetsLoading && (!!fungibleAssetsError || !fungibleAssets?.length)}
+                isLoading={fungibleAssets.loading}
+                isEmpty={!fungibleAssets.loading && (!!fungibleAssets.error || !fungibleAssets.value?.length)}
                 isExpand={isExpand}
                 dataSource={dataSource}
                 onSwitch={() => setIsExpand((x) => !x)}
