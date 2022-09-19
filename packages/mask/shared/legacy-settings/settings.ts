@@ -25,6 +25,7 @@ export const pluginIDSettings = createComplexGlobalSettings<Record<EnhanceableSi
         [EnhanceableSite.OpenSea]: NetworkPluginID.PLUGIN_EVM,
         [EnhanceableSite.Minds]: NetworkPluginID.PLUGIN_EVM,
         [EnhanceableSite.Localhost]: NetworkPluginID.PLUGIN_EVM,
+        [EnhanceableSite.Mirror]: NetworkPluginID.PLUGIN_EVM,
         [ExtensionSite.Popup]: NetworkPluginID.PLUGIN_EVM,
         [ExtensionSite.Dashboard]: NetworkPluginID.PLUGIN_EVM,
     },

@@ -9,6 +9,7 @@ const matchEnhanceableSiteHost: Record<EnhanceableSite, RegExp> = {
     [EnhanceableSite.Minds]: /minds\.com/i,
     [EnhanceableSite.Instagram]: /instagram\.com/i,
     [EnhanceableSite.OpenSea]: /opensea\.io/i,
+    [EnhanceableSite.Mirror]: /mirror\.xyz/i,
 }
 
 const matchExtensionSitePathname: Record<ExtensionSite, RegExp> = {
