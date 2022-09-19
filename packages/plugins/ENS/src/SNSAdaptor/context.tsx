@@ -42,7 +42,6 @@ export function ENSProvider({ children, domain }: PropsWithChildren<SearchResult
     const isNoResult = reversedAddress === undefined
     const isError = !!error
     const tokenId = resolveNonFungibleTokenIdFromEnsDomain(domain)
-    console.log({ reversedAddress })
     const { value: ids } = useAsync(
         async () =>
             reversedAddress
