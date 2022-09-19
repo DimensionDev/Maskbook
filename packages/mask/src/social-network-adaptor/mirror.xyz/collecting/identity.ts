@@ -1,10 +1,12 @@
 import { delay } from '@dimensiondev/kit'
 import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { Mirror, Writer } from '@masknet/web3-providers'
+import urlcat from 'urlcat'
 import type { SocialNetworkUI } from '../../../social-network/types'
 import { creator } from '../../../social-network/utils'
 import { mirrorBase } from '../base'
 
+const getMirrorProfileUrl = (id: string) => urlcat('https://mirror.xyz/:id', { id })
 const getCurrentUserInfo = async () => {
     if (location.host !== EnhanceableSite.Mirror) return
     const userAddress = localStorage.getItem('mirror.userAddress') as string | null
@@ -27,6 +29,8 @@ function resolveLastRecognizedIdentityInner(
             avatar: writer.avatarURL,
             nickname: writer.displayName,
             identifier: ProfileIdentifier.of(mirrorBase.networkIdentifier, writer.address).unwrapOr(undefined),
+            bio: writer.description,
+            homepage: writer.domain || getMirrorProfileUrl(writer.address),
         }
     }
 
@@ -46,20 +50,25 @@ function resolveCurrentVisitingIdentityInner(
         if (!INIT_DATA) return
         const writer = INIT_DATA.props?.pageProps?.project as Writer
         if (!writer) {
-            if (location.pathname !== '/dashboard') return
+            if (location.pathname.includes('/dashboard')) return
 
             // when current page is dashboard
             const currentUser = await getCurrentUserInfo()
             if (!currentUser) return
             ref.value = {
-                avatar: currentUser?.avatarURL,
-                nickname: currentUser?.displayName,
+                avatar: currentUser.avatarURL,
+                nickname: currentUser.displayName,
+                bio: currentUser.description,
+                homepage: currentUser.domain || getMirrorProfileUrl(currentUser.address),
                 identifier: ProfileIdentifier.of(mirrorBase.networkIdentifier, currentUser.address).unwrapOr(undefined),
             }
+            return
         }
         ref.value = {
             avatar: writer.avatarURL,
             nickname: writer.displayName,
+            bio: writer.description,
+            homepage: writer.domain || getMirrorProfileUrl(writer.address),
             identifier: ProfileIdentifier.of(mirrorBase.networkIdentifier, writer.address).unwrapOr(undefined),
         }
     }
