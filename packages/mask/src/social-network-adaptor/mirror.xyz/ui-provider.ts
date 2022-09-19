@@ -6,6 +6,7 @@ import { InitAutonomousStateProfiles } from '../../social-network/defaults/state
 import { mirrorBase } from './base.js'
 import { mirrorShared } from './shared.js'
 import { CurrentVisitingIdentityProviderMirror, IdentityProviderMirror } from './collecting/identity.js'
+import { PaletteModeProviderMirror } from './customization/custom.js'
 
 const define: SocialNetworkUI.Definition = {
     ...mirrorBase,
@@ -16,7 +17,9 @@ const define: SocialNetworkUI.Definition = {
         currentVisitingIdentityProvider: CurrentVisitingIdentityProviderMirror,
     },
     configuration: {},
-    customization: {},
+    customization: {
+        paletteMode: PaletteModeProviderMirror,
+    },
     init(signal) {
         const profiles = stateCreator.profiles()
         InitAutonomousStateProfiles(signal, profiles, mirrorShared.networkIdentifier)
