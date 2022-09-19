@@ -7,9 +7,7 @@ import { useI18N } from '../../../utils/index.js'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { Icons } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useNetworkDescriptor } from '@masknet/plugin-infra/web3'
-import { ChainId } from '@masknet/web3-shared-evm'
 import Color from 'color'
 import { VALUABLES_VCENT_URL } from '../constants'
 
@@ -24,11 +22,11 @@ const useStyle = makeStyles()((theme) => ({
         borderRadius: 8,
     },
     twitter: {
-        fill: '#1D9BF0',
         width: 30,
         height: 30,
         filter: 'drop-shadow(0px 6px 12px rgba(29, 155, 240, 0.2))',
         backdropFilter: 'blur(8px)',
+        fill: theme.palette.maskColor.publickTwitter,
     },
     content: {
         flex: 1,
@@ -55,7 +53,7 @@ export default function VCentDialog({ tweetAddress }: { tweetAddress: string }) 
     const { value: tweets } = useAsync(() => PluginVCentRPC.getTweetData(tweetAddress), [tweetAddress])
     const tweet = first(tweets)
     usePluginWrapper(tweet?.type === 'Offer')
-    const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, ChainId.Mainnet)
+    const networkDescriptor = useNetworkDescriptor()
     // only offer tweets
     if (tweet?.type !== 'Offer') return null
 
