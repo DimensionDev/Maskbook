@@ -59,11 +59,11 @@ const useStyles = makeStyles()((theme) => {
             background: theme.palette.maskColor.white,
         },
         active: {
-            color: '#fff',
+            color: theme.palette.maskColor.white,
             backgroundColor: theme.palette.maskColor.success,
         },
         default: {
-            color: '#fff',
+            color: theme.palette.maskColor.white,
             backgroundColor: new Color(theme.palette.maskColor.primary).alpha(0.1).toString(),
         },
         avatar: {
