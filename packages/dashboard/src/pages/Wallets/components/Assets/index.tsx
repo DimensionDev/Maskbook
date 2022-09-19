@@ -38,13 +38,13 @@ export enum AssetTab {
 
 const assetTabs = [AssetTab.Token, AssetTab.Collectibles] as const
 
-interface TokenAssetsProps {
+export interface AssetsProps {
     network: Web3Helper.NetworkDescriptorAll | null
 }
 
-export const Assets = memo<TokenAssetsProps>(({ network }) => {
+export const Assets = memo<AssetsProps>(({ network }) => {
     const t = useDashboardI18N()
-    const pluginId = useCurrentWeb3NetworkPluginID()
+    const pluginID = useCurrentWeb3NetworkPluginID()
     const { classes } = useStyles()
     const assetTabsLabel: Record<AssetTab, string> = {
         [AssetTab.Token]: t.wallets_assets_token(),
@@ -58,9 +58,9 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
 
     useEffect(() => {
         setTab(AssetTab.Token)
-    }, [pluginId])
+    }, [pluginID])
 
-    const showCollectibles = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginId)
+    const showCollectibles = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginID)
     const selectFungibleToken = useSelectFungibleToken()
 
     return (
@@ -75,7 +75,7 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
                                     <Tab key={key} value={key} label={assetTabsLabel[key]} />
                                 ))}
                         </TabList>
-                        {pluginId === NetworkPluginID.PLUGIN_EVM && network && (
+                        {pluginID === NetworkPluginID.PLUGIN_EVM && network && (
                             <Button
                                 size="small"
                                 color="secondary"
