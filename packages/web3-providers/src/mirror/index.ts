@@ -2,9 +2,9 @@ import formatDateTime from 'date-fns/format'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import type { MirrorBaseAPI, Writer } from '../types'
 
-const MIRRORAPI_URL = 'https://mirror-api.com/graphql'
+const MIRROR_API_URL = 'https://mirror-api.com/graphql'
 
-interface EntryRespnose {
+interface EntryResponse {
     digest: string
     arweaveTransactionRequest: {
         transactionId: string
@@ -45,7 +45,7 @@ interface requestBody {
 
 async function fetchFromMirror<T>(body: requestBody) {
     if (!body) return null
-    const response = await globalThis.fetch(MIRRORAPI_URL, {
+    const response = await globalThis.fetch(MIRROR_API_URL, {
         method: 'POST',
         mode: 'cors',
         body: JSON.stringify(body),
@@ -83,7 +83,7 @@ export class MirrorAPI implements MirrorBaseAPI.Provider {
     async getPost(digest: string) {
         if (!digest) return null
 
-        const response = await fetchFromMirror<EntryRespnose>({
+        const response = await fetchFromMirror<EntryResponse>({
             query: `
             query Entry ($digest: String!) {
                 entry(digest: $digest) {
