@@ -230,15 +230,6 @@ export function PreviewCard(props: PreviewCardProps) {
             </Box>
         )
 
-    const renderTab = () => {
-        const tabMap = {
-            [tabs.Articles]: boxInfo ? <ArticlesTab boxInfo={boxInfo} boxMetadata={boxMetadata} /> : null,
-            [tabs.Details]: boxInfo ? <DetailsTab boxInfo={boxInfo} boxMetadata={boxMetadata} /> : null,
-        }
-
-        return tabMap[currentTab] || null
-    }
-
     const Tabs = [
         {
             value: tabs.Articles,
