@@ -26,7 +26,7 @@ const useStyle = makeStyles()((theme) => ({
         height: 30,
         filter: 'drop-shadow(0px 6px 12px rgba(29, 155, 240, 0.2))',
         backdropFilter: 'blur(8px)',
-        fill: theme.palette.maskColor.publickTwitter,
+        fill: theme.palette.maskColor.publicTwitter,
     },
     content: {
         flex: 1,
