@@ -53,25 +53,21 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     // #region should not show notification if user have operation
     const [hasOperation, setOperation] = useState(false)
 
+    const notify = useCallback(
+        () =>
+            showSnackbar(t('setup_guide_connected_title'), {
+                variant: 'success',
+                message: t('setup_guide_connected_description'),
+            }),
+        [],
+    )
+
     useEffect(() => {
         if (!(type === 'done' && !hasOperation)) return
-        showSnackbar(t('setup_guide_connected_title'), {
-            variant: 'success',
-            message: t('setup_guide_connected_description'),
-        })
 
-        /**
-         * why use setTimeout?
-         *
-         * In this case: User opened the twitter.com page, and then click `connect social media` from Popup
-         * The popup will create new tab to open the twitter.com.
-         * In old twitter.com, the follow setter will execute immediately,
-         * and the new twitter.com page need time to load, and will get the empty `currentSetupGuideStatus`.
-         */
-        setTimeout(() => {
-            currentSetupGuideStatus[ui.networkIdentifier].value = ''
-        }, 10000)
-    }, [type, hasOperation])
+        notify()
+        currentSetupGuideStatus[ui.networkIdentifier].value = ''
+    }, [type, hasOperation, notify])
     // #endregion
 
     const disableVerify = useMemo(
