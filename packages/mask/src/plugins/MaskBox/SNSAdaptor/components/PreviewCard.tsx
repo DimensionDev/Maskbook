@@ -14,13 +14,13 @@ import { ChainBoundary } from '../../../../web3/UI/ChainBoundary.js'
 import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useWeb3State, useNetworkDescriptor } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../../locales/index.js'
-import { TabContext } from '@mui/lab'
+import { TabContext, TabPanel } from '@mui/lab'
 import { ImageIcon, TokenIcon } from '@masknet/shared'
 
 const useTabsStyles = makeStyles()((theme) => ({
     button: {
         backgroundColor: theme.palette.maskColor.dark,
-        color: 'white',
+        color: theme.palette.maskColor.white,
         fontSize: 14,
         fontWeight: 700,
         width: '100%',
@@ -38,10 +38,10 @@ const useTabsStyles = makeStyles()((theme) => ({
         },
     },
     tabActive: {
-        background: '#fff',
+        background: theme.palette.maskColor.white,
         color: theme.palette.maskColor.publicMain,
         '&:hover': {
-            background: '#fff',
+            background: theme.palette.maskColor.white,
         },
     },
     body: {
@@ -77,13 +77,13 @@ const useTabsStyles = makeStyles()((theme) => ({
     name: {
         color: theme.palette.maskColor.main,
         fontSize: 18,
-        fontWeight: 'bold',
+        fontWeight: 700,
     },
     active: {
         backgroundColor: theme.palette.maskColor.success,
         color: theme.palette.maskColor.bottom,
         fontSize: 12,
-        fontWeight: 'bold',
+        fontWeight: 700,
         borderRadius: 9999,
         padding: '8px 12px',
         width: 65,
@@ -322,7 +322,14 @@ export function PreviewCard(props: PreviewCardProps) {
                         ))}
                     </MaskTabList>
                 </Box>
-                <Paper className={tabClasses.content}>{renderTab()}</Paper>
+                <Paper className={tabClasses.content}>
+                    <TabPanel value={tabs.Articles} key={tabs.Articles} sx={{ padding: 0 }}>
+                        {boxInfo ? <ArticlesTab boxInfo={boxInfo} boxMetadata={boxMetadata} /> : null}
+                    </TabPanel>
+                    <TabPanel value={tabs.Details} key={tabs.Details} sx={{ padding: 0 }}>
+                        {boxInfo ? <DetailsTab boxInfo={boxInfo} boxMetadata={boxMetadata} /> : null}
+                    </TabPanel>
+                </Paper>
 
                 <Box style={{ padding: 12 }}>
                     <ChainBoundary
