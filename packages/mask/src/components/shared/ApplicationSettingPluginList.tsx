@@ -4,7 +4,7 @@ import {
     PluginI18NFieldRender,
     PluginID,
 } from '@masknet/plugin-infra/content-script'
-import { useMemo, useState, useCallback } from 'react'
+import { useMemo, useState, useCallback, useRef } from 'react'
 import { List, ListItem, Typography } from '@mui/material'
 import { makeStyles, getMaskColor, ShadowRootTooltip } from '@masknet/theme'
 import { useI18N } from '../../utils/index.js'
@@ -143,13 +143,15 @@ interface AppListProps {
 function AppList(props: AppListProps) {
     const { appList, setUnlistedApp, isListed } = props
     const { classes } = useStyles({ iconFilterColor: undefined })
+    const popperBoundaryRef = useRef<HTMLUListElement | null>(null)
     const { t } = useI18N()
 
     return appList.length > 0 ? (
-        <List className={classes.list}>
+        <List className={classes.list} ref={popperBoundaryRef}>
             {appList.map((application, index) => (
                 <AppListItem
                     key={index}
+                    popperBoundary={popperBoundaryRef.current}
                     application={application}
                     setUnlistedApp={setUnlistedApp}
                     isListed={isListed}
@@ -169,18 +171,28 @@ function AppList(props: AppListProps) {
 
 interface AppListItemProps {
     application: Application
+    popperBoundary: HTMLUListElement | null
     setUnlistedApp: (app: Application, unlisted: boolean) => void
     isListed: boolean
 }
 
 function AppListItem(props: AppListItemProps) {
-    const { application, setUnlistedApp, isListed } = props
+    const { application, setUnlistedApp, isListed, popperBoundary } = props
     const { classes } = useStyles({ iconFilterColor: application.entry.iconFilterColor })
     return (
         <ShadowRootTooltip
             PopperProps={{
                 disablePortal: true,
                 placement: 'top',
+                modifiers: [
+                    {
+                        name: 'flip',
+                        options: {
+                            boundary: popperBoundary,
+                            flipVariations: false,
+                        },
+                    },
+                ],
             }}
             title={
                 <Typography>

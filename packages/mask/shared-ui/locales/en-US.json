@@ -89,7 +89,7 @@
     "additional_post_box__encrypted_post_pre_ito": "$t(promote_ito) {{encrypted}}",
     "additional_post_box__encrypted_post_pre_file_service_twitter_official_account": "$t(promote_file_service)\n {{encrypted}}",
     "additional_post_box__encrypted_post_pre_file_service": "$t(promote_file_service) {{encrypted}}",
-    "additional_post_box__steganography_post_pre": "This image is encrypted with #mask_io.\n{{random}}\n\nInstall Mask.io to send your first encrypted tweet.",
+    "additional_post_box__steganography_post_pre": "This image is encrypted with #mask_io. \n{{random}}\n\nInstall Mask.io to send your first encrypted tweet.",
     "auto_paste_failed_dialog_title": "Paste manually",
     "auto_paste_failed_dialog_content": "Please copy the following text and image (if there is any) and publish it.",
     "auto_paste_failed_dialog_image_caption": "Open in a new tab",
@@ -166,6 +166,8 @@
     "setup_guide_verify_dismiss": "Don't show again.",
     "setup_guide_verify_checking": "Checking",
     "setup_guide_verify_post_not_found": "No verification post found",
+    "setup_guide_connected_title": "Connected and verified successfully.",
+    "setup_guide_connected_description": "Try exploring Web3 dApps features on social media.",
     "setup_guide_verifying": "Verifiying",
     "setup_guide_verifying_failed": "Re-Verfiy",
     "user_guide_tip_connected": "You have connected to this account successfully.",
@@ -1143,7 +1145,8 @@
     "popups_rename_error_tip": "Maximum length is {{length}} characters long.",
     "nft_wallet_label": "Wallet",
     "plugin_profile_no_wallets": "Connect your wallet here.<br/>This section will be shown to your encrypted friends.<br/>The display content includes digital art, donations, badges<br/>and other public information on chain.",
-    "plugin_vcent_last_offer_at": "LATEST OFFER at",
+    "plugin_vcent_last_offer_at": "Latest offer at",
+    "plugin_vcent_go": "Go",
     "nft_input_address_label": "Please input contract address",
     "nft_input_tokenid_label": "Please input token ID",
     "nft_owner_hint": "The contract address is incorrect or the collection does not belong to you",
@@ -1197,5 +1200,6 @@
     "plugin_valuables_name": "Valuables",
     "plugin_valuables_description": "Buy & sell tweets autographed by their original creators.",
     "popups_wallet_unsupported_network": "Unsupported network type",
-    "plugin_enables": "Enable plugins"
+    "plugin_enables": "Enable plugins",
+    "web3_profile_no_social_address_list": " The user has not set this."
 }
