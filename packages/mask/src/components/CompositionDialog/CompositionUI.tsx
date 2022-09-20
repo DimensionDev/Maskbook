@@ -24,6 +24,10 @@ const useStyles = makeStyles()((theme) => ({
             height: '36px !important',
         },
         minHeight: 450,
+        maxHeight: 464,
+        height: 464,
+        display: 'flex',
+        flexDirection: 'column',
     },
     flex: {
         width: '100%',
@@ -72,7 +76,7 @@ const useStyles = makeStyles()((theme) => ({
         marginRight: 12,
     },
     editorWrapper: {
-        minHeight: 338,
+        flex: 1,
         width: 568,
         background: theme.palette.background.input,
         padding: 0,
@@ -192,18 +196,20 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
     return (
         <CompositionContext.Provider value={context}>
             <div className={classes.root}>
-                <TypedMessageEditor
-                    autoFocus
-                    readonly={sending}
-                    ref={(element) => {
-                        Editor.current = element
-                        if (element) updatePostSize(element.estimatedLength)
-                    }}
-                    onChange={(message) => {
-                        startTransition(() => props.onChange?.(message))
-                        updatePostSize(Editor.current?.estimatedLength || 0)
-                    }}
-                />
+                <div className={classes.editorWrapper}>
+                    <TypedMessageEditor
+                        autoFocus
+                        readonly={sending}
+                        ref={(element) => {
+                            Editor.current = element
+                            if (element) updatePostSize(element.estimatedLength)
+                        }}
+                        onChange={(message) => {
+                            startTransition(() => props.onChange?.(message))
+                            updatePostSize(Editor.current?.estimatedLength || 0)
+                        }}
+                    />
+                </div>
 
                 <div className={classes.flex}>
                     <Typography className={classes.optionTitle}>{t('plugins')}</Typography>
