@@ -103,9 +103,16 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     const isPluginIDMatched = actualPluginID === expectedPluginID
     const isMatched = predicate(actualPluginID, actualChainId)
 
-    const { openDialog: openSelectProviderDialog, setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
+    const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
+
+    const openSelectProviderDialog = useCallback(() => {
+        setSelectProviderDialog({
+            open: true,
+            network: expectedNetworkDescriptor,
+        })
+    }, [expectedNetworkDescriptor])
 
     const [{ loading }, onSwitchChain] = useAsyncFn(async () => {
         try {
@@ -113,7 +120,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                 if (actualProviderType === ProviderType.MaskWallet) {
                     await expectedConnection?.switchChain?.(expectedChainId)
                 } else {
-                    const result = await expectedConnection?.connect({
+                    await expectedConnection?.connect({
                         chainId: expectedChainId,
                     })
                 }
@@ -123,15 +130,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         } catch {
             return false
         }
-    }, [
-        expectedChainAllowed,
-        isMatched,
-        isPluginIDMatched,
-        actualProviderType,
-        expectedChainId,
-        expectedConnection,
-        openSelectProviderDialog,
-    ])
+    }, [expectedChainAllowed, isMatched, isPluginIDMatched, actualProviderType, expectedChainId, expectedConnection])
 
     const onChangeNetwork = useCallback(async () => {
         // a short time loading makes the user fells better
@@ -139,11 +138,10 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         if (!expectedChainAllowed) return 'init'
 
         if (!isPluginIDMatched) {
-            setSelectProviderDialog({ open: true, network: expectedNetworkDescriptor })
-            return 'init'
+            openSelectProviderDialog()
         }
         return
-    }, [expectedChainAllowed, isPluginIDMatched, expectedNetworkDescriptor])
+    }, [expectedChainAllowed, isPluginIDMatched, openSelectProviderDialog])
 
     const switchButtonDisabled = useMemo(() => {
         return !(actualProviderDescriptor?.enableRequirements?.supportedChainIds?.includes(expectedChainId) ?? false)
