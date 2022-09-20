@@ -52,6 +52,7 @@ export function getPaymentToken(chainId: ChainId, token?: { name?: string; symbo
 
     return [
         createNativeToken(chainId),
+        /* cspell:disable-next-line */
         ...[APE, USDC, USDT, DAI, HUSD, BUSD, WBTC, WNATIVE, TATR, RARI].map((x) => x[chainId]),
     ].find(
         (x) =>
