@@ -138,11 +138,9 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
 
     const collections = useMemo(() => {
         const filterCollections = collectionList?.filter((collection) => !collection?.hidden)
-        if (!filterCollections || filterCollections?.length === 0) {
-            return EMPTY_LIST
-        }
-        if (filterCollections?.length > 8 && loadStatus !== LOAD_STATUS.Finish) {
-            return filterCollections?.slice(0, 8)
+        if (!filterCollections?.length) return EMPTY_LIST
+        if (filterCollections.length > 8 && loadStatus !== LOAD_STATUS.Finish) {
+            return filterCollections.slice(0, 8)
         }
         return filterCollections
     }, [loadStatus, collectionList])
@@ -189,7 +187,7 @@ export function WalletAssetsCard(props: WalletAssetsCardProps) {
                 </div>
             </div>
 
-            {collectionList && collectionList?.filter((collection) => !collection?.hidden)?.length > 0 ? (
+            {collectionList?.some((collection) => !collection?.hidden) ? (
                 <Box className={classes.listBox}>
                     <CollectionList
                         classes={{ list: classes.list, collectionWrap: classes.imageIconWrapper }}

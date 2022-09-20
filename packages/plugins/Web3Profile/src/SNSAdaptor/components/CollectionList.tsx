@@ -18,8 +18,9 @@ export function CollectionList(props: CollectionListProps) {
 
     return (
         <List className={classes.list}>
-            {collections.map((collection, i) => (
+            {collections.map((collection) => (
                 <ListItem
+                    data-url={collection.imageURL ?? ''}
                     key={collection?.key}
                     className={classes.collectionWrap}
                     onClick={() => onList?.(collection.key)}>
@@ -42,7 +43,7 @@ export function CollectionList(props: CollectionListProps) {
                                 schema: SchemaType.ERC721,
                             },
                             metadata: {
-                                imageURL: collection.iconURL,
+                                imageURL: collection.imageURL,
                                 chainId: ChainId.Mainnet,
                                 name: '',
                                 symbol: '',
