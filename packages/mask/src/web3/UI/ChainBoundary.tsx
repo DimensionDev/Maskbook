@@ -60,7 +60,7 @@ export interface ChainBoundaryProps<T extends NetworkPluginID> extends withClass
     expectedChainId: Web3Helper.Definition[T]['ChainId']
     /** Judge the network is available for children components */
     predicate?: (actualPluginID: NetworkPluginID, actualChainId: Web3Helper.Definition[T]['ChainId']) => boolean
-
+    expectedAccount?: string
     className?: string
     noSwitchNetworkTip?: boolean
     hiddenConnectButton?: boolean
@@ -73,6 +73,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         noSwitchNetworkTip = true,
         expectedPluginID,
         expectedChainId,
+        expectedAccount,
         predicate = (actualPluginID, actualChainId) =>
             actualPluginID === expectedPluginID && actualChainId === expectedChainId,
     } = props
@@ -88,7 +89,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     const actualProviderType = useProviderType(actualPluginID)
     const actualProviderDescriptor = useProviderDescriptor(actualPluginID)
     const actualChainName = actualOthers?.chainResolver.chainName(actualChainId)
-    const account = useAccount(actualPluginID)
+    const account = useAccount(actualPluginID, expectedAccount)
 
     const { Others: expectedOthers } = useWeb3State(expectedPluginID)
     const expectedConnection = useWeb3Connection(expectedPluginID)

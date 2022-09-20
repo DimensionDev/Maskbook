@@ -412,6 +412,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     <ChainBoundary
                         expectedChainId={chainId}
                         predicate={selectedPluginId !== NetworkPluginID.PLUGIN_FLOW ? () => true : undefined}
+                        expectedAccount={selectedAccount}
                         expectedPluginID={
                             selectedPluginId === NetworkPluginID.PLUGIN_FLOW
                                 ? NetworkPluginID.PLUGIN_EVM
