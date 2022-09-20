@@ -1,6 +1,5 @@
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import type { SourceType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     gemRankWrapper: {
