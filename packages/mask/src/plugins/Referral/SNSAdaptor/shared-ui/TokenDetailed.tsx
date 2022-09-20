@@ -27,10 +27,10 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface TokenProps {
     address: string
+    name: string
     symbol?: string
-    name?: string
-    logoURL?: string
     chainId?: ChainId
+    logoURL?: string
 }
 
 export interface TokenDetailedProps extends React.PropsWithChildren<{}> {

@@ -9,6 +9,7 @@ import {
     DAI,
     HUSD,
     NETWORK_DESCRIPTORS,
+    RARI,
     SchemaType,
     TATR,
     USDC,
@@ -51,7 +52,7 @@ export function getPaymentToken(chainId: ChainId, token?: { name?: string; symbo
 
     return [
         createNativeToken(chainId),
-        ...[APE, USDC, USDT, HUSD, BUSD, DAI, WBTC, WNATIVE, TATR].map((x) => x[chainId]),
+        ...[APE, USDC, USDT, DAI, HUSD, BUSD, WBTC, WNATIVE, TATR, RARI].map((x) => x[chainId]),
     ].find(
         (x) =>
             x.name.toLowerCase() === token.name?.toLowerCase() ||

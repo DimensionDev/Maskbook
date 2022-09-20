@@ -1,17 +1,12 @@
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import {
-    NonFungibleTokenOrder,
-    formatBalance,
-    formatCurrency,
-    NetworkPluginID,
-    isValidTimestamp,
-} from '@masknet/web3-shared-base'
+import { NonFungibleTokenOrder, formatBalance, formatCurrency, isValidTimestamp } from '@masknet/web3-shared-base'
 import { useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { Icons } from '@masknet/icons'
 import { useI18N } from '../../../../utils/index.js'
 import { CollectibleProviderIcon } from './CollectibleProviderIcon.js'
+import { TokenIcon } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -67,7 +62,7 @@ export interface OfferCardProps {
 export function OfferCard(props: OfferCardProps) {
     const { offer } = props
     const { classes } = useStyles()
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const { Others } = useWeb3State()
     const { t } = useI18N()
 
     return (
@@ -81,9 +76,25 @@ export function OfferCard(props: OfferCardProps) {
                         (offer.priceInToken?.token.symbol.toUpperCase() === 'WETH' ? (
                             <Icons.WETH size={18} />
                         ) : (
-                            <Typography className={classes.fallbackSymbol}>
-                                {offer.priceInToken?.token.symbol || offer.priceInToken?.token.name}
-                            </Typography>
+                            <>
+                                {offer.priceInToken?.token.address ? (
+                                    <TokenIcon
+                                        name={offer.priceInToken.token.name}
+                                        symbol={offer.priceInToken.token.symbol}
+                                        address={offer.priceInToken.token.address}
+                                        AvatarProps={{
+                                            style: {
+                                                width: 18,
+                                                height: 18,
+                                            },
+                                        }}
+                                    />
+                                ) : (
+                                    <Typography className={classes.fallbackSymbol}>
+                                        {offer.priceInToken?.token.symbol || offer.priceInToken?.token.name}
+                                    </Typography>
+                                )}
+                            </>
                         ))}
                     <div className={classes.flex}>
                         <Typography className={classes.textBase}>

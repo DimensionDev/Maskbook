@@ -213,6 +213,7 @@ export function Collectible(props: CollectibleProps) {
                         <LinkingAvatar
                             href={_asset.link ?? ''}
                             title={_asset.owner?.nickname ?? _asset.owner?.address ?? ''}
+                            name={_asset.metadata?.name ?? ''}
                             src={
                                 _asset.collection?.iconURL ?? _asset.creator?.avatarURL ?? _asset.owner?.avatarURL ?? ''
                             }

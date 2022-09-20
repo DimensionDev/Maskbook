@@ -1,11 +1,11 @@
+import { FC, PropsWithChildren, useCallback, useMemo } from 'react'
+import { groupBy, toPairs } from 'lodash-unified'
 import { Icons } from '@masknet/icons'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { TokenType } from '@masknet/web3-shared-base'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import { Divider, MenuItem, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/system'
-import { groupBy, toPairs } from 'lodash-unified'
-import { FC, PropsWithChildren, useCallback, useMemo } from 'react'
 import type { Coin } from '../../types/index.js'
 import { CoinIcon } from './components/index.js'
 
@@ -80,13 +80,16 @@ const TokenMenuList: FC<TokenMenuListProps> = ({ options, type, value, onSelect 
                         selected={selected}
                         key={`${x.coin.type}/${x.value}`}
                         onClick={() => onSelect(x.coin.type, x.value)}>
-                        <CoinIcon
-                            type={x.coin.type}
-                            address={x.coin.address}
-                            name={x.coin.name}
-                            logoUrl={x.coin.image_url}
-                            size={20}
-                        />
+                        {x.coin.address ? (
+                            <CoinIcon
+                                type={x.coin.type}
+                                address={x.coin.address}
+                                name={x.coin.name}
+                                symbol={x.coin.symbol}
+                                logoUrl={x.coin.image_url}
+                                size={20}
+                            />
+                        ) : null}
                         <Typography className={classes.symbol}>{x.coin.market_cap_rank}</Typography>
                         <Stack className={classes.itemText}>
                             <Typography

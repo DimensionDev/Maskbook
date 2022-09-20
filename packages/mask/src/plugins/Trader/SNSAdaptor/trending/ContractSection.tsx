@@ -9,10 +9,12 @@ import { useCopyToClipboard } from 'react-use'
 export interface ContractSectionProps {
     chainId?: ChainId
     address: string
+    name: string
+    symbol?: string
     iconURL?: string
 }
 
-export const ContractSection = ({ address, chainId, iconURL }: ContractSectionProps) => {
+export const ContractSection = ({ chainId, address, name, symbol, iconURL }: ContractSectionProps) => {
     const theme = useTheme()
     const [, copyToClipboard] = useCopyToClipboard()
     const chain = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
@@ -27,7 +29,13 @@ export const ContractSection = ({ address, chainId, iconURL }: ContractSectionPr
             {chainId ? (
                 <WalletIcon size={16} mainIcon={chain?.icon} />
             ) : iconURL ? (
-                <TokenIcon AvatarProps={{ sx: { width: 16, height: 16 } }} logoURL={iconURL} address={address} />
+                <TokenIcon
+                    logoURL={iconURL}
+                    address={address}
+                    name={name}
+                    symbol={symbol}
+                    AvatarProps={{ style: { width: 16, height: 16 } }}
+                />
             ) : (
                 <Box width={16} />
             )}

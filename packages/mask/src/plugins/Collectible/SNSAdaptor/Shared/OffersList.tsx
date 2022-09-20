@@ -39,11 +39,6 @@ export function OffersList(props: OffersListProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
 
-    console.log('DEBUG: OffersList')
-    console.log({
-        offers: props.offers,
-    })
-
     if (offers.loading)
         return (
             <div className={classes.wrapper}>

@@ -62,6 +62,7 @@ export const JEWEL = createERC20Tokens('JEWEL_ADDRESS', 'Jewels', 'JEWEL', 18)
 export const YUMI = createERC20Tokens('YUMI_ADDRESS', 'YumiSwap Token', 'YUMI', 18)
 export const xYUMI = createERC20Tokens('xYUMI_ADDRESS', 'Yumi Staking Token', 'xYUMI', 18)
 export const OP = createERC20Tokens('OP_ADDRESS', 'Optimism', 'OP', 18)
+export const RARI = createERC20Tokens('RARI_ADDRESS', 'Rarible', 'RARI', 18)
 
 export const WNATIVE = createERC20Tokens(
     'WNATIVE_ADDRESS',

@@ -330,6 +330,8 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                                 <TokenIcon
                                     classes={{ icon: classes.tokenIcon }}
                                     address={inputToken.address}
+                                    name={inputToken.name}
+                                    symbol={inputToken.symbol}
                                     logoURL={inputToken.logoURL}
                                 />
                                 {inputToken.symbol}
@@ -366,7 +368,10 @@ export const ConfirmDialogUI = memo<ConfirmDialogUIProps>(
                             <Typography component="div" className={classes.symbol}>
                                 <TokenIcon
                                     classes={{ icon: classes.tokenIcon }}
+                                    chainId={outputToken.chainId}
                                     address={outputToken.address}
+                                    name={outputToken.name}
+                                    symbol={outputToken.symbol}
                                     logoURL={outputToken.logoURL}
                                 />
                                 {outputToken.symbol}
