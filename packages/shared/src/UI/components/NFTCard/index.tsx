@@ -1,9 +1,9 @@
 import { Icons } from '@masknet/icons'
 import { ImageIcon, useIsImageURL } from '@masknet/shared'
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, NonFungibleToken } from '@masknet/web3-shared-base'
 import { ChainId, NETWORK_DESCRIPTORS, SchemaType } from '@masknet/web3-shared-evm'
-import { Box, Skeleton } from '@mui/material'
+import { Box, Skeleton, Tooltip, TooltipProps } from '@mui/material'
 import classNames from 'classnames'
 
 const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, props) => ({
@@ -13,6 +13,9 @@ const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, pro
 
     itemRoot: {
         position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     itemIcon: {
         position: 'absolute',
@@ -97,6 +100,20 @@ interface NFTImageCollectibleAvatarProps {
     showNetwork?: boolean
 }
 
+const tooltipProps: Partial<TooltipProps> = {
+    arrow: true,
+    disableInteractive: true,
+    PopperProps: {
+        disablePortal: true,
+        popperOptions: {
+            strategy: 'absolute',
+        },
+    },
+}
+
+/**
+ * @deprecated Use CollectibleItem instead.
+ */
 export function NFTImageCollectibleAvatar({
     token,
     onChange,
@@ -131,11 +148,11 @@ export function NFTImageCollectibleAvatar({
             showNetwork={showNetwork}
         />
     ) : (
-        <ShadowRootTooltip title={token?.contract?.name ?? ''} placement="top" arrow>
+        <Tooltip {...tooltipProps} title={token?.contract?.name ?? ''}>
             <Box sx={{ width: size, height: size }} className={classes.defaultImage}>
                 <Icons.MaskAvatar className={classes.maskIcon} />
             </Box>
-        </ShadowRootTooltip>
+        </Tooltip>
     )
 }
 
@@ -168,7 +185,7 @@ export function NFTImage(props: NFTImageProps) {
     const iconURL = NETWORK_DESCRIPTORS.find((network) => network?.chainId === token.chainId)?.icon
 
     return (
-        <ShadowRootTooltip title={token?.contract?.name ?? ''} placement="top" arrow>
+        <Tooltip {...tooltipProps} title={token.contract?.name ?? ''}>
             <Box className={classes.itemRoot}>
                 <img
                     onClick={() => onChange?.(token)}
@@ -185,6 +202,6 @@ export function NFTImage(props: NFTImageProps) {
                     <Icons.Selected className={classes.itemIcon} />
                 ) : null}
             </Box>
-        </ShadowRootTooltip>
+        </Tooltip>
     )
 }
