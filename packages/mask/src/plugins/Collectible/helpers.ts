@@ -4,6 +4,7 @@ import {
     openseaPathnameRegexMatcher,
     raribleHostnames,
     rariblePathnameRegexMatcher,
+    ZORA_COLLECTION_ADDRESS,
     zoraHostnames,
     zoraPathnameRegexMatcher,
 } from './constants.js'
@@ -81,14 +82,16 @@ export function getAssetInfoFromURL(url?: string): CollectiblePayload | null {
     // #endregion
 
     // #region zora
-    const zoraMatched = _url.pathname.match(zoraPathnameRegexMatcher)
-    if (zoraMatched) {
-        return {
-            pluginID: NetworkPluginID.PLUGIN_EVM,
-            chainId: _url.host.includes('rinkeby') ? ChainIdEVM.Rinkeby : ChainIdEVM.Mainnet,
-            address: zoraMatched[1],
-            tokenId: zoraMatched[2],
-            provider: SourceType.Zora,
+    {
+        const zoraMatched = _url.pathname.match(zoraPathnameRegexMatcher)
+        if (zoraMatched) {
+            return {
+                pluginID: NetworkPluginID.PLUGIN_EVM,
+                chainId: _url.host.includes('rinkeby') ? ChainIdEVM.Rinkeby : ChainIdEVM.Mainnet,
+                address: zoraMatched[1].replace('zora', ZORA_COLLECTION_ADDRESS),
+                tokenId: zoraMatched[2],
+                provider: SourceType.Zora,
+            }
         }
     }
     // #endregion

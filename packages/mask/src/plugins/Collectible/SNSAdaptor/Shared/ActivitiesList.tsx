@@ -75,11 +75,6 @@ export function ActivitiesList(props: ActivitiesListProps) {
             </div>
         )
 
-    console.log('DEBUG: events')
-    console.log({
-        _events,
-    })
-
     return (
         <div className={classes.wrapper} style={{ justifyContent: 'unset' }}>
             {_events?.map((x, idx) => (

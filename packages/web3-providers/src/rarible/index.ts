@@ -222,12 +222,6 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             }),
         )
 
-        console.log('DEBUG: get offers')
-        console.log({
-            response,
-            orders,
-        })
-
         return createPageable(
             orders,
             createIndicator(indicator),
@@ -255,12 +249,6 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                 assetPermalink: createRaribleLink(tokenAddress, tokenId),
             }),
         )
-
-        console.log('DEBUG: get listing')
-        console.log({
-            response: response.orders,
-            orders,
-        })
 
         return createPageable(
             orders,

@@ -2,7 +2,7 @@ import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import { useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -107,6 +107,7 @@ export interface FigureCardProps {
 export function FigureCard(props: FigureCardProps) {
     const { asset, hideSubTitle, timeline } = props
     const { classes, cx } = useStyles()
+    const { Others } = useWeb3State()
 
     const fallbackImgURL = new URL('../../assets/FallbackImage.svg', import.meta.url)
     const resourceUrl = asset.metadata?.imageURL ?? asset.metadata?.mediaURL
@@ -128,6 +129,7 @@ export function FigureCard(props: FigureCardProps) {
             </div>
             <Typography className={timeline ? cx(classes.nameSm, classes.unset) : classes.nameSm}>
                 {asset.metadata?.name ?? '-'}
+                {Others?.formatTokenId(asset.tokenId)}
             </Typography>
             {!hideSubTitle && (
                 <div className={classes.nameLgBox}>
