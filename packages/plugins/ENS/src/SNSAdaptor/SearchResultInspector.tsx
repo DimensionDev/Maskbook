@@ -17,7 +17,7 @@ import { SocialAccountList } from './SocialAccountList'
 
 export function SearchResultInspectorContent() {
     const t = useI18N()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const {
         isLoading,
         isNoResult,
@@ -58,7 +58,7 @@ export function SearchResultInspectorContent() {
                         <Link
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={classes.link}
+                            className={cx(classes.link, classes.rightSpace)}
                             href={`https://twitter.com/${firstValidNextIdTwitterBinding.identity}`}>
                             <Icons.TwitterRound />
                             <Typography className={classes.nextIdVerifiedTwitterName}>

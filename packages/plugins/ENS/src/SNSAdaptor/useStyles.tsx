@@ -88,8 +88,10 @@ const useStyles = makeStyles()((theme) => {
             color: theme.palette.maskColor.dark,
             fontWeight: 700,
             marginLeft: 4,
-            marginRight: 12,
             fontSize: 16,
+        },
+        rightSpace: {
+            marginRight: 12,
         },
         sourceSwitcher: {
             display: 'flex',
@@ -126,6 +128,11 @@ const useStyles = makeStyles()((theme) => {
         menuItemNextIdIcon: {
             display: 'flex',
             marginLeft: 'auto',
+        },
+        accountNameInList: {
+            maxWidth: 120,
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
         },
     }
 })

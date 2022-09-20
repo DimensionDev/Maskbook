@@ -5,6 +5,7 @@ import { NextIDPlatform, BindingProof } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { ChainId, resolveNonFungibleTokenIdFromEnsDomain } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { uniqBy } from 'lodash-unified'
 
 interface ENSContextProps {
     isLoading: boolean
@@ -50,9 +51,12 @@ export function ENSProvider({ children, domain }: PropsWithChildren<SearchResult
         [reversedAddress, domain],
     )
 
-    const validNextIdTwitterBindings = (ids ?? []).reduce<BindingProof[]>((acc, cur) => {
-        return acc.concat(cur.proofs.filter((proof) => proof.is_valid && proof.platform === NextIDPlatform.Twitter))
-    }, [])
+    const validNextIdTwitterBindings = uniqBy(
+        (ids ?? []).reduce<BindingProof[]>((acc, cur) => {
+            return acc.concat(cur.proofs.filter((proof) => proof.is_valid && proof.platform === NextIDPlatform.Twitter))
+        }, []),
+        (x) => x.identity,
+    ).sort((a, b) => Number(b.last_checked_at) - Number(a.last_checked_at))
 
     const firstValidNextIdTwitterBinding = validNextIdTwitterBindings[0]
     const restOfValidNextIdTwitterBindings = validNextIdTwitterBindings.slice(1)
