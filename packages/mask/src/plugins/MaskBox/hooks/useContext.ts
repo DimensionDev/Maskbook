@@ -8,6 +8,7 @@ import { omit, clamp, first, uniq } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import { createContainer } from 'unstated-next'
 import { unreachable } from '@dimensiondev/kit'
+import { TargetChainIdContext, useERC20TokenAllowance } from '@masknet/plugin-infra/web3-evm'
 import { useMaskBoxConstants, isZeroAddress, SchemaType, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { BoxInfo, BoxState } from '../type.js'
@@ -39,14 +40,13 @@ import {
     useNonFungibleTokenContract,
 } from '@masknet/plugin-infra/web3'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { useERC20TokenAllowance } from '@masknet/plugin-infra/web3-evm'
 
 function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const now = new Date()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants()
+    const { targetChainId } = TargetChainIdContext.useContainer()
+    const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants(targetChainId)
     const coder = ABICoder as unknown as ABICoder.AbiCoder
-
     const [boxId, setBoxId] = useState(initialState?.boxId ?? '')
     const rootHash = initialState?.hashRoot || ''
     const [paymentTokenAddress, setPaymentTokenAddress] = useState('')
@@ -70,6 +70,9 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const { value: paymentTokens = EMPTY_LIST } = useFungibleTokens(
         NetworkPluginID.PLUGIN_EVM,
         maskBoxStatus?.payment?.map(([address]) => address) ?? [],
+        {
+            chainId: targetChainId,
+        },
     )
     const { value: allTokens = EMPTY_LIST, retry: retryMaskBoxTokensForSale } = useMaskBoxTokensForSale(boxId)
     const { value: purchasedTokens = EMPTY_LIST, retry: retryMaskBoxPurchasedTokens } = useMaskBoxPurchasedTokens(
@@ -141,10 +144,13 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     const notInWhiteList = value?.message === 'leaf not found'
 
     // at least hold token amount
-    const { value: holderToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, boxInfo?.holderTokenAddress)
+    const { value: holderToken } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, boxInfo?.holderTokenAddress, {
+        chainId: targetChainId,
+    })
     const { value: holderTokenBalance = '0' } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
         holderToken?.address,
+        { chainId: targetChainId },
     )
     const holderMinTokenAmountBN = new BigNumber(boxInfo?.holderMinTokenAmount ?? 0)
     const insufficientHolderToken =
