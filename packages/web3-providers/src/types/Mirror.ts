@@ -41,7 +41,7 @@ export interface MirrorInitData {
 
 export namespace MirrorBaseAPI {
     export interface Provider {
-        getWriter(id: string): Promise<Writer | null>
+        getWriter(id: string): Promise<Writer | null | undefined>
         getPost(digest: string): Promise<Entry | null>
     }
 }

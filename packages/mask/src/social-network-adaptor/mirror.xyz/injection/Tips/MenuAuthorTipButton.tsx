@@ -9,7 +9,7 @@ import { menuAuthorSelector as selector } from '../../utils/selectors.js'
 export function injectTipsButtonOnMenu(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(selector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTipsSlot />)
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<AuthorTipsSlot />)
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-function ProfileTipsSlot() {
+function AuthorTipsSlot() {
     const visitingPersona = useCurrentVisitingIdentity()
     const { classes } = useStyles()
     const component = useMemo(() => {
@@ -43,6 +43,7 @@ function ProfileTipsSlot() {
             (plugin) => plugin.TipsRealm?.UI?.Content,
         )
 
+        // TODO: change the tips solt profile type
         return <Component identity={visitingPersona.identifier} slot={Plugin.SNSAdaptor.TipsSlot.Profile} />
     }, [visitingPersona.identifier])
 

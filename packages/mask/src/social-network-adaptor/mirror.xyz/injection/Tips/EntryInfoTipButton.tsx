@@ -9,7 +9,7 @@ import { entryInfoSelector as selector } from '../../utils/selectors.js'
 export function injectTipsButtonOnEntry(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(selector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.beforeShadow, { signal }).render(<ProfileTipsSlot />)
+    createReactRootShadowed(watcher.firstDOMProxy.beforeShadow, { signal }).render(<AuthorTipsSlot />)
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-function ProfileTipsSlot() {
+function AuthorTipsSlot() {
     const visitingPersona = useCurrentVisitingIdentity()
     const { classes } = useStyles()
     const component = useMemo(() => {

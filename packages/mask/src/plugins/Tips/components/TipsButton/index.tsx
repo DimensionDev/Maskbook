@@ -45,6 +45,7 @@ const useStyles = makeStyles()({
     },
 })
 
+// TODO: reduce re-render
 export const TipButton: FC<Props> = ({
     className,
     receiver,
@@ -68,7 +69,7 @@ export const TipButton: FC<Props> = ({
         loading: loadingVerifyInfo,
         retry: retryLoadVerifyInfo,
     } = useAsyncRetry(async () => {
-        if (pluginId !== NetworkPluginID.PLUGIN_EVM) return true
+        if (pluginId !== NetworkPluginID.PLUGIN_EVM || !platform) return true
         if (!personaPubkey || !receiverUserId) return false
         return NextIDProof.queryIsBound(personaPubkey, platform, receiverUserId, true)
     }, [pluginId, personaPubkey, platform, receiverUserId])

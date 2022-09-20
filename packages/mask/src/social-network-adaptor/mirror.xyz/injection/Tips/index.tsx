@@ -1,4 +1,4 @@
-import { injectTipsButtonOnEntry } from './entryInfoTipButton'
+import { injectTipsButtonOnEntry } from './EntryInfoTipButton'
 import { injectTipsButtonOnMenu } from './MenuAuthorTipButton'
 
 export function injectTips(signal: AbortSignal) {

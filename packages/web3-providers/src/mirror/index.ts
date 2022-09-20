@@ -62,7 +62,7 @@ export class MirrorAPI implements MirrorBaseAPI.Provider {
     async getWriter(id: string) {
         if (!id) return null
 
-        const writer = await fetchFromMirror<Writer>({
+        const writer = await fetchFromMirror<{ projectFeed: Writer }>({
             query: `query Writer ($projectAddress: String!) {
                 projectFeed(projectAddress: $projectAddress) {
                     address
@@ -77,7 +77,7 @@ export class MirrorAPI implements MirrorBaseAPI.Provider {
             operationName: 'Writer',
         })
 
-        return writer
+        return writer?.projectFeed
     }
 
     async getPost(digest: string) {
