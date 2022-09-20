@@ -20,6 +20,7 @@ export interface Entry {
     // mm-dd-yyyy
     version: string
     author: Writer
+    collaborators?: Writer[]
     // NFT token
     collection: NonFungibleCollection<ChainId, SchemaType.ERC721>
     content: {
