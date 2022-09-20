@@ -50,7 +50,7 @@ function resolveCurrentVisitingIdentityInner(
         if (!INIT_DATA) return
         const writer = INIT_DATA.props?.pageProps?.project as Writer
         if (!writer) {
-            if (location.pathname.includes('/dashboard')) return
+            if (!location.pathname.includes('/dashboard')) return
 
             // when current page is dashboard
             const currentUser = await getCurrentUserInfo()
