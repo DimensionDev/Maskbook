@@ -7,7 +7,7 @@ export interface CollectionTypes {
     address: string // take id as address if collection is a poap
     key: string // address + tokenId as unique key of NFT, id as unique key of poap
     tokenId?: string
-    iconURL?: string
+    imageURL?: string
     hidden?: boolean
     name?: string
     chainId?: ChainId

@@ -33,9 +33,9 @@ export const useFindUsernameStyles = makeStyles()((theme) => ({
 
 export interface FindUsernameProps extends Partial<WizardDialogProps> {
     username: string
+    stepUpdating?: boolean
     personaName?: string
     avatar?: string
-    onUsernameChange?: (username: string) => void
     onConnect: () => Promise<void>
     onDone?: () => void
     enableNextID?: boolean
@@ -49,6 +49,7 @@ export function FindUsername({
     onDone,
     onClose,
     enableNextID,
+    stepUpdating,
 }: FindUsernameProps) {
     const { t } = useI18N()
     const [connected, setConnected] = useState(false)
@@ -110,7 +111,7 @@ export function FindUsername({
                         executor={onConnect}
                         completeOnClick={enableNextID ? undefined : onDone}
                         onComplete={enableNextID ? onDone : () => setConnected(true)}
-                        disabled={!username || !personaName}
+                        disabled={!username || !personaName || stepUpdating}
                         completeIcon={null}
                         failIcon={null}
                         failedOnClick="use executor"

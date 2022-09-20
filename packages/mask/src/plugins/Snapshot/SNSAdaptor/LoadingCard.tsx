@@ -20,7 +20,7 @@ export function LoadingCard(
         title: string
     }>,
 ) {
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
     return (
         <Suspense
             fallback={
@@ -29,6 +29,7 @@ export function LoadingCard(
                         <Skeleton
                             key={i}
                             className={classes.skeleton}
+                            sx={{ backgroundColor: theme.palette.maskColor.secondaryBottom }}
                             animation="wave"
                             variant="rectangular"
                             width={i === 0 ? '80%' : '60%'}

@@ -7,5 +7,5 @@ export interface CollectibleToken {
     tokenId: string
     contractAddress: string
     schemaName?: WyvernSchemaName
-    provider?: SourceType
+    sourceType?: SourceType
 }

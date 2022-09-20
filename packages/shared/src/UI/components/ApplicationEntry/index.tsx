@@ -94,13 +94,23 @@ interface ApplicationEntryProps {
     title: React.ReactNode
     disabled?: boolean
     recommendFeature?: Plugin.SNSAdaptor.ApplicationEntry['recommendFeature']
+    popperBoundary?: HTMLElement | null
     iconFilterColor?: string
     tooltipHint?: string | React.ReactElement
     onClick: () => void
 }
 
 export function ApplicationEntry(props: ApplicationEntryProps) {
-    const { title, onClick, disabled = false, icon, tooltipHint, recommendFeature, iconFilterColor } = props
+    const {
+        title,
+        onClick,
+        disabled = false,
+        icon,
+        tooltipHint,
+        recommendFeature,
+        iconFilterColor,
+        popperBoundary,
+    } = props
     const { classes } = useStyles({ disabled, iconFilterColor })
     const jsx = recommendFeature ? (
         <div
@@ -135,6 +145,15 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
             PopperProps={{
                 disablePortal: true,
                 placement: recommendFeature ? 'bottom' : 'top',
+                modifiers: [
+                    {
+                        name: 'flip',
+                        options: {
+                            boundary: popperBoundary,
+                            flipVariations: false,
+                        },
+                    },
+                ],
             }}
             classes={{
                 tooltip: classes.tooltip,

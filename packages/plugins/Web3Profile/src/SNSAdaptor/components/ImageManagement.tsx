@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../locales/index.js'
 import { WalletAssetsCard } from './WalletAssets.js'
-import { PersonaInformation, PopupRoutes } from '@masknet/shared-base'
+import { EMPTY_LIST, PersonaInformation, PopupRoutes } from '@masknet/shared-base'
 import { ImageListDialog } from './ImageList.js'
 import { useState } from 'react'
 import { InjectedDialog, WalletTypes } from '@masknet/shared'
@@ -72,24 +72,26 @@ export interface ImageManagementProps {
     allWallets?: WalletTypes[]
     getWalletHiddenRetry: () => void
 }
-const getAddressesByStatus = (status: CURRENT_STATUS, accountList: AccountType) => {
+const getAddressesByStatus = (accountList: AccountType | undefined, status: CURRENT_STATUS) => {
+    if (!accountList) return EMPTY_LIST
     let addresses
-    if (status === CURRENT_STATUS.Donations_setting) addresses = accountList?.walletList?.donations
-    if (status === CURRENT_STATUS.Footprints_setting) addresses = accountList?.walletList?.footprints
-    if (status === CURRENT_STATUS.NFT_Setting) addresses = accountList?.walletList?.NFTs
+    if (status === CURRENT_STATUS.Donations_setting) addresses = accountList.walletList?.donations
+    if (status === CURRENT_STATUS.Footprints_setting) addresses = accountList.walletList?.footprints
+    if (status === CURRENT_STATUS.NFT_Setting) addresses = accountList.walletList?.NFTs
     return addresses?.sort((a, z) => {
-        const a_hasItems = a?.collections && a.collections.filter?.((collection) => !collection?.hidden)?.length > 0
-        const z_hasItems = z?.collections && z.collections.filter?.((collection) => !collection?.hidden)?.length > 0
-        if (a_hasItems && z_hasItems) {
+        const aHasItems = a.collections?.some?.((x) => !x?.hidden)
+        const zHasItems = z.collections?.some?.((x) => !x?.hidden)
+        if (aHasItems && zHasItems) {
             if (!a?.updateTime || !z?.updateTime) return 0
             if (Number(a.updateTime) > Number(z.updateTime)) return -1
         }
-        if (z_hasItems) return 1
-        if (a_hasItems) return -1
+        if (zHasItems) return 1
+        if (aHasItems) return -1
 
         return 0
     })
 }
+
 export function ImageManagement(props: ImageManagementProps) {
     const t = useI18N()
 
@@ -100,16 +102,16 @@ export function ImageManagement(props: ImageManagementProps) {
         open,
         onClose,
         accountId,
-        allWallets = [],
+        allWallets = EMPTY_LIST,
         accountList,
         getWalletHiddenRetry,
     } = props
     const [settingAddress, setSettingAddress] = useState<WalletTypes>()
     const [imageListOpen, setImageListOpen] = useState(false)
     const [walletSettingOpen, setWalletSettingOpen] = useState(false)
-    const addresses = getAddressesByStatus(status, accountList!)
+    const addresses = getAddressesByStatus(accountList, status)
 
-    const hasConnectedWallets = allWallets?.length > 0
+    const hasConnectedWallets = allWallets.length > 0
 
     const openPopupsWindow = async () => {
         await context.openPopupWindow(PopupRoutes.ConnectWallet)
@@ -124,7 +126,7 @@ export function ImageManagement(props: ImageManagementProps) {
             onClose={onClose}>
             <DialogContent className={classes.content}>
                 <div>
-                    {addresses && addresses.length > 0 ? (
+                    {addresses?.length ? (
                         addresses.map((address) => (
                             <WalletAssetsCard
                                 key={address.address}
@@ -133,7 +135,7 @@ export function ImageManagement(props: ImageManagementProps) {
                                     setSettingAddress(address)
                                     setImageListOpen(true)
                                 }}
-                                collectionList={address?.collections}
+                                collectionList={address.collections}
                                 address={address}
                             />
                         ))

@@ -1,6 +1,7 @@
 import { Component, PropsWithChildren } from 'react'
 import { SnapshotCard } from './SnapshotCard.js'
 import { Typography, Button, Box } from '@mui/material'
+import { Trans } from 'react-i18next'
 
 export class LoadingFailCard extends Component<
     PropsWithChildren<{
@@ -20,7 +21,7 @@ export class LoadingFailCard extends Component<
             return this.props.isFullPluginDown ? (
                 <Box style={{ textAlign: 'center', padding: 16 }}>
                     <Typography textAlign="center" color="error">
-                        Loading fails due to Snapshot API service breakdown.
+                        <Trans i18nKey="plugin_furucombo_load_failed" />
                     </Typography>
                     <Button
                         style={{
@@ -33,18 +34,19 @@ export class LoadingFailCard extends Component<
                             marginBottom: 4,
                             marginTop: 32,
                         }}
+                        variant="roundedContained"
                         onClick={() => {
                             this.setState({ error: null })
                             this.props.retry()
                         }}>
-                        Retry
+                        <Trans i18nKey="reload" />
                     </Button>
                 </Box>
             ) : (
                 <SnapshotCard title={this.props.title}>
                     <Box style={{ textAlign: 'center' }}>
-                        <Typography color="textPrimary">
-                            Loading fails due to Snapshot API service breakdown.
+                        <Typography color="#07101b">
+                            <Trans i18nKey="plugin_snapshot_load_failed" />
                         </Typography>
                         <Button
                             sx={{
@@ -61,7 +63,7 @@ export class LoadingFailCard extends Component<
                                 this.setState({ error: null })
                                 this.props.retry()
                             }}>
-                            Retry
+                            <Trans i18nKey="retry" />
                         </Button>
                     </Box>
                 </SnapshotCard>

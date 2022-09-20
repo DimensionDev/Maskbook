@@ -134,7 +134,7 @@ export const getDonationList = async (walletList: WalletTypes[]) => {
                     key: action.index.toString(),
                     address: donation.address_to ?? action.metadata?.token.contract_address ?? ZERO_ADDRESS,
                     platform: platform ?? NetworkPluginID.PLUGIN_EVM,
-                    iconURL: action.metadata?.logo,
+                    imageURL: action.metadata?.logo,
                     name: action.metadata?.title,
                 }
             }),
@@ -155,7 +155,7 @@ export const getFootprintList = async (walletList: WalletTypes[]) => {
                     key: index.toString(),
                     address: metadata?.contract_address ?? ZERO_ADDRESS,
                     platform,
-                    iconURL: metadata?.image,
+                    imageURL: metadata?.image,
                     name: metadata?.name,
                 }
             }),
@@ -166,19 +166,23 @@ export const getFootprintList = async (walletList: WalletTypes[]) => {
 }
 
 export const getNFTList = async (walletList: WalletTypes[], chainId: ChainId = ChainId.Mainnet) => {
-    const promises = walletList.map(async ({ address, platform }) => {
-        const assets = await AlchemyEVM.getAssets(address, { chainId })
+    const promises = walletList.map(async ({ address, platform = NetworkPluginID.PLUGIN_EVM }) => {
+        const { data } = await AlchemyEVM.getAssets(address, { chainId })
+        // Discard assets without name and imageURL
+        const assets = data.filter((x) => x.metadata?.name || x.metadata?.imageURL)
+        const collections: CollectionTypes[] = assets.map((asset) => ({
+            key: `${asset.contract?.address}_${asset.tokenId}`,
+            address: asset.address,
+            platform,
+            tokenId: asset.tokenId,
+            imageURL: asset.metadata?.imageURL,
+            name: asset.metadata?.name,
+            chainId,
+        }))
+
         return {
             address,
-            collections: assets.data?.map((asset) => ({
-                key: `${asset.contract?.address}_${asset.tokenId}`,
-                address: asset.address,
-                platform: platform ?? NetworkPluginID.PLUGIN_EVM,
-                tokenId: asset.tokenId,
-                iconURL: asset.metadata?.imageURL,
-                name: asset.metadata?.name,
-                chainId,
-            })),
+            collections,
         }
     })
     const collections = await Promise.all(promises)

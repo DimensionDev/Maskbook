@@ -6,6 +6,7 @@ import { formatPersonaFingerprint, type ProfileIdentifier } from '@masknet/share
 import { PersonaContext } from '../../hooks/usePersonaContext.js'
 import { LoadingButton } from '@mui/lab'
 import { useI18N } from '../../../../../../utils/index.js'
+import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles()(() => ({
     title: {
@@ -68,7 +69,10 @@ export const DisconnectDialog = memo<DisconnectDialogProps>(
                 <DialogContent>
                     <Typography className={classes.title}>{t('popups_persona_disconnect_confirmation')}</Typography>
                     <Typography className={classes.content}>
-                        {t('popups_persona_disconnect_confirmation_description')}
+                        <Trans
+                            i18nKey="popups_persona_disconnect_confirmation_description"
+                            components={{ br: <br />, li: <li /> }}
+                        />
                     </Typography>
                     <Typography className={classes.content}>
                         {`${t('popups_persona')}: `}

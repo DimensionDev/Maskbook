@@ -9,7 +9,9 @@ import { NetworkPluginID } from '@masknet/web3-shared-base'
 interface ENSContextProps {
     isLoading: boolean
     isNoResult: boolean
-    nextIdTwitterBindingName: string | undefined
+    firstValidNextIdTwitterBinding: BindingProof | undefined
+    restOfValidNextIdTwitterBindings: BindingProof[]
+    validNextIdTwitterBindings: BindingProof[]
     reversedAddress: string | undefined
     domain: string
     isError: boolean
@@ -20,7 +22,9 @@ interface ENSContextProps {
 export const ENSContext = createContext<ENSContextProps>({
     isLoading: true,
     isNoResult: true,
-    nextIdTwitterBindingName: undefined,
+    firstValidNextIdTwitterBinding: undefined,
+    restOfValidNextIdTwitterBindings: [],
+    validNextIdTwitterBindings: [],
     reversedAddress: undefined,
     tokenId: undefined,
     domain: '',
@@ -38,16 +42,20 @@ export function ENSProvider({ children, domain }: PropsWithChildren<SearchResult
     const isNoResult = reversedAddress === undefined
     const isError = !!error
     const tokenId = resolveNonFungibleTokenIdFromEnsDomain(domain)
-
     const { value: ids } = useAsync(
-        async () => NextIDProof.queryExistedBindingByPlatform(NextIDPlatform.Twitter, domain),
-        [domain],
+        async () =>
+            reversedAddress
+                ? NextIDProof.queryExistedBindingByPlatform(NextIDPlatform.Ethereum, reversedAddress ?? '')
+                : [],
+        [reversedAddress, domain],
     )
 
-    const validNextIdTwitterBinding = ids?.reduce<BindingProof | undefined>((acc, cur) => {
-        const p = cur.proofs.find((proof) => proof.is_valid && proof.platform === NextIDPlatform.Twitter)
-        return p ?? acc
-    }, undefined)
+    const validNextIdTwitterBindings = (ids ?? []).reduce<BindingProof[]>((acc, cur) => {
+        return acc.concat(cur.proofs.filter((proof) => proof.is_valid && proof.platform === NextIDPlatform.Twitter))
+    }, [])
+
+    const firstValidNextIdTwitterBinding = validNextIdTwitterBindings[0]
+    const restOfValidNextIdTwitterBindings = validNextIdTwitterBindings.slice(1)
 
     return (
         <ENSContext.Provider
@@ -59,7 +67,9 @@ export function ENSProvider({ children, domain }: PropsWithChildren<SearchResult
                 retry,
                 tokenId,
                 domain,
-                nextIdTwitterBindingName: validNextIdTwitterBinding?.identity,
+                validNextIdTwitterBindings,
+                firstValidNextIdTwitterBinding,
+                restOfValidNextIdTwitterBindings,
             }}>
             {children}
         </ENSContext.Provider>
