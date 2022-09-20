@@ -37,7 +37,7 @@ function canAccessAsContent(url: string) {
     )
         return true
 
-    if (location.origin.endsWith(EnhanceableSite.Mirror)) return true
+    if (location.origin.endsWith(EnhanceableSite.Mirror) && target.origin.endsWith(EnhanceableSite.Mirror)) return true
     if (extensionOrigin === target.origin) return true
     return target.origin === location.origin
 }
