@@ -574,6 +574,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                             expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                             expectedChainId={chainId}
                             noSwitchNetworkTip
+                            switchChainWithoutPopup
                             className={classes.chainBoundary}
                             ActionButtonPromiseProps={{
                                 fullWidth: true,
