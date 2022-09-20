@@ -244,10 +244,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
     }, [account, wallets, showSnackbar])
 
     useEffect(() => {
-        setDisabled(!selectedToken || isSameToken(selectedToken, tokenInfo))
-    }, [selectedToken, tokenInfo])
-
-    useEffect(() => {
         setSelectedPluginId(currentPluginId)
     }, [currentPluginId])
 
