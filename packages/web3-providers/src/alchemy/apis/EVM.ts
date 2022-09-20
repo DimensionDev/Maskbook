@@ -44,7 +44,7 @@ function createNonFungibleToken(
     const imageURL =
         asset.metadata.image || asset.metadata.image_url || asset.media?.[0]?.gateway || asset.metadata.animation_url
     const mediaURL =
-        asset.media?.[0]?.gateway ?? asset.media?.[0]?.raw ?? asset.metadata.image_url ?? asset.metadata.image
+        asset.media?.[0]?.gateway || asset.media?.[0]?.raw || asset.metadata.image_url || asset.metadata.image
     return {
         id: `${contractAddress}_${tokenId}`,
         chainId,
@@ -64,7 +64,7 @@ function createNonFungibleToken(
             chainId,
             schema: asset.id?.tokenMetadata.tokenType === 'ERC721' ? SchemaType_EVM.ERC721 : SchemaType_EVM.ERC1155,
             address: contractAddress,
-            name: asset.metadata.name ?? asset.title,
+            name: asset.metadata.name || asset.title,
             symbol: '',
         },
         collection: {
@@ -114,18 +114,18 @@ function createNonFungibleAsset(
                     : SchemaType_EVM.ERC1155,
             address: metaDataResponse.contract?.address,
             name:
-                contractMetadataResponse?.contractMetadata.name ??
-                metaDataResponse.metadata?.name ??
+                contractMetadataResponse?.contractMetadata.name ||
+                metaDataResponse.metadata?.name ||
                 metaDataResponse.title,
             symbol: contractMetadataResponse?.contractMetadata?.symbol ?? '',
         },
         collection: {
             chainId,
             name:
-                contractMetadataResponse?.contractMetadata.name ??
-                metaDataResponse.metadata?.name ??
+                contractMetadataResponse?.contractMetadata.name ||
+                metaDataResponse.metadata?.name ||
                 metaDataResponse.title,
-            slug: contractMetadataResponse?.contractMetadata?.symbol ?? '',
+            slug: contractMetadataResponse?.contractMetadata?.symbol || '',
             description: metaDataResponse.description,
         },
         link: createNonFungibleTokenLink(chainId, metaDataResponse.contract?.address, metaDataResponse.id?.tokenId),
