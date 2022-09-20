@@ -35,11 +35,13 @@ export interface ActivitiesListProps {
 
 const resolveActivityType = (type?: string) => {
     if (!type) return ActivityType.Transfer
-    if (['created', 'MINT'].includes(type)) return ActivityType.Mint
-    if (['successful'].includes(type)) return ActivityType.Sale
-    if (['OFFER', 'offer_entered', 'bid_withdrawn', 'bid_entered'].includes(type)) return ActivityType.Offer
-    if (['LIST'].includes(type)) return ActivityType.List
-    if (['CANCEL_OFFER'].includes(type)) return ActivityType.CancelOffer
+    const type_ = type.toLowerCase()
+    if (['created', 'mint'].includes(type_)) return ActivityType.Mint
+    if (['successful'].includes(type_)) return ActivityType.Sale
+    if (['offer', 'offer_entered', 'bid_withdrawn', 'bid_entered'].includes(type_)) return ActivityType.Offer
+    if (['list'].includes(type_)) return ActivityType.List
+    if (['cancel_offer'].includes(type_)) return ActivityType.CancelOffer
+    if (['sale'].includes(type_)) return ActivityType.Sale
     return ActivityType.Transfer
 }
 
@@ -72,6 +74,12 @@ export function ActivitiesList(props: ActivitiesListProps) {
                 <Typography className={classes.emptyText}>{t('plugin_collectible_nft_activity_empty')}</Typography>
             </div>
         )
+
+    console.log('DEBUG: events')
+    console.log({
+        _events,
+    })
+
     return (
         <div className={classes.wrapper} style={{ justifyContent: 'unset' }}>
             {_events?.map((x, idx) => (
