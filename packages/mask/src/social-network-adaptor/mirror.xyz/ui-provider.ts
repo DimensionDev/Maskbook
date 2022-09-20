@@ -9,6 +9,8 @@ import { CurrentVisitingIdentityProviderMirror, IdentityProviderMirror } from '.
 import { PaletteModeProviderMirror } from './customization/custom.js'
 import { injectTips } from './injection/Tips/index.js'
 import { useInjectedDialogClassesOverwriteMirror } from './customization/ui-overwrite.js'
+import { injectPostActionsAtMirror } from './injection/PostActions'
+import { PostProviderMirror } from './collecting/posts.js'
 
 // TODO: access chrome permission
 const define: SocialNetworkUI.Definition = {
@@ -18,6 +20,7 @@ const define: SocialNetworkUI.Definition = {
     collecting: {
         identityProvider: IdentityProviderMirror,
         currentVisitingIdentityProvider: CurrentVisitingIdentityProviderMirror,
+        postsProvider: PostProviderMirror,
     },
     configuration: {},
     customization: {
@@ -35,6 +38,7 @@ const define: SocialNetworkUI.Definition = {
     },
     injection: {
         pageInspector: injectPageInspectorDefault(),
+        postActions: injectPostActionsAtMirror,
         // Todo: should remove this?
         setupWizard: createTaskStartSetupGuideDefault(),
         tips: injectTips,

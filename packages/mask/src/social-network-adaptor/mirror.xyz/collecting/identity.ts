@@ -7,7 +7,7 @@ import { creator } from '../../../social-network/utils'
 import { mirrorBase } from '../base'
 
 const getMirrorProfileUrl = (id: string) => urlcat('https://mirror.xyz/:id', { id })
-const getCurrentUserInfo = async () => {
+export const getCurrentUserInfo = async () => {
     if (location.host !== EnhanceableSite.Mirror) return
     const userAddress = localStorage.getItem('mirror.userAddress') as string | null
 
@@ -37,6 +37,22 @@ function resolveLastRecognizedIdentityInner(
     assign()
 
     window.addEventListener('locationchange', assign, { signal: cancel })
+}
+
+// TODO: align this method
+export const getUserInfo = () => {
+    const script = document.getElementById('__NEXT_DATA__')?.innerHTML
+    if (!script) return
+    const INIT_DATA = JSON.parse(script)
+    if (!INIT_DATA) return
+    const writer = INIT_DATA.props?.pageProps?.project as Writer
+    return {
+        avatar: writer.avatarURL,
+        nickname: writer.displayName,
+        bio: writer.description,
+        homepage: writer.domain || getMirrorProfileUrl(writer.address),
+        identifier: ProfileIdentifier.of(mirrorBase.networkIdentifier, writer.address).unwrapOr(undefined),
+    }
 }
 
 function resolveCurrentVisitingIdentityInner(
