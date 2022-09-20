@@ -1,17 +1,23 @@
-import { first } from 'lodash-unified'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { first } from 'lodash-unified'
 import { Card, CardActions, CardContent, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
-import { isZero, isLessThan, NetworkPluginID, NonFungibleAsset, FungibleToken } from '@masknet/web3-shared-base'
+import { isZero, isLessThan } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
 import getUnixTime from 'date-fns/getUnixTime'
+import {
+    useAccount,
+    useChainId,
+    useCurrentWeb3NetworkPluginID,
+    useFungibleTokenWatched,
+    useWeb3State,
+    Web3Helper,
+} from '@masknet/plugin-infra/web3'
 import { PluginWalletStatusBar, useI18N } from '../../../../utils/index.js'
 import { SelectTokenAmountPanel } from '../../../ITO/SNSAdaptor/SelectTokenAmountPanel.js'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary.js'
 import { DateTimePanel } from '../../../../web3/UI/DateTimePanel.js'
 import { toAsset, isWyvernSchemaName } from '../../helpers.js'
-import { useAccount, useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
 import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton.js'
 import { useOpenSea } from './hooks/useOpenSea.js'
 
@@ -46,22 +52,25 @@ const useStyles = makeStyles()((theme) => ({
 export interface ListingByHighestBidCardProps {
     open: boolean
     onClose: () => void
-    asset?: NonFungibleAsset<ChainId, SchemaType>
-    paymentTokens: Array<FungibleToken<ChainId, SchemaType>>
+    asset?: Web3Helper.NonFungibleAssetScope<'all'>
+    paymentTokens: Array<Web3Helper.FungibleTokenScope<'all'>>
 }
 
 export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
     const { asset, paymentTokens, open, onClose } = props
     const { t } = useI18N()
     const { classes } = useStyles()
+
+    const { Others } = useWeb3State()
+    const pluginID = useCurrentWeb3NetworkPluginID()
     const { amount, token, balance, setAmount, setAddress } = useFungibleTokenWatched(
-        NetworkPluginID.PLUGIN_EVM,
+        pluginID,
         first(paymentTokens)?.address,
     )
 
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const opensea = useOpenSea(chainId)
+    const account = useAccount()
+    const chainId = useChainId()
+    const opensea = useOpenSea(pluginID, chainId)
 
     const [reservePrice, setReservePrice] = useState('')
     const [expirationDateTime, setExpirationDateTime] = useState(new Date())
@@ -77,7 +86,13 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
     const onPostListing = useCallback(async () => {
         if (!opensea) return
         if (!asset?.tokenId || !asset.address) return
-        if (token?.value?.schema !== SchemaType.ERC20) return
+
+        // ERC20 token
+        if (
+            Others?.isFungibleTokenSchemaType(token?.value?.schema) &&
+            !Others?.isNativeTokenSchemaType(token?.value?.schema)
+        )
+            return
         await opensea.createSellOrder({
             asset: toAsset({
                 tokenId: asset.tokenId,
@@ -89,7 +104,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
             expirationTime: getUnixTime(expirationDateTime),
             englishAuctionReservePrice: Number.parseFloat(reservePrice),
             waitForHighestBid: true,
-            paymentTokenAddress: token.value.address, // english auction must be erc20 token
+            paymentTokenAddress: token?.value?.address, // english auction must be erc20 token
         })
     }, [asset, token, amount, account, reservePrice, expirationDateTime, opensea])
 
@@ -106,7 +121,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                     amount={amount}
                     balance={balance.value ?? '0'}
                     token={token.value}
-                    disableNativeToken={!paymentTokens.some((x) => isNativeTokenAddress(x.address))}
+                    disableNativeToken={!paymentTokens.some((x) => Others?.isNativeTokenAddress(x.address))}
                     onAmountChange={setAmount}
                     onTokenChange={(x) => setAddress(x.address)}
                     FungibleTokenInputProps={{

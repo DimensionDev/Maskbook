@@ -1,15 +1,16 @@
 import { useMemo } from 'react'
 import { OpenSeaPort } from 'opensea-js'
-import { useWeb3Provider } from '@masknet/plugin-infra/web3'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { useWeb3Provider, Web3Helper } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { isOpenSeaSupportedChainId, resolveOpenSeaNetwork } from '../../../pipes/index.js'
 
-export function useOpenSea(chainId?: ChainId) {
-    const web3Provider = useWeb3Provider(NetworkPluginID.PLUGIN_EVM)
+export function useOpenSea(pluginID?: NetworkPluginID, chainId?: Web3Helper.ChainIdAll) {
+    const web3Provider = useWeb3Provider(pluginID)
 
     return useMemo(() => {
-        if (!chainId || !isOpenSeaSupportedChainId(chainId) || !web3Provider) return
+        if (!web3Provider) return
+        if (pluginID !== NetworkPluginID.PLUGIN_EVM) return
+        if (!chainId || !isOpenSeaSupportedChainId(chainId)) return
         return new OpenSeaPort(
             web3Provider,
             {
@@ -18,5 +19,5 @@ export function useOpenSea(chainId?: ChainId) {
             },
             console.log,
         )
-    }, [web3Provider])
+    }, [chainId, pluginID, web3Provider])
 }

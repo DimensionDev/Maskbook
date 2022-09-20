@@ -7,8 +7,8 @@ import { MakeOfferDialog } from './MakeOfferDialog.js'
 import { PostListingDialog } from './PostListingDialog.js'
 import { CheckoutDialog } from './CheckoutDialog.js'
 import { ChainBoundary } from '../../../../web3/UI/ChainBoundary.js'
-import { useAccount } from '@masknet/plugin-infra/web3'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
+import { useAccount, useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/plugin-infra/web3'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { useAssetOrder } from './hooks/useAssetOrder.js'
 import { ChainId } from '@masknet/web3-shared-evm'
 
@@ -27,7 +27,9 @@ export function ActionBar(props: ActionBarProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { asset } = Context.useContainer()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const pluginID = useCurrentWeb3NetworkPluginID()
+    const { Others } = useWeb3State()
+    const account = useAccount()
     const { value: assetOrder } = useAssetOrder(asset.value?.address, asset.value?.tokenId)
 
     const {
@@ -47,8 +49,8 @@ export function ActionBar(props: ActionBarProps) {
     return (
         <Box className={classes.root} sx={{ padding: 1.5 }} display="flex" justifyContent="center">
             <ChainBoundary
-                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                expectedChainId={ChainId.Mainnet}
+                expectedPluginID={pluginID}
+                expectedChainId={Others?.getDefaultChainId() ?? ChainId.Mainnet}
                 ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                 {!isOwner && asset.value.auction ? (
                     <ActionButton fullWidth variant="roundedDark" onClick={onOpenCheckoutDialog}>

@@ -2,7 +2,6 @@ import { useMemo } from 'react'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
-import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Context } from '../hooks/useContext.js'
 import { CollectibleCard } from '../CollectibleCard.js'
 import { DetailsCard } from '../../CardDialog/DetailsCard.js'
@@ -22,7 +21,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface DetailTabProps {
-    asset: AsyncState<Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>>
+    asset: AsyncState<Web3Helper.NonFungibleAssetScope<'all'>>
 }
 
 export function DetailTab(props: DetailTabProps) {

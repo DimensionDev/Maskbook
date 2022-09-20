@@ -1,5 +1,5 @@
-import { head } from 'lodash-unified'
 import { useAsyncRetry } from 'react-use'
+import { head } from 'lodash-unified'
 import type { Order } from 'opensea-js/lib/types'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { getOrderUnitPrice } from '@masknet/web3-providers'
@@ -10,10 +10,11 @@ import { useOpenSea } from './useOpenSea.js'
 
 export function useAssetOrder(address?: string, tokenId?: string) {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const SDK = useOpenSea(isOpenSeaSupportedChainId(chainId) ? chainId : undefined)
+    const opensea = useOpenSea(NetworkPluginID.PLUGIN_EVM, isOpenSeaSupportedChainId(chainId) ? chainId : undefined)
+
     return useAsyncRetry(async () => {
         if (!address || !tokenId) return
-        const asset = await SDK?.api.getAsset({
+        const asset = await opensea?.api.getAsset({
             tokenAddress: address,
             tokenId,
         })
@@ -27,5 +28,5 @@ export function useAssetOrder(address?: string, tokenId?: string) {
 
         const sellOrders = asset?.sellOrders ?? []
         return head(sellOrders.sort((a, b) => getPrice(a).toNumber() - getPrice(b).toNumber()))
-    }, [address, tokenId, SDK])
+    }, [address, tokenId, opensea])
 }

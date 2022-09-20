@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js'
 import { first } from 'lodash-unified'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
-import type { NetworkPluginID, NonFungibleTokenOrder } from '@masknet/web3-shared-base'
+import type { NonFungibleTokenOrder } from '@masknet/web3-shared-base'
 import { Context } from '../hooks/useContext.js'
 import { CollectibleCard } from '../CollectibleCard.js'
 import { FigureCard } from '../../CardDialog/FigureCard.js'
@@ -35,7 +35,7 @@ const resolveTopOffer = (orders?: Array<NonFungibleTokenOrder<Web3Helper.ChainId
 }
 
 export interface AboutTabProps {
-    asset: AsyncState<Web3Helper.NonFungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>>
+    asset: AsyncState<Web3Helper.NonFungibleAssetScope<'all'>>
 }
 
 export function AboutTab(props: AboutTabProps) {

@@ -15,9 +15,14 @@ import { makeStyles, ActionButton } from '@masknet/theme'
 import type { Order } from 'opensea-js/lib/types'
 import { InjectedDialog } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { isGreaterThan, NetworkPluginID, NonFungibleAsset } from '@masknet/web3-shared-base'
-import { useAccount, useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { isGreaterThan } from '@masknet/web3-shared-base'
+import {
+    useAccount,
+    useChainId,
+    useCurrentWeb3NetworkPluginID,
+    useFungibleTokenWatched,
+    Web3Helper,
+} from '@masknet/plugin-infra/web3'
 import { UnreviewedWarnings } from './UnreviewedWarnings.js'
 import { useI18N } from '../../../../utils/index.js'
 import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton.js'
@@ -54,7 +59,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface CheckoutDialogProps {
-    asset?: NonFungibleAsset<ChainId, SchemaType>
+    asset?: Web3Helper.NonFungibleAssetScope<'all'>
     order?: Order
     open: boolean
     onClose: () => void
@@ -65,13 +70,14 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const isVerified = asset?.collection?.verified ?? false
     const { t } = useI18N()
     const { classes } = useStyles()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const opensea = useOpenSea(chainId)
+    const plugnID = useCurrentWeb3NetworkPluginID()
+    const account = useAccount()
+    const chainId = useChainId()
+    const opensea = useOpenSea(plugnID, chainId)
     const [unreviewedChecked, setUnreviewedChecked] = useState(false)
     const [ToS_Checked, setToS_Checked] = useState(false)
     const [insufficientBalance, setInsufficientBalance] = useState(false)
-    const { token, balance } = useFungibleTokenWatched(NetworkPluginID.PLUGIN_EVM, order?.paymentToken ?? '')
+    const { token, balance } = useFungibleTokenWatched(plugnID, order?.paymentToken ?? '')
     const onCheckout = useCallback(async () => {
         if (!asset?.tokenId || !asset.address) return
         if (!order || !opensea) return

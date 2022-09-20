@@ -19,16 +19,22 @@ import {
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { InjectedDialog } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { UnreviewedWarnings } from './UnreviewedWarnings.js'
 import { PluginWalletStatusBar, useI18N } from '../../../../utils/index.js'
 import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton.js'
 import { DateTimePanel } from '../../../../web3/UI/DateTimePanel.js'
 import { toAsset, isWyvernSchemaName } from '../../helpers.js'
-import { CurrencyType, NetworkPluginID, NonFungibleAsset, rightShift, ZERO } from '@masknet/web3-shared-base'
+import { CurrencyType, NetworkPluginID, rightShift, ZERO } from '@masknet/web3-shared-base'
 import { SelectTokenListPanel } from './SelectTokenListPanel.js'
 import { ChainBoundary } from '../../../../web3/UI/ChainBoundary.js'
-import { useAccount, useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
+import {
+    useAccount,
+    useChainId,
+    useCurrentWeb3NetworkPluginID,
+    useFungibleTokenWatched,
+    useWeb3State,
+    Web3Helper,
+} from '@masknet/plugin-infra/web3'
 import { useOpenSea } from './hooks/useOpenSea.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -63,7 +69,7 @@ const useStyles = makeStyles()((theme) => {
 
 export interface MakeOfferDialogProps {
     open: boolean
-    asset?: NonFungibleAsset<ChainId, SchemaType>
+    asset?: Web3Helper.NonFungibleAssetScope<'all'>
     order?: Order
     onClose: () => void
 }
@@ -83,9 +89,12 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const opensea = useOpenSea(chainId)
+    const pluginID = useCurrentWeb3NetworkPluginID()
+    const account = useAccount()
+    const chainId = useChainId()
+    const opensea = useOpenSea(pluginID, chainId)
+    const { Others } = useWeb3State()
+
     const [expirationDateTime, setExpirationDateTime] = useState(new Date())
     const [unreviewedChecked, setUnreviewedChecked] = useState(false)
     const [ToS_Checked, setToS_Checked] = useState(false)
@@ -100,7 +109,11 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         if (!asset) return
         if (!asset.tokenId || !asset.address) return
         if (!token?.value) return
-        if (token.value.schema !== SchemaType.Native && token.value.schema !== SchemaType.ERC20) return
+        if (
+            !Others?.isNativeTokenSchemaType(token.value?.schema) &&
+            !Others?.isFungibleTokenSchemaType(token.value?.schema)
+        )
+            return
         const schemaName = asset.contract?.schema
 
         await opensea?.createBuyOrder({
@@ -112,9 +125,9 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
             accountAddress: account,
             startAmount: Number.parseFloat(amount),
             expirationTime: !isAuction ? getUnixTime(expirationDateTime) : undefined,
-            paymentTokenAddress: token.value.schema === SchemaType.Native ? undefined : token.value.address,
+            paymentTokenAddress: Others.isNativeTokenSchemaType(token.value.schema) ? undefined : token.value.address,
         })
-    }, [asset, token, account, amount, expirationDateTime, isAuction, opensea])
+    }, [asset, token, account, amount, expirationDateTime, isAuction, opensea, Others])
 
     const onConvertClick = useCallback(() => {
         if (!token?.value) return
@@ -235,7 +248,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
             </DialogContent>
             <DialogActions style={{ padding: 0 }}>
                 <PluginWalletStatusBar>
-                    <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
+                    <ChainBoundary expectedPluginID={pluginID} expectedChainId={chainId}>
                         <Box className={classes.buttons} display="flex" alignItems="center" justifyContent="center">
                             <ActionButtonPromise
                                 className={classes.button}

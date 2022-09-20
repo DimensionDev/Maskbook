@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { createContainer } from 'unstated-next'
-import type { CollectibleToken } from '../../../types.js'
 import {
     useNonFungibleAsset,
     useNonFungibleOrders,
@@ -9,40 +8,28 @@ import {
 } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
+import type { CollectibleToken } from '../../../types.js'
 
 function useContext(token?: CollectibleToken) {
+    const [pluginID, setPluginID] = useState(NetworkPluginID.PLUGIN_EVM)
+    const [chainId, setChainId] = useState(ChainId.Mainnet)
     const [provider, setProvider] = useState(SourceType.NFTScan)
 
-    const asset = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, token?.contractAddress ?? '', token?.tokenId ?? '', {
-        chainId: ChainId.Mainnet,
+    const asset = useNonFungibleAsset(pluginID, token?.contractAddress ?? '', token?.tokenId ?? '', {
+        chainId,
     })
 
-    const orders = useNonFungibleOrders(
-        NetworkPluginID.PLUGIN_EVM,
-        token?.contractAddress ?? '',
-        token?.tokenId ?? '',
-        {
-            chainId: ChainId.Mainnet,
-        },
-    )
+    const orders = useNonFungibleOrders(pluginID, token?.contractAddress ?? '', token?.tokenId ?? '', {
+        chainId,
+    })
 
-    const events = useNonFungibleEvents(
-        NetworkPluginID.PLUGIN_EVM,
-        token?.contractAddress ?? '',
-        token?.tokenId ?? '',
-        {
-            chainId: ChainId.Mainnet,
-        },
-    )
-    const rarity = useNonFungibleRarity(
-        NetworkPluginID.PLUGIN_EVM,
-        token?.contractAddress ?? '',
-        token?.tokenId ?? '',
-        {
-            chainId: ChainId.Mainnet,
-            sourceType: SourceType.Gem,
-        },
-    )
+    const events = useNonFungibleEvents(pluginID, token?.contractAddress ?? '', token?.tokenId ?? '', {
+        chainId,
+    })
+    const rarity = useNonFungibleRarity(pluginID, token?.contractAddress ?? '', token?.tokenId ?? '', {
+        chainId,
+        sourceType: SourceType.Gem,
+    })
 
     return {
         token,
@@ -50,6 +37,13 @@ function useContext(token?: CollectibleToken) {
         orders,
         events,
         rarity,
+
+        chainId,
+        setChainId,
+
+        pluginID,
+        setPluginID,
+
         provider,
         setProvider,
     }

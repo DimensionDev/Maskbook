@@ -3,16 +3,22 @@ import { first } from 'lodash-unified'
 import { EthereumAddress } from 'wallet.ts'
 import { Box, Card, CardActions, CardContent, Checkbox, FormControlLabel, Typography, InputBase } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { ChainId, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
-import { isZero, isGreaterThan, NetworkPluginID, FungibleToken, NonFungibleAsset } from '@masknet/web3-shared-base'
+import { isZero, isGreaterThan } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
+import getUnixTime from 'date-fns/getUnixTime'
 import { PluginWalletStatusBar, useI18N } from '../../../../utils/index.js'
 import { SelectTokenAmountPanel } from '../../../ITO/SNSAdaptor/SelectTokenAmountPanel.js'
 import { WalletConnectedBoundary } from '../../../../web3/UI/WalletConnectedBoundary.js'
 import { DateTimePanel } from '../../../../web3/UI/DateTimePanel.js'
 import { toAsset, isWyvernSchemaName } from '../../helpers.js'
-import getUnixTime from 'date-fns/getUnixTime'
-import { useAccount, useChainId, useFungibleTokenWatched } from '@masknet/plugin-infra/web3'
+import {
+    useAccount,
+    useChainId,
+    useCurrentWeb3NetworkPluginID,
+    useFungibleTokenWatched,
+    useWeb3State,
+    Web3Helper,
+} from '@masknet/plugin-infra/web3'
 import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton.js'
 import { useOpenSea } from './hooks/useOpenSea.js'
 
@@ -52,22 +58,24 @@ const useStyles = makeStyles()((theme) => {
 export interface ListingByPriceCardProps {
     open: boolean
     onClose: () => void
-    asset?: NonFungibleAsset<ChainId, SchemaType>
-    paymentTokens: Array<FungibleToken<ChainId, SchemaType>>
+    asset?: Web3Helper.NonFungibleAssetScope<'all'>
+    paymentTokens: Array<Web3Helper.FungibleTokenScope<'all'>>
 }
 
 export function ListingByPriceCard(props: ListingByPriceCardProps) {
     const { asset, paymentTokens, open, onClose } = props
+    const pluginID = useCurrentWeb3NetworkPluginID()
     const { amount, token, balance, setAmount, setAddress } = useFungibleTokenWatched(
-        NetworkPluginID.PLUGIN_EVM,
+        pluginID,
         first(paymentTokens)?.address,
     )
     const { t } = useI18N()
     const { classes } = useStyles()
 
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
-    const opensea = useOpenSea(chainId)
+    const account = useAccount()
+    const chainId = useChainId()
+    const opensea = useOpenSea(pluginID, chainId)
+    const { Others } = useWeb3State()
 
     const now = new Date()
     const [scheduleTime, setScheduleTime] = useState(now)
@@ -104,7 +112,11 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
     const onPostListing = useCallback(async () => {
         if (!opensea) return
         if (!asset?.id || !asset.address) return
-        if (token.value?.schema !== SchemaType.Native && token.value?.schema !== SchemaType.ERC20) return
+        if (
+            !Others?.isNativeTokenSchemaType(token.value?.schema) &&
+            !Others?.isFungibleTokenSchemaType(token.value?.schema)
+        )
+            return
         await opensea.createSellOrder({
             asset: toAsset({
                 tokenId: asset.tokenId,
@@ -131,6 +143,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
         futureTimeChecked,
         privacyChecked,
         opensea,
+        Others,
     ])
 
     useEffect(() => {
@@ -148,7 +161,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                     amount={amount}
                     balance={balance.value ?? '0'}
                     token={token.value}
-                    disableNativeToken={!paymentTokens.some((x) => isNativeTokenAddress(x.address))}
+                    disableNativeToken={!paymentTokens.some((x) => Others?.isNativeTokenAddress(x.address))}
                     onAmountChange={setAmount}
                     onTokenChange={(x) => setAddress(x.address)}
                     FungibleTokenInputProps={{
