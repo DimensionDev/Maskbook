@@ -43,7 +43,7 @@ function AuthorTipsSlot() {
             (plugin) => plugin.TipsRealm?.UI?.Content,
         )
 
-        // TODO: change the tips solt profile type
+        // TODO: change the tips slot profile type
         return <Component identity={visitingPersona.identifier} slot={Plugin.SNSAdaptor.TipsSlot.Profile} />
     }, [visitingPersona.identifier])
 
