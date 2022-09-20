@@ -8,6 +8,7 @@
     "promote_withdraw": "Hi friends, I just withdrew my deposit {{amount}} {{symbol}} on {{chain}}. Follow @{{account}} to find more staking projects.",
     "promote_collectible": "Display collectibles in variable NFT marketplaces, make an offer directly on social media. Install Mask.io to try to browse NFTs directly on Twitter.",
     "promote_snapshot": "Want to actively participate in proposal vote and move projects forward? Install Mask.io to vote proposals directly on Twitter.",
+    "data_source_from_nextid": "Data source is retrieved from <nextIdLink>NEXT.ID</nextIdLink>.",
     "database_backup": "Backup Database",
     "database_overwrite": "Overwrite Database with backup",
     "database_clear": "Clear Database",
