@@ -8,9 +8,9 @@ import {
     zoraPathnameRegexMatcher,
 } from './constants.js'
 import { ChainId as ChainIdEVM } from '@masknet/web3-shared-evm'
-import { SourceType } from '@masknet/web3-shared-base'
+import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 import { Asset, WyvernSchemaName } from 'opensea-js/lib/types'
-import type { CollectibleToken, CollectibleJSON_Payload } from './types.js'
+import type { CollectibleToken, CollectiblePayload } from './types.js'
 
 export function toAsset(asset: { tokenId: string; tokenAddress: string; schemaName?: WyvernSchemaName }): Asset {
     return {
@@ -41,7 +41,7 @@ export function getRelevantUrl(textContent: string) {
     return urls.find(checkUrl)
 }
 
-export function getAssetInfoFromURL(url?: string): CollectibleJSON_Payload | null {
+export function getAssetInfoFromURL(url?: string): CollectiblePayload | null {
     if (!url) return null
     const _url = new URL(url)
 
@@ -49,9 +49,10 @@ export function getAssetInfoFromURL(url?: string): CollectibleJSON_Payload | nul
     const openSeaMatched = _url.pathname.match(openseaPathnameRegexMatcher)
     if (openSeaMatched) {
         return {
-            chain_id: _url.host.includes('testnets') ? ChainIdEVM.Rinkeby : ChainIdEVM.Mainnet,
+            pluginID: NetworkPluginID.PLUGIN_EVM,
+            chainId: _url.host.includes('testnets') ? ChainIdEVM.Rinkeby : ChainIdEVM.Mainnet,
             address: openSeaMatched[1],
-            token_id: openSeaMatched[2],
+            tokenId: openSeaMatched[2],
             provider: SourceType.OpenSea,
         }
     }
@@ -61,13 +62,14 @@ export function getAssetInfoFromURL(url?: string): CollectibleJSON_Payload | nul
     const raribleMatched = _url.pathname.match(rariblePathnameRegexMatcher)
     if (raribleMatched) {
         return {
-            chain_id: _url.host.includes('ropsten')
+            pluginID: NetworkPluginID.PLUGIN_EVM,
+            chainId: _url.host.includes('ropsten')
                 ? ChainIdEVM.Ropsten
                 : _url.host.includes('rinkeby')
                 ? ChainIdEVM.Rinkeby
                 : ChainIdEVM.Mainnet,
             address: raribleMatched[1],
-            token_id: raribleMatched[2],
+            tokenId: raribleMatched[2],
             provider: SourceType.Rarible,
         }
     }
@@ -77,9 +79,10 @@ export function getAssetInfoFromURL(url?: string): CollectibleJSON_Payload | nul
     const zoraMatched = _url.pathname.match(zoraPathnameRegexMatcher)
     if (zoraMatched) {
         return {
-            chain_id: _url.host.includes('rinkeby') ? ChainIdEVM.Rinkeby : ChainIdEVM.Mainnet,
+            pluginID: NetworkPluginID.PLUGIN_EVM,
+            chainId: _url.host.includes('rinkeby') ? ChainIdEVM.Rinkeby : ChainIdEVM.Mainnet,
             address: zoraMatched[1],
-            token_id: zoraMatched[2],
+            tokenId: zoraMatched[2],
             provider: SourceType.Zora,
         }
     }

@@ -9,7 +9,7 @@ const useStyles = makeStyles()({
         overflow: 'auto',
     },
     overContent: {
-        background: '#fff',
+        backgroundColor: '#fff',
     },
 })
 

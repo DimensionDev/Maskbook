@@ -22,8 +22,8 @@ export interface RankProps {
 
 export function Rank(props: RankProps) {
     const { rank } = props
-    // todo: multiple style to provider
     const { classes } = useStyles()
+
     return (
         <div className={classes.gemRankWrapper}>
             <Typography># {rank ?? '-'}</Typography>

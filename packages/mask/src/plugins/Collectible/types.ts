@@ -1,5 +1,5 @@
 import type { WyvernSchemaName } from 'opensea-js/lib/types'
-import type { SourceType } from '@masknet/web3-shared-base'
+import type { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 
 export enum ActivityType {
@@ -17,10 +17,11 @@ export enum TabType {
     Activity = 'Activity',
 }
 
-export interface CollectibleJSON_Payload {
-    chain_id: Web3Helper.ChainIdAll
+export interface CollectiblePayload {
+    pluginID: NetworkPluginID
+    chainId: Web3Helper.ChainIdAll
+    tokenId: string
     address: string
-    token_id: string
     provider?: SourceType
 }
 

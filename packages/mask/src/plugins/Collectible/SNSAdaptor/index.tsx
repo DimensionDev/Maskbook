@@ -8,9 +8,9 @@ import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plug
 import { PostInspector } from './PostInspector.js'
 import { base } from '../base.js'
 import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../helpers.js'
+import { setupContext } from '../context.js'
 import { PLUGIN_ID, PLUGIN_WRAPPER_TITLE } from '../constants.js'
 import { CollectibleList } from './List/CollectibleList.js'
-import { setupContext } from '../context.js'
 import { CardDialog } from './CardDialog/CardDialog.js'
 
 const TabConfig: Plugin.SNSAdaptor.ProfileTab = {

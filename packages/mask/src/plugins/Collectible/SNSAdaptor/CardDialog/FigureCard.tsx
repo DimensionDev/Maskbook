@@ -100,8 +100,8 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface FigureCardProps {
     hideSubTitle?: boolean
-    asset: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID>
     timeline?: boolean
+    asset: Web3Helper.NonFungibleAssetScope<void, NetworkPluginID>
 }
 
 export function FigureCard(props: FigureCardProps) {

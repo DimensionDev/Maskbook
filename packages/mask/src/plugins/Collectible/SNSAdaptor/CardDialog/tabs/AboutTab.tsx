@@ -19,6 +19,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: 24,
     },
 }))
+
 const resolveTopOffer = (orders?: Array<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>) => {
     if (!orders?.length) return
     return first(
@@ -29,6 +30,7 @@ const resolveTopOffer = (orders?: Array<NonFungibleTokenOrder<Web3Helper.ChainId
         }),
     )
 }
+
 export interface AboutTabProps {
     asset: AsyncStateRetry<Web3Helper.NonFungibleAssetScope<void>>
     orders: AsyncStateRetry<Pageable<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>
