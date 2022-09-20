@@ -109,11 +109,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         if (!asset) return
         if (!asset.tokenId || !asset.address) return
         if (!token?.value) return
-        if (
-            !Others?.isNativeTokenSchemaType(token.value?.schema) &&
-            !Others?.isFungibleTokenSchemaType(token.value?.schema)
-        )
-            return
+        if (!Others?.isFungibleTokenSchemaType(token.value?.schema)) return
         const schemaName = asset.contract?.schema
 
         await opensea?.createBuyOrder({

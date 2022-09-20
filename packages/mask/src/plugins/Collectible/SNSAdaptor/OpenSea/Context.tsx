@@ -6,14 +6,16 @@ export interface OpenSeaContextProps {
     chainId?: ChainId
 }
 
-export function OpenSeaContext({ chainId = ChainId.Mainnet }: OpenSeaContextProps & React.ProviderProps<{}>) {
+export function OpenSeaContext({ chainId = ChainId.Mainnet, children }: OpenSeaContextProps & React.ProviderProps<{}>) {
     return (
         <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
             <PluginWeb3ContextProvider
                 pluginID={NetworkPluginID.PLUGIN_EVM}
                 value={{
                     chainId,
-                }}></PluginWeb3ContextProvider>
+                }}>
+                {children}
+            </PluginWeb3ContextProvider>
         </PluginIDContextProvider>
     )
 }

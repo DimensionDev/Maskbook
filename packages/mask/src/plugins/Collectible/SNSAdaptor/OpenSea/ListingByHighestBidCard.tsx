@@ -87,7 +87,6 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
         if (!opensea) return
         if (!asset?.tokenId || !asset.address) return
 
-        // ERC20 token
         if (
             Others?.isFungibleTokenSchemaType(token?.value?.schema) &&
             !Others?.isNativeTokenSchemaType(token?.value?.schema)

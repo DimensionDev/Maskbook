@@ -1,5 +1,4 @@
 import { createLookupTableResolver } from '@masknet/shared-base'
-import { ZERO_ADDRESS } from '../constants/index.js'
 import { SchemaType } from '../types.js'
 
 export function formatDomainName(domain?: string, size?: number) {

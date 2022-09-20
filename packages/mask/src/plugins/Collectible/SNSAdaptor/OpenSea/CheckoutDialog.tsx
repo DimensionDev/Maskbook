@@ -70,14 +70,14 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const isVerified = asset?.collection?.verified ?? false
     const { t } = useI18N()
     const { classes } = useStyles()
-    const plugnID = useCurrentWeb3NetworkPluginID()
+    const pluginID = useCurrentWeb3NetworkPluginID()
     const account = useAccount()
     const chainId = useChainId()
-    const opensea = useOpenSea(plugnID, chainId)
+    const opensea = useOpenSea(pluginID, chainId)
     const [unreviewedChecked, setUnreviewedChecked] = useState(false)
     const [ToS_Checked, setToS_Checked] = useState(false)
     const [insufficientBalance, setInsufficientBalance] = useState(false)
-    const { token, balance } = useFungibleTokenWatched(plugnID, order?.paymentToken ?? '')
+    const { token, balance } = useFungibleTokenWatched(pluginID, order?.paymentToken ?? '')
     const onCheckout = useCallback(async () => {
         if (!asset?.tokenId || !asset.address) return
         if (!order || !opensea) return

@@ -112,11 +112,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
     const onPostListing = useCallback(async () => {
         if (!opensea) return
         if (!asset?.id || !asset.address) return
-        if (
-            !Others?.isNativeTokenSchemaType(token.value?.schema) &&
-            !Others?.isFungibleTokenSchemaType(token.value?.schema)
-        )
-            return
+        if (!Others?.isFungibleTokenSchemaType(token.value?.schema)) return
         await opensea.createSellOrder({
             asset: toAsset({
                 tokenId: asset.tokenId,
