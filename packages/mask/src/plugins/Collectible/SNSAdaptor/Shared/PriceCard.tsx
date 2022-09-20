@@ -67,6 +67,7 @@ export function PriceCard(props: PriceCardProps) {
     const { t } = useI18N()
 
     if (!asset.priceInToken) return null
+
     const priceTokenImg = (() => {
         const url = asset.priceInToken.token.logoURL
         if (url) {

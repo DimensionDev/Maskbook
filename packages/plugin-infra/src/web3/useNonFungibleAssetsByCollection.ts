@@ -17,12 +17,13 @@ export function useNonFungibleAssetsByCollection<
 
     // create iterator
     const iterator = useMemo(() => {
-        if (!address || !hub?.getNonFungibleAssetsByCollection) return
+        if (!hub?.getNonFungibleAssetsByCollection) return
+
         setAssets(EMPTY_LIST)
         setDone(false)
 
         return pageableToIterator(async (indicator) => {
-            return hub.getNonFungibleAssetsByCollection!(address, {
+            return hub.getNonFungibleAssetsByCollection!(address ?? '', {
                 indicator,
                 size: 50,
                 ...options,

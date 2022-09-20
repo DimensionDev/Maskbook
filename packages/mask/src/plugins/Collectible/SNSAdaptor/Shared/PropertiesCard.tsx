@@ -73,16 +73,19 @@ export function PropertiesCard(props: PropertiesCardProps) {
     const { classes, cx } = useStyles()
     const { t } = useI18N()
 
+    if (!props.asset.traits?.length) return null
+
     return (
         <div className={classes.wrapper}>
             <div className={classes.titleBox}>
                 <Typography className={timeline ? cx(classes.title, classes.unset) : classes.title}>
                     {t('plugin_collectible_properties')}
                 </Typography>
-                <div className={classes.rankBox}>
-                    {/* gem rank */}
-                    <Rank rank={rank} />
-                </div>
+                {rank ? (
+                    <div className={classes.rankBox}>
+                        <Rank rank={rank} />
+                    </div>
+                ) : null}
             </div>
             <div className={classes.content}>
                 {asset.traits?.map((x) => {

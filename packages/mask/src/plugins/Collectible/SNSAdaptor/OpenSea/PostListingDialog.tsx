@@ -1,12 +1,11 @@
+import { TabContext, TabPanel } from '@mui/lab'
 import { DialogContent, Tab, Typography } from '@mui/material'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { InjectedDialog } from '@masknet/shared'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import type { NonFungibleAsset } from '@masknet/web3-shared-base'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import { useI18N } from '../../../../utils/index.js'
 import { ListingByPriceCard } from './ListingByPriceCard.js'
 import { ListingByHighestBidCard } from './ListingByHighestBidCard.js'
-import { TabContext, TabPanel } from '@mui/lab'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -29,7 +28,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface PostListingDialogProps {
-    asset?: NonFungibleAsset<ChainId, SchemaType>
+    asset?: Web3Helper.NonFungibleAssetScope<'all'>
     open: boolean
     onClose: () => void
 }

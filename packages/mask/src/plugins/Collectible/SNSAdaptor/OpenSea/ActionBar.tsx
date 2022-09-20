@@ -1,16 +1,15 @@
 import { Box } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
+import { useAccount, Web3Helper } from '@masknet/plugin-infra/web3'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../utils/index.js'
-import { Context } from '../Card/hooks/useContext.js'
 import { useControlledDialog } from '../../../../utils/hooks/useControlledDialog.js'
 import { MakeOfferDialog } from './MakeOfferDialog.js'
 import { PostListingDialog } from './PostListingDialog.js'
 import { CheckoutDialog } from './CheckoutDialog.js'
 import { ChainBoundary } from '../../../../web3/UI/ChainBoundary.js'
-import { useAccount } from '@masknet/plugin-infra/web3'
-import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useAssetOrder } from './hooks/useAssetOrder.js'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { Context } from '../Context/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -21,13 +20,16 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export interface ActionBarProps {}
+export interface ActionBarProps {
+    chainId: Web3Helper.ChainIdAll
+    pluginID: NetworkPluginID
+}
 
-export function ActionBar(props: ActionBarProps) {
+export function ActionBar({ chainId, pluginID }: ActionBarProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { asset } = Context.useContainer()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount()
     const { value: assetOrder } = useAssetOrder(asset.value?.address, asset.value?.tokenId)
 
     const {
@@ -47,8 +49,8 @@ export function ActionBar(props: ActionBarProps) {
     return (
         <Box className={classes.root} sx={{ padding: 1.5 }} display="flex" justifyContent="center">
             <ChainBoundary
-                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                expectedChainId={ChainId.Mainnet}
+                expectedPluginID={pluginID}
+                expectedChainId={chainId}
                 ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                 {!isOwner && asset.value.auction ? (
                     <ActionButton fullWidth variant="roundedDark" onClick={onOpenCheckoutDialog}>

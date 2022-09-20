@@ -42,17 +42,17 @@ export interface SelectTokenPanelProps {
     amount: string
     balance: string
     token?: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    tokens?: Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     onAmountChange: (amount: string) => void
     onTokenChange: (token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>) => void
-    tokens?: Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
 }
 
 export function SelectTokenListPanel(props: SelectTokenPanelProps) {
     const { amount, balance, token, onAmountChange, onTokenChange, tokens = [] } = props
 
     const { t } = useI18N()
-    const ref = useRef<HTMLElement>(null)
     const { classes } = useStyles()
+    const ref = useRef<HTMLElement>(null)
     const [haveMenu, setHaveMenu] = useState(true)
 
     const width = useMemo(() => {

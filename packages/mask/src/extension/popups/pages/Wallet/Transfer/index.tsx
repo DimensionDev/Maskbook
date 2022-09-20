@@ -45,7 +45,12 @@ const Transfer = memo(() => {
             return (
                 <MenuItem key={index} className={classes.assetItem} onClick={() => setSelectedAsset(asset)}>
                     <div className={classes.assetSymbol}>
-                        <TokenIcon address={asset.address} />
+                        <TokenIcon
+                            chainId={asset.chainId}
+                            address={asset.address}
+                            name={asset.name}
+                            symbol={asset.symbol}
+                        />
                         <Typography>{asset.symbol}</Typography>
                     </div>
                     <Typography>

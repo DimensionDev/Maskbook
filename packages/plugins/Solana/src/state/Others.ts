@@ -6,6 +6,9 @@ import {
     isValidDomain,
     isValidAddress,
     isZeroAddress,
+    isNativeTokenSchemaType,
+    isFungibleTokenSchemaType,
+    isNonFungibleTokenSchemaType,
     ChainId,
     formatAddress,
     ProviderType,
@@ -41,6 +44,10 @@ export class Others extends OthersState<ChainId, SchemaType, ProviderType, Netwo
     override isValidAddress = isValidAddress
     override isSameAddress = isSameAddress
     override isZeroAddress = isZeroAddress
+
+    override isNativeTokenSchemaType = isNativeTokenSchemaType
+    override isFungibleTokenSchemaType = isFungibleTokenSchemaType
+    override isNonFungibleTokenSchemaType = isNonFungibleTokenSchemaType
 
     override getDefaultChainId = getDefaultChainId
     override getDefaultNetworkType = getDefaultNetworkType

@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, cloneElement, Children, DetailedReactHTMLElement, isValidElement } from 'react'
+import { useAsyncFn } from 'react-use'
 import { Box, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, ShadowRootTooltip, useStylesExtends, ActionButton } from '@masknet/theme'
 import {
@@ -27,7 +28,6 @@ import { WalletIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { useAsyncFn } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     action: {

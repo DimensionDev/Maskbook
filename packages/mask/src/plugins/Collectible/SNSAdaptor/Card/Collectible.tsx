@@ -8,20 +8,21 @@ import formatDateTime from 'date-fns/format'
 import isAfter from 'date-fns/isAfter'
 import isValidDate from 'date-fns/isValid'
 import { SUPPORTED_PROVIDERS } from '../../constants.js'
-import { Context } from './hooks/useContext.js'
 import { CollectiblePaper } from './CollectiblePaper.js'
-import { LinkingAvatar } from './LinkingAvatar.js'
+import { LinkingAvatar } from '../Shared/LinkingAvatar.js'
 import { AboutTab } from './tabs/AboutTab.js'
 import { ActivityTab } from './tabs/ActivityTab.js'
 import { DetailTab } from './tabs/DetailTab.js'
 import { OffersTab } from './tabs/OffersTab.js'
 import { useI18N, useSwitcher } from '../../../../utils/index.js'
+import { Context } from '../Context/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
         root: {
             width: '100%',
             padding: 0,
+            paddingBottom: theme.spacing(2),
             backgroundColor: 'unset',
         },
         content: {
@@ -141,12 +142,12 @@ export interface CollectibleProps {}
 export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { asset, provider, setProvider } = Context.useContainer()
+    const { asset, events, orders, sourceType, setSourceType } = Context.useContainer()
 
     // #region provider switcher
     const CollectibleProviderSwitcher = useSwitcher(
-        provider,
-        setProvider,
+        sourceType,
+        setSourceType,
         SUPPORTED_PROVIDERS,
         resolveSourceTypeName,
         true,
@@ -172,7 +173,7 @@ export function Collectible(props: CollectibleProps) {
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
                 <Typography color={MaskColorVar.textPluginColor} sx={{ marginTop: 8, marginBottom: 8 }}>
-                    Failed to load your collectible on {resolveSourceTypeName(provider)}.
+                    Failed to load your collectible on {resolveSourceTypeName(sourceType)}.
                 </Typography>
                 <Box alignItems="center" sx={{ padding: 1, display: 'flex', flexDirection: 'row', width: '100%' }}>
                     <Box sx={{ flex: 1, padding: 1 }}> {CollectibleProviderSwitcher}</Box>
@@ -191,8 +192,8 @@ export function Collectible(props: CollectibleProps) {
         const tabMap = {
             [tabs.about]: <AboutTab asset={asset} />,
             [tabs.details]: <DetailTab asset={asset} />,
-            [tabs.offers]: <OffersTab />,
-            [tabs.activity]: <ActivityTab />,
+            [tabs.offers]: <OffersTab offers={orders} />,
+            [tabs.activity]: <ActivityTab events={events} />,
         }
 
         return tabMap[currentTab] || null
@@ -213,6 +214,7 @@ export function Collectible(props: CollectibleProps) {
                         <LinkingAvatar
                             href={_asset.link ?? ''}
                             title={_asset.owner?.nickname ?? _asset.owner?.address ?? ''}
+                            name={_asset.metadata?.name ?? ''}
                             src={
                                 _asset.collection?.iconURL ?? _asset.creator?.avatarURL ?? _asset.owner?.avatarURL ?? ''
                             }

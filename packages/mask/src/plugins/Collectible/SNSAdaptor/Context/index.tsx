@@ -1,17 +1,24 @@
+import { useState } from 'react'
 import { createContainer } from 'unstated-next'
 import {
     useNonFungibleAsset,
     useNonFungibleOrders,
     useNonFungibleEvents,
     useNonFungibleRarity,
-    useChainId,
-    useCurrentWeb3NetworkPluginID,
+    Web3Helper,
 } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 
-function useContext(initialState?: { tokenId?: string; tokenAddress?: string }) {
-    const { tokenAddress, tokenId } = initialState ?? {}
-    const pluginID = useCurrentWeb3NetworkPluginID()
-    const chainId = useChainId()
+interface InitialState {
+    pluginID: NetworkPluginID
+    chainId: Web3Helper.ChainIdAll
+    tokenId: string
+    tokenAddress: string
+}
+
+function useContext(initialState?: InitialState) {
+    const { pluginID, chainId, tokenId, tokenAddress } = initialState ?? {}
+    const [sourceType, setSourceType] = useState(SourceType.NFTScan)
 
     const asset = useNonFungibleAsset(pluginID, tokenAddress, tokenId, {
         chainId,
@@ -30,8 +37,11 @@ function useContext(initialState?: { tokenId?: string; tokenAddress?: string }) 
         pluginID,
         chainId,
 
-        tokenAddress,
+        sourceType,
+        setSourceType,
+
         tokenId,
+        tokenAddress,
 
         asset,
         orders,

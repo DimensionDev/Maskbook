@@ -35,6 +35,7 @@ export const sUSD = createERC20Tokens('sUSD_ADDRESS', 'Synth sUSD', 'sUSD', 18)
 export const UNITOKEN = createERC20Tokens('UNITOKEN_ADDRESS', 'Uniswap', 'UNI', 18)
 export const TT01 = createERC20Tokens('TT01_ADDRESS', 'Test Token 01', 'TT01', 18)
 export const TT02 = createERC20Tokens('TT02_ADDRESS', 'Test Token 02', 'TT02', 18)
+export const TATR = createERC20Tokens('TART_ADDRESS', 'TATR tech', 'TATR', 18)
 export const ETHER = createERC20Tokens('ETHER_ADDRESS', 'Ether', 'ETH', 18)
 export const QUICK = createERC20Tokens('QUICK_ADDRESS', 'Quickswap', 'QUICK', 18)
 export const WANNA = createERC20Tokens('WANNA_ADDRESS', 'Wannaswap', 'WANNA', 18)
@@ -61,6 +62,7 @@ export const JEWEL = createERC20Tokens('JEWEL_ADDRESS', 'Jewels', 'JEWEL', 18)
 export const YUMI = createERC20Tokens('YUMI_ADDRESS', 'YumiSwap Token', 'YUMI', 18)
 export const xYUMI = createERC20Tokens('xYUMI_ADDRESS', 'Yumi Staking Token', 'xYUMI', 18)
 export const OP = createERC20Tokens('OP_ADDRESS', 'Optimism', 'OP', 18)
+export const RARI = createERC20Tokens('RARI_ADDRESS', 'Rarible', 'RARI', 18)
 
 export const WNATIVE = createERC20Tokens(
     'WNATIVE_ADDRESS',

@@ -4,13 +4,15 @@ import {
     openseaPathnameRegexMatcher,
     raribleHostnames,
     rariblePathnameRegexMatcher,
+    ZORA_COLLECTION_ADDRESS,
     zoraHostnames,
     zoraPathnameRegexMatcher,
 } from './constants.js'
+import { ChainId as ChainIdSolana } from '@masknet/web3-shared-solana'
 import { ChainId as ChainIdEVM } from '@masknet/web3-shared-evm'
-import { SourceType } from '@masknet/web3-shared-base'
+import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 import { Asset, WyvernSchemaName } from 'opensea-js/lib/types'
-import type { CollectibleToken, CollectibleJSON_Payload } from './types.js'
+import type { CollectibleToken, CollectiblePayload } from './types.js'
 
 export function toAsset(asset: { tokenId: string; tokenAddress: string; schemaName?: WyvernSchemaName }): Asset {
     return {
@@ -41,46 +43,55 @@ export function getRelevantUrl(textContent: string) {
     return urls.find(checkUrl)
 }
 
-export function getAssetInfoFromURL(url?: string): CollectibleJSON_Payload | null {
+export function getAssetInfoFromURL(url?: string): CollectiblePayload | null {
     if (!url) return null
     const _url = new URL(url)
 
     // #region opensea
-    const openSeaMatched = _url.pathname.match(openseaPathnameRegexMatcher)
-    if (openSeaMatched) {
-        return {
-            chain_id: _url.host.includes('testnets') ? ChainIdEVM.Rinkeby : ChainIdEVM.Mainnet,
-            address: openSeaMatched[1],
-            token_id: openSeaMatched[2],
-            provider: SourceType.OpenSea,
+    {
+        const openSeaMatched = _url.pathname.match(openseaPathnameRegexMatcher)
+        const maticMatched = _url.pathname.includes('matic')
+        const solanaMatched = _url.pathname.includes('solana')
+        if (openSeaMatched) {
+            return {
+                pluginID: solanaMatched ? NetworkPluginID.PLUGIN_SOLANA : NetworkPluginID.PLUGIN_EVM,
+                chainId: maticMatched ? ChainIdEVM.Matic : solanaMatched ? ChainIdSolana.Mainnet : ChainIdEVM.Mainnet,
+                address: solanaMatched ? '' : openSeaMatched[1],
+                tokenId: solanaMatched ? openSeaMatched[1] : openSeaMatched[2],
+                provider: SourceType.OpenSea,
+            }
         }
     }
     // #endregion
 
     // #region rarible
-    const raribleMatched = _url.pathname.match(rariblePathnameRegexMatcher)
-    if (raribleMatched) {
-        return {
-            chain_id: _url.host.includes('ropsten')
-                ? ChainIdEVM.Ropsten
-                : _url.host.includes('rinkeby')
-                ? ChainIdEVM.Rinkeby
-                : ChainIdEVM.Mainnet,
-            address: raribleMatched[1],
-            token_id: raribleMatched[2],
-            provider: SourceType.Rarible,
+    {
+        const raribleMatched = _url.pathname.match(rariblePathnameRegexMatcher)
+        const maticMatched = _url.pathname.includes('polygon')
+        const solanaMatched = _url.pathname.includes('solana')
+        if (raribleMatched) {
+            return {
+                pluginID: solanaMatched ? NetworkPluginID.PLUGIN_SOLANA : NetworkPluginID.PLUGIN_EVM,
+                chainId: maticMatched ? ChainIdEVM.Matic : solanaMatched ? ChainIdSolana.Mainnet : ChainIdEVM.Mainnet,
+                address: solanaMatched ? '' : raribleMatched[1],
+                tokenId: solanaMatched ? raribleMatched[1] : raribleMatched[2],
+                provider: SourceType.Rarible,
+            }
         }
     }
     // #endregion
 
     // #region zora
-    const zoraMatched = _url.pathname.match(zoraPathnameRegexMatcher)
-    if (zoraMatched) {
-        return {
-            chain_id: _url.host.includes('rinkeby') ? ChainIdEVM.Rinkeby : ChainIdEVM.Mainnet,
-            address: zoraMatched[1],
-            token_id: zoraMatched[2],
-            provider: SourceType.Zora,
+    {
+        const zoraMatched = _url.pathname.match(zoraPathnameRegexMatcher)
+        if (zoraMatched) {
+            return {
+                pluginID: NetworkPluginID.PLUGIN_EVM,
+                chainId: _url.host.includes('rinkeby') ? ChainIdEVM.Rinkeby : ChainIdEVM.Mainnet,
+                address: zoraMatched[1].replace('zora', ZORA_COLLECTION_ADDRESS),
+                tokenId: zoraMatched[2],
+                provider: SourceType.Zora,
+            }
         }
     }
     // #endregion

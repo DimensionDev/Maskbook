@@ -4,10 +4,10 @@ import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import type { NonFungibleTokenOrder, Pageable } from '@masknet/web3-shared-base'
-import { DescriptionCard } from '../DescriptionCard.js'
-import { PropertiesCard } from '../PropertiesCard.js'
-import { PriceCard } from '../PriceCard.js'
-import { DetailsCard } from '../DetailsCard.js'
+import { DescriptionCard } from '../../Shared/DescriptionCard.js'
+import { PropertiesCard } from '../../Shared/PropertiesCard.js'
+import { PriceCard } from '../../Shared/PriceCard.js'
+import { DetailsCard } from '../../Shared/DetailsCard.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -19,6 +19,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: 24,
     },
 }))
+
 const resolveTopOffer = (orders?: Array<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>) => {
     if (!orders?.length) return
     return first(
@@ -29,6 +30,7 @@ const resolveTopOffer = (orders?: Array<NonFungibleTokenOrder<Web3Helper.ChainId
         }),
     )
 }
+
 export interface AboutTabProps {
     asset: AsyncStateRetry<Web3Helper.NonFungibleAssetScope<void>>
     orders: AsyncStateRetry<Pageable<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>

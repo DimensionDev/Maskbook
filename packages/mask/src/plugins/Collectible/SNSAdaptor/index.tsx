@@ -8,10 +8,10 @@ import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plug
 import { PostInspector } from './PostInspector.js'
 import { base } from '../base.js'
 import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../helpers.js'
+import { setupContext } from '../context.js'
 import { PLUGIN_ID, PLUGIN_WRAPPER_TITLE } from '../constants.js'
 import { CollectibleList } from './List/CollectibleList.js'
-import { setupContext } from '../context.js'
-import { CardDialog } from './CardDialog/CardDialog.js'
+import { DialogInspector } from './DialogInspector.js'
 
 const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
     ID: `${PLUGIN_ID}_nfts`,
@@ -58,7 +58,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     GlobalInjection: function Component() {
         return (
             <>
-                <CardDialog />
+                <DialogInspector />
             </>
         )
     },
@@ -66,6 +66,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const links = usePostInfoDetails.mentionedLinks()
         const link = uniq(links).find(checkUrl)
         const asset = getAssetInfoFromURL(link)
+
         usePluginWrapper(!!asset)
         return asset ? <PostInspector payload={asset} /> : null
     },

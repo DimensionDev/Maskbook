@@ -139,7 +139,14 @@ export function RemindDialog(props: RemindDialogProps) {
                 </Typography>
             </section>
             <section className={classNames(classes.wrapper, classes.tokenWrapper)}>
-                <TokenIcon address={token.address} classes={{ icon: classes.tokenIcon }} logoURL={token?.logoURL} />
+                <TokenIcon
+                    classes={{ icon: classes.tokenIcon }}
+                    chainId={token.chainId}
+                    address={token.address}
+                    name={token.name}
+                    symbol={token.symbol}
+                    logoURL={token?.logoURL}
+                />
                 <div className={classes.tokenTextWrapper}>
                     <Typography variant="h5" className={classes.tokenSymbol}>
                         {token.name}

@@ -13,3 +13,16 @@ export function createNativeToken(chainId: ChainId) {
         'https://assets.coingecko.com/coins/images/4128/small/solana.png',
     )
 }
+
+export function isNativeTokenSchemaType(schemaType?: SchemaType) {
+    // there is no native token schema on solana network
+    return false
+}
+
+export function isFungibleTokenSchemaType(schemaType?: SchemaType) {
+    return schemaType === SchemaType.Fungible
+}
+
+export function isNonFungibleTokenSchemaType(schemaType?: SchemaType) {
+    return schemaType === SchemaType.NonFungible
+}

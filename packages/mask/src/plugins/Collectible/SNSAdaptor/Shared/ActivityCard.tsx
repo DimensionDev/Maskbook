@@ -85,7 +85,7 @@ export function ActivityCard(props: ActivityCardProps) {
     const { activity, type } = props
     const { t } = useI18N()
     const { classes, cx } = useStyles()
-    const { Others } = useWeb3State<'all'>()
+    const { Others } = useWeb3State()
 
     return (
         <div className={classes.wrapper}>
@@ -127,7 +127,6 @@ export function ActivityCard(props: ActivityCardProps) {
                         </>
                     )}
                 </Typography>
-
                 <Typography className={classes.textBase}>
                     {activity.to && (
                         <>

@@ -5,9 +5,9 @@ import { Typography, Button } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
-import { ActivityCard } from '../ActivityCard'
-import { ActivityType } from '../../../types.js'
-import { useI18N } from '../../../../../utils/index.js'
+import { ActivityCard } from './ActivityCard'
+import { ActivityType } from '../../types.js'
+import { useI18N } from '../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -29,26 +29,29 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ActivitiesTabProps {
+export interface ActivitiesListProps {
     events: AsyncStateRetry<Pageable<NonFungibleTokenEvent<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>
 }
 
 const resolveActivityType = (type?: string) => {
     if (!type) return ActivityType.Transfer
-    if (['created', 'MINT'].includes(type)) return ActivityType.Mint
-    if (['successful'].includes(type)) return ActivityType.Sale
-    if (['OFFER', 'offer_entered', 'bid_withdrawn', 'bid_entered'].includes(type)) return ActivityType.Offer
-    if (['LIST'].includes(type)) return ActivityType.List
-    if (['CANCEL_OFFER'].includes(type)) return ActivityType.CancelOffer
+    const type_ = type.toLowerCase()
+    if (['created', 'mint'].includes(type_)) return ActivityType.Mint
+    if (['successful'].includes(type_)) return ActivityType.Sale
+    if (['offer', 'offer_entered', 'bid_withdrawn', 'bid_entered'].includes(type_)) return ActivityType.Offer
+    if (['list'].includes(type_)) return ActivityType.List
+    if (['cancel_offer'].includes(type_)) return ActivityType.CancelOffer
+    if (['sale'].includes(type_)) return ActivityType.Sale
     return ActivityType.Transfer
 }
 
-export function ActivitiesTab(props: ActivitiesTabProps) {
+export function ActivitiesList(props: ActivitiesListProps) {
     const { events } = props
-    const { classes } = useStyles()
-    const { t } = useI18N()
-
     const _events = events.value?.data ?? EMPTY_LIST
+
+    const { t } = useI18N()
+    const { classes } = useStyles()
+
     if (events.loading)
         return (
             <div className={classes.wrapper}>
@@ -71,6 +74,7 @@ export function ActivitiesTab(props: ActivitiesTabProps) {
                 <Typography className={classes.emptyText}>{t('plugin_collectible_nft_activity_empty')}</Typography>
             </div>
         )
+
     return (
         <div className={classes.wrapper} style={{ justifyContent: 'unset' }}>
             {_events?.map((x, idx) => (

@@ -8,19 +8,28 @@ import { useImageBase64 } from '../../../hooks/useImageBase64.js'
 import { Icon } from '../Icon/index.js'
 
 export interface TokenIconProps extends withClasses<'icon'> {
-    chainId?: Web3Helper.ChainIdAll
     pluginID?: NetworkPluginID
+    chainId?: Web3Helper.ChainIdAll
     address: string
-    name?: string
+    name: string
+    symbol?: string
     logoURL?: string
-    isERC721?: boolean
     tokenType?: TokenType
     disableDefaultIcon?: boolean
     AvatarProps?: Partial<AvatarProps>
 }
 
 export function TokenIcon(props: TokenIconProps) {
-    const { address, logoURL, name, AvatarProps, classes, tokenType = TokenType.Fungible, disableDefaultIcon } = props
+    const {
+        address,
+        logoURL,
+        name,
+        symbol,
+        AvatarProps,
+        classes,
+        tokenType = TokenType.Fungible,
+        disableDefaultIcon,
+    } = props
 
     const chainId = useChainId(props.pluginID, props.chainId)
     const hub = useWeb3Hub(props.pluginID)
@@ -44,10 +53,10 @@ export function TokenIcon(props: TokenIconProps) {
     return (
         <Icon
             key={key}
+            classes={classes}
+            name={symbol ?? name}
             logoURL={isNFT ? logoURL : accessibleUrl || originalUrl}
             AvatarProps={AvatarProps}
-            classes={classes}
-            name={name}
         />
     )
 }

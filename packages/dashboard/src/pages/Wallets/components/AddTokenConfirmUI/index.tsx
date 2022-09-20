@@ -55,13 +55,16 @@ export const AddTokenConfirmUI = memo<AddTokenConfirmUIProps>(({ token, balance,
                     </Box>
                     <Box>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <TokenIcon
-                                address={token?.address ?? ''}
-                                name={token?.name}
-                                chainId={token?.chainId}
-                                logoURL={token?.logoURL}
-                                AvatarProps={{ sx: { width: 48, height: 48 } }}
-                            />
+                            {token?.address ? (
+                                <TokenIcon
+                                    chainId={token?.chainId}
+                                    address={token?.address ?? ''}
+                                    name={token.name}
+                                    symbol={token.symbol}
+                                    logoURL={token?.logoURL}
+                                    AvatarProps={{ sx: { width: 48, height: 48 } }}
+                                />
+                            ) : null}
                             <Typography className={classes.confirmTitle} sx={{ marginLeft: 1.2 }}>
                                 {getValues('symbol')}
                             </Typography>

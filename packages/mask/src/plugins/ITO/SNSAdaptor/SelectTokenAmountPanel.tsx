@@ -1,18 +1,18 @@
 import { useCallback } from 'react'
 import type { MaskFixedSizeListProps, MaskTextFieldProps } from '@masknet/theme'
 import { useSelectFungibleToken, FungibleTokenInput, FungibleTokenInputProps } from '@masknet/shared'
-import { FungibleToken, NetworkPluginID } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../utils/index.js'
+import type { Web3Helper } from '@masknet/plugin-infra/web3'
 
 interface ERC20TokenListProps extends withClasses<'list' | 'placeholder'> {
-    targetChainId?: ChainId
+    targetChainId?: Web3Helper.ChainIdAll
     whitelist?: string[]
     blacklist?: string[]
-    tokens?: Array<FungibleToken<ChainId, SchemaType>>
+    tokens?: Array<Web3Helper.FungibleTokenScope<'all'>>
     selectedTokens?: string[]
     disableSearch?: boolean
-    onSelect?(token: FungibleToken<ChainId, SchemaType> | null): void
+    onSelect?(token: Web3Helper.FungibleTokenScope<'all'> | null): void
     FixedSizeListProps?: Partial<MaskFixedSizeListProps>
     SearchTextFieldProps?: MaskTextFieldProps
 }
@@ -20,11 +20,11 @@ interface ERC20TokenListProps extends withClasses<'list' | 'placeholder'> {
 export interface SelectTokenAmountPanelProps {
     amount: string
     balance: string
-    token?: FungibleToken<ChainId, SchemaType>
+    token?: Web3Helper.FungibleTokenScope<'all'>
     disableNativeToken?: boolean
     disableSearchBar?: boolean
     onAmountChange: (amount: string) => void
-    onTokenChange: (token: FungibleToken<ChainId, SchemaType>) => void
+    onTokenChange: (token: Web3Helper.FungibleTokenScope<'all'>) => void
     FungibleTokenListProps?: Partial<ERC20TokenListProps>
     FungibleTokenInputProps?: Partial<FungibleTokenInputProps>
 }

@@ -1,6 +1,5 @@
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import type { SourceType } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     gemRankWrapper: {
@@ -16,17 +15,16 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface RankProps {
-    providerType?: SourceType
-    rank?: number
+    rank: number
 }
 
 export function Rank(props: RankProps) {
     const { rank } = props
-    // todo: multiple style to provider
     const { classes } = useStyles()
+
     return (
         <div className={classes.gemRankWrapper}>
-            <Typography># {rank ?? '-'}</Typography>
+            <Typography># {rank}</Typography>
         </div>
     )
 }
