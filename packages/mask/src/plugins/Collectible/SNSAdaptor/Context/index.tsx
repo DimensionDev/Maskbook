@@ -20,6 +20,14 @@ function useContext(initialState?: InitialState) {
     const { pluginID, chainId, tokenId, tokenAddress } = initialState ?? {}
     const [sourceType, setSourceType] = useState(SourceType.NFTScan)
 
+    console.log('DEBUG: useContext')
+    console.log({
+        pluginID,
+        chainId,
+        tokenId,
+        tokenAddress,
+    })
+
     const asset = useNonFungibleAsset(pluginID, tokenAddress, tokenId, {
         chainId,
     })

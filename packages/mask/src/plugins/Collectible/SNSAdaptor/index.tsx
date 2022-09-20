@@ -66,6 +66,10 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const links = usePostInfoDetails.mentionedLinks()
         const link = uniq(links).find(checkUrl)
         const asset = getAssetInfoFromURL(link)
+
+        console.log('DEBUG: post inspector')
+        console.log(asset)
+
         usePluginWrapper(!!asset)
         return asset ? <PostInspector payload={asset} /> : null
     },

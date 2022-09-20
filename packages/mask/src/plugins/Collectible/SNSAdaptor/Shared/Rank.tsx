@@ -16,8 +16,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface RankProps {
-    providerType?: SourceType
-    rank?: number
+    rank: number
 }
 
 export function Rank(props: RankProps) {
@@ -26,7 +25,7 @@ export function Rank(props: RankProps) {
 
     return (
         <div className={classes.gemRankWrapper}>
-            <Typography># {rank ?? '-'}</Typography>
+            <Typography># {rank}</Typography>
         </div>
     )
 }

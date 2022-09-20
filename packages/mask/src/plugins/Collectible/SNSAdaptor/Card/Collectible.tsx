@@ -22,6 +22,7 @@ const useStyles = makeStyles()((theme) => {
         root: {
             width: '100%',
             padding: 0,
+            paddingBottom: theme.spacing(2),
             backgroundColor: 'unset',
         },
         content: {

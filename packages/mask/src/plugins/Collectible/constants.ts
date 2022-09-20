@@ -9,9 +9,9 @@ export const PLUGIN_ID = PluginID.Collectible
 export const PLUGIN_META_KEY = `${PluginID.Collectible}:1`
 
 export const openseaHostnames = ['opensea.io', 'testnets.opensea.io']
-export const openseaPathnameRegexMatcher = /^\/assets\/(?:ethereum\/)?(0x[\dA-Fa-f]{40})\/(\d+)/
+export const openseaPathnameRegexMatcher = /^\/assets\/(?:ethereum|matic|solana)\/(0x[\dA-Fa-f]{40}|\w{44})\/?(\d+)?/
 export const raribleHostnames = ['rarible.com', 'app.rarible.com', 'ropsten.rarible.com']
-export const rariblePathnameRegexMatcher = /^\/token\/(0x[\dA-Fa-f]{40}):(\d+)/
+export const rariblePathnameRegexMatcher = /^\/token\/(?:ethereum|solana|polygon)?\/?(\w+):?(\d+)?/
 
 export const zoraHostnames = ['zora.co']
 export const zoraPathnameRegexMatcher = /^\/collections\/(0x[\dA-Fa-f]{40})\/(\d+)$/

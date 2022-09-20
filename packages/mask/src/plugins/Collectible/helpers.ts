@@ -7,6 +7,7 @@ import {
     zoraHostnames,
     zoraPathnameRegexMatcher,
 } from './constants.js'
+import { ChainId as ChainIdSolana } from '@masknet/web3-shared-solana'
 import { ChainId as ChainIdEVM } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 import { Asset, WyvernSchemaName } from 'opensea-js/lib/types'
@@ -46,31 +47,35 @@ export function getAssetInfoFromURL(url?: string): CollectiblePayload | null {
     const _url = new URL(url)
 
     // #region opensea
-    const openSeaMatched = _url.pathname.match(openseaPathnameRegexMatcher)
-    if (openSeaMatched) {
-        return {
-            pluginID: NetworkPluginID.PLUGIN_EVM,
-            chainId: _url.host.includes('testnets') ? ChainIdEVM.Rinkeby : ChainIdEVM.Mainnet,
-            address: openSeaMatched[1],
-            tokenId: openSeaMatched[2],
-            provider: SourceType.OpenSea,
+    {
+        const openSeaMatched = _url.pathname.match(openseaPathnameRegexMatcher)
+        const maticMatched = _url.pathname.includes('matic')
+        const solanaMatched = _url.pathname.includes('solana')
+        if (openSeaMatched) {
+            return {
+                pluginID: solanaMatched ? NetworkPluginID.PLUGIN_SOLANA : NetworkPluginID.PLUGIN_EVM,
+                chainId: maticMatched ? ChainIdEVM.Matic : solanaMatched ? ChainIdSolana.Mainnet : ChainIdEVM.Mainnet,
+                address: solanaMatched ? '' : openSeaMatched[1],
+                tokenId: solanaMatched ? openSeaMatched[1] : openSeaMatched[2],
+                provider: SourceType.OpenSea,
+            }
         }
     }
     // #endregion
 
     // #region rarible
-    const raribleMatched = _url.pathname.match(rariblePathnameRegexMatcher)
-    if (raribleMatched) {
-        return {
-            pluginID: NetworkPluginID.PLUGIN_EVM,
-            chainId: _url.host.includes('ropsten')
-                ? ChainIdEVM.Ropsten
-                : _url.host.includes('rinkeby')
-                ? ChainIdEVM.Rinkeby
-                : ChainIdEVM.Mainnet,
-            address: raribleMatched[1],
-            tokenId: raribleMatched[2],
-            provider: SourceType.Rarible,
+    {
+        const raribleMatched = _url.pathname.match(rariblePathnameRegexMatcher)
+        const maticMatched = _url.pathname.includes('polygon')
+        const solanaMatched = _url.pathname.includes('solana')
+        if (raribleMatched) {
+            return {
+                pluginID: solanaMatched ? NetworkPluginID.PLUGIN_SOLANA : NetworkPluginID.PLUGIN_EVM,
+                chainId: maticMatched ? ChainIdEVM.Matic : solanaMatched ? ChainIdSolana.Mainnet : ChainIdEVM.Mainnet,
+                address: solanaMatched ? '' : raribleMatched[1],
+                tokenId: solanaMatched ? raribleMatched[1] : raribleMatched[2],
+                provider: SourceType.Rarible,
+            }
         }
     }
     // #endregion
