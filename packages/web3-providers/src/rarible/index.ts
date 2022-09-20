@@ -38,10 +38,16 @@ async function fetchFromRarible<T>(url: string, path: string, init?: RequestInit
     return response.json() as Promise<T>
 }
 
-function createAccount(address?: string) {
+function createAddress(address?: string) {
     if (!address) return
+    return address.split(':')[1]
+}
+
+function createAccount(address?: string) {
+    const resolvedAddress = createAddress(address)
+    if (!resolvedAddress) return
     return {
-        address: address.split(':')[1],
+        address: resolvedAddress,
     }
 }
 
@@ -91,16 +97,21 @@ function createOrder(chainId: ChainId, order: RaribleOrder): NonFungibleTokenOrd
     const paymentToken = getPaymentToken(chainId, {
         name: order.make.type['@type'],
         symbol: order.make.type['@type'],
-        address: order.make.type.contract?.split(':')[1],
+        address: createAddress(order.make.type.contract),
     })
     return {
         id: order.id,
         chainId,
         assetPermalink: '',
         createdAt: new Date(order.createdAt).getTime(),
-        price: {
-            [CurrencyType.USD]: order.takePriceUsd ?? order.makePriceUsd,
-        },
+        maker: createAccount(order.maker),
+        taker: createAccount(order.taker),
+        price:
+            order.takePriceUsd ?? order.makePriceUsd
+                ? {
+                      [CurrencyType.USD]: order.takePriceUsd ?? order.makePriceUsd,
+                  }
+                : undefined,
         priceInToken: paymentToken
             ? {
                   amount: scale10(order.takePrice ?? order.makePrice ?? '0', paymentToken?.decimals).toFixed(),
@@ -121,7 +132,7 @@ function createEvent(chainId: ChainId, history: RaribleHistory): NonFungibleToke
     })
     return {
         id: history.id,
-        chainId: ChainId.Mainnet,
+        chainId,
         from: createAccount(history.from ?? history.seller ?? history.owner ?? history.maker),
         to: createAccount(history.buyer),
         type: history['@type'],

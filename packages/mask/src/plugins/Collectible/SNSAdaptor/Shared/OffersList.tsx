@@ -34,10 +34,16 @@ export interface OffersListProps {
 
 export function OffersList(props: OffersListProps) {
     const { offers } = props
+    const _offers = offers.value?.data ?? EMPTY_LIST
+
     const { classes } = useStyles()
     const { t } = useI18N()
 
-    const _offers = offers.value?.data ?? EMPTY_LIST
+    console.log('DEBUG: OffersList')
+    console.log({
+        offers: props.offers,
+    })
+
     if (offers.loading)
         return (
             <div className={classes.wrapper}>
