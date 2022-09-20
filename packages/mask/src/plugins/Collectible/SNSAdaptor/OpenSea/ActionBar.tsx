@@ -1,15 +1,15 @@
 import { Box } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
-import { useAccount, useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useAccount, Web3Helper } from '@masknet/plugin-infra/web3'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../utils/index.js'
-import { Context } from '../Card/hooks/useContext.js'
 import { useControlledDialog } from '../../../../utils/hooks/useControlledDialog.js'
 import { MakeOfferDialog } from './MakeOfferDialog.js'
 import { PostListingDialog } from './PostListingDialog.js'
 import { CheckoutDialog } from './CheckoutDialog.js'
 import { ChainBoundary } from '../../../../web3/UI/ChainBoundary.js'
 import { useAssetOrder } from './hooks/useAssetOrder.js'
+import { Context } from '../Context/index.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -29,7 +29,6 @@ export function ActionBar({ chainId, pluginID }: ActionBarProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { asset } = Context.useContainer()
-    const { Others } = useWeb3State()
     const account = useAccount()
     const { value: assetOrder } = useAssetOrder(asset.value?.address, asset.value?.tokenId)
 

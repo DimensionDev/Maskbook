@@ -8,6 +8,7 @@ export interface LinkingAvatarProps {
 
 export function LinkingAvatar(props: LinkingAvatarProps) {
     const { href, title, src } = props
+
     try {
         const url = new URL(href).toString()
         return (

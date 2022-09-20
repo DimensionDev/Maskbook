@@ -172,6 +172,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                             </option>
                         ))}
                     </select>
+                    <br />
                     <FormControlLabel
                         control={
                             <Checkbox
@@ -181,7 +182,7 @@ export function ConsoleContent(props: ConsoleContentProps) {
                         }
                         label="Quick Mode"
                     />
-
+                    <br />
                     <Button
                         size="small"
                         onClick={() => {

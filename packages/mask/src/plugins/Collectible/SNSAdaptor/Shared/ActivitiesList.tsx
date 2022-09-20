@@ -5,9 +5,9 @@ import { Typography, Button } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
-import { ActivityCard } from '../ActivityCard'
-import { ActivityType } from '../../../types.js'
-import { useI18N } from '../../../../../utils/index.js'
+import { ActivityCard } from './ActivityCard'
+import { ActivityType } from '../../types.js'
+import { useI18N } from '../../../../utils/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface ActivitiesTabProps {
+export interface ActivitiesListProps {
     events: AsyncStateRetry<Pageable<NonFungibleTokenEvent<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>
 }
 
@@ -43,12 +43,13 @@ const resolveActivityType = (type?: string) => {
     return ActivityType.Transfer
 }
 
-export function ActivitiesTab(props: ActivitiesTabProps) {
+export function ActivitiesList(props: ActivitiesListProps) {
     const { events } = props
-    const { classes } = useStyles()
-    const { t } = useI18N()
-
     const _events = events.value?.data ?? EMPTY_LIST
+
+    const { t } = useI18N()
+    const { classes } = useStyles()
+
     if (events.loading)
         return (
             <div className={classes.wrapper}>

@@ -1,6 +1,6 @@
 import type { CollectiblePayload } from '../types.js'
 import { Collectible } from './Card/Collectible.js'
-import { Context } from './Card/hooks/useContext.js'
+import { Context } from './Context/index.js'
 
 export interface PostInspectorProps {
     payload: CollectiblePayload
@@ -12,10 +12,10 @@ export function PostInspector(props: PostInspectorProps) {
     return (
         <Context.Provider
             initialState={{
+                pluginID: token.pluginID,
                 chainId: token.chainId,
                 tokenId: token.tokenId,
-                contractAddress: token.address,
-                provider: token.provider,
+                tokenAddress: token.address,
             }}>
             <Collectible />
         </Context.Provider>

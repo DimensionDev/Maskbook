@@ -8,11 +8,11 @@ import { PluginWalletStatusBar, useI18N as useBaseI18n } from '../../../../utils
 import { useStyles } from './hooks/useStyles.js'
 import { AboutTab } from './tabs/AboutTab.js'
 import { OffersTab } from './tabs/OffersTab.js'
-import { ActivitiesTab } from './tabs/ActivitiesTab.js'
+import { ActivityTab } from './tabs/ActivityTab.js'
 import { base as pluginDefinition } from '../../base.js'
 import { TabType } from '../../types.js'
-import { Context } from './hooks/useContext.js'
-import { FigureCard } from './FigureCard.js'
+import { FigureCard } from '../Shared/FigureCard.js'
+import { Context } from '../Context/index.js'
 
 export interface CardDialogContentProps {
     currentTab: TabType
@@ -21,7 +21,7 @@ export interface CardDialogContentProps {
 export function CardDialogContent(props: CardDialogContentProps) {
     const { currentTab } = props
     const { classes } = useStyles()
-    const { t: tb } = useBaseI18n()
+    const { t } = useBaseI18n()
     const pluginID = useCurrentWeb3NetworkPluginID()
     const { Others } = useWeb3State()
     const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
@@ -43,9 +43,9 @@ export function CardDialogContent(props: CardDialogContentProps) {
         return (
             <div className={classes.contentWrapper}>
                 <div className={classes.loadingPlaceholder}>
-                    <Typography className={classes.emptyText}>{tb('plugin_furucombo_load_failed')}</Typography>
+                    <Typography className={classes.emptyText}>{t('plugin_furucombo_load_failed')}</Typography>
                     <Button variant="text" onClick={() => asset.retry()}>
-                        {tb('retry')}
+                        {t('retry')}
                     </Button>
                 </div>
             </div>
@@ -63,7 +63,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
                     ) : currentTab === TabType.Offers ? (
                         <OffersTab offers={orders} />
                     ) : (
-                        <ActivitiesTab events={events} />
+                        <ActivityTab events={events} />
                     )}
                 </div>
             </div>
@@ -82,8 +82,8 @@ export function CardDialogContent(props: CardDialogContentProps) {
                     }}
                     fullWidth>
                     {pluginID === NetworkPluginID.PLUGIN_EVM
-                        ? tb('wallet_status_button_change')
-                        : tb('wallet_status_button_change_to_evm')}
+                        ? t('wallet_status_button_change')
+                        : t('wallet_status_button_change_to_evm')}
                 </Button>
             </PluginWalletStatusBar>
         </div>

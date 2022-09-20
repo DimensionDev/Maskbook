@@ -11,7 +11,7 @@ import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../helpers.js'
 import { setupContext } from '../context.js'
 import { PLUGIN_ID, PLUGIN_WRAPPER_TITLE } from '../constants.js'
 import { CollectibleList } from './List/CollectibleList.js'
-import { CardDialog } from './CardDialog/CardDialog.js'
+import { DialogInspector } from './DialogInspector.js'
 
 const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
     ID: `${PLUGIN_ID}_nfts`,
@@ -58,7 +58,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     GlobalInjection: function Component() {
         return (
             <>
-                <CardDialog />
+                <DialogInspector />
             </>
         )
     },

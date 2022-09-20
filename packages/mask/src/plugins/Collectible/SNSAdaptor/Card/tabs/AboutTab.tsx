@@ -1,14 +1,13 @@
-import { useMemo } from 'react'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
 import BigNumber from 'bignumber.js'
 import { first } from 'lodash-unified'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/plugin-infra/web3'
 import type { NonFungibleTokenOrder } from '@masknet/web3-shared-base'
-import { Context } from '../hooks/useContext.js'
 import { CollectibleCard } from '../CollectibleCard.js'
-import { FigureCard } from '../../CardDialog/FigureCard.js'
-import { PriceCard } from '../../CardDialog/PriceCard.js'
+import { FigureCard } from '../../Shared/FigureCard.js'
+import { PriceCard } from '../../Shared/PriceCard.js'
+import { Context } from '../../Context/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     body: {
@@ -44,24 +43,23 @@ export function AboutTab(props: AboutTabProps) {
     const { classes } = useStyles()
 
     const topOffer = resolveTopOffer(orders.value?.data)
-    return useMemo(() => {
-        if (asset.loading || !asset.value)
-            return (
-                <CollectibleCard>
-                    <div className={classes.body}>
-                        <LoadingBase />
-                    </div>
-                </CollectibleCard>
-            )
+
+    if (asset.loading || !asset.value)
         return (
             <CollectibleCard>
                 <div className={classes.body}>
-                    <div className={classes.basic}>
-                        <FigureCard hideSubTitle asset={asset.value} />
-                    </div>
-                    <PriceCard topOffer={topOffer} asset={asset.value} />
+                    <LoadingBase />
                 </div>
             </CollectibleCard>
         )
-    }, [asset, classes])
+    return (
+        <CollectibleCard>
+            <div className={classes.body}>
+                <div className={classes.basic}>
+                    <FigureCard hideSubTitle asset={asset.value} />
+                </div>
+                <PriceCard topOffer={topOffer} asset={asset.value} />
+            </div>
+        </CollectibleCard>
+    )
 }

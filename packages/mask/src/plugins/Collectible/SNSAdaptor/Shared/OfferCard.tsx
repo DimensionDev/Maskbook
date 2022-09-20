@@ -11,7 +11,7 @@ import {
 import { useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
 import { Icons } from '@masknet/icons'
 import { useI18N } from '../../../../utils/index.js'
-import { CollectibleProviderIcon } from '../Card/CollectibleProviderIcon.js'
+import { CollectibleProviderIcon } from './CollectibleProviderIcon.js'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {

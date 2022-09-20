@@ -6,7 +6,7 @@ import { CurrencyType, formatBalance, NetworkPluginID } from '@masknet/web3-shar
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { resolveAssetLinkOnCurrentProvider } from '../../pipes/index.js'
 import { useI18N } from '../../../../utils/index.js'
-import { Context } from '../Card/hooks/useContext.js'
+import { Context } from '../Context/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     itemInfo: {
@@ -25,10 +25,10 @@ export interface CheckoutOrderProps {
 export function CheckoutOrder({ order }: CheckoutOrderProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { token, asset, provider } = Context.useContainer()
+    const { tokenId, tokenAddress, asset, sourceType } = Context.useContainer()
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
-    if (!asset?.value || !token || !order) return null
+    if (!asset?.value || !tokenId || !tokenAddress || !order) return null
 
     const price = (order as Order).currentPrice ?? asset.value.price?.[CurrencyType.USD]
 
@@ -53,16 +53,16 @@ export function CheckoutOrder({ order }: CheckoutOrderProps) {
                             <Image height={80} width={80} src={asset.value?.metadata?.imageURL ?? ''} />
                             <div className={classes.texts}>
                                 <Typography>{asset.value.collection?.name ?? ''}</Typography>
-                                {token.contractAddress && token.tokenId ? (
+                                {tokenAddress && tokenId ? (
                                     <Link
                                         color="primary"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         href={resolveAssetLinkOnCurrentProvider(
                                             chainId,
-                                            token.contractAddress,
-                                            token.tokenId,
-                                            provider,
+                                            tokenAddress,
+                                            tokenId,
+                                            sourceType,
                                         )}>
                                         <Typography>{asset.value.metadata?.name ?? ''}</Typography>
                                     </Link>
