@@ -33,6 +33,7 @@ export interface PostContextCreation extends PostContextAuthor {
     readonly isFocusing?: boolean
     readonly suggestedInjectionPoint: HTMLElement
     readonly comments?: PostContextComment
+    readonly coAuthors: Subscription<ProfileIdentifier[]>
     /**
      * The result of this subscription will be merged with `PostContext.postMentionedLinks`.
      *
@@ -60,6 +61,7 @@ export interface PostContext extends PostContextAuthor {
     /** Auto computed */
     readonly identifier: Subscription<null | PostIdentifier>
     readonly url: Subscription<URL | null>
+    readonly coAuthors: Subscription<ProfileIdentifier[] | null>
     // Meta
     readonly mentionedLinks: Subscription<string[]>
     /** @deprecated It should appears in rawMessage */

@@ -1,12 +1,10 @@
 import { delay } from '@dimensiondev/kit'
-import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
+import { EnhanceableSite } from '@masknet/shared-base'
 import { Mirror, Writer } from '@masknet/web3-providers'
-import urlcat from 'urlcat'
 import type { SocialNetworkUI } from '../../../social-network/types'
 import { creator } from '../../../social-network/utils'
-import { mirrorBase } from '../base'
+import { formatWriter } from './utils.js'
 
-const getMirrorProfileUrl = (id: string) => urlcat('https://mirror.xyz/:id', { id })
 export const getCurrentUserInfo = async () => {
     if (location.host !== EnhanceableSite.Mirror) return
     const userAddress = localStorage.getItem('mirror.userAddress') as string | null
@@ -25,13 +23,7 @@ function resolveLastRecognizedIdentityInner(
         const writer = await getCurrentUserInfo()
         if (!writer) return
 
-        ref.value = {
-            avatar: writer.avatarURL,
-            nickname: writer.displayName,
-            identifier: ProfileIdentifier.of(mirrorBase.networkIdentifier, writer.address).unwrapOr(undefined),
-            bio: writer.description,
-            homepage: writer.domain || getMirrorProfileUrl(writer.address),
-        }
+        ref.value = formatWriter(writer)
     }
 
     assign()
@@ -46,13 +38,7 @@ export const getUserInfo = () => {
     const INIT_DATA = JSON.parse(script)
     if (!INIT_DATA) return
     const writer = INIT_DATA.props?.pageProps?.project as Writer
-    return {
-        avatar: writer.avatarURL,
-        nickname: writer.displayName,
-        bio: writer.description,
-        homepage: writer.domain || getMirrorProfileUrl(writer.address),
-        identifier: ProfileIdentifier.of(mirrorBase.networkIdentifier, writer.address).unwrapOr(undefined),
-    }
+    return formatWriter(writer)
 }
 
 function resolveCurrentVisitingIdentityInner(
@@ -71,22 +57,10 @@ function resolveCurrentVisitingIdentityInner(
             // when current page is dashboard
             const currentUser = await getCurrentUserInfo()
             if (!currentUser) return
-            ref.value = {
-                avatar: currentUser.avatarURL,
-                nickname: currentUser.displayName,
-                bio: currentUser.description,
-                homepage: currentUser.domain || getMirrorProfileUrl(currentUser.address),
-                identifier: ProfileIdentifier.of(mirrorBase.networkIdentifier, currentUser.address).unwrapOr(undefined),
-            }
+            ref.value = formatWriter(currentUser)
             return
         }
-        ref.value = {
-            avatar: writer.avatarURL,
-            nickname: writer.displayName,
-            bio: writer.description,
-            homepage: writer.domain || getMirrorProfileUrl(writer.address),
-            identifier: ProfileIdentifier.of(mirrorBase.networkIdentifier, writer.address).unwrapOr(undefined),
-        }
+        ref.value = formatWriter(writer)
     }
 
     assign()

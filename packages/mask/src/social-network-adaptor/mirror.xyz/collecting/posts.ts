@@ -2,26 +2,14 @@ import { DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { creator, SocialNetworkUI as Next } from '../../../social-network/index.js'
 import { postsContentSelector } from '../utils/selectors.js'
 
-import { getCurrentUserInfo, getUserInfo } from './identity.js'
 import { mirrorShared } from '../shared'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context'
-import { ProfileIdentifier } from '@masknet/shared-base'
-import { mirrorBase } from '../base'
 import { startWatch } from '../../../utils'
 import { noop } from 'lodash-unified'
+import { formatWriter } from './utils'
+import type { ProfileIdentifier } from '@masknet/shared-base'
 
 const MIRROR_LINK_PREFIX = /https(.*)mirror.xyz\//g
-
-async function collectPostInfo(cancel: AbortSignal) {
-    if (cancel?.aborted) return
-
-    const user = await getCurrentUserInfo()
-    if (!user) return
-
-    return {
-        postBy: ProfileIdentifier.of(mirrorBase.networkIdentifier, user.address).unwrapOr(null),
-    }
-}
 
 async function registerPostCollectorInner(
     postStore: Next.CollectingCapabilities.PostsProvider['posts'],
@@ -33,15 +21,36 @@ async function registerPostCollectorInner(
         if (href?.startsWith('https')) {
             return href.replace(MIRROR_LINK_PREFIX, '')
         }
-        return href.replace('/', '')
+        return href?.replace('/', '')
     }
 
-    const baseInfo = getUserInfo()
+    // TODO: align this method
+    const getPostWriters = (postId: string) => {
+        const script = document.getElementById('__NEXT_DATA__')?.innerHTML
+        if (!script) return
+        const INIT_DATA = JSON.parse(script)
+        if (!INIT_DATA) return
+        const publisher = INIT_DATA.props?.pageProps?.__APOLLO_STATE__?.[`entry:${postId}`]?.publisher
+        if (!publisher) return
+        return {
+            author: formatWriter({
+                address: publisher?.project?.__ref.replace('ProjectType:', '') as string,
+                avatarURL: '',
+            }),
+            coAuthors: [
+                formatWriter({
+                    address: publisher?.member.__ref.replace('ProjectType:', '') as string,
+                    avatarURL: '',
+                }),
+            ],
+        }
+    }
 
     startWatch(
         new MutationObserverWatcher(postsContentSelector()).useForeach((node, key, proxy) => {
             if (!node) return
             const postId = getPostId(node)
+            const postWriters = getPostWriters(postId)
 
             const actionsElementProxy = DOMProxy({})
             const allANode = node.querySelectorAll(['div+a', 'footer span > div'].join())
@@ -56,7 +65,9 @@ async function registerPostCollectorInner(
                 ...refs.subscriptions,
             })
             refs.postID.value = postId
-            refs.postBy.value = baseInfo?.identifier || null
+            refs.postBy.value = postWriters?.author.identifier || null
+            refs.postCoAuthors.value =
+                (postWriters?.coAuthors.map((x) => x.identifier).filter(Boolean) as ProfileIdentifier[]) || []
             postStore.set(proxy, postInfo)
 
             return {

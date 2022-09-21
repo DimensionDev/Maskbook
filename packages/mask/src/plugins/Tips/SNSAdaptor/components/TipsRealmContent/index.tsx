@@ -3,6 +3,7 @@ import { TipButton } from '../../../components/index.js'
 import { makeStyles } from '@masknet/theme'
 import Guide from '../../../components/Guide.js'
 import { Stack } from '@mui/material'
+import type { TipsAccount } from '../../../types'
 
 const useStyles = makeStyles<{}, 'postTipsButton'>()((theme, _, refs) => ({
     focusingPostButtonWrapper: {
@@ -44,7 +45,11 @@ const useStyles = makeStyles<{}, 'postTipsButton'>()((theme, _, refs) => ({
     },
 }))
 
-export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOptions> = ({ identity, slot }) => {
+export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOptions> = ({
+    identity,
+    slot,
+    addresses,
+}) => {
     const { classes, cx } = useStyles({})
     if (!identity) return null
 
@@ -56,11 +61,13 @@ export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOption
         [Plugin.SNSAdaptor.TipsSlot.MirrorMenu]: classes.profileTipsButton,
     }
 
+    const tipsAccounts = addresses?.map((x) => ({ address: x } as TipsAccount))
+
     if (slot === Plugin.SNSAdaptor.TipsSlot.MirrorMenu) {
         return (
             <Guide>
                 <Stack display="inline-flex" width="40px" height="40px">
-                    <TipButton className={buttonClassMap[slot]} receiver={identity} />
+                    <TipButton className={buttonClassMap[slot]} receiver={identity} addresses={tipsAccounts} />
                 </Stack>
             </Guide>
         )
@@ -72,9 +79,10 @@ export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOption
                     classes.postButtonWrapper,
                     slot === Plugin.SNSAdaptor.TipsSlot.FocusingPost ? classes.focusingPostButtonWrapper : undefined,
                 )}>
-                <TipButton className={buttonClassMap[slot]} receiver={identity} />
+                <TipButton className={buttonClassMap[slot]} receiver={identity} addresses={tipsAccounts} />
             </div>
         )
     }
-    return <TipButton className={buttonClassMap[slot]} receiver={identity} />
+
+    return <TipButton className={buttonClassMap[slot]} receiver={identity} addresses={tipsAccounts} />
 }
