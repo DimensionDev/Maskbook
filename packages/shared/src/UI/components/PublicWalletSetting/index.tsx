@@ -11,11 +11,11 @@ import {
     PopupRoutes,
 } from '@masknet/shared-base'
 import { useHiddenAddressSetting, useWeb3State } from '@masknet/plugin-infra/web3'
-import { PluginID as MaskPluginID } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/plugin-infra'
 import { WalletSettingCard } from '@masknet/shared'
 import { useAsyncFn, useUpdateEffect } from 'react-use'
 
-import { differenceWith } from 'lodash-unified'
+import { differenceWith, uniq } from 'lodash-unified'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useSharedI18N } from '../../../locales'
 import { SettingActions } from './SettingActions.js'
@@ -65,7 +65,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexWrap: 'wrap',
         gap: 12,
-        '& > *': {
+        '& > div': {
             flex: 1,
             maxWidth: 'calc(50% - 22px)',
         },
@@ -77,7 +77,7 @@ interface PublicWalletSettingProps {
     onOpenPopup: (route?: PopupRoutes, params?: Record<string, any>) => void
     bindingWallets?: BindingProof[]
     currentPersona?: ECKeyIdentifier
-    pluginId: MaskPluginID
+    pluginId: PluginID
 }
 
 export const PublicWalletSetting = memo<PublicWalletSettingProps>(
@@ -118,11 +118,11 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
                     NextIDPlatform.NextID,
                     currentPersona,
                 )
-                const prevResult = storage.get<PublicWalletSettingType>(MaskPluginID.Web3Profile)
+                const prevResult = storage.get<PublicWalletSettingType>(PluginID.Web3Profile)
 
-                await storage.set<PublicWalletSettingType>(MaskPluginID.Web3Profile, {
+                await storage.set<PublicWalletSettingType>(PluginID.Web3Profile, {
                     ...prevResult,
-                    hiddenAddresses: addresses,
+                    hiddenAddresses: uniq(addresses),
                 })
 
                 showSnackbar(t.save_successfully(), {
@@ -154,8 +154,8 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
 
         const EmptyHintMapping = useMemo(() => {
             const mapping: Record<string, string> = {
-                [MaskPluginID.Tips]: t.add_wallet_tips(),
-                [MaskPluginID.Tips]: t.add_wallet_web3_profile(),
+                [PluginID.Tips]: t.add_wallet_tips(),
+                [PluginID.Tips]: t.add_wallet_web3_profile(),
             }
 
             return mapping[pluginId] ?? t.add_wallet_web3_profile()
