@@ -644,6 +644,7 @@ export namespace Plugin.SNSAdaptor {
         Post = 'post',
         Profile = 'profile',
         MirrorMenu = 'mirror-menu',
+        MirrorEntry = 'mirror-entry',
     }
     export interface TipsRealmOptions {
         identity?: ProfileIdentifier

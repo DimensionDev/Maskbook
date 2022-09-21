@@ -143,9 +143,6 @@ export default function Guide({ children, arrow = true, disabled = false, onComp
         }
     }, [childrenRef, lastStep.finished])
 
-    console.log('------------------Guide')
-    console.log(clientRect)
-
     return (
         <>
             {cloneElement(children as ReactElement<any>, { ref: childrenRef })}

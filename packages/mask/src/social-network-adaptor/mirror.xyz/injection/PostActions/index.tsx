@@ -21,10 +21,10 @@ export function PostActions({ isFocusing }: { isFocusing?: boolean }) {
     if (!identifier) return null
     return (
         <ActionsRenderer
-            // workaound
+            // In Mirror, then profile identifier is wallet address
             addresses={coAuthors?.map((x) => x.userId)}
             identity={identifier}
-            slot={isFocusing ? Plugin.SNSAdaptor.TipsSlot.FocusingPost : Plugin.SNSAdaptor.TipsSlot.Post}
+            slot={Plugin.SNSAdaptor.TipsSlot.MirrorEntry}
         />
     )
 }
@@ -41,9 +41,8 @@ function createPostActionsInjector() {
                 key: 'post-actions',
                 signal,
             })
-            if (postInfo.actionsElement?.realCurrent?.parentNode) {
-                const actionsContainer = postInfo.actionsElement.realCurrent.parentNode as HTMLDivElement
-                actionsContainer.style.maxWidth = '100%'
+            if (postInfo.actionsElement?.realCurrent?.parentNode?.lastElementChild) {
+                ;(postInfo.actionsElement.realCurrent.parentNode.lastElementChild as HTMLDivElement).style.flex = '1'
             }
             root.render(jsx)
             return root.destroy

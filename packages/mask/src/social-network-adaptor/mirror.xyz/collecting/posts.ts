@@ -53,7 +53,7 @@ async function registerPostCollectorInner(
             const postWriters = getPostWriters(postId)
 
             const actionsElementProxy = DOMProxy({})
-            const allANode = node.querySelectorAll(['div+a', 'footer span > div'].join())
+            const allANode = node.querySelectorAll(['div+a', 'footer span > div > div'].join())
             actionsElementProxy.realCurrent = allANode.item(allANode.length - 1) as HTMLElement
 
             const refs = createRefsForCreatePostContext()

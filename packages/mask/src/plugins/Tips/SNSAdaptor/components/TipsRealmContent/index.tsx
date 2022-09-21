@@ -14,6 +14,14 @@ const useStyles = makeStyles<{}, 'postTipsButton'>()((theme, _, refs) => ({
         alignItems: 'center',
         color: '#8899a6',
         position: 'relative',
+        [`&.${refs.postTipsButton}::before`]: {
+            content: '""',
+            width: 34,
+            height: 34,
+            position: 'absolute',
+            borderRadius: '100%',
+            zIndex: 0,
+        },
         [`& .${refs.postTipsButton}::before`]: {
             content: '""',
             width: 34,
@@ -27,6 +35,9 @@ const useStyles = makeStyles<{}, 'postTipsButton'>()((theme, _, refs) => ({
         },
     },
     postTipsButton: {},
+    mirrorEntryTipsButtonWrapper: {
+        justifyContent: 'flex-end',
+    },
     followTipsButton: {
         position: 'absolute',
         width: '100%',
@@ -59,6 +70,7 @@ export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOption
         [Plugin.SNSAdaptor.TipsSlot.Post]: classes.postTipsButton,
         [Plugin.SNSAdaptor.TipsSlot.Profile]: classes.profileTipsButton,
         [Plugin.SNSAdaptor.TipsSlot.MirrorMenu]: classes.profileTipsButton,
+        [Plugin.SNSAdaptor.TipsSlot.MirrorEntry]: classes.postTipsButton,
     }
 
     const tipsAccounts = addresses?.map((x) => ({ address: x } as TipsAccount))
@@ -72,12 +84,18 @@ export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOption
             </Guide>
         )
     }
-    if (slot === Plugin.SNSAdaptor.TipsSlot.Post || slot === Plugin.SNSAdaptor.TipsSlot.FocusingPost) {
+
+    if (
+        slot === Plugin.SNSAdaptor.TipsSlot.Post ||
+        slot === Plugin.SNSAdaptor.TipsSlot.FocusingPost ||
+        slot === Plugin.SNSAdaptor.TipsSlot.MirrorEntry
+    ) {
         return (
             <div
                 className={cx(
                     classes.postButtonWrapper,
                     slot === Plugin.SNSAdaptor.TipsSlot.FocusingPost ? classes.focusingPostButtonWrapper : undefined,
+                    slot === Plugin.SNSAdaptor.TipsSlot.MirrorEntry ? classes.mirrorEntryTipsButtonWrapper : undefined,
                 )}>
                 <TipButton className={buttonClassMap[slot]} receiver={identity} addresses={tipsAccounts} />
             </div>
