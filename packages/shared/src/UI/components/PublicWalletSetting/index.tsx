@@ -94,7 +94,9 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
 
         const onSwitchChange = useCallback((address: string) => {
             setAddresses((prev) => {
-                return prev.some((x) => address === x) ? prev.filter((x) => address !== x) : [...prev, address]
+                return prev.some((x) => isSameAddress(address, x))
+                    ? prev.filter((x) => !isSameAddress(address, x))
+                    : [...prev, address]
             })
         }, [])
 

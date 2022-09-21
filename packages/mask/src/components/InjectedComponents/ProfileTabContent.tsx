@@ -22,7 +22,7 @@ import { MaskMessages, sorter, useI18N, useLocationChange } from '../../utils/in
 import { useCurrentVisitingSocialIdentity } from '../DataSource/useActivatedUI.js'
 import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
 import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary.js'
-import { PublicWalletSettingEntry } from './ProfileTab/PublicWalletSettingEntry'
+import { WalletSettingEntry } from './ProfileTab/WalletSettingEntry'
 
 function getTabContent(tabId?: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
@@ -396,7 +396,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                 <div className={classes.root}>
                     <PluginCardFrameMini>
                         <Stack display="inline-flex" gap={3} justifyContent="center" alignItems="center">
-                            <PublicWalletSettingEntry />
+                            <WalletSettingEntry />
                         </Stack>
                     </PluginCardFrameMini>
                 </div>

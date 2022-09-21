@@ -16,7 +16,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const PublicWalletSettingEntry = memo(() => {
+export const WalletSettingEntry = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
 
