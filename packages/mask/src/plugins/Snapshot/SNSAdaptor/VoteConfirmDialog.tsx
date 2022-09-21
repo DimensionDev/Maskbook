@@ -27,6 +27,10 @@ const useStyles = makeStyles()((theme) => ({
         '& > :first-child': {
             marginTop: 0,
         },
+        height: 492,
+    },
+    button: {
+        margin: 16,
     },
 }))
 
@@ -71,7 +75,7 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                 </InfoField>
             </DialogContent>
             <DialogActions style={{ padding: 0 }}>
-                <WalletConnectedBoundary offChain>
+                <WalletConnectedBoundary offChain classes={{ button: classes.button }}>
                     <PluginWalletStatusBar>
                         <ActionButton
                             color="primary"
