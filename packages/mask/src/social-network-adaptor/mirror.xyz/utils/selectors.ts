@@ -17,6 +17,13 @@ export const entryInfoSelector: () => LiveSelector<E, true> = () =>
 export const menuAuthorSelector: () => LiveSelector<E, true> = () => querySelector<E>('a[href="/"]')
 
 export const postsContentSelector = () =>
-    querySelectorAll('#__next > div:nth-child(2) > div > div > div').filter((x) => x.childNodes.length !== 0)
+    querySelectorAll(
+        [
+            // In Entries
+            '#__next > div:nth-child(2) > div > div > div:not(footer)',
+            // In collection
+            '#__next > div:nth-child(2) > div > div > div > a:has(footer)',
+        ].join(),
+    ).filter((x) => x.childNodes.length !== 0)
 
 export const themeSelector: () => LiveSelector<E, true> = () => querySelector<E>('[data-theme]')

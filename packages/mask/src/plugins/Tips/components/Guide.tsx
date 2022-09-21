@@ -123,11 +123,9 @@ export default function Guide({ children, arrow = true, disabled = false, onComp
     }
 
     useEffect(() => {
-        console.log(childrenRef)
         if (disabled || !enableUserGuide || lastStep.finished) return
         const onResize = () => {
             const cr = childrenRef.current?.getBoundingClientRect()
-            console.log(cr)
 
             if (cr) {
                 const bottomAvailable = window.innerHeight - cr.height - cr.top > 200
