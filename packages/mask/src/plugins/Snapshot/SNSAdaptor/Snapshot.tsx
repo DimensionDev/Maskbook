@@ -69,12 +69,14 @@ const useStyles = makeStyles()((theme) => {
         avatar: {
             boxShadow: '0px 6px 12px rgba(81, 62, 255, 0.2)',
             backdropFilter: 'blur(8px)',
+            width: 48,
+            height: 48,
         },
     }
 })
 
 export function Snapshot() {
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
     const identifier = useContext(SnapshotContext)
     const { payload: proposal } = useProposal(identifier.id)
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
@@ -109,15 +111,21 @@ export function Snapshot() {
                             {proposal.space.name}
                         </Typography>
                         <Box sx={{ display: 'flex' }}>
-                            <Typography fontSize={14} sx={{ paddingRight: 1 }}>
+                            <Typography
+                                fontSize={14}
+                                sx={{ paddingRight: 1 }}
+                                color={theme.palette.maskColor.publicSecond}>
                                 by
                             </Typography>
-                            <Typography fontSize={14} fontWeight="bold">
+                            <Typography fontSize={14} fontWeight="700">
                                 {proposal.space.id}
                             </Typography>
                         </Box>
                     </Box>
-                    <Typography fontSize={14} fontWeight="bold">
+                    <Typography
+                        fontSize={14}
+                        fontWeight="700"
+                        sx={{ width: 347, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
                         {proposal.title}
                     </Typography>
                 </Box>

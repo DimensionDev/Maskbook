@@ -9,6 +9,9 @@ const useStyles = makeStyles()((theme) => {
             overflowY: 'auto',
             overflowX: 'hidden',
             height: 400,
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         content: {
             padding: `${theme.spacing(2)} !important`,
