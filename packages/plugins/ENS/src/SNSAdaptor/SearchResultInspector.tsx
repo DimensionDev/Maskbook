@@ -10,17 +10,16 @@ import { LoadingContent } from './LoadingContent'
 import { LoadFailedContent } from './LoadFailedContent'
 import { TopAndLastOffers } from './TopAndLastOffers'
 import { SourceSwitcher } from './SourceSwitcher'
-import { ENSProvider, ENSContext, SearchResultInspectorProps } from './context'
+import { ENSProvider, ENSContext, SearchResultInspectorProps, RootContext } from './context'
 import { CollectibleState } from './hooks/useCollectibleState'
 import { NextIdBadge } from './NextIdBadge'
 import { SocialAccountList } from './SocialAccountList'
 
 export function SearchResultInspectorContent() {
     const t = useI18N()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const {
         isLoading,
-        isNoResult,
         isError,
         reversedAddress,
         retry,
@@ -30,9 +29,9 @@ export function SearchResultInspectorContent() {
         tokenId,
     } = useContext(ENSContext)
 
-    if (isNoResult || !reversedAddress || !tokenId) return <EmptyContent />
-
     if (isLoading) return <LoadingContent />
+
+    if (!reversedAddress || !tokenId) return <EmptyContent />
 
     if (isError) return <LoadFailedContent isLoading={isLoading} retry={retry} />
 
@@ -58,7 +57,7 @@ export function SearchResultInspectorContent() {
                         <Link
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={classes.link}
+                            className={cx(classes.link, classes.rightSpace)}
                             href={`https://twitter.com/${firstValidNextIdTwitterBinding.identity}`}>
                             <Icons.TwitterRound />
                             <Typography className={classes.nextIdVerifiedTwitterName}>
@@ -78,8 +77,10 @@ export function SearchResultInspectorContent() {
 
 export function SearchResultInspector(props: SearchResultInspectorProps) {
     return (
-        <ENSProvider {...props}>
-            <SearchResultInspectorContent />
-        </ENSProvider>
+        <RootContext>
+            <ENSProvider {...props}>
+                <SearchResultInspectorContent />
+            </ENSProvider>
+        </RootContext>
     )
 }

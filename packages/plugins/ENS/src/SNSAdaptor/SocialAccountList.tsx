@@ -14,7 +14,7 @@ interface SocialAccountListProps {
 
 export function SocialAccountList({ restOfValidNextIdTwitterBindings }: SocialAccountListProps) {
     const t = useI18N()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
 
     const [menu, openMenu] = useMenuConfig(
         restOfValidNextIdTwitterBindings.map((x, i) => (
@@ -24,7 +24,9 @@ export function SocialAccountList({ restOfValidNextIdTwitterBindings }: SocialAc
                 key={i}
                 onClick={() => openWindow(`https://twitter.com/${x.identity}`)}>
                 <Icons.TwitterRound />
-                <Typography className={classes.nextIdVerifiedTwitterName}>{x.identity}</Typography>
+                <Typography className={cx(classes.nextIdVerifiedTwitterName, classes.accountNameInList)}>
+                    {x.identity}
+                </Typography>
                 <div className={classes.menuItemNextIdIcon}>
                     <NextIdBadge />
                 </div>
@@ -39,6 +41,9 @@ export function SocialAccountList({ restOfValidNextIdTwitterBindings }: SocialAc
             transformOrigin: {
                 vertical: 'top',
                 horizontal: 'right',
+            },
+            PaperProps: {
+                style: { maxHeight: 296 },
             },
         },
     )
