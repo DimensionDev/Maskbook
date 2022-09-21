@@ -56,6 +56,8 @@ const useStyles = makeStyles()((theme) => {
         resultButton: {
             width: 200,
             margin: '0 auto',
+            backgroundColor: theme.palette.maskColor.publicMain,
+            color: theme.palette.maskColor.white,
         },
     }
 })
@@ -159,7 +161,7 @@ function Content() {
             </List>
             {proposal.isEnd ? (
                 <Button
-                    color="primary"
+                    variant="roundedContained"
                     className={classes.resultButton}
                     onClick={() => {
                         const csv = parse(dataForCsv)

@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react'
 import classNames from 'classnames'
-import { Box, Button } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { SnapshotContext } from '../context.js'
 import { toChecksumAddress } from 'web3-utils'
@@ -20,13 +20,23 @@ import { getSnapshotVoteType } from '../utils.js'
 const useStyles = makeStyles()((theme) => {
     return {
         button: {
-            height: 40,
+            height: 48,
             margin: `${theme.spacing(1)} auto`,
+            '&.Mui-disabled': {
+                backgroundColor: theme.palette.maskColor.publicThirdMain,
+                color: theme.palette.maskColor.publicMain,
+            },
         },
-        choiceButton: {},
+        choiceButton: {
+            backgroundColor: theme.palette.maskColor.publicThirdMain,
+            color: theme.palette.maskColor.publicMain,
+            '&:hover': {
+                backgroundColor: 'transparent',
+            },
+        },
         buttonActive: {
-            backgroundColor: theme.palette.maskColor.publicMain,
-            color: theme.palette.maskColor.white,
+            backgroundColor: `${theme.palette.maskColor.publicMain} !important`,
+            color: `${theme.palette.maskColor.white} !important`,
         },
         buttons: {
             '& > :first-child': {
@@ -112,6 +122,7 @@ export function VotingCard() {
         setOpen(false)
     }, [account, power, setOpen])
 
+    const disabled = choice === 0 || !account || !power
     return account && networkPluginId === NetworkPluginID.PLUGIN_EVM ? (
         <SnapshotCard title={t('plugin_snapshot_vote_title')}>
             <Box className={classes.buttons}>
@@ -126,17 +137,24 @@ export function VotingCard() {
                             classes.choiceButton,
                             ...(choice === i + 1 ? [classes.buttonActive] : []),
                         ])}>
-                        {choiceText}
+                        <Typography
+                            fontWeight={700}
+                            fontSize={16}
+                            sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            {choiceText}
+                        </Typography>
                     </Button>
                 ))}
 
                 <Button
                     variant="roundedContained"
                     fullWidth
-                    className={classes.button}
-                    disabled={choice === 0 || !account || !power}
+                    className={classNames(classes.button, disabled ? '' : classes.buttonActive)}
+                    disabled={disabled}
                     onClick={() => setOpen(true)}>
-                    {power && account ? t('plugin_snapshot_vote') : t('plugin_snapshot_no_power')}
+                    <Typography fontWeight={700} fontSize={16}>
+                        {power && account ? t('plugin_snapshot_vote') : t('plugin_snapshot_no_power')}
+                    </Typography>
                 </Button>
             </Box>
 

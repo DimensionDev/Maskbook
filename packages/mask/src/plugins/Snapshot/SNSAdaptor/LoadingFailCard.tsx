@@ -24,15 +24,15 @@ export class LoadingFailCard extends Component<
                         <Trans i18nKey="plugin_furucombo_load_failed" />
                     </Typography>
                     <Button
-                        style={{
+                        sx={{
                             width: 254,
                             height: 40,
-                            backgroundColor: '#07101B',
+                            backgroundColor: (t) => t.palette.maskColor.publicMain,
                             color: 'white',
                             fontSize: 14,
                             fontWeight: 700,
-                            marginBottom: 4,
-                            marginTop: 32,
+                            marginBottom: 0.5,
+                            marginTop: 4,
                         }}
                         variant="roundedContained"
                         onClick={() => {
@@ -45,19 +45,23 @@ export class LoadingFailCard extends Component<
             ) : (
                 <SnapshotCard title={this.props.title}>
                     <Box style={{ textAlign: 'center' }}>
-                        <Typography color="#07101b">
+                        <Typography color={(t) => t.palette.maskColor.publicMain}>
                             <Trans i18nKey="plugin_snapshot_load_failed" />
                         </Typography>
                         <Button
+                            variant="roundedContained"
                             sx={{
                                 width: 254,
                                 height: 40,
-                                backgroundColor: (theme) => (theme.palette.mode === 'dark' ? 'white' : '#07101B'),
-                                color: (theme) => (theme.palette.mode === 'dark' ? '#07101b' : 'white'),
+                                backgroundColor: (theme) => theme.palette.maskColor.publicMain,
+                                color: (theme) => theme.palette.maskColor.white,
                                 fontSize: 14,
                                 fontWeight: 700,
                                 marginBottom: 4,
                                 marginTop: 2,
+                                '&:hover': {
+                                    backgroundColor: (theme) => theme.palette.maskColor.publicMain,
+                                },
                             }}
                             onClick={() => {
                                 this.setState({ error: null })
