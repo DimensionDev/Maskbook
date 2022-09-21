@@ -80,7 +80,11 @@ export function PlatformCard(props: PlatformCardProps) {
                                 {isCurrent
                                     ? currentPersona?.nickname
                                     : account?.linkedProfile?.nickname || DEFAULT_PLACEHOLDER}
-                                {isCurrent && <Typography className={classes.currentTag}>{t.current()}</Typography>}
+                                {isCurrent && (
+                                    <Typography component="span" className={classes.currentTag}>
+                                        {t.current()}
+                                    </Typography>
+                                )}
                             </Typography>
                             <Typography>
                                 @{isCurrent ? currentPersona?.identifier?.userId : account?.identity}

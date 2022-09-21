@@ -33,13 +33,11 @@ const useStyles = makeStyles()((theme) => {
             position: 'relative',
             cursor: 'pointer',
             display: 'flex',
-            // overflow: 'hidden',
             padding: 0,
             width: 126,
             height: 126,
             borderRadius: 12,
             userSelect: 'none',
-            lineHeight: 0,
             '&:nth-last-child(-n+4)': {
                 marginBottom: 0,
             },
