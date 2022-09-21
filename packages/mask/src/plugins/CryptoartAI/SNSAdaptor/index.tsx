@@ -10,14 +10,14 @@ import { extractTextFromTypedMessage } from '@masknet/typed-message'
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
-    PostInspector: function Component() {
+    PostInspector() {
         const links = usePostInfoDetails.mentionedLinks()
         const link = uniq(links).find(checkUrl)
         const asset = getAssetInfoFromURL(link)
         usePluginWrapper(!!asset)
         return asset ? <PostInspector payload={asset} /> : null
     },
-    DecryptedInspector: function Component(props) {
+    DecryptedInspector(props) {
         const collectibleUrl = getRelevantUrl(
             extractTextFromTypedMessage(props.message, { linkAsText: true }).unwrapOr(''),
         )

@@ -16,7 +16,7 @@ import { LeavePageConfirmDialog } from '../../../components/shared/LeavePageConf
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
-    GlobalInjection: function Component() {
+    GlobalInjection() {
         return (
             <>
                 <SelectProviderDialog />

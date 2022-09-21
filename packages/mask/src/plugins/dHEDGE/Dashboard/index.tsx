@@ -5,7 +5,7 @@ import { InvestDialog } from '../UI/InvestDialog.js'
 const dashboard: Plugin.Dashboard.Definition = {
     ...base,
     init(signal) {},
-    GlobalInjection: function Component() {
+    GlobalInjection() {
         return <InvestDialog />
     },
 }

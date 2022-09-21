@@ -13,7 +13,7 @@ const isFurucomboLink = (link: string): boolean => matchLink.test(link)
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
-    DecryptedInspector: function Comp(props) {
+    DecryptedInspector(props) {
         const link = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
             if (x.none) return null
@@ -22,7 +22,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         if (!link) return null
         return <Renderer url={link} />
     },
-    PostInspector: function Component() {
+    PostInspector() {
         const link = usePostInfoDetails.mentionedLinks().find(isFurucomboLink)
         if (!link) return null
         return <Renderer url={link} />
