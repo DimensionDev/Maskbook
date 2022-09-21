@@ -42,7 +42,7 @@ export function NFTAvatarDialog() {
     const { classes } = useStyles()
 
     useEffect(() => {
-        return CrossIsolationMessages.events.requestOpenApplication.on(({ open, application }) => {
+        return CrossIsolationMessages.events.applicationDialogEvent.on(({ open, application }) => {
             if (application !== PluginID.Avatar) return
             setOpen(open)
         })

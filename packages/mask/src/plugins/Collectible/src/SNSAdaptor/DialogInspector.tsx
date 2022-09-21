@@ -18,7 +18,7 @@ export function DialogInspector(props: DialogInspectorProps) {
 
     useEffect(() => {
         if (!chainIdValid) setOpen(false)
-        return CrossIsolationMessages.events.requestNFTCardDialog.on((ev) => {
+        return CrossIsolationMessages.events.nonFungibleTokenDialogEvent.on((ev) => {
             if (!ev.open) return
             setPluginID(ev.pluginID)
             setChainId(ev.chainId)

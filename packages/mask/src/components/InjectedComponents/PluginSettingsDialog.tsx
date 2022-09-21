@@ -100,7 +100,7 @@ export function PluginSettingsDialog() {
     }, [currentTab, bindingWallets, currentPersona])
 
     useEffect(() => {
-        return CrossIsolationMessages.events.PluginSettingsDialogUpdate.on(({ open, targetTab }) => {
+        return CrossIsolationMessages.events.settingsDialogEvent.on(({ open, targetTab }) => {
             setOpen(open)
 
             if (targetTab) setTab(targetTab as PluginID)

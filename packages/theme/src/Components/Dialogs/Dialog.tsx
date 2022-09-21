@@ -26,7 +26,7 @@ export const MaskDialog = memo((props: MaskDialogProps) => {
     const { extraProps, shouldReplaceExitWithBack, IncreaseStack } = useDialogStackActor(open)
     const closeBothCompositionDialog = useCallback(() => {
         if (isOpenFromApplicationBoard) {
-            CrossIsolationMessages.events.requestComposition.sendToLocal({ open: false, reason: 'timeline' })
+            CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({ open: false, reason: 'timeline' })
         }
 
         onClose?.()

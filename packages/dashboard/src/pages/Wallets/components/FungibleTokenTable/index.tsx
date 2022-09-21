@@ -101,7 +101,7 @@ export const FungibleTokenTable = memo<FungibleTokenTableProps>(({ selectedChain
                 Web3Helper.Definition[NetworkPluginID]['SchemaType']
             >,
         ) => {
-            return CrossIsolationMessages.events.swapDialogUpdate.sendToLocal({
+            return CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
                 open: true,
                 traderProps: {
                     defaultInputCoin: {

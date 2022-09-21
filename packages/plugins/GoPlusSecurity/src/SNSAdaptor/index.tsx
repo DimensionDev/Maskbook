@@ -38,7 +38,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                             disabled={disabled}
                             icon={icon}
                             onClick={() =>
-                                CrossIsolationMessages.events.requestCheckSecurityDialog.sendToAll({
+                                CrossIsolationMessages.events.checkSecurityDialogEvent.sendToAll({
                                     open: true,
                                     searchHidden: false,
                                 })

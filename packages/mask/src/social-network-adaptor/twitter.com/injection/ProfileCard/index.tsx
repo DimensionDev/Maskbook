@@ -92,7 +92,7 @@ function ProfileCardHolder() {
     }, [hideProfileCard])
 
     useEffect(() => {
-        return CrossIsolationMessages.events.requestProfileCard.on((event) => {
+        return CrossIsolationMessages.events.profileCardEvent.on((event) => {
             if (!event.open) {
                 hideProfileCard()
                 return

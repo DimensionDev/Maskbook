@@ -130,9 +130,7 @@ export function FigureCard(props: FigureCardProps) {
             </div>
             <Typography className={timeline ? cx(classes.nameSm, classes.unset) : classes.nameSm}>
                 {asset.metadata?.name ?? '-'}
-                {asset.metadata?.name && !asset.metadata?.name.includes('#')
-                    ? Others?.formatTokenId(asset.tokenId)
-                    : ''}
+                {Others?.formatTokenId(asset.tokenId)}
             </Typography>
             {!hideSubTitle && (
                 <div className={classes.nameLgBox}>

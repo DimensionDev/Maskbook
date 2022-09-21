@@ -60,7 +60,7 @@ function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
                       t('setup_guide_say_hello_follow', { account: '@realMaskNetwork' }),
               )
 
-        CrossIsolationMessages.events.requestComposition.sendToLocal({
+        CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
             reason: isReplyPageSelector() ? 'reply' : reason,
             open: true,
             content,

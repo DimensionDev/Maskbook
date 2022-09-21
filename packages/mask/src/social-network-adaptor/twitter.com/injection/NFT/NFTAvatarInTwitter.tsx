@@ -242,7 +242,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
                 if (nftInfo?.permalink) openWindow(nftInfo.permalink)
                 return
             }
-            CrossIsolationMessages.events.requestNFTCardDialog.sendToLocal({
+            CrossIsolationMessages.events.nonFungibleTokenDialogEvent.sendToLocal({
                 open: true,
                 pluginID: nftAvatar.pluginId,
                 chainId: nftAvatar.chainId,

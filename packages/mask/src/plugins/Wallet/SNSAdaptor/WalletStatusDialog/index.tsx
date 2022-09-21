@@ -66,7 +66,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
 
     const closeDialog = useCallback(() => {
         _closeDialog()
-        CrossIsolationMessages.events.requestComposition.sendToLocal({
+        CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
             reason: 'timeline',
             open: false,
         })

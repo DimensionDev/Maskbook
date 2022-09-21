@@ -86,7 +86,7 @@ export const ApplicationSettingPluginSwitch = memo(({ focusPluginId }: Props) =>
 
     async function onSwitch(id: string, checked: boolean) {
         if (id === PluginID.GoPlusSecurity && checked === false)
-            return CrossIsolationMessages.events.requestCheckSecurityCloseConfirmDialog.sendToAll({ open: true })
+            return CrossIsolationMessages.events.checkSecurityConfirmationDialogEvent.sendToAll({ open: true })
         await Services.Settings.setPluginMinimalModeEnabled(id, !checked)
     }
 
