@@ -12,7 +12,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal, context) {
         setupContext(context)
     },
-    GlobalInjection: function Component() {
+    GlobalInjection() {
         return <NFTAvatarDialog />
     },
     ApplicationEntries: [

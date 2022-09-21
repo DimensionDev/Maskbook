@@ -5,7 +5,7 @@ import { PetDialog } from '../SNSAdaptor/PetDialog.js'
 const dashboard: Plugin.Dashboard.Definition = {
     ...base,
     init() {},
-    GlobalInjection: function Component() {
+    GlobalInjection() {
         return <PetDialog />
     },
 }

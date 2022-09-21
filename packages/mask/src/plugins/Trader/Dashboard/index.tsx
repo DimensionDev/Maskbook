@@ -6,7 +6,7 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 const dashboard: Plugin.Dashboard.Definition<ChainId> = {
     ...base,
     init(signal) {},
-    GlobalInjection: function Component() {
+    GlobalInjection() {
         return (
             <>
                 <TraderDialog />

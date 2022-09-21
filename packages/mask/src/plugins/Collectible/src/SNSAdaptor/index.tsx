@@ -54,21 +54,21 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal, context) {
         setupContext(context)
     },
-    GlobalInjection: function Component() {
+    GlobalInjection() {
         return (
             <>
                 <DialogInspector />
             </>
         )
     },
-    PostInspector: function Component() {
+    PostInspector() {
         const links = usePostInfoDetails.mentionedLinks()
         const payload = getPayloadFromURLs(links)
 
         usePluginWrapper(!!payload)
         return payload ? <PostInspector payload={payload} /> : null
     },
-    DecryptedInspector: function Component(props) {
+    DecryptedInspector(props) {
         const payload = getPayloadFromURL(extractTextFromTypedMessage(props.message, { linkAsText: true }).unwrapOr(''))
         usePluginWrapper(!!payload)
         return payload ? <PostInspector payload={payload} /> : null

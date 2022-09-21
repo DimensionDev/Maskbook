@@ -35,7 +35,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             },
         ],
     ]),
-    GlobalInjection: function Component() {
+    GlobalInjection() {
         return <SelectToken />
     },
     ApplicationEntries: [

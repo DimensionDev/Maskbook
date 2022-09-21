@@ -48,7 +48,7 @@ function Renderer({ url }: { url: string }) {
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
-    DecryptedInspector: function Component(props): JSX.Element | null {
+    DecryptedInspector(props): JSX.Element | null {
         const link = useMemo(() => {
             const x = extractTextFromTypedMessage(props.message)
             if (x.none) return null
@@ -57,7 +57,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         if (!link) return null
         return <Renderer url={link} />
     },
-    PostInspector: function Component(): JSX.Element | null {
+    PostInspector(): JSX.Element | null {
         const links = usePostInfoDetails.mentionedLinks()
 
         const link = links.find(isSnapshotURL)

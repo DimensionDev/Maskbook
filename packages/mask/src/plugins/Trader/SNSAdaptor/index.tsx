@@ -40,7 +40,7 @@ const sns: Plugin.SNSAdaptor.Definition<
             },
         },
     },
-    GlobalInjection: function Component() {
+    GlobalInjection() {
         return (
             <>
                 <TagInspector />
