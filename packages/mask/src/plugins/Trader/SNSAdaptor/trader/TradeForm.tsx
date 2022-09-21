@@ -593,6 +593,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     infiniteUnlockContent={t('plugin_trader_unlock_symbol', {
                                         symbol: approveToken?.symbol,
                                     })}
+                                    expectedChainId={chainId}
                                     token={
                                         !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
                                         approveToken?.schema === SchemaType.ERC20 &&

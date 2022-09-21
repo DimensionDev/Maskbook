@@ -8,6 +8,7 @@ import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/plugin-
 import { TokenIcon } from '@masknet/shared'
 import { HelpOutline } from '@mui/icons-material'
 import React, { useCallback } from 'react'
+import { noop } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => ({
     container: {},
@@ -59,16 +60,26 @@ export interface EthereumERC20TokenApprovedBoundaryProps extends withClasses<'bu
     ActionButtonProps?: ActionButtonProps
     onlyInfiniteUnlock?: boolean
     contractName?: string
+    expectedChainId?: ChainId
 }
 
 export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenApprovedBoundaryProps) {
-    const { children = null, amount, spender, token, fallback, infiniteUnlockContent, contractName } = props
+    const {
+        children = null,
+        amount,
+        spender,
+        token,
+        fallback,
+        infiniteUnlockContent,
+        contractName,
+        expectedChainId,
+    } = props
 
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
     const [{ type: approveStateType, allowance }, transactionState, approveCallback, resetApproveCallback] =
-        useERC20TokenApproveCallback(token?.address ?? '', amount, spender ?? '')
+        useERC20TokenApproveCallback(token?.address ?? '', amount, spender ?? '', noop, expectedChainId)
 
     const onApprove = useCallback(async () => {
         if (approveStateType !== ApproveStateType.NOT_APPROVED) return
