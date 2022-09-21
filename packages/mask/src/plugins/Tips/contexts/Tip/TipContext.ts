@@ -26,6 +26,7 @@ export interface ContextOptions {
     storedTokens: Array<NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
     reset: () => void
     setGasConfig: Dispatch<SetStateAction<GasConfig | undefined>>
+    gasConfig: GasConfig | undefined
 }
 
 export const TipContext = createContext<ContextOptions>({
@@ -49,4 +50,5 @@ export const TipContext = createContext<ContextOptions>({
     storedTokens: [],
     reset: noop,
     setGasConfig: noop,
+    gasConfig: undefined,
 })
