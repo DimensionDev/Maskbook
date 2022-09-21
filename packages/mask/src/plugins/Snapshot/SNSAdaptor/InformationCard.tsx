@@ -26,7 +26,7 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'space-between',
             alignItems: 'center',
             marginTop: 14,
-            color: theme.palette.maskColor.publicMain,
+            color: theme.palette.maskColor.main,
             width: '100%',
         },
         title: {
