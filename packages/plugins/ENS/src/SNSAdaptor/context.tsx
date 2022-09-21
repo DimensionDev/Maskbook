@@ -9,7 +9,7 @@ import { uniqBy } from 'lodash-unified'
 
 interface ENSContextProps {
     isLoading: boolean
-    isNoResult: boolean
+
     firstValidNextIdTwitterBinding: BindingProof | undefined
     restOfValidNextIdTwitterBindings: BindingProof[]
     validNextIdTwitterBindings: BindingProof[]
@@ -22,7 +22,7 @@ interface ENSContextProps {
 
 export const ENSContext = createContext<ENSContextProps>({
     isLoading: true,
-    isNoResult: true,
+
     firstValidNextIdTwitterBinding: undefined,
     restOfValidNextIdTwitterBindings: [],
     validNextIdTwitterBindings: [],
@@ -40,7 +40,6 @@ export function ENSProvider({ children, domain }: PropsWithChildren<SearchResult
         error,
         retry,
     } = useLookupAddress(NetworkPluginID.PLUGIN_EVM, domain, ChainId.Mainnet)
-    const isNoResult = reversedAddress === undefined
     const isError = !!error
     const tokenId = resolveNonFungibleTokenIdFromEnsDomain(domain)
     const { value: ids } = useAsync(
@@ -66,7 +65,6 @@ export function ENSProvider({ children, domain }: PropsWithChildren<SearchResult
             value={{
                 isLoading,
                 reversedAddress,
-                isNoResult,
                 isError,
                 retry,
                 tokenId,

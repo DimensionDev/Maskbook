@@ -20,7 +20,6 @@ export function SearchResultInspectorContent() {
     const { classes, cx } = useStyles()
     const {
         isLoading,
-        isNoResult,
         isError,
         reversedAddress,
         retry,
@@ -30,9 +29,9 @@ export function SearchResultInspectorContent() {
         tokenId,
     } = useContext(ENSContext)
 
-    if (isNoResult || !reversedAddress || !tokenId) return <EmptyContent />
-
     if (isLoading) return <LoadingContent />
+
+    if (!reversedAddress || !tokenId) return <EmptyContent />
 
     if (isError) return <LoadFailedContent isLoading={isLoading} retry={retry} />
 

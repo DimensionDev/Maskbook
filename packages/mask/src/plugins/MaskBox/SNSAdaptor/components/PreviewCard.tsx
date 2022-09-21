@@ -1,4 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
+import { useChainId } from '@masknet/plugin-infra/web3'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { useContainer } from 'unstated-next'
 import { makeStyles, ActionButton, LoadingBase } from '@masknet/theme'
 import { Box, Button, Typography, useTheme } from '@mui/material'
@@ -9,7 +11,7 @@ import { ArticlesTab } from './ArticlesTab.js'
 import { DetailsTab } from './DetailsTab.js'
 import { DrawDialog } from './DrawDialog.js'
 import { DrawResultDialog } from './DrawResultDialog.js'
-import { useTransactionCallback, TargetChainIdContext } from '@masknet/plugin-infra/web3-evm'
+import { useTransactionCallback } from '@masknet/plugin-infra/web3-evm'
 import { ChainBoundary } from '../../../../web3/UI/ChainBoundary.js'
 import { formatBalance, NetworkPluginID } from '@masknet/web3-shared-base'
 import type { AbstractTabProps } from '../../../../components/shared/AbstractTab.js'
@@ -56,9 +58,9 @@ export interface PreviewCardProps {}
 export function PreviewCard(props: PreviewCardProps) {
     const { classes: tabClasses } = useTabsStyles()
     const state = useState(CardTab.Articles)
+    const chainId = useChainId()
     const [openDrawDialog, setOpenDrawDialog] = useState(false)
     const [openDrawResultDialog, setOpenDrawResultDialog] = useState(false)
-    const { targetChainId } = TargetChainIdContext.useContainer()
     const theme = useTheme()
 
     const {
@@ -216,7 +218,7 @@ export function PreviewCard(props: PreviewCardProps) {
             <Box style={{ padding: 12 }}>
                 <ChainBoundary
                     expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                    expectedChainId={targetChainId}
+                    expectedChainId={chainId as ChainId}
                     ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                     <WalletConnectedBoundary
                         ActionButtonProps={{ size: 'medium', variant: 'roundedDark' }}
