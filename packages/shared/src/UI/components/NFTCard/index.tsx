@@ -100,7 +100,7 @@ interface NFTImageCollectibleAvatarProps {
     showNetwork?: boolean
 }
 
-const tooltipProps: Partial<TooltipProps> = {
+const COMMON_TOOLTIP_PROPS: Partial<TooltipProps> = {
     arrow: true,
     disableInteractive: true,
     PopperProps: {
@@ -148,7 +148,7 @@ export function NFTImageCollectibleAvatar({
             showNetwork={showNetwork}
         />
     ) : (
-        <Tooltip {...tooltipProps} title={token?.contract?.name ?? ''}>
+        <Tooltip {...COMMON_TOOLTIP_PROPS} title={token?.contract?.name ?? ''}>
             <Box sx={{ width: size, height: size }} className={classes.defaultImage}>
                 <Icons.MaskAvatar className={classes.maskIcon} />
             </Box>
@@ -185,7 +185,7 @@ export function NFTImage(props: NFTImageProps) {
     const iconURL = NETWORK_DESCRIPTORS.find((network) => network?.chainId === token.chainId)?.icon
 
     return (
-        <Tooltip {...tooltipProps} title={token.contract?.name ?? ''}>
+        <Tooltip {...COMMON_TOOLTIP_PROPS} title={token.contract?.name ?? ''}>
             <Box className={classes.itemRoot}>
                 <img
                     onClick={() => onChange?.(token)}
