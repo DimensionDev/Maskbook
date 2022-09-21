@@ -85,8 +85,6 @@ export function PluginSettingsDialog() {
 
     useEffect(() => MaskMessages.events.ownPersonaChanged.on(retry), [retry])
 
-    const onOpenPopup = useCallback(Services.Helper.openPopupWindow, [])
-
     const component = useMemo(() => {
         const Component = getTabContent(currentTab)
         if (!Component) return null
@@ -96,7 +94,7 @@ export function PluginSettingsDialog() {
                 bindingWallets={bindingWallets}
                 currentPersona={currentPersona}
                 pluginId={currentTab}
-                onOpenPopup={onOpenPopup}
+                onOpenPopup={Services.Helper.openPopupWindow}
             />
         )
     }, [currentTab, bindingWallets, currentPersona])

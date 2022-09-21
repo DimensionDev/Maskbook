@@ -155,7 +155,7 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
         const EmptyHintMapping = useMemo(() => {
             const mapping: Record<string, string> = {
                 [PluginID.Tips]: t.add_wallet_tips(),
-                [PluginID.Tips]: t.add_wallet_web3_profile(),
+                [PluginID.Web3Profile]: t.add_wallet_web3_profile(),
             }
 
             return mapping[pluginId] ?? t.add_wallet_web3_profile()
