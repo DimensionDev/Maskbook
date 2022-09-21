@@ -18,7 +18,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     input: {
         fontSize: 15,
-        height: 338,
+        height: '100%',
         position: 'relative',
     },
     badgeInput: {

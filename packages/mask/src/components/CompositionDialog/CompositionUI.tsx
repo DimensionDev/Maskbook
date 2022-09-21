@@ -21,9 +21,13 @@ import { EncryptionMethodSelector, EncryptionMethodType } from './EncryptionMeth
 const useStyles = makeStyles()((theme) => ({
     root: {
         '& > *': {
-            marginBottom: '18px !important',
+            height: '36px !important',
         },
         minHeight: 450,
+        maxHeight: 464,
+        height: 464,
+        display: 'flex',
+        flexDirection: 'column',
     },
     flex: {
         width: '100%',
@@ -41,7 +45,7 @@ const useStyles = makeStyles()((theme) => ({
         left: '50%',
         transform: 'translateX(-50%)',
         display: 'flex',
-        padding: '14px 16px',
+        padding: 16,
         boxSizing: 'border-box',
         flexDirection: 'row',
         justifyContent: 'flex-end',
@@ -70,6 +74,20 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         color: theme.palette.text.secondary,
         marginRight: 12,
+    },
+    editorWrapper: {
+        flex: 1,
+        width: 568,
+        background: theme.palette.background.input,
+        padding: 0,
+        boxSizing: 'border-box',
+        borderRadius: 8,
+        marginBottom: 16,
+    },
+    icon: {
+        width: 18,
+        height: 18,
+        fill: theme.palette.text.buttonText,
     },
 }))
 
@@ -178,18 +196,20 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
     return (
         <CompositionContext.Provider value={context}>
             <div className={classes.root}>
-                <TypedMessageEditor
-                    autoFocus
-                    readonly={sending}
-                    ref={(element) => {
-                        Editor.current = element
-                        if (element) updatePostSize(element.estimatedLength)
-                    }}
-                    onChange={(message) => {
-                        startTransition(() => props.onChange?.(message))
-                        updatePostSize(Editor.current?.estimatedLength || 0)
-                    }}
-                />
+                <div className={classes.editorWrapper}>
+                    <TypedMessageEditor
+                        autoFocus
+                        readonly={sending}
+                        ref={(element) => {
+                            Editor.current = element
+                            if (element) updatePostSize(element.estimatedLength)
+                        }}
+                        onChange={(message) => {
+                            startTransition(() => props.onChange?.(message))
+                            updatePostSize(Editor.current?.estimatedLength || 0)
+                        }}
+                    />
+                </div>
 
                 <div className={classes.flex}>
                     <Typography className={classes.optionTitle}>{t('plugins')}</Typography>
@@ -249,12 +269,13 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                     </Button>
                 )}
                 <LoadingButton
+                    style={{ opacity: 1 }}
                     disabled={!submitAvailable}
                     loading={sending}
                     loadingPosition="start"
                     variant="roundedContained"
                     onClick={onSubmit}
-                    startIcon={<Icons.Send size={18} color={theme.palette.text.buttonText} />}>
+                    startIcon={<Icons.Send className={classes.icon} />}>
                     {t('post_dialog__button')}
                 </LoadingButton>
             </div>
