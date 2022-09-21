@@ -1,11 +1,9 @@
 import { Icons } from '@masknet/icons'
 import { PluginID } from '@masknet/plugin-infra'
-import { PluginWeb3ContextProvider } from '@masknet/plugin-infra/web3'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID, SocialAddress, SocialAddressType, SocialIdentity } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
 import { FC, HTMLProps, useMemo } from 'react'
 import { TipButton } from '../../../plugins/Tips/components/index.js'
 import type { TipsAccount } from '../../../plugins/Tips/types/index.js'
@@ -75,27 +73,25 @@ export const ProfileCardTitle: FC<Props> = ({
     }, [socialAddressList])
 
     return (
-        <PluginWeb3ContextProvider pluginID={NetworkPluginID.PLUGIN_EVM} value={{ chainId: ChainId.Mainnet }}>
-            <div className={cx(classes.title, className)} {...rest}>
-                <ProfileBar
-                    className={classes.profileBar}
-                    identity={identity}
-                    socialAddressList={socialAddressList}
-                    address={address}
-                    onAddressChange={onAddressChange}>
-                    <div className={classes.settingItem}>
-                        {identity.isOwner ? (
-                            <Icons.Gear onClick={handleOpenDialog} className={classes.gearIcon} />
-                        ) : (
-                            <TipButton
-                                className={classes.tipButton}
-                                receiver={identity.identifier}
-                                addresses={tipAccounts}
-                            />
-                        )}
-                    </div>
-                </ProfileBar>
-            </div>
-        </PluginWeb3ContextProvider>
+        <div className={cx(classes.title, className)} {...rest}>
+            <ProfileBar
+                className={classes.profileBar}
+                identity={identity}
+                socialAddressList={socialAddressList}
+                address={address}
+                onAddressChange={onAddressChange}>
+                <div className={classes.settingItem}>
+                    {identity.isOwner ? (
+                        <Icons.Gear onClick={handleOpenDialog} className={classes.gearIcon} />
+                    ) : (
+                        <TipButton
+                            className={classes.tipButton}
+                            receiver={identity.identifier}
+                            addresses={tipAccounts}
+                        />
+                    )}
+                </div>
+            </ProfileBar>
+        </div>
     )
 }
