@@ -19,11 +19,12 @@ const useStyles = makeStyles()((theme) => {
             alignItems: 'center',
         },
         profileBar: {
-            overflow: 'auto',
+            width: '100%',
         },
         settingItem: {
             display: 'flex',
             alignItems: 'center',
+            marginLeft: 'auto',
         },
         gearIcon: {
             color: theme.palette.text.primary,
@@ -74,23 +75,27 @@ export const ProfileCardTitle: FC<Props> = ({
     }, [socialAddressList])
 
     return (
-        <div className={cx(classes.title, className)} {...rest}>
-            <PluginWeb3ContextProvider pluginID={NetworkPluginID.PLUGIN_EVM} value={{ chainId: ChainId.Mainnet }}>
+        <PluginWeb3ContextProvider pluginID={NetworkPluginID.PLUGIN_EVM} value={{ chainId: ChainId.Mainnet }}>
+            <div className={cx(classes.title, className)} {...rest}>
                 <ProfileBar
                     className={classes.profileBar}
                     identity={identity}
                     socialAddressList={socialAddressList}
                     address={address}
-                    onAddressChange={onAddressChange}
-                />
-            </PluginWeb3ContextProvider>
-            <div className={classes.settingItem}>
-                {identity.isOwner ? (
-                    <Icons.Gear onClick={handleOpenDialog} className={classes.gearIcon} />
-                ) : (
-                    <TipButton className={classes.tipButton} receiver={identity.identifier} addresses={tipAccounts} />
-                )}
+                    onAddressChange={onAddressChange}>
+                    <div className={classes.settingItem}>
+                        {identity.isOwner ? (
+                            <Icons.Gear onClick={handleOpenDialog} className={classes.gearIcon} />
+                        ) : (
+                            <TipButton
+                                className={classes.tipButton}
+                                receiver={identity.identifier}
+                                addresses={tipAccounts}
+                            />
+                        )}
+                    </div>
+                </ProfileBar>
             </div>
-        </div>
+        </PluginWeb3ContextProvider>
     )
 }
