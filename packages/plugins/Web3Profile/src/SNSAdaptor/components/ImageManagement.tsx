@@ -1,14 +1,13 @@
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../locales/index.js'
 import { WalletAssetsCard } from './WalletAssets.js'
-import {CrossIsolationMessages, EMPTY_LIST, PersonaInformation, PopupRoutes } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST, PersonaInformation, PopupRoutes } from '@masknet/shared-base'
 import { ImageListDialog } from './ImageList.js'
-import {useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { InjectedDialog, WalletTypes } from '@masknet/shared'
 import { Box, Button, DialogContent } from '@mui/material'
 import { IdentityResolved, PluginID } from '@masknet/plugin-infra'
 import type { AccountType } from '../types.js'
-import WalletSetting from './WalletSetting.js'
 import { Empty } from './Empty.js'
 import { context } from '../context.js'
 import { Icons } from '@masknet/icons'
@@ -114,7 +113,7 @@ export function ImageManagement(props: ImageManagementProps) {
         () =>
             CrossIsolationMessages.events.PluginSettingsDialogUpdate.sendToLocal({
                 open: true,
-                targetTab: PluginId.Web3Profile,
+                targetTab: PluginID.Web3Profile,
             }),
         [],
     )

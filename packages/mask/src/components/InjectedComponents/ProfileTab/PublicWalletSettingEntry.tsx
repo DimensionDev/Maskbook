@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { PluginId } from '@masknet/plugin-infra'
+import { PluginID } from '@masknet/plugin-infra'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Button, Stack, Typography } from '@mui/material'
@@ -24,7 +24,7 @@ export const PublicWalletSettingEntry = memo(() => {
         () =>
             CrossIsolationMessages.events.PluginSettingsDialogUpdate.sendToLocal({
                 open: true,
-                targetTab: PluginId.Web3Profile,
+                targetTab: PluginID.Web3Profile,
             }),
         [],
     )

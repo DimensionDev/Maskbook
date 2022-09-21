@@ -751,7 +751,7 @@ export namespace Plugin.SNSAdaptor {
     }
 
     export interface SettingTab {
-        ID: PluginId
+        ID: PluginID
         /**
          * The name of setting tab
          */
@@ -768,7 +768,7 @@ export namespace Plugin.SNSAdaptor {
                 onOpenPopup: (route?: PopupRoutes, params?: Record<string, any>) => void
                 bindingWallets?: BindingProof[]
                 currentPersona?: ECKeyIdentifier
-                pluginId: PluginId
+                pluginId: PluginID
             }>
         }
     }

@@ -11,7 +11,7 @@ import {
     PopupRoutes,
 } from '@masknet/shared-base'
 import { useHiddenAddressSetting, useWeb3State } from '@masknet/plugin-infra/web3'
-import { PluginId } from '@masknet/plugin-infra'
+import { PluginID as MaskPluginID } from '@masknet/plugin-infra'
 import { WalletSettingCard } from '@masknet/shared'
 import { useAsyncFn, useUpdateEffect } from 'react-use'
 
@@ -77,7 +77,7 @@ interface PublicWalletSettingProps {
     onOpenPopup: (route?: PopupRoutes, params?: Record<string, any>) => void
     bindingWallets?: BindingProof[]
     currentPersona?: ECKeyIdentifier
-    pluginId: PluginId
+    pluginId: MaskPluginID
 }
 
 export const PublicWalletSetting = memo<PublicWalletSettingProps>(
@@ -116,9 +116,9 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
                     NextIDPlatform.NextID,
                     currentPersona,
                 )
-                const prevResult = storage.get<PublicWalletSettingType>(PluginId.Web3Profile)
+                const prevResult = storage.get<PublicWalletSettingType>(MaskPluginID.Web3Profile)
 
-                await storage.set<PublicWalletSettingType>(PluginId.Web3Profile, {
+                await storage.set<PublicWalletSettingType>(MaskPluginID.Web3Profile, {
                     ...prevResult,
                     hiddenAddresses: addresses,
                 })
@@ -152,8 +152,8 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
 
         const EmptyHintMapping = useMemo(() => {
             const mapping: Record<string, string> = {
-                [PluginId.Tips]: t.add_wallet_tips(),
-                [PluginId.Tips]: t.add_wallet_web3_profile(),
+                [MaskPluginID.Tips]: t.add_wallet_tips(),
+                [MaskPluginID.Tips]: t.add_wallet_web3_profile(),
             }
 
             return mapping[pluginId] ?? t.add_wallet_web3_profile()

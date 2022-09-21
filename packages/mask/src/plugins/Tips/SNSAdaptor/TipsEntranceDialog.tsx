@@ -195,7 +195,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
 
     useEffect(() => {
         return CrossIsolationMessages.events.PluginPublicWalletSettingsUpdate.on((x) => {
-            if (x === PluginId.Tips) retrySetting()
+            if (x === PluginID.Tips) retrySetting()
         })
     }, [retrySetting])
 

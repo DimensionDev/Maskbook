@@ -58,7 +58,7 @@ export function PluginSettingsDialog() {
         label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
     }))
 
-    const [currentTab, onChange, , setTab] = useTabs<PluginId>(
+    const [currentTab, onChange, , setTab] = useTabs<PluginID>(
         first(tabs)?.id ?? PluginID.Tips,
         ...tabs.map((tab) => tab.id),
     )
@@ -105,7 +105,7 @@ export function PluginSettingsDialog() {
         return CrossIsolationMessages.events.PluginSettingsDialogUpdate.on(({ open, targetTab }) => {
             setOpen(open)
 
-            if (targetTab) setTab(targetTab as PluginId)
+            if (targetTab) setTab(targetTab as PluginID)
         })
     }, [])
 

@@ -182,11 +182,11 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         value: hiddenAddress,
         loading: loadingHiddenAddress,
         retry: retryLoadHiddenAddress,
-    } = useHiddenAddressSetting(PluginId.Web3Profile, personaStatus.currentPersona?.identifier.publicKeyAsHex)
+    } = useHiddenAddressSetting(PluginID.Web3Profile, personaStatus.currentPersona?.identifier.publicKeyAsHex)
 
     useEffect(() => {
         return CrossIsolationMessages.events.PluginPublicWalletSettingsUpdate.on(({ pluginId }) => {
-            if (pluginId === PluginId.Web3Profile) retryLoadHiddenAddress()
+            if (pluginId === PluginID.Web3Profile) retryLoadHiddenAddress()
         })
     }, [retryLoadHiddenAddress])
 
