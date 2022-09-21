@@ -13,6 +13,8 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Link, MenuItem, Typography } from '@mui/material'
 import { HTMLProps, memo, useEffect, useRef, useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
+import { v4 as uuid } from 'uuid'
+import { NFTAvatarMiniClip } from '../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip.js'
 import { useI18N } from '../../../utils/index.js'
 
 const MENU_ITEM_HEIGHT = 40
@@ -25,14 +27,27 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
     },
     avatar: {
+        position: 'relative',
         height: 40,
         width: 40,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 40,
         filter: 'drop-shadow(0px 6px 12px rgba(28, 104, 243, 0.2))',
         backdropFilter: 'blur(16px)',
+        overflow: 'hidden',
+        '& img': {
+            position: 'absolute',
+            borderRadius: '100%',
+            // Adjust to fit the rainbow border.
+            transform: 'scale(0.94, 0.96) translate(0, 1px)',
+        },
+    },
+    avatarClip: {
+        position: 'absolute',
+    },
+    avatarMiniBorder: {
+        transform: 'none',
     },
     description: {
         height: 40,
@@ -106,10 +121,11 @@ export interface ProfileBarProps extends HTMLProps<HTMLDivElement> {
  * - Wallets
  */
 export const ProfileBar = memo<ProfileBarProps>(
-    ({ socialAddressList, address, identity, onAddressChange, className, ...rest }) => {
+    ({ socialAddressList, address, identity, onAddressChange, className, children, ...rest }) => {
         const { classes, theme, cx } = useStyles()
         const { t } = useI18N()
         const containerRef = useRef<HTMLDivElement>(null)
+        const { current: avatarClipId } = useRef<string>(uuid())
 
         const [, copyToClipboard] = useCopyToClipboard()
 
@@ -134,7 +150,24 @@ export const ProfileBar = memo<ProfileBarProps>(
 
         return (
             <Box className={cx(classes.root, className)} {...rest} ref={containerRef}>
-                <img src={identity.avatar} alt={identity.nickname} className={classes.avatar} />
+                <div className={classes.avatar}>
+                    <img
+                        src={identity.avatar}
+                        height={40}
+                        width={40}
+                        alt={identity.nickname}
+                        style={{
+                            WebkitClipPath: `url(#${avatarClipId}-clip-path)`,
+                        }}
+                    />
+                    <NFTAvatarMiniClip
+                        id={avatarClipId}
+                        className={classes.avatarClip}
+                        height={40}
+                        width={40}
+                        screenName={identity.identifier?.userId}
+                    />
+                </div>
                 <Box className={classes.description}>
                     <Typography className={classes.nickname} title={identity.nickname}>
                         {identity.nickname}
@@ -195,6 +228,7 @@ export const ProfileBar = memo<ProfileBarProps>(
                         )
                     })}
                 </ShadowRootMenu>
+                {children}
             </Box>
         )
     },
