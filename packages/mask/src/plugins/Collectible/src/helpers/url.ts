@@ -99,6 +99,36 @@ const RULES = [
         chainId: ChainIdEVM.Mainnet,
         provider: SourceType.LooksRare,
     },
+
+    // element
+    {
+        hosts: ['element.market', 'www.element.market'],
+        pathname: /^\/assets\/(0x[\dA-Fa-f]{40})\/(\d+)/,
+        pluginID: NetworkPluginID.PLUGIN_EVM,
+        chainId: ChainIdEVM.Mainnet,
+        provider: SourceType.Element,
+    },
+    {
+        hosts: ['element.market', 'www.element.market'],
+        pathname: /^\/assets\/bsc\/(0x[\dA-Fa-f]{40})\/(\d+)/,
+        pluginID: NetworkPluginID.PLUGIN_EVM,
+        chainId: ChainIdEVM.BSC,
+        provider: SourceType.Element,
+    },
+    {
+        hosts: ['element.market', 'www.element.market'],
+        pathname: /^\/assets\/polygon\/(0x[\dA-Fa-f]{40})\/(\d+)/,
+        pluginID: NetworkPluginID.PLUGIN_EVM,
+        chainId: ChainIdEVM.Matic,
+        provider: SourceType.Element,
+    },
+    {
+        hosts: ['element.market', 'www.element.market'],
+        pathname: /^\/assets\/avalanche\/(0x[\dA-Fa-f]{40})\/(\d+)/,
+        pluginID: NetworkPluginID.PLUGIN_EVM,
+        chainId: ChainIdEVM.Avalanche,
+        provider: SourceType.Element,
+    },
 ]
 
 export function getPayloadFromURLs(urls: string[]): CollectiblePayload | undefined {

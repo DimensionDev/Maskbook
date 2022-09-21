@@ -7,6 +7,7 @@ import { getPayloadFromURL } from '../src/helpers/url.js'
 
 describe('getPayloadFromURL', () => {
     test.each([
+        // opensea
         {
             give: 'https://opensea.io/assets/ethereum/0xacf63e56fd08970b43401492a02f6f38b6635c91/6904',
             expected: {
@@ -37,6 +38,8 @@ describe('getPayloadFromURL', () => {
                 provider: SourceType.OpenSea,
             },
         },
+
+        // rarible
         {
             give: 'https://rarible.com/token/0x59468516a8259058bad1ca5f8f4bff190d30e066:3127',
             expected: {
@@ -68,6 +71,8 @@ describe('getPayloadFromURL', () => {
                 provider: SourceType.Rarible,
             },
         },
+
+        // zora
         {
             give: 'https://market.zora.co/collections/0x60E4d786628Fea6478F785A6d7e704777c86a7c6/25620',
             expected: {
@@ -78,6 +83,8 @@ describe('getPayloadFromURL', () => {
                 provider: SourceType.Zora,
             },
         },
+
+        // x2y2
         {
             give: 'https://x2y2.io/eth/0x6d19568A959FCB4211852F6472d3df7b67C6Cd54/332',
             expected: {
@@ -88,6 +95,8 @@ describe('getPayloadFromURL', () => {
                 provider: SourceType.X2Y2,
             },
         },
+
+        // loosrare
         {
             give: 'https://looksrare.org/collections/0x60E4d786628Fea6478F785A6d7e704777c86a7c6/28850',
             expected: {
@@ -96,6 +105,48 @@ describe('getPayloadFromURL', () => {
                 address: '0x60E4d786628Fea6478F785A6d7e704777c86a7c6',
                 tokenId: '28850',
                 provider: SourceType.LooksRare,
+            },
+        },
+
+        // element
+        {
+            give: 'https://www.element.market/assets/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/42798313877148491394654426314792201679600836708934007480215157583411817507060',
+            expected: {
+                pluginID: NetworkPluginID.PLUGIN_EVM,
+                chainId: ChainIdEVM.Mainnet,
+                address: '0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85',
+                tokenId: '42798313877148491394654426314792201679600836708934007480215157583411817507060',
+                provider: SourceType.Element,
+            },
+        },
+        {
+            give: 'https://www.element.market/assets/bsc/0x51353799f8550c9010a8b0cbfe6c02ca96e026e2/0',
+            expected: {
+                pluginID: NetworkPluginID.PLUGIN_EVM,
+                chainId: ChainIdEVM.BSC,
+                address: '0x51353799f8550c9010a8b0cbfe6c02ca96e026e2',
+                tokenId: '0',
+                provider: SourceType.Element,
+            },
+        },
+        {
+            give: 'https://www.element.market/assets/polygon/0xf3892ecb9802c4bd13a123d9d1041654583915e1/4937',
+            expected: {
+                pluginID: NetworkPluginID.PLUGIN_EVM,
+                chainId: ChainIdEVM.Matic,
+                address: '0xf3892ecb9802c4bd13a123d9d1041654583915e1',
+                tokenId: '4937',
+                provider: SourceType.Element,
+            },
+        },
+        {
+            give: 'https://www.element.market/assets/avalanche/0x001e68282d52dcaba3749291bac33a9678073d01/20000',
+            expected: {
+                pluginID: NetworkPluginID.PLUGIN_EVM,
+                chainId: ChainIdEVM.Avalanche,
+                address: '0x001e68282d52dcaba3749291bac33a9678073d01',
+                tokenId: '20000',
+                provider: SourceType.Element,
             },
         },
     ])('.getAssetInfoFromURL($give)', ({ give, expected }) => {
