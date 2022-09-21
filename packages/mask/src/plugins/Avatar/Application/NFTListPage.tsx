@@ -34,13 +34,11 @@ const useStyles = makeStyles<{
         position: 'relative',
         cursor: 'pointer',
         display: 'flex',
-        overflow: 'hidden',
         padding: 0,
         flexDirection: 'column',
         borderRadius: 8,
         userSelect: 'none',
         justifyContent: 'center',
-        lineHeight: 0,
     },
     skeleton: {
         width: 100,
