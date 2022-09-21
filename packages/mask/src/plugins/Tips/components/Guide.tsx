@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import { PropsWithChildren, useRef, cloneElement, useEffect, ReactElement, useState } from 'react'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { useI18N } from '../locales/index.js'
-import { finishUserGuide, getUserGuide, TIPS_GUIDE_TOTAL } from '../storage/index.js'
+import { finishUserGuide, TIPS_GUIDE_TOTAL, useTipsUserGuide } from '../storage/index.js'
 import type { EnhanceableSite } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -105,7 +105,7 @@ export default function Guide({ children, arrow = true, disabled = false, onComp
     const [bottomAvailable, setBottomAvailable] = useState(true)
     const ui = activatedSocialNetworkUI
     const enableUserGuide = ui.configuration.tipsConfig?.enableUserGuide
-    const lastStep = getUserGuide(ui.networkIdentifier as EnhanceableSite)
+    const lastStep = useTipsUserGuide(ui.networkIdentifier as EnhanceableSite)
 
     useEffect(() => {
         if (disabled || !enableUserGuide || lastStep.finished) return

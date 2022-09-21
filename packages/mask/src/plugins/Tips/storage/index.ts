@@ -1,7 +1,8 @@
 import { remove } from 'lodash-unified'
-import type { ScopedStorage , EnhanceableSite } from '@masknet/shared-base'
+import type { ScopedStorage, EnhanceableSite } from '@masknet/shared-base'
 import { NonFungibleToken, isSameAddress } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import { useSubscription } from 'use-subscription'
 
 interface StorageValue {
     addedTokens: Array<NonFungibleToken<ChainId, SchemaType>>
@@ -42,16 +43,18 @@ export function deleteToken(address: string, tokenId: string) {
     storage.storage.addedTokens.setValue(tokens)
 }
 
-export function getUserGuide(site?: EnhanceableSite) {
+export function finishUserGuide(site: EnhanceableSite) {
+    const setting = storage.storage.userGuide.value
+    storage.storage.userGuide.setValue({ ...setting, [site]: TIPS_GUIDE_TOTAL })
+}
+
+export const useTipsUserGuide = (site?: EnhanceableSite) => {
+    const setting = useSubscription(storage?.storage?.userGuide.subscription)
+
     if (!site) return { finished: true, step: TIPS_GUIDE_INIT }
-    const setting = storage.storage.userGuide.value ?? { [site]: TIPS_GUIDE_INIT }
+
     return {
         finished: setting[site] === TIPS_GUIDE_TOTAL,
         step: setting[site] ?? TIPS_GUIDE_INIT,
     }
-}
-
-export function finishUserGuide(site: EnhanceableSite) {
-    const setting = storage.storage.userGuide.value
-    storage.storage.userGuide.setValue({ ...setting, [site]: TIPS_GUIDE_TOTAL })
 }
