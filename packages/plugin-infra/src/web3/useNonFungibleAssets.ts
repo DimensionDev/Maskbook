@@ -36,6 +36,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
                             size: 50,
                             ...options,
                             chainId: x.chainId,
+                            withError: true,
                         })
                     })
                 }),

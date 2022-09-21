@@ -4,6 +4,7 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { Box, List, ListItem, Stack, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
+import { supportPluginIds } from '../constants.js'
 import { useI18N } from '../locales/index.js'
 import { NFTImage } from '../SNSAdaptor/NFTImage.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
@@ -62,6 +63,19 @@ const useStyles = makeStyles<{
         },
         borderRadius: 8,
     },
+    placeholder: {
+        display: 'flex',
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        rowGap: 14,
+    },
+    placeholderText: {
+        fontSize: 14,
+        lineHeight: '18px',
+        color: theme.palette.maskColor.second,
+    },
 }))
 
 interface NFTListPageProps {
@@ -89,20 +103,19 @@ export function NFTListPage(props: NFTListPageProps) {
 
     useEffect(() => setSelectedToken(tokenInfo), [tokenInfo])
 
+    if (!supportPluginIds.includes(pluginId)) {
+        return (
+            <Box className={classes.placeholder}>
+                <Icons.EmptySimple variant="light" size={36} />
+                <Typography className={classes.placeholderText}>{t.unsupported_network()}</Typography>
+            </Box>
+        )
+    }
     if (!loadError && !loadFinish && !tokens.length)
         return (
-            <Box
-                sx={{
-                    display: 'flex',
-                    flex: 1,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                }}>
-                <Icons.EmptySimple variant="light" size={36} />
-                <Typography color={(theme) => theme.palette.maskColor.main} fontSize={14} mt="14px">
-                    {t.loading()}
-                </Typography>
+            <Box className={classes.placeholder}>
+                <LoadingBase size={36} />
+                <Typography className={classes.placeholderText}>{t.loading()}</Typography>
             </Box>
         )
     if (children) return <>{children}</>
