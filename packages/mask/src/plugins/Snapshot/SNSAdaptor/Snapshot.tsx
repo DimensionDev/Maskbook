@@ -125,7 +125,7 @@ export function Snapshot() {
                     <Typography
                         fontSize={14}
                         fontWeight="700"
-                        sx={{ width: 347, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                        sx={{ width: 334, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
                         {proposal.title}
                     </Typography>
                 </Box>
