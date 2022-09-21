@@ -271,7 +271,8 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                     })}
                     complete={t('plugin_wallet_switch_network', { network: expectedChainName })}
                     failed={t('retry')}
-                    executor={async () => {}}
+                    executor={onSwitchChain}
+                    completeOnClick={onSwitchChain}
                     failedOnClick="use executor"
                     {...props.ActionButtonPromiseProps}
                 />

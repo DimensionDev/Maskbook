@@ -38,13 +38,13 @@ export function useERC20TokenApproveCallback(
         loading: loadingBalance,
         error: errorBalance,
         retry: revalidateBalance,
-    } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address)
+    } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address, { chainId })
     const {
         value: allowance = '0',
         loading: loadingAllowance,
         error: errorAllowance,
         retry: revalidateAllowance,
-    } = useERC20TokenAllowance(address, spender)
+    } = useERC20TokenAllowance(address, spender, { chainId })
 
     // the computed approve state
     const approveStateType = useMemo(() => {
