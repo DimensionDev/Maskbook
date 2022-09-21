@@ -30,6 +30,7 @@ declare module '@mui/material/styles/createPalette.d' {
             publicThird: string
             publicLine: string
             publicTwitter: string
+            publicThirdMain: string
         }
     }
     export interface TypeText {

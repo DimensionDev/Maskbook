@@ -44,6 +44,7 @@ export const MaskColors = {
             publicThird: '#ACB4C1',
             publicLine: '#F2F5F6',
             publicTwitter: '#1D9BF0',
+            publicThirdMain: '#F3F3F4',
         },
         background: {
             default: '#F9F9F9',
@@ -99,6 +100,7 @@ export const MaskColors = {
             publicThird: '#ACB4C1',
             publicLine: '#F2F5F6',
             publicTwitter: '#1D9BF0',
+            publicThirdMain: '#F3F3F4',
         },
         text: {
             primary: '#F5F5F5',
