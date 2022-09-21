@@ -66,7 +66,7 @@ export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOption
     if (slot === Plugin.SNSAdaptor.TipsSlot.MirrorMenu) {
         return (
             <Guide>
-                <Stack display="inline-flex" width="40px" height="40px">
+                <Stack display="inline-block" width="38px" height="38px" position="relative" top={2}>
                     <TipButton className={buttonClassMap[slot]} receiver={identity} addresses={tipsAccounts} />
                 </Stack>
             </Guide>

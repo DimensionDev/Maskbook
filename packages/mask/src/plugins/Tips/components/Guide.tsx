@@ -10,11 +10,7 @@ import type { EnhanceableSite } from '@masknet/shared-base'
 const useStyles = makeStyles()((theme) => ({
     container: {
         position: 'absolute',
-        boxShadow: `0 0 0 3000px ${theme.palette.mode === 'light' ? 'rgba(0,0,0,.3)' : 'rgba(110,118,125,.3)'}`,
-        borderRadius: 8,
-    },
-    noBoxShadowCover: {
-        boxShadow: `0 0 0 3000px ${theme.palette.mode === 'light' ? 'rgba(0,0,0,.2)' : 'rgba(110,118,125,.2)'}`,
+        borderRadius: '50%',
     },
     target: {
         background: 'transparent',
@@ -147,6 +143,9 @@ export default function Guide({ children, arrow = true, disabled = false, onComp
         }
     }, [childrenRef, lastStep.finished])
 
+    console.log('------------------Guide')
+    console.log(clientRect)
+
     return (
         <>
             {cloneElement(children as ReactElement<any>, { ref: childrenRef })}
@@ -183,12 +182,12 @@ export default function Guide({ children, arrow = true, disabled = false, onComp
                                         </div>
                                         <div>
                                             <Typography fontSize={14} fontWeight={600}>
-                                                {t.add_wallet()}
+                                                {t.tips_guide_description()}
                                             </Typography>
                                         </div>
                                         <div className={classes.buttonContainer}>
                                             <NextButton style={{ width: '100%' }} onClick={onNext}>
-                                                {t.add_wallet()}
+                                                {t.tips_guide_action()}
                                             </NextButton>
                                         </div>
                                     </div>
