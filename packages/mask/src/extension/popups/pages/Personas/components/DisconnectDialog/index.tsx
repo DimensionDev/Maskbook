@@ -8,7 +8,7 @@ import { LoadingButton } from '@mui/lab'
 import { useI18N } from '../../../../../../utils/index.js'
 import { Trans } from 'react-i18next'
 
-const useStyles = makeStyles()(() => ({
+const useStyles = makeStyles()((theme) => ({
     title: {
         fontSize: 16,
         lineHeight: '22px',
@@ -25,6 +25,7 @@ const useStyles = makeStyles()(() => ({
         display: 'flex',
         flexDirection: 'column',
         gap: 16,
+        padding: theme.spacing(3),
         '& > *': {
             marginLeft: '0 !important',
         },

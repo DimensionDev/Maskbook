@@ -86,7 +86,7 @@ export const AccountDetailUI = memo<AccountDetailUIProps>(
                         <Trans
                             i18nKey="popups_verify_warning_alert"
                             components={{ strong: <strong /> }}
-                            values={{ account: account.identifier.userId, persona: `{${personaName}}` }}
+                            values={{ account: account.identifier.userId, persona: personaName }}
                         />
                     ) : (
                         <Trans
