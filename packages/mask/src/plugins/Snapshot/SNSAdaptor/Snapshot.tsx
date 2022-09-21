@@ -36,7 +36,7 @@ const useStyles = makeStyles()((theme) => {
         tab: {
             whiteSpace: 'nowrap',
             background: 'transparent',
-            color: theme.palette.maskColor.second,
+            color: theme.palette.maskColor.secondaryDark,
             '&:hover': {
                 background: 'transparent',
             },
