@@ -940,8 +940,6 @@ export interface HubOptions<ChainId, Indicator = HubIndicator> {
     size?: number
     /** The page index. */
     indicator?: Indicator
-    /** Whether to throw an error */
-    withError?: boolean
 }
 
 export interface HubFungible<ChainId, SchemaType, GasOption, Web3HubOptions = HubOptions<ChainId>> {
