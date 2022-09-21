@@ -47,13 +47,11 @@ const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, pro
         position: 'relative',
         cursor: 'pointer',
         display: 'flex',
-        overflow: 'hidden',
         padding: 0,
         flexDirection: 'column',
         borderRadius: 12,
         userSelect: 'none',
         justifyContent: 'center',
-        lineHeight: 0,
     },
     skeleton: {
         width: 126,
@@ -105,6 +103,9 @@ const COMMON_TOOLTIP_PROPS: Partial<TooltipProps> = {
     disableInteractive: true,
     PopperProps: {
         disablePortal: true,
+        style: {
+            whiteSpace: 'nowrap',
+        },
         popperOptions: {
             strategy: 'absolute',
         },
