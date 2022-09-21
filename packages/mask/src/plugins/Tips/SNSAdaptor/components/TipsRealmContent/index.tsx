@@ -1,6 +1,8 @@
 import { Plugin } from '@masknet/plugin-infra'
 import { TipButton } from '../../../components/index.js'
 import { makeStyles } from '@masknet/theme'
+import Guide from '../../../components/Guide.js'
+import { Stack } from '@mui/material'
 
 const useStyles = makeStyles<{}, 'postTipsButton'>()((theme, _, refs) => ({
     focusingPostButtonWrapper: {
@@ -51,6 +53,17 @@ export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOption
         [Plugin.SNSAdaptor.TipsSlot.FocusingPost]: classes.postTipsButton,
         [Plugin.SNSAdaptor.TipsSlot.Post]: classes.postTipsButton,
         [Plugin.SNSAdaptor.TipsSlot.Profile]: classes.profileTipsButton,
+        [Plugin.SNSAdaptor.TipsSlot.MirrorMenu]: classes.profileTipsButton,
+    }
+
+    if (slot === Plugin.SNSAdaptor.TipsSlot.MirrorMenu) {
+        return (
+            <Guide>
+                <Stack display="inline-flex" width="40px" height="40px">
+                    <TipButton className={buttonClassMap[slot]} receiver={identity} />
+                </Stack>
+            </Guide>
+        )
     }
     if (slot === Plugin.SNSAdaptor.TipsSlot.Post || slot === Plugin.SNSAdaptor.TipsSlot.FocusingPost) {
         return (

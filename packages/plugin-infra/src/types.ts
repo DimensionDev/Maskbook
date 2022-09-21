@@ -643,6 +643,7 @@ export namespace Plugin.SNSAdaptor {
         FocusingPost = 'focusing-post',
         Post = 'post',
         Profile = 'profile',
+        MirrorMenu = 'mirror-menu',
     }
     export interface TipsRealmOptions {
         identity?: ProfileIdentifier

@@ -44,7 +44,7 @@ function AuthorTipsSlot() {
         )
 
         // TODO: change the tips slot profile type
-        return <Component identity={visitingPersona.identifier} slot={Plugin.SNSAdaptor.TipsSlot.Profile} />
+        return <Component identity={visitingPersona.identifier} slot={Plugin.SNSAdaptor.TipsSlot.MirrorMenu} />
     }, [visitingPersona.identifier])
 
     if (!component || !visitingPersona.identifier) return null

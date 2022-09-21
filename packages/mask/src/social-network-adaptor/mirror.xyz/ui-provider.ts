@@ -22,7 +22,11 @@ const define: SocialNetworkUI.Definition = {
         currentVisitingIdentityProvider: CurrentVisitingIdentityProviderMirror,
         postsProvider: PostProviderMirror,
     },
-    configuration: {},
+    configuration: {
+        tipsConfig: {
+            enableUserGuide: true,
+        },
+    },
     customization: {
         paletteMode: PaletteModeProviderMirror,
         sharedComponentOverwrite: {
