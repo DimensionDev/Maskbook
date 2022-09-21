@@ -33,8 +33,8 @@ import {
     useCurrentWeb3NetworkPluginID,
     useFungibleTokenWatched,
     useWeb3State,
-    Web3Helper,
 } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { useOpenSea } from './hooks/useOpenSea.js'
 
 const useStyles = makeStyles()((theme) => {

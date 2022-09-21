@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { Rank } from './Rank.js'
 import { useI18N } from '../../../../../utils/index.js'
 

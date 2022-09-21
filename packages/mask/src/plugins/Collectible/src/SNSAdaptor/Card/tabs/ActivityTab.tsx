@@ -1,6 +1,6 @@
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
 import type { NonFungibleTokenEvent, Pageable } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { CollectibleCard } from '../CollectibleCard.js'
 import { ActivitiesList } from '../../Shared/ActivitiesList.js'
 

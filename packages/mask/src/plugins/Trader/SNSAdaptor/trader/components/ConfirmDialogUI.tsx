@@ -14,7 +14,7 @@ import {
     isZero,
     leftShift,
 } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { Alert, alpha, Box, Button, DialogActions, DialogContent, dialogTitleClasses, Typography } from '@mui/material'
 import { ArrowDownward } from '@mui/icons-material'
 import { Icons } from '@masknet/icons'

@@ -29,7 +29,10 @@ approvedList.set('wyvern-schemas', 'git+https://github.com/ProjectOpenSea/wyvern
 approvedList.set('async-eventemitter', 'github:ahultgren/async-eventemitter#fa06e39e56786ba541c180061dbf2c0a5bbf951c')
 
 // pnpm -r why web3@0.20.7
-approvedList.set('bignumber.js', 'git+https://github.com/frozeman/bignumber.js-nolookahead.git')
+approvedList.set('bignumber.js', [
+    'git+https://github.com/frozeman/bignumber.js-nolookahead.git',
+    'git+https://github.com/frozeman/bignumber.js-nolookahead.git#57692b3ecfc98bbdd6b3a516cb2353652ea49934',
+])
 
 // @magic-works/i18n-codegen -> i18next-translation-parser
 // https://github.com/i18next/i18next-translation-parser/issues/11

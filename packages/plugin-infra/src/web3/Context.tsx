@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from 'react'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { EMPTY_OBJECT } from '@masknet/shared-base'
-import type { Web3Helper } from '../web3-helpers/index.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 interface Web3Context<T extends NetworkPluginID> {
     account?: string

@@ -2,7 +2,7 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { isZero, NonFungibleTokenOrder, formatBalance, formatCurrency } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../../utils/index.js'
 

@@ -1,10 +1,6 @@
 import { useEffect, useState } from 'react'
-import {
-    PluginIDContextProvider,
-    PluginWeb3ContextProvider,
-    useChainIdValid,
-    Web3Helper,
-} from '@masknet/plugin-infra/web3'
+import { PluginIDContextProvider, PluginWeb3ContextProvider, useChainIdValid } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { CardDialog } from './CardDialog/CardDialog.js'

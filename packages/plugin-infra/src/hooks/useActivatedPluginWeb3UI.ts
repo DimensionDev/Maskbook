@@ -1,5 +1,5 @@
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '../entry-web3.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { useActivatedPlugin } from './useActivatedPlugin.js'
 
 export function useActivatedPluginWeb3UI<T extends NetworkPluginID>(pluginID: T) {

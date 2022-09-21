@@ -1,7 +1,7 @@
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import { getPluginDefine } from '../manager/store.js'
-import type { Web3Helper } from '../web3-helpers/index.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { useCurrentWeb3NetworkPluginID } from './Context.js'
 
 export function useProviderDescriptors<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(

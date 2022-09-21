@@ -9,12 +9,12 @@ import {
     useChainId,
     useAllowTestnet,
     useProviderType,
-    Web3Helper,
     useWeb3State,
     useWeb3Connection,
     useChainIdValid,
     useProviderDescriptor,
 } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { delay } from '@dimensiondev/kit'

@@ -1,4 +1,4 @@
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { isDashboardPage } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
 import { formatBalance, FungibleToken } from '@masknet/web3-shared-base'

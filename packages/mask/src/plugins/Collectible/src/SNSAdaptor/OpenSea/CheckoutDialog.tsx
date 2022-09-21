@@ -21,8 +21,8 @@ import {
     useChainId,
     useCurrentWeb3NetworkPluginID,
     useFungibleTokenWatched,
-    Web3Helper,
 } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { UnreviewedWarnings } from './UnreviewedWarnings.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { ActionButtonPromise } from '../../../../../extension/options-page/DashboardComponents/ActionButton.js'
