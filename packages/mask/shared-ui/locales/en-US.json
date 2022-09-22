@@ -839,7 +839,7 @@
     "plugin_snapshot_no_power": "No power",
     "plugin_snapshot_vote_success": "Your vote is in!",
     "plugin_snapshot_vote": "Vote",
-    "plugin_snapshot_vote_choice": "Choice",
+    "plugin_snapshot_vote_choice": "Option(s)",
     "plugin_snapshot_vote_power": "Your voting power",
     "plugin_snapshot_vote_title": "Cast your vote",
     "plugin_snapshot_proposal": "Proposal",
