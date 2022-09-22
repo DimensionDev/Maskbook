@@ -123,7 +123,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
                 address: '',
                 tokenId: '',
                 schema: SchemaType.ERC721,
-                pluginId: NetworkPluginID.PLUGIN_EVM,
+                pluginID: NetworkPluginID.PLUGIN_EVM,
                 chainId: ChainId.Mainnet,
             })
             return
@@ -170,7 +170,7 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
                 address: '',
                 tokenId: '',
                 schema: SchemaType.ERC721,
-                pluginId: NetworkPluginID.PLUGIN_EVM,
+                pluginID: NetworkPluginID.PLUGIN_EVM,
                 chainId: ChainId.Mainnet,
             }) as NFTAvatarEvent,
         )

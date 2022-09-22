@@ -123,7 +123,7 @@ export type ProfileCardEvent =
 export type NonFungibleTokenDialogEvent =
     | {
           open: true
-          pluginID: NetworkPluginID
+          pluginID: string
           chainId: number
           tokenId: string
           tokenAddress: string
@@ -170,7 +170,7 @@ export interface NFTAvatarEvent {
     tokenId?: string
     schema?: number
     chainId?: number
-    pluginId?: NetworkPluginID
+    pluginID?: NetworkPluginID
 }
 
 export interface TokenType {
@@ -189,7 +189,7 @@ export interface SwapDialogEvent {
 }
 
 export interface WalletSettingsDialogEvent {
-    pluginID?: NetworkPluginID
+    pluginID?: string
 }
 
 /** This is a subset of browser.permissions.Permission */
