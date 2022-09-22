@@ -9,6 +9,7 @@ import type {
     ProfileCardEvent,
     SettingDialogEvent,
     OpenNFTDialogEvent,
+    PluginPublicWalletUpdateEvent,
 } from './Mask.js'
 
 /**
@@ -33,6 +34,7 @@ export interface CrossIsolationEvents {
     requestOpenApplication: OpenApplicationRequestEvent
     swapDialogUpdate: SwapDialogEvent
     PluginSettingsDialogUpdate: SettingDialogEvent
+    PluginPublicWalletSettingsUpdate: PluginPublicWalletUpdateEvent
     requestProfileCard: ProfileCardEvent
     requestNFTCardDialog: OpenNFTDialogEvent
 }

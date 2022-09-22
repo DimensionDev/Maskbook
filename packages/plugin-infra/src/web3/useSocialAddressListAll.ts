@@ -24,7 +24,7 @@ export function useSocialAddressListAll(
     const { IdentityService: EVM_IdentityService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { IdentityService: SolanaIdentityService } = useWeb3State(NetworkPluginID.PLUGIN_SOLANA)
 
-    return useAsyncRetry(async () => {
+    return useAsyncRetry<Array<SocialAddress<NetworkPluginID>>>(async () => {
         const userId = identity?.identifier?.userId
         if (!userId || userId === '$unknown') return EMPTY_LIST
         const cacheKey = `${userId}_${identity.publicKey ?? ''}`

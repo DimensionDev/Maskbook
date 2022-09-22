@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { Plugin, PluginID } from '@masknet/plugin-infra'
 import { PluginI18NFieldRender } from '@masknet/plugin-infra/content-script'
-import { ApplicationEntry } from '@masknet/shared'
+import { ApplicationEntry, PublicWalletSetting } from '@masknet/shared'
 import { MaskColorVar } from '@masknet/theme'
 import { Link } from '@mui/material'
 import { useEffect, useState } from 'react'
@@ -13,7 +13,6 @@ import { setupStorage, storageDefaultValue } from '../storage/index.js'
 import { TipsEntranceDialog } from './TipsEntranceDialog.js'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { TipsRealmContent } from './components/TipsRealmContent/index.js'
-import { TipsSetting } from './TipsSetting.js'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -87,7 +86,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             label: 'Tips',
             priority: 1,
             UI: {
-                TabContent: TipsSetting,
+                TabContent: PublicWalletSetting,
             },
         },
     ],
