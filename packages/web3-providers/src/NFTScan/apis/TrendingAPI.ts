@@ -1,5 +1,5 @@
 import { DataProvider } from '@masknet/public-api'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { createLookupTableResolver, EMPTY_LIST } from '@masknet/shared-base'
 import { TokenType } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
@@ -18,15 +18,18 @@ enum NonFungibleMarketplace {
     LooksRare = 'LooksRare',
 }
 
-// NFTScan will discard range unrecognized range
-const nftscanRangeMap: Record<number, string> = {
-    [Days.MAX]: 'all',
-    [Days.ONE_DAY]: '1d',
-    [Days.ONE_WEEK]: '7d',
-    [Days.ONE_MONTH]: '1mth',
-    [Days.THREE_MONTHS]: '3mth',
-    [Days.ONE_YEAR]: '1y',
-}
+const resolveNFTScanRange = createLookupTableResolver<Days, string>(
+    {
+        [Days.MAX]: 'all',
+        [Days.ONE_DAY]: '1d',
+        [Days.ONE_WEEK]: '7d',
+        [Days.ONE_MONTH]: '1mth',
+        [Days.THREE_MONTHS]: '3mth',
+        [Days.ONE_YEAR]: '1y',
+    },
+    // NFTScan will discard range unrecognized range
+    () => '',
+)
 
 export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
     private looksrare = new LooksRareAPI()
@@ -92,7 +95,7 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         currency: TrendingAPI.Currency,
         days: number,
     ): Promise<TrendingAPI.Stat[]> {
-        const range = nftscanRangeMap[days]
+        const range = resolveNFTScanRange(days)
         const records = await this.getContractVolumeAndFloorByRange(coinId, range)
         return records.map((x) => [x.time, x.price])
     }
