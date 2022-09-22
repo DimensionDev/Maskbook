@@ -1,5 +1,11 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createInjectHooksRenderer, Plugin, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra/content-script'
+import {
+    createInjectHooksRenderer,
+    Plugin,
+    PluginID,
+    useActivatedPluginsSNSAdaptor,
+    useIsMinimalMode,
+} from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
 import { useMemo } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
@@ -36,6 +42,7 @@ const useStyles = makeStyles()((theme) => ({
 
 function AuthorTipsSlot() {
     const visitingPersona = useCurrentVisitingIdentity()
+    const isMinimal = useIsMinimalMode(PluginID.Tips)
     const { classes } = useStyles()
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
@@ -46,7 +53,7 @@ function AuthorTipsSlot() {
         return <Component identity={visitingPersona.identifier} slot={Plugin.SNSAdaptor.TipsSlot.MirrorMenu} />
     }, [visitingPersona.identifier])
 
-    if (!component || !visitingPersona.identifier) return null
+    if (!component || !visitingPersona.identifier || isMinimal) return null
 
     return <span className={classes.slot}>{component}</span>
 }
