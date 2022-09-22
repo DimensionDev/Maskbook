@@ -44,7 +44,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
 
     const next = useCallback(async () => {
         if (!iterator || done) return
-
+        setError(undefined)
         const batchResult: Array<Web3Helper.NonFungibleAssetScope<S, T>> = []
         toggleLoading(true)
         try {
@@ -79,6 +79,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
     }, [next])
 
     const retry = useCallback(() => {
+        setError(undefined)
         setAssets(EMPTY_LIST)
         setDone(false)
     }, [])
