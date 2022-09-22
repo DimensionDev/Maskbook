@@ -27,9 +27,6 @@ const useStyles = makeStyles()((theme) => ({
         width: CARD_WIDTH,
         height: CARD_HEIGHT,
         backgroundColor: theme.palette.background.paper,
-        boxShadow: theme.palette.mode === 'light' ? '0px 4px 30px rgba(0, 0, 0, 0.1)' : undefined,
-        borderRadius: theme.spacing(1.5),
-        overflow: 'hidden',
     },
     loading: {
         height: '100%',
