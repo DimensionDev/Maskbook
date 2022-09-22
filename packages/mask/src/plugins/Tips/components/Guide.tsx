@@ -150,7 +150,12 @@ export default function Guide({ children, arrow = true, disabled = false, onComp
                 if (!open) return null
                 return (
                     <Portal container={container}>
-                        <div className={classes.mask} onClick={(e) => e.stopPropagation()}>
+                        <div
+                            className={classes.mask}
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                setOpen(false)
+                            }}>
                             <div
                                 className={classes.container}
                                 style={{
