@@ -2,7 +2,7 @@
 // !!! 2. Open a new issue to the library author.
 // !!! 3. Add a pnpm/resolution in package.json if the package specifier does not include git hash to pin the version.
 
-/* cSpell:disable */
+/* cspell:disable */
 /** @type {Map<string, RegExp | string | (string | RegExp)[]>} */
 const approvedList = new Map()
 
@@ -41,8 +41,6 @@ approvedList.set('html-parse-stringify2', 'github:locize/html-parse-stringify2')
 // ipfs https://github.com/ipfs/js-ipfs-utils/issues/158
 approvedList.set('node-fetch', 'https://registry.npmjs.org/@achingbrain/node-fetch/-/node-fetch-2.6.7.tgz')
 
-/* cSpell:enable */
-
 /**
  * @param {string} parentPackage The current resolving parentPackage
  * @param {string} dependedPackage The package it depends on
@@ -72,6 +70,8 @@ function assertInstallationSourceValid(parentPackage, dependedPackage, installat
     If you want to approve this new unusual dependency, please edit ./pnpmfile.cjs.`,
     )
 }
+
+/* cspell:enable */
 
 function validatePackage({ dependencies, devDependencies, optionalDependencies, peerDependencies, name }) {
     for (const [k, v] of notNormativeInstall(dependencies)) assertInstallationSourceValid(name, k, v)
