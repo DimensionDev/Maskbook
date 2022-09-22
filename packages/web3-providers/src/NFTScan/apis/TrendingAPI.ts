@@ -11,10 +11,21 @@ import type { EVM, Response } from '../types/index.js'
 import { fetchFromNFTScan, getContractSymbol } from '../helpers/EVM.js'
 import { LooksRareAPI } from '../../looksrare/index.js'
 import { OpenSeaAPI } from '../../opensea/index.js'
+import { Days } from '../../common.js'
 
 enum NonFungibleMarketplace {
     OpenSea = 'OpenSea',
     LooksRare = 'LooksRare',
+}
+
+// NFTScan will discard range unrecognized range
+const nftscanRangeMap: Record<number, string> = {
+    [Days.MAX]: 'all',
+    [Days.ONE_DAY]: '1d',
+    [Days.ONE_WEEK]: '7d',
+    [Days.ONE_MONTH]: '1mth',
+    [Days.THREE_MONTHS]: '3mth',
+    [Days.ONE_YEAR]: '1y',
 }
 
 export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
@@ -45,8 +56,9 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
             contract,
             range,
         })
-        const response = await fetchFromNFTScan<Response<EVM.VolumeAndFloorRecord[]>>(url)
-        return response.data ?? EMPTY_LIST
+        const response = await fetchFromNFTScan<Response<EVM.VolumeAndFloor>>(url)
+        // We only care about the record list
+        return response.data?.result ?? EMPTY_LIST
     }
 
     async getCoins(keyword: string, chainId = ChainId.Mainnet): Promise<TrendingAPI.Coin[]> {
@@ -80,9 +92,9 @@ export class NFTScanTrendingAPI implements TrendingAPI.Provider<ChainId> {
         currency: TrendingAPI.Currency,
         days: number,
     ): Promise<TrendingAPI.Stat[]> {
-        const range = `${Math.min(days, 90)}d`
+        const range = nftscanRangeMap[days]
         const records = await this.getContractVolumeAndFloorByRange(coinId, range)
-        return records.map((x) => [x.time, x.floor])
+        return records.map((x) => [x.time, x.price])
     }
 
     async getCoinTrending(

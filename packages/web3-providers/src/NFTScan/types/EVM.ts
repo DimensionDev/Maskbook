@@ -168,7 +168,14 @@ export namespace EVM {
     export interface VolumeAndFloorRecord {
         /** timestamp */
         time: number
-        floor: number
-        value: number
+        price: number
+        volume: number
+        sales: number
+    }
+    export interface VolumeAndFloor {
+        code: number
+        result: VolumeAndFloorRecord[]
+        sales: number
+        volume: number
     }
 }

@@ -7,14 +7,7 @@ import { getCommunityLink, isMirroredKeyword, resolveChainIdByName } from './hel
 import { DataProvider } from '@masknet/public-api'
 import type { Coin, ResultData, Status } from './type.js'
 import { fetchJSON } from '../helpers.js'
-
-export enum Days {
-    MAX = 0,
-    ONE_DAY = 1,
-    ONE_WEEK = 7,
-    ONE_MONTH = 30,
-    ONE_YEAR = 365,
-}
+import { Days } from '../common.js'
 
 // #regin get quote info
 export interface QuotesInfo {

@@ -1,7 +1,6 @@
 import { PluginID, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import {
     useChainIdValid,
-    useFungibleToken,
     useNetworkType,
     useNonFungibleAssetsByCollection,
     useChainId,
@@ -10,6 +9,7 @@ import { DataProvider } from '@masknet/public-api'
 import { NFTList } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, useTabs, ActionButton } from '@masknet/theme'
+import { Days } from '@masknet/web3-providers'
 import { NetworkPluginID, TokenType, createFungibleToken } from '@masknet/web3-shared-base'
 import { isNativeTokenSymbol, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
@@ -29,7 +29,7 @@ import type { TagType } from '../../types/index.js'
 import { TradeView } from '../trader/TradeView.js'
 import { CoinMarketPanel } from './CoinMarketPanel.js'
 import { PriceChart } from './PriceChart.js'
-import { Days, DEFAULT_RANGE_OPTIONS, NFT_RANGE_OPTIONS, PriceChartDaysControl } from './PriceChartDaysControl.js'
+import { DEFAULT_RANGE_OPTIONS, NFT_RANGE_OPTIONS, PriceChartDaysControl } from './PriceChartDaysControl.js'
 import { TickersTable } from './TickersTable.js'
 import { TrendingViewDeck } from './TrendingViewDeck.js'
 import { TrendingViewError } from './TrendingViewError.js'
@@ -149,13 +149,6 @@ export function TrendingView(props: TrendingViewProps) {
     // #endregion
 
     const coinSymbol = (trending?.coin.symbol || '').toLowerCase()
-
-    // #region swap
-    const { value: tokenDetailed } = useFungibleToken(
-        NetworkPluginID.PLUGIN_EVM,
-        coinSymbol === 'eth' ? '' : trending?.coin.contract_address ?? '',
-    )
-    // #endregion
 
     // #region stats
     const [days, setDays] = useState(Days.ONE_WEEK)

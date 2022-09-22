@@ -5,8 +5,7 @@ import { getEnumAsArray, unreachable } from '@dimensiondev/kit'
 import { CRYPTOCURRENCY_MAP_EXPIRES_AT } from '../../constants/index.js'
 import { isBlockedId, isBlockedKeyword, resolveAlias, resolveCoinId, isBlockedAddress } from './hotfix.js'
 import { ChainId, chainResolver, NetworkType } from '@masknet/web3-shared-evm'
-import { Days } from '../../SNSAdaptor/trending/PriceChartDaysControl.js'
-import { CoinGeckoTrendingEVM, CoinMarketCap, NFTScanTrending, UniSwap } from '@masknet/web3-providers'
+import { CoinGeckoTrendingEVM, CoinMarketCap, Days, NFTScanTrending, UniSwap } from '@masknet/web3-providers'
 
 /**
  * Get supported currencies of specific data provider
