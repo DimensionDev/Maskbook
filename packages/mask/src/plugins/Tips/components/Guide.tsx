@@ -1,5 +1,5 @@
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { Box, Typography, styled, Portal } from '@mui/material'
+import { Box, Typography, Portal, Button } from '@mui/material'
 import classNames from 'classnames'
 import { PropsWithChildren, useRef, cloneElement, useEffect, ReactElement, useState } from 'react'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
@@ -29,10 +29,10 @@ const useStyles = makeStyles()((theme) => ({
         width: 256,
         padding: '16px',
         borderRadius: '16px',
-        background: 'rgba(0,0,0,.85)',
+        background: theme.palette.maskColor.tips,
         boxShadow: '0 4px 8px rgba(0,0,0,.1)',
         boxSizing: 'border-box',
-        color: '#fff',
+        color: theme.palette.maskColor.bottom,
         '&.arrow-top:after': {
             content: '""',
             display: 'inline-block',
@@ -65,26 +65,13 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'space-between',
         paddingTop: '16px',
     },
+    button: {
+        color: theme.palette.maskColor.main,
+        backgroundColor: theme.palette.maskColor.bottom,
+        width: '100%',
+        borderRadius: '20px',
+    },
 }))
-
-const ActionButton = styled('div')(({ theme }) => ({
-    boxSizing: 'border-box',
-    width: 104,
-    height: 32,
-    lineHeight: '32px',
-    borderRadius: 16,
-    textAlign: 'center',
-    border: 'solid 1px #000',
-    borderColor: '#fff',
-    cursor: 'pointer',
-    fontFamily: 'PingFang SC',
-}))
-
-const NextButton = styled(ActionButton)({
-    border: 'none',
-    color: '#111418',
-    background: '#fff',
-})
 
 export interface GuideStepProps extends PropsWithChildren<{}> {
     arrow?: boolean
@@ -169,6 +156,7 @@ export default function Guide({ children, arrow = true, disabled = false, onComp
                                         height: clientRect.height,
                                     }}>
                                     <div
+                                        onClick={(e) => e.stopPropagation()}
                                         className={classNames(
                                             classes.card,
                                             arrow ? (bottomAvailable ? 'arrow-top' : 'arrow-bottom') : '',
@@ -188,9 +176,9 @@ export default function Guide({ children, arrow = true, disabled = false, onComp
                                             </Typography>
                                         </div>
                                         <div className={classes.buttonContainer}>
-                                            <NextButton style={{ width: '100%' }} onClick={onNext}>
+                                            <Button className={classes.button} onClick={onNext}>
                                                 {t.tips_guide_action()}
-                                            </NextButton>
+                                            </Button>
                                         </div>
                                     </div>
                                 </Box>
