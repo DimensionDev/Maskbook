@@ -1,8 +1,15 @@
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
 import { useWeb3Hub, useWeb3State } from '@masknet/plugin-infra/web3'
-import { formatBalance, CurrencyType, NetworkPluginID } from '@masknet/web3-shared-base'
+import {
+    formatBalance,
+    CurrencyType,
+    NetworkPluginID,
+    NonFungibleToken,
+    NonFungibleAsset,
+} from '@masknet/web3-shared-base'
 import type { NFTInfo } from '../types.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 export function useNFT(
     account: string,
@@ -22,12 +29,17 @@ export function useNFT(
             chainId,
             account,
         })
-        const [token, asset] = await Promise.all([
+        const allSettled = await Promise.allSettled([
             connection?.getNonFungibleToken(address, tokenId),
             hub?.getNonFungibleAsset?.(address, tokenId, {
                 chainId,
             }),
         ])
+
+        const [token, asset] = allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)) as [
+            NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | undefined,
+            NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | undefined,
+        ]
 
         const contract = token?.contract || asset?.contract
         const metadata = token?.metadata || asset?.metadata
