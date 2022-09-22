@@ -75,6 +75,8 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
 
     // Execute once after next update
     useEffect(() => {
+        // reset error
+        setError(undefined)
         if (next) next()
     }, [next])
 
