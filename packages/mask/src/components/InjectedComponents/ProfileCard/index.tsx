@@ -39,6 +39,8 @@ const useStyles = makeStyles()((theme) => {
             overflow: 'auto',
             height: '100%',
             overscrollBehavior: 'contain',
+            borderRadius: theme.spacing(1.5),
+            boxShadow: theme.palette.shadow.popup,
         },
         loading: {
             display: 'flex',
