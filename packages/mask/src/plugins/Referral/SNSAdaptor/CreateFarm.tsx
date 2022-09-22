@@ -163,7 +163,7 @@ export function CreateFarm(props: PageInterface) {
 
     const openComposeBox = useCallback(
         (selectedReferralData: Map<string, ReferralMetaData>) =>
-            CrossIsolationMessages.events.requestComposition.sendToLocal({
+            CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
                 reason: 'timeline',
                 open: true,
                 content: makeTypedMessageText('', selectedReferralData),

@@ -47,7 +47,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     const clickHandler = () => setOpen(true)
 
                     useEffect(() => {
-                        return CrossIsolationMessages.events.requestOpenApplication.on(({ open, application }) => {
+                        return CrossIsolationMessages.events.applicationDialogEvent.on(({ open, application }) => {
                             if (application !== PluginID.Tips) return
                             setOpen(open)
                         })

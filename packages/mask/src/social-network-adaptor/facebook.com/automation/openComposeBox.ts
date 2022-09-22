@@ -1,5 +1,5 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
-import { CrossIsolationMessages, CompositionRequest } from '@masknet/shared-base'
+import { CrossIsolationMessages, CompositionDialogEvent } from '@masknet/shared-base'
 import { i18n } from '../../../../shared-ui/locales_legacy/index.js'
 import { makeTypedMessageText, SerializableTypedMessages } from '@masknet/typed-message'
 import { delay, waitDocumentReadyState } from '@dimensiondev/kit'
@@ -36,7 +36,7 @@ const nativeComposeDialogIndicatorSelector = () =>
 
 export async function taskOpenComposeBoxFacebook(
     content: string | SerializableTypedMessages,
-    options?: CompositionRequest['options'],
+    options?: CompositionDialogEvent['options'],
 ) {
     await waitDocumentReadyState('interactive')
     await delay(200)
@@ -56,7 +56,7 @@ export async function taskOpenComposeBoxFacebook(
     }
 
     await delay(2000)
-    CrossIsolationMessages.events.requestComposition.sendToLocal({
+    CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
         reason: 'popup',
         open: true,
         content: typeof content === 'string' ? makeTypedMessageText(content) : content,

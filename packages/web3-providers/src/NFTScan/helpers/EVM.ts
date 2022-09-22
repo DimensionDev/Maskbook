@@ -131,7 +131,7 @@ export function createNonFungibleAsset(
             : undefined,
         metadata: {
             chainId,
-            name,
+            name: first(name.split('#')) ?? '',
             symbol,
             description,
             imageURL: mediaURL,

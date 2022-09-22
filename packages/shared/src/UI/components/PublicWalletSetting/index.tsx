@@ -130,7 +130,7 @@ export const PublicWalletSetting = memo<PublicWalletSettingProps>(
                     message: t.wallet_set_up_successfully(),
                     autoHideDuration: 2000,
                 })
-                CrossIsolationMessages.events.PluginPublicWalletSettingsUpdate.sendToAll({ pluginId })
+                CrossIsolationMessages.events.walletSettingsDialogEvent.sendToAll({ pluginID: pluginId })
                 onClose()
             } catch {
                 showSnackbar(t.save_failed(), {

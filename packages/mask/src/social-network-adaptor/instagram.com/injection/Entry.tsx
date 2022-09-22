@@ -31,7 +31,7 @@ export function Entry() {
             <Fab
                 variant="extended"
                 onClick={() => {
-                    CrossIsolationMessages.events.requestComposition.sendToLocal({ open: true, reason: 'timeline' })
+                    CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({ open: true, reason: 'timeline' })
                 }}>
                 <Create />
                 Create with Mask

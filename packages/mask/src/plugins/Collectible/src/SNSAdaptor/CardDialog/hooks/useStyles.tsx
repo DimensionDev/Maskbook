@@ -45,7 +45,6 @@ export const useStyles = makeStyles<{ listItemBackground?: string; listItemBackg
         tabWrapper: {
             width: 'calc( 100% - 336px)',
             marginLeft: 36,
-            height: 'calc( 100% - 64px )',
             overflowY: 'auto',
         },
         NFTBasicInfoWrapper: {

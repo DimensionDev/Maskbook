@@ -3,10 +3,10 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { CollectibleGridProps, useStyles } from './hooks/useStyles.js'
 import { NetworkPluginID, NonFungibleAsset, SocialAddress, SourceType } from '@masknet/web3-shared-base'
 import { Box, Button, Tooltip, Typography } from '@mui/material'
+import { useI18N } from '../../../../utils/index.js'
 import { CollectibleItem } from './CollectibleItem.js'
 import { CollectibleListContext } from './CollectibleListContext.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
-import { useI18N } from '../../../../../utils/index.js'
 
 export interface CollectibleListProps extends withClasses<'empty' | 'button'>, CollectibleGridProps {
     address: SocialAddress<NetworkPluginID>

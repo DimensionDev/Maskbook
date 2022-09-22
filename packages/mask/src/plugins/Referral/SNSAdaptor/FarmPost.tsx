@@ -77,7 +77,7 @@ export function FarmPost(props: FarmPostProps) {
 
     const openComposeBox = useCallback(
         (selectedReferralData: Map<string, ReferralMetaData>, id?: string) =>
-            CrossIsolationMessages.events.requestComposition.sendToLocal({
+            CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
                 reason: 'timeline',
                 open: true,
                 content: makeTypedMessageText('', selectedReferralData),
@@ -120,7 +120,7 @@ export function FarmPost(props: FarmPostProps) {
             return
         }
 
-        CrossIsolationMessages.events.swapDialogUpdate.sendToLocal({
+        CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
             open: true,
             traderProps: {
                 defaultInputCoin: {

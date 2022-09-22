@@ -9,8 +9,8 @@ import { base } from '../base.js'
 import { getPayloadFromURL, getPayloadFromURLs } from '../helpers/index.js'
 import { setupContext } from '../context.js'
 import { PLUGIN_ID, PLUGIN_WRAPPER_TITLE } from '../constants.js'
-import { CollectibleList } from './List/CollectibleList.js'
 import { DialogInspector } from './DialogInspector.js'
+import { CollectionList } from './List/CollectionList.js'
 
 const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
     ID: `${PLUGIN_ID}_nfts`,
@@ -18,7 +18,8 @@ const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
     priority: 1,
     UI: {
         TabContent({ socialAddress, identity }) {
-            return <CollectibleList socialAddress={socialAddress} identity={identity} />
+            if (!socialAddress) return null
+            return <CollectionList addressName={socialAddress} persona={identity?.publicKey} profile={identity} />
         },
     },
     Utils: {
@@ -64,7 +65,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
     PostInspector() {
         const links = usePostInfoDetails.mentionedLinks()
         const payload = getPayloadFromURLs(links)
-
         usePluginWrapper(!!payload)
         return payload ? <PostInspector payload={payload} /> : null
     },
@@ -80,14 +80,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
             priority: 2,
             UI: {
                 TabContent({ socialAddress, identity }) {
+                    if (!socialAddress) return null
                     return (
                         <Box pr={1.5}>
-                            <CollectibleList
-                                socialAddress={socialAddress}
-                                identity={identity}
-                                gridProps={{
-                                    gap: 1.5,
-                                }}
+                            <CollectionList
+                                addressName={socialAddress}
+                                persona={identity?.publicKey}
+                                profile={identity}
                             />
                         </Box>
                     )

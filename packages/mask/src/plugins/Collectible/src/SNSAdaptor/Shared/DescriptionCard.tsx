@@ -28,11 +28,13 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.second,
     },
     markdownContent: {
+        fontSize: 14,
         textOverflow: 'ellipsis',
         webkitBoxOrient: 'vertical',
         webkitLineClamp: '3',
         color: theme.palette.maskColor.second,
-        '& > p': {
+        '& p, & li': {
+            fontSize: '14px !important',
             color: `${theme.palette.maskColor.second} !important`,
         },
         '& a': {

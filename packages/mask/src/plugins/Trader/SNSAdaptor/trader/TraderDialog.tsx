@@ -92,7 +92,7 @@ export function TraderDialog() {
     }, [chainId])
 
     useEffect(() => {
-        return CrossIsolationMessages.events.swapDialogUpdate.on(({ open, traderProps }) => {
+        return CrossIsolationMessages.events.swapDialogEvent.on(({ open, traderProps }) => {
             setOpen(open)
             if (traderProps) {
                 const { defaultInputCoin, defaultOutputCoin } = traderProps

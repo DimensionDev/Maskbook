@@ -185,8 +185,8 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     } = useHiddenAddressSetting(PluginID.Web3Profile, personaStatus.currentPersona?.identifier.publicKeyAsHex)
 
     useEffect(() => {
-        return CrossIsolationMessages.events.PluginPublicWalletSettingsUpdate.on(({ pluginId }) => {
-            if (pluginId === PluginID.Web3Profile) retryLoadHiddenAddress()
+        return CrossIsolationMessages.events.walletSettingsDialogEvent.on(({ pluginID }) => {
+            if (pluginID === PluginID.Web3Profile) retryLoadHiddenAddress()
         })
     }, [retryLoadHiddenAddress])
 
@@ -315,7 +315,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         setAnchorEl(null)
     }
     const handleOpenDialog = () => {
-        CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToAll({
+        CrossIsolationMessages.events.web3ProfileDialogEvent.sendToAll({
             open: true,
         })
     }

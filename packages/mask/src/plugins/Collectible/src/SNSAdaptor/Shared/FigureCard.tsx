@@ -134,7 +134,7 @@ export function FigureCard(props: FigureCardProps) {
             </Typography>
             {!hideSubTitle && (
                 <div className={classes.nameLgBox}>
-                    <Typography className={classes.nameLg}>{asset.metadata?.name}</Typography>
+                    <Typography className={classes.nameLg}>{asset.collection?.name}</Typography>
                     {asset.collection?.verified && <VerifiedUserIcon color="primary" fontSize="small" />}
                 </div>
             )}
