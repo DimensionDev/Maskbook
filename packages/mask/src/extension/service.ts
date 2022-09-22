@@ -11,7 +11,6 @@ import {
     AsyncGeneratorVersionOf,
 } from 'async-call-rpc/full'
 import { WebExtensionMessage, MessageTarget, assertNotEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { serializer } from '@masknet/shared-base'
 import type {
     BackupService,
     CryptoService,
@@ -22,6 +21,7 @@ import type {
     SiteAdaptorService,
     ThirdPartyPluginService,
 } from '../../background/services/types.js'
+import { specializedSerializer } from '../../shared/serializer-helper.js'
 assertNotEnvironment(Environment.ManifestBackground)
 
 const message = new WebExtensionMessage<Record<string, any>>({ domain: '$' })
@@ -54,7 +54,7 @@ function add<T extends object>(key: string, generator = false): AsyncVersionOf<T
     const RPC = (generator ? AsyncGeneratorCall : AsyncCall) as any as typeof AsyncCall
     const service = RPC<T>(null, {
         key,
-        serializer,
+        serializer: specializedSerializer,
         log,
         channel,
         strict: false,

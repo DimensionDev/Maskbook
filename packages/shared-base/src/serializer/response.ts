@@ -1,25 +1,42 @@
 import { TypesonPromise } from 'typeson'
 
-export const is = (x: any) => x instanceof Response
-export const serializer = (x: Response) => {
-    return new TypesonPromise<{
-        body: Blob
-        init: ResponseInit
-    }>(async (resolve) => {
-        const bodyBlob = await x.blob()
-        resolve({
-            body: bodyBlob,
-            init: {
-                status: x.status,
-                statusText: x.statusText,
-                headers: x.headers,
-            },
-        })
+interface Seralizedresponse {
+    body: Blob | ReadableStream | null
+    init: ResponseInit
+}
+function is(x: any) {
+    return x instanceof Response
+}
+function serializer(response: Response) {
+    return new TypesonPromise<Seralizedresponse>((resolve, reject) => {
+        response.blob().then((body) => {
+            resolve({
+                body,
+                init: {
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: response.headers,
+                },
+            })
+        }, reject)
     })
 }
-
-export const deserializer = (x: { body: Blob; init: ResponseInit }) => {
-    return new Response(x.body, x.init)
+function streamSerializer(response: Response): Seralizedresponse {
+    return {
+        body: response.body,
+        init: {
+            status: response.status,
+            statusText: response.statusText,
+            headers: response.headers,
+        },
+    }
 }
 
-export const responseRegedit = [is, serializer, deserializer] as const
+function deserializer(response: Seralizedresponse) {
+    return new Response(response.body, response.init)
+}
+
+/** @internal */
+export const response = [is, serializer, deserializer] as const
+/** @internal */
+export const streamResponse = [is, streamSerializer, deserializer] as const

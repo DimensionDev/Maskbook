@@ -1,5 +1,7 @@
-export const is = (x: any) => x instanceof Request
-export const serializer = (x: Request) => {
+function is(x: any) {
+    return x instanceof Request
+}
+function serializer(x: Request) {
     const { url, method, body, headers, mode, credentials, cache, redirect, referrer, integrity } = x
     return {
         input: url,
@@ -18,8 +20,14 @@ export const serializer = (x: Request) => {
     }
 }
 
-export const deserializer = (x: { input: string; init: RequestInit }) => {
-    return new Request(x.input, x.init)
+interface SerializedRequest {
+    input: string
+    init: RequestInit
 }
 
-export const requestRegedit = [is, serializer, deserializer] as const
+function deserializer(data: SerializedRequest) {
+    return new Request(data.input, data.init)
+}
+
+/** @internal */
+export const request = [is, serializer, deserializer] as const
