@@ -7,15 +7,20 @@ import { createRefsForCreatePostContext } from '../../../social-network/utils/cr
 import { startWatch } from '../../../utils'
 import { formatWriter, mirrorPageProbe, MirrorPageType } from './utils'
 import type { ProfileIdentifier } from '@masknet/shared-base'
+import { Mirror } from '@masknet/web3-providers'
 
-const MIRROR_LINK_PREFIX = /https(.*)mirror.xyz(.*)\//g
+const MIRROR_LINK_PREFIX = /https(.*)mirror.xyz(.*)\//i
 
 export function queryInjectPoint(node: HTMLElement) {
     const allANode = node.querySelectorAll(
         [
+            // if have header image is 4, either 3
             ':scope > div:nth-child(3) div+a',
+            ':scope > div:nth-child(4) div+a',
             ':scope > div:nth-child(1) footer span > div > div',
+            // if have header image is 4, either 3
             ':scope > div:nth-child(3) a+div',
+            ':scope > div:nth-child(4) a+div',
         ].join(),
     )
     return allANode.item(allANode.length - 1) as HTMLElement
@@ -44,41 +49,53 @@ async function registerPostCollectorInner(
     }
 
     // TODO: align this method
-    const getPostWriters = (postId: string) => {
+    const getPostWriters = async (postId: string) => {
         const script = document.getElementById('__NEXT_DATA__')?.innerHTML
         if (!script) return
         const INIT_DATA = JSON.parse(script)
-        if (!INIT_DATA) return
-        const publisher = INIT_DATA.props?.pageProps?.__APOLLO_STATE__?.[`entry:${postId}`]?.publisher
-        if (!publisher) return
-        return {
-            author: formatWriter({
-                address: publisher?.project?.__ref.replace('ProjectType:', '') as string,
-                avatarURL: '',
-            }),
-            coAuthors: [
-                formatWriter({
-                    address: publisher?.member.__ref.replace('ProjectType:', '') as string,
-                    avatarURL: '',
+
+        function getAuthorDetail(address?: string) {
+            const author = INIT_DATA?.props?.pageProps?.__APOLLO_STATE__?.[`ProjectType:${address}`]
+            return {
+                nickname: author?.displayName,
+                avatarURL: author?.avatarURL,
+                domain: author?.domain,
+            }
+        }
+
+        const publisher = INIT_DATA?.props?.pageProps?.__APOLLO_STATE__?.[`entry:${postId}`]?.publisher
+        if (!publisher) {
+            // get publisher from api
+            const post = await Mirror.getPost(postId)
+            if (!post) return
+
+            return {
+                author: formatWriter(post.author),
+                coAuthors: post.coAuthors.map(formatWriter),
+            }
+        } else {
+            // get publisher from local
+            return {
+                author: formatWriter({
+                    address: publisher?.project?.__ref.replace('ProjectType:', '') as string,
+                    ...getAuthorDetail(publisher?.project?.__ref.replace('ProjectType:', '') as string),
                 }),
-            ],
+                coAuthors: [
+                    formatWriter({
+                        address: publisher?.member.__ref.replace('ProjectType:', '') as string,
+                        ...getAuthorDetail(publisher?.member?.__ref.replace('ProjectType:', '') as string),
+                    }),
+                ],
+            }
         }
     }
 
-    function collectPostInfo(
-        node: HTMLElement | null,
-        info: ReturnType<typeof createRefsForCreatePostContext>,
-        cancel: AbortSignal,
-    ) {
+    async function collectPostInfo(node: HTMLElement | null, cancel: AbortSignal) {
         if (!node) return
         if (cancel?.aborted) return
         const postId = getPostId(node)
-        const postWriters = getPostWriters(postId)
-        info.postID.value = postId
-
-        info.postBy.value = postWriters?.author.identifier || null
-        info.postCoAuthors.value =
-            (postWriters?.coAuthors.map((x) => x.identifier).filter(Boolean) as ProfileIdentifier[]) || []
+        const writers = await getPostWriters(postId)
+        return { postId, writers }
     }
 
     startWatch(
@@ -98,7 +115,14 @@ async function registerPostCollectorInner(
             })
 
             function run() {
-                collectPostInfo(node, refs, cancel)
+                collectPostInfo(node, cancel).then((result) => {
+                    if (!result) return
+                    refs.postID.value = result.postId
+                    refs.postBy.value = result.writers?.author.identifier || null
+                    refs.postCoAuthors.value =
+                        (result?.writers?.coAuthors.map((x) => x.identifier).filter(Boolean) as ProfileIdentifier[]) ||
+                        []
+                })
             }
             run()
 

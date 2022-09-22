@@ -12,6 +12,7 @@ interface EntryResponse {
     collaborators?: Writer[]
     publisher: {
         member: Writer
+        project: Writer
     }
     nft?: {
         tokenId?: string
@@ -83,7 +84,7 @@ export class MirrorAPI implements MirrorBaseAPI.Provider {
     async getPost(digest: string) {
         if (!digest) return null
 
-        const response = await fetchFromMirror<EntryResponse>({
+        const response = await fetchFromMirror<{ entry: EntryResponse }>({
             query: `
             query Entry ($digest: String!) {
                 entry(digest: $digest) {
@@ -151,25 +152,26 @@ export class MirrorAPI implements MirrorBaseAPI.Provider {
         })
         if (!response) return null
         return {
-            transactionId: response.arweaveTransactionRequest.transactionId,
-            digest: response.digest,
-            author: response.publisher.member,
+            transactionId: response.entry.arweaveTransactionRequest.transactionId,
+            digest: response.entry.digest,
+            author: response.entry.publisher.project,
+            coAuthors: [response.entry.publisher.member],
             collection: {
-                chainId: response.writingNFT.network.chainId,
-                name: response.writingNFT.name,
-                slug: response.writingNFT.symbol || response.writingNFT.name,
-                symbol: response.writingNFT.symbol,
-                description: response.writingNFT.description,
-                address: response.writingNFT.proxyAddress,
-                tokensTotal: response.writingNFT.quantity,
-                iconURL: response.writingNFT.media.url,
-                createAt: response.writingNFT.timestamp,
+                chainId: response.entry.writingNFT.network.chainId,
+                name: response.entry.writingNFT.name,
+                slug: response.entry.writingNFT.symbol || response.entry.writingNFT.name,
+                symbol: response.entry.writingNFT.symbol,
+                description: response.entry.writingNFT.description,
+                address: response.entry.writingNFT.proxyAddress,
+                tokensTotal: response.entry.writingNFT.quantity,
+                iconURL: response.entry.writingNFT.media.url,
+                createAt: response.entry.writingNFT.timestamp,
             },
-            version: formatDateTime(fromUnixTime(response.publishedAtTimestamp), 'mm-dd-yyyy'),
+            version: formatDateTime(fromUnixTime(response.entry.publishedAtTimestamp), 'mm-dd-yyyy'),
             content: {
-                title: response.title,
-                body: response.body,
-                timestamp: response.publishedAtTimestamp,
+                title: response.entry.title,
+                body: response.entry.body,
+                timestamp: response.entry.publishedAtTimestamp,
             },
         }
     }
