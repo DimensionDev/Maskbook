@@ -1,6 +1,6 @@
 import { useSubscription } from 'use-subscription'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '../web3-helpers/index.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3State } from './useWeb3State.js'
 import { UNDEFINED } from '../utils/subscription.js'
 import { useDefaultChainId } from './useDefaultChainId.js'

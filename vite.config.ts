@@ -9,6 +9,8 @@ export default defineConfig({
         include: ['./packages/**/tests/**/*.ts'],
         alias: {
             '@masknet/shared-base': createURL('./packages/shared-base/src/index.ts'),
+            '@masknet/web3-helpers': createURL('./packages/web3-helpers/src/index.ts'),
+            '@masknet/web3-providers': createURL('./packages/web3-providers/src/index.ts'),
             '@masknet/web3-shared-base': createURL('./packages/web3-shared/base/src/index.ts'),
             '@masknet/web3-shared-evm': createURL('./packages/web3-shared/evm/src/index.ts'),
             '@masknet/web3-shared-solana': createURL('./packages/web3-shared/solana/src/index.ts'),

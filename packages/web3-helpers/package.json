@@ -1,0 +1,18 @@
+{
+  "name": "@masknet/web3-helpers",
+  "private": true,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "webpack": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@masknet/web3-shared-base": "workspace:*",
+    "@masknet/web3-shared-evm": "workspace:*",
+    "@masknet/web3-shared-flow": "workspace:*",
+    "@masknet/web3-shared-solana": "workspace:*"
+  }
+}

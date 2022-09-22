@@ -1,5 +1,5 @@
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry.js'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NonFungibleTokenOrder, Pageable } from '@masknet/web3-shared-base'
 import { CollectibleCard } from '../CollectibleCard.js'
 import { OffersList } from '../../Shared/OffersList.js'

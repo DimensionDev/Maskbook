@@ -24,10 +24,11 @@ import type {
     SocialIdentity,
     Wallet,
     Web3EnableRequirement,
+    Web3UI,
+    Web3State,
 } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType, Transaction } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
-import type { Web3Plugin } from './web3-types.js'
 import type { UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 
 export declare namespace Plugin {
@@ -417,9 +418,9 @@ export namespace Plugin.SNSAdaptor {
         /** This UI will be rendered under the Search of the SNS. */
         SearchResultBox?: SearchResultBox
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
-        Web3UI?: Web3Plugin.UI.UI<ChainId, ProviderType, NetworkType>
+        Web3UI?: Web3UI<ChainId, ProviderType, NetworkType>
         /** This is the context of the currently chosen network. */
-        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities<
+        Web3State?: Web3State<
             ChainId,
             SchemaType,
             ProviderType,
@@ -815,9 +816,9 @@ export namespace Plugin.Dashboard {
         /** This UI will be injected into the global scope of the Dashboard. */
         GlobalInjection?: InjectUI<{}>
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
-        Web3UI?: Web3Plugin.UI.UI<ChainId, ProviderType, NetworkType>
+        Web3UI?: Web3UI<ChainId, ProviderType, NetworkType>
         /** This is the context of the currently chosen network. */
-        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities<
+        Web3State?: Web3State<
             ChainId,
             SchemaType,
             ProviderType,

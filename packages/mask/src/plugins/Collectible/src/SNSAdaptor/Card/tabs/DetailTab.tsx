@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { CollectibleCard } from '../CollectibleCard.js'
 import { DetailsCard } from '../../Shared/DetailsCard.js'
 import { PropertiesCard } from '../../Shared/PropertiesCard.js'

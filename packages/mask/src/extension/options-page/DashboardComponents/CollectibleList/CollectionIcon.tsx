@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { Image, Icon } from '@masknet/shared'
 import classNames from 'classnames'
 import { isSameAddress, NonFungibleCollection } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '@masknet/plugin-infra/src/entry-web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({

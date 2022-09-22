@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { useAccount, useChainId, useWeb3Hub, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useAccount, useChainId, useWeb3Hub } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { Hub, OrderSide, resolveSourceTypeName, SourceType } from '@masknet/web3-shared-base'
 import { Button, MenuItem, Table, TableBody, TableCell, TableRow, TextField, Typography } from '@mui/material'

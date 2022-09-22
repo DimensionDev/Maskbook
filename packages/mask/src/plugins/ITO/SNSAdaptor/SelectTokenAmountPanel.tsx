@@ -3,7 +3,7 @@ import type { MaskFixedSizeListProps, MaskTextFieldProps } from '@masknet/theme'
 import { useSelectFungibleToken, FungibleTokenInput, FungibleTokenInputProps } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../utils/index.js'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 interface ERC20TokenListProps extends withClasses<'list' | 'placeholder'> {
     targetChainId?: Web3Helper.ChainIdAll

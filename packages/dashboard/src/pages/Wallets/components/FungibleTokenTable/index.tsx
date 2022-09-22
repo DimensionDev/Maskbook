@@ -18,7 +18,8 @@ import {
     NetworkPluginID,
     toZero,
 } from '@masknet/web3-shared-base'
-import { useCurrentWeb3NetworkPluginID, useNativeToken, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useCurrentWeb3NetworkPluginID, useNativeToken } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { useContainer } from 'unstated-next'
 import { Context } from '../../hooks/useContext'

@@ -12,9 +12,9 @@ import {
     getRegisteredWeb3Providers,
     useWeb3State,
     useWeb3UI,
-    Web3Helper,
     useWallets,
 } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { useTitle } from '../../../hook/useTitle.js'
 import { useI18N } from '../../../../../utils/index.js'
 import { PopupContext } from '../../../hook/usePopupContext.js'

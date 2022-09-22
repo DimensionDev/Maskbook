@@ -1,5 +1,6 @@
 import { FC, useMemo, useState } from 'react'
-import { useChainId, useCurrentWeb3NetworkPluginID, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { useSharedI18N } from '@masknet/shared'
 import { isDashboardPage } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'

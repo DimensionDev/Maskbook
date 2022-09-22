@@ -11,7 +11,7 @@ import {
     pageableToIterator,
     toZero,
 } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '../web3-helpers/index.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount } from './useAccount.js'
 import { useChainId } from './useChainId.js'
 import { useWeb3Hub } from './useWeb3Hub.js'

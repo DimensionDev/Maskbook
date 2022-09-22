@@ -16,11 +16,12 @@ import type {
     HubIndicator,
     FungibleTokenSecurity,
     NonFungibleTokenSecurity,
+    Web3State as Web3StateShared,
+    Web3UI as Web3UIShared,
 } from '@masknet/web3-shared-base'
 import type * as EVM from '@masknet/web3-shared-evm'
 import type * as Flow from '@masknet/web3-shared-flow'
 import type * as Solana from '@masknet/web3-shared-solana'
-import type { Web3Plugin } from '../web3-types.js'
 
 export declare namespace Web3Helper {
     export type Definition = {
@@ -142,7 +143,7 @@ export declare namespace Web3Helper {
 
     export type Web3State<T extends NetworkPluginID = never> = T extends never
         ? never
-        : Web3Plugin.ObjectCapabilities.Capabilities<
+        : Web3StateShared<
               Definition[T]['ChainId'],
               Definition[T]['SchemaType'],
               Definition[T]['ProviderType'],
@@ -162,7 +163,7 @@ export declare namespace Web3Helper {
 
     export type Web3UI<T extends NetworkPluginID = never> = T extends never
         ? never
-        : Web3Plugin.UI.UI<Definition[T]['ChainId'], Definition[T]['ProviderType'], Definition[T]['NetworkType']>
+        : Web3UIShared<Definition[T]['ChainId'], Definition[T]['ProviderType'], Definition[T]['NetworkType']>
 
     export type ChainIdAll = Definition[NetworkPluginID]['ChainId']
     export type SchemaTypeAll = Definition[NetworkPluginID]['SchemaType']
@@ -218,7 +219,7 @@ export declare namespace Web3Helper {
         Definition[NetworkPluginID]['GasOption']
     >
 
-    export type Web3StateAll = Web3Plugin.ObjectCapabilities.Capabilities<
+    export type Web3StateAll = Web3StateShared<
         Definition[NetworkPluginID]['ChainId'],
         Definition[NetworkPluginID]['SchemaType'],
         Definition[NetworkPluginID]['ProviderType'],
@@ -236,7 +237,7 @@ export declare namespace Web3Helper {
         Definition[NetworkPluginID]['Web3Provider']
     >
 
-    export type Web3UIAll = Web3Plugin.UI.UI<
+    export type Web3UIAll = Web3UIShared<
         Definition[NetworkPluginID]['ChainId'],
         Definition[NetworkPluginID]['ProviderType'],
         Definition[NetworkPluginID]['NetworkType']
@@ -316,7 +317,7 @@ export declare namespace Web3Helper {
         T extends NetworkPluginID = NetworkPluginID,
     > = S extends 'all'
         ? Web3StateAll
-        : Web3Plugin.ObjectCapabilities.Capabilities<
+        : Web3StateShared<
               Definition[T]['ChainId'],
               Definition[T]['SchemaType'],
               Definition[T]['ProviderType'],
@@ -363,7 +364,7 @@ export declare namespace Web3Helper {
         T extends NetworkPluginID = NetworkPluginID,
     > = S extends 'all'
         ? Web3UIAll
-        : Web3Plugin.UI.UI<Definition[T]['ChainId'], Definition[T]['ProviderType'], Definition[T]['NetworkType']>
+        : Web3UIShared<Definition[T]['ChainId'], Definition[T]['ProviderType'], Definition[T]['NetworkType']>
     export type Web3HubOptionsScope<
         S extends 'all' | void = void,
         T extends NetworkPluginID = NetworkPluginID,

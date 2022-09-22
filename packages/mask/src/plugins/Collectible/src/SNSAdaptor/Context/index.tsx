@@ -5,8 +5,8 @@ import {
     useNonFungibleOrders,
     useNonFungibleEvents,
     useNonFungibleRarity,
-    Web3Helper,
 } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID, SourceType } from '@masknet/web3-shared-base'
 
 interface InitialState {

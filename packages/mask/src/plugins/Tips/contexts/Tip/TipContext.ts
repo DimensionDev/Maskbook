@@ -1,4 +1,4 @@
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { FungibleToken, NonFungibleToken, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import type { GasConfig } from '@masknet/web3-shared-evm'
 import { noop } from 'lodash-unified'

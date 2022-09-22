@@ -8,7 +8,7 @@ import { formatCurrency, NetworkDescriptor, NetworkPluginID } from '@masknet/web
 import { Box, Button, buttonClasses, styled, Typography } from '@mui/material'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { useIsMatched } from '../../hooks/index.js'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { useContainer } from 'unstated-next'
 import { Context } from '../../hooks/useContext'
 import { getTokenUSDValue } from '../../utils/getTokenUSDValue'

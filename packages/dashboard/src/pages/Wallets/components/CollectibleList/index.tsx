@@ -1,5 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { uniqBy } from 'lodash-unified'
 import { Box, Button, Stack } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, NonFungibleAsset, NonFungibleToken } from '@masknet/web3-shared-base'
@@ -14,10 +15,9 @@ import {
     useCurrentWeb3NetworkPluginID,
     useNonFungibleAssets,
     useTrustedNonFungibleTokens,
-    Web3Helper,
 } from '@masknet/plugin-infra/web3'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { uniqBy } from 'lodash-unified'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor } from '@masknet/shared'
 
 const useStyles = makeStyles()({

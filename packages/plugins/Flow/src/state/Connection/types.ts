@@ -1,4 +1,4 @@
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NetworkPluginID, WalletProvider } from '@masknet/web3-shared-base'
 import type { ChainId, ProviderType, Web3, Web3Provider } from '@masknet/web3-shared-flow'
 

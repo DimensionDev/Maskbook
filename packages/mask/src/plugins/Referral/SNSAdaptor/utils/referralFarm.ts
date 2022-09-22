@@ -11,7 +11,7 @@ import { roundValue, toChainAddressEthers } from '../../helpers/index.js'
 import { ReferralRPC } from '../../messages.js'
 import type { FungibleTokenDetailed } from '../../types.js'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 async function resolveReferralFarmsV1Address() {
     try {

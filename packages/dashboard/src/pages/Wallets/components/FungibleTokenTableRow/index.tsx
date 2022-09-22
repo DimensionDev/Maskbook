@@ -2,12 +2,8 @@ import { memo, useMemo } from 'react'
 import { Box, Button, TableCell, TableRow, Tooltip, Typography } from '@mui/material'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { FormattedCurrency, TokenIcon, WalletIcon } from '@masknet/shared'
-import {
-    useChainId,
-    useNetworkDescriptors,
-    useCurrentWeb3NetworkPluginID,
-    Web3Helper,
-} from '@masknet/plugin-infra/web3'
+import { useChainId, useNetworkDescriptors, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { CurrencyType, formatBalance, formatCurrency, FungibleAsset, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useDashboardI18N } from '../../../../locales/index.js'

@@ -1,5 +1,6 @@
 import { Icons } from '@masknet/icons'
-import { useNonFungibleAssets, useTrustedNonFungibleTokens, Web3Helper, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useNonFungibleAssets, useTrustedNonFungibleTokens, useWeb3State } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, RetryHint, useWeb3ProfileHiddenSettings } from '@masknet/shared'
 import { EMPTY_LIST, EMPTY_OBJECT } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'

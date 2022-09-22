@@ -2,7 +2,8 @@ import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
-import { useWeb3State, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
