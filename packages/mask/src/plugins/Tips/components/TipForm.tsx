@@ -168,7 +168,7 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
                 <SelectGasSettingsToolbar
                     nativeToken={nativeToken}
                     nativeTokenPrice={nativeTokenPrice}
-                    transaction={{ ...gasConfig }}
+                    transaction={gasConfig}
                     onChange={(tx: Transaction) => {
                         setGasConfig(
                             Others?.chainResolver.isSupport(chainId, 'EIP1559')

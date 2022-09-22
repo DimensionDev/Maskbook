@@ -104,7 +104,7 @@ export function SelectGasSettingsToolbar(props: SelectGasSettingsToolbarProps) {
 
 export function SelectGasSettingsToolbarUI({
     onChange,
-    transaction: gasConfig,
+    transaction: tx,
     nativeToken,
     nativeTokenPrice,
 }: SelectGasSettingsToolbarProps) {
@@ -139,7 +139,7 @@ export function SelectGasSettingsToolbarUI({
             chainId,
             disableGasLimit: true,
             disableSlippageTolerance: true,
-            transaction: gasConfig,
+            transaction: tx,
         })
 
         if (!transaction) return
@@ -149,24 +149,25 @@ export function SelectGasSettingsToolbarUI({
             transaction.maxPriorityFeePerGas as string,
             transaction.gasPrice as string,
         )
-    }, [chainId, gasConfig])
+    }, [chainId, tx, selectAdvancedSettings])
 
+    const currentGasOption = gasOptions?.[currentGasOptionType]
     useEffect(() => {
-        if (!gasOptions?.[currentGasOptionType] || isCustomGas) return
+        if (!currentGasOption || isCustomGas) return
 
         setGasConfigCallback(
-            formatGweiToWei(gasOptions[currentGasOptionType].suggestedMaxFeePerGas).toString(),
-            formatGweiToWei(gasOptions[currentGasOptionType].suggestedMaxFeePerGas).toString(),
-            gasOptions[currentGasOptionType].suggestedMaxPriorityFeePerGas,
+            formatGweiToWei(currentGasOption.suggestedMaxFeePerGas).toString(),
+            formatGweiToWei(currentGasOption.suggestedMaxPriorityFeePerGas).toString(),
+            currentGasOption.suggestedMaxPriorityFeePerGas,
         )
-    }, [currentGasOptionType, gasOptions, isCustomGas])
+    }, [currentGasOption, isCustomGas])
 
     const [menu, openMenu] = useMenuConfig(
         Object.entries(gasOptions ?? {})
             .reverse()
-            .map(([type, option], i) => (
+            .map(([type, option]) => (
                 <MenuItem
-                    key={i}
+                    key={type}
                     className={cx(classes.menuItem, classes.menuItemBorder)}
                     onClick={() => {
                         setIsCustomGas(false)
@@ -183,7 +184,7 @@ export function SelectGasSettingsToolbarUI({
                 </MenuItem>
             ))
             .concat(
-                <MenuItem className={cx(classes.menuItem)} onClick={openCustomGasSettingsDialog}>
+                <MenuItem key="setting" className={cx(classes.menuItem)} onClick={openCustomGasSettingsDialog}>
                     <Typography className={classes.title}>{t.gas_settings_custom()}</Typography>
                 </MenuItem>,
             ),
@@ -203,13 +204,10 @@ export function SelectGasSettingsToolbarUI({
         },
     )
     const gasFee = useMemo(() => {
-        const gasPrice = gasConfig?.gasPrice ? gasConfig?.gasPrice : (gasConfig?.maxFeePerGas as string)
-        return gasConfig?.gas && gasPrice
-            ? multipliedBy(gasPrice as string, gasConfig.gas)
-                  .integerValue()
-                  .toFixed()
-            : '0'
-    }, [gasConfig])
+        if (!tx) return '0'
+        const gasPrice = (tx.gasPrice ? tx.gasPrice : tx.maxFeePerGas) as string
+        return tx.gas && gasPrice ? multipliedBy(gasPrice, tx.gas).integerValue().toFixed() : '0'
+    }, [tx])
 
     const gasFeeUSD = useMemo(() => {
         if (!gasFee) return '0'
