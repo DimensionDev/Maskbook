@@ -6,8 +6,8 @@ import { mirrorShared } from '../shared'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context'
 import { startWatch } from '../../../utils'
 import { formatWriter, mirrorPageProbe, MirrorPageType } from './utils'
-import type { ProfileIdentifier } from '@masknet/shared-base'
 import { Mirror } from '@masknet/web3-providers'
+import type { PostContextCoAuthor } from '@masknet/plugin-infra/content-script'
 
 const MIRROR_LINK_PREFIX = /https(.*)mirror.xyz(.*)\//i
 
@@ -65,7 +65,7 @@ async function registerPostCollectorInner(
         function getAuthorDetail(address?: string) {
             const author = INIT_DATA?.props?.pageProps?.__APOLLO_STATE__?.[`ProjectType:${address}`]
             return {
-                nickname: author?.displayName,
+                displayName: author?.displayName,
                 avatarURL: author?.avatarURL,
                 domain: author?.domain,
             }
@@ -127,9 +127,17 @@ async function registerPostCollectorInner(
                     if (!result) return
                     refs.postID.value = result.postId
                     refs.postBy.value = result.writers?.author.identifier || null
+                    refs.nickname.value = result.writers?.author.nickname || null
+                    refs.avatarURL.value = result.writers?.author.avatar || null
                     refs.postCoAuthors.value =
-                        (result?.writers?.coAuthors.map((x) => x.identifier).filter(Boolean) as ProfileIdentifier[]) ||
-                        []
+                        (result?.writers?.coAuthors
+                            .map((x) => ({
+                                nickname: x.nickname,
+                                avatarURL: new URL(x.avatar),
+                                author: x.identifier,
+                                snsID: x.identifier?.userId,
+                            }))
+                            .filter(Boolean) as PostContextCoAuthor[]) || []
                 })
             }
             run()

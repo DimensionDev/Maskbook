@@ -17,12 +17,17 @@ const ActionsRenderer = createInjectHooksRenderer(
 
 export function PostActions({ isFocusing }: { isFocusing?: boolean }) {
     const identifier = usePostInfoDetails.author()
+    const nickname = usePostInfoDetails.nickname()
     const coAuthors = usePostInfoDetails.coAuthors()
+
     if (!identifier) return null
     return (
         <ActionsRenderer
             // In Mirror, then profile identifier is wallet address
-            addresses={coAuthors?.map((x) => x.userId)}
+            tipsAccounts={[
+                { address: identifier.userId, name: nickname || undefined },
+                ...(coAuthors?.map((x) => ({ address: x.author.userId, name: x.nickname || undefined })) ?? []),
+            ]}
             identity={identifier}
             slot={Plugin.SNSAdaptor.TipsSlot.MirrorEntry}
         />

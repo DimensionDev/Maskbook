@@ -3,7 +3,6 @@ import { TipButton } from '../../../components/index.js'
 import { makeStyles } from '@masknet/theme'
 import Guide from '../../../components/Guide.js'
 import { Stack } from '@mui/material'
-import type { TipsAccount } from '../../../types'
 
 const useStyles = makeStyles<{}, 'postTipsButton'>()((theme, _, refs) => ({
     focusingPostButtonWrapper: {
@@ -59,7 +58,7 @@ const useStyles = makeStyles<{}, 'postTipsButton'>()((theme, _, refs) => ({
 export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOptions> = ({
     identity,
     slot,
-    addresses,
+    tipsAccounts,
 }) => {
     const { classes, cx } = useStyles({})
     if (!identity) return null
@@ -72,8 +71,6 @@ export const TipsRealmContent: Plugin.InjectUI<Plugin.SNSAdaptor.TipsRealmOption
         [Plugin.SNSAdaptor.TipsSlot.MirrorMenu]: classes.profileTipsButton,
         [Plugin.SNSAdaptor.TipsSlot.MirrorEntry]: classes.postTipsButton,
     }
-
-    const tipsAccounts = addresses?.map((x) => ({ address: x } as TipsAccount))
 
     if (slot === Plugin.SNSAdaptor.TipsSlot.MirrorMenu) {
         return (

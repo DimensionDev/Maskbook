@@ -2,6 +2,7 @@ import { ValueRef } from '@dimensiondev/holoflows-kit'
 import type {
     PostContext,
     PostContextAuthor,
+    PostContextCoAuthor,
     PostContextCreation,
     PostContextSNSActions,
 } from '@masknet/plugin-infra/content-script'
@@ -145,7 +146,7 @@ export function createRefsForCreatePostContext() {
     const avatarURL = new ValueRef<string | null>(null)
     const nickname = new ValueRef<string | null>(null)
     const postBy = new ValueRef<ProfileIdentifier | null>(null)
-    const postCoAuthors = new ValueRef<ProfileIdentifier[]>([])
+    const postCoAuthors = new ValueRef<PostContextCoAuthor[]>([])
     const postID = new ValueRef<string | null>(null)
     const postMessage = new ValueRef<TypedMessageTuple<readonly TypedMessage[]>>(makeTypedMessageTupleFromList())
     const postMetadataImages = new ObservableSet<string>()

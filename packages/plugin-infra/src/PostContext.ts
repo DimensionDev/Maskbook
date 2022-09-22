@@ -23,6 +23,14 @@ export interface PostContextAuthor {
     /** ID on the SNS network. */
     readonly snsID: Subscription<string | null>
 }
+
+export interface PostContextCoAuthor {
+    nickname?: string
+    avatarURL?: URL
+    author: ProfileIdentifier
+    snsID: string
+}
+
 export interface PostContextComment {
     readonly commentsSelector: LiveSelector<HTMLElement, false>
     readonly commentBoxSelector: LiveSelector<HTMLElement, false>
@@ -33,7 +41,7 @@ export interface PostContextCreation extends PostContextAuthor {
     readonly isFocusing?: boolean
     readonly suggestedInjectionPoint: HTMLElement
     readonly comments?: PostContextComment
-    readonly coAuthors: Subscription<ProfileIdentifier[]>
+    readonly coAuthors: Subscription<PostContextCoAuthor[]>
     /**
      * The result of this subscription will be merged with `PostContext.postMentionedLinks`.
      *
@@ -61,7 +69,7 @@ export interface PostContext extends PostContextAuthor {
     /** Auto computed */
     readonly identifier: Subscription<null | PostIdentifier>
     readonly url: Subscription<URL | null>
-    readonly coAuthors: Subscription<ProfileIdentifier[] | null>
+    readonly coAuthors: Subscription<PostContextCoAuthor[] | null>
     // Meta
     readonly mentionedLinks: Subscription<string[]>
     /** @deprecated It should appears in rawMessage */

@@ -44,13 +44,30 @@ function AuthorTipsSlot() {
     const visitingPersona = useCurrentVisitingIdentity()
     const isMinimal = useIsMinimalMode(PluginID.Tips)
     const { classes } = useStyles()
+
+    const tipsAccounts = useMemo(() => {
+        if (!visitingPersona?.identifier) return []
+        return [
+            {
+                address: visitingPersona.identifier.userId,
+                name: visitingPersona.nickname,
+            },
+        ]
+    }, [visitingPersona])
+
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
             useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
             (plugin) => plugin.TipsRealm?.UI?.Content,
         )
 
-        return <Component identity={visitingPersona.identifier} slot={Plugin.SNSAdaptor.TipsSlot.MirrorMenu} />
+        return (
+            <Component
+                identity={visitingPersona.identifier}
+                slot={Plugin.SNSAdaptor.TipsSlot.MirrorMenu}
+                tipsAccounts={tipsAccounts}
+            />
+        )
     }, [visitingPersona.identifier])
 
     if (!component || !visitingPersona.identifier || isMinimal) return null
