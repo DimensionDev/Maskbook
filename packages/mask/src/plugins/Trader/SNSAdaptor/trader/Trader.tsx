@@ -283,7 +283,11 @@ export const Trader = forwardRef<TraderRef, TraderProps>((props: TraderProps, re
     useEffect(() => {
         return PluginTraderMessages.swapSettingsUpdated.on((event) => {
             if (event.open) return
-            if (event.gasConfig) setGasConfig(event.gasConfig)
+
+            if (event.gasConfig) {
+                console.log({ gasConfig: event.gasConfig })
+                setGasConfig(event.gasConfig)
+            }
         })
     }, [])
 
