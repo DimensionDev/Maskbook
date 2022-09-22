@@ -43,6 +43,7 @@ function createPostActionsInjector() {
             })
             if (postInfo.actionsElement?.realCurrent?.parentNode?.lastElementChild) {
                 ;(postInfo.actionsElement.realCurrent.parentNode.lastElementChild as HTMLDivElement).style.flex = '1'
+                ;(postInfo.actionsElement.realCurrent.parentNode as HTMLDivElement).style.flex = '1 1 auto'
             }
             root.render(jsx)
             return root.destroy

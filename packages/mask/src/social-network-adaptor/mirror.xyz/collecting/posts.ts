@@ -15,12 +15,20 @@ export function queryInjectPoint(node: HTMLElement) {
     const allANode = node.querySelectorAll(
         [
             // if have header image is 4, either 3
+            ':scope > div:nth-child(3) div:has(div > div > div+a)~div',
+            ':scope > div:nth-child(4) div:has(div > div > div+a)~div',
+            ':scope > div:nth-child(3) div:has(div > div > div+a)~div~a',
+            ':scope > div:nth-child(4) div:has(div > div > div+a)~div~a',
+
+            // collection page card footer
+            ':scope > div:nth-child(1) footer span > div > div',
+            // if have header image is 4, either 3 entries: time + entry link
             ':scope > div:nth-child(3) div+a',
             ':scope > div:nth-child(4) div+a',
-            ':scope > div:nth-child(1) footer span > div > div',
-            // if have header image is 4, either 3
-            ':scope > div:nth-child(3) a+div',
-            ':scope > div:nth-child(4) a+div',
+
+            // if have header image is 4, either 3 entry: address link + time
+            ':scope > div:nth-child(3) > div > div > a~div',
+            ':scope > div:nth-child(4) > div > div > a~div',
         ].join(),
     )
     return allANode.item(allANode.length - 1) as HTMLElement
