@@ -1,17 +1,17 @@
 import { PluginID, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import {
+    useChainId,
     useChainIdValid,
     useNetworkType,
     useNonFungibleAssetsByCollection,
-    useChainId,
 } from '@masknet/plugin-infra/web3'
 import { DataProvider } from '@masknet/public-api'
 import { NFTList } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { makeStyles, MaskTabList, useTabs, ActionButton } from '@masknet/theme'
-import { Days } from '@masknet/web3-providers'
-import { NetworkPluginID, TokenType, createFungibleToken } from '@masknet/web3-shared-base'
-import { isNativeTokenSymbol, isNativeTokenAddress, SchemaType } from '@masknet/web3-shared-evm'
+import { ActionButton, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { TrendingAPI } from '@masknet/web3-providers'
+import { createFungibleToken, NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
+import { isNativeTokenAddress, isNativeTokenSymbol, SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { Link, Stack, Tab } from '@mui/material'
 import { Box, useTheme } from '@mui/system'
@@ -151,7 +151,7 @@ export function TrendingView(props: TrendingViewProps) {
     const coinSymbol = (trending?.coin.symbol || '').toLowerCase()
 
     // #region stats
-    const [days, setDays] = useState(Days.ONE_WEEK)
+    const [days, setDays] = useState(TrendingAPI.Days.ONE_WEEK)
     const {
         value: stats = EMPTY_LIST,
         loading: loadingStats,

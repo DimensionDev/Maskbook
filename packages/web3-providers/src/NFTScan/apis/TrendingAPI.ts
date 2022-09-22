@@ -5,27 +5,26 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
 import { compact } from 'lodash-unified'
 import { LooksRareLogo, OpenSeaLogo } from '../../resources/index.js'
-import type { TrendingAPI } from '../../types/index.js'
+import { TrendingAPI } from '../../types/index.js'
 import { NFTSCAN_API } from '../constants.js'
 import type { EVM, Response } from '../types/index.js'
 import { fetchFromNFTScan, getContractSymbol } from '../helpers/EVM.js'
 import { LooksRareAPI } from '../../looksrare/index.js'
 import { OpenSeaAPI } from '../../opensea/index.js'
-import { Days } from '../../common.js'
 
 enum NonFungibleMarketplace {
     OpenSea = 'OpenSea',
     LooksRare = 'LooksRare',
 }
 
-const resolveNFTScanRange = createLookupTableResolver<Days, string>(
+const resolveNFTScanRange = createLookupTableResolver<TrendingAPI.Days, string>(
     {
-        [Days.MAX]: 'all',
-        [Days.ONE_DAY]: '1d',
-        [Days.ONE_WEEK]: '7d',
-        [Days.ONE_MONTH]: '1mth',
-        [Days.THREE_MONTHS]: '3mth',
-        [Days.ONE_YEAR]: '1y',
+        [TrendingAPI.Days.MAX]: 'all',
+        [TrendingAPI.Days.ONE_DAY]: '1d',
+        [TrendingAPI.Days.ONE_WEEK]: '7d',
+        [TrendingAPI.Days.ONE_MONTH]: '1mth',
+        [TrendingAPI.Days.THREE_MONTHS]: '3mth',
+        [TrendingAPI.Days.ONE_YEAR]: '1y',
     },
     // NFTScan will discard range unrecognized range
     () => '',
