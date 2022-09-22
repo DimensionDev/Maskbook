@@ -49,11 +49,11 @@ const useStyles = makeStyles()((theme) => {
         avatarWrapper: {
             marginRight: 8,
         },
-        strategy: {
+        info: {
             marginTop: 0,
             color: theme.palette.maskColor.publicMain,
         },
-        stragegyColor: {
+        infoColor: {
             color: theme.palette.maskColor.publicMain,
         },
     }
@@ -80,7 +80,7 @@ export function InformationCard(props: InformationCardProps) {
     const { start, end, snapshot, strategies } = proposal
     return (
         <SnapshotCard title={t('plugin_snapshot_info_title')}>
-            <InfoField title={t('plugin_snapshot_info_strategy')} classes={{ field: classes.strategy }}>
+            <InfoField title={t('plugin_snapshot_info_strategy')} classes={{ field: classes.info }}>
                 <Box sx={{ display: 'flex' }}>
                     {strategies
                         .filter((strategy) => Boolean(strategy.params.address))
@@ -96,7 +96,7 @@ export function InformationCard(props: InformationCardProps) {
                         ))}
                 </Box>
             </InfoField>
-            <InfoField title={t('plugin_snapshot_info_author')} classes={{ field: classes.stragegyColor }}>
+            <InfoField title={t('plugin_snapshot_info_author')} classes={{ field: classes.infoColor }}>
                 <Link
                     className={classes.link}
                     target="_blank"
@@ -112,23 +112,23 @@ export function InformationCard(props: InformationCardProps) {
                     {proposal.authorName ?? formatEthereumAddress(proposal.address, 4)}
                 </Link>
             </InfoField>
-            <InfoField title={t('plugin_snapshot_info_ipfs')} classes={{ field: classes.stragegyColor }}>
+            <InfoField title={t('plugin_snapshot_info_ipfs')} classes={{ field: classes.infoColor }}>
                 <Link className={classes.link} target="_blank" rel="noopener" href={resolveIPFS_URL(identifier.id)}>
                     #{identifier.id.slice(0, 7)}
                     <OpenInNew fontSize="small" sx={{ paddingLeft: 1 }} />
                 </Link>
             </InfoField>
-            <InfoField title={t('plugin_snapshot_info_start')} classes={{ field: classes.stragegyColor }}>
+            <InfoField title={t('plugin_snapshot_info_start')} classes={{ field: classes.infoColor }}>
                 <Typography fontSize={14} fontWeight={400}>
                     {formatDateTime(start * 1000, 'MM/dd/yyyy')}
                 </Typography>
             </InfoField>
-            <InfoField title={t('plugin_snapshot_info_end')} classes={{ field: classes.stragegyColor }}>
+            <InfoField title={t('plugin_snapshot_info_end')} classes={{ field: classes.infoColor }}>
                 <Typography fontSize={14} fontWeight={400}>
                     {formatDateTime(end * 1000, 'MM/dd/yyyy')}
                 </Typography>
             </InfoField>
-            <InfoField title={t('plugin_snapshot_info_snapshot')} classes={{ field: classes.stragegyColor }}>
+            <InfoField title={t('plugin_snapshot_info_snapshot')} classes={{ field: classes.infoColor }}>
                 <Link
                     className={classes.link}
                     target="_blank"
