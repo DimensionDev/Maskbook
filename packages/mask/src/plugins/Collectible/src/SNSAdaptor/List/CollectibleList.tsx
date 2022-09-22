@@ -1,4 +1,5 @@
-import { Web3Helper, useWeb3State } from '@masknet/plugin-infra/web3'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { CollectibleGridProps, useStyles } from './hooks/useStyles.js'
 import { NetworkPluginID, NonFungibleAsset, SocialAddress, SourceType } from '@masknet/web3-shared-base'
 import { Box, Button, Tooltip, Typography } from '@mui/material'

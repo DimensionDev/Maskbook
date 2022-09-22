@@ -123,7 +123,7 @@ export type ProfileCardEvent =
 export type NonFungibleTokenDialogEvent =
     | {
           open: true
-          pluginID: string
+          pluginID: NetworkPluginID
           chainId: number
           tokenId: string
           tokenAddress: string

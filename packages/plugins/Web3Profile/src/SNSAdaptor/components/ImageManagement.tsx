@@ -1,18 +1,18 @@
+import { useCallback, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../locales/index.js'
 import { WalletAssetsCard } from './WalletAssets.js'
 import { CrossIsolationMessages, EMPTY_LIST, PersonaInformation, PopupRoutes } from '@masknet/shared-base'
 import { ImageListDialog } from './ImageList.js'
-import { useCallback, useState } from 'react'
 import { InjectedDialog, WalletTypes } from '@masknet/shared'
 import { Box, Button, DialogContent } from '@mui/material'
 import { IdentityResolved, PluginID } from '@masknet/plugin-infra'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import type { AccountType } from '../types.js'
 import { Empty } from './Empty.js'
 import { context } from '../context.js'
 import { Icons } from '@masknet/icons'
 import { CurrentStatusMap, CURRENT_STATUS } from '../../constants.js'
-import { isSameAddress } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     bottomButton: {
@@ -111,7 +111,7 @@ export function ImageManagement(props: ImageManagementProps) {
 
     const handleOpenSettingDialog = useCallback(
         () =>
-            CrossIsolationMessages.events.PluginSettingsDialogUpdate.sendToLocal({
+            CrossIsolationMessages.events.settingsDialogEvent.sendToLocal({
                 open: true,
                 targetTab: PluginID.Web3Profile,
             }),
