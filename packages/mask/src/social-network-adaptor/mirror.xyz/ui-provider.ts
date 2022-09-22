@@ -1,6 +1,6 @@
 import type { SocialNetworkUI } from '../../social-network/index.js'
 import { stateCreator } from '../../social-network/utils.js'
-import { createTaskStartSetupGuideDefault, injectPageInspectorDefault } from '../../social-network/defaults/index.js'
+import { injectPageInspectorDefault } from '../../social-network/defaults/index.js'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles.js'
 
 import { mirrorBase } from './base.js'
@@ -43,8 +43,6 @@ const define: SocialNetworkUI.Definition = {
     injection: {
         pageInspector: injectPageInspectorDefault(),
         postActions: injectPostActionsAtMirror,
-        // Todo: should remove this?
-        setupWizard: createTaskStartSetupGuideDefault(),
         tips: injectTips,
     },
 }
