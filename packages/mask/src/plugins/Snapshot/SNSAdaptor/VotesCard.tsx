@@ -69,6 +69,10 @@ const useStyles = makeStyles()((theme) => {
         power: {
             minWidth: 90,
             color: theme.palette.maskColor.publicMain,
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            maxWidth: 90,
         },
         shadowRootTooltip: {
             color: theme.palette.maskColor.white,
@@ -136,11 +140,25 @@ function Content() {
                                     <Typography className={classes.choice}>{fullChoiceText}</Typography>
                                 </ShadowRootTooltip>
                             ) : null}
-                            <Typography className={classes.power}>
-                                {millify(v.balance, { precision: 2, lowercase: true }) +
-                                    ' ' +
-                                    (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
-                            </Typography>
+                            <ShadowRootTooltip
+                                PopperProps={{
+                                    disablePortal: true,
+                                }}
+                                title={
+                                    <Typography className={classes.shadowRootTooltip}>
+                                        {millify(v.balance, { precision: 2, lowercase: true }) +
+                                            ' ' +
+                                            (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
+                                    </Typography>
+                                }
+                                placement="top"
+                                arrow>
+                                <Typography className={classes.power}>
+                                    {millify(v.balance, { precision: 2, lowercase: true }) +
+                                        ' ' +
+                                        (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
+                                </Typography>
+                            </ShadowRootTooltip>
                         </ListItem>
                     )
                 })}
