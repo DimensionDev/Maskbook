@@ -200,8 +200,9 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     }, [t, chainId, isTokenTip, classes.nftMessage, nonFungibleToken])
 
     const handleConfirm = useCallback(() => {
-        if (!isSupportShare) return
-        activatedSocialNetworkUI.utils.share?.(shareText)
+        if (isSupportShare) {
+            activatedSocialNetworkUI.utils.share?.(shareText)
+        }
         openConfirmModal(false)
         onClose?.()
     }, [shareText, onClose])
