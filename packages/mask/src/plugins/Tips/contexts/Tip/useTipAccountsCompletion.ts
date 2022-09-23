@@ -12,12 +12,14 @@ export function useTipAccountsCompletion(tipAccounts: TipsAccount[]) {
     const chainId = useChainId()
     useEffect(() => {
         if (!NameService?.reverse) return
-        tipAccounts.forEach(async ({ address }) => {
-            const name = await NameService.reverse!(chainId, address)
-            if (!name) return
+        tipAccounts.forEach(async ({ address, name }) => {
+            if (name) return
+
+            const ens = await NameService.reverse!(chainId, address)
+            if (!ens) return
             setMap((oldMap) => ({
                 ...oldMap,
-                [address]: name,
+                [address]: ens,
             }))
         })
     }, [chainId, tipAccounts, NameService])
@@ -26,7 +28,7 @@ export function useTipAccountsCompletion(tipAccounts: TipsAccount[]) {
         if (!Object.keys(map).length) return tipAccounts
         return tipAccounts.map((config) => ({
             ...config,
-            name: map[config.address] || config.name,
+            name: config.name || map[config.address],
         }))
     }, [tipAccounts, map])
 }

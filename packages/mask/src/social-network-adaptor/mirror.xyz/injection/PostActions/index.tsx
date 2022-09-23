@@ -9,6 +9,7 @@ import { Plugin } from '@masknet/plugin-infra'
 import { Flags } from '../../../../../shared/index.js'
 import { createReactRootShadowed } from '../../../../utils'
 import { noop } from 'lodash-unified'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 
 const ActionsRenderer = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
@@ -25,8 +26,14 @@ export function PostActions({ isFocusing }: { isFocusing?: boolean }) {
         <ActionsRenderer
             // In Mirror, then profile identifier is wallet address
             tipsAccounts={[
-                { address: identifier.userId, name: nickname || undefined },
-                ...(coAuthors?.map((x) => ({ address: x.author.userId, name: x.nickname || undefined })) ?? []),
+                {
+                    address: identifier.userId,
+                    name: nickname ? `(${nickname}) ${formatEthereumAddress(identifier.userId, 4)}` : identifier.userId,
+                },
+                ...(coAuthors?.map((x) => ({
+                    address: x.author.userId,
+                    name: x.nickname ? `(${x.nickname}) ${formatEthereumAddress(x.author.userId, 4)}` : x.author.userId,
+                })) ?? []),
             ]}
             identity={identifier}
             slot={Plugin.SNSAdaptor.TipsSlot.MirrorEntry}
