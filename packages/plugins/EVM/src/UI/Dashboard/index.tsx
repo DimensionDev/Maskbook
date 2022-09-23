@@ -1,5 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import type {
+    AddressType,
     Block,
     ChainId,
     GasOption,
@@ -21,6 +22,7 @@ import { SharedContextSettings, Web3StateSettings } from '../../settings/index.j
 
 const dashboard: Plugin.Dashboard.Definition<
     ChainId,
+    AddressType,
     SchemaType,
     ProviderType,
     NetworkType,
