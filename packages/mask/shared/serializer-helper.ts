@@ -2,9 +2,10 @@ import { Environment, isEnvironment, WebExtensionMessage } from '@dimensiondev/h
 import { decodeArrayBuffer, defer, encodeArrayBuffer, unreachable } from '@dimensiondev/kit'
 import { createSerializer } from '@masknet/shared-base'
 
+let id = 0
 function sendStream(stream: ReadableStream) {
     if (isEnvironment(Environment.ManifestBackground)) {
-        const id = Math.random().toString()
+        id += 1
         function onConnect(port: browser.runtime.Port) {
             if (port.name !== `stream:${id}`) return
             browser.runtime.onConnect.removeListener(onConnect)
@@ -61,7 +62,7 @@ function sendStream(stream: ReadableStream) {
         return _()
     }
 }
-function restoreSream(stream: string | any[]) {
+function restoreStream(stream: string | any[]) {
     if (typeof stream === 'string') {
         const port = browser.runtime.connect({ name: `stream:${stream}` })
         let controller: ReadableStreamController<any>
@@ -117,7 +118,7 @@ function restoreAbortSignal(id: string): AbortSignal {
 }
 
 export const specializedSerializer = createSerializer({
-    stream: [sendStream, restoreSream],
+    stream: [sendStream, restoreStream],
     abortSignal: [sendAbortSignal, restoreAbortSignal],
 })
 const messages = new WebExtensionMessage<{
