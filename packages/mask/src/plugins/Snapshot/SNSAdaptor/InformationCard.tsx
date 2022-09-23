@@ -1,4 +1,4 @@
-import { formatEthereumAddress, explorerResolver, ChainId } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, explorerResolver } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Link, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import OpenInNew from '@mui/icons-material/OpenInNew'
@@ -86,10 +86,7 @@ export function InformationCard(props: InformationCardProps) {
                                 className={classes.link}
                                 target="_blank"
                                 rel="noopener"
-                                href={explorerResolver.addressLink(
-                                    Number(proposal.network) as ChainId,
-                                    strategy.params.address,
-                                )}>
+                                href={explorerResolver.addressLink(proposal.chainId, strategy.params.address)}>
                                 <Avatar src={resolveIPFS_URL(proposal.space.avatar)} className={classes.avatar} />
                             </Link>
                         ))}
@@ -100,7 +97,7 @@ export function InformationCard(props: InformationCardProps) {
                     className={classes.link}
                     target="_blank"
                     rel="noopener"
-                    href={explorerResolver.addressLink(Number(proposal.network) as ChainId, proposal.address)}>
+                    href={explorerResolver.addressLink(proposal.chainId, proposal.address)}>
                     <div className={classes.avatarWrapper}>
                         {proposal.authorAvatar ? (
                             <Avatar src={resolveIPFS_URL(proposal.authorAvatar)} className={classes.avatar} />
@@ -136,10 +133,7 @@ export function InformationCard(props: InformationCardProps) {
                     className={classes.link}
                     target="_blank"
                     rel="noopener"
-                    href={explorerResolver.blockLink(
-                        Number(proposal.network) as ChainId,
-                        Number.parseInt(snapshot, 10),
-                    )}>
+                    href={explorerResolver.blockLink(proposal.chainId, Number.parseInt(snapshot, 10))}>
                     {snapshot}
                     <OpenInNew fontSize="small" />
                 </Link>
