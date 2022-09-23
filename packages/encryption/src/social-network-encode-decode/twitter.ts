@@ -10,13 +10,16 @@ export function __TwitterEncoder(data: Uint8Array | string) {
  * @link https://github.com/DimensionDev/Maskbook/issues/198
  */
 function __TwitterEncoderText(text: string) {
-    return `https://mask.io/?PostData_v1=${batchReplace(text, [
-        ['\u{1F3BC}', '%20'],
-        [':||', '%40'],
-        ['+', '-'],
-        ['=', '_'],
-        [/\|/g, '.'],
-    ])}`
+    return (
+        'https://mask.io/?PostData_v1=' +
+        text
+            //
+            .replace('\u{1F3BC}', '%20')
+            .replace(':||', '%40')
+            .replace('+', '-')
+            .replace('=', '_')
+            .replace(/\|/g, '.')
+    )
 }
 function __TwitterEncoderBinary(data: Uint8Array) {
     return `https://mask.io/?PostData_v2=${encodeURIComponent(encodeArrayBuffer(data))}`
@@ -57,29 +60,19 @@ function TwitterDecoderText(raw: string): Option<string> {
         const payload = search ? search.slice(1) : pathname.slice(1)
         if (!payload) return None
         return Some(
-            `\u{1F3BC}${batchReplace(
+            '\u{1F3BC}' +
                 payload
                     // https://github.com/sindresorhus/eslint-plugin-unicorn/issues/1476
                     // eslint-disable-next-line unicorn/better-regex
                     .replace(/^PostData_v\d=/i, '')
                     .replace(/^%20/, '')
-                    .replace(/%40$/, ''),
-                [
-                    ['-', '+'],
-                    ['_', '='],
-                    [/\./g, '|'],
-                ],
-            )}:||`,
+                    .replace(/%40$/, '')
+                    .replace('-', '+')
+                    .replace('_', '=')
+                    .replace(/\./g, '|') +
+                ':||',
         )
     } catch {
         return None
     }
-}
-
-function batchReplace(source: string, group: Array<[string | RegExp, string]>) {
-    let storage = source
-    for (const v of group) {
-        storage = storage.replace(v[0], v[1])
-    }
-    return storage
 }

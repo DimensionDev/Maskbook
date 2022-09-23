@@ -137,7 +137,7 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
             </div>
             {action ? (
                 <>
-                    <Typography variant="body1" color="#FF3545" sx={{ padding: 1 }} textAlign="center">
+                    <Typography component="div" variant="body1" color="#FF3545" sx={{ padding: 1 }} textAlign="center">
                         {content}
                     </Typography>
                     <div className={classes.action}>{action}</div>

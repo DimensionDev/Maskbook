@@ -53,7 +53,7 @@ export function injectCompositionFacebook(signal: AbortSignal) {
 
     signal.addEventListener(
         'abort',
-        CrossIsolationMessages.events.requestComposition.on((data) => {
+        CrossIsolationMessages.events.compositionDialogEvent.on((data) => {
             if (data.reason === 'popup') return
             if (data.open === false) return
             taskOpenComposeBoxFacebook(data.content || '', data.options)
@@ -63,7 +63,7 @@ export function injectCompositionFacebook(signal: AbortSignal) {
 function UI() {
     const { classes } = useStyles()
     const onHintButtonClicked = useCallback(
-        () => CrossIsolationMessages.events.requestComposition.sendToLocal({ reason: 'popup', open: true }),
+        () => CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({ reason: 'popup', open: true }),
         [],
     )
     return (

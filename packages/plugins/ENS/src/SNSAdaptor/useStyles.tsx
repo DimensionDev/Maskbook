@@ -59,20 +59,19 @@ const useStyles = makeStyles()((theme) => {
             height: 'auto',
         },
         coverCard: {
-            position: 'relative',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
             height: 256,
             marginBottom: 12,
             backgroundImage: `url(${new URL('./assets/ENSCover.svg', import.meta.url)})`,
             backgroundSize: 'contain',
         },
         coverText: {
-            position: 'absolute',
             fontSize: 24,
             fontWeight: 700,
             width: '100%',
             textAlign: 'center',
-            top: '50%',
-            transform: 'translateY(-50%)',
             color: theme.palette.common.white,
         },
         nextIdVerified: {
@@ -89,8 +88,10 @@ const useStyles = makeStyles()((theme) => {
             color: theme.palette.maskColor.dark,
             fontWeight: 700,
             marginLeft: 4,
-            marginRight: 12,
             fontSize: 16,
+        },
+        rightSpace: {
+            marginRight: 12,
         },
         sourceSwitcher: {
             display: 'flex',
@@ -101,6 +102,37 @@ const useStyles = makeStyles()((theme) => {
             fontSize: 14,
             fontWeight: '400 !important',
             color: theme.palette.maskColor.secondaryDark,
+        },
+        link: {
+            display: 'flex',
+            textDecoration: 'none !important',
+        },
+        nextIdLink: {
+            color: theme.palette.maskColor.primary,
+            textDecoration: 'none !important',
+        },
+        more: {
+            cursor: 'pointer',
+            marginLeft: 'auto',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+        socialAccountListItem: {
+            width: 193,
+            padding: '12px 6px',
+            margin: '6px 12px',
+            display: 'flex',
+            alignItems: 'center',
+        },
+        menuItemNextIdIcon: {
+            display: 'flex',
+            marginLeft: 'auto',
+        },
+        accountNameInList: {
+            maxWidth: 120,
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
         },
     }
 })

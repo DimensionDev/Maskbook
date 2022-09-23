@@ -1,6 +1,6 @@
+import { createContext, memo, useContext, useEffect, useRef, useState } from 'react'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { ShadowRootIsolation } from '@masknet/theme'
-import { createContext, memo, useContext, useEffect, useRef, useState } from 'react'
 import {
     PluginWrapperComponent,
     PluginWrapperMethods,

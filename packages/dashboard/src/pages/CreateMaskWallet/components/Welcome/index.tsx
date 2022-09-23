@@ -1,7 +1,7 @@
 import { memo, MutableRefObject, useEffect, useMemo, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { styled, useTheme } from '@mui/material/styles'
+import { lighten, styled, useTheme } from '@mui/material/styles'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { Button } from '@mui/material'
 import { Icons } from '@masknet/icons'
@@ -51,7 +51,10 @@ const CancelButton = styled(Button)(
     line-height: 20px;
     padding: 8px 16px;
     border-radius: 20px;
-    background: ${theme.palette.mode === 'dark' ? '#1A1D20' : '#F7F9FA'}
+    background: ${theme.palette.mode === 'dark' ? '#1A1D20' : '#F7F9FA'};
+    &:hover {
+        background: ${lighten(theme.palette.mode === 'dark' ? '#1A1D20' : '#F7F9FA', 0.1)}!important;
+    }
 `,
 )
 

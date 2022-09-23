@@ -14,9 +14,9 @@ import {
     useChainIdValid,
     useWallets,
     getRegisteredWeb3Networks,
-    Web3Helper,
     useChainId,
 } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainIcon, WalletIcon } from '@masknet/shared'
 import { PopupRoutes } from '@masknet/shared-base'
 

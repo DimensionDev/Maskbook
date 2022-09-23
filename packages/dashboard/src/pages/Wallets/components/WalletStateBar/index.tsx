@@ -11,9 +11,9 @@ import {
     useWeb3State,
     useReverseAddress,
     useRecentTransactions,
-    Web3Helper,
     useAccount,
 } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { PluginMessages } from '../../../../API.js'
 import { useDashboardI18N } from '../../../../locales/index.js'
 import { useNetworkSelector } from './useNetworkSelector.js'

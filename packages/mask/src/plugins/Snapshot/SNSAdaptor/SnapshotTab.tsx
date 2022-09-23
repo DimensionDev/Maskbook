@@ -4,8 +4,14 @@ const useStyles = makeStyles()((theme) => {
     return {
         root: {
             width: '100%',
-            borderTopLeftRadius: 0,
-            borderTopRightRadius: 0,
+            borderRadius: 0,
+            backgroundColor: theme.palette.maskColor.white,
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            height: 400,
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         content: {
             padding: `${theme.spacing(2)} !important`,

@@ -1,6 +1,6 @@
 import { formatEthereumAddress, explorerResolver } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Link, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import OpenInNew from '@mui/icons-material/OpenInNew'
 import formatDateTime from 'date-fns/format'
 import { useContext } from 'react'
@@ -14,7 +14,7 @@ import { NetworkPluginID, resolveIPFS_URL } from '@masknet/web3-shared-base'
 
 export interface InformationCardProps {}
 
-export interface InfoFieldProps {
+export interface InfoFieldProps extends withClasses<'field'> {
     title: string
     children: React.ReactNode
 }
@@ -25,7 +25,13 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            margin: `${theme.spacing(1)} auto`,
+            marginTop: 14,
+            color: theme.palette.maskColor.main,
+            width: '100%',
+        },
+        title: {
+            fontSize: 14,
+            fontWeight: 400,
         },
         link: {
             display: 'flex',
@@ -33,6 +39,8 @@ const useStyles = makeStyles()((theme) => {
             alignItems: 'center',
             marginLeft: theme.spacing(1),
             textDecoration: 'none !important',
+            fontSize: 14,
+            fontWeight: 400,
         },
         avatar: {
             width: 16,
@@ -41,16 +49,17 @@ const useStyles = makeStyles()((theme) => {
         avatarWrapper: {
             marginRight: 8,
         },
+        strategy: {
+            marginTop: 0,
+        },
     }
 })
 
 export function InfoField(props: InfoFieldProps) {
-    const { classes } = useStyles()
+    const classes = useStylesExtends(useStyles(), props)
     return (
         <div className={classes.field}>
-            <div>
-                <Typography>{props.title}</Typography>
-            </div>
+            <Typography className={classes.title}>{props.title}</Typography>
             <div>{props.children}</div>
         </div>
     )
@@ -67,60 +76,64 @@ export function InformationCard(props: InformationCardProps) {
     const { start, end, snapshot, strategies } = proposal
     return (
         <SnapshotCard title={t('plugin_snapshot_info_title')}>
-            <Typography component="div">
-                <InfoField title={t('plugin_snapshot_info_strategy')}>
-                    <Box sx={{ display: 'flex' }}>
-                        {strategies
-                            .filter((strategy) => Boolean(strategy.params.address))
-                            .map((strategy, i) => (
-                                <Link
-                                    key={i}
-                                    className={classes.link}
-                                    target="_blank"
-                                    rel="noopener"
-                                    href={explorerResolver.addressLink(chainId, strategy.params.address)}>
-                                    <Avatar src={resolveIPFS_URL(proposal.space.avatar)} className={classes.avatar} />
-                                </Link>
-                            ))}
-                    </Box>
-                </InfoField>
-                <InfoField title={t('plugin_snapshot_info_author')}>
-                    <Link
-                        className={classes.link}
-                        target="_blank"
-                        rel="noopener"
-                        href={explorerResolver.addressLink(chainId, proposal.address)}>
-                        <div className={classes.avatarWrapper}>
-                            {proposal.authorAvatar ? (
-                                <Avatar src={resolveIPFS_URL(proposal.authorAvatar)} className={classes.avatar} />
-                            ) : (
-                                <EthereumBlockie address={proposal.address} />
-                            )}
-                        </div>
-                        {proposal.authorName ?? formatEthereumAddress(proposal.address, 4)}
-                    </Link>
-                </InfoField>
-                <InfoField title={t('plugin_snapshot_info_ipfs')}>
-                    <Link className={classes.link} target="_blank" rel="noopener" href={resolveIPFS_URL(identifier.id)}>
-                        #{identifier.id.slice(0, 7)}
-                        <OpenInNew fontSize="small" />
-                    </Link>
-                </InfoField>
-                <InfoField title={t('plugin_snapshot_info_start')}>
+            <InfoField title={t('plugin_snapshot_info_strategy')} classes={{ field: classes.strategy }}>
+                <Box sx={{ display: 'flex' }}>
+                    {strategies
+                        .filter((strategy) => Boolean(strategy.params.address))
+                        .map((strategy, i) => (
+                            <Link
+                                key={i}
+                                className={classes.link}
+                                target="_blank"
+                                rel="noopener"
+                                href={explorerResolver.addressLink(chainId, strategy.params.address)}>
+                                <Avatar src={resolveIPFS_URL(proposal.space.avatar)} className={classes.avatar} />
+                            </Link>
+                        ))}
+                </Box>
+            </InfoField>
+            <InfoField title={t('plugin_snapshot_info_author')}>
+                <Link
+                    className={classes.link}
+                    target="_blank"
+                    rel="noopener"
+                    href={explorerResolver.addressLink(chainId, proposal.address)}>
+                    <div className={classes.avatarWrapper}>
+                        {proposal.authorAvatar ? (
+                            <Avatar src={resolveIPFS_URL(proposal.authorAvatar)} className={classes.avatar} />
+                        ) : (
+                            <EthereumBlockie address={proposal.address} />
+                        )}
+                    </div>
+                    {proposal.authorName ?? formatEthereumAddress(proposal.address, 4)}
+                </Link>
+            </InfoField>
+            <InfoField title={t('plugin_snapshot_info_ipfs')}>
+                <Link className={classes.link} target="_blank" rel="noopener" href={resolveIPFS_URL(identifier.id)}>
+                    #{identifier.id.slice(0, 7)}
+                    <OpenInNew fontSize="small" />
+                </Link>
+            </InfoField>
+            <InfoField title={t('plugin_snapshot_info_start')}>
+                <Typography fontSize={14} fontWeight={400}>
                     {formatDateTime(start * 1000, 'MM/dd/yyyy')}
-                </InfoField>
-                <InfoField title={t('plugin_snapshot_info_end')}>{formatDateTime(end * 1000, 'MM/dd/yyyy')}</InfoField>
-                <InfoField title={t('plugin_snapshot_info_snapshot')}>
-                    <Link
-                        className={classes.link}
-                        target="_blank"
-                        rel="noopener"
-                        href={explorerResolver.blockLink(chainId, Number.parseInt(snapshot, 10))}>
-                        {snapshot}
-                        <OpenInNew fontSize="small" />
-                    </Link>
-                </InfoField>
-            </Typography>
+                </Typography>
+            </InfoField>
+            <InfoField title={t('plugin_snapshot_info_end')}>
+                <Typography fontSize={14} fontWeight={400}>
+                    {formatDateTime(end * 1000, 'MM/dd/yyyy')}
+                </Typography>
+            </InfoField>
+            <InfoField title={t('plugin_snapshot_info_snapshot')}>
+                <Link
+                    className={classes.link}
+                    target="_blank"
+                    rel="noopener"
+                    href={explorerResolver.blockLink(chainId, Number.parseInt(snapshot, 10))}>
+                    {snapshot}
+                    <OpenInNew fontSize="small" />
+                </Link>
+            </InfoField>
         </SnapshotCard>
     )
 }

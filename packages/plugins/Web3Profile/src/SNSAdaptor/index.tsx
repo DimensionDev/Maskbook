@@ -1,5 +1,5 @@
 import { Plugin, PluginID } from '@masknet/plugin-infra'
-import { ApplicationEntry } from '@masknet/shared'
+import { ApplicationEntry, PublicWalletSetting } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { base } from '../base.js'
 import { Web3ProfileDialog } from './components/Web3ProfileDialog.js'
@@ -28,9 +28,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
             return {
                 RenderEntryComponent(EntryComponentProps) {
                     useEffect(() => {
-                        return CrossIsolationMessages.events.requestOpenApplication.on(({ open, application }) => {
+                        return CrossIsolationMessages.events.applicationDialogEvent.on(({ open, application }) => {
                             if (application !== PluginID.Web3Profile) return
-                            CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToLocal({ open })
+                            CrossIsolationMessages.events.web3ProfileDialogEvent.sendToLocal({ open })
                         })
                     }, [])
 
@@ -44,7 +44,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                                 onClick={() =>
                                     EntryComponentProps?.onClick
                                         ? EntryComponentProps?.onClick()
-                                        : CrossIsolationMessages.events.requestWeb3ProfileDialog.sendToLocal({
+                                        : CrossIsolationMessages.events.web3ProfileDialogEvent.sendToLocal({
                                               open: true,
                                           })
                                 }
@@ -72,6 +72,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
             ID: PluginID.Web3Profile,
             label: 'Web3Profile',
             priority: 2,
+            UI: {
+                TabContent: PublicWalletSetting,
+            },
         },
     ],
 }

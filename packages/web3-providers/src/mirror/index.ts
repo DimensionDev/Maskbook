@@ -156,6 +156,7 @@ export class MirrorAPI implements MirrorBaseAPI.Provider {
             digest: response.entry.digest,
             author: response.entry.publisher.project,
             coAuthors: [response.entry.publisher.member],
+            collaborators: response.entry.collaborators,
             collection: {
                 chainId: response.entry.writingNFT.network.chainId,
                 name: response.entry.writingNFT.name,

@@ -1,6 +1,6 @@
 import type BigNumber from 'bignumber.js'
 import { createPluginMessage, PluginID, PluginMessageEmitter } from '@masknet/plugin-infra'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { GasOptionType, NetworkPluginID, NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { PLUGIN_ID } from './constants.js'

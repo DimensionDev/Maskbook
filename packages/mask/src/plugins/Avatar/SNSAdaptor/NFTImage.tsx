@@ -3,9 +3,10 @@ import { makeStyles } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { SelectedIcon } from '../assets/selected.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
-import { Box, useTheme } from '@mui/material'
+import { Box, Tooltip, useTheme } from '@mui/material'
 import { Image } from '@masknet/shared'
 import { mask_avatar_dark, mask_avatar_light } from '../constants.js'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -71,20 +72,36 @@ export function NFTImage(props: NFTImageProps) {
     const { token, onClick, selectedToken, showBadge = false, pluginId } = props
     const { classes } = useStyles()
     const theme = useTheme()
+    const { Others } = useWeb3State()
 
+    const name = token.collection?.name || token.contract?.name
+    const uiTokenId = Others?.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
+    const title = name ? `${name} ${uiTokenId}` : token.metadata?.name ?? ''
     return (
-        <Box className={classes.root}>
-            <Image
-                fallback={theme.palette.mode === 'dark' ? mask_avatar_dark : mask_avatar_light}
-                classes={{
-                    imageLoading: classes.imageLoading,
-                    container: classes.imageLoadingBox,
-                }}
-                onClick={() => onClick(token)}
-                src={token.metadata?.imageURL ?? ''}
-                className={classNames(classes.image, isSameNFT(pluginId, token, selectedToken) ? classes.selected : '')}
-            />
-            {showBadge && isSameNFT(pluginId, token, selectedToken) ? <SelectedIcon className={classes.icon} /> : null}
-        </Box>
+        <Tooltip
+            title={title}
+            arrow
+            disableInteractive
+            placement="top"
+            PopperProps={{ disablePortal: true, popperOptions: { strategy: 'absolute' } }}>
+            <Box className={classes.root} data-src={token.metadata?.imageURL}>
+                <Image
+                    fallback={theme.palette.mode === 'dark' ? mask_avatar_dark : mask_avatar_light}
+                    classes={{
+                        imageLoading: classes.imageLoading,
+                        container: classes.imageLoadingBox,
+                    }}
+                    onClick={() => onClick(token)}
+                    src={token.metadata?.imageURL ?? ''}
+                    className={classNames(
+                        classes.image,
+                        isSameNFT(pluginId, token, selectedToken) ? classes.selected : '',
+                    )}
+                />
+                {showBadge && isSameNFT(pluginId, token, selectedToken) ? (
+                    <SelectedIcon className={classes.icon} />
+                ) : null}
+            </Box>
+        </Tooltip>
     )
 }

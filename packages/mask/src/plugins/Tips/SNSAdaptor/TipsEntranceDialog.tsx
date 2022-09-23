@@ -23,7 +23,6 @@ import { WalletsByNetwork } from './components/WalletsByNetwork.js'
 import { Icons } from '@masknet/icons'
 import { useTipsSetting } from '../hooks/useTipsSetting.js'
 import type { TipsSettingType } from '../types/index.js'
-import { PluginNextIDMessages } from '../messages.js'
 import { MaskMessages } from '../../../utils/index.js'
 
 export interface TipsEntranceDialogProps {
@@ -177,7 +176,7 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
 
     const handleOpenSettingDialog = useCallback(
         () =>
-            CrossIsolationMessages.events.PluginSettingsDialogUpdate.sendToLocal({
+            CrossIsolationMessages.events.settingsDialogEvent.sendToLocal({
                 open: true,
                 targetTab: PluginID.Tips,
             }),
@@ -195,7 +194,9 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const openConnectWallet = useCallback(() => Services.Helper.openPopupWindow(PopupRoutes.ConnectWallet), [])
 
     useEffect(() => {
-        return PluginNextIDMessages.tipsSettingUpdate.on(retrySetting)
+        return CrossIsolationMessages.events.walletSettingsDialogEvent.on((x) => {
+            if (x === PluginID.Tips) retrySetting()
+        })
     }, [retrySetting])
 
     useEffect(() => {

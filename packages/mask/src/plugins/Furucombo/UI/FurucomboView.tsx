@@ -99,7 +99,7 @@ export function FurucomboView(props: PoolViewProps) {
                         className={classes.tabs}
                         variant="fullWidth"
                         indicatorColor="primary"
-                        textColor="secondary"
+                        textColor="primary"
                         onChange={(_, newValue: number) => setTabIndex(newValue)}>
                         <Tab value={0} className={classes.tab} key={0} label={t('plugin_furucombo_tab_pool')} />,
                         <Tab value={1} className={classes.tab} key={1} label={t('plugin_furucombo_tab_investments')} />,

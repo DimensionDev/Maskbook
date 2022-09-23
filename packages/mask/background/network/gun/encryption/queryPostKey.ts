@@ -175,7 +175,6 @@ namespace Version38Or39 {
         if (x === SocialNetworkEnum.Twitter) return 'twitter-'
         if (x === SocialNetworkEnum.Minds) return 'minds-'
         if (x === SocialNetworkEnum.Instagram) return 'instagram-'
-        if (x === SocialNetworkEnum.Mirror) return 'mirror-'
         if (x === SocialNetworkEnum.Unknown)
             throw new TypeError('[@masknet/encryption] Current SNS network is not correctly configured.')
         unreachable(x)
@@ -344,7 +343,6 @@ namespace Version37 {
         if (x === SocialNetworkEnum.Twitter) return '37-tw'
         if (x === SocialNetworkEnum.Minds) return '37-minds'
         if (x === SocialNetworkEnum.Instagram) return '37-ins'
-        if (x === SocialNetworkEnum.Mirror) return '37-mirror'
         if (x === SocialNetworkEnum.Unknown)
             throw new TypeError('[@masknet/encryption] Current SNS network is not correctly configured.')
         unreachable(x)

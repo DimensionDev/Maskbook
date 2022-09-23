@@ -25,6 +25,8 @@ const useStyles = makeStyles()((theme) => {
         listItem: {
             display: 'flex',
             flexDirection: 'column',
+            paddingLeft: 0,
+            paddingRight: 0,
         },
         listItemHeader: {
             display: 'flex',
@@ -32,12 +34,15 @@ const useStyles = makeStyles()((theme) => {
         },
         power: {
             marginLeft: theme.spacing(2),
+            color: theme.palette.maskColor.publicMain,
         },
         ratio: {
             marginLeft: 'auto',
+            color: theme.palette.maskColor.publicMain,
         },
         choice: {
             maxWidth: choiceMaxWidth,
+            color: theme.palette.maskColor.publicMain,
         },
         linearProgressWrap: {
             width: '100%',
@@ -51,6 +56,8 @@ const useStyles = makeStyles()((theme) => {
         resultButton: {
             width: 200,
             margin: '0 auto',
+            backgroundColor: theme.palette.maskColor.publicMain,
+            color: theme.palette.maskColor.white,
         },
     }
 })
@@ -154,7 +161,7 @@ function Content() {
             </List>
             {proposal.isEnd ? (
                 <Button
-                    color="primary"
+                    variant="roundedContained"
                     className={classes.resultButton}
                     onClick={() => {
                         const csv = parse(dataForCsv)

@@ -2,7 +2,7 @@
 // !!! 2. Open a new issue to the library author.
 // !!! 3. Add a pnpm/resolution in package.json if the package specifier does not include git hash to pin the version.
 
-/* cSpell:disable */
+/* cspell:disable */
 /** @type {Map<string, RegExp | string | (string | RegExp)[]>} */
 const approvedList = new Map()
 
@@ -29,7 +29,10 @@ approvedList.set('wyvern-schemas', 'git+https://github.com/ProjectOpenSea/wyvern
 approvedList.set('async-eventemitter', 'github:ahultgren/async-eventemitter#fa06e39e56786ba541c180061dbf2c0a5bbf951c')
 
 // pnpm -r why web3@0.20.7
-approvedList.set('bignumber.js', 'git+https://github.com/frozeman/bignumber.js-nolookahead.git')
+approvedList.set('bignumber.js', [
+    'git+https://github.com/frozeman/bignumber.js-nolookahead.git',
+    'git+https://github.com/frozeman/bignumber.js-nolookahead.git#57692b3ecfc98bbdd6b3a516cb2353652ea49934',
+])
 
 // @magic-works/i18n-codegen -> i18next-translation-parser
 // https://github.com/i18next/i18next-translation-parser/issues/11
@@ -37,8 +40,6 @@ approvedList.set('html-parse-stringify2', 'github:locize/html-parse-stringify2')
 
 // ipfs https://github.com/ipfs/js-ipfs-utils/issues/158
 approvedList.set('node-fetch', 'https://registry.npmjs.org/@achingbrain/node-fetch/-/node-fetch-2.6.7.tgz')
-
-/* cSpell:enable */
 
 /**
  * @param {string} parentPackage The current resolving parentPackage
@@ -69,6 +70,8 @@ function assertInstallationSourceValid(parentPackage, dependedPackage, installat
     If you want to approve this new unusual dependency, please edit ./pnpmfile.cjs.`,
     )
 }
+
+/* cspell:enable */
 
 function validatePackage({ dependencies, devDependencies, optionalDependencies, peerDependencies, name }) {
     for (const [k, v] of notNormativeInstall(dependencies)) assertInstallationSourceValid(name, k, v)

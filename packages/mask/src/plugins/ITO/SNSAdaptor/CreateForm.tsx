@@ -416,7 +416,10 @@ export function CreateForm(props: CreateFormProps) {
                             <Box className={classes.tokenAdornment}>
                                 <TokenIcon
                                     classes={{ icon: classes.tokenIcon }}
+                                    chainId={tokenAndAmount.token.chainId}
                                     address={tokenAndAmount.token.address}
+                                    name={tokenAndAmount.token.name}
+                                    symbol={tokenAndAmount.token.symbol}
                                     logoURL={tokenAndAmount.token.logoURL}
                                 />
                                 <Typography>{tokenAndAmount.token?.symbol}</Typography>

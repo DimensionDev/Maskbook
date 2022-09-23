@@ -1,5 +1,5 @@
 import { pageableToIterator, NetworkPluginID } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '../web3-helpers/index.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount } from './useAccount.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -44,7 +44,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
 
     const next = useCallback(async () => {
         if (!iterator || done) return
-
+        setError(undefined)
         const batchResult: Array<Web3Helper.NonFungibleAssetScope<S, T>> = []
         toggleLoading(true)
         try {
@@ -79,6 +79,7 @@ export function useNonFungibleAssets<S extends 'all' | void = void, T extends Ne
     }, [next])
 
     const retry = useCallback(() => {
+        setError(undefined)
         setAssets(EMPTY_LIST)
         setDone(false)
     }, [])

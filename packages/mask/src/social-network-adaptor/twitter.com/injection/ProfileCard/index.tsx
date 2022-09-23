@@ -1,6 +1,7 @@
-import { CrossIsolationMessages, EMPTY_OBJECT, ProfileIdentifier } from '@masknet/shared-base'
+import { CrossIsolationMessages, ProfileIdentifier } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Twitter } from '@masknet/web3-providers'
+import type { SocialIdentity } from '@masknet/web3-shared-base'
 import { CSSProperties, useCallback, useEffect, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
 import { useSocialIdentity } from '../../../../components/DataSource/useActivatedUI.js'
@@ -26,9 +27,6 @@ const useStyles = makeStyles()((theme) => ({
         width: CARD_WIDTH,
         height: CARD_HEIGHT,
         backgroundColor: theme.palette.background.paper,
-        boxShadow: theme.palette.mode === 'light' ? '0px 4px 30px rgba(0, 0, 0, 0.1)' : undefined,
-        borderRadius: theme.spacing(1.5),
-        overflow: 'hidden',
     },
     loading: {
         height: '100%',
@@ -91,7 +89,7 @@ function ProfileCardHolder() {
     }, [hideProfileCard])
 
     useEffect(() => {
-        return CrossIsolationMessages.events.requestProfileCard.on((event) => {
+        return CrossIsolationMessages.events.profileCardEvent.on((event) => {
             if (!event.open) {
                 hideProfileCard()
                 return
@@ -138,7 +136,7 @@ function ProfileCardHolder() {
         }
     }, [hideProfileCard])
 
-    const { value: identity, loading } = useAsync(async () => {
+    const { value: identity, loading } = useAsync(async (): Promise<SocialIdentity | null> => {
         if (!twitterId) return null
         const user = await Twitter.getUserByScreenName(twitterId)
         if (!user?.legacy) return null
@@ -158,7 +156,7 @@ function ProfileCardHolder() {
         }
     }, [twitterId])
 
-    const { value: resolvedIdentity, loading: resolving } = useSocialIdentity(identity ?? EMPTY_OBJECT)
+    const { value: resolvedIdentity, loading: resolving } = useSocialIdentity(identity)
 
     return (
         <div className={classes.root} style={style} ref={holderRef}>

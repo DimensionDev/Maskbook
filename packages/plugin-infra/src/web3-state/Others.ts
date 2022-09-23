@@ -77,6 +77,16 @@ export class OthersState<ChainId, SchemaType, ProviderType, NetworkType, Transac
         throw new Error('Method not implemented.')
     }
 
+    isNativeTokenSchemaType(schemaType?: SchemaType | undefined): boolean {
+        throw new Error('Method not implemented.')
+    }
+    isFungibleTokenSchemaType(schemaType?: SchemaType | undefined): boolean {
+        throw new Error('Method not implemented.')
+    }
+    isNonFungibleTokenSchemaType(schemaType?: SchemaType | undefined): boolean {
+        throw new Error('Method not implemented.')
+    }
+
     formatAddress(address: string, size?: number | undefined): string {
         throw new Error('Method not implemented.')
     }

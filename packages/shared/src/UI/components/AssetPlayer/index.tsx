@@ -7,7 +7,7 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box } from '@mui/material'
 import { ImageIcon } from '@masknet/shared'
 import { GeneratedIconProps, Icons } from '@masknet/icons'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { MEDIA_VIEWER_URL } from '../../../constants.js'
 
 interface ERC721TokenQuery {

@@ -1,26 +1,36 @@
 import { useAsyncRetry } from 'react-use'
 import { first } from 'lodash-unified'
 import type { AvatarProps } from '@mui/material'
-import { useChainId, useWeb3Hub, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useChainId, useWeb3Hub } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID, TokenType } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useImageBase64 } from '../../../hooks/useImageBase64.js'
 import { Icon } from '../Icon/index.js'
 
 export interface TokenIconProps extends withClasses<'icon'> {
-    chainId?: Web3Helper.ChainIdAll
     pluginID?: NetworkPluginID
+    chainId?: Web3Helper.ChainIdAll
     address: string
-    name?: string
+    name: string
+    symbol?: string
     logoURL?: string
-    isERC721?: boolean
     tokenType?: TokenType
     disableDefaultIcon?: boolean
     AvatarProps?: Partial<AvatarProps>
 }
 
 export function TokenIcon(props: TokenIconProps) {
-    const { address, logoURL, name, AvatarProps, classes, tokenType = TokenType.Fungible, disableDefaultIcon } = props
+    const {
+        address,
+        logoURL,
+        name,
+        symbol,
+        AvatarProps,
+        classes,
+        tokenType = TokenType.Fungible,
+        disableDefaultIcon,
+    } = props
 
     const chainId = useChainId(props.pluginID, props.chainId)
     const hub = useWeb3Hub(props.pluginID)
@@ -44,10 +54,10 @@ export function TokenIcon(props: TokenIconProps) {
     return (
         <Icon
             key={key}
+            classes={classes}
+            name={symbol ?? name}
             logoURL={isNFT ? logoURL : accessibleUrl || originalUrl}
             AvatarProps={AvatarProps}
-            classes={classes}
-            name={name}
         />
     )
 }

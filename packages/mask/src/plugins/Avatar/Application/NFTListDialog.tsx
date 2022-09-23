@@ -8,14 +8,9 @@ import { AddNFT } from '../SNSAdaptor/AddNFT.js'
 import { BindingProof, EMPTY_LIST } from '@masknet/shared-base'
 import { AllChainsNonFungibleToken, PFP_TYPE, SelectTokenInfo } from '../types.js'
 import { useI18N } from '../locales/index.js'
-import { SUPPORTED_CHAIN_IDS } from '../constants.js'
-import {
-    useAccount,
-    useChainId,
-    useCurrentWeb3NetworkPluginID,
-    useNonFungibleAssets,
-    Web3Helper,
-} from '@masknet/plugin-infra/web3'
+import { SUPPORTED_CHAIN_IDS, supportPluginIds } from '../constants.js'
+import { useAccount, useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAssets } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { toPNG } from '../utils/index.js'
 import { NFTListPage } from './NFTListPage.js'
 import { NetworkTab } from '../../../components/shared/NetworkTab.js'
@@ -73,6 +68,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         margin: 'auto',
         flex: 1,
+        rowGap: 22,
     },
     skeleton: {
         width: 97,
@@ -187,8 +183,9 @@ export function NFTListDialog(props: NFTListDialogProps) {
         done: loadFinish,
         next: nextPage,
         error: loadError,
+        retry,
     } = useNonFungibleAssets(selectedPluginId, undefined, {
-        chainId: actualChainId,
+        chainId: selectedPluginId === NetworkPluginID.PLUGIN_EVM ? actualChainId : undefined,
         account: selectedAccount,
     })
 
@@ -244,10 +241,6 @@ export function NFTListDialog(props: NFTListDialogProps) {
     }, [account, wallets, showSnackbar])
 
     useEffect(() => {
-        setDisabled(!selectedToken || isSameToken(selectedToken, tokenInfo))
-    }, [selectedToken, tokenInfo])
-
-    useEffect(() => {
         setSelectedPluginId(currentPluginId)
     }, [currentPluginId])
 
@@ -279,7 +272,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
             <Typography color={(theme) => theme.palette.maskColor.main} fontWeight="bold" fontSize={12}>
                 {t.load_failed()}
             </Typography>
-            <Button className={classes.button} variant="text" onClick={nextPage}>
+            <Button variant="roundedContained" size="small" style={{ width: 88 }} onClick={retry}>
                 {t.reload()}
             </Button>
         </Box>
@@ -294,10 +287,10 @@ export function NFTListDialog(props: NFTListDialogProps) {
 
     const NoNFTList = () => {
         if (actualChainId === ChainId.Matic && tokensInList.length) return
-        if (tokensInList.length === 0 && !loadFinish) return AddCollectible
-        if (loadError && !loadFinish && !collectibles.length) {
+        if (loadError && !collectibles.length) {
             return Retry
         }
+        if (tokensInList.length === 0 && loadFinish) return AddCollectible
         return
     }
 
@@ -411,11 +404,10 @@ export function NFTListDialog(props: NFTListDialogProps) {
                     expectedAddress={selectedAccount}>
                     <ChainBoundary
                         expectedChainId={chainId}
-                        predicate={selectedPluginId !== NetworkPluginID.PLUGIN_FLOW ? () => true : undefined}
+                        predicate={supportPluginIds.includes(selectedPluginId) ? () => true : undefined}
+                        expectedAccount={selectedAccount}
                         expectedPluginID={
-                            selectedPluginId === NetworkPluginID.PLUGIN_FLOW
-                                ? NetworkPluginID.PLUGIN_EVM
-                                : selectedPluginId
+                            !supportPluginIds.includes(selectedPluginId) ? NetworkPluginID.PLUGIN_EVM : selectedPluginId
                         }>
                         <Button onClick={onSave} disabled={disabled} fullWidth>
                             {pfpType === PFP_TYPE.PFP ? t.set_PFP_title() : t.set_pfp_background_title()}

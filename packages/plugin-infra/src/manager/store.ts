@@ -1,7 +1,7 @@
 // DO NOT import React in this file. This file is also used by worker.
 import type { Plugin, PluginID } from '../types.js'
 import { memoize } from 'lodash-unified'
-import type { Web3Helper } from '../web3-helpers/index.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { Subscription } from 'use-subscription'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 

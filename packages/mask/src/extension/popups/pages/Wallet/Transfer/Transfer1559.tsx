@@ -681,25 +681,28 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                                     classes={{ root: classes.max, label: classes.maxLabel }}
                                                     onClick={handleMaxClick}
                                                 />
-                                                <Chip
-                                                    className={classes.chip}
-                                                    onClick={openAssetMenu}
-                                                    icon={
-                                                        <TokenIcon
-                                                            classes={{ icon: classes.icon }}
-                                                            address={selectedAsset?.address ?? ''}
-                                                            name={selectedAsset?.name}
-                                                            logoURL={selectedAsset?.logoURL}
-                                                        />
-                                                    }
-                                                    deleteIcon={<ChevronDown className={classes.icon} />}
-                                                    color="default"
-                                                    size="small"
-                                                    variant="outlined"
-                                                    clickable
-                                                    label={selectedAsset?.symbol}
-                                                    onDelete={noop}
-                                                />
+                                                {selectedAsset ? (
+                                                    <Chip
+                                                        className={classes.chip}
+                                                        onClick={openAssetMenu}
+                                                        icon={
+                                                            <TokenIcon
+                                                                classes={{ icon: classes.icon }}
+                                                                address={selectedAsset.address ?? ''}
+                                                                name={selectedAsset.name}
+                                                                symbol={selectedAsset.symbol}
+                                                                logoURL={selectedAsset.logoURL}
+                                                            />
+                                                        }
+                                                        deleteIcon={<ChevronDown className={classes.icon} />}
+                                                        color="default"
+                                                        size="small"
+                                                        variant="outlined"
+                                                        clickable
+                                                        label={selectedAsset.symbol}
+                                                        onDelete={noop}
+                                                    />
+                                                ) : null}
                                             </Box>
                                         ),
                                     }}

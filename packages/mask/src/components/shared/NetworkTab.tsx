@@ -1,4 +1,5 @@
-import { useNetworkDescriptors, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useNetworkDescriptors } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { MaskTabList, useTabs } from '@masknet/theme'
 import type { NetworkPluginID } from '@masknet/web3-shared-base'
 import TabContext from '@mui/lab/TabContext'

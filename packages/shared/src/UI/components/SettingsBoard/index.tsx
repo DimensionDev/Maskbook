@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { makeStyles } from '@masknet/theme'
-import type { Web3Helper } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { SettingsContext } from './Context.js'
 import { GasSection } from './GasSection.js'
 import { SlippageToleranceSection } from './SlippageToleranceSection.js'

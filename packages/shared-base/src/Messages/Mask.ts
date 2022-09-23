@@ -70,7 +70,7 @@ export interface UpdateEvent<Data> {
     readonly of: Data
 }
 
-export interface CompositionRequest {
+export interface CompositionDialogEvent {
     readonly reason: 'timeline' | 'popup' | 'reply'
     readonly open: boolean
     readonly content?: SerializableTypedMessages
@@ -80,16 +80,47 @@ export interface CompositionRequest {
         isOpenFromApplicationBoard?: boolean
     }
 }
-export enum EncryptionTargetType {
-    Public = 'public',
-    Self = 'self',
-    E2E = 'e2e',
-}
 
-export interface NFTAvatarSettingDialogEvent {
+export interface Web3ProfileDialogEvent {
     open: boolean
 }
-export type OpenNFTDialogEvent =
+
+export interface CheckSecurityConfirmationDialogEvent {
+    open: boolean
+}
+
+export type CheckSecurityDialogEvent =
+    | {
+          open: true
+          searchHidden: boolean
+          tokenAddress?: string
+          chainId?: number
+      }
+    | {
+          open: false
+      }
+
+export type ApplicationDialogEvent = {
+    open: boolean
+    application: string
+}
+
+export interface SettingsDialogEvent {
+    open: boolean
+    targetTab?: string
+}
+
+export type ProfileCardEvent =
+    | {
+          open: false
+      }
+    | {
+          open: true
+          userId: string
+          badgeBounding: DOMRect
+      }
+
+export type NonFungibleTokenDialogEvent =
     | {
           open: true
           pluginID: NetworkPluginID
@@ -100,6 +131,17 @@ export type OpenNFTDialogEvent =
     | {
           open: false
       }
+
+export enum EncryptionTargetType {
+    Public = 'public',
+    Self = 'self',
+    E2E = 'e2e',
+}
+
+export interface NFTAvatarSettingDialogEvent {
+    open: boolean
+}
+
 export interface SettingsUpdateEvent {
     id: number
     key: string
@@ -121,39 +163,6 @@ export interface OpenPageConfirmEvent {
     position?: 'center' | 'top-right'
 }
 
-export interface Web3ProfileDialogRequest {
-    open: boolean
-}
-
-export interface CheckSecurityCloseConfirmDialogRequest {
-    open: boolean
-}
-export type OpenApplicationRequestEvent = {
-    open: boolean
-    application: string
-}
-
-export type ProfileCardEvent =
-    | {
-          open: false
-      }
-    | {
-          open: true
-          userId: string
-          badgeBounding: DOMRect
-      }
-
-export type CheckSecurityDialogRequest =
-    | {
-          open: true
-          searchHidden: boolean
-          tokenAddress?: string
-          chainId?: number
-      }
-    | {
-          open: false
-      }
-
 export interface NFTAvatarEvent {
     userId: string
     avatarId: string
@@ -161,7 +170,7 @@ export interface NFTAvatarEvent {
     tokenId?: string
     schema?: number
     chainId?: number
-    pluginId?: string
+    pluginID?: NetworkPluginID
 }
 
 export interface TokenType {
@@ -179,9 +188,8 @@ export interface SwapDialogEvent {
     }
 }
 
-export interface SettingDialogEvent {
-    open: boolean
-    targetTab?: string
+export interface WalletSettingsDialogEvent {
+    pluginID?: string
 }
 
 /** This is a subset of browser.permissions.Permission */

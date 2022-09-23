@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, cloneElement, Children, DetailedReactHTMLElement, isValidElement } from 'react'
+import { useAsyncFn } from 'react-use'
 import { Box, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, ShadowRootTooltip, useStylesExtends, ActionButton } from '@masknet/theme'
 import {
@@ -8,12 +9,12 @@ import {
     useChainId,
     useAllowTestnet,
     useProviderType,
-    Web3Helper,
     useWeb3State,
     useWeb3Connection,
     useChainIdValid,
     useProviderDescriptor,
 } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { delay } from '@dimensiondev/kit'
@@ -27,7 +28,6 @@ import { WalletIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import { useAsyncFn } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     action: {
@@ -60,10 +60,11 @@ export interface ChainBoundaryProps<T extends NetworkPluginID> extends withClass
     expectedChainId: Web3Helper.Definition[T]['ChainId']
     /** Judge the network is available for children components */
     predicate?: (actualPluginID: NetworkPluginID, actualChainId: Web3Helper.Definition[T]['ChainId']) => boolean
-
+    expectedAccount?: string
     className?: string
     noSwitchNetworkTip?: boolean
     hiddenConnectButton?: boolean
+    switchChainWithoutPopup?: boolean
     children?: React.ReactNode
     ActionButtonPromiseProps?: Partial<ActionButtonPromiseProps>
 }
@@ -73,6 +74,8 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         noSwitchNetworkTip = true,
         expectedPluginID,
         expectedChainId,
+        expectedAccount,
+        switchChainWithoutPopup = false,
         predicate = (actualPluginID, actualChainId) =>
             actualPluginID === expectedPluginID && actualChainId === expectedChainId,
     } = props
@@ -88,7 +91,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     const actualProviderType = useProviderType(actualPluginID)
     const actualProviderDescriptor = useProviderDescriptor(actualPluginID)
     const actualChainName = actualOthers?.chainResolver.chainName(actualChainId)
-    const account = useAccount(actualPluginID)
+    const account = useAccount(actualPluginID, expectedAccount)
 
     const { Others: expectedOthers } = useWeb3State(expectedPluginID)
     const expectedConnection = useWeb3Connection(expectedPluginID)
@@ -103,26 +106,37 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
     const isPluginIDMatched = actualPluginID === expectedPluginID
     const isMatched = predicate(actualPluginID, actualChainId)
 
-    const { openDialog: openSelectProviderDialog, setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
+    const { setDialog: setSelectProviderDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectProviderDialogUpdated,
     )
 
+    const openSelectProviderDialog = useCallback(() => {
+        setSelectProviderDialog({
+            open: true,
+            network: expectedNetworkDescriptor,
+        })
+    }, [expectedNetworkDescriptor])
+
     const [{ loading }, onSwitchChain] = useAsyncFn(async () => {
-        try {
-            if (!isMatched) {
-                if (actualProviderType === ProviderType.MaskWallet) {
-                    await expectedConnection?.switchChain?.(expectedChainId)
-                } else {
-                    const result = await expectedConnection?.connect({
-                        chainId: expectedChainId,
-                    })
-                }
-                return true
-            }
-            return false
-        } catch {
-            return false
+        // a short time loading makes the user fells better
+        await delay(1000)
+
+        if (!expectedChainAllowed) return 'init'
+
+        if (!isPluginIDMatched || actualProviderType === ProviderType.WalletConnect) {
+            setSelectProviderDialog({ open: true, network: expectedNetworkDescriptor })
+            return 'init'
         }
+        if (!isMatched) {
+            if (switchChainWithoutPopup && actualProviderType === ProviderType.MaskWallet) {
+                await expectedConnection?.switchChain?.(expectedChainId)
+            } else {
+                await expectedConnection?.connect({
+                    chainId: expectedChainId,
+                })
+            }
+        }
+        return 'complete'
     }, [
         expectedChainAllowed,
         isMatched,
@@ -130,20 +144,8 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
         actualProviderType,
         expectedChainId,
         expectedConnection,
-        openSelectProviderDialog,
+        switchChainWithoutPopup,
     ])
-
-    const onChangeNetwork = useCallback(async () => {
-        // a short time loading makes the user fells better
-        await delay(1000)
-        if (!expectedChainAllowed) return 'init'
-
-        if (!isPluginIDMatched) {
-            setSelectProviderDialog({ open: true, network: expectedNetworkDescriptor })
-            return 'init'
-        }
-        return
-    }, [expectedChainAllowed, isPluginIDMatched, expectedNetworkDescriptor])
 
     const switchButtonDisabled = useMemo(() => {
         return !(actualProviderDescriptor?.enableRequirements?.supportedChainIds?.includes(expectedChainId) ?? false)
@@ -230,8 +232,8 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                             network: expectedChainName,
                         })}
                         failed={t('retry')}
-                        executor={onChangeNetwork}
-                        completeOnClick={onChangeNetwork}
+                        executor={onSwitchChain}
+                        completeOnClick={onSwitchChain}
                         failedOnClick="use executor"
                         {...props.ActionButtonPromiseProps}
                     />
@@ -252,7 +254,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                     </span>
                 </Typography>
             ) : null}
-            {expectedChainAllowed && (actualProviderType === ProviderType.WalletConnect || switchButtonDisabled) ? (
+            {expectedChainAllowed && !switchChainWithoutPopup ? (
                 <ActionButtonPromise
                     fullWidth
                     startIcon={
@@ -261,7 +263,7 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                             size={18}
                         />
                     }
-                    disabled
+                    disabled={actualProviderType === ProviderType.WalletConnect || switchButtonDisabled}
                     sx={props.ActionButtonPromiseProps?.sx}
                     init={<span>{t('plugin_wallet_switch_network', { network: expectedChainName })}</span>}
                     waiting={t('plugin_wallet_switch_network_under_going', {
@@ -269,12 +271,20 @@ export function ChainBoundary<T extends NetworkPluginID>(props: ChainBoundaryPro
                     })}
                     complete={t('plugin_wallet_switch_network', { network: expectedChainName })}
                     failed={t('retry')}
-                    executor={async () => {}}
+                    executor={onSwitchChain}
+                    completeOnClick={onSwitchChain}
                     failedOnClick="use executor"
                     {...props.ActionButtonPromiseProps}
                 />
             ) : (
-                CopyDeepElementWithEventHandler(props.children, onSwitchChain, loading)
+                CopyDeepElementWithEventHandler(
+                    props.children,
+                    async () => {
+                        const result = await onSwitchChain()
+                        return result === 'complete'
+                    },
+                    loading,
+                )
             )}
         </>,
         actualProviderType === ProviderType.WalletConnect

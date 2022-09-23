@@ -45,7 +45,7 @@ function PostDialogHintAtMinds({ reason }: { reason: 'timeline' | 'popup' }) {
     const { classes } = useStyles({ reason })
 
     const onHintButtonClicked = useCallback(
-        () => CrossIsolationMessages.events.requestComposition.sendToLocal({ reason, open: true }),
+        () => CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({ reason, open: true }),
         [reason],
     )
     return (

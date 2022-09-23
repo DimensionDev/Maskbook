@@ -106,7 +106,7 @@ export function ReferToFarm(props: PageInterface) {
 
     const openComposeBox = useCallback(
         (selectedReferralData: Map<string, ReferralMetaData>, id?: string) =>
-            CrossIsolationMessages.events.requestComposition.sendToLocal({
+            CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({
                 reason: 'timeline',
                 open: true,
                 content: makeTypedMessageText('', selectedReferralData),

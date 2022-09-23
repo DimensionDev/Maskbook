@@ -11,7 +11,7 @@ import {
     FungibleTokenSpender,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import type { AuthorizationAPI, FungibleTokenAPI, TokenListAPI } from '@masknet/web3-providers'
+import type { AuthorizationAPI, FungibleTokenAPI, TokenListAPI, TokenIconAPI, PriceAPI } from '@masknet/web3-providers'
 import { HubStateBaseClient } from '../Hub.js'
 
 export class HubStateFungibleClient<ChainId, SchemaType> extends HubStateBaseClient<ChainId> {
@@ -20,7 +20,9 @@ export class HubStateFungibleClient<ChainId, SchemaType> extends HubStateBaseCli
     ): Array<
         AuthorizationAPI.Provider<ChainId> &
             FungibleTokenAPI.Provider<ChainId, SchemaType> &
-            TokenListAPI.Provider<ChainId, SchemaType>
+            TokenListAPI.Provider<ChainId, SchemaType> &
+            TokenIconAPI.Provider<ChainId> &
+            PriceAPI.Provider<ChainId>
     > {
         throw new Error('Method not implemented.')
     }
@@ -59,7 +61,14 @@ export class HubStateFungibleClient<ChainId, SchemaType> extends HubStateBaseCli
         address: string,
         initial?: HubOptions<ChainId>,
     ): Promise<string[]> {
-        throw new Error('Method not implemented.')
+        const options = this.getOptions(initial, {
+            chainId,
+        })
+        const providers = this.getProviders(initial)
+        return attemptUntil(
+            providers.map((x) => () => x.getFungibleTokenIconURLs?.(options.chainId, address)),
+            EMPTY_LIST,
+        )
     }
 
     async getFungibleTokenPrice(chainId: ChainId, address: string, initial?: HubOptions<ChainId>): Promise<number> {

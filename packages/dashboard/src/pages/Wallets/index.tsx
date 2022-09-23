@@ -5,8 +5,8 @@ import {
     useCurrentWeb3NetworkPluginID,
     useNetworkDescriptor,
     useWallets,
-    Web3Helper,
 } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { DashboardRoutes, relativeRouteOf, CrossIsolationMessages } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
@@ -51,7 +51,7 @@ function Wallets() {
     const { openDialog: openBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak?.buyTokenDialogUpdated)
 
     const openSwapDialog = useCallback(() => {
-        CrossIsolationMessages.events.swapDialogUpdate.sendToLocal({
+        CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
             open: true,
         })
     }, [])

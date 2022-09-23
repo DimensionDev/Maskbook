@@ -1,4 +1,5 @@
-import { useChainId, useWeb3Connection, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useChainId, useWeb3Connection } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, getITOConstants } from '@masknet/web3-shared-evm'
 import { useRef, useEffect } from 'react'

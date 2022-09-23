@@ -1,11 +1,11 @@
+import { PluginID } from '@masknet/plugin-infra'
+import { CrossIsolationMessages } from '@masknet/shared-base'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
 import { startWatch, createReactRootShadowed } from '../../../../utils'
 import { searchProfileAvatarSelector } from '../../utils/selector'
 import { ConnectPersonaBoundary } from '../../../../components/shared/ConnectPersonaBoundary'
-import { PluginID } from '@masknet/plugin-infra'
-import { CrossIsolationMessages } from '@masknet/shared-base'
 
 export function injectOpenNFTAvatarEditProfileButtonAtEditProfileDialog(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileAvatarSelector())
@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
 
 function OpenNFTAvatarEditProfileButtonInTwitter() {
     const clickHandler = () => {
-        CrossIsolationMessages.events.requestOpenApplication.sendToLocal({
+        CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({
             open: true,
             application: PluginID.Avatar,
         })

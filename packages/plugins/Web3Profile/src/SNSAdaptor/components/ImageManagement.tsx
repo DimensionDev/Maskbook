@@ -1,19 +1,18 @@
+import { useCallback, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../locales/index.js'
 import { WalletAssetsCard } from './WalletAssets.js'
-import { PersonaInformation, PopupRoutes } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST, PersonaInformation, PopupRoutes } from '@masknet/shared-base'
 import { ImageListDialog } from './ImageList.js'
-import { useState } from 'react'
 import { InjectedDialog, WalletTypes } from '@masknet/shared'
 import { Box, Button, DialogContent } from '@mui/material'
-import type { IdentityResolved } from '@masknet/plugin-infra'
+import { IdentityResolved, PluginID } from '@masknet/plugin-infra'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import type { AccountType } from '../types.js'
-import WalletSetting from './WalletSetting.js'
 import { Empty } from './Empty.js'
 import { context } from '../context.js'
 import { Icons } from '@masknet/icons'
 import { CurrentStatusMap, CURRENT_STATUS } from '../../constants.js'
-import { isSameAddress } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     bottomButton: {
@@ -72,24 +71,26 @@ export interface ImageManagementProps {
     allWallets?: WalletTypes[]
     getWalletHiddenRetry: () => void
 }
-const getAddressesByStatus = (status: CURRENT_STATUS, accountList: AccountType) => {
+const getAddressesByStatus = (accountList: AccountType | undefined, status: CURRENT_STATUS) => {
+    if (!accountList) return EMPTY_LIST
     let addresses
-    if (status === CURRENT_STATUS.Donations_setting) addresses = accountList?.walletList?.donations
-    if (status === CURRENT_STATUS.Footprints_setting) addresses = accountList?.walletList?.footprints
-    if (status === CURRENT_STATUS.NFT_Setting) addresses = accountList?.walletList?.NFTs
+    if (status === CURRENT_STATUS.Donations_setting) addresses = accountList.walletList?.donations
+    if (status === CURRENT_STATUS.Footprints_setting) addresses = accountList.walletList?.footprints
+    if (status === CURRENT_STATUS.NFT_Setting) addresses = accountList.walletList?.NFTs
     return addresses?.sort((a, z) => {
-        const a_hasItems = a?.collections && a.collections.filter?.((collection) => !collection?.hidden)?.length > 0
-        const z_hasItems = z?.collections && z.collections.filter?.((collection) => !collection?.hidden)?.length > 0
-        if (a_hasItems && z_hasItems) {
+        const aHasItems = a.collections?.some?.((x) => !x?.hidden)
+        const zHasItems = z.collections?.some?.((x) => !x?.hidden)
+        if (aHasItems && zHasItems) {
             if (!a?.updateTime || !z?.updateTime) return 0
             if (Number(a.updateTime) > Number(z.updateTime)) return -1
         }
-        if (z_hasItems) return 1
-        if (a_hasItems) return -1
+        if (zHasItems) return 1
+        if (aHasItems) return -1
 
         return 0
     })
 }
+
 export function ImageManagement(props: ImageManagementProps) {
     const t = useI18N()
 
@@ -100,16 +101,24 @@ export function ImageManagement(props: ImageManagementProps) {
         open,
         onClose,
         accountId,
-        allWallets = [],
+        allWallets = EMPTY_LIST,
         accountList,
         getWalletHiddenRetry,
     } = props
     const [settingAddress, setSettingAddress] = useState<WalletTypes>()
     const [imageListOpen, setImageListOpen] = useState(false)
-    const [walletSettingOpen, setWalletSettingOpen] = useState(false)
-    const addresses = getAddressesByStatus(status, accountList!)
+    const addresses = getAddressesByStatus(accountList, status)
 
-    const hasConnectedWallets = allWallets?.length > 0
+    const handleOpenSettingDialog = useCallback(
+        () =>
+            CrossIsolationMessages.events.settingsDialogEvent.sendToLocal({
+                open: true,
+                targetTab: PluginID.Web3Profile,
+            }),
+        [],
+    )
+
+    const hasConnectedWallets = allWallets.length > 0
 
     const openPopupsWindow = async () => {
         await context.openPopupWindow(PopupRoutes.ConnectWallet)
@@ -120,11 +129,11 @@ export function ImageManagement(props: ImageManagementProps) {
             classes={{ dialogContent: classes.content }}
             fullWidth={false}
             open={open}
-            titleTail={<Icons.Gear className={classes.settingIcon} onClick={() => setWalletSettingOpen(true)} />}
+            titleTail={<Icons.Gear className={classes.settingIcon} onClick={handleOpenSettingDialog} />}
             onClose={onClose}>
             <DialogContent className={classes.content}>
                 <div>
-                    {addresses && addresses.length > 0 ? (
+                    {addresses?.length ? (
                         addresses.map((address) => (
                             <WalletAssetsCard
                                 key={address.address}
@@ -133,7 +142,7 @@ export function ImageManagement(props: ImageManagementProps) {
                                     setSettingAddress(address)
                                     setImageListOpen(true)
                                 }}
-                                collectionList={address?.collections}
+                                collectionList={address.collections}
                                 address={address}
                             />
                         ))
@@ -163,16 +172,6 @@ export function ImageManagement(props: ImageManagementProps) {
                         addresses?.find((address) => isSameAddress(address?.address, settingAddress?.address))
                             ?.collections
                     }
-                />
-                <WalletSetting
-                    wallets={allWallets}
-                    accountList={accountList}
-                    open={walletSettingOpen}
-                    title={CurrentStatusMap[status].title}
-                    accountId={accountId}
-                    onClose={() => setWalletSettingOpen(false)}
-                    currentPersona={currentPersona}
-                    retryData={getWalletHiddenRetry}
                 />
             </DialogContent>
         </InjectedDialog>

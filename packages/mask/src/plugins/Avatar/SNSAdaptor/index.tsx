@@ -12,7 +12,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal, context) {
         setupContext(context)
     },
-    GlobalInjection: function Component() {
+    GlobalInjection() {
         return <NFTAvatarDialog />
     },
     ApplicationEntries: [
@@ -26,7 +26,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             return {
                 RenderEntryComponent(EntryComponentProps) {
                     const clickHandler = () => {
-                        CrossIsolationMessages.events.requestOpenApplication.sendToLocal({
+                        CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({
                             open: true,
                             application: PluginID.Avatar,
                         })

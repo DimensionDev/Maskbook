@@ -14,7 +14,7 @@ import { ExtensionSite, getSiteType } from '@masknet/shared-base'
 const dashboard: Plugin.Dashboard.Definition = {
     ...base,
     init(signal) {},
-    GlobalInjection: function Component() {
+    GlobalInjection() {
         return (
             <>
                 <SelectProviderDialog />

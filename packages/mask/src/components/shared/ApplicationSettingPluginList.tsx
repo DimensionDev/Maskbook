@@ -183,7 +183,7 @@ function AppListItem(props: AppListItemProps) {
         <ShadowRootTooltip
             PopperProps={{
                 disablePortal: true,
-                placement: 'top',
+                placement: 'bottom',
                 modifiers: [
                     {
                         name: 'flip',
@@ -199,7 +199,7 @@ function AppListItem(props: AppListItemProps) {
                     <PluginI18NFieldRender field={application.entry.name} pluginID={application.pluginId} />
                 </Typography>
             }
-            placement="top"
+            placement="bottom"
             arrow>
             <ListItem className={classes.listItem} onClick={() => setUnlistedApp(application, isListed)}>
                 <div className={classes.iconWrapper}>{application.entry.icon}</div>

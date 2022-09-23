@@ -1,7 +1,20 @@
-import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
+import {
+    useChainId,
+    useCurrentWeb3NetworkPluginID,
+    useWeb3State,
+    useGasPrice,
+    useNativeTokenPrice,
+} from '@masknet/plugin-infra/web3'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    Transaction,
+    EIP1559GasConfig,
+    PriorEIP1559GasConfig,
+    createNativeToken,
+} from '@masknet/web3-shared-evm'
+import { SelectGasSettingsToolbar } from '@masknet/shared'
 import { Box, BoxProps, Button, FormControl, FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material'
 import classnames from 'classnames'
 import { FC, memo, useCallback, useMemo, useState } from 'react'
@@ -82,13 +95,21 @@ interface Props extends BoxProps {
     onSent?(): void
 }
 
+const GAS_LIMIT = 21000
+
 export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest }) => {
     const t = useI18N()
     const currentChainId = useChainId()
+    const nativeToken = createNativeToken(currentChainId as ChainId)
+    const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
+        chainId: currentChainId as ChainId,
+    })
+    const { Others } = useWeb3State<'all'>()
     const pluginId = useCurrentWeb3NetworkPluginID()
+    const { value: defaultGasPrice = '1' } = useGasPrice(NetworkPluginID.PLUGIN_EVM)
     const { targetChainId: chainId } = TargetRuntimeContext.useContainer()
     const { classes } = useStyles({})
-    const { isSending, sendTip, tipType, setTipType } = useTip()
+    const { isSending, sendTip, tipType, setTipType, setGasConfig, gasConfig } = useTip()
     const [isValid, validateMessage] = useTipValidate()
     const [empty, setEmpty] = useState(false)
 
@@ -144,6 +165,34 @@ export const TipForm: FC<Props> = memo(({ className, onAddToken, onSent, ...rest
                 ) : (
                     <NFTSection onEmpty={setEmpty} onAddToken={onAddToken} />
                 )}
+                <SelectGasSettingsToolbar
+                    nativeToken={nativeToken}
+                    nativeTokenPrice={nativeTokenPrice}
+                    transaction={gasConfig}
+                    onChange={(tx: Transaction) => {
+                        setGasConfig(
+                            Others?.chainResolver.isSupport(chainId, 'EIP1559')
+                                ? {
+                                      gas: GAS_LIMIT,
+                                      maxFeePerGas:
+                                          (tx.maxFeePerGas as string) ||
+                                          (gasConfig as EIP1559GasConfig)?.maxFeePerGas ||
+                                          defaultGasPrice,
+                                      maxPriorityFeePerGas:
+                                          (tx.maxPriorityFeePerGas as string) ||
+                                          (gasConfig as EIP1559GasConfig)?.maxPriorityFeePerGas ||
+                                          '1',
+                                  }
+                                : {
+                                      gas: GAS_LIMIT,
+                                      gasPrice:
+                                          (tx.gasPrice as string) ||
+                                          (gasConfig as PriorEIP1559GasConfig)?.gasPrice ||
+                                          defaultGasPrice,
+                                  },
+                        )
+                    }}
+                />
             </div>
 
             <PluginWalletStatusBar>

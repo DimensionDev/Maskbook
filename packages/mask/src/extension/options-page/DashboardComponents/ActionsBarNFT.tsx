@@ -9,7 +9,8 @@ import {
     DashboardWalletHideTokenConfirmDialog,
     DashboardWalletTransferDialogNFT,
 } from '../DashboardDialogs/Wallet/index.js'
-import { useChainIdValid, Web3Helper } from '@masknet/plugin-infra/web3'
+import { useChainIdValid } from '@masknet/plugin-infra/web3'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NonFungibleAsset, Wallet } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 

@@ -77,7 +77,7 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     useLocationChange(() => setStyleFromEditProfileSelector())
 
     const clickHandler = () => {
-        CrossIsolationMessages.events.requestOpenApplication.sendToLocal({
+        CrossIsolationMessages.events.applicationDialogEvent.sendToLocal({
             open: true,
             application: PluginID.Avatar,
         })

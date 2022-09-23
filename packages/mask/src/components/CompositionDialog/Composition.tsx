@@ -27,7 +27,7 @@ const useStyles = makeStyles()({
         visibility: 'hidden',
     },
     dialogContent: {
-        padding: '20px 24px',
+        padding: 16,
     },
 })
 export interface PostDialogProps {
@@ -75,7 +75,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     }, [onQueryClipboardPermission])
 
     useEffect(() => {
-        return CrossIsolationMessages.events.requestComposition.on(({ reason, open, content, options }) => {
+        return CrossIsolationMessages.events.compositionDialogEvent.on(({ reason, open, content, options }) => {
             if ((reason !== 'reply' && reason !== type) || (reason === 'reply' && type === 'popup')) return
             setOpen(open)
             setReason(reason)
@@ -134,7 +134,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                         isOpenFromApplicationBoard={isOpenFromApplicationBoard}
                     />
                 </DialogContent>
-                <DialogActions sx={{ height: 68 }} />
+                <DialogActions sx={{ height: 68, padding: '0px !important' }} />
             </InjectedDialog>
         </DialogStackingProvider>
     )

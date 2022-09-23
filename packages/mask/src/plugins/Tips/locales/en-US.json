@@ -8,6 +8,7 @@
     "copy_success": "Copy successfully",
     "description": "Gift crypto or NFTs tips to any <Link>Next.ID</Link> verified users on social media.",
     "default": "Default",
+    "gas_fee": "Gas Fee",
     "token_insufficient_balance": "Insufficient balance",
     "manage_wallet": "Manage wallet",
     "save": "Save",
@@ -56,7 +57,6 @@
     "wallet_set_up_successfully": "Tips Wallet set up successfully.",
     "wallet_set_up_failed": "Tips Wallet setup failed, please try again.",
     "view_on_explorer": "View on Explorer",
-    "setting_alert_title": "Toggle the button to manage wallet display settings.",
     "tips_guide_description": "Send authors tips by using Mask Network’s Tips function.",
     "tips_guide_action": "Close"
 }
