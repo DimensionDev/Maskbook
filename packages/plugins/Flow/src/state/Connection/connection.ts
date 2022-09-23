@@ -197,7 +197,7 @@ class Connection implements BaseConnection {
         }
         throw new Error('Method not implemented.')
     }
-    getNonFungibleToken(
+    async getNonFungibleToken(
         address: string,
         tokenId: string,
         schema?: SchemaType,
