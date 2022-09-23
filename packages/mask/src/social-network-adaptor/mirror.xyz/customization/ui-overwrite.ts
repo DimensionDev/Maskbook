@@ -1,6 +1,5 @@
 import { makeStyles } from '@masknet/theme'
 
-// TODO: this code copy from twitter overwrite, should remove
 export const useInjectedDialogClassesOverwriteMirror = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {

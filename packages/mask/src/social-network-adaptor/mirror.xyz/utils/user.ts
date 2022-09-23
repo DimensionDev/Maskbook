@@ -6,7 +6,6 @@ import urlcat from 'urlcat'
 
 const getMirrorProfileUrl = (id: string) => urlcat('https://mirror.xyz/:id', { id })
 
-// TODO: double check should use this method
 export async function getUserIdentity(userAddress: string): Promise<SocialIdentity | undefined> {
     if (!userAddress) return
     const writer = await Mirror.getWriter(userAddress)

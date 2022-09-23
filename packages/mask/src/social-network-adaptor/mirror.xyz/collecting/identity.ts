@@ -31,7 +31,6 @@ function resolveLastRecognizedIdentityInner(
     window.addEventListener('locationchange', assign, { signal: cancel })
 }
 
-// TODO: align this method
 export const getUserInfo = () => {
     const script = document.getElementById('__NEXT_DATA__')?.innerHTML
     if (!script) return

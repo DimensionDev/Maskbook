@@ -56,7 +56,6 @@ async function registerPostCollectorInner(
         return ''
     }
 
-    // TODO: align this method
     const getPostWriters = async (postId: string) => {
         const script = document.getElementById('__NEXT_DATA__')?.innerHTML
         if (!script) return
