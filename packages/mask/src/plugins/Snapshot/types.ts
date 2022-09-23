@@ -43,6 +43,7 @@ export interface Proposal {
     authorName?: string
     authorAvatar?: string
     chainId: number
+    network: string
     type: string
     votes: RawVote[]
 }
