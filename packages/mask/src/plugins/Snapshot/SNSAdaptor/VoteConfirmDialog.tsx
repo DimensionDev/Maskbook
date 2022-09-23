@@ -72,7 +72,7 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                         <Typography
                             sx={{
                                 textAlign: 'right',
-                                width: 200,
+                                width: 300,
                                 whiteSpace: 'nowrap',
                                 textOverflow: 'ellipsis',
                                 overflow: 'hidden',
