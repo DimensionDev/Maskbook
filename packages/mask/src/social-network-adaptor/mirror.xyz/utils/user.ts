@@ -2,9 +2,7 @@ import type { SocialIdentity } from '@masknet/web3-shared-base'
 import { Mirror } from '@masknet/web3-providers'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { mirrorBase } from '../base'
-import urlcat from 'urlcat'
-
-const getMirrorProfileUrl = (id: string) => urlcat('https://mirror.xyz/:id', { id })
+import { getMirrorProfileUrl } from '../collecting/utils'
 
 export async function getUserIdentity(userAddress: string): Promise<SocialIdentity | undefined> {
     if (!userAddress) return

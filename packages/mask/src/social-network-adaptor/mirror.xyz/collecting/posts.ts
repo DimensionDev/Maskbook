@@ -34,78 +34,78 @@ export function queryInjectPoint(node: HTMLElement) {
     return allANode.item(allANode.length - 1) as HTMLElement
 }
 
+const getPostId = (node: HTMLElement | HTMLLinkElement) => {
+    // Handle entry detail page post id
+    if (mirrorPageProbe(location.href) === MirrorPageType.Post) {
+        return location.pathname.match(/\w{43}/i)?.[0]
+    }
+
+    const ele = node.querySelector('div > a') as HTMLLinkElement
+    const href = ele?.href || (node as HTMLLinkElement)?.href
+
+    if (href?.startsWith('https')) {
+        return href.replace(MIRROR_LINK_PREFIX, '')
+    }
+
+    if (href) return href?.replace('/', '')
+
+    return ''
+}
+
+const getPostWriters = async (postId: string) => {
+    const script = document.getElementById('__NEXT_DATA__')?.innerHTML
+    if (!script) return
+    const INIT_DATA = JSON.parse(script)
+
+    function getAuthorDetail(address?: string) {
+        const author = INIT_DATA?.props?.pageProps?.__APOLLO_STATE__?.[`ProjectType:${address}`]
+        return {
+            displayName: author?.displayName,
+            avatarURL: author?.avatarURL,
+            domain: author?.domain,
+        }
+    }
+
+    const publisher = INIT_DATA?.props?.pageProps?.__APOLLO_STATE__?.[`entry:${postId}`]?.publisher
+    if (!publisher) {
+        // get publisher from api
+        const post = await Mirror.getPost(postId)
+        if (!post) return
+
+        return {
+            author: formatWriter(post.author),
+            coAuthors: post.coAuthors.map(formatWriter),
+        }
+    } else {
+        // get publisher from local
+        return {
+            author: formatWriter({
+                address: publisher?.project?.__ref.replace('ProjectType:', '') as string,
+                ...getAuthorDetail(publisher?.project?.__ref.replace('ProjectType:', '') as string),
+            }),
+            coAuthors: [
+                formatWriter({
+                    address: publisher?.member.__ref.replace('ProjectType:', '') as string,
+                    ...getAuthorDetail(publisher?.member?.__ref.replace('ProjectType:', '') as string),
+                }),
+            ],
+        }
+    }
+}
+
+async function collectPostInfo(node: HTMLElement | null, cancel: AbortSignal) {
+    if (!node) return
+    if (cancel?.aborted) return
+    const postId = getPostId(node)
+    if (!postId) return
+    const writers = await getPostWriters(postId)
+    return { postId, writers }
+}
+
 async function registerPostCollectorInner(
     postStore: Next.CollectingCapabilities.PostsProvider['posts'],
     cancel: AbortSignal,
 ) {
-    const getPostId = (node: HTMLElement | HTMLLinkElement) => {
-        // Handle entry detail page post id
-        if (mirrorPageProbe(location.href) === MirrorPageType.Post) {
-            return location.pathname.match(/\w{43}/i)?.[0]
-        }
-
-        const ele = node.querySelector('div > a') as HTMLLinkElement
-        const href = ele?.href || (node as HTMLLinkElement)?.href
-
-        if (href?.startsWith('https')) {
-            return href.replace(MIRROR_LINK_PREFIX, '')
-        }
-
-        if (href) return href?.replace('/', '')
-
-        return ''
-    }
-
-    const getPostWriters = async (postId: string) => {
-        const script = document.getElementById('__NEXT_DATA__')?.innerHTML
-        if (!script) return
-        const INIT_DATA = JSON.parse(script)
-
-        function getAuthorDetail(address?: string) {
-            const author = INIT_DATA?.props?.pageProps?.__APOLLO_STATE__?.[`ProjectType:${address}`]
-            return {
-                displayName: author?.displayName,
-                avatarURL: author?.avatarURL,
-                domain: author?.domain,
-            }
-        }
-
-        const publisher = INIT_DATA?.props?.pageProps?.__APOLLO_STATE__?.[`entry:${postId}`]?.publisher
-        if (!publisher) {
-            // get publisher from api
-            const post = await Mirror.getPost(postId)
-            if (!post) return
-
-            return {
-                author: formatWriter(post.author),
-                coAuthors: post.coAuthors.map(formatWriter),
-            }
-        } else {
-            // get publisher from local
-            return {
-                author: formatWriter({
-                    address: publisher?.project?.__ref.replace('ProjectType:', '') as string,
-                    ...getAuthorDetail(publisher?.project?.__ref.replace('ProjectType:', '') as string),
-                }),
-                coAuthors: [
-                    formatWriter({
-                        address: publisher?.member.__ref.replace('ProjectType:', '') as string,
-                        ...getAuthorDetail(publisher?.member?.__ref.replace('ProjectType:', '') as string),
-                    }),
-                ],
-            }
-        }
-    }
-
-    async function collectPostInfo(node: HTMLElement | null, cancel: AbortSignal) {
-        if (!node) return
-        if (cancel?.aborted) return
-        const postId = getPostId(node)
-        if (!postId) return
-        const writers = await getPostWriters(postId)
-        return { postId, writers }
-    }
-
     startWatch(
         new MutationObserverWatcher(postsContentSelector()).useForeach((node, key, proxy) => {
             if (!node) return
