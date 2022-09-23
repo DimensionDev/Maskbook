@@ -66,8 +66,6 @@ const useStyles = makeStyles()((theme) => ({
         paddingTop: '16px',
     },
     button: {
-        color: theme.palette.maskColor.main,
-        backgroundColor: theme.palette.maskColor.bottom,
         width: '100%',
         borderRadius: '20px',
     },
@@ -176,7 +174,11 @@ export default function Guide({ children, arrow = true, disabled = false, onComp
                                             </Typography>
                                         </div>
                                         <div className={classes.buttonContainer}>
-                                            <Button className={classes.button} onClick={onNext}>
+                                            <Button
+                                                variant="outlined"
+                                                color="primary"
+                                                className={classes.button}
+                                                onClick={onNext}>
                                                 {t.tips_guide_action()}
                                             </Button>
                                         </div>
