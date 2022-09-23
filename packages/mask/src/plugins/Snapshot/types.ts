@@ -26,6 +26,7 @@ export interface Proposal {
     title: string
     version: string
     end: number
+    ipfs: string
     space: {
         id: string
         name: string

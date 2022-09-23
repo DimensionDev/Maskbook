@@ -11,6 +11,8 @@ import { useProposal } from './hooks/useProposal.js'
 import { SnapshotCard } from './SnapshotCard.js'
 import { useChainId } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, resolveIPFS_URL } from '@masknet/web3-shared-base'
+import urlcat from 'urlcat'
+import { SNAPSHOT_IPFS } from '../constants.js'
 
 export interface InformationCardProps {}
 
@@ -109,7 +111,11 @@ export function InformationCard(props: InformationCardProps) {
                 </Link>
             </InfoField>
             <InfoField title={t('plugin_snapshot_info_ipfs')}>
-                <Link className={classes.link} target="_blank" rel="noopener" href={resolveIPFS_URL(identifier.id)}>
+                <Link
+                    className={classes.link}
+                    target="_blank"
+                    rel="noopener"
+                    href={urlcat(SNAPSHOT_IPFS, proposal.ipfs)}>
                     #{identifier.id.slice(0, 7)}
                     <OpenInNew fontSize="small" />
                 </Link>
