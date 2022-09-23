@@ -162,7 +162,7 @@ export default function Guide({ children, arrow = true, disabled = false, onComp
                                             arrow ? (bottomAvailable ? 'arrow-top' : 'arrow-bottom') : '',
                                         )}
                                         style={{
-                                            left: clientRect.width < 50 ? -clientRect.width / 2 : 0,
+                                            left: clientRect.width < 50 ? -clientRect.width / 2 + 5 : 0,
                                             [bottomAvailable ? 'top' : 'bottom']: clientRect.height + 16,
                                         }}>
                                         <div style={{ paddingBottom: '16px' }}>
