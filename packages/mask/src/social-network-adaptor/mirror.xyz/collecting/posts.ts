@@ -41,7 +41,7 @@ async function registerPostCollectorInner(
     const getPostId = (node: HTMLElement | HTMLLinkElement) => {
         // Handle entry detail page post id
         if (mirrorPageProbe(location.href) === MirrorPageType.Post) {
-            return location.href.replace(MIRROR_LINK_PREFIX, '')
+            return location.pathname.match(/\w{43}/i)?.[0]
         }
 
         const ele = node.querySelector('div > a') as HTMLLinkElement
@@ -101,6 +101,7 @@ async function registerPostCollectorInner(
         if (!node) return
         if (cancel?.aborted) return
         const postId = getPostId(node)
+        if (!postId) return
         const writers = await getPostWriters(postId)
         return { postId, writers }
     }
