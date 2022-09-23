@@ -15,13 +15,13 @@ import { menuAuthorSelector as selector } from '../../utils/selectors.js'
 export function injectTipsButtonOnMenu(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(selector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<AuthorTipsSlot />)
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<AuthorTipsButtonWrapper />)
 }
 
 const useStyles = makeStyles()((theme) => ({
-    slot: {
+    root: {
         position: 'relative',
-        marginLeft: '0.5rem',
+        marginLeft: theme.spacing(1),
         height: 40,
         width: 40,
         display: 'flex',
@@ -29,18 +29,14 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         borderWidth: 1,
         borderStyle: 'solid',
-        borderColor: theme.palette.mode === 'dark' ? '#536471' : '#d2dbe0',
-        borderRadius: 999,
+        borderColor: theme.palette.maskColor.line,
+        borderRadius: 20,
         marginRight: theme.spacing(1),
-        verticalAlign: 'top',
         color: theme.palette.text.primary,
-        '&:hover': {
-            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(239,243,244,0.1)' : 'rgba(15,20,25,0.1)',
-        },
     },
 }))
 
-function AuthorTipsSlot() {
+function AuthorTipsButtonWrapper() {
     const visitingPersona = useCurrentVisitingIdentity()
     const isMinimal = useIsMinimalMode(PluginID.Tips)
     const { classes } = useStyles()
@@ -72,5 +68,5 @@ function AuthorTipsSlot() {
 
     if (!component || !visitingPersona.identifier || isMinimal) return null
 
-    return <span className={classes.slot}>{component}</span>
+    return <span className={classes.root}>{component}</span>
 }
