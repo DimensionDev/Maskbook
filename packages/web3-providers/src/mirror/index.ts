@@ -78,7 +78,7 @@ export class MirrorAPI implements MirrorBaseAPI.Provider {
             operationName: 'Writer',
         })
 
-        return writer?.projectFeed
+        return writer?.projectFeed || null
     }
 
     async getPost(digest: string) {
