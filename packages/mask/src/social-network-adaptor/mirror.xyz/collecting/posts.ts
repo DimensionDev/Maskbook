@@ -5,7 +5,7 @@ import { postsContentSelector } from '../utils/selectors.js'
 import { mirrorShared } from '../shared'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context'
 import { startWatch } from '../../../utils'
-import { formatWriter, mirrorPageProbe, MirrorPageType } from './utils'
+import { formatWriter, getMirrorPageType, MirrorPageType } from './utils'
 import { Mirror } from '@masknet/web3-providers'
 import type { PostContextCoAuthor } from '@masknet/plugin-infra/content-script'
 
@@ -36,7 +36,7 @@ export function queryInjectPoint(node: HTMLElement) {
 
 const getPostId = (node: HTMLElement | HTMLLinkElement) => {
     // Handle entry detail page post id
-    if (mirrorPageProbe(location.href) === MirrorPageType.Post) {
+    if (getMirrorPageType(location.href) === MirrorPageType.Post) {
         return location.pathname.match(/\w{43}/i)?.[0]
     }
 

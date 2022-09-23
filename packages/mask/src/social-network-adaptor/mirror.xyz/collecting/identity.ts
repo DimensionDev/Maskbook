@@ -31,7 +31,7 @@ function resolveLastRecognizedIdentityInner(
     window.addEventListener('locationchange', assign, { signal: cancel })
 }
 
-export const getUserInfo = () => {
+export const getUserInfoFromLocal = () => {
     const script = document.getElementById('__NEXT_DATA__')?.innerHTML
     if (!script) return
     const INIT_DATA = JSON.parse(script)

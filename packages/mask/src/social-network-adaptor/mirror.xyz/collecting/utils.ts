@@ -22,11 +22,10 @@ export enum MirrorPageType {
     Dashboard = 'dashboard',
 }
 
-const ADDRESS_FULL = /0x\w{40,}/i
-const MIRROR_SUB_DOMAIN = /https(.*)mirror.xyz/i
+const ADDRESS_FULL = /0x[\da-f]{40}/i
 const MIRROR_ENTRY_ID = /\w{43}/i
 
-export function mirrorPageProbe(url?: string) {
+export function getMirrorPageType(url?: string) {
     if (!url) return
 
     if (url.includes(`/${MirrorPageType.Dashboard}`)) return MirrorPageType.Dashboard

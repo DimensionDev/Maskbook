@@ -20,7 +20,7 @@
     "send_tip_successfully": "Sent tip successfully.",
     "send_specific_tip_successfully": "Sent {{amount}} {{name}} tip successfully.",
     "tip_share": "Share",
-    "tip_success_ok": "Ok",
+    "tip_success_ok": "OK",
     "tip_connect_wallet_message": "Please connect to a wallet.",
     "tip_connect_wallet": "Connect Wallet",
     "search": "Search",
@@ -55,7 +55,7 @@
     "tip_copy_success_of_wallet_addr": "Copy wallet address successfully!",
     "copy_address": "Copy Address",
     "wallet_set_up_successfully": "Tips Wallet set up successfully.",
-    "wallet_set_up_failed": "Tips Wallet setup failed, please try again.",
+    "wallet_set_up_failed": "Tips Wallet set up failed, please try again.",
     "view_on_explorer": "View on Explorer",
     "tips_guide_description": "Send authors tips by using Mask Network’s Tips function.",
     "tips_guide_action": "Close"

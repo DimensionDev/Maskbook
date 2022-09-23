@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { MirrorPageType, mirrorPageProbe } from '../collecting/utils'
+import { MirrorPageType, getMirrorPageType } from '../collecting/utils'
 
 describe('test mirror collection utils', () => {
     test.each([
@@ -30,6 +30,6 @@ describe('test mirror collection utils', () => {
             expected: MirrorPageType.Dashboard,
         },
     ])('.pageProbe($give)', ({ give, expected }) => {
-        expect(mirrorPageProbe(give)).toBe(expected)
+        expect(getMirrorPageType(give)).toBe(expected)
     })
 })

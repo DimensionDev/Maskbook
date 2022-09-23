@@ -76,7 +76,7 @@ export const useInjectedDialogClassesOverwriteMirror = makeStyles()((theme) => {
             },
         },
         dialogBackdropRoot: {
-            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(110, 118, 125, 0.4)' : 'rgba(0, 0, 0, 0.4)',
+            backgroundColor: theme.palette.action.mask,
         },
     }
 })
