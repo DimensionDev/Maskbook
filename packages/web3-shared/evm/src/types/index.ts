@@ -96,6 +96,11 @@ export interface Wallet {
     hasDerivationPath: boolean
 }
 
+export enum AddressType {
+    ExternalOwned = 1,
+    Contract = 2,
+}
+
 export enum SchemaType {
     Native = 1,
     ERC20 = 2,
