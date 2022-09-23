@@ -12,13 +12,17 @@ export function useSaveKV(pluginId: NetworkPluginID) {
 
     return useCallback(
         async (info: NextIDAvatarMeta, account: string, persona: ECKeyIdentifier, proof: BindingProof) => {
-            if (!connection) return
+            try {
+                if (!connection) return
 
-            const sign = await connection.signMessage(JSON.stringify(info), 'personalSign', {
-                account,
-            })
+                const sign = await connection.signMessage(JSON.stringify(info), 'personalSign', {
+                    account,
+                })
 
-            return saveAvatar(account, activatedSocialNetworkUI.networkIdentifier as EnhanceableSite, info, sign)
+                return saveAvatar(account, activatedSocialNetworkUI.networkIdentifier as EnhanceableSite, info, sign)
+            } catch {
+                return
+            }
         },
         [connection, saveAvatar],
     )

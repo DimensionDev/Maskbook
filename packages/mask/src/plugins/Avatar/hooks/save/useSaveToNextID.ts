@@ -12,19 +12,23 @@ export function useSaveToNextID() {
     const saveAddress = useSaveAddress()
     return useCallback(
         async (info: NextIDAvatarMeta, account: string, persona?: ECKeyIdentifier, proof?: BindingProof) => {
-            if (!proof?.identity || !persona || !Storage) return
-            const storage = Storage.createNextIDStorage(proof.identity, proof.platform, persona)
+            try {
+                if (!proof?.identity || !persona || !Storage) return
+                const storage = Storage.createNextIDStorage(proof.identity, proof.platform, persona)
 
-            await storage.set(PLUGIN_ID, info)
+                await storage.set(PLUGIN_ID, info)
 
-            saveAddress(
-                info.userId,
-                info.pluginId ?? NetworkPluginID.PLUGIN_EVM,
-                account,
-                activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
-            )
+                saveAddress(
+                    info.userId,
+                    info.pluginId ?? NetworkPluginID.PLUGIN_EVM,
+                    account,
+                    activatedSocialNetworkUI.networkIdentifier as EnhanceableSite,
+                )
 
-            return info
+                return info
+            } catch {
+                return
+            }
         },
         [saveAddress, Storage],
     )
