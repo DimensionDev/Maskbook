@@ -1,4 +1,4 @@
-import { formatEthereumAddress, explorerResolver } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, explorerResolver, ChainId } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Link, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import OpenInNew from '@mui/icons-material/OpenInNew'
@@ -9,8 +9,7 @@ import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie.js'
 import { SnapshotContext } from '../context.js'
 import { useProposal } from './hooks/useProposal.js'
 import { SnapshotCard } from './SnapshotCard.js'
-import { useChainId } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, resolveIPFS_URL } from '@masknet/web3-shared-base'
+import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import urlcat from 'urlcat'
 import { SNAPSHOT_IPFS } from '../constants.js'
 
@@ -70,7 +69,6 @@ export function InfoField(props: InfoFieldProps) {
 export function InformationCard(props: InformationCardProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
-    const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
 
     const identifier = useContext(SnapshotContext)
     const { payload: proposal } = useProposal(identifier.id)
@@ -88,7 +86,10 @@ export function InformationCard(props: InformationCardProps) {
                                 className={classes.link}
                                 target="_blank"
                                 rel="noopener"
-                                href={explorerResolver.addressLink(chainId, strategy.params.address)}>
+                                href={explorerResolver.addressLink(
+                                    Number(proposal.network) as ChainId,
+                                    strategy.params.address,
+                                )}>
                                 <Avatar src={resolveIPFS_URL(proposal.space.avatar)} className={classes.avatar} />
                             </Link>
                         ))}
@@ -99,7 +100,7 @@ export function InformationCard(props: InformationCardProps) {
                     className={classes.link}
                     target="_blank"
                     rel="noopener"
-                    href={explorerResolver.addressLink(chainId, proposal.address)}>
+                    href={explorerResolver.addressLink(Number(proposal.network) as ChainId, proposal.address)}>
                     <div className={classes.avatarWrapper}>
                         {proposal.authorAvatar ? (
                             <Avatar src={resolveIPFS_URL(proposal.authorAvatar)} className={classes.avatar} />
@@ -135,7 +136,10 @@ export function InformationCard(props: InformationCardProps) {
                     className={classes.link}
                     target="_blank"
                     rel="noopener"
-                    href={explorerResolver.blockLink(chainId, Number.parseInt(snapshot, 10))}>
+                    href={explorerResolver.blockLink(
+                        Number(proposal.network) as ChainId,
+                        Number.parseInt(snapshot, 10),
+                    )}>
                     {snapshot}
                     <OpenInNew fontSize="small" />
                 </Link>
