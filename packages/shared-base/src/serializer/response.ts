@@ -1,6 +1,6 @@
 import { TypesonPromise } from 'typeson'
 
-interface Seralizedresponse {
+interface SeralizedResponse {
     body: Blob | ReadableStream | null
     init: ResponseInit
 }
@@ -8,7 +8,7 @@ function is(x: any) {
     return x instanceof Response
 }
 function serializer(response: Response) {
-    return new TypesonPromise<Seralizedresponse>((resolve, reject) => {
+    return new TypesonPromise<SeralizedResponse>((resolve, reject) => {
         response.blob().then((body) => {
             resolve({
                 body,
@@ -21,7 +21,7 @@ function serializer(response: Response) {
         }, reject)
     })
 }
-function streamSerializer(response: Response): Seralizedresponse {
+function streamSerializer(response: Response): SeralizedResponse {
     return {
         body: response.body,
         init: {
@@ -32,7 +32,7 @@ function streamSerializer(response: Response): Seralizedresponse {
     }
 }
 
-function deserializer(response: Seralizedresponse) {
+function deserializer(response: SeralizedResponse) {
     return new Response(response.body, response.init)
 }
 
