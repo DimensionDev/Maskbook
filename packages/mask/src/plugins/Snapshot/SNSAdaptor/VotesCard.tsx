@@ -34,6 +34,7 @@ const useStyles = makeStyles()((theme) => {
             borderBottom: `1px solid ${theme.palette.maskColor.publicLine}`,
             paddingLeft: 0,
             paddingRight: 0,
+            gap: 16,
         },
         badge: {
             transform: 'translateX(40px) translateY(2.5px)',
@@ -46,7 +47,7 @@ const useStyles = makeStyles()((theme) => {
             overflow: 'hidden',
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
-            maxWidth: 180,
+            maxWidth: 170,
             color: theme.palette.maskColor.publicMain,
         },
         ellipsisText: {
@@ -64,7 +65,6 @@ const useStyles = makeStyles()((theme) => {
             color: 'inherit',
             alignItems: 'center',
             textDecoration: 'none !important',
-            marginRight: 16,
         },
         power: {
             minWidth: 90,
