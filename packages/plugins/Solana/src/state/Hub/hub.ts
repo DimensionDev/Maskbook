@@ -40,7 +40,7 @@ class HubNonFungibleClient extends HubStateNonFungibleClient<ChainId, SchemaType
                 [SourceType.Solana]: SolanaNonFungible,
                 [SourceType.NFTScan]: NFTScanNonFungibleTokenSolana,
             },
-            [MagicEden, SolanaNonFungible, NFTScanNonFungibleTokenSolana],
+            [NFTScanNonFungibleTokenSolana, MagicEden, SolanaNonFungible],
             initial,
         )
     }
