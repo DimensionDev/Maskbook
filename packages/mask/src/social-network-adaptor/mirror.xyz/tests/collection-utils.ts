@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest'
 import { MirrorPageType, mirrorPageProbe } from '../collecting/utils'
 
-describe.skip('test mirror collection utils', () => {
+describe('test mirror collection utils', () => {
     test.each([
         { give: 'https://0xtest.mirror.xyz', expected: MirrorPageType.Profile },
         { give: 'https://mirror.xyz/0x790116d0685eB197B886DAcAD9C247f785987A4a', expected: MirrorPageType.Profile },
