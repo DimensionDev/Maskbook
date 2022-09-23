@@ -265,7 +265,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
     const AddCollectible = (
         <Box className={classes.empty}>
             <Icons.EmptySimple variant="light" size={36} />
-            <Typography color="textSecondary" textAlign="center" fontSize={14} fontWeight={600}>
+            <Typography color="textSecondary" textAlign="center" fontSize={14}>
                 {t.collectible_no_collectible()}
             </Typography>
         </Box>

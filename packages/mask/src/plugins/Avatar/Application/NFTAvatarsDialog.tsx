@@ -16,6 +16,7 @@ import { PluginID } from '@masknet/plugin-infra'
 const useStyles = makeStyles()((theme) => ({
     root: {
         margin: 0,
+        minHeight: 564,
         padding: '0px !important',
         '::-webkit-scrollbar': {
             display: 'none',
