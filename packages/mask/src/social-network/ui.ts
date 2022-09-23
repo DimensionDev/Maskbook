@@ -155,6 +155,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
                 }
             },
             Services.Settings.getPluginMinimalModeEnabled,
+            Services.Helper.hasHostPermission,
         ),
     )
 

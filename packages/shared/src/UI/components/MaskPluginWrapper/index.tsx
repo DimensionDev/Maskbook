@@ -22,6 +22,7 @@ interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     publisher?: JSX.Element
     wrapperProps?: Plugin.SNSAdaptor.PluginWrapperProps
     publisherLink?: string
+    lackHostPermission?: boolean
 }
 
 const useStyles = makeStyles<{ backgroundGradient?: string; borderRadius?: string; margin?: string }>()(

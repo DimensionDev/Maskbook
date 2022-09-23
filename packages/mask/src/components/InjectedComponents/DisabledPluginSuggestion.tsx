@@ -15,8 +15,9 @@ import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import Services from '../../extension/service.js'
 import { useI18N } from '../../utils/index.js'
 import { useSubscription } from 'use-subscription'
+import { usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
 
-export function useDisabledPlugins() {
+function useDisabledPlugins() {
     const activated = new Set(useActivatedPluginsSNSAdaptor('any').map((x) => x.ID))
     const minimalMode = new Set(useActivatedPluginsSNSAdaptor(true).map((x) => x.ID))
     const disabledPlugins = useSubscription(registeredPlugins)
@@ -57,55 +58,77 @@ export function PossiblePluginSuggestionPostInspector() {
     const matches = useDisabledPluginSuggestionFromPost(message, metaLinks)
     return <PossiblePluginSuggestionUI plugins={matches} />
 }
-export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefinition[] }) {
+export function PossiblePluginSuggestionUI(props: { plugins: Plugin.Shared.Definition[] }) {
     const { plugins } = props
-    const { t } = useI18N()
-    const theme = useTheme()
-    const onClick = useCallback((x: Plugin.DeferredDefinition) => {
-        Services.Settings.setPluginMinimalModeEnabled(x.ID, false)
-    }, [])
     const _plugins = useActivatedPluginsSNSAdaptor('any')
+    const lackPermission = usePluginHostPermissionCheck(plugins)
     if (!plugins.length) return null
-
     return (
         <>
-            {plugins.map((x) => (
-                <MaskPostExtraInfoWrapper
-                    open
-                    key={x.ID}
-                    title={<PluginI18NFieldRender field={x.name} pluginID={x.ID} />}
-                    publisher={
-                        x.publisher ? <PluginI18NFieldRender pluginID={x.ID} field={x.publisher.name} /> : undefined
-                    }
-                    publisherLink={x.publisher?.link}
-                    wrapperProps={_plugins.find((y) => y.ID === x.ID)?.wrapperProps}
-                    action={
-                        <Button
-                            size="small"
-                            startIcon={<Icons.Plugin size={18} />}
-                            variant="roundedDark"
-                            onClick={() => onClick(x)}
-                            sx={{
-                                backgroundColor: theme.palette.maskColor.dark,
-                                color: 'white',
-                                width: '254px',
-                                height: '36px',
-                                fontSize: 14,
-                                fontWeight: 700,
-                                paddingTop: 1,
-                                paddingBottom: 1.125,
-                                lineHeight: 1.5,
-                                '&:hover': {
-                                    backgroundColor: theme.palette.maskColor.dark,
-                                },
-                            }}>
-                            {t('plugin_enables')}
-                        </Button>
-                    }
-                    content={<Rectangle style={{ paddingLeft: 8, marginBottom: 42 }} />}
+            {plugins.map((define) => (
+                <PossiblePluginSuggestionUISingle
+                    define={define}
+                    key={define.ID}
+                    wrapperProps={_plugins.find((y) => y.ID === define.ID)?.wrapperProps}
+                    lackHostPermission={lackPermission?.has(define.ID)}
                 />
             ))}
         </>
+    )
+}
+
+export function PossiblePluginSuggestionUISingle(props: {
+    lackHostPermission?: boolean | undefined
+    define: Plugin.Shared.Definition
+    wrapperProps?: Plugin.SNSAdaptor.PluginWrapperProps | undefined
+}) {
+    const { define, lackHostPermission, wrapperProps } = props
+    const { t } = useI18N()
+    const theme = useTheme()
+    const onClick = useCallback(() => {
+        Services.Settings.setPluginMinimalModeEnabled(define.ID, false)
+        if (lackHostPermission && define.enableRequirement.host_permissions) {
+            Services.Helper.requestHostPermission(define.enableRequirement.host_permissions)
+        }
+    }, [lackHostPermission, define])
+
+    return (
+        <MaskPostExtraInfoWrapper
+            open
+            title={<PluginI18NFieldRender field={define.name} pluginID={define.ID} />}
+            publisher={
+                define.publisher ? (
+                    <PluginI18NFieldRender pluginID={define.ID} field={define.publisher.name} />
+                ) : undefined
+            }
+            publisherLink={define.publisher?.link}
+            wrapperProps={wrapperProps}
+            lackHostPermission={lackHostPermission}
+            action={
+                <Button
+                    size="small"
+                    startIcon={<Icons.Plugin size={18} />}
+                    variant="roundedDark"
+                    onClick={onClick}
+                    sx={{
+                        backgroundColor: theme.palette.maskColor.dark,
+                        color: 'white',
+                        width: '254px',
+                        height: '36px',
+                        fontSize: 14,
+                        fontWeight: 700,
+                        paddingTop: 1,
+                        paddingBottom: 1.125,
+                        lineHeight: 1.5,
+                        '&:hover': {
+                            backgroundColor: theme.palette.maskColor.dark,
+                        },
+                    }}>
+                    {lackHostPermission ? 'Grant permission' : t('plugin_enables')}
+                </Button>
+            }
+            content={<Rectangle style={{ paddingLeft: 8, marginBottom: 42 }} />}
+        />
     )
 }
 
