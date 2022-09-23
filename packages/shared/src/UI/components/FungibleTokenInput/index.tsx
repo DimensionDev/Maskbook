@@ -34,6 +34,7 @@ export const FungibleTokenInput = memo<FungibleTokenInputProps>(
         disableMax,
         disableBalance,
         disableToken,
+        loadingBalance,
         onSelectToken,
         onAmountChange,
         amount,
@@ -95,7 +96,7 @@ export const FungibleTokenInput = memo<FungibleTokenInputProps>(
                 }}
                 balance={balance}
                 required
-                loadingBalance
+                loadingBalance={loadingBalance}
                 disabled={disabled}
                 disableMax={disableMax}
                 disableBalance={disableBalance}

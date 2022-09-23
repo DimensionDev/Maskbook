@@ -1,6 +1,6 @@
 import { useChainId, useFungibleToken, useNonFungibleTokenContract } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
-import type { GasConfig } from '@masknet/web3-shared-evm'
+import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import { FC, useContext, useEffect, useMemo, useState } from 'react'
 import { useSubscription } from 'use-subscription'
 import { getStorage } from '../../storage/index.js'
@@ -37,11 +37,11 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
         setTipType(TipsType.Tokens)
     }, [targetChainId])
 
-    const [gasConfig, setGasConfig] = useState<GasConfig | undefined>()
+    const [gasOption, setGasOption] = useState<GasOptionConfig>()
     const connectionOptions =
         pluginId === NetworkPluginID.PLUGIN_EVM
             ? {
-                  overrides: gasConfig,
+                  overrides: gasOption,
               }
             : undefined
     const selectedRecipientAddress = recipientAddress || task.recipient || recipients[0]?.address
@@ -87,8 +87,8 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
             isSending,
             storedTokens: storedTokens.filter((t) => t.contract?.chainId === chainId),
             reset,
-            gasConfig,
-            setGasConfig,
+            gasOption,
+            setGasOption,
         }
     }, [
         chainId,
@@ -105,7 +105,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
         selectedToken,
         sendTip,
         isSending,
-        gasConfig,
+        gasOption,
         storedTokens,
     ])
 
@@ -116,6 +116,11 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
             setPluginId(NetworkPluginID.PLUGIN_EVM)
         }
     }, [recipient?.pluginId])
+
+    useEffect(() => {
+        setToken(nativeTokenDetailed)
+    }, [nativeTokenDetailed])
+
     return <TipContext.Provider value={contextValue}>{children}</TipContext.Provider>
 }
 

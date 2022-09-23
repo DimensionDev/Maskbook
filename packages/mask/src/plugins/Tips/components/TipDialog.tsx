@@ -38,7 +38,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 528,
     },
     recipient: {
-        margin: theme.spacing(2),
+        margin: theme.spacing(2, 2, 0),
     },
     abstractTabWrapper: {
         width: '100%',
@@ -49,6 +49,11 @@ const useStyles = makeStyles()((theme) => ({
         flexGrow: 1,
         overflow: 'auto',
         padding: theme.spacing(0, 2),
+    },
+    section: {
+        height: '100%',
+        paddingTop: theme.spacing(2),
+        boxSizing: 'border-box',
     },
     tab: {
         height: 36,
@@ -224,17 +229,17 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                 titleTabs={
                     <MaskTabList variant="base" onChange={onTabChange} aria-label="Tips">
                         <Tab label={t.tips_tab_tokens()} value={tabs.tokens} />
-                        <Tab label={t.tips_tab_colletibles()} value={tabs.collectibles} />
+                        <Tab label={t.tips_tab_collectibles()} value={tabs.collectibles} />
                     </MaskTabList>
                 }>
                 <DialogContent className={classes.content}>
                     <NetworkSection />
                     <RecipientSection className={classes.recipient} />
                     <TabPanel value={tabs.tokens} className={classes.tabPanel}>
-                        <TokenSection />
+                        <TokenSection className={classes.section} />
                     </TabPanel>
                     <TabPanel value={tabs.collectibles} className={classes.tabPanel}>
-                        <NFTSection />
+                        <NFTSection className={classes.section} />
                     </TabPanel>
                     <PluginWalletStatusBar expectedPluginID={expectedPluginID} expectedChainId={targetChainId}>
                         <ChainBoundary
