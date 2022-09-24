@@ -101,6 +101,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
             if (!open) {
                 html.style.overflow = 'auto scroll'
                 setRecoverOverflow(false)
+                html.style.removeProperty('margin-right')
             }
 
             setOpen(open)
