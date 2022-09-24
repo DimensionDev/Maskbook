@@ -51,16 +51,31 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     // #region Open
     const [open, setOpen] = useState(false)
     const [isOpenFromApplicationBoard, setIsOpenFromApplicationBoard] = useState(false)
+    const [recoverOverflow, setRecoverOverflow] = useState(false)
+
     const onClose = useCallback(() => {
         setOpen(false)
+        if (recoverOverflow) {
+            const html = document.documentElement
+            html.style.overflow = 'auto scroll'
+            html.style.removeProperty('margin-right')
+            setRecoverOverflow(false)
+        }
+
         UI.current?.reset()
-    }, [])
+    }, [recoverOverflow])
 
     useEffect(() => {
         if (openOnInitAnswered) return
         openOnInitAnswered = true
         Services.SocialNetwork.getDesignatedAutoStartPluginID().then((plugin) => {
             if (!plugin) return
+            const html = document.documentElement
+            if (html.style.overflow !== 'hidden') {
+                html.style.overflow = 'hidden'
+                html.style.marginRight = '17px'
+                setRecoverOverflow(true)
+            }
 
             setOpen(true)
             UI.current?.startPlugin(plugin)
@@ -77,6 +92,17 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     useEffect(() => {
         return CrossIsolationMessages.events.compositionDialogEvent.on(({ reason, open, content, options }) => {
             if ((reason !== 'reply' && reason !== type) || (reason === 'reply' && type === 'popup')) return
+            const html = document.documentElement
+            if (html.style.overflow !== 'hidden') {
+                html.style.overflow = 'hidden'
+                html.style.marginRight = '17px'
+                setRecoverOverflow(true)
+            }
+            if (!open) {
+                html.style.overflow = 'auto scroll'
+                setRecoverOverflow(false)
+            }
+
             setOpen(open)
             setReason(reason)
             setIsOpenFromApplicationBoard(Boolean(options?.isOpenFromApplicationBoard))
@@ -87,6 +113,13 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     }, [type])
     useEffect(() => {
         if (!open) return
+        const html = document.documentElement
+        if (html.style.overflow !== 'hidden') {
+            html.style.overflow = 'hidden'
+            html.style.marginRight = '17px'
+            setRecoverOverflow(true)
+        }
+
         return MaskMessages.events.replaceComposition.on((message) => {
             const ui = UI.current
             if (!ui) return

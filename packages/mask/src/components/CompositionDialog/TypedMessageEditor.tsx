@@ -18,14 +18,13 @@ const useStyles = makeStyles()((theme) => ({
     },
     input: {
         fontSize: 15,
-        height: '100%',
         position: 'relative',
+        display: 'flex',
     },
     badgeInput: {
         paddingTop: 48,
     },
     textarea: {
-        padding: '0 14px!important',
         '::-webkit-scrollbar': {
             backgroundColor: 'transparent',
             width: 20,
@@ -160,7 +159,7 @@ export const TypedMessageEditor = memo(
                     fullWidth
                     multiline
                     placeholder={t('post_dialog__placeholder')}
-                    rows={value.meta ? 12 : 14}
+                    rows={value.meta ? 11 : 13}
                 />
             </>
         )
