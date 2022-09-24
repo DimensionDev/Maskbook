@@ -228,10 +228,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                 if (a.pluginID === PluginID.Debugger) return 1
                 if (z.pluginID === PluginID.Debugger) return -1
 
-                // place those tabs from dao before the last
-                if (a.pluginID === PluginID.DAO) return 1
-                if (z.pluginID === PluginID.DAO) return -1
-
                 return a.priority - z.priority
             })
     })

@@ -10,7 +10,6 @@
     { "path": "./Wallet/" },
     { "path": "./FileService/" },
     { "path": "./RSS3/" },
-    { "path": "./DAO/" },
     { "path": "./CyberConnect/" },
     { "path": "./CrossChainBridge/" },
     { "path": "./Web3Profile/" }
