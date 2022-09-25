@@ -55,6 +55,8 @@
     "tip_empty_manage_list": "Please manage wallets to receive tips.",
     "tip_set_as_default": "Set as default",
     "tip_copy_success_of_wallet_addr": "Copy wallet address successfully!",
+    "recipient_address_is_contract": "The receiving address is a contract address. Please check again.",
+    "recipient_address_is_malicious": "The receiving address may be a malicious address.",
     "copy_address": "Copy Address",
     "wallet_set_up_successfully": "Tips Wallet set up successfully.",
     "wallet_set_up_failed": "Tips Wallet set up failed, please try again.",

@@ -12,7 +12,7 @@ import { useBoolean } from 'react-use'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
 import { PluginWalletStatusBar } from '../../../utils/index.js'
 import { ChainBoundary } from '../../../web3/UI/ChainBoundary.js'
-import { TargetRuntimeContext, useTip, useTipValidate } from '../contexts/index.js'
+import { TargetRuntimeContext, useTip } from '../contexts/index.js'
 import { useI18N } from '../locales/index.js'
 import { TipsType } from '../types/index.js'
 import { AddDialog } from './AddDialog.js'
@@ -158,9 +158,9 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         setNonFungibleTokenId,
         reset,
         sendTip,
+        validation: [isValid, validateMessage],
     } = useTip()
     const { targetChainId, pluginId } = TargetRuntimeContext.useContainer()
-    const [isValid, validateMessage] = useTipValidate()
 
     const isTokenTip = tipType === TipsType.Tokens
     const shareText = useMemo(() => {

@@ -1,15 +1,17 @@
 import { useChainId, useFungibleToken, useNonFungibleTokenContract } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 import type { GasOptionConfig } from '@masknet/web3-shared-evm'
-import { FC, useContext, useEffect, useMemo, useState } from 'react'
+import { FC, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useSubscription } from 'use-subscription'
 import { getStorage } from '../../storage/index.js'
 import { TipTask, TipsType } from '../../types/index.js'
 import { TargetRuntimeContext } from '../TargetRuntimeContext.js'
-import { ContextOptions, TipContext } from './TipContext.js'
+import { TipContextOptions, TipContext } from './TipContext.js'
 import { useTipAccountsCompletion } from './useTipAccountsCompletion.js'
 import { useNftTip } from './useNftTip.js'
 import { useTokenTip } from './useTokenTip.js'
+import { useRecipientValidate } from './useRecipientValidate.js'
+import { useTipValidate } from './useTipValidate.js'
 
 interface Props {
     task: TipTask
@@ -26,10 +28,12 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
     const { value: nativeTokenDetailed = null } = useFungibleToken(pluginId, undefined, {
         chainId: targetChainId,
     })
-    const [token, setToken] = useState<ContextOptions['token']>(nativeTokenDetailed)
+    const [token, setToken] = useState<TipContextOptions['token']>(nativeTokenDetailed)
     const selectedToken = token ?? nativeTokenDetailed
-    const [nonFungibleTokenId, setNonFungibleTokenId] = useState<ContextOptions['nonFungibleTokenId']>(null)
+    const [nonFungibleTokenId, setNonFungibleTokenId] = useState<TipContextOptions['nonFungibleTokenId']>(null)
     const storedTokens = useSubscription(getStorage().addedTokens.subscription)
+    const { loading: validatingRecipient, validation: recipientValidation } = useRecipientValidate(recipientAddress)
+    const validation = useTipValidate({ tipType, amount, token, nonFungibleTokenId, nonFungibleTokenAddress })
 
     const { value: nonFungibleTokenContract } = useNonFungibleTokenContract(pluginId, nonFungibleTokenAddress)
 
@@ -59,13 +63,13 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
     const sendTip = sendTipTuple[1]
     const recipient = recipients.find((x) => x.address === selectedRecipientAddress)
 
-    const contextValue = useMemo(() => {
-        const reset = () => {
-            setAmount('')
-            setNonFungibleTokenId(null)
-            setNonFungibleTokenAddress('')
-        }
+    const reset = useCallback(() => {
+        setAmount('')
+        setNonFungibleTokenId(null)
+        setNonFungibleTokenAddress('')
+    }, [])
 
+    const contextValue = useMemo(() => {
         return {
             recipient,
             recipientSnsId: task.recipientSnsId || '',
@@ -89,6 +93,9 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
             reset,
             gasOption,
             setGasOption,
+            validation,
+            validatingRecipient,
+            recipientValidation,
         }
     }, [
         chainId,
@@ -105,8 +112,12 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
         selectedToken,
         sendTip,
         isSending,
+        reset,
         gasOption,
         storedTokens,
+        validation,
+        validatingRecipient,
+        recipientValidation,
     ])
 
     useEffect(() => {
