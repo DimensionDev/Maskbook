@@ -137,7 +137,6 @@ export class TwitterAPI implements TwitterBaseAPI.Provider {
         return {
             address: result.data.user.result.nft_avatar_metadata.smart_contract.address,
             token_id: result.data.user.result.nft_avatar_metadata.token_id,
-            type_name: result.data.user.result.nft_avatar_metadata.smart_contract.__typename,
         }
     }
 
