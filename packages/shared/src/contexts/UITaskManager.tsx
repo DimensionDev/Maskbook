@@ -112,10 +112,6 @@ export const createUITaskManager = <TaskOptions extends BaseModalPopperProps<Res
                                 task.resolve(null)
                                 setAnchorEl(null)
                             },
-                            onClick: () => {
-                                task.resolve(null)
-                                setAnchorEl(null)
-                            },
                         } as unknown as TaskOptions,
                         children,
                     )
