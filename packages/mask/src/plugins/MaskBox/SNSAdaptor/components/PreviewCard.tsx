@@ -58,7 +58,6 @@ const useTabsStyles = makeStyles()((theme) => ({
         '&::-webkit-scrollbar': {
             display: 'none',
         },
-        background: '#fff !important',
     },
     header: {
         gap: 24,
