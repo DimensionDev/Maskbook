@@ -54,6 +54,7 @@
     "tip_empty_manage_list": "Please manage wallets to receive tips.",
     "tip_set_as_default": "Set as default",
     "tip_copy_success_of_wallet_addr": "Copy wallet address successfully!",
+    "recipient_address_is_contract": "The receiving address is a contract address.",
     "copy_address": "Copy Address",
     "view_on_explorer": "View on Explorer",
     "source_tooltip": "Data source is retrieved from <Link>{{source}}<Link>",

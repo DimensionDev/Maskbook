@@ -317,7 +317,7 @@ class Connection implements EVM_Connection {
     }
     async getAddressType(address: string, initial?: EVM_Web3ConnectionOptions): Promise<AddressType | undefined> {
         if (!isValidAddress(address)) return
-        const code = await this.getCode(address)
+        const code = await this.getCode(address, initial)
         return code === '0x' ? AddressType.ExternalOwned : AddressType.Contract
     }
     async getSchemaType(address: string, initial?: EVM_Web3ConnectionOptions): Promise<SchemaType | undefined> {

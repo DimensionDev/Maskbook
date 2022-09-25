@@ -3,9 +3,9 @@ import type { FungibleToken, NonFungibleToken, NonFungibleTokenContract } from '
 import type { GasOptionConfig } from '@masknet/web3-shared-evm'
 import { noop } from 'lodash-unified'
 import { createContext, Dispatch, SetStateAction } from 'react'
-import { TipsAccount, TipsType } from '../../types/index.js'
+import { TipsAccount, TipsType, ValidationTuple } from '../../types/index.js'
 
-export interface ContextOptions {
+export interface TipContextOptions {
     recipient: TipsAccount | undefined
     recipientSnsId: string
     recipientAddress: string
@@ -28,9 +28,12 @@ export interface ContextOptions {
     reset: () => void
     setGasOption: Dispatch<SetStateAction<GasOptionConfig | undefined>>
     gasOption: GasOptionConfig | undefined
+    validation: ValidationTuple
+    validatingRecipient: boolean
+    recipientValidation: ValidationTuple
 }
 
-export const TipContext = createContext<ContextOptions>({
+export const TipContext = createContext<TipContextOptions>({
     recipient: undefined,
     recipientAddress: '',
     recipientSnsId: '',
@@ -53,4 +56,7 @@ export const TipContext = createContext<ContextOptions>({
     reset: noop,
     setGasOption: noop,
     gasOption: undefined,
+    validation: [true],
+    validatingRecipient: false,
+    recipientValidation: [true],
 })
