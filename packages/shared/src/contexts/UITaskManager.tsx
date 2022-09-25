@@ -1,6 +1,16 @@
-import { createContext, createElement, FC, ComponentType, PropsWithChildren, useMemo, useState } from 'react'
+import {
+    createContext,
+    createElement,
+    FC,
+    ComponentType,
+    PropsWithChildren,
+    useMemo,
+    useState,
+    SyntheticEvent,
+} from 'react'
 import { defer, DeferTuple } from '@dimensiondev/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { useUpdate } from 'react-use'
 
 export interface ContextOptions<T, R> {
     show(options?: Omit<T, 'open'>, signal?: AbortSignal): Promise<R>
@@ -8,6 +18,8 @@ export interface ContextOptions<T, R> {
 
 export interface BaseModalPopperProps<T> {
     open: boolean
+    anchorEl?: HTMLElement | SyntheticEvent<HTMLElement>
+    anchorSibling?: boolean
     onClose?(event: {}, reason: 'backdropClick' | 'escapeKeyDown'): void
     onSubmit?(result: T | null): void
 }
@@ -33,6 +45,9 @@ export const createUITaskManager = <TaskOptions extends BaseModalPopperProps<Res
 
     const TaskManagerProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
         const [tasks, setTasks] = useState<Task[]>(EMPTY_LIST)
+        const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+
+        const update = useUpdate()
 
         const contextValue = useMemo(() => {
             const removeTask = (id: number) => {
@@ -47,6 +62,27 @@ export const createUITaskManager = <TaskOptions extends BaseModalPopperProps<Res
                         resolve(null)
                         signal.removeEventListener('abort', abortHandler)
                     })
+
+                    // Mui Popper
+                    if (options?.anchorEl) {
+                        let element: HTMLElement
+                        if (options?.anchorEl instanceof HTMLElement) {
+                            element = options?.anchorEl
+                        } else {
+                            element = options?.anchorEl.currentTarget
+                        }
+
+                        // when the essential content of currentTarget would be closed over,
+                        //  we can set the anchorEl with currentTarget's bottom sibling to avoid it.
+                        const finalAnchor = options?.anchorSibling
+                            ? (element.nextElementSibling as HTMLElement) ?? undefined
+                            : element
+                        setAnchorEl(finalAnchor)
+                        // HACK: it seems like anchor doesn't work correctly
+                        // but a force repaint can solve the problem.
+                        window.requestAnimationFrame(update)
+                    }
+
                     const newTask: Task = { id, promise, resolve, reject, options }
                     setTasks((list) => [...list, newTask])
                     promise.then(() => {
@@ -65,6 +101,7 @@ export const createUITaskManager = <TaskOptions extends BaseModalPopperProps<Res
                         Component,
                         {
                             ...task.options,
+                            anchorEl,
                             key: task.id,
                             open: true,
                             onSubmit: (result: Result | null) => {
