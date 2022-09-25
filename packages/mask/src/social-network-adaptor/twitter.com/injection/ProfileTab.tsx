@@ -2,17 +2,17 @@ import Color from 'color'
 import { useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createReactRootShadowed, startWatch, untilElementAvailable, MaskMessages } from '../../../utils'
 import {
     searchAppBarBackSelector,
     searchNewTweetButtonSelector,
     searchProfileEmptySelector,
     searchProfileTabListLastChildSelector,
     searchProfileTabListSelector,
+    searchProfileTabLoseConnectionPageSelector,
     searchProfileTabPageSelector,
     searchProfileTabSelector,
-    searchProfileTabLoseConnectionPageSelector,
 } from '../utils/selector'
+import { createReactRootShadowed, MaskMessages, startWatch, untilElementAvailable } from '../../../utils'
 import { ProfileTab } from '../../../components/InjectedComponents/ProfileTab'
 
 function getStyleProps() {
@@ -80,6 +80,25 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
+function nameTagClickHandler() {
+    MaskMessages.events.profileTabUpdated.sendToLocal({ show: false })
+
+    const eleEmpty = searchProfileEmptySelector().evaluate()
+    if (eleEmpty) eleEmpty.style.display = 'none'
+
+    const elePage = searchProfileTabPageSelector().evaluate()
+    if (elePage) {
+        elePage.style.visibility = 'hidden'
+        elePage.style.height = 'auto'
+    }
+}
+
+function tabClickHandler() {
+    MaskMessages.events.profileTabUpdated.sendToLocal({ show: false })
+
+    resetTwitterActivatedContent()
+}
+
 async function hideTwitterActivatedContent() {
     const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
     const loseConnectionEle = searchProfileTabLoseConnectionPageSelector().evaluate()
@@ -93,6 +112,7 @@ async function hideTwitterActivatedContent() {
         _v.style.color = style.color
         const line = v.querySelector('div > div') as HTMLDivElement
         line.style.display = 'none'
+        v.addEventListener('click', v.closest('#open-nft-button') ? nameTagClickHandler : tabClickHandler)
     })
 
     if (loseConnectionEle) return
@@ -107,7 +127,7 @@ async function hideTwitterActivatedContent() {
     const elePage = searchProfileTabPageSelector().evaluate()
     if (elePage) {
         elePage.style.visibility = 'hidden'
-        elePage.style.height = '0'
+        elePage.style.height = 'auto'
     }
 }
 
@@ -122,6 +142,7 @@ function resetTwitterActivatedContent() {
         _v.style.color = ''
         const line = v.querySelector('div > div') as HTMLDivElement
         line.style.display = ''
+        v.removeEventListener('click', v.closest('#open-nft-button') ? nameTagClickHandler : tabClickHandler)
     })
 
     if (loseConnectionEle) return
