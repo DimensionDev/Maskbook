@@ -1,13 +1,14 @@
 import { createContext, createElement, FC, ComponentType, PropsWithChildren, useMemo, useState } from 'react'
 import { defer, DeferTuple } from '@dimensiondev/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import type { InjectedDialogProps } from './components/index.js'
 
 export interface ContextOptions<T, R> {
     show(options?: Omit<T, 'open'>, signal?: AbortSignal): Promise<R>
 }
 
-export interface BaseDialogProps<T> extends Pick<InjectedDialogProps, 'open' | 'onClose'> {
+export interface BaseModalPopperProps<T> {
+    open: boolean
+    onClose?(event: {}, reason: 'backdropClick' | 'escapeKeyDown'): void
     onSubmit?(result: T | null): void
 }
 
@@ -15,7 +16,7 @@ export interface BaseDialogProps<T> extends Pick<InjectedDialogProps, 'open' | '
  * Create a manager of small UI task sessions,
  * which provides both a Context and a Provider.
  */
-export const createUITaskManager = <TaskOptions extends BaseDialogProps<Result>, Result>(
+export const createUITaskManager = <TaskOptions extends BaseModalPopperProps<Result>, Result>(
     Component: ComponentType<TaskOptions>,
 ) => {
     const TaskManagerContext = createContext<ContextOptions<TaskOptions, Result | null>>(null!)
