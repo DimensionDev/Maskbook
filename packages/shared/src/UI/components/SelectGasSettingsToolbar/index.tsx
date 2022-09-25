@@ -265,9 +265,12 @@ export function SelectGasSettingsToolbarUI({
                             PaperProps: {
                                 style: { background: theme.palette.maskColor.bottom, transform: 'translateY(8px)' },
                             },
+                            openCustomGasSettingsDialog,
                         })
+
                         if (!result) return
                         const { isCustomGas, type, transaction } = result
+
                         setIsCustomGas(isCustomGas)
                         setCurrentGasOptionType(type)
                         setGasConfigCallback(

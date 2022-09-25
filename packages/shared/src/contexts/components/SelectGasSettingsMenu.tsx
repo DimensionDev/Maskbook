@@ -88,6 +88,7 @@ export interface SelectGasSettingsMenuProps<T extends NetworkPluginID = NetworkP
     anchorEl?: HTMLElement
     anchorSibling: boolean
     onSubmit?(settings: SelectGasSettingsMenuResult): void
+    openCustomGasSettingsDialog?(): void
 }
 
 export function SelectGasSettingsMenu(props: SelectGasSettingsMenuProps) {
@@ -104,6 +105,7 @@ export function SelectGasSettingsMenu(props: SelectGasSettingsMenuProps) {
 export function SelectGasSettingsMenuUI(props: SelectGasSettingsMenuProps) {
     const { gasOptions, GAS_OPTION_NAMES } = SettingsContext.useContainer()
     const { classes, cx } = useStyles()
+    const chainId = useChainId()
     const t = useSharedI18N()
     const selectAdvancedSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
 
@@ -141,7 +143,10 @@ export function SelectGasSettingsMenuUI(props: SelectGasSettingsMenuProps) {
                     </MenuItem>
                 ))
                 .concat(
-                    <MenuItem key="setting" className={cx(classes.menuItem)} onClick={async () => {}}>
+                    <MenuItem
+                        key="setting"
+                        className={cx(classes.menuItem)}
+                        onClick={props?.openCustomGasSettingsDialog}>
                         <Typography className={classes.title}>{t.gas_settings_custom()}</Typography>
                     </MenuItem>,
                 )}
