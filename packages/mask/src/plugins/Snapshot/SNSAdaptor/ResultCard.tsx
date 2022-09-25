@@ -66,16 +66,16 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-const StyledLinearProgress = styled(LinearProgress)`
-    &.${linearProgressClasses.root} {
-        height: 8px;
-        border-radius: 5px;
-        background-color: #f9f9f9;
-    }
-    &.${linearProgressClasses.bar} {
-        border-radius: 5px;
-    }
-`
+const StyledLinearProgress = styled(LinearProgress)(({ theme }) => ({
+    [`&.${linearProgressClasses.root}`]: {
+        height: 8,
+        borderRadius: 5,
+        backgroundColor: theme.palette.maskColor.publicBg,
+    },
+    [`&.${linearProgressClasses.bar}`]: {
+        borderRadius: 5,
+    },
+}))
 
 function Content() {
     const identifier = useContext(SnapshotContext)
