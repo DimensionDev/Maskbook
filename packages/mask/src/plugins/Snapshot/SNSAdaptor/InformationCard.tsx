@@ -73,7 +73,7 @@ export function InformationCard(props: InformationCardProps) {
     const identifier = useContext(SnapshotContext)
     const { payload: proposal } = useProposal(identifier.id)
 
-    const { start, end, snapshot, strategies } = proposal
+    const { start, end, snapshot, strategies, chainId } = proposal
     return (
         <SnapshotCard title={t('plugin_snapshot_info_title')}>
             <InfoField title={t('plugin_snapshot_info_strategy')} classes={{ field: classes.strategy }}>
@@ -86,7 +86,7 @@ export function InformationCard(props: InformationCardProps) {
                                 className={classes.link}
                                 target="_blank"
                                 rel="noopener"
-                                href={explorerResolver.addressLink(proposal.chainId, strategy.params.address)}>
+                                href={explorerResolver.addressLink(chainId, strategy.params.address)}>
                                 <Avatar src={resolveIPFS_URL(proposal.space.avatar)} className={classes.avatar} />
                             </Link>
                         ))}
