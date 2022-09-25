@@ -63,7 +63,7 @@ export const createUITaskManager = <TaskOptions extends BaseModalPopperProps<Res
                         signal.removeEventListener('abort', abortHandler)
                     })
 
-                    // Mui Popper
+                    // #region Mui Popper
                     if (options?.anchorEl) {
                         let element: HTMLElement
                         if (options?.anchorEl instanceof HTMLElement) {
@@ -82,7 +82,7 @@ export const createUITaskManager = <TaskOptions extends BaseModalPopperProps<Res
                         // but a force repaint can solve the problem.
                         window.requestAnimationFrame(update)
                     }
-
+                    // # endregion
                     const newTask: Task = { id, promise, resolve, reject, options }
                     setTasks((list) => [...list, newTask])
                     promise.then(() => {
@@ -110,6 +110,11 @@ export const createUITaskManager = <TaskOptions extends BaseModalPopperProps<Res
                             },
                             onClose: () => {
                                 task.resolve(null)
+                                setAnchorEl(null)
+                            },
+                            onClick: () => {
+                                task.resolve(null)
+                                setAnchorEl(null)
                             },
                         } as unknown as TaskOptions,
                         children,

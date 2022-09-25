@@ -1,5 +1,11 @@
 import { useEffect, useState, useMemo, useCallback } from 'react'
-import { useMenuConfig, FormattedBalance, useSharedI18N, useSelectAdvancedSettings } from '@masknet/shared'
+import {
+    useMenuConfig,
+    FormattedBalance,
+    useSharedI18N,
+    useSelectAdvancedSettings,
+    useGasSettingsMenu,
+} from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import {
     NetworkPluginID,
@@ -223,6 +229,8 @@ export function SelectGasSettingsToolbarUI({
         return formatUSD(formatWeiToEther(gasFee).times(nativeTokenPrice))
     }, [gasFee, nativeTokenPrice])
 
+    const selectGasSettingsMenu = useGasSettingsMenu(NetworkPluginID.PLUGIN_EVM)
+
     return gasOptions && !isZero(gasFee) ? (
         <Box className={classes.section}>
             <Typography className={classes.title}>Gas fee</Typography>
@@ -240,6 +248,35 @@ export function SelectGasSettingsToolbarUI({
                         {isCustomGas ? t.gas_settings_custom() : GAS_OPTION_NAMES[currentGasOptionType]}
                     </Typography>
                     <Icons.Candle width={12} height={12} />
+                </div>
+                <div
+                    onClick={async (ev) => {
+                        const result = await selectGasSettingsMenu({
+                            anchorEl: ev.currentTarget,
+                            anchorSibling: false,
+                            anchorOrigin: {
+                                vertical: 'bottom',
+                                horizontal: 'right',
+                            },
+                            transformOrigin: {
+                                vertical: 'top',
+                                horizontal: 'right',
+                            },
+                            PaperProps: {
+                                style: { background: theme.palette.maskColor.bottom, transform: 'translateY(8px)' },
+                            },
+                        })
+                        if (!result) return
+                        const { isCustomGas, type, transaction } = result
+                        setIsCustomGas(isCustomGas)
+                        setCurrentGasOptionType(type)
+                        setGasConfigCallback(
+                            transaction.maxFeePerGas as string,
+                            transaction.maxPriorityFeePerGas as string,
+                            transaction.gasPrice as string,
+                        )
+                    }}>
+                    xxx
                 </div>
                 {menu}
             </div>
