@@ -12,34 +12,6 @@ import BigNumber from 'bignumber.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
-        root: {
-            display: 'flex',
-            alignItems: 'center',
-            border: `1px solid ${theme.palette.divider}`,
-            borderRadius: 99,
-            padding: '8px 12px',
-            cursor: 'pointer',
-        },
-        section: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            margin: '16px 0',
-            '& > p': {
-                fontSize: 14,
-                lineHeight: '18px',
-                fontWeight: 700,
-                display: 'flex',
-                alignItems: 'center',
-            },
-        },
-        gasSection: {
-            display: 'flex',
-            fontSize: 14,
-            lineHeight: '18px',
-            fontWeight: 700,
-            alignItems: 'center',
-        },
         text: {
             fontSize: 14,
             lineHeight: '18px',
@@ -66,11 +38,6 @@ const useStyles = makeStyles()((theme) => {
         },
         menuItemBorder: {
             borderBottom: `1px solid ${theme.palette.divider}`,
-        },
-        gasUSDPrice: {
-            fontWeight: 700,
-            margin: '0px 4px',
-            fontSize: 14,
         },
     }
 })
@@ -143,10 +110,7 @@ export function SelectGasSettingsMenuUI(props: SelectGasSettingsMenuProps) {
                     </MenuItem>
                 ))
                 .concat(
-                    <MenuItem
-                        key="setting"
-                        className={cx(classes.menuItem)}
-                        onClick={props?.openCustomGasSettingsDialog}>
+                    <MenuItem key="setting" className={classes.menuItem} onClick={props?.openCustomGasSettingsDialog}>
                         <Typography className={classes.title}>{t.gas_settings_custom()}</Typography>
                     </MenuItem>,
                 )}

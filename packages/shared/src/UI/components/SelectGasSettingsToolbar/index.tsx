@@ -1,11 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from 'react'
-import {
-    useMenuConfig,
-    FormattedBalance,
-    useSharedI18N,
-    useSelectAdvancedSettings,
-    useGasSettingsMenu,
-} from '@masknet/shared'
+import { FormattedBalance, useSharedI18N, useSelectAdvancedSettings, useGasSettingsMenu } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import {
     NetworkPluginID,
@@ -15,14 +9,8 @@ import {
     formatBalance,
     FungibleToken,
 } from '@masknet/web3-shared-base'
-import {
-    formatEtherToGwei,
-    formatGweiToWei,
-    formatUSD,
-    formatWeiToEther,
-    GasOptionConfig,
-} from '@masknet/web3-shared-evm'
-import { Typography, MenuItem, Box } from '@mui/material'
+import { formatGweiToWei, formatUSD, formatWeiToEther, GasOptionConfig } from '@masknet/web3-shared-evm'
+import { Typography, Box } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainId, useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/plugin-infra/web3'
 import { Icons } from '@masknet/icons'
@@ -77,24 +65,8 @@ const useStyles = makeStyles()((theme) => {
             alignItems: 'center',
             marginRight: 5,
         },
-        menuItem: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            margin: '0px 12px',
-            padding: theme.spacing(1, 0),
-            width: 158,
-            '&:hover': {
-                background: 'none',
-            },
-        },
         title: {
             fontWeight: 700,
-        },
-        estimateGas: {
-            color: theme.palette.text.third,
-        },
-        menuItemBorder: {
-            borderBottom: `1px solid ${theme.palette.divider}`,
         },
         gasUSDPrice: {
             fontWeight: 700,
@@ -126,7 +98,7 @@ export function SelectGasSettingsToolbarUI({
     const t = useSharedI18N()
     const [isCustomGas, setIsCustomGas] = useState(false)
     const [currentGasOptionType, setCurrentGasOptionType] = useState<GasOptionType>(GasOptionType.SLOW)
-    const { classes, cx, theme } = useStyles()
+    const { classes, theme } = useStyles()
     const chainId = useChainId()
     const { Others } = useWeb3State<'all'>()
 
@@ -177,47 +149,6 @@ export function SelectGasSettingsToolbarUI({
         )
     }, [currentGasOption, isCustomGas, setGasConfigCallback])
 
-    const [menu, openMenu] = useMenuConfig(
-        Object.entries(gasOptions ?? {})
-            .reverse()
-            .map(([type, option]) => (
-                <MenuItem
-                    key={type}
-                    className={cx(classes.menuItem, classes.menuItemBorder)}
-                    onClick={() => {
-                        setIsCustomGas(false)
-                        setCurrentGasOptionType(type as GasOptionType)
-                    }}>
-                    <Typography className={classes.title}>{GAS_OPTION_NAMES[type as GasOptionType]}</Typography>
-                    <Typography className={classes.estimateGas}>
-                        {new BigNumber(option.suggestedMaxFeePerGas).gt(0)
-                            ? `${new BigNumber(option.suggestedMaxFeePerGas).toFixed(2)}Gwei`
-                            : new BigNumber(option.estimatedBaseFee ?? 0).gt(0)
-                            ? `${formatEtherToGwei(option.estimatedBaseFee!).toFixed(2)}Gwei`
-                            : ''}
-                    </Typography>
-                </MenuItem>
-            ))
-            .concat(
-                <MenuItem key="setting" className={cx(classes.menuItem)} onClick={openCustomGasSettingsDialog}>
-                    <Typography className={classes.title}>{t.gas_settings_custom()}</Typography>
-                </MenuItem>,
-            ),
-        {
-            anchorSibling: false,
-            anchorOrigin: {
-                vertical: 'bottom',
-                horizontal: 'right',
-            },
-            transformOrigin: {
-                vertical: 'top',
-                horizontal: 'right',
-            },
-            PaperProps: {
-                style: { background: theme.palette.maskColor.bottom, transform: 'translateY(8px)' },
-            },
-        },
-    )
     const gasFee = useMemo(() => {
         if (!gasOption || !gasLimit) return '0'
         const gasPrice = (gasOption.gasPrice ? gasOption.gasPrice : gasOption.maxFeePerGas) as string
@@ -243,14 +174,10 @@ export function SelectGasSettingsToolbarUI({
                     formatter={formatBalance}
                 />
                 <Typography className={classes.gasUSDPrice}>{t.gas_usd_price({ usd: gasFeeUSD })}</Typography>
-                <div className={classes.root} onClick={gasOptions ? openMenu : undefined}>
-                    <Typography className={classes.text}>
-                        {isCustomGas ? t.gas_settings_custom() : GAS_OPTION_NAMES[currentGasOptionType]}
-                    </Typography>
-                    <Icons.Candle width={12} height={12} />
-                </div>
                 <div
+                    className={classes.root}
                     onClick={async (ev) => {
+                        if (!gasOptions) return
                         const result = await selectGasSettingsMenu({
                             anchorEl: ev.currentTarget,
                             anchorSibling: false,
@@ -279,9 +206,11 @@ export function SelectGasSettingsToolbarUI({
                             transaction.gasPrice as string,
                         )
                     }}>
-                    xxx
+                    <Typography className={classes.text}>
+                        {isCustomGas ? t.gas_settings_custom() : GAS_OPTION_NAMES[currentGasOptionType]}
+                    </Typography>
+                    <Icons.Candle width={12} height={12} />
                 </div>
-                {menu}
             </div>
         </Box>
     ) : null
