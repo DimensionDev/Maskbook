@@ -1,6 +1,10 @@
-import { useGasPrice, useNativeTokenPrice, useWeb3State } from '@masknet/plugin-infra/web3'
+import {
+    useGasPrice,
+    useNativeTokenPrice,
+    useWeb3State,
+    useCurrentWeb3NetworkPluginID,
+} from '@masknet/plugin-infra/web3'
 import { SelectGasSettingsToolbar } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 import {
     createNativeToken,
     EIP1559GasConfig,
@@ -16,13 +20,14 @@ const ETH_GAS_LIMIT = 21000
 const ERC20_GAS_LIMIT = 50000
 export function GasSettingsBar() {
     const { token, setGasOption, gasOption } = useTip()
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const currentPluginId = useCurrentWeb3NetworkPluginID()
+    const { Others } = useWeb3State(currentPluginId)
     const isNativeToken = isNativeTokenAddress(token?.address)
     const { targetChainId: chainId } = TargetRuntimeContext.useContainer()
-    const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
+    const { value: nativeTokenPrice = 0 } = useNativeTokenPrice(currentPluginId, {
         chainId,
     })
-    const { value: defaultGasPrice = '1' } = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const { value: defaultGasPrice = '1' } = useGasPrice(currentPluginId, { chainId })
     const nativeToken = useMemo(() => createNativeToken(chainId), [chainId])
     const isSupportEIP1559 = Others?.chainResolver.isSupport(chainId, 'EIP1559')
     const GAS_LIMIT = isNativeToken ? ETH_GAS_LIMIT : ERC20_GAS_LIMIT
