@@ -1,11 +1,9 @@
-import { Icons } from '@masknet/icons'
-import { useNonFungibleAsset } from '@masknet/plugin-infra/web3'
 import { InjectedDialog } from '@masknet/shared'
 import { ActionButton, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { NetworkPluginID, NonFungibleAsset } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
-import { Box, DialogContent, Tab, Typography } from '@mui/material'
+import { DialogContent, Tab } from '@mui/material'
 import { useCallback, useMemo } from 'react'
 import { useBoolean } from 'react-use'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
@@ -17,7 +15,7 @@ import { TipsType } from '../types/index.js'
 import { AddDialog } from './AddDialog.js'
 import { ConfirmModal } from './common/ConfirmModal.js'
 import { NetworkSection } from './NetworkSection/index.js'
-import { NFTItem, NFTSection } from './NFTSection/index.js'
+import { NFTSection } from './NFTSection/index.js'
 import { RecipientSection } from './RecipientSection/index.js'
 import { TokenSection } from './TokenSection/index.js'
 
@@ -67,22 +65,6 @@ const useStyles = makeStyles()((theme) => ({
         minHeight: 36,
         margin: '0 auto',
         borderRadius: 4,
-    },
-    nftContainer: {
-        height: 100,
-        width: 100,
-    },
-    nftMessage: {
-        textAlign: 'center',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    nftMessageText: {
-        fontSize: 18,
-        color: '#3DC233',
-        marginTop: theme.spacing(3),
-        lineHeight: '30px',
     },
     fallbackImage: {
         width: 64,
@@ -152,7 +134,6 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         recipientAddress,
         recipientSnsId,
         nonFungibleTokenContract,
-        nonFungibleTokenId,
         setNonFungibleTokenAddress,
         setNonFungibleTokenId,
         reset,
@@ -180,12 +161,6 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
               })
         return message
     }, [amount, isTokenTip, nonFungibleTokenContract?.name, token, recipient, recipientSnsId, t])
-
-    const { value: nonFungibleToken } = useNonFungibleAsset(
-        undefined,
-        nonFungibleTokenContract?.address,
-        nonFungibleTokenId ?? '',
-    )
 
     const [currentTab, onChange, tabs] = useTabs(TipsType.Tokens, TipsType.Collectibles)
     const onTabChange: typeof onChange = useCallback(
@@ -246,6 +221,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                             expectedPluginID={expectedPluginID}
                             expectedChainId={targetChainId}
                             noSwitchNetworkTip
+                            switchChainWithoutPopup
                             ActionButtonPromiseProps={{
                                 fullWidth: true,
                             }}>
@@ -265,26 +241,8 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                     onClose?.()
                 }}
                 confirmText={t.tip_share()}
-                onConfirm={handleConfirm}>
-                {isTokenTip ? (
-                    <Box>
-                        <Icons.Success size={75} />
-                        <Typography>Congratulations!</Typography>
-                    </Box>
-                ) : (
-                    <div className={classes.nftMessage}>
-                        <div className={classes.nftContainer}>
-                            <NFTItem token={nonFungibleToken!} />
-                        </div>
-                        <Typography className={classes.nftMessageText}>
-                            {t.send_specific_tip_successfully({
-                                amount: '1',
-                                name: nonFungibleToken?.contract?.name || 'NFT',
-                            })}
-                        </Typography>
-                    </div>
-                )}
-            </ConfirmModal>
+                onConfirm={handleConfirm}
+            />
             <AddDialog open={addTokenDialogIsOpen} onClose={() => openAddTokenDialog(false)} onAdd={handleAddToken} />
         </TabContext>
     )
