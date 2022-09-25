@@ -141,6 +141,7 @@ export const postEditorDraftContentSelector = () => {
 }
 
 export const searchResultHeadingSelector: () => LiveSelector<E, true> = () =>
+    // To match the scenario with no results in timeline.
     querySelector<E>('[role="main"] [data-testid="primaryColumn"] > div > div > :nth-child(2)')
 
 export const postEditorToolbarSelector: () => LiveSelector<E, true> = () =>
