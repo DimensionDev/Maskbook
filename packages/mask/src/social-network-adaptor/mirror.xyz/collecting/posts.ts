@@ -98,8 +98,15 @@ async function collectPostInfo(node: HTMLElement | null, cancel: AbortSignal) {
     if (cancel?.aborted) return
     const postId = getPostId(node)
     if (!postId) return
-    const writers = await getPostWriters(postId)
-    return { postId, writers }
+    const publisher = await Mirror.getPostPublisher(postId)
+    if (!publisher) return
+    return {
+        postId,
+        writers: {
+            author: formatWriter(publisher.author),
+            coAuthors: publisher?.coAuthors.map((x) => formatWriter(x)),
+        },
+    }
 }
 
 async function registerPostCollectorInner(
