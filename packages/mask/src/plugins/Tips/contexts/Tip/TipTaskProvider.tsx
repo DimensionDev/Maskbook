@@ -87,6 +87,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
             isSending,
             storedTokens: storedTokens.filter((t) => t.contract?.chainId === chainId),
             reset,
+            gasConfig,
             setGasConfig,
         }
     }, [
@@ -102,6 +103,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = ({ children, 
         token,
         sendTip,
         isSending,
+        gasConfig,
         storedTokens,
     ])
     return <TipContext.Provider value={contextValue}>{children}</TipContext.Provider>

@@ -1,4 +1,4 @@
-import { Link, DialogContent, DialogActions } from '@mui/material'
+import { Link, DialogContent, DialogActions, Typography } from '@mui/material'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import millify from 'millify'
 import OpenInNew from '@mui/icons-material/OpenInNew'
@@ -58,7 +58,16 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
             disableBackdropClick>
             <DialogContent className={classes.content}>
                 <InfoField classes={{ field: classes.field }} title={t('plugin_snapshot_vote_choice')}>
-                    {choiceText}
+                    <Typography
+                        sx={{
+                            textAlign: 'right',
+                            width: 100,
+                            whiteSpace: 'nowrap',
+                            textOverflow: 'ellipsis',
+                            overflow: 'hidden',
+                        }}>
+                        {choiceText}
+                    </Typography>
                 </InfoField>
                 <InfoField classes={{ field: classes.field }} title={t('plugin_snapshot_info_snapshot')}>
                     <Link
@@ -67,7 +76,7 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                         rel="noopener"
                         href={explorerResolver.blockLink(ChainId.Mainnet, Number.parseInt(snapshot, 10))}>
                         {snapshot}
-                        <OpenInNew fontSize="small" />
+                        <OpenInNew fontSize="small" sx={{ paddingLeft: 1 }} />
                     </Link>
                 </InfoField>
                 <InfoField classes={{ field: classes.field }} title={t('plugin_snapshot_vote_power')}>

@@ -8,6 +8,7 @@
     "copy_success": "Copy successfully",
     "description": "Gift crypto or NFTs tips to any <Link>Next.ID</Link> verified users on social media.",
     "default": "Default",
+    "gas_fee": "Gas Fee",
     "token_insufficient_balance": "Insufficient balance",
     "manage_wallet": "Manage wallet",
     "save": "Save",
