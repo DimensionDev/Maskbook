@@ -1,8 +1,8 @@
 import type { MenuProps } from '@mui/material'
-import { useSharedI18N, useSelectAdvancedSettings } from '@masknet/shared'
+import { useSharedI18N } from '@masknet/shared'
 import { MenuItem, Typography } from '@mui/material'
 import { ShadowRootMenu, makeStyles } from '@masknet/theme'
-import { NetworkPluginID, GasOptionType } from '@masknet/web3-shared-base'
+import type { NetworkPluginID, GasOptionType } from '@masknet/web3-shared-base'
 import { formatEtherToGwei, Transaction, formatGweiToWei } from '@masknet/web3-shared-evm'
 import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -74,7 +74,6 @@ export function SelectGasSettingsMenuUI(props: SelectGasSettingsMenuProps) {
     const { classes, cx } = useStyles()
     const chainId = useChainId()
     const t = useSharedI18N()
-    const selectAdvancedSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
 
     return (
         <ShadowRootMenu {...omit(props, ['onSubmit'])}>

@@ -160,11 +160,11 @@ export function SelectGasSettingsToolbarUI({
         return formatUSD(formatWeiToEther(gasFee).times(nativeTokenPrice))
     }, [gasFee, nativeTokenPrice])
 
-    const selectGasSettingsMenu = useGasSettingsMenu(NetworkPluginID.PLUGIN_EVM)
+    const selectGasSettingsMenu = useGasSettingsMenu()
 
     return gasOptions && !isZero(gasFee) ? (
         <Box className={classes.section}>
-            <Typography className={classes.title}>Gas fee</Typography>
+            <Typography className={classes.title}>{t.gas_fee()}</Typography>
             <div className={classes.gasSection}>
                 <FormattedBalance
                     value={gasFee}
