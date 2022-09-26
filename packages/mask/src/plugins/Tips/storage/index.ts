@@ -44,17 +44,17 @@ export function deleteToken(address: string, tokenId: string) {
 }
 
 export function finishUserGuide(site: EnhanceableSite) {
-    const setting = storage.storage.userGuide.value
-    storage.storage.userGuide.setValue({ ...setting, [site]: TIPS_GUIDE_TOTAL })
+    const settings = storage.storage.userGuide.value
+    storage.storage.userGuide.setValue({ ...settings, [site]: TIPS_GUIDE_TOTAL })
 }
 
 export const useTipsUserGuide = (site?: EnhanceableSite) => {
-    const setting = useSubscription(storage?.storage?.userGuide.subscription)
+    const settings = useSubscription(storage?.storage?.userGuide.subscription)
 
     if (!site) return { finished: true, step: TIPS_GUIDE_INIT }
 
     return {
-        finished: setting[site] === TIPS_GUIDE_TOTAL,
-        step: setting[site] ?? TIPS_GUIDE_INIT,
+        finished: settings[site] === TIPS_GUIDE_TOTAL,
+        step: settings[site] ?? TIPS_GUIDE_INIT,
     }
 }

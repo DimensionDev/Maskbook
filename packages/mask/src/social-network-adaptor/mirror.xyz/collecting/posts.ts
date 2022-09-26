@@ -40,7 +40,7 @@ const getPostId = (node: HTMLElement | HTMLLinkElement) => {
         return location.pathname.match(/\w{43}/i)?.[0]
     }
 
-    const ele = node.querySelector('div > a') as HTMLLinkElement
+    const ele = node.querySelector<HTMLLinkElement>('div > a')
     const href = ele?.href || (node as HTMLLinkElement)?.href
 
     if (href?.startsWith('https')) {
@@ -107,7 +107,7 @@ async function registerPostCollectorInner(
     cancel: AbortSignal,
 ) {
     startWatch(
-        new MutationObserverWatcher(postsContentSelector()).useForeach((node, key, proxy) => {
+        new MutationObserverWatcher<HTMLElement>(postsContentSelector()).useForeach((node, key, proxy) => {
             if (!node) return
 
             const actionsElementProxy = DOMProxy({})
@@ -118,7 +118,7 @@ async function registerPostCollectorInner(
                 actionsElement: actionsElementProxy,
                 comments: undefined,
                 rootElement: proxy,
-                suggestedInjectionPoint: (node.lastElementChild as HTMLElement) || (node as HTMLElement),
+                suggestedInjectionPoint: (node.lastElementChild as HTMLElement) || node,
                 ...refs.subscriptions,
             })
 
