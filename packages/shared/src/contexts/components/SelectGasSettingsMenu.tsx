@@ -72,11 +72,10 @@ export function SelectGasSettingsMenu(props: SelectGasSettingsMenuProps) {
 export function SelectGasSettingsMenuUI(props: SelectGasSettingsMenuProps) {
     const { gasOptions, GAS_OPTION_NAMES } = SettingsContext.useContainer()
     const { classes, cx } = useStyles()
-    const chainId = useChainId()
     const t = useSharedI18N()
 
     return (
-        <ShadowRootMenu {...omit(props, ['onSubmit'])}>
+        <ShadowRootMenu {...omit(props, ['onSubmit', 'openCustomGasSettingsDialog', 'anchorSibling'])}>
             {Object.entries(gasOptions ?? {})
                 .reverse()
                 .map(([type, option]) => (
