@@ -73,9 +73,6 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
     const { label, sx, required = false, ...rest } = props
     const inputProps = (props.InputProps as InputProps) ?? {}
     const { classes } = useStyles()
-
-    console.log(omit(rest, 'margin', 'onKeyDown', 'onKeyUp'))
-
     return (
         <Box sx={sx}>
             {label && typeof label === 'string' && (
