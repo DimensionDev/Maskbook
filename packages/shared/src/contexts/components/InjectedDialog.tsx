@@ -16,7 +16,7 @@ import {
     useMediaQuery,
     useTheme,
 } from '@mui/material'
-import { Children, cloneElement, useCallback } from 'react'
+import { Children, cloneElement, useCallback, useEffect, useState } from 'react'
 import { useSharedI18N } from '../../locales/index.js'
 import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '../base/index.js'
 import { DialogDismissIcon } from './DialogDismissIcon.js'
@@ -138,15 +138,31 @@ export function InjectedDialog(props: InjectedDialogProps) {
     const actions = CopyElementWithNewProps(children, DialogActions, { root: dialogActions })
     const content = CopyElementWithNewProps(children, DialogContent, { root: dialogContent })
     const { extraProps, shouldReplaceExitWithBack, IncreaseStack } = useDialogStackActor(open)
+    const [recoverOverflow, setRecoverOverflow] = useState(false)
 
     const closeBothCompositionDialog = useCallback(() => {
         if (isOpenFromApplicationBoard) {
             CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({ open: false, reason: 'timeline' })
         }
 
+        if (recoverOverflow) {
+            const html = document.documentElement
+            html.style.overflow = 'auto scroll'
+            html.style.removeProperty('margin-right')
+            setRecoverOverflow(false)
+        }
         onClose?.()
-    }, [isOpenFromApplicationBoard, onClose])
+    }, [isOpenFromApplicationBoard, onClose, recoverOverflow])
 
+    useEffect(() => {
+        if (!open) return
+        const html = document.documentElement
+        if (html.style.overflow !== 'hidden') {
+            html.style.overflow = 'hidden'
+            html.style.marginRight = '17px'
+            setRecoverOverflow(true)
+        }
+    }, [open])
     return usePortalShadowRoot((container) => (
         <IncreaseStack>
             <Dialog
