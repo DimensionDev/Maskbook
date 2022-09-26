@@ -9,17 +9,19 @@ import { Plugin } from '@masknet/plugin-infra'
 import { Flags } from '../../../../../shared/index.js'
 import { createReactRootShadowed } from '../../../../utils'
 import { noop } from 'lodash-unified'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const ActionsRenderer = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
     (plugin) => plugin.TipsRealm?.UI?.Content,
 )
 
-export function PostActions({ isFocusing }: { isFocusing?: boolean }) {
+export function PostActions() {
     const identifier = usePostInfoDetails.author()
     const nickname = usePostInfoDetails.nickname()
     const coAuthors = usePostInfoDetails.coAuthors()
+    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     if (!identifier) return null
     return (
@@ -28,11 +30,11 @@ export function PostActions({ isFocusing }: { isFocusing?: boolean }) {
             tipsAccounts={[
                 {
                     address: identifier.userId,
-                    name: nickname ? `(${nickname}) ${formatEthereumAddress(identifier.userId, 4)}` : identifier.userId,
+                    name: nickname ? `(${nickname}) ${Others?.formatAddress(identifier.userId, 4)}` : identifier.userId,
                 },
                 ...(coAuthors?.map((x) => ({
                     address: x.author.userId,
-                    name: x.nickname ? `(${x.nickname}) ${formatEthereumAddress(x.author.userId, 4)}` : x.author.userId,
+                    name: x.nickname ? `(${x.nickname}) ${Others?.formatAddress(x.author.userId, 4)}` : x.author.userId,
                 })) ?? []),
             ]}
             identity={identifier}
