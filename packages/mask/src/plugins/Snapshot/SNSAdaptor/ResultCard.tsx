@@ -63,6 +63,13 @@ const useStyles = makeStyles()((theme) => {
                 color: theme.palette.maskColor.white,
             },
         },
+        tooltip: {
+            backgroundColor: theme.palette.maskColor.publicMain,
+            color: theme.palette.maskColor.white,
+        },
+        arrow: {
+            color: theme.palette.maskColor.publicMain,
+        },
     }
 })
 
@@ -122,6 +129,7 @@ function Content() {
                                 title={<Typography>{result.choice}</Typography>}
                                 placement="top"
                                 disableHoverListener={!tooltipsVisible[i]}
+                                classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                 arrow>
                                 <Typography
                                     ref={(ref) => {
@@ -135,6 +143,7 @@ function Content() {
                                 PopperProps={{
                                     disablePortal: true,
                                 }}
+                                classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                 title={
                                     <Typography className={classes.ellipsisText}>
                                         {result.powerDetail

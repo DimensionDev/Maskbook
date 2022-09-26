@@ -72,8 +72,13 @@ const useStyles = makeStyles()((theme) => {
             width: 48,
             height: 48,
         },
-        shadowRootTooltip: {
+        shadowRootTooltip: {},
+        tooltip: {
+            backgroundColor: theme.palette.maskColor.publicMain,
             color: theme.palette.maskColor.white,
+        },
+        arrow: {
+            color: theme.palette.maskColor.publicMain,
         },
     }
 })
@@ -132,6 +137,7 @@ export function Snapshot() {
                         }}
                         title={<Typography className={classes.shadowRootTooltip}>{proposal.title}</Typography>}
                         placement="top"
+                        classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                         arrow>
                         <Typography
                             fontSize={14}
