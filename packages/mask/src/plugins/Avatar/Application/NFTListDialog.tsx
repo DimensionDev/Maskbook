@@ -70,6 +70,15 @@ const useStyles = makeStyles()((theme) => ({
         flex: 1,
         rowGap: 22,
     },
+    empty: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 'auto',
+        flex: 1,
+        rowGap: 12,
+    },
     skeleton: {
         width: 97,
         height: 97,
@@ -173,10 +182,11 @@ export function NFTListDialog(props: NFTListDialogProps) {
 
     // Set eth to the default chain
     const actualChainId = useMemo(() => {
+        if (selectedPluginId !== NetworkPluginID.PLUGIN_EVM) return
         const defaultChain = first(SUPPORTED_CHAIN_IDS)
         if (!SUPPORTED_CHAIN_IDS.includes(chainId) && defaultChain) return defaultChain
         return chainId
-    }, [chainId])
+    }, [chainId, selectedPluginId])
 
     const {
         value: collectibles = EMPTY_LIST,
@@ -185,7 +195,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
         error: loadError,
         retry,
     } = useNonFungibleAssets(selectedPluginId, undefined, {
-        chainId: selectedPluginId === NetworkPluginID.PLUGIN_EVM ? actualChainId : undefined,
+        chainId: actualChainId,
         account: selectedAccount,
     })
 
@@ -253,17 +263,11 @@ export function NFTListDialog(props: NFTListDialogProps) {
     }
 
     const AddCollectible = (
-        <Box className={classes.error}>
+        <Box className={classes.empty}>
             <Icons.EmptySimple variant="light" size={36} />
-            <Typography color="textSecondary" textAlign="center" fontSize={14} fontWeight={600} mt="14px">
+            <Typography color="textSecondary" textAlign="center" fontSize={14}>
                 {t.collectible_no_collectible()}
             </Typography>
-
-            {selectedPluginId === NetworkPluginID.PLUGIN_EVM ? (
-                <Button className={classes.AddCollectiblesButton} variant="text" onClick={() => setOpen_(true)}>
-                    {t.add_collectible()}
-                </Button>
-            ) : null}
         </Box>
     )
 
@@ -280,13 +284,10 @@ export function NFTListDialog(props: NFTListDialogProps) {
 
     const tokensInList = uniqBy(
         [...tokens.filter((x) => x.chainId === actualChainId), ...collectibles],
-        selectedPluginId === NetworkPluginID.PLUGIN_SOLANA
-            ? (x) => x.tokenId
-            : (x) => x.contract?.address?.toLowerCase() + x.tokenId,
-    ).filter((x) => x.chainId === actualChainId)
+        (x) => x.contract?.address?.toLowerCase() + x.tokenId,
+    ).filter((x) => (actualChainId ? x.chainId === actualChainId : true))
 
     const NoNFTList = () => {
-        if (actualChainId === ChainId.Matic && tokensInList.length) return
         if (loadError && !collectibles.length) {
             return Retry
         }
@@ -303,7 +304,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
             <DialogContent className={classes.content}>
                 {account || Boolean(wallets?.length) ? (
                     <>
-                        {selectedPluginId === NetworkPluginID.PLUGIN_EVM ? (
+                        {selectedPluginId === NetworkPluginID.PLUGIN_EVM && actualChainId ? (
                             <div className={classes.abstractTabWrapper}>
                                 <NetworkTab
                                     chains={SUPPORTED_CHAIN_IDS}
@@ -346,7 +347,7 @@ export function NFTListDialog(props: NFTListDialogProps) {
                         justifyContent: 'space-between',
                     }}>
                     <Stack sx={{ flex: 1 }}>
-                        {selectedPluginId === NetworkPluginID.PLUGIN_EVM && tokensInList.length ? (
+                        {selectedPluginId === NetworkPluginID.PLUGIN_EVM ? (
                             <Typography
                                 variant="body1"
                                 color="#1D9BF0"

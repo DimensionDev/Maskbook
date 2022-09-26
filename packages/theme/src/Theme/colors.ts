@@ -45,6 +45,7 @@ export const MaskColors = {
             publicLine: '#F2F5F6',
             publicTwitter: '#1D9BF0',
             publicThirdMain: '#F3F3F4',
+            publicBg: '#F9F9F9',
         },
         shadow: {
             popup: '0px 4px 30px rgba(0, 0, 0, 0.1)',
@@ -104,6 +105,7 @@ export const MaskColors = {
             publicLine: '#F2F5F6',
             publicTwitter: '#1D9BF0',
             publicThirdMain: '#F3F3F4',
+            publicBg: '#F9F9F9',
         },
         shadow: {
             popup: '0px 4px 30px rgba(255, 255, 255, 0.15)',

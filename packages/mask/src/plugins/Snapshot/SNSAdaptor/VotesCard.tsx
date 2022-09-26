@@ -34,6 +34,7 @@ const useStyles = makeStyles()((theme) => {
             borderBottom: `1px solid ${theme.palette.maskColor.publicLine}`,
             paddingLeft: 0,
             paddingRight: 0,
+            gap: 16,
         },
         badge: {
             transform: 'translateX(40px) translateY(2.5px)',
@@ -46,7 +47,7 @@ const useStyles = makeStyles()((theme) => {
             overflow: 'hidden',
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
-            maxWidth: 180,
+            maxWidth: 170,
             color: theme.palette.maskColor.publicMain,
         },
         ellipsisText: {
@@ -64,11 +65,14 @@ const useStyles = makeStyles()((theme) => {
             color: 'inherit',
             alignItems: 'center',
             textDecoration: 'none !important',
-            marginRight: 16,
         },
         power: {
             minWidth: 90,
             color: theme.palette.maskColor.publicMain,
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            maxWidth: 90,
         },
         shadowRootTooltip: {
             color: theme.palette.maskColor.white,
@@ -136,11 +140,25 @@ function Content() {
                                     <Typography className={classes.choice}>{fullChoiceText}</Typography>
                                 </ShadowRootTooltip>
                             ) : null}
-                            <Typography className={classes.power}>
-                                {millify(v.balance, { precision: 2, lowercase: true }) +
-                                    ' ' +
-                                    (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
-                            </Typography>
+                            <ShadowRootTooltip
+                                PopperProps={{
+                                    disablePortal: true,
+                                }}
+                                title={
+                                    <Typography className={classes.shadowRootTooltip}>
+                                        {millify(v.balance, { precision: 2, lowercase: true }) +
+                                            ' ' +
+                                            (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
+                                    </Typography>
+                                }
+                                placement="top"
+                                arrow>
+                                <Typography className={classes.power}>
+                                    {millify(v.balance, { precision: 2, lowercase: true }) +
+                                        ' ' +
+                                        (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
+                                </Typography>
+                            </ShadowRootTooltip>
                         </ListItem>
                     )
                 })}

@@ -579,9 +579,6 @@ importers:
       '@masknet/plugin-cyberconnect':
         specifier: workspace:*
         version: link:../plugins/CyberConnect
-      '@masknet/plugin-dao':
-        specifier: workspace:*
-        version: link:../plugins/DAO
       '@masknet/plugin-debugger':
         specifier: workspace:*
         version: link:../plugins/Debugger
@@ -1148,39 +1145,6 @@ importers:
       react-use:
         specifier: ^17.4.0
         version: 17.4.0
-
-  packages/plugins/DAO:
-    dependencies:
-      '@masknet/configuration':
-        specifier: workspace:*
-        version: link:../../configuration
-      '@masknet/icons':
-        specifier: workspace:*
-        version: link:../../icons
-      '@masknet/plugin-infra':
-        specifier: workspace:*
-        version: link:../../plugin-infra
-      '@masknet/shared':
-        specifier: workspace:*
-        version: link:../../shared
-      '@masknet/shared-base':
-        specifier: workspace:*
-        version: link:../../shared-base
-      bignumber.js:
-        specifier: ^9.0.2
-        version: 9.0.2
-      date-fns:
-        specifier: ^2.28.0
-        version: 2.28.0
-      iframe-resizer-react:
-        specifier: ^1.1.0
-        version: 1.1.0
-      react-use:
-        specifier: ^17.4.0
-        version: 17.4.0
-      urlcat:
-        specifier: ^2.0.4
-        version: 2.0.4_fggwetex7eobhq3hztj4obsulu
 
   packages/plugins/Debugger:
     dependencies:

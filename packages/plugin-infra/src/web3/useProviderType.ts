@@ -10,6 +10,14 @@ export function useProviderType<S extends 'all' | void = void, T extends Network
 ) {
     const { Provider } = useWeb3State(pluginID)
     const currentProviderType = useCurrentWeb3NetworkProviderType(pluginID)
-    const providerType = useSubscription(Provider?.providerType ?? UNDEFINED)
-    return (currentProviderType ?? providerType) as Web3Helper.ProviderTypeScope<S, T>
+    const defaultProviderType = useSubscription(Provider?.providerType ?? UNDEFINED)
+    return (currentProviderType ?? defaultProviderType) as Web3Helper.ProviderTypeScope<S, T>
+}
+
+export function useActualProviderType<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
+    pluginID?: T,
+) {
+    const { Provider } = useWeb3State(pluginID)
+    const defaultProviderType = useSubscription(Provider?.providerType ?? UNDEFINED)
+    return defaultProviderType as Web3Helper.ProviderTypeScope<S, T>
 }

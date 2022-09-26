@@ -50,8 +50,12 @@ const useStyles = makeStyles()((theme) => {
         avatarWrapper: {
             marginRight: 8,
         },
-        strategy: {
+        info: {
             marginTop: 0,
+            color: theme.palette.maskColor.publicMain,
+        },
+        infoColor: {
+            color: theme.palette.maskColor.publicMain,
         },
     }
 })
@@ -76,7 +80,7 @@ export function InformationCard(props: InformationCardProps) {
     const { start, end, snapshot, strategies, chainId } = proposal
     return (
         <SnapshotCard title={t('plugin_snapshot_info_title')}>
-            <InfoField title={t('plugin_snapshot_info_strategy')} classes={{ field: classes.strategy }}>
+            <InfoField title={t('plugin_snapshot_info_strategy')} classes={{ field: classes.info }}>
                 <Box sx={{ display: 'flex' }}>
                     {strategies
                         .filter((strategy) => Boolean(strategy.params.address))
@@ -92,7 +96,7 @@ export function InformationCard(props: InformationCardProps) {
                         ))}
                 </Box>
             </InfoField>
-            <InfoField title={t('plugin_snapshot_info_author')}>
+            <InfoField title={t('plugin_snapshot_info_author')} classes={{ field: classes.infoColor }}>
                 <Link
                     className={classes.link}
                     target="_blank"
@@ -115,27 +119,27 @@ export function InformationCard(props: InformationCardProps) {
                     rel="noopener"
                     href={urlcat(SNAPSHOT_IPFS, proposal.ipfs)}>
                     #{identifier.id.slice(0, 7)}
-                    <OpenInNew fontSize="small" />
+                    <OpenInNew fontSize="small" sx={{ paddingLeft: 1 }} />
                 </Link>
             </InfoField>
-            <InfoField title={t('plugin_snapshot_info_start')}>
+            <InfoField title={t('plugin_snapshot_info_start')} classes={{ field: classes.infoColor }}>
                 <Typography fontSize={14} fontWeight={400}>
                     {formatDateTime(start * 1000, 'MM/dd/yyyy')}
                 </Typography>
             </InfoField>
-            <InfoField title={t('plugin_snapshot_info_end')}>
+            <InfoField title={t('plugin_snapshot_info_end')} classes={{ field: classes.infoColor }}>
                 <Typography fontSize={14} fontWeight={400}>
                     {formatDateTime(end * 1000, 'MM/dd/yyyy')}
                 </Typography>
             </InfoField>
-            <InfoField title={t('plugin_snapshot_info_snapshot')}>
+            <InfoField title={t('plugin_snapshot_info_snapshot')} classes={{ field: classes.infoColor }}>
                 <Link
                     className={classes.link}
                     target="_blank"
                     rel="noopener"
                     href={explorerResolver.blockLink(proposal.chainId, Number.parseInt(snapshot, 10))}>
                     {snapshot}
-                    <OpenInNew fontSize="small" />
+                    <OpenInNew fontSize="small" sx={{ paddingLeft: 1 }} />
                 </Link>
             </InfoField>
         </SnapshotCard>

@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { Box, Tab, Avatar, Typography, Chip } from '@mui/material'
-import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { makeStyles, MaskTabList, ShadowRootTooltip, useTabs } from '@masknet/theme'
 import { SnapshotContext } from '../context.js'
 import { useProposal } from './hooks/useProposal.js'
 import { ProposalTab } from './ProposalTab.js'
@@ -72,6 +72,9 @@ const useStyles = makeStyles()((theme) => {
             width: 48,
             height: 48,
         },
+        shadowRootTooltip: {
+            color: theme.palette.maskColor.white,
+        },
     }
 })
 
@@ -115,12 +118,21 @@ export function Snapshot() {
                             </Typography>
                         </Box>
                     </Box>
-                    <Typography
-                        fontSize={14}
-                        fontWeight="700"
-                        sx={{ width: 334, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                        {proposal.title}
-                    </Typography>
+
+                    <ShadowRootTooltip
+                        PopperProps={{
+                            disablePortal: true,
+                        }}
+                        title={<Typography className={classes.shadowRootTooltip}>{proposal.title}</Typography>}
+                        placement="top"
+                        arrow>
+                        <Typography
+                            fontSize={14}
+                            fontWeight="700"
+                            sx={{ width: 334, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                            {proposal.title}
+                        </Typography>
+                    </ShadowRootTooltip>
                 </Box>
                 <Box>
                     <Chip

@@ -29,6 +29,7 @@ export function getPluginDefine(id: PluginID | NetworkPluginID) {
 
 export function registerPlugin<
     ChainId = unknown,
+    AddressType = unknown,
     SchemaType = unknown,
     ProviderType = unknown,
     NetworkType = unknown,
@@ -45,6 +46,7 @@ export function registerPlugin<
 >(
     def: Plugin.DeferredDefinition<
         ChainId,
+        AddressType,
         SchemaType,
         ProviderType,
         NetworkType,
