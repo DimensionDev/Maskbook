@@ -4,7 +4,6 @@ import { useAsync } from 'react-use'
 import { RSS3_KEY_SNS } from '../../../plugins/Avatar/constants'
 import { NFTAvatarMiniClip } from '../../../plugins/Avatar/SNSAdaptor/NFTAvatarClip'
 import { NFTBadgeTimeline } from '../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeline'
-import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
 
 interface Props {
     className?: string
@@ -20,7 +19,7 @@ export const AvatarDecoration: FC<Props> = ({ clipPathId, userId, className, siz
 
     if (!userId || !user) return null
 
-    const avatarId = getAvatarId(user.legacy?.profile_image_url_https)
+    const avatarId = Twitter.getAvatarId(user.legacy?.profile_image_url_https)
 
     return user.has_nft_avatar ? (
         <NFTAvatarMiniClip className={className} id={clipPathId} height={size} width={size} screenName={userId} />

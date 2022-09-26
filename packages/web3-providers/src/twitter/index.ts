@@ -123,7 +123,16 @@ const cache = new LRUCache<string, any>({
     ttl: 300000,
 })
 
+const TWITTER_AVATAR_ID_MATCH = /^\/profile_images\/(\d+)/
 export class TwitterAPI implements TwitterBaseAPI.Provider {
+    getAvatarId(avatarURL?: string) {
+        if (!avatarURL) return ''
+        const url = new URL(avatarURL)
+        const match = url.pathname.match(TWITTER_AVATAR_ID_MATCH)
+        if (!match) return ''
+
+        return match[1]
+    }
     async getSettings() {
         const { bearerToken, queryToken, csrfToken } = await getTokens()
         if (!bearerToken || !csrfToken) return
