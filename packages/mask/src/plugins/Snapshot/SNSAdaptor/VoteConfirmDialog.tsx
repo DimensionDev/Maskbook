@@ -2,7 +2,7 @@ import { Link, DialogContent, DialogActions, Typography } from '@mui/material'
 import { ActionButton, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import millify from 'millify'
 import OpenInNew from '@mui/icons-material/OpenInNew'
-import { explorerResolver } from '@masknet/web3-shared-evm'
+import { ChainId, explorerResolver } from '@masknet/web3-shared-evm'
 import { PluginWalletStatusBar, useI18N } from '../../../utils/index.js'
 import { InjectedDialog } from '@masknet/shared'
 import { InfoField } from './InformationCard.js'
@@ -46,7 +46,7 @@ interface VoteConfirmDialogProps {
     onVoteConfirm: () => void
     choiceText: string
     power: number | undefined
-    chainId: number
+    chainId: ChainId
 }
 
 export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
