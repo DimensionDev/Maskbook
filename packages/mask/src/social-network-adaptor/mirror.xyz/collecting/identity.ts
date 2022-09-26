@@ -31,15 +31,6 @@ function resolveLastRecognizedIdentityInner(
     window.addEventListener('locationchange', assign, { signal: cancel })
 }
 
-export const getUserInfoFromLocal = () => {
-    const script = document.getElementById('__NEXT_DATA__')?.innerHTML
-    if (!script) return
-    const INIT_DATA = JSON.parse(script)
-    if (!INIT_DATA) return
-    const writer = INIT_DATA.props?.pageProps?.project as Writer
-    return formatWriter(writer)
-}
-
 function resolveCurrentVisitingIdentityInner(
     ref: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider['recognized'],
     cancel: AbortSignal,

@@ -176,4 +176,15 @@ export class MirrorAPI implements MirrorBaseAPI.Provider {
             },
         }
     }
+
+    // TODO: this user get from local, should as fallback when get from mirror api failed.
+    // Should refactor it when use this method in the business case.
+    async getUser(): Promise<Writer | null> {
+        const script = document.getElementById('__NEXT_DATA__')?.innerHTML
+        if (!script) return null
+        const INIT_DATA = JSON.parse(script)
+        if (!INIT_DATA) return null
+
+        return INIT_DATA.props?.pageProps?.project as Writer
+    }
 }
