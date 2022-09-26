@@ -1,6 +1,6 @@
-import { PluginID } from '@masknet/plugin-infra'
-import { useHiddenAddressSetting, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
 import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
+import { useHiddenAddressSetting, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
+import { PluginID } from '@masknet/plugin-infra'
 import {
     currySameAddress,
     NetworkPluginID,
@@ -10,7 +10,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { useEffect, useMemo } from 'react'
 
-export const useSocialAddressListBySetting = (
+export const useSocialAddressListBySettings = (
     identity?: SocialIdentity,
     typeWhitelist?: SocialAddressType[],
     sorter?: (a: SocialAddress<NetworkPluginID>, z: SocialAddress<NetworkPluginID>) => number,
@@ -34,7 +34,7 @@ export const useSocialAddressListBySetting = (
         if (!hiddenAddress || !hiddenAddress.length) return socialAddressList
 
         return socialAddressList.filter((x) => {
-            // if (x.type !== SocialAddressType.NEXT_ID) return true
+            if (x.type !== SocialAddressType.NEXT_ID) return true
             return !hiddenAddress.some(currySameAddress(x.address))
         })
     }, [socialAddressList, hiddenAddress, loadingSocialAddressList, loadingHiddenAddress])

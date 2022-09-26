@@ -7,7 +7,7 @@ import {
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
 import { useAvailablePlugins, useHiddenAddressSetting } from '@masknet/plugin-infra/web3'
-import { AddressItem, PluginCardFrameMini } from '@masknet/shared'
+import { AddressItem, PluginCardFrameMini, useSocialAddressListBySettings } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
@@ -23,7 +23,6 @@ import { useCurrentVisitingSocialIdentity } from '../DataSource/useActivatedUI.j
 import { useCurrentPersonaConnectStatus } from '../DataSource/usePersonaConnectStatus.js'
 import { ConnectPersonaBoundary } from '../shared/ConnectPersonaBoundary.js'
 import { WalletSettingEntry } from './ProfileTab/WalletSettingEntry'
-import { useSocialAddressListBySetting } from '../DataSource/useSocialAddressListBySetting'
 
 function getTabContent(tabId?: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
@@ -177,7 +176,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         loading: loadingSocialAddressList,
         error: loadSocialAddressListError,
         retry: retrySocialAddress,
-    } = useSocialAddressListBySetting(currentVisitingSocialIdentity, undefined, sorter)
+    } = useSocialAddressListBySettings(currentVisitingSocialIdentity, undefined, sorter)
 
     const { value: hiddenAddress } = useHiddenAddressSetting(
         PluginID.Web3Profile,
