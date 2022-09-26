@@ -74,7 +74,7 @@ export function NFTAvatarDialog() {
     const onClose = useCallback(() => {
         setStep(CreateNFTAvatarStep.Persona)
         handleClose()
-    }, [handleClose])
+    }, [])
 
     useEffect(() => setSelectedAccount(account || wallets?.[0]?.identity || ''), [account, wallets?.[0]?.identity])
 

@@ -2,6 +2,7 @@ import { Trans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { Box } from '@mui/material'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
+import { PluginIDContextProvider } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
 import { type Plugin, usePostInfoDetails, usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { PostInspector } from './PostInspector.js'
@@ -19,7 +20,11 @@ const TabConfig: Plugin.SNSAdaptor.ProfileTab = {
     UI: {
         TabContent({ socialAddress, identity }) {
             if (!socialAddress) return null
-            return <CollectionList addressName={socialAddress} persona={identity?.publicKey} profile={identity} />
+            return (
+                <PluginIDContextProvider value={socialAddress.networkSupporterPluginID}>
+                    <CollectionList socialAddress={socialAddress} persona={identity?.publicKey} profile={identity} />
+                </PluginIDContextProvider>
+            )
         },
     },
     Utils: {
@@ -83,11 +88,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
                     if (!socialAddress) return null
                     return (
                         <Box pr={1.5}>
-                            <CollectionList
-                                addressName={socialAddress}
-                                persona={identity?.publicKey}
-                                profile={identity}
-                            />
+                            <PluginIDContextProvider value={socialAddress.networkSupporterPluginID}>
+                                <CollectionList
+                                    socialAddress={socialAddress}
+                                    persona={identity?.publicKey}
+                                    profile={identity}
+                                />
+                            </PluginIDContextProvider>
                         </Box>
                     )
                 },
