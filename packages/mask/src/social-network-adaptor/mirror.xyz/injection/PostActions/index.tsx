@@ -9,7 +9,7 @@ import { Plugin } from '@masknet/plugin-infra'
 import { Flags } from '../../../../../shared/index.js'
 import { createReactRootShadowed } from '../../../../utils'
 import { noop } from 'lodash-unified'
-import { useWeb3State } from '@masknet/plugin-infra/web3'
+import { PluginIDContextProvider, useWeb3State } from '@masknet/plugin-infra/web3'
 import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 const ActionsRenderer = createInjectHooksRenderer(
@@ -18,10 +18,11 @@ const ActionsRenderer = createInjectHooksRenderer(
 )
 
 export function PostActions() {
+    const { Others } = useWeb3State()
+
     const identifier = usePostInfoDetails.author()
     const nickname = usePostInfoDetails.nickname()
     const coAuthors = usePostInfoDetails.coAuthors()
-    const { Others } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
     if (!identifier) return null
     return (
@@ -46,9 +47,11 @@ export function PostActions() {
 function createPostActionsInjector() {
     return function injectPostActions(postInfo: PostInfo, signal: AbortSignal) {
         const jsx = (
-            <PostInfoProvider post={postInfo}>
-                <PostActions />
-            </PostInfoProvider>
+            <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
+                <PostInfoProvider post={postInfo}>
+                    <PostActions />
+                </PostInfoProvider>
+            </PluginIDContextProvider>
         )
         if (postInfo.actionsElement) {
             const root = createReactRootShadowed(postInfo.actionsElement.afterShadow, {

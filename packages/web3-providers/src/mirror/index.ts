@@ -1,6 +1,6 @@
 import formatDateTime from 'date-fns/format'
 import fromUnixTime from 'date-fns/fromUnixTime'
-import type { MirrorBaseAPI, Writer } from '../types'
+import type { MirrorBaseAPI, Writer, Publisher } from '../types'
 
 const MIRROR_API_URL = 'https://mirror-api.com/graphql'
 
@@ -59,7 +59,47 @@ async function fetchFromMirror<T>(body: requestBody) {
     }
     return data
 }
+
 export class MirrorAPI implements MirrorBaseAPI.Provider {
+    async getPostPublisher(digest: string): Promise<Publisher | null> {
+        const script = document.getElementById('__NEXT_DATA__')?.innerHTML
+        const INIT_DATA = JSON.parse(script ?? '{}')
+
+        function getAuthorDetail(address?: string) {
+            const author = INIT_DATA?.props?.pageProps?.__APOLLO_STATE__?.[`ProjectType:${address}`]
+            return {
+                displayName: author?.displayName,
+                avatarURL: author?.avatarURL,
+                domain: author?.domain,
+            }
+        }
+
+        const publisher = INIT_DATA?.props?.pageProps?.__APOLLO_STATE__?.[`entry:${digest}`]?.publisher
+        if (!publisher) {
+            // get publisher from api
+            const post = await this.getPost(digest)
+            if (!post) return null
+
+            return {
+                author: post.author,
+                coAuthors: post.coAuthors,
+            }
+        } else {
+            // get publisher from local
+            return {
+                author: {
+                    address: publisher?.project?.__ref.replace('ProjectType:', '') as string,
+                    ...getAuthorDetail(publisher?.project?.__ref.replace('ProjectType:', '') as string),
+                },
+                coAuthors: [
+                    {
+                        address: publisher?.member.__ref.replace('ProjectType:', '') as string,
+                        ...getAuthorDetail(publisher?.member?.__ref.replace('ProjectType:', '') as string),
+                    },
+                ],
+            }
+        }
+    }
     async getWriter(id: string) {
         if (!id) return null
 
