@@ -8,6 +8,8 @@ on:
 
 permissions:
   contents: read
+  pull-requests: write
+  deployments: write
 
 # Cancels all previous workflow runs for pull requests that have not completed.
 concurrency:
