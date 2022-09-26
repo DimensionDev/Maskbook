@@ -9,7 +9,7 @@ import { EthereumBlockie } from '../../../web3/UI/EthereumBlockie.js'
 import { SnapshotContext } from '../context.js'
 import { useProposal } from './hooks/useProposal.js'
 import { SnapshotCard } from './SnapshotCard.js'
-import { resolveIPFS_URL } from '@masknet/web3-shared-base'
+import { resolveIPFS_URL, resolveResourceURL } from '@masknet/web3-shared-base'
 import urlcat from 'urlcat'
 import { SNAPSHOT_IPFS } from '../constants.js'
 
@@ -117,7 +117,7 @@ export function InformationCard(props: InformationCardProps) {
                     className={classes.link}
                     target="_blank"
                     rel="noopener"
-                    href={urlcat(SNAPSHOT_IPFS, proposal.ipfs)}>
+                    href={resolveResourceURL(urlcat(SNAPSHOT_IPFS, proposal.ipfs))}>
                     #{identifier.id.slice(0, 7)}
                     <OpenInNew fontSize="small" sx={{ paddingLeft: 1 }} />
                 </Link>
