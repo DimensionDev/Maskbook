@@ -9,6 +9,10 @@ export function formatAddress(address: string, size = 0) {
     return `${address.slice(0, Math.max(0, 2 + size))}...${address.slice(-size)}`
 }
 
+export function formatTokenId(id: string) {
+    return `#${id}`
+}
+
 export function isValidAddress(address: string) {
     return /0x\w{16}/.test(address)
 }
