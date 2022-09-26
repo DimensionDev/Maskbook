@@ -55,9 +55,11 @@ function createPostActionsInjector() {
                 key: 'post-actions',
                 signal,
             })
-            if (postInfo.actionsElement?.realCurrent?.parentNode?.lastElementChild) {
-                ;(postInfo.actionsElement.realCurrent.parentNode.lastElementChild as HTMLDivElement).style.flex = '1'
-                ;(postInfo.actionsElement.realCurrent.parentNode as HTMLDivElement).style.flex = '1 1 auto'
+
+            const parentNode = postInfo.actionsElement?.realCurrent?.parentNode as HTMLDivElement
+            if (parentNode?.lastElementChild) {
+                ;(parentNode.lastElementChild as HTMLDivElement).style.flex = '1'
+                parentNode.style.flex = '1 1 auto'
             }
             root.render(jsx)
             return root.destroy
