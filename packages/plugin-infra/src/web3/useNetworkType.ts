@@ -13,6 +13,14 @@ export function useNetworkType<S extends 'all' | void = void, T extends NetworkP
     const currentNetworkType = useCurrentWeb3NetworkNetworkType(pluginID)
     const defaultNetworkType = useDefaultNetworkType(pluginID)
     const networkType = useSubscription(Provider?.networkType ?? UNDEFINED)
-
     return (currentNetworkType ?? networkType ?? defaultNetworkType) as Web3Helper.NetworkTypeScope<S, T>
+}
+
+export function useActualNetworkType<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
+    pluginID?: T,
+) {
+    const { Provider } = useWeb3State<S>(pluginID)
+    const defaultNetworkType = useDefaultNetworkType(pluginID)
+    const networkType = useSubscription(Provider?.networkType ?? UNDEFINED)
+    return (networkType ?? defaultNetworkType) as Web3Helper.NetworkTypeScope<S, T>
 }
