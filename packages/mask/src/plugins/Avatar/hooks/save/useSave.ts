@@ -26,7 +26,7 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
             persona: ECKeyIdentifier,
             proof: BindingProof,
         ) => {
-            if (!token.contract?.address || !token.tokenId) return
+            if (!token.contract?.address) return
             const info: NextIDAvatarMeta = {
                 pluginId,
                 nickname: data.nickname,
@@ -34,7 +34,7 @@ export function useSave(pluginId: NetworkPluginID, chainId: ChainId) {
                 imageUrl: data.imageUrl,
                 avatarId: data.avatarId,
                 address: token.contract?.address ?? '',
-                tokenId: token.tokenId,
+                tokenId: token.tokenId || token.id,
                 chainId: (token.contract?.chainId ?? ChainId.Mainnet) as ChainId,
                 schema: (token.contract?.schema ?? SchemaType.ERC721) as SchemaType,
             }
