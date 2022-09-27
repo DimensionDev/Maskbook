@@ -9,7 +9,6 @@ import { EmptyContent } from './EmptyContent'
 import { LoadingContent } from './LoadingContent'
 import { LoadFailedContent } from './LoadFailedContent'
 import { TopAndLastOffers } from './TopAndLastOffers'
-import { SourceSwitcher } from './SourceSwitcher'
 import { ENSProvider, ENSContext, SearchResultInspectorProps, RootContext } from './context'
 import { CollectibleState } from './hooks/useCollectibleState'
 import { NextIdBadge } from './NextIdBadge'
@@ -47,7 +46,7 @@ export function SearchResultInspectorContent() {
                 <div className={classes.coverCard}>
                     <Typography className={classes.coverText}>{domain}</Typography>
                 </div>
-                <SourceSwitcher />
+                {/* Hide it temporarily <SourceSwitcher /> */}
                 <TopAndLastOffers />
                 {firstValidNextIdTwitterBinding?.identity ? (
                     <div className={classes.nextIdVerified}>
