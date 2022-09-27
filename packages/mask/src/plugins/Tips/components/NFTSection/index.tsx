@@ -143,6 +143,7 @@ export const NFTSection: FC<Props> = ({ className, onEmpty, ...rest }) => {
                                 columns={4}
                                 selectable
                                 value={selectedKey}
+                                showNetworkIcon
                                 onChange={(value: string | null) => {
                                     if (!value) {
                                         setNonFungibleTokenAddress('')

@@ -12,6 +12,8 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         position: 'relative',
         zIndex: 0,
+        background: theme.palette.maskColor.bg,
+        borderRadius: theme.spacing(1),
     },
     inactive: {
         opacity: 0.5,
@@ -24,7 +26,6 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
     },
     description: {
-        background: theme.palette.maskColor.bg,
         alignSelf: 'stretch',
         borderRadius: theme.spacing(0, 0, 1, 1),
     },
@@ -42,6 +43,10 @@ const useStyles = makeStyles()((theme) => ({
         right: 0,
         padding: 6,
         zIndex: 9,
+        '& [data-icon]': {
+            width: 20,
+            height: 20,
+        },
     },
 }))
 
@@ -78,6 +83,7 @@ export const CollectibleItem = memo(
             value,
             onChange,
             className,
+            showNetworkIcon,
             ...rest
         } = props
         const { classes, cx } = useStyles()
@@ -101,6 +107,7 @@ export const CollectibleItem = memo(
                     readonly={readonly}
                     renderOrder={renderOrder}
                     pluginID={pluginID}
+                    showNetworkIcon={showNetworkIcon}
                 />
                 {uiTokenId ? (
                     <div className={classes.description}>

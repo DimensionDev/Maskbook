@@ -68,6 +68,7 @@ export interface CollectibleCardProps {
     renderOrder: number
     pluginID?: NetworkPluginID
     disableLink?: boolean
+    showNetworkIcon?: boolean
 }
 
 export const CollectibleCard = memo(function CollectibleCard({
@@ -78,6 +79,7 @@ export const CollectibleCard = memo(function CollectibleCard({
     renderOrder,
     pluginID,
     disableLink,
+    showNetworkIcon,
     ...rest
 }: CollectibleCardProps) {
     const { classes, cx } = useStyles()
@@ -103,7 +105,7 @@ export const CollectibleCard = memo(function CollectibleCard({
                         wrapper: classes.wrapper,
                         imgWrapper: classes.wrapper,
                     }}
-                    showNetwork
+                    showNetwork={showNetworkIcon}
                 />
             </Card>
         </>
