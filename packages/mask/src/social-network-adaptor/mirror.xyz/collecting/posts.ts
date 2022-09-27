@@ -91,6 +91,7 @@ async function registerPostCollectorInner(
             function run() {
                 collectPostInfo(node, cancel).then((result) => {
                     if (!result) return
+
                     refs.postID.value = result.postId
                     refs.postBy.value = result.writers?.author.identifier || null
                     refs.nickname.value = result.writers?.author.nickname || null
