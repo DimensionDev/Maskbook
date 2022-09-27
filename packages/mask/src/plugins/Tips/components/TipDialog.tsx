@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { PluginID, useActivatedPlugin } from '@masknet/plugin-infra/dom'
 import { useChainId, useCurrentWeb3NetworkPluginID, useNonFungibleAsset } from '@masknet/plugin-infra/web3'
 import { InjectedDialog } from '@masknet/shared'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, EnhanceableSite } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { NonFungibleAsset } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -135,6 +135,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const chainIdList = tipDefinition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? EMPTY_LIST
     const t = useI18N()
     const { classes } = useStyles()
+    const isSupportShare = activatedSocialNetworkUI.networkIdentifier !== EnhanceableSite.Mirror
 
     const [addTokenDialogIsOpen, openAddTokenDialog] = useBoolean(false)
     const [confirmModalIsOpen, openConfirmModal] = useBoolean(false)
@@ -199,7 +200,9 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     }, [t, chainId, isTokenTip, classes.nftMessage, nonFungibleToken])
 
     const handleConfirm = useCallback(() => {
-        activatedSocialNetworkUI.utils.share?.(shareText)
+        if (isSupportShare) {
+            activatedSocialNetworkUI.utils.share?.(shareText)
+        }
         openConfirmModal(false)
         onClose?.()
     }, [shareText, onClose])
@@ -247,7 +250,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                 }}
                 icon={isTokenTip ? <Icons.Success size={64} /> : null}
                 message={successMessage}
-                confirmText={t.tip_share()}
+                confirmText={isSupportShare ? t.tip_share() : t.tip_success_ok()}
                 onConfirm={handleConfirm}
             />
             <AddDialog open={addTokenDialogIsOpen} onClose={() => openAddTokenDialog(false)} onAdd={handleAddToken} />

@@ -10,6 +10,7 @@ export {
 export {
     type PostContext,
     type PostContextAuthor,
+    type PostContextCoAuthor,
     type PostContextComment,
     type PostContextCreation,
     type PostContextSNSActions,

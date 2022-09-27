@@ -267,6 +267,7 @@ export namespace SocialNetworkUI {
         export interface Define {
             nextIDConfig?: NextIDConfig
             steganography?: SteganographyConfig
+            tipsConfig?: TipsConfig
         }
         export interface SteganographyConfig {
             grayscaleAlgorithm?: GrayscaleAlgorithm
@@ -280,6 +281,9 @@ export namespace SocialNetworkUI {
             enable?: boolean
             platform: NextIDPlatform
             collectVerificationPost: (keyword: string) => PostIdentifier | null
+        }
+        export interface TipsConfig {
+            enableUserGuide?: boolean
         }
     }
 }

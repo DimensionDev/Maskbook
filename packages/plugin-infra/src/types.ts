@@ -654,10 +654,17 @@ export namespace Plugin.SNSAdaptor {
         FocusingPost = 'focusing-post',
         Post = 'post',
         Profile = 'profile',
+        MirrorMenu = 'mirror-menu',
+        MirrorEntry = 'mirror-entry',
+    }
+    export interface TipsAccount {
+        address: string
+        name?: string
     }
     export interface TipsRealmOptions {
         identity?: ProfileIdentifier
         slot: TipsSlot
+        tipsAccounts?: TipsAccount[]
     }
     export interface TipsRealm {
         ID: string
