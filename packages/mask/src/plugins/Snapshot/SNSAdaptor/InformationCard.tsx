@@ -112,7 +112,7 @@ export function InformationCard(props: InformationCardProps) {
                     {proposal.authorName ?? formatEthereumAddress(proposal.address, 4)}
                 </Link>
             </InfoField>
-            <InfoField title={t('plugin_snapshot_info_ipfs')}>
+            <InfoField title={t('plugin_snapshot_info_ipfs')} classes={{ field: classes.infoColor }}>
                 <Link
                     className={classes.link}
                     target="_blank"
