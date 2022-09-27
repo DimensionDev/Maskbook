@@ -30,6 +30,16 @@ export function PluginWeb3ContextProvider<T extends NetworkPluginID>({
     return <PluginWeb3Context.Provider value={value} children={children} />
 }
 
+export function PluginWeb3ActualContextProvider({ children }: React.ProviderProps<never>) {
+    const value = {
+        chainId: useCurrentWeb3NetworkChainId(),
+        account: useCurrentWeb3NetworkAccount(),
+        networkType: useCurrentWeb3NetworkNetworkType(),
+        providerType: useCurrentWeb3NetworkProviderType(),
+    }
+    return <PluginWeb3Context.Provider value={value} children={children} />
+}
+
 export function PluginsWeb3ContextProvider<T extends NetworkPluginID>({
     pluginID,
     value,
