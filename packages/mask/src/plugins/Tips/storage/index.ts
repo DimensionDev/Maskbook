@@ -6,11 +6,11 @@ import { useSubscription } from 'use-subscription'
 
 interface StorageValue {
     addedTokens: Array<NonFungibleToken<ChainId, SchemaType>>
-    userGuide: Record<EnhanceableSite, number>
+    userGuide: Partial<Record<EnhanceableSite, number>>
 }
 
 export const storageDefaultValue = {
-    userGuide: {} as Record<EnhanceableSite, number>,
+    userGuide: {},
     publicKey: null as null | string,
     addedTokens: [],
 }
