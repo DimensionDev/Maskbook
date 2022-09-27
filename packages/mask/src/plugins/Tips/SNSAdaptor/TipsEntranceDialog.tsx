@@ -194,8 +194,8 @@ export function TipsEntranceDialog({ open, onClose }: TipsEntranceDialogProps) {
     const openConnectWallet = useCallback(() => Services.Helper.openPopupWindow(PopupRoutes.ConnectWallet), [])
 
     useEffect(() => {
-        return CrossIsolationMessages.events.walletSettingsDialogEvent.on((x) => {
-            if (x === PluginID.Tips) retrySetting()
+        return CrossIsolationMessages.events.walletSettingsDialogEvent.on(({ pluginID }) => {
+            if (pluginID === PluginID.Tips) retrySetting()
         })
     }, [retrySetting])
 
