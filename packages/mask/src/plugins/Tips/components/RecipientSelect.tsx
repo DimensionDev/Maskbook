@@ -39,7 +39,14 @@ const useStyles = makeStyles<void, 'icon' | 'tooltip' | 'text'>()((theme, _, ref
                 fontWeight: 400,
             },
         },
+        menuPaper: {
+            '::-webkit-scrollbar': {
+                display: 'none',
+                opacity: 0,
+            },
+        },
         menu: {
+            maxHeight: 312,
             padding: theme.spacing(1.5),
             borderRadius: theme.spacing(2),
         },
@@ -216,6 +223,7 @@ export const RecipientSelect: FC<Props> = memo(({ className }) => {
             }}
             MenuProps={{
                 classes: {
+                    paper: classes.menuPaper,
                     list: classes.menu,
                 },
                 anchorOrigin: {
