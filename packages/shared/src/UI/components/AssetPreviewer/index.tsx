@@ -1,5 +1,6 @@
 import { useTheme } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { useChainId, useCurrentWeb3NetworkPluginID } from '@masknet/plugin-infra/web3'
 import { Image } from '../Image/index.js'
 import { NetworkIcon, NetworkIconProps } from '../NetworkIcon/index.js'
 
@@ -40,6 +41,9 @@ export function AssetPreviewer(props: AssetPreviewerProps) {
     const classes = useStylesExtends(useStyles(), props)
     const theme = useTheme()
 
+    const pluginID = useCurrentWeb3NetworkPluginID(NetworkIconProps?.pluginID)
+    const chainId = useChainId(NetworkIconProps?.pluginID, NetworkIconProps?.chainId)
+
     return (
         <div className={classes.root}>
             <Image
@@ -56,10 +60,10 @@ export function AssetPreviewer(props: AssetPreviewerProps) {
                     (theme.palette.mode === 'dark' ? ASSET_PLAYER_FALLBACK_DARK : ASSET_PLAYER_FALLBACK_LIGHT)
                 }
             />
-            {NetworkIconProps?.pluginID && NetworkIconProps.chainId ? (
+            {pluginID && chainId ? (
                 <NetworkIcon
-                    pluginID={NetworkIconProps.pluginID}
-                    chainId={NetworkIconProps.chainId}
+                    pluginID={pluginID}
+                    chainId={chainId}
                     ImageIconProps={{
                         classes: { icon: classes.networkIcon },
                     }}
