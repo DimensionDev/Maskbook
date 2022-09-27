@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
     selectSection: {
         display: 'flex',
         flexDirection: 'column',
-        overflow: 'auto',
+        overflow: 'hidden',
         flexGrow: 1,
         margin: theme.spacing(4, -2, 0),
     },

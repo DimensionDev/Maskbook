@@ -8,10 +8,10 @@ import { useTip } from '../contexts/index.js'
 import { Translate, useI18N } from '../locales/index.js'
 import type { TipsAccount } from '../types/index.js'
 
-const useStyles = makeStyles<void, 'icon' | 'tooltip'>()((theme, _, refs) => {
+const useStyles = makeStyles<void, 'icon' | 'tooltip' | 'text'>()((theme, _, refs) => {
     return {
         root: {
-            height: 48,
+            height: 40,
             flexGrow: 1,
         },
         menuItem: {
@@ -34,6 +34,9 @@ const useStyles = makeStyles<void, 'icon' | 'tooltip'>()((theme, _, refs) => {
             alignItems: 'center',
             [`& .${refs.icon}`]: {
                 display: 'none',
+            },
+            [`& .${refs.text}`]: {
+                fontWeight: 400,
             },
         },
         menu: {
@@ -170,7 +173,10 @@ const TipsAccountSource: FC<{ tipsAccount: TipsAccount }> = ({ tipsAccount }) =>
     if (tipsAccount.verified)
         return (
             <SourceTooltip platform={AddressPlatform.NextId}>
-                <Icons.NextIDMini width={32} height={18} className={classes.actionIcon} style={iconStyle} />
+                <Icons.NextIDMini
+                    className={cx(classes.actionIcon, classes.icon)}
+                    style={{ ...iconStyle, width: 32, height: 18 }}
+                />
             </SourceTooltip>
         )
     if (tipsAccount.isSocialAddress) {
