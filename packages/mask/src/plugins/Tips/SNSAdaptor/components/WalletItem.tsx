@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { useReverseAddress, useWallets, useWeb3State } from '@masknet/plugin-infra/web3'
 import { FormattedAddress, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
+import { isSameAddress, NetworkPluginID } from '@masknet/web3-shared-base'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Link, Typography } from '@mui/material'
 import { useMemo } from 'react'
@@ -106,7 +106,7 @@ export function WalletItem({ address, isDefault, deletable, fallbackName, setAsD
         if (domain && Others?.formatDomainName) {
             return Others.formatDomainName(domain)
         }
-        const currentWallet = wallets.find((x) => Others?.isSameAddress(x.address, address))
+        const currentWallet = wallets.find((x) => isSameAddress(x.address, address))
         const name = currentWallet?.name
         return name !== undefined && currentWallet?.hasStoredKeyInfo ? name : fallbackName
     }, [address, domain, fallbackName])

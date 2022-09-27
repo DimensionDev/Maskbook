@@ -31,11 +31,11 @@ export class GoPlusLabsAPI implements SecurityAPI.Provider<ChainId> {
         return createTokenSecurity(chainId, response.result)
     }
 
-    async getAddressSecurity(chainId: ChainId, address: string) {
+    async getAddressSecurity(chainId: ChainId, address: string): Promise<SecurityAPI.AddressSecurity | undefined> {
         const response = await fetchJSON<{
             code: 0 | 1
             message: 'OK' | string
-            result: Record<string, SecurityAPI.AddressSecurity>
+            result: SecurityAPI.AddressSecurity
         }>(
             urlcat(GO_PLUS_LABS_ROOT_URL, 'api/v1/address_security/:address', {
                 address,

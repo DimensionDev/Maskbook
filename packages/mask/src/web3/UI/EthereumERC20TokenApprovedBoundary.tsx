@@ -1,5 +1,4 @@
-import { Tooltip } from '@mui/material'
-import { makeStyles, useStylesExtends, ActionButton, ActionButtonProps } from '@masknet/theme'
+import { makeStyles, useStylesExtends, ActionButton, ActionButtonProps, ShadowRootTooltip } from '@masknet/theme'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
 import { useI18N } from '../../utils/index.js'
@@ -132,23 +131,19 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                     />
                 }
                 endIcon={
-                    <Tooltip
-                        classes={{
-                            tooltip: classes.tooltip,
-                        }}
-                        PopperProps={{
-                            disablePortal: true,
-                        }}
+                    <ShadowRootTooltip
                         title={t('plugin_wallet_token_infinite_unlock_tips', {
                             provider: contractName,
                             symbol: token.symbol,
                         })}
                         placement="top"
                         arrow
+                        leaveDelay={2000}
+                        disableInteractive
                         disableFocusListener
                         disableTouchListener>
                         <HelpOutline className={classes.helpIcon} />
-                    </Tooltip>
+                    </ShadowRootTooltip>
                 }
                 onClick={onApprove}
                 {...props.ActionButtonProps}>

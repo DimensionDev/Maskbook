@@ -1356,7 +1356,6 @@ export interface OthersState<ChainId, SchemaType, ProviderType, NetworkType, Tra
     isValidAddress(address?: string): boolean
     isZeroAddress(address?: string): boolean
     isNativeTokenAddress(address?: string): boolean
-    isSameAddress(address?: string, otherAddress?: string): boolean
     isNativeTokenSchemaType(schemaType?: SchemaType): boolean
     isFungibleTokenSchemaType(schemaType?: SchemaType): boolean
     isNonFungibleTokenSchemaType(schemaType?: SchemaType): boolean

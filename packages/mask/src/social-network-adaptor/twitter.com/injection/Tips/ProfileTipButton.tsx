@@ -20,6 +20,9 @@ interface StyleProps {
     marginBottom: number
 }
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
+    hide: {
+        display: 'none',
+    },
     slot: {
         position: 'relative',
         height: props.size,
@@ -27,17 +30,10 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        borderWidth: 1,
-        borderStyle: 'solid',
-        borderColor: theme.palette.mode === 'dark' ? '#536471' : '#d2dbe0',
         borderRadius: 999,
         marginRight: theme.spacing(1),
         marginBottom: props.marginBottom,
         verticalAlign: 'top',
-        color: theme.palette.text.primary,
-        '&:hover': {
-            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(239,243,244,0.1)' : 'rgba(15,20,25,0.1)',
-        },
     },
 }))
 
@@ -60,17 +56,24 @@ function useTipsSlotStyles() {
 
 function ProfileTipsSlot() {
     const visitingPersona = useCurrentVisitingIdentity()
-    const { classes } = useTipsSlotStyles()
+    const { classes, cx } = useTipsSlotStyles()
+    const [disabled, setDisabled] = useState(true)
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
             useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
             (plugin) => plugin.TipsRealm?.UI?.Content,
         )
 
-        return <Component identity={visitingPersona.identifier} slot={Plugin.SNSAdaptor.TipsSlot.Profile} />
+        return (
+            <Component
+                identity={visitingPersona.identifier}
+                slot={Plugin.SNSAdaptor.TipsSlot.Profile}
+                onStatusUpdate={setDisabled}
+            />
+        )
     }, [visitingPersona.identifier])
 
     if (!component || !visitingPersona.identifier) return null
 
-    return <span className={classes.slot}>{component}</span>
+    return <span className={cx(classes.slot, disabled ? classes.hide : null)}>{component}</span>
 }

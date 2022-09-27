@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { NFTCardStyledAssetPlayer } from '@masknet/shared'
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import type { NetworkPluginID, NonFungibleAsset, SocialAddress, SourceType, Wallet } from '@masknet/web3-shared-base'
+import type { NetworkPluginID, NonFungibleAsset, SourceType, Wallet } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -64,7 +64,8 @@ export interface CollectibleCardProps {
     link?: string
     readonly?: boolean
     renderOrder: number
-    address?: SocialAddress<NetworkPluginID>
+    pluginID?: NetworkPluginID
+    disableLink?: boolean
 }
 
 export function CollectibleCard({
@@ -73,7 +74,8 @@ export function CollectibleCard({
     asset,
     readonly,
     renderOrder,
-    address,
+    pluginID,
+    disableLink,
     ...rest
 }: CollectibleCardProps) {
     const { classes, cx } = useStyles()
@@ -98,7 +100,7 @@ export function CollectibleCard({
                     url={asset.metadata?.mediaURL || asset.metadata?.imageURL}
                     renderOrder={renderOrder}
                     tokenId={asset.tokenId}
-                    address={address}
+                    pluginID={pluginID}
                     classes={{
                         fallbackImage: classes.fallbackImage,
                         wrapper: classes.wrapper,

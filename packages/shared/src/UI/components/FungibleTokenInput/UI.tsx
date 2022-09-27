@@ -25,6 +25,9 @@ const useStyles = makeStyles()((theme) => ({
         [`& > .${inputBaseClasses.input}`]: {
             paddingTop: `${theme.spacing(2.75)}!important`,
             flex: 2,
+            paddingLeft: '0px !important',
+            fontSize: 18,
+            fontWeight: 700,
         },
     },
     title: {
@@ -138,7 +141,7 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                 fullWidth
                 startAdornment={<Typography className={cx(classes.label, classes.title)}>{label}</Typography>}
                 endAdornment={
-                    <Box className={classes.control}>
+                    <Box className={classes.control} justifyContent={disableBalance ? 'flex-end' : undefined}>
                         {!disableBalance ? (
                             <Typography className={classes.label} display="flex" alignItems="center">
                                 {isNative ? t.available_balance() : t.balance()}:

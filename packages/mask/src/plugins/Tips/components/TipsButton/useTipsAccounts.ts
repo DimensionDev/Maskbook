@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import { useCurrentWeb3NetworkPluginID, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
-import { NetworkPluginID, SocialAddressType } from '@masknet/web3-shared-base'
+import { useAccount, useCurrentWeb3NetworkPluginID, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { usePublicWallets } from '../../hooks/usePublicWallets.js'
@@ -13,28 +13,35 @@ export function useTipsAccounts(
     addresses: TipsAccount[],
 ) {
     const pluginId = useCurrentWeb3NetworkPluginID()
+    const account = useAccount()
     const { value: socialAddressList = EMPTY_LIST } = useSocialAddressListAll(identity)
     const publicWallets = usePublicWallets(personaPubkey)
     const tipsAccounts = useMemo(() => {
-        switch (pluginId) {
-            case NetworkPluginID.PLUGIN_EVM:
-                const evmAddresses = socialAddressList
-                    .filter((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM)
-                    .map((x) => ({
-                        address: x.address,
-                        name: x.type === SocialAddressType.ENS ? x.label : undefined,
-                    }))
-                return uniqBy([...publicWallets, ...addresses, ...evmAddresses], (v) => v.address.toLowerCase())
-            case NetworkPluginID.PLUGIN_SOLANA:
-                return socialAddressList
-                    .filter((x) => x.networkSupporterPluginID === pluginId)
-                    .map((x) => ({
-                        address: x.address,
-                        name: x.type === SocialAddressType.SOL ? x.label : undefined,
-                    }))
-        }
-        return EMPTY_LIST
-    }, [pluginId, publicWallets, addresses, socialAddressList])
+        // If no wallet connected yet, return all wallets. (Only includes EVM and Solana by now.)
+        const filter: (x: SocialAddress<NetworkPluginID>) => boolean = account
+            ? (x) => x.networkSupporterPluginID === pluginId
+            : (x) => [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(x.networkSupporterPluginID)
+
+        const fromSocialAddresses = socialAddressList.filter(filter).map((x): TipsAccount => {
+            const name = [SocialAddressType.ENS, SocialAddressType.SOL, SocialAddressType.RSS3].includes(x.type)
+                ? x.label
+                : undefined
+            return {
+                pluginId: x.networkSupporterPluginID,
+                address: x.address,
+                isSocialAddress: true,
+                name,
+                type: x.type,
+            }
+        })
+
+        const list =
+            pluginId === NetworkPluginID.PLUGIN_EVM
+                ? [...publicWallets, ...addresses, ...fromSocialAddresses]
+                : fromSocialAddresses
+
+        return uniqBy(list, (v) => v.pluginId + v.address.toLowerCase())
+    }, [pluginId, account, publicWallets, addresses, socialAddressList])
 
     return tipsAccounts
 }

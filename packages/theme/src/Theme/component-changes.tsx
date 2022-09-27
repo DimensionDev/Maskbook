@@ -726,10 +726,11 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                         size: 'small',
                     },
                     style: {
+                        fontSize: 12,
                         [`&.${inputBaseClasses.focused} > .${inputBaseClasses.input}`]: {
-                            padding: 7,
+                            padding: '7px 8px',
                             [`&.${selectClasses.select}`]: {
-                                padding: 7,
+                                padding: '7px 8px',
                                 height: 16,
                                 minHeight: 'unset',
                             },
@@ -743,6 +744,12 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                                 minHeight: 'unset',
                             },
                         },
+                        [`&.${inputBaseClasses.adornedStart}:last-child`]: {
+                            paddingLeft: 8,
+                        },
+                        [`&.${inputBaseClasses.adornedEnd}:last-child`]: {
+                            paddingRight: 8,
+                        },
                     },
                 },
                 {
@@ -750,22 +757,29 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                         size: 'medium',
                     },
                     style: {
+                        fontSize: 14,
                         [`&.${inputBaseClasses.focused} > .${inputBaseClasses.input}`]: {
-                            padding: 10,
+                            padding: '10px 12px',
                             [`&.${selectClasses.select}`]: {
-                                padding: 10,
+                                padding: '10px 12px',
                                 height: 18,
                                 minHeight: 'unset',
                             },
                         },
                         [`& .${inputBaseClasses.input}`]: {
-                            padding: 11,
+                            padding: '11px 12px',
                             height: 18,
                             [`&.${selectClasses.select}`]: {
-                                padding: 11,
+                                padding: '11px 12px',
                                 height: 18,
                                 minHeight: 'unset',
                             },
+                        },
+                        [`&.${inputBaseClasses.adornedStart}:last-child`]: {
+                            paddingLeft: 12,
+                        },
+                        [`&.${inputBaseClasses.adornedEnd}:last-child`]: {
+                            paddingRight: 12,
                         },
                     },
                 },
@@ -774,10 +788,11 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                         size: 'large',
                     },
                     style: {
+                        fontSize: 15,
                         [`&.${inputBaseClasses.focused} > .${inputBaseClasses.input}`]: {
-                            padding: 13,
+                            padding: '13px 14px',
                             [`&.${selectClasses.select}`]: {
-                                padding: 13,
+                                padding: '13px 14px',
                                 height: 20,
                                 minHeight: 'unset',
                             },
@@ -790,6 +805,12 @@ export const InputBase = (mode: PaletteMode, colors: MaskColor) => ({
                                 height: 20,
                                 minHeight: 'unset',
                             },
+                        },
+                        [`&.${inputBaseClasses.adornedStart}:last-child`]: {
+                            paddingLeft: 14,
+                        },
+                        [`&.${inputBaseClasses.adornedEnd}:last-child`]: {
+                            paddingRight: 14,
                         },
                     },
                 },
@@ -963,6 +984,7 @@ export const Tooltip = (mode: PaletteMode, colors: MaskColor) => ({
                 tooltip: {
                     padding: 10,
                     fontSize: 14,
+                    borderRadius: 4,
                     lineHeight: '18px',
                     backgroundColor: colors.maskColor.tips,
                     color: colors.maskColor.bottom,
