@@ -1,7 +1,6 @@
 import { useWeb3State } from '@masknet/plugin-infra/web3'
 import { makeStyles } from '@masknet/theme'
 import { Checkbox, Radio, Skeleton, Typography } from '@mui/material'
-import { noop } from 'lodash-unified'
 import { forwardRef, HTMLProps, memo } from 'react'
 import { CollectibleCard, CollectibleCardProps } from './CollectibleCard.js'
 
@@ -17,6 +16,9 @@ const useStyles = makeStyles()((theme) => ({
     },
     inactive: {
         opacity: 0.5,
+    },
+    selectable: {
+        cursor: 'pointer',
     },
     collectibleCard: {
         width: '100%',
@@ -84,6 +86,7 @@ export const CollectibleItem = memo(
             onChange,
             className,
             showNetworkIcon,
+            disableLink,
             ...rest
         } = props
         const { classes, cx } = useStyles()
@@ -97,7 +100,16 @@ export const CollectibleItem = memo(
             <div
                 className={cx(classes.card, className, {
                     [classes.inactive]: inactive,
+                    [classes.selectable]: selectable,
                 })}
+                onClick={() => {
+                    if (selectable) {
+                        onChange?.({
+                            checked: !checked,
+                            value: value!,
+                        })
+                    }
+                }}
                 {...rest}
                 ref={ref}>
                 <CollectibleCard
@@ -108,6 +120,7 @@ export const CollectibleItem = memo(
                     renderOrder={renderOrder}
                     pluginID={pluginID}
                     showNetworkIcon={showNetworkIcon}
+                    disableLink={disableLink || selectable}
                 />
                 {uiTokenId ? (
                     <div className={classes.description}>
@@ -116,21 +129,7 @@ export const CollectibleItem = memo(
                         </Typography>
                     </div>
                 ) : null}
-                {selectable ? (
-                    <SelectableButton
-                        className={classes.select}
-                        value={value}
-                        checked={!!checked}
-                        onChange={noop}
-                        onClick={(event) => {
-                            event.preventDefault()
-                            onChange?.({
-                                checked: !checked,
-                                value: value!,
-                            })
-                        }}
-                    />
-                ) : null}
+                {selectable ? <SelectableButton className={classes.select} value={value} checked={!!checked} /> : null}
             </div>
         )
     }),
