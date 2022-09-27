@@ -9,6 +9,5 @@ export function useNativeTokenAddress<S extends 'all' | void = void, T extends N
     const { Others } = useWeb3State(pluginID)
     const nativeTokenAddress = Others?.getNativeTokenAddress?.(options?.chainId)
 
-    if (!nativeTokenAddress) throw new Error('No native token address.')
     return nativeTokenAddress
 }

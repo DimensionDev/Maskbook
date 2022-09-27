@@ -2,13 +2,21 @@ import ss from '@snapshot-labs/snapshot.js'
 import type { Proposal, VoteSuccess, RawVote, Strategy } from '../../types.js'
 import { transform } from 'lodash-unified'
 import { SNAPSHOT_GET_SCORE_API } from '../../constants.js'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 export async function fetchProposal(id: string) {
     const { votes, proposal } = await fetchProposalFromGraphql(id)
     const now = Date.now()
     const isStart = proposal.start * 1000 < now
     const isEnd = proposal.end * 1000 < now
-    return { ...proposal, address: proposal.author, isStart, isEnd, votes } as unknown as Proposal
+    return {
+        ...proposal,
+        address: proposal.author,
+        isStart,
+        isEnd,
+        votes,
+        chainId: Number(proposal.network) as ChainId,
+    } as unknown as Proposal
 }
 
 async function fetchProposalFromGraphql(id: string) {

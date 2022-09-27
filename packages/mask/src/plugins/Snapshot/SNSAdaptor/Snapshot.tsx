@@ -72,8 +72,13 @@ const useStyles = makeStyles()((theme) => {
             width: 48,
             height: 48,
         },
-        shadowRootTooltip: {
+        shadowRootTooltip: {},
+        tooltip: {
+            backgroundColor: theme.palette.maskColor.publicMain,
             color: theme.palette.maskColor.white,
+        },
+        arrow: {
+            color: theme.palette.maskColor.publicMain,
         },
     }
 })
@@ -85,13 +90,6 @@ export function Snapshot() {
     const chainId = useChainId(NetworkPluginID.PLUGIN_EVM)
     const [currentTab, onChange, tabs] = useTabs('Proposal', 'Progress')
     const { t } = useI18N()
-    const renderTab = () => {
-        const tabMap = {
-            [tabs.Proposal]: <ProposalTab />,
-            [tabs.Progress]: <ProgressTab />,
-        }
-        return tabMap[currentTab]
-    }
 
     const Tabs = [
         {
@@ -132,6 +130,7 @@ export function Snapshot() {
                         }}
                         title={<Typography className={classes.shadowRootTooltip}>{proposal.title}</Typography>}
                         placement="top"
+                        classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                         arrow>
                         <Typography
                             fontSize={14}

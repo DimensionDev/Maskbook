@@ -127,7 +127,6 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         const network = ui.networkIdentifier
         if (!userPinExtension.value) {
             userPinExtension.value = true
-            retryCheckStep()
         }
         if (network === EnhanceableSite.Twitter && userGuideStatus[network].value !== userGuideVersion.value) {
             userGuideStatus[network].value = '1'

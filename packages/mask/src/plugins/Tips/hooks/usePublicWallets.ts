@@ -1,6 +1,6 @@
 import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
-import { isSameAddress, isGreaterThan } from '@masknet/web3-shared-base'
+import { isSameAddress, isGreaterThan, NetworkPluginID } from '@masknet/web3-shared-base'
 import { uniqBy } from 'lodash-unified'
 import { useEffect, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
@@ -15,9 +15,16 @@ export function usePublicWallets(personaPubkey?: string): TipsAccount[] {
         const bindings = await NextIDProof.queryExistedBindingByPersona(personaPubkey, true)
         if (!bindings) return EMPTY_LIST
 
-        const wallets = bindings.proofs
+        const wallets: TipsAccount[] = bindings.proofs
             .filter((p) => p.platform === NextIDPlatform.Ethereum)
-            .map((p) => ({ address: p.identity, verified: true, last_checked_at: p.last_checked_at }))
+            .map(
+                (p): TipsAccount => ({
+                    pluginId: NetworkPluginID.PLUGIN_EVM,
+                    address: p.identity,
+                    verified: true,
+                    last_checked_at: p.last_checked_at,
+                }),
+            )
         return wallets
     }, [personaPubkey])
 
@@ -30,7 +37,7 @@ export function usePublicWallets(personaPubkey?: string): TipsAccount[] {
     }, [])
 
     return useMemo(() => {
-        const result =
+        const result: TipsAccount[] =
             nextIdWallets
                 ?.filter((x) => !TipsSetting?.hiddenAddresses?.some((y) => isSameAddress(y, x.address)) ?? true)
                 .sort((a, z) => {
@@ -40,8 +47,7 @@ export function usePublicWallets(personaPubkey?: string): TipsAccount[] {
                     }
 
                     return isSameAddress(a.address, TipsSetting?.defaultAddress) ? -1 : 1
-                })
-                .map((x) => ({ address: x.address, verified: true })) ?? EMPTY_LIST
+                }) ?? EMPTY_LIST
 
         return uniqBy(result, (x) => x.address)
     }, [nextIdWallets, TipsSetting?.hiddenAddresses])

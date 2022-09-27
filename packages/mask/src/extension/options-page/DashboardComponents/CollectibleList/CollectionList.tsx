@@ -34,19 +34,19 @@ const AllButton = styled(Button)(({ theme }) => ({
 }))
 
 export interface CollectionListProps {
-    addressName: SocialAddress<NetworkPluginID>
+    socialAddress: SocialAddress<NetworkPluginID>
     persona?: string
     profile?: SocialIdentity
     gridProps?: CollectibleGridProps
 }
 
-export function CollectionList({ addressName, persona, profile, gridProps = EMPTY_OBJECT }: CollectionListProps) {
+export function CollectionList({ socialAddress, persona, profile, gridProps = EMPTY_OBJECT }: CollectionListProps) {
     const { t } = useI18N()
     const { classes } = useStyles(gridProps)
     const [selectedCollection, setSelectedCollection] = useState<
         NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | undefined
     >()
-    const { address: account } = addressName
+    const { address: account } = socialAddress
 
     useEffect(() => {
         setSelectedCollection(undefined)
@@ -62,7 +62,7 @@ export function CollectionList({ addressName, persona, profile, gridProps = EMPT
         next: nextPage,
         error,
         retry: retryFetchCollectible,
-    } = useNonFungibleAssets(addressName.networkSupporterPluginID, undefined, { account })
+    } = useNonFungibleAssets(socialAddress.networkSupporterPluginID, undefined, { account })
 
     const userId = profile?.identifier?.userId.toLowerCase()
 
@@ -148,7 +148,7 @@ export function CollectionList({ addressName, persona, profile, gridProps = EMPT
                             </Box>
                         )}
                         <CollectibleList
-                            address={addressName}
+                            pluginID={socialAddress.networkSupporterPluginID}
                             retry={retryFetchCollectible}
                             collectibles={renderCollectibles}
                             loading={renderCollectibles.length === 0}
