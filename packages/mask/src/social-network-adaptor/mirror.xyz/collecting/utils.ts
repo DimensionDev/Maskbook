@@ -22,8 +22,7 @@ export enum MirrorPageType {
     Dashboard = 'dashboard',
 }
 
-const ADDRESS_FULL = /0x[\da-f]{40}/i
-const MIRROR_ENTRY_ID = /\w{43}/i
+export const MIRROR_ENTRY_ID = /[\w|-]{43}/i
 
 export function getMirrorPageType(url?: string) {
     if (!url) return

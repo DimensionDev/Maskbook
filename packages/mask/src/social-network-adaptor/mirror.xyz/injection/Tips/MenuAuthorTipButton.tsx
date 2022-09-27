@@ -8,17 +8,22 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID } from '@masknet/web3-shared-base'
 import { useMemo } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import type { TipsAccount } from '../../../../plugins/Tips/types/tip.js'
 import { createReactRootShadowed, startWatch } from '../../../../utils/index.js'
 import { menuAuthorSelector as selector } from '../../utils/selectors.js'
+import { PluginIDContextProvider, useCurrentWeb3NetworkPluginID, useWeb3State } from '@masknet/plugin-infra/web3'
+import { NetworkPluginID } from '@masknet/web3-shared-base'
 
 export function injectTipsButtonOnMenu(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(selector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<AuthorTipsButtonWrapper />)
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(
+        <PluginIDContextProvider value={NetworkPluginID.PLUGIN_EVM}>
+            <AuthorTipsButtonWrapper />
+        </PluginIDContextProvider>,
+    )
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -40,20 +45,23 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 function AuthorTipsButtonWrapper() {
-    const visitingPersona = useCurrentVisitingIdentity()
-    const isMinimal = useIsMinimalMode(PluginID.Tips)
     const { classes } = useStyles()
 
+    const visitingIdentity = useCurrentVisitingIdentity()
+    const isMinimal = useIsMinimalMode(PluginID.Tips)
+    const pluginId = useCurrentWeb3NetworkPluginID()
+    const { Others } = useWeb3State()
+
     const tipsAccounts = useMemo((): TipsAccount[] => {
-        if (!visitingPersona?.identifier) return EMPTY_LIST
+        if (!visitingIdentity?.identifier) return EMPTY_LIST
         return [
             {
-                pluginId: NetworkPluginID.PLUGIN_EVM,
-                address: visitingPersona.identifier.userId,
-                name: visitingPersona.nickname,
+                pluginId,
+                address: visitingIdentity.identifier.userId,
+                name: `(${visitingIdentity.nickname}) ${Others?.formatAddress(visitingIdentity.identifier.userId, 4)}`,
             },
         ]
-    }, [visitingPersona])
+    }, [visitingIdentity])
 
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
@@ -63,14 +71,14 @@ function AuthorTipsButtonWrapper() {
 
         return (
             <Component
-                identity={visitingPersona.identifier}
+                identity={visitingIdentity.identifier}
                 slot={Plugin.SNSAdaptor.TipsSlot.MirrorMenu}
                 tipsAccounts={tipsAccounts}
             />
         )
-    }, [visitingPersona.identifier])
+    }, [visitingIdentity.identifier])
 
-    if (!component || !visitingPersona.identifier || isMinimal) return null
+    if (!component || !visitingIdentity.identifier || isMinimal) return null
 
     return <span className={classes.root}>{component}</span>
 }

@@ -34,7 +34,7 @@ export const NetworkSection: FC<Props> = () => {
     const { classes } = useStyles()
 
     const { pluginId, targetChainId, setTargetChainId } = TargetRuntimeContext.useContainer()
-    const tipDefinition = useActivatedPlugin(PluginID.NextID, 'any')
+    const tipDefinition = useActivatedPlugin(PluginID.Tips, 'any')
     const chainIdList = tipDefinition?.enableRequirement.web3?.[pluginId]?.supportedChainIds ?? EMPTY_LIST
 
     if (!chainIdList.length) return null
