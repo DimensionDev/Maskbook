@@ -6,14 +6,14 @@ import {
     useIsMinimalMode,
     usePluginI18NField,
 } from '@masknet/plugin-infra/content-script'
-import { useAvailablePlugins, useHiddenAddressSetting, useSocialAddressListAll } from '@masknet/plugin-infra/web3'
-import { AddressItem, PluginCardFrameMini } from '@masknet/shared'
+import { useAvailablePlugins, useHiddenAddressSetting } from '@masknet/plugin-infra/web3'
+import { AddressItem, PluginCardFrameMini, useSocialAddressListBySettings } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme, MaskTabList, ShadowRootMenu, useStylesExtends, useTabs } from '@masknet/theme'
 import { isSameAddress, NetworkPluginID, SocialAddress, SocialAddressType } from '@masknet/web3-shared-base'
 import { TabContext } from '@mui/lab'
 import { Button, Link, MenuItem, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
-import { first, uniqBy, without } from 'lodash-unified'
+import { first, uniqBy } from 'lodash-unified'
 import { useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { activatedSocialNetworkUI } from '../../social-network/index.js'
@@ -176,19 +176,12 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         loading: loadingSocialAddressList,
         error: loadSocialAddressListError,
         retry: retrySocialAddress,
-    } = useSocialAddressListAll(currentVisitingSocialIdentity, undefined, sorter)
+    } = useSocialAddressListBySettings(currentVisitingSocialIdentity, undefined, sorter)
 
-    const {
-        value: hiddenAddress,
-        loading: loadingHiddenAddress,
-        retry: retryLoadHiddenAddress,
-    } = useHiddenAddressSetting(PluginID.Web3Profile, personaStatus.currentPersona?.identifier.publicKeyAsHex)
-
-    useEffect(() => {
-        return CrossIsolationMessages.events.walletSettingsDialogEvent.on(({ pluginID }) => {
-            if (pluginID === PluginID.Web3Profile) retryLoadHiddenAddress()
-        })
-    }, [retryLoadHiddenAddress])
+    const { value: hiddenAddress } = useHiddenAddressSetting(
+        PluginID.Web3Profile,
+        personaStatus?.currentPersona?.identifier?.publicKeyAsHex,
+    )
 
     useEffect(() => {
         return MaskMessages.events.ownProofChanged.on(() => {
@@ -294,17 +287,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         }
     }, [])
 
-    const showPublicWalletSetting = useMemo(() => {
-        if (!hiddenAddress) return false
-
-        return socialAddressList.some((x) => x.type !== SocialAddressType.NEXT_ID)
-            ? false
-            : !without(
-                  socialAddressList.filter((x) => x.type === SocialAddressType.NEXT_ID).map((x) => x.address),
-                  ...hiddenAddress,
-              ).length
-    }, [socialAddressList, hiddenAddress])
-
     const onOpen = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget)
     const onSelect = (option: SocialAddress<NetworkPluginID>) => {
         setSelectedAddress(option)
@@ -322,8 +304,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         !currentVisitingUserId ||
         loadingSocialAddressList ||
         loadingCurrentVisitingSocialIdentity ||
-        loadingPersonaStatus ||
-        loadingHiddenAddress
+        loadingPersonaStatus
     )
         return (
             <ThemeProvider theme={MaskLightTheme}>
@@ -366,7 +347,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         )
     }
 
-    if (socialAddressList.length === 0) {
+    if (socialAddressList.length === 0 && !showNextID && !hiddenAddress?.length) {
         return (
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
@@ -386,7 +367,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         )
     }
 
-    if (showPublicWalletSetting && !showNextID) {
+    if (!socialAddressList.length && !showNextID) {
         return (
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
