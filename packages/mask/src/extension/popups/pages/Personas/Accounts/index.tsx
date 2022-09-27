@@ -3,19 +3,31 @@ import { useTitle } from '../../../hook/useTitle.js'
 import { AccountsUI } from './UI.js'
 import { PersonaContext } from '../hooks/usePersonaContext.js'
 import { useI18N } from '../../../../../utils/index.js'
-import { EMPTY_LIST, EnhanceableSite, PopupRoutes } from '@masknet/shared-base'
+import { compact } from 'lodash-unified'
+import { EnhanceableSite, PopupRoutes } from '@masknet/shared-base'
 import { useAsyncFn } from 'react-use'
 import Services from '../../../../service.js'
 import type { Account } from '../type.js'
 import { useNavigate } from 'react-router-dom'
-import { useSupportSocialNetworks } from '../../../hook/useSupportSocialNetworks.js'
+import { getEnumAsArray } from '@dimensiondev/kit'
 
 const Accounts = memo(() => {
     const { t } = useI18N()
 
     const navigate = useNavigate()
     const { currentPersona, setSelectedAccount, accounts } = PersonaContext.useContainer()
-    const { value: definedSocialNetworks = EMPTY_LIST } = useSupportSocialNetworks()
+
+    const definedSocialNetworks = compact(
+        getEnumAsArray(EnhanceableSite).map((x) => {
+            if (
+                x.value === EnhanceableSite.Localhost ||
+                x.value === EnhanceableSite.OpenSea ||
+                x.value === EnhanceableSite.Mirror
+            )
+                return null
+            return x.value
+        }),
+    )
 
     const [, onConnect] = useAsyncFn(
         async (networkIdentifier: EnhanceableSite) => {

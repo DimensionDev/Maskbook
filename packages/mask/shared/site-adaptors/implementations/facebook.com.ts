@@ -10,7 +10,6 @@ export const FacebookAdaptor: SiteAdaptor.Definition = {
     networkIdentifier: EnhanceableSite.Facebook,
     declarativePermissions: { origins },
     homepage: 'https://www.facebook.com',
-    isSocialNetwork: true,
 
     getProfilePage: () => new URL('https://www.facebook.com'),
     getShareLinkURL(message) {

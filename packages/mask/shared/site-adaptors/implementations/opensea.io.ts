@@ -10,7 +10,6 @@ export const OpenSeaAdaptor: SiteAdaptor.Definition = {
     networkIdentifier: EnhanceableSite.OpenSea,
     declarativePermissions: { origins },
     homepage: 'https://opensea.io/',
-    isSocialNetwork: false,
 
     getProfilePage: () => new URL('https://opensea.io/account'),
     getShareLinkURL(message) {

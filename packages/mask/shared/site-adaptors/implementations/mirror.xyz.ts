@@ -7,7 +7,6 @@ export const MirrorAdaptor: SiteAdaptor.Definition = {
     networkIdentifier: EnhanceableSite.Mirror,
     declarativePermissions: { origins },
     homepage: 'https://mirror.xyz',
-    isSocialNetwork: false,
     getProfilePage: () => new URL('https://mirror.xyz/dashboard'),
     getShareLinkURL(message) {
         return new URL('https://mirror.xyz')

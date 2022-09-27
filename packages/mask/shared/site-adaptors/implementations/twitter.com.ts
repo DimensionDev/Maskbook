@@ -10,7 +10,6 @@ export const TwitterAdaptor: SiteAdaptor.Definition = {
     networkIdentifier: EnhanceableSite.Twitter,
     declarativePermissions: { origins },
     homepage: 'https://twitter.com',
-    isSocialNetwork: true,
 
     getProfilePage: (userId) => new URL(`https://twitter.com/${userId.userId}`),
     getShareLinkURL(message) {

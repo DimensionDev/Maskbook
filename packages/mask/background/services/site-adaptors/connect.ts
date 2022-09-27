@@ -7,14 +7,12 @@ import { definedSiteAdaptors } from '../../../shared/site-adaptors/definitions.j
 import { requestSiteAdaptorsPermission } from '../helper/request-permission.js'
 import stringify from 'json-stable-stringify'
 
-export async function getSupportedSites(options: { isSocialNetwork?: boolean } = {}): Promise<
+export async function getSupportedSites(): Promise<
     Array<{
         networkIdentifier: string
     }>
 > {
-    return [...definedSiteAdaptors.values()]
-        .filter((x) => (options.isSocialNetwork === undefined ? true : x.isSocialNetwork === options.isSocialNetwork))
-        .map((x) => ({ networkIdentifier: x.networkIdentifier }))
+    return [...definedSiteAdaptors.values()].map((x) => ({ networkIdentifier: x.networkIdentifier }))
 }
 
 export async function setupSite(network: string, newTab: boolean) {

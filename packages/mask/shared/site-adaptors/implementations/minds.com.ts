@@ -10,7 +10,6 @@ export const MindsAdaptor: SiteAdaptor.Definition = {
     networkIdentifier: EnhanceableSite.Minds,
     declarativePermissions: { origins },
     homepage: 'https://www.minds.com',
-    isSocialNetwork: true,
 
     getProfilePage: () => new URL('https://www.minds.com'),
     getShareLinkURL(message) {
