@@ -125,11 +125,13 @@ export function createExplorerResolver<ChainId, SchemaType, NetworkType>(
                 domain,
                 ...getExplorerURL(chainId)?.parameters,
             }),
-        fungibleTokenLink: (chainId: ChainId, address: string) =>
-            urlcat(getExplorerURL(chainId).url, fungibleTokenPathname, {
+        fungibleTokenLink: (chainId: ChainId, address: string) => {
+            if (!chainId || !address) return ''
+            return urlcat(getExplorerURL(chainId).url, fungibleTokenPathname, {
                 address,
                 ...getExplorerURL(chainId)?.parameters,
-            }),
+            })
+        },
         nonFungibleTokenLink: (chainId: ChainId, address: string, tokenId: string) => {
             return urlcat(getExplorerURL(chainId).url, nonFungibleTokenPathname, {
                 address,
